@@ -8,6 +8,10 @@
 
 #import "RoomViewController.h"
 #import "LSTcpSocket.h"
+#import "UIImageView+WebCache.h"
+#import "Photo.h"
+#import "PhotoViewController.h"
+#import "ZLCoreTextCell.h"
 #import "UITableView+reloadComplete.h"
 #import "RoomHttp.h"
 #import "RoomGroup.h"
@@ -32,6 +36,7 @@
 UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,EmojiViewDelegate>
 {
     NSCache *cellCache;
+    NSCache *imageCache;
     //聊天view
     UIView *downView;
     UIView *bodyView;
@@ -50,6 +55,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     UIView *_downHUD;
     UIButton *_btnVideo;
     NSInteger _nTag;
+    
+    
 }
 
 @property (nonatomic,strong) NSMutableDictionary *dictIcon;
@@ -444,6 +451,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    cellCache = [[NSCache alloc] init];
+    imageCache = [[NSCache alloc] init];
     [self initUIHead];
     [self initUIBody];
     [self createEmojiKeyboard];
@@ -980,7 +989,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 {
     if(tableView!=_tableView)
     {
-        DTAttributedTextCell *cell = (DTAttributedTextCell*)[self tableView:tableView preparedCellForIndexPath:indexPath];
+//        DTAttributedTextCell *cell = (DTAttributedTextCell*)[self tableView:tableView preparedCellForIndexPath:indexPath];
+        ZLCoreTextCell *cell = [self tableView:tableView preparedCellForZLIndexPath:indexPath];
         return cell;
     }
     static NSString *strIdentifier = @"ROOMVIEWTABLEVIEWIDENTIFIER";
@@ -1004,11 +1014,14 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 {
     if(tableView!=_tableView)
     {
-        DTAttributedTextCell *cell = (DTAttributedTextCell *)[self tableView:tableView preparedCellForIndexPath:indexPath];
-        return [cell requiredRowHeightInTableView:tableView];
+//        DTAttributedTextCell *cell = (DTAttributedTextCell *)[self tableView:tableView preparedCellForIndexPath:indexPath];
+        ZLCoreTextCell *cell = (ZLCoreTextCell *)[self tableView:tableView preparedCellForZLIndexPath:indexPath];
+        return [cell.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+10;
     }
     return 44;
 }
+
+
 
 //设置DTAttributedTextCell
 - (DTAttributedTextCell *)tableView:(UITableView *)tableView preparedCellForIndexPath:(NSIndexPath *)indexPath
@@ -1018,17 +1031,14 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     if (tableView == _noticeView)
     {
         key =[NSString stringWithFormat:@"noticeView-%zi-%zi", indexPath.section, indexPath.row];
-//        key =@"noticeView";
     }
     else if(tableView == _chatView)
     {
         key =[NSString stringWithFormat:@"chatView-%zi-%zi", indexPath.section, indexPath.row];
-//        key = @"chatView";
     }
     else if(tableView == _priChatView)
     {
         key = [NSString stringWithFormat:@"priChat--%zi-%zi",indexPath.section,indexPath.row];
-//        key = @"priChat";
     }
     if (!cellCache)
     {
@@ -1070,7 +1080,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     cell.attributedTextContextView.shouldDrawImages = YES;
     cell.attributedTextContextView.edgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     cell.attributedTextContextView.delegate = self;
-    
     return cell;
 }
 
@@ -1095,15 +1104,84 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     
 }
 
+- (ZLCoreTextCell *)tableView:(UITableView *)tableView preparedCellForZLIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *cacheKey;
+    NSString *strInfo;
+    if(tableView == _noticeView && [LSTcpSocket sharedLSTcpSocket].aryNotice.count > indexPath.row)
+    {
+        cacheKey =[NSString stringWithFormat:@"noticeView-%zi", indexPath.row];
+        strInfo = [[LSTcpSocket sharedLSTcpSocket].aryNotice objectAtIndex:indexPath.row];
+    }
+    else if(tableView == _chatView && [LSTcpSocket sharedLSTcpSocket].aryChat.count > indexPath.row)
+    {
+        cacheKey =[NSString stringWithFormat:@"chatView-%zi", indexPath.row];
+        strInfo = [[LSTcpSocket sharedLSTcpSocket].aryChat objectAtIndex:indexPath.row];
+    }
+    else if(tableView == _priChatView )
+    {
+        cacheKey = [NSString stringWithFormat:@"priChat--%zi",indexPath.row];
+        NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[UserInfo sharedUserInfo].nUserId];
+        NSPredicate *pred = TABLEVIEW_ARRAY_PREDICATE(query);
+        NSArray *aryCount = [[LSTcpSocket sharedLSTcpSocket].aryChat filteredArrayUsingPredicate:pred];
+        if (aryCount.count>indexPath.row)
+        {
+            strInfo = [aryCount objectAtIndex:indexPath.row];
+        }
+        else
+        {
+            return nil;
+        }
+    }
+    else
+    {
+        return nil;
+    }
+    ZLCoreTextCell *cell = [cellCache objectForKey:cacheKey];
+    if (!cell)
+    {
+        cell = [[ZLCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"roomviewcontroller"];
+    }
+    cell.attributedTextContextView.delegate = self;
+    cell.attributedTextContextView.shouldDrawImages = YES;
+    [cellCache setObject:cell forKey:cacheKey];
+    cell.attributedTextContextView.edgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
+    NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
+    cell.attributedTextContextView.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:nil documentAttributes:nil];
+    UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
+    [selectView setBackgroundColor:[UIColor clearColor]];
+    cell.selectedBackgroundView = selectView;
+    return cell;
+}
+
+- (void)showImageInfo:(UITapGestureRecognizer *)tapGest
+{
+    UIImageView *imageView = (UIImageView *)tapGest.view;
+    NSMutableArray *aryIndex = [NSMutableArray array];
+//    [aryIndex addObject:imageView];
+    Photo *_photo = [[Photo alloc] init];
+    _photo.nId = 0;
+    _photo.imgName = imageView.image;
+    [aryIndex addObject:_photo];
+    PhotoViewController *photoControl = [[PhotoViewController alloc] initWithArray:aryIndex current:0];
+    [photoControl show];
+}
+
 #pragma mark DTCoreText Delegate
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame
 {
     if ([attachment isKindOfClass:[DTImageTextAttachment class]])
     {
-        DTLazyImageView *imageView = [[DTLazyImageView alloc] initWithFrame:frame];
-        imageView.delegate = self;
-        imageView.image = [(DTImageTextAttachment *)attachment image];
-        imageView.url = attachment.contentURL;
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
+        [imageView sd_setImageWithURL:attachment.contentURL completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL)
+        {
+//            CGFloat scale = attributedTextContentView.frame.size.width / [image size].width;
+//            CGSize scaledSize = CGSizeMake([image size].width * scale, [image size].height * scale);
+//            [imageCache setObject:[NSValue valueWithCGSize: scaledSize] forKey:imageURL];
+        }];
+        imageView.userInteractionEnabled = YES;
+        [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
+           action:@selector(showImageInfo:)]];
         return imageView;
     }
     else if([attachment isKindOfClass:[DTObjectTextAttachment class]])
@@ -1140,7 +1218,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 }
 
 #pragma mark Custom Views on Text
-
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttributedString:(NSAttributedString *)string frame:(CGRect)frame
 {
     //超链接操作

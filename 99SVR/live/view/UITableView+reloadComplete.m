@@ -13,7 +13,8 @@
 - (void)reloadDataWithCompletion:(void (^)(void))completionBlock
 {
     [self reloadData];
-    if(completionBlock) {
+    if(completionBlock)
+    {
         completionBlock();
     }
 }

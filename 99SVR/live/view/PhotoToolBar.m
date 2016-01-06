@@ -47,7 +47,7 @@
     _saveImageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _saveImageBtn.frame = CGRectMake(20, 0, 80, btnWidth);
 
-    [_saveImageBtn setTitle:XCLocalized(@"savePhoto") forState:UIControlStateNormal];
+    [_saveImageBtn setTitle:XCLocalized(@"保存") forState:UIControlStateNormal];
     [_saveImageBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_saveImageBtn addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
     
@@ -58,12 +58,13 @@
     [self addSubview:backView];
     [self addSubview:_saveImageBtn];
     
-    UIButton *_deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _deleteBtn.frame = CGRectMake(self.frame.size.width-80,0,60,btnWidth);
-    [_deleteBtn setTitle:XCLocalized(@"devDel") forState:UIControlStateNormal];
-    [_deleteBtn addTarget:self action:@selector(deleteImage) forControlEvents:UIControlEventTouchUpInside];
-    [_deleteBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self addSubview:_deleteBtn];
+//    UIButton *_deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    _deleteBtn.frame = CGRectMake(self.frame.size.width-80,0,60,btnWidth);
+//    [_deleteBtn setTitle:XCLocalized(@"devDel") forState:UIControlStateNormal];
+//    [_deleteBtn addTarget:self action:@selector(deleteImage) forControlEvents:UIControlEventTouchUpInside];
+//    [_deleteBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [self addSubview:_deleteBtn];
+    
 }
 -(void)deleteImage
 {

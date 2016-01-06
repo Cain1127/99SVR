@@ -1401,7 +1401,6 @@ static int stream_component_open(VideoState *is, int stream_index)
         case AVMEDIA_TYPE_VIDEO:
             is->video_stream = stream_index;
             is->video_st = ic->streams[stream_index];
-            NSLog(@"line:%d width:%d  height:%d", __LINE__, is->video_st->codec->width, is->video_st->codec->height);
             
             packet_queue_start(&is->videoq);
             is->video_tid = SDL_CreateThread(video_thread,"video_tid",  is);
@@ -1919,30 +1918,17 @@ static int lockmgr(void **mtx, enum AVLockOp op)
 {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    DLog(@"解码出BUG了");
     @synchronized(_aryVideo)
     {
         [_aryVideo removeAllObjects];
     }
+    [self stop];
 }
 
 #pragma mark - View lifecycle
 - (void)startLoad
 {
     [_glView makeToastActivity_2:@"bottom"];
-//    if (myAlert==nil)
-//    {
-//        myAlert = [[UIAlertView alloc] initWithTitle:nil
-//                                             message: @"正在加载"
-//                                            delegate: self
-//                                   cancelButtonTitle: nil
-//                                   otherButtonTitles: nil];
-//        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-//        activityView.frame = CGRectMake(120.f, 48.0f, 37.0f, 37.0f);
-//        [myAlert addSubview:activityView];
-//        [activityView startAnimating];
-//    }
-//    [myAlert show];
 }
 
 - (void)stopLoad
@@ -2145,7 +2131,10 @@ static int lockmgr(void **mtx, enum AVLockOp op)
                                   length:nSourceHeight*rgbFrame.linesize];
     rgbFrame.width = nSourceWidth;
     rgbFrame.height = nSourceHeight;
-    
+    if(_aryVideo.count>0)
+    {
+        [_aryVideo removeAllObjects];
+    }
     [_aryVideo addObject:rgbFrame];
 }
 

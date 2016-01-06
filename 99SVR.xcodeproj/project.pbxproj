@@ -16,6 +16,8 @@
 		BB1661861C3D029200D318BE /* MBProgressHUD+Add.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661821C3D029200D318BE /* MBProgressHUD+Add.m */; };
 		BB1661871C3D029200D318BE /* MBProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BB1661831C3D029200D318BE /* MBProgressHUD.bundle */; };
 		BB1661881C3D029200D318BE /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661851C3D029200D318BE /* MBProgressHUD.m */; };
+		BB16618B1C3D094F00D318BE /* ZLCoreTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16618A1C3D094F00D318BE /* ZLCoreTextCell.m */; };
+		BB16618F1C3D500D00D318BE /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16618E1C3D500D00D318BE /* PhotoViewController.m */; };
 		BB25D7E41C1571B400314C1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB25D7E31C1571B400314C1E /* Assets.xcassets */; };
 		BB25D7F21C1571B400314C1E /* _9SVRTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7F11C1571B400314C1E /* _9SVRTests.m */; };
 		BB25D7FD1C1571B400314C1E /* _9SVRUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7FC1C1571B400314C1E /* _9SVRUITests.m */; };
@@ -256,6 +258,10 @@
 		BB1661831C3D029200D318BE /* MBProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MBProgressHUD.bundle; sourceTree = "<group>"; };
 		BB1661841C3D029200D318BE /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		BB1661851C3D029200D318BE /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		BB1661891C3D094F00D318BE /* ZLCoreTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLCoreTextCell.h; sourceTree = "<group>"; };
+		BB16618A1C3D094F00D318BE /* ZLCoreTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLCoreTextCell.m; sourceTree = "<group>"; };
+		BB16618D1C3D500D00D318BE /* PhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewController.h; sourceTree = "<group>"; };
+		BB16618E1C3D500D00D318BE /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewController.m; sourceTree = "<group>"; };
 		BB25D7D41C1571B400314C1E /* 99SVR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 99SVR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB25D7E31C1571B400314C1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB25D7ED1C1571B400314C1E /* 99SVRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 99SVRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1250,6 +1256,8 @@
 		BB63F5421C2CC7A300A042E8 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				BB16618D1C3D500D00D318BE /* PhotoViewController.h */,
+				BB16618E1C3D500D00D318BE /* PhotoViewController.m */,
 				BB63F5431C2CC7A300A042E8 /* FinanceOnlineVedioController.h */,
 				BB63F5441C2CC7A300A042E8 /* FinanceOnlineVedioController.m */,
 				BB63F5451C2CC7A300A042E8 /* RoomViewController.h */,
@@ -1309,6 +1317,8 @@
 				BB63F62B1C2D0DDF00A042E8 /* ChatButton.m */,
 				BB16616A1C3CA0B800D318BE /* UITableView+reloadComplete.h */,
 				BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */,
+				BB1661891C3D094F00D318BE /* ZLCoreTextCell.h */,
+				BB16618A1C3D094F00D318BE /* ZLCoreTextCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1694,6 +1704,7 @@
 				BB63F5C31C2CC7A300A042E8 /* MASConstraintMaker.m in Sources */,
 				BB63F5C91C2CC7A300A042E8 /* View+MASAdditions.m in Sources */,
 				BB63F5D21C2CC7A300A042E8 /* MJRefreshLegendFooter.m in Sources */,
+				BB16618B1C3D094F00D318BE /* ZLCoreTextCell.m in Sources */,
 				BB63F6241C2CC7A300A042E8 /* LeftCellModel.m in Sources */,
 				BB63F5FE1C2CC7A300A042E8 /* Video.m in Sources */,
 				BB63F6071C2CC7A300A042E8 /* RoomUserCell.m in Sources */,
@@ -1762,6 +1773,7 @@
 				BB16617F1C3D01F400D318BE /* Photo.m in Sources */,
 				BB63F60C1C2CC7A300A042E8 /* LoginViewController.m in Sources */,
 				BB63F61E1C2CC7A300A042E8 /* GroupListRequest.m in Sources */,
+				BB16618F1C3D500D00D318BE /* PhotoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
