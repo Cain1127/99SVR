@@ -40,24 +40,6 @@
         make.top.equalTo(container).offset(98);
     }];
     
-//    UIButton *lookBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    lookBtn.titleLabel.font = kFontSize(19);
-//    lookBtn.titleLabel.textColor = [UIColor colorWithHex:@"#427ede"];
-//    [lookBtn setTitle:@"随便看看" forState:UIControlStateNormal];
-//    lookBtn.layer.masksToBounds = YES;
-//    lookBtn.layer.borderWidth = 1;
-//    [lookBtn setBackgroundColor:[UIColor whiteColor]];
-//    lookBtn.layer.borderColor = [RGBA(239, 239, 239, 1) CGColor];
-//    lookBtn.layer.cornerRadius = 3;
-//    [container addSubview:lookBtn];
-    
-//    [lookBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.size.mas_equalTo(CGSizeMake(203, 55));
-//        make.left.equalTo(container).offset(86);
-//        make.right.equalTo(container).offset(-86);
-//        make.top.mas_equalTo(logoImageView.mas_bottom).offset(28);
-//    }];
-    
     if (self.vedios == nil || self.vedios.count == 0) {
         _noDataView.hidden = NO;
     } else {

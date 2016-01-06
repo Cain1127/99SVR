@@ -11,6 +11,11 @@
 		BB16616F1C3CDE5000D318BE /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16616E1C3CDE5000D318BE /* RegisterViewController.m */; };
 		BB1661731C3CDEE200D318BE /* IdentifyService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661721C3CDEE200D318BE /* IdentifyService.m */; };
 		BB1661761C3CE0B800D318BE /* RegisterService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661751C3CE0B800D318BE /* RegisterService.m */; };
+		BB16617C1C3D018C00D318BE /* PhotoToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16617B1C3D018C00D318BE /* PhotoToolBar.m */; };
+		BB16617F1C3D01F400D318BE /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16617E1C3D01F400D318BE /* Photo.m */; };
+		BB1661861C3D029200D318BE /* MBProgressHUD+Add.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661821C3D029200D318BE /* MBProgressHUD+Add.m */; };
+		BB1661871C3D029200D318BE /* MBProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BB1661831C3D029200D318BE /* MBProgressHUD.bundle */; };
+		BB1661881C3D029200D318BE /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661851C3D029200D318BE /* MBProgressHUD.m */; };
 		BB25D7E41C1571B400314C1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB25D7E31C1571B400314C1E /* Assets.xcassets */; };
 		BB25D7F21C1571B400314C1E /* _9SVRTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7F11C1571B400314C1E /* _9SVRTests.m */; };
 		BB25D7FD1C1571B400314C1E /* _9SVRUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7FC1C1571B400314C1E /* _9SVRUITests.m */; };
@@ -242,6 +247,15 @@
 		BB1661721C3CDEE200D318BE /* IdentifyService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentifyService.m; sourceTree = "<group>"; };
 		BB1661741C3CE0B800D318BE /* RegisterService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterService.h; sourceTree = "<group>"; };
 		BB1661751C3CE0B800D318BE /* RegisterService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterService.m; sourceTree = "<group>"; };
+		BB16617A1C3D018C00D318BE /* PhotoToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoToolBar.h; sourceTree = "<group>"; };
+		BB16617B1C3D018C00D318BE /* PhotoToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoToolBar.m; sourceTree = "<group>"; };
+		BB16617D1C3D01F400D318BE /* Photo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photo.h; sourceTree = "<group>"; };
+		BB16617E1C3D01F400D318BE /* Photo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Photo.m; sourceTree = "<group>"; };
+		BB1661811C3D029200D318BE /* MBProgressHUD+Add.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+Add.h"; sourceTree = "<group>"; };
+		BB1661821C3D029200D318BE /* MBProgressHUD+Add.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+Add.m"; sourceTree = "<group>"; };
+		BB1661831C3D029200D318BE /* MBProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MBProgressHUD.bundle; sourceTree = "<group>"; };
+		BB1661841C3D029200D318BE /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		BB1661851C3D029200D318BE /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		BB25D7D41C1571B400314C1E /* 99SVR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 99SVR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB25D7E31C1571B400314C1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB25D7ED1C1571B400314C1E /* 99SVRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 99SVRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -700,6 +714,18 @@
 			path = service;
 			sourceTree = "<group>";
 		};
+		BB1661801C3D029200D318BE /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				BB1661811C3D029200D318BE /* MBProgressHUD+Add.h */,
+				BB1661821C3D029200D318BE /* MBProgressHUD+Add.m */,
+				BB1661831C3D029200D318BE /* MBProgressHUD.bundle */,
+				BB1661841C3D029200D318BE /* MBProgressHUD.h */,
+				BB1661851C3D029200D318BE /* MBProgressHUD.m */,
+			);
+			path = MBProgressHUD;
+			sourceTree = "<group>";
+		};
 		BB25D7CB1C1571B400314C1E = {
 			isa = PBXGroup;
 			children = (
@@ -939,6 +965,7 @@
 		BB63F4861C2CC7A200A042E8 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				BB1661801C3D029200D318BE /* MBProgressHUD */,
 				BBAC81301C37E61500CE9D2B /* um */,
 				BB63F4871C2CC7A200A042E8 /* blocks */,
 				BB63F48A1C2CC7A200A042E8 /* category */,
@@ -1234,6 +1261,8 @@
 		BB63F5471C2CC7A300A042E8 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				BB16617D1C3D01F400D318BE /* Photo.h */,
+				BB16617E1C3D01F400D318BE /* Photo.m */,
 				BB63F5481C2CC7A300A042E8 /* RoomInfo.h */,
 				BB63F5491C2CC7A300A042E8 /* RoomInfo.m */,
 				BB63F54A1C2CC7A300A042E8 /* RoomUser.h */,
@@ -1254,6 +1283,8 @@
 		BB63F54F1C2CC7A300A042E8 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				BB16617A1C3D018C00D318BE /* PhotoToolBar.h */,
+				BB16617B1C3D018C00D318BE /* PhotoToolBar.m */,
 				BB63F5501C2CC7A300A042E8 /* EmojiTextAttachment.h */,
 				BB63F5511C2CC7A300A042E8 /* EmojiTextAttachment.m */,
 				BB63F5521C2CC7A300A042E8 /* EmojiView.h */,
@@ -1575,6 +1606,7 @@
 				BB365A411C23A6AF009E2867 /* Info.plist in Resources */,
 				BB63F2D01C27FB2800A042E8 /* 8.gif in Resources */,
 				BB63F2CA1C27FB2800A042E8 /* 33.gif in Resources */,
+				BB1661871C3D029200D318BE /* MBProgressHUD.bundle in Resources */,
 				BB63F2CE1C27FB2800A042E8 /* 6.gif in Resources */,
 				BB63F2BC1C27FB2800A042E8 /* 20.gif in Resources */,
 				BB63F2B41C27FB2800A042E8 /* 13.gif in Resources */,
@@ -1684,6 +1716,7 @@
 				BB63F5CD1C2CC7A300A042E8 /* MJRefreshConst.m in Sources */,
 				BB63F5D01C2CC7A300A042E8 /* MJRefreshGifHeader.m in Sources */,
 				BB63F5E21C2CC7A300A042E8 /* UIWindow+RESideMenuExtensions.m in Sources */,
+				BB1661861C3D029200D318BE /* MBProgressHUD+Add.m in Sources */,
 				BB63F6111C2CC7A300A042E8 /* HotViewController.m in Sources */,
 				BB63F5C01C2CC7A300A042E8 /* LivePlayViewController.m in Sources */,
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
@@ -1709,6 +1742,7 @@
 				BB63F60A1C2CC7A300A042E8 /* VideoCell.m in Sources */,
 				BB63F5DF1C2CC7A300A042E8 /* RESideMenu.m in Sources */,
 				BB63F5E71C2CC7A300A042E8 /* SDWebImageDecoder.m in Sources */,
+				BB16617C1C3D018C00D318BE /* PhotoToolBar.m in Sources */,
 				BB63F5EF1C2CC7A300A042E8 /* UIImage+WebP.m in Sources */,
 				BB63F5FF1C2CC7A300A042E8 /* EmojiTextAttachment.m in Sources */,
 				BB63F5DE1C2CC7A300A042E8 /* REBackgroundView.m in Sources */,
@@ -1723,7 +1757,9 @@
 				BB63F5AE1C2CC7A300A042E8 /* FMDatabase.m in Sources */,
 				BB63F5B51C2CC7A300A042E8 /* DecodeJson.m in Sources */,
 				BB63F6261C2CC7A300A042E8 /* LeftViewCell.m in Sources */,
+				BB1661881C3D029200D318BE /* MBProgressHUD.m in Sources */,
 				BB63F6181C2CC7A300A042E8 /* NewViewController.m in Sources */,
+				BB16617F1C3D01F400D318BE /* Photo.m in Sources */,
 				BB63F60C1C2CC7A300A042E8 /* LoginViewController.m in Sources */,
 				BB63F61E1C2CC7A300A042E8 /* GroupListRequest.m in Sources */,
 			);

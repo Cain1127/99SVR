@@ -236,24 +236,24 @@
         return ;
     }
     
-//    BOOL bCheck = _check.checked;
-//    int nSave = bCheck ? 1 : 0;
-//    int nLogin = _autoLogin.checked ? 1 : 0;
- 
+    //    BOOL bCheck = _check.checked;
+    //    int nSave = bCheck ? 1 : 0;
+    //    int nLogin = _autoLogin.checked ? 1 : 0;
+    
     __weak LoginViewController *__self = self;
     //进入新的界面先
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [__self.view makeToastActivity];
-    });
+                   ^{
+                       [__self.view makeToastActivity];
+                   });
     __block NSString *__strUser = strUser;
     __block NSString *__strPwd = strPwd;
     [self performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8.0];
     dispatch_async(dispatch_get_global_queue(0, 0),
-    ^{
-        LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
-        [tcpSocket loginServer:__strUser pwd:__strPwd];
-    });
+                   ^{
+                       LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+                       [tcpSocket loginServer:__strUser pwd:__strPwd];
+                   });
 }
 
 
@@ -332,11 +332,11 @@
 {
     __weak LoginViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-         [NSObject cancelPreviousPerformRequestsWithTarget:__self];
-         [__self.view hideToastActivity];
-         [__self.view makeToast:@"登录失败"];
-    });
+                   ^{
+                       [NSObject cancelPreviousPerformRequestsWithTarget:__self];
+                       [__self.view hideToastActivity];
+                       [__self.view makeToast:@"登录失败"];
+                   });
     if (notify==nil)
     {
         return ;
@@ -361,10 +361,10 @@
         NSString *strMsg = notify.object;
         __block NSString *__strMsg = strMsg;
         dispatch_async(dispatch_get_main_queue(),
-           ^{
-               [__self.view hideToastActivity];
-               [__self.view makeToast:__strMsg];
-           });
+                       ^{
+                           [__self.view hideToastActivity];
+                           [__self.view makeToast:__strMsg];
+                       });
     }
 }
 

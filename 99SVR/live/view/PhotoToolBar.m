@@ -8,7 +8,6 @@
 #import "PhotoToolBar.h"
 #import "Photo.h"
 #import "MBProgressHUD+Add.h"
-#import "XCNotification.h"
 
 @interface PhotoToolbar()
 {
@@ -69,21 +68,24 @@
 -(void)deleteImage
 {
  //   XCPhoto *photo = _photos[_currentPhotoIndex];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NS_DELETE_IMAGE_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:NS_DELETE_IMAGE_VC object:nil];
 }
 - (void)saveImage
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        XCPhoto *photo = _photos[_currentPhotoIndex];
+        Photo *photo = _photos[_currentPhotoIndex];
         UIImageWriteToSavedPhotosAlbum(photo.imgName, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
     });
 }
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
 {
-    if (error) {
+    if (error)
+    {
         [MBProgressHUD showSuccess:@"保存失败" toView:nil];
-    } else {
+    }
+    else
+    {
         _saveImageBtn.enabled = YES;
         [MBProgressHUD showSuccess:XCLocalized(@"savePhotos") toView:nil];
     }
