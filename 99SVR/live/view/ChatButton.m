@@ -13,10 +13,10 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    self.layer.borderColor = UIColorFromRGB(0xf0f0f0).CGColor;
-    self.layer.borderWidth = 0.5;
-    [self setBackgroundColor:UIColorFromRGB(0xffffff)];
-    [self setTitleColor:RGB(15, 173, 225) forState:UIControlStateNormal];
+//    self.layer.borderColor = UIColorFromRGB(0xf0f0f0).CGColor;
+//    self.layer.borderWidth = 0.5;
+//    [self setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [self setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateNormal];
     [self setTitleColor:[UIColor greenColor] forState:UIControlStateHighlighted];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.titleLabel.font = XCFONT(12);

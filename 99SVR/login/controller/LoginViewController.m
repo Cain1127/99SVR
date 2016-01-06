@@ -44,6 +44,7 @@
     
     UIButton *exitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [exitBtn setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+    
     [exitBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -60,27 +61,11 @@
     [lblName setFont:XCFONT(17)];
     [self.view setBackgroundColor:RGB(245, 245, 246)];
     
-//    UILabel *lblContent = [[UILabel alloc] initWithFrame:Rect(15, 91, kScreenWidth-30, 0.5)];
-//    [self.view addSubview:lblContent];
-//    [lblContent setBackgroundColor:UIColorFromRGBHex(0xd8e6ea)];
-    
-//    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-40, 81, 80, 20)];
-//    [lblTemp setText:@"登录"];
-//    [lblTemp setBackgroundColor:UIColorFromRGBHex(0xf7f7f7)];
-//    [lblTemp setTextColor:UIColorFromRGBHex(0xbcc7cb)];
-//    [lblTemp setFont:XCFONT(12)];
-//    [lblTemp setTextAlignment:NSTextAlignmentCenter];
-//    [self.view addSubview:lblTemp];
     UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
     [self.view addSubview:logoImageView];
-    [logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view);
-        make.top.equalTo(self.view).offset(81);
-        
-    }];
+    [logoImageView setFrame:Rect(kScreenWidth/2-44, 89, 88, 88)];
     
-    CGFloat offsetY = 35;
-    _txtUser = [[LoginTextField alloc] initWithFrame:CGRectMake(15 + 32,118 + offsetY + 20, kScreenWidth-30 - 32 * 2, 44)];
+    _txtUser = [[LoginTextField alloc] initWithFrame:CGRectMake(15 + 32,logoImageView.y+logoImageView.height, kScreenWidth-30 - 32 * 2, 44)];
     _txtPwd = [[LoginTextField alloc] initWithFrame:CGRectMake(_txtUser.x, _txtUser.frame.origin.y+_txtUser.frame.size.height+10, _txtUser.width, 44)];
     
     [_txtUser setBorderStyle:UITextBorderStyleNone];
@@ -101,7 +86,7 @@
     _txtUser.leftView = imgUser;
     _txtUser.leftViewMode = UITextFieldViewModeAlways;
     _txtUser.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    [_txtUser setTextColor:RGB(15, 173, 225)];
+    [_txtUser setTextColor:UIColorFromRGB(0x343434)];
     [_txtUser setBackgroundColor:[UIColor clearColor]];
     [_txtPwd setReturnKeyType:UIReturnKeyDone];
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
@@ -118,18 +103,7 @@
     _txtPwd.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _txtPwd.leftViewMode = UITextFieldViewModeAlways;
     [_txtPwd setBackgroundColor:[UIColor clearColor]];
-    [_txtPwd setTextColor:RGB(15, 173, 225)];
-    
-    
-//    _txtUser.layer.borderColor = UIColorFromRGBHex(0xc6cfd2).CGColor;
-//    _txtUser.layer.borderWidth = 0.5;
-//    _txtUser.layer.masksToBounds = YES;
-//    _txtUser.layer.cornerRadius = 3;
-//    
-//    _txtPwd.layer.borderWidth = 0.5;
-//    _txtPwd.layer.masksToBounds = YES;
-//    _txtPwd.layer.cornerRadius = 3;
-//    _txtPwd.layer.borderColor = UIColorFromRGBHex(0xc6cfd2).CGColor;
+    [_txtPwd setTextColor:UIColorFromRGB(0x343434)];
     
     UIColor *color = [UIColor grayColor];
     _txtUser.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入用户名" attributes:@{NSForegroundColorAttributeName: color}];
@@ -144,37 +118,11 @@
     [_txtPwd setSecureTextEntry:YES];
     [_txtUser setFont:XCFONT(15)];
     [_txtPwd setFont:XCFONT(15)];
-    
     _check = [[QCheckBox alloc] initWithDelegate:self];
-    
-//    UIFont *font = XCFONT(12);
-    
-//    CGSize labelsize = [@"自动登录" sizeWithFont:font constrainedToSize:CGSizeMake(200.0f, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
-    
-    /**_check.frame = Rect(15, _txtPwd.frame.origin.y+_txtPwd.frame.size.height+12, 120, 30);
-    [_check setTitle:@"保存密码" forState:UIControlStateNormal];
-    [_check setTitleColor:UIColorFromRGBHex(0xaaaaaa) forState:UIControlStateNormal];
-    
-    [_check.titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12]];
-    [self.view addSubview:_check];**/
-    
-//    _check.checked = [DeviceInfoDb querySavePwd];
-    /**_autoLogin = [[QCheckBox alloc] initWithDelegate:self];
-    _autoLogin.frame = Rect(kScreenWidth-47-labelsize.width, _txtPwd.frame.origin.y+_txtPwd.frame.size.height+12, labelsize.width+32, 30);
-    [_autoLogin setTitle:@"自动登录" forState:UIControlStateNormal];
-    [_autoLogin setTitleColor:UIColorFromRGBHex(0xaaaaaa) forState:UIControlStateNormal];
-    [_autoLogin.titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12]];
-    
-    [self.view addSubview:_autoLogin];**/
-//    _autoLogin.checked = [DeviceInfoDb queryLogin];
-    
     _btnLogin = [UIButton buttonWithType:UIButtonTypeCustom];
     _btnRegin = [UIButton buttonWithType:UIButtonTypeCustom];
     _btnFind = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [_btnLogin setFrame:CGRectMake(15, _autoLogin.frame.origin.y+_autoLogin.frame.size.height+12, _txtUser.width, 44)];
     
-//    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"btnBG"] forState:UIControlStateNormal];
-//    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"btnBG_H"] forState:UIControlStateHighlighted];
     _btnLogin.layer.masksToBounds = YES;
     _btnLogin.layer.cornerRadius = 3;
     
@@ -183,13 +131,14 @@
     [_btnFind setTitleColor:RGB(15, 173, 225) forState:UIControlStateNormal];
     [_btnFind setTitle:@"找回密码" forState:UIControlStateNormal];
     _btnFind.titleLabel.font = XCFONT(12);
-    CGSize findSize = [@"找回密码" sizeWithFont:XCFONT(12) constrainedToSize:CGSizeMake(200.0f, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize findSize = [@"忘记密码" sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}];
     
     [_btnFind setFrame:Rect(kScreenWidth/2-findSize.width/2,_btnLogin.frame.origin.y+_btnLogin.frame.size.height+20, findSize.width,25)];
     
     [_btnLogin setTitle:@"登 录" forState:UIControlStateNormal];
     [_btnLogin setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_btnLogin setBackgroundColor:kNavColor];
+    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
     _btnLogin.titleLabel.font = XCFONT(15);
     
     [_btnRegin setTitleColor:RGB(255, 255, 255) forState:UIControlStateNormal];
@@ -198,7 +147,6 @@
     [_btnRegin setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
     
     _btnRegin.titleLabel.font = XCFONT(12);
-    
     [_btnRegin addTarget:self action:@selector(registerServver) forControlEvents:UIControlEventTouchUpInside];
     [_btnLogin addTarget:self action:@selector(loginServer) forControlEvents:UIControlEventTouchUpInside];
     [_btnFind addTarget:self action:@selector(findPwd) forControlEvents:UIControlEventTouchUpInside];

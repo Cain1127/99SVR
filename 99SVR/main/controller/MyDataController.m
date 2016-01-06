@@ -10,7 +10,7 @@
 #import "LeftHeaderView.h"
 #import "UserInfo.h"
 
-#define kImageWidth 84
+#define kImageWidth 117
 #define kCircle (kImageWidth + 6)
 
 @implementation TitleItem
@@ -21,13 +21,13 @@
     {
         UIColor *textColor = [UIColor whiteColor];
         _nameLabel = [UILabel new];
-        _nameLabel.font = kFontSize(14);
-        _nameLabel.textColor = textColor;
+        _nameLabel.font = XCFONT(14);
+        _nameLabel.textColor = UIColorFromRGB(0xbbd0ed);
         _nameLabel.text = @"账号";
         [self addSubview:_nameLabel];
         
         _valueLabel = [UILabel new];
-        _valueLabel.font = kFontSize(17);
+        _valueLabel.font = XCFONT(17);
         _valueLabel.textColor = textColor;
         _valueLabel.text = @"3265702";
         [self addSubview:_valueLabel];
@@ -37,6 +37,7 @@
              make.top.equalTo(self);
              make.centerX.equalTo(self);
          }];
+        
         [_valueLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(_nameLabel.mas_bottom).offset(10);
             make.centerX.equalTo(self);
@@ -58,7 +59,12 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = kNavColor;
-    [self addDefaultHeader:@"我的资料"];
+    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
+    [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
+    [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
+    [self setLeftBtn:btnBack];
+    [self setLineHidden:YES];
     [self initSubviews];
 }
 
@@ -70,13 +76,14 @@
 
 - (void)initSubviews
 {
+    UIImageView *imgTemp = [[UIImageView alloc] initWithFrame:Rect(0, 100, kScreenWidth,102)];
+    [imgTemp setImage:[UIImage imageNamed:@"left_bg"]];
+    [self.view addSubview:imgTemp];
+    
     UserInfo *info = [UserInfo sharedUserInfo];
     UIView *circleLine = [UIView new];
-    circleLine.backgroundColor = RGB(59, 97, 166);
     circleLine.layer.masksToBounds = YES;
     circleLine.layer.cornerRadius = (kCircle) / 2;
-    circleLine.layer.borderColor = [RGBA(255, 255, 255, 0.13) CGColor];
-    circleLine.layer.borderWidth = 1.5;
     [self.view addSubview:circleLine];
     
     UIImageView *avatarImageView = [[UIImageView alloc] init];
@@ -84,49 +91,39 @@
     avatarImageView.layer.cornerRadius = kImageWidth / 2;
     avatarImageView.layer.masksToBounds = YES;
     avatarImageView.image = [UIImage imageNamed:@"logo"];
-    [circleLine addSubview:avatarImageView];
+    [self.view addSubview:avatarImageView];
     
     UILabel *nameLabel = [[UILabel alloc] init];
     nameLabel.textColor = [UIColor whiteColor];
-    nameLabel.font = kFontSize(24);
+    nameLabel.font = kFontSize(15);
     nameLabel.text = NSStringFromInt([UserInfo sharedUserInfo].nUserId);
+    [nameLabel setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:nameLabel];
     
     UIButton *vipLevel = [UIButton buttonWithType:UIButtonTypeCustom];
-    vipLevel.titleLabel.textColor = [UIColor whiteColor];
-    vipLevel.titleLabel.font = kFontSize(10);
+    vipLevel.titleLabel.textColor = UIColorFromRGB(0xbbd0ed);
+    vipLevel.titleLabel.font = kFontSize(12);
     [vipLevel setTitle:[info getVipDescript] forState:UIControlStateNormal];
+    vipLevel.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:vipLevel];
     
-    [circleLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kCircle, kCircle));
-        make.top.equalTo(self.view).offset(64 + 10);
-        make.centerX.equalTo(self.view);
-    }];
-    [avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kImageWidth, kImageWidth));
-        make.center.equalTo(circleLine);
-    }];
-    
-    [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(avatarImageView.mas_bottom).offset(19);
-        make.centerX.equalTo(self.view);
-    }];
-    
-    [vipLevel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(nameLabel.mas_bottom).offset(8);
-        make.centerX.equalTo(self.view);
-    }];
+    circleLine.frame = Rect(kScreenWidth/2-kCircle/2, 80, kCircle, kCircle);
+    avatarImageView.frame = Rect(circleLine.x+3,circleLine.y+3, kImageWidth, kImageWidth);
+    nameLabel.frame = Rect(30, circleLine.height+circleLine.y+19, kScreenWidth-60, 20);
+    vipLevel.frame = Rect(30, nameLabel.height+nameLabel.y, kScreenWidth-60, 20);
     
     TitleItem *accountItem = [[TitleItem alloc] init];
     accountItem.nameLabel.text = @"账号";
     accountItem.valueLabel.text = [NSString stringWithFormat:@"%d",[UserInfo sharedUserInfo].nUserId];
+    
     TitleItem *cardItem = [[TitleItem alloc] init];
     cardItem.nameLabel.text = @"金币";
     cardItem.valueLabel.text = NSStringFromLong(info.goldCoin);
+    
     TitleItem *scoreItem = [[TitleItem alloc] init];
     scoreItem.nameLabel.text = @"积分";
     scoreItem.valueLabel.text = NSStringFromLong(info.score);
+    
     [self.view addSubview:accountItem];
     [self.view addSubview:cardItem];
     [self.view addSubview:scoreItem];

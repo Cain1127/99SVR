@@ -9,7 +9,7 @@
 #import "LeftHeaderView.h"
 #import "UserInfo.h"
 
-#define kImageWidth 84
+#define kImageWidth 117
 #define kCircle (kImageWidth + 6)
 
 @interface LeftHeaderView()
@@ -18,7 +18,7 @@
     UIImageView *_avatarImageView; // 头像
     UILabel *_nameLabel; // 名称
     UIButton *_vipLevel; // vip等级
-    UIView *_lineView;
+    UILabel *_lineView;
 }
 
 @end
@@ -27,38 +27,40 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    if (self = [super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame])
+    {
+        UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(0, 21, kScreenWidth,88)];
+        [self addSubview:imgView];
+        [imgView setImage:[UIImage imageNamed:@"left_bg"]];
+        
         _circleLine = [UIView new];
-        _circleLine.backgroundColor = RGB(59, 97, 166);
         _circleLine.layer.masksToBounds = YES;
         _circleLine.layer.cornerRadius = (kCircle) / 2;
-        _circleLine.layer.borderColor = [RGBA(255, 255, 255, 0.13) CGColor];
-        _circleLine.layer.borderWidth = 1.5;
         [self addSubview:_circleLine];
         
         _avatarImageView = [[UIImageView alloc] init];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
-        _avatarImageView.layer.cornerRadius = kImageWidth / 2;
+        _avatarImageView.layer.cornerRadius = (kImageWidth-6) / 2;
         _avatarImageView.layer.masksToBounds = YES;
-//        _avatarImageView.layer.borderColor = [[UIColor clearColor] CGColor];
-//        _avatarImageView.layer.borderWidth = 0;
         _avatarImageView.image = [UIImage imageNamed:@"logo"];
         [_circleLine addSubview:_avatarImageView];
         
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.textColor = [UIColor whiteColor];
-        _nameLabel.font = kFontSize(24);
-        _nameLabel.text = @"天天开心";
+        _nameLabel.font = kFontSize(15);
+        [_nameLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:_nameLabel];
 
         _vipLevel = [UIButton buttonWithType:UIButtonTypeCustom];
-        _vipLevel.titleLabel.textColor = [UIColor whiteColor];
-        _vipLevel.titleLabel.font = kFontSize(10);
+        _vipLevel.titleLabel.textColor = UIColorFromRGB(0xbbd0ed);
+        _vipLevel.titleLabel.font = kFontSize(12);
+        _vipLevel.titleLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_vipLevel];
         
-        _lineView = [UIView new];
-        _lineView.backgroundColor = RGBA(255, 255, 255, 0.43);
+        _lineView = [UILabel new];
+        _lineView.backgroundColor = kLineColor;
         [self addSubview:_lineView];
+        
         [self layoutViews];
     }
     return self;
@@ -82,37 +84,12 @@
 
 - (void)layoutViews
 {
-    CGFloat offsetValue = -23;
+    _circleLine.frame = Rect(self.width/2-kCircle/2, 1, kCircle, kCircle);
+    _avatarImageView.frame = Rect(3, 3, _circleLine.width-6, _circleLine.height-6);
+    _nameLabel.frame = Rect(30, _avatarImageView.height+_avatarImageView.y+19, self.width-60, 20);
+    _vipLevel.frame = Rect(30, _nameLabel.height+_nameLabel.y+8, self.width-60, 20);
+    _lineView.frame = Rect(8, self.height-1.5, self.width-24, 1);
     
-    [_circleLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kCircle, kCircle));
-        make.top.equalTo(self).offset(1);
-        make.centerX.equalTo(self).offset(offsetValue);
-    }];
-    [_avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kImageWidth, kImageWidth));
-        make.center.equalTo(_circleLine);
-//        make.top.equalTo(self).offset(1);
-//        make.centerX.equalTo(self).offset(offsetValue);
-    }];
-    
-    [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_avatarImageView.mas_bottom).offset(19);
-        make.centerX.equalTo(self).offset(offsetValue);
-    }];
-    
-    [_vipLevel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_nameLabel.mas_bottom).offset(8);
-        make.centerX.equalTo(self).offset(offsetValue);
-    }];
-    CGFloat space = 8;
-    CGFloat rightSpace = 75;
-    [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(self.width - space - rightSpace, 1));
-        make.left.equalTo(self).offset(space);
-        make.right.equalTo(self).offset(-rightSpace);
-        make.bottom.equalTo(self);
-    }];
 }
 
 @end

@@ -168,6 +168,7 @@ NSComparator cmptr = ^(id omUser1, id omUser2)
         return ;
     }
 
+//    DLog(@"userid:%d--vipmanager:%d--getroom:%d",user.m_nUserId,user.m_nVipLevel,[user GetRoomMgrLevel]);
     for (int i=0; i<_aryUser.count; i++)
     {
         RoomUser *user1 = [_aryUser objectAtIndex:i];

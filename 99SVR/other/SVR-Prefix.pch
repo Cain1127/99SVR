@@ -53,5 +53,10 @@ lipo -create armv7/lib/libavutil.a arm64/lib/libavutil.a -output all/libavutil.a
 lipo -create armv7/lib/libswresample.a arm64/lib/libswresample.a -output all/libswresample.a
 lipo -create armv7/lib/libswscale.a arm64/lib/libswscale.a -output all/libswscale.a
 lipo -create armv7/lib/libavdevice.a arm64/lib/libavdevice.a -output all/libavdevice.a
+ 
+
+
+ 
+ 
 
 */

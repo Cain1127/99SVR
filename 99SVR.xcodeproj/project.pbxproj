@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB16616C1C3CA0B800D318BE /* UITableView+reloadComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */; };
+		BB16616F1C3CDE5000D318BE /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16616E1C3CDE5000D318BE /* RegisterViewController.m */; };
+		BB1661731C3CDEE200D318BE /* IdentifyService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661721C3CDEE200D318BE /* IdentifyService.m */; };
+		BB1661761C3CE0B800D318BE /* RegisterService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661751C3CE0B800D318BE /* RegisterService.m */; };
 		BB25D7E41C1571B400314C1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB25D7E31C1571B400314C1E /* Assets.xcassets */; };
 		BB25D7F21C1571B400314C1E /* _9SVRTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7F11C1571B400314C1E /* _9SVRTests.m */; };
 		BB25D7FD1C1571B400314C1E /* _9SVRUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7FC1C1571B400314C1E /* _9SVRUITests.m */; };
@@ -230,6 +234,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BB16616A1C3CA0B800D318BE /* UITableView+reloadComplete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+reloadComplete.h"; sourceTree = "<group>"; };
+		BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+reloadComplete.m"; sourceTree = "<group>"; };
+		BB16616D1C3CDE5000D318BE /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		BB16616E1C3CDE5000D318BE /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		BB1661711C3CDEE200D318BE /* IdentifyService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentifyService.h; sourceTree = "<group>"; };
+		BB1661721C3CDEE200D318BE /* IdentifyService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentifyService.m; sourceTree = "<group>"; };
+		BB1661741C3CE0B800D318BE /* RegisterService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterService.h; sourceTree = "<group>"; };
+		BB1661751C3CE0B800D318BE /* RegisterService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterService.m; sourceTree = "<group>"; };
 		BB25D7D41C1571B400314C1E /* 99SVR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 99SVR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB25D7E31C1571B400314C1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB25D7ED1C1571B400314C1E /* 99SVRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 99SVRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -677,6 +689,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BB1661701C3CDEA300D318BE /* service */ = {
+			isa = PBXGroup;
+			children = (
+				BB1661711C3CDEE200D318BE /* IdentifyService.h */,
+				BB1661721C3CDEE200D318BE /* IdentifyService.m */,
+				BB1661741C3CE0B800D318BE /* RegisterService.h */,
+				BB1661751C3CE0B800D318BE /* RegisterService.m */,
+			);
+			path = service;
+			sourceTree = "<group>";
+		};
 		BB25D7CB1C1571B400314C1E = {
 			isa = PBXGroup;
 			children = (
@@ -1253,6 +1276,8 @@
 				BB63F5661C2CC7A300A042E8 /* VideoCellView.m */,
 				BB63F62A1C2D0DDF00A042E8 /* ChatButton.h */,
 				BB63F62B1C2D0DDF00A042E8 /* ChatButton.m */,
+				BB16616A1C3CA0B800D318BE /* UITableView+reloadComplete.h */,
+				BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1260,6 +1285,7 @@
 		BB63F5671C2CC7A300A042E8 /* login */ = {
 			isa = PBXGroup;
 			children = (
+				BB1661701C3CDEA300D318BE /* service */,
 				BB63F5681C2CC7A300A042E8 /* controller */,
 				BB63F56B1C2CC7A300A042E8 /* model */,
 				BB63F56E1C2CC7A300A042E8 /* view */,
@@ -1274,6 +1300,8 @@
 				BB63F56A1C2CC7A300A042E8 /* LoginViewController.m */,
 				BBFA851E1C3383CD000466E4 /* RegViewController.h */,
 				BBFA851F1C3383CD000466E4 /* RegViewController.m */,
+				BB16616D1C3CDE5000D318BE /* RegisterViewController.h */,
+				BB16616E1C3CDE5000D318BE /* RegisterViewController.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -1601,6 +1629,7 @@
 				BB63F5E11C2CC7A300A042E8 /* RESideMenuItem.m in Sources */,
 				BB63F6091C2CC7A300A042E8 /* UIImage+animatedGIF.m in Sources */,
 				BB63F5BF1C2CC7A300A042E8 /* cmdutils.c in Sources */,
+				BB16616F1C3CDE5000D318BE /* RegisterViewController.m in Sources */,
 				BB63F5FC1C2CC7A300A042E8 /* RoomInfo.m in Sources */,
 				BB63F5C71C2CC7A300A042E8 /* NSArray+MASAdditions.m in Sources */,
 				BB63F5E01C2CC7A300A042E8 /* RESideMenuCell.m in Sources */,
@@ -1661,6 +1690,7 @@
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
 				BB63F6141C2CC7A300A042E8 /* MyCollectionController.m in Sources */,
 				BB63F60D1C2CC7A300A042E8 /* RoomListInfo.m in Sources */,
+				BB1661761C3CE0B800D318BE /* RegisterService.m in Sources */,
 				BB63F5AF1C2CC7A300A042E8 /* FMDatabaseAdditions.m in Sources */,
 				BB63F5B21C2CC7A300A042E8 /* FMResultSet.m in Sources */,
 				BB25D80F1C15729800314C1E /* AppDelegate.m in Sources */,
@@ -1669,6 +1699,7 @@
 				BB63F6081C2CC7A300A042E8 /* TitleButton.m in Sources */,
 				BB63F5B01C2CC7A300A042E8 /* FMDatabasePool.m in Sources */,
 				BB63F5C51C2CC7A300A042E8 /* MASViewAttribute.m in Sources */,
+				BB16616C1C3CA0B800D318BE /* UITableView+reloadComplete.m in Sources */,
 				BB63F5C41C2CC7A300A042E8 /* MASLayoutConstraint.m in Sources */,
 				BB63F5D31C2CC7A300A042E8 /* MJRefreshLegendHeader.m in Sources */,
 				BB63F6001C2CC7A300A042E8 /* EmojiView.m in Sources */,
@@ -1688,6 +1719,7 @@
 				BB7B6FF91C33D6E10018FEC1 /* MyDataController.m in Sources */,
 				BB63F61C1C2CC7A300A042E8 /* RoomGroup.m in Sources */,
 				BB63F6221C2CC7A300A042E8 /* MySearchBar.m in Sources */,
+				BB1661731C3CDEE200D318BE /* IdentifyService.m in Sources */,
 				BB63F5AE1C2CC7A300A042E8 /* FMDatabase.m in Sources */,
 				BB63F5B51C2CC7A300A042E8 /* DecodeJson.m in Sources */,
 				BB63F6261C2CC7A300A042E8 /* LeftViewCell.m in Sources */,

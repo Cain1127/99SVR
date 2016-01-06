@@ -212,7 +212,7 @@
 -(void)showLeftView
 {
     [UIView beginAnimations:nil context:nil];
-    mainControl.view.transform = CGAffineTransformScale(CGAffineTransformIdentity,0.85,0.85);
+    mainControl.view.transform = CGAffineTransformScale(CGAffineTransformIdentity,0.85,1);
     mainControl.view.center = CGPointMake(kScreenSourchWidth*1.25,[UIScreen mainScreen].bounds.size.height/2);
     [UIView commitAnimations];
     [mainControl.view addSubview:clearView];

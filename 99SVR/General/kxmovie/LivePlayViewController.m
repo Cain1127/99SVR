@@ -1529,7 +1529,7 @@ static int read_thread(void *arg)
     ic = avformat_alloc_context();
     ic->interrupt_callback.callback = decode_interrupt_cb;
     ic->interrupt_callback.opaque = is;
-    
+    ic->max_analyze_duration = 1000000;
     err = avformat_open_input(&ic, is->filename, is->iformat, &format_opts);
     if (err < 0) {
         print_error(is->filename, err);
@@ -1919,8 +1919,11 @@ static int lockmgr(void **mtx, enum AVLockOp op)
 {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
+    DLog(@"解码出BUG了");
+    @synchronized(_aryVideo)
+    {
+        [_aryVideo removeAllObjects];
+    }
 }
 
 #pragma mark - View lifecycle
@@ -2004,7 +2007,6 @@ static int lockmgr(void **mtx, enum AVLockOp op)
 {
     videoPlayState = theVideoPlayState;
     [UIApplication sharedApplication].idleTimerDisabled = (videoPlayState == VideoPlayStatePlaying);
-    
 }
 
 #pragma mark -

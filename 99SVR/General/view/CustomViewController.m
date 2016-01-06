@@ -10,8 +10,9 @@
 #import "UIView+Extension.h"
 
 @interface CustomViewController ()
-
-
+{
+    UILabel *_lblContent;
+}
 
 @property (nonatomic,strong) UIView *headView;
 @property (nonatomic,strong) UIButton *btnLeft;
@@ -35,9 +36,9 @@
     [_txtTitle setTextAlignment:NSTextAlignmentCenter];
     [_txtTitle setTextColor:[UIColor whiteColor]];
     
-    UILabel *lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
-    [lblContent setBackgroundColor:[UIColor whiteColor]];
-    [_headView addSubview:lblContent];
+    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
+    [_lblContent setBackgroundColor:[UIColor whiteColor]];
+    [_headView addSubview:_lblContent];
 }
 
 - (void)setUserInter
@@ -104,11 +105,17 @@
     }];
     [self.headView addSubview:exitBtn];
     [self.headView addSubview:exitBtn];
-    [exitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    [exitBtn mas_makeConstraints:^(MASConstraintMaker *make)
+    {
         make.size.mas_equalTo(CGSizeMake(50, 44));
         make.left.equalTo(self.headView);
         make.bottom.equalTo(self.headView);
     }];
+}
+
+- (void)setLineHidden:(BOOL)bHidden
+{
+    [_lblContent setHidden:bHidden];
 }
 
 @end

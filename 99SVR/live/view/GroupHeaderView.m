@@ -12,7 +12,6 @@
     UIView *_container;
     UIImageView *_arrowImageView;
     UILabel *_titleLabel;
-//    UIView *_line;
     UIView *_line2;
 }
 
@@ -22,7 +21,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    if (self = [super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame])
+    {
         _container = [[UIView alloc] init];
         [self addSubview:_container];
         _arrowImageView = [[UIImageView alloc] init];
@@ -33,9 +33,6 @@
         _titleLabel.textColor = [UIColor colorWithHex:@"#427ede"];
         [self addSubview:_titleLabel];
         self.backgroundColor = [UIColor clearColor];
-//        _line = [UIView new];
-//        _line.backgroundColor = [UIColor lightGrayColor];
-//        [self addSubview:_line];
         _line2 = [UIView new];
         _line2.backgroundColor = [UIColor lightGrayColor];
         [self addSubview:_line2];
@@ -44,7 +41,8 @@
     return self;
 }
 
-- (void)layoutViews {
+- (void)layoutViews
+{
     [_container mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(8);
         make.top.equalTo(self);
@@ -85,8 +83,9 @@
     if (open)
     {
         _arrowImageView.image = [UIImage imageNamed:@"arrow_open"];
-//        _container.backgroundColor = [UIColor colorWithHex:@"#f3f3f3"];
-    } else {
+    }
+    else
+    {
         _arrowImageView.image = [UIImage imageNamed:@"arrow_close"];
         _container.backgroundColor = [UIColor clearColor];
     }

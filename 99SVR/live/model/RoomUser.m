@@ -39,10 +39,10 @@
     {
         nLevel = 109;
     }
-    else if(_m_nRoomLevel == RoomMgrType_Guan)  //管理
-    {
-        nLevel = 103;
-    }
+//    else if(_m_nRoomLevel == RoomMgrType_Guan)  //管理
+//    {
+//        nLevel = 103;
+//    }
     else if(_m_nInRoomState & FT_ROOMUSER_STATUS_IS_TEMPOP)  //临管
     {
         nLevel = 104;

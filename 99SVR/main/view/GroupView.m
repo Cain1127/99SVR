@@ -75,34 +75,14 @@
     UIColor *lineColor = [UIColor colorWithHex:@"#629aff"];
     line1.backgroundColor = lineColor;
     [self addSubview:line1];
+    
+//    [_line1 setFrame:Rect(_btnFirst.width/2-_btnFirst.titleLabel.width/2,self.height-2,_btnFirst.titleLabel.width,2)];
     [line1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(60, 2));
         make.left.equalTo(_btnFirst.titleLabel).offset(-2);
-        make.bottom.equalTo(self).offset(-5);
+        make.bottom.equalTo(self).offset(0);
     }];
-//    UIView *line2 = [UIView new];
-//    line2.tag = kLineTagStart + 1;
-//    line2.hidden = YES;
-//    line2.backgroundColor = lineColor;
-//    [self addSubview:line2];
-//    [line2 mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.size.mas_equalTo(CGSizeMake(60, 2));
-//        make.left.equalTo(_btnSecond.titleLabel).offset(-2);
-//        make.bottom.equalTo(self).offset(-5);
-//    }];
-//    UIView *line3 = [UIView new];
-//    line3.tag = kLineTagStart + 2;
-//    line3.hidden = YES;
-//    line3.backgroundColor = lineColor;
-//    [self addSubview:line3];
-//    [line3 mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.size.mas_equalTo(CGSizeMake(60, 2));
-//        make.left.equalTo(_btnThird.titleLabel).offset(-2);
-//        make.bottom.equalTo(self).offset(-5);
-//    }];
     _line1 = line1;
-//    _line2 = line2;
-//    _line3 = line3;
     
     [self addLineHeight];
     
@@ -190,7 +170,7 @@
 - (void)setBluePointX:(CGFloat)fPointX
 {
     CGFloat fx = _btnFirst.width/2-_btnFirst.titleLabel.width/2+fPointX/kScreenWidth * _btnFirst.width;
-    [_line1 setFrame:Rect(fx,self.height-5,_btnFirst.titleLabel.width,2)];
+    [_line1 setFrame:Rect(fx,self.height-2,_btnFirst.titleLabel.width,2)];
 }
 
 @end

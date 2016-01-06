@@ -25,14 +25,18 @@
 {
     self = [super initWithFrame:frame];
     [self setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
+    
     UILabel *lblContent = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];
-    [lblContent setBackgroundColor:UIColorFromRGB(0x00)];
+    [lblContent setBackgroundColor:UIColorFromRGB(0xcfcfcf)];
     [self addSubview:lblContent];
+    
+    UILabel *lblContent1 = [[UILabel alloc] initWithFrame:Rect(0, frame.size.height-1, kScreenWidth, 0.5)];
+    [lblContent1 setBackgroundColor:UIColorFromRGB(0xcfcfcf)];
+    [self addSubview:lblContent1];
     
     _btnFirst = [[TitleButton alloc] initWithFrame:Rect(0, 0, kScreenWidth/3, frame.size.height)];
     _btnSecond = [[TitleButton alloc] initWithFrame:Rect(kScreenWidth/3*1, 0, kScreenWidth/3, frame.size.height)];
     _btnThird = [[TitleButton alloc] initWithFrame:Rect(kScreenWidth/3*2, 0, kScreenWidth/3, frame.size.height)];
-    [self setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
 
     [_btnFirst setTitle:keyName[0] forState:UIControlStateNormal];
     [_btnSecond setTitle:keyName[1] forState:UIControlStateNormal];

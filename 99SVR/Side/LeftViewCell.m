@@ -51,10 +51,12 @@
         [self setBackgroundColor:kLeftViewBgColor];
         UIView *bgView = [[UIView alloc] init];
         [bgView setBackgroundColor:RGB(47, 102, 172)];
-//        [bgView setAlpha:0.23];
+        
         [self setSelectedBackgroundView:bgView];
+        
         _imgView = [[UIImageView alloc] initWithFrame:Rect(15,22-kImageWidth/2, kImageWidth, kImageWidth)];
         _lblTitle = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+10,_imgView.y, 160, 16)];
+        
         [_lblTitle setFont:XCFONT(14)];
         [_lblTitle setTextColor:[UIColor whiteColor]];
         [self.contentView addSubview:_lblTitle];

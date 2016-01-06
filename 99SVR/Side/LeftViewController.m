@@ -69,15 +69,13 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
-    LeftHeaderView *header = [[LeftHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 205)];
-    NSLog(@"ctrl_viewWidth:%1.f", self.view.width);
-    header.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"avatar_bg"]];
+    LeftHeaderView *header = [[LeftHeaderView alloc] initWithFrame:CGRectMake(0, 0,kScreenWidth*0.85, 205)];
     _tableView.tableHeaderView = header;
     _leftHeaderView = header;
     
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.height - 44, self.view.width - 75, 44)];
     footerView.backgroundColor = kLeftViewBgColor;
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(5, 0, self.view.width - 80, 1)];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(8, 0,kScreenWidth*0.85-24, 1)];
     line.backgroundColor = kLineColor;
     [footerView addSubview:line];
     
@@ -93,6 +91,7 @@
     [footerView addSubview:logoutBtn];
     [self.view addSubview:footerView];
     _footerView = footerView;
+    
     [logoutBtn clickWithBlock:^(UIGestureRecognizer *gesture)
     {
         UIAlertView *tips = [[UIAlertView alloc] initWithTitle:nil message:@"是否确认退出登陆?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
@@ -183,6 +182,7 @@
     UIViewController *viewControl = nil;
     LeftCellModel *leftModel = [_items objectAtIndex:indexPath.row];
     viewControl = [[NSClassFromString(leftModel.goClassName) alloc] init];
+    [_tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (viewControl)
     {
         [self presentViewController:viewControl animated:YES completion:nil];

@@ -64,26 +64,32 @@
 
 - (void)layoutViews
 {
-    [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make)
-    {
-        make.width.mas_equalTo(self.width * 0.35);
-        make.left.equalTo(_imageView).offset(8);
-        make.bottom.equalTo(_imageView).offset(-4);
-    }];
+    _nameLabel.frame = Rect(_imageView.x+5,_imageView.height+_imageView.y-20,self.width*0.35,15);
+//    
+//    [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make)
+//    {
+//        make.width.mas_equalTo(self.width * 0.35);
+//        make.left.equalTo(_imageView).offset(8);
+//        make.bottom.equalTo(_imageView).offset(-4);
+//    }];
     
-    [_lookCountBtn mas_makeConstraints:^(MASConstraintMaker *make)
-    {
-        make.width.mas_equalTo(self.width * 0.25);
-        make.right.equalTo(_imageView).offset(-8);
-        make.bottom.equalTo(_imageView).offset(-4);
-    }];
+    _roomIdLabel.frame = Rect(_nameLabel.x+_nameLabel.width+2,_nameLabel.y,60,15);
+//    [_lookCountBtn mas_makeConstraints:^(MASConstraintMaker *make)
+//    {
+//        make.width.mas_equalTo(self.width * 0.25);
+//        make.right.equalTo(_imageView).offset(-8);
+//        make.bottom.equalTo(_imageView).offset(-4);
+//    }];
     
-    [_roomIdLabel mas_makeConstraints:^(MASConstraintMaker *make)
-    {
-        make.width.mas_equalTo(self.width * 0.25);
-        make.left.mas_equalTo(_nameLabel.mas_right).offset(6);
-        make.bottom.equalTo(_nameLabel);
-    }];
+    [_lookCountBtn setFrame:Rect(_roomIdLabel.width+_roomIdLabel.x+5,
+                            _nameLabel.y,_imageView.width-(_roomIdLabel.width+_roomIdLabel.x+9) , 15)];
+    
+//    [_roomIdLabel mas_makeConstraints:^(MASConstraintMaker *make)
+//    {
+//        make.width.mas_equalTo(self.width * 0.25);
+//        make.left.mas_equalTo(_nameLabel.mas_right).offset(6);
+//        make.bottom.equalTo(_nameLabel);
+//    }];
 }
 
 - (void)setRoom:(RoomHttp *)room

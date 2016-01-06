@@ -45,8 +45,10 @@
         [UserInfo sharedUserInfo].strPwd = userPwd;
         [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
         [[LSTcpSocket sharedLSTcpSocket] setUserInfo];
-        [UserInfo sharedUserInfo].bIsLogin = YES;
-        [UserInfo sharedUserInfo].nType = 1;
+//        [UserInfo sharedUserInfo].bIsLogin = YES;
+//        [UserInfo sharedUserInfo].nType = 1;
+        [[LSTcpSocket sharedLSTcpSocket] loginServer:[UserDefaults objectForKey:kUserId]
+                                                 pwd:[UserDefaults objectForKey:kUserPwd]];
     }
     else
     {

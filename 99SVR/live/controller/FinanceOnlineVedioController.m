@@ -119,8 +119,11 @@
         [__self.view makeToastActivity];
     });
     NSString *strPort = [strAry componentsSeparatedByString:@":"][1];
-    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:10];
+    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
+//    [socket connectRoomInfo:room.nvcbid address:@"172.16.41.215" port:22706];
+//    [socket connectRoomInfo:roomi.nvcbid address:@"42.62.11.116" port:22706];
     [socket connectRoomInfo:room.nvcbid address:strAddress port:[strPort intValue]];
+//    [socket connectRoomInfo:room.nvcbid address:strAddress port:22790];
     DLog(@"请求房间:room.nvcbid:%@--%@--%@",room.nvcbid,strAddress,strPort);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomSuc:) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
@@ -244,10 +247,8 @@
     {
         groupBtn.open = YES;
     }
-    
     RoomGroup *group = _vedios[section];
     groupBtn.title = group.groupname;
-    
     [groupBtn clickWithBlock:^(UIGestureRecognizer *gesture)
     {
         [self groupClick:groupBtn];

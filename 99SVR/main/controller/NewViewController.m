@@ -89,8 +89,7 @@
         RoomGroupData_t groupData;
         memset(&groupData, 0, sizeof(RoomGroupData_t));
         [value getValue:&groupData];
-        NSStringEncoding gbkEncoding =CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-        NSString *strName = [NSString stringWithCString:groupData.groupname encoding:gbkEncoding];
+        NSString *strName = [NSString stringWithCString:groupData.groupname encoding:GBK_ENCODING];
         [aryName addObject:strName];
         tag[i]=groupData.groupid;
         DLog(@"groupId:%d---strName:%@",tag[i],strName);
@@ -116,7 +115,6 @@
 {
     
     [super viewDidLoad];
-    
     _aryGroup = [NSMutableArray array];
     
     [self initUIHead];

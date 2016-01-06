@@ -159,9 +159,9 @@
 {
     NSError *error= NULL;
     
-    NSString *strTemplate = [NSString stringWithFormat:@"$1 width=\"%d\" height=\"%d\"",
-                             (int)(kScreenWidth-20),(int)((kScreenWidth-20)*.5)];
-//    NSString *strTemplate = [NSString stringWithFormat:@"$1 width=\"160\" height=\"160\""];
+//    NSString *strTemplate = [NSString stringWithFormat:@"$1 width=\"%d\" height=\"%d\"",
+//                             (int)(kScreenWidth-20),(int)((kScreenWidth-20)*.5)];
+    NSString *strTemplate = [NSString stringWithFormat:@"$1 width=\"160\" height=\"160\""];
     NSRegularExpression* regex1 = [NSRegularExpression regularExpressionWithPattern:@"(<img|<IMG)"
                                                                             options:0
                                                                               error:&error];

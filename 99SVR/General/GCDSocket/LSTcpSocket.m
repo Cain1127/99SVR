@@ -184,7 +184,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     return 0;
 }
 
-- (void)sendHello
+- (void)sendHello:(int)nMDM_Vchat
 {
     char szTemp[32]={0};
 
@@ -192,11 +192,9 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     pHead->length = sizeof(COM_MSG_HEADER) + sizeof(CMDClientHello_t);
     pHead->checkcode = 0;
     pHead->version = MDM_Version_Value;
-    pHead->maincmd = MDM_Vchat_Login;
+    pHead->maincmd = nMDM_Vchat;
     pHead->subcmd = Sub_Vchat_ClientHello;
-    
     CMDClientHello_t* pHollo = (CMDClientHello_t *)pHead->content;
-    
     pHollo->param1 = 12;
     pHollo->param2 = 8;
     pHollo->param3 = 7;
@@ -209,7 +207,6 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 - (void)sendMsg_login
 {
     CMDUserLogonReq2_t req;
-    
     memset(&req, 0, sizeof(CMDUserLogonReq2_t));
     
     req.userid = _strUser ? [_strUser intValue] : 0;//如果为0  则是游客登录
@@ -319,8 +316,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             rm.bfontbold    = pInfo->bfontbold;
             strcpy(rm.groupname, pInfo->cgroupname);
             strcpy(rm.iconname, pInfo->clienticonname);
-            NSStringEncoding gbkEncoding =CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-            NSString *strName = [NSString stringWithCString:rm.groupname encoding:gbkEncoding];
+            NSString *strName = [NSString stringWithCString:rm.groupname encoding:GBK_ENCODING];
             DLog(@"rm:%@--groupid:%u---parentid:%u",strName,rm.groupid,rm.parentid);
             strncpy(rm.url,pInfo->content, pInfo->urllength);
             rm.url[pInfo->urllength]='\0';
@@ -638,8 +634,8 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
                 DLog(@"新增用户通知!");
                 CMDRoomUserInfo_t *pItem = (CMDRoomUserInfo_t *)pNewMsg;
                 [self addUserStruct:pItem];
-                NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;FONT-FAMILY:黑体;font-size=14px;\">系统消息: %@(%d) 进入了房间</span>",[NSString stringWithCString:pItem->useralias
-                                                                                                  encoding:GBK_ENCODING],pItem->userid];
+                NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;FONT-FAMILY:黑体;font-size=14px;\">系统消息: <a style=\"TEXT-DECORATION:font-size:14px; none;color:#629bff \" href=\"sqchatid://%d\">%@ 进入了房间</span>",
+                                     pItem->userid,[NSString stringWithCString:pItem->useralias encoding:GBK_ENCODING]];
                 if ([UserInfo sharedUserInfo].m_nVipLevel >=21 && [UserInfo sharedUserInfo].m_nVipLevel <=36)
                 {
                     [_aryChat addObject:strInfo];
@@ -673,7 +669,8 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
                     
                 }
                 DLog(@"userid:%d",pInfo->userid);
-                NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;font-size=14px;\">系统消息:%@(%d) 退出了房间</span>",strName,pInfo->userid];
+                NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;font-size=14px;\">\
+                                     系统消息:<span style=\"TEXT-DECORATION:font-size:14px; none;color:#629bff \">%@</span>退出了房间</span>",strName];
                 if ([UserInfo sharedUserInfo].m_nVipLevel >=21 && [UserInfo sharedUserInfo].m_nVipLevel <=36)
                 {
                     [_aryChat addObject:strInfo];
@@ -1165,29 +1162,25 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 
 - (NSString *)getToUser:(int)userId user:(RoomUser*)pUser name:(NSString *)strName
 {
-    if(pUser)
-    {
-
-    }
     if(userId == 0)
     {
-        return @"<a style=\"TEXT-DECORATION:font-size:13px; none;COLOR: #1444ac \" href=\"sqchatid://0\" value=\"大家\">大家</a>";
+        return @"<span style=\"TEXT-DECORATION:font-size:13px; none;color:#629bff \" href=\"sqchatid://0\" value=\"大家\">大家</span>";
     }
     if(userId == [_strUser intValue])
     {
-        return [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;font-size:13px;COLOR: #1444ac\" value=\"forme--%d\">你</span>",userId];
+        return [NSString stringWithFormat:@"<span value=\"forme--%d\">你</span>",userId];
     }
     else
     {
         if (strName)
         {
-            return [NSString stringWithFormat:@"<a style=\"TEXT-DECORATION: none;font-size:13px;COLOR: #1444ac \" \
-                    href=\"sqchatid://%d\" value=\"%@\">%@</a>(%d)",
-                                                      userId,strName,strName, userId];
+            return [NSString stringWithFormat:@"<a style=\"TEXT-DECORATION: none;font-size:13px;COLOR: #629bff \" \
+                    href=\"sqchatid://%d\" value=\"%@\">%@</a>",
+                                                      userId,strName,strName];
         }
         else
         {
-            return [NSString stringWithFormat:@"<a style=\"TEXT-DECORATION: none;font-size:13px;COLOR: #1444ac \" href=\"sqchatid://%d\">%d</a>(%d)",
+            return [NSString stringWithFormat:@"<a style=\"TEXT-DECORATION: none;font-size:13px;COLOR: #629bff \" href=\"sqchatid://%d\">%d</a>(%d)",
                     userId, userId, userId];
         }
     }
@@ -1197,34 +1190,59 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 - (void)chatMessageOper:(char *)pNewMsg
 {
     CMDRoomChatMsg_t *msg = (CMDRoomChatMsg_t*)pNewMsg;
+    
     NSString *strContent = [NSString stringWithCString:msg->content encoding:GBK_ENCODING];
+    
     NSString *strSrcName = [NSString stringWithCString:msg->srcalias encoding:GBK_ENCODING];
+
     NSString *strFrom = [self getToUser:msg->srcid user:[_rInfo findUser:msg->srcid] name:strSrcName];
-    NSString *strToName = [NSString stringWithCString:msg->toalias encoding:GBK_ENCODING];
-    NSString *strTo = [self getToUser:msg->toid user:[_rInfo findUser:msg->toid] name:strToName];
-    NSString *strInfo = [NSString stringWithFormat:@"  %@ 对 %@ 说:<br>  %@",strFrom,strTo,strContent];
-    strInfo = [DecodeJson replaceEmojiString:strInfo];
-    [_aryChat addObject:strInfo];
-    if (_aryChat.count>=100)
+
+    if (msg->msgtype==1)
     {
-        @synchronized(_aryChat)
+        NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\">说:</span>&nbsp;&nbsp;%@",strFrom,strContent];
+        strInfo = [DecodeJson replaceImageString:strInfo];
+        strInfo = [DecodeJson replaceEmojiString:strInfo];
+        [_aryNotice addObject:strInfo];
+        DLog(@"notice:%@",strInfo);
+        if (_aryNotice.count>=100)
         {
-            for (int i=0; i<50; i++)
+            @synchronized(_aryNotice)
             {
-                [_aryChat removeObjectAtIndex:i];
+                for (int i=0; i<50; i++)
+                {
+                    [_aryNotice removeObjectAtIndex:i];
+                }
             }
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
     }
-    
-    NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[_strUser intValue]];
-    //查询是否有对我说的记录
-    if ([strTo rangeOfString:query].location != NSNotFound)
+    else
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
+        NSString *strToName = [NSString stringWithCString:msg->toalias encoding:GBK_ENCODING];
+        NSString *strTo = [self getToUser:msg->toid user:[_rInfo findUser:msg->toid] name:strToName];
+        NSString *strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\">对 %@ 说 :</span>&nbsp;&nbsp;%@",strFrom,strTo,strContent];
+        strInfo = [DecodeJson replaceEmojiString:strInfo];
+        [_aryChat addObject:strInfo];
+        if (_aryChat.count>=100)
+        {
+            @synchronized(_aryChat)
+            {
+                for (int i=0; i<50; i++)
+                {
+                    [_aryChat removeObjectAtIndex:i];
+                }
+            }
+        }
+        
+        NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[_strUser intValue]];
+        //查询是否有对我说的记录
+        if ([strTo rangeOfString:query].location != NSNotFound)
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
+        }
+        strInfo = nil;
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     }
-    strInfo = nil;
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-    
 }
 
 #pragma mark 房间用户信息添加
@@ -1442,9 +1460,12 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 
 - (void)sendChatInfo:(NSString *)strInfo toid:(int)userId
 {
-    NSString *strMsg = [NSString stringWithFormat:@"<SPAN style=\"font-famlily:黑;COLOR:#000000;FONT-SIZE:16px\">%@</SPAN>",
+    NSString *strMsg = [NSString stringWithFormat:@"<SPAN style=\"font-famlily:黑体;COLOR:#000000;FONT-SIZE:16px\">%@</SPAN>",
                         strInfo];
     NSData *data = [strMsg dataUsingEncoding:GBK_ENCODING];
+    
+    DLog(@"strInfo:%@",strInfo);
+    
     char szBuf[2048]={0};
     CMDRoomChatMsg_t* pReq = (CMDRoomChatMsg_t *)szBuf;
     pReq->vcbid       = [_strRoomId intValue];
@@ -1454,13 +1475,15 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     pReq->srcviplevel = [UserInfo sharedUserInfo].m_nVipLevel;
     pReq->msgtype     = 0;
     pReq->textlen     = data.length+1;
+    
     strcpy(pReq->vcbname,[_rInfo getRoomName]);
-//    strcpy(pReq->tocbname,[_rInfo getRoomName]);
-    memcpy(pReq->content, [data bytes], pReq->textlen);
+    
+    memcpy(pReq->content, [data bytes], [data length]);
+    
     RoomUser *fromUser= [_rInfo findUser:[_strUser intValue]];
+    
     memcpy(pReq->srcalias,[[fromUser.m_strUserAlias dataUsingEncoding:GBK_ENCODING] bytes],
            [[fromUser.m_strUserAlias dataUsingEncoding:GBK_ENCODING] length]);
-
     if (userId!=0)
     {
         RoomUser *toUser = [_rInfo findUser:userId];
@@ -1468,7 +1491,9 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
                [[toUser.m_strUserAlias dataUsingEncoding:GBK_ENCODING] length]);
     }
     [self sendLocalChat:strMsg to:pReq->toid];
+    
     pReq->content[pReq->textlen -1] = '\0';
+    
     [self sendChat:pReq];
 }
 
@@ -1476,14 +1501,25 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 - (void)sendLocalChat:(NSString *)strMsg to:(int)nUser
 {
     NSString *strChat = [DecodeJson replaceEmojiString:strMsg];
-    strChat = [DecodeJson replaceImageString:strChat];
-    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;font-size:13px;COLOR: #1444ac \">你</span>"];
-    RoomUser *user = [_rInfo findUser:nUser];
-    NSString *strTo = [self getToUser:nUser user:user name:user.m_strUserAlias];
-    NSString *strInfo = [NSString stringWithFormat:@"%@ 对 %@ 说:<br>%@",strFrom,strTo,strChat];
-    [_aryChat addObject:strInfo];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     
+    strChat = [DecodeJson replaceImageString:strChat];
+    
+    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;font-size:13px;COLOR: #629bff \">你</span>"];
+    
+    if (nUser!=0)
+    {
+        RoomUser *user = [_rInfo findUser:nUser];
+        NSString *strTo = [self getToUser:nUser user:user name:user.m_strUserAlias];
+        NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\">对 %@ 说:</span>%@",strFrom,strTo,strChat];
+        [_aryChat addObject:strInfo];
+    }
+    else
+    {
+        NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\"> 说:</span>%@",strFrom,strChat];
+        [_aryChat addObject:strInfo];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
 }
 
 - (void)sendChat:(CMDRoomChatMsg_t*)pReq
@@ -1508,12 +1544,13 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     if ([host isEqualToString:[self getIPWithHostName:SVR_LOGIN_IP]] && port == SVR_LOGIN_PORT)
     {
         //登录服务器信息
-        [self sendHello];
+        [self sendHello:MDM_Vchat_Login];
         [self sendMsg_login];
     }
     else if([host isEqualToString:_strRoomAddress] && _nRoomPort == port)
     {
         //房间连接消息
+        [self sendHello:MDM_Vchat_Room];
         [self joinRoomInfo];
     }
     [_asyncSocket readDataToLength:sizeof(int) withTimeout:-1 tag:SOCKET_READ_LENGTH];
@@ -1600,6 +1637,5 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         return nil;
     }
 }
-
 
 @end
