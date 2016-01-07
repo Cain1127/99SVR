@@ -1917,13 +1917,13 @@ static int lockmgr(void **mtx, enum AVLockOp op)
 
 - (void)didReceiveMemoryWarning
 {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     @synchronized(_aryVideo)
     {
         [_aryVideo removeAllObjects];
     }
     [self stop];
+    [self startPlayWithURLString:@""];
 }
 
 #pragma mark - View lifecycle

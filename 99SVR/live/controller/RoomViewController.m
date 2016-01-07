@@ -791,9 +791,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     });
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)addNotification
 {
-    [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startPlayThread) name:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatPriMsg:) name:MESSAGE_ROOM_TO_ME_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatMSg:) name:MESSAGE_ROOM_CHAT_VC object:nil];
@@ -805,11 +804,24 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
                                                   name:UIKeyboardDidHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardFrameDidChange:)
                                                  name:UIKeyboardDidChangeFrameNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBack) name:MESSAGE_ENTER_BACK_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(comeBack) name:MESSAGE_COME_BACK_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomBeExit:) name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(room_kickout) name:MESSAGE_ROOM_KICKOUT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeNotification) name:MESSAGE_REMOVE_NOTIFY_VC object:nil];
+}
+
+- (void)removeNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBack) name:MESSAGE_ENTER_BACK_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNotification) name:MESSAGE_ADD_NOTIFY_VC object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self addNotification];
 }
 
 #pragma mark stop Play

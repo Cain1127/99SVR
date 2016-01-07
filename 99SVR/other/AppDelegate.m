@@ -66,7 +66,7 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_REMOVE_NOTIFY_VC object:nil];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -103,7 +103,6 @@
 -(void)timerMethod:(NSTimer *)paramSender
 {
     NSTimeInterval backgroundTimeRemaining =[[UIApplication sharedApplication] backgroundTimeRemaining];
-    DLog(@"Background Time Remaining = %.02f Seconds", backgroundTimeRemaining);
     if (backgroundTimeRemaining == DBL_MAX)
     {}
     else
@@ -139,8 +138,10 @@
 {
     
 }
-- (void)applicationDidBecomeActive:(UIApplication *)application {
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
     DLog(@"返回");
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ADD_NOTIFY_VC object:nil];
     bStatus = YES;
     [self.myTimer invalidate];
     if (bGGLogin)
