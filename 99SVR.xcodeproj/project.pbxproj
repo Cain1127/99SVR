@@ -18,6 +18,8 @@
 		BB1661881C3D029200D318BE /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661851C3D029200D318BE /* MBProgressHUD.m */; };
 		BB16618B1C3D094F00D318BE /* ZLCoreTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16618A1C3D094F00D318BE /* ZLCoreTextCell.m */; };
 		BB16618F1C3D500D00D318BE /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16618E1C3D500D00D318BE /* PhotoViewController.m */; };
+		BB1661941C3DF6EA00D318BE /* JPEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661921C3DF6EA00D318BE /* JPEngine.m */; };
+		BB1661951C3DF6EA00D318BE /* JSPatch.js in Resources */ = {isa = PBXBuildFile; fileRef = BB1661931C3DF6EA00D318BE /* JSPatch.js */; };
 		BB25D7E41C1571B400314C1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB25D7E31C1571B400314C1E /* Assets.xcassets */; };
 		BB25D7F21C1571B400314C1E /* _9SVRTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7F11C1571B400314C1E /* _9SVRTests.m */; };
 		BB25D7FD1C1571B400314C1E /* _9SVRUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7FC1C1571B400314C1E /* _9SVRUITests.m */; };
@@ -262,6 +264,9 @@
 		BB16618A1C3D094F00D318BE /* ZLCoreTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLCoreTextCell.m; sourceTree = "<group>"; };
 		BB16618D1C3D500D00D318BE /* PhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewController.h; sourceTree = "<group>"; };
 		BB16618E1C3D500D00D318BE /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewController.m; sourceTree = "<group>"; };
+		BB1661911C3DF6EA00D318BE /* JPEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPEngine.h; sourceTree = "<group>"; };
+		BB1661921C3DF6EA00D318BE /* JPEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPEngine.m; sourceTree = "<group>"; };
+		BB1661931C3DF6EA00D318BE /* JSPatch.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = JSPatch.js; sourceTree = "<group>"; };
 		BB25D7D41C1571B400314C1E /* 99SVR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 99SVR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB25D7E31C1571B400314C1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB25D7ED1C1571B400314C1E /* 99SVRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 99SVRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -732,6 +737,16 @@
 			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
+		BB1661901C3DF6EA00D318BE /* JSPatch */ = {
+			isa = PBXGroup;
+			children = (
+				BB1661911C3DF6EA00D318BE /* JPEngine.h */,
+				BB1661921C3DF6EA00D318BE /* JPEngine.m */,
+				BB1661931C3DF6EA00D318BE /* JSPatch.js */,
+			);
+			path = JSPatch;
+			sourceTree = "<group>";
+		};
 		BB25D7CB1C1571B400314C1E = {
 			isa = PBXGroup;
 			children = (
@@ -758,6 +773,7 @@
 		BB25D7D61C1571B400314C1E /* 99SVR */ = {
 			isa = PBXGroup;
 			children = (
+				BB1661901C3DF6EA00D318BE /* JSPatch */,
 				BB63F4861C2CC7A200A042E8 /* General */,
 				BB63F5411C2CC7A300A042E8 /* live */,
 				BB63F5671C2CC7A300A042E8 /* login */,
@@ -1596,6 +1612,7 @@
 				BB36592C1C214067009E2867 /* doxyfile in Resources */,
 				BB63F2C81C27FB2800A042E8 /* 31.gif in Resources */,
 				BB63F2C91C27FB2800A042E8 /* 32.gif in Resources */,
+				BB1661951C3DF6EA00D318BE /* JSPatch.js in Resources */,
 				BB63F5D81C2CC7A300A042E8 /* checkbox1_checked@2x.png in Resources */,
 				BB63F2BB1C27FB2800A042E8 /* 2.gif in Resources */,
 				BB63F2C71C27FB2800A042E8 /* 30.gif in Resources */,
@@ -1712,6 +1729,7 @@
 				BB7B6FFC1C33D7070018FEC1 /* CircleImageView.m in Sources */,
 				BB63F61F1C2CC7A300A042E8 /* RoomListRequest.m in Sources */,
 				BB63F6251C2CC7A300A042E8 /* LeftHeaderView.m in Sources */,
+				BB1661941C3DF6EA00D318BE /* JPEngine.m in Sources */,
 				BB63F5D51C2CC7A300A042E8 /* UIScrollView+MJRefresh.m in Sources */,
 				BB63F6271C2CC7A300A042E8 /* LeftViewController.m in Sources */,
 				BB63F5CA1C2CC7A300A042E8 /* ViewController+MASAdditions.m in Sources */,

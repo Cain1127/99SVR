@@ -819,6 +819,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
                 NSString *strInfo = [NSString stringWithCString:szTemp encoding:GBK_ENCODING];
                 NSString *strNotice = [DecodeJson replaceImageString:strInfo];
                 [_aryNotice addObject:strNotice];
+                DLog(@"公告:%@",strNotice);
                 [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
             }
         }

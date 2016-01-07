@@ -833,7 +833,9 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     __weak RoomViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [__self.view makeToast:@"您被人踢出当前房间" duration:0.5 position:@"center"];
-        [__self navBack];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [__self navBack];
+        });
     });
 }
 
