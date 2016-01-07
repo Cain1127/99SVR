@@ -1342,7 +1342,8 @@ static int stream_component_open(VideoState *is, int stream_index)
     
     avctx->workaround_bugs   = workaround_bugs;
     avctx->lowres            = lowres;
-    if(avctx->lowres > codec->max_lowres){
+    if(avctx->lowres > codec->max_lowres)
+    {
         av_log(avctx, AV_LOG_WARNING, "The maximum value for lowres supported by the decoder is %d\n",
                codec->max_lowres);
         avctx->lowres= codec->max_lowres;
