@@ -159,9 +159,9 @@
 {
     NSError *error= NULL;
     
-//    NSString *strTemplate = [NSString stringWithFormat:@"$1 width=\"%d\" height=\"%d\"",
-//                             (int)(kScreenWidth-20),(int)((kScreenWidth-20)*.5)];
-    NSString *strTemplate = [NSString stringWithFormat:@"$1 width=\"160\" height=\"160\""];
+    NSString *strTemplate = [NSString stringWithFormat:@"$1 width=\"%d\" height=\"%d\"",
+                             (int)(kScreenWidth-20),(int)((kScreenWidth-20)*.5)];
+    
     NSRegularExpression* regex1 = [NSRegularExpression regularExpressionWithPattern:@"(<img|<IMG)"
                                                                             options:0
                                                                               error:&error];
@@ -169,15 +169,6 @@
                                                         options:0
                                                         range:NSMakeRange(0, strInfo.length)
                                                    withTemplate:strTemplate];
-    
-//    NSString *strSpan = [NSString stringWithFormat:@"<p style=\"float:left;margin-rig:15px;\""];
-//    NSString *strSpan = [NSString stringWithFormat:@""];
-//    NSRegularExpression* regex2 = [NSRegularExpression regularExpressionWithPattern:@"(<span class=\"wenzi\">)"
-//                                                                            options:0
-//                                                                              error:&error];
-//    result = [regex2 stringByReplacingMatchesInString:result options:0 range:NSMakeRange(0, result.length)
-//                                         withTemplate:strSpan];
-    
     return result;
 }
 

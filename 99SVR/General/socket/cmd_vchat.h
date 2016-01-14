@@ -49,7 +49,7 @@ typedef struct tag_CMDUserLogonReq2
 	uint32 nversion;        //本地版本号?
 	uint32 nmask;           //标示,用于客户端验证是不是自己发出的resp,
 	char   cuserpwd[PWDLEN];    //登录密码,游客登录不需要密码,长度与将来的md5兼容
-	char   cSerial[IPADDRLEN];  //硬盘标示符号,应该和mac/ip无关,这样才能做到客户端修改ip/mac时无效.
+	char   cSerial[64];  //硬盘标示符号,应该和mac/ip无关,这样才能做到客户端修改ip/mac时无效.
 	char   cMacAddr[IPADDRLEN]; //mac地址
 	char   cIpAddr[IPADDRLEN];  //ip地址
 	byte   nimstate;        //IM状态:如隐身登录
@@ -203,8 +203,8 @@ typedef struct tag_CMDJoinRoomReq
    uint32 coremessagever;     //客户端内核版本
    char   cuserpwd[PWDLEN];   //用户密码,没有就是游客
    char   croompwd[PWDLEN];   //房间密码,可能有
-   char   cSerial[IPADDRLEN];    //
-//   char   cSerial[64];         //修改适应新的内容
+//   char   cSerial[IPADDRLEN];    //
+   char   cSerial[64];         //修改适应新的内容
    char   cMacAddr[IPADDRLEN];   //
    char   cIpAddr[IPADDRLEN];
 }CMDJoinRoomReq_t;

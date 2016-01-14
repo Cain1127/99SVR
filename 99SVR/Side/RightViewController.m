@@ -34,9 +34,9 @@
 
 - (void)initUIHead
 {
-    ZLTabInfo *tabInfo1 = [[ZLTabInfo alloc] initWithTabInfo:@"首页" normal:@"" high:@"" viewControl:[[HomeViewController alloc] init]];
-    ZLTabInfo *tabInfo2 = [[ZLTabInfo alloc] initWithTabInfo:@"视频直播" normal:@"" high:@"" viewControl:[[IndexViewController alloc] init]];
-    ZLTabInfo *tabInfo3 = [[ZLTabInfo alloc] initWithTabInfo:@"文字直播" normal:@"" high:@"" viewControl:[[TextViewController alloc] init]];
+    ZLTabInfo *tabInfo1 = [[ZLTabInfo alloc] initWithTabInfo:@"首页" normal:@"home" high:@"home_h" viewControl:[[HomeViewController alloc] init]];
+    ZLTabInfo *tabInfo2 = [[ZLTabInfo alloc] initWithTabInfo:@"视频直播" normal:@"video_live" high:@"video_live_h" viewControl:[[IndexViewController alloc] init]];
+    ZLTabInfo *tabInfo3 = [[ZLTabInfo alloc] initWithTabInfo:@"文字直播" normal:@"text_live" high:@"text_live_h" viewControl:[[TextViewController alloc] init]];
     
     NSArray *aryTab = @[tabInfo1,tabInfo2,tabInfo3];
     [self addSonView:aryTab];

@@ -296,6 +296,7 @@ enum {
 	Sub_Vchat_ReportMediaGateReq = 208, //客户端报告媒体服务器和网关服务器
 	Sub_Vchat_ReportMediaGateResp = 209, //客户端报告媒体服务器和网关服务器的回应
     Sub_Vchar_RoomAndSubRoomId_Noty = 216,
+    Sub_Vchat_logonReq3 = 1002,
 };
 
 typedef enum MediaConnectActionType

@@ -10,4 +10,6 @@
 
 @interface TextTcpSocket : NSObject
 
+- (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort;
+
 @end

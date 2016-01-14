@@ -11,19 +11,32 @@
 #import "TeacherModel.h"
 #import "TextHomeViewController.h"
 
+#import "TextLivingCell.h"
+
 @interface TextViewController ()<UITableViewDataSource,UITableViewDelegate,HotTeachDelegate>
 
 @property (nonatomic,strong) UIScrollView *scrollView;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryHot;
+@property (nonatomic,copy) NSArray *aryLiving;
 
 @end
 
 @implementation TextViewController
 
-- (void)loadView
+- (void)initLivingData
 {
-    self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-50)];
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i=0; i<10; i++)
+    {
+        TeacherModel *model = [[TeacherModel alloc] init];
+        model.strImg=@"";
+        model.strName = @"帅哥";
+        model.strContent = @"投资市场人才辈出，各领风骚载！他一历经多年钻石，鹤立鸡群，他...";
+        model.nThum = 200;
+        [array addObject:model];
+    }
+    _aryLiving = array;
 }
 
 - (void)viewDidLoad
@@ -31,6 +44,7 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self setTitleText:@"文字直播"];
+    [self initLivingData];
     NSMutableArray *array = [NSMutableArray array];
     for (int i=0; i<2; i++)
     {
@@ -63,6 +77,7 @@
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _scrollView.contentSize = CGSizeMake(kScreenWidth,(kScreenWidth/2+70)*(_aryHot.count/2));
+    
     [self initWithHot];
     [self initTableView];
 }
@@ -101,7 +116,13 @@
 
 - (void)initTableView
 {
-    _tableView = [[UITableView alloc] initWithFrame:Rect(0, _scrollView.y+_scrollView.height+5, kScreenWidth, 320)];
+    UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(8, _scrollView.y+_scrollView.height+5, kScreenWidth, 20)];
+    [lblHot setText:@"正在直播"];
+    [lblHot setFont:XCFONT(15)];
+    [lblHot setTextColor:UIColorFromRGB(0x427ede)];
+    [self.view addSubview:lblHot];
+    
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0, lblHot.y+lblHot.height+5, kScreenWidth,kScreenHeight-(lblHot.y+lblHot.height+5+50))];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -116,17 +137,30 @@
 #pragma mark table view delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    return _aryLiving.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    static NSString *strCellIdentifier = @"TextLivingIdentifier";
+    TextLivingCell *cell = [_tableView dequeueReusableCellWithIdentifier:strCellIdentifier];
+    if(cell==nil)
+    {
+        cell = [[TextLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strCellIdentifier];
+    }
+    TeacherModel *model = [_aryLiving objectAtIndex:indexPath.row];
+    [cell setTeacherModel:model];
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60;
 }
 
 #pragma mark hotViewDelegate

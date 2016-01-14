@@ -35,6 +35,7 @@
     
     UIImageView *imageHead = [[UIImageView alloc] initWithFrame:Rect(5, 5, 40, 40)];
     [self addSubview:imageHead];
+    [imageHead setImage:[UIImage imageNamed:@"teach_hot"]];
     
     _lblName = [[UILabel alloc] initWithFrame:Rect(8, _imgView.y+_imgView.height-30,_imgView.width,15)];
     [self addSubview:_lblName];

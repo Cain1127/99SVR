@@ -361,10 +361,10 @@
         NSString *strMsg = notify.object;
         __block NSString *__strMsg = strMsg;
         dispatch_async(dispatch_get_main_queue(),
-                       ^{
-                           [__self.view hideToastActivity];
-                           [__self.view makeToast:__strMsg];
-                       });
+       ^{
+           [__self.view hideToastActivity];
+           [__self.view makeToast:__strMsg];
+       });
     }
 }
 

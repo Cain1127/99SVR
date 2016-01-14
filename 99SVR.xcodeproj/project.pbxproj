@@ -209,7 +209,6 @@
 		BB88F3131C41461900C1F8D9 /* TextLiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F3121C41461900C1F8D9 /* TextLiveViewController.m */; };
 		BB88F3161C41462B00C1F8D9 /* TextChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F3151C41462B00C1F8D9 /* TextChatViewController.m */; };
 		BB88F3191C41464100C1F8D9 /* TextNewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F3181C41464100C1F8D9 /* TextNewViewController.m */; };
-		BB88F31C1C41466E00C1F8D9 /* TextLiveCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F31B1C41466E00C1F8D9 /* TextLiveCell.m */; };
 		BB88F31F1C414A8A00C1F8D9 /* TextHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F31E1C414A8A00C1F8D9 /* TextHomeViewController.m */; };
 		BB88F3221C41795D00C1F8D9 /* LiveCoreTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F3211C41795D00C1F8D9 /* LiveCoreTextCell.m */; };
 		BB88F3251C4356B100C1F8D9 /* TextTcpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F3241C4356B100C1F8D9 /* TextTcpSocket.m */; };
@@ -224,6 +223,7 @@
 		BB88F3651C4736C100C1F8D9 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F35A1C4736C100C1F8D9 /* AFURLSessionManager.m */; };
 		BB88F3661C4736C100C1F8D9 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F35C1C4736C100C1F8D9 /* BaseService.m */; };
 		BB88F36D1C4772B100C1F8D9 /* NNSVRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F36C1C4772B100C1F8D9 /* NNSVRViewController.m */; };
+		BB88F3701C479CE000C1F8D9 /* TextLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F36F1C479CE000C1F8D9 /* TextLivingCell.m */; };
 		BBAC81341C37E61500CE9D2B /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAC81311C37E61500CE9D2B /* libMobClickLibrary.a */; };
 		BBECB02D1C1AC1E400D7230F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB02C1C1AC1E400D7230F /* OpenGLES.framework */; };
 		BBECB02F1C1AC1EC00D7230F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB02E1C1AC1EC00D7230F /* MediaPlayer.framework */; };
@@ -689,8 +689,6 @@
 		BB88F3151C41462B00C1F8D9 /* TextChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextChatViewController.m; sourceTree = "<group>"; };
 		BB88F3171C41464100C1F8D9 /* TextNewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextNewViewController.h; sourceTree = "<group>"; };
 		BB88F3181C41464100C1F8D9 /* TextNewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextNewViewController.m; sourceTree = "<group>"; };
-		BB88F31A1C41466E00C1F8D9 /* TextLiveCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLiveCell.h; sourceTree = "<group>"; };
-		BB88F31B1C41466E00C1F8D9 /* TextLiveCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLiveCell.m; sourceTree = "<group>"; };
 		BB88F31D1C414A8A00C1F8D9 /* TextHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextHomeViewController.h; sourceTree = "<group>"; };
 		BB88F31E1C414A8A00C1F8D9 /* TextHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextHomeViewController.m; sourceTree = "<group>"; };
 		BB88F3201C41795D00C1F8D9 /* LiveCoreTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveCoreTextCell.h; sourceTree = "<group>"; };
@@ -720,6 +718,8 @@
 		BB88F35C1C4736C100C1F8D9 /* BaseService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseService.m; sourceTree = "<group>"; };
 		BB88F36B1C4772B100C1F8D9 /* NNSVRViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSVRViewController.h; sourceTree = "<group>"; };
 		BB88F36C1C4772B100C1F8D9 /* NNSVRViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNSVRViewController.m; sourceTree = "<group>"; };
+		BB88F36E1C479CE000C1F8D9 /* TextLivingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLivingCell.h; sourceTree = "<group>"; };
+		BB88F36F1C479CE000C1F8D9 /* TextLivingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLivingCell.m; sourceTree = "<group>"; };
 		BBAC81311C37E61500CE9D2B /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		BBAC81321C37E61500CE9D2B /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		BBAC81331C37E61500CE9D2B /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClickSocialAnalytics.h; sourceTree = "<group>"; };
@@ -864,10 +864,10 @@
 			children = (
 				BB88F30B1C3FB09900C1F8D9 /* HotTextView.h */,
 				BB88F30C1C3FB09900C1F8D9 /* HotTextView.m */,
-				BB88F31A1C41466E00C1F8D9 /* TextLiveCell.h */,
-				BB88F31B1C41466E00C1F8D9 /* TextLiveCell.m */,
 				BB88F3201C41795D00C1F8D9 /* LiveCoreTextCell.h */,
 				BB88F3211C41795D00C1F8D9 /* LiveCoreTextCell.m */,
+				BB88F36E1C479CE000C1F8D9 /* TextLivingCell.h */,
+				BB88F36F1C479CE000C1F8D9 /* TextLivingCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1834,6 +1834,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB88F3191C41464100C1F8D9 /* TextNewViewController.m in Sources */,
+				BB88F3701C479CE000C1F8D9 /* TextLivingCell.m in Sources */,
 				BB63F61B1C2CC7A300A042E8 /* HtmlRoom.m in Sources */,
 				BB63F5F01C2CC7A300A042E8 /* UIImageView+HighlightedWebCache.m in Sources */,
 				BB63F5ED1C2CC7A300A042E8 /* UIImage+GIF.m in Sources */,
@@ -1883,7 +1884,6 @@
 				BB63F5F91C2CC7A300A042E8 /* UIView+Extension.m in Sources */,
 				BB63F5D41C2CC7A300A042E8 /* UIScrollView+MJExtension.m in Sources */,
 				BB63F5B31C2CC7A300A042E8 /* GCDAsyncSocket.m in Sources */,
-				BB88F31C1C41466E00C1F8D9 /* TextLiveCell.m in Sources */,
 				BB63F5AB1C2CC7A300A042E8 /* UIColor+Ext.m in Sources */,
 				BB63F6201C2CC7A300A042E8 /* GroupView.m in Sources */,
 				BB63F5B61C2CC7A300A042E8 /* GTMBase64.m in Sources */,
@@ -2180,7 +2180,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.SVRNN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "61f5f47f-494c-4172-9716-44b79cb117bb";
+				PROVISIONING_PROFILE = "32671d5f-3f19-470d-9186-87408dcfe3bb";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "armv7 arm64";

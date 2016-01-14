@@ -23,11 +23,18 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor blackColor]];
     [self setTitleText:@"首页"];
+    [self initUIHead];
 }
 
 - (void)initUIHead
 {
-    
+    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftBtn setImage:[UIImage imageNamed:@"switcher"] forState:UIControlStateNormal];
+    [leftBtn clickWithBlock:^(UIGestureRecognizer *gesture)
+     {
+         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
+     }];
+    [self setLeftBtn:leftBtn];
 }
 
 - (void)initUIBody

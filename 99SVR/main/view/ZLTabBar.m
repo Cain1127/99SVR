@@ -61,7 +61,7 @@
         [view setTag:count+20];
         [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapIndex:)]];
         
-        ZLButton *tabButton = [[ZLButton alloc] initWithTabInfo:tabInfo frame:CGRectMake(buttonSize/2-48/2.0, 0 ,48, 48)];
+        ZLButton *tabButton = [[ZLButton alloc] initWithTabInfo:tabInfo frame:view.bounds];
         [tabButton setTag:count+10];
         
         [tabButton addTarget:self action:@selector(clickIndex:) forControlEvents:UIControlEventTouchUpInside];

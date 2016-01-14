@@ -1166,7 +1166,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         }
         else
         {
-            return nil;
+            ZLCoreTextCell *cell = [[ZLCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"roomviewcontroller"];
+            return cell;
         }
     }
     else

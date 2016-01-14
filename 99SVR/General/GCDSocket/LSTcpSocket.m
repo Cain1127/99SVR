@@ -230,7 +230,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     req.nmobile = 1;
     
     [self sendMessage:(char*)&req size:sizeof(CMDUserLogonReq2_t) version:MDM_Version_Value
-              maincmd:MDM_Vchat_Login subcmd:Sub_Vchat_logonReq2];
+              maincmd:MDM_Vchat_Login subcmd:Sub_Vchat_logonReq3];
 }
 
 - (void)loginServer:(NSString *)strUser pwd:(NSString *)strPwd

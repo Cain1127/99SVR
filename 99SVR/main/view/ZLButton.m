@@ -36,11 +36,10 @@
     if (self)
     {
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
-        self.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0f];
-        
+        self.titleLabel.font = XCFONT(12);
         [self setTitle:tabInfo.strTitle forState:UIControlStateNormal];
         [self setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        [self setTitleColor:RGB(15,173,225) forState:UIControlStateSelected];
+        [self setTitleColor:UIColorFromRGB(0x427EDE) forState:UIControlStateSelected];
 
         _imgNormal = [UIImage imageNamed:tabInfo.strNorImg];
         _imgSelect = [UIImage imageNamed:tabInfo.strHighImg];
@@ -54,13 +53,12 @@
 
 -(CGRect)imageRectForContentRect:(CGRect)bounds
 {
-    
-    return CGRectMake(9, 3, 30, 30);//49
+    return CGRectMake(bounds.size.width/2-11, 5, 23, 23);//49
 }
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect
 {
-    return CGRectMake(0.0, 33, 48, 15);
+    return CGRectMake(0.0, 33, contentRect.size.width, 14);
 }
 
 /*
