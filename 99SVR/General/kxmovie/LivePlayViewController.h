@@ -273,10 +273,8 @@ typedef enum {
 
 - (void)setDefaultImg;
 
-#pragma mark
+- (void)setNullMic;
 
-//void av_noreturn exit_program(int ret);
-//static int stream_component_open(VideoState *is, int stream_index);
-//static int read_thread(void *arg);
+#pragma mark
 
 @end

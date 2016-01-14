@@ -15,18 +15,13 @@
     
 }
 
-@property (nonatomic,strong) UITableView *tableView;
-@property (nonatomic,strong) NSArray *aryObj;
-
 @end
 
 @implementation HotViewController
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     
 }

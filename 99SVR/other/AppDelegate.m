@@ -11,7 +11,7 @@
 #import "LSTcpSocket.h"
 #import "UserInfo.h"
 #import "WWSideslipViewController.h"
-#import "IndexViewController.h"
+#import "RightViewController.h"
 #import "LeftViewController.h"
 #import "DecodeJson.h"
 #import "MobClick.h"
@@ -19,7 +19,7 @@
 @interface AppDelegate ()
 {
     WWSideslipViewController *_sides;
-    IndexViewController *indexView;
+    RightViewController *rightView;
     LeftViewController *leftView;
     BOOL bStatus;
     BOOL bGGLogin;
@@ -57,8 +57,8 @@
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_window makeKeyAndVisible];
     leftView = [[LeftViewController alloc] init];
-    indexView = [[IndexViewController alloc] init];
-    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
+    rightView = [[RightViewController alloc] init];
+    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
     [_window setRootViewController:_sides];
     _sides.speedf = 0.5;
     return YES;
@@ -98,6 +98,7 @@
                                               userInfo:nil
                                                repeats:YES];
     [self performSelector:@selector(setEndBackground) withObject:nil afterDelay:180.0];
+//    [self performSelector:@selector(setEndBackground) withObject:nil afterDelay:30.0];
 }
 
 -(void)timerMethod:(NSTimer *)paramSender
@@ -138,6 +139,7 @@
 {
     
 }
+
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     DLog(@"返回");

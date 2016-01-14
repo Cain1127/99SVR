@@ -15,6 +15,8 @@
 #import "LSTcpSocket.h"
 #import "Toast+UIView.h"
 #import "RoomViewController.h"
+#import "UserInfo.h"
+#import "SearchButton.h"
 
 #define kLineColor RGB(205, 204, 204)
 
@@ -25,52 +27,109 @@
     UIView *_accessoryView; // 遮盖层
     UIView *headView;
     GroupListRequest *_grouRequest;
+    UIView *_defaultView;
 }
 
 @property(nonatomic, strong) UITableView *searchResultsTable;
 
-@property (nonatomic, strong) NSMutableArray *allDatas;
-@property (nonatomic, strong) NSMutableArray *searchResults;
+//@property (nonatomic, strong) NSMutableArray *allDatas;
+//@property (nonatomic, strong) NSMutableArray *searchResults;
+@property (nonatomic,copy) NSArray *aryResult;
+@property (nonatomic,copy) NSArray *allDatas;
 
 @end
 
 @implementation SearchController
 
+- (void)initDefaultView
+{
+    _defaultView = [[UIView alloc] initWithFrame:Rect(0,_searchResultsTable.y,kScreenWidth,_searchResultsTable.height)];
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 30, kScreenWidth,20)];
+    [lblName setText:@"热门搜索"];
+    [lblName setFont:XCFONT(15)];
+    [lblName setTextAlignment:NSTextAlignmentCenter];
+    [_defaultView addSubview:lblName];
+    [self.view addSubview:_defaultView];
+    [self addTitleGroup];
+}
+
+- (void)addTitleGroup
+{
+    NSArray *arySB = @[@"股林争霸",@"财富一家",@"股上云霄"];
+    for (int i=0; i<arySB.count; i++)
+    {
+        SearchButton *sb1 = [[SearchButton alloc] initWithFrame:Rect(0, (30*i+1)+60, kScreenWidth, 16)];
+        [_defaultView addSubview:sb1];
+        [sb1 setTitle:[arySB objectAtIndex:i] forState:UIControlStateNormal];
+        [sb1 addTarget:self action:@selector(searchBtnEvent:) forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void)searchBtnEvent:(UIButton *)sender
+{
+    NSString *strInfo = sender.titleLabel.text;
+    [self startSearch:strInfo];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     _grouRequest = [[GroupListRequest alloc] init];
-    self.allDatas = [NSMutableArray array];
-    _searchResults = [NSMutableArray array];
     [self addSubviews];
     [self loadData];
+    [self initDefaultView];
 }
 
-- (void)loadData {
-    __weak SearchController *__self = self;
-    _grouRequest.groupBlock = ^(int status,NSArray *aryIndex)
+- (void)loadData
+{
+    if ([UserInfo sharedUserInfo].aryRoom.count>0)
     {
-        for (RoomGroup *group in aryIndex)
+        NSMutableArray *aryDatas = [NSMutableArray array];
+        RoomGroup *group = [[RoomGroup alloc] init];
+        group.groupid = @"1";
+        group.groupname = @"搜索";
+        group.aryRoomHttp = [NSMutableArray array];
+        [aryDatas addObject:group];
+        for (RoomGroup *rGroup in [UserInfo sharedUserInfo].aryRoom)
         {
-            for (RoomHttp *item in group.aryRoomHttp) {
-                BOOL repeat = NO;
-                for (RoomHttp *innerItem in __self.allDatas) {
-                    if ([innerItem.nvcbid isEqualToString:item.nvcbid]) {
-                        repeat = YES;
-                        break;
-                    }
-                }
-                if (!repeat) {
-                    [__self.allDatas addObject:item];
-                }
+            for (RoomHttp *item in rGroup.aryRoomHttp)
+            {
+                [group.aryRoomHttp removeObject:item];
+                [group.aryRoomHttp addObject:item];
             }
         }
-        [__self.searchResultsTable reloadData];
-    };
-    [_grouRequest requestListRequest];
+        _allDatas = aryDatas;
+    }
+    else
+    {
+        __weak SearchController *__self = self;
+        __block NSMutableArray *__aryDatas = [NSMutableArray array];
+        _grouRequest.groupBlock = ^(int status,NSArray *aryIndex)
+        {
+            if (status==1)
+            {
+                RoomGroup *group = [[RoomGroup alloc] init];
+                group.groupid = @"1";
+                group.groupname = @"搜索";
+                group.aryRoomHttp = [NSMutableArray array];
+                [__aryDatas addObject:group];
+                for (RoomGroup *rGroup in aryIndex)
+                {
+                    for (RoomHttp *item in rGroup.aryRoomHttp)
+                    {
+                        [group.aryRoomHttp removeObject:item];
+                        [group.aryRoomHttp addObject:item];
+                    }
+                }
+                __self.allDatas = __aryDatas;
+            }
+        };
+        [_grouRequest requestListRequest];
+    }
 }
 
-- (void)addHeaderView {
+- (void)addHeaderView
+{
     headView = [[UIView alloc] initWithFrame:Rect(0, 0, self.view.width,64)];
     [self.view addSubview:headView];
     [headView setBackgroundColor:kNavColor];
@@ -100,7 +159,7 @@
     [self addHeaderView];
     self.view.backgroundColor = [UIColor whiteColor];
     CGFloat space = 8;
-    CGFloat searchBarHeight = 44;
+    //    CGFloat searchBarHeight = 44;
     MySearchBar *searchBar = [[MySearchBar alloc] init];
     [searchBar setPlaceholder:@"请输入搜索关键字"];
     [searchBar setShowsScopeBar:YES];
@@ -111,42 +170,29 @@
     [self.view addSubview:searchBar];
     _mySearchBar = searchBar;
     
-    
-    
-    
-    [searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(space);
-        make.right.equalTo(self.view).offset(-space);
-        make.height.mas_equalTo(searchBarHeight);
-        make.top.equalTo(self.view).offset(64 + space);
-    }];
+    _mySearchBar.frame = Rect(8,72, kScreenWidth-16, 44);
     
     UITableView *keywordsTable = [[UITableView alloc] init];
-    keywordsTable.layer.borderColor = [kLineColor CGColor];
-    keywordsTable.layer.borderWidth = 0.5;
     keywordsTable.layer.masksToBounds = YES;
     keywordsTable.delegate = self;
     keywordsTable.dataSource = self;
     keywordsTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:keywordsTable];
-    self.searchResultsTable = keywordsTable;
-    [self.searchResultsTable registerClass:[VideoCell class] forCellReuseIdentifier:@"cellId"];
     
-    [keywordsTable mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(searchBar.mas_bottom).offset(space);
-        make.left.equalTo(self.view).offset(space);
-        make.right.equalTo(self.view).offset(-space);
-        make.bottom.equalTo(self.view).offset(-10);
-    }];
+    [self.view addSubview:keywordsTable];
+    _searchResultsTable = keywordsTable;
+    _searchResultsTable.frame = Rect(0,_mySearchBar.y+_mySearchBar.height+8,kScreenWidth,kScreenHeight-(_mySearchBar.y+_mySearchBar.height+8));
+    [_searchResultsTable registerClass:[VideoCell class] forCellReuseIdentifier:@"cellId"];
     
     _accessoryView = [UIView new];
     _accessoryView.backgroundColor = [UIColor blackColor];
     _accessoryView.alpha = 0;
     [self.view addSubview:_accessoryView];
-    [_accessoryView clickWithBlock:^(UIGestureRecognizer *gesture) {
-        [self changeView:_accessoryView withAlpha:0];
-        [_mySearchBar endEditing:YES];
-    }];
+    [_accessoryView clickWithBlock:^(UIGestureRecognizer *gesture)
+     {
+         [self startSearch:_mySearchBar.text];
+         [self changeView:_accessoryView withAlpha:0];
+         [_mySearchBar endEditing:YES];
+     }];
     [_accessoryView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
@@ -165,9 +211,11 @@
 {
     [UIView animateWithDuration:0.2 animations:^{
         view.alpha = alpha;
-    } completion:^(BOOL finished) {
-        
-    }];
+    }
+                     completion:^(BOOL finished)
+     {
+         
+     }];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
@@ -185,33 +233,51 @@
 #pragma mark 开始搜索
 - (void)startSearch:(NSString *)keywords
 {
-    NSString *searchWords = [NSString stringWithFormat:@"cname like '*%@*' or nvcbid like '*%@*'", keywords, keywords];
-    NSPredicate *pre = [NSPredicate predicateWithFormat:searchWords];
-    NSArray *resultArr = [self.allDatas filteredArrayUsingPredicate:pre];
-    if (resultArr.count == 0)
+    if ([keywords isEqualToString:@""])
     {
-        [self noFindTips];
+        _aryResult = [NSArray array];
+        [_searchResultsTable reloadData];
+        _defaultView.hidden = NO;
     }
     else
     {
-        self.searchResults = [NSMutableArray arrayWithArray:resultArr];
-        [self.searchResultsTable reloadData];
+        if(_allDatas.count>0)
+        {
+            _defaultView.hidden = YES;
+            RoomGroup *group = [_allDatas objectAtIndex:0];
+            NSString *searchWords = [NSString stringWithFormat:@"cname like '*%@*' or nvcbid like '*%@*'", keywords, keywords];
+            NSPredicate *pre = [NSPredicate predicateWithFormat:searchWords];
+            _aryResult = [group.aryRoomHttp filteredArrayUsingPredicate:pre];
+            if (_aryResult.count == 0)
+            {
+                [self noFindTips];
+            }
+            else
+            {
+                [_searchResultsTable reloadData];
+            }
+        }
+        else
+        {
+            _defaultView.hidden = NO;
+        }
     }
 }
 
 - (void)noFindTips
 {
     NSString *tipsStr = [NSString stringWithFormat:@"未找到包含\"%@\"的结果", _mySearchBar.text];
-    UIAlertView *tips = [[UIAlertView alloc] initWithTitle:nil message:tipsStr delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-    [tips show];
+    [self.view makeToast:tipsStr];
 }
 
 - (void)changeBtnStyle:(UIView *)superView
 {
     for (UIView *view in superView.subviews) {
-        if ([view isKindOfClass:[UIButton class]]) {
+        if ([view isKindOfClass:[UIButton class]])
+        {
             UIButton *btn = (UIButton *)view;
-            if ([btn.titleLabel.text isEqualToString:@"Cancel"]) {
+            if ([btn.titleLabel.text isEqualToString:@"Cancel"])
+            {
                 [btn setTitle:@"搜索" forState:UIControlStateNormal];
                 [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
                 btn.titleLabel.font = [UIFont systemFontOfSize:15];
@@ -220,7 +286,8 @@
                 }];
             }
             break;
-        } else {
+        } else
+        {
             [self changeBtnStyle:view];
         }
     }
@@ -228,8 +295,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
-    return (self.searchResults.count + 1) / 2;
+    return (_aryResult.count + 1) / 2;
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -244,12 +311,12 @@
     }
     int length = 2;
     int loc = (int)indexPath.row * length;
-    if (loc + length > self.searchResults.count)
+    if (loc + length > _aryResult.count)
     {
-        length = (int)self.searchResults.count - loc;
+        length = (int)_aryResult.count - loc;
     }
     NSRange range = NSMakeRange(loc, length);
-    NSArray *rowDatas = [self.searchResults subarrayWithRange:range];
+    NSArray *rowDatas = [_aryResult subarrayWithRange:range];
     cell.itemOnClick = ^(RoomHttp *room)
     {
         [self connectRoom:room];
@@ -307,10 +374,10 @@
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         __block NSString *__strMsg = strMsg;
         dispatch_async(dispatch_get_main_queue(),
-       ^{
-           [__self.view hideToastActivity];
-           [__self.view makeToast:__strMsg];
-       });
+                       ^{
+                           [__self.view hideToastActivity];
+                           [__self.view makeToast:__strMsg];
+                       });
     }
 }
 
@@ -333,26 +400,26 @@
                        });
     }];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-       UITextField *login = alert.textFields.firstObject;
-       if ([login.text length]==0)
-       {
-           dispatch_async(dispatch_get_main_queue(),
-                          ^{
-                              [__self.view hideToastActivity];
-                              [__self.view makeToast:@"密码不能为空"];
-                              [__self createAlertController];
-                          });
-       }
-       else
-       {
-           [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:10];
-           dispatch_async(dispatch_get_global_queue(0, 0),
-                          ^{
-                              [[LSTcpSocket sharedLSTcpSocket] connectRoomAndPwd:login.text];
-                          });
-       }
-    }];
+                               {
+                                   UITextField *login = alert.textFields.firstObject;
+                                   if ([login.text length]==0)
+                                   {
+                                       dispatch_async(dispatch_get_main_queue(),
+                                                      ^{
+                                                          [__self.view hideToastActivity];
+                                                          [__self.view makeToast:@"密码不能为空"];
+                                                          [__self createAlertController];
+                                                      });
+                                   }
+                                   else
+                                   {
+                                       [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:10];
+                                       dispatch_async(dispatch_get_global_queue(0, 0),
+                                                      ^{
+                                                          [[LSTcpSocket sharedLSTcpSocket] connectRoomAndPwd:login.text];
+                                                      });
+                                   }
+                               }];
     [alert addAction:canAction];
     [alert addAction:okAction];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -362,18 +429,19 @@
 
 - (void)joinRoomSuc:(NSNotification *)notify
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     __weak SearchController *__self =self;
     dispatch_async(dispatch_get_main_queue(),
-       ^{
-           [NSObject cancelPreviousPerformRequestsWithTarget:__self];
-       });
+                   ^{
+                       [NSObject cancelPreviousPerformRequestsWithTarget:__self];
+                   });
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [__self.view hideToastActivity];
-        RoomViewController *roomView = [[RoomViewController alloc] init];
-        [__self presentViewController:roomView animated:YES completion:nil];
-    });
+                   ^{
+                       [__self.view hideToastActivity];
+                       RoomViewController *roomView = [[RoomViewController alloc] init];
+                       [__self presentViewController:roomView animated:YES completion:nil];
+                   });
 }
 
 - (BOOL)shouldAutorotate

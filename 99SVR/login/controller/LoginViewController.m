@@ -61,9 +61,9 @@
     [lblName setFont:XCFONT(17)];
     [self.view setBackgroundColor:RGB(245, 245, 246)];
     
-    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
+    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_head"]];
     [self.view addSubview:logoImageView];
-    [logoImageView setFrame:Rect(kScreenWidth/2-44, 89, 88, 88)];
+    [logoImageView setFrame:Rect(kScreenWidth/2-39, 89, 78, 78)];
     
     _txtUser = [[LoginTextField alloc] initWithFrame:CGRectMake(15 + 32,logoImageView.y+logoImageView.height, kScreenWidth-30 - 32 * 2, 44)];
     _txtPwd = [[LoginTextField alloc] initWithFrame:CGRectMake(_txtUser.x, _txtUser.frame.origin.y+_txtUser.frame.size.height+10, _txtUser.width, 44)];
@@ -347,7 +347,7 @@
         [UserDefaults setObject:_txtUser.text forKey:kUserId];
         [UserDefaults setObject:_txtPwd.text forKey:kUserPwd];
         [UserDefaults synchronize];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MIESSAGE_UPDATE_LOGIN_STATUS object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
         LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
         [tcpSocket closeSocket];
         dispatch_async(dispatch_get_main_queue(),

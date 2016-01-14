@@ -21,8 +21,7 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 @property (nonatomic,copy) NSString *strMd5Pwd;
 @property (nonatomic,copy) NSString *strName;
 @property (nonatomic,assign) int nType;
-@property (nonatomic,strong) NSMutableArray *aryRoomInfo;
-
+@property (nonatomic,copy) NSArray *aryRoom;
 @property (nonatomic,strong) NSMutableDictionary *dictRoomInfo;
 
 @property (nonatomic,assign) unsigned char m_nVipLevel;

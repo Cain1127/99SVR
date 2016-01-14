@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void(^RegisterBlock)(int nStatus);
+typedef void(^RegisterBlock)(int nStatus,NSString *strCode);
 
 @interface RegisterService : NSObject
 

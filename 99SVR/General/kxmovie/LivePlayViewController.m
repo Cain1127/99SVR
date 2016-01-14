@@ -93,6 +93,8 @@ typedef enum {
     int nSourceWidth;
     int nSourceHeight;
     UIAlertView *myAlert;
+    UIImageView *smallImg;
+    
 }
 @property (nonatomic,copy) NSString *strPath;
 @end
@@ -651,7 +653,7 @@ static void video_refresh(void *opaque)
             /* display picture */
             
             if (!display_disable)
-            [fsPlay showVideo];
+                [fsPlay showVideo];
             
             pictq_next_picture(is);
         }
@@ -1529,7 +1531,7 @@ static int read_thread(void *arg)
     ic = avformat_alloc_context();
     ic->interrupt_callback.callback = decode_interrupt_cb;
     ic->interrupt_callback.opaque = is;
-    ic->max_analyze_duration = 1000000;
+    
     err = avformat_open_input(&ic, is->filename, is->iformat, &format_opts);
     if (err < 0) {
         print_error(is->filename, err);
@@ -1602,8 +1604,13 @@ static int read_thread(void *arg)
                              st_index[AVMEDIA_TYPE_AUDIO] :
                              st_index[AVMEDIA_TYPE_VIDEO]),
                             NULL, 0);
-    if (show_status) {
+    if (show_status)
+    {
         av_dump_format(ic, 0, is->filename, 0);
+        if (!strstr(is->filename, "only-audio=1"))
+        {
+            [fsPlay removeSmall];
+        }
     }
     
     is->show_mode = show_mode;
@@ -1625,7 +1632,8 @@ static int read_thread(void *arg)
         stream_component_open(is, st_index[AVMEDIA_TYPE_SUBTITLE]);
     }
     
-    if (is->video_stream < 0 && is->audio_stream < 0) {
+    if (is->video_stream < 0 && is->audio_stream < 0)
+    {
         fprintf(stderr, "%s: could not open codecs\n", is->filename);
         ret = -1;
         goto fail;
@@ -1774,6 +1782,11 @@ fail:
     }
     
     [fsPlay stopLoad];
+    __weak LivePlayViewController *__self = fsPlay;
+    dispatch_async(dispatch_get_main_queue(),
+                   ^{
+                       [__self setDefaultImg];
+                   });
     if (ret != 0)
     {
         
@@ -1937,9 +1950,9 @@ static int lockmgr(void **mtx, enum AVLockOp op)
     DLog(@"videoPlayState:%d",videoPlayState);
     __weak UIImageView *__glView = _glView;
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [__glView hideToastActivity];
-    });
+                   ^{
+                       [__glView hideToastActivity];
+                   });
 }
 
 - (void)viewDidLoad
@@ -1951,6 +1964,8 @@ static int lockmgr(void **mtx, enum AVLockOp op)
     [self.view addSubview:_glView];
     _aryVideo = [NSMutableArray array];
     [self.view setBackgroundColor:UIColorFromRGB(0x000000)];
+    smallImg = [[UIImageView alloc] initWithFrame:Rect(_glView.width/2-44,_glView.height/2-35, 88, 71)];
+    [self.view addSubview:smallImg];
     [self setDefaultImg];
 }
 
@@ -1965,6 +1980,14 @@ static int lockmgr(void **mtx, enum AVLockOp op)
     {
         [self playAction:nil];
     }
+}
+
+- (void)setNullMic
+{
+    [_glView setImage:[UIImage imageNamed:@"live_default"]];
+    smallImg.hidden = NO;
+    [smallImg setImage:[UIImage imageNamed:@"noMic"]];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -2024,9 +2047,9 @@ static int lockmgr(void **mtx, enum AVLockOp op)
     }
     __weak LivePlayViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [__self startLoad];
-    });
+                   ^{
+                       [__self startLoad];
+                   });
     fsPlay = self;
     int flags;
     VideoState *is;
@@ -2105,16 +2128,16 @@ static int lockmgr(void **mtx, enum AVLockOp op)
             __weak KxVideoFrameRGB *__rgbFrame = frame;
             __weak UIImageView *__imgView = _glView;
             dispatch_sync(dispatch_get_main_queue(),
-            ^{
-                  [__imgView setImage:[__rgbFrame asImage]];
-            });
+                          ^{
+                              [__imgView setImage:[__rgbFrame asImage]];
+                          });
         }
         isFrameOk = NO;
     }
 }
 - (void)createVideoFrame:(VideoState *)is
 {
-    if (!_pictureValid || (nSourceWidth != _glView.width))
+    if (!_pictureValid)
     {
         [self setupScaler:is->video_st->codec];
     }
@@ -2129,9 +2152,9 @@ static int lockmgr(void **mtx, enum AVLockOp op)
     KxVideoFrameRGB *rgbFrame = [[KxVideoFrameRGB alloc] init];
     rgbFrame.linesize = _picture.linesize[0];
     rgbFrame.rgb = [NSData dataWithBytes:_picture.data[0]
-                                  length:nSourceHeight*rgbFrame.linesize];
-    rgbFrame.width = nSourceWidth;
-    rgbFrame.height = nSourceHeight;
+                                  length:is->video_st->codec->height*rgbFrame.linesize];
+    rgbFrame.width = is->video_st->codec->width;
+    rgbFrame.height = is->video_st->codec->height;
     if(_aryVideo.count>0)
     {
         [_aryVideo removeAllObjects];
@@ -2156,8 +2179,10 @@ static int lockmgr(void **mtx, enum AVLockOp op)
 - (BOOL)setupScaler:(AVCodecContext *)pCodecCtx
 {
     [self closeScaler];
-    nSourceWidth = _glView.width;
-    nSourceHeight = _glView.height;
+    //    nSourceWidth = _glView.width;
+    //    nSourceHeight = _glView.height;
+    nSourceWidth = pCodecCtx->width;
+    nSourceHeight = pCodecCtx->height;
     
     _pictureValid = avpicture_alloc(&_picture,
                                     PIX_FMT_RGB24,
@@ -2253,6 +2278,17 @@ static int lockmgr(void **mtx, enum AVLockOp op)
 - (void)setDefaultImg
 {
     [_glView setImage:[UIImage imageNamed:@"live_default"]];
+    smallImg.hidden = NO;
+    [smallImg setImage:[UIImage imageNamed:@"noVideo"]];
+}
+
+- (void)removeSmall
+{
+    __weak UIImageView *__weakImg = smallImg;
+    dispatch_async(dispatch_get_main_queue(),
+                   ^{
+                       __weakImg.hidden = YES;
+                   });
 }
 
 - (void)seekWithTime:(int)time
@@ -2270,8 +2306,10 @@ static int lockmgr(void **mtx, enum AVLockOp op)
 
 - (void)dealloc
 {
-    DLog(@"释放!");
     _aryVideo = nil;
+    
 }
 
 @end
+
+

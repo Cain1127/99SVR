@@ -136,7 +136,6 @@ var global = this
       })()
     }
   }
-
   global.defineClass = function(declaration, instMethods, clsMethods) {
     var newInstMethods = {}, newClsMethods = {}
     _formatDefineMethods(instMethods, newInstMethods)

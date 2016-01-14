@@ -32,7 +32,6 @@
 - (char *)getRoomName;
 - (void)insertRUser:(RoomUser *)user;
 
-
 @property (nonatomic,assign) int m_nRoomId;        //房间id
 @property (nonatomic,assign) int m_nVipLevel;      //vip房间等级
 @property (nonatomic,assign) int m_nGroupId;

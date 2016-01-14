@@ -13,14 +13,7 @@
 
 DEFINE_SINGLETON_FOR_CLASS(UserInfo)
 
-- (void)addRoomInfo:(NSValue *)value
-{
-    if (_aryRoomInfo==nil)
-    {
-        _aryRoomInfo = [NSMutableArray array];
-    }
-    [_aryRoomInfo addObject:value];
-}
+
 
 - (void)addParentRoom:(NSValue *)value key:(NSString *)strKey
 {

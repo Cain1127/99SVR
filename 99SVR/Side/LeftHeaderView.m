@@ -9,8 +9,8 @@
 #import "LeftHeaderView.h"
 #import "UserInfo.h"
 
-#define kImageWidth 117
-#define kCircle (kImageWidth + 6)
+#define kImageWidth 107
+#define kCircle (kImageWidth + 12)
 
 @interface LeftHeaderView()
 {
@@ -29,18 +29,20 @@
 {
     if (self = [super initWithFrame:frame])
     {
-        UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(0, 21, kScreenWidth,88)];
+        UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(frame.size.width/2-kScreenWidth/2, 21, kScreenWidth,88)];
         [self addSubview:imgView];
         [imgView setImage:[UIImage imageNamed:@"left_bg"]];
         
         _circleLine = [UIView new];
         _circleLine.layer.masksToBounds = YES;
         _circleLine.layer.cornerRadius = (kCircle) / 2;
+        _circleLine.layer.borderWidth = 0.5;
+        _circleLine.layer.borderColor = UIColorFromRGB(0xffffff).CGColor;
         [self addSubview:_circleLine];
         
         _avatarImageView = [[UIImageView alloc] init];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
-        _avatarImageView.layer.cornerRadius = (kImageWidth-6) / 2;
+        _avatarImageView.layer.cornerRadius = kImageWidth / 2;
         _avatarImageView.layer.masksToBounds = YES;
         _avatarImageView.image = [UIImage imageNamed:@"logo"];
         [_circleLine addSubview:_avatarImageView];
@@ -50,10 +52,10 @@
         _nameLabel.font = kFontSize(15);
         [_nameLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:_nameLabel];
-
+        
         _vipLevel = [UIButton buttonWithType:UIButtonTypeCustom];
         _vipLevel.titleLabel.textColor = UIColorFromRGB(0xbbd0ed);
-        _vipLevel.titleLabel.font = kFontSize(12);
+        _vipLevel.titleLabel.font = kFontSize(13);
         _vipLevel.titleLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_vipLevel];
         
@@ -77,17 +79,17 @@
     else
     {
         UserInfo *userInfo = [UserInfo sharedUserInfo];
-        _nameLabel.text = NSStringFromInt(userInfo.nUserId);
-        [_vipLevel setTitle:[userInfo getVipDescript] forState:UIControlStateNormal];
+        _nameLabel.text = [userInfo getVipDescript];
+        [_vipLevel setTitle:NSStringFromInt(userInfo.nUserId) forState:UIControlStateNormal];
     }
 }
 
 - (void)layoutViews
 {
     _circleLine.frame = Rect(self.width/2-kCircle/2, 1, kCircle, kCircle);
-    _avatarImageView.frame = Rect(3, 3, _circleLine.width-6, _circleLine.height-6);
-    _nameLabel.frame = Rect(30, _avatarImageView.height+_avatarImageView.y+19, self.width-60, 20);
-    _vipLevel.frame = Rect(30, _nameLabel.height+_nameLabel.y+8, self.width-60, 20);
+    _avatarImageView.frame = Rect(6, 6, _circleLine.width-12, _circleLine.height-12);
+    _nameLabel.frame = Rect(30, _avatarImageView.height+_avatarImageView.y+15, self.width-60, 20);
+    _vipLevel.frame = Rect(30, _nameLabel.height+_nameLabel.y+5, self.width-60, 20);
     _lineView.frame = Rect(8, self.height-1.5, self.width-24, 1);
     
 }

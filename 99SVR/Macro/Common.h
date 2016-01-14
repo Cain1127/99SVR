@@ -42,7 +42,7 @@
 
 #define kHISTORY_HTTP_URL @"http://hall.99ducaijing.cn:8081/roomdata/room.php?act=history&userid="
 
-#define kVideoImageHeight (kScreenHeight-20)*2/5-2
+#define kVideoImageHeight kScreenWidth*240/320
 
 #endif
 

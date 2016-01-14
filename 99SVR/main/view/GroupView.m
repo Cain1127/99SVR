@@ -15,6 +15,7 @@
 @interface GroupView()
 {
     UIView *_line1, *_line2, *_line3;
+    CGFloat fTempWidth;
 }
 
 @property (nonatomic,strong) UIButton *btnFirst;
@@ -42,13 +43,16 @@
     [_btnSecond setTitle:keyName[1] forState:UIControlStateNormal];
     [_btnThird setTitle:keyName[2] forState:UIControlStateNormal];
     
+    CGSize sizeWidth = [@"热门推荐" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}];
+    fTempWidth = sizeWidth.width;
+    
     [self addSubview:_btnFirst];
     [self addSubview:_btnSecond];
     [self addSubview:_btnThird];
     
     UIColor *titleColor = [UIColor colorWithHex:@"#555555"];
     UIColor *selectedColor = [UIColor colorWithHex:@"#427ede"];
-    UIFont *titleFont = [UIFont systemFontOfSize:14];
+    UIFont *titleFont = XCFONT(14);
     
     _btnFirst.titleLabel.font = titleFont;
     _btnSecond.titleLabel.font = titleFont;
@@ -70,21 +74,14 @@
     _btnSecond.frame = Rect(kScreenWidth/3*1, 0, kScreenWidth/3, frame.size.height);
     _btnThird.frame = Rect(kScreenWidth/3*2, 0, kScreenWidth/3, frame.size.height);
     
-    UIView *line1 = [UIView new];
-    line1.tag = kLineTagStart;
-    UIColor *lineColor = [UIColor colorWithHex:@"#629aff"];
-    line1.backgroundColor = lineColor;
-    [self addSubview:line1];
+    [self addLineHeight];
     
-//    [_line1 setFrame:Rect(_btnFirst.width/2-_btnFirst.titleLabel.width/2,self.height-2,_btnFirst.titleLabel.width,2)];
-    [line1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(60, 2));
-        make.left.equalTo(_btnFirst.titleLabel).offset(-2);
-        make.bottom.equalTo(self).offset(0);
-    }];
+    UIView *line1 = [UIView new];
+    line1.backgroundColor = UIColorFromRGB(0x629aff);
+    [self addSubview:line1];
     _line1 = line1;
     
-    [self addLineHeight];
+    [_line1 setFrame:Rect(_btnFirst.width/2-fTempWidth/2,self.height-2,fTempWidth,2)];
     
     return self;
 }
@@ -132,7 +129,7 @@
     [_btnThird bk_addEventHandler:handler forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)setBtnSelect:(int)tag
+- (void)setBtnSelect:(NSInteger)tag
 {
     for (UIButton *btn in self.subviews)
     {
@@ -143,19 +140,6 @@
         if(btn.tag == tag)
         {
             btn.selected = YES;
-//            if (tag == 1)
-//            {
-//                _line1.frame = Rect(_btnFirst.width/2-_btnFirst.titleLabel.width/2,self.height-5, _btnFirst.titleLabel.width, 2);
-//            }
-//            else if (tag == 2)
-//            {
-//                
-//                _line1.frame = Rect(kScreenWidth/3+_btnSecond.width/2-_btnSecond.titleLabel.width/2,self.height-5, _btnFirst.titleLabel.width, 2);
-//            }
-//            else
-//            {
-//                _line1.frame = Rect(kScreenWidth*2/3+_btnSecond.width/2-_btnSecond.titleLabel.width/2,self.height-5, _btnFirst.titleLabel.width, 2);
-//            }
         }
         else
         {
@@ -169,8 +153,8 @@
 
 - (void)setBluePointX:(CGFloat)fPointX
 {
-    CGFloat fx = _btnFirst.width/2-_btnFirst.titleLabel.width/2+fPointX/kScreenWidth * _btnFirst.width;
-    [_line1 setFrame:Rect(fx,self.height-2,_btnFirst.titleLabel.width,2)];
+    CGFloat fx = _btnFirst.width/2-fTempWidth/2+fPointX/kScreenWidth * _btnFirst.width;
+    [_line1 setFrame:Rect(fx,self.height-2,fTempWidth,2)];
 }
 
 @end

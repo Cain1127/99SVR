@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void(^IdentifierQequest)(int nStatus,NSString *strId,NSString *strImgPath);
+typedef void(^IdentifierQequest)(int nStatus,NSString *strId,UIImage *strImgPath);
 
 @interface IdentifyService : NSObject
 

@@ -43,11 +43,12 @@
 
 - (void)viewDidLoad
 {
-    self.tableView = [[UITableView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-108) style:UITableViewStyleGrouped];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.backgroundColor = [UIColor whiteColor];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [super viewDidLoad];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-158) style:UITableViewStyleGrouped];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    _tableView.backgroundColor = [UIColor whiteColor];
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[VideoCell class] forCellReuseIdentifier:@"cellId"];
     [self.view addSubview:self.tableView];
     _groupStatus = [NSMutableDictionary dictionary];

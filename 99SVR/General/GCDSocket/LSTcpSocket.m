@@ -187,7 +187,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 - (void)sendHello:(int)nMDM_Vchat
 {
     char szTemp[32]={0};
-
+    
     COM_MSG_HEADER* pHead = (COM_MSG_HEADER *)szTemp;
     pHead->length = sizeof(COM_MSG_HEADER) + sizeof(CMDClientHello_t);
     pHead->checkcode = 0;
@@ -230,7 +230,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     req.nmobile = 1;
     
     [self sendMessage:(char*)&req size:sizeof(CMDUserLogonReq2_t) version:MDM_Version_Value
-           maincmd:MDM_Vchat_Login subcmd:Sub_Vchat_logonReq2];
+              maincmd:MDM_Vchat_Login subcmd:Sub_Vchat_logonReq2];
 }
 
 - (void)loginServer:(NSString *)strUser pwd:(NSString *)strPwd
@@ -265,45 +265,46 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             [self loginSucess:pNewMsg];
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_SUCESS_VC object:@"登录成功"];
         }
-        break;
+            break;
         case Sub_Vchat_logonErr:
         {
             [self loginError:pNewMsg];
         }
-        break;
+            break;
         case Sub_Vchat_UserQuanxianBegin:
         {
             DLog(@"权限开始数据!");
-            
         }
-        break;
+            break;
         case Sub_Vchat_UserQuanxianLst:
         {
             DLog(@"权限数据!");
-    
+            
         }
             break;
         case Sub_Vchat_UserQuanxianEnd:
         {
             DLog(@"权限数据结束!");
-         
+            
         }
-        break;
+            break;
         case Sub_Vchat_logonFinished:
         {
             DLog(@"登录过程结束!");
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_SUCESS_VC object:@"登录成功"];
+            [self closeSocket];
+            return;
         }
-        break;
+            break;
         case Sub_Vchat_RoomGroupListBegin:
         {
             DLog(@"房间组数据开始!");
         }
-        break;
+            break;
         case Sub_Vchat_RoomGroupListResp:
         {
             DLog(@"房间组数据!");
-
+            
             CMDRoomGroupItem_t* pInfo = (CMDRoomGroupItem_t *)(pNewMsg + sizeof(int));
             RoomGroupData_t rm;
             memset(&rm, 0, sizeof(RoomGroupData_t));
@@ -330,23 +331,23 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
                 [[UserInfo sharedUserInfo] addRoomInfo:[NSValue value:&rm withObjCType:@encode(RoomGroupData_t)]];
             }
         }
-        break;
+            break;
         case Sub_Vchat_RoomGroupListFinished:
         {
             DLog(@"房间分组数据");
         }
-        break;
+            break;
         case Sub_Vchat_RoomGroupStatusResp:
         {
             DLog(@"房间组状态数据!");
             
         }
-        break;
+            break;
         case Sub_Vchat_RoomGroupStatusFinished:
         {
             //not do anything...
         }
-        break;
+            break;
         case Sub_Vchat_RoomListBegin:
         {
             DLog(@"房间列表开始!");
@@ -356,7 +357,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         case Sub_Vchat_RoomListResp:
         {
             DLog(@"房间数据!");
-           
+            
         }
             break;
         case Sub_Vchat_RoomListFinished:
@@ -364,7 +365,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             DLog(@"房间数据结束!");
             
         }
-        break;
+            break;
         case Sub_Vchat_QuanxianId2ListResp:
         {
             DLog(@"权限ID数据...");
@@ -388,7 +389,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             DLog(@"权限动作数据结束开始...");
             
         }
-        break;
+            break;
         case Sub_Vchat_SetUserProfileResp:
         {
             DLog(@"设置用户配置信息响应!\n");
@@ -406,12 +407,12 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             DLog(@"查询房间网关地址响应!\n");
             
         }
-        break;
+            break;
         default:
         {
             DLog(@"error");
         }
-        break;
+            break;
     }
     free(pNewMsg);
     [_asyncSocket readDataToLength:sizeof(int) withTimeout:-1 tag:SOCKET_READ_LENGTH];
@@ -421,33 +422,33 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 {
     CMDUserLogonSuccess_t* pLogonResp=(CMDUserLogonSuccess_t*)pData;
     UserInfo *user = [UserInfo sharedUserInfo];
-//    _GlobalSetting.m_pKernelData->m_nServerVersion=pLogonResp->version;
-//    _GlobalSetting.m_pKernelData->m_nServerTime=pLogonResp->servertime;
-//    _GlobalSetting.m_pKernelData->m_nNowClientTime=time(0);
-//    pLocalUser->m_nk= pLogonResp->nk;
-//    pLocalUser->m_nb= pLogonResp->nb;
-//    pLocalUser->m_nd= pLogonResp->nd;
-//    pLocalUser->m_nkdeposit = 0;
-//    pLocalUser->m_nUserId =pLogonResp->userid;
-//    pLocalUser->m_nUserType=USERTYPE_NORMALUSER;
-//    pLocalUser->m_nLangId= pLogonResp->langid;
-//    pLocalUser->m_nLangIdExpTime=pLogonResp->langidexptime;
-//    pLocalUser->m_nHeadId=pLogonResp->headid;
-      user.m_nVipLevel=pLogonResp->viplevel;
-      user.goldCoin = pLogonResp->nk;
-      user.score = pLogonResp->nb;
-      user.sex = pLogonResp->ngender;
-//    pLocalUser->m_nYiyuanLevel=pLogonResp->yiyuanlevel;
-//    pLocalUser->m_nShoufuLevel=pLogonResp->shoufulevel;
-//    pLocalUser->m_nZhongshenLevel=pLogonResp->zhonglevel;
-//    pLocalUser->m_nCaifuLevel =pLogonResp->caifulevel;
-//    pLocalUser->m_nlastmonthcostlevel=pLogonResp->lastmonthcostlevel;
-//    pLocalUser->m_nthismonthcostlevel=pLogonResp->thismonthcostlevel;
-//    pLocalUser->m_thismonthcostgrade=pLogonResp->thismonthcostgrade;
-//    pLocalUser->m_nGender=pLogonResp->ngender;
-//    pLocalUser->m_bLangIdExp=pLogonResp->blangidexp;
-//    pLocalUser->m_nXiaoShou=pLogonResp->bxiaoshou;
-//    pLocalUser->m_strUserAlias=pLogonResp->cuseralias;
+    //    _GlobalSetting.m_pKernelData->m_nServerVersion=pLogonResp->version;
+    //    _GlobalSetting.m_pKernelData->m_nServerTime=pLogonResp->servertime;
+    //    _GlobalSetting.m_pKernelData->m_nNowClientTime=time(0);
+    //    pLocalUser->m_nk= pLogonResp->nk;
+    //    pLocalUser->m_nb= pLogonResp->nb;
+    //    pLocalUser->m_nd= pLogonResp->nd;
+    //    pLocalUser->m_nkdeposit = 0;
+    //    pLocalUser->m_nUserId =pLogonResp->userid;
+    //    pLocalUser->m_nUserType=USERTYPE_NORMALUSER;
+    //    pLocalUser->m_nLangId= pLogonResp->langid;
+    //    pLocalUser->m_nLangIdExpTime=pLogonResp->langidexptime;
+    //    pLocalUser->m_nHeadId=pLogonResp->headid;
+    user.m_nVipLevel=pLogonResp->viplevel;
+    user.goldCoin = pLogonResp->nk;
+    user.score = pLogonResp->nb;
+    user.sex = pLogonResp->ngender;
+    //    pLocalUser->m_nYiyuanLevel=pLogonResp->yiyuanlevel;
+    //    pLocalUser->m_nShoufuLevel=pLogonResp->shoufulevel;
+    //    pLocalUser->m_nZhongshenLevel=pLogonResp->zhonglevel;
+    //    pLocalUser->m_nCaifuLevel =pLogonResp->caifulevel;
+    //    pLocalUser->m_nlastmonthcostlevel=pLogonResp->lastmonthcostlevel;
+    //    pLocalUser->m_nthismonthcostlevel=pLogonResp->thismonthcostlevel;
+    //    pLocalUser->m_thismonthcostgrade=pLogonResp->thismonthcostgrade;
+    //    pLocalUser->m_nGender=pLogonResp->ngender;
+    //    pLocalUser->m_bLangIdExp=pLogonResp->blangidexp;
+    //    pLocalUser->m_nXiaoShou=pLogonResp->bxiaoshou;
+    //    pLocalUser->m_strUserAlias=pLogonResp->cuseralias;
     user.nUserId = pLogonResp->userid;
     
     user.strName = [NSString stringWithCString:pLogonResp->cuseralias encoding:GBK_ENCODING];
@@ -459,7 +460,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     {
         user.nUserId = [_strUser intValue];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MIESSAGE_UPDATE_LOGIN_STATUS object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
 }
 
 - (void)loginError:(char *)pError
@@ -576,7 +577,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     uint32 crcval = crc32((void*)&req,sizeof(CMDJoinRoomReq_t),CRC_MAGIC);
     req.crc32 = crcval;
     [self sendMessage:(char *)&req size:sizeof(CMDJoinRoomReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Room
-            subcmd:Sub_Vchat_JoinRoomReq];
+               subcmd:Sub_Vchat_JoinRoomReq];
     return YES;
 }
 
@@ -605,114 +606,114 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     }
     switch (in_msg->subcmd)
     {
-            case Sub_Vchat_JoinRoomErr:
-            {
-                [self joinRoomError:pNewMsg];
-                return ;
-            }
+        case Sub_Vchat_JoinRoomErr:
+        {
+            [self joinRoomError:pNewMsg];
+            return ;
+        }
             break;
-            case Sub_Vchat_JoinRoomResp:
-            {
-                DLog(@"加入房间成功");
-                [self joinRoomSuccess:pNewMsg];
-            }
+        case Sub_Vchat_JoinRoomResp:
+        {
+            DLog(@"加入房间成功");
+            [self joinRoomSuccess:pNewMsg];
+        }
             break;
-            case Sub_Vchat_RoomUserListBegin:
-            {
-                DLog(@"房间用户列表开始!");
-                [[UserInfo sharedUserInfo] initUserAry];
-            }
+        case Sub_Vchat_RoomUserListBegin:
+        {
+            DLog(@"房间用户列表开始!");
+            [[UserInfo sharedUserInfo] initUserAry];
+        }
             break;
-            case Sub_Vchat_RoomUserListResp:
-            {
-                DLog(@"房间用户列表数据!");
-                [self addRoomUser:pNewMsg];
-            }
+        case Sub_Vchat_RoomUserListResp:
+        {
+            DLog(@"房间用户列表数据!");
+            [self addRoomUser:pNewMsg];
+        }
             break;
-            case Sub_Vchat_RoomUserNoty:
+        case Sub_Vchat_RoomUserNoty:
+        {
+            DLog(@"新增用户通知!");
+            CMDRoomUserInfo_t *pItem = (CMDRoomUserInfo_t *)pNewMsg;
+            [self addUserStruct:pItem];
+            NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;FONT-FAMILY:黑体;font-size=14px;\">系统消息: <a style=\"TEXT-DECORATION:font-size:14px; none;color:#629bff \" href=\"sqchatid://%d\">%@</a> 进入了房间</span>",
+                                 pItem->userid,[NSString stringWithCString:pItem->useralias encoding:GBK_ENCODING]];
+            if ([UserInfo sharedUserInfo].m_nVipLevel >=21 && [UserInfo sharedUserInfo].m_nVipLevel <=36)
             {
-                DLog(@"新增用户通知!");
-                CMDRoomUserInfo_t *pItem = (CMDRoomUserInfo_t *)pNewMsg;
-                [self addUserStruct:pItem];
-                NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;FONT-FAMILY:黑体;font-size=14px;\">系统消息: <a style=\"TEXT-DECORATION:font-size:14px; none;color:#629bff \" href=\"sqchatid://%d\">%@ 进入了房间</span>",
-                                     pItem->userid,[NSString stringWithCString:pItem->useralias encoding:GBK_ENCODING]];
-                if ([UserInfo sharedUserInfo].m_nVipLevel >=21 && [UserInfo sharedUserInfo].m_nVipLevel <=36)
-                {
-                    [_aryChat addObject:strInfo];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-                }
+                [_aryChat addObject:strInfo];
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+        }
+            break;
+        case Sub_Vchat_RoomPubMicState:
+        {
+            DLog(@"公麦状态数据!");
+            
+        }
+            break;
+        case Sub_Vchat_RoomUserExitResp:
+        {
+            // not do anything...
+        }
+            break;
+        case Sub_Vchat_RoomUserExitNoty:
+        {
+            DLog(@"房间用户退出通知!");
+            CMDUserExitRoomInfo_t* pInfo = (CMDUserExitRoomInfo_t *)pNewMsg;
+            NSString *strName = nil;
+            if (_rInfo)
+            {
+                RoomUser *user = [_rInfo findUser:pInfo->userid];
+                strName = user.m_strUserAlias;
+                [[_rInfo aryUser] removeObject:user];
+                [_rInfo removeUser:pInfo->userid];
+                
+            }
+            DLog(@"userid:%d",pInfo->userid);
+            NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;font-size=14px;\">\
+                                 系统消息:<span style=\"TEXT-DECORATION:font-size:14px; none;color:#629bff \">%@</span>退出了房间</span>",strName];
+            if ([UserInfo sharedUserInfo].m_nVipLevel >=21 && [UserInfo sharedUserInfo].m_nVipLevel <=36)
+            {
+                [_aryChat addObject:strInfo];
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+            
+            strInfo = nil;
+        }
+            break;
+        case Sub_Vchat_RoomKickoutUserResp:
+        {
+            // not do anything
+        }
+            break;
+        case Sub_Vchat_RoomKickoutUserNoty:
+        {
+            DLog(@"房间用户踢出通知!");
+            CMDUserKickoutRoomInfo_t* pInfo = (CMDUserKickoutRoomInfo_t *)pNewMsg;
+            if (_rInfo)
+            {
+                [_rInfo removeUser:pInfo->toid];
+            }
+            //522:超时   107:同号登录
+            DLog(@"被人踢出:%d--:resonid:%d",pInfo->toid,pInfo->resonid);
+            if(pInfo->toid == [_strUser intValue])
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_KICKOUT_VC object:nil];
+            }
+            else
+            {
                 [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
             }
-            break;
-            case Sub_Vchat_RoomPubMicState:
-            {
-                DLog(@"公麦状态数据!");
-                
-            }
-                break;
-            case Sub_Vchat_RoomUserExitResp:
-            {
-                // not do anything...
-            }
-                break;
-            case Sub_Vchat_RoomUserExitNoty:
-            {
-                DLog(@"房间用户退出通知!");
-                CMDUserExitRoomInfo_t* pInfo = (CMDUserExitRoomInfo_t *)pNewMsg;
-                NSString *strName = nil;
-                if (_rInfo)
-                {
-                    RoomUser *user = [_rInfo findUser:pInfo->userid];
-                    strName = user.m_strUserAlias;
-                    [[_rInfo aryUser] removeObject:user];
-                    [_rInfo removeUser:pInfo->userid];
-                    
-                }
-                DLog(@"userid:%d",pInfo->userid);
-                NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;font-size=14px;\">\
-                                     系统消息:<span style=\"TEXT-DECORATION:font-size:14px; none;color:#629bff \">%@</span>退出了房间</span>",strName];
-                if ([UserInfo sharedUserInfo].m_nVipLevel >=21 && [UserInfo sharedUserInfo].m_nVipLevel <=36)
-                {
-                    [_aryChat addObject:strInfo];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-                }
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-                
-                strInfo = nil;
-            }
-            break;
-            case Sub_Vchat_RoomKickoutUserResp:
-            {
-                // not do anything
-            }
-                break;
-            case Sub_Vchat_RoomKickoutUserNoty:
-            {
-                DLog(@"房间用户踢出通知!");
-                CMDUserKickoutRoomInfo_t* pInfo = (CMDUserKickoutRoomInfo_t *)pNewMsg;
-                if (_rInfo)
-                {
-                    [_rInfo removeUser:pInfo->toid];
-                }
-                //522:超时   107:同号登录
-                DLog(@"被人踢出:%d--:resonid:%d",pInfo->toid,pInfo->resonid);
-                if(pInfo->toid == [_strUser intValue])
-                {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_KICKOUT_VC object:nil];
-                }
-                else
-                {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-                }
-            }
+        }
             break;
         case Sub_Vchat_FlyGiftListInfo:
         {
             DLog(@"大礼物信息!");
             
         }
-        break;
+            break;
         case Sub_Vchat_WaitiMicListInfo:
         {
             DLog(@"排麦列表!");
@@ -728,47 +729,47 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             DLog(@"聊天通知数据!");
             [self chatMessageOper:pNewMsg];
         }
-        break;
+            break;
         case Sub_Vchat_TradeGiftResp:
         {
             DLog(@"赠送礼物返回响应消息!");
         }
-        break;
+            break;
         case Sub_Vchat_TradeGiftErr:
         {
             DLog(@"赠送礼物返回错误消息!");
         }
-        break;
+            break;
         case Sub_Vchat_TradeGiftNotify:
         {
             DLog(@"赠送礼物通知数据!");
         }
-        break;
+            break;
         case Sub_Vchat_TradeFlowerResp:
         {
             DLog(@"赠送鲜花返回响应消息!");
         }
-        break;
+            break;
         case Sub_Vchat_TradeFlowerErr:
         {
             DLog(@"赠送鲜花返回错误消息!");
         }
-        break;
+            break;
         case Sub_Vchat_TradeFlowerNotify:
         {
             DLog(@"赠送鲜花通知数据!");
         }
-        break;
+            break;
         case Sub_Vchat_TradeFireworksResp:
         {
             DLog(@"赠送烟花返回响应消息!");
         }
-        break;
+            break;
         case Sub_Vchat_TradeFireworksNotify:
         {
             DLog(@"赠送烟花通知数据!");
         }
-        break;
+            break;
         case Sub_Vchat_TradeFireworksErr:
         {
             DLog(@"赠送烟花返回错误消息!");
@@ -791,22 +792,22 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             DLog(@"系统消息通知数据!");
             
         }
-        break;
+            break;
         case Sub_Vchat_UserAccountInfo:
         {
             DLog(@"用户帐户数据!");
         }
-        break;
+            break;
         case Sub_Vchat_RoomManagerNotify:
         {
             DLog(@"房间管理通知数据!");
         }
-        break;
+            break;
         case Sub_Vchat_RoomMediaNotify:
         {
             DLog(@"房间媒体数据通知!");
         }
-        break;
+            break;
         case Sub_Vchat_RoomNoticeNotify:
         {
             DLog(@"房间公告数据通知!");
@@ -823,67 +824,64 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
                 [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
             }
         }
-        break;
+            break;
         case Sub_Vchat_RoomOPStatusNotify:
         {
             DLog(@"房间状态数据通知!");
         }
-        break;
+            break;
         case Sub_Vchat_RoomInfoNotify:
         {
             DLog(@"房间信息数据通知!");
         }
-        break;
+            break;
         case Sub_Vchat_ThrowUserNotify:
         {
             DLog(@"房间封杀用户通知!");
             
         }
-        break;
+            break;
         case Sub_Vchat_UpWaitMicResp:
         {
             DLog(@"上排麦响应!");
             
         }
-        break;
+            break;
         case Sub_Vchat_UpWaitMicErr:
         {
             DLog(@"上排麦错误!\n");
             
         }
-        break;
+            break;
         case Sub_Vchat_ChangePubMicStateNotify:
         {
             DLog(@"公麦状态通知!\n");
         }
-        break;
+            break;
         case Sub_Vchat_TransMediaReq:
         {
-//            DLog(@"传输媒体请求!\n");
+            //            DLog(@"传输媒体请求!\n");
         }
-        break;
+            break;
         case Sub_Vchat_TransMediaResp:
         {
             DLog(@"传输媒体响应!\n");
             
         }
-        break;
+            break;
         case Sub_Vchat_TransMediaErr:
         {
             DLog(@"传输媒体错误!\n");
-            
         }
-        break;
+            break;
         case Sub_Vchat_SetMicStateResp:
         {
             DLog(@"设置麦状态响应!\n");
-            
         }
             break;
         case Sub_Vchat_SetMicStateErr:
         {
             DLog(@"设置麦状态错误!\n");
-            
         }
             break;
         case Sub_Vchat_SetMicStateNotify:
@@ -894,14 +892,34 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             {
                 [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
             }
+            else
+            {
+                DLog(@"有人上M了,pInfo->toid:%d",pInfo->toid);
+            }
+            RoomUser *roomUser = [_rInfo.dictUser objectForKey:NSStringFromInt(pInfo->toid)];
+            roomUser.m_nInRoomState = pInfo->micstate;
+            for (int i=0; i<_rInfo.aryUser.count;i++)
+            {
+                RoomUser *rUser = [_rInfo.aryUser objectAtIndex:i];
+                if (![rUser isManager])
+                {
+                    break;
+                }
+                if (rUser.m_nUserId == pInfo->toid)
+                {
+                    rUser.m_nInRoomState = pInfo->micstate;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+                    break;
+                }
+            }
         }
-        break;
+            break;
         case Sub_Vchat_SetDevStateResp:
         {
             DLog(@"设置设备状态响应!\n");
             
         }
-        break;
+            break;
         case Sub_Vchat_SetDevStateErr:
         {
             DLog(@"设置设备状态错误!\n");
@@ -923,7 +941,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         case Sub_Vchat_SetUserAliasErr:
         {
             DLog(@"设置用户呢称错误!\n");
-
+            
         }
             break;
         case Sub_Vchat_SetUserAliasNotify:
@@ -969,7 +987,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         case Sub_Vchat_ForbidUserChatNotify:
         {
             DLog(@"禁言通知!\n");
-           
+            
         }
             break;
         case Sub_Vchat_FavoriteVcbResp:
@@ -1051,9 +1069,9 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         case Sub_Vchat_SetUserMoreInfoResp:
         {
             //todo...
-
+            
         }
-        break;
+            break;
         case Sub_Vchat_QueryUserMoreInfoResp:
         {
             //todo...
@@ -1067,7 +1085,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         case Sub_Vchat_SetUserPwdResp:
         {
             DLog(@"设置用户密码响应!\n");
-
+            
         }
             break;
         case Sub_Vchat_SetExecQueryResp:
@@ -1083,26 +1101,26 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         {
             
         }
-        break;
+            break;
         case Sub_Vchat_CloseRoomNotify:
         {
             DLog(@"房间被关闭消息,直接退出当前房间!\n");
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
         }
-        break;
+            break;
         case Sub_Vchat_DoNotReachRoomServer:
         {
             DLog(@"收到房间不可到达消息!\n");
         }
-        break;
+            break;
         case Sub_Vchat_LotteryPoolNotify:
         {
             DLog(@"收到幸运宝箱奖池消息!\n");
         }
-        break;
+            break;
         case Sub_Vchat_SetRoomInfoResp_v2:
         {
-           
+            
             DLog(@"Sub_Vchat_SetRoomInfoResp_v2");
         }
             break;
@@ -1110,47 +1128,69 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         {
             DLog(@"Sub_Vchat_SetRoomInfoNoty_v2");
         }
-        break;
+            break;
         case Sub_Vchat_SetUserHideStateResp:
         {
             DLog(@"Sub_Vchat_SetUserHideStateResp");
         }
-        break;
+            break;
         case Sub_VChat_SetUserHideStateNoty:
         {
             DLog(@"消息类型:%d",in_msg->subcmd);
         }
-        break;
+            break;
         case Sub_Vchat_UserAddChestNumNoty:
         {
             DLog(@"[tag_netconn] 收到用户增加新宝箱通知!\n");
-         
+            
         }
             break;
         case Sub_Vchat_AddClosedFriendNoty:
         {
             DLog(@"[tag_netconn] 收到赠送礼物增加密友通知!\n");
         }
-        break;
+            break;
         case Sub_Vchat_AdKeyWordOperateNoty:
         {
-//            DLog(@"[tag_netconn] 收到禁言关键词刷新通知!\n");
+            //            DLog(@"[tag_netconn] 收到禁言关键词刷新通知!\n");
         }
-        break;
+            break;
         case Sub_Vchat_AdKeyWordOperateResp:
         {
             DLog(@"[tag_netconn] 收到禁言关键词更新通知!");
         }
-        break;
+            break;
         case Sub_Vchar_RoomAndSubRoomId_Noty:
         {
             DLog(@"获取上麦的人!");
             CMDRoomAndSubRoomIdNoty_t *roomIdNoty = (CMDRoomAndSubRoomIdNoty_t*)pNewMsg;
-            _nMId = roomIdNoty->roomid;
-            DLog(@"mid:%d",_nMId);
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
+            NSString *strTemp;
+            if (_nMId==0)
+            {
+                strTemp = @"0";
+            }
+            else
+            {
+                strTemp = @"5";
+            }
+            NSInteger i=0;
+            for (i=0;i<_rInfo.aryUser.count; i++)
+            {
+                if ([[_rInfo.aryUser objectAtIndex:i] isOnMic])
+                {
+                    _nMId = roomIdNoty->roomid;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:strTemp];
+                    i=-1;
+                    break;
+                }
+            }
+            if (i!=-1)
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
+            }
+            
         }
-        break;
+            break;
         default:
         {
             DLog(@"消息类型:%d",in_msg->subcmd);
@@ -1177,7 +1217,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         {
             return [NSString stringWithFormat:@"<a style=\"TEXT-DECORATION: none;font-size:13px;COLOR: #629bff \" \
                     href=\"sqchatid://%d\" value=\"%@\">%@</a>",
-                                                      userId,strName,strName];
+                    userId,strName,strName];
         }
         else
         {
@@ -1191,13 +1231,9 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 - (void)chatMessageOper:(char *)pNewMsg
 {
     CMDRoomChatMsg_t *msg = (CMDRoomChatMsg_t*)pNewMsg;
-    
     NSString *strContent = [NSString stringWithCString:msg->content encoding:GBK_ENCODING];
-    
     NSString *strSrcName = [NSString stringWithCString:msg->srcalias encoding:GBK_ENCODING];
-
     NSString *strFrom = [self getToUser:msg->srcid user:[_rInfo findUser:msg->srcid] name:strSrcName];
-
     if (msg->msgtype==1)
     {
         NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\">说:</span>&nbsp;&nbsp;%@",strFrom,strContent];
@@ -1205,11 +1241,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         strInfo = [DecodeJson replaceEmojiString:strInfo];
         [_aryNotice addObject:strInfo];
         DLog(@"notice:%@",strInfo);
-        if (_aryNotice.count>=100)
+        if (_aryNotice.count>=20)
         {
             @synchronized(_aryNotice)
             {
-                for (int i=0; i<50; i++)
+                for (int i=0; i<10; i++)
                 {
                     [_aryNotice removeObjectAtIndex:i];
                 }
@@ -1223,6 +1259,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         NSString *strTo = [self getToUser:msg->toid user:[_rInfo findUser:msg->toid] name:strToName];
         NSString *strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\">对 %@ 说 :</span>&nbsp;&nbsp;%@",strFrom,strTo,strContent];
         strInfo = [DecodeJson replaceEmojiString:strInfo];
+        strInfo = [DecodeJson replaceImageString:strInfo];
         [_aryChat addObject:strInfo];
         if (_aryChat.count>=100)
         {
@@ -1249,7 +1286,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 #pragma mark 房间用户信息添加
 - (void)sendGift:(int)userId
 {
-
+    
 }
 
 - (void)sendColletRoom:(int)nCollet
@@ -1258,7 +1295,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     req.actionid = nCollet ? 1 : -1;
     req.userid =[_strUser intValue];
     req.vcbid = [_strRoomId intValue];
-
+    
     char szBuf[128]={0};
     COM_MSG_HEADER* pHead = (COM_MSG_HEADER*)szBuf;
     pHead->length = sizeof(COM_MSG_HEADER) + sizeof(CMDFavoriteRoomReq_t);
@@ -1269,7 +1306,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     memcpy(pHead->content,&req,sizeof(CMDFavoriteRoomReq_t));
     NSData *data = [NSData dataWithBytes:szBuf length:pHead->length];
     [_asyncSocket writeData:data withTimeout:-1 tag:1];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
 }
 
 - (void)addUserStruct:(CMDRoomUserInfo_t*)pItem
@@ -1330,11 +1367,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         pUser.m_nInRoomState |= FT_ROOMUSER_STATUS_IS_SIEGE2;
     
     pUser.m_pInRoom = _rInfo;
-//    if(pUser.m_nUserId != [_strUser intValue])
-//    {
+    //    if(pUser.m_nUserId != [_strUser intValue])
+    //    {
     [_rInfo addUser:pUser];
     [_rInfo insertRUser:pUser];
-//    }
+    //    }
     if([pUser isHide])
     {
         DLog(@"发现隐身用户[%d]进入房间[%@].",[UserInfo sharedUserInfo].nUserId,_strRoomId);
@@ -1378,9 +1415,9 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     __weak LSTcpSocket *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
-    ^{
-        [__self thread_room];//发送心跳
-    });
+                   ^{
+                       [__self thread_room];//发送心跳
+                   });
 }
 
 - (void)joinRoomError:(char *)pData
@@ -1396,27 +1433,27 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:strMsg];
             return ;
         }
-        break;
+            break;
         case 101:
         {
             strMsg = @"房间黑名单";
         }
-        break;
+            break;
         case 203:
         {
             strMsg = @"用户名/密码查询错误，无法加入房间!";
         }
-        break;
+            break;
         case 404:
         {
             strMsg = @"加入房间 不存在";
         }
-        break;
+            break;
         case 405:
         {
             strMsg = @"房间已经被房主关闭，不能进入";
         }
-        break;
+            break;
         case 502:
         {
             strMsg = @"房间人数已满";
@@ -1431,7 +1468,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         {
             strMsg = @"未知错误";
         }
-        break;
+            break;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:strMsg];
     [self closeSocket];
@@ -1456,7 +1493,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     req.userid = [UserInfo sharedUserInfo].nUserId;
     req.vcbid = [_strRoomId intValue];
     [self sendMessage:(char*)&req size:sizeof(CMDUserExitRoomInfo_t) version:MDM_Version_Value maincmd:MDM_Vchat_Room
-            subcmd:Sub_Vchat_RoomUserExitReq];
+               subcmd:Sub_Vchat_RoomUserExitReq];
 }
 
 - (void)sendChatInfo:(NSString *)strInfo toid:(int)userId
@@ -1576,7 +1613,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
                 [_asyncSocket readDataToLength:nSize-sizeof(int32) withTimeout:-1 tag:SOCKET_READ_DATA];
             }
         }
-        break;
+            break;
         case SOCKET_READ_DATA:
         {
             char *p = cBuf;
@@ -1588,16 +1625,16 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             memcpy(p+sizeof(int32), [data bytes], data.length);
             [self getSocketHead:cBuf len:(int32)(data.length+sizeof(int32))];
         }
-        break;
+            break;
         default:
-        break;
+            break;
     }
 }
 
 
 -(void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
-//    DLog(@"发送成功:%lu",tag);
+    //    DLog(@"发送成功:%lu",tag);
     
 }
 

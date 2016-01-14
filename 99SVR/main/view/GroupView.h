@@ -22,7 +22,7 @@
 
 - (void)addEvent:(void (^)(id sender))handler;
 
-- (void)setBtnSelect:(int)tag;
+- (void)setBtnSelect:(NSInteger)tag;
 
 - (void)setBluePointX:(CGFloat)fPointX;
 

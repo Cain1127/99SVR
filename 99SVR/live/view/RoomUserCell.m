@@ -26,7 +26,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
-    imgView = [[UIImageView alloc] initWithFrame:Rect(10, 10, 20, 20)];
+    imgView = [[UIImageView alloc] initWithFrame:Rect(10, 10, 17, 17)];
     
     imgViewPic = [[UIImageView alloc] initWithFrame:Rect(imgView.x+imgView.width+10, imgView.y, 20, 20)];
     

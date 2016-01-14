@@ -1,55 +1,87 @@
 //
 //  RightViewController.m
-//  WWSideslipViewControllerSample
+//  99SVR
 //
-//  Created by 王维 on 14-8-27.
-//  Copyright (c) 2014年 wangwei. All rights reserved.
+//  Created by xia zhonglin  on 1/7/16.
+//  Copyright © 2016 xia zhonglin . All rights reserved.
 //
-
-// 版权属于原作者
-// http://code4app.com (cn) http://code4app.net (en)
-// 发布代码于最专业的源码分享网站: Code4App.com
 
 #import "RightViewController.h"
+#import "ZLTabBar.h" 
+#import "HomeViewController.h"
+#import "IndexViewController.h"
+#import "TextViewController.h"
+#import "ZLButton.h"
 
-@interface RightViewController ()
+#define kSelect_view_control_tag 100
 
+@interface RightViewController ()<ZLTabBarDelegate>
+{
+    
+}
+
+@property (nonatomic,strong) ZLTabBar *tabBar;
 @end
 
 @implementation RightViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-        [self createrView];
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [self.view setBackgroundColor:[UIColor blackColor]];
+    [self initUIHead];
+}
+
+- (void)initUIHead
+{
+    ZLTabInfo *tabInfo1 = [[ZLTabInfo alloc] initWithTabInfo:@"首页" normal:@"" high:@"" viewControl:[[HomeViewController alloc] init]];
+    ZLTabInfo *tabInfo2 = [[ZLTabInfo alloc] initWithTabInfo:@"视频直播" normal:@"" high:@"" viewControl:[[IndexViewController alloc] init]];
+    ZLTabInfo *tabInfo3 = [[ZLTabInfo alloc] initWithTabInfo:@"文字直播" normal:@"" high:@"" viewControl:[[TextViewController alloc] init]];
+    
+    NSArray *aryTab = @[tabInfo1,tabInfo2,tabInfo3];
+    [self addSonView:aryTab];
+    
+    _tabBar = [[ZLTabBar alloc] initWithItems:aryTab];
+    [self.view addSubview:_tabBar];
+    _tabBar.delegate = self;
+    [_tabBar setSelectIndex:0];
+    
+    tabInfo1.viewController.view.tag = kSelect_view_control_tag;
+}
+
+- (void)addSonView:(NSArray *)array
+{
+    for (ZLTabInfo *tabInfo in array)
+    {
+        [self addChildViewController:tabInfo.viewController];
+    }
+}
+
+- (void)selectIndex:(UIViewController *)viewController
+{
+    [UIView animateWithDuration:0.1f animations:
+     ^{
+         UIView *currentView = [self.view viewWithTag:kSelect_view_control_tag];
+         [currentView removeFromSuperview];
+         viewController.view.frame = CGRectMake(0,0,kScreenWidth, kScreenHeight);
+         viewController.view.tag = kSelect_view_control_tag;
+         [self.view insertSubview:viewController.view belowSubview:self.tabBar];
+     }];
+}
+
+- (void)initUIBody
+{
+    
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
--(void)createrView{
-    [self.view setBackgroundColor:[UIColor clearColor]];
-    
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(100,0,200, [UIScreen mainScreen].bounds.size.height)];
-    [label setText:@"这是右视图"];
-    [label setTextColor:[UIColor whiteColor]];
-    [label setNumberOfLines:0];
-    [label setFont:[UIFont systemFontOfSize:100]];
-    
-    [self.view addSubview:label];
-}
+//- (void)selectIndex:(UIViewController *)viewController
+//{
+//    
+//}
 
 @end

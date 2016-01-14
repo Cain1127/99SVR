@@ -29,6 +29,7 @@
     int _currentPage;
     CGFloat scalef;
 }
+
 @property (nonatomic,strong) UIScrollView *scrollView;
 @property (nonatomic,strong) GroupView *group;
 @property (nonatomic,strong) UITableView *tableView;
@@ -53,6 +54,10 @@
     [_aryOnline removeAllObjects];
     _grouRequest.groupBlock = ^(int status,NSArray *aryIndex)
     {
+        if (aryIndex.count>0)
+        {
+            [UserInfo sharedUserInfo].aryRoom = aryIndex;
+        }
         for (RoomGroup *group in aryIndex)
         {
             DLog(@"groupid:%@",group.groupid);
@@ -92,7 +97,6 @@
 #pragma mark get history
 - (void)initHistoryData
 {
-    [_aryHistory removeAllObjects];
     if([UserInfo sharedUserInfo].aryCollet==nil)
     {
         [UserInfo sharedUserInfo].aryCollet = [NSMutableArray array];
@@ -104,7 +108,15 @@
         if (aryHistory.count>0)
         {
             RoomGroup *group = [aryHistory objectAtIndex:0];
-            [__self.aryHistory addObject:group];
+            if (__self.aryHistory.count==0)
+            {
+                [__self.aryHistory addObject:group];
+            }
+            else
+            {
+                [__self.aryHistory removeObjectAtIndex:0];
+                [__self.aryHistory addObject:group];
+            }
         }
         if (aryColl.count>0)
         {
@@ -129,6 +141,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
     updateCount = 0;
     _currentPage = 0;
     [self initUIHead];
@@ -145,10 +159,10 @@
     
     __weak IndexViewController *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
-    ^{
-        [__self initData];
-        [__self initHistoryData];
-    });
+                   ^{
+                       [__self initData];
+                       [__self initHistoryData];
+                   });
     [_group addEvent:^(id sender)
      {
          [__self btnEvent:sender];
@@ -157,14 +171,16 @@
     [self btnEvent:btnSender];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MIESSAGE_UPDATE_LOGIN_STATUS object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchToHistory) name:MESSAGE_SWITCH_RIGHT_TAB object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initHistoryData) name:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
+    //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
+    //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchToHistory) name:MESSAGE_SWITCH_RIGHT_TAB object:nil];
+    //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initHistoryData) name:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -182,9 +198,9 @@
 {
     __weak IndexViewController *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
-    ^{
-        [__self initHistoryData];
-    });
+                   ^{
+                       [__self initHistoryData];
+                   });
 }
 
 - (void)initUIHead
@@ -224,7 +240,7 @@
     [_scrollView addSubview:hotController.view];
     [_scrollView addSubview:mainView.view];
     [_scrollView addSubview:historyView.view];
-
+    
     _scrollView.contentSize = CGSizeMake(kScreenWidth*3, _scrollView.height);
     
     _tag = 0;
@@ -232,9 +248,9 @@
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftBtn setImage:[UIImage imageNamed:@"switcher"] forState:UIControlStateNormal];
     [leftBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
-    }];
+     {
+         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
+     }];
     
     [self setLeftBtn:leftBtn];
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -385,7 +401,7 @@
 {
     if (updateCount ==1)//正常
     {
-
+        
     }
     else if(updateCount==0 && _currentPage ==0)
     {

@@ -12,6 +12,7 @@
 
 #import "LeftViewController.h"
 #import "Common.h"
+#import "RegisterViewController.h"
 #import "UIView+Extension.h"
 #import "LeftCellModel.h"
 #import "LeftViewCell.h"
@@ -100,7 +101,7 @@
     
     [self checkLogin];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MIESSAGE_UPDATE_LOGIN_STATUS object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -128,7 +129,7 @@
     else
     {
         [_items addObject:[[LeftCellModel alloc] initWithTitle:kLogin icon:@"mydata.png" goClassName:@"LoginViewController"]];
-        [_items addObject:[[LeftCellModel alloc] initWithTitle:kRegist icon:@"regist.png" goClassName:@"RegViewController"]];
+        [_items addObject:[[LeftCellModel alloc] initWithTitle:kRegist icon:@"regist.png" goClassName:@"RegisterViewController"]];
         [_items addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
         [_items addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"kefu.png" goClassName:@"KefuCenterController"]];
         _footerView.hidden = YES;
@@ -147,7 +148,7 @@
         [UserDefaults removeObjectForKey:kIsLogin];
         [UserInfo sharedUserInfo].bIsLogin = NO;
         [UserInfo sharedUserInfo].nUserId = 0;
-        [[NSNotificationCenter defaultCenter] postNotificationName:MIESSAGE_UPDATE_LOGIN_STATUS object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
         [self checkLogin];
     }
 }

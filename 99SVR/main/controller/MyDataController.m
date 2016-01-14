@@ -10,8 +10,8 @@
 #import "LeftHeaderView.h"
 #import "UserInfo.h"
 
-#define kImageWidth 117
-#define kCircle (kImageWidth + 6)
+#define kImageWidth 107
+#define kCircle (kImageWidth + 12)
 
 @implementation TitleItem
 
@@ -84,6 +84,8 @@
     UIView *circleLine = [UIView new];
     circleLine.layer.masksToBounds = YES;
     circleLine.layer.cornerRadius = (kCircle) / 2;
+    circleLine.layer.borderWidth = 0.5;
+    circleLine.layer.borderColor = UIColorFromRGB(0xffffff).CGColor;
     [self.view addSubview:circleLine];
     
     UIImageView *avatarImageView = [[UIImageView alloc] init];
@@ -108,7 +110,7 @@
     [self.view addSubview:vipLevel];
     
     circleLine.frame = Rect(kScreenWidth/2-kCircle/2, 80, kCircle, kCircle);
-    avatarImageView.frame = Rect(circleLine.x+3,circleLine.y+3, kImageWidth, kImageWidth);
+    avatarImageView.frame = Rect(circleLine.x+6,circleLine.y+6, kImageWidth, kImageWidth);
     nameLabel.frame = Rect(30, circleLine.height+circleLine.y+19, kScreenWidth-60, 20);
     vipLevel.frame = Rect(30, nameLabel.height+nameLabel.y, kScreenWidth-60, 20);
     
@@ -137,11 +139,12 @@
     line2.backgroundColor = [UIColor colorWithHex:@"#ffffff" alpha:0.7];
     [self.view addSubview:line2];
     
-    [accountItem mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(self.view.width / 3, 50));
-        make.left.equalTo(self.view);
-        make.top.mas_equalTo(vipLevel.mas_bottom).offset(36);
-    }];
+    [accountItem mas_makeConstraints:^(MASConstraintMaker *make)
+     {
+         make.size.mas_equalTo(CGSizeMake(self.view.width / 3, 50));
+         make.left.equalTo(self.view);
+         make.top.mas_equalTo(vipLevel.mas_bottom).offset(36);
+     }];
     [line1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(0.5, itemHeight));
         make.left.mas_equalTo(accountItem.mas_right);
