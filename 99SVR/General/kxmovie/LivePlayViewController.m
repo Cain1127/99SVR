@@ -1366,11 +1366,11 @@ static int stream_component_open(VideoState *is, int stream_index)
     if (!codec ||
         avcodec_open2(avctx, codec, &opts) < 0)
         return -1;
-    if ((t = av_dict_get(opts, "", NULL, AV_DICT_IGNORE_SUFFIX))) {
+    if ((t = av_dict_get(opts, "", NULL, AV_DICT_IGNORE_SUFFIX)))
+    {
         av_log(NULL, AV_LOG_ERROR, "Option %s not found.\n", t->key);
         return AVERROR_OPTION_NOT_FOUND;
     }
-    
     
     /* prepare audio output */
     if (avctx->codec_type == AVMEDIA_TYPE_AUDIO) {
@@ -1607,10 +1607,10 @@ static int read_thread(void *arg)
     if (show_status)
     {
         av_dump_format(ic, 0, is->filename, 0);
-        if (!strstr(is->filename, "only-audio=1"))
-        {
-            [fsPlay removeSmall];
-        }
+//        if (!strstr(is->filename, "only-audio=1"))
+//        {
+//            [fsPlay removeSmall];
+//        }
     }
     
     is->show_mode = show_mode;
@@ -1689,7 +1689,8 @@ static int read_thread(void *arg)
             is->seek_req = 0;
             eof = 0;
         }
-        if (is->que_attachments_req) {
+        if (is->que_attachments_req)
+        {
             avformat_queue_attached_pictures(ic);
             is->que_attachments_req = 0;
         }
@@ -1706,7 +1707,8 @@ static int read_thread(void *arg)
                  SDL_UnlockMutex(wait_mutex);
                  continue;
              }
-        if (eof) {
+        if (eof)
+        {
             if (is->video_stream >= 0) {
                 av_init_packet(pkt);
                 pkt->data = NULL;
@@ -1726,7 +1728,9 @@ static int read_thread(void *arg)
             if (is->audioq.size + is->videoq.size + is->subtitleq.size == 0) {
                 if (loop != 1 && (!loop || --loop)) {
                     stream_seek(is, start_time != AV_NOPTS_VALUE ? start_time : 0, 0, 0);
-                } else if (autoexit) {
+                }
+                else if (autoexit)
+                {
                     ret = AVERROR_EOF;
                     goto fail;
                 }
@@ -1784,9 +1788,9 @@ fail:
     [fsPlay stopLoad];
     __weak LivePlayViewController *__self = fsPlay;
     dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       [__self setDefaultImg];
-                   });
+    ^{
+        [__self setDefaultImg];
+    });
     if (ret != 0)
     {
         
@@ -1950,9 +1954,9 @@ static int lockmgr(void **mtx, enum AVLockOp op)
     DLog(@"videoPlayState:%d",videoPlayState);
     __weak UIImageView *__glView = _glView;
     dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       [__glView hideToastActivity];
-                   });
+   ^{
+       [__glView hideToastActivity];
+   });
 }
 
 - (void)viewDidLoad
@@ -1987,7 +1991,6 @@ static int lockmgr(void **mtx, enum AVLockOp op)
     [_glView setImage:[UIImage imageNamed:@"live_default"]];
     smallImg.hidden = NO;
     [smallImg setImage:[UIImage imageNamed:@"noMic"]];
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -2127,10 +2130,15 @@ static int lockmgr(void **mtx, enum AVLockOp op)
             }
             __weak KxVideoFrameRGB *__rgbFrame = frame;
             __weak UIImageView *__imgView = _glView;
+            __weak UIImageView *__img = smallImg;
             dispatch_sync(dispatch_get_main_queue(),
-                          ^{
-                              [__imgView setImage:[__rgbFrame asImage]];
-                          });
+            ^{
+                 if(!__img.hidden)
+                 {
+                     __img.hidden = YES;
+                 }
+                 [__imgView setImage:[__rgbFrame asImage]];
+            });
         }
         isFrameOk = NO;
     }
@@ -2286,9 +2294,9 @@ static int lockmgr(void **mtx, enum AVLockOp op)
 {
     __weak UIImageView *__weakImg = smallImg;
     dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       __weakImg.hidden = YES;
-                   });
+    ^{
+        __weakImg.hidden = YES;
+    });
 }
 
 - (void)seekWithTime:(int)time
@@ -2311,5 +2319,4 @@ static int lockmgr(void **mtx, enum AVLockOp op)
 }
 
 @end
-
 

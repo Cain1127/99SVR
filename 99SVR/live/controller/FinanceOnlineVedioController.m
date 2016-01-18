@@ -64,7 +64,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _vedios.count;
+    return _videos.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -76,7 +76,7 @@
     }
     else
     {
-        RoomGroup *room = _vedios[section];
+        RoomGroup *room = _videos[section];
         return (room.aryRoomHttp.count + 1) / 2;
     }
 }
@@ -91,7 +91,7 @@
         cell.textLabel.textColor = [UIColor blackColor];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    RoomGroup *room = _vedios[indexPath.section];
+    RoomGroup *room = _videos[indexPath.section];
     int length = 2;
     int loc = (int)indexPath.row * length;
     if (loc + length > room.aryRoomHttp.count)
@@ -112,7 +112,7 @@
 - (void)connectRoom:(RoomHttp *)room
 {
     LSTcpSocket *socket = [LSTcpSocket sharedLSTcpSocket];
-    NSString *strAry = [room.cgateaddr componentsSeparatedByString:@";"][0];
+    NSString *strAry = [room.cgateaddr componentsSeparatedByString:@";"][1];
     NSString *strAddress = [strAry componentsSeparatedByString:@":"][0];
     __weak FinanceOnlineVedioController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
@@ -122,10 +122,8 @@
     NSString *strPort = [strAry componentsSeparatedByString:@":"][1];
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
 //    [socket connectRoomInfo:room.nvcbid address:@"172.16.41.215" port:22706];
-//    [socket connectRoomInfo:roomi.nvcbid address:@"42.62.11.116" port:22706];
     [socket connectRoomInfo:room.nvcbid address:strAddress port:[strPort intValue]];
 //    [socket connectRoomInfo:room.nvcbid address:strAddress port:22790];
-    DLog(@"请求房间:room.nvcbid:%@--%@--%@",room.nvcbid,strAddress,strPort);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomSuc:) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
 }
@@ -233,7 +231,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (_vedios.count==1)
+    if (_videos.count==1)
     {
         return nil;
     }
@@ -248,7 +246,7 @@
     {
         groupBtn.open = YES;
     }
-    RoomGroup *group = _vedios[section];
+    RoomGroup *group = _videos[section];
     groupBtn.title = group.groupname;
     [groupBtn clickWithBlock:^(UIGestureRecognizer *gesture)
     {
@@ -259,7 +257,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (_vedios.count<=1)
+    if (_videos.count<=1)
     {
         return 1;
     }

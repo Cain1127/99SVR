@@ -98,11 +98,11 @@ typedef struct tag_WantToJoinRoomInfo
 }WantToJoinRoomInfo_t;
 
 //中奖倍数次数
-typedef struct tag_JiangCiShu
+typedef struct tag_JiangCiShu_t
 {
    int beishu;
    int count;
-}JiangCiShu_t;
+}tag_JiangCiShu_t;
 
 typedef struct tag_AudioDevName
 {

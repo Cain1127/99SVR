@@ -65,31 +65,11 @@
 - (void)layoutViews
 {
     _nameLabel.frame = Rect(_imageView.x+5,_imageView.height+_imageView.y-20,self.width*0.35,15);
-//    
-//    [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make)
-//    {
-//        make.width.mas_equalTo(self.width * 0.35);
-//        make.left.equalTo(_imageView).offset(8);
-//        make.bottom.equalTo(_imageView).offset(-4);
-//    }];
     
     _roomIdLabel.frame = Rect(_nameLabel.x+_nameLabel.width+2,_nameLabel.y,60,15);
-//    [_lookCountBtn mas_makeConstraints:^(MASConstraintMaker *make)
-//    {
-//        make.width.mas_equalTo(self.width * 0.25);
-//        make.right.equalTo(_imageView).offset(-8);
-//        make.bottom.equalTo(_imageView).offset(-4);
-//    }];
     
-    [_lookCountBtn setFrame:Rect(_roomIdLabel.width+_roomIdLabel.x+5,
-                            _nameLabel.y,_imageView.width-(_roomIdLabel.width+_roomIdLabel.x+9) , 15)];
-    
-//    [_roomIdLabel mas_makeConstraints:^(MASConstraintMaker *make)
-//    {
-//        make.width.mas_equalTo(self.width * 0.25);
-//        make.left.mas_equalTo(_nameLabel.mas_right).offset(6);
-//        make.bottom.equalTo(_nameLabel);
-//    }];
+    [_lookCountBtn setFrame:Rect(_imageView.x+_imageView.width-60,
+                            _nameLabel.y,60, 15)];
 }
 
 - (void)setRoom:(RoomHttp *)room
@@ -99,25 +79,25 @@
     _nameLabel.text = room.cname;
     [_lookCountBtn setTitle:room.ncount forState:UIControlStateNormal];
     [_roomIdLabel setText:room.nvcbid];
-    if ([room.password isEqualToString:@"1"])
-    {
-        if (_btnPwd==nil)
-        {
-            _btnPwd = [UIButton buttonWithType:UIButtonTypeCustom];
-            [_btnPwd setImage:[UIImage imageNamed:@"pwd_play"] forState:UIControlStateNormal];
-            [_btnPwd setImage:[UIImage imageNamed:@"pwd_play_h"] forState:UIControlStateHighlighted];
-            [self addSubview:_btnPwd];
-            _btnPwd.frame = Rect(self.width/2-18, self.height/2-18, 36, 36);
-        }
-    }
+//    if ([room.password isEqualToString:@"1"])
+//    {
+//        if (_btnPwd==nil)
+//        {
+//            _btnPwd = [UIButton buttonWithType:UIButtonTypeCustom];
+//            [_btnPwd setImage:[UIImage imageNamed:@"pwd_play"] forState:UIControlStateNormal];
+//            [_btnPwd setImage:[UIImage imageNamed:@"pwd_play_h"] forState:UIControlStateHighlighted];
+//            [self addSubview:_btnPwd];
+//            _btnPwd.frame = Rect(self.width/2-18, self.height/2-18, 36, 36);
+//        }
+//    }
 }
 
 - (void)addGesture:(void (^)(id sender))handler
 {
-    if(_btnPwd)
-    {
-        [_btnPwd bk_addEventHandler:handler forControlEvents:UIControlEventTouchUpInside];
-    }
+//    if(_btnPwd)
+//    {
+//        [_btnPwd bk_addEventHandler:handler forControlEvents:UIControlEventTouchUpInside];
+//    }
 }
 
 @end

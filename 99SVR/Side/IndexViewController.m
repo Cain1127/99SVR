@@ -304,7 +304,7 @@
 - (void)setUpdate:(NSArray *)array obj:(id)object
 {
     FinanceOnlineVedioController *finan = object;
-    [finan setVedios:array];
+    [finan setVideos:array];
     [finan reloadData];
 }
 

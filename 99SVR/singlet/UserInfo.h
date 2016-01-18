@@ -15,6 +15,9 @@
 
 DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
+@property (nonatomic,copy) NSString *strWebAddr;
+@property (nonatomic,copy) NSString *strRoomAddr;
+
 @property (nonatomic,assign) BOOL bIsLogin;
 @property (nonatomic,assign) int nUserId;
 @property (nonatomic,copy) NSString *strPwd;

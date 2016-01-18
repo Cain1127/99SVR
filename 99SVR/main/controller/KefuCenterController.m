@@ -45,11 +45,10 @@
                 break;
             }
         }
-        [__self setVedios:__self.datas];
+        [__self setVideos:__self.datas];
         dispatch_async(dispatch_get_main_queue(), ^{
             [__self reloadData];
         });
-        
     };
     [self.listReuqest requestListRequest];
 }

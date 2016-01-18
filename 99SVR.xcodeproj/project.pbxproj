@@ -33,16 +33,6 @@
 		BB25D8121C15729800314C1E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D80E1C15729800314C1E /* main.m */; };
 		BB25D8F21C1581F000314C1E /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB25D8F11C1581F000314C1E /* libsqlite3.0.tbd */; };
 		BB3658D91C213E6F009E2867 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3658D81C213E6F009E2867 /* libSDL.a */; };
-		BB3658E51C213E77009E2867 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3658DB1C213E77009E2867 /* libavcodec.a */; };
-		BB3658E61C213E77009E2867 /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3658DC1C213E77009E2867 /* libavdevice.a */; };
-		BB3658E71C213E77009E2867 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3658DD1C213E77009E2867 /* libavfilter.a */; };
-		BB3658E81C213E77009E2867 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3658DE1C213E77009E2867 /* libavformat.a */; };
-		BB3658E91C213E77009E2867 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3658DF1C213E77009E2867 /* libavutil.a */; };
-		BB3658EA1C213E77009E2867 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3658E01C213E77009E2867 /* libogg.a */; };
-		BB3658EB1C213E77009E2867 /* libspeex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3658E11C213E77009E2867 /* libspeex.a */; };
-		BB3658EC1C213E77009E2867 /* libspeexdsp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3658E21C213E77009E2867 /* libspeexdsp.a */; };
-		BB3658ED1C213E77009E2867 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3658E31C213E77009E2867 /* libswresample.a */; };
-		BB3658EE1C213E77009E2867 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3658E41C213E77009E2867 /* libswscale.a */; };
 		BB36592C1C214067009E2867 /* doxyfile in Resources */ = {isa = PBXBuildFile; fileRef = BB3658F21C214066009E2867 /* doxyfile */; };
 		BB36592D1C214067009E2867 /* SDL_config.h.in in Resources */ = {isa = PBXBuildFile; fileRef = BB3658FB1C214066009E2867 /* SDL_config.h.in */; };
 		BB365A411C23A6AF009E2867 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB365A401C23A6AF009E2867 /* Info.plist */; };
@@ -182,7 +172,7 @@
 		BB63F6111C2CC7A300A042E8 /* HotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5781C2CC7A300A042E8 /* HotViewController.m */; };
 		BB63F6121C2CC7A300A042E8 /* KefuCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F57A1C2CC7A300A042E8 /* KefuCenterController.m */; };
 		BB63F6131C2CC7A300A042E8 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F57C1C2CC7A300A042E8 /* MainViewController.m */; };
-		BB63F6141C2CC7A300A042E8 /* MyCollectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F57E1C2CC7A300A042E8 /* MyCollectionController.m */; };
+		BB63F6141C2CC7A300A042E8 /* LiveColletionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F57E1C2CC7A300A042E8 /* LiveColletionViewController.m */; };
 		BB63F6181C2CC7A300A042E8 /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5831C2CC7A300A042E8 /* NewViewController.m */; };
 		BB63F6191C2CC7A300A042E8 /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5851C2CC7A300A042E8 /* SearchController.m */; };
 		BB63F61A1C2CC7A300A042E8 /* SettingCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5871C2CC7A300A042E8 /* SettingCenterController.m */; };
@@ -224,7 +214,20 @@
 		BB88F3661C4736C100C1F8D9 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F35C1C4736C100C1F8D9 /* BaseService.m */; };
 		BB88F36D1C4772B100C1F8D9 /* NNSVRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F36C1C4772B100C1F8D9 /* NNSVRViewController.m */; };
 		BB88F3701C479CE000C1F8D9 /* TextLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F36F1C479CE000C1F8D9 /* TextLivingCell.m */; };
+		BB88F37E1C48BA7300C1F8D9 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3721C48BA7300C1F8D9 /* libavcodec.a */; };
+		BB88F37F1C48BA7300C1F8D9 /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3731C48BA7300C1F8D9 /* libavdevice.a */; };
+		BB88F3801C48BA7300C1F8D9 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3741C48BA7300C1F8D9 /* libavfilter.a */; };
+		BB88F3811C48BA7300C1F8D9 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3751C48BA7300C1F8D9 /* libavformat.a */; };
+		BB88F3821C48BA7300C1F8D9 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3761C48BA7300C1F8D9 /* libavutil.a */; };
+		BB88F3831C48BA7300C1F8D9 /* libDTCoreText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3771C48BA7300C1F8D9 /* libDTCoreText.a */; };
+		BB88F3841C48BA7300C1F8D9 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3781C48BA7300C1F8D9 /* libogg.a */; };
+		BB88F3851C48BA7300C1F8D9 /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3791C48BA7300C1F8D9 /* libpostproc.a */; };
+		BB88F3861C48BA7300C1F8D9 /* libspeex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F37A1C48BA7300C1F8D9 /* libspeex.a */; };
+		BB88F3881C48BA7300C1F8D9 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F37C1C48BA7300C1F8D9 /* libswresample.a */; };
+		BB88F3891C48BA7300C1F8D9 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F37D1C48BA7300C1F8D9 /* libswscale.a */; };
 		BBAC81341C37E61500CE9D2B /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAC81311C37E61500CE9D2B /* libMobClickLibrary.a */; };
+		BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F31C4CD515008F2CEC /* SVRInitLBS.m */; };
+		BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */; };
 		BBECB02D1C1AC1E400D7230F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB02C1C1AC1E400D7230F /* OpenGLES.framework */; };
 		BBECB02F1C1AC1EC00D7230F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB02E1C1AC1EC00D7230F /* MediaPlayer.framework */; };
 		BBECB0311C1AC1F900D7230F /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB0301C1AC1F900D7230F /* Accelerate.framework */; };
@@ -321,16 +324,6 @@
 		BB25D9DB1C167AE000314C1E /* PubNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PubNotification.h; sourceTree = "<group>"; };
 		BB25D9DC1C167AE000314C1E /* UtilsMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilsMacro.h; sourceTree = "<group>"; };
 		BB3658D81C213E6F009E2867 /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSDL.a; sourceTree = "<group>"; };
-		BB3658DB1C213E77009E2867 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavcodec.a; sourceTree = "<group>"; };
-		BB3658DC1C213E77009E2867 /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavdevice.a; sourceTree = "<group>"; };
-		BB3658DD1C213E77009E2867 /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavfilter.a; sourceTree = "<group>"; };
-		BB3658DE1C213E77009E2867 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavformat.a; sourceTree = "<group>"; };
-		BB3658DF1C213E77009E2867 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavutil.a; sourceTree = "<group>"; };
-		BB3658E01C213E77009E2867 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libogg.a; sourceTree = "<group>"; };
-		BB3658E11C213E77009E2867 /* libspeex.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libspeex.a; sourceTree = "<group>"; };
-		BB3658E21C213E77009E2867 /* libspeexdsp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libspeexdsp.a; sourceTree = "<group>"; };
-		BB3658E31C213E77009E2867 /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswresample.a; sourceTree = "<group>"; };
-		BB3658E41C213E77009E2867 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswscale.a; sourceTree = "<group>"; };
 		BB3658F01C214066009E2867 /* begin_code.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = begin_code.h; sourceTree = "<group>"; };
 		BB3658F11C214066009E2867 /* close_code.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = close_code.h; sourceTree = "<group>"; };
 		BB3658F21C214066009E2867 /* doxyfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = doxyfile; sourceTree = "<group>"; };
@@ -635,8 +628,8 @@
 		BB63F57A1C2CC7A300A042E8 /* KefuCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KefuCenterController.m; sourceTree = "<group>"; };
 		BB63F57B1C2CC7A300A042E8 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		BB63F57C1C2CC7A300A042E8 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		BB63F57D1C2CC7A300A042E8 /* MyCollectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCollectionController.h; sourceTree = "<group>"; };
-		BB63F57E1C2CC7A300A042E8 /* MyCollectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCollectionController.m; sourceTree = "<group>"; };
+		BB63F57D1C2CC7A300A042E8 /* LiveColletionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveColletionViewController.h; sourceTree = "<group>"; };
+		BB63F57E1C2CC7A300A042E8 /* LiveColletionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LiveColletionViewController.m; sourceTree = "<group>"; };
 		BB63F5821C2CC7A300A042E8 /* NewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
 		BB63F5831C2CC7A300A042E8 /* NewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
 		BB63F5841C2CC7A300A042E8 /* SearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchController.h; sourceTree = "<group>"; };
@@ -720,9 +713,24 @@
 		BB88F36C1C4772B100C1F8D9 /* NNSVRViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNSVRViewController.m; sourceTree = "<group>"; };
 		BB88F36E1C479CE000C1F8D9 /* TextLivingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLivingCell.h; sourceTree = "<group>"; };
 		BB88F36F1C479CE000C1F8D9 /* TextLivingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLivingCell.m; sourceTree = "<group>"; };
+		BB88F3721C48BA7300C1F8D9 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavcodec.a; sourceTree = "<group>"; };
+		BB88F3731C48BA7300C1F8D9 /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavdevice.a; sourceTree = "<group>"; };
+		BB88F3741C48BA7300C1F8D9 /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavfilter.a; sourceTree = "<group>"; };
+		BB88F3751C48BA7300C1F8D9 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavformat.a; sourceTree = "<group>"; };
+		BB88F3761C48BA7300C1F8D9 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavutil.a; sourceTree = "<group>"; };
+		BB88F3771C48BA7300C1F8D9 /* libDTCoreText.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libDTCoreText.a; sourceTree = "<group>"; };
+		BB88F3781C48BA7300C1F8D9 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libogg.a; sourceTree = "<group>"; };
+		BB88F3791C48BA7300C1F8D9 /* libpostproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpostproc.a; sourceTree = "<group>"; };
+		BB88F37A1C48BA7300C1F8D9 /* libspeex.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libspeex.a; sourceTree = "<group>"; };
+		BB88F37C1C48BA7300C1F8D9 /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswresample.a; sourceTree = "<group>"; };
+		BB88F37D1C48BA7300C1F8D9 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswscale.a; sourceTree = "<group>"; };
 		BBAC81311C37E61500CE9D2B /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		BBAC81321C37E61500CE9D2B /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		BBAC81331C37E61500CE9D2B /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClickSocialAnalytics.h; sourceTree = "<group>"; };
+		BBB515F21C4CD515008F2CEC /* SVRInitLBS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRInitLBS.h; sourceTree = "<group>"; };
+		BBB515F31C4CD515008F2CEC /* SVRInitLBS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRInitLBS.m; sourceTree = "<group>"; };
+		BBB515F51C4D29E3008F2CEC /* AllColletViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllColletViewController.h; sourceTree = "<group>"; };
+		BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllColletViewController.m; sourceTree = "<group>"; };
 		BBECB02C1C1AC1E400D7230F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BBECB02E1C1AC1EC00D7230F /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		BBECB0301C1AC1F900D7230F /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -744,32 +752,33 @@
 			files = (
 				BBECB5321C1E960000D7230F /* MobileCoreServices.framework in Frameworks */,
 				BBECB5301C1E95F400D7230F /* CoreText.framework in Frameworks */,
-				BB3658E81C213E77009E2867 /* libavformat.a in Frameworks */,
 				BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */,
-				BB3658E91C213E77009E2867 /* libavutil.a in Frameworks */,
-				BB3658EE1C213E77009E2867 /* libswscale.a in Frameworks */,
+				BB88F3801C48BA7300C1F8D9 /* libavfilter.a in Frameworks */,
 				BB3EE99A1C1AA94F00CF5621 /* QuartzCore.framework in Frameworks */,
-				BB3658EB1C213E77009E2867 /* libspeex.a in Frameworks */,
-				BB3658E51C213E77009E2867 /* libavcodec.a in Frameworks */,
+				BB88F3851C48BA7300C1F8D9 /* libpostproc.a in Frameworks */,
+				BB88F3891C48BA7300C1F8D9 /* libswscale.a in Frameworks */,
 				BBECB0371C1AC2AB00D7230F /* UIKit.framework in Frameworks */,
-				BB3658E61C213E77009E2867 /* libavdevice.a in Frameworks */,
+				BB88F3861C48BA7300C1F8D9 /* libspeex.a in Frameworks */,
 				BBECB0351C1AC2A300D7230F /* Foundation.framework in Frameworks */,
 				BBECB0331C1AC29900D7230F /* CoreGraphics.framework in Frameworks */,
+				BB88F3821C48BA7300C1F8D9 /* libavutil.a in Frameworks */,
 				BBECB0311C1AC1F900D7230F /* Accelerate.framework in Frameworks */,
 				BBECB02F1C1AC1EC00D7230F /* MediaPlayer.framework in Frameworks */,
+				BB88F3831C48BA7300C1F8D9 /* libDTCoreText.a in Frameworks */,
 				BBECB02D1C1AC1E400D7230F /* OpenGLES.framework in Frameworks */,
-				BB3658E71C213E77009E2867 /* libavfilter.a in Frameworks */,
+				BB88F37F1C48BA7300C1F8D9 /* libavdevice.a in Frameworks */,
 				BB3EE9A41C1AAAAF00CF5621 /* libiconv.tbd in Frameworks */,
-				BB3658ED1C213E77009E2867 /* libswresample.a in Frameworks */,
+				BB88F3811C48BA7300C1F8D9 /* libavformat.a in Frameworks */,
 				BBAC81341C37E61500CE9D2B /* libMobClickLibrary.a in Frameworks */,
-				BB3658EC1C213E77009E2867 /* libspeexdsp.a in Frameworks */,
+				BB88F3881C48BA7300C1F8D9 /* libswresample.a in Frameworks */,
 				BB3EE9A21C1AA98500CF5621 /* CoreAudio.framework in Frameworks */,
+				BB88F3841C48BA7300C1F8D9 /* libogg.a in Frameworks */,
 				BB3EE9A01C1AA97A00CF5621 /* AudioToolbox.framework in Frameworks */,
+				BB88F37E1C48BA7300C1F8D9 /* libavcodec.a in Frameworks */,
 				BB3EE99E1C1AA96000CF5621 /* libbz2.tbd in Frameworks */,
 				BB3EE99C1C1AA95A00CF5621 /* libz.tbd in Frameworks */,
 				BB3658D91C213E6F009E2867 /* libSDL.a in Frameworks */,
 				BB25D8F21C1581F000314C1E /* libsqlite3.0.tbd in Frameworks */,
-				BB3658EA1C213E77009E2867 /* libogg.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -898,6 +907,7 @@
 		BB25D7D61C1571B400314C1E /* 99SVR */ = {
 			isa = PBXGroup;
 			children = (
+				BB88F3711C48BA7300C1F8D9 /* libs */,
 				BB1661A81C3E67B000D318BE /* Text */,
 				BB1661901C3DF6EA00D318BE /* JSPatch */,
 				BB63F4861C2CC7A200A042E8 /* General */,
@@ -919,7 +929,6 @@
 			children = (
 				BB63F28D1C27FB2800A042E8 /* gif */,
 				BB365A401C23A6AF009E2867 /* Info.plist */,
-				BB3658DA1C213E77009E2867 /* libs */,
 				BB3658D81C213E6F009E2867 /* libSDL.a */,
 				BBECB0361C1AC2AB00D7230F /* UIKit.framework */,
 				BBECB0341C1AC2A300D7230F /* Foundation.framework */,
@@ -972,23 +981,6 @@
 				BB25D9DC1C167AE000314C1E /* UtilsMacro.h */,
 			);
 			path = Macro;
-			sourceTree = "<group>";
-		};
-		BB3658DA1C213E77009E2867 /* libs */ = {
-			isa = PBXGroup;
-			children = (
-				BB3658DB1C213E77009E2867 /* libavcodec.a */,
-				BB3658DC1C213E77009E2867 /* libavdevice.a */,
-				BB3658DD1C213E77009E2867 /* libavfilter.a */,
-				BB3658DE1C213E77009E2867 /* libavformat.a */,
-				BB3658DF1C213E77009E2867 /* libavutil.a */,
-				BB3658E01C213E77009E2867 /* libogg.a */,
-				BB3658E11C213E77009E2867 /* libspeex.a */,
-				BB3658E21C213E77009E2867 /* libspeexdsp.a */,
-				BB3658E31C213E77009E2867 /* libswresample.a */,
-				BB3658E41C213E77009E2867 /* libswscale.a */,
-			);
-			path = libs;
 			sourceTree = "<group>";
 		};
 		BB3658EF1C214066009E2867 /* sdl */ = {
@@ -1490,6 +1482,8 @@
 				BB16616E1C3CDE5000D318BE /* RegisterViewController.m */,
 				BB88F36B1C4772B100C1F8D9 /* NNSVRViewController.h */,
 				BB88F36C1C4772B100C1F8D9 /* NNSVRViewController.m */,
+				BBB515F21C4CD515008F2CEC /* SVRInitLBS.h */,
+				BBB515F31C4CD515008F2CEC /* SVRInitLBS.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -1540,14 +1534,16 @@
 				BB63F57A1C2CC7A300A042E8 /* KefuCenterController.m */,
 				BB63F57B1C2CC7A300A042E8 /* MainViewController.h */,
 				BB63F57C1C2CC7A300A042E8 /* MainViewController.m */,
-				BB63F57D1C2CC7A300A042E8 /* MyCollectionController.h */,
-				BB63F57E1C2CC7A300A042E8 /* MyCollectionController.m */,
+				BB63F57D1C2CC7A300A042E8 /* LiveColletionViewController.h */,
+				BB63F57E1C2CC7A300A042E8 /* LiveColletionViewController.m */,
 				BB63F5821C2CC7A300A042E8 /* NewViewController.h */,
 				BB63F5831C2CC7A300A042E8 /* NewViewController.m */,
 				BB63F5841C2CC7A300A042E8 /* SearchController.h */,
 				BB63F5851C2CC7A300A042E8 /* SearchController.m */,
 				BB63F5861C2CC7A300A042E8 /* SettingCenterController.h */,
 				BB63F5871C2CC7A300A042E8 /* SettingCenterController.m */,
+				BBB515F51C4D29E3008F2CEC /* AllColletViewController.h */,
+				BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -1644,6 +1640,24 @@
 				BB88F35C1C4736C100C1F8D9 /* BaseService.m */,
 			);
 			path = AFNetworking;
+			sourceTree = "<group>";
+		};
+		BB88F3711C48BA7300C1F8D9 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				BB88F3721C48BA7300C1F8D9 /* libavcodec.a */,
+				BB88F3731C48BA7300C1F8D9 /* libavdevice.a */,
+				BB88F3741C48BA7300C1F8D9 /* libavfilter.a */,
+				BB88F3751C48BA7300C1F8D9 /* libavformat.a */,
+				BB88F3761C48BA7300C1F8D9 /* libavutil.a */,
+				BB88F3771C48BA7300C1F8D9 /* libDTCoreText.a */,
+				BB88F3781C48BA7300C1F8D9 /* libogg.a */,
+				BB88F3791C48BA7300C1F8D9 /* libpostproc.a */,
+				BB88F37A1C48BA7300C1F8D9 /* libspeex.a */,
+				BB88F37C1C48BA7300C1F8D9 /* libswresample.a */,
+				BB88F37D1C48BA7300C1F8D9 /* libswscale.a */,
+			);
+			path = libs;
 			sourceTree = "<group>";
 		};
 		BBAC81301C37E61500CE9D2B /* um */ = {
@@ -1938,7 +1952,7 @@
 				BB63F5C01C2CC7A300A042E8 /* LivePlayViewController.m in Sources */,
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
-				BB63F6141C2CC7A300A042E8 /* MyCollectionController.m in Sources */,
+				BB63F6141C2CC7A300A042E8 /* LiveColletionViewController.m in Sources */,
 				BB88F3101C3FB22F00C1F8D9 /* TeacherModel.m in Sources */,
 				BB63F60D1C2CC7A300A042E8 /* RoomListInfo.m in Sources */,
 				BB1661761C3CE0B800D318BE /* RegisterService.m in Sources */,
@@ -1968,6 +1982,8 @@
 				BB63F5DE1C2CC7A300A042E8 /* REBackgroundView.m in Sources */,
 				BB63F5B11C2CC7A300A042E8 /* FMDatabaseQueue.m in Sources */,
 				BB63F5EA1C2CC7A300A042E8 /* SDWebImageManager.m in Sources */,
+				BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */,
+				BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */,
 				BB63F5C11C2CC7A300A042E8 /* MASCompositeConstraint.m in Sources */,
 				BB63F47B1C2B809800A042E8 /* UserInfo.m in Sources */,
 				BB7B6FF91C33D6E10018FEC1 /* MyDataController.m in Sources */,

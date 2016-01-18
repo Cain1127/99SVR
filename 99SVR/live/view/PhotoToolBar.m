@@ -47,7 +47,7 @@
     _saveImageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _saveImageBtn.frame = CGRectMake(20, 0, 80, btnWidth);
 
-    [_saveImageBtn setTitle:XCLocalized(@"保存") forState:UIControlStateNormal];
+    [_saveImageBtn setTitle:@"保存" forState:UIControlStateNormal];
     [_saveImageBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_saveImageBtn addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
     
@@ -88,7 +88,7 @@
     else
     {
         _saveImageBtn.enabled = YES;
-        [MBProgressHUD showSuccess:XCLocalized(@"savePhotos") toView:nil];
+        [MBProgressHUD showSuccess:@"保存成功" toView:nil];
     }
 }
 

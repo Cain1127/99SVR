@@ -11,7 +11,7 @@
 #import "RoomListRequest.h"
 #import "RoomGroup.h"
 
-@interface MyCollectionController()
+@interface LiveColletionViewController()
 {
     UIView  *headView;
 }
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation MyCollectionController
+@implementation LiveColletionViewController
 
 - (void)viewDidLoad
 {
@@ -64,25 +64,31 @@
 #pragma mark get history
 - (void)initHistoryData
 {
-//    [_aryHistory removeAllObjects];
     if([UserInfo sharedUserInfo].aryCollet==nil)
     {
         [UserInfo sharedUserInfo].aryCollet = [NSMutableArray array];
-    }
-    [[UserInfo sharedUserInfo].aryCollet removeAllObjects];
-    __weak MyCollectionController *__self = self;
-    _listReuqest.historyBlock = ^(int status,NSArray *aryHistory,NSArray *aryColl)
-    {
-        for (RoomGroup *group in aryColl)
+        __weak MyCollectionController *__self = self;
+        _listReuqest.historyBlock = ^(int status,NSArray *aryHistory,NSArray *aryColl)
         {
-            [[UserInfo sharedUserInfo].aryCollet addObject:group];
-        }
-        [__self setVedios:[UserInfo sharedUserInfo].aryCollet];
+            for (RoomGroup *group in aryColl)
+            {
+                [[UserInfo sharedUserInfo].aryCollet addObject:group];
+            }
+            [__self setVideos:[UserInfo sharedUserInfo].aryCollet];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [__self updateTableView];
+            });
+        };
+        [_listReuqest requestRoomByUserId:[UserInfo sharedUserInfo].nUserId];
+    }
+    else
+    {
+        __weak MyCollectionController *__self = self;
+        [__self setVideos:[UserInfo sharedUserInfo].aryCollet];
         dispatch_async(dispatch_get_main_queue(), ^{
             [__self updateTableView];
         });
-    };
-    [_listReuqest requestRoomByUserId:[UserInfo sharedUserInfo].nUserId];
+    }
 }
 
 - (void)updateTableView

@@ -14,5 +14,6 @@
 #define kIsLogin @"isLogin"
 #define kUserId @"userId"
 #define kUserPwd @"userPwd"
+#define kUserName @"userName"
 
 #endif /* StringsMacro_h */

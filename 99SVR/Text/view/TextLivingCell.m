@@ -25,13 +25,13 @@
 {
     _imgView = [[UIImageView alloc] initWithFrame:Rect(8, 10, 40, 40)];
     [self.contentView addSubview:_imgView];
+    [_imgView.layer setMasksToBounds:YES];
+    _imgView.layer.cornerRadius = 40;
     
     _lblName = [[UILabel alloc] initWithFrame:Rect(_imgView.width+_imgView.x+10, 10, 200,20)];
     [_lblName setTextColor:UIColorFromRGB(0x343434)];
     [self.contentView addSubview:_lblName];
     [_lblName setFont:XCFONT(15)];
-    [_lblName.layer setMasksToBounds:YES];
-    _lblName.layer.cornerRadius = 40;
     
     _lblContent = [[UILabel alloc] initWithFrame:Rect(_imgView.width+_imgView.x+10,_lblName.y+_lblName.height+5,kScreenWidth-70,20)];
     [self.contentView addSubview:_lblContent];

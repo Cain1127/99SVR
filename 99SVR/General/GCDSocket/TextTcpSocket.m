@@ -28,6 +28,7 @@
 
 @implementation TextTcpSocket
 
+
 - (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort
 {
     
@@ -93,6 +94,7 @@
     }
     else if(in_msg->maincmd == MDM_Vchat_Room)
     {
+        
     }
     else
     {

@@ -38,6 +38,31 @@
     }];
 }
 
++ (void)getJSONWithUrl:(NSString *)urlStr parameters:(id)parameters success:(void (^)(id responseObject))success fail:(void (^)(NSError *error))fail
+{
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    // 设置请求格式
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.requestSerializer.stringEncoding = NSUTF8StringEncoding;
+    // 设置返回格式
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager GET:urlStr parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         if (success)
+         {
+             success(responseObject);
+         }
+     }
+          failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         DLog(@"error:%@",error);
+         if (fail)
+         {
+             fail(error);
+         }
+     }];
+}
+
 + (void)postJSONWithUrl:(NSString *)urlStr parameters:(id)parameters success:(void (^)(id responseObject))success fail:(void (^)(NSError *error))fail
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

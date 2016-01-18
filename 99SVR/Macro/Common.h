@@ -24,7 +24,9 @@
 
 #define SVR_LOGIN_IP @"login2.99ducaijing.cn"
 
-#define SVR_LOGIN_PORT  7401
+//#define SVR_LOGIN_PORT 7400
+
+#define SVR_LOGIN_PORT 7401
 
 #define SVR_LVBBY_IP @"lobbyip5.99ducaijing.cn"
 
@@ -36,7 +38,7 @@
 
 #define GBK_ENCODING CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
 
-#define kGROUP_REQUEST_HTTP @"http://hall.99ducaijing.cn:8081/roomdata/room.php?act=roomdata"
+#define kGROUP_REQUEST_HTTP @"http://hall.99ducaijing.cn:8081/roomdata/room.php?act=roomdata&client=android"
 
 #define kIMAGE_HTTP_URL @"http://roompic.99ducaijing.cn:8081/"
 

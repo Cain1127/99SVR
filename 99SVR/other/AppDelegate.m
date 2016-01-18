@@ -15,6 +15,7 @@
 #import "LeftViewController.h"
 #import "DecodeJson.h"
 #import "MobClick.h"
+#import "SVRInitLBS.h"
 
 @interface AppDelegate ()
 {
@@ -37,23 +38,21 @@
     //友盟
     [MobClick startWithAppkey:@"568388ebe0f55a1537000bfa" reportPolicy:BATCH channelId:@""];
     sleep(1);
-    BOOL isLogin = [UserDefaults boolForKey:kIsLogin];
-    if (isLogin)
-    {
-        [UserInfo sharedUserInfo].nUserId = [[UserDefaults objectForKey:kUserId] intValue];
-        NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
-        [UserInfo sharedUserInfo].strPwd = userPwd;
-        [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
-        [[LSTcpSocket sharedLSTcpSocket] setUserInfo];
-//        [UserInfo sharedUserInfo].bIsLogin = YES;
-//        [UserInfo sharedUserInfo].nType = 1;
-        [[LSTcpSocket sharedLSTcpSocket] loginServer:[UserDefaults objectForKey:kUserId]
-                                                 pwd:[UserDefaults objectForKey:kUserPwd]];
-    }
-    else
-    {
-        [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
-    }
+//    BOOL isLogin = [UserDefaults boolForKey:kIsLogin];
+//    if (isLogin)
+//    {
+//        [UserInfo sharedUserInfo].nUserId = [[UserDefaults objectForKey:kUserId] intValue];
+//        NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
+//        [UserInfo sharedUserInfo].strPwd = userPwd;
+//        [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
+//        [[LSTcpSocket sharedLSTcpSocket] setUserInfo];
+//        [[LSTcpSocket sharedLSTcpSocket] loginServer:[UserDefaults objectForKey:kUserId]
+//                                                 pwd:[UserDefaults objectForKey:kUserPwd]];
+//    }
+//    else
+//    {
+//        [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
+//    }
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_window makeKeyAndVisible];
     leftView = [[LeftViewController alloc] init];
@@ -98,7 +97,7 @@
                                               userInfo:nil
                                                repeats:YES];
     [self performSelector:@selector(setEndBackground) withObject:nil afterDelay:180.0];
-//    [self performSelector:@selector(setEndBackground) withObject:nil afterDelay:30.0];
+    
 }
 
 -(void)timerMethod:(NSTimer *)paramSender

@@ -13,6 +13,8 @@
 + (void)postJSONWithUrl:(NSString *)urlStr parameters:(id)parameters success:(void (^)(id responseObject))success
                    fail:(void (^)(NSError *error))fail;
 
++ (void)getJSONWithUrl:(NSString *)urlStr parameters:(id)parameters
+               success:(void (^)(id responseObject))success fail:(void (^)(NSError *error))fail;
 + (void)JSONDataWithUrl:(NSString *)url parameters:(id)parameters success:(void (^)(id json))success fail:(void (^)())fail;
 
 + (void)postUploadWithUrl:(NSString *)urlStr image:(UIImage*)imgInfo success:(void (^)(id responseObject))success fail:(void (^)())fail;

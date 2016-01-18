@@ -155,6 +155,23 @@
     return address;
 }
 
++ (NSString *)replaceImageString:(NSString *)strInfo width:(CGFloat)width height:(CGFloat)height index:(NSInteger)nIndex strTemp:(NSString *)strTemp
+{
+    NSError *error= NULL;
+    
+    NSString *strTemplate = [NSString stringWithFormat:@"$1 width=\"%d\" height=\"%d\" style=\"float:left\"",
+                             (int)width,(int)height];
+    NSString *strTempPattern = [NSString stringWithFormat:@"(src=\"%@\"|SRC=\"%@\")",strTemp,strTemp];
+    NSRegularExpression* regex1 = [NSRegularExpression regularExpressionWithPattern:strTempPattern
+                                                                            options:0
+                                                                              error:&error];
+    NSString* result = [regex1 stringByReplacingMatchesInString:strInfo
+                                                        options:0
+                                                          range:NSMakeRange(0, strInfo.length)
+                                                   withTemplate:strTemplate];
+    return result;
+}
+
 + (NSString *)replaceImageString:(NSString *)strInfo
 {
     NSError *error= NULL;
@@ -195,6 +212,25 @@
         cInfo = [strInfo UTF8String];
     }
     return strInfo;
+}
+
++ (NSArray *)getSrcPath:(NSString *)urlString
+{
+    NSError *error;
+    NSMutableArray *array = [NSMutableArray array];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"src=\"http:\"?(.*?)(\"|>|\\s+)" options:0 error:&error];
+    if (regex != nil)
+    {
+        NSArray<NSTextCheckingResult*> *aryResult = [regex matchesInString:urlString options:0 range:NSMakeRange(0, [urlString length])];
+        for (NSTextCheckingResult *textMatch in aryResult)
+        {
+            NSString *result=[urlString substringWithRange:NSMakeRange(textMatch.range.location+5,textMatch.range.length-6)];
+            //输出结果
+            DLog(@"result:%@",result);
+            [array addObject:result];
+        }
+    }
+    return array;
 }
 
 @end

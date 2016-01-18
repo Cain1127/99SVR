@@ -10,7 +10,7 @@
 
 @interface FinanceOnlineVedioController : UIViewController
 
-@property(nonatomic, strong) NSArray *vedios; // 直播视频列
+@property(nonatomic, strong) NSArray *videos; // 直播视频列
 
 - (void)reloadData;
 

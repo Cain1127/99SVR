@@ -9,13 +9,12 @@
 #import <Availability.h>
 
 #ifndef __IPHONE_3_0
-#warning "This project uses features only available in iOS SDK 3.0 and later."
+#warningThis project uses features only available in iOS SDK 3.0 and later."
 #endif
 
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#define XCLocalized(x) NSLocalizedString(x, "")
 #define    kUSER_INFO_MAX_LENGTH   64
 #import "UtilsMacro.h"
 #import "PubDefine.h"
@@ -30,18 +29,14 @@
 #endif
 
 /*
- 
-1.用户列表排序     不好测试
-2.用户列表图片展示  部分完善
-3.测试多次进入视频  不会崩溃
-4.单独关闭音、视频  缺少图片
-5.全屏            已实现
-6.昵称文字调整      已实现
-7.发送玫瑰               已实现
-8.房间重连               已实现
-9.进入后台之后，重新加载   已实现
-10.收藏                 已实现
- 
+1.LBS策略修改--完成
+2.文字直播接口
+3.显示修改
+4.图片内容修改--完成
+5.首页
+6.收藏新页面--
+7.
+
 [UserInfo sharedUserInfo].nUserId = 1764964;
 [UserInfo sharedUserInfo].strPwd = @"123456";
 [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:@"123456"];
@@ -53,10 +48,5 @@ lipo -create armv7/lib/libavutil.a arm64/lib/libavutil.a -output all/libavutil.a
 lipo -create armv7/lib/libswresample.a arm64/lib/libswresample.a -output all/libswresample.a
 lipo -create armv7/lib/libswscale.a arm64/lib/libswscale.a -output all/libswscale.a
 lipo -create armv7/lib/libavdevice.a arm64/lib/libavdevice.a -output all/libavdevice.a
- 
-
-
- 
- 
 
 */

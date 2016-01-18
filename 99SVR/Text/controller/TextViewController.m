@@ -94,7 +94,9 @@
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
     [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-    {}];
+    {
+    
+    }];
     [self setRightBtn:rightBtn];
 }
 

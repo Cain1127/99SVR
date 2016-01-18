@@ -40,7 +40,7 @@
         make.top.equalTo(container).offset(98);
     }];
     
-    if (self.vedios == nil || self.vedios.count == 0) {
+    if (self.videos == nil || self.videos.count == 0) {
         _noDataView.hidden = NO;
     } else {
         _noDataView.hidden = YES;
@@ -50,9 +50,9 @@
 - (void)reloadData
 {
     [super reloadData];
-    if (self.vedios.count>0)
+    if (self.videos.count>0)
     {
-        RoomGroup *group = [self.vedios objectAtIndex:0];
+        RoomGroup *group = [self.videos objectAtIndex:0];
         if (group.aryRoomHttp.count>0)
         {
             [self setEmptyData:NO];

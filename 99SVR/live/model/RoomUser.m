@@ -23,14 +23,6 @@
     {
         nLevel = 190;
     }
-    else if(_m_nRoomLevel == RoomMgrType_Daili)  //代理
-    {
-        nLevel = 106;
-    }
-    else if(_m_nRoomLevel == RoomMgrType_Quzhang)  //区长
-    {
-        nLevel = 105;
-    }
     else if(rInfo != 0 && [rInfo IsRoomFangzhu:_m_nUserId])
     {
         nLevel = 180;
@@ -39,10 +31,6 @@
     {
         nLevel = 109;
     }
-//    else if(_m_nRoomLevel == RoomMgrType_Guan)  //管理
-//    {
-//        nLevel = 103;
-//    }
     else if(_m_nInRoomState & FT_ROOMUSER_STATUS_IS_TEMPOP)  //临管
     {
         nLevel = 104;

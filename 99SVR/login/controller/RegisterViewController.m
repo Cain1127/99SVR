@@ -304,15 +304,15 @@
                      [[LSTcpSocket sharedLSTcpSocket] loginServer:[data objectForKey:@"userid"] pwd:__strPwd];
                      
                      dispatch_async(dispatch_get_main_queue(), ^
-                                    {
-                                        [__self.view makeToastActivity];
-                                        [__self.view makeToast:@"注册成功"];
-                                        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
-                                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                            [__self dismissViewControllerAnimated:YES completion:^{
-                                            }];
-                                        });
-                                    });
+                    {
+                        [__self.view makeToastActivity];
+                        [__self.view makeToast:@"注册成功"];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [__self dismissViewControllerAnimated:YES completion:^{
+                            }];
+                        });
+                    });
                  }
              }
              else

@@ -800,6 +800,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 {
     CGRect frame = self.view.frame;
     frame.origin.y = originalY;
+    [downView setFrame:Rect(0,kScreenHeight-50,kScreenWidth,50)];
 }
 
 - (void)startPlayThread:(NSNotification *)notify
