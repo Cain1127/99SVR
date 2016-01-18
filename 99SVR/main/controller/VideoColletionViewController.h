@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "FinanceOnlineVedioController.h"
 
-@interface LiveColletionViewController : FinanceOnlineVedioController
+@interface VideoColletionViewController : FinanceOnlineVedioController
 
 @end

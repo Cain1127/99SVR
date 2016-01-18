@@ -271,9 +271,18 @@
     {
         return ;
     }
-    [_group setBtnSelect:(int)btnSender.tag];
-    [_scrollView setContentOffset:CGPointMake((btnSender.tag-1)*kScreenWidth, 0)];
-    _tag = (int)btnSender.tag;
+    int tag = (int)btnSender.tag;
+    [_group setBtnSelect:tag];
+    if(tag+2 == _tag || tag-2==_tag)
+    {
+        _tag = (int)btnSender.tag;
+        [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
+    }
+    else
+    {
+        [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
+        _tag = (int)btnSender.tag;
+    }
 }
 
 - (void)switchController:(int)tag

@@ -6,12 +6,12 @@
 //  Copyright © 2015年 xia zhonglin . All rights reserved.
 //
 
-#import "LiveColletionViewController.h"
+#import "VideoColletionViewController.h"
 #import "UserInfo.h"
 #import "RoomListRequest.h"
 #import "RoomGroup.h"
 
-@interface LiveColletionViewController()
+@interface VideoColletionViewController()
 {
 //    UIView *headView;
 }
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation LiveColletionViewController
+@implementation VideoColletionViewController
 
 - (void)viewDidLoad
 {
@@ -35,7 +35,7 @@
     if([UserInfo sharedUserInfo].aryCollet==nil)
     {
         [UserInfo sharedUserInfo].aryCollet = [NSMutableArray array];
-        __weak LiveColletionViewController *__self = self;
+        __weak VideoColletionViewController *__self = self;
         _listReuqest.historyBlock = ^(int status,NSArray *aryHistory,NSArray *aryColl)
         {
             for (RoomGroup *group in aryColl)
@@ -51,7 +51,7 @@
     }
     else
     {
-        __weak MyCollectionController *__self = self;
+        __weak VideoColletionViewController *__self = self;
         [__self setVideos:[UserInfo sharedUserInfo].aryCollet];
         dispatch_async(dispatch_get_main_queue(), ^{
             [__self updateTableView];

@@ -172,7 +172,7 @@
 		BB63F6111C2CC7A300A042E8 /* HotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5781C2CC7A300A042E8 /* HotViewController.m */; };
 		BB63F6121C2CC7A300A042E8 /* KefuCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F57A1C2CC7A300A042E8 /* KefuCenterController.m */; };
 		BB63F6131C2CC7A300A042E8 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F57C1C2CC7A300A042E8 /* MainViewController.m */; };
-		BB63F6141C2CC7A300A042E8 /* LiveColletionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F57E1C2CC7A300A042E8 /* LiveColletionViewController.m */; };
+		BB63F6141C2CC7A300A042E8 /* VideoColletionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F57E1C2CC7A300A042E8 /* VideoColletionViewController.m */; };
 		BB63F6181C2CC7A300A042E8 /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5831C2CC7A300A042E8 /* NewViewController.m */; };
 		BB63F6191C2CC7A300A042E8 /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5851C2CC7A300A042E8 /* SearchController.m */; };
 		BB63F61A1C2CC7A300A042E8 /* SettingCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5871C2CC7A300A042E8 /* SettingCenterController.m */; };
@@ -628,8 +628,8 @@
 		BB63F57A1C2CC7A300A042E8 /* KefuCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KefuCenterController.m; sourceTree = "<group>"; };
 		BB63F57B1C2CC7A300A042E8 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		BB63F57C1C2CC7A300A042E8 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		BB63F57D1C2CC7A300A042E8 /* LiveColletionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveColletionViewController.h; sourceTree = "<group>"; };
-		BB63F57E1C2CC7A300A042E8 /* LiveColletionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LiveColletionViewController.m; sourceTree = "<group>"; };
+		BB63F57D1C2CC7A300A042E8 /* VideoColletionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoColletionViewController.h; sourceTree = "<group>"; };
+		BB63F57E1C2CC7A300A042E8 /* VideoColletionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoColletionViewController.m; sourceTree = "<group>"; };
 		BB63F5821C2CC7A300A042E8 /* NewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
 		BB63F5831C2CC7A300A042E8 /* NewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
 		BB63F5841C2CC7A300A042E8 /* SearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchController.h; sourceTree = "<group>"; };
@@ -1534,8 +1534,8 @@
 				BB63F57A1C2CC7A300A042E8 /* KefuCenterController.m */,
 				BB63F57B1C2CC7A300A042E8 /* MainViewController.h */,
 				BB63F57C1C2CC7A300A042E8 /* MainViewController.m */,
-				BB63F57D1C2CC7A300A042E8 /* LiveColletionViewController.h */,
-				BB63F57E1C2CC7A300A042E8 /* LiveColletionViewController.m */,
+				BB63F57D1C2CC7A300A042E8 /* VideoColletionViewController.h */,
+				BB63F57E1C2CC7A300A042E8 /* VideoColletionViewController.m */,
 				BB63F5821C2CC7A300A042E8 /* NewViewController.h */,
 				BB63F5831C2CC7A300A042E8 /* NewViewController.m */,
 				BB63F5841C2CC7A300A042E8 /* SearchController.h */,
@@ -1952,7 +1952,7 @@
 				BB63F5C01C2CC7A300A042E8 /* LivePlayViewController.m in Sources */,
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
-				BB63F6141C2CC7A300A042E8 /* LiveColletionViewController.m in Sources */,
+				BB63F6141C2CC7A300A042E8 /* VideoColletionViewController.m in Sources */,
 				BB88F3101C3FB22F00C1F8D9 /* TeacherModel.m in Sources */,
 				BB63F60D1C2CC7A300A042E8 /* RoomListInfo.m in Sources */,
 				BB1661761C3CE0B800D318BE /* RegisterService.m in Sources */,
