@@ -8,6 +8,7 @@
 
 #import "IndexViewController.h"
 #import "GroupListRequest.h"
+#import "Toast+UIView.h"
 #import "LSTcpSocket.h"
 #import "UserInfo.h"
 #import "RoomListRequest.h"
@@ -44,8 +45,6 @@
 
 @implementation IndexViewController
 
-
-
 //所有房间组数据
 - (void)initData
 {
@@ -54,44 +53,66 @@
     [_aryOnline removeAllObjects];
     _grouRequest.groupBlock = ^(int status,NSArray *aryIndex)
     {
-        if (aryIndex.count>0)
+        if (status==1)
         {
-            [UserInfo sharedUserInfo].aryRoom = aryIndex;
+            if (aryIndex.count>0)
+            {
+                [UserInfo sharedUserInfo].aryRoom = aryIndex;
+            }
+            for (RoomGroup *group in aryIndex)
+            {
+                DLog(@"groupid:%@",group.groupid);
+                if([group.groupid isEqualToString:@"4"])
+                {
+                    [__self.aryHot addObject:group];
+                }
+                else if([group.groupid isEqualToString:@"18"] || [group.groupid isEqualToString:@"16"] ||[group.groupid isEqualToString:@"200"])
+                {
+                    
+                }
+                else
+                {
+                    [__self.aryOnline addObject:group];
+                }
+            }
+            for (UIViewController *viewController in __self.childViewControllers)
+            {
+                if([viewController class]==[HotViewController class])
+                {
+                    [__self setUpdate:__self.aryHot obj:viewController];
+                    continue;
+                }
+                if([viewController class] == [MainViewController class])
+                {
+                    [__self setUpdate:__self.aryOnline obj:viewController];
+                    continue;
+                }
+                if ([viewController class] == [HistoryViewController class]) {
+                    continue;
+                }
+            }
         }
-        for (RoomGroup *group in aryIndex)
+        else
         {
-            DLog(@"groupid:%@",group.groupid);
-            if([group.groupid isEqualToString:@"4"])
-            {
-                [__self.aryHot addObject:group];
-            }
-            else if([group.groupid isEqualToString:@"18"] || [group.groupid isEqualToString:@"16"] ||[group.groupid isEqualToString:@"200"])
-            {
-                
-            }
-            else
-            {
-                [__self.aryOnline addObject:group];
-            }
-        }
-        for (UIViewController *viewController in __self.childViewControllers)
-        {
-            if([viewController class]==[HotViewController class])
-            {
-                [__self setUpdate:__self.aryHot obj:viewController];
-                continue;
-            }
-            if([viewController class] == [MainViewController class])
-            {
-                [__self setUpdate:__self.aryOnline obj:viewController];
-                continue;
-            }
-            if ([viewController class] == [HistoryViewController class]) {
-                continue;
-            }
+            //重新加载load
+            [__self reConnect];
         }
     };
     [_grouRequest requestListRequest];
+}
+
+#pragma mark 重新加载
+- (void)reConnect
+{
+    __weak IndexViewController *__self = self;
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        [__self.view makeToast:@"获取房间数据超时,重新房间数据"];
+    });
+    dispatch_async(dispatch_get_global_queue(0, 0),
+    ^{
+        [__self initData];
+    });
 }
 
 #pragma mark get history
@@ -159,10 +180,10 @@
     
     __weak IndexViewController *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
-                   ^{
-                       [__self initData];
-                       [__self initHistoryData];
-                   });
+    ^{
+        [__self initData];
+        [__self initHistoryData];
+    });
     [_group addEvent:^(id sender)
      {
          [__self btnEvent:sender];
@@ -198,9 +219,9 @@
 {
     __weak IndexViewController *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
-                   ^{
-                       [__self initHistoryData];
-                   });
+    ^{
+       [__self initHistoryData];
+    });
 }
 
 - (void)initUIHead

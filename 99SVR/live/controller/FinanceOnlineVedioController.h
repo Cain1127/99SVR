@@ -12,6 +12,8 @@
 
 @property(nonatomic, strong) NSArray *videos; // 直播视频列
 
+@property(nonatomic, strong) UITableView *tableView;
+
 - (void)reloadData;
 
 - (void)changeLocation;

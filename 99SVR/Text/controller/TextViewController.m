@@ -33,7 +33,7 @@
         model.strImg=@"";
         model.strName = @"帅哥";
         model.strContent = @"投资市场人才辈出，各领风骚载！他一历经多年钻石，鹤立鸡群，他...";
-        model.nThum = 200;
+        model.zans = 200;
         [array addObject:model];
     }
     _aryLiving = array;
@@ -52,7 +52,7 @@
         model.strImg=@"";
         model.strName = @"帅哥";
         model.strContent = @"投资市场人才辈出，各领风骚载！他一历经多年钻石，鹤立鸡群，他...";
-        model.nThum = 200;
+        model.zans = 200;
         [array addObject:model];
     }
     _aryHot = array;

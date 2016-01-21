@@ -71,10 +71,14 @@
                 }
             }
         }
-        if (_groupBlock)
+        else
         {
-            _groupBlock(999,nil);
+            if(_groupBlock)
+            {
+                _groupBlock(999,nil);
+            }
         }
+        
     }
     else
     {

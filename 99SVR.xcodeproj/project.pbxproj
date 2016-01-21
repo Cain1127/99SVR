@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB0436811C4E28B800A162A8 /* TomorrowModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436801C4E28B800A162A8 /* TomorrowModel.m */; };
+		BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436831C4E28C500A162A8 /* TodayVIPModel.m */; };
+		BB0436871C4E28E700A162A8 /* TextLiveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436861C4E28E700A162A8 /* TextLiveModel.m */; };
+		BB04368A1C4E295900A162A8 /* IdeaModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436891C4E295900A162A8 /* IdeaModel.m */; };
+		BB0436B21C4F130500A162A8 /* ChatReplyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436B11C4F130500A162A8 /* ChatReplyModel.m */; };
 		BB16616C1C3CA0B800D318BE /* UITableView+reloadComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */; };
 		BB16616F1C3CDE5000D318BE /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16616E1C3CDE5000D318BE /* RegisterViewController.m */; };
 		BB1661731C3CDEE200D318BE /* IdentifyService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661721C3CDEE200D318BE /* IdentifyService.m */; };
@@ -228,6 +233,10 @@
 		BBAC81341C37E61500CE9D2B /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAC81311C37E61500CE9D2B /* libMobClickLibrary.a */; };
 		BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F31C4CD515008F2CEC /* SVRInitLBS.m */; };
 		BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */; };
+		BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F91C4D3655008F2CEC /* DoubleView.m */; };
+		BBE56C551C4F8AE50030E050 /* IdeaDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE56C541C4F8AE50030E050 /* IdeaDetails.m */; };
+		BBE56C581C4FA1B10030E050 /* IdeaDetailRePly.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE56C571C4FA1B10030E050 /* IdeaDetailRePly.m */; };
+		BBE56C5B1C4FD5EB0030E050 /* HistoryTextModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE56C5A1C4FD5EB0030E050 /* HistoryTextModel.m */; };
 		BBECB02D1C1AC1E400D7230F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB02C1C1AC1E400D7230F /* OpenGLES.framework */; };
 		BBECB02F1C1AC1EC00D7230F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB02E1C1AC1EC00D7230F /* MediaPlayer.framework */; };
 		BBECB0311C1AC1F900D7230F /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB0301C1AC1F900D7230F /* Accelerate.framework */; };
@@ -271,6 +280,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BB04367F1C4E28B800A162A8 /* TomorrowModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TomorrowModel.h; sourceTree = "<group>"; };
+		BB0436801C4E28B800A162A8 /* TomorrowModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TomorrowModel.m; sourceTree = "<group>"; };
+		BB0436821C4E28C500A162A8 /* TodayVIPModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayVIPModel.h; sourceTree = "<group>"; };
+		BB0436831C4E28C500A162A8 /* TodayVIPModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodayVIPModel.m; sourceTree = "<group>"; };
+		BB0436851C4E28E700A162A8 /* TextLiveModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLiveModel.h; sourceTree = "<group>"; };
+		BB0436861C4E28E700A162A8 /* TextLiveModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLiveModel.m; sourceTree = "<group>"; };
+		BB0436881C4E295900A162A8 /* IdeaModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdeaModel.h; sourceTree = "<group>"; };
+		BB0436891C4E295900A162A8 /* IdeaModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdeaModel.m; sourceTree = "<group>"; };
+		BB0436B01C4F130500A162A8 /* ChatReplyModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatReplyModel.h; sourceTree = "<group>"; };
+		BB0436B11C4F130500A162A8 /* ChatReplyModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatReplyModel.m; sourceTree = "<group>"; };
 		BB16616A1C3CA0B800D318BE /* UITableView+reloadComplete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+reloadComplete.h"; sourceTree = "<group>"; };
 		BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+reloadComplete.m"; sourceTree = "<group>"; };
 		BB16616D1C3CDE5000D318BE /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
@@ -731,6 +750,14 @@
 		BBB515F31C4CD515008F2CEC /* SVRInitLBS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRInitLBS.m; sourceTree = "<group>"; };
 		BBB515F51C4D29E3008F2CEC /* AllColletViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllColletViewController.h; sourceTree = "<group>"; };
 		BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllColletViewController.m; sourceTree = "<group>"; };
+		BBB515F81C4D3655008F2CEC /* DoubleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoubleView.h; sourceTree = "<group>"; };
+		BBB515F91C4D3655008F2CEC /* DoubleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoubleView.m; sourceTree = "<group>"; };
+		BBE56C531C4F8AE50030E050 /* IdeaDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdeaDetails.h; sourceTree = "<group>"; };
+		BBE56C541C4F8AE50030E050 /* IdeaDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdeaDetails.m; sourceTree = "<group>"; };
+		BBE56C561C4FA1B10030E050 /* IdeaDetailRePly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdeaDetailRePly.h; sourceTree = "<group>"; };
+		BBE56C571C4FA1B10030E050 /* IdeaDetailRePly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdeaDetailRePly.m; sourceTree = "<group>"; };
+		BBE56C591C4FD5EB0030E050 /* HistoryTextModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryTextModel.h; sourceTree = "<group>"; };
+		BBE56C5A1C4FD5EB0030E050 /* HistoryTextModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTextModel.m; sourceTree = "<group>"; };
 		BBECB02C1C1AC1E400D7230F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BBECB02E1C1AC1EC00D7230F /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		BBECB0301C1AC1F900D7230F /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -750,6 +777,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBECB0311C1AC1F900D7230F /* Accelerate.framework in Frameworks */,
+				BB3EE9A01C1AA97A00CF5621 /* AudioToolbox.framework in Frameworks */,
+				BB3EE9A21C1AA98500CF5621 /* CoreAudio.framework in Frameworks */,
+				BBECB0331C1AC29900D7230F /* CoreGraphics.framework in Frameworks */,
+				BBECB02F1C1AC1EC00D7230F /* MediaPlayer.framework in Frameworks */,
 				BBECB5321C1E960000D7230F /* MobileCoreServices.framework in Frameworks */,
 				BBECB5301C1E95F400D7230F /* CoreText.framework in Frameworks */,
 				BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */,
@@ -760,10 +792,7 @@
 				BBECB0371C1AC2AB00D7230F /* UIKit.framework in Frameworks */,
 				BB88F3861C48BA7300C1F8D9 /* libspeex.a in Frameworks */,
 				BBECB0351C1AC2A300D7230F /* Foundation.framework in Frameworks */,
-				BBECB0331C1AC29900D7230F /* CoreGraphics.framework in Frameworks */,
 				BB88F3821C48BA7300C1F8D9 /* libavutil.a in Frameworks */,
-				BBECB0311C1AC1F900D7230F /* Accelerate.framework in Frameworks */,
-				BBECB02F1C1AC1EC00D7230F /* MediaPlayer.framework in Frameworks */,
 				BB88F3831C48BA7300C1F8D9 /* libDTCoreText.a in Frameworks */,
 				BBECB02D1C1AC1E400D7230F /* OpenGLES.framework in Frameworks */,
 				BB88F37F1C48BA7300C1F8D9 /* libavdevice.a in Frameworks */,
@@ -771,9 +800,7 @@
 				BB88F3811C48BA7300C1F8D9 /* libavformat.a in Frameworks */,
 				BBAC81341C37E61500CE9D2B /* libMobClickLibrary.a in Frameworks */,
 				BB88F3881C48BA7300C1F8D9 /* libswresample.a in Frameworks */,
-				BB3EE9A21C1AA98500CF5621 /* CoreAudio.framework in Frameworks */,
 				BB88F3841C48BA7300C1F8D9 /* libogg.a in Frameworks */,
-				BB3EE9A01C1AA97A00CF5621 /* AudioToolbox.framework in Frameworks */,
 				BB88F37E1C48BA7300C1F8D9 /* libavcodec.a in Frameworks */,
 				BB3EE99E1C1AA96000CF5621 /* libbz2.tbd in Frameworks */,
 				BB3EE99C1C1AA95A00CF5621 /* libz.tbd in Frameworks */,
@@ -864,6 +891,22 @@
 			children = (
 				BB88F30E1C3FB22F00C1F8D9 /* TeacherModel.h */,
 				BB88F30F1C3FB22F00C1F8D9 /* TeacherModel.m */,
+				BB04367F1C4E28B800A162A8 /* TomorrowModel.h */,
+				BB0436801C4E28B800A162A8 /* TomorrowModel.m */,
+				BB0436821C4E28C500A162A8 /* TodayVIPModel.h */,
+				BB0436831C4E28C500A162A8 /* TodayVIPModel.m */,
+				BB0436851C4E28E700A162A8 /* TextLiveModel.h */,
+				BB0436861C4E28E700A162A8 /* TextLiveModel.m */,
+				BB0436881C4E295900A162A8 /* IdeaModel.h */,
+				BB0436891C4E295900A162A8 /* IdeaModel.m */,
+				BB0436B01C4F130500A162A8 /* ChatReplyModel.h */,
+				BB0436B11C4F130500A162A8 /* ChatReplyModel.m */,
+				BBE56C531C4F8AE50030E050 /* IdeaDetails.h */,
+				BBE56C541C4F8AE50030E050 /* IdeaDetails.m */,
+				BBE56C561C4FA1B10030E050 /* IdeaDetailRePly.h */,
+				BBE56C571C4FA1B10030E050 /* IdeaDetailRePly.m */,
+				BBE56C591C4FD5EB0030E050 /* HistoryTextModel.h */,
+				BBE56C5A1C4FD5EB0030E050 /* HistoryTextModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -1589,6 +1632,8 @@
 				BB63F59A1C2CC7A300A042E8 /* MySearchBar.m */,
 				BB88F3081C3FA97E00C1F8D9 /* SearchButton.h */,
 				BB88F3091C3FA97E00C1F8D9 /* SearchButton.m */,
+				BBB515F81C4D3655008F2CEC /* DoubleView.h */,
+				BBB515F91C4D3655008F2CEC /* DoubleView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1878,6 +1923,7 @@
 				BB63F5BF1C2CC7A300A042E8 /* cmdutils.c in Sources */,
 				BB16616F1C3CDE5000D318BE /* RegisterViewController.m in Sources */,
 				BB63F5FC1C2CC7A300A042E8 /* RoomInfo.m in Sources */,
+				BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */,
 				BB63F5C71C2CC7A300A042E8 /* NSArray+MASAdditions.m in Sources */,
 				BB63F5E01C2CC7A300A042E8 /* RESideMenuCell.m in Sources */,
 				BB63F5D61C2CC7A300A042E8 /* UIView+MJExtension.m in Sources */,
@@ -1916,6 +1962,7 @@
 				BB16619E1C3E2DC700D318BE /* ZLTabBar.m in Sources */,
 				BB63F60F1C2CC7A300A042E8 /* AboutController.m in Sources */,
 				BB1661AE1C3E67B000D318BE /* TextViewController.m in Sources */,
+				BB0436871C4E28E700A162A8 /* TextLiveModel.m in Sources */,
 				BB63F5C31C2CC7A300A042E8 /* MASConstraintMaker.m in Sources */,
 				BB63F5C91C2CC7A300A042E8 /* View+MASAdditions.m in Sources */,
 				BB63F5D21C2CC7A300A042E8 /* MJRefreshLegendFooter.m in Sources */,
@@ -1943,6 +1990,7 @@
 				BB63F5B41C2CC7A300A042E8 /* LSTcpSocket.m in Sources */,
 				BB63F5C61C2CC7A300A042E8 /* MASViewConstraint.m in Sources */,
 				BB25D8121C15729800314C1E /* main.m in Sources */,
+				BB0436B21C4F130500A162A8 /* ChatReplyModel.m in Sources */,
 				BB63F5CD1C2CC7A300A042E8 /* MJRefreshConst.m in Sources */,
 				BB88F3651C4736C100C1F8D9 /* AFURLSessionManager.m in Sources */,
 				BB63F5D01C2CC7A300A042E8 /* MJRefreshGifHeader.m in Sources */,
@@ -1953,14 +2001,17 @@
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
 				BB63F6141C2CC7A300A042E8 /* VideoColletionViewController.m in Sources */,
+				BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */,
 				BB88F3101C3FB22F00C1F8D9 /* TeacherModel.m in Sources */,
 				BB63F60D1C2CC7A300A042E8 /* RoomListInfo.m in Sources */,
 				BB1661761C3CE0B800D318BE /* RegisterService.m in Sources */,
 				BB63F5AF1C2CC7A300A042E8 /* FMDatabaseAdditions.m in Sources */,
 				BB63F5B21C2CC7A300A042E8 /* FMResultSet.m in Sources */,
+				BB04368A1C4E295900A162A8 /* IdeaModel.m in Sources */,
 				BB25D80F1C15729800314C1E /* AppDelegate.m in Sources */,
 				BB63F5F41C2CC7A300A042E8 /* SVRSocket.m in Sources */,
 				BB63F5D11C2CC7A300A042E8 /* MJRefreshHeader.m in Sources */,
+				BB0436811C4E28B800A162A8 /* TomorrowModel.m in Sources */,
 				BB63F6081C2CC7A300A042E8 /* TitleButton.m in Sources */,
 				BB63F5B01C2CC7A300A042E8 /* FMDatabasePool.m in Sources */,
 				BB63F5C51C2CC7A300A042E8 /* MASViewAttribute.m in Sources */,
@@ -1970,6 +2021,7 @@
 				BB63F6001C2CC7A300A042E8 /* EmojiView.m in Sources */,
 				BB63F60E1C2CC7A300A042E8 /* LoginTextField.m in Sources */,
 				BB88F3131C41461900C1F8D9 /* TextLiveViewController.m in Sources */,
+				BBE56C551C4F8AE50030E050 /* IdeaDetails.m in Sources */,
 				BB63F5DC1C2CC7A300A042E8 /* AccelerationAnimation.m in Sources */,
 				BB88F3601C4736C100C1F8D9 /* AFNetworkReachabilityManager.m in Sources */,
 				BB63F6121C2CC7A300A042E8 /* KefuCenterController.m in Sources */,
@@ -1981,7 +2033,9 @@
 				BB63F5FF1C2CC7A300A042E8 /* EmojiTextAttachment.m in Sources */,
 				BB63F5DE1C2CC7A300A042E8 /* REBackgroundView.m in Sources */,
 				BB63F5B11C2CC7A300A042E8 /* FMDatabaseQueue.m in Sources */,
+				BBE56C5B1C4FD5EB0030E050 /* HistoryTextModel.m in Sources */,
 				BB63F5EA1C2CC7A300A042E8 /* SDWebImageManager.m in Sources */,
+				BBE56C581C4FA1B10030E050 /* IdeaDetailRePly.m in Sources */,
 				BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */,
 				BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */,
 				BB63F5C11C2CC7A300A042E8 /* MASCompositeConstraint.m in Sources */,

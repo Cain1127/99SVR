@@ -157,9 +157,13 @@
 
 + (NSString *)replaceImageString:(NSString *)strInfo width:(CGFloat)width height:(CGFloat)height index:(NSInteger)nIndex strTemp:(NSString *)strTemp
 {
+    if(strInfo==nil)
+    {
+        return nil;
+    }
     NSError *error= NULL;
     
-    NSString *strTemplate = [NSString stringWithFormat:@"$1 width=\"%d\" height=\"%d\" style=\"float:left\"",
+    NSString *strTemplate = [NSString stringWithFormat:@"$1 style=\"float:left\" width=\"%d\" height=\"%d\"",
                              (int)width,(int)height];
     NSString *strTempPattern = [NSString stringWithFormat:@"(src=\"%@\"|SRC=\"%@\")",strTemp,strTemp];
     NSRegularExpression* regex1 = [NSRegularExpression regularExpressionWithPattern:strTempPattern
@@ -169,6 +173,7 @@
                                                         options:0
                                                           range:NSMakeRange(0, strInfo.length)
                                                    withTemplate:strTemplate];
+    DLog(@"result%@",result);
     return result;
 }
 

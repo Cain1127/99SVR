@@ -40,7 +40,7 @@
 }
 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar
-{
+ {
     searchBar.showsScopeBar = NO;
     [searchBar sizeToFit];
     [searchBar setShowsCancelButton:NO animated:YES];

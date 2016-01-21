@@ -121,7 +121,7 @@
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
         [_items addObject:[[LeftCellModel alloc] initWithTitle:@"我的资料" icon:@"mydata.png" goClassName:@"MyDataController"]];
-        [_items addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"collect.png" goClassName:@"MyCollectionController"]];
+        [_items addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"collect.png" goClassName:@"AllColletViewController"]];
         [_items addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
         [_items addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"kefu.png" goClassName:@"KefuCenterController"]];
         _footerView.hidden = NO;

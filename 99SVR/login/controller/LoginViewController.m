@@ -14,6 +14,7 @@
 #import "LSTcpSocket.h"
 #import "NewViewController.h"
 #import "LoginTextField.h"
+#import "NNSVRViewController.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
 {
@@ -179,31 +180,39 @@
         make.top.mas_equalTo(_txtPwd.mas_bottom).offset(38);
     }];
     
-    UIButton *registBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [registBtn setTitle:@"快速注册" forState:UIControlStateNormal];
-    [registBtn setTitleColor:[UIColor colorWithHex:@"555555"] forState:UIControlStateNormal];
-    registBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-    [registBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
-        NSLog(@"注册...");
-    }];
-    [self.view addSubview:registBtn];
-    [registBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_btnLogin);
-        make.top.mas_equalTo(_btnLogin.mas_bottom).offset(53);
-    }];
+//    UIButton *registBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [registBtn setTitle:@"快速注册" forState:UIControlStateNormal];
+//    [registBtn setTitleColor:[UIColor colorWithHex:@"555555"] forState:UIControlStateNormal];
+//    registBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+//    [registBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
+//        NSLog(@"注册...");
+//    }];
+//    [self.view addSubview:registBtn];
+//    [registBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(_btnLogin);
+//        make.top.mas_equalTo(_btnLogin.mas_bottom).offset(53);
+//    }];
     
     UIButton *forgetPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [forgetPwdBtn setTitle:@"忘记密码" forState:UIControlStateNormal];
     [forgetPwdBtn setTitleColor:[UIColor colorWithHex:@"555555"] forState:UIControlStateNormal];
     forgetPwdBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-    [forgetPwdBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
-        NSLog(@"忘记密码...");
+    __weak LoginViewController *__self = self;
+    [forgetPwdBtn clickWithBlock:^(UIGestureRecognizer *gesture)
+    {
+        [__self forgetPassword];
     }];
     [self.view addSubview:forgetPwdBtn];
     [forgetPwdBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(_btnLogin);
         make.top.mas_equalTo(_btnLogin.mas_bottom).offset(53);
     }];
+}
+
+- (void)forgetPassword
+{
+    NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:@"http://www.99ducaijing.com/findpassword.aspx" title:@"忘记"];
+    [self presentViewController:svrView animated:YES completion:nil];
 }
 
 -(void)setTextFieldLeftPadding:(UITextField *)textField forWidth:(CGFloat)leftWidth

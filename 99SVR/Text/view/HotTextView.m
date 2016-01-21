@@ -62,7 +62,7 @@
     [_imgView sd_setImageWithURL:[NSURL URLWithString:teach.strImg] placeholderImage:[UIImage imageNamed:@"logo"]];
     _lblName.text = teach.strName;
     _lblContent.text = teach.strContent;
-    [_btnClick setTitle:NSStringFromInt((int)teach.nThum) forState:UIControlStateNormal];
+    [_btnClick setTitle:NSStringFromInt((int)teach.zans) forState:UIControlStateNormal];
 }
 
 - (void)addHotTextView

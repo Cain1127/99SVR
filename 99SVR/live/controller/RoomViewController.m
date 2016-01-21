@@ -20,6 +20,7 @@
 #import "EmojiTextAttachment.h"
 #import "UIImage+animatedGIF.h"
 #import "UserInfo.h"
+//#import "KxMovieViewController.h"
 #import "RoomUser.h"
 #import "RoomTitleView.h"
 #import <DTCoreText/DTCoreText.h>
@@ -55,12 +56,12 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     UIView *_downHUD;
     UIButton *_btnVideo;
     NSInteger _nTag;
-    
-    
+    dispatch_queue_t room_gcd;
 }
 
 @property (nonatomic,strong) NSMutableDictionary *dictIcon;
 @property (nonatomic,strong) LivePlayViewController *ffPlay;
+//@property (nonatomic,strong) KxMovieViewController *ffPlay;
 @property (nonatomic,strong) UIButton *btnRight;
 @property (nonatomic,assign) CGFloat fChatHeight;
 @property (nonatomic,strong) RoomTitleView *group;
@@ -100,11 +101,11 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)navBack
 {
     [_ffPlay stop];
+    [[LSTcpSocket sharedLSTcpSocket] exit_Room:YES];
     [self dismissViewControllerAnimated:YES completion:
      ^{
          
      }];
-    [[LSTcpSocket sharedLSTcpSocket] exit_Room:YES];
 }
 
 - (void)colletRoom
@@ -118,7 +119,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
             if([strId isEqualToString:room.nvcbid])
             {
                 __weak RoomViewController *__self = self;
-                dispatch_async(dispatch_get_main_queue(),
+                dispatch_main_async_safe(
                                ^{
                                    [__self.btnRight setSelected:YES];
                                });
@@ -141,6 +142,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)colletCurrentRoom
 {
     _btnRight.selected = !_btnRight.selected;
+    [[LSTcpSocket sharedLSTcpSocket] sendColletRoom:_btnRight.selected];
 }
 
 - (void)hiddenTopHud
@@ -154,11 +156,11 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     {
         __weak UIView *__topHud = _topHUD;
         __weak UIView *__downHUD = _downHUD;
-        dispatch_async(dispatch_get_main_queue(),
-                       ^{
-                           __topHud.alpha = 0;
-                           __downHUD.alpha = 0;
-                       });
+        dispatch_main_async_safe(
+       ^{
+           __topHud.alpha = 0;
+           __downHUD.alpha = 0;
+       });
     }
 }
 
@@ -183,6 +185,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 {
     //设置初始化_ffPlay
     _ffPlay = [[LivePlayViewController alloc] init];
+//    _ffPlay = [[KxMovieViewController alloc] init];
     [self.view insertSubview:_ffPlay.view atIndex:1];
     _ffPlay.view.frame = Rect(0, 20, kScreenWidth, kScreenHeight);
     
@@ -311,7 +314,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         return ;
     }
     __block int __nUserId = toUser;
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    dispatch_async(room_gcd, ^{
         LSTcpSocket *socket = [LSTcpSocket sharedLSTcpSocket];
         [socket sendChatInfo:@"[$999$]"  toid:__nUserId];
     });
@@ -334,7 +337,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     DLog(@"发送内容:%@",strContent);
     __block NSString *__strContent = strContent;
     __block int __nUserId = toUser;
-    dispatch_async(dispatch_get_global_queue(0, 0),
+    dispatch_async(room_gcd,
                    ^{
                        LSTcpSocket *socket = [LSTcpSocket sharedLSTcpSocket];
                        [socket sendChatInfo:__strContent  toid:__nUserId];
@@ -429,7 +432,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     else
     {
         __weak RoomViewController *__self = self;
-        dispatch_async(dispatch_get_global_queue(0, 0),
+        dispatch_async(room_gcd,
                        ^{
                            [__self startPlay];
                        });
@@ -442,7 +445,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     if(nMicId <=0)
     {
         __weak LivePlayViewController *__fsPlay = _ffPlay;
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_main_async_safe(
+        ^{
             [__fsPlay setNullMic];
         });
         return ;
@@ -467,6 +471,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    room_gcd = dispatch_queue_create("decode_gcd",0);
     cellCache = [[NSCache alloc] init];
     imageCache = [[NSCache alloc] init];
     [self initUIHead];
@@ -747,12 +752,11 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         __weak RoomViewController *__self = self;
         [[LSTcpSocket sharedLSTcpSocket].aryChat removeAllObjects];
         [[LSTcpSocket sharedLSTcpSocket].aryNotice removeAllObjects];
-        dispatch_async(dispatch_get_main_queue(),
-                       ^{
-                           [__self.chatView reloadData];
-                           [__self.priChatView reloadData];
-                           [__self.noticeView reloadData];
-                       });
+        dispatch_main_async_safe(^{
+             [__self.chatView reloadData];
+             [__self.priChatView reloadData];
+             [__self.noticeView reloadData];
+        });
     }
 }
 
@@ -808,9 +812,9 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     int nTime = [notify.object intValue];
     __weak RoomViewController *__self = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(nTime * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0),
-                   ^{
-                       [__self startPlay];
-                   });
+    ^{
+        [__self startPlay];
+    });
 }
 
 - (void)addNotification
@@ -855,7 +859,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         [_ffPlay stop];
     }
     __weak LivePlayViewController *__ffPlay = _ffPlay;
-    dispatch_async(dispatch_get_main_queue(),
+    dispatch_main_async_safe(
                    ^{
                        [__ffPlay setNullMic];
                    });
@@ -865,7 +869,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)room_kickout
 {
     __weak RoomViewController *__self = self;
-    dispatch_async(dispatch_get_main_queue(),
+    dispatch_main_async_safe(
                    ^{
                        [__self.view makeToast:@"您被人踢出当前房间" duration:2 position:@"center"];
                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -879,7 +883,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 {
     __weak RoomViewController *__self =self;
     __weak LivePlayViewController *__ffPlay = _ffPlay;
-    dispatch_async(dispatch_get_main_queue(),
+    dispatch_main_async_safe(
                    ^{
                        [__ffPlay setDefaultImg];
                        [__self.chatView reloadData];
@@ -895,7 +899,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 {
     [[LSTcpSocket sharedLSTcpSocket] enterBackGroud];
     __weak RoomViewController *__self =self;
-    dispatch_async(dispatch_get_main_queue(),
+    dispatch_main_async_safe(
                    ^{
                        [__self.chatView reloadData];
                        [__self.noticeView reloadData];
@@ -915,7 +919,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)roomUserList:(NSNotification*)notify
 {
     __weak RoomViewController *__self = self;
-    dispatch_async(dispatch_get_main_queue(),
+    dispatch_main_async_safe(
                    ^{
                        [__self.tableView reloadData];
                    });
@@ -925,7 +929,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)roomListNotice:(NSNotification *)notify
 {
     __weak RoomViewController *__self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_main_async_safe(^{
         [__self.noticeView reloadDataWithCompletion:
          ^{
              NSInteger numberOfRows = [__self.noticeView numberOfRowsInSection:0];
@@ -947,21 +951,20 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)roomBeExit:(NSNotification *)notify
 {
     __weak RoomViewController *__self = self;
-    dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       [__self.view makeToast:@"当前房间被关闭" duration:2.0 position:@"center"];
-                       dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-                                      ^{
-                                          [__self navBack];
-                                      });
-                   });
+    dispatch_main_async_safe(
+       ^{
+           [__self.view makeToast:@"当前房间被关闭" duration:2.0 position:@"center"];
+           dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
+                          ^{
+                              [__self navBack];
+                          });
+       });
 }
 
 - (void)roomChatPriMsg:(NSNotification *)notify
 {
     __weak RoomViewController *__self = self;
-    dispatch_sync(dispatch_get_main_queue(),
-                  ^{
+    dispatch_main_async_safe(^{
                       [__self.priChatView reloadDataWithCompletion:
                        ^{
                            NSInteger numberOfRows = [__self.priChatView numberOfRowsInSection:0];
@@ -977,8 +980,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)roomChatMSg:(NSNotification *)notify
 {
     __weak RoomViewController *__self = self;
-    dispatch_sync(dispatch_get_main_queue(),
-                  ^{
+    dispatch_main_async_safe(^{
                       [__self.chatView reloadDataWithCompletion:
                        ^{
                            NSInteger numberOfRows = [__self.chatView numberOfRowsInSection:0];
@@ -994,6 +996,10 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 #pragma mark tableview delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if(tableView==_noticeView)
+    {
+        return [LSTcpSocket sharedLSTcpSocket].aryNotice.count;
+    }
     return 1;
 }
 
@@ -1006,7 +1012,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     }
     else if(tableView == _noticeView)
     {
-        return [LSTcpSocket sharedLSTcpSocket].aryNotice.count;
+        return 1;
     }
     else if(tableView == _chatView)
     {
@@ -1017,6 +1023,22 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[UserInfo sharedUserInfo].nUserId];
         NSPredicate *pred = TABLEVIEW_ARRAY_PREDICATE(query);
         return [[LSTcpSocket sharedLSTcpSocket].aryChat filteredArrayUsingPredicate:pred].count;
+    }
+    return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if(tableView == _noticeView)
+    return 1;
+    return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if(tableView == _noticeView)
+    {
+        return 10;
     }
     return 0;
 }
@@ -1145,10 +1167,10 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 {
     NSString *cacheKey;
     NSString *strInfo;
-    if(tableView == _noticeView && [LSTcpSocket sharedLSTcpSocket].aryNotice.count > indexPath.row)
+    if(tableView == _noticeView && [LSTcpSocket sharedLSTcpSocket].aryNotice.count > indexPath.section)
     {
-        cacheKey =[NSString stringWithFormat:@"noticeView-%zi", indexPath.row];
-        strInfo = [[LSTcpSocket sharedLSTcpSocket].aryNotice objectAtIndex:indexPath.row];
+        cacheKey =[NSString stringWithFormat:@"noticeView-%zi", indexPath.section];
+        strInfo = [[LSTcpSocket sharedLSTcpSocket].aryNotice objectAtIndex:indexPath.section];
     }
     else if(tableView == _chatView && [LSTcpSocket sharedLSTcpSocket].aryChat.count > indexPath.row)
     {

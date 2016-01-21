@@ -49,7 +49,6 @@
 
 #define _PRODUCT_CORE_MESSAGE_VER_   10690001
 
-
 #define SOCKET_READ_LENGTH     1
 #define SOCKET_READ_DATA       2
 
@@ -58,6 +57,8 @@
     char cBuf[16384];
     int nSocketType;
     BOOL bCache;
+    dispatch_queue_t tcpThread;
+    dispatch_queue_t downGCD;
 }
 @property (nonatomic) int nFall;
 @property (nonatomic,copy) NSString *strUser;
@@ -69,6 +70,7 @@
 @property (nonatomic,strong) RoomInfo *rInfo;
 @property (nonatomic,strong) GCDAsyncSocket *asyncSocket;
 @property (nonatomic,strong) NSMutableArray *aryBuffer;
+@property (nonatomic,strong) NSMutableDictionary *dictDownLoad;
 
 @end
 
@@ -107,6 +109,8 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         [_aryChat removeAllObjects];
         [_aryNotice removeAllObjects];
         [_rInfo.dictUser removeAllObjects];
+        [_rInfo.aryUser removeAllObjects];
+        _rInfo = nil;
     }
 }
 
@@ -151,7 +155,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 {
     BOOL bReturn = NO;
     nSocketType = 1;
-    _asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(0, 0)];
+    _asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:tcpThread];
     NSError *error = nil;
     if(![_asyncSocket connectToHost:SVR_LOGIN_IP onPort:SVR_LOGIN_PORT error:&error])
     {
@@ -166,8 +170,12 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 -(BOOL)connectLogInServer:(NSString *)strAddr port:(int)nPort
 {
     BOOL bReturn = NO;
+    if (tcpThread==nil)
+    {
+        tcpThread = dispatch_queue_create("socket",0);
+    }
     nSocketType = 1;
-    _asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(0, 0)];
+    _asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:tcpThread];
     NSError *error = nil;
     if(![_asyncSocket connectToHost:strAddr onPort:nPort error:&error])
     {
@@ -296,24 +304,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         {
             [self loginError:pNewMsg];
         }
-            break;
-        case Sub_Vchat_UserQuanxianBegin:
-        {
-            DLog(@"权限开始数据!");
-        }
-            break;
-        case Sub_Vchat_UserQuanxianLst:
-        {
-            DLog(@"权限数据!");
-            
-        }
-            break;
-        case Sub_Vchat_UserQuanxianEnd:
-        {
-            DLog(@"权限数据结束!");
-            
-        }
-            break;
+        break;
         case Sub_Vchat_logonFinished:
         {
             DLog(@"登录过程结束!");
@@ -321,100 +312,17 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             [self closeSocket];
             return;
         }
-            break;
+        break;
         case Sub_Vchat_RoomGroupListBegin:
         {
             DLog(@"房间组数据开始!");
         }
-            break;
-        case Sub_Vchat_RoomGroupListResp:
-        {
-            DLog(@"房间组数据!");
-            
-            CMDRoomGroupItem_t* pInfo = (CMDRoomGroupItem_t *)(pNewMsg + sizeof(int));
-            RoomGroupData_t rm;
-            memset(&rm, 0, sizeof(RoomGroupData_t));
-            rm.groupid      = pInfo->grouid;
-            rm.parentid     = pInfo->parentid;
-            rm.bhaschild    = 0;
-            rm.bshowusernum = pInfo->showusernum;
-            rm.usernum      = pInfo->usernum;
-            rm.textcolor    = pInfo->textcolor;
-            rm.bfontbold    = pInfo->bfontbold;
-            strcpy(rm.groupname, pInfo->cgroupname);
-            strcpy(rm.iconname, pInfo->clienticonname);
-            NSString *strName = [NSString stringWithCString:rm.groupname encoding:GBK_ENCODING];
-            DLog(@"rm:%@--groupid:%u---parentid:%u",strName,rm.groupid,rm.parentid);
-            strncpy(rm.url,pInfo->content, pInfo->urllength);
-            rm.url[pInfo->urllength]='\0';
-            
-            if(rm.parentid==0)
-            {
-                [[UserInfo sharedUserInfo] addParentRoom:[NSValue value:&rm withObjCType:@encode(RoomGroupData_t)] key:strName];
-            }
-            else
-            {
-                [[UserInfo sharedUserInfo] addRoomInfo:[NSValue value:&rm withObjCType:@encode(RoomGroupData_t)]];
-            }
-        }
-            break;
-        case Sub_Vchat_RoomGroupListFinished:
-        {
-            DLog(@"房间分组数据");
-        }
-            break;
-        case Sub_Vchat_RoomGroupStatusResp:
-        {
-            DLog(@"房间组状态数据!");
-            
-        }
-            break;
-        case Sub_Vchat_RoomGroupStatusFinished:
-        {
-            //not do anything...
-        }
-            break;
-        case Sub_Vchat_RoomListBegin:
-        {
-            DLog(@"房间列表开始!");
-            
-        }
-            break;
-        case Sub_Vchat_RoomListResp:
-        {
-            DLog(@"房间数据!");
-            
-        }
-            break;
-        case Sub_Vchat_RoomListFinished:
-        {
-            DLog(@"房间数据结束!");
-            
-        }
         break;
-        case Sub_Vchat_SetUserProfileResp:
-        {
-            DLog(@"设置用户配置信息响应!\n");
-            
-        }
-            break;
-        case Sub_Vchat_SetUserPwdResp:
-        {
-            DLog(@"设置用户密码响应!\n");
-            
-        }
-            break;
-        case Sub_Vchat_QueryRoomGateAddrResp:
-        {
-            DLog(@"查询房间网关地址响应!\n");
-            
-        }
-            break;
         default:
         {
-            DLog(@"error");
+            DLog(@"other");
         }
-            break;
+        break;
     }
     free(pNewMsg);
     [_asyncSocket readDataToLength:sizeof(int) withTimeout:-1 tag:SOCKET_READ_LENGTH];
@@ -492,7 +400,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     int nTimes = 0;
     while (_asyncSocket)
     {
-        if (nTimes%15==14)
+        if (nTimes%29==28)
         {
             [self sendRoomPing];
             nTimes = 0;
@@ -536,7 +444,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 - (BOOL)reConnectRoomTime:(NSString *)strId address:(NSString *)strIp port:(int)nPort
 {
     nSocketType = 2;
-    _asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(0, 0)];
+    if (tcpThread==nil)
+    {
+        tcpThread = dispatch_queue_create("socket",0);
+    }
+    _asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:tcpThread];
     if(![_asyncSocket connectToHost:strIp onPort:nPort error:nil])
     {
         DLog(@"连接失败");
@@ -571,7 +483,6 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         _aryChat = [NSMutableArray array];
     }
     [_aryChat removeAllObjects];
-    
     CMDJoinRoomReq_t req;
     memset(&req,0,sizeof(CMDJoinRoomReq_t));
     req.userid = [UserInfo sharedUserInfo].nUserId;
@@ -632,13 +543,12 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             DLog(@"加入房间成功");
             [self joinRoomSuccess:pNewMsg];
         }
-            break;
+        break;
         case Sub_Vchat_RoomUserListBegin:
         {
             DLog(@"房间用户列表开始!");
-            [[UserInfo sharedUserInfo] initUserAry];
         }
-            break;
+        break;
         case Sub_Vchat_RoomUserListResp:
         {
             DLog(@"房间用户列表数据!");
@@ -680,7 +590,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             {
                 RoomUser *user = [_rInfo findUser:pInfo->userid];
                 strName = user.m_strUserAlias;
-                [[_rInfo aryUser] removeObject:user];
+                [_rInfo.aryUser removeObject:user];
                 [_rInfo removeUser:pInfo->userid];
                 
             }
@@ -709,6 +619,10 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             CMDUserKickoutRoomInfo_t* pInfo = (CMDUserKickoutRoomInfo_t *)pNewMsg;
             if (_rInfo)
             {
+                RoomUser *user = [_rInfo findUser:pInfo->toid];
+                
+                [_rInfo.aryUser removeObject:user];
+                
                 [_rInfo removeUser:pInfo->toid];
             }
             //522:超时   107:同号登录
@@ -833,15 +747,12 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
                 memcpy(szTemp, pInfo->content, pInfo->textlen);
                 szTemp[pInfo->textlen]='\0';
                 NSString *strInfo = [NSString stringWithCString:szTemp encoding:GBK_ENCODING];
-//                NSString *strNotice = [DecodeJson replaceImageString:strInfo];
-//                [_aryNotice addObject:strNotice];
                 [_aryBuffer addObject:strInfo];
                 __weak LSTcpSocket *__self = self;
-                dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                    [self downloadCache];
+                dispatch_async(downGCD,
+                ^{
+                    [__self downloadCache];
                 });
-//                DLog(@"公告:%@",strNotice);
-//                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
             }
         }
             break;
@@ -1257,23 +1168,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     if (msg->msgtype==1)
     {
         NSString *strInfo = [NSString stringWithFormat:@"房间广播:   %@ &nbsp;&nbsp;%@",strFrom,strContent];
-//        strInfo = [DecodeJson replaceImageString:strInfo];
         strInfo = [DecodeJson replaceEmojiString:strInfo];
-//        [_aryNotice addObject:strInfo];
         DLog(@"notice:%@",strInfo);
-//        if (_aryNotice.count>=20)
-//        {
-//            @synchronized(_aryNotice)
-//            {
-//                for (int i=0; i<10; i++)
-//                {
-//                    [_aryNotice removeObjectAtIndex:i];
-//                }
-//            }
-//        }
         [_aryBuffer addObject:strInfo];
         __weak LSTcpSocket *__self = self;
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        dispatch_async(downGCD, ^{
             [__self downloadCache];
         });
     }
@@ -1330,7 +1229,8 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     memcpy(pHead->content,&req,sizeof(CMDFavoriteRoomReq_t));
     NSData *data = [NSData dataWithBytes:szBuf length:pHead->length];
     [_asyncSocket writeData:data withTimeout:-1 tag:1];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
 }
 
 - (void)addUserStruct:(CMDRoomUserInfo_t*)pItem
@@ -1349,33 +1249,33 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     pUser.m_nUserId = pItem->userid;
     pUser.m_nHeadId  = pItem->headicon;
     pUser.m_nVipLevel = pItem->viplevel;
-    pUser.m_nYiyuanLevel = pItem->yiyuanlevel;
-    pUser.m_nShoufuLevel = pItem->shoufulevel;
-    pUser.m_nZhongshenLevel = pItem->zhonglevel;
-    pUser.m_nCaifuLevel = pItem->caifulevel;
-    pUser.m_nlastmonthcostlevel = pItem->lastmonthcostlevel;
-    pUser.m_nthismonthcostlevel = pItem->thismonthcostlevel;
-    pUser.m_thismonthcostgrade = pItem->thismonthcostgrade;
+//    pUser.m_nYiyuanLevel = pItem->yiyuanlevel;
+//    pUser.m_nShoufuLevel = pItem->shoufulevel;
+//    pUser.m_nZhongshenLevel = pItem->zhonglevel;
+//    pUser.m_nCaifuLevel = pItem->caifulevel;
+//    pUser.m_nlastmonthcostlevel = pItem->lastmonthcostlevel;
+//    pUser.m_nthismonthcostlevel = pItem->thismonthcostlevel;
+//    pUser.m_thismonthcostgrade = pItem->thismonthcostgrade;
     pUser.m_nGender = pItem->gender;
-    pUser.m_nPubMicIndex = pItem->pubmicindex;
-    pUser.m_nSealId = pItem->sealid;
-    pUser.m_nComeTime = pItem->cometime;
-    pUser.m_nSealExpTime = pItem->sealexpiretime;
+//    pUser.m_nPubMicIndex = pItem->pubmicindex;
+//    pUser.m_nSealId = pItem->sealid;
+//    pUser.m_nComeTime = pItem->cometime;
+//    pUser.m_nSealExpTime = pItem->sealexpiretime;
     pUser.m_nInRoomState = pItem->userstate;
-    pUser.m_nStarFlag = pItem->starflag;
-    pUser.m_nActivityStarFlag = pItem->activityflag;
-    pUser.m_nFlowerNum = pItem->flowernum;
-    pUser.m_nYuanpiaoNum = pItem->ticket1num;
+//    pUser.m_nStarFlag = pItem->starflag;
+//    pUser.m_nActivityStarFlag = pItem->activityflag;
+//    pUser.m_nFlowerNum = pItem->flowernum;
+//    pUser.m_nYuanpiaoNum = pItem->ticket1num;
     pUser.m_strUserAlias = [NSString stringWithCString:pItem->useralias encoding:GBK_ENCODING];
-    pUser.m_nXiaoShou = pItem->isxiaoshou;
+//    pUser.m_nXiaoShou = pItem->isxiaoshou;
     pUser.m_nRoomLevel = pItem->roomlevel;
-    pUser.m_bForbidInviteUpMic = (bool)pItem->bforbidinviteupmic;
-    pUser.m_bForbidChat = (bool)pItem->bforbidchat;
+//    pUser.m_bForbidInviteUpMic = (bool)pItem->bforbidinviteupmic;
+//    pUser.m_bForbidChat = (bool)pItem->bforbidchat;
     pUser.m_nUserType = pItem->usertype;
-    pUser.m_ncarid = pItem->ncarid;
-    pUser.m_strCarname= [NSString stringWithCString:pItem->carname encoding:GBK_ENCODING];
-    pUser.m_nMICgiftId =pItem->micgiftid;
-    pUser.m_nMICgiftNum =pItem->micgiftnum;
+//    pUser.m_ncarid = pItem->ncarid;
+//    pUser.m_strCarname= [NSString stringWithCString:pItem->carname encoding:GBK_ENCODING];
+//    pUser.m_nMICgiftId =pItem->micgiftid;
+//    pUser.m_nMICgiftNum =pItem->micgiftnum;
     
 #ifdef __SWITCH_SERVER2__
     pUser->m_nb =pItem->nb;
@@ -1393,8 +1293,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     pUser.m_pInRoom = _rInfo;
     //    if(pUser.m_nUserId != [_strUser intValue])
     //    {
-    [_rInfo addUser:pUser];
-    [_rInfo insertRUser:pUser];
+    
+    if (pUser) {
+        [_rInfo addUser:pUser];
+        [_rInfo insertRUser:pUser];
+    }
     //    }
     if([pUser isHide])
     {
@@ -1428,6 +1331,10 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 
 - (void)joinRoomSuccess:(char *)pData
 {
+    if (_dictDownLoad==nil)
+    {
+        _dictDownLoad = [NSMutableDictionary dictionary];
+    }
     CMDJoinRoomResp_t* pResp=(CMDJoinRoomResp_t*)pData;
     DLog(@"房间ID:%d",pResp->vcbid);
     if (_rInfo)
@@ -1439,9 +1346,9 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     __weak LSTcpSocket *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
-                   ^{
-                       [__self thread_room];//发送心跳
-                   });
+    ^{
+       [__self thread_room];//发送心跳
+    });
 }
 
 - (void)joinRoomError:(char *)pData
@@ -1604,6 +1511,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 {
     _nFall = 0;
     NSLog(@"connect server sucess!");
+    if (downGCD==nil)
+    {
+        downGCD = dispatch_queue_create("downgcd",0);
+    }
+    
     if (nSocketType == 1)
     {
         //登录服务器信息
@@ -1755,25 +1667,33 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         return ;
     }
     bCache = YES;
-    dispatch_queue_t queue = dispatch_queue_create("download", 0);
+    dispatch_queue_t queue = dispatch_queue_create("downloadCache", 0);
     while (_aryBuffer.count)
     {
         NSString *strInfo = nil;
-        @synchronized(strInfo)
+        @synchronized(_aryBuffer)
         {
-            strInfo = [NSString stringWithFormat:@"%@",[_aryBuffer objectAtIndex:0]];
+            strInfo = [[NSString alloc] initWithFormat:@"%@",[_aryBuffer objectAtIndex:0]];
             [_aryBuffer removeObjectAtIndex:0];
         }
         NSArray *aryPath = [DecodeJson getSrcPath:strInfo];
-        DLog(@"aryPath:%zi",aryPath.count);
-        __weak NSArray *__aryPath = aryPath;
-        __weak NSString *__strInfo = strInfo;
-        __weak LSTcpSocket *__self = self;
-        dispatch_apply(aryPath.count, queue, ^(size_t index)
+        
+        if (aryPath.count>0)
         {
-           NSString *strPath = [__aryPath objectAtIndex:index];
-           [__self downloadSingle:strPath info:__strInfo];
-        });
+            __weak NSArray *__aryPath = aryPath;
+            [_dictDownLoad setObject:strInfo forKey:[aryPath objectAtIndex:0]];
+            __weak LSTcpSocket *__self = self;
+            dispatch_apply(1,queue, ^(size_t index)
+            {
+                NSString *strKey = [__aryPath objectAtIndex:0];
+                [__self downloadSingle:strKey info:[__self.dictDownLoad objectForKey:strKey]];
+            });
+        }
+        else
+        {
+            [self pushNotice:nil info:strInfo path:nil];
+        }
+        strInfo = nil;
     }
     bCache = NO;
 }
@@ -1787,6 +1707,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 {
     __weak LSTcpSocket *__self = self;
     __weak NSString *__strInfo = strInfo;
+    DLog(@"strInfo:%@",strInfo);
     UIImage *imageCache = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:strPath];
     if (imageCache)
     {
@@ -1803,7 +1724,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
              {
                  [__self pushNotice:image info:__strInfo path:__strPath];
              }
-             else{}
+             else
+             {
+                 [__self pushNotice:nil info:__strInfo path:nil];
+             }
+             [__self.dictDownLoad removeObjectForKey:__strPath];
          }];
     }
     
@@ -1811,21 +1736,6 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 
 -(void)pushNotice:(UIImage *)image info:(NSString *)strInfo path:(NSString *)strPath
 {
-    CGSize imageSize = image.size;
-    CGFloat fHeight,fWidth;
-    if((kScreenWidth-20)*2>imageSize.width)
-    {
-        fWidth = imageSize.width/2;
-        fHeight = imageSize.height/2;
-    }
-    else
-    {
-        fHeight = (CGFloat)((kScreenWidth-20)/imageSize.width*imageSize.height);
-        fWidth = kScreenWidth-20;
-    }
-    NSString *strResult = [DecodeJson replaceImageString:strInfo width:fWidth height:fHeight index:0 strTemp:strPath];
-    [self.aryNotice addObject:strResult];
-    strInfo = nil;
     if (_aryNotice.count>=20)
     {
         @synchronized(_aryNotice)
@@ -1836,7 +1746,34 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             }
         }
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
+    if (image==nil)
+    {
+        if (strInfo)
+        {
+            [_aryNotice addObject:strInfo];
+        }
+    }
+    else
+    {
+        CGSize imageSize = image.size;
+        CGFloat fHeight,fWidth;
+        if((kScreenWidth-20)*2>imageSize.width)
+        {
+            fWidth = imageSize.width/2;
+            fHeight = imageSize.height/2;
+        }
+        else
+        {
+            fHeight = (CGFloat)((kScreenWidth-20)/imageSize.width*imageSize.height);
+            fWidth = kScreenWidth-20;
+        }
+        NSString *strResult = [DecodeJson replaceImageString:strInfo width:fWidth height:fHeight index:0 strTemp:strPath];
+        if(strResult)
+        {
+            [self.aryNotice addObject:strResult];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
+        }
+    }
 }
 
 @end

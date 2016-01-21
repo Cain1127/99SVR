@@ -13,40 +13,6 @@
 
 DEFINE_SINGLETON_FOR_CLASS(UserInfo)
 
-
-
-- (void)addParentRoom:(NSValue *)value key:(NSString *)strKey
-{
-    if (_dictRoomInfo==nil)
-    {
-        _dictRoomInfo = [NSMutableDictionary dictionary];
-    }
-    [_dictRoomInfo setObject:value forKey:strKey];
-}
-
-- (void)initUserAry
-{
-    if (_aryUsers == nil)
-    {
-        _aryUsers = [NSMutableArray array];
-    }
-    [_aryUsers removeAllObjects];
-}
-
-- (void)addRoomUser:(RoomUser *)users
-{
-    if (_aryUsers==nil)
-    {
-        _aryUsers = [NSMutableArray array];
-    }
-    [_aryUsers addObject:users];
-}
-
-- (void)removeUsers:(RoomUser *)users
-{
-    [_aryUsers removeObject:users];
-}
-
 - (NSString *)getVipDescript
 {
     NSDictionary *male = @{

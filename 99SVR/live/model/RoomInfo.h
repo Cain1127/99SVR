@@ -44,7 +44,7 @@
 @property (nonatomic,assign) int  m_bGetUserListFinished;   //用户列表是否下载完成
 @property (nonatomic,copy) NSString *strGateURL;
 @property (nonatomic,copy) NSString *strRoomName;
-@property (nonatomic,strong) NSMutableArray *aryNotice;
+//@property (nonatomic,strong) NSMutableArray *aryNotice;
 @property (nonatomic,assign) uint32 m_nMaxWaitMicUser;
 @property (nonatomic,assign) uint32 m_nMaxUserWitMic;
 @property (nonatomic,assign) uint32 m_bUsePwd;

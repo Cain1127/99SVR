@@ -38,21 +38,6 @@
     //友盟
     [MobClick startWithAppkey:@"568388ebe0f55a1537000bfa" reportPolicy:BATCH channelId:@""];
     sleep(1);
-//    BOOL isLogin = [UserDefaults boolForKey:kIsLogin];
-//    if (isLogin)
-//    {
-//        [UserInfo sharedUserInfo].nUserId = [[UserDefaults objectForKey:kUserId] intValue];
-//        NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
-//        [UserInfo sharedUserInfo].strPwd = userPwd;
-//        [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
-//        [[LSTcpSocket sharedLSTcpSocket] setUserInfo];
-//        [[LSTcpSocket sharedLSTcpSocket] loginServer:[UserDefaults objectForKey:kUserId]
-//                                                 pwd:[UserDefaults objectForKey:kUserPwd]];
-//    }
-//    else
-//    {
-//        [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
-//    }
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_window makeKeyAndVisible];
     leftView = [[LeftViewController alloc] init];
@@ -69,8 +54,7 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
-{
-}
+{}
 
 -(void)setEndBackground
 {

@@ -20,7 +20,7 @@
 {
     NSMutableDictionary *_groupStatus;
 }
-@property(nonatomic, strong) UITableView *tableView;
+//@property(nonatomic, strong) UITableView *tableView;
 @end
 
 @implementation FinanceOnlineVedioController
