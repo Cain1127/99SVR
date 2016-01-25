@@ -15,9 +15,9 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
-    _attributedTextContextView = [DTAttributedTextContentView new];
-    
-    [self.contentView addSubview:_attributedTextContextView];
+//    _attributedTextContextView = [DTAttributedTextContentView new];
+    _lblInfo = [DTAttributedTextView new];
+    [self.contentView addSubview:_lblInfo];
     
     return self;
 }
@@ -25,7 +25,13 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [_attributedTextContextView setFrame:self.contentView.bounds];
+    
+    [_lblInfo setFrame:self.contentView.bounds];
+}
+
+- (void)dealloc
+{
+    DLog(@"释放");
 }
 
 @end

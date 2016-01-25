@@ -47,17 +47,14 @@ static NSMutableDictionary * gHistory;
 
 #define LOCAL_MIN_BUFFERED_DURATION   0.2
 #define LOCAL_MAX_BUFFERED_DURATION   0.4
-#define NETWORK_MIN_BUFFERED_DURATION 2.0
-#define NETWORK_MAX_BUFFERED_DURATION 4.0
+#define NETWORK_MIN_BUFFERED_DURATION 0.2
+#define NETWORK_MAX_BUFFERED_DURATION 1.0
 
 @interface KxMovieViewController () {
 
     KxMovieDecoder      *_decoder;    
     dispatch_queue_t    _dispatchQueue;
-    NSMutableArray      *_videoFrames;
-    NSMutableArray      *_audioFrames;
-    NSMutableArray      *_subtitles;
-    
+
     NSData              *_currentAudioFrame;
     NSUInteger          _currentAudioFramePos;
     CGFloat             _moviePosition;
@@ -71,17 +68,16 @@ static NSMutableDictionary * gHistory;
     BOOL                _infoMode;
     BOOL                _restoreIdleTimer;
     BOOL                _interrupted;
-
     CGFloat             _bufferedDuration;
     CGFloat             _minBufferedDuration;
     CGFloat             _maxBufferedDuration;
     BOOL                _buffered;
-    
     BOOL                _savedIdleTimer;
-    
     NSDictionary        *_parameters;
+    UIImageView *smallImg;
 }
-
+@property (nonatomic,strong) NSMutableArray *videoFrames;
+@property (nonatomic,strong) NSMutableArray *audioFrames;
 @property (readwrite) BOOL playing;
 @property (readwrite) BOOL decoding;
 @property (readwrite, strong) KxArtworkFrame *artworkFrame;
@@ -93,7 +89,8 @@ static NSMutableDictionary * gHistory;
 {
     _playing = NO;
     _decoding = NO;
-    
+    [self setDefaultImg];
+    [self freeBufferedFrames];
 }
 
 + (void)initialize
@@ -115,17 +112,13 @@ static NSMutableDictionary * gHistory;
 - (void)startPlayWithURLString:(NSString *)path
 {
     _moviePosition = 0;
-    
     __weak KxMovieViewController *weakSelf = self;
-    
     KxMovieDecoder *decoder = [[KxMovieDecoder alloc] init];
-    
     decoder.interruptCallback = ^BOOL()
     {
         __strong KxMovieViewController *strongSelf = weakSelf;
         return strongSelf ? [strongSelf interruptDecoder] : YES;
     };
-    
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         
         NSError *error = nil;
@@ -186,7 +179,7 @@ static NSMutableDictionary * gHistory;
 - (void) dealloc
 {
     [self pause];
-    
+    [self freeBufferedFrames];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     if (_dispatchQueue)
@@ -202,26 +195,25 @@ static NSMutableDictionary * gHistory;
     [super loadView];
     id<KxAudioManager> audioManager = [KxAudioManager audioManager];
     [audioManager activateAudioSession];
-//    [_decoder setupVideoFrameFormat:KxVideoFrameFormatRGB];
     _imageView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kVideoImageHeight)];
     _imageView.backgroundColor = [UIColor blackColor];
     _imageView.contentMode = UIViewContentModeScaleAspectFit;
     _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
-    
     [self.view insertSubview:_imageView atIndex:0];
+    smallImg = [[UIImageView alloc] initWithFrame:Rect(_imageView.width/2-44,_imageView.height/2-35, 88, 71)];
+    [self.view addSubview:smallImg];
+    [self setDefaultImg];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     
-    if (self.playing) {
-        
+    if (self.playing)
+    {
         [self pause];
         [self freeBufferedFrames];
-        
         if (_maxBufferedDuration > 0) {
-            
             _minBufferedDuration = _maxBufferedDuration = 0;
             [self play];
             
@@ -308,13 +300,11 @@ static NSMutableDictionary * gHistory;
 {
     if (self.playing)
         return;
-    
     if (!_decoder.validVideo &&
-        !_decoder.validAudio) {
-        
+        !_decoder.validAudio)
+    {
         return;
     }
-    
     if (_interrupted)
         return;
 
@@ -325,14 +315,19 @@ static NSMutableDictionary * gHistory;
     _tickCounter = 0;
 
 #ifdef DEBUG
-    _debugStartTime = -1;
 #endif
     [self asyncDecodeFrames];
+    __weak KxMovieViewController *__self = self;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self tick];
+        [__self tick];
     });
-
+    __weak UIImageView *__imgView = smallImg;
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        [__imgView setHidden:YES];
+    });
+    
     if (_decoder.validAudio)
         [self enableAudio:YES];
 
@@ -417,9 +412,7 @@ static NSMutableDictionary * gHistory;
         _videoFrames    = [NSMutableArray array];
         _audioFrames    = [NSMutableArray array];
         
-        if (_decoder.subtitleStreamsCount) {
-            _subtitles = [NSMutableArray array];
-        }
+
     
         if (_decoder.isNetwork) {
             
@@ -493,11 +486,6 @@ static NSMutableDictionary * gHistory;
                             if (delta < -0.1) {
                                 
                                 memset(outData, 0, numFrames * numChannels * sizeof(float));
-#ifdef DEBUG
-                                DLog(@"desync audio (outrun) wait %.4f %.4f", _moviePosition, frame.position);
-                                _debugAudioStatus = 1;
-                                _debugAudioStatusTS = [NSDate date];
-#endif
                                 break; // silence and exit
                             }
                             
@@ -505,11 +493,6 @@ static NSMutableDictionary * gHistory;
                             
                             if (delta > 0.1 && count > 1) {
                                 
-#ifdef DEBUG
-                                DLog(@"desync audio (lags) skip %.4f %.4f", _moviePosition, frame.position);
-                                _debugAudioStatus = 2;
-                                _debugAudioStatusTS = [NSDate date];
-#endif
                                 continue;
                             }
                             
@@ -519,15 +502,13 @@ static NSMutableDictionary * gHistory;
                             _moviePosition = frame.position;
                             _bufferedDuration -= frame.duration;
                         }
-                        
                         _currentAudioFramePos = 0;
                         _currentAudioFrame = frame.samples;                        
                     }
                 }
             }
-            
-            if (_currentAudioFrame) {
-                
+            if (_currentAudioFrame)
+            {
                 const void *bytes = (Byte *)_currentAudioFrame.bytes + _currentAudioFramePos;
                 const NSUInteger bytesLeft = (_currentAudioFrame.length - _currentAudioFramePos);
                 const NSUInteger frameSizeOf = numChannels * sizeof(float);
@@ -546,11 +527,6 @@ static NSMutableDictionary * gHistory;
             } else {
                 
                 memset(outData, 0, numFrames * numChannels * sizeof(float));
-                //DLog(@"silence audio");
-#ifdef DEBUG
-                _debugAudioStatus = 3;
-                _debugAudioStatusTS = [NSDate date];
-#endif
                 break;
             }
         }
@@ -596,37 +572,27 @@ static NSMutableDictionary * gHistory;
         }
     }
     
-    if (_decoder.validAudio) {
-        
-        @synchronized(_audioFrames) {
-            
+    if (_decoder.validAudio)
+    {
+        @synchronized(_audioFrames)
+        {
             for (KxMovieFrame *frame in frames)
-                if (frame.type == KxMovieFrameTypeAudio) {
+            {
+                if (frame.type == KxMovieFrameTypeAudio)
+                {
                     [_audioFrames addObject:frame];
                     if (!_decoder.validVideo)
                         _bufferedDuration += frame.duration;
                 }
+            }
         }
-        
-        if (!_decoder.validVideo) {
-            
+        if (!_decoder.validVideo)
+        {
             for (KxMovieFrame *frame in frames)
                 if (frame.type == KxMovieFrameTypeArtwork)
                     self.artworkFrame = (KxArtworkFrame *)frame;
         }
     }
-    
-    if (_decoder.validSubtitles) {
-        
-        @synchronized(_subtitles) {
-            
-            for (KxMovieFrame *frame in frames)
-                if (frame.type == KxMovieFrameTypeSubtitle) {
-                    [_subtitles addObject:frame];
-                }
-        }
-    }
-    
     return self.playing && _bufferedDuration < _maxBufferedDuration;
 }
 
@@ -755,7 +721,6 @@ static NSMutableDictionary * gHistory;
     //    DLog(@"tick correction %.4f", correction);
     
     if (correction > 1.f || correction < -1.f) {
-        
         DLog(@"tick correction reset %.2f", correction);
         correction = 0;
         _tickCorrectionTime = 0;
@@ -808,10 +773,6 @@ static NSMutableDictionary * gHistory;
     _fullscreen = on;
     UIApplication *app = [UIApplication sharedApplication];
     [app setStatusBarHidden:on withAnimation:UIStatusBarAnimationNone];
-    // if (!self.presentingViewController) {
-    //[self.navigationController setNavigationBarHidden:on animated:YES];
-    //[self.tabBarController setTabBarHidden:on animated:YES];
-    // }
 }
 
 - (void) setMoviePositionFromDecoder
@@ -891,13 +852,6 @@ static NSMutableDictionary * gHistory;
         [_audioFrames removeAllObjects];
         _currentAudioFrame = nil;
     }
-    
-    if (_subtitles) {
-        @synchronized(_subtitles) {
-            [_subtitles removeAllObjects];
-        }
-    }
-    
     _bufferedDuration = 0;
 }
 
@@ -988,13 +942,15 @@ static NSMutableDictionary * gHistory;
 - (void)setDefaultImg
 {
     [_imageView setImage:[UIImage imageNamed:@"live_default"]];
-//    smallImg.hidden = NO;
-//    [smallImg setImage:[UIImage imageNamed:@"noVideo"]];
+    smallImg.hidden = NO;
+    [smallImg setImage:[UIImage imageNamed:@"noVideo"]];
 }
 
 - (void)setNullMic
 {
     [_imageView setImage:[UIImage imageNamed:@"live_default"]];
+    smallImg.hidden = NO;
+    [smallImg setImage:[UIImage imageNamed:@"noMic"]];
 }
 
 @end

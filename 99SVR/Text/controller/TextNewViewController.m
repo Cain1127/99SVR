@@ -4,21 +4,29 @@
 //
 //  Created by xia zhonglin  on 1/9/16.
 //  Copyright © 2016 xia zhonglin . All rights reserved.
-//
+//  观点类
 
 #import "TextNewViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "IdeaDetails.h"
+#import "TextLiveModel.h"
+#import "LiveCoreTextCell.h"
 #import "UIImage+GIF.h"
 #import "UIImageView+WebCache.h"
 #import "Photo.h"
 #import "PhotoViewController.h"
 #import "UIImage+animatedGIF.h"
+#import "TextTcpSocket.h"
 
-@interface TextNewViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface TextNewViewController ()<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate>
 {
+    NSCache *cellCache;
     NSMutableDictionary *_dictIcon;
 }
 @property (nonatomic,strong) UITableView *tableView;
+@property (nonatomic,copy) NSArray *aryNew;
+
+
 @end
 
 @implementation TextNewViewController
@@ -104,17 +112,95 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    return 1;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return _aryNew.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    LiveCoreTextCell *cell = [self tableView:tableView preparedCellForIndexPath:indexPath];
+    return cell;
+}
+
+
+- (LiveCoreTextCell *)tableView:(UITableView *)tableView preparedCellForIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *cacheKey = nil;
+    NSString *strInfo = nil;
+    cacheKey =[NSString stringWithFormat:@"newtableview-%zi", indexPath.section];
+    IdeaDetails *textModel = [_aryNew objectAtIndex:indexPath.section];
+    strInfo = textModel.strContent;
+    if (cellCache == nil )
+    {
+        cellCache = [[NSCache alloc] init];
+    }
+    LiveCoreTextCell *cell = [cellCache objectForKey:cacheKey];
+    if (cell==nil)
+    {
+        cell = [[LiveCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextLiveIdentifier"];
+    }
+    cell.textCoreView.delegate = self;
+    cell.textCoreView.shouldDrawImages = YES;
+    [cellCache setObject:cell forKey:cacheKey];
+    NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
+    cell.textCoreView.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:nil documentAttributes:nil];
+    UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
+    [selectView setBackgroundColor:[UIColor clearColor]];
+    cell.selectedBackgroundView = selectView;
+    NSDate *date = [NSDate date];
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    fmt.dateStyle = kCFDateFormatterShortStyle;
+    fmt.timeStyle = kCFDateFormatterShortStyle;
+    NSString *strTime = [fmt stringFromDate:date];
+    [cell.lblTime setText:strTime];
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
+    LiveCoreTextCell *cell = [self tableView:tableView preparedCellForIndexPath:indexPath];
+    CGFloat fHeight = [cell.textCoreView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
+    return fHeight+66;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    IdeaDetails *idea = [_aryNew objectAtIndex:indexPath.section];
+    DLog(@"idea:%zi",idea.messageid);
+//    [[TextTcpSocket sharedTextTcpSocket] reqIdeaDetails:0 count:20 ideaId:(int)idea.messageid];
+//    [[TextTcpSocket sharedTextTcpSocket] replyCommentReq:@"你好啊" msgid:idea.messageid toid:idea.userid];
+//    [[TextTcpSocket sharedTextTcpSocket] reqCommentZan:idea.messageid];
+    [[TextTcpSocket sharedTextTcpSocket] reqSendFlower:idea.messageid count:20];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 5;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadNew) name:MESSAGE_TEXT_NEW_VC object:nil];
+}
+
+- (void)reloadNew
+{
+    _aryNew = [TextTcpSocket sharedTextTcpSocket].aryNew;
+    __weak TextNewViewController *__self = self;
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        [__self.tableView reloadData];
+    });
 }
 
 

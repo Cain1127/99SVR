@@ -10,7 +10,7 @@
 
 @implementation TextLiveModel
 
-- (id)initWIthMessageNotify:(CMDTextRoomLiveMessageRes_t *)notify
+- (id)initWithMessageNotify:(CMDTextRoomLiveMessageRes_t *)notify
 {
     if (self=[super init])
     {
@@ -44,7 +44,9 @@
 
 - (id)initWithPointNotify:(CMDTextRoomLivePointNoty_t *)notify
 {
-    if (self = [super init]) {
+    if (self = [super init])
+    {
+        [self decodePointList:notify];
         return self;
     }
     return self;
@@ -107,6 +109,7 @@
     _zans = notify->zans;
     _time = notify->messagetime;
     _strContent = [NSString stringWithCString:notify->content encoding:GBK_ENCODING];
+    DLog(@"_messageid:%zi--strContent:%@",_messageid,_strContent);
 }
 
 @end

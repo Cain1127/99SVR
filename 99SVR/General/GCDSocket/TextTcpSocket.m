@@ -8,9 +8,9 @@
 
 #import "TextTcpSocket.h"
 #import "GCDAsyncSocket.h"
+#import "IdeaDetails.h"
 #import "HistoryTextModel.h"
 #import "IdeaDetailRePly.h"
-#import "IdeaDetails.h"
 #import "IdeaModel.h"
 #import "TextLiveModel.h"
 #import "cmd_vchat.h"
@@ -34,6 +34,7 @@
     char cBuf[16384];
     dispatch_queue_t socketQueue;
 }
+//@property (nonatomic,strong) NSMutableArray *aryText;
 @property (nonatomic,strong) GCDAsyncSocket *asyncSocket;
 @property (nonatomic,copy) NSString *strRoomId;
 @property (nonatomic,strong) TeacherModel *teacher;
@@ -42,24 +43,51 @@
 
 @implementation TextTcpSocket
 
+DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
+
 #pragma mark 解析文字直播数据
 
 - (void)authTextRoom:(COM_MSG_HEADER *)in_msg
 {
-//    kUserInfoId
     int nMsgLen=in_msg->length-sizeof(COM_MSG_HEADER);
     char* pNewMsg=0;
+    DLog(@"数据指令:%d",in_msg->subcmd);
     if(nMsgLen>0)
     {
         pNewMsg= (char*) malloc(nMsgLen);
+        DLog(@"数组长度:%d",nMsgLen);
         memcpy(pNewMsg,in_msg->content,nMsgLen);
     }
     else
     {
-        DLog(@"数据长度为空:%d",in_msg->subcmd);
-        DLog(@"消息为Sub_Vchat_TextRoomLiveListEnd:%d",Sub_Vchat_TextRoomLiveListEnd == in_msg->subcmd);
-        DLog(@"列表消息Sub_Vchat_TextRoomLivePointBegin:%d",Sub_Vchat_TextRoomLivePointBegin == in_msg->subcmd);
-        DLog(@"列表消息Sub_Vchat_TextRoomLivePointEnd:%d",Sub_Vchat_TextRoomLivePointEnd == in_msg->subcmd);
+        switch (in_msg->subcmd)
+        {
+            case Sub_Vchat_TextRoomLiveListEnd:
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
+//                [self reqTextRoomList:0 count:20 type:2];//测试的时候使用
+//                [self createTextMessage:1680014 type:1 msg:@"这个也是用来测试的"];
+//                [self reqQuestion:@"吃多少长身体" title:@"关于吃饭" teach:1680014];
+//                [self reqInterest:1680014];
+//                [self reqZans:275844 type:1];
+//                [self reqLiveChat:@"测试一下" to:0 toalias:@""];
+//                [self reqChatReply:@"再试一下" to:1680014 source:@"测试一次"];
+//                [self reqLiveView:0];//查看讲师所有观点内容
+                [self reqNewList:1680014 index:0 count:20];//观点列表请求
+//                [self reqOperViewType:0 name:@"测试一下" type:1];  //添加观点
+            break;
+            case Sub_Vchat_TextRoomLivePointEnd:
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_TODAY_VIP_VC object:nil];
+            }
+            break;
+            case Sub_Vchat_TextRoomLiveViewEnd:
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_NEW_VC object:nil];
+            }
+                break;
+            default:
+                break;
+        }
         [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
         return ;
     }
@@ -78,66 +106,77 @@
         break;
         case Sub_Vchat_TextRoomTeacherNotify:
         {
-            [self authTeacherInfo:pNewMsg];
+            [self authTeacherInfo:pNewMsg];//成功
         }
         break;
         case Sub_Vchat_TextRoomLiveListNotify:
         {
-            [self respTextRoomList:pNewMsg];
+            [self respTextRoomList:pNewMsg];//获取直播消息
         }
         break;
         case Sub_Vchat_TextRoomLivePointNotify:
         {
-            [self respPointTextList:pNewMsg];
+            [self respPointTextList:pNewMsg];//直播重点
         }
         break;
         case Sub_Vchat_TextRoomLiveMessageRes:
         {
-            [self respTextRoomMessage:pNewMsg];
+            [self respTextRoomMessage:pNewMsg];//讲师新的直播
         }
         break;
+        case Sub_Vchat_TextRoomQuestionRes:
+        {
+            [self respTextQuestion:pNewMsg];//提问回复
+        }
+            break;
         case Sub_Vchat_TextRoomInterestForRes:
         {
-            [self respInterestForRes:pNewMsg];
+            [self respInterestForRes:pNewMsg];//完成
         }
         break;
         case Sub_Vchat_TextRoomZanForRes:
         {
-            [self respZanForRes:pNewMsg];
+            [self respZanForRes:pNewMsg];//点赞回复   已完成
         }
         break;
         case Sub_Vchat_TextRoomLiveChatRes:
         {
-            [self respChatMsg:pNewMsg];
+            [self respChatMsg:pNewMsg];//聊天消息响应   已完成
         }
         break;
         case Sub_Vchat_TextLiveChatReplyRes:
         {
-            [self respChatReply:pNewMsg];
+            [self respChatReply:pNewMsg];//互动回复
         }
-            break;
+        break;
         case Sub_Vchat_TextRoomViewGroupRes:
         {
-            [self respViewGroupList:pNewMsg];
+            [self respViewGroupList:pNewMsg];//可以  现有版本不适应  观点类型列表
         }
-            break;
+        break;
         case Sub_Vchat_TextRoomLiveViewRes:
+        {
+            [self respViewList:pNewMsg];//观点详细列表 完成
+        }
+        break;
+        case Sub_Vchat_TextRoomLiveViewDetailRes:
         {
             [self respViewList:pNewMsg];
         }
-            break;
+        break;
         case Sub_Vchat_TextRoomViewInfoRes:
         {
-            [self respIdeaReplay:pNewMsg];
+            [self respIdeaReplay:pNewMsg];//观点详细内容列表返回
         }
-            break;
+        break;
         case Sub_Vchat_TextRoomViewTypeRes://讲师观点修改、添加回复
         {
-            DLog(@"暂时不处理当前消息");
+            DLog(@"暂时不处理添加的消息");
         }
         break;
         case Sub_Vchat_TextRoomViewMessageRes://讲师发布观点或修改观点
         {
+            DLog(@"暂时不处理");
             [self respMessageUpdate:pNewMsg];
         }
         break;
@@ -148,17 +187,19 @@
         break;
         case Sub_Vchat_TextRoomViewCommentRes:
         {
-            //没有找到消息回应
+            CMDTextRoomLiveActionRes_t *resp = (CMDTextRoomLiveActionRes_t*)pNewMsg;
+            DLog(@"评论结果:%d",resp->result);
         }
         break;
-            
         case Sub_Vchat_TextLiveViewZanForRes:
         {
+            //点赞结果
             [self respCommentZan:pNewMsg];
         }
         break;
-        case Sub_Vchat_TextLiveViewFlowerReq:
+        case Sub_Vchat_TextLiveViewFlowerRes:
         {
+            //送花响应
             [self respSendFlower:pNewMsg];
         }
             break;
@@ -172,6 +213,12 @@
             [self respDayHistoryList:pNewMsg];
         }
         break;
+        case Sub_Vchat_TextLiveUserExitRes:
+        {
+            DLog(@"退出房间成功");
+            [self closeSocket];
+        }
+        break;
         default:
         {
             DLog(@"其余消息:%d",in_msg->subcmd);
@@ -182,21 +229,42 @@
     [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
 }
 
+#pragma mark 请求观点详细记录
+- (void)reqIdeaDetails:(int)nIndex count:(int)nCount ideaId:(int)ideaId
+{
+    CMDTextRoomLiveViewDetailReq_t req = {0};
+    req.vcbid = [_strRoomId intValue];
+    req.userid = kUserInfoId;
+    req.count = nCount;
+    req.startcommentpos = nIndex;
+    req.viewid = ideaId;
+    [self sendMessage:(char *)&req size:sizeof(CMDTextRoomLiveViewDetailReq_t)
+              version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomLiveViewDetailReq];
+}
+
+#pragma mark 提问
+- (void)respTextQuestion:(char *)pInfo
+{
+    CMDTextRoomLiveActionRes_t *resp = (CMDTextRoomLiveActionRes_t *)pInfo;
+    DLog(@"提问结果:%d--提问消息:%d",resp->result,resp->messageid);
+}
+
 #pragma mark 某天记录的响应
 - (void)respDayHistoryList:(char *)pInfo
 {
     CMDTextRoomLiveListNoty_t *resp = (CMDTextRoomLiveListNoty_t*)pInfo;
     HistoryTextModel *text = [[HistoryTextModel alloc] initWithHistoryText:resp];
-    DLog(@"text:%@",text);
+    DLog(@"text:%@",text.strContent);
 }
 
 #pragma mark 请求某一天的直播记录
-- (void)reqDayHistoryList:(int)nIndex count:(int)nCount time:(NSTimeInterval)time
+- (void)reqDayHistoryList:(int)nIndex count:(int)nCount time:(NSTimeInterval)time teacher:(int32)teid
 {
     CMDTextLiveHistoryDaylyReq_t req = {0};
     req.userid = kUserInfoId;
     req.vcbid = [_strRoomId intValue];
-    req.fromIndex = nIndex;
+    req.teacherid = teid;
+    req.messageid = nIndex;
     req.count = nCount;
     req.datetime = time;
     [self sendMessage:(char *)&req size:sizeof(CMDTextLiveHistoryDaylyReq_t) version:MDM_Version_Value
@@ -207,7 +275,8 @@
 - (void)respHistoryList:(char *)pInfo
 {
     CMDTextLiveHistoryListRes_t *resp = (CMDTextLiveHistoryListRes_t *)pInfo;
-    DLog(@"start:%zi--end:%zi",resp->beginTime,resp->endTime);
+    DLog(@"start:%zi--end:%zi",resp->beginTime,resp->datetime);
+    DLog(@"renqi:%zi--answer:%zi",resp->renQi,resp->cAnswer);
 }
 
 #pragma mark 点击请求直播历史记录
@@ -217,8 +286,11 @@
     req.vcbid = [_strRoomId intValue];
     req.userid = kUserInfoId;
     req.fromIndex = nIndex;
+    req.teacherid = 1680014;
     req.count = nCount;
-    [self sendMessage:(char *)&req size:sizeof(CMDTextLiveHistoryListReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextLiveHistoryListReq ];
+    req.fromdate = [self getdateFromString:@"20160114"];
+    req.bInc = 1;
+    [self sendMessage:(char *)&req size:sizeof(CMDTextLiveHistoryListReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextLiveHistoryListReq];
 }
 
 #pragma mark 送花响应
@@ -239,6 +311,8 @@
     req.messageid = msgId;
     req.vcbid = [_strRoomId intValue];
     req.count = nCount;
+    [self sendMessage:(char *)&req size:sizeof(CMDTextLiveViewFlowerReq_t) version:MDM_Version_Value
+              maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextLiveViewFlowerReq];
 }
 
 #pragma mark 点赞回应
@@ -247,7 +321,7 @@
     CMDViewZanForRes_t *resp = (CMDViewZanForRes_t *)pInfo;
     if (resp->result)
     {
-        DLog(@"评论成功");
+        DLog(@"点赞成功");
     }
 }
 
@@ -270,7 +344,7 @@
 - (void)replyCommentReq:(NSString *)strComment msgid:(int64_t)msgId toid:(int)toId
 {
     NSData *commentData = [strComment dataUsingEncoding:GBK_ENCODING];
-    int nLength = (int)commentData.length+1;
+    int nLength = (int)commentData.length+1+sizeof(CMDTextRoomViewCommentReq_t);
     char szBuf[nLength];
     memset(szBuf, 0, nLength);
     CMDTextRoomViewCommentReq_t *req = (CMDTextRoomViewCommentReq_t *)szBuf;
@@ -278,9 +352,9 @@
     req->messageid = msgId;
     req->textlen = nLength;
     memcpy(req->content,commentData.bytes,commentData.length);
-    req->toid = toId;
-    
-    [self sendMessage:szBuf size:nLength version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomViewCommentReq length:nLength];
+    req->toid = 1680014;
+    req->content[req->textlen-1] = '\0';
+    [self sendMessage:szBuf size:nLength version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomViewCommentReq length:nLength+12];
 }
 #pragma mark 讲师观点删除响应
 - (void)respDeleteTeacherView:(char *)pInfo
@@ -321,7 +395,7 @@
 {
     NSData *contentData = [strContent dataUsingEncoding:GBK_ENCODING];
     NSData *titleData = [strTitle dataUsingEncoding:GBK_ENCODING];
-    int nLength = (int)contentData.length+(int)titleData.length+1;
+    int nLength = (int)contentData.length+(int)titleData.length+1+sizeof(CMDTextRoomViewMessageReq_t);
     char szBuf[nLength];
     memset(szBuf, 0, nLength);
     CMDTextRoomViewMessageReq_t *req = (CMDTextRoomViewMessageReq_t *)szBuf;
@@ -337,13 +411,14 @@
               maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomViewMessageReq length:nLength];
 }
 
-#pragma mark 新增观点类型分类
-- (void)reqViewType:(int)viewTypeId name:(NSString *)strContent
+#pragma mark 新增观点类型分类  1-新增；2-修改；3-删除（需要删除分类下所有观点后才可操作）；
+- (void)reqOperViewType:(int)viewTypeId name:(NSString *)strContent type:(int16_t)type
 {
     NSData *typeData = [strContent dataUsingEncoding:GBK_ENCODING];
-    CMDTextRoomViewTypeReq_t req;// = (CMDTextRoomViewTypeReq_t *)szBuf;
+    CMDTextRoomViewTypeReq_t req;
     req.vcbid = [_strRoomId intValue];
-    req.teacherid = kUserInfoId;
+    req.teacherid = 1680014;
+    req.actiontypeid = type;
     req.viewtypeid = viewTypeId;
     int nLength = typeData.length >= NAMELEN ? NAMELEN : (int)typeData.length;
     strncpy(req.viewtypename,typeData.bytes,nLength);
@@ -351,22 +426,44 @@
               version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomViewTypeReq];
 }
 
-#pragma mark 观点评论
+#pragma mark 观点详情
 - (void)respIdeaReplay:(char*)pInfo
 {
     CMDTextRoomViewInfoRes_t *resp = (CMDTextRoomViewInfoRes_t *)pInfo;
     IdeaDetailRePly *idea = [[IdeaDetailRePly alloc] initWithIdeaRePly:resp];
-    
+    DLog(@"%@---%@---%@",idea.strContent,idea.strName,idea.strSrcName);
     idea = nil;
 }
 
-#pragma mark 观点列表详情
+- (void)respNewDetails:(char *)pInfo
+{
+    CMDTextRoomLiveViewRes_t *resp = (CMDTextRoomLiveViewRes_t *)pInfo;
+    IdeaDetails *idea = [[IdeaDetails alloc] initWithIdeaDetails:resp];
+    DLog(@"观点信息:%zi--%@",idea.messageid,idea.strContent);
+}
+
+#pragma mark 观点列表返回
 - (void)respViewList:(char *)pInfo
 {
     CMDTextRoomLiveViewRes_t *resp = (CMDTextRoomLiveViewRes_t *)pInfo;
     IdeaDetails *idea = [[IdeaDetails alloc] initWithIdeaDetails:resp];
-    
+    DLog(@"观点信息:%zi--%@",idea.messageid,idea.strContent);
+    [_aryNew addObject:idea];
     idea = nil;
+}
+
+#pragma mark 观点列表
+- (void)reqNewList:(int)teacherid index:(int)nIndex count:(int)nCount
+{
+    CMDTextRoomLiveViewListReq_t req= {0};
+    req.vcbid = [_strRoomId intValue];
+    req.userid = kUserInfoId;
+    req.teacherid = teacherid;
+    req.viewtypeid = -1;
+    req.messageid = nIndex;
+    req.count = nCount;
+    [self sendMessage:(char *)&req size:sizeof(CMDTextRoomLiveViewListReq_t) version:MDM_Version_Value
+              maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomViewListShowReq];
 }
 
 #pragma mark 观点列表
@@ -378,14 +475,14 @@
     idea = nil;
 }
 
-#pragma mark 查看观点详细信息
-- (void)reqLiveView:(UInt64)messageid
+#pragma mark 查看观点类型
+- (void)reqLiveView:(UInt64)teacherid
 {
-    CMDTextRoomLiveViewReq_t viewReq={0};
+    CMDTextRoomLiveViewGroupReq_t viewReq={0};
     viewReq.vcbid = [_strRoomId intValue];
     viewReq.userid = kUserInfoId;
-    viewReq.messageid = messageid;
-    [self sendMessage:(char*)&viewReq size:sizeof(CMDTextRoomLiveViewReq_t) version:MDM_Version_Value
+    viewReq.teacherid = 1680014;
+    [self sendMessage:(char*)&viewReq size:sizeof(CMDTextRoomLiveViewGroupReq_t) version:MDM_Version_Value
               maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomLiveViewReq];
 }
 
@@ -394,12 +491,12 @@
 {
     CMDTextLiveChatReplyRes_t *resp = (CMDTextLiveChatReplyRes_t *)pInfo;
     ChatReplyModel *chat = [[ChatReplyModel alloc] initWithChatResp:resp];
-
+    DLog(@"content:%@",chat.strContent);
     chat = nil;
 }
 
 #pragma mark 聊天回复请求
-- (void)reqChatReply:(NSString *)strContent to:(int)toId toalias:(NSString *)toName source:(NSString *)strSrc
+- (void)reqChatReply:(NSString *)strContent to:(int)toId source:(NSString *)strSrc
 {
     NSData *contentData = [strContent dataUsingEncoding:GBK_ENCODING];
     NSData *srcData = [strSrc dataUsingEncoding:GBK_ENCODING];
@@ -410,13 +507,14 @@
     req->toid = toId;
     req->vcbid = [_strRoomId intValue];
     req->fromid = kUserInfoId;
+    req->messagetime = [self getNowTime];
     req->reqtextlen = srcData.length;
     req->restextlen = contentData.length;
     memcpy(req->content,srcData.bytes, srcData.length);
     memcpy(req->content+srcData.length, contentData.bytes, contentData.length);
     req->content[sLength-1] = '\0';
-    
-    [self sendMessage:szBuf size:(int)sLength version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextLiveChatReplyReq length:sLength];
+    [self sendMessage:szBuf size:(int)sLength version:MDM_Version_Value
+              maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextLiveChatReplyReq length:sLength+12];
 }
 
 #pragma mark 文字直播回复
@@ -426,9 +524,10 @@
     NSString *strFrom = [NSString stringWithCString:resp->srcalias encoding:GBK_ENCODING];
     NSString *strMsg = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
     NSString *strTo = [NSString stringWithCString:resp->toalias encoding:GBK_ENCODING];
-    NSString *strInfo = [NSString stringWithFormat:@"%@对%@说:<br>%@",strFrom,strTo,strMsg];
+    NSString *strInfo = [NSString stringWithFormat:@"%@对%@:%@",strFrom,strTo,strMsg];
     //发送通知信息
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"" object:strInfo];
+    [_aryChat addObject:strInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_NEW_CHAT_VC object:nil];
 }
 
 #pragma mark 发送聊天信息
@@ -438,7 +537,6 @@
     size_t nLength = sizeof(CMDRoomLiveChatReq_t)+[contentData length]+1;
     char szBuf[nLength];
     memset(szBuf, 0, nLength);
-    
     CMDRoomLiveChatReq_t *req = (CMDRoomLiveChatReq_t *)szBuf;
     memset(req, 0, sizeof(CMDRoomLiveChatReq_t));
     req->vcbid = [_strRoomId intValue];
@@ -446,29 +544,26 @@
     req->toid = toId;
     req->textlen = [contentData length]+1;
     req->msgtype = 0;
+    req->messagetime = [self getNowTime];
     memcpy(req->content,[contentData bytes], [contentData length]);
     req->content[req->textlen-1] = '\0';
-    
     [self sendMessage:szBuf size:(int)nLength version:MDM_Version_Value maincmd:MDM_Vchat_Text
-               subcmd:Sub_Vchat_TextRoomLiveChatReq length:nLength];
+               subcmd:Sub_Vchat_TextRoomLiveChatReq length:nLength+20];
 }
 
 #pragma mark 直播消息赞返回
 - (void)respZanForRes:(char *)pInfo
 {
     CMDTextRoomZanForRes_t *resp = (CMDTextRoomZanForRes_t *)pInfo;
-    int16 recordzans = resp->recordzans;
-    int16 totalzans = resp->totalzans;
-    DLog(@"zans:%d--total:%d",recordzans,totalzans);
+    DLog(@"result:%d--zans:%d--total:%d",resp->result,resp->recordzans,resp->totalzans);
 }
 
 #pragma mark 用户点击提问
-- (void)reqQuestion:(NSString *)strInfo title:(NSString *)strTitle
+- (void)reqQuestion:(NSString *)strInfo title:(NSString *)strTitle teach:(int)teacherid
 {
     NSData *infoData = [strInfo dataUsingEncoding:GBK_ENCODING];
     NSData *titleData = [strTitle dataUsingEncoding:GBK_ENCODING];
     size_t nLength = sizeof(CMDTextRoomQuestionReq_t)+infoData.length+titleData.length+1;
-    
     char szBuf[nLength];
     memset(szBuf, 0, nLength);
     CMDTextRoomQuestionReq_t *req = (CMDTextRoomQuestionReq_t *)szBuf;
@@ -476,13 +571,11 @@
     req->userid = kUserInfoId;
     req->textlen = [infoData length];
     req->stocklen = [titleData length];
-    
-    memcpy(req->content, titleData.bytes, titleData.length);
+    memcpy(req->content,titleData.bytes, titleData.length);
     memcpy(req->content+titleData.length, infoData.bytes, infoData.length);
-    
     req->content[nLength-1] = '\0';
     [self sendMessage:szBuf size:(int)nLength version:MDM_Version_Value maincmd:MDM_Vchat_Text
-               subcmd:Sub_Vchat_TextRoomQuestionReq length:nLength+100];
+               subcmd:Sub_Vchat_TextRoomQuestionReq length:nLength+12];
 }
 
 #pragma makr 用户对直播点赞
@@ -512,22 +605,26 @@
 #pragma mark 关注响应
 - (void)respInterestForRes:(char *)pInfo
 {
-    CMDTextRoomInterestForRes_t *resp = (CMDTextRoomInterestForRes_t*)pInfo;
+    CMDTextRoomInterestForRes_t *resp = (CMDTextRoomInterestForRes_t *)pInfo;
     if (resp->result)
     {
         //关注成功
-        
+        DLog(@"粉丝数:%d",resp->fans);
     }
-    DLog(@"粉丝数:%d",resp->fans);
+    else
+    {
+        DLog(@"粉丝数:%d",resp->fans);
+    }
 }
 
 #pragma mark 收到讲师发送的文字直播
 - (void)respTextRoomMessage:(char *)pInfo
 {
+    DLog(@"CMDTextRoomLiveMessageRes_t:%zi",sizeof(CMDTextRoomLiveMessageRes_t));
     CMDTextRoomLiveMessageRes_t *notify = (CMDTextRoomLiveMessageRes_t*)pInfo;
-    
-    TextLiveModel *textModel = [[TextLiveModel alloc] initWIthMessageNotify:notify];
-    
+    DLog(@"livetype---:%d",notify->livetype);
+    TextLiveModel *textModel = [[TextLiveModel alloc] initWithMessageNotify:notify];
+    DLog(@"textModel---:%@",textModel.strContent);
     textModel = nil;
 }
 
@@ -536,19 +633,34 @@
 {
     CMDTextRoomLivePointNoty_t *notify = (CMDTextRoomLivePointNoty_t *)pInfo;
     //push notify
-    TextLiveModel *textModel = [[TextLiveModel alloc] initWithPointNotify:notify];
-    
-    textModel = nil;
+    if (notify->type==2 || notify->type==3)
+    {
+        TextLiveModel *textModel = [[TextLiveModel alloc] initWithPointNotify:notify];
+        DLog(@"消息类型%d--消息:%@",textModel.type,textModel.strContent);
+        textModel = nil;
+    }
+
 }
 
-#pragma mark 文字直播列表响应 
+#pragma mark 文字直播列表响应 完成
 - (void)respTextRoomList:(char *)pInfo
 {
     CMDTextRoomLiveListNoty_t *notify = (CMDTextRoomLiveListNoty_t *)pInfo;
     //push notify
-    TextLiveModel *textModel = [[TextLiveModel alloc] initWithNotify:notify];
+    if (notify->livetype == 5)
+    {
+        TextLiveModel *textModel = [[TextLiveModel alloc] initWithNotify:notify];
+        [_aryChat addObject:textModel];
+        DLog(@"观点消息");
+    }
+    else
+    {
+        TextLiveModel *textModel = [[TextLiveModel alloc] initWithNotify:notify];
+        [_aryText addObject:textModel];
+        DLog(@"文字直播");
+    }
     
-    textModel = nil;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
 }
 
 #pragma mark 请求文字直播列表
@@ -558,6 +670,7 @@
     memset(&req, 0, sizeof(CMDTextRoomLiveListReq_t));
     req.vcbid = [_strRoomId intValue];
     req.userid = kUserInfoId;
+    req.teacherid = 1680014;
     req.type = nType;
     req.messageid = nIndex;
     req.count = nCount;
@@ -569,6 +682,7 @@
 - (void)authTeacherInfo:(char *)pInfo
 {
     CMDTextRoomTeacherNoty_t *notify = (CMDTextRoomTeacherNoty_t *)pInfo;
+    DLog(@"收到讲师信息:%d",notify->teacherid);
     if (_teacher)
     {
         _teacher  = nil;
@@ -586,17 +700,35 @@
     _teacher.introducelen = notify->introducelen;
     _teacher.strName = [NSString stringWithCString:notify->teacheralias encoding:GBK_ENCODING];
     _teacher.strContent = [NSString stringWithCString:notify->content encoding:GBK_ENCODING];
+    
+//    [self reqTextRoomList:0 count:20 type:2];
+//    [self reqTextRoomList:0 count:20 type:1];
+    [self reqHistoryList:0 count:20];
+//    [self reqDayHistoryList:0 count:20 time:[@"20160122" intValue] teacher:1680014];
+}
+
+#pragma mark 请求讲师信息
+- (void)reqTeacherInfo
+{
+    CMDTextRoomTeacherReq_t req;
+    req.userid = kUserInfoId;
+    req.vcbid = [_strRoomId intValue];
+    req.logtype = 2;
+    [self sendMessage:(char *)&req size:sizeof(CMDTextRoomTeacherReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomTeacherReq];
 }
 
 #pragma mark 加入房间成功
 - (void)joinRoomSuccess:(char *)pInfo
 {
+    DLog(@"加入房间成功!");
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     __weak TextTcpSocket *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
         [__self thread_room];//发送心跳
     });
+    [self reqTeacherInfo];
+//    [self reqTextRoomList:0 count:20 type:1];
 }
 
 #pragma mark 心跳线程
@@ -638,7 +770,56 @@
 
 - (void)joinRoomError:(char *)pInfo
 {
-    
+    CMDJoinRoomErr_t *pResp = (CMDJoinRoomErr_t *)pInfo;
+    DLog(@"加入错误:%d",pResp->errid);
+    NSString *strMsg = nil;
+    switch (pResp->errid)
+    {
+        case 201:
+        {
+            strMsg = @"需要输入密码";
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:strMsg];
+            return ;
+        }
+            break;
+        case 101:
+        {
+            strMsg = @"房间黑名单";
+        }
+            break;
+        case 203:
+        {
+            strMsg = @"用户名/密码查询错误，无法加入房间!";
+        }
+            break;
+        case 404:
+        {
+            strMsg = @"加入房间 不存在";
+        }
+            break;
+        case 405:
+        {
+            strMsg = @"房间已经被房主关闭，不能进入";
+        }
+            break;
+        case 502:
+        {
+            strMsg = @"房间人数已满";
+        }
+            break;
+        case 505:
+        {
+            strMsg = @"通信版本过低，不能使用，请升级";
+        }
+            break;
+        default:
+        {
+            strMsg = @"未知错误";
+        }
+            break;
+    }
+    DLog(@"strMsg:%@",strMsg);
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:strMsg];
 }
 
 #pragma mark 发送消息
@@ -691,6 +872,16 @@
     [_asyncSocket writeData:data withTimeout:20 tag:1];
 }
 
+#pragma mark 关闭socket
+-(void)closeSocket
+{
+    if(_asyncSocket)
+    {
+        [_asyncSocket disconnectAfterReading];
+        _asyncSocket = nil;
+    }
+}
+
 #pragma mark 加入房间
 - (void)joinRoomInfo
 {
@@ -699,8 +890,9 @@
     req.userid = kUserInfoId;
     req.vcbid = (uint32)[_strRoomId intValue];
     req.coremessagever = _PRODUCT_CORE_MESSAGE_VER_;
-    req.userstate = 2;
+    req.devtype = 2;
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
+    strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
     req.time = (uint32)time(0);
     req.crc32 = 15;
     uint32 crcval = crc32((void*)&req,sizeof(CMDJoinRoomReq_t),CRC_MAGIC);
@@ -712,11 +904,27 @@
 #pragma mark 连接房间
 - (void)connectRoom:(NSString *)strRoomId
 {
+    
     _strRoomId = strRoomId;
+    if (_aryText==nil)
+    {
+        _aryText = [NSMutableArray array];
+    }
+    [_aryText removeAllObjects];
+    if (_aryChat==nil) {
+        _aryChat = [NSMutableArray array];
+    }
+    [_aryChat removeAllObjects];
+    if (_aryNew == nil) {
+        _aryNew = [NSMutableArray array];
+    }
+    [_aryNew removeAllObjects];
     NSString *strAry = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][0];
     NSString *strAddr = [strAry componentsSeparatedByString:@":"][0];
     NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
-    [self connectTextServer:strAddr port:nPort];
+//    [self connectTextServer:strAddr port:nPort];
+    [self closeSocket];
+    [self connectTextServer:@"172.16.41.96" port:22806];
 }
 
 - (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort
@@ -736,6 +944,7 @@
 {
     //连接成功
     //sendHello,sendJoinRoom
+    [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
     DLog(@"连接成功!");
     [self sendHello:MDM_Vchat_Text];
     [self joinRoomInfo];
@@ -743,6 +952,7 @@
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
+//    DLog(@"收到字节:%zi",data.length);
     switch(tag)
     {
         case SOCKET_READ_LENGTH:
@@ -785,7 +995,7 @@
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
-    
+    DLog(@"关闭连接:%@",err);
 }
 
 -(int)getSocketHead:(char *)pBuf len:(int)nLen
@@ -800,6 +1010,62 @@
         DLog(@"%d-%d",in_msg->maincmd,in_msg->subcmd);
     }
     return 0;
+}
+
+
+#pragma mark 临时使用 
+- (void)createTextMessage:(uint32_t)teacherid type:(int)nType msg:(NSString *)strMsg
+{
+    NSData *msgData = [strMsg dataUsingEncoding:GBK_ENCODING];
+    int nLength = (int)msgData.length+1+sizeof(CMDTextRoomLiveMessageReq_t);
+    char szBuf[nLength];
+    memset(szBuf, 0, nLength);
+    CMDTextRoomLiveMessageReq_t *req = (CMDTextRoomLiveMessageReq_t *)szBuf;
+    req->vcbid = [_strRoomId intValue];
+    req->textlen = msgData.length+1;
+    req->teacherid = teacherid;
+    if (nType==2)
+    {
+        req->pointflag = 1;
+    }
+    else if(nType ==3)
+    {
+        req->forecastflag = 1;
+    }
+    else
+    {
+        
+    }
+    req->livetype = 1;
+    req->messagetime = [self getNowTime];
+    memcpy(req->content, msgData.bytes, msgData.length);
+    req->content[req->textlen -1] = '\0';
+    [self sendMessage:szBuf size:nLength version:MDM_Version_Value
+              maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomLiveMessageReq length:nLength+100];
+}
+
+- (void)exitRoom
+{
+    CMDUserExitRoomInfo_t req= {0};
+    req.userid = kUserInfoId;
+    req.vcbid = [_strRoomId intValue];
+    [self sendMessage:(char *)&req size:sizeof(CMDUserExitRoomInfo_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextLiveUserExitReq];
+}
+
+- (int64_t)getNowTime
+{
+    NSDate *date = [NSDate date];
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    [fmt setDateFormat:@"yyyyMMddHHmmss"];
+    NSString *strDate = [fmt stringFromDate:date];
+    int64_t messageTime = atoll([strDate UTF8String]);
+    return messageTime;
+}
+
+- (int32_t)getdateFromString:(NSString *)strInfo
+{
+    int32_t messageTime = [strInfo intValue];
+    return messageTime;
 }
 
 @end

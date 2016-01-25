@@ -12,12 +12,13 @@
 #import "Photo.h"
 #import "PhotoViewController.h"
 #import "UIImage+animatedGIF.h"
+#import "TextTcpSocket.h"
 
 @interface TextChatViewController ()<UITableViewDataSource ,UITableViewDelegate>
 {
     NSMutableDictionary *_dictIcon;
 }
-
+@property (nonatomic,copy) NSArray *aryChat;
 @property (nonatomic,strong) UITableView *tableView;
 @end
 
@@ -110,6 +111,29 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return nil;
+}
+
+- (void)viewWillAppear:(BOOL)animate
+{
+    [super viewWillAppear:animate];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadChat) name:MESSAGE_TEXT_NEW_CHAT_VC object:nil];
+}
+
+- (void)reloadChat
+{
+    _aryChat = [TextTcpSocket sharedTextTcpSocket].aryChat;
+    __weak TextChatViewController *__self = self;
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        [__self.tableView reloadData];
+    });
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 
 

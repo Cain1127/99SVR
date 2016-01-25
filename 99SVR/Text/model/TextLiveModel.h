@@ -28,7 +28,7 @@
 
 - (id)initWithNotify:(CMDTextRoomLiveListNoty_t *)notify;
 - (id)initWithPointNotify:(CMDTextRoomLivePointNoty_t *)notify;
-- (id)initWIthMessageNotify:(CMDTextRoomLiveMessageRes_t *)notify;
+- (id)initWithMessageNotify:(CMDTextRoomLiveMessageRes_t *)notify;
 
 
 

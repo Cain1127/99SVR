@@ -24,7 +24,7 @@
 {
     _vcbid = resp->vcbid;
     _userid = resp->userid;
-    _messageid = resp->messageid;
+    _messageid = resp->viewid;
     _liveType = resp->livetype;
     _viewTitleLen = resp->viewTitlelen;
     _viewTextLen = resp->viewtextlen;

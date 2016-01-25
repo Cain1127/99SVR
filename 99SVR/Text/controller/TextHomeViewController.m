@@ -8,6 +8,7 @@
 
 #import "TextHomeViewController.h"
 #import "GroupView.h"
+#import "TextTcpSocket.h"
 #import "TextChatViewController.h"
 #import "TextLiveViewController.h"
 #import "TextNewViewController.h"
@@ -73,25 +74,30 @@
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftBtn setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
     [leftBtn setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
-    [leftBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-     {
-         [__self dismissViewControllerAnimated:YES completion:nil];
-     }];
     [self setLeftBtn:leftBtn];
     
+    [leftBtn addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
+    
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
+    [rightBtn setImage:[UIImage imageNamed:@"text_more_n"] forState:UIControlStateNormal];
+    [rightBtn setImage:[UIImage imageNamed:@"text_more"] forState:UIControlStateNormal];
     [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
         
     }];
     [self setRightBtn:rightBtn];
 }
 
+- (void)navBack
+{
+    
+    [[TextTcpSocket sharedTextTcpSocket] exitRoom];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self initUIHead];
-    
     __weak TextHomeViewController *__self = self;
     [_group addEvent:^(id sender)
      {

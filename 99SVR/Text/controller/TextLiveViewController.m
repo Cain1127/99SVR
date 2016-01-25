@@ -8,6 +8,8 @@
 
 #import "TextLiveViewController.h"
 #import "LiveCoreTextCell.h"
+#import "TextLiveModel.h"
+#import "textTcpSocket.h"
 #import "Photo.h"
 #import "PhotoViewController.h"
 #import "UIImageView+WebCache.h"
@@ -27,11 +29,11 @@
 
 - (void)initData
 {
-    for (int i=0; i<10; i++)
-    {
-        NSString *strContent = @"<div><img width=\"160\" height=\"160\" src=\"http://broadimage.99ducaijing.cn:8081/png/14522174930.png\"><span><h3>【股市藏经阁】下周一1.11震撼开播</h3>股市藏金窥利，凭技闯A股。2016年迎来熔断时代，行情大起大落猝不及防。提前休市背后因素何在？特约财经栏目《股市藏经阁》牵手向后市，【财神女王】艾菲坐镇主掌，特邀名威市场的【资深大师 】相约99°c财经！共探熔断玄机，解惑市场，挖掘接下来的操作应对策略！ 一堂不该错过的黄金命脉解剖课！（下周一01.11,3点半至5点整开播）</span></div>";
-        [_aryLive addObject:strContent];
-    }
+//    for (int i=0; i<10; i++)
+//    {
+//        NSString *strContent = @"<div><img width=\"160\" height=\"160\" src=\"http://broadimage.99ducaijing.cn:8081/png/14522174930.png\"><span><h3>【股市藏经阁】下周一1.11震撼开播</h3>股市藏金窥利，凭技闯A股。2016年迎来熔断时代，行情大起大落猝不及防。提前休市背后因素何在？特约财经栏目《股市藏经阁》牵手向后市，【财神女王】艾菲坐镇主掌，特邀名威市场的【资深大师 】相约99°c财经！共探熔断玄机，解惑市场，挖掘接下来的操作应对策略！ 一堂不该错过的黄金命脉解剖课！（下周一01.11,3点半至5点整开播）</span></div>";
+//        [_aryLive addObject:strContent];
+//    }
 }
 
 - (void)viewDidLoad
@@ -91,15 +93,13 @@
     NSString *cacheKey = nil;
     NSString *strInfo = nil;
     cacheKey =[NSString stringWithFormat:@"LiveText-%zi", indexPath.section];
-    strInfo = [_aryLive objectAtIndex:indexPath.section];
-    
+    TextLiveModel *textModel = [_aryLive objectAtIndex:indexPath.section];
+    strInfo = textModel.strContent;
     LiveCoreTextCell *cell = [cellCache objectForKey:cacheKey];
-    
     if (cell==nil)
     {
         cell = [[LiveCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextLiveIdentifier"];
     }
-    
     cell.textCoreView.delegate = self;
     cell.textCoreView.shouldDrawImages = YES;
     [cellCache setObject:cell forKey:cacheKey];
@@ -185,6 +185,28 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 5;
+}
+
+- (void)reLoadTextList
+{
+    _aryLive = [TextTcpSocket sharedTextTcpSocket].aryText;
+    DLog(@"_aryLiveing:%zi",_aryLive.count);
+    __weak TextLiveViewController *__self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [__self.tableView reloadData];
+    });
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLoadTextList) name:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

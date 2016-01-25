@@ -246,6 +246,10 @@
 		BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB52B1C1E959500D7230F /* libxml2.tbd */; };
 		BBECB5301C1E95F400D7230F /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB52F1C1E95F400D7230F /* CoreText.framework */; };
 		BBECB5321C1E960000D7230F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB5311C1E960000D7230F /* MobileCoreServices.framework */; };
+		BBF89BE41C51BE8D000F8EFC /* KxAudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF89BDD1C51BE8D000F8EFC /* KxAudioManager.m */; };
+		BBF89BE51C51BE8D000F8EFC /* KxMovieDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF89BDF1C51BE8D000F8EFC /* KxMovieDecoder.m */; };
+		BBF89BE61C51BE8D000F8EFC /* KxMovieGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF89BE11C51BE8D000F8EFC /* KxMovieGLView.m */; };
+		BBF89BE71C51BE8D000F8EFC /* KxMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF89BE31C51BE8D000F8EFC /* KxMovieViewController.m */; };
 		BBFA851D1C30D216000466E4 /* 999.gif in Resources */ = {isa = PBXBuildFile; fileRef = BBFA851C1C30D216000466E4 /* 999.gif */; };
 		BBFA85201C3383CD000466E4 /* RegViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFA851F1C3383CD000466E4 /* RegViewController.m */; };
 /* End PBXBuildFile section */
@@ -767,6 +771,14 @@
 		BBECB52B1C1E959500D7230F /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		BBECB52F1C1E95F400D7230F /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		BBECB5311C1E960000D7230F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		BBF89BDC1C51BE8D000F8EFC /* KxAudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxAudioManager.h; sourceTree = "<group>"; };
+		BBF89BDD1C51BE8D000F8EFC /* KxAudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxAudioManager.m; sourceTree = "<group>"; };
+		BBF89BDE1C51BE8D000F8EFC /* KxMovieDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxMovieDecoder.h; sourceTree = "<group>"; };
+		BBF89BDF1C51BE8D000F8EFC /* KxMovieDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxMovieDecoder.m; sourceTree = "<group>"; };
+		BBF89BE01C51BE8D000F8EFC /* KxMovieGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxMovieGLView.h; sourceTree = "<group>"; };
+		BBF89BE11C51BE8D000F8EFC /* KxMovieGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxMovieGLView.m; sourceTree = "<group>"; };
+		BBF89BE21C51BE8D000F8EFC /* KxMovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxMovieViewController.h; sourceTree = "<group>"; };
+		BBF89BE31C51BE8D000F8EFC /* KxMovieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxMovieViewController.m; sourceTree = "<group>"; };
 		BBFA851C1C30D216000466E4 /* 999.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = 999.gif; sourceTree = "<group>"; };
 		BBFA851E1C3383CD000466E4 /* RegViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegViewController.h; sourceTree = "<group>"; };
 		BBFA851F1C3383CD000466E4 /* RegViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegViewController.m; sourceTree = "<group>"; };
@@ -1237,6 +1249,14 @@
 		BB63F4BB1C2CC7A200A042E8 /* kxmovie */ = {
 			isa = PBXGroup;
 			children = (
+				BBF89BDC1C51BE8D000F8EFC /* KxAudioManager.h */,
+				BBF89BDD1C51BE8D000F8EFC /* KxAudioManager.m */,
+				BBF89BDE1C51BE8D000F8EFC /* KxMovieDecoder.h */,
+				BBF89BDF1C51BE8D000F8EFC /* KxMovieDecoder.m */,
+				BBF89BE01C51BE8D000F8EFC /* KxMovieGLView.h */,
+				BBF89BE11C51BE8D000F8EFC /* KxMovieGLView.m */,
+				BBF89BE21C51BE8D000F8EFC /* KxMovieViewController.h */,
+				BBF89BE31C51BE8D000F8EFC /* KxMovieViewController.m */,
 				BB63F4BC1C2CC7A200A042E8 /* cmdutils.c */,
 				BB63F4BD1C2CC7A200A042E8 /* cmdutils.h */,
 				BB63F4BE1C2CC7A200A042E8 /* LivePlayViewController.h */,
@@ -1944,6 +1964,7 @@
 				BB63F5F91C2CC7A300A042E8 /* UIView+Extension.m in Sources */,
 				BB63F5D41C2CC7A300A042E8 /* UIScrollView+MJExtension.m in Sources */,
 				BB63F5B31C2CC7A300A042E8 /* GCDAsyncSocket.m in Sources */,
+				BBF89BE71C51BE8D000F8EFC /* KxMovieViewController.m in Sources */,
 				BB63F5AB1C2CC7A300A042E8 /* UIColor+Ext.m in Sources */,
 				BB63F6201C2CC7A300A042E8 /* GroupView.m in Sources */,
 				BB63F5B61C2CC7A300A042E8 /* GTMBase64.m in Sources */,
@@ -1996,6 +2017,7 @@
 				BB63F5D01C2CC7A300A042E8 /* MJRefreshGifHeader.m in Sources */,
 				BB63F5E21C2CC7A300A042E8 /* UIWindow+RESideMenuExtensions.m in Sources */,
 				BB1661861C3D029200D318BE /* MBProgressHUD+Add.m in Sources */,
+				BBF89BE51C51BE8D000F8EFC /* KxMovieDecoder.m in Sources */,
 				BB63F6111C2CC7A300A042E8 /* HotViewController.m in Sources */,
 				BB63F5C01C2CC7A300A042E8 /* LivePlayViewController.m in Sources */,
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
@@ -2005,6 +2027,7 @@
 				BB88F3101C3FB22F00C1F8D9 /* TeacherModel.m in Sources */,
 				BB63F60D1C2CC7A300A042E8 /* RoomListInfo.m in Sources */,
 				BB1661761C3CE0B800D318BE /* RegisterService.m in Sources */,
+				BBF89BE41C51BE8D000F8EFC /* KxAudioManager.m in Sources */,
 				BB63F5AF1C2CC7A300A042E8 /* FMDatabaseAdditions.m in Sources */,
 				BB63F5B21C2CC7A300A042E8 /* FMResultSet.m in Sources */,
 				BB04368A1C4E295900A162A8 /* IdeaModel.m in Sources */,
@@ -2033,6 +2056,7 @@
 				BB63F5FF1C2CC7A300A042E8 /* EmojiTextAttachment.m in Sources */,
 				BB63F5DE1C2CC7A300A042E8 /* REBackgroundView.m in Sources */,
 				BB63F5B11C2CC7A300A042E8 /* FMDatabaseQueue.m in Sources */,
+				BBF89BE61C51BE8D000F8EFC /* KxMovieGLView.m in Sources */,
 				BBE56C5B1C4FD5EB0030E050 /* HistoryTextModel.m in Sources */,
 				BB63F5EA1C2CC7A300A042E8 /* SDWebImageManager.m in Sources */,
 				BBE56C581C4FA1B10030E050 /* IdeaDetailRePly.m in Sources */,

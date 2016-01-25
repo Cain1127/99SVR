@@ -14,4 +14,5 @@
 
 - (void)addEvent:(void (^)(id sender))handler;
 
+- (void)setBtnSelect:(NSInteger)tag;
 @end

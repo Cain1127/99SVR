@@ -24,6 +24,9 @@
 
 @property (nonatomic,copy) NSString *strContent;
 
+@property (nonatomic) byte type;
+
 - (id)initWithChatResp:(CMDTextLiveChatReplyRes_t *)resp;
 
+- (id)initWIthChatReplyResp:(CMDTextRoomLiveChatRes_t*)resp;
 @end

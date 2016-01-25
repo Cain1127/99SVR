@@ -8,9 +8,9 @@
 
 #import "TextViewController.h"
 #import "HotTextView.h"
+#import "TextTcpSocket.h"
 #import "TeacherModel.h"
 #import "TextHomeViewController.h"
-
 #import "TextLivingCell.h"
 
 @interface TextViewController ()<UITableViewDataSource,UITableViewDelegate,HotTeachDelegate>
@@ -157,7 +157,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    TextTcpSocket *socket = [TextTcpSocket sharedTextTcpSocket];
+    [socket connectRoom:@"80001"];
+    TextHomeViewController *textHome = [[TextHomeViewController alloc] init];
+    [self presentViewController:textHome animated:YES completion:nil];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -168,8 +171,11 @@
 #pragma mark hotViewDelegate
 - (void)clickTeach:(TeacherModel *)teach
 {
+    TextTcpSocket *socket = [TextTcpSocket sharedTextTcpSocket];
+    [socket connectRoom:@"80001"];
     TextHomeViewController *textHome = [[TextHomeViewController alloc] init];
     [self presentViewController:textHome animated:YES completion:nil];
 }
+
 
 @end

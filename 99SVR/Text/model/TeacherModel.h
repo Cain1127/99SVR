@@ -12,7 +12,7 @@
 
 @property (nonatomic,copy) NSString *strContent;
 @property (nonatomic,copy) NSString *strImg;
-@property (nonatomic) NSInteger zans;//赞
+@property (nonatomic) int64_t zans;//赞
 @property (nonatomic,copy) NSString *strName;//讲师昵称
 @property (nonatomic) int vcbid;
 @property (nonatomic) int userid;
