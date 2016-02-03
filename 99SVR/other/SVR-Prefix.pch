@@ -1,0 +1,70 @@
+//
+//  SVR.pch
+//  99SVR
+//
+//  Created by xia zhonglin  on 12/7/15.
+//  Copyright © 2015 xia zhonglin . All rights reserved.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warningThis project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#define    kUSER_INFO_MAX_LENGTH   64
+#import "UtilsMacro.h"
+#import "PubDefine.h"
+#import "PubNotification.h"
+#import "Common.h"
+#import "UIView+Extension.h"
+#import "ImportHeader.h"
+
+
+#define UIColorFromRGBHex(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
+#define SOCKET_READ_LENGTH     1
+#define SOCKET_READ_DATA       2
+
+//播放错误信息提示
+typedef enum {
+    VideoPlayErrorTypeInput,
+    VideoPlayErrorTypeSDLError,
+    VideoPlayErrorTypeInitError,
+    VideoPlayErrorTypeHDError
+} VideoPlayErrorType;
+//播放状态
+
+typedef enum {
+    VideoPlayStatePlaying = 10000,
+    VideoPlayStatePause,
+    VideoPlayStateStop
+} VideoPlayState;
+
+#endif
+
+/*
+1.LBS策略修改--完成
+2.文字直播接口--
+3.显示修改
+4.图片内容修改--完成
+5.首页、首页接口--
+6.收藏新页面--完成
+7.
+
+[UserInfo sharedUserInfo].nUserId = 1764964;
+[UserInfo sharedUserInfo].strPwd = @"123456";
+[UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:@"123456"];
+ 
+lipo -create armv7/lib/libavcodec.a arm64/lib/libavcodec.a -output all/libavcodec.a
+lipo -create armv7/lib/libavfilter.a arm64/lib/libavfilter.a -output all/libavfilter.a
+lipo -create armv7/lib/libavformat.a arm64/lib/libavformat.a -output all/libavformat.a
+lipo -create armv7/lib/libavutil.a arm64/lib/libavutil.a -output all/libavutil.a
+lipo -create armv7/lib/libswresample.a arm64/lib/libswresample.a -output all/libswresample.a
+lipo -create armv7/lib/libswscale.a arm64/lib/libswscale.a -output all/libswscale.a
+lipo -create armv7/lib/libavdevice.a arm64/lib/libavdevice.a -output all/libavdevice.a
+
+*/
