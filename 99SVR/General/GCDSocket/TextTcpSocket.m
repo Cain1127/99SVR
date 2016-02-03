@@ -24,8 +24,6 @@
 #import "TeacherModel.h"
 
 #define _PRODUCT_CORE_MESSAGE_VER_   10690001
-#define SOCKET_READ_LENGTH     1
-#define SOCKET_READ_DATA       2
 
 #define kUserInfoId [UserInfo sharedUserInfo].nUserId
 
@@ -701,9 +699,9 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     _teacher.strName = [NSString stringWithCString:notify->teacheralias encoding:GBK_ENCODING];
     _teacher.strContent = [NSString stringWithCString:notify->content encoding:GBK_ENCODING];
     
-//    [self reqTextRoomList:0 count:20 type:2];
-//    [self reqTextRoomList:0 count:20 type:1];
-    [self reqHistoryList:0 count:20];
+//    [self reqTextRoomList:0 count:20 type:2];//请求今日重点信息
+    [self reqTextRoomList:0 count:20 type:1];//请求文字直播信息
+//    [self reqHistoryList:0 count:20];
 //    [self reqDayHistoryList:0 count:20 time:[@"20160122" intValue] teacher:1680014];
 }
 
@@ -952,7 +950,6 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
-//    DLog(@"收到字节:%zi",data.length);
     switch(tag)
     {
         case SOCKET_READ_LENGTH:
@@ -982,9 +979,9 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
             memcpy(p+sizeof(int32), [data bytes], data.length);
             [self getSocketHead:cBuf len:(int32)(data.length+sizeof(int32))];
         }
-            break;
+        break;
         default:
-            break;
+        break;
     }
 }
 

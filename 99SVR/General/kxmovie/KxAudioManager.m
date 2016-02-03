@@ -307,53 +307,36 @@ static OSStatus renderCallback (void *inRefCon, AudioUnitRenderActionFlags	*ioAc
         memset(ioData->mBuffers[iBuffer].mData, 0, ioData->mBuffers[iBuffer].mDataByteSize);
     }
     
-    if (_playing && _outputBlock ) {
-    
-        // Collect data to render from the callbacks
+    if (_playing && _outputBlock )
+    {
         _outputBlock(_outData, numFrames, _numOutputChannels);
-        
-        // Put the rendered data into the output buffer
         if (_numBytesPerSample == 4) // then we've already got floats
         {
             float zero = 0.0;
-            
-            for (int iBuffer=0; iBuffer < ioData->mNumberBuffers; ++iBuffer) {
-                
+            for (int iBuffer=0; iBuffer < ioData->mNumberBuffers; ++iBuffer)
+            {
                 int thisNumChannels = ioData->mBuffers[iBuffer].mNumberChannels;
-                
-                for (int iChannel = 0; iChannel < thisNumChannels; ++iChannel) {
+                for (int iChannel = 0; iChannel < thisNumChannels; ++iChannel)
+                {
                     vDSP_vsadd(_outData+iChannel, _numOutputChannels, &zero, (float *)ioData->mBuffers[iBuffer].mData, thisNumChannels, numFrames);
                 }
             }
         }
         else if (_numBytesPerSample == 2) // then we need to convert SInt16 -> Float (and also scale)
         {
-//            dumpAudioSamples(@"Audio frames decoded by FFmpeg:\n",
-//                             _outData, @"% 12.4f ", numFrames, _numOutputChannels);
 
             float scale = (float)INT16_MAX;
             vDSP_vsmul(_outData, 1, &scale, _outData, 1, numFrames*_numOutputChannels);
-            
-#ifdef DUMP_AUDIO_DATA
-            DLog(@"Buffer %u - Output Channels %u - Samples %u",
-                          (uint)ioData->mNumberBuffers, (uint)ioData->mBuffers[0].mNumberChannels, (uint)numFrames);
-#endif
-
             for (int iBuffer=0; iBuffer < ioData->mNumberBuffers; ++iBuffer) {
                 
                 int thisNumChannels = ioData->mBuffers[iBuffer].mNumberChannels;
                 
-                for (int iChannel = 0; iChannel < thisNumChannels; ++iChannel) {
+                for (int iChannel = 0; iChannel < thisNumChannels; ++iChannel)
+                {
                     vDSP_vfix16(_outData+iChannel, _numOutputChannels, (SInt16 *)ioData->mBuffers[iBuffer].mData+iChannel, thisNumChannels, numFrames);
                 }
-#ifdef DUMP_AUDIO_DATA
-                dumpAudioSamples(@"Audio frames decoded by FFmpeg and reformatted:\n",
-                                 ((SInt16 *)ioData->mBuffers[iBuffer].mData),
-                                 @"% 8d ", numFrames, thisNumChannels);
-#endif
             }
-            
-        }        
+        }
     }
 
     return noErr;

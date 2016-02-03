@@ -19,6 +19,7 @@
 @interface FinanceOnlineVedioController()<UITableViewDelegate, UITableViewDataSource>
 {
     NSMutableDictionary *_groupStatus;
+    
 }
 //@property(nonatomic, strong) UITableView *tableView;
 @end
@@ -213,15 +214,15 @@
     __weak FinanceOnlineVedioController *__self =self;
     dispatch_async(dispatch_get_main_queue(),
     ^{
+        RoomViewController *roomView = [[RoomViewController alloc] init];
+        [__self presentViewController:roomView animated:YES completion:nil];
+        [__self.view hideToastActivity];
+    });
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
         [NSObject cancelPreviousPerformRequestsWithTarget:__self];
     });
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [__self.view hideToastActivity];
-        RoomViewController *roomView = [[RoomViewController alloc] init];
-        [__self presentViewController:roomView animated:YES completion:nil];
-    });   
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

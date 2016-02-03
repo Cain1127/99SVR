@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "LivePlayViewController.h"
 #import "LSTcpSocket.h"
 #import "UserInfo.h"
 #import "WWSideslipViewController.h"
@@ -38,6 +39,7 @@
     //友盟
     [MobClick startWithAppkey:@"568388ebe0f55a1537000bfa" reportPolicy:BATCH channelId:@""];
     sleep(1);
+//    [[TestMedia sharedTestMedia] connectIpAndPort:@"121.12.118.32" port:819];
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_window makeKeyAndVisible];
     leftView = [[LeftViewController alloc] init];
@@ -45,6 +47,11 @@
     _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
     [_window setRootViewController:_sides];
     _sides.speedf = 0.5;
+//    LivePlayViewController *playView = [[LivePlayViewController alloc] init];
+//    [_window setRootViewController:[[TestPlayViewController alloc] init]];
+//    [_window setRootViewController:[[TestAudioFileViewController alloc] init]];
+//    [_window setRootViewController:[[LivePlayViewController alloc] init]];
+    [_window setRootViewController:_sides];
     return YES;
 }
 

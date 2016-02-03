@@ -280,15 +280,12 @@ static int interrupt_callback(void *ctx);
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface KxMovieFrame()
-@property (readwrite, nonatomic) CGFloat position;
-@property (readwrite, nonatomic) CGFloat duration;
 @end
 
 @implementation KxMovieFrame
 @end
 
 @interface KxAudioFrame()
-@property (readwrite, nonatomic, strong) NSData *samples;
 @end
 
 @implementation KxAudioFrame
@@ -296,8 +293,6 @@ static int interrupt_callback(void *ctx);
 @end
 
 @interface KxVideoFrame()
-@property (readwrite, nonatomic) NSUInteger width;
-@property (readwrite, nonatomic) NSUInteger height;
 @end
 
 @implementation KxVideoFrame
@@ -305,8 +300,6 @@ static int interrupt_callback(void *ctx);
 @end
 
 @interface KxVideoFrameRGB ()
-@property (readwrite, nonatomic) NSUInteger linesize;
-@property (readwrite, nonatomic, strong) NSData *rgb;
 @end
 
 @implementation KxVideoFrameRGB
@@ -345,9 +338,6 @@ static int interrupt_callback(void *ctx);
 @end
 
 @interface KxVideoFrameYUV()
-@property (readwrite, nonatomic, strong) NSData *luma;
-@property (readwrite, nonatomic, strong) NSData *chromaB;
-@property (readwrite, nonatomic, strong) NSData *chromaR;
 @end
 
 @implementation KxVideoFrameYUV
@@ -355,7 +345,6 @@ static int interrupt_callback(void *ctx);
 @end
 
 @interface KxArtworkFrame()
-@property (readwrite, nonatomic, strong) NSData *picture;
 @end
 
 @implementation KxArtworkFrame
@@ -385,7 +374,6 @@ static int interrupt_callback(void *ctx);
 @end
 
 @interface KxSubtitleFrame()
-@property (readwrite, nonatomic, strong) NSString *text;
 @end
 
 @implementation KxSubtitleFrame
@@ -906,21 +894,19 @@ static int interrupt_callback(void *ctx);
                                         codecCtx->sample_rate,
                                         0,
                                         NULL);
-        
-        if (!swrContext ||
-            swr_init(swrContext)) {
-            
+        if (!swrContext || swr_init(swrContext))
+        {
             if (swrContext)
                 swr_free(&swrContext);
-             avcodec_close(codecCtx);
-
+            avcodec_close(codecCtx);
             return kxMovieErroReSampler;
         }
     }
     
     _audioFrame = av_frame_alloc();
 
-    if (!_audioFrame) {
+    if (!_audioFrame)
+    {
         if (swrContext)
             swr_free(&swrContext);
         avcodec_close(codecCtx);
@@ -1242,7 +1228,8 @@ static int interrupt_callback(void *ctx);
         
     } else {
     
-        if (_audioCodecCtx->sample_fmt != AV_SAMPLE_FMT_S16) {
+        if (_audioCodecCtx->sample_fmt != AV_SAMPLE_FMT_S16)
+        {
             NSAssert(false, @"bucheck, audio format is invalid");
             return nil;
         }
@@ -1263,11 +1250,10 @@ static int interrupt_callback(void *ctx);
     frame.duration = av_frame_get_pkt_duration(_audioFrame) * _audioTimeBase;
     frame.samples = data;
     
-    if (frame.duration == 0) {
-        // sometimes ffmpeg can't determine the duration of audio frame
-        // especially of wma/wmv format
-        // so in this case must compute duration
-        frame.duration = frame.samples.length / (sizeof(float) * numChannels * audioManager.samplingRate);
+    if (frame.duration == 0)
+    {
+       // frame.duration = frame.samples.length / (sizeof(float) * numChannels * audioManager.samplingRate);
+        
     }
     
 #if 0

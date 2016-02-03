@@ -49,8 +49,6 @@
 
 #define _PRODUCT_CORE_MESSAGE_VER_   10690001
 
-#define SOCKET_READ_LENGTH     1
-#define SOCKET_READ_DATA       2
 
 @interface LSTcpSocket()<GCDAsyncSocketDelegate>
 {

@@ -11,8 +11,14 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
+#include "libavformat/avformat.h"
+#include "libswscale/swscale.h"
+#include "libswresample/swresample.h"
+#include "libavutil/pixdesc.h"
 
 extern NSString * kxmovieErrorDomain;
+
+static BOOL audioCodecIsSupported(AVCodecContext *audio);
 
 typedef enum {
     
@@ -46,40 +52,40 @@ typedef enum {
 } KxVideoFrameFormat;
 
 @interface KxMovieFrame : NSObject
-@property (readonly, nonatomic) KxMovieFrameType type;
-@property (readonly, nonatomic) CGFloat position;
-@property (readonly, nonatomic) CGFloat duration;
+@property (nonatomic) KxMovieFrameType type;
+@property ( nonatomic) CGFloat position;
+@property ( nonatomic) CGFloat duration;
 @end
 
 @interface KxAudioFrame : KxMovieFrame
-@property (readonly, nonatomic, strong) NSData *samples;
+@property ( nonatomic, strong) NSData *samples;
 @end
 
 @interface KxVideoFrame : KxMovieFrame
-@property (readonly, nonatomic) KxVideoFrameFormat format;
-@property (readonly, nonatomic) NSUInteger width;
-@property (readonly, nonatomic) NSUInteger height;
+@property ( nonatomic) KxVideoFrameFormat format;
+@property ( nonatomic) NSUInteger width;
+@property ( nonatomic) NSUInteger height;
 @end
 
 @interface KxVideoFrameRGB : KxVideoFrame
-@property (readonly, nonatomic) NSUInteger linesize;
-@property (readonly, nonatomic, strong) NSData *rgb;
+@property ( nonatomic) NSUInteger linesize;
+@property ( nonatomic, strong) NSData *rgb;
 - (UIImage *) asImage;
 @end
 
 @interface KxVideoFrameYUV : KxVideoFrame
-@property (readonly, nonatomic, strong) NSData *luma;
-@property (readonly, nonatomic, strong) NSData *chromaB;
-@property (readonly, nonatomic, strong) NSData *chromaR;
+@property ( nonatomic, strong) NSData *luma;
+@property ( nonatomic, strong) NSData *chromaB;
+@property ( nonatomic, strong) NSData *chromaR;
 @end
 
 @interface KxArtworkFrame : KxMovieFrame
-@property (readonly, nonatomic, strong) NSData *picture;
+@property ( nonatomic, strong) NSData *picture;
 - (UIImage *) asImage;
 @end
 
 @interface KxSubtitleFrame : KxMovieFrame
-@property (readonly, nonatomic, strong) NSString *text;
+@property ( nonatomic, strong) NSString *text;
 @end
 
 typedef BOOL(^KxMovieDecoderInterruptCallback)();

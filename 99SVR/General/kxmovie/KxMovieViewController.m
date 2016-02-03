@@ -349,11 +349,12 @@ static NSMutableDictionary * gHistory;
     
     self.playing = NO;
     _disableUpdateHUD = YES;
+    
     [self enableAudio:NO];
     
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void)
+    {
         [self updatePosition:position playMode:playMode];
     });
 }
@@ -479,25 +480,20 @@ static NSMutableDictionary * gHistory;
 #ifdef DUMP_AUDIO_DATA
                         DLog(@"Audio frame position: %f", frame.position);
 #endif
-                        if (_decoder.validVideo) {
-                        
+                        if (_decoder.validVideo)
+                        {
                             const CGFloat delta = _moviePosition - frame.position;
-                            
                             if (delta < -0.1) {
-                                
                                 memset(outData, 0, numFrames * numChannels * sizeof(float));
                                 break; // silence and exit
                             }
-                            
                             [_audioFrames removeObjectAtIndex:0];
-                            
                             if (delta > 0.1 && count > 1) {
-                                
                                 continue;
                             }
-                            
-                        } else {
-                            
+                        }
+                        else
+                        {
                             [_audioFrames removeObjectAtIndex:0];
                             _moviePosition = frame.position;
                             _bufferedDuration -= frame.duration;
@@ -524,8 +520,9 @@ static NSMutableDictionary * gHistory;
                 else
                     _currentAudioFrame = nil;                
                 
-            } else {
-                
+            }
+            else
+            {
                 memset(outData, 0, numFrames * numChannels * sizeof(float));
                 break;
             }
@@ -536,11 +533,9 @@ static NSMutableDictionary * gHistory;
 - (void) enableAudio: (BOOL) on
 {
     id<KxAudioManager> audioManager = [KxAudioManager audioManager];
-            
     if (on && _decoder.validAudio) {
-                
-        audioManager.outputBlock = ^(float *outData, UInt32 numFrames, UInt32 numChannels) {
-            
+        audioManager.outputBlock = ^(float *outData, UInt32 numFrames, UInt32 numChannels)
+        {
             [self audioCallbackFillData: outData numFrames:numFrames numChannels:numChannels];
         };
         

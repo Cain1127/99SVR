@@ -20,7 +20,6 @@
 #import "EmojiTextAttachment.h"
 #import "UIImage+animatedGIF.h"
 #import "UserInfo.h"
-#import "KxMovieViewController.h"
 #import "RoomUser.h"
 #import "RoomTitleView.h"
 #import <DTCoreText/DTCoreText.h>
@@ -68,8 +67,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 
 @property (nonatomic,strong) NSCache *cellCache;
 @property (nonatomic,strong) NSMutableDictionary *dictIcon;
-//@property (nonatomic,strong) LivePlayViewController *ffPlay;
-@property (nonatomic,strong) KxMovieViewController *ffPlay;
+@property (nonatomic,strong) LivePlayViewController *ffPlay;
 @property (nonatomic,strong) UIButton *btnRight;
 @property (nonatomic,assign) CGFloat fChatHeight;
 @property (nonatomic,strong) RoomTitleView *group;
@@ -114,10 +112,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 {
     [_ffPlay stop];
     [[LSTcpSocket sharedLSTcpSocket] exit_Room:YES];
-    [self dismissViewControllerAnimated:YES completion:
-     ^{
-         
-     }];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)colletRoom
@@ -132,9 +127,9 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
             {
                 __weak RoomViewController *__self = self;
                 dispatch_main_async_safe(
-                               ^{
-                                   [__self.btnRight setSelected:YES];
-                               });
+                ^{
+                     [__self.btnRight setSelected:YES];
+                });
                 break;
             }
         }
@@ -196,8 +191,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)initUIHead
 {
     //设置初始化_ffPlay
-//    _ffPlay = [[LivePlayViewController alloc] init];
-    _ffPlay = [[KxMovieViewController alloc] init];
+    _ffPlay = [[LivePlayViewController alloc] init];
+//    _ffPlay = [[KxMovieViewController alloc] init];
     [self.view insertSubview:_ffPlay.view atIndex:1];
     _ffPlay.view.frame = Rect(0, 20, kScreenWidth, kScreenHeight);
     
@@ -455,28 +450,34 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 //    }
 //    else
 //    {
-//        __weak RoomViewController *__self = self;
-//        dispatch_async(room_gcd,
-//        ^{
-//             [__self startPlay];
-//        });
-//    }
+    __weak RoomViewController *__self = self;
+    dispatch_async(dispatch_get_global_queue(0, 0),^{
+        [__self startNewPlay];
+    });
+}
+
+- (void)startNewPlay
+{
+    NSArray *aryUser = [LSTcpSocket sharedLSTcpSocket].aryUser;
+    for (RoomUser *user in aryUser)
+    {
+        if ([user isOnMic])
+        {
+            [_ffPlay startPlayRoomId:[[[LSTcpSocket sharedLSTcpSocket] getRoomId] intValue] user:user.m_nUserId];
+            return ;
+        }
+    }
+    __weak LivePlayViewController *__ffPlay = _ffPlay;
+    dispatch_main_async_safe(^{
+        
+                             [__ffPlay setNullMic];
+    });
 }
 
 - (void)startPlay
 {
+    DLog(@"新的调用");
     int nMicId = [LSTcpSocket sharedLSTcpSocket].nMId;
-    if(nMicId <=0)
-    {
-//        __weak LivePlayViewController *__fsPlay = _ffPlay;
-        __weak KxMovieViewController *__fsPlay = _ffPlay;
-        dispatch_main_async_safe(
-        ^{
-            [__fsPlay setNullMic];
-        });
-        return ;
-    }
-//    if (_ffPlay.videoPlayState == VideoPlayStatePlaying || _ffPlay.videoPlayState == VideoPlayStatePause)
     if (_ffPlay.playing)
     {
         DLog(@"重新加载");
@@ -507,8 +508,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     __weak RoomViewController *__self = self;
     [_group addEvent:^(id sender)
      {
-//         [__self groupEventInfo:(UIButton *)sender];
-         [__self switchBtn:((UIButton *)sender).tag];
+         [__self switchBtn:(int)((UIButton *)sender).tag];
      }];
     UITapGestureRecognizer* singleRecogn;
     
@@ -524,43 +524,12 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
                    });
     _nTag = 1;
     [self switchBtn:1];
-    UISwipeGestureRecognizer *recognizer;
-    recognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeFrom:)];
-    [recognizer setDirection:(UISwipeGestureRecognizerDirectionRight)];
-    [[self view] addGestureRecognizer:recognizer];
-    
-    recognizer = nil;
-    recognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeFrom:)];
-    [recognizer setDirection:(UISwipeGestureRecognizerDirectionLeft)];
-    [[self view] addGestureRecognizer:recognizer];
-    
     //    dispatch_async(dispatch_get_global_queue(0, 0),
     //    ^{
     //        [__self startPlay];
     //    });
     fTempWidth = [@"热门推荐" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}].width;
     [self setBluePointX:0];
-}
-
-- (void)handleSwipeFrom:(UISwipeGestureRecognizer *)recognizer
-{
-    if(recognizer.direction==UISwipeGestureRecognizerDirectionLeft)
-    {
-        NSLog(@"swipe left");
-        if (_nTag<=2)
-        {
-            [self switchBtn:(int)(_nTag+1)];
-        }
-    }
-    if(recognizer.direction==UISwipeGestureRecognizerDirectionRight)
-    {
-        
-        NSLog(@"swipe right");
-        if (_nTag>1)
-        {
-            [self switchBtn:(int)(_nTag-1)];
-        }
-    }
 }
 
 #pragma mark 双击事件  切换屏幕
@@ -628,8 +597,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     int nHeight = kScreenHeight > kScreenWidth ? kScreenWidth : kScreenHeight;
     
     _ffPlay.view.frame = Rect(0, 0, nWidth, nHeight);
-//    _ffPlay.glView.frame = Rect(0, 0, nWidth, nHeight);
-    _ffPlay.imageView.frame = Rect(0, 0, nWidth, nHeight);
+    _ffPlay.glView.frame = Rect(0, 0, nWidth, nHeight);
+//    _ffPlay.imageView.frame = Rect(0, 0, nWidth, nHeight);
     
     _topHUD.frame = Rect(0, 0, nWidth, 44);
     
@@ -661,8 +630,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     _btnRight.frame = Rect(kScreenWidth-50, 20, 44, 44);
     _downHUD.frame = Rect(0, kVideoImageHeight-44, kScreenWidth, 44);
     _ffPlay.view.frame = Rect(0, 20, kScreenWidth, kScreenHeight);
-//    _ffPlay.glView.frame = Rect(0,1,kScreenWidth, kVideoImageHeight);
-    _ffPlay.imageView.frame = Rect(0,1,kScreenWidth, kVideoImageHeight);
+    _ffPlay.glView.frame = Rect(0,1,kScreenWidth, kVideoImageHeight);
+//    _ffPlay.imageView.frame = Rect(0,1,kScreenWidth, kVideoImageHeight);
     _group.hidden = NO;
     downView.hidden = NO;
     _lblBlue.hidden = NO;
@@ -678,20 +647,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     }
     return YES;
 }
-
-#pragma mark ViewLayout
-//- (void)viewDidLayoutSubviews
-//{
-//    [super viewDidLayoutSubviews];
-//    if(_group.hidden)
-//    {
-//        [self verticalViewControl];
-//    }
-//    else
-//    {
-//        [self horizontalViewControl];
-//    }
-//}
 
 - (void)closeKeyBoard
 {
@@ -882,8 +837,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     {
         [_ffPlay stop];
     }
-//    __weak LivePlayViewController *__ffPlay = _ffPlay;
-    __weak KxMovieViewController *__ffPlay = _ffPlay;
+    __weak LivePlayViewController *__ffPlay = _ffPlay;
+//    __weak KxMovieViewController *__ffPlay = _ffPlay;
     dispatch_main_async_safe(
     ^{
         [__ffPlay setNullMic];
@@ -907,7 +862,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)comeBack
 {
     __weak RoomViewController *__self =self;
-    __weak KxMovieViewController *__ffPlay = _ffPlay;
+    __weak LivePlayViewController *__ffPlay = _ffPlay;
     dispatch_main_async_safe(
                    ^{
                        [__ffPlay setDefaultImg];
@@ -1107,7 +1062,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         else if(tableView == _chatView && [LSTcpSocket sharedLSTcpSocket].aryChat.count > indexPath.row)
         {
             cacheKey =[NSString stringWithFormat:@"chatView-%zi", indexPath.row];
-        
         }
         else
         {
@@ -1126,7 +1080,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         }
         if([_cellCache objectForKey:cacheKey])
         {
-            DLog(@"[[_cellCache objectForKey:cacheKey]:%@,strkey:%@",[_cellCache objectForKey:cacheKey],cacheKey);
             return [[_cellCache objectForKey:cacheKey] floatValue];
         }
         else
@@ -1163,18 +1116,18 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     NSString *cacheKey;
     NSString *strInfo;
     ZLCoreTextCell *cell = nil;
-    NSString *strIdentifier;
+    static NSString *strIdentifier= @"TableViewRomm";
     if(tableView == _noticeView && [LSTcpSocket sharedLSTcpSocket].aryNotice.count > indexPath.section)
     {
         cacheKey =[NSString stringWithFormat:@"noticeView-%zi", indexPath.section];
         strInfo = [[LSTcpSocket sharedLSTcpSocket].aryNotice objectAtIndex:indexPath.section];
-        strIdentifier = @"noticeViewIdentifier";
+//        strIdentifier = @"noticeViewIdentifier";
     }
     else if(tableView == _chatView && [LSTcpSocket sharedLSTcpSocket].aryChat.count > indexPath.row)
     {
         cacheKey =[NSString stringWithFormat:@"chatView-%zi", indexPath.row];
         strInfo = [[LSTcpSocket sharedLSTcpSocket].aryChat objectAtIndex:indexPath.row];
-        strIdentifier = @"chatviewideintifier";
+//        strIdentifier = @"chatviewideintifier";
     }
     else if(tableView == _priChatView )
     {
@@ -1185,11 +1138,11 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         if (aryCount.count>indexPath.row)
         {
             strInfo = [aryCount objectAtIndex:indexPath.row];
-            strIdentifier = @"prichatidentifier";
+//            strIdentifier = @"prichatidentifier";
         }
         else
         {
-            ZLCoreTextCell *cell = [[ZLCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"roomviewcontroller"];
+            ZLCoreTextCell *cell = [[ZLCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
             cacheKey = [NSString stringWithFormat:@"priChat--%zi",indexPath.row];
             [_cellCache setObject:NSStringFromFloat(.0f) forKey:cacheKey];
             return cell;

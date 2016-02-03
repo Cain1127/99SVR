@@ -277,7 +277,7 @@
     
     NSString *strUrl = @"http://api.99ducaijing.com/mapi/register";
     
-    NSDictionary *parameters = @{@"type":[NSNumber numberWithInt:3],@"account":strName,@"pwd":strPwd,@"codeid":_strCode,@"code":strCode};
+    NSDictionary *parameters = @{@"type":[NSNumber numberWithInt:2],@"account":strName,@"pwd":strPwd,@"codeid":_strCode,@"code":strCode};
     
     __weak RegisterViewController *__self = self;
     __weak NSString *__strPwd = strPwd;
