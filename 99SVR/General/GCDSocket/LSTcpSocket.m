@@ -8,6 +8,7 @@
 
 #import "LSTcpSocket.h"
 #import "cmd_vchat.h"
+#import "NoticeModel.h"
 #import "SDImageCache.h"
 #import "SDWebImageManager.h"
 #import "BaseService.h"
@@ -739,7 +740,14 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
                 memcpy(szTemp, pInfo->content, pInfo->textlen);
                 szTemp[pInfo->textlen]='\0';
                 NSString *strInfo = [NSString stringWithCString:szTemp encoding:GBK_ENCODING];
-                [_aryBuffer addObject:strInfo];
+                NoticeModel *notice = [[NoticeModel alloc] init];
+                notice.strContent = strInfo;
+                notice.strType = @"<span coloc=\"red\">[房间公告]";
+                NSDate *date = [NSDate date];
+                NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+                [fmt setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                notice.strTime = [fmt stringFromDate:date];
+                [_aryBuffer addObject:notice];
                 __weak LSTcpSocket *__self = self;
                 dispatch_async(downGCD,
                 ^{
@@ -879,7 +887,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 {
     if(userId == 0)
     {
-        return @"<span style=\"TEXT-DECORATION:font-size:13px; none;color:#629bff \" href=\"sqchatid://0\" value=\"大家\">大家</span>";
+        return @"";
     }
     if(userId == [_strUser intValue])
     {
@@ -908,14 +916,31 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     NSString *strContent = [NSString stringWithCString:msg->content encoding:GBK_ENCODING];
     NSString *strSrcName = [NSString stringWithCString:msg->srcalias encoding:GBK_ENCODING];
     NSString *strFrom = [self getToUser:msg->srcid user:[_rInfo findUser:msg->srcid] name:strSrcName];
-    if (msg->msgtype==1)
+    if (msg->msgtype==1 || msg->msgtype==15)
     {
-        NSString *strInfo = [NSString stringWithFormat:@"房间广播:   %@ &nbsp;&nbsp;%@",strFrom,strContent];
-        strInfo = [DecodeJson replaceEmojiString:strInfo];
-        DLog(@"notice:%@",strInfo);
-        [_aryBuffer addObject:strInfo];
+        NSString *strInfo=nil;
+        NoticeModel *notice = [[NoticeModel alloc] init];
+        if (msg->msgtype==1)
+        {
+            strInfo = [DecodeJson replaceEmojiString:strContent];
+            notice.strContent = strInfo;
+            notice.strType = [[NSString alloc] initWithFormat:@"房间广播-%@",strFrom];
+        }
+        else
+        {
+            strInfo = [NSString stringWithFormat:@"%@ &nbsp;&nbsp;%@",strFrom,strContent];
+            notice.strContent = strInfo;
+            notice.strType = @"悄悄话";
+        }
+        NSDate *date = [NSDate date];
+        NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+        [fmt setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        notice.strTime = [fmt stringFromDate:date];
+        
+        [_aryBuffer addObject:notice];
         __weak LSTcpSocket *__self = self;
-        dispatch_async(downGCD, ^{
+        dispatch_async(downGCD,
+        ^{
             [__self downloadCache];
         });
     }
@@ -940,7 +965,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         strFrom = nil;
         NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[_strUser intValue]];
         //查询是否有对我说的记录
-        if ([strTo rangeOfString:query].location != NSNotFound)
+        if ([strTo rangeOfString:query].location != NSNotFound || [strFrom rangeOfString:query].location != NSNotFound )
         {
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
         }
@@ -1215,7 +1240,8 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 {
     NSString *strChat = [DecodeJson replaceEmojiString:strMsg];
     strChat = [DecodeJson replaceImageString:strChat];
-    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;font-size:13px;COLOR: #629bff \">你</span>"];
+    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;font-size:13px;COLOR: #629bff\" value=\"forme--%d\">你</span>",
+                         [UserInfo sharedUserInfo].nUserId];
     if (nUser!=0)
     {
         RoomUser *user = [_rInfo findUser:nUser];
@@ -1238,6 +1264,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             }
         }
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
 }
 
@@ -1421,46 +1448,42 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     while (_aryBuffer.count)
     {
         NSString *strInfo = nil;
+        NoticeModel *notice = nil;
         @synchronized(_aryBuffer)
         {
-            strInfo = [[NSString alloc] initWithFormat:@"%@",[_aryBuffer objectAtIndex:0]];
+            notice = [_aryBuffer objectAtIndex:0];
+            strInfo = notice.strContent;
             [_aryBuffer removeObjectAtIndex:0];
         }
         NSArray *aryPath = [DecodeJson getSrcPath:strInfo];
-        
         if (aryPath.count>0)
         {
             __weak NSArray *__aryPath = aryPath;
-            [_dictDownLoad setObject:strInfo forKey:[aryPath objectAtIndex:0]];
+            [_dictDownLoad setObject:notice forKey:[aryPath objectAtIndex:0]];
             __weak LSTcpSocket *__self = self;
             dispatch_apply(1,queue, ^(size_t index)
             {
                 NSString *strKey = [__aryPath objectAtIndex:0];
-                [__self downloadSingle:strKey info:[__self.dictDownLoad objectForKey:strKey]];
+                [__self downloadSingle:strKey info:notice];
             });
         }
         else
         {
-            [self pushNotice:nil info:strInfo path:nil];
+            [self pushNotice:nil info:notice path:nil];
         }
         strInfo = nil;
     }
     bCache = NO;
 }
 
-- (void)getCacheImg:(NSString *)strCache
-{
-    
-}
-
-- (void)downloadSingle:(NSString *)strPath info:(NSString *)strInfo
+- (void)downloadSingle:(NSString *)strPath info:(NoticeModel *)_notice
 {
     __weak LSTcpSocket *__self = self;
-    __weak NSString *__strInfo = strInfo;
+    __weak NoticeModel *__notice = _notice;
     UIImage *imageCache = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:strPath];
     if (imageCache)
     {
-        [self pushNotice:imageCache info:strInfo path:strPath];
+        [self pushNotice:imageCache info:_notice path:strPath];
     }
     else
     {
@@ -1471,11 +1494,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
              //下载完成后进入这里执行
              if (finished)
              {
-                 [__self pushNotice:image info:__strInfo path:__strPath];
+                 [__self pushNotice:image info:__notice path:__strPath];
              }
              else
              {
-                 [__self pushNotice:nil info:__strInfo path:nil];
+                 [__self pushNotice:nil info:__notice path:nil];
              }
              [__self.dictDownLoad removeObjectForKey:__strPath];
          }];
@@ -1483,7 +1506,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     
 }
 
--(void)pushNotice:(UIImage *)image info:(NSString *)strInfo path:(NSString *)strPath
+-(void)pushNotice:(UIImage *)image info:(NoticeModel *)_notice path:(NSString *)strPath
 {
     if (_aryNotice.count>=20)
     {
@@ -1497,9 +1520,10 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     }
     if (image==nil)
     {
-        if (strInfo)
+        if (_notice)
         {
-            [_aryNotice addObject:strInfo];
+            [_aryNotice addObject:_notice];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
         }
     }
     else
@@ -1516,10 +1540,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             fHeight = (CGFloat)((kScreenWidth-20)/imageSize.width*imageSize.height);
             fWidth = kScreenWidth-20;
         }
-        NSString *strResult = [DecodeJson replaceImageString:strInfo width:fWidth height:fHeight index:0 strTemp:strPath];
+        NSString *strResult = [DecodeJson replaceImageString:_notice.strContent width:fWidth height:fHeight index:0 strTemp:strPath];
         if(strResult)
         {
-            [self.aryNotice addObject:strResult];
+            _notice.strContent = strResult;
+            [self.aryNotice addObject:_notice];
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
         }
     }

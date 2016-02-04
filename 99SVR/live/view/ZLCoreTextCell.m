@@ -14,11 +14,8 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    
-//    _attributedTextContextView = [DTAttributedTextContentView new];
     _lblInfo = [DTAttributedTextView new];
     [self.contentView addSubview:_lblInfo];
-    
     return self;
 }
 

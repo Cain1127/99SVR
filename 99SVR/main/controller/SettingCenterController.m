@@ -93,7 +93,7 @@
     [logoutBtn setTitle:@"退出" forState:UIControlStateNormal];
     [logoutBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [logoutBtn setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateHighlighted];
-    logoutBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
+    logoutBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:logoutBtn];
     logoutBtn.layer.borderColor = kLineColor.CGColor;
     logoutBtn.layer.borderWidth = 0.5f;

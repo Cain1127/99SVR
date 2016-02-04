@@ -81,6 +81,7 @@
     [self initDefaultView];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenKeyBoard)]];
     [self.view setUserInteractionEnabled:YES];
+    [_mySearchBar becomeFirstResponder];
 }
 
 - (void)hiddenKeyBoard

@@ -8,7 +8,7 @@
 
 #import "QCheckBox.h"
 
-#define Q_CHECK_ICON_WH                    (30)
+#define Q_CHECK_ICON_WH                    (15)
 #define Q_ICON_TITLE_MARGIN                (1)
 
 @implementation QCheckBox
@@ -53,7 +53,7 @@
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
-    return CGRectMake(0,0, Q_CHECK_ICON_WH, Q_CHECK_ICON_WH);
+    return CGRectMake(0,contentRect.size.height/2-Q_CHECK_ICON_WH/2, Q_CHECK_ICON_WH, Q_CHECK_ICON_WH);
 }
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect

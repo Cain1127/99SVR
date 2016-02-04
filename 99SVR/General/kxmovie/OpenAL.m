@@ -19,14 +19,16 @@
     if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification]) {
         NSLog(@"Interruption notification received %@!", notification);
         //Check to see if it was a Begin interruption
-        if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]]) {
-            NSLog(@"Interruption began!");
+        if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]])
+        {
             alcMakeContextCurrent(NULL);
             if ([self isPlaying])
             {
                 self.wasInterrupted = YES;
             }
-        } else if([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeEnded]]){
+        }
+        else if([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeEnded]])
+        {
             OSStatus result = [[AVAudioSession sharedInstance] setActive:YES error:nil];
             alcMakeContextCurrent(self.mContext);
             
@@ -37,11 +39,6 @@
             }
         }
     }
-}
-
-- (void)handleMediaServicesReset
-{
-     DLog(@"??????");
 }
 
 - (void)teardownOpenAL
@@ -62,18 +59,11 @@
     if(self=[super init])
     {
        AVAudioSession *session = [AVAudioSession sharedInstance];
-       [session setCategory:AVAudioSessionCategoryAmbient withOptions:AVAudioSessionCategoryOptionAllowBluetooth error:nil];
+       [session setCategory:AVAudioSessionCategoryPlayback error:nil];
        [session setActive: YES error:nil];
-       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAudioSessionEvent:) name:AVAudioSessionInterruptionNotification object:nil];
-        
-       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayBack) name:MESSAGE_ENTER_BACK_VC object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleMediaServicesReset)
-                                                     name:AVAudioSessionMediaServicesWereResetNotification
-                                                   object:nil];
-        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+       [[NSNotificationCenter defaultCenter] addObserver:self
+                                                selector:@selector(onAudioSessionEvent:) name:AVAudioSessionInterruptionNotification object:nil];
         return self;
-        
     }
     return nil;
 }

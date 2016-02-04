@@ -51,13 +51,18 @@
     _listReuqest = [[RoomListRequest alloc] init];
     
     self.tableView.frame = Rect(0, 64, kScreenWidth, kScreenHeight-64);
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initHistoryData) name:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
-    [self initHistoryData];
+
 }
 
 - (void)navBack
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self initHistoryData];
 }
 
 #pragma mark get history

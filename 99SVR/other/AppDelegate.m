@@ -17,8 +17,11 @@
 #import "MobClick.h"
 #import "SVRInitLBS.h"
 #import "IndexViewController.h"
+#import "BaseService.h"
 
-@interface AppDelegate ()
+#define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
+
+@interface AppDelegate ()<UIAlertViewDelegate>
 {
     WWSideslipViewController *_sides;
     IndexViewController *indexView;
@@ -38,7 +41,7 @@
 {
     //友盟
     [MobClick startWithAppkey:@"568388ebe0f55a1537000bfa" reportPolicy:BATCH channelId:@""];
-    sleep(1);
+    [self onCheckVersion];
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_window makeKeyAndVisible];
     leftView = [[LeftViewController alloc] init];
@@ -47,6 +50,41 @@
     [_window setRootViewController:_sides];
     _sides.speedf = 0.5;
     return YES;
+}
+
+-(void)onCheckVersion
+{
+    __weak AppDelegate *__self = self;
+    [BaseService postJSONWithUrl:APP_URL parameters:nil success:^(id responseObject)
+    {
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+        NSArray *infoArray = [dic objectForKey:@"results"];
+        if ([infoArray count])
+        {
+            NSDictionary *releaseInfo = [infoArray objectAtIndex:0];
+            NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+            NSString *currentVersion = [[infoDic objectForKey:@"CFBundleShortVersionString"] stringByReplacingOccurrencesOfString:@"." withString:@""];
+            NSString *lastVersion = [[releaseInfo objectForKey:@"version"] stringByReplacingOccurrencesOfString:@"." withString:@""];
+            CGFloat fLast = [lastVersion intValue] > 100 ? [lastVersion intValue] : [lastVersion intValue]*10;
+            CGFloat fCurrent = [currentVersion intValue] > 100 ? [currentVersion intValue] : [currentVersion intValue]*10;
+            if (fLast>fCurrent)
+            {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"有新的版本更新，是否前往更新？" delegate:__self cancelButtonTitle:@"关闭" otherButtonTitles:@"更新", nil];
+                [alert show];
+            }
+        }
+    } fail:^(NSError *error) {
+        DLog(@"获取失败");
+    }];
+    
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex==1)
+    {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/99-ccai-jing/id1074104620?l=en&mt=8"]];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

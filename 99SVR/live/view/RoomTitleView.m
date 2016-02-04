@@ -15,7 +15,6 @@
 @property (nonatomic,strong) TitleButton *btnFirst;
 @property (nonatomic,strong) TitleButton *btnSecond;
 @property (nonatomic,strong) TitleButton *btnThird;
-//@property (nonatomic,strong) TitleButton *btnFour;
 
 @end
 
@@ -24,6 +23,7 @@
 - (id)initWithFrame:(CGRect)frame ary:(NSArray *)keyName
 {
     self = [super initWithFrame:frame];
+    
     [self setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
     
     UILabel *lblContent = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];

@@ -160,7 +160,7 @@
         // 3.显示日期
         self.updatedTimeLabel.text = [NSString stringWithFormat:@"更新时间：%@", time];
     } else {
-        self.updatedTimeLabel.text = @"latest update：no records!";
+        self.updatedTimeLabel.text = @"最后更新:没有记录!";
     }
 }
 

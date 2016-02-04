@@ -56,21 +56,12 @@
 {
     BOOL isMgr = YES;
     switch (_m_nVipLevel ) {
-        case 21:
-        case 22:
-        case 23:
-        case 24:
-        case 25:
-        case 31:
-        case 32:
-        case 33:
-        case 34:
-        case 35:
-        case 36:
-            isMgr = YES;
+        case 1:
+        case 2:
+            isMgr = NO;
             break;
         default:
-            isMgr = NO;
+            isMgr = YES;
     }
     return isMgr;
 }

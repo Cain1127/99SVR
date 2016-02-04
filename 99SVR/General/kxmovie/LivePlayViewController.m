@@ -93,6 +93,17 @@
     [_smallView setImage:[UIImage imageNamed:@"noVideo"]];
 }
 
+- (id)init
+{
+    if(self = [super init])
+    {
+        nSourceHeight = kVideoImageHeight;
+        nSourceWidth = kScreenWidth;
+        return self;
+    }
+    return nil;
+}
+
 - (void)initDecode
 {
     av_register_all();
@@ -117,7 +128,7 @@
     {
         if (_aryAudio.count==0)
         {
-            [NSThread sleepForTimeInterval:0.03];
+            [NSThread sleepForTimeInterval:0.01];
             continue ;
         }
         NSData *data = nil;
@@ -135,9 +146,9 @@
                 continue;
             }
             int32_t length = returnValue * sizeof(opus_int16) * 2;
-            [_openAL openAudioFromQueue:_out_buffer dataSize:length];
+            [_openAL openAudioFromQueue:(uint8_t*)_out_buffer dataSize:length];
         }
-        [NSThread sleepForTimeInterval:0.01];
+        [NSThread sleepForTimeInterval:0.02];
     }
     [_openAL stopSound];
     [_openAL cleanUpOpenAL];
@@ -359,9 +370,6 @@
 - (BOOL)setupScaler:(AVCodecContext *)pCodecCtx
 {
     [self closeScaler];
-    
-    nSourceWidth = _glView.width;
-    nSourceHeight = _glView.height;
     
     _pictureValid = avpicture_alloc(&_picture,
                                     PIX_FMT_RGB24,

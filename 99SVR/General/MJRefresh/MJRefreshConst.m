@@ -12,8 +12,8 @@ NSString *const MJRefreshContentOffset = @"contentOffset";
 NSString *const MJRefreshContentSize = @"contentSize";
 NSString *const MJRefreshPanState = @"pan.state";
 
-NSString *const MJRefreshHeaderStateIdleText = @"You can drop down to refresh";
-NSString *const MJRefreshHeaderStatePullingText = @"上拉刷新";
+NSString *const MJRefreshHeaderStateIdleText = @"下拉可以刷新";
+NSString *const MJRefreshHeaderStatePullingText = @"下拉刷新";
 NSString *const MJRefreshHeaderStateRefreshingText = @"加载中...";
 
 NSString *const MJRefreshFooterStateIdleText = @"点击加载更多";

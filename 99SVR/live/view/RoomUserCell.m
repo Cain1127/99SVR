@@ -71,10 +71,11 @@
             strMsg = @"putong";
             break;
         default:
-            strMsg = @"zhan";
+            strMsg = @"guan";
             break;
     }
     [imgView setImage:[UIImage imageNamed:strMsg]];
+    
     UIImage *image = [UIImage imageNamed:NSStringFromInt(user.m_nHeadId)];
     if (image)
     {
