@@ -40,6 +40,10 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     //聊天view
     UIView *bodyView;
     UIView *downView;
+    
+    UIView *defaultHeadView;
+    UIView *defaultDownView;
+    
     ChatButton *_btnName;
     UIButton *_btnSend;
     UITextView *_textChat;
@@ -71,7 +75,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 @property (nonatomic,strong) NSCache *cellCache;
 @property (nonatomic,strong) NSMutableDictionary *dictIcon;
 @property (nonatomic,strong) LivePlayViewController *ffPlay;
-//@property (nonatomic,strong) KxMovieViewController *ffPlay;
 @property (nonatomic,strong) UIButton *btnRight;
 @property (nonatomic,strong) UIButton *btnFull;
 @property (nonatomic,assign) CGFloat fChatHeight;
@@ -115,12 +118,19 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 
 - (void)navBack
 {
-    [_ffPlay stop];
-    [[LSTcpSocket sharedLSTcpSocket] exit_Room:YES];
-    [self dismissViewControllerAnimated:YES completion:
-     ^{
-         
-     }];
+    if(!bFull)
+    {
+        [_ffPlay stop];
+        [[LSTcpSocket sharedLSTcpSocket] exit_Room:YES];
+        [self dismissViewControllerAnimated:YES completion:
+         ^{
+             
+         }];
+    }
+    else
+    {
+        [self fullPlayMode];
+    }
 }
 
 - (void)colletRoom
@@ -135,9 +145,9 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
             {
                 __weak RoomViewController *__self = self;
                 dispatch_main_async_safe(
-                               ^{
-                                   [__self.btnRight setSelected:YES];
-                               });
+                ^{
+                   [__self.btnRight setSelected:YES];
+                });
                 break;
             }
         }
@@ -189,8 +199,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     [self closeKeyBoard];
     if(_topHUD.alpha==0)
     {
-        _topHUD.alpha = 0.8;
-        _downHUD.alpha = 0.8;
+        _topHUD.alpha = 1;
+        _downHUD.alpha = 1;
         [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:2.0];
     }
     else
@@ -205,11 +215,14 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     _ffPlay = [[LivePlayViewController alloc] init];
     [self.view insertSubview:_ffPlay.view atIndex:1];
     _ffPlay.view.frame = Rect(0, 20, kScreenWidth, kScreenHeight);
+//    defaultHeadView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 64)];
+//    defaultHeadView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+//    [self.view addSubview:defaultHeadView];
+    
     _topHUD = [[UIView alloc] initWithFrame:CGRectMake(0,0,kScreenWidth,64)];
     _topHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:_topHUD];
-    _topHUD.alpha = 0.5;
-    [self.view setBackgroundColor:UIColorFromRGB(0x00)];
+//    [defaultHeadView setBackgroundColor:UIColorFromRGB(0x00)];
     
     _lblName = [[UILabel alloc] initWithFrame:Rect(50,35,kScreenWidth-100,20)];
     [_lblName setTextAlignment:NSTextAlignmentCenter];
@@ -278,8 +291,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     _noticeView.delegate = self;
     _noticeView.dataSource = self;
     [_noticeView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    _scrollView.contentSize = CGSizeMake(kScreenWidth*3,_scrollView.height);
     
+    _scrollView.contentSize = CGSizeMake(kScreenWidth*3,_scrollView.height);
     _btnGift = [UIButton buttonWithType:UIButtonTypeCustom];
     [bodyView addSubview:_btnGift];
     [_btnGift setFrame:Rect(kScreenWidth-49,_scrollView.height-100, 39, 39)];
@@ -345,7 +358,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         return ;
     }
     __block int __nUserId = toUser;
-    dispatch_async(room_gcd, ^{
+    dispatch_async(room_gcd,
+    ^{
         LSTcpSocket *socket = [LSTcpSocket sharedLSTcpSocket];
         [socket sendChatInfo:@"[$999$]"  toid:__nUserId];
     });
@@ -386,7 +400,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     _tableView.hidden = YES;
     _tableView.tag = 4;
-    //蓝条
     
     _lblBlue = [[UILabel alloc] initWithFrame:Rect(0, _group.y+_group.height-1, 0, 2)];
     [_lblBlue setBackgroundColor:UIColorFromRGB(0x629bff)];
@@ -601,7 +614,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     [_topHUD viewWithTag:2].frame = Rect(0, 0, 44, 44);
     
     _lblName.frame = Rect(50, 12, nWidth-100, 15);
-    _btnRight.frame = Rect(nWidth-50, 10, 44, 44);
+    _btnRight.frame = Rect(nWidth-50, 0, 44, 44);
     
     _downHUD.frame = Rect(0, nHeight-44, nWidth, 44);
     [[_downHUD viewWithTag:1] setFrame:_downHUD.bounds];
@@ -1049,7 +1062,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     if(tableView == _noticeView)
-    return 1;
+    return 10;
     return 0;
 }
 
@@ -1157,17 +1170,20 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     NSString *cacheKey;
     NSString *strInfo;
     ZLCoreTextCell *cell = nil;
-    static NSString *strIdentifier = @"roomviewcontroller";
+    NSString *strIdentifier = nil;
+    
     if(tableView == _noticeView && [LSTcpSocket sharedLSTcpSocket].aryNotice.count > indexPath.section)
     {
         cacheKey =[NSString stringWithFormat:@"noticeView-%zi", indexPath.section];
         NoticeModel *notice = [[LSTcpSocket sharedLSTcpSocket].aryNotice objectAtIndex:indexPath.section];
-        strInfo = [[NSString alloc] initWithFormat:@"%@:%@",notice.strType,notice.strContent];
+        strInfo = [[NSString alloc] initWithFormat:@"%@:<br>%@",notice.strType,notice.strContent];
+        strIdentifier = @"kNoticeIdentifier";
     }
     else if(tableView == _chatView && [LSTcpSocket sharedLSTcpSocket].aryChat.count > indexPath.row)
     {
         cacheKey =[NSString stringWithFormat:@"chatView-%zi", indexPath.row];
         strInfo = [[LSTcpSocket sharedLSTcpSocket].aryChat objectAtIndex:indexPath.row];
+        strIdentifier = @"kChatIdentifier";
     }
     else if(tableView == _priChatView )
     {
@@ -1175,13 +1191,18 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[UserInfo sharedUserInfo].nUserId];
         NSPredicate *pred = TABLEVIEW_ARRAY_PREDICATE(query);
         NSArray *aryCount = [[LSTcpSocket sharedLSTcpSocket].aryChat filteredArrayUsingPredicate:pred];
+        strIdentifier = @"kPriChatIdentifier";
         if (aryCount.count>indexPath.row)
         {
             strInfo = [aryCount objectAtIndex:indexPath.row];
         }
         else
         {
-            ZLCoreTextCell *cell = [[ZLCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:strIdentifier];
+            if (cell==nil)
+            {
+                cell = [[ZLCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
+            }
             cacheKey = [NSString stringWithFormat:@"priChat--%zi",indexPath.row];
             [_cellCache setObject:NSStringFromFloat(.0f) forKey:cacheKey];
             return cell;
@@ -1196,6 +1217,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     {
         cell = [[ZLCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
     }
+    
     cell.lblInfo.attributedTextContentView.delegate = self;
     cell.lblInfo.attributedTextContentView.shouldDrawImages = YES;
     cell.lblInfo.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
@@ -1206,6 +1228,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
     [selectView setBackgroundColor:[UIColor clearColor]];
     cell.selectedBackgroundView = selectView;
+    [cell setNeedsDisplay];
     return cell;
 }
 
@@ -1481,7 +1504,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)setBluePointX:(CGFloat)fPointX
 {
     CGFloat fx = kScreenWidth/3/2-fTempWidth/2+fPointX/kScreenWidth * kScreenWidth/3;
-    [_lblBlue setFrame:Rect(fx,_group.y+_group.height-1,fTempWidth,2)];
+    [_lblBlue setFrame:Rect(fx,_group.y+_group.height-2,fTempWidth,2)];
 }
 
 -(void)textViewDidChange:(UITextView *)textView

@@ -98,6 +98,7 @@ typedef struct _tag_MediaFrameBuffer
 - (void)setEnableVideo:(BOOL)enable
 {
     bVideo = enable;
+    [self send_unregister_tcp:_userid room:_roomid pt:99];
 }
 
 - (void)setEnableAudio:(BOOL)enable

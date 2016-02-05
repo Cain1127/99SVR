@@ -22,7 +22,6 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    
     [_lblInfo setFrame:self.contentView.bounds];
 }
 

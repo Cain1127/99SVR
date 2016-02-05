@@ -15,5 +15,6 @@
 @interface ZLCoreTextCell : UITableViewCell
 
 @property (nonatomic, strong) DTAttributedTextView *lblInfo;
+//@property (nonatomic,strong) UILabel *lblInfo;
 
 @end

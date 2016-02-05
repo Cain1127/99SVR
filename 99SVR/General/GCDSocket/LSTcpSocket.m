@@ -742,7 +742,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
                 NSString *strInfo = [NSString stringWithCString:szTemp encoding:GBK_ENCODING];
                 NoticeModel *notice = [[NoticeModel alloc] init];
                 notice.strContent = strInfo;
-                notice.strType = @"<span coloc=\"red\">[房间公告]";
+                notice.strType = @"<span coloc=\"red\">[房间公告]</span>";
                 NSDate *date = [NSDate date];
                 NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
                 [fmt setDateFormat:@"yyyy-MM-dd HH:mm:ss"];

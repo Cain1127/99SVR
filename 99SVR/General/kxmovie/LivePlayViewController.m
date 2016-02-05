@@ -34,6 +34,8 @@
     dispatch_queue_t audioQueue;
     BOOL paused;
     BOOL bFirst;
+    
+    UILabel *lblText;
 }
 @property (nonatomic) BOOL bVideo;
 @property (nonatomic,strong) OpenAL *openAL;
@@ -81,16 +83,23 @@
     _aryVideo = [NSMutableArray array];
     _aryAudio = [NSMutableArray array];
     [self.view setBackgroundColor:UIColorFromRGB(0x000000)];
-    _smallView = [[UIImageView alloc] initWithFrame:Rect(_glView.width/2-44,_glView.height/2-35, 88, 71)];
-    [self.view addSubview:_smallView];
+
     [self setDefaultImg];
 }
 
 - (void)setDefaultImg
 {
+    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
     [_glView setImage:[UIImage imageNamed:@"live_default"]];
-    _smallView.hidden = NO;
-    [_smallView setImage:[UIImage imageNamed:@"noVideo"]];
+    lblText.hidden = YES;
+}
+
+- (void)setNoVideo
+{
+    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
+    [_glView setImage:[UIImage imageNamed:@"noVideo"]];
+    lblText.hidden = NO;
+    [lblText setText:@"音频模式"];
 }
 
 - (id)init
@@ -188,6 +197,12 @@
 {
     [super viewDidLoad];
     [self frameView];
+    lblText = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-100,150,200,20)];
+    [lblText setTextColor:[UIColor whiteColor]];
+    [self.view addSubview:lblText];
+    [lblText setFont:XCFONT(16)];
+    [lblText setTextAlignment:NSTextAlignmentCenter];
+    
     [self initDecode];
     _media = [[MediaSocket alloc] init];
     __weak LivePlayViewController *__self = self;
@@ -215,14 +230,14 @@
             data = nil;
         }
     };
-    [self setDefaultImg];
 }
 
 - (void)setNullMic
 {
-    [_glView setImage:[UIImage imageNamed:@"live_default"]];
-    _smallView.hidden = NO;
-    [_smallView setImage:[UIImage imageNamed:@"noMic"]];
+    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
+    [_glView setImage:[UIImage imageNamed:@"noMic"]];
+    lblText.hidden = NO;
+    lblText.text = @"没有讲师上麦";
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -274,13 +289,16 @@
     _bVideo = enable;
     if (!enable)
     {
-        [self setDefaultImg];
-        [_aryVideo removeAllObjects];
+        @synchronized(_aryVideo)
+        {
+            [_aryVideo removeAllObjects];
+        }
+        [self setNoVideo];
     }
     else
     {
-        _smallView.hidden = YES;
         __weak LivePlayViewController *__self = self;
+        lblText.hidden = YES;
         dispatch_async(videoQueue,
         ^{
             [__self decodeVideo];
@@ -341,7 +359,6 @@
                 else
                 {
                     [self createVideoFrame];
-
                 }
                 av_free_packet(&packet);
             }
@@ -355,11 +372,6 @@
         avcodec_flush_buffers(_pCodecCtx);
         [self closeScaler];
         [_aryVideo removeAllObjects];
-        __weak LivePlayViewController *__self = self;
-        dispatch_main_async_safe(
-        ^{
-            [__self setDefaultImg];
-        });
     }
 }
 
@@ -418,12 +430,14 @@
         ^{
             if(__self.bVideo)
             {
+                if(__self.glView.height != kVideoImageHeight && self.view.backgroundColor != UIColorFromRGB(0x000000))
+                {
+                    [__self.view setBackgroundColor:UIColorFromRGB(0x000000)];
+                }
                 __self.glView.image = __rgbImage;
             }
         });
-        
     }
-    
 }
 
 - (void) closeScaler
@@ -494,6 +508,8 @@
 {
     [super viewDidLayoutSubviews];
     _smallView.frame = Rect(_glView.width/2-44,_glView.height/2-35, 88, 71);
+    CGFloat originY = _glView.height == kVideoImageHeight ? _glView.height/2+30 : _glView.height/2+40;
+    lblText.frame = Rect(_glView.width/2-100,originY, 200, 20);
 }
 
 #pragma mark AVAudioSession
