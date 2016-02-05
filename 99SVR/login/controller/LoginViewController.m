@@ -62,11 +62,23 @@
     [lblName setFont:XCFONT(17)];
     [self.view setBackgroundColor:RGB(245, 245, 246)];
     
-    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_head"]];
-    [self.view addSubview:logoImageView];
-    [logoImageView setFrame:Rect(kScreenWidth/2-39, 89, 78, 78)];
+    UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 120)];
+    [bodyView setBackgroundColor:RGB(235, 239, 244)];
+    [self.view addSubview:bodyView];
     
-    _txtUser = [[LoginTextField alloc] initWithFrame:CGRectMake(15 + 32,logoImageView.y+logoImageView.height, kScreenWidth-30 - 32 * 2, 44)];
+    UILabel *lblView = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-44, 60-44, 88, 88)];
+    [lblView setBackgroundColor:RGB(234, 239, 244)];
+    [bodyView addSubview:lblView];
+    lblView.layer.borderWidth = 0.5;
+    lblView.layer.borderColor =RGB(208, 215, 232).CGColor;
+    [lblView.layer setMasksToBounds:YES];
+    [lblView.layer setCornerRadius:44];
+    
+    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
+    [bodyView addSubview:logoImageView];
+    [logoImageView setFrame:Rect(kScreenWidth/2-39, 60-39, 78,78)];
+    
+    _txtUser = [[LoginTextField alloc] initWithFrame:CGRectMake(15 + 32,bodyView.y+bodyView.height+30, kScreenWidth-30 - 32 * 2, 44)];
     _txtPwd = [[LoginTextField alloc] initWithFrame:CGRectMake(_txtUser.x, _txtUser.frame.origin.y+_txtUser.frame.size.height+10, _txtUser.width, 44)];
     
     [_txtUser setBorderStyle:UITextBorderStyleNone];
@@ -211,7 +223,6 @@
     textField.leftView = leftview;
 }
 
-
 - (void)registerServver
 {
     
@@ -246,13 +257,11 @@
     __block NSString *__strPwd = strPwd;
     [self performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8.0];
     dispatch_async(dispatch_get_global_queue(0, 0),
-                   ^{
-                       LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
-                       [tcpSocket loginServer:__strUser pwd:__strPwd];
-                   });
+    ^{
+       LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+       [tcpSocket loginServer:__strUser pwd:__strPwd];
+    });
 }
-
-
 
 - (void)findPwd
 {

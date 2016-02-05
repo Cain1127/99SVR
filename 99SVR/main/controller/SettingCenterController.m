@@ -88,21 +88,23 @@
     [_tableView registerClass:[SettingCell class] forCellReuseIdentifier:@"cellId"];
     [self addDefaultHeader:@"设置"];
     
-    UIButton *logoutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    logoutBtn.frame = CGRectMake(0, _tableView.height+_tableView.y+40,kScreenWidth,kCellHeight);
-    [logoutBtn setTitle:@"退出" forState:UIControlStateNormal];
-    [logoutBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [logoutBtn setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateHighlighted];
-    logoutBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
-    [self.view addSubview:logoutBtn];
-    logoutBtn.layer.borderColor = kLineColor.CGColor;
-    logoutBtn.layer.borderWidth = 0.5f;
-    
-    [logoutBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-     {
-         UIAlertView *tips = [[UIAlertView alloc] initWithTitle:nil message:@"是否确认退出登录?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-         [tips show];
-     }];
+    if([UserInfo sharedUserInfo].bIsLogin)
+    {
+        UIButton *logoutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        logoutBtn.frame = CGRectMake(0, _tableView.height+_tableView.y+40,kScreenWidth,kCellHeight);
+        [logoutBtn setTitle:@"退出" forState:UIControlStateNormal];
+        [logoutBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [logoutBtn setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateHighlighted];
+        logoutBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
+        logoutBtn.layer.borderColor = kLineColor.CGColor;
+        logoutBtn.layer.borderWidth = 0.5f;
+        [self.view addSubview:logoutBtn];
+        [logoutBtn clickWithBlock:^(UIGestureRecognizer *gesture)
+         {
+             UIAlertView *tips = [[UIAlertView alloc] initWithTitle:nil message:@"是否确认退出登录?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+             [tips show];
+         }];
+    }
 }
 
 - (void)clearCache

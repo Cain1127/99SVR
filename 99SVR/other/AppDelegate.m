@@ -18,6 +18,7 @@
 #import "SVRInitLBS.h"
 #import "IndexViewController.h"
 #import "BaseService.h"
+#import "RightViewController.h"
 
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
 
@@ -26,6 +27,7 @@
     WWSideslipViewController *_sides;
     IndexViewController *indexView;
     LeftViewController *leftView;
+    RightViewController *rightView;
     BOOL bStatus;
     BOOL bGGLogin;
 }
@@ -46,7 +48,9 @@
     [_window makeKeyAndVisible];
     leftView = [[LeftViewController alloc] init];
     indexView = [[IndexViewController alloc] init];
-    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
+    rightView = [[RightViewController alloc] init];
+//    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
+    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
     [_window setRootViewController:_sides];
     _sides.speedf = 0.5;
     return YES;

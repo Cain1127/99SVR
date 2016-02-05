@@ -17,10 +17,10 @@
 
 @interface RightViewController ()<ZLTabBarDelegate>
 {
-    
 }
 
 @property (nonatomic,strong) ZLTabBar *tabBar;
+
 @end
 
 @implementation RightViewController
