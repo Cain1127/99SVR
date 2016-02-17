@@ -329,35 +329,34 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 {
     CMDUserLogonSuccess_t* pLogonResp=(CMDUserLogonSuccess_t*)pData;
     UserInfo *user = [UserInfo sharedUserInfo];
-    //    _GlobalSetting.m_pKernelData->m_nServerVersion=pLogonResp->version;
-    //    _GlobalSetting.m_pKernelData->m_nServerTime=pLogonResp->servertime;
-    //    _GlobalSetting.m_pKernelData->m_nNowClientTime=time(0);
-    //    pLocalUser->m_nk= pLogonResp->nk;
-    //    pLocalUser->m_nb= pLogonResp->nb;
-    //    pLocalUser->m_nd= pLogonResp->nd;
-    //    pLocalUser->m_nkdeposit = 0;
-    //    pLocalUser->m_nUserId =pLogonResp->userid;
-    //    pLocalUser->m_nUserType=USERTYPE_NORMALUSER;
-    //    pLocalUser->m_nLangId= pLogonResp->langid;
-    //    pLocalUser->m_nLangIdExpTime=pLogonResp->langidexptime;
-    //    pLocalUser->m_nHeadId=pLogonResp->headid;
+//    _GlobalSetting.m_pKernelData->m_nServerVersion=pLogonResp->version;
+//    _GlobalSetting.m_pKernelData->m_nServerTime=pLogonResp->servertime;
+//    _GlobalSetting.m_pKernelData->m_nNowClientTime=time(0);
+//    pLocalUser->m_nk= pLogonResp->nk;
+//    pLocalUser->m_nb= pLogonResp->nb;
+//    pLocalUser->m_nd= pLogonResp->nd;
+//    pLocalUser->m_nkdeposit = 0;
+//    pLocalUser->m_nUserId =pLogonResp->userid;
+//    pLocalUser->m_nUserType=USERTYPE_NORMALUSER;
+//    pLocalUser->m_nLangId= pLogonResp->langid;
+//    pLocalUser->m_nLangIdExpTime=pLogonResp->langidexptime;
+//    pLocalUser->m_nHeadId=pLogonResp->headid;
     user.m_nVipLevel=pLogonResp->viplevel;
     user.goldCoin = pLogonResp->nk;
     user.score = pLogonResp->nb;
     user.sex = pLogonResp->ngender;
-    //    pLocalUser->m_nYiyuanLevel=pLogonResp->yiyuanlevel;
-    //    pLocalUser->m_nShoufuLevel=pLogonResp->shoufulevel;
-    //    pLocalUser->m_nZhongshenLevel=pLogonResp->zhonglevel;
-    //    pLocalUser->m_nCaifuLevel =pLogonResp->caifulevel;
-    //    pLocalUser->m_nlastmonthcostlevel=pLogonResp->lastmonthcostlevel;
-    //    pLocalUser->m_nthismonthcostlevel=pLogonResp->thismonthcostlevel;
-    //    pLocalUser->m_thismonthcostgrade=pLogonResp->thismonthcostgrade;
-    //    pLocalUser->m_nGender=pLogonResp->ngender;
-    //    pLocalUser->m_bLangIdExp=pLogonResp->blangidexp;
-    //    pLocalUser->m_nXiaoShou=pLogonResp->bxiaoshou;
-    //    pLocalUser->m_strUserAlias=pLogonResp->cuseralias;
+//    pLocalUser->m_nYiyuanLevel=pLogonResp->yiyuanlevel;
+//    pLocalUser->m_nShoufuLevel=pLogonResp->shoufulevel;
+//    pLocalUser->m_nZhongshenLevel=pLogonResp->zhonglevel;
+//    pLocalUser->m_nCaifuLevel =pLogonResp->caifulevel;
+//    pLocalUser->m_nlastmonthcostlevel=pLogonResp->lastmonthcostlevel;
+//    pLocalUser->m_nthismonthcostlevel=pLogonResp->thismonthcostlevel;
+//    pLocalUser->m_thismonthcostgrade=pLogonResp->thismonthcostgrade;
+//    pLocalUser->m_nGender=pLogonResp->ngender;
+//    pLocalUser->m_bLangIdExp=pLogonResp->blangidexp;
+//    pLocalUser->m_nXiaoShou=pLogonResp->bxiaoshou;
+//    pLocalUser->m_strUserAlias=pLogonResp->cuseralias;
     user.nUserId = pLogonResp->userid;
-    
     user.strName = [NSString stringWithCString:pLogonResp->cuseralias encoding:GBK_ENCODING];
     if (_strUser || [_strUser isEqualToString:@"0"])
     {
@@ -367,6 +366,14 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     {
         user.nUserId = [_strUser intValue];
     }
+    if([UserInfo sharedUserInfo].nType==1)
+    {
+        [UserDefaults setBool:YES forKey:kIsLogin];
+        [UserDefaults setObject:NSStringFromInt(user.nUserId) forKey:kUserId];
+        [UserDefaults setObject:_strPwd forKey:kUserPwd];
+        [UserDefaults synchronize];
+    }
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
 }
 
@@ -894,7 +901,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     }
     if(userId == [_strUser intValue])
     {
-        return [NSString stringWithFormat:@"<span value=\"forme--%d\">你</span>",userId];
+        return [NSString stringWithFormat:@"对 <span value=\"forme--%d\">你</span>",userId];
     }
     else
     {
@@ -951,7 +958,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     {
         NSString *strToName = [NSString stringWithCString:msg->toalias encoding:GBK_ENCODING];
         NSString *strTo = [self getToUser:msg->toid user:[_rInfo findUser:msg->toid] name:strToName];
-        NSString *strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\">对 %@ 说 :</span>&nbsp;&nbsp;%@",strFrom,strTo,strContent];
+        NSString *strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\"> %@ 说 :</span>&nbsp;&nbsp;%@",strFrom,strTo,strContent];
         strInfo = [DecodeJson replaceEmojiString:strInfo];
         [_aryChat addObject:strInfo];
         if (_aryChat.count>=100)

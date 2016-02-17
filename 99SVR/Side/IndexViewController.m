@@ -66,9 +66,16 @@
                 {
                     [__self.aryHot addObject:group];
                 }
-                else if([group.groupid isEqualToString:@"18"] || [group.groupid isEqualToString:@"16"] ||[group.groupid isEqualToString:@"200"])
+                else if([group.groupid isEqualToString:@"18"] ||[group.groupid isEqualToString:@"200"])
                 {
                     
+                }
+                else if([group.groupid isEqualToString:@"16"])
+                {
+                    if ([UserInfo sharedUserInfo].aryHelp==nil)
+                    {
+                        [UserInfo sharedUserInfo].aryHelp = [[NSArray alloc] initWithObjects:group, nil];
+                    }
                 }
                 else
                 {

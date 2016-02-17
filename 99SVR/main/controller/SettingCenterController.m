@@ -142,6 +142,7 @@
     if (buttonIndex == 1)
     {
         [UserDefaults removeObjectForKey:kIsLogin];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_EXIT_LOGIN_VC object:nil];
         [UserInfo sharedUserInfo].bIsLogin = NO;
         [UserInfo sharedUserInfo].nUserId = 0;
         [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];

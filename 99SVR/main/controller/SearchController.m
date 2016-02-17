@@ -378,7 +378,12 @@
     NSString *strMsg = notify.object;
     if ([strMsg isEqualToString:@"需要输入密码"])
     {
-        [self createAlertController];
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+           [__self.view hideToastActivity];
+           [__self.view makeToast:@"连接失败"];
+        });
     }
     else
     {

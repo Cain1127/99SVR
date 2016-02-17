@@ -348,18 +348,17 @@
     }
     if ([notify.object isEqualToString:@"登录成功"])
     {
-        [UserDefaults setBool:YES forKey:kIsLogin];
-        [UserDefaults setObject:_txtUser.text forKey:kUserId];
-        [UserDefaults setObject:_txtPwd.text forKey:kUserPwd];
-        [UserDefaults synchronize];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
+//        [UserDefaults setBool:YES forKey:kIsLogin];
+//        [UserDefaults setObject:_txtUser.text forKey:kUserId];
+//        [UserDefaults setObject:_txtPwd.text forKey:kUserPwd];
+//        [UserDefaults synchronize];
         LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
         [tcpSocket closeSocket];
         dispatch_async(dispatch_get_main_queue(),
-                       ^{
-                           [__self.view hideToastActivity];
-                           [__self dismissViewControllerAnimated:YES completion:nil];
-                       });
+       ^{
+           [__self.view hideToastActivity];
+           [__self dismissViewControllerAnimated:YES completion:nil];
+       });
     }
     else
     {

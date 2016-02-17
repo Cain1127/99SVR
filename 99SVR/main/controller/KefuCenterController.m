@@ -8,6 +8,7 @@
 
 #import "KefuCenterController.h"
 #import "RoomGroup.h"
+#import "UserInfo.h"
 #import "GroupListRequest.h"
 #import "RoomHttp.h"
 
@@ -24,12 +25,12 @@
 {
     [super viewDidLoad];
     [self addHeaderView:@"客服中心"];
-    self.datas = [NSMutableArray array];
     self.listReuqest = [[GroupListRequest alloc] init];
-    __weak KefuCenterController *__self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [__self loadData];
-    });
+    if ([UserInfo sharedUserInfo].aryHelp)
+    {
+        [self setVideos:[UserInfo sharedUserInfo].aryHelp];
+        [self reloadData];
+    }
 }
 
 #pragma mark get history

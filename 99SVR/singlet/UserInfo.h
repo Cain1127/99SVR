@@ -45,6 +45,8 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
 - (NSString *)getVipDescript;
 
+@property (nonatomic,copy) NSArray *aryHelp;
+
 @end
 
 @interface RoomKey : NSObject

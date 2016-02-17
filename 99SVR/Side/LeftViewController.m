@@ -59,51 +59,23 @@
 {
     [super viewDidLoad];
     _items = [NSMutableArray array];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];
     [self.view setBackgroundColor:kLeftViewBgColor];
     _tableView = [[UITableView alloc] initWithFrame:Rect(0, 64,self.view.width,self.view.height)];
-    
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:self.view.bounds];
     imgView.image = [UIImage imageNamed:@"bg_side_navigation"];
     [self.view addSubview:imgView];
     [_tableView setBackgroundColor:[UIColor clearColor]];
-    
     [self.view addSubview:_tableView];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    
+    _tableView.bounces =  NO;
     LeftHeaderView *header = [[LeftHeaderView alloc] initWithFrame:CGRectMake(0, 0,kScreenWidth*0.85, 205)];
     _tableView.tableHeaderView = header;
     _leftHeaderView = header;
-    
-//    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.height - 44, self.view.width - 75, 44)];
-//    footerView.backgroundColor = kLeftViewBgColor;
-//    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(8, 0,kScreenWidth*0.85-24, 1)];
-//    line.backgroundColor = kLineColor;
-//    [footerView addSubview:line];
-//    
-//    UIButton *logoutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    logoutBtn.frame = CGRectMake(0, 1, footerView.width, 43);
-//    [logoutBtn setTitle:@"退出" forState:UIControlStateNormal];
-//    [logoutBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    [logoutBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-//    [logoutBtn setImage:[UIImage imageNamed:@"exit"] forState:UIControlStateNormal];
-//    UIEdgeInsets btnInsets = logoutBtn.imageEdgeInsets;
-//    btnInsets.left -= 10;
-//    logoutBtn.imageEdgeInsets = btnInsets;
-//    [footerView addSubview:logoutBtn];
-//    [self.view addSubview:footerView];
-//    _footerView = footerView;
-//    
-//    [logoutBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-//    {
-//        UIAlertView *tips = [[UIAlertView alloc] initWithTitle:nil message:@"是否确认退出登录?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//        [tips show];
-//    }];
-    
     [self checkLogin];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
 }
 
 
@@ -144,18 +116,6 @@
     });
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 1)
-    {
-        [UserDefaults removeObjectForKey:kIsLogin];
-        [UserInfo sharedUserInfo].bIsLogin = NO;
-        [UserInfo sharedUserInfo].nUserId = 0;
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
-        [self checkLogin];
-        [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
-    }
-}
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
