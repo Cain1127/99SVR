@@ -14,6 +14,8 @@
 #import "PhotoViewController.h"
 #import "UIImageView+WebCache.h"
 #import "UIImage+animatedGIF.h"
+#import "MJRefresh.h"
+#import "ThumButton.h"
 
 @interface TextLiveViewController ()<UITableViewDataSource,UITableViewDelegate,DTAttributedTextContentViewDelegate>
 {
@@ -22,10 +24,22 @@
 }
 @property (nonatomic,strong) NSMutableArray *aryLive;
 @property (nonatomic,strong) UITableView *tableView;
+@property (nonatomic,strong) TextTcpSocket *textSocket;
 
 @end
 
 @implementation TextLiveViewController
+
+- (id)initWithSocket:(TextTcpSocket *)textSocket
+{
+    if(self = [super  init])
+    {
+        cellCache = [[NSCache alloc] init];
+        _textSocket = textSocket;
+        return self;
+    }
+    return nil;
+}
 
 - (void)initData
 {
@@ -49,6 +63,15 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [_tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(requestTextLive)];
+}
+
+- (void)requestTextLive
+{
+    [_aryLive removeAllObjects];
+    [_tableView reloadData];
+    [_tableView.header beginRefreshing];
+    [_textSocket reqTextRoomList:0 count:20 type:1];
 }
 
 - (void)didReceiveMemoryWarning
@@ -68,8 +91,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LiveCoreTextCell *cell = [self tableView:tableView preparedCellForIndexPath:indexPath];
-    return cell;
+    if (_aryLive.count>indexPath.section)
+    {
+        LiveCoreTextCell *cell = [self tableView:tableView preparedCellForIndexPath:indexPath];
+        return cell;
+    }
+    return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -79,9 +106,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LiveCoreTextCell *cell = [self tableView:tableView preparedCellForIndexPath:indexPath];
-    CGFloat fHeight = [cell.textCoreView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
-    return fHeight+66;
+    NSString *cacheKey =[NSString stringWithFormat:@"LiveText-%zi", indexPath.section];
+    if([cellCache objectForKey:cacheKey])
+    {
+        return [[cellCache objectForKey:cacheKey] floatValue]+66;
+    }
+    return 0;
 }
 
 - (LiveCoreTextCell *)tableView:(UITableView *)tableView preparedCellForIndexPath:(NSIndexPath *)indexPath
@@ -91,14 +121,13 @@
     cacheKey =[NSString stringWithFormat:@"LiveText-%zi", indexPath.section];
     TextLiveModel *textModel = [_aryLive objectAtIndex:indexPath.section];
     strInfo = textModel.strContent;
-    LiveCoreTextCell *cell = [cellCache objectForKey:cacheKey];
+    LiveCoreTextCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TextLiveIdentifier"];
     if (cell==nil)
     {
         cell = [[LiveCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextLiveIdentifier"];
     }
     cell.textCoreView.delegate = self;
     cell.textCoreView.shouldDrawImages = YES;
-    [cellCache setObject:cell forKey:cacheKey];
     NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
     cell.textCoreView.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:nil documentAttributes:nil];
     UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
@@ -110,6 +139,10 @@
     fmt.timeStyle = kCFDateFormatterShortStyle;
     NSString *strTime = [fmt stringFromDate:date];
     [cell.lblTime setText:strTime];
+    CGFloat fHeight = [cell.textCoreView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
+    [cellCache setObject:NSStringFromFloat(fHeight) forKey:cacheKey];
+    [cell.btnThum setTitle:NSStringFromInt((int)textModel.zans) forState:UIControlStateNormal];
+//    [cell.btnThum setTitle:@"123455" forState:UIControlStateNormal];
     return cell;
 }
 
@@ -132,7 +165,6 @@
     {
         DTLazyImageView *imageView = [[DTLazyImageView alloc] initWithFrame:frame];
         NSString *strName = [attachment.attributes objectForKey:@"value"];
-        //[$3$]  [$999$] [$62$]
         if([strName intValue]==999 || [strName intValue]<=34)
         {
             [self findImage:strName imgView:imageView];
@@ -185,18 +217,25 @@
 
 - (void)reLoadTextList
 {
-    _aryLive = [TextTcpSocket sharedTextTcpSocket].aryText;
+    _aryLive = _textSocket.aryText;
     DLog(@"_aryLiveing:%zi",_aryLive.count);
     __weak TextLiveViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        [__self.tableView.header endRefreshing];
         [__self.tableView reloadData];
     });
+}
+
+- (void)reqTextList
+{
+    [_textSocket reqTextRoomList:0 count:20 type:1];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLoadTextList) name:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reqTextList) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

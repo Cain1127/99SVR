@@ -6,8 +6,10 @@
 //  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
-
+@class TextTcpSocket ;
 @interface TextLiveViewController : UIViewController
 
+
+- (id)initWithSocket:(TextTcpSocket *)textSocket;
 
 @end

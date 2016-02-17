@@ -18,11 +18,24 @@
 {
     NSMutableDictionary *_dictIcon;
 }
+
 @property (nonatomic,copy) NSArray *aryChat;
 @property (nonatomic,strong) UITableView *tableView;
+@property (nonatomic,strong) TextTcpSocket *textSocket;
+
 @end
 
 @implementation TextChatViewController
+
+- (id)initWithSocket:(TextTcpSocket *)textSocket
+{
+    if(self = [super init])
+    {
+        _textSocket = textSocket;
+        return self;
+    }
+    return self;
+}
 
 - (void)initUIBody
 {
@@ -121,7 +134,7 @@
 
 - (void)reloadChat
 {
-    _aryChat = [TextTcpSocket sharedTextTcpSocket].aryChat;
+    _aryChat = _textSocket.aryChat;
     __weak TextChatViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
     ^{

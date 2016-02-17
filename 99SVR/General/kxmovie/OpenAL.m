@@ -16,27 +16,19 @@
 
 - (void)onAudioSessionEvent:(NSNotification *)notification
 {
-    if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification]) {
-        NSLog(@"Interruption notification received %@!", notification);
-        //Check to see if it was a Begin interruption
+    if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification])
+    {
         if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]])
         {
-            alcMakeContextCurrent(NULL);
-            if ([self isPlaying])
-            {
-                self.wasInterrupted = YES;
-            }
+//            [self cleanUpOpenAL];
+            [[AVAudioSession sharedInstance] setActive:NO error:nil];
+            [self pauseSound];
         }
         else if([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeEnded]])
         {
-            OSStatus result = [[AVAudioSession sharedInstance] setActive:YES error:nil];
-            alcMakeContextCurrent(self.mContext);
-            
-            if (self.wasInterrupted)
-            {
-                [self playSound];
-                self.wasInterrupted = NO;
-            }
+//            [self initOpenAL];
+            [[AVAudioSession sharedInstance] setActive:YES error:nil];
+            [self playSound];
         }
     }
 }
@@ -61,33 +53,13 @@
        AVAudioSession *session = [AVAudioSession sharedInstance];
        [session setCategory:AVAudioSessionCategoryPlayback error:nil];
        [session setActive: YES error:nil];
+        [session setPreferredSampleRate:48000 error:nil];
+        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
        [[NSNotificationCenter defaultCenter] addObserver:self
                                                 selector:@selector(onAudioSessionEvent:) name:AVAudioSessionInterruptionNotification object:nil];
         return self;
     }
     return nil;
-}
-
-+ (UIBackgroundTaskIdentifier)backgroundPlayerID:(UIBackgroundTaskIdentifier)backTaskId
-{
-    // 1. 设置并激活音频会话类别
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
-    [session setActive:YES error:nil];
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    UIBackgroundTaskIdentifier newTaskId = UIBackgroundTaskInvalid;
-    newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
-    if (newTaskId != UIBackgroundTaskInvalid && backTaskId != UIBackgroundTaskInvalid) {
-        [[UIApplication sharedApplication] endBackgroundTask:backTaskId];
-    }
-    return newTaskId;
-}
-
-- (void)setPlayBack
-{
-//    AVAudioSession *session = [AVAudioSession sharedInstance];
-//    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
-//    [session setActive:YES error:nil];
 }
 
 -(void)_haltOpenALSession
@@ -117,8 +89,12 @@
 -(void)initOpenAL
 {
     NSLog(@"=======initOpenAl===");
-    /*
     mDevice=alcOpenDevice(NULL);
+    if (mDevice==nil)
+    {
+        return ;
+    }
+    
     if (mDevice)
     {
         mContext=alcCreateContext(mDevice, NULL);
@@ -132,40 +108,15 @@
     alSourcef(outSourceId, AL_GAIN, 1.0f);
     alSourcei(outSourceId, AL_LOOPING, AL_FALSE);
     alSourcef(outSourceId, AL_SOURCE_TYPE, AL_STREAMING);
-     */
-    ALenum			error;
-    ALCcontext		*newContext = NULL;
-    ALCdevice		*newDevice = NULL;
-    
-    // Create a new OpenAL Device
-    // Pass NULL to specify the system’s default output device
-    newDevice = alcOpenDevice(NULL);
-    if (newDevice != NULL)
+    if (ticketCondition==nil)
     {
-        // Create a new OpenAL Context
-        // The new context will render to the OpenAL Device just created
-        newContext = alcCreateContext(newDevice, 0);
-        if (newContext != NULL)
-        {
-            alcMakeContextCurrent(newContext);
-            alGenBuffers(1, &buff);
-            if((error = alGetError()) != AL_NO_ERROR) {
-                printf("Error Generating Buffers: %x", error);
-            }
-            alGenSources(1, &outSourceId);
-            if(alGetError() != AL_NO_ERROR) 
-            {
-                printf("Error generating sources! %x\n", error);
-            }
-            
-        }
+        ticketCondition= [[NSCondition alloc] init];
     }
-    alGetError();
 }
 
 - (void)openAudioFromQueue:(unsigned char*)data dataSize:(UInt32)dataSize
 {
-    NSCondition* ticketCondition= [[NSCondition alloc] init];
+#if 0
     [ticketCondition lock];
     ALuint bufferID = 0;
     alGenBuffers(1, &bufferID);
@@ -180,12 +131,65 @@
     ALint stateVaue;
     alGetSourcei(outSourceId, AL_SOURCE_STATE, &stateVaue);
     [ticketCondition unlock];
-    ticketCondition = nil;
+#endif
+#if 1
+    [ticketCondition lock];
+    ALenum  error =AL_NO_ERROR;
+    if ((error =alGetError())!=AL_NO_ERROR)
+    {
+        [ticketCondition unlock];
+        return ;
+    }
+    if (data ==NULL)
+    {
+        return ;
+    }
+    [self updataQueueBuffer];                                  //在这里调用了刚才说的清除缓存buffer函数，也附加声音播放
+    if ((error =alGetError())!=AL_NO_ERROR)
+    {
+        [ticketCondition unlock];
+        return ;
+    }
+    ALuint bufferID =0;                                             //存储声音数据，建立一个pcm数据存储器，初始化一块区域用来保存声音数据
+    alGenBuffers(1, &bufferID);
+    if ((error = alGetError())!=AL_NO_ERROR)
+    {
+        NSLog(@"Create buffer failed");
+        [ticketCondition unlock];
+        return;
+    }
+    alBufferData(bufferID, AL_FORMAT_STEREO16, (char *)data, (ALsizei)dataSize, 48000);
+    if ((error =alGetError())!=AL_NO_ERROR)
+    {
+        NSLog(@"create bufferData failed");
+        [ticketCondition unlock];
+        return;
+    }
+    //添加到缓冲区
+    alSourceQueueBuffers(outSourceId, 1, &bufferID);
+    if ((error =alGetError())!=AL_NO_ERROR)
+    {
+        NSLog(@"add buffer to queue failed");
+        [ticketCondition unlock];
+        return;
+    }
+    if ((error=alGetError())!=AL_NO_ERROR)
+    {
+        NSLog(@"play failed");
+        alDeleteBuffers(1, &bufferID);
+        [ticketCondition unlock];
+        return;
+    }
+    [ticketCondition unlock];
+    
+#endif
+    
 }
 
 
 - (BOOL)updataQueueBuffer
 {
+#if 0
     ALint stateVaue;
     int processed, queued;
     alGetSourcei(outSourceId, AL_BUFFERS_PROCESSED, &processed);
@@ -210,45 +214,72 @@
         alDeleteBuffers(1, &buff);
     }
     return YES;
+#endif
+#if 1
+    ALint  state;
+    int processed ,queued;
+    alGetSourcei(outSourceId, AL_SOURCE_STATE, &state);
+    if (state !=AL_PLAYING)
+    {
+        [self playSound];
+        return NO;
+    }
+    alGetSourcei(outSourceId, AL_BUFFERS_PROCESSED, &processed);
+    alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
+//    NSLog(@"Processed = %d\n", processed);
+//    NSLog(@"Queued = %d\n", queued);
+    while (processed--)
+    {
+        ALuint buffer;
+        alSourceUnqueueBuffers(outSourceId, 1, &buffer);
+        alDeleteBuffers(1, &buffer);
+    }
+    return YES;
+#endif
+    
 }
 
 
 #pragma make - play/stop/clean function
 -(void)playSound
 {
-    alSourcePlay(outSourceId);
-    
+    ALint  state;
+    alGetSourcei(outSourceId, AL_SOURCE_STATE, &state);
+    if (state != AL_PLAYING)
+    {
+        alSourcePlay(outSourceId);
+    }
+}
+
+- (void)pauseSound
+{
+    alSourcePause(outSourceId);
 }
 
 -(void)stopSound
 {
-    alSourceStop(outSourceId);
+    ALint  state;
+    alGetSourcei(outSourceId, AL_SOURCE_STATE, &state);
+    if (state != AL_STOPPED)
+    {
+        
+        alSourceStop(outSourceId);
+    }
 }
 
 -(void)cleanUpOpenAL
 {
     DLog(@"已经释放");
-//    [updateBufferTimer invalidate];
-//    updateBufferTimer = nil;
-    /*
     alDeleteSources(1, &outSourceId);
     alDeleteBuffers(1, &buff);
     alcDestroyContext(mContext);
     alcCloseDevice(mDevicde);
-     */
-    ALCcontext	*context = NULL;
-    ALCdevice	*device = NULL;
-    alDeleteSources(1, &outSourceId);
-    alDeleteBuffers(1, &buff);
-    context = alcGetCurrentContext();
-    device = alcGetContextsDevice(context);
-    alcDestroyContext(context);
-    alcCloseDevice(device);
 }
 
 -(void)dealloc
 {
     NSLog(@"openal sound dealloc");
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 }
 
 

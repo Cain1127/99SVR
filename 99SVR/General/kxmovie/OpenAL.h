@@ -21,6 +21,7 @@
     ALuint buff;
     NSTimer *updateBufferTimer;
     BOOL iPodIsPlaying;
+    NSCondition* ticketCondition;
 }
 @property(nonatomic)ALCcontext *mContext;
 @property(nonatomic)ALCdevice *mDevice;

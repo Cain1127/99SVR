@@ -25,11 +25,21 @@
 }
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryNew;
-
+@property (nonatomic,strong) TextTcpSocket *textSocket;
 
 @end
 
 @implementation TextNewViewController
+
+- (id)initWithSocket:(TextTcpSocket *)textSocket
+{
+    if(self = [super  init])
+    {
+        _textSocket = textSocket;
+        return self;
+    }
+    return nil;
+}
 
 - (void)initUIBody
 {
@@ -174,7 +184,7 @@
 //    [[TextTcpSocket sharedTextTcpSocket] reqIdeaDetails:0 count:20 ideaId:(int)idea.messageid];
 //    [[TextTcpSocket sharedTextTcpSocket] replyCommentReq:@"你好啊" msgid:idea.messageid toid:idea.userid];
 //    [[TextTcpSocket sharedTextTcpSocket] reqCommentZan:idea.messageid];
-    [[TextTcpSocket sharedTextTcpSocket] reqSendFlower:idea.messageid count:20];
+    [_textSocket reqSendFlower:idea.messageid count:20];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -191,11 +201,17 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadNew) name:MESSAGE_TEXT_NEW_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reqTextNewMessage) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
+}
+
+- (void)reqTextNewMessage
+{
+    [_textSocket reqNewList:0 index:0 count:20];
 }
 
 - (void)reloadNew
 {
-    _aryNew = [TextTcpSocket sharedTextTcpSocket].aryNew;
+    _aryNew = _textSocket.aryNew;
     __weak TextNewViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
     ^{

@@ -134,6 +134,22 @@
 #pragma mark get history
 - (void)initHistoryData
 {
+    if ([UserInfo sharedUserInfo].nType !=1)
+    {
+        if (_aryHistory && _aryHistory.count>0)
+        {
+            [_aryHistory removeAllObjects];
+            for (UIViewController *viewController in self.childViewControllers)
+            {
+                if ([viewController class] == [HistoryViewController class])
+                {
+                    [self setUpdate:_aryHistory obj:viewController];
+                    break;
+                }
+            }
+        }
+        return ;
+    }
     if([UserInfo sharedUserInfo].aryCollet==nil)
     {
         [UserInfo sharedUserInfo].aryCollet = [NSMutableArray array];
@@ -142,7 +158,7 @@
     __weak IndexViewController *__self = self;
     _listReuqest.historyBlock = ^(int status,NSArray *aryHistory,NSArray *aryColl)
     {
-        if (aryHistory.count>0)
+        if (aryHistory && aryHistory.count>0)
         {
             RoomGroup *group = [aryHistory objectAtIndex:0];
             if (__self.aryHistory.count==0)
@@ -155,7 +171,7 @@
                 [__self.aryHistory addObject:group];
             }
         }
-        if (aryColl.count>0)
+        if (aryColl && aryColl.count>0)
         {
             [[UserInfo sharedUserInfo].aryCollet addObject:[aryColl objectAtIndex:0]];
         }

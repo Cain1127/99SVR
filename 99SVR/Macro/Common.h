@@ -23,9 +23,7 @@
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 #define SVR_LOGIN_IP @"login2.99ducaijing.cn"
-//#define SVR_LOGIN_IP @"121.14.211.60"
 
-//#define SVR_LOGIN_PORT 7001
 #define SVR_LOGIN_PORT 7401
 
 #define SVR_LVBBY_IP @"lobbyip5.99ducaijing.cn"

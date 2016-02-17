@@ -176,7 +176,19 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self initAVAudioSession];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setBackGroudMode:) name:MESSAGE_ENTER_BACK_VC object:nil];
+}
+
+- (void)setBackGroudMode:(NSNotification *)notify
+{
+    if([notify.object isEqualToString:@"ON"])
+    {
+        [_media settingBackVideo:YES];
+    }
+    else
+    {
+        [_media settingBackVideo:NO];
+    }
 }
 
 //- (void)initAVAudioSession
@@ -254,9 +266,10 @@
 {
     __weak LivePlayViewController *__self = self;
     dispatch_main_async_safe(
-                             ^{
-                                 [__self startLoad];
-                             });
+    ^{
+        [__self startLoad];
+        [__self setDefaultImg];
+    });
     _playing = YES;
     _bVideo = YES;
     [_media connectRoomId:roomid mic:userid];
@@ -363,7 +376,9 @@
                 av_free_packet(&packet);
             }
         }
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1/20 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1/20 * NSEC_PER_SEC)),
+                       dispatch_get_global_queue(0, 0),
+        ^{
             [__self decodeVideo];
         });
     }
@@ -374,7 +389,6 @@
         [_aryVideo removeAllObjects];
     }
 }
-
 
 #pragma mark -
 #pragma mark custom methods

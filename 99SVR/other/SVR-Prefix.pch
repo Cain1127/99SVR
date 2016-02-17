@@ -54,6 +54,11 @@ typedef enum {
 5.首页、首页接口--
 6.收藏新页面--完成
 7.
+ 
+1.视频码流超时
+2.视频流播放修改
+ 
+ 
 
 [UserInfo sharedUserInfo].nUserId = 1764964;
 [UserInfo sharedUserInfo].strPwd = @"123456";

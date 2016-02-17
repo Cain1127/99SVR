@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "cmd_vchat.h"
-
+//观点
 @interface IdeaDetailRePly : NSObject
 
 @property (nonatomic) uint32 vcbid;
 @property (nonatomic) int64 viewId;
-@property (nonatomic) uint32 commentid;
+@property (nonatomic) int64_t commentid;
 @property (nonatomic) uint32 viewuserid;
 @property (nonatomic) uint32 userid;
 @property (nonatomic) int16 textLen;

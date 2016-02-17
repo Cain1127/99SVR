@@ -114,6 +114,7 @@
     return cell;
 }
 
+
 - (void)connectRoom:(RoomHttp *)room
 {
     LSTcpSocket *socket = [LSTcpSocket sharedLSTcpSocket];
@@ -163,7 +164,13 @@
     NSString *strMsg = notify.object;
     if ([strMsg isEqualToString:@"需要输入密码"])
     {
-        [self createAlertController];
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        __block NSString *__strMsg = strMsg;
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+            [__self.view hideToastActivity];
+            [__self.view makeToast:@"加入房间失败"];
+        });
     }
     else
     {
@@ -177,54 +184,9 @@
     }
 }
 
-#pragma mark 创建alert
-- (void)createAlertController
-{
-    __weak FinanceOnlineVedioController *__self =self;
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                   message:@"请输入密码" preferredStyle:UIAlertControllerStyleAlert];
-    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField)
-    {
-         textField.placeholder = @"密码";
-    }];
-    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-            //如果不再登录房间，取消notification
-            [__self.view hideToastActivity];
-            [[NSNotificationCenter defaultCenter] removeObserver:self];
-        });
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-        UITextField *login = alert.textFields.firstObject;
-        if ([login.text length]==0)
-        {
-            dispatch_async(dispatch_get_main_queue(),
-            ^{
-                [__self.view hideToastActivity];
-                [__self.view makeToast:@"密码不能为空"];
-                [__self createAlertController];
-            });
-        }
-        else
-        {
-            [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:10];
-            dispatch_async(dispatch_get_global_queue(0, 0),
-            ^{
-                [[LSTcpSocket sharedLSTcpSocket] connectRoomAndPwd:login.text];
-            });
-        }
-    }];
-    [alert addAction:canAction];
-    [alert addAction:okAction];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [__self presentViewController:alert animated:YES completion:nil];
-    });
-}
-
 - (void)joinRoomSuc:(NSNotification *)notify
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     __weak FinanceOnlineVedioController *__self =self;
     dispatch_async(dispatch_get_main_queue(),
     ^{
@@ -236,7 +198,7 @@
         [__self.view hideToastActivity];
         RoomViewController *roomView = [[RoomViewController alloc] init];
         [__self presentViewController:roomView animated:YES completion:nil];
-    });   
+    }); 
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

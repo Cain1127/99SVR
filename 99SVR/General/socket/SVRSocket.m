@@ -192,8 +192,11 @@ int BuildHelloPack(int mainCmd, int subCmd, char* pBuff, int bufLen)
     req.userid = [strUser intValue];//如果为0  则是游客登录
     req.nversion = 0;
     req.nmask = (int)time(0);
-    const char *cPwd = [[DecodeJson XCmdMd5String:strPwd] UTF8String];
-    strcpy(req.cuserpwd,cPwd);
+    if(strPwd)
+    {
+        const char *cPwd = [[DecodeJson XCmdMd5String:strPwd] UTF8String];
+        strcpy(req.cuserpwd,cPwd);
+    }
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
     strcpy(req.cIpAddr, [[DecodeJson getIPAddress] UTF8String]);
     req.nimstate = 0;

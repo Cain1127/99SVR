@@ -8,13 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+@class TeacherModel;
+
 @interface TextTcpSocket : NSObject
-
-DEFINE_SINGLETON_FOR_HEADER(TextTcpSocket);
-
+@property (nonatomic,strong) TeacherModel *teacher;
 @property (nonatomic,strong) NSMutableArray *aryText;
 @property (nonatomic,strong) NSMutableArray *aryChat;
 @property (nonatomic,strong) NSMutableArray *aryNew;
+
+- (void)reconnectTextRoom;
 
 - (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort;
 //发送聊天信息
@@ -23,11 +25,11 @@ DEFINE_SINGLETON_FOR_HEADER(TextTcpSocket);
 
 - (void)joinRoomInfo;
 
-- (void)connectRoom:(NSString *)strRoomId;
+- (void)connectRoom:(int32_t)roomId;
 
 - (void)reqTextRoomList:(int)nIndex count:(int)nCount type:(int)nType;
 
-- (void)reqInterest:(int)teacherid;
+- (void)reqTeacherCollet;
 
 - (void)reqQuestion:(NSString *)strInfo title:(NSString *)strTitle teach:(int)teacherid;
 
@@ -52,4 +54,8 @@ DEFINE_SINGLETON_FOR_HEADER(TextTcpSocket);
 - (void)exitRoom;
 
 - (void)reqOperViewType:(int)viewTypeId name:(NSString *)strContent type:(int16_t)type;
+
+- (void)reqNewList:(int)teacherid index:(int)nIndex count:(int)nCount;
+
+
 @end

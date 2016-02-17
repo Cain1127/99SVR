@@ -73,14 +73,22 @@
     _login = login;
     if (!login)
     {
-        _nameLabel.text = @"99财经";
+        _nameLabel.text = @"";
         [_vipLevel setTitle:@"未登录" forState:UIControlStateNormal];
     }
     else
     {
         UserInfo *userInfo = [UserInfo sharedUserInfo];
-        _nameLabel.text = [userInfo getVipDescript];
-        [_vipLevel setTitle:NSStringFromInt(userInfo.nUserId) forState:UIControlStateNormal];
+        if (userInfo.nType == 1)
+        {
+            _nameLabel.text = [userInfo getVipDescript];
+            [_vipLevel setTitle:NSStringFromInt(userInfo.nUserId) forState:UIControlStateNormal];
+        }
+        else
+        {
+            _nameLabel.text = @"";
+            [_vipLevel setTitle:@"未登录" forState:UIControlStateNormal];
+        }
     }
 }
 
@@ -91,7 +99,6 @@
     _nameLabel.frame = Rect(30, _avatarImageView.height+_avatarImageView.y+15, self.width-60, 20);
     _vipLevel.frame = Rect(30, _nameLabel.height+_nameLabel.y+5, self.width-60, 20);
     _lineView.frame = Rect(8, self.height-1.5, self.width-24, 1);
-    
 }
 
 @end

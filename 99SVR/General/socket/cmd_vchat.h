@@ -1345,51 +1345,61 @@ typedef struct tag_CMDMessageNoty
 //信箱未读记录数提醒
 typedef struct tag_CMDMessageUnreadRes
 {
-    int32 userid;				  //用户ID
-    int16 type;                   //分类：1.互动回复；2.观点回复；3.问答提醒；4.我的关注；5.系统信息；
-    int16 count;                  //未读记录数
+    int32 userid;				      //用户ID
+    int8  teacherflag;                //是否讲师（0-不是，1-是）
+    int32 chatcount;                  //互动回复未读记录数
+    int32 viewcount;                  //观点回复未读记录数
+    int32 answercount;                //问答提醒未读记录数
+    int32 syscount;                   //系统信息未读记录数
 }CMDMessageUnreadRes_t;
 
 //查看邮箱（不同分类请求用同一个消息类型及结构）
-typedef struct tag_CMDInteractReq
+typedef struct tag_CMDHallMessageReq
 {
     uint32 userid;                 //用户ID
-    int16  type;                   //分类：1.互动回复；2.观点回复；3.问答提醒；4.我的关注；5.系统信息；
-    int16  count;                  //请求记录数，-1表示所有
-}CMDMessageReq_t;
+    int8   teacherflag;            //是否讲师（0-不是，1-是）
+    int16  type;                   //分类：1.互动回复（11.收到的互动（用户）；12.发出的互动（讲师）；）；
+    //2.观点回复（21.收到的观点回复；22.发出的观点评论；）；
+    //3.问答提醒（31. 未回答提问；32.已回答提问；）；
+    //4.我的关注（41.我的粉丝；42.我的关注；43.明日预测）；
+    //5.系统信息；
+    int64  messageid;              //请求得到的最大消息ID，第一次为0
+    int32  startIndex;             //起始索引
+    int16  count;                  //请求记录数
+}CMDHallMessageReq_t;
 
-//查看互动回复（用户展示，讲师不展示），查看问答提醒
+//查看互动回复，查看问答提醒
 typedef struct tag_CMDInteractRes
 {
-    int16  type;                   //分类：1.互动回复；2.观点回复；3.问答提醒；
-    uint32 userid;                 //用户ID
-    char   useralias[NAMELEN];     //用户昵称
-    uint32 teacherid;              //讲师ID
-    char   teacheralias[NAMELEN];  //讲师昵称
+    int16  type;                   //分类：互动回复（11.收到的互动（用户）；12.发出的互动（讲师）；）； 问答提醒（31. 未回答提问；32.已回答提问；）；
+    uint32 userid;                 //请求用户ID
+    uint32 touserid;               //互动用户ID
+    char   touseralias[NAMELEN];   //互动用户昵称
+    uint32 touserheadid;           //互动用户头像
     int64  messageid;              //消息ID（用于回复时找到对应的记录）
     int16  sortextlen;             //源内容长度
     int16  destextlen;             //回复内容长度，type=3时值为0表示未回答的提问，否则表示已回答的提问；
-    uint64 messagetime;            //回复时间
-    int16  commentstype;           //客户端类型 0:PC端 1:安卓 2:IOS
+    uint64 messagetime;            //回复时间(yyyymmddhhmmss)
+    int8   commentstype;           //客户端类型 0:PC端 1:安卓 2:IOS  3:WEB
     char   content[0];             //消息内容，格式：源内容+回复内容
 }CMDInteractRes_t;
 
 //查看观点回复
 typedef struct tag_CMDViewShowRes
 {
-    uint32 userid;                 //用户ID
-    char   useralias[NAMELEN];     //用户昵称
-    uint32 teacherid;              //讲师ID
-    char   teacheralias[NAMELEN];  //讲师昵称
-    int64  messageid;              //消息ID（用于回复时找到对应的记录）
+    int16  type;                   //分类： 观点回复（21.收到的观点回复；22.发出的观点评论；）；
+    uint32 userid;                 //请求用户ID
+    uint32 touserid;               //互动用户ID
+    char   useralias[NAMELEN];     //互动用户昵称
+    uint32 userheadid;             //互动用户头像
+    int64  commentid;              //评论ID（用于回复时找到对应的记录）
     int16  viewTitlelen;           //观点标题长度
     int16  viewtextlen;            //观点内容长度
-    int16  sortextlen;             //评论内容长度
-    uint64 reqtime;                //评论时间
-    int16  destextlen;             //回复内容长度，对于用户值为0表示发出的观点评论，否则表示收到的观点回复；
+    int16  srctextlen;             //评论内容长度
+    int16  replytextlen;           //回复内容长度，对于用户值为0表示发出的观点评论，否则表示收到的观点回复；
     //对于讲师值为0表示收到的观点评论，否则表示发出的观点回复;
     uint64 restime;                //回复时间
-    int16  commentstype;           //客户端类型 0:PC端 1:安卓 2:IOS
+    int8   commentstype;           //客户端类型 0:PC端 1:安卓 2:IOS  3:WEB
     char   content[0];             //消息内容，格式：观点标题+观点内容+评论内容+回复内容
 }CMDViewShowRes_t;
 
@@ -1399,6 +1409,7 @@ typedef struct tag_CMDTeacherFansRes
     uint32 teacherid;              //讲师ID
     uint32 userid;                 //用户ID
     char   useralias[NAMELEN];     //用户昵称
+    uint32 userheadid;             //用户头像
 }CMDTeacherFansRes_t;
 
 //查看我的关注（已关注讲师）
@@ -1407,13 +1418,11 @@ typedef struct tag_CMDInterestRes
     uint32 userid;                 //用户ID
     uint32 teacherid;              //讲师ID
     char   teacheralias[NAMELEN];  //讲师昵称
+    uint32 teacherheadid;          //讲师头像
+    int16  levellen;               //讲师等级长度
     int16  labellen;               //讲师标签长度
-    int16  goodatlen;              //讲师擅长领域长度
     int16  introducelen;           //讲师简介长度
-    int16  forecastlen;            //讲师明日预测长度
-    uint64 messagetime;            //发布时间
-    int16  commentstype;           //客户端类型 0:PC端 1:安卓 2:IOS
-    char   content[0];             //消息内容，格式：讲师标签+讲师擅长领域（多个以分号分隔）+讲师简介+讲师明日预测
+    char   content[0];             //消息内容，格式：讲师等级+讲师标签+讲师简介
 }CMDInterestRes_t;
 
 //查看我的关注（无关注讲师）
@@ -1422,31 +1431,48 @@ typedef struct tag_CMDUnInterestRes
     uint32 userid;                 //用户ID
     uint32 teacherid;              //讲师ID
     char   teacheralias[NAMELEN];  //讲师昵称
+    uint32 teacherheadid;          //讲师头像
+    int16  levellen;               //讲师等级长度
     int16  labellen;               //讲师标签长度
-    int16  directionlen;           //讲师投资方向长度
+    int16  goodatlen;              //讲师擅长领域长度
     int64  answers;                //已回答问题的数目
-    char   content[0];             //消息内容，格式：讲师标签+讲师投资方向
+    char   content[0];             //消息内容，格式：讲师等级+讲师标签+讲师擅长领域
 }CMDUnInterestRes_t;
+
+//查看明日预测（已关注的讲师）
+typedef struct tag_CMDTextLivePointListRes
+{
+    uint32 userid;                 //用户ID
+    uint32 teacherid;              //讲师ID
+    char   teacheralias[NAMELEN];  //讲师昵称
+    uint32 teacherheadid;          //讲师头像
+    int64  messageid;              //消息ID
+    int16  livetype;               //文字直播类型：1-纯文字；2-文字+链接；3-文字+图片;
+    int16  textlen;                //消息长度
+    int8   commentstype;           //客户端类型 0:PC端 1:安卓 2:IOS  3:WEB
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
+    char   content[0];             //消息内容
+}CMDTextLivePointListRes_t;
 
 //讲师回复（包含观点回复和回答提问）
 typedef struct tag_CMDViewAnswerReq
 {
-    uint32 teacherid;              //讲师ID
-    uint32 userid;                 //用户ID
-    int16  type;                   //分类：1.互动回复；2.观点回复；3.问答提醒；（互动无回复）
-    int64  messageid;              //消息ID
-    int16  destextlen;             //观点回复长度
-    uint64 messagetime;            //回复时间
-    int16  commentstype;           //客户端类型 0:PC端 1:安卓 2:IOS
-    char   descontent[0];          //观点回复内容
+    uint32 fromid;              //发出人
+    uint32 toid;                //接收人
+    int16  type;                //分类：1.互动回复；2.观点回复；3.问答提醒；（互动无回复）
+    int64  messageid;           //消息ID
+    int16  textlen;             //观点回复长度
+    int8   commentstype;        //客户端类型 0:PC端 1:安卓 2:IOS  3:WEB
+    char   content[0];          //观点回复内容
 }CMDViewAnswerReq_t;
 
 //讲师回复响应
 typedef struct tag_CMDViewAnswerRes
 {
-    int32 userid;				      //用户ID
-    int16 type;                       //分类：1.互动回复；2.观点回复；3.问答提醒；
-    int16 result;                     //回复是否成功：0失败，1成功；
+    int32 userid;				    //用户ID
+    int16 type;                     //分类：1.互动回复；2.观点回复；3.问答提醒；
+    int64 messageid;                //创建成功的对应消息ID
+    int16 result;                   //回复是否成功：0失败，1成功；
 }CMDViewAnswerRes_t;
 
 //关注（无关注讲师时返回所有讲师列表，点击关注）
@@ -1454,6 +1480,7 @@ typedef struct tag_CMDInterestForReq
 {
     uint32 userid;                 //用户ID
     uint32 teacherid;              //讲师ID
+    int16  optype;                 //操作类型：1是关注，2是取消关注
 }CMDInterestForReq_t;
 
 //关注响应
@@ -1468,7 +1495,6 @@ typedef struct tag_CMDTextRoomTeacherReq
 {
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
-    int logtype;	               //客户端类型 0:PC端 1:安卓 2:IOS  3:WEB
 }CMDTextRoomTeacherReq_t;
 
 //加入房间成功后推送讲师信息响应
@@ -1478,17 +1504,19 @@ typedef struct tag_CMDTextRoomTeacherNoty
     uint32 userid;                 //用户ID
     uint32 teacherid;              //讲师ID
     char   teacheralias[NAMELEN];  //讲师昵称
-    int16  headid;                 //讲师头像ID
+    uint32 headid;                 //讲师头像ID
+    int16  levellen;               //讲师等级长度
     int16  labellen;               //讲师标签长度
     int16  goodatlen;              //讲师擅长领域长度
     int16  introducelen;           //讲师简介长度
     int64  historymoods;           //直播人气数
-    int64  funs;                   //粉丝数
+    int64  fans;                   //粉丝数
     int64  zans;                   //点赞数
     int64  todaymoods;             //今日人气数
     int64  historyLives;           //直播历史数
     int16  liveflag;               //是否直播中（0-不在线；1-在线）
-    char   content[0];             //消息内容，格式：讲师标签+讲师擅长领域（多个以分号分隔）+讲师简介
+    int16  fansflag;               //是否已经关注讲师（0-未关注；1-已关注）
+    char   content[0];             //消息内容，格式：讲师等级+讲师标签+讲师擅长领域（多个以分号分隔）+讲师简介
 }CMDTextRoomTeacherNoty_t;
 
 //加载直播记录请求
@@ -1498,8 +1526,8 @@ typedef struct tag_CMDTextRoomLiveListReq
     uint32 userid;                 //用户ID
     uint32 teacherid;              //讲师ID
     int16  type;                   //类型：1-文字直播；2-直播重点；3-明日预测（已关注的用户可查看）；4-观点；
-    int64  messageid;              //上一次请求得到的最大消息ID，第一次为0
-    int32  count;                  //获取多少条记录 ,-1表示所有
+    int64  messageid;              //上一次请求得到的最小消息ID，第一次为0
+    int32  count;                  //获取多少条记录
 }CMDTextRoomLiveListReq_t;
 
 //加载直播记录响应
@@ -1514,11 +1542,12 @@ typedef struct tag_CMDTextRoomLiveListNoty
     int16  pointflag;              //是否直播重点:0-否；1-是；
     int16  forecastflag;           //是否明日预测:0-否；1-是；
     int16  livetype;               //文字直播类型：1-纯文字；2-文字+链接；3-文字+图片；4-互动回复；5-观点动态；
-    int64  viewid;			       //观点ID(5-观点动态用)
+    int64  viewid;     			   //观点ID(5-观点动态用)
     int16  textlen;                //消息长度
     int16  destextlen;             //互动回复长度
-    uint64 messagetime;            //发送时间
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
     int64  zans;                   //点赞数
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
     char   content[0];             //消息内容，格式：消息内容（发送的直播是内容，发送的观点是标题，互动的是源内容）+互动回复内容
 }CMDTextRoomLiveListNoty_t;
 
@@ -1527,13 +1556,13 @@ typedef struct tag_CMDTextRoomLivePointNoty
 {
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
-    int16  type;                   //类型：1-文字直播；2-直播重点；3-明日预测（已关注的用户可查看）；4-观点；
     uint32 teacherid;              //讲师ID
     int64  messageid;              //消息ID
     int16  livetype;               //文字直播类型：1-纯文字；2-文字+链接；3-文字+图片;
     int16  textlen;                //消息长度
-    uint64 messagetime;            //发送时间
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
     int64  zans;                   //点赞数
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
     char   content[0];             //消息内容
 }CMDTextRoomLivePointNoty_t;
 
@@ -1546,7 +1575,8 @@ typedef struct tag_CMDTextRoomLiveMessageReq
     int16  forecastflag;           //是否明日预测:0-否；1-是；
     int16  livetype;               //文字直播类型：1-纯文字；2-文字+链接；3-文字+图片；
     int16  textlen;                //直播消息长度
-    uint64 messagetime;            //发送时间
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
     char   content[0];             //直播消息内容
 }CMDTextRoomLiveMessageReq_t;
 
@@ -1560,7 +1590,8 @@ typedef struct tag_CMDTextRoomLiveMessageRes
     int16  forecastflag;           //是否明日预测:0-否；1-是；
     int16  livetype;               //文字直播类型：1-纯文字；2-文字+链接；3-文字+图片；
     int16  textlen;                //直播消息长度
-    uint64 messagetime;            //发送时间
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
     char   content[0];             //直播消息内容
 }CMDTextRoomLiveMessageRes_t;
 
@@ -1570,7 +1601,7 @@ typedef struct tag_CMDTextRoomInterestForReq
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
     uint32 teacherid;              //讲师ID
-    int16  optype;
+    int16  optype;                 //操作类型：1-关注  2-取消关注
 }CMDTextRoomInterestForReq_t;
 
 //用户点击关注响应
@@ -1578,8 +1609,9 @@ typedef struct tag_CMDTextRoomInterestForRes
 {
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
-    int16  result;                 //回复是否成功：0失败，1成功；
-    int16  fans;                   //粉丝数；
+    int16  result;                 //回复是否成功：0失败；1成功；2已关注；
+    uint32 teacherid;              //讲师ID
+    int16  optype;                 //操作类型：1是关注，2是取消关注
 }CMDTextRoomInterestForRes_t;
 
 //用户点击提问请求
@@ -1590,8 +1622,8 @@ typedef struct tag_CMDTextRoomQuestionReq
     uint32 userid;                 //用户ID
     int16  stocklen;               //个股名称长度
     int16  textlen;                //问题描述长度
-    uint8  questionType;           //客户端类型
-    uint64 messagetime;            //发送时间
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
     char   content[0];             //消息内容，格式：个股名称+问题描述
 }CMDTextRoomQuestionReq_t;
 
@@ -1601,7 +1633,7 @@ typedef struct tag_CMDTextRoomLiveActionRes
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //请求用户ID
     int16  result;                 //操作是否成功：0失败，1成功；
-    int16  messageid;              //消息ID（通用接口，失败时为0）
+    int64  messageid;              //消息ID（通用接口，失败时为0）
 }CMDTextRoomLiveActionRes_t;
 
 //用户点赞请求
@@ -1610,7 +1642,6 @@ typedef struct tag_CMDTextRoomZanForReq
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
     int64  messageid;              //消息ID
-    int16  type;                   //类型：1-文字直播；2-观点；
 }CMDTextRoomZanForReq_t;
 
 //用户点赞响应
@@ -1620,9 +1651,8 @@ typedef struct tag_CMDTextRoomZanForRes
     uint32 userid;                 //用户ID
     int16  result;                 //回复是否成功：0失败，1成功；
     int64  messageid;              //消息ID
-    int16  type;                   //类型：1-文字直播；2-观点；
-    int16  recordzans;             //消息点赞数
-    int16  totalzans;              //总点赞数
+    int64  recordzans;             //消息点赞数
+    int64  totalzans;              //总点赞数
 }CMDTextRoomZanForRes_t;
 
 //聊天请求
@@ -1632,8 +1662,9 @@ typedef struct tag_CMDRoomLiveChatReq
     uint32 srcid;                  //讲话人ID
     uint32 toid;                   //用户ID
     byte   msgtype;                //私聊类型也在放这里
-    uint64 messagetime;            //发送时间
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
     uint16 textlen;                //聊天内容长度
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
     char   content[0];             //聊天内容
 }CMDRoomLiveChatReq_t;
 
@@ -1643,13 +1674,14 @@ typedef struct tag_CMDTextRoomLiveChatRes
     uint32 vcbid;                  //房间ID
     uint32 srcid;                  //讲话人ID
     char   srcalias[NAMELEN];      //讲话人昵称
-    int16  srcheadid;              //讲话人头像
+    uint32 srcheadid;              //讲话人头像
     uint32 toid;                   //用户ID
     char   toalias[NAMELEN];       //用户昵称
-    int16  toheadid;               //用户头像
+    uint32 toheadid;               //用户头像
     byte   msgtype;                //私聊类型也在放这里
-    uint64 messagetime;            //发送时间
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
     uint16 textlen;                //聊天内容长度
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
     char   content[0];             //聊天内容
 }CMDTextRoomLiveChatRes_t;
 
@@ -1659,10 +1691,11 @@ typedef struct tag_CMDTextLiveChatReplyReq
     uint32 vcbid;                  //房间ID
     uint32 fromid;                 //回复人ID
     uint32 toid;                   //被回复人ID
-    uint64 messagetime;            //互动时间
+    uint64 messagetime;            //互动时间(yyyymmddhhmmss)
     uint16 reqtextlen;             //源消息内容长度
     uint16 restextlen;             //回复内容长度
     int16  liveflag;               //是否发布到直播：0-否；1-是；
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
     char   content[0];             //消息内容，格式：源消息内容 + 回复内容
 }CMDTextLiveChatReplyReq_t;
 
@@ -1672,23 +1705,24 @@ typedef struct tag_CMDTextLiveChatReplyRes
     uint32 vcbid;                  //房间ID
     uint32 fromid;                 //回复人ID
     char   fromalias[NAMELEN];     //回复人昵称
-    int16  fromheadid;             //回复人头像
+    uint32 fromheadid;             //回复人头像
     uint32 toid;                   //被回复人ID
     char   toalias[NAMELEN];       //被回复人昵称
-    int16  toheadid;               //被回复人头像
-    uint64 messagetime;            //互动时间
+    uint32 toheadid;               //被回复人头像
+    uint64 messagetime;            //互动时间(yyyymmddhhmmss)
     uint16 reqtextlen;             //源消息内容长度
     uint16 restextlen;             //回复内容长度
     int16  liveflag;               //是否发布到直播：0-否；1-是；
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
     char   content[0];             //消息内容，格式：源消息内容 + 回复内容
 }CMDTextLiveChatReplyRes_t;
 
-//点击查看观点请求
-typedef struct tag_CMDTextRoomLiveViewReq
+//点击查看观点类型请求
+typedef struct tag_CMDTextRoomLiveViewGroupReq
 {
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
-    uint32 teacherid;               //消息ID，为0查看列表，否则查看观点详情
+    uint32 teacherid;              //讲师ID
 }CMDTextRoomLiveViewGroupReq_t;
 
 //观点分类响应
@@ -1696,8 +1730,9 @@ typedef struct tag_CMDTextRoomViewGroupRes
 {
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
-    uint32 teacherid;
-    int16  viewtypeid;             //观点类型ID
+    uint32 teacherid;              //讲师ID
+    int32  viewtypeid;             //观点类型ID
+    int32  totalcount;             //总观点数
     int16  viewtypelen;            //观点类型名称长度
     char   viewtypename[0];        //观点类型名称
 }CMDTextRoomViewGroupRes_t;
@@ -1707,10 +1742,11 @@ typedef struct tag_CMDTextRoomLiveViewListReq
 {
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
-    uint32 teacherid;
-    int32  viewtypeid;             //观点类型ID
+    uint32 teacherid;              //讲师ID
+    int32  viewtypeid;             //观点类型ID，如果为0，则不分类返回
     int64  messageid;              //消息ID，为请求的观点概述列表的起点
-    uint32  count;                 //观点概述的条数
+    int32  startIndex;             //起始索引
+    uint32 count;                  //观点概述的条数
 }CMDTextRoomLiveViewListReq_t;
 
 //观点列表响应
@@ -1719,15 +1755,16 @@ typedef struct tag_CMDTextRoomLiveViewRes
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
     int32  viewtypeid;             //观点类型ID
-    int64  viewid;              //消息ID
+    int64  viewid;                 //消息ID
     int16  livetype;               //文字直播类型：1-纯文字；2-文字+链接；3-文字+图片；
     int16  viewTitlelen;           //观点标题长度
     int16  viewtextlen;            //观点内容长度
-    uint64 messagetime;            //发送时间
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
     int64  looks;                  //浏览次数
     int64  zans;                   //点赞数
     int64  comments;               //评论数
     int64  flowers;                //送花数
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
     char   content[0];             //消息内容，格式：观点标题+观点内容
 }CMDTextRoomLiveViewRes_t;
 
@@ -1737,25 +1774,27 @@ typedef struct tag_CMDTextRoomLiveViewDetailReq{
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
     int64  viewid;                 //观点ID
-    int64  startcommentpos;        //加载的评论起点,从0起始计数 为零会同时发送观点详情包和评论列表，不为零则只发送评论列表
+    int64  messageid;              //评论ID，为请求的观点概述列表的起点,从0起始计数 为零会同时发送观点详情包和评论列表，不为零则只发送评论列表
+    int64  startcommentpos;        //起始索引
     uint32 count;                  //加载的评论条数
+    int8   type;                   //请求类型，1观点详情，2观点评论，3观点详情+评论
 }CMDTextRoomLiveViewDetailReq_t;
 
 //查看评论详细信息
-typedef struct tag_CMDTextRoomViewInfoRes {
-    
+typedef struct tag_CMDTextRoomViewInfoRes
+{
     uint32 vcbid;                  	//房间ID
     uint32 userid;                 	//请求用户ID
-    int64  viewid;			//观点ID
-    uint32 commentid;		//评论ID
+    int64  viewid;			        //观点ID
+    int64  commentid;				//评论ID
     uint32 viewuserid;              //评论用户ID
-    char   useralias[NAMELEN];	//评论的用户昵称，不对应上面的用户ID
+    char   useralias[NAMELEN];		//评论的用户昵称，不对应上面的用户ID
     int16  textlen;                	//评论长度
-    uint64 messagetime;            	//发送时间
-    uint32 reqcommentstype;		//评论客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
-    uint32 srcinteractid;		//源评论ID（回复评论内容时需要填写），0则代表没有
-    char   srcuseralias[NAMELEN];  //源评论的用户昵称，没有则为空
-    char   content[0];             //评论内容
+    uint64 messagetime;            	//发送时间(yyyymmddhhmmss)
+    int64  srcinteractid;			//源评论ID（回复评论内容时需要填写），0则代表没有
+    char   srcuseralias[NAMELEN];  	//源评论的用户昵称，没有则为空
+    int8   commentstype;			//客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
+    char   content[0];            	//评论内容
 }CMDTextRoomViewInfoRes_t;
 
 
@@ -1765,7 +1804,7 @@ typedef struct tag_CMDTextRoomViewTypeReq
     uint32 vcbid;                  //房间ID
     uint32 teacherid;              //请求用户ID
     int16  actiontypeid;           //操作类型ID：1-新增；2-修改；3-删除（需要删除分类下所有观点后才可操作）；
-    int16  viewtypeid;             //观点类型ID（新增时为0）
+    int32  viewtypeid;             //观点类型ID（新增时为0）
     char   viewtypename[NAMELEN];  //观点类型名称
 }CMDTextRoomViewTypeReq_t;
 
@@ -1774,8 +1813,8 @@ typedef struct tag_CMDTextRoomViewTypeRes
 {
     uint32 vcbid;                  //房间ID
     uint32 teacherid;              //请求用户ID
-    int16  result;                 //操作是否成功：-1失败，0成功；
-    int16  viewtypeid;              //消息ID（通用接口，失败时为0）
+    int16  result;                 //操作是否成功：0失败，1成功；
+    int32  viewtypeid;             //观点类型ID（通用接口，失败时为0）
 }CMDTextRoomViewTypeRes_t;
 
 //讲师发布观点或修改观点请求
@@ -1787,7 +1826,8 @@ typedef struct tag_CMDTextRoomViewMessageReq
     int16  viewtype;               //文字直播类型：1-纯文字；2-文字+链接；3-文字+图片；
     int16  titlelen;               //观点标题长度
     int16  textlen;                //观点内容长度
-    uint64 messagetime;            //发送时间
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
     char   content[0];             //观点格式：观点标题+观点内容
 }CMDTextRoomViewMessageReq_t;
 
@@ -1797,7 +1837,7 @@ typedef struct tag_CMDTextRoomViewMessageReqRes
     uint32 userid;                 //用户ID
     int64  messageid;              //消息ID（修改时填入，新增时为0）
     int16  titlelen;               //观点标题长度
-    uint64 messagetime;            //发送时间
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
     char   content[0];             //观点格式：观点标题
 }CMDTextRoomViewMessageReqRes_t;
 
@@ -1806,7 +1846,7 @@ typedef struct tag_CMDTextRoomViewDeleteReq
 {
     uint32 vcbid;                  	//房间ID
     uint32 userid;                 	//用户ID
-    int64  viewid;              		//消息ID
+    int64  viewid;              		//观点类型ID
 }CMDTextRoomViewDeleteReq_t;
 
 //讲师删除观点响应
@@ -1814,8 +1854,8 @@ typedef struct tag_CMDTextRoomViewDeleteRes
 {
     uint32 vcbid;                  	//房间ID
     uint32 userid;                 	//用户ID
-    int64  viewid;              		//消息ID
-    int16  result;                 //操作是否成功：0失败，1成功；
+    int64  viewid;              	//消息ID
+    int16  result;                  //操作是否成功：0失败，1成功；
 }CMDTextRoomViewDeleteRes_t;
 
 //观点评论详细页送花请求
@@ -1834,7 +1874,7 @@ typedef struct tag_CMDTextLiveViewFlowerRes
     uint32 userid;                 //用户ID
     int16  result;                 //回复是否成功：0失败，1成功；
     int64  messageid;              //消息ID
-    int16  recordflowers;          //总送花数
+    int64  recordflowers;          //总送花数
 }CMDTextLiveViewFlowerRes_t;
 
 //对观点进行评论
@@ -1845,9 +1885,9 @@ typedef struct tag_CMDTextRoomViewCommentReq
     uint32 toid;                   //被评论人ID
     int64  messageid;              //消息ID
     int16  textlen;                //评论长度
-    uint64 messagetime;            //发送时间
-    uint8  commentstype;           //评论来源
-    uint32 srcinteractid;          //如果是对评论产生评论，需要填写这字段
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
+    int64  srcinteractid;          //如果是对评论产生评论，需要填写这字段
     char   content[0];             //评论内容
 }CMDTextRoomViewCommentReq_t;
 
@@ -1856,12 +1896,12 @@ typedef struct tag_CMDTextLiveHistoryListReq
 {
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
-    uint32 teacherid;             //讲师ID
-    int32  count;                  //获取多少条记录 ,-1表示所有
-    int16  fromIndex;              //从第几条开始取,-1该字段无效
-    int16  toIndex;                //到第几条结束,-1该字段无效
-    int32  fromdate;              //从哪一天(年月日)开始,count=-1该字段无效
-    uint8  bInc;                  //是否升序
+    uint32 teacherid;              //讲师ID
+    int32  count;                  //获取多少条记录
+    int16  fromIndex;              //从第几条开始取
+    int16  toIndex;                //到第几条结束
+    int32  fromdate;               //从哪一天(年月日)开始
+    uint8  bInc;                   //是否升序（0降序,1升序）
 }CMDTextLiveHistoryListReq_t;
 
 //点击直播历史（可分页请求展示）响应
@@ -1870,41 +1910,32 @@ typedef struct tag_CMDTextLiveHistoryListRes
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
     uint32 teacherid;              //讲师ID
-    uint32 datetime;               //日期：如20160107
-    uint64 beginTime;              //一天内直播第一条记录的时间
-    uint64 endTime;                //一天内最后一条记录的时间
+    uint32 datetime;               //日期(yyyymmdd)
+    uint64 beginTime;              //一天内直播第一条记录的时间(yyyymmddhhmmss)
+    uint64 endTime;                //一天内最后一条记录的时间(yyyymmddhhmmss)
     uint32 renQi;                  //当天人气
     uint32 cAnswer;                //回答问题的条数
+    uint32 totalCount;             //当天直播记录总数
 }CMDTextLiveHistoryListRes_t;
 
 //请求某一天的直播记录列表（可分页请求展示）请求
 typedef struct tag_CMDTextLiveHistoryDaylyReq
 {
-    uint32 datetime;               //哪一天的记录(yyyymmdd)
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
     uint32 teacherid;              //讲师ID
     int16  type;                   //类型：1-文字直播；2-直播重点；3-明日预测（已关注的用户可查看）；4-观点；
-    int64  messageid;              //上一次请求得到的最大消息ID，第一次为0
-    int32  count;                  //获取多少条记录 ,-1表示所有
+    int64  messageid;              //请求得到的最大消息ID，第一次为0
+    int32  count;                  //获取多少条记录
+    int32  startindex;             //起始索引
+    uint32 datetime;               //哪一天的记录(yyyymmdd)
 }CMDTextLiveHistoryDaylyReq_t;
 
-//对观点点赞请求
-typedef struct tag_CMDViewZanForReq
+//讲师进入房间广播消息
+typedef struct tag_CMDTeacherComeNotify
 {
-    uint32 userid;                 //用户ID
-    int64  messageid;              //消息ID
-}CMDViewZanForReq_t;
-
-//对观点点赞响应
-typedef struct tag_CMDViewZanForRes
-{
-    uint32 userid;                 //用户ID
-    int16  result;                 //回复是否成功：0失败，1成功；
-    int64  messageid;              //消息ID
-    int16  recordzans;             //消息点赞数
-}CMDViewZanForRes_t;
-
+    int64  recordzans;             //房间总点赞数
+}CMDTeacherComeNotify_t;
 
 #pragma pack()
 
@@ -1952,9 +1983,7 @@ typedef enum
     FT_ROOMOPSTATUS_CLOSE_FREEMIC      = 0x00000200,   //自由排麦
     FT_ROOMOPSTATUS_CLOSE_INOUTMSG    = 0x00000400,   //屏蔽用户进出信息
     FT_ROOMOPSTATUS_CLOSE_ROOM        = 0x00000800,   //关闭聊天室
-    
 }e_roomopstate;
-
 
 typedef enum
 {

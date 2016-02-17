@@ -23,7 +23,6 @@
 @interface SearchController()<UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate>
 {
     NSArray *_keywordsArr;
-//    MySearchBar *_mySearchBar; // 搜索框
     UIView *_accessoryView; // 遮盖层
     UIView *headView;
     GroupListRequest *_grouRequest;
@@ -245,7 +244,7 @@
         {
             _defaultView.hidden = YES;
             RoomGroup *group = [_allDatas objectAtIndex:0];
-            NSString *searchWords = [NSString stringWithFormat:@"cname like '*%@*' or nvcbid like '*%@*'", keywords, keywords];
+            NSString *searchWords = [NSString stringWithFormat:@"cname like '*%@*' or nvcbid like '*%@*'" , keywords, keywords];
             NSPredicate *pre = [NSPredicate predicateWithFormat:searchWords];
             _aryResult = [group.aryRoomHttp filteredArrayUsingPredicate:pre];
             if (_aryResult.count == 0)

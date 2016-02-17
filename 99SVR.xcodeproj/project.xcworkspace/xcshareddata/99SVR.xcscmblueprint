@@ -1,29 +1,32 @@
 {
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "FC06F58D0D8D59AF7F38DECC48782B3146D75CB6+++339164E",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "FD72C36D2DCD3B698D91B33D87680A695A749313+++8BD3F24" : {
+
+    },
     "FD72C36D2DCD3B698D91B33D87680A695A749313+++48FE1AE" : {
 
     },
     "aff20229-0aa5-3140-a96a-1427fda5f765++4770+++BF85117" : {
 
-    },
-    "FD72C36D2DCD3B698D91B33D87680A695A749313+++8BD3F24" : {
-
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "FD72C36D2DCD3B698D91B33D87680A695A749313+++48FE1AE" : 0,
+    "FD72C36D2DCD3B698D91B33D87680A695A749313+++8BD3F24" : 0,
     "F501F6253A6AEB746530F92C6B0EA8E3AD06410B+++0EA0040" : 0,
+    "FC06F58D0D8D59AF7F38DECC48782B3146D75CB6+++339164E" : 0,
     "aff20229-0aa5-3140-a96a-1427fda5f765++4770+++BF85117" : 0,
     "2CC69C7EFC439AC727F09E33B49EFBD1D2365CBA+++393A8A0" : 0,
-    "FD72C36D2DCD3B698D91B33D87680A695A749313+++8BD3F24" : 0
+    "FD72C36D2DCD3B698D91B33D87680A695A749313+++48FE1AE" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "3D4FDBCC-82E7-4ADF-B23E-F418E1295EBF",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "FD72C36D2DCD3B698D91B33D87680A695A749313+++48FE1AE" : "99SVR\/",
+    "FD72C36D2DCD3B698D91B33D87680A695A749313+++8BD3F24" : "99SVR\/",
     "F501F6253A6AEB746530F92C6B0EA8E3AD06410B+++0EA0040" : "99SVR\/99SVR\/Externals\/DTCoreText\/Externals\/DTFoundation\/",
+    "FC06F58D0D8D59AF7F38DECC48782B3146D75CB6+++339164E" : "99SVR-1.2\/",
     "aff20229-0aa5-3140-a96a-1427fda5f765++4770+++BF85117" : "",
     "2CC69C7EFC439AC727F09E33B49EFBD1D2365CBA+++393A8A0" : "99SVR\/99SVR\/Externals\/DTCoreText\/",
-    "FD72C36D2DCD3B698D91B33D87680A695A749313+++8BD3F24" : "99SVR\/"
+    "FD72C36D2DCD3B698D91B33D87680A695A749313+++48FE1AE" : "99SVR\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "99SVR",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -38,6 +41,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Cocoanetics\/DTFoundation.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F501F6253A6AEB746530F92C6B0EA8E3AD06410B+++0EA0040"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/xiazl3053\/99SVR.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "FC06F58D0D8D59AF7F38DECC48782B3146D75CB6+++339164E"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/172.16.251.110:8080\/svn\/JJCJPHONE",

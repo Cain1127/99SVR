@@ -275,6 +275,12 @@
         return ;
     }
     
+    if (!_strCode || !strCode)
+    {
+        [self.view makeToast:@"验证码信息异常"];
+        return ;
+    }
+    
     NSString *strUrl = @"http://api.99ducaijing.com/mapi/register";
     
     NSDictionary *parameters = @{@"type":[NSNumber numberWithInt:2],@"account":strName,@"pwd":strPwd,@"codeid":_strCode,@"code":strCode};
@@ -299,7 +305,10 @@
                      [UserInfo sharedUserInfo].nUserId = [[UserDefaults objectForKey:kUserId] intValue];
                      NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
                      [UserInfo sharedUserInfo].strPwd = userPwd;
-                     [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
+                     if(userPwd)
+                     {
+                         [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
+                     }
                      [[LSTcpSocket sharedLSTcpSocket] setUserInfo];
                      [[LSTcpSocket sharedLSTcpSocket] loginServer:[data objectForKey:@"userid"] pwd:__strPwd];
                      

@@ -88,14 +88,13 @@
     [_tableView registerClass:[SettingCell class] forCellReuseIdentifier:@"cellId"];
     [self addDefaultHeader:@"设置"];
     
-    if([UserInfo sharedUserInfo].bIsLogin)
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
         UIButton *logoutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         logoutBtn.frame = CGRectMake(0, _tableView.height+_tableView.y+40,kScreenWidth,kCellHeight);
         [logoutBtn setTitle:@"退出" forState:UIControlStateNormal];
         [logoutBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [logoutBtn setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateHighlighted];
-        logoutBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
         logoutBtn.layer.borderColor = kLineColor.CGColor;
         logoutBtn.layer.borderWidth = 0.5f;
         [self.view addSubview:logoutBtn];
@@ -145,7 +144,6 @@
         [UserDefaults removeObjectForKey:kIsLogin];
         [UserInfo sharedUserInfo].bIsLogin = NO;
         [UserInfo sharedUserInfo].nUserId = 0;
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
         [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
         [self dismissViewControllerAnimated:YES completion:nil];
     }

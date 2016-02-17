@@ -40,7 +40,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     //聊天view
     UIView *bodyView;
     UIView *downView;
-    
+    BOOL bDrag;
     UIView *defaultHeadView;
     UIView *defaultDownView;
     
@@ -167,11 +167,17 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 #pragma mark 关注
 - (void)colletCurrentRoom
 {
-    _btnRight.selected = !_btnRight.selected;
-    NSString *strMsg = _btnRight.selected ? @"关注成功" : @"取消关注";
-    [self.view makeToast:strMsg];
-    [[LSTcpSocket sharedLSTcpSocket] sendColletRoom:_btnRight.selected];
-    
+    if([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
+    {
+        _btnRight.selected = !_btnRight.selected;
+        NSString *strMsg = _btnRight.selected ? @"关注成功" : @"取消关注";
+        [self.view makeToast:strMsg];
+        [[LSTcpSocket sharedLSTcpSocket] sendColletRoom:_btnRight.selected];
+    }
+    else
+    {
+        [self.view makeToast:@"游客不能关注"];
+    }
 }
 
 - (void)hiddenTopHud
@@ -298,7 +304,9 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     [_btnGift setFrame:Rect(kScreenWidth-49,_scrollView.height-100, 39, 39)];
     [_btnGift setImage:[UIImage imageNamed:@"meigui_n"] forState:UIControlStateNormal];
     [_btnGift setImage:[UIImage imageNamed:@"meigui_h"] forState:UIControlStateHighlighted];
-    [_btnGift addTarget:self action:@selector(sendRose) forControlEvents:UIControlEventTouchUpInside];
+//    [_btnGift addTarget:self action:@selector(sendRose) forControlEvents:UIControlEventTouchUpInside];
+    [_btnGift addTarget:self action:@selector(dragEnd:withEvent:) forControlEvents:UIControlEventTouchUpInside];
+    [_btnGift addTarget:self action:@selector(dragMoving:withEvent: )forControlEvents: UIControlEventTouchDragInside];
     
     _downHUD = [[UIView alloc] initWithFrame:Rect(0, kVideoImageHeight-24, kScreenWidth, 44)];
     UIImageView *downImg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
@@ -323,11 +331,57 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     [self initUIBody];
 }
 
+- (void) dragMoving: (UIControl *) c withEvent:ev
+{
+    CGPoint point = [[[ev allTouches] anyObject] locationInView:bodyView];
+    CGFloat x;
+    CGFloat y;
+    if (point.x -19.5<=0)
+    {
+        x = 0;
+    }
+    else if(point.x +19.5>=bodyView.width)
+    {
+        x = bodyView.width - 39;
+    }
+    else
+    {
+        x = point.x;
+    }
+    if (point.y-19.5 <= 0)
+    {
+        y = 0;
+    }
+    else if(point.y+19.5>=bodyView.height-50)
+    {
+        y = bodyView.height-89;
+    }
+    else
+    {
+        y = point.y;
+    }
+    c.frame = Rect(x, y, 39, 39);
+    //计算center
+    bDrag = YES;
+}
+
+- (void)dragEnd:(UIControl *)c withEvent:ev
+{
+    if (bDrag)
+    {
+        bDrag = NO;
+    }
+    else
+    {
+        [self sendRose];
+    }
+}
+
+
 - (void)connectUnVideo:(UIButton *)sender
 {
     [_ffPlay setOnlyAudio:sender.selected];
     sender.selected = !sender.selected;
-    
 }
 
 - (void)showEmojiView
@@ -562,6 +616,10 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         [UIView commitAnimations];
         bFull = YES;
         _btnFull.selected = YES;
+        if (_tableView.hidden==NO)
+        {
+            _tableView.hidden = YES;
+        }
     }
     else
     {
@@ -692,6 +750,10 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 
 - (void)switchBtn:(int)nTag
 {
+    if (_tableView.hidden==NO)
+    {
+        _tableView.hidden = YES;
+    }
     UIButton *btnSender = [_group viewWithTag:nTag];
     if(btnSender)
     {
@@ -848,7 +910,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatMSg:) name:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomListNotice:) name:MESSAGE_ROOM_NOTICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomUserList:) name:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(keyboardWasHidden:)
@@ -860,6 +921,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(room_kickout) name:MESSAGE_ROOM_KICKOUT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeNotification) name:MESSAGE_REMOVE_NOTIFY_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reConnectRoomInfo) name:MESSAGE_RECONNECT_TIMER_VC object:nil];
 }
 
 - (void)removeNotification
@@ -924,12 +986,12 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     [[LSTcpSocket sharedLSTcpSocket] enterBackGroud];
     __weak RoomViewController *__self =self;
     dispatch_main_async_safe(
-                   ^{
-                       [__self.chatView reloadData];
-                       [__self.noticeView reloadData];
-                       [__self.tableView reloadData];
-                       [__self.priChatView reloadData];
-                   });
+    ^{
+       [__self.chatView reloadData];
+       [__self.noticeView reloadData];
+       [__self.tableView reloadData];
+       [__self.priChatView reloadData];
+    });
     [_ffPlay stop];
 }
 
@@ -1210,7 +1272,24 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     }
     else
     {
-        return nil;
+        if (tableView == _noticeView)
+        {
+            strIdentifier = @"kNoticeIdentifier";
+        }
+        else if(tableView == _chatView)
+        {
+            strIdentifier = @"kChatIdentifier";
+        }
+        else
+        {
+            strIdentifier = @"kPriChatIdentifier";
+        }
+        cell = [tableView dequeueReusableCellWithIdentifier:strIdentifier];
+        if (cell==nil)
+        {
+            cell = [[ZLCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
+        }
+        return cell;
     }
     cell = [tableView dequeueReusableCellWithIdentifier:strIdentifier];
     if (cell==nil)

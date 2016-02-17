@@ -52,11 +52,11 @@
     return self;
 }
 
+#pragma mark 今日重点
 - (void)decodePointList:(CMDTextRoomLivePointNoty_t *)notify
 {
     _vcbid = notify->vcbid;
     _userid = notify->userid;
-    _type = notify->type;
     _time = notify->messagetime;
     _teacherid = notify->teacherid;
     _messageid = notify->messageid;

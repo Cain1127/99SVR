@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <DTCoreText/DTCoreText.h>
 
+@class ThumButton;
 @interface LiveCoreTextCell : UITableViewCell
 
 @property (nonatomic,strong) DTAttributedTextContentView *textCoreView;
 @property (nonatomic,strong) UILabel *lblTime;
-@property (nonatomic,strong) UIButton *btnThum;
+@property (nonatomic,strong) ThumButton *btnThum;
 @property (nonatomic,strong) UILabel *line;
 
 @end

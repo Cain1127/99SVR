@@ -8,6 +8,8 @@
 
 #import "CustomViewController.h"
 
-@interface TextHomeViewController : CustomViewController
+@interface TextHomeViewController : UIViewController
+
+- (id)initWithRoom:(int32_t)roomid;
 
 @end

@@ -7,7 +7,10 @@
 //
 
 #import "CustomViewController.h"
+@class TextTcpSocket;
 
 @interface TextChatViewController : UIViewController
+
+- (id)initWithSocket:(TextTcpSocket *)textSocket;
 
 @end

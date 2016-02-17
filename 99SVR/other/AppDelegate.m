@@ -49,8 +49,8 @@
     leftView = [[LeftViewController alloc] init];
     indexView = [[IndexViewController alloc] init];
     rightView = [[RightViewController alloc] init];
-//    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
-    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
+    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
+//    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
     [_window setRootViewController:_sides];
     _sides.speedf = 0.5;
     return YES;
@@ -77,7 +77,8 @@
                 [alert show];
             }
         }
-    } fail:^(NSError *error) {
+    } fail:^(NSError *error)
+    {
         DLog(@"获取失败");
     }];
     
@@ -97,27 +98,22 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
-{}
+{
+
+}
 
 -(void)setEndBackground
 {
-    if (bStatus)
-    {
-        DLog(@"等待时间不够");
-        return ;
-    }
-    DLog(@"进入后台!");
-    bGGLogin = YES;
+    
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    bStatus = NO;
-    self.backgroundTaskIdentifier = [application beginBackgroundTaskWithExpirationHandler:^(void)
-    {
-         [self endBackgroundTask];
+    [[UIApplication sharedApplication] setKeepAliveTimeout:600 handler:
+    ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RECONNECT_TIMER_VC object:nil];
     }];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"ON"];
 }
 
 -(void)endBackgroundTask
@@ -127,13 +123,15 @@
     dispatch_async(mainQueue, ^(void)
     {
         AppDelegate *strongSelf = weakSelf;
-        if (strongSelf != nil){
+        if (strongSelf != nil)
+        {
             [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
             // 销毁后台任务标识符
             strongSelf.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
         }
     });
 }
+
 -(void)applicationWillEnterForeground:(UIApplication *)application
 {
     
@@ -142,13 +140,6 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     DLog(@"返回");
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ADD_NOTIFY_VC object:nil];
-    bStatus = YES;
-    [self.myTimer invalidate];
-    if (bGGLogin)
-    {
-//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_COME_BACK_VC object:nil];
-        bGGLogin = NO;
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];
 }
 @end

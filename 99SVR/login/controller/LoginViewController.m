@@ -70,7 +70,7 @@
     [lblView setBackgroundColor:RGB(234, 239, 244)];
     [bodyView addSubview:lblView];
     lblView.layer.borderWidth = 0.5;
-    lblView.layer.borderColor =RGB(208, 215, 232).CGColor;
+    lblView.layer.borderColor =UIColorFromRGB(0xcfcfcf).CGColor;
     [lblView.layer setMasksToBounds:YES];
     [lblView.layer setCornerRadius:44];
     

@@ -244,10 +244,13 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     req.nmask = (int)time(0);
     if(req.userid != 0)
     {
-        NSString *strMd5 = [DecodeJson XCmdMd5String:_strPwd];
+        if(_strPwd)
+        {
+            NSString *strMd5 = [DecodeJson XCmdMd5String:_strPwd];
+            [UserInfo sharedUserInfo].strMd5Pwd = strMd5;
+            strcpy(req.cuserpwd,[strMd5 UTF8String]);
+        }
         [UserInfo sharedUserInfo].strPwd = _strPwd;
-        [UserInfo sharedUserInfo].strMd5Pwd = strMd5;
-        strcpy(req.cuserpwd,[strMd5 UTF8String]);
     }
     
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
@@ -483,11 +486,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     req.vcbid = (uint32)[_strRoomId intValue];
     req.coremessagever = _PRODUCT_CORE_MESSAGE_VER_;
     req.devtype = 2;
-    if (_strRoomPwd)
+    if ([_strRoomPwd length]>0)
     {
         sprintf(req.croompwd,"%s",[_strRoomPwd UTF8String]);
     }
-    if(req.userid!=0 && [UserInfo sharedUserInfo].nType == 1)
+    if(req.userid!=0 && [UserInfo sharedUserInfo].nType == 1 && [UserInfo sharedUserInfo].strMd5Pwd && [[UserInfo sharedUserInfo].strMd5Pwd length]>0)
     {
         strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
     }
@@ -1292,7 +1295,6 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     {
         downGCD = dispatch_queue_create("downgcd",0);
     }
-    
     if (nSocketType == 1)
     {
         //登录服务器信息

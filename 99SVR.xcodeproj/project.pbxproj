@@ -331,6 +331,8 @@
 		BB88F3821C48BA7300C1F8D9 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3761C48BA7300C1F8D9 /* libavutil.a */; };
 		BB88F3831C48BA7300C1F8D9 /* libDTCoreText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3771C48BA7300C1F8D9 /* libDTCoreText.a */; };
 		BB88F3891C48BA7300C1F8D9 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F37D1C48BA7300C1F8D9 /* libswscale.a */; };
+		BBAB82E41C7049FB00C6AC34 /* ThumButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAB82E31C7049FB00C6AC34 /* ThumButton.m */; };
+		BBAB82E71C719CCD00C6AC34 /* RightView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAB82E61C719CCD00C6AC34 /* RightView.m */; };
 		BBAC81341C37E61500CE9D2B /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAC81311C37E61500CE9D2B /* libMobClickLibrary.a */; };
 		BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F31C4CD515008F2CEC /* SVRInitLBS.m */; };
 		BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */; };
@@ -894,6 +896,10 @@
 		BB88F3761C48BA7300C1F8D9 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavutil.a; sourceTree = "<group>"; };
 		BB88F3771C48BA7300C1F8D9 /* libDTCoreText.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libDTCoreText.a; sourceTree = "<group>"; };
 		BB88F37D1C48BA7300C1F8D9 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswscale.a; sourceTree = "<group>"; };
+		BBAB82E21C7049FB00C6AC34 /* ThumButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumButton.h; sourceTree = "<group>"; };
+		BBAB82E31C7049FB00C6AC34 /* ThumButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumButton.m; sourceTree = "<group>"; };
+		BBAB82E51C719CCD00C6AC34 /* RightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightView.h; sourceTree = "<group>"; };
+		BBAB82E61C719CCD00C6AC34 /* RightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightView.m; sourceTree = "<group>"; };
 		BBAC81311C37E61500CE9D2B /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		BBAC81321C37E61500CE9D2B /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		BBAC81331C37E61500CE9D2B /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClickSocialAnalytics.h; sourceTree = "<group>"; };
@@ -1183,6 +1189,8 @@
 				BB88F3211C41795D00C1F8D9 /* LiveCoreTextCell.m */,
 				BB88F36E1C479CE000C1F8D9 /* TextLivingCell.h */,
 				BB88F36F1C479CE000C1F8D9 /* TextLivingCell.m */,
+				BBAB82E51C719CCD00C6AC34 /* RightView.h */,
+				BBAB82E61C719CCD00C6AC34 /* RightView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1711,6 +1719,8 @@
 				BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */,
 				BB1661891C3D094F00D318BE /* ZLCoreTextCell.h */,
 				BB16618A1C3D094F00D318BE /* ZLCoreTextCell.m */,
+				BBAB82E21C7049FB00C6AC34 /* ThumButton.h */,
+				BBAB82E31C7049FB00C6AC34 /* ThumButton.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -2269,6 +2279,7 @@
 				BB88F3221C41795D00C1F8D9 /* LiveCoreTextCell.m in Sources */,
 				BB63F6021C2CC7A300A042E8 /* NSAttributedString+EmojiExtension.m in Sources */,
 				BB63F6231C2CC7A300A042E8 /* IndexViewController.m in Sources */,
+				BBAB82E41C7049FB00C6AC34 /* ThumButton.m in Sources */,
 				BB63F5DB1C2CC7A300A042E8 /* QCheckBox.m in Sources */,
 				BB63F5AD1C2CC7A300A042E8 /* UIView+Touch.m in Sources */,
 				BB88F35D1C4736C100C1F8D9 /* AFHTTPRequestOperation.m in Sources */,
@@ -2331,6 +2342,7 @@
 				BB63F5C41C2CC7A300A042E8 /* MASLayoutConstraint.m in Sources */,
 				BB63F5D31C2CC7A300A042E8 /* MJRefreshLegendHeader.m in Sources */,
 				BB63F6001C2CC7A300A042E8 /* EmojiView.m in Sources */,
+				BBAB82E71C719CCD00C6AC34 /* RightView.m in Sources */,
 				BB63F60E1C2CC7A300A042E8 /* LoginTextField.m in Sources */,
 				BB88F3131C41461900C1F8D9 /* TextLiveViewController.m in Sources */,
 				BBE56C551C4F8AE50030E050 /* IdeaDetails.m in Sources */,
@@ -2563,7 +2575,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "61f5f47f-494c-4172-9716-44b79cb117bb";
+				PROVISIONING_PROFILE = "32671d5f-3f19-470d-9186-87408dcfe3bb";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "armv7 arm64";

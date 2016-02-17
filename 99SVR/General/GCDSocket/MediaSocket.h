@@ -24,4 +24,6 @@ typedef void(^ReciveMessage)(unsigned char *cBuf,int nLen,int pt);
 
 - (void)setEnableVideo:(BOOL)enable;
 
+- (void)settingBackVideo:(BOOL)enable;
+
 @end

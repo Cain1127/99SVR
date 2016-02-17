@@ -31,20 +31,32 @@
     [self.view addSubview:container];
     _noDataView = container;
     container.backgroundColor = [UIColor colorWithHex:@"#f3f3f3"];
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 30, self.view.width, 40)];
+    [lblName setText:@"没有足迹"];
+    [lblName setFont:XCFONT(14)];
+    [container addSubview:lblName];
+    lblName.textAlignment = NSTextAlignmentCenter;
     
-    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"big_logo"]];
-    [container addSubview:logoImageView];
-    [logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(container).offset(54);
-        make.right.equalTo(container).offset(-54);
-        make.top.equalTo(container).offset(98);
-    }];
+//    UIButton *btnRand = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [container addSubview:btnRand];
+//    [btnRand setTitle:@"随便看看" forState:UIControlStateNormal];
+//    btnRand.frame = Rect(30, 80, kScreenWidth-60, 44);
+//    [btnRand setTitleColor:kNavColor forState:UIControlStateNormal];
+//    [btnRand addTarget:self action:@selector(randEnterRoom) forControlEvents:UIControlEventTouchUpInside];
     
-    if (self.videos == nil || self.videos.count == 0) {
+    if (self.videos == nil || self.videos.count == 0)
+    {
         _noDataView.hidden = NO;
-    } else {
+    }
+    else
+    {
         _noDataView.hidden = YES;
     }
+}
+
+- (void)randEnterRoom
+{
+    
 }
 
 - (void)reloadData
@@ -61,6 +73,10 @@
         {
             [self setEmptyData:YES];
         }
+    }
+    else
+    {
+        [self setEmptyData:YES];
     }
 }
 

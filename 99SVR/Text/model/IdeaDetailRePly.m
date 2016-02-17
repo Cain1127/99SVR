@@ -32,7 +32,7 @@
     _viewuserid = resp->viewuserid;
     _viewuserid = resp->viewuserid;
     _textLen = resp->textlen;
-    _reqcommentstype = resp->reqcommentstype;
+//    _reqcommentstype = resp->reqcommentstype;
     _srcinteractid = resp->srcinteractid;
     _strContent = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
     

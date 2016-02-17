@@ -27,7 +27,9 @@
 #define SOCKET_READ_LENGTH     1
 #define SOCKET_READ_DATA       2
 
-#define kUserInfoId [UserInfo sharedUserInfo].nUserId
+//#define kUserInfoId [UserInfo sharedUserInfo].nUserId
+#define kUserInfoId 1772664
+#define kUserInfoPwd @"123456"
 
 @interface TextTcpSocket()<GCDAsyncSocketDelegate>
 {
@@ -36,14 +38,11 @@
 }
 //@property (nonatomic,strong) NSMutableArray *aryText;
 @property (nonatomic,strong) GCDAsyncSocket *asyncSocket;
-@property (nonatomic,copy) NSString *strRoomId;
-@property (nonatomic,strong) TeacherModel *teacher;
+@property (nonatomic) int32_t roomid;
 
 @end
 
 @implementation TextTcpSocket
-
-DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 
 #pragma mark 解析文字直播数据
 
@@ -72,7 +71,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 //                [self reqLiveChat:@"测试一下" to:0 toalias:@""];
 //                [self reqChatReply:@"再试一下" to:1680014 source:@"测试一次"];
 //                [self reqLiveView:0];//查看讲师所有观点内容
-                [self reqNewList:1680014 index:0 count:20];//观点列表请求
+//                [self reqNewList:1680014 index:0 count:20];//观点列表请求
 //                [self reqOperViewType:0 name:@"测试一下" type:1];  //添加观点
             break;
             case Sub_Vchat_TextRoomLivePointEnd:
@@ -104,6 +103,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
             [self joinRoomSuccess:pNewMsg];
         }
         break;
+        case Sub_Vchat_TextRoomTeacherReq:
         case Sub_Vchat_TextRoomTeacherNotify:
         {
             [self authTeacherInfo:pNewMsg];//成功
@@ -116,7 +116,12 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
         break;
         case Sub_Vchat_TextRoomLivePointNotify:
         {
-            [self respPointTextList:pNewMsg];//直播重点
+            [self respPointTextList:pNewMsg type:2];//直播重点
+        }
+        break;
+        case Sub_Vchat_TextRoomForecastNotify:
+        {
+            [self respPointTextList:pNewMsg type:3];//明日预测
         }
         break;
         case Sub_Vchat_TextRoomLiveMessageRes:
@@ -233,7 +238,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 - (void)reqIdeaDetails:(int)nIndex count:(int)nCount ideaId:(int)ideaId
 {
     CMDTextRoomLiveViewDetailReq_t req = {0};
-    req.vcbid = [_strRoomId intValue];
+    req.vcbid = _roomid;
     req.userid = kUserInfoId;
     req.count = nCount;
     req.startcommentpos = nIndex;
@@ -246,7 +251,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 - (void)respTextQuestion:(char *)pInfo
 {
     CMDTextRoomLiveActionRes_t *resp = (CMDTextRoomLiveActionRes_t *)pInfo;
-    DLog(@"提问结果:%d--提问消息:%d",resp->result,resp->messageid);
+//    DLog(@"提问结果:%d--提问消息:%d",resp->result,resp->messageid);
 }
 
 #pragma mark 某天记录的响应
@@ -262,7 +267,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 {
     CMDTextLiveHistoryDaylyReq_t req = {0};
     req.userid = kUserInfoId;
-    req.vcbid = [_strRoomId intValue];
+    req.vcbid = _roomid;
     req.teacherid = teid;
     req.messageid = nIndex;
     req.count = nCount;
@@ -283,7 +288,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 - (void)reqHistoryList:(int)nIndex count:(int)nCount
 {
     CMDTextLiveHistoryListReq_t req = {0};
-    req.vcbid = [_strRoomId intValue];
+    req.vcbid = _roomid;
     req.userid = kUserInfoId;
     req.fromIndex = nIndex;
     req.teacherid = 1680014;
@@ -309,7 +314,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     CMDTextLiveViewFlowerReq_t req = {0};
     req.userid = kUserInfoId;
     req.messageid = msgId;
-    req.vcbid = [_strRoomId intValue];
+    req.vcbid = _roomid;
     req.count = nCount;
     [self sendMessage:(char *)&req size:sizeof(CMDTextLiveViewFlowerReq_t) version:MDM_Version_Value
               maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextLiveViewFlowerReq];
@@ -318,7 +323,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 #pragma mark 点赞回应
 - (void)respCommentZan:(char *)pInfo
 {
-    CMDViewZanForRes_t *resp = (CMDViewZanForRes_t *)pInfo;
+    CMDTextRoomZanForRes_t *resp = (CMDTextRoomZanForRes_t *)pInfo;
     if (resp->result)
     {
         DLog(@"点赞成功");
@@ -328,10 +333,11 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 #pragma mark 点赞某个评论
 - (void)reqCommentZan:(int64_t)msgid
 {
-    CMDViewZanForReq_t req = {0};
+    CMDTextRoomZanForReq_t req = {0};
     req.userid = kUserInfoId;
     req.messageid = msgid;
-    [self sendMessage:(char *)&req size:sizeof(CMDViewZanForReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextLiveViewZanForReq];
+    [self sendMessage:(char *)&req size:sizeof(CMDTextRoomZanForReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text
+               subcmd:Sub_Vchat_TextLiveViewZanForReq];
 }
 
 #pragma mark 暂未使用
@@ -373,7 +379,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     CMDTextRoomViewDeleteReq_t req;
     memset(&req, 0, sizeof(CMDTextRoomViewDeleteReq_t));
     req.userid = kUserInfoId;
-    req.vcbid = [_strRoomId intValue];
+    req.vcbid = _roomid;
     req.viewid = messageid;
     [self sendMessage:(char *)&req size:sizeof(CMDTextRoomViewDeleteReq_t) version:MDM_Version_Value
               maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomViewDeleteReq];
@@ -399,7 +405,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     char szBuf[nLength];
     memset(szBuf, 0, nLength);
     CMDTextRoomViewMessageReq_t *req = (CMDTextRoomViewMessageReq_t *)szBuf;
-    req->vcbid = [_strRoomId intValue];
+    req->vcbid = _roomid;
     req->userid = kUserInfoId;
     req->messageid = messageId;
     req->textlen = contentData.length;
@@ -416,7 +422,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 {
     NSData *typeData = [strContent dataUsingEncoding:GBK_ENCODING];
     CMDTextRoomViewTypeReq_t req;
-    req.vcbid = [_strRoomId intValue];
+    req.vcbid = _roomid;
     req.teacherid = 1680014;
     req.actiontypeid = type;
     req.viewtypeid = viewTypeId;
@@ -456,10 +462,11 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 - (void)reqNewList:(int)teacherid index:(int)nIndex count:(int)nCount
 {
     CMDTextRoomLiveViewListReq_t req= {0};
-    req.vcbid = [_strRoomId intValue];
+    req.vcbid = _roomid;
     req.userid = kUserInfoId;
-    req.teacherid = teacherid;
-    req.viewtypeid = -1;
+//    req.teacherid = teacherid;
+    req.teacherid = _teacher.teacherid;
+    req.viewtypeid = 0;
     req.messageid = nIndex;
     req.count = nCount;
     [self sendMessage:(char *)&req size:sizeof(CMDTextRoomLiveViewListReq_t) version:MDM_Version_Value
@@ -479,7 +486,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 - (void)reqLiveView:(UInt64)teacherid
 {
     CMDTextRoomLiveViewGroupReq_t viewReq={0};
-    viewReq.vcbid = [_strRoomId intValue];
+    viewReq.vcbid = _roomid;
     viewReq.userid = kUserInfoId;
     viewReq.teacherid = 1680014;
     [self sendMessage:(char*)&viewReq size:sizeof(CMDTextRoomLiveViewGroupReq_t) version:MDM_Version_Value
@@ -505,7 +512,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     memset(szBuf, 0, sLength);
     CMDTextLiveChatReplyReq_t *req = (CMDTextLiveChatReplyReq_t *)szBuf;
     req->toid = toId;
-    req->vcbid = [_strRoomId intValue];
+    req->vcbid = _roomid;
     req->fromid = kUserInfoId;
     req->messagetime = [self getNowTime];
     req->reqtextlen = srcData.length;
@@ -539,7 +546,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     memset(szBuf, 0, nLength);
     CMDRoomLiveChatReq_t *req = (CMDRoomLiveChatReq_t *)szBuf;
     memset(req, 0, sizeof(CMDRoomLiveChatReq_t));
-    req->vcbid = [_strRoomId intValue];
+    req->vcbid = _roomid;
     req->srcid = kUserInfoId;
     req->toid = toId;
     req->textlen = [contentData length]+1;
@@ -567,7 +574,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     char szBuf[nLength];
     memset(szBuf, 0, nLength);
     CMDTextRoomQuestionReq_t *req = (CMDTextRoomQuestionReq_t *)szBuf;
-    req->vcbid = [_strRoomId intValue];
+    req->vcbid = _roomid;
     req->userid = kUserInfoId;
     req->textlen = [infoData length];
     req->stocklen = [titleData length];
@@ -583,21 +590,20 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 {
     CMDTextRoomZanForReq_t zan;
     memset(&zan, 0, sizeof(CMDTextRoomZanForReq_t));
-    zan.vcbid = [_strRoomId intValue];
+    zan.vcbid = _roomid;
     zan.userid = kUserInfoId;
     zan.messageid = messageid;
-    zan.type = type;
     [self sendMessage:(char *)&zan size:sizeof(CMDTextRoomZanForReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomZanForReq];
 }
 
 #pragma mark 用户点击关注
-- (void)reqInterest:(int)teacherid
+- (void)reqTeacherCollet
 {
     CMDTextRoomInterestForReq_t req;
     memset(&req, 0, sizeof(req));
-    req.vcbid = [_strRoomId intValue];
+    req.vcbid = _roomid;
     req.userid = (UInt32)kUserInfoId;
-    req.teacherid = teacherid;
+    req.teacherid = _teacher.teacherid;
     [self sendMessage:(char *)&req size:sizeof(CMDTextRoomInterestForReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text
                subcmd:Sub_Vchat_TextRoomInterestForReq];
 }
@@ -609,11 +615,11 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     if (resp->result)
     {
         //关注成功
-        DLog(@"粉丝数:%d",resp->fans);
+        DLog(@"粉丝数:%d",resp->result);
     }
     else
     {
-        DLog(@"粉丝数:%d",resp->fans);
+        DLog(@"粉丝数:%d",resp->result);
     }
 }
 
@@ -629,17 +635,13 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 }
 
 #pragma mark 明日推荐 直播重点
-- (void)respPointTextList:(char *)pInfo
+- (void)respPointTextList:(char *)pInfo type:(int)nType
 {
     CMDTextRoomLivePointNoty_t *notify = (CMDTextRoomLivePointNoty_t *)pInfo;
-    //push notify
-    if (notify->type==2 || notify->type==3)
-    {
-        TextLiveModel *textModel = [[TextLiveModel alloc] initWithPointNotify:notify];
-        DLog(@"消息类型%d--消息:%@",textModel.type,textModel.strContent);
-        textModel = nil;
-    }
-
+    TextLiveModel *textModel = [[TextLiveModel alloc] initWithPointNotify:notify];
+    DLog(@"消息类型%d--消息:%@",textModel.type,textModel.strContent);
+    textModel.type = nType;
+    
 }
 
 #pragma mark 文字直播列表响应 完成
@@ -659,8 +661,6 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
         [_aryText addObject:textModel];
         DLog(@"文字直播");
     }
-    
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
 }
 
 #pragma mark 请求文字直播列表
@@ -668,9 +668,9 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 {
     CMDTextRoomLiveListReq_t req;
     memset(&req, 0, sizeof(CMDTextRoomLiveListReq_t));
-    req.vcbid = [_strRoomId intValue];
+    req.vcbid = _roomid;
     req.userid = kUserInfoId;
-    req.teacherid = 1680014;
+    req.teacherid = _teacher.teacherid;
     req.type = nType;
     req.messageid = nIndex;
     req.count = nCount;
@@ -682,29 +682,17 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 - (void)authTeacherInfo:(char *)pInfo
 {
     CMDTextRoomTeacherNoty_t *notify = (CMDTextRoomTeacherNoty_t *)pInfo;
-    DLog(@"收到讲师信息:%d",notify->teacherid);
     if (_teacher)
     {
         _teacher  = nil;
     }
-    _teacher = [[TeacherModel alloc] init];
-    _teacher.vcbid = notify->vcbid;
-    _teacher.teacherid = notify->teacherid;
-    _teacher.headid = notify->headid;
-    _teacher.goodatlen = notify->goodatlen;
-    _teacher.labellen = notify->labellen;
-    _teacher.historyLives = notify->historyLives;
-    _teacher.funs = notify->funs;
-    _teacher.zans = notify->zans;
-    _teacher.todaymoods = notify->todaymoods;
-    _teacher.introducelen = notify->introducelen;
-    _teacher.strName = [NSString stringWithCString:notify->teacheralias encoding:GBK_ENCODING];
-    _teacher.strContent = [NSString stringWithCString:notify->content encoding:GBK_ENCODING];
-    
+    _teacher = [[TeacherModel alloc] initWithTeacher:notify];
 //    [self reqTextRoomList:0 count:20 type:2];
 //    [self reqTextRoomList:0 count:20 type:1];
-    [self reqHistoryList:0 count:20];
+//    [self reqHistoryList:0 count:20];
+//    [self reqNewList:_teacher.teacherid index:0 count:20];
 //    [self reqDayHistoryList:0 count:20 time:[@"20160122" intValue] teacher:1680014];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
 }
 
 #pragma mark 请求讲师信息
@@ -712,8 +700,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 {
     CMDTextRoomTeacherReq_t req;
     req.userid = kUserInfoId;
-    req.vcbid = [_strRoomId intValue];
-    req.logtype = 2;
+    req.vcbid = _roomid;
     [self sendMessage:(char *)&req size:sizeof(CMDTextRoomTeacherReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomTeacherReq];
 }
 
@@ -728,7 +715,6 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
         [__self thread_room];//发送心跳
     });
     [self reqTeacherInfo];
-//    [self reqTextRoomList:0 count:20 type:1];
 }
 
 #pragma mark 心跳线程
@@ -753,7 +739,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     CMDClientPing_t req;
     memset(&req,0,sizeof(CMDClientPing_t));
     req.userid = kUserInfoId;
-    req.roomid = [_strRoomId intValue];
+    req.roomid = _roomid;
     char szBuf[128]={0};
     COM_MSG_HEADER* pHead = (COM_MSG_HEADER*)szBuf;
     pHead->length = sizeof(COM_MSG_HEADER) + sizeof(CMDClientPing_t);
@@ -888,11 +874,19 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     CMDJoinRoomReq_t req;
     memset(&req,0,sizeof(CMDJoinRoomReq_t));
     req.userid = kUserInfoId;
-    req.vcbid = (uint32)[_strRoomId intValue];
+    req.vcbid = (uint32)_roomid;
     req.coremessagever = _PRODUCT_CORE_MESSAGE_VER_;
     req.devtype = 2;
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
-    strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
+    [UserInfo sharedUserInfo].strPwd = @"123456";
+    if([UserInfo sharedUserInfo].strPwd)
+    {
+        [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:@"123456"];
+    }
+    if([UserInfo sharedUserInfo].strMd5Pwd!=nil)
+    {
+        strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
+    }
     req.time = (uint32)time(0);
     req.crc32 = 15;
     uint32 crcval = crc32((void*)&req,sizeof(CMDJoinRoomReq_t),CRC_MAGIC);
@@ -901,11 +895,31 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
                subcmd:Sub_Vchat_TextRoomJoinReq];
 }
 
-#pragma mark 连接房间
-- (void)connectRoom:(NSString *)strRoomId
+- (void)reconnectTextRoom
 {
-    
-    _strRoomId = strRoomId;
+    if (_aryText==nil)
+    {
+        _aryText = [NSMutableArray array];
+    }
+    [_aryText removeAllObjects];
+    if (_aryChat==nil)
+    {
+        _aryChat = [NSMutableArray array];
+    }
+    [_aryChat removeAllObjects];
+    if (_aryNew == nil)
+    {
+        _aryNew = [NSMutableArray array];
+    }
+    [_aryNew removeAllObjects];
+    [self connectTextServer:@"122.13.81.62" port:22806];
+    DLog(@"再次连接");
+}
+
+#pragma mark 连接房间
+- (void)connectRoom:(int32_t)roomId
+{
+    _roomid = roomId;
     if (_aryText==nil)
     {
         _aryText = [NSMutableArray array];
@@ -925,7 +939,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
 //    [self connectTextServer:strAddr port:nPort];
     [self closeSocket];
-    [self connectTextServer:@"172.16.41.96" port:22806];
+    [self connectTextServer:@"122.13.81.62" port:22806];
 }
 
 - (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort
@@ -945,6 +959,9 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 {
     //连接成功
     //sendHello,sendJoinRoom
+    [_asyncSocket performBlock:^{
+        [_asyncSocket enableBackgroundingOnSocket];
+    }];
     [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
     DLog(@"连接成功!");
     [self sendHello:MDM_Vchat_Text];
@@ -1022,7 +1039,7 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
     char szBuf[nLength];
     memset(szBuf, 0, nLength);
     CMDTextRoomLiveMessageReq_t *req = (CMDTextRoomLiveMessageReq_t *)szBuf;
-    req->vcbid = [_strRoomId intValue];
+    req->vcbid = _roomid;
     req->textlen = msgData.length+1;
     req->teacherid = teacherid;
     if (nType==2)
@@ -1049,8 +1066,9 @@ DEFINE_SINGLETON_FOR_CLASS(TextTcpSocket);
 {
     CMDUserExitRoomInfo_t req= {0};
     req.userid = kUserInfoId;
-    req.vcbid = [_strRoomId intValue];
+    req.vcbid = _roomid;
     [self sendMessage:(char *)&req size:sizeof(CMDUserExitRoomInfo_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextLiveUserExitReq];
+    [self closeSocket];
 }
 
 - (int64_t)getNowTime

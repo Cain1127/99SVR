@@ -7,13 +7,16 @@
 //
 
 #import "TextHomeViewController.h"
+#import "RightView.h"
 #import "GroupView.h"
+#import "TeacherModel.h"
+#import "ThumButton.h"
 #import "TextTcpSocket.h"
 #import "TextChatViewController.h"
 #import "TextLiveViewController.h"
 #import "TextNewViewController.h"
 
-@interface TextHomeViewController ()<UIScrollViewDelegate>
+@interface TextHomeViewController ()<UIScrollViewDelegate,RightViewDelegate>
 {
     NSInteger _tag;
     CGFloat startContentOffsetX;
@@ -21,22 +24,63 @@
     CGFloat endContentOffsetX;
     int updateCount;
     int _currentPage;
+    int32_t _roomId;
+    UIView *hidenView;
 }
-
+@property (nonatomic,strong) RightView *rightView;
+@property (nonatomic,strong) ThumButton *btnTitle;
 @property (nonatomic,strong) GroupView *group;
 @property (nonatomic,strong) UIScrollView *scrollView;
-
+@property (nonatomic,strong) TextTcpSocket *textSocket;
+@property (nonatomic,strong) UIView *headView;
 @end
 
 @implementation TextHomeViewController
 
+
+- (id)initWithRoom:(int32_t)roomid
+{
+    if(self = [super init])
+    {
+        _textSocket = [[TextTcpSocket alloc] init];
+        _roomId = roomid;
+        return self;
+    }
+    return nil;
+}
+
+- (void)refreshBtnTitle
+{
+    CGSize size = [_btnTitle.titleLabel.text sizeWithAttributes:@{NSFontAttributeName:XCFONT(16)}];
+    CGFloat width = size.width+49;
+    _btnTitle.frame = Rect(kScreenWidth/2-width/2, 20, width, 44);
+}
+
+- (void)initWithRightView
+{
+    
+}
+
 - (void)initUIHead
 {
+    _headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
+    [self.view addSubview:_headView];
+    _headView.backgroundColor = kNavColor;
+    
+    _btnTitle = [[ThumButton alloc] initWithFrame:Rect(kScreenWidth/2-50, 20, 100, 44) size:40 fontSize:16];
+    [_btnTitle setImage:[UIImage imageNamed:@"logo"] forState:UIControlStateNormal];
+    [_btnTitle setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+    [_btnTitle setTitle:@"讲师" forState:UIControlStateNormal];
+    [_headView addSubview:_btnTitle];
+    _btnTitle.titleLabel.textAlignment = NSTextAlignmentCenter;
+    _btnTitle.titleLabel.font = XCFONT(16);
+    
+    [self refreshBtnTitle];
+    
     NSArray *aryMen = @[@"直播",@"聊天",@"观点"];
     _group = [[GroupView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44) ary:aryMen];
     [self.view addSubview:_group];
     [_group setBtnTag:1 tag1:2 tag2:3];
-    
     _scrollView = [[UIScrollView alloc] initWithFrame:Rect(0,_group.y+_group.height,
                                 kScreenWidth, kScreenHeight-_group.y-_group.height)];
     [self.view addSubview:_scrollView];
@@ -44,15 +88,15 @@
     _scrollView.clipsToBounds = YES;
     _scrollView.pagingEnabled = YES;
     _scrollView.bounces = NO;
-    _scrollView.userInteractionEnabled = YES; 
+    _scrollView.userInteractionEnabled = YES;
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _scrollView.delegate = self;
     
-    TextLiveViewController *textLive = [[TextLiveViewController alloc] init];
-    TextChatViewController *textChat = [[TextChatViewController alloc] init];
-    TextNewViewController *textNew = [[TextNewViewController alloc] init];
+    TextLiveViewController *textLive = [[TextLiveViewController alloc] initWithSocket:_textSocket];
+    TextChatViewController *textChat = [[TextChatViewController alloc] initWithSocket:_textSocket];
+    TextNewViewController *textNew = [[TextNewViewController alloc] initWithSocket:_textSocket];
    
     [self addChildViewController:textLive];
     [self addChildViewController:textChat];
@@ -60,8 +104,8 @@
     
     textLive.view.frame = Rect(0, 0, kScreenWidth,_scrollView.height);
     textChat.view.frame = Rect(kScreenWidth, 0, kScreenWidth, _scrollView.height);
-    textNew.view.frame = Rect(kScreenWidth*2, 0, kScreenWidth, _scrollView.height);
-    
+    textNew.view.frame  = Rect(kScreenWidth*2, 0, kScreenWidth, _scrollView.height);
+
     [_scrollView addSubview:textLive.view];
     [_scrollView addSubview:textChat.view];
     [_scrollView addSubview:textNew.view];
@@ -70,33 +114,55 @@
     
     _tag = 0;
     
-    __weak TextHomeViewController *__self = self;
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftBtn setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
     [leftBtn setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
-    [self setLeftBtn:leftBtn];
-    
+    [_headView addSubview:leftBtn];
+    leftBtn.frame = Rect(0, 20, 44, 44);
     [leftBtn addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
     
+    
+    hidenView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+    [self.view addSubview:hidenView];
+    hidenView.hidden = YES;
+    
+    _rightView = [[RightView alloc] initWithFrame:Rect(kScreenWidth-153, 64, 145, 133)];
+    [hidenView addSubview:_rightView];
+    _rightView.hidden = YES;
+    
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [rightBtn setImage:[UIImage imageNamed:@"text_more_n"] forState:UIControlStateNormal];
+    [rightBtn setImage:[UIImage imageNamed:@"text_more_h"] forState:UIControlStateHighlighted];
     [rightBtn setImage:[UIImage imageNamed:@"text_more"] forState:UIControlStateNormal];
-    [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
-        
+    
+    __weak TextHomeViewController *__self = self;
+    __weak UIView *__hidnView = hidenView;
+    
+    [hidenView clickWithBlock:^(UIGestureRecognizer *gesture)
+    {
+        __hidnView.hidden = YES;
+        __self.rightView.hidden = YES;
     }];
-    [self setRightBtn:rightBtn];
+    
+    [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture)
+    {
+        hidenView.hidden = NO;
+        __self.rightView.hidden = NO;
+    }];
+    
+    [_headView addSubview:rightBtn];
+    rightBtn.frame = Rect(kScreenWidth-50, 20, 44, 44);
 }
 
 - (void)navBack
 {
-    
-    [[TextTcpSocket sharedTextTcpSocket] exitRoom];
+    [_textSocket exitRoom];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [_textSocket connectRoom:_roomId];
     [self initUIHead];
     __weak TextHomeViewController *__self = self;
     [_group addEvent:^(id sender)
@@ -182,5 +248,69 @@
     updateCount = 0;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTeacherInfo) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reconnectTextRoom) name:MESSAGE_RECONNECT_TIMER_VC object:nil];
+}
+
+- (void)reconnectTextRoom
+{
+    [_textSocket reconnectTextRoom];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)updateTeacherInfo
+{
+    __weak TextHomeViewController *__self = self;
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        [__self.btnTitle setTitle:_textSocket.teacher.strName forState:UIControlStateNormal];
+        [__self refreshBtnTitle];
+    });
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+- (void)rightView:(RightView *)rightView index:(NSInteger)nNumber
+{
+    switch (nNumber) {
+        case 1:
+           //关注
+            [self sendCollet];
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)sendCollet
+{
+    [_textSocket reqTeacherCollet];
+}
+
+- (void)gotoTextTodayVI
+{
+//    [_textSocket req];
+    
+}
+
+- (void)gotoHistory
+{
+    
+}
 
 @end

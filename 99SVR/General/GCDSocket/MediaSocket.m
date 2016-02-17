@@ -72,6 +72,7 @@ typedef struct _tag_MediaFrameBuffer
     BOOL bFlag;
     BOOL bVideo;
     BOOL bAudio;
+    BOOL bBack;
 }
 
 @property (nonatomic,strong) NSMutableArray *aryVideo;
@@ -98,7 +99,15 @@ typedef struct _tag_MediaFrameBuffer
 - (void)setEnableVideo:(BOOL)enable
 {
     bVideo = enable;
-    [self send_unregister_tcp:_userid room:_roomid pt:99];
+}
+
+- (void)settingBackVideo:(BOOL)enable
+{
+    bBack = enable;
+    if (bBack)
+    {
+        [self send_unregister_tcp:_userid room:_roomid pt:99];
+    }
 }
 
 - (void)setEnableAudio:(BOOL)enable
@@ -125,7 +134,7 @@ typedef struct _tag_MediaFrameBuffer
                 [__self connectIpAndPort:strAddr port:port];
             }
         }
-                               fail:nil];
+        fail:nil];
     }
     else
     {
@@ -193,7 +202,7 @@ typedef struct _tag_MediaFrameBuffer
         if (iTime%8==7)
         {
             [self send_keep_live_tcp];
-            if (bVideo)
+            if (bVideo && !bBack)
             {
                 [self send_register_tcp:_userid room:_roomid pt:99];
             }

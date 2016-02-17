@@ -157,9 +157,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TextTcpSocket *socket = [TextTcpSocket sharedTextTcpSocket];
-    [socket connectRoom:@"80001"];
-    TextHomeViewController *textHome = [[TextHomeViewController alloc] init];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithRoom:80001];
     [self presentViewController:textHome animated:YES completion:nil];
 }
 
@@ -171,9 +170,7 @@
 #pragma mark hotViewDelegate
 - (void)clickTeach:(TeacherModel *)teach
 {
-    TextTcpSocket *socket = [TextTcpSocket sharedTextTcpSocket];
-    [socket connectRoom:@"80001"];
-    TextHomeViewController *textHome = [[TextHomeViewController alloc] init];
+    TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithRoom:80001];
     [self presentViewController:textHome animated:YES completion:nil];
 }
 

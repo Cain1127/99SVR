@@ -382,96 +382,109 @@ enum {
     Sub_Vchat_HallUnInterestRes =           10017,//查看我的关注（无关注讲师），响应
     Sub_Vchat_HallUnInterestEnd =           10018,//查看我的关注（无关注讲师），列表结束
     
-    Sub_Vchat_HallViewAnswerReq =           10019,//讲师回复（包含观点回复和回答提问）请求
-    Sub_Vchat_HallViewAnswerRes =           10020,//讲师回复（包含观点回复和回答提问）响应
+    Sub_Vchat_TextLivePointListBegin =      10019,//查看明日预测（已关注的讲师），列表开始
+    Sub_Vchat_TextLivePointListRes =        10020,//查看明日预测（已关注的讲师），响应
+    Sub_Vchat_TextLivePointListEnd =        10021,//查看明日预测（已关注的讲师），列表结束
     
-    Sub_Vchat_HallInterestForReq =          10021,//关注（无关注讲师时返回所有讲师列表，点击关注）请求
-    Sub_Vchat_HallInterestForRes =          10022,//关注（无关注讲师时返回所有讲师列表，点击关注）响应
+    Sub_Vchat_HallViewAnswerReq =           10022,//讲师回复（包含观点回复和回答提问）请求
+    Sub_Vchat_HallViewAnswerRes =           10023,//讲师回复（包含观点回复和回答提问）响应
+    
+    Sub_Vchat_HallInterestForReq =          10024,//关注（无关注讲师时返回所有讲师列表，点击关注）请求
+    Sub_Vchat_HallInterestForRes =          10025,//关注（无关注讲师时返回所有讲师列表，点击关注）响应
     
     Sub_Vchat_TextRoomJoinReq =             10100,//加入房间请求
     Sub_Vchat_TextRoomJoinErr =             10101,//加入房间出错响应
     Sub_Vchat_TextRoomJoinRes =             10102,//加入房间成功响应
-    Sub_Vchat_TextRoomKeyNoty =             10103,//推送房间列表信息
     
-    Sub_Vchat_TextRoomTeacherReq =          10104,//加入房间成功后推送讲师信息请求
-    Sub_Vchat_TextRoomTeacherNotify =       10105,//加入房间成功后推送讲师信息响应
+    Sub_Vchat_TextTeacherRoomJoinNoty =     10103,//讲师加入房间成功通知
+    Sub_Vchat_TextUserRoomJoinNoty =        10104,//用户加入房间成功通知
     
-    Sub_Vchat_TextRoomLiveListReq =         10106,//加载直播记录请求
-    Sub_Vchat_TextRoomLiveListBegin =       10107,//加载直播记录，列表开始
-    Sub_Vchat_TextRoomLiveListNotify  =     10108,//加载直播记录，响应
-    Sub_Vchat_TextRoomLiveListEnd =         10109,//加载直播记录请求，列表结束
+    Sub_Vchat_TextRoomTeacherReq =          10105,//加入房间成功后推送讲师信息请求
+    Sub_Vchat_TextRoomTeacherNotify =       10106,//加入房间成功后推送讲师信息响应
     
-    Sub_Vchat_TextRoomLivePointBegin =      10110,//加载直播重点和明日预测记录，列表开始
-    Sub_Vchat_TextRoomLivePointNotify  =    10111,//加载直播重点和明日预测记录，响应
-    Sub_Vchat_TextRoomLivePointEnd =        10112,//加载直播重点和明日预测记录，列表结束
+    Sub_Vchat_TextRoomLiveListReq =         10107,//加载直播记录请求
     
-    Sub_Vchat_TextRoomLiveMessageReq =      10113,//讲师发送文字直播请求
-    Sub_Vchat_TextRoomLiveMessageRes =      10114,//讲师发送文字直播响应
+    Sub_Vchat_TextRoomLiveListBegin =       10108,//加载直播记录，列表开始
+    Sub_Vchat_TextRoomLiveListNotify  =     10109,//加载直播记录，响应
+    Sub_Vchat_TextRoomLiveListEnd =         10110,//加载直播记录请求，列表结束
     
-    Sub_Vchat_TextRoomInterestForReq =      10115,//用户点击关注请求
-    Sub_Vchat_TextRoomInterestForRes =      10116,//用户点击关注响应
+    Sub_Vchat_TextRoomLivePointBegin =      10111,//加载直播重点记录，列表开始
+    Sub_Vchat_TextRoomLivePointNotify  =    10112,//加载直播重点记录，响应
+    Sub_Vchat_TextRoomLivePointEnd =        10113,//加载直播重点记录，列表结束
     
-    Sub_Vchat_TextRoomQuestionReq =         10117,//用户点击提问请求
-    Sub_Vchat_TextRoomQuestionRes =         10118,//用户点击提问响应
+    Sub_Vchat_TextRoomForecastBegin =       10114,//加载明日预测记录，列表开始
+    Sub_Vchat_TextRoomForecastNotify  =     10115,//加载明日预测记录，响应
+    Sub_Vchat_TextRoomForecastEnd =         10116,//加载明日预测记录，列表结束
     
-    Sub_Vchat_TextRoomZanForReq =           10119,//用户对直播内容点赞请求
-    Sub_Vchat_TextRoomZanForRes =           10120,//用户对直播内容点赞响应
+    Sub_Vchat_TextRoomLiveMessageReq =      10117,//讲师发送文字直播请求
+    Sub_Vchat_TextRoomLiveMessageRes =      10118,//讲师发送文字直播响应
     
-    Sub_Vchat_TextRoomLiveChatReq =         10121,//聊天请求
-    Sub_Vchat_TextRoomLiveChatRes =         10122,//聊天响应
+    Sub_Vchat_TextRoomInterestForReq =      10119,//用户点击关注请求
+    Sub_Vchat_TextRoomInterestForRes =      10120,//用户点击关注响应
     
-    Sub_Vchat_TextLiveChatReplyReq =        10123,//聊天回复(互动)请求
-    Sub_Vchat_TextLiveChatReplyRes =        10124,//聊天回复(互动)响应
+    Sub_Vchat_TextRoomQuestionReq =         10121,//用户点击提问请求
+    Sub_Vchat_TextRoomQuestionRes =         10122,//用户点击提问响应
     
-    Sub_Vchat_TextRoomLiveViewReq =         10125,//点击查看观点请求
+    Sub_Vchat_TextRoomZanForReq =           10123,//用户对直播内容点赞请求
+    Sub_Vchat_TextRoomZanForRes =           10124,//用户对直播内容点赞响应
     
-    Sub_Vchat_TextRoomViewGroupBegin =      10126,//观点类型分类，列表开始
-    Sub_Vchat_TextRoomViewGroupRes =        10127,//观点类型分类，响应
-    Sub_Vchat_TextRoomViewGroupEnd =        10128,//观点类型分类，列表结束
+    Sub_Vchat_TextRoomLiveChatReq =         10125,//聊天请求
+    Sub_Vchat_TextRoomLiveChatRes =         10126,//聊天响应
     
-    Sub_Vchat_TextRoomViewListShowReq =     10129,//点击观点类型分类请求
+    Sub_Vchat_TextLiveChatReplyReq =        10127,//聊天回复(互动)请求
+    Sub_Vchat_TextLiveChatReplyRes =        10128,//聊天回复(互动)响应
     
-    Sub_Vchat_TextRoomLiveViewBegin =       10130,//观点列表，开始
-    Sub_Vchat_TextRoomLiveViewRes =         10131,//观点列表，响应
-    Sub_Vchat_TextRoomLiveViewEnd =         10132,//观点列表，结束
+    Sub_Vchat_TextRoomLiveViewReq =         10129,//点击查看观点请求
     
-    Sub_Vchat_TextRoomLiveViewDetailReq =   10133,//点击查看观点详情请求
+    Sub_Vchat_TextRoomViewGroupBegin =      10130,//观点类型分类，列表开始
+    Sub_Vchat_TextRoomViewGroupRes =        10131,//观点类型分类，响应
+    Sub_Vchat_TextRoomViewGroupEnd =        10132,//观点类型分类，列表结束
     
-    Sub_Vchat_TextRoomViewInfoBegin =       10134,//观点详细信息，列表开始
-    Sub_Vchat_TextRoomLiveViewDetailRes =   10135,//观点详细信息（观点），响应
-    Sub_Vchat_TextRoomViewInfoRes =         10136,//观点详细信息（评论），响应
-    Sub_Vchat_TextRoomViewInfoEnd =         10137,//观点详细信息，列表结束
+    Sub_Vchat_TextRoomViewListShowReq =     10133,//点击观点类型分类请求
     
-    Sub_Vchat_TextRoomViewTypeReq =         10138,//讲师新增/修改/删除观点类型分类请求
-    Sub_Vchat_TextRoomViewTypeRes =         10139,//讲师新增/修改/删除观点类型分类响应
+    Sub_Vchat_TextRoomLiveViewBegin =       10134,//观点列表，开始
+    Sub_Vchat_TextRoomLiveViewRes =         10135,//观点列表，响应
+    Sub_Vchat_TextRoomLiveViewEnd =         10136,//观点列表，结束
     
-    Sub_Vchat_TextRoomViewMessageReq =      10140,//讲师发布观点或修改观点请求
-    Sub_Vchat_TextRoomViewMessageRes =      10141,//讲师发布观点或修改观点响应
+    Sub_Vchat_TextRoomLiveViewDetailReq =   10137,//点击查看观点详情请求
     
-    Sub_Vchat_TextRoomViewDeleteReq =       10142,//讲师删除观点请求
-    Sub_Vchat_TextRoomViewDeleteRes =       10143,//讲师删除观点响应
+    Sub_Vchat_TextRoomViewInfoBegin =       10138,//观点详细信息，列表开始
+    Sub_Vchat_TextRoomLiveViewDetailRes =   10139,//观点详细信息（观点），响应
+    Sub_Vchat_TextRoomViewInfoRes =         10140,//观点详细信息（评论），响应
+    Sub_Vchat_TextRoomViewInfoEnd =         10141,//观点详细信息，列表结束
     
-    Sub_Vchat_TextRoomViewCommentReq =      10144,//观点进行评论请求
-    Sub_Vchat_TextRoomViewCommentRes =      10145,//观点进行评论响应
+    Sub_Vchat_TextRoomViewTypeReq =         10142,//讲师新增/修改/删除观点类型分类请求
+    Sub_Vchat_TextRoomViewTypeRes =         10143,//讲师新增/修改/删除观点类型分类响应
     
-    Sub_Vchat_TextLiveViewZanForReq =       10146,//观点评论查看页面点赞请求
-    Sub_Vchat_TextLiveViewZanForRes =       10147,//观点评论查看页面点赞响应
+    Sub_Vchat_TextRoomViewMessageReq =      10144,//讲师发布观点或修改观点请求
+    Sub_Vchat_TextRoomViewMessageRes =      10145,//讲师发布观点或修改观点响应
     
-    Sub_Vchat_TextLiveViewFlowerReq =       10148,//观点评论详细页送花请求
-    Sub_Vchat_TextLiveViewFlowerRes =       10149,//观点评论详细页送花响应
+    Sub_Vchat_TextRoomViewDeleteReq =       10146,//讲师删除观点请求
+    Sub_Vchat_TextRoomViewDeleteRes =       10147,//讲师删除观点响应
     
-    Sub_Vchat_TextLiveHistoryListReq =      10150,//直播历史（可分页请求展示）请求
-    Sub_Vchat_TextLiveHistoryListBegin =    10151,//直播历史，列表开始
-    Sub_Vchat_TextLiveHistoryListRes =      10152,//直播历史，响应
-    Sub_Vchat_TextLiveHistoryListEnd =      10153,//直播历史，列表结束
+    Sub_Vchat_TextRoomViewCommentReq =      10148,//观点进行评论请求
+    Sub_Vchat_TextRoomViewCommentRes =      10149,//观点进行评论响应
     
-    Sub_Vchat_TextLiveHistoryDaylyReq =     10154,//某一天的直播记录列表请求（可分页请求展示）请求
-    Sub_Vchat_TextLiveHistoryDaylyBegin =   10155,//某一天的直播记录列表，列表开始
-    Sub_Vchat_TextLiveHistoryDaylyRes =     10156,//某一天的直播记录列表，响应
-    Sub_Vchat_TextLiveHistoryDaylyEnd =     10157,//某一天的直播记录列表，列表结束
+    Sub_Vchat_TextLiveViewZanForReq =       10150,//观点评论查看页面点赞请求
+    Sub_Vchat_TextLiveViewZanForRes =       10151,//观点评论查看页面点赞响应
     
-    Sub_Vchat_TextLiveUserExitReq =         10158,//退出房间请求
-    Sub_Vchat_TextLiveUserExitRes =         10159,//退出房间响应
+    Sub_Vchat_TextLiveViewFlowerReq =       10152,//观点评论详细页送花请求
+    Sub_Vchat_TextLiveViewFlowerRes =       10153,//观点评论详细页送花响应
+    
+    Sub_Vchat_TextLiveHistoryListReq =      10154,//直播历史（可分页请求展示）请求
+    
+    Sub_Vchat_TextLiveHistoryListBegin =    10155,//直播历史，列表开始
+    Sub_Vchat_TextLiveHistoryListRes =      10156,//直播历史，响应
+    Sub_Vchat_TextLiveHistoryListEnd =      10157,//直播历史，列表结束
+    
+    Sub_Vchat_TextLiveHistoryDaylyReq =     10158,//某一天的直播记录列表请求（可分页请求展示）请求
+    
+    Sub_Vchat_TextLiveHistoryDaylyBegin =   10159,//某一天的直播记录列表，列表开始
+    Sub_Vchat_TextLiveHistoryDaylyRes =     10160,//某一天的直播记录列表，响应
+    Sub_Vchat_TextLiveHistoryDaylyEnd =     10161,//某一天的直播记录列表，列表结束
+    
+    Sub_Vchat_TextLiveUserExitReq =         10162,//退出房间请求
+    Sub_Vchat_TextLiveUserExitRes =         10163,//退出房间响应
     
 };
 
@@ -480,12 +493,6 @@ typedef enum MediaConnectActionType
     Connect_You = 1,
     Disconnect_You = 3,
 }e_MediaConnectActionType;
-
-typedef enum LikeForType
-{
-    LIKE_TEXTLIVE = 1,
-    LIKE_VIEWPOINT = 2
-}e_LikeForType;
 
 //----------------------------------------------------------
 #pragma pack(1)

@@ -65,6 +65,10 @@
         else
         {
             cellView.hidden = NO;
+            if(!datas && datas.count<i)
+            {
+                break;
+            }
             RoomHttp *room = datas[i];
             cellView.room = room;
             __weak RoomHttp *__room = room;
