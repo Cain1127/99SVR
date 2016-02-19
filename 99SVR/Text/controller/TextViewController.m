@@ -8,6 +8,8 @@
 
 #import "TextViewController.h"
 #import "HotTextView.h"
+#import "BaseService.h"
+#import "TextRoomModel.h"
 #import "TextTcpSocket.h"
 #import "TeacherModel.h"
 #import "TextHomeViewController.h"
@@ -24,19 +26,49 @@
 
 @implementation TextViewController
 
+//- (void)initLivingData
+//{
+//    NSMutableArray *array = [NSMutableArray array];
+//    for (int i=0; i<10; i++)
+//    {
+//        TeacherModel *model = [[TeacherModel alloc] init];
+//        model.strImg=@"";
+//        model.strName = @"帅哥";
+//        model.strContent = @"投资市场人才辈出，各领风骚载！他一历经多年钻石，鹤立鸡群，他...";
+//        model.zans = 200;
+//        [array addObject:model];
+//    }
+//    _aryLiving = array;
+//}
+
 - (void)initLivingData
 {
-    NSMutableArray *array = [NSMutableArray array];
-    for (int i=0; i<10; i++)
-    {
-        TeacherModel *model = [[TeacherModel alloc] init];
-        model.strImg=@"";
-        model.strName = @"帅哥";
-        model.strContent = @"投资市场人才辈出，各领风骚载！他一历经多年钻石，鹤立鸡群，他...";
-        model.zans = 200;
-        [array addObject:model];
-    }
-    _aryLiving = array;
+     __weak TextViewController *__self = self;
+     [BaseService postJSONWithUrl:@"http://172.16.41.99/test/test.php?act=script" parameters:nil success:^(id responseObject)
+     {
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+         if (dict && [dict objectForKey:@"groups"])
+         {
+             NSMutableArray *array = [NSMutableArray array];
+             NSArray *aryResult = [dict objectForKey:@"groups"];
+             for (NSDictionary *roomDict in aryResult)
+             {
+                 if ([roomDict objectForKey:@"rooms"])
+                 {
+                     NSArray *aryRoom = [roomDict objectForKey:@"rooms"];
+                     for (NSDictionary *textRoom in aryRoom) {
+                         TextRoomModel *room = [TextRoomModel resultWithDict:textRoom];
+                         [array addObject:room];
+                     }
+                 }
+             }
+             __self.aryLiving = array;
+         }
+         dispatch_async(dispatch_get_main_queue(),
+         ^{
+             [__self.tableView reloadData];
+         });
+     } fail:nil];
 }
 
 - (void)viewDidLoad
@@ -62,6 +94,7 @@
 
 - (void)initScrollView
 {
+/*
     UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(8, 74, kScreenWidth, 20)];
     [lblHot setText:@"热门讲师"];
     [lblHot setFont:XCFONT(15)];
@@ -77,8 +110,8 @@
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _scrollView.contentSize = CGSizeMake(kScreenWidth,(kScreenWidth/2+70)*(_aryHot.count/2));
-    
     [self initWithHot];
+*/
     [self initTableView];
 }
 
@@ -118,11 +151,15 @@
 
 - (void)initTableView
 {
-    UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(8, _scrollView.y+_scrollView.height+5, kScreenWidth, 20)];
+    UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(8,70, kScreenWidth, 20)];
     [lblHot setText:@"正在直播"];
     [lblHot setFont:XCFONT(15)];
     [lblHot setTextColor:UIColorFromRGB(0x427ede)];
     [self.view addSubview:lblHot];
+    
+    UILabel *line = [[UILabel alloc] initWithFrame:Rect(8,92, kScreenWidth-16, 0.5)];
+    [self.view addSubview:line];
+    [line setBackgroundColor:kLineColor];
     
     _tableView = [[UITableView alloc] initWithFrame:Rect(0, lblHot.y+lblHot.height+5, kScreenWidth,kScreenHeight-(lblHot.y+lblHot.height+5+50))];
     [self.view addSubview:_tableView];
@@ -150,15 +187,16 @@
     {
         cell = [[TextLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strCellIdentifier];
     }
-    TeacherModel *model = [_aryLiving objectAtIndex:indexPath.row];
-    [cell setTeacherModel:model];
+    TextRoomModel *model = [_aryLiving objectAtIndex:indexPath.row];
+    [cell setTextRoomModel:model];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithRoom:80001];
+    TextRoomModel *teach = [_aryLiving objectAtIndex:indexPath.row];
+    TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithModel:teach];
     [self presentViewController:textHome animated:YES completion:nil];
 }
 
@@ -166,13 +204,5 @@
 {
     return 60;
 }
-
-#pragma mark hotViewDelegate
-- (void)clickTeach:(TeacherModel *)teach
-{
-    TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithRoom:80001];
-    [self presentViewController:textHome animated:YES completion:nil];
-}
-
 
 @end

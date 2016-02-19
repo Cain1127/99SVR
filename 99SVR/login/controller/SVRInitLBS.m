@@ -19,27 +19,30 @@
     //获取登录服务器地址
     [BaseService getJSONWithUrl:@"http://lbs1.99ducaijing.cn:2222/tygetweb" parameters:nil success:^(id responseObject) {
         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        NSString *strResult = [strInfo componentsSeparatedByString:@"|"][0];
-        if (strResult.length>=2)
+        if ([strInfo rangeOfString:@"|"].location != NSNotFound)
         {
-            NSString *strWeb = [strResult substringWithRange:NSMakeRange(2,[strResult length]-3)];
-            [UserInfo sharedUserInfo].strWebAddr  = strWeb;
-            BOOL isLogin = [UserDefaults boolForKey:kIsLogin];
-            if (isLogin)
+            NSString *strResult = [strInfo componentsSeparatedByString:@"|"][0];
+            if (strResult.length>=2)
             {
-                [UserInfo sharedUserInfo].nUserId = [[UserDefaults objectForKey:kUserId] intValue];
-                NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
-                if(userPwd)
+                NSString *strWeb = [strResult substringWithRange:NSMakeRange(2,[strResult length]-3)];
+                [UserInfo sharedUserInfo].strWebAddr  = strWeb;
+                BOOL isLogin = [UserDefaults boolForKey:kIsLogin];
+                if (isLogin)
                 {
-                    [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
-                    [UserInfo sharedUserInfo].strPwd = userPwd;
+                    [UserInfo sharedUserInfo].nUserId = [[UserDefaults objectForKey:kUserId] intValue];
+                    NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
+                    if(userPwd)
+                    {
+                        [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
+                        [UserInfo sharedUserInfo].strPwd = userPwd;
+                    }
+                    [[LSTcpSocket sharedLSTcpSocket] setUserInfo];
+                    [[LSTcpSocket sharedLSTcpSocket] loginServer:[UserDefaults objectForKey:kUserId] pwd:[UserDefaults objectForKey:kUserPwd]];
                 }
-                [[LSTcpSocket sharedLSTcpSocket] setUserInfo];
-                [[LSTcpSocket sharedLSTcpSocket] loginServer:[UserDefaults objectForKey:kUserId] pwd:[UserDefaults objectForKey:kUserPwd]];
-            }
-            else
-            {
-                [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
+                else
+                {
+                    [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
+                }
             }
         }
     }fail:nil];

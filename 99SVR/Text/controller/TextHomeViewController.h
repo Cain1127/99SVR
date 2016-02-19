@@ -8,8 +8,12 @@
 
 #import "CustomViewController.h"
 
+@class TextRoomModel;
+
 @interface TextHomeViewController : UIViewController
 
 - (id)initWithRoom:(int32_t)roomid;
+
+- (id)initWithModel:(TextRoomModel *)model;
 
 @end

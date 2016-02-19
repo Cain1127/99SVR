@@ -8,6 +8,7 @@
 
 #import "TextLiveViewController.h"
 #import "LiveCoreTextCell.h"
+#import "Toast+UIView.h"
 #import "TextLiveModel.h"
 #import "textTcpSocket.h"
 #import "Photo.h"
@@ -17,11 +18,14 @@
 #import "MJRefresh.h"
 #import "ThumButton.h"
 
-@interface TextLiveViewController ()<UITableViewDataSource,UITableViewDelegate,DTAttributedTextContentViewDelegate>
+@interface TextLiveViewController ()<UITableViewDataSource,UITableViewDelegate,DTAttributedTextContentViewDelegate,ThumCellDelagate>
 {
     NSCache *cellCache;
     NSMutableDictionary *_dictIcon;
+    NSMutableDictionary *dict;
 }
+
+@property (nonatomic) int nCurrent;
 @property (nonatomic,strong) NSMutableArray *aryLive;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) TextTcpSocket *textSocket;
@@ -52,6 +56,7 @@
     [self.view setBackgroundColor:[UIColor blueColor]];
     _aryLive = [NSMutableArray array];
     _dictIcon = [NSMutableDictionary dictionary];
+    dict = [NSMutableDictionary dictionary];
     [self initData];
     [self initTabelView];
 }
@@ -63,7 +68,16 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    _tableView.footer.appearencePercentTriggerAutoRefresh = 300.0;
     [_tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(requestTextLive)];
+    [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(requestMoreTextLive)];
+}
+
+- (void)requestMoreTextLive
+{
+    [_tableView.footer beginRefreshing];
+    [_textSocket reqTextRoomList:_nCurrent count:20 type:1];
+     _nCurrent += 20;
 }
 
 - (void)requestTextLive
@@ -71,7 +85,9 @@
     [_aryLive removeAllObjects];
     [_tableView reloadData];
     [_tableView.header beginRefreshing];
-    [_textSocket reqTextRoomList:0 count:20 type:1];
+    [_tableView.footer resetNoMoreData];
+    _nCurrent = 0;
+    [_textSocket reqTextRoomList:_nCurrent count:20 type:1];
 }
 
 - (void)didReceiveMemoryWarning
@@ -109,7 +125,7 @@
     NSString *cacheKey =[NSString stringWithFormat:@"LiveText-%zi", indexPath.section];
     if([cellCache objectForKey:cacheKey])
     {
-        return [[cellCache objectForKey:cacheKey] floatValue]+66;
+        return [[cellCache objectForKey:cacheKey] floatValue]+80;
     }
     return 0;
 }
@@ -126,24 +142,54 @@
     {
         cell = [[LiveCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextLiveIdentifier"];
     }
+    
     cell.textCoreView.delegate = self;
     cell.textCoreView.shouldDrawImages = YES;
     NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
     cell.textCoreView.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:nil documentAttributes:nil];
+    
     UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
     [selectView setBackgroundColor:[UIColor clearColor]];
     cell.selectedBackgroundView = selectView;
+    
     NSDate *date = [NSDate date];
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     fmt.dateStyle = kCFDateFormatterShortStyle;
     fmt.timeStyle = kCFDateFormatterShortStyle;
     NSString *strTime = [fmt stringFromDate:date];
+    
     [cell.lblTime setText:strTime];
+    cell.section = indexPath.section;
+    
     CGFloat fHeight = [cell.textCoreView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
     [cellCache setObject:NSStringFromFloat(fHeight) forKey:cacheKey];
-    [cell.btnThum setTitle:NSStringFromInt((int)textModel.zans) forState:UIControlStateNormal];
-//    [cell.btnThum setTitle:@"123455" forState:UIControlStateNormal];
+    
+    if (textModel.bZan)
+    {
+        [cell.btnThum setTitle:NSStringFromInt64(textModel.zans+1) forState:UIControlStateNormal];
+        cell.btnThum.selected = YES;
+    }
+    else
+    {
+        [cell.btnThum setTitle:NSStringFromInt64(textModel.zans) forState:UIControlStateNormal];
+        cell.btnThum.selected = NO;
+    }
+    
+    cell.messageid = textModel.messageid;
+    cell.delegate = self;
+    
     return cell;
+}
+
+- (void)liveCore:(LiveCoreTextCell *)liveCore msgid:(int64_t)messageid
+{
+    if (liveCore.btnThum.selected)
+    {
+        return ;
+    }
+    [_textSocket reqZans:messageid];
+    liveCore.btnThum.selected = YES;
+    [dict setObject:liveCore forKey:NSStringFromInt((int)messageid)];
 }
 
 #pragma mark DTCoreText Delegate
@@ -215,27 +261,76 @@
     return 5;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+//    NSInteger row = [indexPath section];
+//    TextLiveModel *textModel = [_aryLive objectAtIndex:row];
+//    DLog(@"content:%@",textModel.strContent);
+}
+
 - (void)reLoadTextList
 {
     _aryLive = _textSocket.aryText;
-    DLog(@"_aryLiveing:%zi",_aryLive.count);
     __weak TextLiveViewController *__self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [__self.tableView.header endRefreshing];
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        if ([__self.tableView.header isRefreshing])
+        {
+            [__self.tableView.header endRefreshing];
+        }
+        else
+        {
+            [__self.tableView.footer endRefreshing];
+            if (__self.nCurrent != __self.textSocket.aryText.count)
+            {
+                [__self.tableView.footer noticeNoMoreData];
+                __self.nCurrent = (int)__self.textSocket.aryText.count;
+            }
+        }
         [__self.tableView reloadData];
     });
 }
 
 - (void)reqTextList
 {
-    [_textSocket reqTextRoomList:0 count:20 type:1];
+    if (_nCurrent==0)
+    {
+        [_textSocket.aryChat removeAllObjects];
+    }
+    [_textSocket reqTextRoomList:_nCurrent count:20 type:1];
+    _nCurrent += 20;
 }
+
+- (void)respZanSuccess:(NSNotification *)notify
+{
+    NSString *messageid = notify.object;
+    if (messageid && [dict objectForKey:messageid])
+    {
+        LiveCoreTextCell *cell =  [dict objectForKey:messageid];
+        TextLiveModel *textModel = [_aryLive objectAtIndex:cell.section];
+        textModel.bZan = YES;
+        __weak LiveCoreTextCell *__cell = cell;
+        __weak TextLiveViewController *__self = self;
+        [dict removeObjectForKey:messageid];
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+            [__self.view makeToast:@"点赞成功"];
+            NSInteger message = [__cell.btnThum.titleLabel.text integerValue];
+            message++;
+            [__cell.btnThum setTitle:NSStringFromInteger(message) forState:UIControlStateNormal];
+        });
+    }
+    
+}
+
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLoadTextList) name:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reqTextList) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respZanSuccess:) name:MESSAGE_TEXT_ZAN_SUC_VC object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

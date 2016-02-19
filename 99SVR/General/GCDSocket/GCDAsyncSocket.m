@@ -5006,19 +5006,15 @@ enum GCDAsyncSocketConfig
 		
 		result = [NSData dataWithBytesNoCopy:buffer length:currentRead->bytesDone freeWhenDone:NO];
 	}
-	
 	__strong id theDelegate = delegate;
-
 	if (delegateQueue && [theDelegate respondsToSelector:@selector(socket:didReadData:withTag:)])
 	{
 		GCDAsyncReadPacket *theRead = currentRead; // Ensure currentRead retained since result may not own buffer
-		
-		dispatch_async(delegateQueue, ^{ @autoreleasepool {
-			
+		dispatch_async(delegateQueue, ^{ @autoreleasepool
+        {
 			[theDelegate socket:self didReadData:result withTag:theRead->tag];
 		}});
 	}
-	
 	[self endCurrentRead];
 }
 

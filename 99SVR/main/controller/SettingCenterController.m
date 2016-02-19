@@ -13,7 +13,6 @@
 #import "LeftViewCell.h"
 
 #define kCellHeight 44
-#define kLineColor RGB(207, 207, 207)
 
 @interface SettingCenterController() <UITableViewDelegate, UITableViewDataSource>
 {
@@ -90,13 +89,21 @@
     
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
+        UILabel *lblContent = [[UILabel alloc] initWithFrame:Rect(8, kScreenHeight-55, kScreenWidth-16,0.5)];
+        [lblContent setBackgroundColor:kLineColor];
+        [self.view addSubview:lblContent];
+        
         UIButton *logoutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        logoutBtn.frame = CGRectMake(0, _tableView.height+_tableView.y+40,kScreenWidth,kCellHeight);
+        logoutBtn.frame = CGRectMake(0,kScreenSourchHeight-50,kScreenWidth,kCellHeight);
         [logoutBtn setTitle:@"退出" forState:UIControlStateNormal];
-        [logoutBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [logoutBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [logoutBtn setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateHighlighted];
-        logoutBtn.layer.borderColor = kLineColor.CGColor;
-        logoutBtn.layer.borderWidth = 0.5f;
+        [logoutBtn setImage:[UIImage imageNamed:@"exit_n"] forState:UIControlStateNormal];
+        [logoutBtn setImage:[UIImage imageNamed:@"exit"] forState:UIControlStateHighlighted];
+        UIEdgeInsets btnInsets = logoutBtn.imageEdgeInsets;
+        btnInsets.left -= 10;
+        logoutBtn.imageEdgeInsets = btnInsets;
+        
         [self.view addSubview:logoutBtn];
         [logoutBtn clickWithBlock:^(UIGestureRecognizer *gesture)
          {
@@ -170,13 +177,14 @@
 {
     static NSString *cellId = @"cellId";
     SettingCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
-    if (cell == nil) {
+    if (cell == nil)
+    {
         cell = [[SettingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     if (indexPath.row == 0)
     {
         cell.nameLabel.text = @"清除缓存";
-        cell.arrowImageView.hidden = NO;
+        cell.arrowImageView.hidden = YES;
     }
     else if(indexPath.row==1)
     {

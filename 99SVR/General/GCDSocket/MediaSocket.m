@@ -332,6 +332,11 @@ if(_block) \
 {
     cmd_video_frame_data_t *frame = (cmd_video_frame_data_t *)inmsg->content;
     unsigned char pub[4096]={0};
+    //长度超标
+    if (inmsg->length>(4096+sizeof(COM_MSG_HEADER)+sizeof(cmd_video_frame_data_t)))
+    {
+        return ;
+    }
     memcpy(pub,frame->content,inmsg->length-sizeof(COM_MSG_HEADER)-sizeof(cmd_video_frame_data_t));
     if(frame->ts <= m_nLastRecvTS && m_nLastRecvTS-frame->ts <400)
     {
@@ -414,6 +419,7 @@ if(_block) \
     if (err)
     {
         DLog(@"出现错误");
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:nil];
     }
 }
 

@@ -9,9 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @class TeacherModel;
+@class TextRoomModel;
 
 @interface TextLivingCell : UITableViewCell
 
 - (void)setTeacherModel:(TeacherModel*)teacher;
+
+- (void)setTextRoomModel:(TextRoomModel*)teacher;
 
 @end

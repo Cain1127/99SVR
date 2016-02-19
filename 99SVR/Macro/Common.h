@@ -44,5 +44,7 @@
 
 #define kVideoImageHeight kScreenWidth*360/480
 
+#define kLineColor RGB(207, 207, 207)
+
 #endif
 

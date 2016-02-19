@@ -63,6 +63,10 @@
 }
 +(NSString *)XCmdMd5String:(NSString *)str
 {
+    if (str==nil)
+    {
+        return @"";
+    }
     const char *cStr = [str UTF8String];
     unsigned char result[16];
     CC_MD5(cStr, (CC_LONG)strlen(cStr), result); // This is the md5 call
@@ -196,6 +200,10 @@
 
 + (NSString *)replaceEmojiString:(NSString *)strInfo
 {
+    if (!strInfo)
+    {
+        return nil;
+    }
     const char *cInfo = [strInfo UTF8String];
     char cBuffer[2048],cEnd[2048];
     char cNumber[10];
@@ -239,6 +247,33 @@
         }
     }
     return array;
+}
+
++ (NSString *)replaceTextString:(NSString *)strInfo
+{
+    if (strInfo==nil)
+    {
+        return @"";
+    }
+    strInfo = [DecodeJson replaceEmojiString:strInfo];
+    char inner_charStr[12];
+    for( int i=0; i<10; i++ )
+    {
+        inner_charStr[i] = 1;
+    }
+    inner_charStr[10] = 0;
+    inner_charStr[11] = 0;
+    
+    NSString *strImg = [NSString stringWithFormat:@"%s",inner_charStr];
+    
+    NSRange range = [strInfo rangeOfString:strImg];
+    if(range.location != NSNotFound)
+    {
+        DLog(@"找到图片");
+        
+    }
+    
+    return @"";
 }
 
 @end

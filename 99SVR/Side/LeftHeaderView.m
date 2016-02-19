@@ -46,6 +46,8 @@
         _avatarImageView.layer.masksToBounds = YES;
         _avatarImageView.image = [UIImage imageNamed:@"logo"];
         [_circleLine addSubview:_avatarImageView];
+        _avatarImageView.userInteractionEnabled = YES;
+        [_avatarImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loginDelegate)]];
         
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.textColor = [UIColor whiteColor];
@@ -66,6 +68,14 @@
         [self layoutViews];
     }
     return self;
+}
+
+- (void)loginDelegate
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(enterLogin)])
+    {
+        [_delegate enterLogin];
+    }
 }
 
 - (void)setLogin:(BOOL)login

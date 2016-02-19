@@ -36,7 +36,7 @@
 #define kMyCollection @"我的收藏"
 #define kKefu @"客服中心"
 
-@interface LeftViewController ()<UITableViewDataSource,UITableViewDelegate, UIAlertViewDelegate>
+@interface LeftViewController ()<UITableViewDataSource,UITableViewDelegate, UIAlertViewDelegate,LeftHeaderDelegate>
 {
     LeftHeaderView *_leftHeaderView;
     UIView *_footerView;
@@ -53,6 +53,15 @@
     if (self)
     {}
     return self;
+}
+
+- (void)enterLogin
+{
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType != 1)
+    {
+        LoginViewController *loginView = [[LoginViewController alloc] init];
+        [self presentViewController:loginView animated:YES completion:nil];
+    }
 }
 
 - (void)viewDidLoad
@@ -74,11 +83,10 @@
     _tableView.bounces =  NO;
     LeftHeaderView *header = [[LeftHeaderView alloc] initWithFrame:CGRectMake(0, 0,kScreenWidth*0.85, 205)];
     _tableView.tableHeaderView = header;
+    header.delegate = self;
     _leftHeaderView = header;
     [self checkLogin];
 }
-
-
 
 - (void)viewWillAppear:(BOOL)animated
 {

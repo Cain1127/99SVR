@@ -8,6 +8,7 @@
 
 #import "TextLivingCell.h"
 #import "UIImageView+WebCache.h"
+#import "TextRoomModel.h"
 #import "TeacherModel.h"
 
 @interface TextLivingCell()
@@ -26,7 +27,7 @@
     _imgView = [[UIImageView alloc] initWithFrame:Rect(8, 10, 40, 40)];
     [self.contentView addSubview:_imgView];
     [_imgView.layer setMasksToBounds:YES];
-    _imgView.layer.cornerRadius = 40;
+    _imgView.layer.cornerRadius = 20;
     
     _lblName = [[UILabel alloc] initWithFrame:Rect(_imgView.width+_imgView.x+10, 10, 200,20)];
     [_lblName setTextColor:UIColorFromRGB(0x343434)];
@@ -40,6 +41,10 @@
     
     _btnClick = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.contentView addSubview:_btnClick];
+    
+    UILabel *line = [[UILabel alloc] initWithFrame:Rect(8,59, kScreenWidth-16, 0.5)];
+    [self.contentView addSubview:line];
+    [line setBackgroundColor:kLineColor];
     
 }
 
@@ -65,6 +70,14 @@
                 placeholderImage:[UIImage imageNamed:@"logo"]];
     _lblName.text = teacher.strName;
     _lblContent.text = teacher.strContent;
+}
+
+- (void)setTextRoomModel:(TextRoomModel *)teacher
+{
+    [_imgView sd_setImageWithURL:[NSURL URLWithString:teacher.roomPic]
+                placeholderImage:[UIImage imageNamed:@"logo"]];
+    _lblName.text = teacher.roomName;
+    _lblContent.text = teacher.rid;
 }
 
 @end

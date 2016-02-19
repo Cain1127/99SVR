@@ -27,7 +27,7 @@
     _teacherid = teacher->teacherid;
     _strName = [NSString stringWithCString:teacher->teacheralias encoding:GBK_ENCODING];
     _headid = teacher->headid;
-    _levellen = teacher->headid;
+    _levellen = teacher->levellen;
     _labellen = teacher->labellen;
     _goodatlen = teacher->goodatlen;
     _introducelen = teacher->introducelen;
@@ -54,6 +54,7 @@
     char cContent[_introducelen];
     memcpy(cContent,teacher->content+_levellen+_labellen+_goodatlen, _introducelen);
     _strContent = [NSString stringWithCString:cContent encoding:GBK_ENCODING];
+    
 }
 
 

@@ -8,6 +8,7 @@
 
 //#import "ThumButton.h"
 #import "LiveCoreTextCell.h"
+#import "UIControl+BlocksKit.h"
 #import "ThumButton.h"
 
 @implementation LiveCoreTextCell
@@ -23,25 +24,40 @@
     [self.contentView addSubview:_textCoreView];
     
     _textCoreView.edgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
-    _btnThum = [[ThumButton alloc] initWithFrame:Rect(0, -70, 70, 30) size:30 fontSize:14];
+    _btnThum = [[ThumButton alloc] initWithFrame:Rect(0, -70, 70, 44) size:40 fontSize:14];
     [_btnThum setImage:[UIImage imageNamed:@"thum"] forState:UIControlStateNormal];
     [_btnThum setImage:[UIImage imageNamed:@"thum_h"] forState:UIControlStateHighlighted];
     [_btnThum setTitleColor:UIColorFromRGB(0x7a7a7a) forState:UIControlStateNormal];
+    [_btnThum setImage:[UIImage imageNamed:@"thum_s"] forState:UIControlStateSelected];
     _btnThum.titleLabel.font = XCFONT(14);
     [self.contentView addSubview:_btnThum];
+    
+    [_btnThum addTarget:self action:@selector(addThum) forControlEvents:UIControlEventTouchUpInside];
+    
     return self;
+}
+
+- (void)addThum
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(liveCore:msgid:)])
+    {
+        [_delegate liveCore:self msgid:_messageid];
+    }
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
     _textCoreView.frame = Rect(0, _lblTime.y+_lblTime.height+5, kScreenWidth, self.contentView.height-66);
-    _btnThum.frame = Rect(kScreenWidth - 80, self.contentView.height-35,70, 30);
+    
+    _textCoreView.edgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
+    
+    _btnThum.frame = Rect(kScreenWidth - 80, self.contentView.height-50,70, 44);
 }
 
 - (void)awakeFromNib
 {
-    
+     
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

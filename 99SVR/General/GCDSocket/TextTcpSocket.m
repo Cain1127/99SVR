@@ -133,8 +133,8 @@
         {
             [self respTextQuestion:pNewMsg];//提问回复
         }
-            break;
-        case Sub_Vchat_TextRoomInterestForRes:
+        break;
+        case Sub_Vchat_TextRoomInterestForRes://收藏回复
         {
             [self respInterestForRes:pNewMsg];//完成
         }
@@ -562,7 +562,12 @@
 - (void)respZanForRes:(char *)pInfo
 {
     CMDTextRoomZanForRes_t *resp = (CMDTextRoomZanForRes_t *)pInfo;
-    DLog(@"result:%d--zans:%d--total:%d",resp->result,resp->recordzans,resp->totalzans);
+    if(resp->result)
+    {
+        //点赞成功
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_ZAN_SUC_VC object:NSStringFromInt64(resp->messageid)];
+    }
+    DLog(@"result:%d--zans:%lld--total:%lld",resp->result,resp->recordzans,resp->totalzans);
 }
 
 #pragma mark 用户点击提问
@@ -586,24 +591,26 @@
 }
 
 #pragma makr 用户对直播点赞
-- (void)reqZans:(int64_t)messageid type:(short)type
+- (void)reqZans:(int64_t)messageid
 {
     CMDTextRoomZanForReq_t zan;
     memset(&zan, 0, sizeof(CMDTextRoomZanForReq_t));
     zan.vcbid = _roomid;
     zan.userid = kUserInfoId;
     zan.messageid = messageid;
-    [self sendMessage:(char *)&zan size:sizeof(CMDTextRoomZanForReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomZanForReq];
+    [self sendMessage:(char *)&zan size:sizeof(CMDTextRoomZanForReq_t)
+              version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomZanForReq];
 }
 
 #pragma mark 用户点击关注
-- (void)reqTeacherCollet
+- (void)reqTeacherCollet:(short)oper
 {
     CMDTextRoomInterestForReq_t req;
     memset(&req, 0, sizeof(req));
     req.vcbid = _roomid;
     req.userid = (UInt32)kUserInfoId;
     req.teacherid = _teacher.teacherid;
+    req.optype = oper;
     [self sendMessage:(char *)&req size:sizeof(CMDTextRoomInterestForReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text
                subcmd:Sub_Vchat_TextRoomInterestForReq];
 }
@@ -612,15 +619,10 @@
 - (void)respInterestForRes:(char *)pInfo
 {
     CMDTextRoomInterestForRes_t *resp = (CMDTextRoomInterestForRes_t *)pInfo;
-    if (resp->result)
-    {
-        //关注成功
-        DLog(@"粉丝数:%d",resp->result);
-    }
-    else
-    {
-        DLog(@"粉丝数:%d",resp->result);
-    }
+    DLog(@"关注 响应:%d",resp->result);
+    DLog(@"粉丝数:%d",resp->result);
+    NSDictionary *dict = @{@"result":NSStringFromInt(resp->result),@"opertype":NSStringFromInt(resp->optype)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_COLLET_VC object:dict];
 }
 
 #pragma mark 收到讲师发送的文字直播
@@ -687,11 +689,6 @@
         _teacher  = nil;
     }
     _teacher = [[TeacherModel alloc] initWithTeacher:notify];
-//    [self reqTextRoomList:0 count:20 type:2];
-//    [self reqTextRoomList:0 count:20 type:1];
-//    [self reqHistoryList:0 count:20];
-//    [self reqNewList:_teacher.teacherid index:0 count:20];
-//    [self reqDayHistoryList:0 count:20 time:[@"20160122" intValue] teacher:1680014];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
 }
 
@@ -934,12 +931,13 @@
         _aryNew = [NSMutableArray array];
     }
     [_aryNew removeAllObjects];
-    NSString *strAry = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][0];
-    NSString *strAddr = [strAry componentsSeparatedByString:@":"][0];
-    NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
+//    NSString *strAry = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][0];
+//    NSString *strAddr = [strAry componentsSeparatedByString:@":"][0];
+//    NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
 //    [self connectTextServer:strAddr port:nPort];
     [self closeSocket];
-    [self connectTextServer:@"122.13.81.62" port:22806];
+//    [self connectTextServer:@"122.13.81.62" port:22806];
+    [self connectTextServer:@"172.16.41.96" port:22806];
 }
 
 - (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort

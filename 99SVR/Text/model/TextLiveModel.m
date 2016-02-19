@@ -7,6 +7,7 @@
 //
 
 #import "TextLiveModel.h"
+#import "DecodeJson.h"
 
 @implementation TextLiveModel
 
@@ -89,7 +90,6 @@
     }
     else
     {
-        
         if(notify->livetype==5)
         {
             _type = 4;
@@ -109,7 +109,30 @@
     _zans = notify->zans;
     _time = notify->messagetime;
     _strContent = [NSString stringWithCString:notify->content encoding:GBK_ENCODING];
-    DLog(@"_messageid:%zi--strContent:%@",_messageid,_strContent);
+    _strContent = [DecodeJson replaceEmojiString:_strContent];
+    
+    DLog(@"_messageid:%zi--strContent:%@--zans:%lld",_messageid,_strContent,_zans);
+    
+}
+
+- (void)decodeContent:(CMDTextRoomLiveListNoty_t*)notify
+{
+    char inner_charStr[12];
+    for( int i=0; i<10; i++ )
+    {
+        inner_charStr[i] = 1;
+    }
+    inner_charStr[10] = 0;
+    inner_charStr[11] = 0;
+    NSString *strInfo = [NSString stringWithCString:notify->content encoding:GBK_ENCODING];
+    strInfo = [DecodeJson replaceEmojiString:strInfo];
+    NSRange range = [strInfo rangeOfString:[NSString stringWithFormat:@"%s",inner_charStr]];
+    if(range.location != NSNotFound)
+    {
+        DLog(@"找到图片");
+        
+    }
+    
 }
 
 @end

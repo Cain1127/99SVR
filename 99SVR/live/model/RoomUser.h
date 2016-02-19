@@ -8,14 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "yc_datatypes.h"
-
-@class RoomInfo;
-
 @interface RoomUser : NSObject
 {
     char cToUser[NAMELEN];
 }
 
+@property (nonatomic) int nLevel;
 @property (nonatomic,assign) int m_nk;     //金币余额
 @property (nonatomic,assign) int m_nb;     //积分余额
 @property (nonatomic,assign) int m_nd;     //欢乐豆余额
@@ -58,20 +56,15 @@
 //@property (nonatomic,assign) int  m_bloodgroup;  //血型
 //@property (nonatomic,copy) NSString * m_strCarname;
 @property (nonatomic,copy) NSString *m_strUserAlias;
-
-@property (nonatomic,strong) RoomInfo *m_pInRoom;
-
+//@property (nonatomic,strong) RoomInfo *m_pInRoom;
 #ifdef __SWITCH_SERVER2__
 @property (nonatomic,copy) NSString *cemail;            //邮箱
 @property (nonatomic,copy) NSString *cqq;               //QQ
 @property (nonatomic,copy) NSString *ctel;              //手机
 #endif
 - (BOOL)isHide;
-
 - (BOOL)isOnMic;
-
 - (int)GetRoomMgrLevel;
-
 - (int)isManager;
 
 @end

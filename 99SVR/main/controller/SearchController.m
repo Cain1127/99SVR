@@ -17,8 +17,9 @@
 #import "RoomViewController.h"
 #import "UserInfo.h"
 #import "SearchButton.h"
+#import "RoomTcpSocket.h"
 
-#define kLineColor RGB(205, 204, 204)
+
 
 @interface SearchController()<UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate>
 {
@@ -31,9 +32,6 @@
 }
 
 @property(nonatomic, strong) UITableView *searchResultsTable;
-
-//@property (nonatomic, strong) NSMutableArray *allDatas;
-//@property (nonatomic, strong) NSMutableArray *searchResults;
 @property (nonatomic,copy) NSArray *aryResult;
 @property (nonatomic,copy) NSArray *allDatas;
 
@@ -331,6 +329,7 @@
 
 - (void)connectRoom:(RoomHttp *)room
 {
+#if 0
     LSTcpSocket *socket = [LSTcpSocket sharedLSTcpSocket];
     __weak SearchController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
@@ -356,6 +355,11 @@
     DLog(@"strAddress:%@--strPort:%@",strAddress,strPort);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomSuc:) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
+#endif
+#if 1
+    RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
+    [self presentViewController:roomView animated:YES completion:nil];
+#endif
 }
 
 - (void)joinRoomTimeOut
@@ -395,52 +399,6 @@
                            [__self.view makeToast:__strMsg];
                        });
     }
-}
-
-#pragma mark 创建alert
-- (void)createAlertController
-{
-    __weak SearchController *__self =self;
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                   message:@"请输入密码" preferredStyle:UIAlertControllerStyleAlert];
-    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField)
-     {
-         textField.placeholder = @"密码";
-     }];
-    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-        dispatch_async(dispatch_get_main_queue(),
-                       ^{
-                           //如果不再登录房间，取消notification
-                           [__self.view hideToastActivity];
-                           [[NSNotificationCenter defaultCenter] removeObserver:self];
-                       });
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-                               {
-                                   UITextField *login = alert.textFields.firstObject;
-                                   if ([login.text length]==0)
-                                   {
-                                       dispatch_async(dispatch_get_main_queue(),
-                                                      ^{
-                                                          [__self.view hideToastActivity];
-                                                          [__self.view makeToast:@"密码不能为空"];
-                                                          [__self createAlertController];
-                                                      });
-                                   }
-                                   else
-                                   {
-                                       [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:10];
-                                       dispatch_async(dispatch_get_global_queue(0, 0),
-                                                      ^{
-                                                          [[LSTcpSocket sharedLSTcpSocket] connectRoomAndPwd:login.text];
-                                                      });
-                                   }
-                               }];
-    [alert addAction:canAction];
-    [alert addAction:okAction];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [__self presentViewController:alert animated:YES completion:nil];
-    });
 }
 
 - (void)joinRoomSuc:(NSNotification *)notify

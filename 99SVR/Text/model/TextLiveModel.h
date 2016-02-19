@@ -25,6 +25,7 @@
 @property (nonatomic) int64_t messageid;
 @property (nonatomic) int64 totalzans;
 @property (nonatomic) int64  flowers;
+@property (nonatomic) BOOL bZan;
 
 - (id)initWithNotify:(CMDTextRoomLiveListNoty_t *)notify;
 - (id)initWithPointNotify:(CMDTextRoomLivePointNoty_t *)notify;

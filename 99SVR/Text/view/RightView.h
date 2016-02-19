@@ -20,4 +20,9 @@
 
 @property (nonatomic,assign) id<RightViewDelegate> delegate;
 
+@property (nonatomic,strong) UIButton *btnFirst;
+@property (nonatomic,strong) UIButton *btnSecond;
+@property (nonatomic,strong) UIButton *btnThird;
+
+
 @end

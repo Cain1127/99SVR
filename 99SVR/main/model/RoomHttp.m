@@ -32,7 +32,6 @@ NSArray * getPropertyNameList(id object)
     for (NSString* key in propertyArray) {
         @try
         {
-//            NSLog(@"%@:%@,%@",key,dict[key],NSStringFromClass([dict[key] class]));
             [result setValue:dict[key] forKey:key];
         }@catch(NSException *exception)
         {
@@ -41,4 +40,5 @@ NSArray * getPropertyNameList(id object)
     }  
     return result;
 }
+
 @end

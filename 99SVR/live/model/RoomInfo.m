@@ -54,6 +54,7 @@
 {
     return _m_nCreatorId == userid;
 }
+
 - (BOOL)IsRoomFuFangzhu:(int)userid  //是不是副房主
 {
     if(userid == 0) return NO;
@@ -77,6 +78,39 @@
         [_dictUser removeObjectForKey:[NSNumber numberWithInt:userId]];
     }
     return YES;
+}
+
+- (int)getUserLevel:(RoomUser *)user
+{
+    int nLevel = 0;
+    if(user.m_nInRoomState&(FT_ROOMUSER_STATUS_PUBLIC_MIC |
+                               FT_ROOMUSER_STATUS_PRIVE_MIC  |
+                               FT_ROOMUSER_STATUS_SECRET_MIC |
+                               FT_ROOMUSER_STATUS_CHARGE_MIC))
+    {
+        nLevel = 200;
+    }
+    else if(user.m_nUserType == 1)
+    {
+        nLevel = 190;
+    }
+    else if([self IsRoomFangzhu:user.m_nUserId])
+    {
+        nLevel = 180;
+    }
+    else if([self IsRoomFuFangzhu:user.m_nUserId])
+    {
+        nLevel = 109;
+    }
+    else if(user.m_nInRoomState & FT_ROOMUSER_STATUS_IS_TEMPOP)  //临管
+    {
+        nLevel = 104;
+    }
+    else if(user.m_nVipLevel!=1 && user.m_nVipLevel != 2)
+    {
+        nLevel = user.m_nVipLevel;
+    }
+    return nLevel;
 }
 
 - (BOOL)addUser:(RoomUser *)user

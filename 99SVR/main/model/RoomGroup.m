@@ -32,7 +32,6 @@
     for (NSString* key in propertyArray) {
         @try
         {
-//            NSLog(@"%@:%@,%@",key,dict[key],NSStringFromClass([dict[key] class]));
             if ([key isEqual:@"groupArr"])
             {
                 [result setValue:dict[key] forKey:key];

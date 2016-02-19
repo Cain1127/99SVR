@@ -1,7 +1,7 @@
 #import "RoomUser.h"
-#import "RoomInfo.h"
 #import "message_vchat.h"
 #import "LSTcpSocket.h"
+#import "cmd_vchat.h"
 
 @implementation RoomUser
 
@@ -12,35 +12,34 @@
 
 - (int)GetRoomMgrLevel
 {
-    RoomInfo *rInfo = [[LSTcpSocket sharedLSTcpSocket] getRoomInfo];
-    int nLevel = 0;
-    
-    if([self isOnMic])
-    {
-        nLevel = 200;
-    }
-    else if(self.m_nUserType == 1)
-    {
-        nLevel = 190;
-    }
-    else if(rInfo != 0 && [rInfo IsRoomFangzhu:_m_nUserId])
-    {
-        nLevel = 180;
-    }
-    else if(rInfo != 0 && [rInfo IsRoomFuFangzhu:_m_nUserId])
-    {
-        nLevel = 109;
-    }
-    else if(_m_nInRoomState & FT_ROOMUSER_STATUS_IS_TEMPOP)  //临管
-    {
-        nLevel = 104;
-    }
-    else if([self isManager])
-    {
-        nLevel = _m_nVipLevel;
-    }
-    return nLevel;
+//    int nLevel = 0;
+//    if([self isOnMic])
+//    {
+//        nLevel = 200;
+//    }
+//    else if(self.m_nUserType == 1)
+//    {
+//        nLevel = 190;
+//    }
+//    else if(rInfo != 0 && [rInfo IsRoomFangzhu:_m_nUserId])
+//    {
+//        nLevel = 180;
+//    }
+//    else if(rInfo != 0 && [rInfo IsRoomFuFangzhu:_m_nUserId])
+//    {
+//        nLevel = 109;
+//    }
+//    else if(_m_nInRoomState & FT_ROOMUSER_STATUS_IS_TEMPOP)  //临管
+//    {
+//        nLevel = 104;
+//    }
+//    else if([self isManager])
+//    {
+//        nLevel = _m_nVipLevel;
+//    }
+    return _nLevel;
 }
+
 - (BOOL)isOnMic
 {
     

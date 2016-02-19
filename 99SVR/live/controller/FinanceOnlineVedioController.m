@@ -15,6 +15,7 @@
 #import "Toast+UIView.h"
 #import "GroupHeaderView.h"
 #import "UserInfo.h"
+#import "RoomTcpSocket.h"
 
 #define kGroupHeight 40
 
@@ -117,6 +118,7 @@
 
 - (void)connectRoom:(RoomHttp *)room
 {
+#if 0
     LSTcpSocket *socket = [LSTcpSocket sharedLSTcpSocket];
     __weak FinanceOnlineVedioController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
@@ -139,9 +141,11 @@
     }
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
     [socket connectRoomInfo:room.nvcbid address:strAddress port:[strPort intValue]];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomSuc:) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
+#endif
+    RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
+    [self presentViewController:roomView animated:YES completion:nil];
 }
 
 - (void)joinRoomTimeOut

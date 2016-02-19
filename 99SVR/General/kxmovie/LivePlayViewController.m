@@ -34,8 +34,9 @@
     dispatch_queue_t audioQueue;
     BOOL paused;
     BOOL bFirst;
-    
     UILabel *lblText;
+    int _roomid;
+    int _nuserid;
 }
 @property (nonatomic) BOOL bVideo;
 @property (nonatomic,strong) OpenAL *openAL;
@@ -83,8 +84,18 @@
     _aryVideo = [NSMutableArray array];
     _aryAudio = [NSMutableArray array];
     [self.view setBackgroundColor:UIColorFromRGB(0x000000)];
-
     [self setDefaultImg];
+}
+
+- (void)disconnectMedia
+{
+    _playing = NO;
+    __weak LivePlayViewController *__self = self;
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        [__self.view makeToast:@"网络异常,重新连接视频"];
+    });
+    [_media connectRoomId:_roomid mic:_nuserid];
 }
 
 - (void)setDefaultImg
@@ -161,7 +172,6 @@
     }
     [_openAL stopSound];
     [_openAL cleanUpOpenAL];
-    
     [_aryAudio removeAllObjects];
 }
 
@@ -177,6 +187,7 @@
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setBackGroudMode:) name:MESSAGE_ENTER_BACK_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectMedia) name:MESSAGE_MEDIA_DISCONNECT_VC object:nil];
 }
 
 - (void)setBackGroudMode:(NSNotification *)notify
@@ -190,20 +201,6 @@
         [_media settingBackVideo:NO];
     }
 }
-
-//- (void)initAVAudioSession
-//{
-//    AVAudioSession *sessionInstance = [AVAudioSession sharedInstance];
-//    NSError *error;
-//    bool success = [sessionInstance setCategory:AVAudioSessionCategoryPlayback error:&error];
-//    if (!success) NSLog(@"Error setting AVAudioSession category! %@\n", [error localizedDescription]);
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                               selector:@selector(handleInterruption:)
-//                                                   name:AVAudioSessionInterruptionNotification
-//                                                 object:sessionInstance];
-//    success = [sessionInstance setActive:YES error:&error];
-//    if (!success) NSLog(@"Error setting session active! %@\n", [error localizedDescription]);
-//}
 
 - (void)viewDidLoad
 {
@@ -264,6 +261,11 @@
 
 - (void)startPlayRoomId:(int)roomid user:(int)userid
 {
+    if (_playing)
+    {
+        DLog(@"解码已开启!");
+        return ;
+    }
     __weak LivePlayViewController *__self = self;
     dispatch_main_async_safe(
     ^{
@@ -273,6 +275,8 @@
     _playing = YES;
     _bVideo = YES;
     [_media connectRoomId:roomid mic:userid];
+    _roomid = roomid;
+    _nuserid = userid;
     if (audioQueue==nil)
     {
         audioQueue = dispatch_queue_create("audio",0);

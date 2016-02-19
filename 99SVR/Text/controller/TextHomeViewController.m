@@ -8,13 +8,19 @@
 
 #import "TextHomeViewController.h"
 #import "RightView.h"
+#import "UIButton+WebCache.h"
+#import "UIImage+WebP.h"
 #import "GroupView.h"
 #import "TeacherModel.h"
 #import "ThumButton.h"
 #import "TextTcpSocket.h"
+#import "TextRoomModel.h"
 #import "TextChatViewController.h"
 #import "TextLiveViewController.h"
+#import "Toast+UIView.h"
 #import "TextNewViewController.h"
+#import "BaseService.h"
+#import "TextRoomModel.h"
 
 @interface TextHomeViewController ()<UIScrollViewDelegate,RightViewDelegate>
 {
@@ -33,10 +39,31 @@
 @property (nonatomic,strong) UIScrollView *scrollView;
 @property (nonatomic,strong) TextTcpSocket *textSocket;
 @property (nonatomic,strong) UIView *headView;
+@property (nonatomic,strong) TextRoomModel *model;
+
+
 @end
 
 @implementation TextHomeViewController
 
+//- (void)initData
+//{
+//    [BaseService postJSONWithUrl:@"http://172.16.41.99/test/test.php?act=script" parameters:nil success:^(id responseObject)
+//    {
+//        
+//    } fail:nil];
+//}
+
+- (id)initWithModel:(TextRoomModel *)model
+{
+    if (self = [super init])
+    {
+        _model = model;
+        _textSocket = [[TextTcpSocket alloc] init];
+        return self;
+    }
+    return nil;
+}
 
 - (id)initWithRoom:(int32_t)roomid
 {
@@ -68,9 +95,20 @@
     _headView.backgroundColor = kNavColor;
     
     _btnTitle = [[ThumButton alloc] initWithFrame:Rect(kScreenWidth/2-50, 20, 100, 44) size:40 fontSize:16];
-    [_btnTitle setImage:[UIImage imageNamed:@"logo"] forState:UIControlStateNormal];
     [_btnTitle setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
-    [_btnTitle setTitle:@"讲师" forState:UIControlStateNormal];
+    if (_model)
+    {
+        [_btnTitle setTitle:_model.roomName forState:UIControlStateNormal];
+        [_btnTitle sd_setImageWithURL:[NSURL URLWithString:_model.roomPic]
+                             forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"logo"]];
+    }
+    else
+    {
+        [_btnTitle setImage:[UIImage imageNamed:@"logo"] forState:UIControlStateNormal];
+        [_btnTitle setTitle:@"讲师" forState:UIControlStateNormal];
+    }
+    _btnTitle.imageView.layer.masksToBounds = YES;
+    _btnTitle.imageView.layer.cornerRadius = 20;
     [_headView addSubview:_btnTitle];
     _btnTitle.titleLabel.textAlignment = NSTextAlignmentCenter;
     _btnTitle.titleLabel.font = XCFONT(16);
@@ -109,9 +147,7 @@
     [_scrollView addSubview:textLive.view];
     [_scrollView addSubview:textChat.view];
     [_scrollView addSubview:textNew.view];
-    
     _scrollView.contentSize = CGSizeMake(kScreenWidth*3, _scrollView.height);
-    
     _tag = 0;
     
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -129,6 +165,7 @@
     _rightView = [[RightView alloc] initWithFrame:Rect(kScreenWidth-153, 64, 145, 133)];
     [hidenView addSubview:_rightView];
     _rightView.hidden = YES;
+    _rightView.delegate = self;
     
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setImage:[UIImage imageNamed:@"text_more_h"] forState:UIControlStateHighlighted];
@@ -136,7 +173,6 @@
     
     __weak TextHomeViewController *__self = self;
     __weak UIView *__hidnView = hidenView;
-    
     [hidenView clickWithBlock:^(UIGestureRecognizer *gesture)
     {
         __hidnView.hidden = YES;
@@ -162,7 +198,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [_textSocket connectRoom:_roomId];
+    if(_model)
+    {
+        [_textSocket connectRoom:[_model.rid intValue]];
+    }
+    else
+    {
+        [_textSocket connectRoom:_roomId];
+    }
     [self initUIHead];
     __weak TextHomeViewController *__self = self;
     [_group addEvent:^(id sender)
@@ -248,11 +291,48 @@
     updateCount = 0;
 }
 
+- (void)respCollet:(NSNotification *)notify
+{
+    NSDictionary *dictObj = [notify object];
+    NSString *oper = @"取消关注";
+    if ([[dictObj objectForKey:@"opertype"] isEqualToString:@"1"])//关注
+    {
+        oper = @"关注";
+    }
+    NSString *result = @"失败";
+    if ([[dictObj objectForKey:@"result"] isEqualToString:@"1"])
+    {
+        result = @"成功";
+    }
+    __weak TextHomeViewController *__self = self;
+    __weak NSString *__oper = oper;
+    __weak NSString *__result = result;
+    __weak RightView *__rightView = _rightView;
+    dispatch_async(dispatch_get_main_queue(),
+   ^{
+       [__self.view makeToast:[NSString stringWithFormat:@"%@%@",__oper,__result]];
+       if ([__result isEqualToString:@"成功"])
+       {
+           if([__oper isEqualToString:@"关注"])
+           {
+               __rightView.btnFirst.selected = YES;
+           }
+           else
+           {
+               __rightView.btnFirst.selected = NO;
+           }
+       }
+       
+   });
+    
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTeacherInfo) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reconnectTextRoom) name:MESSAGE_RECONNECT_TIMER_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respCollet:) name:MESSAGE_TEXT_COLLET_VC object:nil];
 }
 
 - (void)reconnectTextRoom
@@ -299,12 +379,12 @@
 
 - (void)sendCollet
 {
-    [_textSocket reqTeacherCollet];
+    
+    [_textSocket reqTeacherCollet:_rightView.btnFirst.selected ? 2 : 1];
 }
 
 - (void)gotoTextTodayVI
 {
-//    [_textSocket req];
     
 }
 

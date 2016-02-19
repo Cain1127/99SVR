@@ -29,7 +29,9 @@
 
 - (void)reqTextRoomList:(int)nIndex count:(int)nCount type:(int)nType;
 
-- (void)reqTeacherCollet;
+- (void)reqTeacherCollet:(short)oper;
+
+- (void)reqZans:(int64_t)messageid;
 
 - (void)reqQuestion:(NSString *)strInfo title:(NSString *)strTitle teach:(int)teacherid;
 

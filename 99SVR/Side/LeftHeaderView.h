@@ -8,8 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol LeftHeaderDelegate  <NSObject>
+
+- (void)enterLogin;
+
+@end
+
 
 @interface LeftHeaderView : UIView
+
+@property (nonatomic,assign) id<LeftHeaderDelegate> delegate;
 
 @property(nonatomic, assign) BOOL login; // 是否登录
 

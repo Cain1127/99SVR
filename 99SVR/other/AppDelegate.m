@@ -14,11 +14,12 @@
 #import "WWSideslipViewController.h"
 #import "LeftViewController.h"
 #import "DecodeJson.h"
-#import "MobClick.h"
 #import "SVRInitLBS.h"
 #import "IndexViewController.h"
 #import "BaseService.h"
 #import "RightViewController.h"
+#import <Bugly/BuglyLog.h>
+#import <Bugly/CrashReporter.h>
 
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
 
@@ -39,18 +40,22 @@
 
 @implementation AppDelegate
 
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    //友盟
-    [MobClick startWithAppkey:@"568388ebe0f55a1537000bfa" reportPolicy:BATCH channelId:@""];
+    [[CrashReporter sharedInstance] installWithAppId:@"900018787" applicationGroupIdentifier:@"com.hctt.fae99"];
+    // 你可以在初始化之前设置本地保存的用户身份, 也可以在用户身份切换后调用此接口即时修改
+//    [[CrashReporter sharedInstance] setUserId:[NSString stringWithFormat:@"测试用户:%@", @"tester"]];
+    
     [self onCheckVersion];
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_window makeKeyAndVisible];
     leftView = [[LeftViewController alloc] init];
     indexView = [[IndexViewController alloc] init];
-    rightView = [[RightViewController alloc] init];
-    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
+//    rightView = [[RightViewController alloc] init];
+    
 //    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
+    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
     [_window setRootViewController:_sides];
     _sides.speedf = 0.5;
     return YES;
@@ -94,7 +99,7 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_REMOVE_NOTIFY_VC object:nil];
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

@@ -9,11 +9,6 @@
 #import "RightView.h"
 
 @interface RightView()
-
-@property (nonatomic,strong) UIButton *btnFirst;
-@property (nonatomic,strong) UIButton *btnSecond;
-@property (nonatomic,strong) UIButton *btnThird;
-
 @end
 
 @implementation RightView
@@ -25,13 +20,19 @@
     _btnFirst = [UIButton buttonWithType:UIButtonTypeCustom];
     _btnSecond =[UIButton buttonWithType:UIButtonTypeCustom];
     _btnThird = [UIButton buttonWithType:UIButtonTypeCustom];
+    
     [_btnFirst setTitle:@"关注讲师" forState:UIControlStateNormal];
+    [_btnFirst setTitle:@"取消关注" forState:UIControlStateSelected];
     [_btnSecond setTitle:@"直播重点" forState:UIControlStateNormal];
     [_btnThird setTitle:@"直播历史" forState:UIControlStateNormal];
     
     [_btnFirst setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [_btnSecond setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [_btnThird setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+    
+    [_btnFirst setTitleColor:kNavColor forState:UIControlStateHighlighted];
+    [_btnSecond setTitleColor:kNavColor forState:UIControlStateHighlighted];
+    [_btnThird setTitleColor:kNavColor forState:UIControlStateHighlighted];
     
     [self addSubview:_btnFirst];
     [self addSubview:_btnSecond];
@@ -50,6 +51,11 @@
     [_btnFirst addTarget:self action:@selector(addEvent:) forControlEvents:UIControlEventTouchUpInside];
     [_btnSecond addTarget:self action:@selector(addEvent:) forControlEvents:UIControlEventTouchUpInside];
     [_btnThird addTarget:self action:@selector(addEvent:) forControlEvents:UIControlEventTouchUpInside];
+    self.layer.shadowColor = UIColorFromRGB(0x1b3c6d).CGColor;
+    self.layer.shadowOffset = CGSizeMake(0,0);
+    self.layer.shadowOpacity = 0.8;
+    self.layer.shadowRadius = 4;
+    
     return self;
 }
 

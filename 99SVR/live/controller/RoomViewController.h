@@ -9,7 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "CustomViewController.h"
 
+@class  RoomHttp;
+
 @interface RoomViewController : UIViewController
+
+- (id)initWithModel:(RoomHttp *)room;
 
 
 
