@@ -143,9 +143,10 @@
     [headView addSubview:lblName];
     UIButton *exitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [exitBtn setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+    __weak SearchController *__self = self;
     [exitBtn clickWithBlock:^(UIGestureRecognizer *gesture)
     {
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [__self dismissViewControllerAnimated:YES completion:nil];
     }];
     [headView addSubview:exitBtn];
     [exitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -245,47 +246,11 @@
             NSString *searchWords = [NSString stringWithFormat:@"cname like '*%@*' or nvcbid like '*%@*'" , keywords, keywords];
             NSPredicate *pre = [NSPredicate predicateWithFormat:searchWords];
             _aryResult = [group.aryRoomHttp filteredArrayUsingPredicate:pre];
-            if (_aryResult.count == 0)
-            {
-                [self noFindTips];
-            }
-            else
-            {
-                [_searchResultsTable reloadData];
-            }
+            [_searchResultsTable reloadData];
         }
         else
         {
             _defaultView.hidden = NO;
-        }
-    }
-}
-
-- (void)noFindTips
-{
-//    NSString *tipsStr = [NSString stringWithFormat:@"未找到包含\"%@\"的结果", _mySearchBar.text];
-//    [self.view makeToast:tipsStr];
-}
-
-- (void)changeBtnStyle:(UIView *)superView
-{
-    for (UIView *view in superView.subviews) {
-        if ([view isKindOfClass:[UIButton class]])
-        {
-            UIButton *btn = (UIButton *)view;
-            if ([btn.titleLabel.text isEqualToString:@"Cancel"])
-            {
-                [btn setTitle:@"搜索" forState:UIControlStateNormal];
-                [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-                btn.titleLabel.font = [UIFont systemFontOfSize:15];
-                [btn clickWithBlock:^(UIGestureRecognizer *gesture) {
-                    
-                }];
-            }
-            break;
-        } else
-        {
-            [self changeBtnStyle:view];
         }
     }
 }

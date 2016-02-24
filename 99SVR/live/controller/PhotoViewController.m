@@ -229,9 +229,9 @@
     return NO;
 }
 
--(NSUInteger)supportedInterfaceOrientations
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationPortrait;
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView

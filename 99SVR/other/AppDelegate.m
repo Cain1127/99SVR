@@ -20,6 +20,8 @@
 #import "RightViewController.h"
 #import <Bugly/BuglyLog.h>
 #import <Bugly/CrashReporter.h>
+#import "MTA.h"
+#import "MTAConfig.h"
 
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
 
@@ -44,8 +46,13 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[CrashReporter sharedInstance] installWithAppId:@"900018787" applicationGroupIdentifier:@"com.hctt.fae99"];
-    // 你可以在初始化之前设置本地保存的用户身份, 也可以在用户身份切换后调用此接口即时修改
-//    [[CrashReporter sharedInstance] setUserId:[NSString stringWithFormat:@"测试用户:%@", @"tester"]];
+    
+    [[MTAConfig getInstance] setDebugEnable:TRUE];
+    [[MTAConfig getInstance] setAutoExceptionCaught:FALSE];
+    [[MTAConfig getInstance] setSmartReporting:false];
+    [[MTAConfig getInstance] setReportStrategy:MTA_STRATEGY_INSTANT];
+    [MTA startWithAppkey:@"ILQ4T8A5X5JA"];
+    
     
     [self onCheckVersion];
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -53,7 +60,6 @@
     leftView = [[LeftViewController alloc] init];
     indexView = [[IndexViewController alloc] init];
 //    rightView = [[RightViewController alloc] init];
-    
 //    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
     _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
     [_window setRootViewController:_sides];
@@ -114,11 +120,8 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [[UIApplication sharedApplication] setKeepAliveTimeout:600 handler:
-    ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RECONNECT_TIMER_VC object:nil];
-    }];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"ON"];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 }
 
 -(void)endBackgroundTask
@@ -145,6 +148,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     DLog(@"返回");
+    [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];
 }
 @end

@@ -25,6 +25,8 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
 @property (nonatomic,assign) int nUserId;
 
+@property (nonatomic,copy) NSString *strUser;
+
 @property (nonatomic,copy) NSString *strPwd;
 
 @property (nonatomic,copy) NSString *strMd5Pwd;

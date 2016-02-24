@@ -91,7 +91,7 @@
         UserInfo *userInfo = [UserInfo sharedUserInfo];
         if (userInfo.nType == 1)
         {
-            _nameLabel.text = [userInfo getVipDescript];
+            _nameLabel.text = userInfo.strName;
             [_vipLevel setTitle:NSStringFromInt(userInfo.nUserId) forState:UIControlStateNormal];
         }
         else

@@ -153,10 +153,7 @@
     if ([attachment isKindOfClass:[DTImageTextAttachment class]])
     {
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
-        [imageView sd_setImageWithURL:attachment.contentURL completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL)
-         {
-             
-         }];
+        [imageView sd_setImageWithURL:attachment.contentURL];
         imageView.userInteractionEnabled = YES;
         [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(showImageInfo:)]];

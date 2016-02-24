@@ -24,7 +24,8 @@ static char kTapBlockKey;
 - (void)tapEventHandle:(UITapGestureRecognizer *)gesture
 {
     GestureBlock block = objc_getAssociatedObject(self, &kTapBlockKey);
-    if (block) {
+    if (block)
+    {
         block(gesture);
     }
 }

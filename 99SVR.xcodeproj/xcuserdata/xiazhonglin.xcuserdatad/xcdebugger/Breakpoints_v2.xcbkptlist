@@ -25,13 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "99SVR/live/controller/RoomViewController.m"
-            timestampString = "477584180.613902"
+            filePath = "99SVR/login/controller/LoginViewController.m"
+            timestampString = "477992007.031404"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1052"
-            endingLineNumber = "1052"
-            landmarkName = "-roomBeExit:"
+            startingLineNumber = "267"
+            endingLineNumber = "267"
+            landmarkName = "-findPwd"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

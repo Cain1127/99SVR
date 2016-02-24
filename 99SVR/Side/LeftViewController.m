@@ -2,17 +2,15 @@
 //  LeftViewController.m
 //  WWSideslipViewControllerSample
 //
-//  Created by 王维 on 14-8-26.
-//  Copyright (c) 2014年 wangwei. All rights reserved.
+//  Created by xiazhonglin on 14-8-26.
+//  Copyright (c) 2014年 xiazhonglin. All rights reserved.
 //
 
-// 版权属于原作者
-// http://code4app.com (cn) http://code4app.net (en)
-// 发布代码于最专业的源码分享网站: Code4App.com
 
 #import "LeftViewController.h"
 #import "Common.h"
 #import "RegisterViewController.h"
+#import "RegMobileViewController.h"
 #import "UIView+Extension.h"
 #import "LeftCellModel.h"
 #import "LeftViewCell.h"
@@ -111,8 +109,9 @@
     }
     else
     {
+    //   RegMobileViewController//
         [_items addObject:[[LeftCellModel alloc] initWithTitle:kLogin icon:@"mydata.png" goClassName:@"LoginViewController"]];
-        [_items addObject:[[LeftCellModel alloc] initWithTitle:kRegist icon:@"regist.png" goClassName:@"RegisterViewController"]];
+        [_items addObject:[[LeftCellModel alloc] initWithTitle:kRegist icon:@"regist.png" goClassName:@"RegMobileViewController"]];
         [_items addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
         [_items addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"kefu.png" goClassName:@"KefuCenterController"]];
         _footerView.hidden = YES;

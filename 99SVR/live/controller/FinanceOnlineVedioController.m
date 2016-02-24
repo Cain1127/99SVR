@@ -231,9 +231,10 @@
     {
         RoomGroup *group = _videos[section];
         groupBtn.title = group.groupname;
+        __weak FinanceOnlineVedioController *__self = self;
         [groupBtn clickWithBlock:^(UIGestureRecognizer *gesture)
         {
-            [self groupClick:groupBtn];
+            [__self groupClick:groupBtn];
         }];
     }
     return groupBtn;
@@ -276,9 +277,10 @@
     [headView addSubview:lblName];
     UIButton *exitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [exitBtn setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+    __weak FinanceOnlineVedioController *__self = self;
     [exitBtn clickWithBlock:^(UIGestureRecognizer *gesture)
     {
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [__self dismissViewControllerAnimated:YES completion:nil];
     }];
     [headView addSubview:exitBtn];
     [exitBtn mas_makeConstraints:^(MASConstraintMaker *make)

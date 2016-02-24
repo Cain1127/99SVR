@@ -24,4 +24,6 @@
 
 + (NSString *)replaceImageString:(NSString *)strInfo width:(CGFloat)width height:(CGFloat)height index:(NSInteger)nIndex strTemp:(NSString *)strTemp;
 
++ (BOOL)getSrcMobile:(NSString *)mobileInfo;
+
 @end

@@ -38,13 +38,12 @@
     int _roomid;
     int _nuserid;
 }
+@property (nonatomic) BOOL backGroud;
 @property (nonatomic) BOOL bVideo;
 @property (nonatomic,strong) OpenAL *openAL;
 @property (nonatomic) opus_int16 *out_buffer;
 @property (nonatomic,copy) UIImage *currentImage;
 @property (nonatomic,strong) UIImageView *smallView;
-@property (nonatomic,strong) NSMutableArray *aryVideo;
-@property (nonatomic,strong) NSMutableArray *aryAudio;
 @property (nonatomic,copy) NSString *strPath;
 
 @end
@@ -54,10 +53,17 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    @synchronized(_aryVideo)
+    @synchronized(_media.videoQueue)
     {
-        [_aryVideo removeAllObjects];
+        [_media.videoQueue removeAllObjects];
     }
+    @synchronized(_media.audioQueue)
+    {
+        [_media.audioQueue removeAllObjects];
+    }
+    [_openAL stopSound];
+    _playing = NO;
+    [_media closeSocket];
 }
 
 #pragma mark - View lifecycle
@@ -81,21 +87,26 @@
     _glView.contentMode = UIViewContentModeScaleAspectFit;
     _glView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:_glView];
-    _aryVideo = [NSMutableArray array];
-    _aryAudio = [NSMutableArray array];
     [self.view setBackgroundColor:UIColorFromRGB(0x000000)];
     [self setDefaultImg];
 }
 
-- (void)disconnectMedia
+- (void)disconnectMedia:(NSNotification *)notify
 {
-    _playing = NO;
     __weak LivePlayViewController *__self = self;
+    NSString *strMsg = notify && notify.object ? notify.object : nil;
+    __weak NSString *__strMsg = strMsg;
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        [__self.view makeToast:@"网络异常,重新连接视频"];
+        if(strMsg)
+        {
+            [__self.view makeToast:__strMsg];
+        }
     });
-    [_media connectRoomId:_roomid mic:_nuserid];
+    if(strMsg)
+    {
+        [_media connectRoomId:_roomid mic:_nuserid];
+    }
 }
 
 - (void)setDefaultImg
@@ -146,18 +157,27 @@
     int returnValue = 0;
     while (_playing)
     {
-        if (_aryAudio.count==0)
+        if (_media.audioQueue.count==0)
         {
             [NSThread sleepForTimeInterval:0.01];
             continue ;
         }
-        NSData *data = nil;
-        @synchronized(_aryAudio)
+        else if(_media.audioQueue.count>125)
         {
-            data = [_aryAudio objectAtIndex:0];
-            [_aryAudio removeObjectAtIndex:0];
+            @synchronized(_media.audioQueue)
+            {
+                [_media.audioQueue removeAllObjects];
+            }
+            continue ;
         }
-        if (data)
+//        DLog(@"_media.audioQueue.count:%zi",_media.audioQueue.count);
+        NSData *data = nil;
+        @synchronized(_media.audioQueue)
+        {
+            data = [_media.audioQueue objectAtIndex:0];
+            [_media.audioQueue removeObjectAtIndex:0];
+        }
+        if (data && data.length > 0)
         {
             returnValue = opus_decode(_decoder,data.bytes,(int32_t)data.length,_out_buffer, 1920, 0);
             if (returnValue<0)
@@ -168,11 +188,10 @@
             int32_t length = returnValue * sizeof(opus_int16) * 2;
             [_openAL openAudioFromQueue:(uint8_t*)_out_buffer dataSize:length];
         }
-        [NSThread sleepForTimeInterval:0.02];
     }
     [_openAL stopSound];
     [_openAL cleanUpOpenAL];
-    [_aryAudio removeAllObjects];
+    [_media.audioQueue removeAllObjects];
 }
 
 - (void)stop
@@ -187,17 +206,24 @@
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setBackGroudMode:) name:MESSAGE_ENTER_BACK_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectMedia) name:MESSAGE_MEDIA_DISCONNECT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectMedia:) name:MESSAGE_MEDIA_DISCONNECT_VC object:nil];
 }
 
 - (void)setBackGroudMode:(NSNotification *)notify
 {
     if([notify.object isEqualToString:@"ON"])
     {
+        _backGroud = YES;
         [_media settingBackVideo:YES];
+        __weak LivePlayViewController *__self = self;
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+            [__self setDefaultImg];
+        });
     }
     else
     {
+        _backGroud = NO;
         [_media settingBackVideo:NO];
     }
 }
@@ -211,15 +237,15 @@
     [self.view addSubview:lblText];
     [lblText setFont:XCFONT(16)];
     [lblText setTextAlignment:NSTextAlignmentCenter];
-    
-    [self initDecode];
+//    [self initDecode];
     _media = [[MediaSocket alloc] init];
+    /*
     __weak LivePlayViewController *__self = self;
     _media.block = ^(unsigned char *puf,int nLen,int pt)
     {
         if (pt==99)
         {
-            NSData *data = [[NSData alloc] initWithBytes:puf+8 length:nLen-8];
+            NSData *data = [NSData dataWithBytes:puf+8 length:nLen-8];
             @synchronized(__self.aryVideo)
             {
                 if(__self.bVideo)
@@ -239,6 +265,7 @@
             data = nil;
         }
     };
+    */
 }
 
 - (void)setNullMic
@@ -266,13 +293,14 @@
         DLog(@"解码已开启!");
         return ;
     }
+    _playing = YES;
+    [self initDecode];
     __weak LivePlayViewController *__self = self;
     dispatch_main_async_safe(
     ^{
         [__self startLoad];
         [__self setDefaultImg];
     });
-    _playing = YES;
     _bVideo = YES;
     [_media connectRoomId:roomid mic:userid];
     _roomid = roomid;
@@ -306,9 +334,9 @@
     _bVideo = enable;
     if (!enable)
     {
-        @synchronized(_aryVideo)
+        @synchronized(_media.videoQueue)
         {
-            [_aryVideo removeAllObjects];
+            [_media.videoQueue removeAllObjects];
         }
         [self setNoVideo];
     }
@@ -327,7 +355,7 @@
 {
     while (_playing)
     {
-        if (_aryVideo.count+_aryAudio.count>0)
+        if (_media.videoQueue.count+_media.audioQueue.count>0)
         {
             __weak LivePlayViewController *__self = self;
             dispatch_main_async_safe(
@@ -346,19 +374,19 @@
     if (_playing && _bVideo)
     {
         __weak LivePlayViewController *__self = self;
-        if (_aryVideo.count==0)
+        if (_media.videoQueue.count<=0)
         {
             [NSThread sleepForTimeInterval:.03];
         }
         else
         {
             NSData *data = nil;
-            @synchronized(_aryVideo)
+            @synchronized(_media.videoQueue)
             {
-                data = [_aryVideo objectAtIndex:0];
-                [_aryVideo removeObjectAtIndex:0];
+                data = [_media.videoQueue objectAtIndex:0];
+                [_media.videoQueue removeObjectAtIndex:0];
             }
-            if (data)
+            if (data && data.length > 0)
             {
                 AVPacket packet;
                 av_init_packet(&packet);
@@ -379,9 +407,9 @@
                 }
                 av_free_packet(&packet);
             }
+            data = nil;
         }
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1/20 * NSEC_PER_SEC)),
-                       dispatch_get_global_queue(0, 0),
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1/20 * NSEC_PER_SEC)),videoQueue,
         ^{
             [__self decodeVideo];
         });
@@ -390,7 +418,7 @@
     {
         avcodec_flush_buffers(_pCodecCtx);
         [self closeScaler];
-        [_aryVideo removeAllObjects];
+        [_media.videoQueue removeAllObjects];
     }
 }
 
@@ -446,7 +474,7 @@
         __weak UIImage *__rgbImage = _currentImage;
         dispatch_main_sync_safe(
         ^{
-            if(__self.bVideo)
+            if(__self.bVideo && !__self.backGroud)
             {
                 if(__self.glView.height != kVideoImageHeight && self.view.backgroundColor != UIColorFromRGB(0x000000))
                 {
@@ -487,7 +515,12 @@
 
 - (void)dealloc
 {
-    free(_out_buffer);
+    DLog(@"已经释放");
+    if(_out_buffer)
+    {
+        free(_out_buffer);
+        _out_buffer = NULL;
+    }
     opus_decoder_destroy(_decoder);
     if(_pFrame)
     {

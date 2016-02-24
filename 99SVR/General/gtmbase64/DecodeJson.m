@@ -270,10 +270,20 @@
     if(range.location != NSNotFound)
     {
         DLog(@"找到图片");
-        
     }
-    
     return @"";
+}
+
++ (BOOL)getSrcMobile:(NSString *)mobileInfo
+{
+    // | 47\\d{8}
+    NSString *strMobile = @"(1[3578]\\d{9}|1[4][7]\\d{8})";
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strMobile];
+    if([regextestmobile evaluateWithObject:mobileInfo]==YES)
+    {
+        return YES;
+    }
+    return NO;
 }
 
 @end

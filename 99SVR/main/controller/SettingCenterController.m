@@ -71,7 +71,7 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64 + 36, self.view.width,2*kCellHeight+8)];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64 + 36, self.view.width,3*kCellHeight+8)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -104,10 +104,11 @@
         btnInsets.left -= 10;
         logoutBtn.imageEdgeInsets = btnInsets;
         
+        __weak SettingCenterController *__self = self;
         [self.view addSubview:logoutBtn];
         [logoutBtn clickWithBlock:^(UIGestureRecognizer *gesture)
          {
-             UIAlertView *tips = [[UIAlertView alloc] initWithTitle:nil message:@"是否确认退出登录?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+             UIAlertView *tips = [[UIAlertView alloc] initWithTitle:nil message:@"是否确认退出登录?" delegate:__self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
              [tips show];
          }];
     }
@@ -170,6 +171,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
+    {
+        return 3;
+    }
     return 2;
 }
 
@@ -191,6 +196,11 @@
         cell.nameLabel.text = @"关于我们";
         cell.arrowImageView.hidden = NO;
     }
+    else
+    {
+        cell.nameLabel.text = @"修改密码";
+        cell.arrowImageView.hidden = NO;
+    }
     return cell;
 }
 
@@ -204,9 +214,19 @@
     if (indexPath.row == 1) {
         AboutController *about = [[AboutController alloc] init];
         [self presentViewController:about animated:YES completion:nil];
-    } else {
+    }
+    else if(indexPath.row == 2)
+    {
+        
+    }
+    else {
         [self clearCache];
     }
+}
+
+- (void)dealloc
+{
+    DLog(@"dealloc");
 }
 
 @end

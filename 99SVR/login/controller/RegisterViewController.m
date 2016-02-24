@@ -39,14 +39,19 @@
     [self.view addSubview:lblContent];
 }
 
-- (UILabel *)createLabelWithRect:(CGRect)frame
+- (void)createLabelWithRect:(CGRect)frame
 {
-    UILabel *lbl1 = [[UILabel alloc] initWithFrame:frame];
-    [self.view addSubview:lbl1];
-    [lbl1 setFont:XCFONT(14)];
-    [lbl1 setTextColor:UIColorFromRGB(0x343434)];
-    [self addLineHeight:lbl1];
-    return lbl1;
+//    UILabel *lbl1 = [[UILabel alloc] initWithFrame:frame];
+//    [self.view addSubview:lbl1];
+//    [lbl1 setFont:XCFONT(14)];
+//    [lbl1 setTextColor:UIColorFromRGB(0x343434)];
+    
+    UILabel *lblContent = [[UILabel alloc] initWithFrame:Rect(frame.origin.x,frame.origin.y+frame.size.height+10,kScreenWidth-frame.origin.x*2,0.5)];
+    [lblContent setBackgroundColor:UIColorFromRGB(0xcfcfcf)];
+    [self.view addSubview:lblContent];
+//    [self addLineHeight:lbl1];
+//    return lbl1;
+//    return lblContent;
 }
 
 - (UITextField *)createTextField:(CGRect)frame
@@ -70,31 +75,26 @@
     [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
     [self setLeftBtn:btnBack];
     
-    UILabel *lbl1 = [self createLabelWithRect:Rect(30, 80, 80, 30)];
-    [lbl1 setText:@"昵      称"];
+    [self createLabelWithRect:Rect(30, 80, 80, 30)];
     
-    _txtName = [self createTextField:Rect(lbl1.x+lbl1.y+13, lbl1.y, kScreenWidth-lbl1.x*2-lbl1.width, 30)];
+    _txtName = [self createTextField:Rect(30, 80, kScreenWidth-60, 30)];
     [_txtName setPlaceholder:@"请输入昵称"];
     
-    UILabel *lbl2 = [self createLabelWithRect:Rect(lbl1.x, lbl1.y+50,lbl1.width, 30)];
-    [lbl2 setText:@"密      码"];
+    [self createLabelWithRect:Rect(30, 130,80, 30)];
     
-    _txtPwd = [self createTextField:Rect(_txtName.x,lbl2.y,_txtName.width,_txtName.height)];
+    _txtPwd = [self createTextField:Rect(_txtName.x,130,_txtName.width,_txtName.height)];
     [_txtPwd setPlaceholder:@"请输入密码"];
     [_txtPwd setSecureTextEntry:YES];
     
-    UILabel *lbl3 = [self createLabelWithRect:Rect(lbl2.x, lbl2.y+50, lbl1.width, 30)];
-    [lbl3 setText:@"确认密码"];
+    [self createLabelWithRect:Rect(30, 180, 80, 30)];
     
-    _txtCmdPwd = [self createTextField:Rect(_txtName.x,lbl3.y,_txtName.width,_txtName.height)];
+    _txtCmdPwd = [self createTextField:Rect(_txtName.x,180,_txtName.width,_txtName.height)];
     [_txtCmdPwd setPlaceholder:@"请再次输入密码"];
     [_txtCmdPwd setSecureTextEntry:YES];
     
     
-    UILabel *lbl4 = [self createLabelWithRect:Rect(lbl3.x, lbl3.y+50, lbl1.width, 30)];
-    [lbl4 setText:@"验 证 码"];
-    
-    _txtCode = [self createTextField:Rect(_txtName.x,lbl4.y,_txtName.width-80,_txtName.height)];
+    [self createLabelWithRect:Rect(30, 230, 80, 30)];
+    _txtCode = [self createTextField:Rect(_txtName.x,230,_txtName.width-80,_txtName.height)];
     [_txtCode setPlaceholder:@"请输入验证码"];
     
     _imgView = [[UIImageView alloc] initWithFrame:Rect(_txtCode.x+_txtCode.width+1,_txtCode.y, 60, _txtName.height)];
@@ -104,7 +104,7 @@
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(lbl1.x, lbl4.y+70, kScreenWidth-2*lbl1.x, 40);
+    btnRegister.frame = Rect(30, 300, kScreenWidth-60, 40);
     [btnRegister setTitle:@"注册" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
@@ -282,9 +282,7 @@
     }
     
     NSString *strUrl = @"http://api.99ducaijing.com/mapi/register";
-    
     NSDictionary *parameters = @{@"type":[NSNumber numberWithInt:2],@"account":strName,@"pwd":strPwd,@"codeid":_strCode,@"code":strCode};
-    
     __weak RegisterViewController *__self = self;
     __weak NSString *__strPwd = strPwd;
     [BaseService postJSONWithUrl:strUrl parameters:parameters success:^(id response)
@@ -311,9 +309,8 @@
                      }
                      [[LSTcpSocket sharedLSTcpSocket] setUserInfo];
                      [[LSTcpSocket sharedLSTcpSocket] loginServer:[data objectForKey:@"userid"] pwd:__strPwd];
-                     
                      dispatch_async(dispatch_get_main_queue(), ^
-                    {
+                     {
                         [__self.view makeToastActivity];
                         [__self.view makeToast:@"注册成功"];
                         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
@@ -321,7 +318,7 @@
                             [__self dismissViewControllerAnimated:YES completion:^{
                             }];
                         });
-                    });
+                     });
                  }
              }
              else

@@ -209,6 +209,32 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     [_asyncSocket writeData:data withTimeout:20 tag:1];
 }
 
+- (void)sendMsg_newLogin
+{
+    CMDUserLogonReq4_t req;
+    memset(&req, 0, sizeof(CMDUserLogonReq4_t));
+    strcpy(req.cloginid, [_strUser UTF8String]);
+    req.nversion = 4000000;
+    req.nmask = (int)time(0);
+    [UserInfo sharedUserInfo].strUser = _strUser;
+    if (![_strUser isEqualToString:@"0"])
+    {
+        if(_strPwd)
+        {
+            NSString *strMd5 = [DecodeJson XCmdMd5String:_strPwd];
+            [UserInfo sharedUserInfo].strMd5Pwd = strMd5;
+            strcpy(req.cuserpwd,[strMd5 UTF8String]);
+        }
+        [UserInfo sharedUserInfo].strPwd = _strPwd;
+    }
+    strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
+    strcpy(req.cIpAddr, [[DecodeJson getIPAddress] UTF8String]);
+    req.nimstate = 0;
+    req.nmobile = 1;
+    [self sendMessage:(char*)&req size:sizeof(CMDUserLogonReq4_t) version:MDM_Version_Value
+              maincmd:MDM_Vchat_Login subcmd:Sub_Vchat_logonReq4];
+}
+
 - (void)sendMsg_login
 {
     CMDUserLogonReq3_t req;
@@ -227,7 +253,6 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         }
         [UserInfo sharedUserInfo].strPwd = _strPwd;
     }
-    
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
     strcpy(req.cIpAddr, [[DecodeJson getIPAddress] UTF8String]);
     req.nimstate = 0;
@@ -259,6 +284,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         strAddr = SVR_LOGIN_IP;
         nPort = SVR_LOGIN_PORT;
     }
+//    [self connectLogInServer:@"172.16.41.96" port:7403];
     [self connectLogInServer:strAddr port:nPort];
     if ([strUser isEqualToString:@"0"])
     {
@@ -271,6 +297,8 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     _strUser = strUser;
     _strPwd = strPwd;
 }
+
+
 
 - (void)loginAuthInfo:(COM_MSG_HEADER *)in_msg
 {
@@ -286,13 +314,41 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         case Sub_Vchat_logonSuccess:
         {
             DLog(@"登录成功");
-            [self loginSucess:pNewMsg];
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_SUCESS_VC object:@"登录成功"];
+            if(nMsgLen == sizeof(CMDUserLogonSuccess_t))
+            {
+                [self loginSucess:pNewMsg];
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_SUCESS_VC object:@"登录成功"];
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_ERROR_VC object:@"登录异常"];
+            }
         }
-            break;
+        break;
+        case Sub_Vchat_logonSuccess2:
+        {
+            if (nMsgLen == sizeof(CMDUserLogonSuccess2_t)) {
+                [self loginSucess2:pNewMsg];
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_SUCESS_VC object:@"登录成功"];
+            }
+        }
+        break;
+        case Sub_Vchat_logonErr2:
+        {
+            DLog(@"登录失败");
+            [self loginError2:pNewMsg];
+        }
+        break;
         case Sub_Vchat_logonErr:
         {
-            [self loginError:pNewMsg];
+            if(nMsgLen == sizeof(CMDUserLogonErr_t))
+            {
+                [self loginError:pNewMsg];
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_ERROR_VC object:@"登录异常"];
+            }
         }
         break;
         case Sub_Vchat_logonFinished:
@@ -316,6 +372,38 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     }
     free(pNewMsg);
     [_asyncSocket readDataToLength:sizeof(int) withTimeout:-1 tag:SOCKET_READ_LENGTH];
+}
+
+- (void)loginSucess2:(char *)pData
+{
+    CMDUserLogonSuccess2_t *pLogonResp = (CMDUserLogonSuccess2_t *)pData;
+    UserInfo *user = [UserInfo sharedUserInfo];
+    user.m_nVipLevel=pLogonResp->viplevel;
+    user.goldCoin = pLogonResp->nk;
+    user.score = pLogonResp->nb;
+    user.sex = pLogonResp->ngender;
+    user.nUserId = pLogonResp->userid;
+    user.strName = [NSString stringWithCString:pLogonResp->cuseralias encoding:GBK_ENCODING];
+    if ((user.nUserId>900000000 && user.nUserId < 1000000000) || user.nUserId == 0)
+    {
+        [UserInfo sharedUserInfo].bIsLogin = YES;
+        [UserInfo sharedUserInfo].nType = 2;
+    }
+    else
+    {
+        user.nUserId = pLogonResp->userid;
+        [UserInfo sharedUserInfo].bIsLogin = YES;
+        [UserInfo sharedUserInfo].nType = 1;
+    }
+    if([UserInfo sharedUserInfo].nType==1)
+    {
+        [UserDefaults setBool:YES forKey:kIsLogin];
+        [UserDefaults setObject:NSStringFromInt(user.nUserId) forKey:kUserId];
+        [UserDefaults setObject:_strPwd forKey:kUserPwd];
+        [UserDefaults synchronize];
+    }
+    [[CrashReporter sharedInstance] setUserId:[NSString stringWithFormat:@"用户:%@",NSStringFromInt(user.nUserId)]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
 }
 
 - (void)loginSucess:(char *)pData
@@ -351,13 +439,16 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
 //    pLocalUser->m_strUserAlias=pLogonResp->cuseralias;
     user.nUserId = pLogonResp->userid;
     user.strName = [NSString stringWithCString:pLogonResp->cuseralias encoding:GBK_ENCODING];
-    if (_strUser || [_strUser isEqualToString:@"0"])
+    if ((user.nUserId>900000000 && user.nUserId < 1000000000) || user.nUserId == 0)
     {
         [UserInfo sharedUserInfo].bIsLogin = YES;
+        [UserInfo sharedUserInfo].nType = 2;
     }
     else
     {
-        user.nUserId = [_strUser intValue];
+        user.nUserId = pLogonResp->userid;
+        [UserInfo sharedUserInfo].bIsLogin = YES;
+        [UserInfo sharedUserInfo].nType = 1;
     }
     if([UserInfo sharedUserInfo].nType==1)
     {
@@ -369,6 +460,27 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     [[CrashReporter sharedInstance] setUserId:[NSString stringWithFormat:@"用户:%@",NSStringFromInt(user.nUserId)]];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
 }
+
+- (void)loginError2:(char *)pError
+{
+    CMDUserLogonErr2_t* pErr = (CMDUserLogonErr2_t *)pError;
+    DLog(@"登录失败--pErr:%u",pErr->errid);
+    NSString *strMsg = nil;
+    if (pErr->errid == 103)
+    {
+        strMsg = @"没有此用户";
+    }
+    else if(pErr->errid == 101)
+    {
+        strMsg = @"你被限制进入,登录失败!请联系在线客服.";
+    }
+    else
+    {
+        strMsg = @"密码错误";
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_ERROR_VC object:strMsg];
+}
+
 
 - (void)loginError:(char *)pError
 {
@@ -404,7 +516,14 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     {
         //登录服务器信息
         [self sendHello:MDM_Vchat_Login];
-        [self sendMsg_login];
+        if (_strUser.length==11 && [DecodeJson getSrcMobile:_strUser])
+        {
+            [self sendMsg_newLogin];
+        }
+        else
+        {
+            [self sendMsg_login];
+        }
         [_asyncSocket readDataToLength:sizeof(int) withTimeout:-1 tag:SOCKET_READ_LENGTH];
     }
 }
@@ -446,9 +565,9 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     }
 }
 
-
 -(void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
+    
 }
 
 -(void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
@@ -459,13 +578,6 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         {
             DLog(@"连接失败,换IP");
             [self ReConnectSocket];
-        }
-    }
-    else
-    {
-        if (_strRoomId)
-        {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_KICKOUT_VC object:nil];
         }
     }
 }

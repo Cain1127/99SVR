@@ -17,13 +17,8 @@
 - (void)setLeftBtn:(UIButton *)btnLeft;
 - (void)setRightBtn:(UIButton *)btnRight;
 - (void)setUserInter;
-
 - (void)setHeadBackGroup:(UIColor *)color;
-
 - (void)addDefaultHeader:(NSString *)title;
-
 - (void)setLineHidden:(BOOL)bHidden;
-
-
 
 @end

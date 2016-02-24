@@ -40,9 +40,9 @@
     sprintf(cCarName, "%s",pResp->carname);
     _ncarid = pResp->ncarid;
     
-    int nSize = sizeof(SiegeInfo_t);
-    _m_tSiegeInfo = malloc(nSize);
-    memcpy(_m_tSiegeInfo,&pResp->siege_info,sizeof(SiegeInfo_t));
+//    int nSize = sizeof(SiegeInfo_t);
+//    _m_tSiegeInfo = malloc(nSize);
+//    memcpy(_m_tSiegeInfo,&pResp->siege_info,sizeof(SiegeInfo_t));
     
     //关闭房间等待窗口
     //重置自己的全局对象房间状态
@@ -138,7 +138,8 @@
 
 - (SiegeInfo_t *)siegeInfo
 {
-    return _m_tSiegeInfo;
+//    return _m_tSiegeInfo;
+    return nil;
 }
 
 - (char *)getRoomName

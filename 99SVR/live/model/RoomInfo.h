@@ -16,7 +16,7 @@
 {
     int _m_nOp[4];
     char cCarName[NAMELEN];
-    SiegeInfo_t *_m_tSiegeInfo;
+//    SiegeInfo_t *_m_tSiegeInfo;
     char cRoomName[NAMELEN];
 }
 

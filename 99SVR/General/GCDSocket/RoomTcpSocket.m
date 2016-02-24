@@ -8,6 +8,7 @@
 
 #import "RoomTcpSocket.h"
 #import "cmd_vchat.h"
+#import "BaseService.h"
 #import "NoticeModel.h"
 #import "SDImageCache.h"
 #import "SDWebImageManager.h"
@@ -103,7 +104,6 @@
     {
         [_asyncSocket disconnectAfterReading];
         _asyncSocket = nil;
-        [_aryChat removeAllObjects];
         [_aryNotice removeAllObjects];
         [_rInfo.dictUser removeAllObjects];
         [_rInfo.aryUser removeAllObjects];
@@ -448,7 +448,9 @@
 
 - (void)reConnectRoomInfo
 {
-    [self connectRoomInfo:_strRoomId address:_strRoomAddress port:_nRoomPort];
+//    [self connectRoomInfo:_strRoomId address:_strRoomAddress port:_nRoomPort];
+    _nFall++;
+    [self reConnectRoomTime:_strRoomId address:_strRoomAddress port:_nRoomPort];
 }
 
 - (BOOL)connectRoomAndPwd:(NSString *)strPwd
@@ -467,19 +469,35 @@
         tcpThread = dispatch_queue_create("socket",0);
     }
     _asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:tcpThread];
+    
+    [_aryChat addObject:@"[系统消息]正在加载房间数据..."];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+    
     if(![_asyncSocket connectToHost:strIp onPort:nPort error:nil])
     {
+        [_aryChat addObject:@"[系统消息]正在加载房间数据失败"];
         DLog(@"连接失败");
     }
-    _strRoomAddress = strIp;
-    _strRoomId = strId;
-    _nRoomPort = nPort;
+    else
+    {
+        _strRoomAddress = strIp;
+        _strRoomId = strId;
+        _nRoomPort = nPort;
+    }
     return YES;
 }
 
 - (BOOL)connectRoomInfo:(NSString *)strId address:(NSString *)strIp port:(int)nPort
 {
     _nFall = 0;
+    if(_aryChat == nil)
+    {
+        _aryChat = [NSMutableArray array];
+    }
+    else
+    {
+        [_aryChat removeAllObjects];
+    }
     [self reConnectRoomTime:strId address:strIp port:nPort];
     return YES;
 }
@@ -501,14 +519,7 @@
     [_aryNotice removeAllObjects];
     [_aryBuffer removeAllObjects];
     [_aryPriChat removeAllObjects];
-    
-    if (_aryChat == nil)
-    {
-        _aryChat = [NSMutableArray array];
-    }
-    [_aryChat removeAllObjects];
-    [_aryChat addObject:@"[系统消息]正在加载房间数据..."];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
+
     CMDJoinRoomReq_t req;
     memset(&req,0,sizeof(CMDJoinRoomReq_t));
     req.userid = [UserInfo sharedUserInfo].nUserId;
@@ -548,7 +559,7 @@
         if (in_msg->subcmd == Sub_Vchat_RoomUserListFinished)
         {
             DLog(@"房间用户数据结束");
-            //            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
             [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
             return ;
         }
@@ -583,25 +594,24 @@
             break;
         case Sub_Vchat_RoomUserNoty:
         {
-            DLog(@"新增用户通知!");
+//            DLog(@"新增用户通知!");
             CMDRoomUserInfo_t *pItem = (CMDRoomUserInfo_t *)pNewMsg;
             [self addUserStruct:pItem];
-            NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;FONT-FAMILY:黑体;font-size=14px;\">系统消息: <a style=\"TEXT-DECORATION:font-size:14px; none;color:#629bff \" href=\"sqchatid://%d\">%@</a> 进入了房间</span>",
-                                 pItem->userid,[NSString stringWithCString:pItem->useralias encoding:GBK_ENCODING]];
-            if ([UserInfo sharedUserInfo].m_nVipLevel >=21 && [UserInfo sharedUserInfo].m_nVipLevel <=36)
-            {
-                [_aryChat addObject:strInfo];
-                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-            }
+//            NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;FONT-FAMILY:黑体;font-size=14px;\">系统消息: <a style=\"TEXT-DECORATION:font-size:14px; none;color:#629bff \" href=\"sqchatid://%d\">%@</a> 进入了房间</span>",
+//                                 pItem->userid,[NSString stringWithCString:pItem->useralias encoding:GBK_ENCODING]];
+//            if ([UserInfo sharedUserInfo].m_nVipLevel >=21 && [UserInfo sharedUserInfo].m_nVipLevel <=36)
+//            {
+//                [_aryChat addObject:strInfo];
+//                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+//            }
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
         }
             break;
         case Sub_Vchat_RoomPubMicState:
         {
-            DLog(@"公麦状态数据!");
-            
+//            DLog(@"公麦状态数据!");
         }
-            break;
+        break;
         case Sub_Vchat_RoomUserExitResp:
         {
             // not do anything...
@@ -620,17 +630,16 @@
                 [_rInfo removeUser:pInfo->userid];
             }
             DLog(@"userid:%d",pInfo->userid);
-            NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;font-size=14px;\">\
+//            NSString *strInfo = [NSString stringWithFormat:@"<span style=\"TEXT-DECORATION: none;font-size=14px;\">\
                                  系统消息:<span style=\"TEXT-DECORATION:font-size:14px; none;color:#629bff \">%@</span>退出了房间</span>",strName];
-            if ([UserInfo sharedUserInfo].m_nVipLevel >=21 && [UserInfo sharedUserInfo].m_nVipLevel <=36)
-            {
-                [_aryChat addObject:strInfo];
-                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-            }
-            
+//            if ([UserInfo sharedUserInfo].m_nVipLevel >=21 && [UserInfo sharedUserInfo].m_nVipLevel <=36)
+//            {
+//                [_aryChat addObject:strInfo];
+//                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+//            }
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
             
-            strInfo = nil;
+//            strInfo = nil;
         }
             break;
         case Sub_Vchat_RoomKickoutUserResp:
@@ -640,7 +649,7 @@
             break;
         case Sub_Vchat_RoomKickoutUserNoty:
         {
-            DLog(@"房间用户踢出通知!");
+//            DLog(@"房间用户踢出通知!");
             CMDUserKickoutRoomInfo_t* pInfo = (CMDUserKickoutRoomInfo_t *)pNewMsg;
             if (_rInfo)
             {
@@ -680,7 +689,7 @@
             break;
         case Sub_Vchat_ChatNotify:
         {
-            DLog(@"聊天通知数据!");
+//            DLog(@"聊天通知数据!");
             [self chatMessageOper:pNewMsg];
         }
             break;
@@ -946,7 +955,6 @@
 {
     CMDRoomChatMsg_t *msg = (CMDRoomChatMsg_t*)pNewMsg;
     NSString *strContent = [NSString stringWithCString:msg->content encoding:GBK_ENCODING];
-    DLog(@"strContent:%@",strContent);
     NSString *strSrcName = [NSString stringWithCString:msg->srcalias encoding:GBK_ENCODING];
     NSString *strFrom = [self getToUser:msg->srcid user:[_rInfo findUser:msg->srcid] name:strSrcName];
     if (msg->msgtype==1 || msg->msgtype==15)
@@ -984,27 +992,42 @@
         NSString *strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\"> %@ 说 :</span>&nbsp;&nbsp;%@",strFrom,strTo,strContent];
         strInfo = [DecodeJson replaceEmojiString:strInfo];
         [_aryChat addObject:strInfo];
+        NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[UserInfo sharedUserInfo].nUserId];
+        //查询是否有对我说的记录
+        if ([strTo rangeOfString:query].location != NSNotFound || [strFrom rangeOfString:query].location != NSNotFound )
+        {
+            [_aryPriChat addObject:strInfo];
+            if (_aryPriChat.count >= 20)
+            {
+                @synchronized(_aryPriChat)
+                {
+                    for (int i=0; i<15; i++)
+                    {
+                        [_aryPriChat removeObjectAtIndex:0];
+                    }
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:@"clear"];
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
+            }
+        }
         if (_aryChat.count>=50)
         {
             @synchronized(_aryChat)
             {
                 for (int i=0; i<25; i++)
                 {
-                    [_aryChat removeObjectAtIndex:i];
+                    [_aryChat removeObjectAtIndex:0];
                 }
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:@"clear"];
         }
-        strTo = nil;
-        strFrom = nil;
-        NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[UserInfo sharedUserInfo].nUserId];
-        //查询是否有对我说的记录
-        if ([strTo rangeOfString:query].location != NSNotFound || [strFrom rangeOfString:query].location != NSNotFound )
+        else
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
         }
-        query = nil;
-        strInfo = nil;
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     }
 }
 
@@ -1086,13 +1109,7 @@
     pUser->cqq =pItem->cqq;
     pUser->ctel =pItem->ctel;
 #endif
-    
     //判断城主，服务器已经不判断了
-    if(pUser.m_nUserId == [_rInfo siegeInfo]->srcid)
-        pUser.m_nInRoomState |= FT_ROOMUSER_STATUS_IS_SIEGE1;
-    else if(pUser.m_nUserId == [_rInfo siegeInfo]->toid)
-        pUser.m_nInRoomState |= FT_ROOMUSER_STATUS_IS_SIEGE2;
-    
     if ([pUser isOnMic])
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
@@ -1102,19 +1119,6 @@
     {
         [_rInfo addUser:pUser];
         [_rInfo insertRUser:pUser];
-    }
-
-    if(pUser.m_nInRoomState & FT_ROOMUSER_STATUS_IS_SIEGE1)
-    {
-        DLog(@"发现【城主】用户[%d]进入房间[%d].", pUser.m_nUserId, _rInfo.m_nRoomId);
-    }
-    if(pUser.m_nInRoomState & FT_ROOMUSER_STATUS_IS_SIEGE2)
-    {
-        DLog(@"发现【城后】用户[%d]进入房间[%d].", pUser.m_nUserId, _rInfo.m_nRoomId);
-    }
-    if(pUser.m_nUserId == [UserInfo sharedUserInfo].nUserId)
-    {
-        DLog(@"发现自己[%d] 进入房间!",pUser.m_nUserId);
     }
 }
 
@@ -1166,48 +1170,47 @@
     {
         case 201:
         {
-            strMsg = @"需要输入密码";
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:strMsg];
-            return ;
+            strMsg = @"[系统消息]需要输入密码";
         }
-            break;
+        break;
         case 101:
         {
-            strMsg = @"房间黑名单";
+            strMsg = @"[系统消息]房间黑名单";
         }
             break;
         case 203:
         {
-            strMsg = @"用户名/密码查询错误，无法加入房间!";
+            strMsg = @"[系统消息]用户名/密码查询错误，无法加入房间!";
         }
-            break;
+        break;
         case 404:
         {
-            strMsg = @"加入房间 不存在";
+            strMsg = @"[系统消息]加入房间 不存在";
         }
             break;
         case 405:
         {
-            strMsg = @"房间已经被房主关闭，不能进入";
+            strMsg = @"[系统消息]房间已经被房主关闭，不能进入";
         }
             break;
         case 502:
         {
-            strMsg = @"房间人数已满";
+            strMsg = @"[系统消息]房间人数已满";
         }
             break;
         case 505:
         {
-            strMsg = @"通信版本过低，不能使用，请升级";
+            strMsg = @"[系统消息]通信版本过低，不能使用，请升级";
         }
             break;
         default:
         {
-            strMsg = @"未知错误";
+            strMsg = @"[系统消息]未知错误";
         }
             break;
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:strMsg];
+    [_aryChat addObject:strMsg];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [self closeSocket];
 }
 
@@ -1248,13 +1251,9 @@
     pReq->srcviplevel = [UserInfo sharedUserInfo].m_nVipLevel;
     pReq->msgtype     = 0;
     pReq->textlen     = data.length+1;
-    
     strcpy(pReq->vcbname,[_rInfo getRoomName]);
-    
     memcpy(pReq->content, [data bytes], [data length]);
-    
     RoomUser *fromUser= [_rInfo findUser:[UserInfo sharedUserInfo].nUserId];
-    
     memcpy(pReq->srcalias,[[fromUser.m_strUserAlias dataUsingEncoding:GBK_ENCODING] bytes],
            [[fromUser.m_strUserAlias dataUsingEncoding:GBK_ENCODING] length]);
     if (userId!=0)
@@ -1283,11 +1282,13 @@
         NSString *strTo = [self getToUser:nUser user:user name:user.m_strUserAlias];
         NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\">对 %@ 说:</span>%@",strFrom,strTo,strChat];
         [_aryChat addObject:strInfo];
+        [_aryPriChat addObject:strInfo];
     }
     else
     {
         NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\"> 说:</span>%@",strFrom,strChat];
         [_aryChat addObject:strInfo];
+        [_aryPriChat addObject:strInfo];
     }
     if (_aryChat.count>=50)
     {
@@ -1390,54 +1391,58 @@
     {
         if ([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Connection refused"])
         {
-            DLog(@"连接失败,换IP");
+            [_aryChat addObject:@"[系统消息]加载失败,重连房间"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
             [self ReConnectSocket];
         }
         else if([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Socket closed byremote peer"])
         {
             [self reConnectRoomInfo];
         }
-    }
-    else
-    {
-        if (_strRoomId)
+        else if([err.domain isEqualToString:@"NSPOSIXErrorDomain"] &&_nFall < 3)
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_KICKOUT_VC object:nil];
+            [_aryChat addObject:@"[系统消息]网络中断,请检测手机网络"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+            [self reConnectRoomInfo];
         }
     }
+    
 }
 
 - (void)ReConnectSocket
 {
-    if(nSocketType==1)
+        //重连操作
+    if(![UserInfo sharedUserInfo].strRoomAddr)
     {
-        NSString *strAddr = nil;
-        int nPort = 0;
-        if ([[UserInfo sharedUserInfo].strWebAddr componentsSeparatedByString:@","].count > _nFall)
-        {
-            NSString *strInfo = [[UserInfo sharedUserInfo].strWebAddr componentsSeparatedByString:@","][_nFall];
-            strAddr = [strInfo componentsSeparatedByString:@":"][0];
-            nPort = [[strInfo componentsSeparatedByString:@":"][1] intValue];
-        }
-        else
-        {
-            strAddr = SVR_LOGIN_IP;
-            nPort = SVR_LOGIN_PORT;
-        }
-        [self connectLogInServer:strAddr port:nPort];
+        __weak UserInfo *__userInfo = [UserInfo sharedUserInfo];
+        [BaseService getJSONWithUrl:@"http://lbs1.99ducaijing.cn:2222/tygetgate" parameters:nil success:^(id responseObject)
+         {
+             NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+             __userInfo.strRoomAddr = strInfo;
+             NSString *strAddr = nil;
+             int nPort = 0;
+             if([[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","].count > _nFall)
+             {
+                 NSString *strInfo = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][_nFall];
+                 strAddr = [strInfo componentsSeparatedByString:@":"][0];
+                 nPort = [[strInfo componentsSeparatedByString:@":"][1] intValue];
+                 [self reConnectRoomTime:_strRoomId address:strAddr port:nPort];
+                 _nFall++;
+             }
+         }fail:^(NSError *error)
+         {
+             DLog(@"获取服务器信息异常");
+             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_SEND_MSG_VC object:@"获取房间数据失败"];
+         }];
         _nFall++;
     }
-    else
+    else if([[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","].count > _nFall)
     {
-        //重连操作
         NSString *strAddr = nil;
         int nPort = 0;
-        if ([[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","].count > _nFall)
-        {
-            NSString *strInfo = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][_nFall];
-            strAddr = [strInfo componentsSeparatedByString:@":"][0];
-            nPort = [[strInfo componentsSeparatedByString:@":"][1] intValue];
-        }
+        NSString *strInfo = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][_nFall];
+        strAddr = [strInfo componentsSeparatedByString:@":"][0];
+        nPort = [[strInfo componentsSeparatedByString:@":"][1] intValue];
         [self reConnectRoomTime:_strRoomId address:strAddr port:nPort];
         _nFall++;
     }
@@ -1499,11 +1504,11 @@
             __weak NSArray *__aryPath = aryPath;
             [_dictDownLoad setObject:notice forKey:[aryPath objectAtIndex:0]];
             __weak RoomTcpSocket *__self = self;
-            dispatch_apply(1,queue, ^(size_t index)
-                           {
-                               NSString *strKey = [__aryPath objectAtIndex:0];
-                               [__self downloadSingle:strKey info:notice];
-                           });
+            dispatch_apply(1,queue,^(size_t index)
+            {
+                NSString *strKey = [__aryPath objectAtIndex:0];
+                [__self downloadSingle:strKey info:notice];
+            });
         }
         else
         {
@@ -1526,6 +1531,11 @@
     else
     {
         __weak NSString *__strPath = strPath;
+        if (strPath==nil)
+        {
+            [__self pushNotice:nil info:__notice path:nil];
+            return ;
+        }
         [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:strPath] options:0 progress:nil
                                                             completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished)
          {
@@ -1538,7 +1548,11 @@
              {
                  [__self pushNotice:nil info:__notice path:nil];
              }
-             [__self.dictDownLoad removeObjectForKey:__strPath];
+             DLog(@"__strPath:%@",__strPath);
+             if(__strPath)
+             {
+                 [__self.dictDownLoad removeObjectForKey:__strPath];
+             }
          }];
     }
     
@@ -1590,6 +1604,7 @@
 
 - (void)dealloc
 {
+    [_aryChat removeAllObjects];
     [self closeSocket];
 }
 

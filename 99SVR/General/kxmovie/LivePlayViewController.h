@@ -29,9 +29,9 @@
 
 //开始播放
 
-- (void)seekWithTime:(int)time;
+//- (void)seekWithTime:(int)time;
 
-- (void)playWithUrl:(NSString *)strUrl;
+//- (void)playWithUrl:(NSString *)strUrl;
 
 - (void)setDefaultImg;
 

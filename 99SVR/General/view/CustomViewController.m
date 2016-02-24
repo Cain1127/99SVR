@@ -101,10 +101,8 @@
     _txtTitle.text = title;
     UIButton *exitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [exitBtn setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
-    [exitBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }];
-    [self.headView addSubview:exitBtn];
+    [exitBtn addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
+    
     [self.headView addSubview:exitBtn];
     [exitBtn mas_makeConstraints:^(MASConstraintMaker *make)
     {
@@ -117,6 +115,10 @@
 - (void)setLineHidden:(BOOL)bHidden
 {
     [_lblContent setHidden:bHidden];
+}
+
+- (void)dealloc
+{
 }
 
 @end

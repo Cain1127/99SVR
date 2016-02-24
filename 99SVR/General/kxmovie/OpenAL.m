@@ -14,18 +14,19 @@
 @synthesize mDevice,mContext,soundDictionary,bufferStorageArray;
 @synthesize wasInterrupted;
 
-- (void)onAudioSessionEvent:(NSNotification *)notification
+- (void)handleAudioNotify:(NSNotification *)notification
 {
     if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification])
     {
         if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]])
         {
-            [[AVAudioSession sharedInstance] setActive:NO error:nil];
+            alcSuspendContext(mContext);
+            alcMakeContextCurrent(NULL);
         }
         else if([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeEnded]])
         {
-            [[AVAudioSession sharedInstance] setActive:YES error:nil];
-            [self playSound];
+            alcMakeContextCurrent(mContext);
+            alcProcessContext(mContext);
         }
     }
 }
@@ -47,13 +48,13 @@
 {
     if(self=[super init])
     {
+       ticketCondition = [[NSCondition alloc] init];
        AVAudioSession *session = [AVAudioSession sharedInstance];
        [session setCategory:AVAudioSessionCategoryPlayback error:nil];
        [session setActive:YES error:nil];
        [session setPreferredSampleRate:48000 error:nil];
-//       [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                selector:@selector(onAudioSessionEvent:) name:AVAudioSessionInterruptionNotification object:nil];
+                                                selector:@selector(handleAudioNotify:) name:AVAudioSessionInterruptionNotification object:nil];
         return self;
     }
     return nil;
@@ -63,11 +64,11 @@
 {
     NSError *error;
     BOOL bSucess = [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
-    if (!bSucess) {
+    if (!bSucess)
+    {
         DLog(@"set no:%@",error);
     }
     alSourcePause(outSourceId);
-    alcMakeContextCurrent(NULL);
     alcSuspendContext(mContext);
 }
 
@@ -117,13 +118,16 @@
     newDevice = alcOpenDevice(NULL);
     if (newDevice != NULL)
     {
+        mDevicde = newDevice;
         newContext = alcCreateContext(newDevice, 0);
+        mContext = newContext;
         if (newContext != NULL)
         {
             alcMakeContextCurrent(newContext);
             alGenBuffers(1, &buff);
-            if((error = alGetError()) != AL_NO_ERROR) {
-                printf("Error Generating Buffers: %x", error);
+            if((error = alGetError()) != AL_NO_ERROR)
+            {
+                printf("Error Generating Buffers: %x\n", error);
             }
             alGenSources(1, &outSourceId);
             if(alGetError() != AL_NO_ERROR)
@@ -140,6 +144,7 @@
 {
 #if 1
     [ticketCondition lock];
+    ALenum  error =AL_NO_ERROR;
     ALuint bufferID = 0;
     alGenBuffers(1, &bufferID);
     int aSampleRate,aBit,aChannel;
@@ -147,13 +152,31 @@
     aBit = 16;
     aChannel = 2;
     ALenum format=AL_FORMAT_STEREO16;
+    if ((error =alGetError())!=AL_NO_ERROR)
+    {
+        NSLog(@"create bufferData failed");
+        [ticketCondition unlock];
+        return;
+    }
     alBufferData(bufferID, format,data, (ALsizei)dataSize,aSampleRate);
+    if ((error =alGetError())!=AL_NO_ERROR)
+    {
+        NSLog(@"create bufferData failed");
+        [ticketCondition unlock];
+        return;
+    }
     alSourceQueueBuffers(outSourceId, 1, &bufferID);
+    if ((error =alGetError())!=AL_NO_ERROR)
+    {
+        NSLog(@"create bufferData failed");
+        [ticketCondition unlock];
+        return;
+    }
     [self updataQueueBuffer];
-    ALint stateVaue;
-    alGetSourcei(outSourceId, AL_SOURCE_STATE, &stateVaue);
+    
     [ticketCondition unlock];
 #endif
+    
 #if 0
     [ticketCondition lock];
     ALenum  error =AL_NO_ERROR;
@@ -220,18 +243,21 @@
         stateVaue == AL_PAUSED ||
         stateVaue == AL_INITIAL)
     {
+        DLog(@"stateVaue:%d",stateVaue);
+        DLog(@"queued:%d",queued);
         if (queued < processed || queued == 0 ||(queued == 1 && processed ==1))
         {
             DLog(@"释放");
             [self stopSound];
             [self cleanUpOpenAL];
         }
+        DLog(@"播放");
         [self playSound];
         return NO;
     }
     while(processed--)
     {
-        alSourceUnqueueBuffers(outSourceId, 1, &buff);
+        alSourceUnqueueBuffers(outSourceId,1,&buff);
         alDeleteBuffers(1, &buff);
     }
     return YES;
@@ -288,20 +314,19 @@
 -(void)cleanUpOpenAL
 {
     DLog(@"已经释放");
-    
     ALCcontext	*context = NULL;
     ALCdevice	*device = NULL;
     alDeleteSources(1, &outSourceId);
     alDeleteBuffers(1, &buff);
-    context = alcGetCurrentContext();
-    device = alcGetContextsDevice(context);
-    alcDestroyContext(context);
-    alcCloseDevice(device);
+//    context = alcGetCurrentContext();
+//    device = alcGetContextsDevice(context);
+//    alcDestroyContext(context);
+//    alcCloseDevice(device);
+    alcDestroyContext(mContext);
+    alcCloseDevice(mDevicde);
 /*
     alDeleteSources(1, &outSourceId);
     alDeleteBuffers(1, &buff);
-    alcDestroyContext(mContext);
-    alcCloseDevice(mDevicde);
 */
 }
 
@@ -316,7 +341,7 @@
     {
         DLog(@"错误原因:%@",[error description]);
     }
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 

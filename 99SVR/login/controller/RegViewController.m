@@ -38,7 +38,6 @@
     _webView = [[UIWebView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64)];
     [self.view addSubview:_webView];
     _webView.delegate = self;
-    
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:
                              [[NSURL alloc] initWithString:@"http://www.99ducaijing.com/phone/register.aspx"]];
     [_webView loadRequest:request];

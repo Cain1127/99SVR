@@ -8,11 +8,33 @@
 
 #import "GitInfo.h"
 #import "UIImage+animatedGIF.h"
+#import "FLAnimatedImage.h"
 
 @implementation GitInfo
 
 DEFINE_SINGLETON_FOR_CLASS(GitInfo)
 
+- (FLAnimatedImage *)findFLAnimated:(NSString *)strName
+{
+    if(_dictIcon==nil)
+    {
+        _dictIcon = [NSMutableDictionary dictionary];
+    }
+    FLAnimatedImage *image = nil;
+    if ([_dictIcon objectForKey:strName])
+    {
+        image = [_dictIcon objectForKey:strName];
+    }
+    else
+    {
+        NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"gif"];
+        NSData *data1 = [NSData dataWithContentsOfURL:url1];
+        image = [[FLAnimatedImage alloc] initWithAnimatedGIFData:data1];
+        [_dictIcon setObject:image forKey:strName];
+    }
+    return image;
+    
+}
 
 - (UIImage *)findIconImage:(NSString *)number
 {

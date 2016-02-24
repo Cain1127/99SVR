@@ -311,10 +311,10 @@
     [self setLeftBtn:leftBtn];
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
-    
+    __weak IndexViewController *__self = self;
     [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
         SearchController *searchVc = [[SearchController alloc] init];
-        [self presentViewController:searchVc animated:YES completion:nil];
+        [__self presentViewController:searchVc animated:YES completion:nil];
     }];
     
     [self setRightBtn:rightBtn];

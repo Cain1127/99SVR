@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class FLAnimatedImage;
 
 @interface GitInfo : NSObject
 
@@ -15,5 +16,7 @@ DEFINE_SINGLETON_FOR_HEADER(GitInfo)
 @property (nonatomic,strong) NSMutableDictionary *dictIcon;
 
 - (void)removeAllIcon;
+
+- (FLAnimatedImage *)findFLAnimated:(NSString *)strName;
 
 @end

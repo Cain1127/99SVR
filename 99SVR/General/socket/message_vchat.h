@@ -7,34 +7,26 @@
 #define MDM_Vchat_Login  103  //登陆
 #define MDM_Vchat_Hall   104  //大厅
 #define MDM_Vchat_Room   105  //房间
-#define MDM_Vchat_Gate   106  //网关
-#define MDM_Vchat_WEB    107  //来自web的通知
-#define MDM_Vchat_Text   108
-
-#define MDM_Vchat_Frtiy  110  //外部 111
-#define MDM_Vchat_Trust  112
-#define MDM_Vchat_Alarm  199  //告警服务器
+#define MDM_Vchat_Text   108  //文字直播间
 
 #define MDM_Version_Value 10  //协议版本
 
-//au
-#define  MDM_GR_ShouQuan 10
-#define  Sub_GR_clientHello 200
-#define  Sub_GR_ServerAuthReq 3
-#define  Sub_GR_ServerAuthResp 4
-#define  TM_SERVERAUTH_RESP 0x0400+1
 
 enum {
     ERR_USER_IN_BLACK_LIST = 101,	//用户在黑名单
     ERR_JOINROOM_PWD_WRONG = 201,	//房间密码不对
     ERR_FAIL_CREATE_USER = 203,		//创建用户失败(用户名/密码失败)
     ERR_KICKOUT_SAMEACCOUNT = 107,	//同号加入房间踢出
+    //add new
+    ERR_EXCEPTION_QUIT_ROOM = 108,
+    //end
     ERR_ROOM_NOT_EXIST = 404,		//房间不存在
     ERR_ROOM_IS_CLOSED = 405,		//房间已经关闭
     ERR_ROOM_USER_IS_FULL = 502,	//房间人数已满
     ERR_KICKOUT_TIMEOUT = 522,		//超时踢出
     ERR_KICKOUT_AD = 600			//打广告踢出
 };
+
 
 enum {
     Sub_Vchat_ClientHello = 1,         //握手,每个MDM mainCmd不一样
@@ -92,6 +84,7 @@ enum {
     Sub_Vchat_RoomUserExitReq = 38,         //用户自己退出房间
     Sub_Vchat_RoomUserExitResp = 39,              //
     Sub_Vchat_RoomUserExitNoty = 40,              //通知
+    Sub_Vchat_RoomUserExceptExitNoty = 323, //用户异常退出通知
     
     Sub_Vchat_RoomKickoutUserReq = 41,      //踢出用户请求
     Sub_Vchat_RoomKickoutUserResp = 42,           //
@@ -225,8 +218,8 @@ enum {
     Sub_Vchat_SetForbidInviteUpMicResp = 140,
     Sub_Vchat_SetForbidInviteUpMicNotify = 141,
     
-    Sub_Vchat_GetSiegeInfoReq = 142,      //获取城主消息
-    Sub_Vchat_SiegeInfoNotify = 143,
+    Sub_Vchat_GetSiegeInfoRequest = 142,      //获取城主消息
+    Sub_Vchat_SiegeInfoNotify  =143,
     
     Sub_Vchat_QueryVcbExistReq = 144,      //查询某房间是否存在
     Sub_Vchat_QueryVcbExistResp = 145,     //该消息没有err
@@ -255,10 +248,10 @@ enum {
     Sub_Vchat_QueryUserMoreInfoReq = 162,   //查询用户更多信息
     Sub_Vchat_QueryUserMoreInfoResp = 163,
     
-    Sub_VChat_QuanxianId2ListResp = 164,  //权限id数据
-    Sub_VChat_QuanxianAction2ListBegin = 165,  //权限操作数据
-    Sub_VChat_QuanxianAction2ListResp = 166,
-    Sub_VChat_QuanxianAction2ListFinished = 167,
+    Sub_Vchat_QuanxianId2ListResp =164, //权限id数据
+    Sub_Vchat_QuanxianAction2ListBegin=165, //权限操作数据
+    Sub_Vchat_QuanxianAction2ListResp=166,
+    Sub_Vchat_QuanxianAction2ListFinished=167,
     
     //3套保留指令, 先占位,使用的时候,在修改指令名称
     Sub_Vchat_MessageReq_reserve1_req = 168,
@@ -303,57 +296,40 @@ enum {
     Sub_Vchat_AdKeyWordOperateResp = 195,  //关键字操作回应
     Sub_Vchat_AdKeyWordOperateNoty = 196,	//关键字广播通知
     
-    Sub_Vchat_TeacherScoreReq = 197, //讲师发送评分处理请求
-    Sub_Vchat_TeacherScoreResp = 198, //讲师发送评分处理响应
+    Sub_Vchat_TeacherScoreReq = 197,//讲师发送评分处理请求
+    Sub_Vchat_TeacherScoreResp = 198,//讲师发送评分处理响应
     Sub_Vchat_TeacherScoreRecordReq = 199,  //用户评分请求
     Sub_Vchat_TeacherScoreRecordResp = 200,//用户评分响应
+    
     Sub_Vchat_RoborTeacherIdNoty = 201,  //机器人对应讲师ID通知
     
-    Sub_Vchat_TeacherGiftListReq = 202,   //讲师忠实度周版请求
+    Sub_Vchat_TeacherGiftListReq = 202,  //讲师忠实度周版请求
     Sub_Vchat_TeacherGiftListResp = 203,  //讲师忠实度周版响应
+    
+    Sub_Vchat_MgrRefreshListReq = 204,            //刷新用户列表
+    Sub_Vchat_MgrRefreshListNotify = 205,            //
+    
+    Sub_Vchat_MgrRelieveBlackDBReq = 206,		//解封请求
+    Sub_Vchat_MgrRelieveBlackDBNoty = 207,
     
     Sub_Vchat_ReportMediaGateReq = 208, //客户端报告媒体服务器和网关服务器
     Sub_Vchat_ReportMediaGateResp = 209, //客户端报告媒体服务器和网关服务器的回应
     
-    Sub_Vchat_RoomUserExceptExitReq = 213, //用户异常推出通知roomsvr
-    
     Sub_Vchat_UserScoreNotify = 214,  //用户对讲师的评分
     Sub_Vchat_UserScoreListNotify = 215,  //用户对讲师的评分广播
     
-    Sub_Vchat_RoomAndSubRoomId_Noty = 216, //IOS和Android方面，需要在进入房间和讲师上麦的时候得到主房间和子房间的ID
-    Sub_Vchat_TeacherAvarageScore_Noty = 217, //某个讲师的平均分
-    
     Sub_Vchat_UserExitMessage_Req = 218,//用户退出软件的请求
+    Sub_Vchat_TeacherAvarageScore_Noty = 217, //某个讲师的平均分
     Sub_Vchat_UserExitMessage_Resp = 219,//用户退出软件的响应
     
-    Sub_Vchat_GetSecureInfoReq = 311,//客户端请求用户email,qq,手机号码,已提醒次数
-    Sub_Vchat_GetSecureInfoResp = 312,//客户端请求用户email,qq,手机号码,已提醒次数的回应
-    //告警管理
-    Sub_Vchat_AlarmReport = 313,
+    Sub_Vchat_SysCast_Resp = 220,//房间发送系统公告
     
-    //what is it?
-    Sub_Vchat_SysBroadInfo = 314,              //系统广播(专门)消息
+    Sub_Vchat_GetSecureInfoReq = 311,//客户端请求后去用户email,qq,手机号码,已提醒次数
+    Sub_Vchat_GetSecureInfoResp = 312,//客户端请求后去用户email,qq,手机号码,已提醒次数的回应
     
-    //房间管理
-    Sub_Vchat_MgrRefreshListReq = 315,            //刷新请求
-    Sub_Vchat_MgrRefreshListNotify = 316,
-    Sub_Vchat_MgrRelieveBlackDBReq = 317,			//解除黑名单请求
-    Sub_Vchat_MgrRelieveBlackDBNoty = 318,
-    
-    Sub_Vchat_SysBroadCastInfo = 319,				//资讯
-    
-    Sub_Vchat_StartRecordOnlineTime = 320,
-    Sub_Vchat_RefreshOnlineTimeReq = 321,
-    Sub_Vchat_RefreshOnlineTimeNoty = 322,
-    
-    Sub_Vchat_RoomUserExceptExitNoty = 323, //用户异常退出通知
-    //end of what is it?
-    
-    Sub_Vchat_HitGoldEgg_FROMWEB_Noty = 1000, //砸金蛋通知（来自web端）
-    Sub_Vchat_HitGoldEgg_ToClient_Noty = 1001, //砸金蛋通知客户端
+    Sub_Vchat_HitGoldEgg_ToClient_Noty = 1001, //砸金蛋
     
     Sub_Vchat_logonReq3 = 1002, //新版登录
-    Sub_Vchat_ResetConnInfo_Client = 1003, //重设客户端的连接信息（用于gate与roomsvr端口的情况）
     
     Sub_Vchat_HallMessageNotify =           10000,//信箱小红点提醒（服务器主动推送）
     
@@ -362,35 +338,50 @@ enum {
     
     Sub_Vchat_HallMessageReq =              10003,//查看邮箱请求（不同分类请求用同一个消息类型及结构）
     
-    Sub_Vchat_HallInteractBegin =           10004,//查看互动回复,查看问答提醒，列表开始
-    Sub_Vchat_HallInteractRes =             10005,//查看互动回复,查看问答提醒，响应
-    Sub_Vchat_HallInteractEnd =             10006,//查看互动回复,查看问答提醒，列表结束
+    Sub_Vchat_HallInteractBegin =           10004,//查看互动回复，列表开始
+    Sub_Vchat_HallInteractRes =             10005,//查看互动回复，响应
+    Sub_Vchat_HallInteractEnd =             10006,//查看互动回复，列表结束
     
-    Sub_Vchat_HallViewShowBegin =           10007,//查看观点回复，列表开始
-    Sub_Vchat_HallViewShowRes =             10008,//查看观点回复，响应
-    Sub_Vchat_HallViewShowEnd =             10009,//查看观点回复，列表结束
+    Sub_Vchat_HallAnswerBegin =             10007,//查看问答提醒，列表开始
+    Sub_Vchat_HallAnswerRes =               10008,//查看问答提醒，响应
+    Sub_Vchat_HallAnswerEnd =               10009,//查看问答提醒，列表结束
     
-    Sub_Vchat_HallTeacherFansBegin =        10010,//查看我的粉丝，列表开始
-    Sub_Vchat_HallTeacherFansRes =          10011,//查看我的粉丝，响应
-    Sub_Vchat_HallTeacherFansEnd =          10012,//查看我的粉丝，列表结束
+    Sub_Vchat_HallViewShowBegin =           10010,//查看观点回复，列表开始
+    Sub_Vchat_HallViewShowRes =             10011,//查看观点回复，响应
+    Sub_Vchat_HallViewShowEnd =             10012,//查看观点回复，列表结束
     
-    Sub_Vchat_HallInterestBegin =           10013,//查看我的关注（已关注讲师），列表开始
-    Sub_Vchat_HallInterestRes =             10014,//查看我的关注（已关注讲师），响应
-    Sub_Vchat_HallInterestEnd =             10015,//查看我的关注（已关注讲师），列表结束
+    Sub_Vchat_HallTeacherFansBegin =        10013,//查看我的粉丝，列表开始
+    Sub_Vchat_HallTeacherFansRes =          10014,//查看我的粉丝，响应
+    Sub_Vchat_HallTeacherFansEnd =          10015,//查看我的粉丝，列表结束
     
-    Sub_Vchat_HallUnInterestBegin =         10016,//查看我的关注（无关注讲师），列表开始
-    Sub_Vchat_HallUnInterestRes =           10017,//查看我的关注（无关注讲师），响应
-    Sub_Vchat_HallUnInterestEnd =           10018,//查看我的关注（无关注讲师），列表结束
+    Sub_Vchat_HallInterestBegin =           10016,//查看我的关注（已关注讲师），列表开始
+    Sub_Vchat_HallInterestRes =             10017,//查看我的关注（已关注讲师），响应
+    Sub_Vchat_HallInterestEnd =             10018,//查看我的关注（已关注讲师），列表结束
     
-    Sub_Vchat_TextLivePointListBegin =      10019,//查看明日预测（已关注的讲师），列表开始
-    Sub_Vchat_TextLivePointListRes =        10020,//查看明日预测（已关注的讲师），响应
-    Sub_Vchat_TextLivePointListEnd =        10021,//查看明日预测（已关注的讲师），列表结束
+    Sub_Vchat_HallUnInterestBegin =         10019,//查看我的关注（无关注讲师），列表开始
+    Sub_Vchat_HallUnInterestRes =           10020,//查看我的关注（无关注讲师），响应
+    Sub_Vchat_HallUnInterestEnd =           10021,//查看我的关注（无关注讲师），列表结束
     
-    Sub_Vchat_HallViewAnswerReq =           10022,//讲师回复（包含观点回复和回答提问）请求
-    Sub_Vchat_HallViewAnswerRes =           10023,//讲师回复（包含观点回复和回答提问）响应
+    Sub_Vchat_TextLivePointListBegin =      10022,//查看明日预测（已关注的讲师），列表开始
+    Sub_Vchat_TextLivePointListRes =        10023,//查看明日预测（已关注的讲师），响应
+    Sub_Vchat_TextLivePointListEnd =        10024,//查看明日预测（已关注的讲师），列表结束
     
-    Sub_Vchat_HallInterestForReq =          10024,//关注（无关注讲师时返回所有讲师列表，点击关注）请求
-    Sub_Vchat_HallInterestForRes =          10025,//关注（无关注讲师时返回所有讲师列表，点击关注）响应
+    Sub_Vchat_HallViewAnswerReq =           10025,//讲师回复（包含观点回复和回答提问）请求
+    Sub_Vchat_HallViewAnswerRes =           10026,//讲师回复（包含观点回复和回答提问）响应
+    
+    Sub_Vchat_HallInterestForReq =          10027,//关注（无关注讲师时返回所有讲师列表，点击关注）请求
+    Sub_Vchat_HallInterestForRes =          10028,//关注（无关注讲师时返回所有讲师列表，点击关注）响应
+    
+    Sub_Vchat_HallMessageReq_Mobile =       10029,//查看邮箱请求（不同分类请求用同一个消息类型及结构）(暂时只给手机查询列表)
+    
+    Sub_Vchat_HallInteractRes_Mobile =      10030,//查看互动回复，响应(暂时只给手机查询列表)
+    Sub_Vchat_HallAnswerRes_Mobile =        10031,//查看问答提醒，响应(暂时只给手机查询列表)
+    Sub_Vchat_HallViewShowRes_Mobile =      10032,//查看观点回复，响应(暂时只给手机查询列表)
+    Sub_Vchat_HallTeacherFansRes_Mobile =   10033,//查看我的粉丝，响应(暂时只给手机查询列表)
+    Sub_Vchat_HallInterestRes_Mobile =      10034,//查看我的关注（已关注讲师），响应(暂时只给手机查询列表)
+    Sub_Vchat_HallUnInterestRes_Mobile =    10035,//查看我的关注（无关注讲师），响应(暂时只给手机查询列表)
+    Sub_Vchat_TextLivePointListRes_Mobile = 10036,//查看明日预测（已关注的讲师），响应(暂时只给手机查询列表)
+    
     
     Sub_Vchat_TextRoomJoinReq =             10100,//加入房间请求
     Sub_Vchat_TextRoomJoinErr =             10101,//加入房间出错响应
@@ -486,6 +477,33 @@ enum {
     Sub_Vchat_TextLiveUserExitReq =         10162,//退出房间请求
     Sub_Vchat_TextLiveUserExitRes =         10163,//退出房间响应
     
+    Sub_Vchat_TextRoomViewListReq_Mobile =  10164,//点击观点类型分类请求(暂时只给手机查询列表)
+    Sub_Vchat_TextRoomViewRes_Mobile     =  10165, //观点列表，响应(暂时只给手机查询列表)
+    
+    Sub_Vchat_TextRoomLiveListReq_Mobile =  10166,//加载直播记录请求(暂时只给手机查询列表)
+    Sub_Vchat_TextRoomLiveListRes_Mobile =  10167,//加载直播记录，响应(暂时只给手机查询列表)
+    Sub_Vchat_TextRoomLivePointRes_Mobile  =10168,//加载直播重点记录，响应(暂时只给手机查询列表)
+    Sub_Vchat_TextRoomForecastRes_Mobile  = 10169,//加载明日预测记录，响应(暂时只给手机查询列表)
+    
+    Sub_Vchat_TextRoomLiveViewReq_Mobile=   10170,//点击查看观点请求(暂时只给手机查询列表)
+    Sub_Vchat_TextRoomViewGroupRes_Mobile = 10171,///观点类型分类，响应(暂时只给手机查询列表)
+    
+    Sub_Vchat_TextRoomLiveViewDetailReq_Mobile=10172,//点击查看观点详情请求(暂时只给手机查询列表)
+    Sub_Vchat_TextRoomViewInfoRes_Mobile =     10173,//观点详细信息（评论），响应(暂时只给手机查询列表)
+    
+    Sub_Vchat_TextLiveHistoryListReq_Mobile=10174,//直播历史（可分页请求展示）请求(暂时只给手机查询列表)
+    Sub_Vchat_TextLiveHistoryListRes_Mobile=10175,//直播历史，响应(暂时只给手机查询列表)
+    
+    Sub_Vchat_TextLiveHistoryDaylyReq_Mobile=10176,//某一天的直播记录列表请求（可分页请求展示）请求(暂时只给手机查询列表)
+    Sub_Vchat_TextLiveHistoryDaylyRes_Mobile=10177,//某一天的直播记录列表，响应(暂时只给手机查询列表)
+    
+    Sub_Vchat_TextRoomViewPHPReq =      10178,//讲师通过PHP页面发布观点或修改观点或删除观点请求
+    Sub_Vchat_TextRoomViewPHPRes =      10179,//讲师通过PHP页面发布观点或修改观点或删除观点响应
+    
+    Sub_Vchat_logonReq4 = 1004,               //自定义登录
+    Sub_Vchat_logonReq5 = 1005,               //第三方登录
+    Sub_Vchat_logonErr2 = 1006,               //登陆失败
+    Sub_Vchat_logonSuccess2 = 1007,           //登陆成功
 };
 
 typedef enum MediaConnectActionType
@@ -493,6 +511,7 @@ typedef enum MediaConnectActionType
     Connect_You = 1,
     Disconnect_You = 3,
 }e_MediaConnectActionType;
+
 
 //----------------------------------------------------------
 #pragma pack(1)
@@ -541,42 +560,9 @@ typedef struct tag_CMDGetDBInfoResp
     char szdbuserpwd[32];
 }CMDGetDBInfoResp_t;
 
-typedef struct tag_CmdServerAuthInfo
-{
-    char sz1[64];
-    char sz2[64];
-    char sz3[64];
-    char sz4[64];
-    char sz5[64];
-}CmdServerAuthInfo_t;
-
-//128 bytes
-typedef struct tag_CMDClientHello_2
-{
-    char encrytionContent[16];  //加密后的内容
-    char encrytionKey[16];
-}CMDClientHello_t_2;
-
-typedef enum enum_AlarmLevel
-{
-    alarm_level_general = 0,
-    alarm_level_major,
-    alarm_level_fatal
-    
-}e_AlarmLevel;
-
-typedef struct tag_CmdAlarmInfo
-{
-    int processId;
-    char processName[256];
-    char processIp[30];//consider IPv6
-    unsigned short processPort;
-    e_AlarmLevel alarm_level;
-    char alarmContent[512];
-}CmdAlarmInfo;
-
 #pragma pack()
 
-#endif  //__MESSAGE_VCHAT_HH_20130715__
 
+
+#endif  //__MESSAGE_VCHAT_HH_20130715__
 

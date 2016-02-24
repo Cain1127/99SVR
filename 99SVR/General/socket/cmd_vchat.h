@@ -4,11 +4,14 @@
 #include "yc_datatypes.h"
 
 #define MAXSTARSIZE		  16  //周星等最大数目限制
-//#define __SWITCH_SERVER2__
+
 //-----------------------------------------------------------
+
+//#define __SWITCH_SERVER2__
 #pragma pack(1)
 //登录请求消息
 //bytes
+#if 0 //不再在客户端使用
 typedef struct tag_CMDUserLogonReq
 {
     uint32 userid;          //0-游客登陆,可能是靓号ID
@@ -20,7 +23,24 @@ typedef struct tag_CMDUserLogonReq
     byte   nimstate;        //IM状态:如隐身登录
     byte   nmobile;         //1-手机登录?
 }CMDUserLogonReq_t;
+#endif
 
+typedef struct tag_CWavHeader
+{
+    int rId  ;
+    int rLen ;
+    int wId  ;
+    int fId  ;
+    int fLen;
+    WORD	wFormatTag ;
+    WORD nChannels ;
+    int nSamplesPerSec  ;
+    int nAvgBytesPerSec ;
+    WORD nBlockAlign ;
+    WORD wBitsPerSample;
+    int dId  ;
+    int wSampleLength  ;
+}CWavHeader_t ;
 typedef struct tag_CMDUserLogonReq2
 {
     uint32 userid;          //0-游客登陆,可能是靓号ID
@@ -33,7 +53,6 @@ typedef struct tag_CMDUserLogonReq2
     byte   nimstate;        //IM状态:如隐身登录
     byte   nmobile;         //1-手机登录?
 }CMDUserLogonReq2_t;
-
 typedef struct tag_CMDUserLogonReq3
 {
     uint32 userid;          //0-游客登陆,可能是靓号ID
@@ -98,7 +117,7 @@ typedef struct tag_CMDSetUserProfileReq
 {
     uint32 userid;                 //id
     uint32 headid;
-    byte   ngender;                      //性别
+    byte   ngender;                //性别
     char   cbirthday[BIRTHLEN];          //生日
     char   cuseralias[NAMELEN];         //用户昵称
 }CMDSetUserProfileReq_t;
@@ -124,7 +143,7 @@ typedef struct tag_CMDSetUserPwdResp
     uint32 userid;
     uint32 vcbid;
     int    errorid;        //错误代码, 0-无错误
-    char   pwdtype;
+    char   pwdtype;        //同上
     char   cnewpwd[PWDLEN];     //设置成功的新密码
 }CMDSetUserPwdResp_t;
 
@@ -133,7 +152,7 @@ typedef struct tag_CMDSetUserPwdResp
 typedef struct tag_CMDRoomGroupListReq
 {
     uint32 userid;               //请求者的id
-}CMDRooGroupListReq_t;
+}CMDRoomGroupListReq_t;
 
 //房间组列表的数据体 (已经排序好的,即parent排序[+子排序] 一共二级排序,见高校导航树php说明)
 //29 + n bytes
@@ -166,7 +185,7 @@ typedef struct tag_CMDRoomListReq
     uint32 userid;               //请求者的id
     uint32 ntype;                //-1,指定vcb_id列表,>0,就是房间组id
     uint32 nvcbcount;
-    char   content[0];          //vcb_id列表
+    char   content[0];           //vcb_id列表
 }CMDRoomListReq_t;
 
 //房间列表的数据体
@@ -184,38 +203,22 @@ typedef struct tag_CMDRoomItem
 
 //加入房间请求
 //248 bytes
-typedef struct
+typedef struct tag_CMDJoinRoomReq
 {
     uint32 userid;         //用户id,可能是靓号id,可能是游客号码
     uint32 vcbid;          //房间id
-    uint32 devtype;      //0:PC端 1:安卓 2:IOS 3:WEB
-    uint32 time;
-    uint32 crc32;
-    uint32 coremessagever;     //客户端内核版本
-    char   cuserpwd[PWDLEN];   //用户密码,没有就是游客
-    char   croompwd[PWDLEN];   //房间密码,可能有
-    char   cSerial[32];    //
-    char   cMacAddr[IPADDRLEN];   //客户端mac地址
-    char   cIpAddr[IPADDRLEN];	  //客户端ip地址
-}CMDJoinRoomReq1_t;
-//加入房间请求
-//280 bytes
-typedef struct
-{
-    uint32 userid;         //用户id,可能是靓号id,可能是游客号码
-    uint32 vcbid;          //房间id
-    uint32 devtype;      //0:PC端 1:安卓 2:IOS 3:WEB
+    uint32 userstate;      //请求时的状态(如-在线,离线,隐身)
     uint32 time;
     uint32 crc32;
     uint32 coremessagever;     //客户端内核版本
     char   cuserpwd[PWDLEN];   //用户密码,没有就是游客
     char   croompwd[PWDLEN];   //房间密码,可能有
     char   cSerial[64];    //uuid
-    char   cMacAddr[IPADDRLEN];   //客户端mac地址
-    char   cIpAddr[IPADDRLEN];	  //客户端ip地址
+    char   cMacAddr[IPADDRLEN];   //
+    char   cIpAddr[IPADDRLEN];
 }CMDJoinRoomReq_t;
 
-//攻城消息内容
+//攻城消息内容(88byte)
 typedef struct tag_SiegeInfo
 {
     uint32	vcbid;
@@ -334,7 +337,7 @@ typedef struct tag_CMDRoomPubMicState
 {
     int16   micid;         //从0开始(0-第一个公麦),和本地公麦用户的micid对应
     int16   mictimetype;   //
-    uint32  userid;        //该麦的用户id,可能为0(机器人id)
+    uint32  userid;        //该麦的用户id,可能为0
     int16   userlefttime;  //麦用户剩余时间,
 }CMDRoomPubMicState_t;
 
@@ -347,20 +350,19 @@ typedef struct tag_CMDRoomChatMsg
     uint32 srcid;
     uint32 toid;
     byte srcviplevel;  //用户的viplevel,对广播消息有用(前缀图标)
-    //msgtype定义:
-    //0-文字聊天消息,1-房间内广播消息,2-欢迎词消息(收到此消息不会再自动回复)，3-小喇叭消息(聊天),4-礼物喇叭消息,5-塞子,
-    //8-宝箱获取广播喇叭消息,10-获得幸运奖消息(给小喇叭窗口),11-自动回复消息(收到此消息不会再自动回复)
-    //13-彩色文字(提出区别的目的:该数据只在公麦区显示),14－隔房间小纸条消息(给自己私聊窗口),15-房间内私聊消息 16-礼物感谢
-    //20-系统广播消息
     byte msgtype;      //私聊类型也在放这里
     uint16 textlen;    //聊天内容长度
     char   srcalias[NAMELEN];
     char   toalias[NAMELEN];
     char   vcbname[NAMELEN];
-    char   tocbname[NAMELEN];//new
+    char   tocbname[NAMELEN]; //new
     char   content[0];  //聊天内容
 }CMDRoomChatMsg_t;
-
+//msgtype定义:
+//0-文字聊天消息,1-房间内广播消息,2-欢迎词消息(收到此消息不会再自动回复)，3-小喇叭消息(聊天),4-礼物喇叭消息,5-塞子,
+//8-宝箱获取广播喇叭消息,10-获得幸运奖消息(给小喇叭窗口),11-自动回复消息(收到此消息不会再自动回复)
+//13-彩色文字(提出区别的目的:该数据只在公麦区显示),14－隔房间小纸条消息(给自己私聊窗口),15-房间内私聊消息 16-礼物感谢,
+//20-系统广播消息
 
 //房间公告的数据体
 typedef struct tag_CMDRoomNotice
@@ -405,7 +407,7 @@ typedef struct tag_CMDTradeGiftRecord
     byte  action;      //交易动作:action=0-下发跑道礼物列表时使用(null), 2-普通礼物赠送,3-世界道, 5-收费麦礼物, 6-烟花(特别,因为提示格式不一样)
     byte  servertype;  //服务器转发类型。	0-表示普通转发(房间内）。1-表示通过centerSvr转发, 2-表示房间登陆时获取
     byte  banonymous;  //是否匿名。0-表示不匿名，1-表示匿名 10-接受者隐身 11-送受双方都隐身
-    byte  casttype;    //是否广播，0-表示不广播，1-表示广播,客户端设是否需要上小喇叭通知 5-所有房间公聊区显示
+    byte  casttype;    //是否广播，0-表示不广播，1-表示广播,客户端设是否需要上小喇叭通知 5-单价大于１０万的所有房间广播
     uint32 dtime;      //发起时间
     uint32 oldnum;     //下发时填写,上次数目, 下发跑道礼物列表时0(null)
     char   flyid;      //跑道ID,-1没有
@@ -415,7 +417,6 @@ typedef struct tag_CMDTradeGiftRecord
     char   toalias[NAMELEN];
     char   sztext[GIFTTEXTLEN];   //定义40,实际使用最多18个汉字或英文（最多占36个长度)
 }CMDTradeGiftRecord_t;
-
 
 //赠送礼物的响应
 typedef struct tag_CMDTradeGiftResp
@@ -449,13 +450,6 @@ typedef struct tag_CMDUserExitRoomInfo
     uint32 userid;
     uint32 vcbid;
 }CMDUserExitRoomInfo_t;
-
-//用户退出房间请求和通知的数据体
-typedef struct tag_CMDUserExceptExitRoomInfo
-{
-    uint32 userid;
-    uint32 vcbid;
-}CMDUserExceptExitRoomInfo_t;
 
 //踢人请求和通知消息的数据体
 typedef struct tag_CMDUserKickoutRoomInfo
@@ -496,16 +490,27 @@ typedef struct tag_CMDUserAccountInfo
 //封杀用户信息(req, notify)
 typedef struct tag_CMDThrowUserInfo
 {
-    uint32 vcbid;
+    uint32 vcbid;          //操作所在的房间
     uint32 runnerid;
     uint32 toid;
     byte   viplevel;       //(roomsvr填写)
     byte   nscopeid;       //封杀范围 :1-房间,2-全站
     byte   ntimeid;        //封杀时长
     byte   nreasionid;     //封杀理由
-    char   szip[IPADDRLEN];       //(roomsvr填写)
+    
+    char   szip[IPADDRLEN];       //(roomsvr填写，如果不在房间则是centersvr处理)
     char   szserial[IPADDRLEN];   //(roomsvr填写)
 }CMDThrowUserInfo_t;
+
+//解除封杀
+typedef struct tag_CMDRelieveUserInfo
+{
+    byte   nscopeid;       //封杀范围 :1-房间,2-全站
+    uint32 vcbid;			//操作所在的房间
+    uint32 runnerid;		//操作人
+    uint32 toid;			//解封ID
+    bool	isRelieve;		//true:解封成功	false:未解封
+}CMDRelieveUserInfo_t;
 
 typedef struct tag_CMDThrowUserInfoResp
 {
@@ -541,6 +546,7 @@ typedef struct tag_CMDUserDevState
     byte   videostate;  //设备状态,0-不处理, 3-无视频设备 ,2-有视频设备(正常)， 1-视频关了(有视频设备,但发送者禁止发送数据)(用户禁止share)
     uint32 userinroomstate;  //最新合集状态(客户端根据需要采用)
 }CMDUserDevState_t;
+
 
 //用户昵称更新 (req,resp,noty都使用该结构)
 typedef struct tag_CMDUserAliasState
@@ -664,7 +670,7 @@ typedef struct tag_CMDChangePubMicStateNoty
     int16   userlefttime;  //麦用户剩余时间,
 }CMDChangePubMicStateNoty_t;
 
-//gch++
+//把别人抱上了排麦(麦序)(req,resp,err 消息共用数据结构？)
 typedef struct tag_CMDUpWaitMic
 {
     uint32  vcbid;
@@ -673,7 +679,7 @@ typedef struct tag_CMDUpWaitMic
     int32   nmicindex;   //-1,默认(插麦到最后一个);1-同时插入到第一个
 }CMDUpWaitMic_t;
 
-//设置排序用户index的请求
+//设置排序用户index的请求 (含 CMDChangeWaitMicIndexReq 功能)
 typedef struct tag_CMDOperateWaitMic
 {
     uint32  vcbid;
@@ -699,8 +705,6 @@ typedef struct tag_CMDChangeWaitMicIndexNoty
     int16  micid;      //该用户的第几个麦序
     int    optype;     //操作类型: -3,清除所有人所有麦序?,-2 删除该用户的所有麦序,-1,删除该麦序,1-up,2-down,3-top,4-button
 }CMDChangeWaitMicIndexNoty_t;
-
-
 
 //夺用户公麦的请求消息
 typedef struct tag_CMDLootUserMicReq
@@ -730,16 +734,16 @@ typedef struct tag_CMDLootUserMicNoty
 //设置房间信息的请求消息
 typedef struct tag_CMDSetRoomInfoReq
 {
-    uint32 vcbid;   //只读
+    uint32 vcbid;             //只读
     uint32 runnerid;
-    uint32 creatorid;
-    uint32 op1id;
+    uint32 creatorid;         //房主
+    uint32 op1id;             //副房主
     uint32 op2id;
     uint32 op3id;
     uint32 op4id;
-    int    busepwd; //是否启用密码
-    char   cname[NAMELEN]; //房间名
-    char   cpwd[PWDLEN];  //密码(可能有)
+    int    busepwd;         //是否启用密码
+    char   cname[NAMELEN];  //房间名
+    char   cpwd[PWDLEN];    //密码(可能有)
 }CMDSetRoomInfoReq_t;
 
 typedef struct tag_CMDSetRoomInfoReq_v2
@@ -749,12 +753,12 @@ typedef struct tag_CMDSetRoomInfoReq_v2
     //进入房间设置
     int8 nallowjoinmode;
     //房间聊天设置
-    int8 ncloseroom;
-    int8 nclosepubchat;
-    int8 nclosecolorbar;
-    int8 nclosefreemic;
+    int8 ncloseroom;//关闭聊天室/屏蔽互动聊天
+    int8 nclosepubchat;//关闭公聊/禁止聊天回复
+    int8 nclosecolorbar;//屏蔽献花
+    int8 nclosefreemic;//自由排麦/禁止点赞
     int8 ncloseinoutmsg;
-    int8 ncloseprvchat;
+    int8 ncloseprvchat;//关闭私聊/禁止问股
     char   cname[NAMELEN];  //房间名
     char   cpwd[PWDLEN];    //密码(可能有)
 }CMDSetRoomInfoReq_v2_t;
@@ -820,11 +824,20 @@ typedef struct tag_CMDSendUserSealErr
 typedef struct tag_CMDForbidUserChat
 {
     uint32 vcbid;
-    uint32 srcid;
+    uint32 srcid;    //操作人
     uint32 toid;
-    uint32 ttime;   //禁言时长
+    uint32 ttime;    //禁言时长
     byte   action;   //动作：1禁言 0解禁
 }CMDForbidUserChat_t;
+
+typedef struct tag_CMDMgrRefreshList
+{
+    uint32 vcbid;		//房间ID
+    uint32 userid;		//用户ID
+    char	name[20];	//用户名字
+    uint32 srcid;		//操作人
+    int    actionid;  //1:禁言 2:黑名单 3:其他
+}CMDMgrRefreshList_t;
 
 //把房间加入Favorite
 typedef struct tag_CMDFavoriteRoomReq
@@ -873,24 +886,27 @@ typedef struct tag_CMDLotteryPoolInfo
 typedef struct tag_CMDTradeFireworksReq
 {
     uint32 vcbid;
-    uint32 srcid;
-    uint16 giftid;
+    uint32 userid;   //送烟花的用户id
+    uint16 giftid;   //centersvr自己根据giftid获得礼物价格
     uint16 giftnum;
-    uint16 sendtype;   //1.大烟花,2.小烟花
-    char   srcalias[NAMELEN];
+    uint16 usernum;   //分钱的用户个数
+    char   alias[NAMELEN];  //昵称
+    char   content[0];      //得到烟花礼物的用户id列表(uint32|uint32)
 }CMDTradeFireworksReq_t;
 
-//捡烟的通知消息
+//捡烟花加钱的通知消息 (每个得到钱的用户都下发一个给自己)
 typedef struct tag_CMDTradeFireworksNotify
 {
     uint32 vcbid;
-    uint32 srcid;
-    uint16 giftid;
-    uint16 giftnum;
-    uint16 sendtype;   //1.大烟花,2.小烟花
-    char   srcalias[NAMELEN];
+    uint32 userid;
+    int64 getmoney;  //该用户本次捡到的钱
+    int64 nk;        //自己新的余额
+    int64 nb;
+    uint32 srcid;     //送烟花的用户id
+    uint16 giftid;    //烟花礼物的id,可能有不同的烟花种类
 }CMDTradeFireworksNotify_t;
 
+//gch++
 typedef struct tag_CMDTradeFireworksErr
 {
     uint32 vcbid;
@@ -899,15 +915,32 @@ typedef struct tag_CMDTradeFireworksErr
     int32  errid;
 }CMDTradeFireworksErr_t;
 
+typedef struct tag_CMDTradeFireworksResp
+{
+    uint32 vcbid;
+    uint32 userid;
+    uint32 playtime;
+    uint16 giftid;
+    uint16 giftnum;
+}CMDTradeFireworksResp_t;
+//~~~
+
+//房间播放烟花的通知消息(用来做动画触发指令)
+typedef struct tag_CMDPlayFireworksNotify
+{
+    uint32 vcbid;
+    uint32 srcid;
+    uint16 giftid;   //烟花礼物id
+}CMDPlayFireworksNotify_t;
 
 //银行存取款
 typedef struct tag_CMDMoneyAndPointOp
 {
     uint32 vcbid;
     uint32 srcid;
-    uint32 touserid;   //3-用到
-    int64 data;        //金额/积分数目
-    uint8 optype;      //1 银行存款 2 银行取款   3 转账  4 积分兑换金币
+    uint32 touserid;
+    int64 data;       //金额/积分数目
+    uint8 optype;     //1 银行存款 2 银行取款   3 转账  4 积分兑换金币
 }CMDMoneyAndPointOp_t;
 
 typedef struct tag_CMDSetRoomWaitMicMaxNumLimit
@@ -984,7 +1017,7 @@ typedef struct tag_CMDOpenChestResp
     int32 usedchestnum;   //使用掉的宝箱
     int32 remainchestnum;  //剩余的宝箱
     int32 openresult_type;   //开奖类型 - 对应请求中数据
-    int32 openresult_0;      //单次奖项的数据idx
+    int32 openresult_0;      //单次奖项的数目
     int32 openresult_1[7];   //7个奖项的次数,注意,特等奖只会产生一次
     int64 poolvalue;         //剩余奖池数目
     int64 tedengvalue;       //特等奖结果
@@ -1042,12 +1075,41 @@ typedef struct tag_CMDQueryUserMoreInfo
 
 typedef struct tag_CMDQuanxianId2Item
 {
-    int16 levelid;  //可(-)
-    int16 quanxianid;  //可(-)
+    int16 levelid; //
+    int16 quanxianid; //
     uint8 quanxianprio;
     uint16 sortid;
     uint8 sortprio;
 }CMDQuanxianId2Item_t;
+
+// 关键字屏蔽
+typedef struct tag_AdKeywordInfo
+{
+    int		naction;				//0-刷新 1-增加 2-删除
+    int		ntype;					//广告类型
+    int		nrunerid;				//操作人Id
+    char	createtime[32];			//创建时间
+    char	keyword[64];			//关键词
+}CMDAdKeywordInfo_t;
+
+
+// 关键字操作请求
+typedef struct tag_CMDAdKeywordsReq{
+    int num;
+    char keywod[0];
+}CMDAdKeywordsReq_t;
+
+//关键字操作回应
+typedef struct tag_CMDAdKeywordsResp{
+    int errid;				// 0 代表成功，否则失败
+    uint32 userid;
+}CMDAdKeywordsResp_t;
+
+//关键字操作广播(也作为用户加入房间后，客户端第一次获取关键字列表的请求）
+typedef struct tag_CMDAdKeywordsNotify{
+    int num;
+    char keywod[0];
+}CMDAdKeywordsNotify_t;
 
 typedef struct tag_CMDQuanxianAction2Item
 {
@@ -1119,13 +1181,6 @@ typedef struct tag_CMDUserAddChestNumNoty
     uint32 totalchestnum; //共有宝箱
 }CMDUserAddChestNumNoty_t;
 
-//中奖倍数次数
-typedef struct tag_JiangCiShu
-{
-    int beishu;
-    int count;
-}JiangCiShu_t;
-
 //增加密友通知
 typedef struct tag_CMDAddClosedFriendNotify
 {
@@ -1133,62 +1188,57 @@ typedef struct tag_CMDAddClosedFriendNotify
     uint32 vcbid;
 }CMDAddClosedFriendNotify_t;
 
-// 关键字屏蔽
-typedef struct tag_AdKeywordInfo
+//资讯弹出
+//512 bytes
+typedef struct tag_CMDBroadcastInfomation
 {
-    int		naction;				//0-刷新 1-增加 2-删除
-    int		ntype;					//广告类型
-    int		nrunerid;				//操作人Id
-    char	createtime[32];			//创建时间
-    char	keyword[64];			//关键词
-}CMDAdKeywordInfo_t;
+    char   info[256];   //摘要
+    char   link[256];   //链接
+}CMDBroadcastInfomation_t;
 
-
-// 关键字操作请求
-typedef struct tag_CMDAdKeywordsReq{
-    int num;
-    char keywod[0];
-}CMDAdKeywordsReq_t;
-
-//关键字操作回应
-typedef struct tag_CMDAdKeywordsResp{
-    int errid;				// 0 代表成功，否则失败
+//报告媒体服务器
+typedef struct tag_CMDReportMediaGateReq
+{
+    uint32 vcbid;
     uint32 userid;
-}CMDAdKeywordsResp_t;
-
-//关键字操作广播(也作为用户加入房间后，客户端第一次获取关键字列表的请求）
-typedef struct tag_CMDAdKeywordsNotify{
-    int num;
-    char keywod[0];
-}CMDAdKeywordsNotify_t;
+    uint16 textlen;          //下面内容的长度
+    char  content[0];       //ip:port的形式，分号作为分隔符，用“|”竖号分隔媒体服务器地址和网关服务器地址
+}CMDReportMediaGateReq_t;
+//报告媒体服务器回应
+typedef struct tag_CMDReportMediaGateResp
+{
+    uint32 vcbid;
+    uint32 userid;
+    int errid;
+}CMDReportMediaGateResp_t;
 
 //讲师请求打分
-typedef struct tag_CMDTeacherScoreReq
+typedef struct tag_CMDTeacherScore
 {
-    uint32 teacher_userid;             //讲师ID
-    char  teacheralias[NAMELEN]; //讲师呢称
+    uint32 teacherid;             //讲师ID
+    char   teacheralias[NAMELEN]; //讲师昵称
     uint32  vcbid;                //所在房间id
     int64 data1;                  //备用字段1
     char   data2[NAMELEN];        //备用字段2
-}CMDTeacherScoreReq_t;
+}CMDTeacherScore_t;
 
 //讲师请求打分结果
 typedef struct tag_CMDTeacherScoreResp
 {
     int    type;                  //操作是否成功
-    uint32 teacher_userid;             //讲师ID
-    char   teacheralias[NAMELEN]; //讲师呢称
-    int    vcbid;                 //房间id，主房间或子房间
+    uint32 teacherid;             //讲师ID
+    char   teacheralias[NAMELEN]; //讲师昵称
+    int   vcbid;        //讲师所在房间id列表，包括主房间和所有子房间
 }CMDTeacherScoreResp_t;
 
-//讲师打分记录
-typedef struct tag_CMDTeacherScoreRecordReq
+//用户打分记录请求
+typedef struct tag_CMDTeacherScoreRecord
 {
-    uint32 teacher_userid;             //讲师ID
-    char   teacheralias[NAMELEN]; //讲师呢称
+    uint32 teacherid;             //讲师ID
+    char   teacheralias[NAMELEN]; //讲师昵称
     uint32 userid;                //打分人ID
     char   alias[NAMELEN];        //打分人呢称
-    byte   usertype;              //讲师类型: 0-普通 1-机器人
+    byte   usertype;              //打分人类型: 0-普通 1-机器人
     uint32 score;                 //分数
     char   logtime[NAMELEN];      //打分时间
     uint32  vcbid;                //所在房间id
@@ -1197,15 +1247,14 @@ typedef struct tag_CMDTeacherScoreRecordReq
     int64 data3;                  //备用字段3
     char   data4[NAMELEN];        //备用字段4
     char   data5[NAMELEN];        //备用字段5
-}CMDTeacherScoreRecordReq_t;
-
-//讲师打分结果
-typedef struct tag_CMDTeacherScoreRecordResp
+}CMDTeacherScoreRecord_t;
+//用户打分记录响应
+typedef struct tag_CMDTeacherScoreRes
 {
-    uint32 teacher_userid;             //讲师ID
-    char   teacheralias[NAMELEN]; //讲师呢称
+    uint32 teacherid;             //讲师ID
+    char   teacheralias[NAMELEN]; //讲师昵称
     int    type;                  //操作是否成功
-}CMDTeacherScoreRecordResp_t;
+}CMDTeacherScoreRes_t;
 
 //机器人对应讲师ID通知
 typedef struct tag_CMDRoborTeacherIdNoty
@@ -1214,7 +1263,6 @@ typedef struct tag_CMDRoborTeacherIdNoty
     uint32 roborid;//机器人id
     uint32 teacherid;             //讲师ID
 }CMDRoborTeacherIdNoty_t;
-
 //讲师忠实度周版请求
 typedef struct tag_CMDTeacherGiftListReq
 {
@@ -1228,90 +1276,11 @@ typedef struct tag_CMDTeacherGiftListResp
     uint32 seqid;                   //把排名也发过去
     uint32 vcbid;					//房间id
     uint32 teacherid;				//讲师ID
-    char useralias[NAMELEN];	    //用户昵称
+    char   useralias[NAMELEN];	    //用户昵称
     uint64 t_num;					//忠实度值
 }CMDTeacherGiftListResp_t;
 
-//用户进入房间或者讲师上麦，传送一个房间和子房间ID
-typedef struct tag_CMDRoomAndSubRoomIdNoty
-{
-    uint32 roomid;                 //主房间ID
-    uint32 subroomid;              //子房间ID
-}CMDRoomAndSubRoomIdNoty_t;
-
-typedef struct tag_CMDTeacherAvarageScoreNoty
-{
-    uint32 teacherid;
-    uint32 roomid;
-    float avarage_score;
-    char data1[NAMELEN]; //备用字段1
-    uint32 data2; //备用字段2
-}CMDTeacherAvarageScoreNoty_t;
-
-//用户退出程序给出的提示
-typedef struct tag_CMDExitAlertReq
-{
-    int32 userid;                      //用户ID
-}CMDExitAlertReq_t;
-
-typedef struct tag_CMDExitAlertResp
-{
-    int32 userid;
-    char email[32];                 //邮箱
-    char qq[32];                    //qq号码
-    char tel[32];                   //手机号码
-    int32 hit_gold_egg_time;        //当天内砸蛋的次数
-    int32 data1;
-    int32 data2;
-    int32 data3;
-    char data4[32];
-    char data5[32];
-}CMDExitAlertResp_t;
-
-//用户安全信息查询请求
-typedef struct tag_CMDSecureInfoReq
-{
-    int32 userid;                      //用户ID
-}CMDSecureInfoReq_t;
-
-//用户安全信息查询响应
-typedef struct tag_CMDSecureInfoResp
-{
-    char email[32];                 //邮箱
-    char qq[32];                    //qq号码
-    char tel[32];                   //手机号码
-    int32 remindtime;                 //已提醒次数
-    int32 data1;
-    int32 data2;
-    int32 data3;
-    char data4[32];
-    char data5[32];
-    char data6[32];
-}CMDSecureInfoResp_t;
-
-//报告媒体服务器
-typedef struct tag_CMDReportMediaGateReq
-{
-    uint32 vcbid;
-    uint32 userid;
-    uint16 textlen;          //下面内容的长度
-    char  content[0];       //ip:port的形式，分号作为分隔符，用“|”竖号分隔网关服务器地址和媒体服务器地址
-}CMDReportMediaGateReq_t;
-//报告媒体服务器回应
-typedef struct tag_CMDReportMediaGateResp
-{
-    uint32 vcbid;
-    uint32 userid;
-    int errid;
-}CMDReportMediaGateResp_t;
-
-//web端砸完金蛋的通知消息
-typedef struct tag_CMDHitGoldEggWebNoty
-{
-    uint32 vcbid;
-    uint32 userid;
-}CMDHitGoldEggWebNoty_t;
-//砸完金蛋通知客户端
+//砸玩金蛋的通知客户端
 typedef struct tag_CMDHitGoldEggClientNoty
 {
     uint32 vcbid;
@@ -1324,16 +1293,19 @@ typedef struct tag_CMDUserScoreNoty
 {
     uint32 vcbid;					//房间号
     uint32 teacherid;				//讲师ID
-    int32 score;					//用户对讲师的评分
+    int32  score;					//用户对讲师的评分
     int32 userid;					//用户ID
 }CMDUserScoreNoty_t;
-
-//重设客户端的连接信息（用于gate与roomsvr断开时）
-typedef struct tag_CMDResetConnInfo
+//讲师评分平均分
+typedef struct tag_CMDTeacherAvarageScoreNoty
 {
-    uint32 vcbid;					//房间号
-    int32 userid;					//用户ID
-}CMDResetConnInfo_t;
+    uint32 teacherid;
+    uint32 roomid;
+    float avarage_score;
+    char data1[NAMELEN]; //备用字段1
+    uint32 data2; //备用字段2
+}CMDTeacherAvarageScoreNoty_t;
+
 
 ////////////////////////////////////////
 //信箱小红点提醒（服务器主动推送）
@@ -1694,8 +1666,8 @@ typedef struct tag_CMDTextLiveChatReplyReq
     uint64 messagetime;            //互动时间(yyyymmddhhmmss)
     uint16 reqtextlen;             //源消息内容长度
     uint16 restextlen;             //回复内容长度
-    int16  liveflag;               //是否发布到直播：0-否；1-是；
-    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
+    int8  liveflag;                //是否发布到直播：0-否；1-是；
+    int8   commentstype;	       //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
     char   content[0];             //消息内容，格式：源消息内容 + 回复内容
 }CMDTextLiveChatReplyReq_t;
 
@@ -1712,8 +1684,9 @@ typedef struct tag_CMDTextLiveChatReplyRes
     uint64 messagetime;            //互动时间(yyyymmddhhmmss)
     uint16 reqtextlen;             //源消息内容长度
     uint16 restextlen;             //回复内容长度
-    int16  liveflag;               //是否发布到直播：0-否；1-是；
-    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
+    int8   liveflag;               //是否发布到直播：0-否；1-是；
+    int8   commentstype;	       //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
+    int64  messageid;              //消息ID
     char   content[0];             //消息内容，格式：源消息内容 + 回复内容
 }CMDTextLiveChatReplyRes_t;
 
@@ -1937,6 +1910,45 @@ typedef struct tag_CMDTeacherComeNotify
     int64  recordzans;             //房间总点赞数
 }CMDTeacherComeNotify_t;
 
+//列表消息头(手机版本)，仅限20个
+typedef struct tag_CMDTextRoomList_mobile
+{
+    char    uuid[16];               //唯一标识头
+}CMDTextRoomList_mobile;
+
+//讲师通过PHP页面发布观点或修改观点或删除观点请求（由于PHP不支持64位数据传输故将其合并到字符串中）
+typedef struct tag_CMDTextRoomViewPHPReq
+{
+    uint32 vcbid;                  //房间ID
+    uint32 teacherid;              //请求用户ID
+    //int64  messageid;              //消息ID
+    int8   viewtype;               //操作类型：1-新增；2-修改；3-删除；
+    int16  titlelen;               //观点标题长度
+    //uint64 messagetime;            //发送时间(yyyymmddhhmmss)
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
+    char   content[0];             //格式：消息ID|观点ID|发送时间(yyyymmddhhmmss)|观点标题
+}CMDTextRoomViewPHPReq_t;
+
+//讲师通过PHP页面发布观点或修改观点或删除观点响应
+typedef struct tag_CMDTextRoomViewPHPRes
+{
+    //int64  messageid;              //消息ID
+    int8   viewtype;               //操作类型：1-新增；2-修改；3-删除；
+    int16  titlelen;               //观点标题长度
+    //uint64 messagetime;            //发送时间(yyyymmddhhmmss)
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
+    char   content[0];             //格式：消息ID|观点ID|发送时间(yyyymmddhhmmss)|观点标题
+}CMDTextRoomViewPHPRes_t;
+
+//房间推送系统公告
+typedef struct tag_CMDSyscast
+{
+    unsigned char newType;  //0 一次性新闻 1
+    long long   nid;        //记录ID
+    char   title[32];
+    char   content[512];
+}CMDSyscast;
+
 #pragma pack()
 
 //////////////////////////////////////////////////////////////////////////
@@ -1947,7 +1959,6 @@ typedef enum
     FT_ROOMUSER_STATUS_PRIVE_MIC      = 0x00000002,   //私麦状态(任何人可以连接)
     FT_ROOMUSER_STATUS_SECRET_MIC     = 0x00000004,   //密麦状态(连接时只有好友自动通过连接,其他拒绝,这里现在都要要求验证同意)
     FT_ROOMUSER_STATUS_CHARGE_MIC     = 0x00000010,    //收费状态 (上了收费麦)
-    
     
     //mask:0xF0
     FT_ROOMUSER_STATUS_IS_TEMPOP      = 0x00000020,    //临时管理 标识
@@ -1960,14 +1971,12 @@ typedef enum
     FT_ROOMUSER_STATUS_VIDEOOFF       = 0x00000400,    //视频关闭 (有视频设备，不允许连接)
     FT_ROOMUSER_STATUS_IS_HIDE        = 0x00000800,    //隐身(在登录时使用名字冗余字段进行初次隐身进入房间操作或默认隐身进场)
     
-    
     //mask: 盟主(0xF000)
     FT_ROOMUSER_STATUS_IS_SIEGE1      = 0x00002000,    //标识
     FT_ROOMUSER_STATUS_IS_SIEGE2      = 0x00004000,
     
     //mask: 区长(0xF0000)
     FT_ROOMUSER_STATUS_IS_QUZHUANG    = 0x00010000,    //区长
-    
 }e_userinroomstate;
 
 typedef enum
@@ -1991,6 +2000,105 @@ typedef enum
     FT_SCOPE_ROOM          = 1,     //房间 
     FT_SCOPE_GLOBAL        = 2,     //gcz++ 全局
 }e_violatioscope;
+
+//用户安全信息查询请求
+typedef struct tag_CMDSecureInfoReq
+{
+    int32 userid;                      //用户ID
+}CMDSecureInfoReq_t;
+
+//用户安全信息查询响应
+typedef struct tag_CMDSecureInfoResp
+{
+    char email[32];                 //邮箱
+    char qq[32];                    //qq号码
+    char tel[32];                   //手机号码
+    int32 remindtime;                 //已提醒次数
+    int32 data1;
+    int32 data2;
+    int32 data3;
+    char data4[32];
+    char data5[32];
+    char data6[32];
+}CMDSecureInfoResp_t;
+
+typedef struct tag_CMDExitAlertResp
+{
+    int32 userid;
+    char email[32];                 //邮箱
+    char qq[32];                    //qq号码
+    char tel[32];                   //手机号码
+    int32 hit_gold_egg_time;        //当天内砸蛋的次数
+    int32 data1;
+    int32 data2;
+    int32 data3;
+    char data4[32];
+    char data5[32];
+}CMDExitAlertResp_t;
+
+
+//资讯消息
+typedef struct tag_CMDSysBroadCastInfo
+{
+    int		ntype;
+    char	ctitle[64];
+    char	cabstract[256];	//摘要
+    char	clink[256];		//链接
+}CMDSysBroadCastInfo_t;
+
+
+typedef struct tag_CMDUserLogonSuccess2
+{
+    uint32 nmessageid;           //message id
+    int64 nk;                    //金币
+    int64 nb;                    //礼物积分,可以换金币或兑换RMB
+    int64 nd;                    //游戏豆
+    uint32 nmask;                 //标志位, 用于客户端验证是不是自己发出的resp,
+    uint32 userid;                //本号
+    uint32 langid;                //靓号id
+    uint32 langidexptime;         //靓号id到期时间
+    uint32 servertime;            //服务器时间,显示客户端,用于抢星之类的时间查看
+    uint32 version;               //服务器版本号,用在在信令相同的情况下登陆成功发回服务器DB中的版本号
+    uint32 headid;                //用户头像id
+    byte   viplevel;              //会员等级(可能是临时等级)
+    byte   yiyuanlevel;           //艺员等级,如
+    byte   shoufulevel;           //守护者等级
+    byte   zhonglevel;            //终生等级,叠加数字(1~150)
+    byte   caifulevel;            //财富等级
+    byte   lastmonthcostlevel;     //上月消费排行
+    byte   thismonthcostlevel;     //本月消费排行
+    byte   thismonthcostgrade;    //本月累计消费等级
+    byte   ngender;               //性别
+    byte   blangidexp;            //靓号是否过期
+    byte   bxiaoshou;             //是不是销售标志
+    char   cuseralias[NAMELEN];   //呢称
+    byte   nloginflag;            //login flag
+    byte   bloginSource;          //local 99 login or other platform login:0-local;1-other platform
+    byte   bBoundTel;             //bound telephone number:0-not;1-yes.
+    char   sid[32];               //sid for visit web
+}CMDUserLogonSuccess2_t;
+
+typedef struct tag_CMDUserLogonErr2
+{
+    uint32 nmessageid;  //message id
+    uint32 errid;       //根据id,客户端本地判断错误,包括版本错误(需要升级),封杀
+    uint32 data1;       //参数1
+    uint32 data2;       //参数2
+}CMDUserLogonErr2_t;
+
+typedef struct tag_CMDUserLogonReq4
+{
+    uint32 nmessageid;      //message id
+    char   cloginid[32];    //[0]-游客登陆
+    uint32 nversion;        //本地版本号?
+    uint32 nmask;           //标示,用于客户端验证是不是自己发出的resp,
+    char   cuserpwd[PWDLEN];    //登录密码,游客登录不需要密码,长度与将来的md5兼容
+    char   cSerial[64];  //uuid
+    char   cMacAddr[IPADDRLEN]; //mac地址
+    char   cIpAddr[IPADDRLEN];  //ip地址
+    byte   nimstate;        //IM状态:如隐身登录
+    byte   nmobile;         //0-PC,1-Android,2-IOS,3-web
+}CMDUserLogonReq4_t;
 
 #endif //__CMD_VCHAT_HH_20110409__
 

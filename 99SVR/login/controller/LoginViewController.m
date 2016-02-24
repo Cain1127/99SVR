@@ -15,6 +15,7 @@
 #import "NewViewController.h"
 #import "LoginTextField.h"
 #import "NNSVRViewController.h"
+#import "ForgetPwdViewController.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
 {
@@ -45,9 +46,9 @@
     
     UIButton *exitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [exitBtn setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
-    
+    __weak LoginViewController *__self = self;
     [exitBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [__self dismissViewControllerAnimated:YES completion:nil];
     }];
     [headView addSubview:exitBtn];
     [exitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -105,8 +106,6 @@
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
     _txtPwd.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-    
-    
     UIImageView *imgPwd = [[UIImageView alloc] init];
     imgPwd.frame = Rect(0, 0, imageWidth, imageWidth);
     imgPwd.image = [UIImage imageNamed:@"login_icon2"];
@@ -145,7 +144,6 @@
     [_btnFind setTitle:@"找回密码" forState:UIControlStateNormal];
     _btnFind.titleLabel.font = XCFONT(12);
     CGSize findSize = [@"忘记密码" sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}];
-    
     [_btnFind setFrame:Rect(kScreenWidth/2-findSize.width/2,_btnLogin.frame.origin.y+_btnLogin.frame.size.height+20, findSize.width,25)];
     
     [_btnLogin setTitle:@"登 录" forState:UIControlStateNormal];
@@ -196,7 +194,7 @@
     [forgetPwdBtn setTitle:@"忘记密码" forState:UIControlStateNormal];
     [forgetPwdBtn setTitleColor:[UIColor colorWithHex:@"555555"] forState:UIControlStateNormal];
     forgetPwdBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-    __weak LoginViewController *__self = self;
+    
     [forgetPwdBtn clickWithBlock:^(UIGestureRecognizer *gesture)
     {
         [__self forgetPassword];
@@ -210,8 +208,8 @@
 
 - (void)forgetPassword
 {
-    NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:@"http://www.99ducaijing.com/findpassword.aspx" title:@"忘记密码"];
-    [self presentViewController:svrView animated:YES completion:nil];
+    ForgetPwdViewController *forget = [[ForgetPwdViewController alloc] init];
+    [self presentViewController:forget animated:YES completion:nil];
 }
 
 -(void)setTextFieldLeftPadding:(UITextField *)textField forWidth:(CGFloat)leftWidth
@@ -225,7 +223,8 @@
 
 - (void)registerServver
 {
-    
+    ForgetPwdViewController *forget = [[ForgetPwdViewController alloc] init];
+    [self presentViewController:forget animated:YES completion:nil];
 }
 
 - (void)loginServer
@@ -265,7 +264,7 @@
 
 - (void)findPwd
 {
-    
+    [self presentViewController:[[ForgetPwdViewController alloc] init] animated:YES completion:nil];
 }
 
 -(void)initUIBody
@@ -280,8 +279,8 @@
     [self initUIBody];
     NSString *userId = [UserDefaults objectForKey:kUserId];
     NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
-    _txtUser.text = userId == nil ? @"" : userId;
-    _txtPwd.text = userPwd == nil ? @"" : userPwd;
+    _txtUser.text = userId == nil ? @"13800138001" : userId;
+    _txtPwd.text = userPwd == nil ? @"123123" : userPwd;
 }
 
 - (void)didReceiveMemoryWarning
@@ -318,6 +317,13 @@
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginStatus:) name:MESSAGE_LOGIN_SUCESS_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginStatus:) name:MESSAGE_LOGIN_ERROR_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backLeft) name:MESSAGE_UPDATE_PASSWROD_VC object:nil];
+}
+
+- (void)backLeft
+{
+    [self dismissViewControllerAnimated:YES
+                             completion:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -337,11 +343,11 @@
 {
     __weak LoginViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       [NSObject cancelPreviousPerformRequestsWithTarget:__self];
-                       [__self.view hideToastActivity];
-                       [__self.view makeToast:@"登录失败"];
-                   });
+    ^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:__self];
+        [__self.view hideToastActivity];
+        [__self.view makeToast:@"登录失败"];
+    });
     if (notify==nil)
     {
         return ;

@@ -46,5 +46,9 @@
 
 #define kLineColor RGB(207, 207, 207)
 
+#define kRegisterNumber @"http://172.16.41.237:8088/"
+
+#define kFindServer @"http://172.16.41.31:8099/"
+
 #endif
 
