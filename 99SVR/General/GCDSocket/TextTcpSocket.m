@@ -873,7 +873,7 @@
     req.userid = kUserInfoId;
     req.vcbid = (uint32)_roomid;
     req.coremessagever = _PRODUCT_CORE_MESSAGE_VER_;
-    req.devtype = 2;
+//    req.devtype = 2;
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
     [UserInfo sharedUserInfo].strPwd = @"123456";
     if([UserInfo sharedUserInfo].strPwd)

@@ -525,7 +525,7 @@
     req.userid = [UserInfo sharedUserInfo].nUserId;
     req.vcbid = (uint32)[_strRoomId intValue];
     req.coremessagever = _PRODUCT_CORE_MESSAGE_VER_;
-    req.devtype = 2;
+//    req.devtype = 2;
     if ([_strRoomPwd length]>0)
     {
         sprintf(req.croompwd,"%s",[_strRoomPwd UTF8String]);

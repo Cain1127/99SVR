@@ -122,6 +122,10 @@ typedef struct _tag_MediaFrameBuffer
 
 - (void)connectRoomId:(int)roomid mic:(int)userid
 {
+    if(_gcdSocket)
+    {
+        [self closeSocket];
+    }
     _roomid = roomid;
     _userid = userid;
     @synchronized(_videoQueue)
@@ -498,16 +502,23 @@ if(_block) \
     bFlag = NO;
     [self send_unregister_tcp:_userid room:_roomid pt:99];
     [self send_unregister_tcp:_userid room:_roomid pt:97];
-    
     [_gcdSocket disconnectAfterReading];
     _gcdSocket = nil;
     [_aryVideo removeAllObjects];
     _aryVideo = nil;
+    [_audioQueue removeAllObjects];
+    [_videoQueue removeAllObjects];
 }
 
 - (void)dealloc
 {
     DLog(@"释放MediaSocket");
+    
+    [_audioQueue removeAllObjects];
+    _audioQueue = nil;
+    
+    [_videoQueue removeAllObjects];
+    _videoQueue = nil;
 }
 
 @end

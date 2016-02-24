@@ -102,6 +102,7 @@
         {
             [__self.view makeToast:__strMsg];
         }
+        [__self setDefaultImg];
     });
     if(strMsg)
     {

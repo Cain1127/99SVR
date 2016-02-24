@@ -32,13 +32,13 @@ typedef struct tag_CWavHeader
     int wId  ;
     int fId  ;
     int fLen;
-    WORD	wFormatTag ;
-    WORD nChannels ;
+    unsigned short wFormatTag ;
+    unsigned short nChannels ;
     int nSamplesPerSec  ;
     int nAvgBytesPerSec ;
-    WORD nBlockAlign ;
-    WORD wBitsPerSample;
-    int dId  ;
+    unsigned short nBlockAlign ;
+    unsigned short wBitsPerSample;
+    int dId;
     int wSampleLength  ;
 }CWavHeader_t ;
 typedef struct tag_CMDUserLogonReq2
