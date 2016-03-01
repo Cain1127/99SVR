@@ -15,6 +15,11 @@
 
 DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
+@property (nonatomic,copy) NSString *strOpenId;
+@property (nonatomic,copy) NSString *strToken;
+
+@property (nonatomic,assign) int otherLogin;
+
 @property (nonatomic,copy) NSString *strWebAddr;
 
 @property (nonatomic,copy) NSString *strRoomAddr;

@@ -46,6 +46,7 @@
     manager.requestSerializer.stringEncoding = NSUTF8StringEncoding;
     // 设置返回格式
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 10;
     [manager GET:urlStr parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          if (success)
@@ -55,7 +56,7 @@
      }
           failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         DLog(@"error:%@",error);
+//         DLog(@"error:%@",error);
          if (fail)
          {
              fail(error);

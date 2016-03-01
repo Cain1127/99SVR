@@ -76,9 +76,9 @@ typedef struct _tag_MediaFrameBuffer
     BOOL bAudio;
     BOOL bBack;
     long  nReadTime;
-    int nFall;
 }
 
+@property (nonatomic,assign) int nFall;
 @property (nonatomic,strong) NSMutableArray *aryVideo;
 @property (nonatomic,strong) GCDAsyncSocket *gcdSocket;
 @property (nonatomic) int roomid;
@@ -94,8 +94,8 @@ typedef struct _tag_MediaFrameBuffer
    {
        bAudio = YES;
        bVideo = YES;
-       _videoQueue = [NSMutableArray array];
-       _audioQueue = [NSMutableArray array];
+       _videoBuf = [[NSMutableArray alloc] init];
+       _audioBuf = [[NSMutableArray alloc] init];
        return self;
    }
    return nil;
@@ -128,18 +128,23 @@ typedef struct _tag_MediaFrameBuffer
     }
     _roomid = roomid;
     _userid = userid;
-    @synchronized(_videoQueue)
+    @synchronized(_audioBuf)
     {
-        [_videoQueue removeAllObjects];
+        [_audioBuf removeAllObjects];
     }
-    @synchronized(_audioQueue)
+    @synchronized(_videoBuf)
     {
-        [_audioQueue removeAllObjects];
+        [_videoBuf removeAllObjects];
     }
     bFlag = YES;
+    [self getMediaHost];
+}
+
+- (void)getMediaHost
+{
     if (_strAddress == nil)
     {
-        NSString *strPath = [[NSString alloc] initWithFormat:@"http://lbs1.99ducaijing.cn:2222/tygetmedia?id=%d",_roomid];
+        NSString *strPath = [[NSString alloc] initWithFormat:@"http://lbs%d.99ducaijing.cn:2222/tygetmedia?id=%d",_nFall+1,_roomid];
         __weak MediaSocket *__self = self;
         [BaseService getJSONWithUrl:strPath parameters:nil success:^(id responseObject) {
             __self.strAddress= [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
@@ -151,7 +156,14 @@ typedef struct _tag_MediaFrameBuffer
                 [__self connectIpAndPort:strAddr port:port];
             }
         }
-        fail:nil];
+         fail:^(NSError *error)
+         {
+             __self.nFall++;
+             if(__self.nFall<3)
+             {
+                [__self getMediaHost];
+             }
+         }];
     }
     else
     {
@@ -200,7 +212,7 @@ typedef struct _tag_MediaFrameBuffer
 {
     DLog(@"建立socket成功:ip:%@--port:%d",host,port);
     m_jittertime = 2;
-    nFall ++;
+    _nFall ++;
     [_gcdSocket readDataToLength:4 withTimeout:10 tag:1];
     [self sendHello];
     struct timeval result;
@@ -245,11 +257,11 @@ typedef struct _tag_MediaFrameBuffer
     header->maincmd = MDM_GR_TCPVIDEO;
     header->subcmd = 201;
     header->length = sizeof(COM_MSG_HEADER);
-    NSData *data = [NSData dataWithBytes:szBuf length:header->length];
-    if(data)
-    {
+    @autoreleasepool {
+        NSData *data = [NSData dataWithBytes:szBuf length:header->length];
         [_gcdSocket writeData:data withTimeout:20 tag:1];
     }
+    
 }
 
 - (void)send_register_source_tcp:(int)ssrc room:(int)roomid pt:(int)ptId
@@ -265,8 +277,12 @@ typedef struct _tag_MediaFrameBuffer
     pReq->roomid = roomid;
     pReq->pt = ptId;
     header->length = sizeof(COM_MSG_HEADER) + sizeof(cmd_tcp_video_register_t);
-    NSData *data = [NSData dataWithBytes:szBuf length:header->length];
-    [_gcdSocket writeData:data withTimeout:20 tag:1];
+    @autoreleasepool
+    {
+        NSData *data = [NSData dataWithBytes:szBuf length:header->length];
+        [_gcdSocket writeData:data withTimeout:20 tag:1];
+        data = nil;
+    }
 }
 
 - (void)send_unregister_tcp:(int )ssrc room:(int)roomid pt:(int)ptId
@@ -282,8 +298,11 @@ typedef struct _tag_MediaFrameBuffer
     pReq->roomid = roomid;
     pReq->pt = ptId;
     header->length = sizeof(COM_MSG_HEADER) + sizeof(cmd_tcp_video_register_t);
-    NSData *data = [NSData dataWithBytes:szBuf length:header->length];
-    [_gcdSocket writeData:data withTimeout:20 tag:1];
+    @autoreleasepool {
+        NSData *data = [NSData dataWithBytes:szBuf length:header->length];
+        [_gcdSocket writeData:data withTimeout:20 tag:1];
+        data = nil;
+    }
 }
 
 - (void)send_register_tcp:(int )ssrc room:(int)roomid pt:(int)ptId
@@ -299,8 +318,12 @@ typedef struct _tag_MediaFrameBuffer
     pReq->roomid = roomid;
     pReq->pt = ptId;
     header->length = sizeof(COM_MSG_HEADER) + sizeof(cmd_tcp_video_register_t);
-    NSData *data = [NSData dataWithBytes:szBuf length:header->length];
-    [_gcdSocket writeData:data withTimeout:20 tag:1];
+    @autoreleasepool
+    {
+        NSData *data = [NSData dataWithBytes:szBuf length:header->length];
+        [_gcdSocket writeData:data withTimeout:20 tag:1];
+        data = nil;
+    }
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
@@ -322,7 +345,7 @@ typedef struct _tag_MediaFrameBuffer
                 [_gcdSocket readDataToLength:nSize-sizeof(int32) withTimeout:10 tag:SOCKET_READ_DATA];
             }
         }
-            break;
+        break;
         case SOCKET_READ_DATA:
         {
             char *p = cBuf;
@@ -330,7 +353,7 @@ typedef struct _tag_MediaFrameBuffer
             memcpy(p+sizeof(int32), [data bytes], data.length);
             [self getSocketHead:cBuf len:(int32)(data.length+sizeof(int32))];
         }
-            break;
+        break;
         default:
             break;
     }
@@ -352,18 +375,27 @@ if(_block) \
 
 - (void)bufferOper:(COM_MSG_HEADER *)inmsg
 {
-    cmd_video_frame_data_t *frame = (cmd_video_frame_data_t *)inmsg->content;
+    int nMsgLen=inmsg->length-sizeof(COM_MSG_HEADER);
+    char* pNewMsg=0;
+    if(nMsgLen>0)
+    {
+        pNewMsg= (char*) malloc(nMsgLen);
+        memcpy(pNewMsg,inmsg->content,nMsgLen);
+    }
+    cmd_video_frame_data_t *frame = (cmd_video_frame_data_t *)pNewMsg;
     unsigned char pub[4096]={0};
     //长度超标
     if (inmsg->length>(4096+sizeof(COM_MSG_HEADER)+sizeof(cmd_video_frame_data_t)))
     {
+        free(pNewMsg);
+        DLog(@"长度不对");
         return ;
     }
     memcpy(pub,frame->content,inmsg->length-sizeof(COM_MSG_HEADER)-sizeof(cmd_video_frame_data_t));
     if(frame->ts <= m_nLastRecvTS && m_nLastRecvTS-frame->ts <400)
     {
         DLog(@"丢弃");
-        [_gcdSocket readDataToLength:sizeof(int32) withTimeout:10 tag:SOCKET_READ_LENGTH];
+        free(pNewMsg);
         return;
     }
     bool bfound=false;
@@ -424,6 +456,7 @@ if(_block) \
             [_aryVideo addObject:mBuffer];
         }
     }
+    free(pNewMsg);
 }
 
 - (void)push_queue:(unsigned char *)cBuffer length:(int)length pt:(int)pt ts:(int)ts
@@ -431,22 +464,30 @@ if(_block) \
     if (pt==97 && bAudio)
     {
         //音频
-        if(_audioQueue)
+        if(_audioBuf)
         {
-            @synchronized(_audioQueue)
+            @autoreleasepool
             {
-                [_audioQueue addObject:[NSData dataWithBytes:cBuffer length:length]];
+                if(length>0)
+                {
+                    NSData *data = [NSData dataWithBytes:cBuffer length:length];
+                    [_audioBuf addObject:data];
+                }
             }
         }
     }
     else if(pt ==99 && bVideo)
     {
-        if(_videoQueue)
+        if(_videoBuf)
         {
-            @synchronized(_videoQueue)
-            {
-                [_videoQueue addObject:[NSData dataWithBytes:cBuffer length:length]];
+            @autoreleasepool {
+                if(length>0)
+                {
+                    NSData *data = [NSData dataWithBytes:cBuffer length:length];
+                    [_videoBuf addObject:data];
+                }
             }
+            
         }
     }
 }
@@ -476,7 +517,7 @@ if(_block) \
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
     DLog(@"socket 中断");
-    if(nFall==3)
+    if(_nFall==3)
     {
         DLog(@"重新建立连接");
     }
@@ -494,7 +535,9 @@ if(_block) \
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接中断"];
     }
-    nFall ++;
+    DLog(@"error:%@",err);
+    m_nLastRecvTS=0;
+    _nFall ++;
 }
 
 - (void)closeSocket
@@ -506,19 +549,18 @@ if(_block) \
     _gcdSocket = nil;
     [_aryVideo removeAllObjects];
     _aryVideo = nil;
-    [_audioQueue removeAllObjects];
-    [_videoQueue removeAllObjects];
+    [_audioBuf removeAllObjects];
+    [_videoBuf removeAllObjects];
 }
 
 - (void)dealloc
 {
     DLog(@"释放MediaSocket");
+    [_audioBuf removeAllObjects];
+    _audioBuf = nil;
     
-    [_audioQueue removeAllObjects];
-    _audioQueue = nil;
-    
-    [_videoQueue removeAllObjects];
-    _videoQueue = nil;
+    [_videoBuf removeAllObjects];
+    _videoBuf = nil;
 }
 
 @end

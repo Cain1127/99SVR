@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-@class FLAnimatedImage;
-
 @interface GitInfo : NSObject
 
 DEFINE_SINGLETON_FOR_HEADER(GitInfo)
@@ -17,6 +15,6 @@ DEFINE_SINGLETON_FOR_HEADER(GitInfo)
 
 - (void)removeAllIcon;
 
-- (FLAnimatedImage *)findFLAnimated:(NSString *)strName;
+- (UIImage *)findFLAnimated:(NSString *)strName;
 
 @end

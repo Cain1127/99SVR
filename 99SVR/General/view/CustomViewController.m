@@ -74,7 +74,7 @@
 -(void)setLeftBtn:(UIButton *)btnLeft
 {
     _btnLeft = btnLeft;
-    _btnLeft.frame = Rect(5, 20, 44, 44);
+    _btnLeft.frame = Rect(8, 20, 44, 44);
     [_headView addSubview:_btnLeft];
 }
 

@@ -74,7 +74,16 @@
 - (void)setRoom:(RoomHttp *)room
 {
     _room = room;
-    [_imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.croompic]] placeholderImage:[UIImage imageNamed:@"default"]];
+    NSString *strUrl=nil;
+    if([room.croompic length]==0)
+    {
+        strUrl = @"";
+    }
+    else
+    {
+       strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.croompic];
+    }
+    [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     _nameLabel.text = room.cname;
     [_lookCountBtn setTitle:room.ncount forState:UIControlStateNormal];
     [_roomIdLabel setText:room.nvcbid];

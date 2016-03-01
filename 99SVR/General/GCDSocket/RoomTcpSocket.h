@@ -12,6 +12,7 @@
 
 @interface RoomTcpSocket : NSObject
 
+@property (nonatomic,strong) RoomInfo *rInfo;
 @property (nonatomic,strong) NSMutableArray *aryNotice;
 
 @property (nonatomic,strong) NSMutableArray *aryChat;

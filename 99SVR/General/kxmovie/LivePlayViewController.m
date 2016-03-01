@@ -46,6 +46,9 @@
 @property (nonatomic,strong) UIImageView *smallView;
 @property (nonatomic,copy) NSString *strPath;
 
+//@property (nonatomic,strong) NSMutableArray *aryVideo;
+//@property (nonatomic,strong) NSMutableArray *aryAudio;
+
 @end
 
 @implementation LivePlayViewController
@@ -53,13 +56,13 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    @synchronized(_media.videoQueue)
+    @synchronized(_media.videoBuf)
     {
-        [_media.videoQueue removeAllObjects];
+        [_media.videoBuf removeAllObjects];
     }
-    @synchronized(_media.audioQueue)
+    @synchronized(_media.audioBuf)
     {
-        [_media.audioQueue removeAllObjects];
+        [_media.audioBuf removeAllObjects];
     }
     [_openAL stopSound];
     _playing = NO;
@@ -158,45 +161,41 @@
     int returnValue = 0;
     while (_playing)
     {
-        if (_media.audioQueue.count==0)
+        if (_media.audioBuf.count==0)
         {
             [NSThread sleepForTimeInterval:0.01];
             continue ;
         }
-        else if(_media.audioQueue.count>125)
+        @autoreleasepool
         {
-            @synchronized(_media.audioQueue)
+            NSData *data = nil;
+            @synchronized(_media.audioBuf)
             {
-                [_media.audioQueue removeAllObjects];
+                data = [_media.audioBuf objectAtIndex:0];
+                [_media.audioBuf removeObjectAtIndex:0];
             }
-            continue ;
-        }
-//        DLog(@"_media.audioQueue.count:%zi",_media.audioQueue.count);
-        NSData *data = nil;
-        @synchronized(_media.audioQueue)
-        {
-            data = [_media.audioQueue objectAtIndex:0];
-            [_media.audioQueue removeObjectAtIndex:0];
-        }
-        if (data && data.length > 0)
-        {
-            returnValue = opus_decode(_decoder,data.bytes,(int32_t)data.length,_out_buffer, 1920, 0);
-            if (returnValue<0)
+            if (data && data.length > 0)
             {
-                DLog(@"解码失败");
-                continue;
+                returnValue = opus_decode(_decoder,data.bytes,(int32_t)data.length,_out_buffer, 1920, 0);
+                if (returnValue<0)
+                {
+                    DLog(@"解码失败");
+                    continue;
+                }
+                int32_t length = returnValue * sizeof(opus_int16) * 2;
+                [_openAL openAudioFromQueue:(uint8_t*)_out_buffer dataSize:length];
             }
-            int32_t length = returnValue * sizeof(opus_int16) * 2;
-            [_openAL openAudioFromQueue:(uint8_t*)_out_buffer dataSize:length];
+            [NSThread sleepForTimeInterval:0.01];
         }
     }
     [_openAL stopSound];
     [_openAL cleanUpOpenAL];
-    [_media.audioQueue removeAllObjects];
+    [_media.audioBuf removeAllObjects];
 }
 
 - (void)stop
 {
+    DLog(@"视频停止");
     _playing = NO;
     [_media closeSocket];
     [UIApplication sharedApplication].idleTimerDisabled = _playing;
@@ -238,35 +237,34 @@
     [self.view addSubview:lblText];
     [lblText setFont:XCFONT(16)];
     [lblText setTextAlignment:NSTextAlignmentCenter];
-//    [self initDecode];
     _media = [[MediaSocket alloc] init];
-    /*
-    __weak LivePlayViewController *__self = self;
-    _media.block = ^(unsigned char *puf,int nLen,int pt)
-    {
-        if (pt==99)
-        {
-            NSData *data = [NSData dataWithBytes:puf+8 length:nLen-8];
-            @synchronized(__self.aryVideo)
-            {
-                if(__self.bVideo)
-                {
-                    [__self.aryVideo addObject:data];
-                }
-            }
-            data = nil;
-        }
-        else if(pt==97 && nLen < 4000)
-        {
-            NSData *data = [[NSData alloc] initWithBytes:puf length:nLen];
-            @synchronized(__self.aryAudio)
-            {
-                [__self.aryAudio addObject:data];
-            }
-            data = nil;
-        }
-    };
-    */
+//    if (_aryAudio == nil)
+//    {
+//        _aryAudio = [[NSMutableArray alloc] init];
+//    }
+//    if (_aryVideo==nil)
+//    {
+//        _aryVideo = [[NSMutableArray alloc] init];
+//    }
+//    __weak LivePlayViewController *__self = self;
+//    _media.block = ^(unsigned char *puf,int nLen,int pt)
+//    {
+//        if (pt==99)
+//        {
+//            if(__self.bVideo)
+//            {
+//                [__self.aryVideo addObject:[[NSData alloc] initWithBytes:puf+8 length:nLen-8]];
+//            }
+//        }
+//        else if(pt==97 && nLen < 4000)
+//        {
+//            if (__self.aryAudio)
+//            {
+//                [__self.aryAudio addObject:[[NSData alloc] initWithBytes:puf length:nLen]];
+//            }
+//        }
+//    };
+    
 }
 
 - (void)setNullMic
@@ -322,6 +320,10 @@
     ^{
         [__self decodeAudio];
     });
+    
+//    [_aryVideo removeAllObjects];
+//    [_aryAudio removeAllObjects];
+    
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
         [__self checkMedia];
@@ -335,9 +337,9 @@
     _bVideo = enable;
     if (!enable)
     {
-        @synchronized(_media.videoQueue)
+        @synchronized(_media.videoBuf)
         {
-            [_media.videoQueue removeAllObjects];
+            [_media.videoBuf removeAllObjects];
         }
         [self setNoVideo];
     }
@@ -356,7 +358,7 @@
 {
     while (_playing)
     {
-        if (_media.videoQueue.count+_media.audioQueue.count>0)
+        if (_media.audioBuf.count+_media.videoBuf.count>0)
         {
             __weak LivePlayViewController *__self = self;
             dispatch_main_async_safe(
@@ -375,40 +377,42 @@
     if (_playing && _bVideo)
     {
         __weak LivePlayViewController *__self = self;
-        if (_media.videoQueue.count<=0)
+        if (_media.videoBuf.count<=0)
         {
             [NSThread sleepForTimeInterval:.03];
         }
         else
         {
-            NSData *data = nil;
-            @synchronized(_media.videoQueue)
+            @autoreleasepool
             {
-                data = [_media.videoQueue objectAtIndex:0];
-                [_media.videoQueue removeObjectAtIndex:0];
-            }
-            if (data && data.length > 0)
-            {
-                AVPacket packet;
-                av_init_packet(&packet);
-                packet.size = (int)data.length;
-                unsigned char cBuffer[data.length];
-                memcpy(cBuffer,data.bytes,data.length);
-                packet.data = cBuffer;
-                int got_pictrue;
-                int len;
-                len = avcodec_decode_video2(_pCodecCtx,_pFrame,&got_pictrue,&packet);
-                if (len<0)
+                NSData *data = nil;
+                @synchronized(_media.videoBuf)
                 {
-                    DLog(@"解码失败");
+                    data = [_media.videoBuf objectAtIndex:0];
+                    [_media.videoBuf removeObjectAtIndex:0];
                 }
-                else
+                if (data && data.length > 0)
                 {
-                    [self createVideoFrame];
+                    AVPacket packet;
+                    av_init_packet(&packet);
+                    packet.size = (int)data.length;
+                    unsigned char cBuffer[data.length];
+                    memcpy(cBuffer,data.bytes,data.length);
+                    packet.data = cBuffer;
+                    int got_pictrue;
+                    int len;
+                    len = avcodec_decode_video2(_pCodecCtx,_pFrame,&got_pictrue,&packet);
+                    if (len<0)
+                    {
+                        DLog(@"解码失败");
+                    }
+                    else
+                    {
+                        [self createVideoFrame];
+                    }
+                    av_free_packet(&packet);
                 }
-                av_free_packet(&packet);
             }
-            data = nil;
         }
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1/20 * NSEC_PER_SEC)),videoQueue,
         ^{
@@ -419,7 +423,7 @@
     {
         avcodec_flush_buffers(_pCodecCtx);
         [self closeScaler];
-        [_media.videoQueue removeAllObjects];
+        [_media.videoBuf removeAllObjects];
     }
 }
 

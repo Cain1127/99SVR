@@ -8,6 +8,7 @@
 
 #import "OpenAL.h"
 #import <AVFoundation/AVAudioSession.h>
+#import "BaseService.h"
 #import <AudioToolbox/AudioServices.h>
 
 @implementation OpenAL
@@ -87,34 +88,10 @@
 -(void)initOpenAL
 {
     NSLog(@"=======initOpenAl===");
-#if 0
-    mDevice=alcOpenDevice(NULL);
-    if (mDevice==nil)
-    {
-        return ;
-    }
-    if (mDevice)
-    {
-        mContext=alcCreateContext(mDevice, NULL);
-        alcMakeContextCurrent(mContext);
-    }
-    alGenSources(1, &outSourceId);
-    alSpeedOfSound(1.0);
-    alDopplerVelocity(1.0);
-    alDopplerFactor(1.0);
-    alSourcef(outSourceId, AL_PITCH, 1.0f);
-    alSourcef(outSourceId, AL_GAIN, 1.0f);
-    alSourcei(outSourceId, AL_LOOPING, AL_FALSE);
-    alSourcef(outSourceId, AL_SOURCE_TYPE, AL_STREAMING);
-    if (ticketCondition==nil)
-    {
-        ticketCondition= [[NSCondition alloc] init];
-    }
-#endif
 #if 1
     ALenum			error;
-    ALCcontext		*newContext = NULL;
-    ALCdevice		*newDevice = NULL;
+    ALCcontext *newContext = NULL;
+    ALCdevice *newDevice = NULL;
     newDevice = alcOpenDevice(NULL);
     if (newDevice != NULL)
     {
@@ -142,146 +119,75 @@
 
 - (void)openAudioFromQueue:(unsigned char*)data dataSize:(UInt32)dataSize
 {
-#if 1
     [ticketCondition lock];
-    ALenum  error =AL_NO_ERROR;
-    ALuint bufferID = 0;
-    alGenBuffers(1, &bufferID);
-    int aSampleRate,aBit,aChannel;
-    aSampleRate = 48000;
-    aBit = 16;
-    aChannel = 2;
-    ALenum format=AL_FORMAT_STEREO16;
-    if ((error =alGetError())!=AL_NO_ERROR)
-    {
-        NSLog(@"create bufferData failed");
-        [ticketCondition unlock];
-        return;
-    }
-    alBufferData(bufferID, format,data, (ALsizei)dataSize,aSampleRate);
-    if ((error =alGetError())!=AL_NO_ERROR)
-    {
-        NSLog(@"create bufferData failed");
-        [ticketCondition unlock];
-        return;
-    }
-    alSourceQueueBuffers(outSourceId, 1, &bufferID);
-    if ((error =alGetError())!=AL_NO_ERROR)
-    {
-        NSLog(@"create bufferData failed");
-        [ticketCondition unlock];
-        return;
-    }
-    [self updataQueueBuffer];
-    
-    [ticketCondition unlock];
-#endif
-    
-#if 0
-    [ticketCondition lock];
-    ALenum  error =AL_NO_ERROR;
-    if ((error =alGetError())!=AL_NO_ERROR)
-    {
-        [ticketCondition unlock];
-        return ;
-    }
-    if (data ==NULL)
-    {
-        return ;
-    }
-    [self updataQueueBuffer];                                  //在这里调用了刚才说的清除缓存buffer函数，也附加声音播放
-    if ((error =alGetError())!=AL_NO_ERROR)
-    {
-        [ticketCondition unlock];
-        return ;
-    }
-    ALuint bufferID =0;                                             //存储声音数据，建立一个pcm数据存储器，初始化一块区域用来保存声音数据
-    alGenBuffers(1, &bufferID);
-    if ((error = alGetError())!=AL_NO_ERROR)
-    {
-        [ticketCondition unlock];
-        return;
-    }
-    alBufferData(bufferID, AL_FORMAT_STEREO16, (char *)data, (ALsizei)dataSize, 48000);
-    if ((error =alGetError())!=AL_NO_ERROR)
-    {
-        NSLog(@"create bufferData failed");
-        [ticketCondition unlock];
-        return;
-    }
-    //添加到缓冲区
-    alSourceQueueBuffers(outSourceId, 1, &bufferID);
-    if ((error =alGetError())!=AL_NO_ERROR)
-    {
-        NSLog(@"add buffer to queue failed");
-        [ticketCondition unlock];
-        return;
-    }
-    if ((error=alGetError())!=AL_NO_ERROR)
-    {
-        NSLog(@"play failed");
-        alDeleteBuffers(1, &bufferID);
-        [ticketCondition unlock];
-        return;
+    @autoreleasepool {
+        ALenum  error =AL_NO_ERROR;
+        ALuint bufferID = 0;
+        alGenBuffers(1, &bufferID);
+        int aSampleRate,aBit,aChannel;
+        aSampleRate = 48000;
+        aBit = 16;
+        aChannel = 2;
+        ALenum format=AL_FORMAT_STEREO16;
+        alBufferData(bufferID, format,data, (ALsizei)dataSize,aSampleRate);
+        if ((error =alGetError())!=AL_NO_ERROR)
+        {
+            DLog(@"create bufferData failed");
+            [ticketCondition unlock];
+            return;
+        }
+        alSourceQueueBuffers(outSourceId, 1, &bufferID);
+        if ((error =alGetError())!=AL_NO_ERROR)
+        {
+            DLog(@"push bufferData failed");
+            [ticketCondition unlock];
+            return;
+        }
+        [self updataQueueBuffer];
     }
     [ticketCondition unlock];
-    
-#endif
-    
 }
-
 
 - (BOOL)updataQueueBuffer
 {
-#if 1
     ALint stateVaue;
     int processed, queued;
-    alGetSourcei(outSourceId, AL_BUFFERS_PROCESSED, &processed);
-    alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
     alGetSourcei(outSourceId, AL_SOURCE_STATE, &stateVaue);
-    if (stateVaue == AL_STOPPED ||
-        stateVaue == AL_PAUSED ||
-        stateVaue == AL_INITIAL)
+    if (stateVaue != AL_PLAYING)
     {
         DLog(@"stateVaue:%d",stateVaue);
         DLog(@"queued:%d",queued);
-        if (queued < processed || queued == 0 ||(queued == 1 && processed ==1))
-        {
-            DLog(@"释放");
-            [self stopSound];
-            [self cleanUpOpenAL];
-        }
         DLog(@"播放");
         [self playSound];
         return NO;
     }
-    while(processed--)
-    {
-        alSourceUnqueueBuffers(outSourceId,1,&buff);
-        alDeleteBuffers(1, &buff);
-    }
-    return YES;
-#endif
-#if 0
-    ALint  state;
-    int processed ,queued;
-    alGetSourcei(outSourceId, AL_SOURCE_STATE, &state);
-    if (state !=AL_PLAYING)
-    {
-        [self playSound];
-        return NO;
-    }
     alGetSourcei(outSourceId, AL_BUFFERS_PROCESSED, &processed);
     alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
-    while (processed--)
+    if (queued < processed || queued == 0 ||(queued == 1 && processed ==1) || queued >50)
     {
-        ALuint buffer;
-        alSourceUnqueueBuffers(outSourceId, 1, &buffer);
-        alDeleteBuffers(1, &buffer);
+        [BaseService getJSONWithUrl:@"http://42.81.53.201/AnalyticStatistics/?c=Message&type=humanReportBlock&subtype=1&from=1&client=4&content=video_lag" parameters:nil success:nil fail:nil];
+        DLog(@"清除缓存");
+        alDeleteBuffers(1, &outSourceId);
+        alDeleteBuffers(1, &buff);
+        DLog(@"重新建立缓存");
+        alGenBuffers(1, &buff);
+        if (alGetError() != AL_NO_ERROR)
+        {
+            DLog(@"建立新缓存失败");
+        }
+        alGenSources(1, &outSourceId);
+        if (alGetError() != AL_NO_ERROR)
+        {
+            DLog(@"建立新buffer失败");
+        }
+    }
+    while(processed--)
+    {
+        ALuint bufferId;
+        alSourceUnqueueBuffers(outSourceId,1,&bufferId);
+        alDeleteBuffers(1, &bufferId);
     }
     return YES;
-#endif
-    
 }
 
 
@@ -318,10 +224,6 @@
     ALCdevice	*device = NULL;
     alDeleteSources(1, &outSourceId);
     alDeleteBuffers(1, &buff);
-//    context = alcGetCurrentContext();
-//    device = alcGetContextsDevice(context);
-//    alcDestroyContext(context);
-//    alcCloseDevice(device);
     alcDestroyContext(mContext);
     alcCloseDevice(mDevicde);
 /*

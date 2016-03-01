@@ -317,9 +317,6 @@
     }
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
     [socket connectRoomInfo:room.nvcbid address:strAddress port:[strPort intValue]];
-    DLog(@"strAddress:%@--strPort:%@",strAddress,strPort);
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomSuc:) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
 #endif
 #if 1
     RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];

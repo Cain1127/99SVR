@@ -30,7 +30,19 @@
 
 #define SVR_LVBBY_PORT  7301
 
-#define SVR_LBS_IP @"lbs1.99ducaijing.cn"
+//#define LBS_HTTP_HOST @"http://lbs1.99ducaijing.cn:2222/"
+
+#define LBS_HTTP_HOST @"http://lbs1.99ducaijing.cn:2222/"
+#define LBS_HTTP_HOST1 @"http://lbs1.99ducaijing.cn:2222/"
+#define LBS_HTTP_HOST3 @"http://lbs3.99ducaijing.cn:2222/"
+
+#define LBS_ROOM_WEB [NSString stringWithFormat:@"%@tygetweb",LBS_HTTP_HOST]
+
+#define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
+
+#define LBS_ROOM_STREAM @"http://lbs1.99ducaijing.cn:2222/tygetmedia"
+#define LBS_ROOM_STREAM1 @"http://lbs2.99ducaijing.cn:2222/tygetmedia"
+#define LBS_ROOM_STREAM2 @"http://lbs3.99ducaijing.cn:2222/tygetmedia"
 
 #define SVR_LBS_PORT 2222
 
@@ -46,9 +58,16 @@
 
 #define kLineColor RGB(207, 207, 207)
 
-#define kRegisterNumber @"http://172.16.41.237:8088/"
+#define kRegisterNumber @"http://api.99ducaijing.com/"
+//#define kRegisterNumber @"http://172.16.41.158/"
 
-#define kFindServer @"http://172.16.41.31:8099/"
+#define kSinaKey @"4288225685"
+
+#define kRedirectURI @"http://api.99ducaijing.com/loginapi/RedirectByWeibo"
+
+#define  kWXAPP_ID @"wxfbfe01336f468525"
+
+#define  kWXAPP_SEC @"acc28b09efbb768a1b5b7b6514903ef8"
 
 #endif
 

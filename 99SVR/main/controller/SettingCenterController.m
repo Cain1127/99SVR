@@ -152,6 +152,7 @@
         [UserDefaults removeObjectForKey:kIsLogin];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_EXIT_LOGIN_VC object:nil];
         [UserInfo sharedUserInfo].bIsLogin = NO;
+        [UserInfo sharedUserInfo].otherLogin = 0;
         [UserInfo sharedUserInfo].nUserId = 0;
         [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -171,10 +172,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
-    {
-        return 3;
-    }
+//    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
+//    {
+//        return 3;
+//    }
     return 2;
 }
 
@@ -196,11 +197,11 @@
         cell.nameLabel.text = @"关于我们";
         cell.arrowImageView.hidden = NO;
     }
-    else
-    {
-        cell.nameLabel.text = @"修改密码";
-        cell.arrowImageView.hidden = NO;
-    }
+//    else
+//    {
+//        cell.nameLabel.text = @"修改密码";
+//        cell.arrowImageView.hidden = NO;
+//    }
     return cell;
 }
 

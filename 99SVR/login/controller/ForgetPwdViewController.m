@@ -12,11 +12,14 @@
 #import "BaseService.h"
 #import "Toast+UIView.h"
 
-@interface ForgetPwdViewController ()
+@interface ForgetPwdViewController ()<UITextFieldDelegate>
 {
     NSTimer *_timer;
     int nSecond;
+    NSString *strDate;
 }
+
+@property (nonatomic,strong) UILabel *lblError;
 @property (nonatomic,copy) NSString *strMobile;
 @property (nonatomic,strong) UITextField *txtName;
 @property (nonatomic,strong) UITextField *txtCode;
@@ -53,25 +56,34 @@
 - (void)getAuthCode
 {
     NSString *strMobile = _txtName.text;
+    if (strMobile.length==0)
+    {
+        [_lblError setText:@"手机号不能为空"];
+        return ;
+    }
     if (strMobile.length!=11)
     {
-        [self.view makeToast:@"手机长度错误"];
+        [_lblError setText:@"手机长度错误"];
         return ;
     }
     if(![DecodeJson getSrcMobile:strMobile])
     {
-        [self.view makeToast:@"手机格式不正确"];
+        [_lblError setText:@"请输入正确的手机号"];
         return ;
     }
-    srand((unsigned int)time(NULL));
-    long  randomNum = rand();
-    NSString *strMd5 = [NSString stringWithFormat:@"action=find&account=%@&guid=%ld",strMobile,randomNum];
+    [_lblError setText:@""];
+    [self.view makeToastActivity];
+    if(!strDate)
+    {
+        [_lblError setText:@"手机异常"];
+        return ;
+    }
+    NSString *strMd5 = [NSString stringWithFormat:@"action=find&account=%@&date=%@",strMobile,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = [NSString stringWithFormat:@"%@MApi/GetFindPasswordMsgCode?pnum=%@&key=%@&Guid=%ld",kFindServer,strMobile,strMd5,randomNum];
+    NSString *strInfo = [NSString stringWithFormat:@"%@MApi/GetFindPasswordMsgCode?pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
     __weak ForgetPwdViewController *__self = self;
-    
-    [BaseService postJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
+    [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
      {
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
@@ -81,22 +93,26 @@
              dispatch_async(dispatch_get_main_queue(),
                 ^{
                     __self.btnCode.enabled = NO;
-                    [__self.view makeToast:@"已发送验证码到目标手机"];
+                    [__self.view hideToastActivity];
+                    [__self.lblError setText:@"已发送验证码到目标手机"];
+                    [__self.txtCode becomeFirstResponder];
                 });
          }
          else
          {
              dispatch_async(dispatch_get_main_queue(),
                 ^{
-                    [__self.view makeToast:[dict objectForKey:@"errmsg"]];
+                    [__self.view hideToastActivity];
+                    [__self.lblError setText:[dict objectForKey:@"errmsg"]];
                 });
          }
      }fail:^(NSError *error)
      {
          dispatch_async(dispatch_get_main_queue(),
-        ^{
-            [__self.view makeToast:@"请求验证码失败"];
-        });
+         ^{
+             [__self.view hideToastActivity];
+             [__self.lblError setText:@"请求验证码失败"];
+         });
      }];
 }
 
@@ -115,6 +131,8 @@
     [textField setFont:XCFONT(15)];
     [textField setAutocorrectionType:UITextAutocorrectionTypeNo];
     [textField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    [textField setClearButtonMode:UITextFieldViewModeAlways];
+    [textField setKeyboardType:UIKeyboardTypeNumberPad];
     return textField;
 }
 
@@ -149,6 +167,14 @@
     _btnCode.frame = Rect(_txtCode.x+_txtCode.width+5,_txtCode.y, 95, 30);
     [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
     _btnCode.titleLabel.font = XCFONT(15);
+    _btnCode.layer.masksToBounds = YES;
+    _btnCode.layer.cornerRadius = 3;
+    
+    
+    _lblError = [[UILabel alloc] initWithFrame:Rect(30, 178, kScreenWidth-60, 20)];
+    [_lblError setFont:XCFONT(14)];
+    [_lblError setTextColor:[UIColor redColor]];
+    [self.view addSubview:_lblError];
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
@@ -183,9 +209,14 @@
 
 - (void)backLeft
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_PASSWROD_VC object:nil];
-    }];
+    __weak ForgetPwdViewController *__self = self;
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
+        [__self dismissViewControllerAnimated:YES completion:
+         ^{
+             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_PASSWROD_VC object:nil];
+         }];
+    });
 }
 
 - (void)authMobile
@@ -193,31 +224,41 @@
     NSString *strMobile = _txtName.text;
     if ([strMobile length]==0)
     {
-        [self.view makeToast:@"手机号不能为空"];
+        _lblError.text = @"手机号不能为空";
+        return ;
+    }
+    if ([strMobile length]!=11)
+    {
+        _lblError.text = @"手机号格式错误";
         return ;
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)
     {
-        [self.view makeToast:@"验证码不能为空"];
+        _lblError.text = @"验证码不能为空";
         return ;
     }
+    _lblError.text = @"";
+    [self.view makeToastActivity];
     NSDictionary *parameters = @{@"phone":strMobile,@"code":strCode};
-    NSString *strInfo = [NSString stringWithFormat:@"%@MApi/MobileFindPasswordCheckSMS",kFindServer];
+    NSString *strInfo = [NSString stringWithFormat:@"%@MApi/MobileFindPasswordCheckSMS",kRegisterNumber];
     _strMobile = strMobile;
     __weak ForgetPwdViewController *__self = self;
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id response)
     {
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+            [__self.view hideToastActivity];
+        });
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableLeaves error:nil];
         if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
         {
             DLog(@"dict:%@",dict);
-            [__self startTimer];
             dispatch_async(dispatch_get_main_queue(),
-                           ^{
-                               __self.btnCode.enabled = NO;
-                               [__self.view makeToast:@"验证成功"];
-                           });
+            ^{
+                __self.btnCode.enabled = NO;
+                [__self.view makeToast:@"验证成功"];
+            });
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 InputPwdViewController *input = [[InputPwdViewController alloc] initWithMobile:__self.strMobile];
                 [self presentViewController:input animated:YES completion:nil];
@@ -226,16 +267,17 @@
         else
         {
             dispatch_async(dispatch_get_main_queue(),
-                           ^{
-                               [__self.view makeToast:[dict objectForKey:@"errmsg"] duration:2.0 position:@"center"];
-                           });
+            ^{
+//                [__self.view makeToast:[dict objectForKey:@"errmsg"] duration:2.0 position:@"center"];
+                [__self.lblError setText:[dict objectForKey:@"errmsg"]];
+            });
         }
         
     } fail:^(NSError *error) {
         dispatch_async(dispatch_get_main_queue(),
-                       ^{
-                           [__self.view makeToast:@"连接服务器失败"];
-                       });
+        ^{
+           [__self.view makeToast:@"连接服务器失败"];
+        });
     }];
 }
 
@@ -243,8 +285,15 @@
 {
     [super viewDidLoad];
     [self initUIHead];
-    _txtName.text = @"17727610912";
-    _txtCode.text = @"5614";
+
+    [self setTitleText:@"修改密码"];
+    NSDate *date = [NSDate date];
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    [fmt setDateFormat:@"yyyyMMdd"];
+    strDate = [fmt stringFromDate:date];
+    [_txtName setDelegate:self];
+//    _txtName.text = @"17727610912";
+//    _txtCode.text = @"5614";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -261,5 +310,17 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (_txtName == textField)
+    {
+        if (range.location>11 || range.location+string.length>11)
+        {
+            return NO;
+        }
+    }
+    return YES;
+}
 
 @end

@@ -22,6 +22,7 @@
         const char * name = property_getName(property);
         [propertyNames addObject:[NSString stringWithUTF8String:name]];
     }
+    free(properties);
     return propertyNames;
 }
 

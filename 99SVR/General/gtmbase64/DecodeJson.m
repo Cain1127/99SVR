@@ -211,23 +211,22 @@
     memset(cBuffer, 0, 2048);
     memset(cEnd, 0, 2048);
     memset(cNumber, 0, 10);
-    int nNum = 0;
     
+    NSUInteger nStart,nEnd;
     while ([strInfo rangeOfString:@"[$"].location != NSNotFound && [strInfo rangeOfString:@"$]"].location != NSNotFound)
     {
-        memset(cBuffer, 0, 2048);
-        memset(cEnd, 0, 2048);
-        memset(cNumber, 0, 10);
-        sscanf(cInfo,"%[^[][$%d$]%s",cBuffer,&nNum,cEnd);
-        
-        strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%d$]",nNum] withString:
-                   [NSString stringWithFormat:@"<object value=%d width=24 height=24 ></object>",nNum]];
+        nStart = [strInfo rangeOfString:@"[$"].location;
+        nEnd = [strInfo rangeOfString:@"$]"].location;
+        if(nStart>nEnd)
+        {
+            return strInfo;
+        }
+        NSString *strTemp = [strInfo substringWithRange:NSMakeRange(nStart+2,nEnd-nStart-2)];
+        strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
+                   [NSString stringWithFormat:@"<object value=%d width=24 height=24 ></object>",[strTemp intValue]]];
         cInfo = [strInfo UTF8String];
     }
-    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
-    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
-    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"<i>" withString:@""];
-    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
+
     return strInfo;
 }
 
@@ -277,7 +276,7 @@
 + (BOOL)getSrcMobile:(NSString *)mobileInfo
 {
     // | 47\\d{8}
-    NSString *strMobile = @"(1[3578]\\d{9}|1[4][7]\\d{8})";
+    NSString *strMobile = @"(1[3578]\\d{9}|14[57]\\d{8})";
     NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strMobile];
     if([regextestmobile evaluateWithObject:mobileInfo]==YES)
     {

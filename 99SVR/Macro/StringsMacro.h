@@ -16,4 +16,8 @@
 #define kUserPwd @"userPwd"
 #define kUserName @"userName"
 
+#define kOpenId @"openId"
+#define kToken @"token"
+#define kOtherLogin @"otherlogin"
+
 #endif /* StringsMacro_h */

@@ -14,8 +14,9 @@ typedef void(^ReciveMessage)(unsigned char *cBuf,int nLen,int pt);
 
 @property (nonatomic,copy) ReciveMessage block;
 
-@property (nonatomic,strong) NSMutableArray *videoQueue;
-@property (nonatomic,strong) NSMutableArray *audioQueue;
+@property (nonatomic,strong) NSMutableArray *videoBuf;
+
+@property (nonatomic,strong) NSMutableArray *audioBuf;
 
 - (void)connectIpAndPort:(NSString *)strIp port:(int)nPort;
 

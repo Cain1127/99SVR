@@ -20,10 +20,9 @@
 //播放器
 @interface LivePlayViewController : UIViewController
 {
-    
+    MediaSocket *_media;
 }
 
-@property (nonatomic,strong) MediaSocket *media;
 @property (nonatomic) BOOL playing;
 @property (nonatomic,strong) UIImageView *glView;
 

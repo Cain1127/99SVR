@@ -20,8 +20,8 @@ NSArray * getPropertyNameList(id object)
         objc_property_t property = properties[i];
         const char * name = property_getName(property);
         [propertyNames addObject:[NSString stringWithUTF8String:name]];
-        
     }
+    free(properties);
     return propertyNames;
 }
 
@@ -37,7 +37,7 @@ NSArray * getPropertyNameList(id object)
         {
             NSLog(@"except:%@:%@",key,dict[key]);
         }  
-    }  
+    }
     return result;
 }
 

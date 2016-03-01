@@ -41,6 +41,78 @@ typedef struct tag_CWavHeader
     int dId;
     int wSampleLength  ;
 }CWavHeader_t ;
+
+typedef struct tag_CMDUserLogonSuccess2
+{
+    uint32 nmessageid;            //message id
+    int64 nk;                     //金币
+    int64 nb;                     //礼物积分,可以换金币或兑换RMB
+    int64 nd;                     //游戏豆
+    uint32 nmask;                 //标志位, 用于客户端验证是不是自己发出的resp,
+    uint32 userid;                //本号
+    uint32 langid;                //靓号id
+    uint32 langidexptime;         //靓号id到期时间
+    uint32 servertime;            //服务器时间,显示客户端,用于抢星之类的时间查看
+    uint32 version;               //服务器版本号,用在在信令相同的情况下登陆成功发回服务器DB中的版本号
+    uint32 headid;                //用户头像id
+    byte   viplevel;              //会员等级(可能是临时等级)
+    byte   yiyuanlevel;           //艺员等级,如
+    byte   shoufulevel;           //守护者等级
+    byte   zhonglevel;            //终生等级,叠加数字(1~150)
+    byte   caifulevel;            //财富等级
+    byte   lastmonthcostlevel;    //上月消费排行
+    byte   thismonthcostlevel;    //本月消费排行
+    byte   thismonthcostgrade;    //本月累计消费等级
+    byte   ngender;               //性别
+    byte   blangidexp;            //靓号是否过期
+    byte   bxiaoshou;             //是不是销售标志
+    char   cuseralias[NAMELEN];   //呢称
+    byte   nloginflag;            //login flag
+    byte   bloginSource;          //local 99 login or other platform login:0-local;1-other platform
+    byte   bBoundTel;             //bound telephone number:0-not;1-yes.
+    char   csid[48];              //sid for visit web
+}CMDUserLogonSuccess2_t;
+
+typedef struct tag_CMDUserLogonErr2
+{
+    uint32 nmessageid;  //message id
+    uint32 errid;       //根据id,客户端本地判断错误,包括版本错误(需要升级),封杀
+    uint32 data1;       //参数1
+    uint32 data2;       //参数2
+}CMDUserLogonErr2_t;
+
+//14+32+192
+typedef struct tag_CMDUserLogonReq4
+{
+    uint32 nmessageid;      //message id
+    char   cloginid[32];    //[0]-游客登陆
+    uint32 nversion;        //本地版本号?
+    uint32 nmask;           //标示,用于客户端验证是不是自己发出的resp,
+    char   cuserpwd[PWDLEN];    //登录密码,游客登录不需要密码,长度与将来的md5兼容
+    char   cSerial[PWDLEN];  //uuid
+    char   cMacAddr[IPADDRLEN]; //mac地址
+    char   cIpAddr[IPADDRLEN];  //ip地址
+    byte nimstate;        //IM状态:如隐身登录
+    byte nmobile;         //0-PC,1-Android,2-IOS,3-web
+}CMDUserLogonReq4_t;
+
+typedef struct tag_CMDUserLogonReq5
+{
+    int    nmessageid;      //message id
+    uint32 userid;          //local user id,as before
+    char   openid[48];
+    char   opentoken[64];   //open platform token
+    int    platformType;    //platform type,for example:1-QQ,2-weibo
+    uint32 nversion;        //本地版本号?
+    uint32 nmask;           //标示,用于客户端验证是不是自己发出的resp,
+    //char   cuserpwd[PWDLEN];    //登录密码,游客登录不需要密码,长度与将来的md5兼容
+    char   cSerial[64];  //uuid
+    char   cMacAddr[IPADDRLEN]; //mac地址
+    char   cIpAddr[IPADDRLEN];  //ip地址
+    byte   nimstate;        //IM状态:如隐身登录
+    byte   nmobile;         //0-PC,1-Android,2-IOS,3-web
+}CMDUserLogonReq5_t;
+
 typedef struct tag_CMDUserLogonReq2
 {
     uint32 userid;          //0-游客登陆,可能是靓号ID
@@ -53,6 +125,7 @@ typedef struct tag_CMDUserLogonReq2
     byte   nimstate;        //IM状态:如隐身登录
     byte   nmobile;         //1-手机登录?
 }CMDUserLogonReq2_t;
+
 typedef struct tag_CMDUserLogonReq3
 {
     uint32 userid;          //0-游客登陆,可能是靓号ID
@@ -217,6 +290,24 @@ typedef struct tag_CMDJoinRoomReq
     char   cMacAddr[IPADDRLEN];   //
     char   cIpAddr[IPADDRLEN];
 }CMDJoinRoomReq_t;
+
+typedef struct
+{
+    uint32 userid;         //用户id,可能是靓号id,可能是游客号码
+    uint32 vcbid;          //房间id
+    uint32 devtype;       //0:PC端 1:安卓 2:IOS 3:WEB
+    uint32 time;
+    uint32 crc32;
+    uint32 coremessagever;     //客户端内核版本
+    char   cuserpwd[PWDLEN];   //用户密码,没有就是游客
+    char   croompwd[PWDLEN];   //房间密码,可能有
+    char   cSerial[64];    //uuid
+    char   cMacAddr[IPADDRLEN];   //客户端mac地址
+    char   cIpAddr[IPADDRLEN];	  //客户端ip地址
+    byte   bloginSource;         //local 99 login or other platform login:0-local;1-other platform
+    byte   reserve1;
+    byte   reserve2;
+}CMDJoinRoomReq2_t;
 
 //攻城消息内容(88byte)
 typedef struct tag_SiegeInfo
@@ -1949,7 +2040,7 @@ typedef struct tag_CMDSyscast
     char   content[512];
 }CMDSyscast;
 
-#pragma pack()
+#pragma pack(1)
 
 //////////////////////////////////////////////////////////////////////////
 typedef enum
@@ -2047,58 +2138,7 @@ typedef struct tag_CMDSysBroadCastInfo
 }CMDSysBroadCastInfo_t;
 
 
-typedef struct tag_CMDUserLogonSuccess2
-{
-    uint32 nmessageid;           //message id
-    int64 nk;                    //金币
-    int64 nb;                    //礼物积分,可以换金币或兑换RMB
-    int64 nd;                    //游戏豆
-    uint32 nmask;                 //标志位, 用于客户端验证是不是自己发出的resp,
-    uint32 userid;                //本号
-    uint32 langid;                //靓号id
-    uint32 langidexptime;         //靓号id到期时间
-    uint32 servertime;            //服务器时间,显示客户端,用于抢星之类的时间查看
-    uint32 version;               //服务器版本号,用在在信令相同的情况下登陆成功发回服务器DB中的版本号
-    uint32 headid;                //用户头像id
-    byte   viplevel;              //会员等级(可能是临时等级)
-    byte   yiyuanlevel;           //艺员等级,如
-    byte   shoufulevel;           //守护者等级
-    byte   zhonglevel;            //终生等级,叠加数字(1~150)
-    byte   caifulevel;            //财富等级
-    byte   lastmonthcostlevel;     //上月消费排行
-    byte   thismonthcostlevel;     //本月消费排行
-    byte   thismonthcostgrade;    //本月累计消费等级
-    byte   ngender;               //性别
-    byte   blangidexp;            //靓号是否过期
-    byte   bxiaoshou;             //是不是销售标志
-    char   cuseralias[NAMELEN];   //呢称
-    byte   nloginflag;            //login flag
-    byte   bloginSource;          //local 99 login or other platform login:0-local;1-other platform
-    byte   bBoundTel;             //bound telephone number:0-not;1-yes.
-    char   sid[32];               //sid for visit web
-}CMDUserLogonSuccess2_t;
 
-typedef struct tag_CMDUserLogonErr2
-{
-    uint32 nmessageid;  //message id
-    uint32 errid;       //根据id,客户端本地判断错误,包括版本错误(需要升级),封杀
-    uint32 data1;       //参数1
-    uint32 data2;       //参数2
-}CMDUserLogonErr2_t;
-
-typedef struct tag_CMDUserLogonReq4
-{
-    uint32 nmessageid;      //message id
-    char   cloginid[32];    //[0]-游客登陆
-    uint32 nversion;        //本地版本号?
-    uint32 nmask;           //标示,用于客户端验证是不是自己发出的resp,
-    char   cuserpwd[PWDLEN];    //登录密码,游客登录不需要密码,长度与将来的md5兼容
-    char   cSerial[64];  //uuid
-    char   cMacAddr[IPADDRLEN]; //mac地址
-    char   cIpAddr[IPADDRLEN];  //ip地址
-    byte   nimstate;        //IM状态:如隐身登录
-    byte   nmobile;         //0-PC,1-Android,2-IOS,3-web
-}CMDUserLogonReq4_t;
 
 #endif //__CMD_VCHAT_HH_20110409__
 

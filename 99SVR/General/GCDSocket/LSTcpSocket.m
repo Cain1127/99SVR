@@ -122,8 +122,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     pHead->maincmd = nMainCmd;
     pHead->subcmd = nSubCmd;
     memcpy(pHead->content,pReq,nSize);
-    NSData *data = [NSData dataWithBytes:szBuf length:pHead->length];
-    [_asyncSocket writeData:data withTimeout:-1 tag:1];
+    @autoreleasepool
+    {
+        NSData *data = [NSData dataWithBytes:szBuf length:pHead->length];
+        [_asyncSocket writeData:data withTimeout:-1 tag:1];
+    }
 }
 
 #pragma mark 连接登录服务器
@@ -204,11 +207,32 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     pHollo->param2 = 8;
     pHollo->param3 = 7;
     pHollo->param4 = 1;
-    
-    NSData *data = [NSData dataWithBytes:szTemp length:pHead->length];
-    [_asyncSocket writeData:data withTimeout:20 tag:1];
+    @autoreleasepool {
+        NSData *data = [NSData dataWithBytes:szTemp length:pHead->length];
+        [_asyncSocket writeData:data withTimeout:20 tag:1];
+    }
 }
 
+#pragma mark 第三方登录
+
+- (void)sendMsg_otherLogin
+{
+    CMDUserLogonReq5_t req;
+    memset(&req, 0, sizeof(CMDUserLogonReq5_t));
+    req.userid = [UserInfo sharedUserInfo].nUserId;
+    strcpy(req.openid, [[UserInfo sharedUserInfo].strOpenId UTF8String]);
+    strcpy(req.opentoken, [[UserInfo sharedUserInfo].strToken UTF8String]);
+    req.platformType = [UserInfo sharedUserInfo].otherLogin;
+    req.nversion = 4000000;
+    req.nmask = (int)time(0);
+    [UserInfo sharedUserInfo].strUser = _strUser;
+    req.nimstate = 0;
+    req.nmobile = 2;
+    [self sendMessage:(char*)&req size:sizeof(CMDUserLogonReq5_t) version:MDM_Version_Value
+              maincmd:MDM_Vchat_Login subcmd:Sub_Vchat_logonReq5];
+}
+
+#pragma mark 新接口
 - (void)sendMsg_newLogin
 {
     CMDUserLogonReq4_t req;
@@ -227,14 +251,13 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         }
         [UserInfo sharedUserInfo].strPwd = _strPwd;
     }
-    strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
-    strcpy(req.cIpAddr, [[DecodeJson getIPAddress] UTF8String]);
     req.nimstate = 0;
-    req.nmobile = 1;
+    req.nmobile = 2;
     [self sendMessage:(char*)&req size:sizeof(CMDUserLogonReq4_t) version:MDM_Version_Value
               maincmd:MDM_Vchat_Login subcmd:Sub_Vchat_logonReq4];
 }
 
+#pragma mark 准备弃用
 - (void)sendMsg_login
 {
     CMDUserLogonReq3_t req;
@@ -284,6 +307,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         strAddr = SVR_LOGIN_IP;
         nPort = SVR_LOGIN_PORT;
     }
+//    [self connectLogInServer:@"58.210.107.53" port:7405];
 //    [self connectLogInServer:@"172.16.41.96" port:7403];
     [self connectLogInServer:strAddr port:nPort];
     if ([strUser isEqualToString:@"0"])
@@ -374,6 +398,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     [_asyncSocket readDataToLength:sizeof(int) withTimeout:-1 tag:SOCKET_READ_LENGTH];
 }
 
+#pragma makr 新响应
 - (void)loginSucess2:(char *)pData
 {
     CMDUserLogonSuccess2_t *pLogonResp = (CMDUserLogonSuccess2_t *)pData;
@@ -398,14 +423,26 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     if([UserInfo sharedUserInfo].nType==1)
     {
         [UserDefaults setBool:YES forKey:kIsLogin];
-        [UserDefaults setObject:NSStringFromInt(user.nUserId) forKey:kUserId];
+        [UserDefaults setObject:_strUser forKey:kUserId];
         [UserDefaults setObject:_strPwd forKey:kUserPwd];
         [UserDefaults synchronize];
+        
+        if ([UserInfo sharedUserInfo].otherLogin ==0)
+        {
+            [UserDefaults setInteger:0 forKey:kOtherLogin];
+        }
+        else
+        {
+            [UserDefaults setObject:[UserInfo sharedUserInfo].strOpenId forKey:kOpenId];
+            [UserDefaults setObject:[UserInfo sharedUserInfo].strToken forKey:kToken];
+            [UserDefaults setInteger:[UserInfo sharedUserInfo].otherLogin forKey:kOtherLogin];
+        }
     }
     [[CrashReporter sharedInstance] setUserId:[NSString stringWithFormat:@"用户:%@",NSStringFromInt(user.nUserId)]];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
 }
 
+#pragma mark 准备弃用
 - (void)loginSucess:(char *)pData
 {
     CMDUserLogonSuccess_t* pLogonResp=(CMDUserLogonSuccess_t*)pData;
@@ -474,6 +511,22 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     {
         strMsg = @"你被限制进入,登录失败!请联系在线客服.";
     }
+    else if(pErr->errid == 106)
+    {
+        strMsg = @"账号错误";
+    }
+    else if(pErr->errid == 104)
+    {
+        strMsg = @"密码错误";
+    }
+    else if(pErr->errid == 105)
+    {
+        strMsg = @"请升级";
+    }
+    else if(pErr->errid == 107)
+    {
+        strMsg = @"账号已冻结";
+    }
     else
     {
         strMsg = @"密码错误";
@@ -516,13 +569,13 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     {
         //登录服务器信息
         [self sendHello:MDM_Vchat_Login];
-        if (_strUser.length==11 && [DecodeJson getSrcMobile:_strUser])
+        if ([UserInfo sharedUserInfo].otherLogin != 0)
         {
-            [self sendMsg_newLogin];
+            [self sendMsg_otherLogin];
         }
         else
         {
-            [self sendMsg_login];
+            [self sendMsg_newLogin];
         }
         [_asyncSocket readDataToLength:sizeof(int) withTimeout:-1 tag:SOCKET_READ_LENGTH];
     }

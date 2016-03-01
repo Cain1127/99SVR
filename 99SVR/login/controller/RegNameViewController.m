@@ -8,12 +8,18 @@
 
 #import "RegNameViewController.h"
 #import "QCheckBox.h"
+#import "LSTcpSocket.h"
 #import "Toast+UIView.h"
 #import "NNSVRViewController.h"
 #import "BaseService.h"
 #import "DecodeJson.h"
-@interface RegNameViewController ()
+@interface RegNameViewController ()<UITextFieldDelegate>
+{
+    NSString *strDate;
+}
 
+@property (nonatomic,copy) NSString *username;
+@property (nonatomic,copy) NSString *password;
 @property (nonatomic,strong) UIButton *btnCode;
 @property (nonatomic,strong) UIImageView *imgView;
 @property (nonatomic,strong) UITextField *txtName;
@@ -21,30 +27,126 @@
 @property (nonatomic,strong) UITextField *txtCmdPwd;
 @property (nonatomic,copy) NSString *strCode;
 @property (nonatomic,strong) QCheckBox *checkAgree;
+@property (nonatomic,strong) UILabel *lblError;
 
 @end
 
 @implementation RegNameViewController
-- (void)regMobile
+- (void)registerServer
 {
-    NSDictionary *dict = @{@"type":@"2",@"account":@"17727610912",@"pwd":@"g123456",@"vcode":@"8162"};
-    [BaseService postJSONWithUrl:@"http://172.16.41.237:8088/mapi/phoneregister" parameters:dict success:^(id responseObject) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
-        DLog(@"dict:%@",dict);
+    if (strDate==nil)
+    {
+        return ;
     }
-    fail:nil];
+    _username = _txtName.text;
+    if ([_username length]==0)
+    {
+        [_lblError setText:@"用户名不能为空"];
+        return ;
+    }
+    int flag = [self MatchLetter:_username];
+    if (flag==0)
+    {
+        [_lblError setText:@"用户名第一位必须是字母"];
+        return ;
+    }
+    else if(flag == -1)
+    {
+        [_lblError setText:@"用户名只能包含数字、字母、下划线"];
+        return ;
+    }
+    _password = _txtPwd.text;
+    if ([_password length]==0)
+    {
+        [_lblError setText:@"密码不能为空"];
+        return ;
+    }
+    _lblError.text = @"";
+    [self.view makeToastActivity];
+    NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",_username,strDate];
+    strMd5 = [DecodeJson XCmdMd5String:strMd5];
+    strMd5 = [DecodeJson XCmdMd5String:strMd5];
+    NSString *strInfo = [NSString stringWithFormat:@"%@mapi/registerMulti",kRegisterNumber];
+    NSDictionary *parameters = @{@"account":_username,@"key":strMd5,@"pwd":_password,@"type":@"21"};
+    __weak RegNameViewController *__self = self;
+    __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+    [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id responseObject)
+     {
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+         dispatch_async(dispatch_get_main_queue(),
+         ^{
+             [__self.view hideToastActivity];
+         });
+         if ([dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
+         {
+             [__tcpSocket loginServer:__self.username pwd:__self.password];
+             dispatch_async(dispatch_get_main_queue(),
+             ^{
+                 [__self.view makeToast:@"注册成功"];
+             });
+             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(),
+             ^{
+                 [__self dismissViewControllerAnimated:YES completion:
+                 ^{
+                     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_PASSWROD_VC object:nil];
+                 }];
+             });
+         }
+         else
+         {
+             dispatch_async(dispatch_get_main_queue(),
+             ^{
+                 NSString *strNull = [dict objectForKey:@"errmsg"];
+                 if(strNull && ![strNull isKindOfClass:[NSNull class]])
+                 {
+                     [__self.lblError setText:[dict objectForKey:@"errmsg"]];
+                 }
+                 else
+                 {
+                     [__self.lblError setText:@"服务器异常"];
+                 }
+             });
+         }
+     }fail:^(NSError *error)
+     {
+         dispatch_async(dispatch_get_main_queue(),
+        ^{
+             [__self.view hideToastActivity];
+             [__self.lblError setText:@"连接服务器失败"];
+         });
+     }];
+}
+
+-(int)MatchLetter:(NSString *)str
+{
+    //判断是否以字母开头
+    NSString *ZIMU = @"^[^a-zA-Z][a-zA-Z0-9_\u4e00-\u9fa5]+$";
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", ZIMU];
+    if ([regextestmobile evaluateWithObject:str]==YES)
+    {
+        DLog(@"账号第一为只能是字符");
+        return 0;
+    }
+    ZIMU = @"^[a-zA-Z][a-zA-Z0-9_\u4e00-\u9fa5]+$";
+    regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", ZIMU];
+    if([regextestmobile evaluateWithObject:str]==YES)
+    {
+        return 1;
+    }
+    DLog(@"用户名只能包含数字、字母、下划线");
+    return -1;
 }
 
 - (void)getMobileCode:(NSString *)strMobile
 {
-    srand((unsigned int)time(NULL));
-    long  randomNum = rand();
-    NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&guid=%ld",strMobile,randomNum];
+    if (strDate==nil)
+    {
+        return ;
+    }
+    NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",strMobile,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    DLog(@"strMd5:%@",strMd5);
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    DLog(@"strMd5:%@",strMd5);
-    NSString *strInfo = [NSString stringWithFormat:@"http://172.16.41.237:8088/mapi/getregmsgcode?pnum=%@&key=%@&Guid=%ld",strMobile,strMd5,randomNum];
+    NSString *strInfo = [NSString stringWithFormat:@"%@mapi/getregmsgcode?pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
     [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
      {
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
@@ -78,6 +180,8 @@
     [textField setFont:XCFONT(15)];
     [textField setAutocorrectionType:UITextAutocorrectionTypeNo];
     [textField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    [textField setClearButtonMode:UITextFieldViewModeAlways];
+    [textField setKeyboardType:UIKeyboardTypeASCIICapable];
     return textField;
 }
 
@@ -89,8 +193,6 @@
 - (void)getAuthCode
 {
 
-   
-    
 }
 
 - (void)initUIHead
@@ -104,30 +206,30 @@
     
     [self createLabelWithRect:Rect(30, 80, 80, 30)];
     _txtName = [self createTextField:Rect(30, 80, kScreenWidth-60, 30)];
-    [_txtName setPlaceholder:@"请输入账号"];
+    [_txtName setPlaceholder:@"请输入用户名"];
     
     [self createLabelWithRect:Rect(30, 130,80, 30)];
-    _txtPwd = [self createTextField:Rect(_txtName.x,130,_txtName.width-100,_txtName.height)];
+    _txtPwd = [self createTextField:Rect(_txtName.x,130,_txtName.width,_txtName.height)];
     [_txtPwd setPlaceholder:@"请输入密码"];
-    _btnCode = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
-    [_btnCode setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
-    [_btnCode setTitleColor:kNavColor forState:UIControlStateHighlighted];
-    [_btnCode setTitle:@"获取验证码" forState:UIControlStateNormal];
-    [self.view addSubview:_btnCode];
+    [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
+
     _btnCode.frame = Rect(_txtPwd.x+_txtPwd.width+5,_txtPwd.y, 95, 30);
     [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
     _btnCode.titleLabel.font = XCFONT(15);
     
-    [self createLabelWithRect:Rect(30, 180, 80, 30)];
-    _txtCmdPwd = [self createTextField:Rect(_txtName.x,180,_txtName.width,_txtName.height)];
-    [_txtCmdPwd setPlaceholder:@"请再次输入密码"];
-    [_txtCmdPwd setSecureTextEntry:YES];
+//    [self createLabelWithRect:Rect(30, 180, 80, 30)];
+//    _txtCmdPwd = [self createTextField:Rect(_txtName.x,180,_txtName.width,_txtName.height)];
+//    [_txtCmdPwd setPlaceholder:@"请再次输入密码"];
+//    [_txtCmdPwd setSecureTextEntry:YES];
+    
+    _lblError = [[UILabel alloc] initWithFrame:Rect(30, 178, kScreenWidth-60, 20)];
+    [_lblError setFont:XCFONT(14)];
+    [_lblError setTextColor:[UIColor redColor]];
+    [self.view addSubview:_lblError];
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, 250, kScreenWidth-60, 40);
+    btnRegister.frame = Rect(30, 200, kScreenWidth-60, 40);
     [btnRegister setTitle:@"注册" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
@@ -139,7 +241,7 @@
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
     
     _checkAgree = [[QCheckBox alloc] initWithDelegate:self];
-    _checkAgree.frame = Rect(btnRegister.x, btnRegister.y+btnRegister.height+30,60,30);
+    _checkAgree.frame = Rect(btnRegister.x, btnRegister.y+btnRegister.height+10,60,30);
     [_checkAgree setTitle:@"同意" forState:UIControlStateNormal];
     [_checkAgree setTitleColor:UIColorFromRGB(0x555555) forState:UIControlStateNormal];
     [self.view addSubview:_checkAgree];
@@ -148,8 +250,8 @@
     
     UIButton *btnPro = [UIButton buttonWithType:UIButtonTypeCustom];
     UIButton *btnPri = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnPro setTitle:@"用户服务协议、" forState:UIControlStateNormal];
-    [btnPri setTitle:@"隐私权条款" forState:UIControlStateNormal];
+    [btnPro setTitle:@"《用户服务协议》" forState:UIControlStateNormal];
+    [btnPri setTitle:@"《隐私权条款》" forState:UIControlStateNormal];
     [btnPro setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateNormal];
     [btnPri setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateNormal];
     
@@ -157,22 +259,25 @@
     [self.view addSubview:btnPro];
     btnPri.titleLabel.font = XCFONT(14);
     btnPro.titleLabel.font = XCFONT(14);
-    CGSize sizePro = [@"用户服务协议、" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}];
-    CGSize sizePri = [@"隐私权条款" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}];
+    CGSize sizePro = [@"《用户服务协议》" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}];
+    CGSize sizePri = [@"《隐私权条款》" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}];
     btnPro.frame = Rect(_checkAgree.x+_checkAgree.width+2, _checkAgree.y,sizePro.width,30);
-    btnPri.frame = Rect(btnPro.x+btnPro.width, _checkAgree.y, sizePri.width, 30);
+    
+    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(btnPro.x+btnPro.width+3, _checkAgree.y,15,30)];
+    [lblTemp setText:@"和"];
+    [lblTemp setFont:XCFONT(14)];
+    [lblTemp setTextColor:UIColorFromRGB(0x343434)];
+    [self.view addSubview:lblTemp];
+    
+    btnPri.frame = Rect(btnPro.x+btnPro.width+18, _checkAgree.y, sizePri.width, 30);
     [btnPro addTarget:self action:@selector(openHttpView:) forControlEvents:UIControlEventTouchUpInside];
     [btnPri addTarget:self action:@selector(openHttpView:) forControlEvents:UIControlEventTouchUpInside];
     btnPro.tag = 101;
     btnPri.tag = 102;
-}
-
-- (void)closeKeyBoard
-{
     
 }
 
-- (void)registerServer
+- (void)closeKeyBoard
 {
     
 }
@@ -199,11 +304,39 @@
 {
     [super viewDidLoad];
     [self initUIHead];
+    [self setTitleText:@"账号注册"];
+    NSDate *date = [NSDate date];
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    [fmt setDateFormat:@"yyyyMMdd"];
+    strDate = [fmt stringFromDate:date];
+    [_txtName setDelegate:self];
+    [_txtPwd setDelegate:self];
+    [_txtName becomeFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (_txtName == textField)
+    {
+        NSString *strCode = @"[a-zA-Z0-9_\u4e00-\u9fa5]+$";
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strCode];;
+        if (range.location>16 || range.location+string.length>16 || ![predicate evaluateWithObject:string])
+        {
+            return NO;
+        }
+    }
+    else if(_txtPwd == textField)
+    {
+        if(range.location>16 || range.location+string.length > 16)
+        {
+            return NO;
+        }
+    }
+    return YES;
+}
 
 @end

@@ -12,9 +12,10 @@
 #import "Toast+UIView.h"
 #import "BaseService.h"
 
-@interface InputPwdViewController ()
+@interface InputPwdViewController ()<UITextFieldDelegate>
 @property (nonatomic,strong) UITextField *txtName;
 @property (nonatomic,copy) NSString *strMobile;
+@property (nonatomic,strong) UILabel *lblError;
 @property (nonatomic,copy) NSString *strPwd;
 @property (nonatomic,strong) UITextField *txtCode;
 @end
@@ -36,6 +37,9 @@
     [textField setFont:XCFONT(15)];
     [textField setAutocorrectionType:UITextAutocorrectionTypeNo];
     [textField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    [textField setClearButtonMode:UITextFieldViewModeAlways];
+    [textField setKeyboardType:UIKeyboardTypeASCIICapable];
+//    [textField setSecureTextEntry:YES];
     return textField;
 }
 
@@ -44,32 +48,42 @@
     NSString *strMobile = _txtName.text;
     if ([strMobile length]==0)
     {
-        [self.view makeToast:@"密码不能为空"];
+        [_lblError setText:@"密码不能为空"];
         return ;
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)
     {
-        [self.view makeToast:@"确认密码不能为空"];
+        [_lblError setText:@"确认密码不能为空"];
         return ;
     }
+    if (![strCode isEqualToString:strMobile])
+    {
+        [_lblError setText:@"两次密码不一致"];
+        return ;
+    }
+    [_lblError setText:@""];
+    [self.view makeToastActivity];
     NSDictionary *parameters = @{@"phone":_strMobile,@"password":strMobile};
-    NSString *strInfo = [NSString stringWithFormat:@"%@MApi/MobileFindPassword",kFindServer];
+    NSString *strInfo = [NSString stringWithFormat:@"%@MApi/MobileFindPassword",kRegisterNumber];
     _strPwd = strMobile;
     __weak InputPwdViewController *__self = self;
     __weak LSTcpSocket *__lsTcp = [LSTcpSocket sharedLSTcpSocket];
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id response)
      {
+         dispatch_async(dispatch_get_main_queue(), ^{
+             [__self.view hideToastActivity];
+         });
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableLeaves error:nil];
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
              [__lsTcp loginServer:__self.strMobile pwd:__self.strPwd];
              dispatch_async(dispatch_get_main_queue(),
              ^{
-                 [__self.view makeToast:@"密码设置成功"];
+                 [__self.lblError setText:@"密码设置成功"];
              });
-             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                 
+             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(),
+             ^{
                  [__self dismissViewControllerAnimated:YES completion:
                   ^{
                       [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_PASSWROD_VC object:nil];
@@ -80,14 +94,15 @@
          {
              dispatch_async(dispatch_get_main_queue(),
                             ^{
-                                [__self.view makeToast:[dict objectForKey:@"errmsg"] duration:2.0 position:@"center"];
+                                [__self.lblError setText:[dict objectForKey:@"errmsg"]];
                             });
          }
          
      } fail:^(NSError *error) {
          dispatch_async(dispatch_get_main_queue(),
                         ^{
-                            [__self.view makeToast:@"连接服务器失败"];
+                            [__self.view hideToastActivity];
+                            [__self.lblError setText:@"连接服务器失败"];
                         });
      }];
 }
@@ -114,6 +129,11 @@
     _txtCode = [self createTextField:Rect(_txtName.x,130,_txtName.width,_txtName.height)];
     [_txtCode setPlaceholder:@"请确认密码"];
     
+    _lblError = [[UILabel alloc] initWithFrame:Rect(30, 178, kScreenWidth-60, 20)];
+    [_lblError setFont:XCFONT(14)];
+    [_lblError setTextColor:[UIColor redColor]];
+    [self.view addSubview:_lblError];
+    
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
     btnRegister.frame = Rect(30, 200, kScreenWidth-60, 40);
@@ -126,6 +146,8 @@
     [btnRegister addTarget:self action:@selector(authMobile) forControlEvents:UIControlEventTouchUpInside];
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
+    
+    
 }
 
 - (void)closeKeyBoard
@@ -137,8 +159,10 @@
 {
     [super viewDidLoad];
     [self initUIHead];
-    _txtName.text =@"qwerty";
-    _txtCode.text =@"qwerty";
+    [_txtName setDelegate:self];
+    [_txtCode setDelegate:self];
+    [_txtName becomeFirstResponder];
+    [self setTitleText:@"设置密码"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -162,4 +186,24 @@
     _strMobile = strMobile;
     return  self;
 }
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (_txtName == textField)
+    {
+        if (range.location>16 || range.location+string.length>16)
+        {
+            return NO;
+        }
+    }
+    else if(_txtCode == textField)
+    {
+        if(range.location>16 || range.location+string.length > 16)
+        {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 @end
