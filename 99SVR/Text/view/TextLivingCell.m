@@ -17,6 +17,7 @@
 @property (nonatomic,strong) UILabel *lblName;
 @property (nonatomic,strong) UILabel *lblContent;
 @property (nonatomic,strong) UIButton *btnClick;
+@property (nonatomic,strong) UILabel *lblRoomId;
 
 @end
 
@@ -24,7 +25,7 @@
 
 - (void)initCell
 {
-    _imgView = [[UIImageView alloc] initWithFrame:Rect(8, 10, 40, 40)];
+    _imgView = [[UIImageView alloc] initWithFrame:Rect(8, 10, 45, 45)];
     [self.contentView addSubview:_imgView];
     [_imgView.layer setMasksToBounds:YES];
     _imgView.layer.cornerRadius = 20;
@@ -41,10 +42,19 @@
     
     _btnClick = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.contentView addSubview:_btnClick];
+    [_btnClick setTitle:@"0" forState:UIControlStateNormal];
+    [_btnClick setImage:[UIImage imageNamed:@"textcount"] forState:UIControlStateNormal];
+    [_btnClick setTitleColor:UIColorFromRGB(0xffa926) forState:UIControlStateNormal];
+    [self.contentView addSubview:_btnClick];
+    _btnClick.frame = Rect(kScreenWidth-80,8,70,30);
+    UIEdgeInsets btnInsets = _btnClick.imageEdgeInsets;
+    btnInsets.left -= 10;
+    _btnClick.imageEdgeInsets = btnInsets;
     
-    UILabel *line = [[UILabel alloc] initWithFrame:Rect(8,59, kScreenWidth-16, 0.5)];
-    [self.contentView addSubview:line];
-    [line setBackgroundColor:kLineColor];
+    _lblRoomId = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-130, 8, 50,20)];
+    [self.contentView addSubview:_lblRoomId];
+    
+    [_lblRoomId setFont:XCFONT(15)];
     
 }
 
@@ -74,10 +84,13 @@
 
 - (void)setTextRoomModel:(TextRoomModel *)teacher
 {
-    [_imgView sd_setImageWithURL:[NSURL URLWithString:teacher.roomPic]
+    NSString *url = [NSString stringWithFormat:@"%@%@",kImage_TEXT_URL,teacher.teacherId];
+    [_btnClick setTitle:teacher.ncount forState:UIControlStateNormal];
+    [_imgView sd_setImageWithURL:[NSURL URLWithString:url]
                 placeholderImage:[UIImage imageNamed:@"logo"]];
+    [_lblRoomId setText:teacher.rid];
     _lblName.text = teacher.roomName;
-    _lblContent.text = teacher.rid;
+    _lblContent.text = teacher.introduce;
 }
 
 @end

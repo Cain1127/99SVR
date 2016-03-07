@@ -8,6 +8,7 @@
 
 #import "TextChatViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "TextChatModel.h"
 #import "ChatViewCell.h"
 #import "UIImageView+WebCache.h"
 #import "Photo.h"
@@ -24,19 +25,21 @@
     NSMutableDictionary *_dictIcon;
     
     NSCache *cellCache;
-    UIView *downView;
-    UITextView *_textChat;
+    
     UILabel *lblPlace;
+    UITextView *_textChat;
     CGFloat deltaY;
+    UIView *downView;
     CGFloat duration;
     CGFloat originalY;
     EmojiView *_emojiView;
 }
 @property (nonatomic) int keyboardPresentFlag;
+@property (nonatomic,strong) UIButton *btnSend;
+
 @property (nonatomic,copy) NSArray *aryChat;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) TextTcpSocket *textSocket;
-@property (nonatomic,strong) UIButton *btnSend;
 
 @end
 
@@ -122,8 +125,8 @@
     }
     NSString *strContent = [_textChat.textStorage getPlainString];
     [_textSocket reqLiveChat:strContent to:0 toalias:@""];
-    
     [self closeKeyBoard];
+    _textChat.text = @"";
 }
 
 - (void)showEmojiView
@@ -161,17 +164,10 @@
     }
     else if([attachment isKindOfClass:[DTObjectTextAttachment class]])
     {
-        DTLazyImageView *imageView = [[DTLazyImageView alloc] initWithFrame:frame];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
         NSString *strName = [attachment.attributes objectForKey:@"value"];
-        //[$3$]  [$999$] [$62$]
-        if([strName intValue]==999 || [strName intValue]<=34)
-        {
-            [self findImage:strName imgView:imageView];
-        }
-        else
-        {
-            [self findImage:@"8" imgView:imageView];
-        }
+        NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"gif"];
+        [imageView sd_setImageWithURL:url1];
         return imageView;
     }
     return nil;
@@ -220,12 +216,10 @@
     NSString *strKey = [NSString stringWithFormat:@"%zi",indexPath.row];
     if (_aryChat.count >indexPath.row)
     {
-        NSString *strInfo = [_aryChat objectAtIndex:indexPath.row];
-        
+        TextChatModel *model = [_aryChat objectAtIndex:indexPath.row];
         cell.content.delegate = self;
         cell.content.shouldDrawImages = YES;
-        NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
-        
+        NSData *data = [model.content dataUsingEncoding:NSUTF8StringEncoding];
         [cell.content setAttributedString:[[NSAttributedString alloc] initWithHTMLData:data baseURL:nil documentAttributes:nil]];
     }
     else
@@ -315,7 +309,6 @@
     {
         downView.frame = Rect(0, kScreenHeight-50, kScreenWidth, 50);
     }
-    // 得到keyboard在当前controller的view中的Y轴坐标
 }
 
 - (void)closeKeyBoard
@@ -328,7 +321,6 @@
     if(_emojiView.hidden==NO)
     {
         [_emojiView setHidden:YES];
-        [self.view setFrame:Rect(0,0,kScreenWidth,kScreenHeight)];
         [downView setFrame:Rect(0,kScreenHeight-158,kScreenWidth,50)];
     }
 }
@@ -359,10 +351,12 @@
     EmojiTextAttachment *emojiTextAttachment = [EmojiTextAttachment new];
     emojiTextAttachment.emojiTag = strContent;
     emojiTextAttachment.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:strInfo ofType:@"gif"]];
-    emojiTextAttachment.emojiSize = CGSizeMake(15,15);
+    emojiTextAttachment.emojiSize = CGSizeMake(16,16);
     [_textChat.textStorage insertAttributedString:[NSAttributedString attributedStringWithAttachment:emojiTextAttachment]
                                           atIndex:_textChat.selectedRange.location];
+    
     _textChat.selectedRange = NSMakeRange(_textChat.selectedRange.location + 1, _textChat.selectedRange.length);
+    
     if ([_textChat.textStorage getPlainString].length==0)
     {
         lblPlace.text = @"点此和大家说点什么吧";

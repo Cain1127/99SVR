@@ -37,12 +37,7 @@
 #define LBS_HTTP_HOST3 @"http://lbs3.99ducaijing.cn:2222/"
 
 #define LBS_ROOM_WEB [NSString stringWithFormat:@"%@tygetweb",LBS_HTTP_HOST]
-
 #define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
-
-#define LBS_ROOM_STREAM @"http://lbs1.99ducaijing.cn:2222/tygetmedia"
-#define LBS_ROOM_STREAM1 @"http://lbs2.99ducaijing.cn:2222/tygetmedia"
-#define LBS_ROOM_STREAM2 @"http://lbs3.99ducaijing.cn:2222/tygetmedia"
 
 #define SVR_LBS_PORT 2222
 
@@ -68,6 +63,14 @@
 #define  kWXAPP_ID @"wxfbfe01336f468525"
 
 #define  kWXAPP_SEC @"acc28b09efbb768a1b5b7b6514903ef8"
+
+#define kImage_TEXT_URL @"http://172.16.41.99/test/getimage.php?tid="
+#define kTEXT_GROUP_URL @"http://172.16.41.99/test/test.php?act=script"
+#define kTEXT_NEW_DETAILS_URL @"http://172.16.41.99/viewpoint/index.php?s=/Index/getViewPoint/id/"
+
+//#define kImage_TEXT_URL @"http://121.33.236.180:22807/test/getimage.php?tid="
+//#define kTEXT_GROUP_URL @"http://121.33.236.180:22807/test/test.php?act=script"
+//#define kTEXT_NEW_DETAILS_URL @"http://121.33.236.180:22807/viewpoint/index.php?s=/Index/getViewPoint/id/"
 
 #endif
 

@@ -56,7 +56,7 @@
     __weak HomeViewController *__self = self;
     [BaseService postJSONWithUrl:@"http://172.16.41.99/test/test.php?act=script" parameters:nil success:^(id responseObject)
      {
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if (dict && [dict objectForKey:@"groups"])
          {
              NSMutableArray *array = [NSMutableArray array];

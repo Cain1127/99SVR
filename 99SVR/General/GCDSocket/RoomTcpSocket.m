@@ -8,6 +8,7 @@
 
 #import "RoomTcpSocket.h"
 #import "cmd_vchat.h"
+#import "DeviceUID.h"
 #import "BaseService.h"
 #import "NoticeModel.h"
 #import "SDImageCache.h"
@@ -540,6 +541,11 @@
         strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
     }
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
+    NSString *uid = [DeviceUID uid];
+    if (uid && uid>0)
+    {
+        strcpy(req.cSerial,[uid UTF8String]);
+    }
     req.time = (uint32)time(0);
     req.devtype = 2;
     req.bloginSource = [UserInfo sharedUserInfo].otherLogin;

@@ -72,7 +72,7 @@
     __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id responseObject)
      {
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          dispatch_async(dispatch_get_main_queue(),
          ^{
              [__self.view hideToastActivity];
@@ -97,7 +97,7 @@
              dispatch_async(dispatch_get_main_queue(),
              ^{
                  NSString *strNull = [dict objectForKey:@"errmsg"];
-                 if(strNull && ![strNull isKindOfClass:[NSNull class]])
+                 if(strNull)
                  {
                      [__self.lblError setText:[dict objectForKey:@"errmsg"]];
                  }
@@ -149,7 +149,7 @@
     NSString *strInfo = [NSString stringWithFormat:@"%@mapi/getregmsgcode?pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
     [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
      {
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          DLog(@"dict:%@",dict);
          
      } fail:nil];

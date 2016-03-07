@@ -392,12 +392,6 @@ if(_block) \
         return ;
     }
     memcpy(pub,frame->content,inmsg->length-sizeof(COM_MSG_HEADER)-sizeof(cmd_video_frame_data_t));
-    if(frame->ts <= m_nLastRecvTS && m_nLastRecvTS-frame->ts <400)
-    {
-        DLog(@"丢弃");
-        free(pNewMsg);
-        return;
-    }
     bool bfound=false;
     MediaBuffer *mBuffer = nil;
     for (MediaBuffer *oldBuffer in _aryVideo)
@@ -470,8 +464,10 @@ if(_block) \
             {
                 if(length>0)
                 {
-                    NSData *data = [NSData dataWithBytes:cBuffer length:length];
-                    [_audioBuf addObject:data];
+                    @synchronized(_audioBuf) {
+                        NSData *data = [NSData dataWithBytes:cBuffer length:length];
+                        [_audioBuf addObject:data];
+                    }
                 }
             }
         }
@@ -483,8 +479,10 @@ if(_block) \
             @autoreleasepool {
                 if(length>0)
                 {
-                    NSData *data = [NSData dataWithBytes:cBuffer length:length];
-                    [_videoBuf addObject:data];
+                    @synchronized(_videoBuf) {
+                        NSData *data = [NSData dataWithBytes:cBuffer length:length];
+                        [_videoBuf addObject:data];
+                    }
                 }
             }
             
@@ -558,7 +556,6 @@ if(_block) \
     DLog(@"释放MediaSocket");
     [_audioBuf removeAllObjects];
     _audioBuf = nil;
-    
     [_videoBuf removeAllObjects];
     _videoBuf = nil;
 }

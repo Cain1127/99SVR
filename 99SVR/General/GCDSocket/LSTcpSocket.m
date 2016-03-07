@@ -19,6 +19,7 @@
 #import "message_vchat.h"
 #import "DecodeJson.h"
 #import "GCDAsyncSocket.h"
+#import "DeviceUID.h"
 #import "crc32.h"
 #import "RoomInfo.h"
 #import "RoomUser.h"
@@ -225,6 +226,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
     req.platformType = [UserInfo sharedUserInfo].otherLogin;
     req.nversion = 4000000;
     req.nmask = (int)time(0);
+    NSString *uid = [DeviceUID uid];
+    if (uid && uid>0)
+    {
+        strcpy(req.cSerial,[uid UTF8String]);
+    }
     [UserInfo sharedUserInfo].strUser = _strUser;
     req.nimstate = 0;
     req.nmobile = 2;
@@ -250,6 +256,11 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
             strcpy(req.cuserpwd,[strMd5 UTF8String]);
         }
         [UserInfo sharedUserInfo].strPwd = _strPwd;
+    }
+    NSString *uid = [DeviceUID uid];
+    if (uid && uid>0)
+    {
+        strcpy(req.cSerial,[uid UTF8String]);
     }
     req.nimstate = 0;
     req.nmobile = 2;

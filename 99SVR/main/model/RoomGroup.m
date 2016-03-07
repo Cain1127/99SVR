@@ -29,6 +29,10 @@
 + (RoomGroup*)resultWithDict:(NSDictionary* )dict
 {
     RoomGroup *result = [[RoomGroup alloc] init];
+    if ([dict isKindOfClass:[NSString class]])
+    {
+        return result;
+    }
     NSArray* propertyArray = [result getPropetName];
     for (NSString* key in propertyArray) {
         @try

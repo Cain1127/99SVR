@@ -45,11 +45,9 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[CrashReporter sharedInstance] installWithAppId:@"900018787" applicationGroupIdentifier:@"com.hctt.fae99"];
-    
     [[MTAConfig getInstance] setDebugEnable:TRUE];
     [[MTAConfig getInstance] setAutoExceptionCaught:FALSE];
     [[MTAConfig getInstance] setSmartReporting:false];
@@ -64,10 +62,11 @@
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_window makeKeyAndVisible];
     leftView = [[LeftViewController alloc] init];
-    indexView = [[IndexViewController alloc] init];
-//    rightView = [[RightViewController alloc] init];
-//    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
-    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
+    
+//    indexView = [[IndexViewController alloc] init];
+    rightView = [[RightViewController alloc] init];
+    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
+//    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
     [_window setRootViewController:_sides];
     _sides.speedf = 0.5;
     return YES;
@@ -78,7 +77,7 @@
     __weak AppDelegate *__self = self;
     [BaseService postJSONWithUrl:APP_URL parameters:nil success:^(id responseObject)
     {
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
         NSArray *infoArray = [dic objectForKey:@"results"];
         if ([infoArray count])
         {
@@ -178,7 +177,6 @@
 {
     if ([response isKindOfClass:WBAuthorizeResponse.class])
     {
-        DLog(@"登录状态:%zi",response.statusCode);
         if ((int)response.statusCode == 0)
         {
             NSDictionary *dic = @{@"userID":[(WBAuthorizeResponse *)response userID],

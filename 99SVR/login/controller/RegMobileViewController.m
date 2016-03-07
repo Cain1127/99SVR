@@ -82,8 +82,8 @@
     __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
     [BaseService postJSONWithUrl:strInfo parameters:paramters success:^(id responseObject)
     {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
-        if(dict && ![[dict objectForKey:@"errcode"] isKindOfClass:[NSNull class]] && [[dict objectForKey:@"errcode"] intValue]==1)
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+        if(dict && ![dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
         {
             dispatch_async(dispatch_get_main_queue(),
             ^{
@@ -133,7 +133,7 @@
     __weak RegMobileViewController *__self = self;
     [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
      {
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
              DLog(@"dict:%@",dict);

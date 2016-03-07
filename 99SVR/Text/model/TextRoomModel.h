@@ -13,8 +13,9 @@
 @property (nonatomic,copy) NSString *rid;
 @property (nonatomic,copy) NSString *roomName;
 @property (nonatomic,copy) NSString *roomPic;
-@property (nonatomic,assign) int zans;
-
+@property (nonatomic,copy) NSString *introduce;
+@property (nonatomic,copy) NSString *ncount;
+@property (nonatomic,copy) NSString *teacherId;
 
 + (TextRoomModel *)resultWithDict:(NSDictionary* )dict;
 

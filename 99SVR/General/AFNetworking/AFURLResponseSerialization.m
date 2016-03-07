@@ -95,7 +95,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     }
 
     self.stringEncoding = NSUTF8StringEncoding;
-
+    
     self.acceptableStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)];
     self.acceptableContentTypes = nil;
 
@@ -203,14 +203,15 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 
 @implementation AFJSONResponseSerializer
 
-+ (instancetype)serializer {
++ (instancetype)serializer
+{
     return [self serializerWithReadingOptions:(NSJSONReadingOptions)0];
 }
 
 + (instancetype)serializerWithReadingOptions:(NSJSONReadingOptions)readingOptions {
     AFJSONResponseSerializer *serializer = [[self alloc] init];
     serializer.readingOptions = readingOptions;
-
+    serializer.removesKeysWithNullValues = YES;
     return serializer;
 }
 
@@ -257,9 +258,11 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
             data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
 
             if (data) {
-                if ([data length] > 0) {
+                if ([data length] > 0)
+                {
                     responseObject = [NSJSONSerialization JSONObjectWithData:data options:self.readingOptions error:&serializationError];
-                } else {
+                } else
+                {
                     return nil;
                 }
             } else {

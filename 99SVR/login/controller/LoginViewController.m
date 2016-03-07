@@ -320,8 +320,8 @@
 //    __weak LoginViewController *__self = self;
     __weak UIView *__hidenView = hidenView;
     [BaseService getJSONWithUrl:@"http://lbs1.99ducaijing.cn:2222/tygetconf" parameters:nil success:^(id responseObject) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
-        if (dict && [dict objectForKey:@"checkstate"] && ![[dict objectForKey:@"checkstate"] isKindOfClass:[NSNull class]]) {
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+        if (dict && [dict objectForKey:@"checkstate"]) {
             NSString *strStatus = [dict objectForKey:@"checkstate"];
             if (![strStatus isEqualToString:@"1"])
             {
@@ -453,7 +453,7 @@
         return ;
     }
     
-    if (dict && ![[dict objectForKey:@"code"] isKindOfClass:[NSNull class]])
+    if (dict && [dict objectForKey:@"code"])
     {
         NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByWeixin?client=2&code=%@",kRegisterNumber,[dict objectForKey:@"code"]];
         __weak LoginViewController *__self = self;
@@ -465,7 +465,7 @@
             ^{
                 [__self.view hiddenActivityInView];
             });
-            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
             if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
                 [[dict objectForKey:@"token"] isKindOfClass:[NSString class]])
             {
@@ -518,9 +518,8 @@
         });
         return ;
     }
-    if (dict && [dict objectForKey:@"userID"] && [dict objectForKey:@"accessToken"] &&
-        ![[dict objectForKey:@"userID"] isKindOfClass:[NSNull class]]
-        && ![[dict objectForKey:@"accessToken"] isKindOfClass:[NSNull class]]) {
+    //检测 user id
+    if (dict && [dict objectForKey:@"userID"] && [dict objectForKey:@"accessToken"]) {
         __weak LoginViewController *__self = self;
         NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByWeibo?client=2&openid=%@&token=%@",
                              kRegisterNumber,[dict objectForKey:@"userID"],[dict objectForKey:@"accessToken"]];
@@ -530,7 +529,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [__self.view hiddenActivityInView];
             });
-            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
             if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
                 [[dict objectForKey:@"token"] isKindOfClass:[NSString class]])
             {
@@ -658,7 +657,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [__self.view hiddenActivityInView];
             });
-            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
             if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
                 [[dict objectForKey:@"token"] isKindOfClass:[NSString class]] )
             {
@@ -804,7 +803,7 @@
         ^{
             [__self.view hiddenActivityInView];
         });
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
         if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
             [[dict objectForKey:@"token"] isKindOfClass:[NSString class]])
         {

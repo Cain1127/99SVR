@@ -38,7 +38,12 @@
     UILabel *versionLabel = [[UILabel alloc] init];
     versionLabel.font = kFontSize(17);
     versionLabel.textColor = [UIColor colorWithHex:@"#343434"];
-    versionLabel.text = [NSString stringWithFormat:@"版本 V%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    #ifdef DEBUG
+        versionLabel.text = [NSString stringWithFormat:@"版本 V%@,build:%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
+                             [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+    #else
+        versionLabel.text = [NSString stringWithFormat:@"版本 V%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    #endif
     [self.view addSubview:versionLabel];
     __weak AboutController *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),

@@ -8,6 +8,8 @@
 
 #import "TextHomeViewController.h"
 #import "RightView.h"
+#import "TeachView.h"
+#import "TextHistoryViewController.h"
 #import "UIButton+WebCache.h"
 #import "UIImage+WebP.h"
 #import "GroupView.h"
@@ -21,6 +23,7 @@
 #import "TextNewViewController.h"
 #import "BaseService.h"
 #import "TextRoomModel.h"
+#import "TextTodayVPViewController.h"
 
 @interface TextHomeViewController ()<UIScrollViewDelegate,RightViewDelegate>
 {
@@ -32,6 +35,7 @@
     int _currentPage;
     int32_t _roomId;
     UIView *hidenView;
+    TeachView *_teachView;
 }
 @property (nonatomic,strong) RightView *rightView;
 @property (nonatomic,strong) ThumButton *btnTitle;
@@ -88,18 +92,24 @@
     
 }
 
+- (void)showTeacherView
+{
+    hidenView.hidden = NO;
+    _teachView.hidden = NO;
+}
+
 - (void)initUIHead
 {
     _headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
     _headView.backgroundColor = kNavColor;
-    
     _btnTitle = [[ThumButton alloc] initWithFrame:Rect(kScreenWidth/2-50, 20, 100, 44) size:40 fontSize:16];
     [_btnTitle setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     if (_model)
     {
+        NSString *url = [NSString stringWithFormat:@"%@%@",kImage_TEXT_URL,_model.teacherId];
         [_btnTitle setTitle:_model.roomName forState:UIControlStateNormal];
-        [_btnTitle sd_setImageWithURL:[NSURL URLWithString:_model.roomPic]
+        [_btnTitle sd_setImageWithURL:[NSURL URLWithString:url]
                              forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"logo"]];
     }
     else
@@ -112,13 +122,14 @@
     [_headView addSubview:_btnTitle];
     _btnTitle.titleLabel.textAlignment = NSTextAlignmentCenter;
     _btnTitle.titleLabel.font = XCFONT(16);
-    
     [self refreshBtnTitle];
+    [_btnTitle addTarget:self action:@selector(showTeacherView) forControlEvents:UIControlEventTouchUpInside];
     
     NSArray *aryMen = @[@"直播",@"聊天",@"观点"];
     _group = [[GroupView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44) ary:aryMen];
     [self.view addSubview:_group];
     [_group setBtnTag:1 tag1:2 tag2:3];
+    
     _scrollView = [[UIScrollView alloc] initWithFrame:Rect(0,_group.y+_group.height,
                                 kScreenWidth, kScreenHeight-_group.y-_group.height)];
     [self.view addSubview:_scrollView];
@@ -162,6 +173,10 @@
     [self.view addSubview:hidenView];
     hidenView.hidden = YES;
     
+    _teachView = [[TeachView alloc] initWithFrame:Rect(0, 64, kScreenWidth,140)];
+    [hidenView addSubview:_teachView];
+    _teachView.hidden = YES;
+    
     _rightView = [[RightView alloc] initWithFrame:Rect(kScreenWidth-153, 64, 145, 133)];
     [hidenView addSubview:_rightView];
     _rightView.hidden = YES;
@@ -173,9 +188,11 @@
     
     __weak TextHomeViewController *__self = self;
     __weak UIView *__hidnView = hidenView;
+    __weak TeachView *__teachView = _teachView;
     [hidenView clickWithBlock:^(UIGestureRecognizer *gesture)
     {
         __hidnView.hidden = YES;
+        __teachView.hidden = YES;
         __self.rightView.hidden = YES;
     }];
     
@@ -322,9 +339,7 @@
                __rightView.btnFirst.selected = NO;
            }
        }
-       
    });
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -333,6 +348,22 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTeacherInfo) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reconnectTextRoom) name:MESSAGE_RECONNECT_TIMER_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respCollet:) name:MESSAGE_TEXT_COLLET_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showJoinErr:) name:MESSAGE_TEXT_JOIN_ROOM_ERR_VC object:nil];
+}
+
+- (void)showJoinErr:(NSNotification *)notify
+{
+    if (notify.object)
+    {
+        NSString *strMsg = notify.object;
+        DLog(@"strMsg:%@",strMsg);
+        __block NSString *__strMsg = strMsg;
+        __weak TextHomeViewController *__self = self;
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+            [__self.view makeToast:__strMsg];
+        });
+    }
 }
 
 - (void)reconnectTextRoom
@@ -349,10 +380,16 @@
 - (void)updateTeacherInfo
 {
     __weak TextHomeViewController *__self = self;
+    __weak TeachView *__teachView = _teachView;
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        [__self.btnTitle setTitle:_textSocket.teacher.strName forState:UIControlStateNormal];
+        [__self.btnTitle setTitle:__self.textSocket.teacher.strName forState:UIControlStateNormal];
         [__self refreshBtnTitle];
+        [__teachView setTeachModel:__self.textSocket.teacher];
+        if(__self.textSocket.teacher.fansflag==1)
+        {
+            __self.rightView.btnFirst.selected = YES;
+        }
     });
 }
 
@@ -369,18 +406,28 @@
             [self sendCollet];
             break;
         case 2:
-            break;
+        {
+            TextTodayVPViewController *todayVIP = [[TextTodayVPViewController alloc] initWithSocket:_textSocket];
+            [self presentViewController:todayVIP animated:YES completion:nil];
+        }
+        break;
         case 3:
-            break;
+        {
+            TextHistoryViewController *historyView = [[TextHistoryViewController alloc] initWithSocket:_textSocket];
+            [self presentViewController:historyView animated:YES completion:nil];
+        }
+        break;
         default:
             break;
     }
+    hidenView.hidden = YES;
+    _rightView.hidden = YES;
 }
 
 - (void)sendCollet
 {
-    
     [_textSocket reqTeacherCollet:_rightView.btnFirst.selected ? 2 : 1];
+    
 }
 
 - (void)gotoTextTodayVI

@@ -14,58 +14,144 @@
 #import "TeacherModel.h"
 #import "TextHomeViewController.h"
 #import "TextLivingCell.h"
+#import "TextGroupList.h"
 
-@interface TextViewController ()<UITableViewDataSource,UITableViewDelegate,HotTeachDelegate>
+@interface TextViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
+{
+    NSInteger _tag;
+    CGFloat fWidth;
+    CGFloat startContentOffsetX;
+    CGFloat willEndContentOffsetX;
+    NSInteger _currentPage;
+    int updateCount;
+    UILabel *_line1;
+}
 
 @property (nonatomic,strong) UIScrollView *scrollView;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryHot;
 @property (nonatomic,copy) NSArray *aryLiving;
+@property (nonatomic,strong) UIScrollView *scrollHeader;
+@property (nonatomic,strong) NSMutableArray *aryGroup;
 
 @end
 
 @implementation TextViewController
 
-//- (void)initLivingData
-//{
-//    NSMutableArray *array = [NSMutableArray array];
-//    for (int i=0; i<10; i++)
-//    {
-//        TeacherModel *model = [[TeacherModel alloc] init];
-//        model.strImg=@"";
-//        model.strName = @"帅哥";
-//        model.strContent = @"投资市场人才辈出，各领风骚载！他一历经多年钻石，鹤立鸡群，他...";
-//        model.zans = 200;
-//        [array addObject:model];
-//    }
-//    _aryLiving = array;
-//}
+- (void)initHeadScroller
+{
+    _scrollHeader = [[UIScrollView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 46)];
+    [self.view addSubview:_scrollHeader];
+    _scrollHeader.clipsToBounds = YES;
+    _scrollHeader.pagingEnabled = YES;
+    _scrollHeader.showsHorizontalScrollIndicator = NO;
+    _scrollHeader.showsVerticalScrollIndicator = NO;
+    _scrollHeader.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _scrollHeader.contentSize = CGSizeMake(0, 46);
+    
+    CGSize sizeWidth = [@"视频直播间" sizeWithAttributes:@{NSFontAttributeName:XCFONT(15)}];
+    fWidth = sizeWidth.width;
+}
+
+- (void)settingTextGroup
+{
+    __weak TextViewController *__self = self;
+    __weak UILabel *__line1 = _line1;
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        int i=0;
+        for (TextGroupList *textList in __self.aryGroup)
+        {
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [btn setTitle:textList.gname forState:UIControlStateNormal];
+            UIColor *titleColor = [UIColor colorWithHex:@"#555555"];
+            UIColor *selectedColor = [UIColor colorWithHex:@"#427ede"];
+            [btn setTitleColor:titleColor forState:UIControlStateNormal];
+            [btn setTitleColor:selectedColor forState:UIControlStateHighlighted];
+            [btn setTitleColor:selectedColor forState:UIControlStateSelected];
+            btn.titleLabel.font = XCFONT(14);
+            btn.frame = Rect(__self.scrollHeader.contentSize.width,0, fWidth, 44);
+            [__self.scrollHeader addSubview:btn];
+            __self.scrollHeader.contentSize = CGSizeMake(btn.x+btn.width, 44);
+            btn.tag = i;
+            i++;
+            [btn addTarget:__self action:@selector(selectTabButton:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        [__self.scrollHeader addSubview:__line1];
+        __line1.frame = Rect(0, 44, fWidth, 2);
+        
+        NSInteger tag = 0;
+        int  nCount = (int)[_aryGroup count];
+        for (tag = 0 ; tag<nCount;tag++)
+        {
+            UITableView *tableView = [[UITableView alloc] initWithFrame:Rect(tag*kScreenWidth,0,kScreenWidth,__self.scrollView.height)];
+            tableView.tag = tag;
+            tableView.delegate = __self;
+            tableView.dataSource = __self;
+            [__self.scrollView addSubview:tableView];
+            [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+            [tableView reloadData];
+        }
+        __self.scrollView.contentSize = CGSizeMake(kScreenWidth * nCount,__self.scrollView.height);
+        [__self setSelectInfo:0];
+    });
+}
+
+- (void)setSelectInfo:(NSInteger)tag
+{
+    for (UIButton *btn in _scrollHeader.subviews)
+    {
+        if (![btn isKindOfClass:[UIButton class]])
+        {
+            continue;
+        }
+        if(btn.tag == tag)
+        {
+            btn.selected = YES;
+        }
+        else
+        {
+            if(btn.selected)
+            {
+                btn.selected = NO;
+            }
+        }
+    }
+}
+
+- (void)selectTabButton:(UIButton *)btn
+{
+    for (UIView *sender in _scrollHeader.subviews)
+    {
+        if([sender isKindOfClass:[UIButton class]])
+        {
+            [(UIButton *)sender setSelected:NO];
+        }
+    }
+    [btn setSelected:YES];
+    _tag = (int)btn.tag;
+    [_scrollView setContentOffset:CGPointMake(btn.tag*kScreenWidth, 0)];
+    [self setBluePointX:_scrollView.contentOffset.x];
+}
 
 - (void)initLivingData
 {
      __weak TextViewController *__self = self;
-     [BaseService postJSONWithUrl:@"http://172.16.41.99/test/test.php?act=script" parameters:nil success:^(id responseObject)
+     [BaseService postJSONWithUrl:kTEXT_GROUP_URL parameters:nil success:^(id responseObject)
      {
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if (dict && [dict objectForKey:@"groups"])
          {
-             NSMutableArray *array = [NSMutableArray array];
              NSArray *aryResult = [dict objectForKey:@"groups"];
              for (NSDictionary *roomDict in aryResult)
              {
-                 if ([roomDict objectForKey:@"rooms"])
-                 {
-                     NSArray *aryRoom = [roomDict objectForKey:@"rooms"];
-                     for (NSDictionary *textRoom in aryRoom) {
-                         TextRoomModel *room = [TextRoomModel resultWithDict:textRoom];
-                         [array addObject:room];
-                     }
-                 }
+                 TextGroupList *groupList = [TextGroupList resultWithDict:roomDict];
+                 [__self.aryGroup addObject:groupList];
              }
-             __self.aryLiving = array;
          }
          dispatch_async(dispatch_get_main_queue(),
          ^{
+             [__self settingTextGroup];
              [__self.tableView reloadData];
          });
      } fail:nil];
@@ -75,44 +161,30 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
+    _aryGroup = [NSMutableArray array];
     [self setTitleText:@"文字直播"];
-    [self initLivingData];
-    NSMutableArray *array = [NSMutableArray array];
-    for (int i=0; i<2; i++)
-    {
-        TeacherModel *model = [[TeacherModel alloc] init];
-        model.strImg=@"";
-        model.strName = @"帅哥";
-        model.strContent = @"投资市场人才辈出，各领风骚载！他一历经多年钻石，鹤立鸡群，他...";
-        model.zans = 200;
-        [array addObject:model];
-    }
-    _aryHot = array;
+    [self initHeadScroller];
     [self initUIHead];
+    _line1 = [UILabel new];
+    _line1.backgroundColor = UIColorFromRGB(0x629aff);
+    [_line1 setFrame:Rect(0,2,fWidth,2)];
+    
     [self initScrollView];
+    [self initLivingData];
 }
 
 - (void)initScrollView
 {
-/*
-    UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(8, 74, kScreenWidth, 20)];
-    [lblHot setText:@"热门讲师"];
-    [lblHot setFont:XCFONT(15)];
-    [lblHot setTextColor:UIColorFromRGB(0x427ede)];
-    [self.view addSubview:lblHot];
-    
-    _scrollView = [[UIScrollView alloc] initWithFrame:Rect(0, lblHot.y+lblHot.height+10, kScreenWidth, (kScreenWidth/2+80)*(_aryHot.count/2))];
+    _scrollView = [[UIScrollView alloc] initWithFrame:Rect(0, 110, kScreenWidth,kScreenHeight - 160)];
     [self.view addSubview:_scrollView];
     _scrollView.clipsToBounds = YES;
     _scrollView.pagingEnabled = YES;
     _scrollView.bounces = NO;
+    _scrollView.delegate = self;
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _scrollView.contentSize = CGSizeMake(kScreenWidth,(kScreenWidth/2+70)*(_aryHot.count/2));
-    [self initWithHot];
-*/
-    [self initTableView];
+    _scrollView.contentSize = CGSizeMake(kScreenWidth,kScreenHeight - 110);
 }
 
 - (void)initUIHead
@@ -120,52 +192,18 @@
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftBtn setImage:[UIImage imageNamed:@"switcher"] forState:UIControlStateNormal];
     [leftBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-     {
-         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
-     }];
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
+    }];
     [self setLeftBtn:leftBtn];
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
+    __weak TextViewController *__self = self;
     [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture)
     {
-    
+        [__self initLivingData];
     }];
     [self setRightBtn:rightBtn];
-}
-
-- (void)initWithHot
-{
-    int nX,nY;
-    int nWidth = kScreenWidth/2;
-    int nHeight = (kScreenWidth/2+80);
-    for (int i=0;i<_aryHot.count; i++)
-    {
-        nX = i%2*kScreenWidth/2;
-        nY = i/2*(kScreenWidth/2+80);
-        HotTextView *hotView = [[HotTextView alloc] initWithFrame:Rect(nX, nY,nWidth,nHeight)];
-        [_scrollView addSubview:hotView];
-        [hotView setHotText:[_aryHot objectAtIndex:i]];
-        hotView.delegate = self;
-    }
-}
-
-- (void)initTableView
-{
-    UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(8,70, kScreenWidth, 20)];
-    [lblHot setText:@"正在直播"];
-    [lblHot setFont:XCFONT(15)];
-    [lblHot setTextColor:UIColorFromRGB(0x427ede)];
-    [self.view addSubview:lblHot];
-    
-    UILabel *line = [[UILabel alloc] initWithFrame:Rect(8,92, kScreenWidth-16, 0.5)];
-    [self.view addSubview:line];
-    [line setBackgroundColor:kLineColor];
-    
-    _tableView = [[UITableView alloc] initWithFrame:Rect(0, lblHot.y+lblHot.height+5, kScreenWidth,kScreenHeight-(lblHot.y+lblHot.height+5+50))];
-    [self.view addSubview:_tableView];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
 - (void)didReceiveMemoryWarning
@@ -176,7 +214,12 @@
 #pragma mark table view delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _aryLiving.count;
+    if(_aryGroup.count > tableView.tag)
+    {
+        TextGroupList *textList = [_aryGroup objectAtIndex:tableView.tag];
+        return textList.rooms.count;
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -187,22 +230,113 @@
     {
         cell = [[TextLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strCellIdentifier];
     }
-    TextRoomModel *model = [_aryLiving objectAtIndex:indexPath.row];
-    [cell setTextRoomModel:model];
+    if(_aryGroup.count > tableView.tag)
+    {
+        TextGroupList *textList = [_aryGroup objectAtIndex:tableView.tag];
+        TextRoomModel *model = [textList.rooms objectAtIndex:indexPath.row];
+        [cell setTextRoomModel:model];
+        return cell;
+    }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    TextRoomModel *teach = [_aryLiving objectAtIndex:indexPath.row];
-    TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithModel:teach];
-    [self presentViewController:textHome animated:YES completion:nil];
+    
+    if(_aryGroup.count > tableView.tag)
+    {
+        TextGroupList *textList = [_aryGroup objectAtIndex:tableView.tag];
+        TextRoomModel *teach = [textList.rooms objectAtIndex:indexPath.row];
+        TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithModel:teach];
+        [self presentViewController:textHome animated:YES completion:nil];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 60;
 }
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (scrollView != _scrollView)
+    {
+        return ;
+    }
+    //拖动前的起始坐标
+    startContentOffsetX = scrollView.contentOffset.x;
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if (scrollView != _scrollView)
+    {
+        return ;
+    }
+    //将要停止前的坐标
+    willEndContentOffsetX = scrollView.contentOffset.x;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView != _scrollView || (willEndContentOffsetX == 0 && startContentOffsetX ==0) )
+    {
+        return ;
+    }
+    [self setBluePointX:scrollView.contentOffset.x];
+    int temp = floor((scrollView.contentOffset.x - kScreenWidth/2.0)/kScreenWidth +1);//判断是否翻页
+    if (temp != _currentPage)
+    {
+        if (temp > _currentPage)
+        {
+            if (_tag<_aryGroup.count)
+            {
+                _tag ++;
+                [self setSelectInfo:_tag];
+                CGFloat x = (_scrollHeader.contentOffset.x+fWidth*0.5+kScreenWidth) >= _scrollHeader.contentSize.width ? _scrollHeader.contentSize.width-kScreenWidth : (_scrollHeader.contentOffset.x+fWidth*0.5);
+                
+                _scrollHeader.contentOffset = CGPointMake(x, 0);
+            }
+        }
+        else
+        {
+            if (_tag>=1)
+            {
+                _tag--;
+                [self setSelectInfo:_tag];
+                CGFloat x = (_scrollHeader.contentOffset.x-fWidth*0.5) <= 0 ? 0 : (_scrollHeader.contentOffset.x-fWidth*0.5);
+                _scrollHeader.contentOffset = CGPointMake(x, 0);
+            }
+        }
+        updateCount++;
+        _currentPage = temp;
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (scrollView != _scrollView)
+    {
+        return ;
+    }
+    if (updateCount ==1)//正常
+    {
+        
+    }
+    else if(updateCount==0 && _currentPage ==0)
+    {
+    }
+    updateCount = 0;
+    startContentOffsetX = 0;
+    willEndContentOffsetX = 0;
+}
+
+- (void)setBluePointX:(CGFloat)fPointX
+{
+    CGFloat fx = fPointX/kScreenWidth * fWidth;
+    [_line1 setFrame:Rect(fx,44,fWidth,2)];
+}
+
 
 @end

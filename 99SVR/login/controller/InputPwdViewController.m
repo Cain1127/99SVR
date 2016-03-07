@@ -74,7 +74,7 @@
          dispatch_async(dispatch_get_main_queue(), ^{
              [__self.view hideToastActivity];
          });
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableLeaves error:nil];
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
              [__lsTcp loginServer:__self.strMobile pwd:__self.strPwd];

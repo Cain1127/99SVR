@@ -7,8 +7,8 @@
 //
 
 @class TextTcpSocket ;
-@interface TextLiveViewController : UIViewController
 
+@interface TextLiveViewController : UIViewController
 
 - (id)initWithSocket:(TextTcpSocket *)textSocket;
 

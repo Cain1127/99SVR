@@ -80,7 +80,6 @@
     line1.backgroundColor = UIColorFromRGB(0x629aff);
     [self addSubview:line1];
     _line1 = line1;
-    
     [_line1 setFrame:Rect(_btnFirst.width/2-fTempWidth/2,self.height-2,fTempWidth,2)];
     
     return self;

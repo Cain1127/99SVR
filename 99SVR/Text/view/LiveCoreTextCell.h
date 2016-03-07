@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <DTCoreText/DTCoreText.h>
 
-@class ThumButton;
 @class LiveCoreTextCell;
+@class TextLiveModel;
 
 @protocol ThumCellDelagate <NSObject>
 
@@ -22,10 +22,18 @@
 
 @property (nonatomic,strong) DTAttributedTextContentView *textCoreView;
 @property (nonatomic,strong) UILabel *lblTime;
-@property (nonatomic,strong) ThumButton *btnThum;
+@property (nonatomic,strong) UIButton *btnThum;
 @property (nonatomic,strong) UILabel *line;
 @property (nonatomic) int64_t messageid;
 @property (nonatomic,assign) id<ThumCellDelagate> delegate;
 @property (nonatomic) NSInteger section;
+@property (nonatomic) int64_t viewid;
+
+- (void)hiddenThum;
+
+- (void)setTextModel:(TextLiveModel *)model;
+
+
+
 
 @end

@@ -287,7 +287,7 @@
     __weak NSString *__strPwd = strPwd;
     [BaseService postJSONWithUrl:strUrl parameters:parameters success:^(id response)
      {
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableLeaves error:nil];
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if (dict)
          {
              int nValue = [[dict objectForKey:@"errcode"] intValue];

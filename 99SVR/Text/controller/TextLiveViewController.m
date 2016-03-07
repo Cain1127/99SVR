@@ -8,6 +8,7 @@
 
 #import "TextLiveViewController.h"
 #import "LiveCoreTextCell.h"
+#import "NewDetailsViewController.h"
 #import "Toast+UIView.h"
 #import "TextLiveModel.h"
 #import "textTcpSocket.h"
@@ -17,6 +18,7 @@
 #import "UIImage+animatedGIF.h"
 #import "MJRefresh.h"
 #import "ThumButton.h"
+#import "TeacherModel.h"
 
 @interface TextLiveViewController ()<UITableViewDataSource,UITableViewDelegate,DTAttributedTextContentViewDelegate,ThumCellDelagate>
 {
@@ -26,7 +28,7 @@
 }
 
 @property (nonatomic) int nCurrent;
-@property (nonatomic,strong) NSMutableArray *aryLive;
+@property (nonatomic,copy) NSArray *aryLive;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) TextTcpSocket *textSocket;
 
@@ -71,6 +73,7 @@
     _tableView.footer.appearencePercentTriggerAutoRefresh = 300.0;
     [_tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(requestTextLive)];
     [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(requestMoreTextLive)];
+    [_tableView setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
 }
 
 - (void)requestMoreTextLive
@@ -82,12 +85,18 @@
 
 - (void)requestTextLive
 {
-    [_aryLive removeAllObjects];
-    [_tableView reloadData];
-    [_tableView.header beginRefreshing];
-    [_tableView.footer resetNoMoreData];
+    _aryLive = _textSocket.aryText;
+    DLog(@"重新加载");
+    __weak UITableView *__table = _tableView;
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        [__table reloadData];
+        [__table.header beginRefreshing];
+        [__table.footer resetNoMoreData];
+    });
     _nCurrent = 0;
     [_textSocket reqTextRoomList:_nCurrent count:20 type:1];
+    _nCurrent += 20;
 }
 
 - (void)didReceiveMemoryWarning
@@ -152,28 +161,14 @@
     [selectView setBackgroundColor:[UIColor clearColor]];
     cell.selectedBackgroundView = selectView;
     
-    NSDate *date = [NSDate date];
-    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-    fmt.dateStyle = kCFDateFormatterShortStyle;
-    fmt.timeStyle = kCFDateFormatterShortStyle;
-    NSString *strTime = [fmt stringFromDate:date];
     
-    [cell.lblTime setText:strTime];
+    [cell.lblTime setText:NSStringFromInt64(textModel.messagetime)];
     cell.section = indexPath.section;
+    
+    [cell setTextModel:textModel];
     
     CGFloat fHeight = [cell.textCoreView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
     [cellCache setObject:NSStringFromFloat(fHeight) forKey:cacheKey];
-    
-    if (textModel.bZan)
-    {
-        [cell.btnThum setTitle:NSStringFromInt64(textModel.zans+1) forState:UIControlStateNormal];
-        cell.btnThum.selected = YES;
-    }
-    else
-    {
-        [cell.btnThum setTitle:NSStringFromInt64(textModel.zans) forState:UIControlStateNormal];
-        cell.btnThum.selected = NO;
-    }
     
     cell.messageid = textModel.messageid;
     cell.delegate = self;
@@ -183,13 +178,21 @@
 
 - (void)liveCore:(LiveCoreTextCell *)liveCore msgid:(int64_t)messageid
 {
-    if (liveCore.btnThum.selected)
+    if([liveCore.btnThum.titleLabel.text isEqualToString:@"详情>>>"])
     {
-        return ;
+        NewDetailsViewController *newView = [[NewDetailsViewController alloc] initWithSocket:_textSocket viewID:liveCore.viewid];
+        [self presentViewController:newView animated:YES completion:nil];
     }
-    [_textSocket reqZans:messageid];
-    liveCore.btnThum.selected = YES;
-    [dict setObject:liveCore forKey:NSStringFromInt((int)messageid)];
+    else
+    {
+        if (liveCore.btnThum.selected)
+        {
+            return ;
+        }
+        [_textSocket reqZans:messageid];
+        liveCore.btnThum.selected = YES;
+        [dict setObject:liveCore forKey:NSStringFromInt((int)messageid)];
+    }
 }
 
 #pragma mark DTCoreText Delegate
@@ -198,10 +201,19 @@
     if ([attachment isKindOfClass:[DTImageTextAttachment class]])
     {
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
-        [imageView sd_setImageWithURL:attachment.contentURL completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL)
-         {
-          
-         }];
+        if([attachment.contentURL.absoluteString isEqualToString:@"text_live_ask_icon"])
+        {
+            [imageView setImage:[UIImage imageNamed:@"text_live_ask_icon"]];
+        }
+        else if([attachment.contentURL.absoluteString isEqualToString:@"text_live_answer_icon"])
+        {
+            [imageView setImage:[UIImage imageNamed:@"text_live_answer_icon"]];
+        }
+        else
+        {
+            [imageView sd_setImageWithURL:attachment.contentURL completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL)
+             {}];
+        }
         imageView.userInteractionEnabled = YES;
         [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(showImageInfo:)]];
@@ -209,16 +221,10 @@
     }
     else if([attachment isKindOfClass:[DTObjectTextAttachment class]])
     {
-        DTLazyImageView *imageView = [[DTLazyImageView alloc] initWithFrame:frame];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
         NSString *strName = [attachment.attributes objectForKey:@"value"];
-        if([strName intValue]==999 || [strName intValue]<=34)
-        {
-            [self findImage:strName imgView:imageView];
-        }
-        else
-        {
-            [self findImage:@"8" imgView:imageView];
-        }
+        NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"gif"];
+        [imageView sd_setImageWithURL:url1];
         return imageView;
     }
     return nil;
@@ -271,6 +277,7 @@
 - (void)reLoadTextList
 {
     _aryLive = _textSocket.aryText;
+    DLog(@"重新加载");
     __weak TextLiveViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
     ^{
@@ -307,20 +314,22 @@
     if (messageid && [dict objectForKey:messageid])
     {
         LiveCoreTextCell *cell =  [dict objectForKey:messageid];
-        TextLiveModel *textModel = [_aryLive objectAtIndex:cell.section];
-        textModel.bZan = YES;
-        __weak LiveCoreTextCell *__cell = cell;
-        __weak TextLiveViewController *__self = self;
-        [dict removeObjectForKey:messageid];
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-            [__self.view makeToast:@"点赞成功"];
-            NSInteger message = [__cell.btnThum.titleLabel.text integerValue];
-            message++;
-            [__cell.btnThum setTitle:NSStringFromInteger(message) forState:UIControlStateNormal];
-        });
+        if(_aryLive.count>cell.section)
+        {
+            TextLiveModel *textModel = [_aryLive objectAtIndex:cell.section];
+            textModel.bZan = YES;
+            __weak LiveCoreTextCell *__cell = cell;
+            __weak TextLiveViewController *__self = self;
+            [dict removeObjectForKey:messageid];
+            dispatch_async(dispatch_get_main_queue(),
+            ^{
+                [__self.view makeToast:@"点赞成功"];
+                NSInteger message = [__cell.btnThum.titleLabel.text integerValue];
+                message++;
+                [__cell.btnThum setTitle:NSStringFromInteger(message) forState:UIControlStateNormal];
+            });
+        }
     }
-    
 }
 
 

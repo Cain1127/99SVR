@@ -34,7 +34,9 @@
     _textLen = resp->textlen;
 //    _reqcommentstype = resp->reqcommentstype;
     _srcinteractid = resp->srcinteractid;
-    _strContent = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
+    char cBuf[_textLen];
+    memcpy(cBuf,resp->content,_textLen);
+    _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
     
 }
 

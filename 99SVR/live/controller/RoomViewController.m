@@ -927,7 +927,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomBeExit:) name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(room_kickout) name:MESSAGE_ROOM_KICKOUT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeNotification) name:MESSAGE_REMOVE_NOTIFY_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reConnectRoomInfo) name:MESSAGE_RECONNECT_TIMER_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomSucsess) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
@@ -965,7 +964,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)removeNotification
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNotification) name:MESSAGE_ADD_NOTIFY_VC object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -1337,7 +1335,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     cell.lblInfo.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
     NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
     cell.lblInfo.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:nil documentAttributes:nil];
-    CGFloat fHeight = [cell.lblInfo.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+10;
+    CGFloat fHeight = [cell.lblInfo.attributedTextContentView
+                       suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+10;
     [_cellCache setObject:NSStringFromFloat(fHeight) forKey:cacheKey];
     UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
     [selectView setBackgroundColor:[UIColor clearColor]];
@@ -1424,27 +1423,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
             }
         }
     }
-}
-
-#pragma mark LazyImageView Delegate
-- (void)lazyImageView:(DTLazyImageView *)lazyImageView didChangeImageSize:(CGSize)size
-{
-    //    NSURL *url = lazyImageView.url;
-    //    CGSize imageSize = size;
-    //    NSPredicate *pred = [NSPredicate predicateWithFormat:@"contentURL == %@", url];
-    //    for (DTAttributedTextCell *cell in self.noticeView.visibleCells)
-    //    {
-    //        for (DTTextAttachment *oneAttachment in
-    //             [cell.attributedTextContextView.layoutFrame textAttachmentsWithPredicate:pred])
-    //        {
-    //            oneAttachment.originalSize = CGSizeMake(40, 40);
-    //            if (!CGSizeEqualToSize(imageSize, oneAttachment.displaySize))
-    //            {
-    //                oneAttachment.displaySize = CGSizeMake(40,40);
-    //            }
-    //        }
-    //        [cell.attributedTextContextView relayoutText];
-    //    }
 }
 
 #pragma mark EmojiViewDelegate

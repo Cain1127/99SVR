@@ -8,6 +8,8 @@
 
 #import "TextNewViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "NewDetailsViewController.h"
+#import "TextNewCell.h"
 #import "IdeaDetails.h"
 #import "TextLiveModel.h"
 #import "LiveCoreTextCell.h"
@@ -17,12 +19,15 @@
 #import "PhotoViewController.h"
 #import "UIImage+animatedGIF.h"
 #import "TextTcpSocket.h"
+#import "EmojiView.h"
 
 @interface TextNewViewController ()<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate>
 {
     NSCache *cellCache;
     NSMutableDictionary *_dictIcon;
+    
 }
+
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryNew;
 @property (nonatomic,strong) TextTcpSocket *textSocket;
@@ -48,6 +53,7 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [_tableView setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
 }
 
 - (void)viewDidLoad
@@ -73,17 +79,10 @@
     }
     else if([attachment isKindOfClass:[DTObjectTextAttachment class]])
     {
-        DTLazyImageView *imageView = [[DTLazyImageView alloc] initWithFrame:frame];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
         NSString *strName = [attachment.attributes objectForKey:@"value"];
-        //[$3$]  [$999$] [$62$]
-        if([strName intValue]==999 || [strName intValue]<=34)
-        {
-            [self findImage:strName imgView:imageView];
-        }
-        else
-        {
-            [self findImage:@"8" imgView:imageView];
-        }
+        NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"gif"];
+        [imageView sd_setImageWithURL:url1];
         return imageView;
     }
     return nil;
@@ -128,59 +127,39 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LiveCoreTextCell *cell = [self tableView:tableView preparedCellForIndexPath:indexPath];
-    return cell;
-}
-
-
-- (LiveCoreTextCell *)tableView:(UITableView *)tableView preparedCellForIndexPath:(NSIndexPath *)indexPath
-{
-    NSString *cacheKey = nil;
-    NSString *strInfo = nil;
-    cacheKey =[NSString stringWithFormat:@"newtableview-%zi", indexPath.section];
-    IdeaDetails *textModel = [_aryNew objectAtIndex:indexPath.section];
-    strInfo = textModel.strContent;
-    if (cellCache == nil )
+    static NSString *strTextNew = @"textnewtableviewcellidentifier";
+    
+    TextNewCell *cell = [tableView dequeueReusableCellWithIdentifier:strTextNew];
+    if(cell==nil)
     {
-        cellCache = [[NSCache alloc] init];
+        cell = [[TextNewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strTextNew];
     }
-    LiveCoreTextCell *cell = [cellCache objectForKey:cacheKey];
-    if (cell==nil)
+    if(_aryNew.count > indexPath.section)
     {
-        cell = [[LiveCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextLiveIdentifier"];
+        IdeaDetails *idea = [_aryNew objectAtIndex:indexPath.section];
+        [cell setDetails:idea];
     }
-    cell.textCoreView.delegate = self;
-    cell.textCoreView.shouldDrawImages = YES;
-    [cellCache setObject:cell forKey:cacheKey];
-    NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
-    cell.textCoreView.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:nil documentAttributes:nil];
-    UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
-    [selectView setBackgroundColor:[UIColor clearColor]];
-    cell.selectedBackgroundView = selectView;
-    NSDate *date = [NSDate date];
-    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-    fmt.dateStyle = kCFDateFormatterShortStyle;
-    fmt.timeStyle = kCFDateFormatterShortStyle;
-    NSString *strTime = [fmt stringFromDate:date];
-    [cell.lblTime setText:strTime];
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    LiveCoreTextCell *cell = [self tableView:tableView preparedCellForIndexPath:indexPath];
-    CGFloat fHeight = [cell.textCoreView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
-    return fHeight+66;
+//    LiveCoreTextCell *cell = [self tableView:tableView preparedCellForIndexPath:indexPath];
+//    CGFloat fHeight = [cell.textCoreView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
+    return 150;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     IdeaDetails *idea = [_aryNew objectAtIndex:indexPath.section];
-    DLog(@"idea:%zi",idea.messageid);
+//    DLog(@"idea:%zi",idea.messageid);
 //    [[TextTcpSocket sharedTextTcpSocket] reqIdeaDetails:0 count:20 ideaId:(int)idea.messageid];
 //    [[TextTcpSocket sharedTextTcpSocket] replyCommentReq:@"你好啊" msgid:idea.messageid toid:idea.userid];
 //    [[TextTcpSocket sharedTextTcpSocket] reqCommentZan:idea.messageid];
-    [_textSocket reqSendFlower:idea.messageid count:20];
+//    [_textSocket reqSendFlower:idea.messageid count:20];
+    NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:_textSocket model:idea];
+    [self presentViewController:detailView animated:YES completion:nil];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -194,7 +173,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadNew) name:MESSAGE_TEXT_NEW_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reqTextNewMessage) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
@@ -202,7 +182,7 @@
 
 - (void)reqTextNewMessage
 {
-    [_textSocket reqNewList:0 index:0 count:20];
+    [_textSocket reqNewList:0 count:20];
 }
 
 - (void)reloadNew
@@ -214,6 +194,5 @@
         [__self.tableView reloadData];
     });
 }
-
 
 @end

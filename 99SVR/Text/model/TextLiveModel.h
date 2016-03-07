@@ -19,13 +19,16 @@
 @property (nonatomic) short type;
 @property (nonatomic) short textlen;
 @property (nonatomic) short destextlen;
+@property (nonatomic) short livetype;
 @property (nonatomic) uint64_t time;
 @property (nonatomic) int64_t zans;
+@property (nonatomic) int64_t viewid;
 @property (nonatomic,copy) NSString *strContent;
 @property (nonatomic) int64_t messageid;
 @property (nonatomic) int64 totalzans;
 @property (nonatomic) int64  flowers;
 @property (nonatomic) BOOL bZan;
+@property (nonatomic) int64 messagetime;
 
 - (id)initWithNotify:(CMDTextRoomLiveListNoty_t *)notify;
 - (id)initWithPointNotify:(CMDTextRoomLivePointNoty_t *)notify;

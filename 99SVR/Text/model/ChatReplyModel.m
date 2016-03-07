@@ -57,6 +57,7 @@
     _messageTime = resp->messagetime;
     _reqTextlen = resp->reqtextlen;
     _resTextLen = resp->restextlen;
+    _liveflag = resp->liveflag;
     _strContent = [[NSString alloc] initWithCString:resp->content encoding:GBK_ENCODING];
 }
 

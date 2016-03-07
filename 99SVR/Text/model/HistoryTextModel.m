@@ -7,6 +7,7 @@
 //
 
 #import "HistoryTextModel.h"
+#import "DecodeJson.h"
 
 @implementation HistoryTextModel
 
@@ -30,19 +31,8 @@
     _srcName = [NSString stringWithCString:resp->srcuseralias encoding:GBK_ENCODING];
     _zans = resp->zans;
     _msgid = resp->messageid;
-    if (resp->pointflag)
-    {
-        _type = 2;
-    }
-    else if(resp->forecastflag)
-    {
-        _type = 3;
-    }
-    else
-    {
-        _type = 1;
-    }
     _strContent = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
+    _strContent = [DecodeJson replaceEmojiString:_strContent];
 }
 
 @end

@@ -64,7 +64,14 @@
     _textlen = notify->textlen;
     _zans = notify->zans;
     _time = notify->messagetime;
-    _strContent = [NSString stringWithCString:notify->content encoding:GBK_ENCODING];
+    _messagetime = notify->messagetime;
+    _livetype = notify->livetype;
+    char cBuf[_textlen];
+    memset(cBuf, 0, _textlen);
+    memcpy(cBuf,notify->content,_textlen);
+    _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
+    _strContent = [DecodeJson replaceEmojiString:_strContent];
+    DLog(@"_messageid:%zi--strContent:%@--textlen:%d",_messageid,_strContent,_textlen);
 }
 
 - (id)initWithNotify:(CMDTextRoomLiveListNoty_t *)notify
@@ -80,25 +87,8 @@
 - (void)decodeStruct:(CMDTextRoomLiveListNoty_t *)notify
 {
     //类型：1-文字直播；2-直播重点；3-明日预测（已关注的用户可查看）；4-观点；
-    if (notify->pointflag)
-    {
-        _type = 2;
-    }
-    else if(notify->forecastflag)
-    {
-        _type = 3;
-    }
-    else
-    {
-        if(notify->livetype==5)
-        {
-            _type = 4;
-        }
-        else
-        {
-            _type = 1;
-        }
-    }
+    DLog(@"livetype:%d",notify->livetype);
+    _livetype = notify->livetype;
     _strTeacherName = [NSString stringWithCString:notify->srcuseralias encoding:GBK_ENCODING];
     _teacherid = notify->teacherid;
     _vcbid = notify->vcbid;
@@ -107,32 +97,46 @@
     _textlen = notify->textlen;
     _destextlen = notify->destextlen;
     _zans = notify->zans;
-    _time = notify->messagetime;
-    _strContent = [NSString stringWithCString:notify->content encoding:GBK_ENCODING];
-    _strContent = [DecodeJson replaceEmojiString:_strContent];
-    
-    DLog(@"_messageid:%zi--strContent:%@--zans:%lld",_messageid,_strContent,_zans);
-    
-}
-
-- (void)decodeContent:(CMDTextRoomLiveListNoty_t*)notify
-{
-    char inner_charStr[12];
-    for( int i=0; i<10; i++ )
+    _messagetime = notify->messagetime;
+    _viewid = notify->viewid;
+    char cBuf[_textlen];
+    memset(cBuf, 0, _textlen);
+    memcpy(cBuf,notify->content,_textlen);
+    if (_livetype==4)
     {
-        inner_charStr[i] = 1;
-    }
-    inner_charStr[10] = 0;
-    inner_charStr[11] = 0;
-    NSString *strInfo = [NSString stringWithCString:notify->content encoding:GBK_ENCODING];
-    strInfo = [DecodeJson replaceEmojiString:strInfo];
-    NSRange range = [strInfo rangeOfString:[NSString stringWithFormat:@"%s",inner_charStr]];
-    if(range.location != NSNotFound)
-    {
-        DLog(@"找到图片");
+        char cTitle[_textlen];
+        memset(cTitle, 0, _textlen);
+        memcpy(cTitle, notify->content, _textlen);
         
+        if (_destextlen>0)
+        {
+            char cDest[_destextlen];
+            memset(cDest, 0, _destextlen);
+            memcpy(cDest, notify->content+_textlen,_destextlen);
+            
+            NSString *strTitle = [NSString stringWithCString:cTitle encoding:GBK_ENCODING];
+            NSString *strDest = [NSString stringWithCString:cDest encoding:GBK_ENCODING];
+            
+            _strContent = [NSString stringWithFormat:@"<img src=\"text_live_ask_icon\" width=\"15\" height=\"15\">:%@<br><img src=\"text_live_answer_icon\" width=\"15\" height=\"15\">:%@",
+                           strTitle,strDest];
+            _strContent = [DecodeJson replaceEmojiString:_strContent];
+        }
     }
-    
+    else if(_livetype==5)
+    {
+        char cTitle[_textlen];
+        memset(cTitle, 0, _textlen);
+        memcpy(cTitle, notify->content, _textlen);
+        _strContent = [NSString stringWithCString:cTitle encoding:GBK_ENCODING];
+        _strContent = [DecodeJson replaceEmojiString:_strContent];
+        DLog(@"消息回复长度:%d",_destextlen);
+    }
+    else
+    {
+        _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
+        _strContent = [DecodeJson replaceEmojiString:_strContent];
+    }
+    DLog(@"_messageid:%zi--strContent:%@--textlen:%d",_messageid,_strContent,_textlen);
 }
 
 @end

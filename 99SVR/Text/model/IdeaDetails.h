@@ -23,6 +23,7 @@
 @property (nonatomic) int64 flowers;
 @property (nonatomic) int64 comments;
 @property (nonatomic,copy) NSString *strContent;
+@property (nonatomic,copy) NSString *strTitle;
 
 - (id)initWithIdeaDetails:(CMDTextRoomLiveViewRes_t *)resp;
 

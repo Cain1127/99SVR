@@ -22,7 +22,7 @@
 #import "Common.h"
 #import "UIView+Extension.h"
 #import "ImportHeader.h"
-
+#import "NSJSONSerialization+RemovingNulls.h"
 
 #define UIColorFromRGBHex(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -47,11 +47,10 @@ typedef enum {
 #endif
 
 /*
-1.账号自定义登录
-2.内存上涨到
-3.图文混排
-4.
- 
+2.0功能
+1.提示框改动
+2.注册，填写昵称
+3.
  
 
 [UserInfo sharedUserInfo].nUserId = 1764964;

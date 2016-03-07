@@ -21,4 +21,8 @@
 - (void)addDefaultHeader:(NSString *)title;
 - (void)setLineHidden:(BOOL)bHidden;
 
+
+
+
+
 @end

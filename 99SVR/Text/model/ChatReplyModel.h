@@ -21,6 +21,7 @@
 @property (nonatomic) UInt64 messageTime;
 @property (nonatomic) short reqTextlen;
 @property (nonatomic) short resTextLen;
+@property (nonatomic) int8_t liveflag;
 
 @property (nonatomic,copy) NSString *strContent;
 

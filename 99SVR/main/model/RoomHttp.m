@@ -28,6 +28,10 @@ NSArray * getPropertyNameList(id object)
 + (RoomHttp*)resultWithDict:(NSDictionary* )dict
 {
     RoomHttp *result = [[RoomHttp alloc] init];
+    if ([dict isKindOfClass:[NSString class]])
+    {
+        return result;
+    }
     NSArray* propertyArray = getPropertyNameList(result);
     for (NSString* key in propertyArray) {
         @try

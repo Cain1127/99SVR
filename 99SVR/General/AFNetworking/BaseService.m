@@ -44,11 +44,13 @@
     // 设置请求格式
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.requestSerializer.stringEncoding = NSUTF8StringEncoding;
+    manager.requestSerializer.timeoutInterval = 10;
     // 设置返回格式
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.requestSerializer.timeoutInterval = 10;
+    
+    
     [manager GET:urlStr parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
+    {
          if (success)
          {
              success(responseObject);
@@ -56,7 +58,6 @@
      }
           failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-//         DLog(@"error:%@",error);
          if (fail)
          {
              fail(error);
@@ -70,6 +71,7 @@
     // 设置请求格式
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.requestSerializer.stringEncoding = NSUTF8StringEncoding;
+    manager.requestSerializer.timeoutInterval = 10;
     // 设置返回格式
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:urlStr parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
@@ -94,13 +96,10 @@
     // 本地上传给服务器时,没有确定的URL,不好用MD5的方式处理
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    //@"http://localhost/demo/upload.php"
     [manager POST:urlStr parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         
     NSData *uploadData = UIImageJPEGRepresentation(imgInfo,0.5);
     DLog(@"kb:%zi",uploadData.length/1024);
-//      [formData appendPartWithFileURL:fileURL name:@"uploadFile" fileName:fileName mimeType:fileTye error:NULL];
-        
          [formData appendPartWithFileData:uploadData name:@"file"
                                 fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
         
@@ -125,7 +124,6 @@
     //
     // 实际上就是AFN没有对响应数据做任何处理的情况
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
     // formData是遵守了AFMultipartFormData的对象
     [manager POST:urlStr parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         
