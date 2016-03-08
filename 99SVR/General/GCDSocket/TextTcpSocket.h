@@ -105,6 +105,7 @@
  *  @param nCount 个数
  */
 - (void)reqNewList:(int)nIndex count:(int)nCount;
+
 /**
  *  请求观点详情,默认请求类型为2
  *

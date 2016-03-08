@@ -8,6 +8,7 @@
 
 #import "NewDetailsViewController.h"
 #import "TextTcpSocket.h"
+#import "UIImageView+WebCache.h"
 #import "Toast+UIView.h"
 #import "IdeaDetailRePly.h"
 #import "CommentCell.h"
@@ -20,7 +21,7 @@
 #import "NSAttributedString+EmojiExtension.h"
 #import "EmojiTextAttachment.h"
 
-@interface NewDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,EmojiViewDelegate,UIScrollViewDelegate>
+@interface NewDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,EmojiViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate>
 {
     UIView *contentView;
     UILabel *lblPlace;
@@ -272,17 +273,43 @@
     if(_aryCommont.count > indexPath.row)
     {
         IdeaDetailRePly *comment = [_aryCommont objectAtIndex:indexPath.row];
+        cell.textView.shouldDrawImages = YES;
+//        cell.textView.shouldDrawLinks = YES;
+        cell.textView.delegate = self;
         cell.textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[comment.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
         [cell setModel:comment];
     }
     return cell;
 }
 
+#pragma mark DTCoreText Delegate
+- (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame
+{
+    if ([attachment isKindOfClass:[DTImageTextAttachment class]])
+    {
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
+        [imageView sd_setImageWithURL:attachment.contentURL];
+        imageView.userInteractionEnabled = YES;
+        [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                action:@selector(showImageInfo:)]];
+        return imageView;
+    }
+    else if([attachment isKindOfClass:[DTObjectTextAttachment class]])
+    {
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
+        NSString *strName = [attachment.attributes objectForKey:@"value"];
+        NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"gif"];
+        [imageView sd_setImageWithURL:url1];
+        return imageView;
+    }
+    return nil;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    IdeaDetailRePly *comment = [_aryCommont objectAtIndex:indexPath.row];
     if (_aryCommont.count>indexPath.row)
     {
+        IdeaDetailRePly *comment = [_aryCommont objectAtIndex:indexPath.row];
         DTAttributedTextContentView *content = [DTAttributedTextContentView new];
         content.attributedString = [[NSAttributedString alloc] initWithHTMLData:[comment.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
         CGFloat height = [content suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-80].height;

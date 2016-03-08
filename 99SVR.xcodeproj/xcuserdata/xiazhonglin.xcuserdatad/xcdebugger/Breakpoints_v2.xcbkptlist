@@ -26,7 +26,7 @@
                   moduleName = "99SVR"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/xiazhonglin/Desktop/99SVR-1.2/99SVR/login/controller/LoginViewController.m"
-                  timestampString = "479035483.916168"
+                  timestampString = "479109964.163225"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "499"
@@ -41,7 +41,7 @@
                   moduleName = "99SVR"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/xiazhonglin/Desktop/99SVR-1.2/99SVR/login/controller/LoginViewController.m"
-                  timestampString = "479035483.916569"
+                  timestampString = "479109964.16349"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "500"
@@ -49,6 +49,54 @@
                   offsetFromSymbolStart = "20">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "99SVR/Text/model/TextLiveModel.m"
+            timestampString = "479060927.315088"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
+            landmarkName = "-decodePointList:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "99SVR/Text/controller/NewDetailsViewController.m"
+            timestampString = "479063157.78028"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "99SVR/Text/controller/NewDetailsViewController.m"
+            timestampString = "479063180.531064"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "288"
+            endingLineNumber = "288"
+            landmarkName = "-attributedTextContentView:viewForAttachment:frame:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

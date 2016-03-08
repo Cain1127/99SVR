@@ -8,6 +8,8 @@
 
 #import "TextLiveModel.h"
 #import "DecodeJson.h"
+#import "NSDate+convenience.h"
+#import "UserInfo.h"
 
 @implementation TextLiveModel
 
@@ -65,6 +67,7 @@
     _zans = notify->zans;
     _time = notify->messagetime;
     _messagetime = notify->messagetime;
+    [self settingTime];
     _livetype = notify->livetype;
     char cBuf[_textlen];
     memset(cBuf, 0, _textlen);
@@ -99,6 +102,9 @@
     _zans = notify->zans;
     _messagetime = notify->messagetime;
     _viewid = notify->viewid;
+    
+    [self settingTime];
+    
     char cBuf[_textlen];
     memset(cBuf, 0, _textlen);
     memcpy(cBuf,notify->content,_textlen);
@@ -137,6 +143,26 @@
         _strContent = [DecodeJson replaceEmojiString:_strContent];
     }
     DLog(@"_messageid:%zi--strContent:%@--textlen:%d",_messageid,_strContent,_textlen);
+}
+
+- (void)settingTime
+{
+    UserInfo *userinfo = [UserInfo sharedUserInfo];
+    DLog(@"time:%@",NSStringFromInt64(_messagetime));
+    NSDate *date = [userinfo.fmt dateFromString:NSStringFromInt64(_messagetime)];
+    int result = [DecodeJson compareDate:date];
+    if (result == 1)
+    {
+        _strTime = [NSString stringWithFormat:@"今天 %zi:%zi:%zi",date.hour,date.minute,date.second];
+    }
+    else if(result == 0)
+    {
+        _strTime = [NSString stringWithFormat:@"昨天 %zi:%zi:%zi",date.hour,date.minute,date.second];
+    }
+    else
+    {
+        _strTime = [NSString stringWithFormat:@"%d年%d月%d日 %d:%d:%d",date.year,date.month,date.day,date.hour,date.minute,date.second];
+    }
 }
 
 @end

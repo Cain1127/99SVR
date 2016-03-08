@@ -205,7 +205,7 @@
     [selectView setBackgroundColor:[UIColor clearColor]];
     cell.selectedBackgroundView = selectView;
    
-    [cell.lblTime setText:NSStringFromInt64(textModel.messagetime)];
+//    [cell.lblTime setText:NSStringFromInt64(textModel.messagetime)];
     cell.section = indexPath.section;
     
     [cell setTextModel:textModel];

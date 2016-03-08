@@ -63,5 +63,13 @@
  */
 + (BOOL)getSrcMobile:(NSString *)mobileInfo;
 
+/**
+ *  时期计算，今天，昨天
+ *
+ *  @param date 比较日期
+ *
+ *  @return 1 今天 0 昨天 
+ */
++ (int)compareDate:(NSDate *)date;
 
 @end

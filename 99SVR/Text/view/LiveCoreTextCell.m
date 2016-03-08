@@ -71,6 +71,7 @@
 
 - (void)setTextModel:(TextLiveModel *)model
 {
+    [_lblTime setText:model.strTime];
     if(model.livetype==5)
     {
         [_btnThum setImage:nil forState:UIControlStateNormal];

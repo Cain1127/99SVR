@@ -6,6 +6,9 @@
 //  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 #import "IdeaDetailRePly.h"
+#import "UserInfo.h"
+#import "NSDate+convenience.h"
+#import "DecodeJson.h"
 
 @implementation IdeaDetailRePly
 
@@ -32,12 +35,24 @@
     _viewuserid = resp->viewuserid;
     _viewuserid = resp->viewuserid;
     _textLen = resp->textlen;
-//    _reqcommentstype = resp->reqcommentstype;
-    _srcinteractid = resp->srcinteractid;
+    NSDate *date = [[UserInfo sharedUserInfo].fmt dateFromString:NSStringFromInt64(_messageTime)];
+    int result = [DecodeJson compareDate:date];
+    if (result == 1)
+    {
+        _time = [NSString stringWithFormat:@"今天 %d:%d:%d",date.hour,date.minute,date.second];
+    }
+    else if(result == 0)
+    {
+        _time = [NSString stringWithFormat:@"昨天 %d:%d:%d",date.hour,date.minute,date.second];
+    }
+    else
+    {
+        _time = [NSString stringWithFormat:@"%d月%d日 %d:%d:%d",date.month,date.day,date.hour,date.minute,date.second];
+    }
     char cBuf[_textLen];
     memcpy(cBuf,resp->content,_textLen);
     _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
-    
+    _strContent = [DecodeJson replaceEmojiString:_strContent];
 }
 
 @end

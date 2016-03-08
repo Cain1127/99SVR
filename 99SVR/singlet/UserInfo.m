@@ -52,6 +52,16 @@ DEFINE_SINGLETON_FOR_CLASS(UserInfo)
     return str;
 }
 
+- (NSDateFormatter *)fmt
+{
+    if (_fmt==nil)
+    {
+        _fmt = [[NSDateFormatter alloc] init];
+        [_fmt setDateFormat:@"yyyyMMddHHmmss"];
+    }
+    return _fmt;
+}
+
 @end
 
 @implementation RoomKey

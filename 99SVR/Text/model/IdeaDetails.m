@@ -7,6 +7,9 @@
 //
 
 #import "IdeaDetails.h"
+#import "UserInfo.h"
+#import "NSDate+convenience.h"
+#import "DecodeJson.h"
 
 @implementation IdeaDetails
 
@@ -33,7 +36,7 @@
     _zans = resp->zans;
     _flowers = resp->flowers;
     _comments = resp->comments;
-    
+    [self settingTime];
     char cTitle[_viewTitleLen];
     memset(cTitle, 0, _viewTitleLen);
     memcpy(cTitle,resp->content,_viewTitleLen);
@@ -50,5 +53,22 @@
     NSString *strInfo = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
     DLog(@"整条观点:%@",strInfo);
 }
-
+- (void)settingTime
+{
+    UserInfo *userinfo = [UserInfo sharedUserInfo];
+    NSDate *date = [userinfo.fmt dateFromString:NSStringFromInt64(_messageTime)];
+    int result = [DecodeJson compareDate:date];
+    if (result == 1)
+    {
+        _strTime = [NSString stringWithFormat:@"今天 %zi:%zi:%zi",date.hour,date.minute,date.second];
+    }
+    else if(result == 0)
+    {
+        _strTime = [NSString stringWithFormat:@"昨天 %zi:%zi:%zi",date.hour,date.minute,date.second];
+    }
+    else
+    {
+        _strTime = [NSString stringWithFormat:@"%d年%d月%d日 %d:%d:%d",date.year,date.month,date.day,date.hour,date.minute,date.second];
+    }
+}
 @end

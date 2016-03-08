@@ -91,7 +91,7 @@
 
 - (void)setDetails:(IdeaDetails *)idea
 {
-    _lblTime.text = NSStringFromInt64(idea.messageTime);
+    _lblTime.text = idea.strTime;
     _lblTitle.text = idea.strTitle;
     _lblContent.text = idea.strContent;
     [_btnObserved setTitle:NSStringFromInt64(idea.looks) forState:UIControlStateNormal];

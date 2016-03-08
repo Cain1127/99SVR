@@ -500,6 +500,9 @@ enum {
     Sub_Vchat_TextRoomViewPHPReq =      10178,//讲师通过PHP页面发布观点或修改观点或删除观点请求
     Sub_Vchat_TextRoomViewPHPRes =      10179,//讲师通过PHP页面发布观点或修改观点或删除观点响应
     
+    Sub_Vchat_HallGetFansCountReq =     10180,
+    Sub_Vchat_HallGetFansCountRes =     10181,
+    
     Sub_Vchat_logonReq4 = 1004,        //自定义登录
     Sub_Vchat_logonReq5 = 1005,        //第三方登录
     Sub_Vchat_logonErr2 = 1006,        //登陆失败

@@ -267,7 +267,7 @@
         [selectView setBackgroundColor:[UIColor clearColor]];
         cell.selectedBackgroundView = selectView;
         
-        [cell.lblTime setText:NSStringFromInt64(textModel.messagetime)];
+//        [cell.lblTime setText:NSStringFromInt64(textModel.messagetime)];
         cell.section = indexPath.section;
         
         CGFloat fHeight = [cell.textCoreView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;

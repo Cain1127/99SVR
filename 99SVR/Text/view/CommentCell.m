@@ -22,11 +22,12 @@
     [self.contentView addSubview:_lblTitle];
     [_lblTitle setFont:XCFONT(17)];
     
-    _textView = [DTAttributedTextView new];
+    _textView = [DTAttributedTextContentView new];
     [self.contentView addSubview:_textView];
     
-    _lblTime = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-100,_lblTitle.y, 90, 20)];
-    [_lblTime setFont:XCFONT(15)];
+    _lblTime = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-120,_lblTitle.y, 115, 20)];
+    [_lblTime setFont:XCFONT(12)];
+    [_lblTime setTextAlignment:NSTextAlignmentRight];
     [_lblTime setTextColor:UIColorFromRGB(0x919191)];
     [self.contentView addSubview:_lblTime];
     
@@ -46,7 +47,7 @@
 - (void)setModel:(IdeaDetailRePly *)details
 {
     [_lblTitle setText:details.strSrcName];
-    [_lblTime setText:@"今天 8:30"];
+    [_lblTime setText:details.time];
     [_imgView setImage:[UIImage imageNamed:@"logo"]];
 }
 

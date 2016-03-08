@@ -29,6 +29,7 @@
 @property (nonatomic) int64  flowers;
 @property (nonatomic) BOOL bZan;
 @property (nonatomic) int64 messagetime;
+@property (nonatomic,copy) NSString *strTime;
 
 - (id)initWithNotify:(CMDTextRoomLiveListNoty_t *)notify;
 - (id)initWithPointNotify:(CMDTextRoomLivePointNoty_t *)notify;

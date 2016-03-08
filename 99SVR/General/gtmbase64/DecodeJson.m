@@ -286,4 +286,31 @@
 }
 
 
++ (int)compareDate:(NSDate *)date{
+    
+    NSTimeInterval secondsPerDay = 24 * 60 * 60;
+    NSDate *today = [[NSDate alloc] init];
+    NSDate *tomorrow, *yesterday;
+    
+    tomorrow = [today dateByAddingTimeInterval: secondsPerDay];
+    yesterday = [today dateByAddingTimeInterval: -secondsPerDay];
+    
+    NSString * todayString = [[today description] substringToIndex:10];
+    NSString * yesterdayString = [[yesterday description] substringToIndex:10];
+    NSString * dateString = [[date description] substringToIndex:10];
+    
+    if ([dateString isEqualToString:todayString])
+    {
+        return 1;
+    }
+    else if ([dateString isEqualToString:yesterdayString])
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
 @end

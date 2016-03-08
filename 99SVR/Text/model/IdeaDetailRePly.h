@@ -21,8 +21,9 @@
 @property (nonatomic) int64 messageTime;
 @property (nonatomic,copy) NSString *strContent;
 @property (nonatomic) uint32 reqcommentstype;		//评论客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
-@property (nonatomic) uint32 srcinteractid;		//源评论ID（回复评论内容时需要填写），0则代表没有
+@property (nonatomic) int64 srcinteractid;		//源评论ID（回复评论内容时需要填写），0则代表没有
 @property (nonatomic,copy) NSString *strName;
+@property (nonatomic,copy) NSString *time;
 
 - (id)initWithIdeaRePly:(CMDTextRoomViewInfoRes_t*)resp;
 

@@ -144,8 +144,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-//    LiveCoreTextCell *cell = [self tableView:tableView preparedCellForIndexPath:indexPath];
-//    CGFloat fHeight = [cell.textCoreView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
     return 150;
 }
 
@@ -153,11 +151,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     IdeaDetails *idea = [_aryNew objectAtIndex:indexPath.section];
-//    DLog(@"idea:%zi",idea.messageid);
-//    [[TextTcpSocket sharedTextTcpSocket] reqIdeaDetails:0 count:20 ideaId:(int)idea.messageid];
-//    [[TextTcpSocket sharedTextTcpSocket] replyCommentReq:@"你好啊" msgid:idea.messageid toid:idea.userid];
-//    [[TextTcpSocket sharedTextTcpSocket] reqCommentZan:idea.messageid];
-//    [_textSocket reqSendFlower:idea.messageid count:20];
+    
     NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:_textSocket model:idea];
     [self presentViewController:detailView animated:YES completion:nil];
 }
