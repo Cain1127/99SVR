@@ -250,7 +250,6 @@
     [super didReceiveMemoryWarning];
 }
 
-
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     //拖动前的起始坐标
@@ -336,7 +335,7 @@
            }
            else
            {
-               __rightView.btnFirst.selected = NO;
+              __rightView.btnFirst.selected = NO;
            }
        }
    });

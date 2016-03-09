@@ -282,6 +282,7 @@
     return cell;
 }
 
+
 #pragma mark DTCoreText Delegate
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame
 {
@@ -290,8 +291,8 @@
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
         [imageView sd_setImageWithURL:attachment.contentURL];
         imageView.userInteractionEnabled = YES;
-        [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                action:@selector(showImageInfo:)]];
+//        [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
+//                                                                                action:@selector(showImageInfo:)]];
         return imageView;
     }
     else if([attachment isKindOfClass:[DTObjectTextAttachment class]])

@@ -18,19 +18,29 @@
     [self setBackgroundColor:UIColorFromRGB(0x427ede)];
     _imgHead = [[UIImageView alloc] initWithFrame:Rect(15, 12, 65, 65)];
     [self addSubview:_imgHead];
+    _imgHead.layer.masksToBounds = YES;
+    _imgHead.layer.cornerRadius = 32.5;
     
     UIColor *color = UIColorFromRGB(0xB2CDFF);
     UIColor *linecolor = UIColorFromRGB(0x6898e5);
+    
+    _lblLabel = [[UILabel alloc] initWithFrame:Rect(_imgHead.x+_imgHead.width+15,8, kScreenWidth-_imgHead.x-_imgHead.width-15,25)];
+    [self addSubview:_lblLabel];
+    [_lblLabel setBackgroundColor:UIColorFromRGB(0x2263cc)];
+    [_lblLabel setTextColor:UIColorFromRGB(0xffffff)];
+    [_lblLabel setFont:XCFONT(12)];
     
     UILabel *lblTempFans = [[UILabel alloc] initWithFrame:Rect(_imgHead.x+_imgHead.width+15, 44,70, 20)];
     [lblTempFans setText:@"粉丝"];
     [lblTempFans setTextColor:color];
     [lblTempFans setFont:XCFONT(15)];
+    [lblTempFans setTextAlignment:NSTextAlignmentCenter];
     [self addSubview:lblTempFans];
     
     _lblFans = [[UILabel alloc] initWithFrame:Rect(lblTempFans.x, lblTempFans.y+lblTempFans.height+10,lblTempFans.width,20)];
     [_lblFans setFont:XCFONT(15)];
     [_lblFans setTextColor:color];
+    [_lblFans setTextAlignment:NSTextAlignmentCenter];
     [self addSubview:_lblFans];
     
     UILabel *line1 = [[UILabel alloc] initWithFrame:Rect(lblTempFans.x+lblTempFans.width+2, lblTempFans.y, 0.5, 40)];
@@ -92,14 +102,16 @@
     [_imgHead sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"logo"]];
     _lblFans.text = NSStringFromInt64(model.fans);
     _lblThum.text = NSStringFromInt64(model.zans);
-    _lblCount.text = NSStringFromInt64(model.zans);
-    
+    _lblCount.text = NSStringFromInt64(model.historymoods);
+    _lblLabel.text = model.strLabel;
+    CGSize sizeLabel = [model.strLabel sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}];
+    CGRect labelFrame = _lblLabel.frame;
+    _lblLabel.frame = Rect(labelFrame.origin.x, labelFrame.origin.y,sizeLabel.width,labelFrame.size.height);
     [_lblContent setText:model.strContent];
     CGRect rect = [model.strContent boundingRectWithSize:CGSizeMake(kScreenWidth-30,100)
                                               options:NSStringDrawingUsesLineFragmentOrigin
                                            attributes:@{NSFontAttributeName:XCFONT(12)}
                                               context:nil];
-//    CGSize size = [model.strContent sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}];
     CGRect frame = _lblContent.frame;
     _lblContent.frame = Rect(frame.origin.x, frame.origin.y,kScreenWidth-30,rect.size.height);
     self.frame = Rect(0, 64, kScreenWidth, _lblContent.y+_lblContent.height+8);

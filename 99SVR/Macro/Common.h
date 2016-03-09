@@ -64,13 +64,13 @@
 
 #define  kWXAPP_SEC @"acc28b09efbb768a1b5b7b6514903ef8"
 
-//#define kImage_TEXT_URL @"http://172.16.41.99/test/getimage.php?tid="
-//#define kTEXT_GROUP_URL @"http://172.16.41.99/test/test.php?act=script"
-//#define kTEXT_NEW_DETAILS_URL @"http://172.16.41.99/viewpoint/index.php?s=/Index/getViewPoint/id/"
+#define kImage_TEXT_URL @"http://172.16.41.99/test/getimage.php?tid="
+#define kTEXT_GROUP_URL @"http://172.16.41.99/test/test.php?act=script"
+#define kTEXT_NEW_DETAILS_URL @"http://172.16.41.99/viewpoint/index.php?s=/Index/getViewPoint/id/"
 
-#define kImage_TEXT_URL @"http://121.33.236.180:22807/test/getimage.php?tid="
-#define kTEXT_GROUP_URL @"http://121.33.236.180:22807/test/test.php?act=script"
-#define kTEXT_NEW_DETAILS_URL @"http://121.33.236.180:22807/viewpoint/index.php?s=/Index/getViewPoint/id/"
+//#define kImage_TEXT_URL @"http://121.33.236.180:22807/test/getimage.php?tid="
+//#define kTEXT_GROUP_URL @"http://121.33.236.180:22807/test/test.php?act=script"
+//#define kTEXT_NEW_DETAILS_URL @"http://121.33.236.180:22807/viewpoint/index.php?s=/Index/getViewPoint/id/"
 
 #endif
 

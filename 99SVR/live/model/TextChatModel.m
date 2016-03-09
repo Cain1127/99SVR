@@ -25,11 +25,13 @@
     _textlen = resp->textlen;
     _commentstype = resp->commentstype;
     _content = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
-    
     _content = [DecodeJson replaceEmojiString:_content];
-    _content = [NSString stringWithFormat:@"%@对%@:%@",_fromNick,_toNick,_content];
-    
-    
+    if (_toid!=0) {
+        _content = [NSString stringWithFormat:@"%@:回复@%@,%@",_fromNick,_toNick,_content];
+    }
+    else{
+        _content = [NSString stringWithFormat:@"%@:%@",_fromNick,_content];
+    }
     return self;
 }
 

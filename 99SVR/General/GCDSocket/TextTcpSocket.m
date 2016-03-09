@@ -29,8 +29,8 @@
 #define SOCKET_READ_LENGTH     1
 #define SOCKET_READ_DATA       2
 
-//#define kUserInfoId [UserInfo sharedUserInfo].nUserId
-#define kUserInfoId 1772664
+#define kUserInfoId [UserInfo sharedUserInfo].nUserId
+//#define kUserInfoId 1772664
 #define kUserInfoPwd @"123456"
 
 @interface TextTcpSocket()<GCDAsyncSocketDelegate>
@@ -1018,7 +1018,7 @@
     req.coremessagever = _PRODUCT_CORE_MESSAGE_VER_;
 //    req.devtype = 2;
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
-    [UserInfo sharedUserInfo].strPwd = @"123456";
+//    [UserInfo sharedUserInfo].strPwd = @"123456";
     if([UserInfo sharedUserInfo].strPwd)
     {
         [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:[UserInfo sharedUserInfo].strPwd];
@@ -1082,8 +1082,8 @@
 //    [self connectTextServer:strAddr port:nPort];
     [self closeSocket];
 //    [self connectTextServer:@"122.13.81.62" port:22806];
-//    [self connectTextServer:@"172.16.41.96" port:22806];
-    [self connectTextServer:@"121.33.236.180" port:22806];
+    [self connectTextServer:@"172.16.41.96" port:22806];
+//    [self connectTextServer:@"121.33.236.180" port:22806];
 }
 
 - (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort

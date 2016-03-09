@@ -102,7 +102,6 @@
     _zans = notify->zans;
     _messagetime = notify->messagetime;
     _viewid = notify->viewid;
-    
     [self settingTime];
     
     char cBuf[_textlen];
@@ -133,9 +132,10 @@
         char cTitle[_textlen];
         memset(cTitle, 0, _textlen);
         memcpy(cTitle, notify->content, _textlen);
-        _strContent = [NSString stringWithCString:cTitle encoding:GBK_ENCODING];
+        NSStringEncoding GBK = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+        _strContent = [NSString stringWithCString:cTitle encoding:GBK];
         _strContent = [DecodeJson replaceEmojiString:_strContent];
-        DLog(@"消息回复长度:%d",_destextlen);
+        DLog(@"消息回复长度:%d",_textlen);
     }
     else
     {
@@ -150,19 +150,8 @@
     UserInfo *userinfo = [UserInfo sharedUserInfo];
     DLog(@"time:%@",NSStringFromInt64(_messagetime));
     NSDate *date = [userinfo.fmt dateFromString:NSStringFromInt64(_messagetime)];
-    int result = [DecodeJson compareDate:date];
-    if (result == 1)
-    {
-        _strTime = [NSString stringWithFormat:@"今天 %zi:%zi:%zi",date.hour,date.minute,date.second];
-    }
-    else if(result == 0)
-    {
-        _strTime = [NSString stringWithFormat:@"昨天 %zi:%zi:%zi",date.hour,date.minute,date.second];
-    }
-    else
-    {
-        _strTime = [NSString stringWithFormat:@"%d年%d月%d日 %d:%d:%d",date.year,date.month,date.day,date.hour,date.minute,date.second];
-    }
+    _strTime = [NSString stringWithFormat:@"%d:%d",date.hour,date.minute];
+    
 }
 
 @end
