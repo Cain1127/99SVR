@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18AC14081C8FB3B000FDFF40 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 18AC14071C8FB3B000FDFF40 /* libsqlite3.0.tbd */; };
+		18AC140A1C8FB44600FDFF40 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 18AC14091C8FB44600FDFF40 /* libiconv.tbd */; };
+		18AC140C1C8FB55600FDFF40 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18AC140B1C8FB55600FDFF40 /* CoreTelephony.framework */; };
 		BB0436811C4E28B800A162A8 /* TomorrowModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436801C4E28B800A162A8 /* TomorrowModel.m */; };
 		BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436831C4E28C500A162A8 /* TodayVIPModel.m */; };
 		BB0436871C4E28E700A162A8 /* TextLiveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436861C4E28E700A162A8 /* TextLiveModel.m */; };
@@ -141,13 +144,10 @@
 		BB1661AE1C3E67B000D318BE /* TextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661AB1C3E67B000D318BE /* TextViewController.m */; };
 		BB17688D1C75A97E00CE947C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB17688C1C75A97E00CE947C /* libc++.tbd */; };
 		BB17688F1C75A9C200CE947C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB17688E1C75A9C200CE947C /* SystemConfiguration.framework */; };
-		BB1768911C75A9CE00CE947C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB1768901C75A9CE00CE947C /* Security.framework */; };
-		BB1768931C75A9E400CE947C /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB1768921C75A9E400CE947C /* JavaScriptCore.framework */; };
 		BB1768961C75C11200CE947C /* TextRoomModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1768951C75C11200CE947C /* TextRoomModel.m */; };
 		BB1768991C75EB3A00CE947C /* TextPointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1768981C75EB3A00CE947C /* TextPointViewController.m */; };
 		BB17689C1C77018F00CE947C /* ChatViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB17689B1C77018F00CE947C /* ChatViewCell.m */; };
 		BB17689F1C77052000CE947C /* GitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BB17689E1C77052000CE947C /* GitInfo.m */; };
-		BB1768A51C772AFC00CE947C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB1768A41C772AFC00CE947C /* CoreTelephony.framework */; };
 		BB1768A71C774EB000CE947C /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB1768A61C774EB000CE947C /* Bugly.framework */; };
 		BB1769211C7B006F00CE947C /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1769011C7B006E00CE947C /* MKAnnotationView+WebCache.m */; };
 		BB1769221C7B006F00CE947C /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1769031C7B006E00CE947C /* NSData+ImageContentType.m */; };
@@ -177,14 +177,9 @@
 		BB25D7FD1C1571B400314C1E /* _9SVRUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7FC1C1571B400314C1E /* _9SVRUITests.m */; };
 		BB25D80F1C15729800314C1E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D80B1C15729800314C1E /* AppDelegate.m */; };
 		BB25D8121C15729800314C1E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D80E1C15729800314C1E /* main.m */; };
-		BB25D8F21C1581F000314C1E /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB25D8F11C1581F000314C1E /* libsqlite3.0.tbd */; };
 		BB365A411C23A6AF009E2867 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB365A401C23A6AF009E2867 /* Info.plist */; };
-		BB3EE99A1C1AA94F00CF5621 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3EE9991C1AA94F00CF5621 /* QuartzCore.framework */; };
 		BB3EE99C1C1AA95A00CF5621 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3EE99B1C1AA95A00CF5621 /* libz.tbd */; };
 		BB3EE99E1C1AA96000CF5621 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3EE99D1C1AA96000CF5621 /* libbz2.tbd */; };
-		BB3EE9A01C1AA97A00CF5621 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3EE99F1C1AA97A00CF5621 /* AudioToolbox.framework */; };
-		BB3EE9A21C1AA98500CF5621 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3EE9A11C1AA98500CF5621 /* CoreAudio.framework */; };
-		BB3EE9A41C1AAAAF00CF5621 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3EE9A31C1AAAAF00CF5621 /* libiconv.tbd */; };
 		BB5F9BC11C5DDA2100285EA6 /* MediaBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC01C5DDA2100285EA6 /* MediaBuffer.m */; };
 		BB5F9BC41C5DDA6100285EA6 /* OpenAL.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC31C5DDA6100285EA6 /* OpenAL.m */; };
 		BB5F9BC71C5DDA9D00285EA6 /* MediaSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC61C5DDA9D00285EA6 /* MediaSocket.m */; };
@@ -352,8 +347,6 @@
 		BB9765C91C81DC9400FAA5B7 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9765C81C81DC9400FAA5B7 /* TencentOpenAPI.framework */; };
 		BB9765CD1C81DF6300FAA5B7 /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BB9765CC1C81DF6300FAA5B7 /* TencentOpenApi_IOS_Bundle.bundle */; };
 		BB9765E01C81F64C00FAA5B7 /* WeiboSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BB9765DC1C81F64C00FAA5B7 /* WeiboSDK.bundle */; };
-		BB9765E21C81F6E100FAA5B7 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9765E11C81F6E100FAA5B7 /* ImageIO.framework */; };
-		BB9765E41C81FA8300FAA5B7 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9765E31C81FA8300FAA5B7 /* GameController.framework */; };
 		BB9765E61C81FAC800FAA5B7 /* libWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9765E51C81FAC800FAA5B7 /* libWeiboSDK.a */; };
 		BB9765E81C834D9800FAA5B7 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9765E71C834D9800FAA5B7 /* libWeChatSDK.a */; };
 		BB9765F01C858B9500FAA5B7 /* TextGroupList.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9765EF1C858B9500FAA5B7 /* TextGroupList.m */; };
@@ -377,15 +370,7 @@
 		BBE56C551C4F8AE50030E050 /* IdeaDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE56C541C4F8AE50030E050 /* IdeaDetails.m */; };
 		BBE56C581C4FA1B10030E050 /* IdeaDetailRePly.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE56C571C4FA1B10030E050 /* IdeaDetailRePly.m */; };
 		BBE56C5B1C4FD5EB0030E050 /* HistoryTextModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE56C5A1C4FD5EB0030E050 /* HistoryTextModel.m */; };
-		BBECB02D1C1AC1E400D7230F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB02C1C1AC1E400D7230F /* OpenGLES.framework */; };
-		BBECB02F1C1AC1EC00D7230F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB02E1C1AC1EC00D7230F /* MediaPlayer.framework */; };
-		BBECB0311C1AC1F900D7230F /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB0301C1AC1F900D7230F /* Accelerate.framework */; };
-		BBECB0331C1AC29900D7230F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB0321C1AC29900D7230F /* CoreGraphics.framework */; };
-		BBECB0351C1AC2A300D7230F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB0341C1AC2A300D7230F /* Foundation.framework */; };
-		BBECB0371C1AC2AB00D7230F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB0361C1AC2AB00D7230F /* UIKit.framework */; };
 		BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB52B1C1E959500D7230F /* libxml2.tbd */; };
-		BBECB5301C1E95F400D7230F /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB52F1C1E95F400D7230F /* CoreText.framework */; };
-		BBECB5321C1E960000D7230F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB5311C1E960000D7230F /* MobileCoreServices.framework */; };
 		BBF22F771C80050400907AD9 /* RoomCoreTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */; };
 		BBFA851D1C30D216000466E4 /* 999.gif in Resources */ = {isa = PBXBuildFile; fileRef = BBFA851C1C30D216000466E4 /* 999.gif */; };
 		BBFA85201C3383CD000466E4 /* RegViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFA851F1C3383CD000466E4 /* RegViewController.m */; };
@@ -421,6 +406,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		18AC14071C8FB3B000FDFF40 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		18AC14091C8FB44600FDFF40 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		18AC140B1C8FB55600FDFF40 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		BB04367F1C4E28B800A162A8 /* TomorrowModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TomorrowModel.h; sourceTree = "<group>"; };
 		BB0436801C4E28B800A162A8 /* TomorrowModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TomorrowModel.m; sourceTree = "<group>"; };
 		BB0436821C4E28C500A162A8 /* TodayVIPModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayVIPModel.h; sourceTree = "<group>"; };
@@ -577,8 +565,6 @@
 		BB1661AB1C3E67B000D318BE /* TextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewController.m; sourceTree = "<group>"; };
 		BB17688C1C75A97E00CE947C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		BB17688E1C75A9C200CE947C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		BB1768901C75A9CE00CE947C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		BB1768921C75A9E400CE947C /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		BB1768941C75C11200CE947C /* TextRoomModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextRoomModel.h; sourceTree = "<group>"; };
 		BB1768951C75C11200CE947C /* TextRoomModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextRoomModel.m; sourceTree = "<group>"; };
 		BB1768971C75EB3A00CE947C /* TextPointViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextPointViewController.h; sourceTree = "<group>"; };
@@ -587,7 +573,6 @@
 		BB17689B1C77018F00CE947C /* ChatViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewCell.m; sourceTree = "<group>"; };
 		BB17689D1C77052000CE947C /* GitInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitInfo.h; sourceTree = "<group>"; };
 		BB17689E1C77052000CE947C /* GitInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitInfo.m; sourceTree = "<group>"; };
-		BB1768A41C772AFC00CE947C /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		BB1768A61C774EB000CE947C /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bugly.framework; sourceTree = "<group>"; };
 		BB1769001C7B006E00CE947C /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
 		BB1769011C7B006E00CE947C /* MKAnnotationView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+WebCache.m"; sourceTree = "<group>"; };
@@ -652,7 +637,6 @@
 		BB25D80B1C15729800314C1E /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = other/AppDelegate.m; sourceTree = "<group>"; };
 		BB25D80E1C15729800314C1E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = other/main.m; sourceTree = "<group>"; };
 		BB25D8F01C157DB100314C1E /* SVR-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SVR-Prefix.pch"; path = "other/SVR-Prefix.pch"; sourceTree = "<group>"; };
-		BB25D8F11C1581F000314C1E /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		BB25D9D91C167AE000314C1E /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		BB25D9DA1C167AE000314C1E /* PubDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PubDefine.h; sourceTree = "<group>"; };
 		BB25D9DB1C167AE000314C1E /* PubNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PubNotification.h; sourceTree = "<group>"; };
@@ -660,12 +644,8 @@
 		BB3659EF1C227E7A009E2867 /* ImportHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImportHeader.h; sourceTree = "<group>"; };
 		BB3659F01C227E7A009E2867 /* StringsMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringsMacro.h; sourceTree = "<group>"; };
 		BB365A401C23A6AF009E2867 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = other/Info.plist; sourceTree = "<group>"; };
-		BB3EE9991C1AA94F00CF5621 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BB3EE99B1C1AA95A00CF5621 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		BB3EE99D1C1AA96000CF5621 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
-		BB3EE99F1C1AA97A00CF5621 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		BB3EE9A11C1AA98500CF5621 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		BB3EE9A31C1AAAAF00CF5621 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		BB5F9BBF1C5DDA2100285EA6 /* MediaBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaBuffer.h; sourceTree = "<group>"; };
 		BB5F9BC01C5DDA2100285EA6 /* MediaBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaBuffer.m; sourceTree = "<group>"; };
 		BB5F9BC21C5DDA6100285EA6 /* OpenAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenAL.h; sourceTree = "<group>"; };
@@ -981,8 +961,6 @@
 		BB9765DC1C81F64C00FAA5B7 /* WeiboSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WeiboSDK.bundle; sourceTree = "<group>"; };
 		BB9765DD1C81F64C00FAA5B7 /* WeiboSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiboSDK.h; sourceTree = "<group>"; };
 		BB9765DE1C81F64C00FAA5B7 /* WeiboUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiboUser.h; sourceTree = "<group>"; };
-		BB9765E11C81F6E100FAA5B7 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		BB9765E31C81FA8300FAA5B7 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
 		BB9765E51C81FAC800FAA5B7 /* libWeiboSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeiboSDK.a; sourceTree = "<group>"; };
 		BB9765E71C834D9800FAA5B7 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
 		BB9765EA1C834DA200FAA5B7 /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
@@ -1030,15 +1008,7 @@
 		BBE56C571C4FA1B10030E050 /* IdeaDetailRePly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdeaDetailRePly.m; sourceTree = "<group>"; };
 		BBE56C591C4FD5EB0030E050 /* HistoryTextModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryTextModel.h; sourceTree = "<group>"; };
 		BBE56C5A1C4FD5EB0030E050 /* HistoryTextModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTextModel.m; sourceTree = "<group>"; };
-		BBECB02C1C1AC1E400D7230F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		BBECB02E1C1AC1EC00D7230F /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		BBECB0301C1AC1F900D7230F /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		BBECB0321C1AC29900D7230F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		BBECB0341C1AC2A300D7230F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		BBECB0361C1AC2AB00D7230F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BBECB52B1C1E959500D7230F /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
-		BBECB52F1C1E95F400D7230F /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		BBECB5311C1E960000D7230F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		BBF22F751C80050400907AD9 /* RoomCoreTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCoreTextCell.h; sourceTree = "<group>"; };
 		BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCoreTextCell.m; sourceTree = "<group>"; };
 		BBFA851C1C30D216000466E4 /* 999.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = 999.gif; sourceTree = "<group>"; };
@@ -1051,32 +1021,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB9765E41C81FA8300FAA5B7 /* GameController.framework in Frameworks */,
+				18AC140C1C8FB55600FDFF40 /* CoreTelephony.framework in Frameworks */,
+				18AC140A1C8FB44600FDFF40 /* libiconv.tbd in Frameworks */,
+				18AC14081C8FB3B000FDFF40 /* libsqlite3.0.tbd in Frameworks */,
 				BB9765E61C81FAC800FAA5B7 /* libWeiboSDK.a in Frameworks */,
-				BBECB02F1C1AC1EC00D7230F /* MediaPlayer.framework in Frameworks */,
-				BBECB5301C1E95F400D7230F /* CoreText.framework in Frameworks */,
-				BB9765E21C81F6E100FAA5B7 /* ImageIO.framework in Frameworks */,
-				BB1768A51C772AFC00CE947C /* CoreTelephony.framework in Frameworks */,
-				BB1768931C75A9E400CE947C /* JavaScriptCore.framework in Frameworks */,
 				BB1768A71C774EB000CE947C /* Bugly.framework in Frameworks */,
-				BB1768911C75A9CE00CE947C /* Security.framework in Frameworks */,
 				BB17688F1C75A9C200CE947C /* SystemConfiguration.framework in Frameworks */,
 				BB17688D1C75A97E00CE947C /* libc++.tbd in Frameworks */,
-				BBECB0311C1AC1F900D7230F /* Accelerate.framework in Frameworks */,
-				BB3EE9A01C1AA97A00CF5621 /* AudioToolbox.framework in Frameworks */,
-				BB3EE9A21C1AA98500CF5621 /* CoreAudio.framework in Frameworks */,
-				BBECB0331C1AC29900D7230F /* CoreGraphics.framework in Frameworks */,
-				BBECB5321C1E960000D7230F /* MobileCoreServices.framework in Frameworks */,
 				BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */,
-				BB3EE99A1C1AA94F00CF5621 /* QuartzCore.framework in Frameworks */,
 				BB9765E81C834D9800FAA5B7 /* libWeChatSDK.a in Frameworks */,
 				BB88F3891C48BA7300C1F8D9 /* libswscale.a in Frameworks */,
-				BBECB0371C1AC2AB00D7230F /* UIKit.framework in Frameworks */,
-				BBECB0351C1AC2A300D7230F /* Foundation.framework in Frameworks */,
 				BB88F3821C48BA7300C1F8D9 /* libavutil.a in Frameworks */,
 				BB88F3831C48BA7300C1F8D9 /* libDTCoreText.a in Frameworks */,
-				BBECB02D1C1AC1E400D7230F /* OpenGLES.framework in Frameworks */,
-				BB3EE9A41C1AAAAF00CF5621 /* libiconv.tbd in Frameworks */,
 				BB88F3811C48BA7300C1F8D9 /* libavformat.a in Frameworks */,
 				BB88F37E1C48BA7300C1F8D9 /* libavcodec.a in Frameworks */,
 				BB1769471C7C91EF00CE947C /* libmtasdk.a in Frameworks */,
@@ -1084,7 +1040,6 @@
 				BB3EE99E1C1AA96000CF5621 /* libbz2.tbd in Frameworks */,
 				BB5F9BCE1C5DEAC000285EA6 /* libopus.a in Frameworks */,
 				BB3EE99C1C1AA95A00CF5621 /* libz.tbd in Frameworks */,
-				BB25D8F21C1581F000314C1E /* libsqlite3.0.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1410,8 +1365,8 @@
 		BB25D7CB1C1571B400314C1E = {
 			isa = PBXGroup;
 			children = (
-				BB9003C01C8D8395007E1C48 /* Frameworks */,
 				BB25D7D61C1571B400314C1E /* 99SVR */,
+				BB9003C01C8D8395007E1C48 /* Frameworks */,
 				BB25D7F01C1571B400314C1E /* 99SVRTests */,
 				BB25D7FB1C1571B400314C1E /* 99SVRUITests */,
 				BB25D7D51C1571B400314C1E /* Products */,
@@ -1443,7 +1398,6 @@
 				BB63F59B1C2CC7A300A042E8 /* Side */,
 				BB63F4781C2B809800A042E8 /* singlet */,
 				BB25D9D81C167AE000314C1E /* Macro */,
-				BB25D7E31C1571B400314C1E /* Assets.xcassets */,
 				BB25D7D71C1571B400314C1E /* Supporting Files */,
 			);
 			path = 99SVR;
@@ -1454,20 +1408,8 @@
 			children = (
 				BB0630411C6185E1008AD41D /* head */,
 				BB63F28D1C27FB2800A042E8 /* gif */,
+				BB25D7E31C1571B400314C1E /* Assets.xcassets */,
 				BB365A401C23A6AF009E2867 /* Info.plist */,
-				BBECB0361C1AC2AB00D7230F /* UIKit.framework */,
-				BBECB0341C1AC2A300D7230F /* Foundation.framework */,
-				BBECB0321C1AC29900D7230F /* CoreGraphics.framework */,
-				BBECB0301C1AC1F900D7230F /* Accelerate.framework */,
-				BBECB02E1C1AC1EC00D7230F /* MediaPlayer.framework */,
-				BBECB02C1C1AC1E400D7230F /* OpenGLES.framework */,
-				BB3EE9A31C1AAAAF00CF5621 /* libiconv.tbd */,
-				BB3EE9A11C1AA98500CF5621 /* CoreAudio.framework */,
-				BB3EE99F1C1AA97A00CF5621 /* AudioToolbox.framework */,
-				BB3EE99D1C1AA96000CF5621 /* libbz2.tbd */,
-				BB3EE99B1C1AA95A00CF5621 /* libz.tbd */,
-				BB3EE9991C1AA94F00CF5621 /* QuartzCore.framework */,
-				BB25D8F11C1581F000314C1E /* libsqlite3.0.tbd */,
 				BB25D8F01C157DB100314C1E /* SVR-Prefix.pch */,
 				BB25D80A1C15729800314C1E /* AppDelegate.h */,
 				BB25D80B1C15729800314C1E /* AppDelegate.m */,
@@ -2125,16 +2067,14 @@
 		BB9003C01C8D8395007E1C48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BB9765E31C81FA8300FAA5B7 /* GameController.framework */,
-				BB9765E11C81F6E100FAA5B7 /* ImageIO.framework */,
-				BB1768A41C772AFC00CE947C /* CoreTelephony.framework */,
-				BB1768921C75A9E400CE947C /* JavaScriptCore.framework */,
-				BB1768901C75A9CE00CE947C /* Security.framework */,
+				18AC140B1C8FB55600FDFF40 /* CoreTelephony.framework */,
+				18AC14091C8FB44600FDFF40 /* libiconv.tbd */,
+				18AC14071C8FB3B000FDFF40 /* libsqlite3.0.tbd */,
 				BB17688E1C75A9C200CE947C /* SystemConfiguration.framework */,
 				BB17688C1C75A97E00CE947C /* libc++.tbd */,
-				BBECB5311C1E960000D7230F /* MobileCoreServices.framework */,
-				BBECB52F1C1E95F400D7230F /* CoreText.framework */,
 				BBECB52B1C1E959500D7230F /* libxml2.tbd */,
+				BB3EE99D1C1AA96000CF5621 /* libbz2.tbd */,
+				BB3EE99B1C1AA95A00CF5621 /* libz.tbd */,
 			);
 			name = Frameworks;
 			path = 99SVR;
@@ -2820,7 +2760,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "32671d5f-3f19-470d-9186-87408dcfe3bb";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "armv7 arm64";
@@ -2869,7 +2809,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "32671d5f-3f19-470d-9186-87408dcfe3bb";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "armv7 arm64";
