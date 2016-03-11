@@ -140,7 +140,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     if([UserInfo sharedUserInfo].aryCollet.count>=1)
     {
         RoomGroup *group = [[UserInfo sharedUserInfo].aryCollet objectAtIndex:0];
-        for (RoomHttp *room in group.aryRoomHttp)
+        for (RoomHttp *room in group.roomList)
         {
             if([_room.nvcbid isEqualToString:room.nvcbid])
             {
@@ -1107,7 +1107,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         [__self.chatView reloadDataWithCompletion:
          ^{
              NSInteger numberOfRows = [__self.chatView numberOfRowsInSection:0];
-             NSLog(@"numberofRows:%zi",numberOfRows);
               if (numberOfRows > 0)
               {
                   NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];

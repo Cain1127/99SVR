@@ -41,39 +41,39 @@
                 if(![[firDict objectForKey:@"FootPrint"] isKindOfClass:[NSString class]])
                 {
                     RoomGroup *group = [[RoomGroup alloc] init];
-                    group.groupname = @"我的足迹";
-                    group.groupid = @"FootPrint1";
-                    group.aryRoomHttp = [NSMutableArray array];
+                    group.groupName = @"我的足迹";
+                    group.groupId = @"FootPrint1";
+                    NSMutableArray *array = [NSMutableArray array];
                     [aryHist addObject:group];
-                    
                     for (NSDictionary *aryDict in histDict)
                     {
                         RoomHttp *room = [RoomHttp resultWithDict:aryDict];
-                        [group.aryRoomHttp addObject:room];
+                        [array addObject:room];
                     }
+                    group.roomList = array;
                 }
                 NSArray *collDict = [firDict objectForKey:@"Collent"];
                 NSMutableArray *aryColl = [NSMutableArray array];
                 if(![[firDict objectForKey:@"Collent"] isKindOfClass:[NSString class]])
                 {
                     RoomGroup *group = [[RoomGroup alloc] init];
-                    group.groupname = @"我的收藏";
-                    group.groupid = @"Collent1";
-                    group.aryRoomHttp = [NSMutableArray array];
+                    group.groupName = @"我的收藏";
+                    group.groupId = @"Collent1";
                     [aryColl addObject:group];
-                    
+                    NSMutableArray *array = [NSMutableArray array];
                     for (NSDictionary *aryDict in collDict)
                     {
                         RoomHttp *room = [RoomHttp resultWithDict:aryDict];
-                        [group.aryRoomHttp addObject:room];
+                        [array addObject:room];
                     }
+                    group.roomList = array;
                 }
                 else
                 {
                     RoomGroup *group = [[RoomGroup alloc] init];
-                    group.groupname = @"我的收藏";
-                    group.groupid = @"Collent1";
-                    group.aryRoomHttp = [NSMutableArray array];
+                    group.groupName = @"我的收藏";
+                    group.groupId = @"Collent1";
+                    group.roomList = [NSArray array];
                     [aryColl addObject:group];
                 }
                 if (_historyBlock)

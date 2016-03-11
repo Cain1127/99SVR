@@ -922,6 +922,7 @@
             }
             if (pInfo->micstate == 0)
             {
+                DLog(@"有人下麦了");
                 [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
             }
             else
@@ -960,9 +961,8 @@
         break;
         default:
         {
-            DLog(@"消息类型:%d",in_msg->subcmd);
-        }
-            break;
+            
+        }break;
     }
     free(pNewMsg);
     [_asyncSocket readDataToLength:4 withTimeout:-1 tag:SOCKET_READ_LENGTH];

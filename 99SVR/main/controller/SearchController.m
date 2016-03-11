@@ -92,18 +92,19 @@
     {
         NSMutableArray *aryDatas = [NSMutableArray array];
         RoomGroup *group = [[RoomGroup alloc] init];
-        group.groupid = @"1";
-        group.groupname = @"搜索";
-        group.aryRoomHttp = [NSMutableArray array];
-        [aryDatas addObject:group];
+        group.groupId = @"1";
+        group.groupName = @"搜索";
+        NSMutableArray *array = [NSMutableArray array];
         for (RoomGroup *rGroup in [UserInfo sharedUserInfo].aryRoom)
         {
-            for (RoomHttp *item in rGroup.aryRoomHttp)
+            for (RoomHttp *item in rGroup.roomList)
             {
-                [group.aryRoomHttp removeObject:item];
-                [group.aryRoomHttp addObject:item];
+                [array removeObject:item];
+                [array addObject:item];
             }
         }
+        group.roomList = array;
+        [aryDatas addObject:group];
         _allDatas = aryDatas;
     }
     else
@@ -115,18 +116,19 @@
             if (status==1)
             {
                 RoomGroup *group = [[RoomGroup alloc] init];
-                group.groupid = @"1";
-                group.groupname = @"搜索";
-                group.aryRoomHttp = [NSMutableArray array];
-                [__aryDatas addObject:group];
+                group.groupId = @"1";
+                group.groupName = @"搜索";
+                NSMutableArray *array = [NSMutableArray array];
                 for (RoomGroup *rGroup in aryIndex)
                 {
-                    for (RoomHttp *item in rGroup.aryRoomHttp)
+                    for (RoomHttp *item in rGroup.roomList)
                     {
-                        [group.aryRoomHttp removeObject:item];
-                        [group.aryRoomHttp addObject:item];
+                        [array removeObject:item];
+                        [array addObject:item];
                     }
                 }
+                group.roomList = array;
+                [__aryDatas addObject:group];
                 __self.allDatas = __aryDatas;
             }
         };
@@ -245,7 +247,7 @@
             RoomGroup *group = [_allDatas objectAtIndex:0];
             NSString *searchWords = [NSString stringWithFormat:@"cname like '*%@*' or nvcbid like '*%@*'" , keywords, keywords];
             NSPredicate *pre = [NSPredicate predicateWithFormat:searchWords];
-            _aryResult = [group.aryRoomHttp filteredArrayUsingPredicate:pre];
+            _aryResult = [group.roomList filteredArrayUsingPredicate:pre];
             [_searchResultsTable reloadData];
         }
         else

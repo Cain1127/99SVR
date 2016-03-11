@@ -10,10 +10,12 @@
 
 @interface RoomGroup : NSObject
 
-@property (nonatomic,copy) NSString *groupid;
-@property (nonatomic,copy) NSString *groupname;
-@property (nonatomic,strong) NSArray *groupArr;
-@property (nonatomic,strong) NSMutableArray *aryRoomHttp;
+@property (nonatomic,copy) NSString *groupId;
+@property (nonatomic,copy) NSString *groupName;
+@property (nonatomic,copy) NSArray *roomList;
+@property (nonatomic,copy) NSArray *groupList;
+
+//@property (nonatomic,strong) NSMutableArray *aryRoomHttp;
 
 + (RoomGroup*)resultWithDict:(NSDictionary *)dict;
 

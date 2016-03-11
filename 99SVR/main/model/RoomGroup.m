@@ -8,6 +8,7 @@
 
 #import "RoomGroup.h"
 #import <objc/runtime.h>
+#import "RoomHttp.h"
 
 @implementation RoomGroup
 
@@ -37,13 +38,27 @@
     for (NSString* key in propertyArray) {
         @try
         {
-            if ([key isEqual:@"groupArr"])
+            if ([key isEqual:@"roomList"])
             {
-                [result setValue:dict[key] forKey:key];
+                NSArray *array = dict[key];
+                NSMutableArray *aryCount = [[NSMutableArray alloc] init];
+                for (NSDictionary *dict in array)
+                {
+                    RoomHttp *textModel = [RoomHttp resultWithDict:dict];
+                    [aryCount addObject:textModel];
+                }
+                result.roomList = aryCount;
             }
-            else if([key isEqual:@"aryRoomHttp"])
+            else if ([key isEqual:@"groupList"])
             {
-                
+                NSArray *array = dict[key];
+                NSMutableArray *aryList = [NSMutableArray array];
+                for (NSDictionary *roomlist in array)
+                {
+                    RoomGroup *group = [RoomGroup resultWithDict:roomlist];
+                    [aryList addObject:group];
+                }
+                result.groupList = aryList;
             }
             else
             {

@@ -43,18 +43,18 @@
 
 #define GBK_ENCODING CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
 
-#define kGROUP_REQUEST_HTTP @"http://hall.99ducaijing.cn:8081/roomdata/room.php?act=roomdata&client=android"
+//#define kGROUP_REQUEST_HTTP @"http://hall.99ducaijing.cn:8081/roomdata/room.php?act=roomdata&client=android"
+#define kGROUP_REQUEST_HTTP @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=roomdata&client=android"
 
 #define kIMAGE_HTTP_URL @"http://roompic.99ducaijing.cn:8081/"
 
-#define kHISTORY_HTTP_URL @"http://hall.99ducaijing.cn:8081/roomdata/room.php?act=history&userid="
+#define kHISTORY_HTTP_URL @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=history&userid="
 
 #define kVideoImageHeight kScreenWidth*360/480
 
 #define kLineColor RGB(207, 207, 207)
 
 #define kRegisterNumber @"http://api.99ducaijing.com/"
-//#define kRegisterNumber @"http://172.16.41.158/"
 
 #define kSinaKey @"4288225685"
 

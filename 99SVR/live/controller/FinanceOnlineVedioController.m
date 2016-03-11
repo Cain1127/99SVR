@@ -67,6 +67,19 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    
+    if (_videos.count>0)
+    {
+        RoomGroup *group = [_videos objectAtIndex:0];
+        if (group.groupList && group.groupList.count>0)
+        {
+            return group.groupList.count;
+        }
+        else
+        {
+            return 1;
+        }
+    }
     return _videos.count;
 }
 
@@ -77,11 +90,20 @@
     {
         return 0;
     }
-    else
+    if (_videos.count > 0)
     {
-        RoomGroup *room = _videos[section];
-        return (room.aryRoomHttp.count + 1) / 2;
+        RoomGroup *room = _videos[0];
+        if (room.groupList && room.groupList.count>0)
+        {
+            RoomGroup *group = room.groupList[section];
+            return (group.roomList.count + 1) / 2;
+        }
+        else
+        {
+            return (room.roomList.count + 1) / 2;
+        }
     }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -94,17 +116,26 @@
         cell.textLabel.textColor = [UIColor blackColor];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    if(_videos.count>indexPath.section)
+    if(_videos.count>0)
     {
-        RoomGroup *room = _videos[indexPath.section];
+        RoomGroup *roomTemp = _videos[0];
+        RoomGroup *room = nil;
+        if (roomTemp.groupList && roomTemp.groupList.count>0)
+        {
+            room = roomTemp.groupList[indexPath.section];
+        }
+        else
+        {
+            room = _videos[indexPath.section];
+        }
         int length = 2;
         int loc = (int)indexPath.row * length;
-        if (loc + length > room.aryRoomHttp.count)
+        if (loc + length > room.roomList.count)
         {
-            length = (int)room.aryRoomHttp.count - loc;
+            length = (int)room.roomList.count - loc;
         }
         NSRange range = NSMakeRange(loc, length);
-        NSArray *rowDatas = [room.aryRoomHttp subarrayWithRange:range];
+        NSArray *rowDatas = [room.roomList subarrayWithRange:range];
         __weak FinanceOnlineVedioController *__self = self;
         cell.itemOnClick = ^(RoomHttp *room)
         {
@@ -118,30 +149,6 @@
 
 - (void)connectRoom:(RoomHttp *)room
 {
-#if 0
-    LSTcpSocket *socket = [LSTcpSocket sharedLSTcpSocket];
-    __weak FinanceOnlineVedioController *__self = self;
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [__self.view makeToastActivity];
-    });
-    NSString *strAddress;
-    NSString *strPort;
-    if([UserInfo sharedUserInfo].strRoomAddr)
-    {
-        NSString *strAry = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@";"][0];
-        strAddress = [strAry componentsSeparatedByString:@":"][0];
-        strPort = [strAry componentsSeparatedByString:@":"][1];
-    }
-    else
-    {
-        NSString *strAry = [room.cgateaddr componentsSeparatedByString:@";"][0];
-        strAddress = [strAry componentsSeparatedByString:@":"][0];
-        strPort = [strAry componentsSeparatedByString:@":"][1];
-    }
-    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
-    [socket connectRoomInfo:room.nvcbid address:strAddress port:[strPort intValue]];
-#endif
     RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
     [self presentViewController:roomView animated:YES completion:nil];
 }
@@ -167,7 +174,6 @@
     if ([strMsg isEqualToString:@"需要输入密码"])
     {
         [[NSNotificationCenter defaultCenter] removeObserver:self];
-//        __block NSString *__strMsg = strMsg;
         dispatch_async(dispatch_get_main_queue(),
         ^{
             [__self.view hideToastActivity];
@@ -210,41 +216,56 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (_videos.count<2)
+    if (_videos.count>0)
     {
-        return nil;
-    }
-    GroupHeaderView *groupBtn = [[GroupHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, kGroupHeight)];
-    groupBtn.tag = section;
-    int status = [_groupStatus[@(section)] intValue];
-    if (status == 1)
-    {
-        groupBtn.open = NO;
-    }
-    else
-    {
-        groupBtn.open = YES;
-    }
-    if(_videos.count>section)
-    {
-        RoomGroup *group = _videos[section];
-        groupBtn.title = group.groupname;
+        GroupHeaderView *groupBtn = [[GroupHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, kGroupHeight)];
+        groupBtn.tag = section;
+        int status = [_groupStatus[@(section)] intValue];
+        if (status == 1)
+        {
+            groupBtn.open = NO;
+        }
+        else
+        {
+            groupBtn.open = YES;
+        }
+        RoomGroup *roomTemp = _videos[0];
+        RoomGroup *room = nil;
+        if (roomTemp.groupList && roomTemp.groupList.count>0)
+        {
+            room = roomTemp.groupList[section];
+        }
+        else
+        {
+            return nil;
+        }
+        groupBtn.title = room.groupName;
         __weak FinanceOnlineVedioController *__self = self;
         [groupBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-        {
-            [__self groupClick:groupBtn];
-        }];
+         {
+             [__self groupClick:groupBtn];
+         }];
+        
+        return groupBtn;
     }
-    return groupBtn;
+    return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (_videos.count<=1)
+    if (_videos.count>0)
     {
-        return 1;
+        RoomGroup *roomTemp = _videos[0];
+        if (roomTemp.groupList && roomTemp.groupList.count>0)
+        {
+            return kGroupHeight;
+        }
+        else
+        {
+            return 1;
+        }
     }
-    return kGroupHeight;
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

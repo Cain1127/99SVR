@@ -45,7 +45,6 @@
                     [aryCount addObject:textModel];
                 }
                 result.rooms = aryCount;
-//                [result setValue:dict[key] forKey:key];
             }
             else
             {

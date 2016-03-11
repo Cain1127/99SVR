@@ -37,6 +37,7 @@
     UILabel *lblText;
     int _roomid;
     int _nuserid;
+    int nReceiveMemory;
 }
 @property (nonatomic) BOOL backGroud;
 @property (nonatomic) BOOL bVideo;
@@ -56,17 +57,21 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    @synchronized(_media.videoBuf)
+    if (nReceiveMemory)
     {
-        [_media.videoBuf removeAllObjects];
+        @synchronized(_media.videoBuf)
+        {
+            [_media.videoBuf removeAllObjects];
+        }
+        @synchronized(_media.audioBuf)
+        {
+            [_media.audioBuf removeAllObjects];
+        }
+        [_openAL stopSound];
+        _playing = NO;
+        [_media closeSocket];
     }
-    @synchronized(_media.audioBuf)
-    {
-        [_media.audioBuf removeAllObjects];
-    }
-    [_openAL stopSound];
-    _playing = NO;
-    [_media closeSocket];
+    nReceiveMemory++;
 }
 
 #pragma mark - View lifecycle
@@ -169,10 +174,9 @@
         @autoreleasepool
         {
             NSData *data = nil;
-            @synchronized(_media.audioBuf)
+            if(_media.audioBuf.count>0)
             {
                 data = [_media.audioBuf objectAtIndex:0];
-                [_media.audioBuf removeObjectAtIndex:0];
             }
             if (data && data.length > 0)
             {
@@ -185,11 +189,17 @@
                 int32_t length = returnValue * sizeof(opus_int16) * 2;
                 [_openAL openAudioFromQueue:(uint8_t*)_out_buffer dataSize:length];
             }
+            @synchronized(_media.audioBuf)
+            {
+                if(_media.audioBuf.count>0)
+                {
+                    [_media.audioBuf removeObjectAtIndex:0];
+                }
+            }
             [NSThread sleepForTimeInterval:0.01];
         }
     }
     [_openAL stopSound];
-    [_openAL cleanUpOpenAL];
     [_media.audioBuf removeAllObjects];
 }
 
@@ -238,33 +248,6 @@
     [lblText setFont:XCFONT(16)];
     [lblText setTextAlignment:NSTextAlignmentCenter];
     _media = [[MediaSocket alloc] init];
-//    if (_aryAudio == nil)
-//    {
-//        _aryAudio = [[NSMutableArray alloc] init];
-//    }
-//    if (_aryVideo==nil)
-//    {
-//        _aryVideo = [[NSMutableArray alloc] init];
-//    }
-//    __weak LivePlayViewController *__self = self;
-//    _media.block = ^(unsigned char *puf,int nLen,int pt)
-//    {
-//        if (pt==99)
-//        {
-//            if(__self.bVideo)
-//            {
-//                [__self.aryVideo addObject:[[NSData alloc] initWithBytes:puf+8 length:nLen-8]];
-//            }
-//        }
-//        else if(pt==97 && nLen < 4000)
-//        {
-//            if (__self.aryAudio)
-//            {
-//                [__self.aryAudio addObject:[[NSData alloc] initWithBytes:puf length:nLen]];
-//            }
-//        }
-//    };
-    
 }
 
 - (void)setNullMic

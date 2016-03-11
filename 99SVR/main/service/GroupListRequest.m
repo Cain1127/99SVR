@@ -32,44 +32,31 @@
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
         if (dict)
         {
-            NSDictionary *firDict = [dict objectForKey:@"arr"];
-            if (firDict)
+            NSArray *firstArray = [dict objectForKey:@"groups"];
+            NSMutableArray *aryRoom = [NSMutableArray array];
+            if ([firstArray isKindOfClass:[NSArray class]] && firstArray.count>0)
             {
-                //先解析room  room id保存
-                NSArray *roomAry = [firDict objectForKey:@"room"];
-                NSMutableDictionary *dictObj = [NSMutableDictionary dictionary];
-                if(roomAry)
+                for (NSDictionary *group in firstArray)
                 {
-                    for (NSDictionary *dict in roomAry)
-                    {
-                        RoomHttp *room = [RoomHttp resultWithDict:dict];
-                        [dictObj setValue:room forKey:room.nvcbid];
-                    }
+                    RoomGroup *_roomgroup = [RoomGroup resultWithDict:group];
+                    [aryRoom addObject:_roomgroup];
                 }
-                //通过room Array  分别加入到aryRoom
-                NSDictionary *secDict = [firDict objectForKey:@"group"];
-                NSMutableArray *aryRoom = [NSMutableArray array];
-                if(secDict)
-                {
-                    for (NSDictionary *dict in [secDict allValues])
-                    {
-                        RoomGroup *room = [RoomGroup resultWithDict:dict];
-                        [aryRoom addObject:room];
-                        room.aryRoomHttp = [NSMutableArray array];
-                        for (NSString *strId in room.groupArr)
-                        {
-                            RoomHttp *roomHttp = [dictObj objectForKey:strId];
-                            if(roomHttp)
-                            {
-                                [room.aryRoomHttp addObject:roomHttp];
-                            }
-                        }
-                    }
-                }
-                if (_groupBlock)
-                {
-                    _groupBlock(1,aryRoom);
-                }
+            }
+            NSDictionary *dictService = [dict objectForKey:@"service"];
+            if ([dictService objectForKey:@"groupId"] && [dictService objectForKey:@"groupName"] && [dictService objectForKey:@"roomList"])
+            {
+                RoomGroup *_roomgroup = [RoomGroup resultWithDict:dictService];
+                [aryRoom addObject:_roomgroup];
+            }
+            NSDictionary *dictOther = [dict objectForKey:@"other"];
+            if ([dictOther objectForKey:@"groupId"] && [dictOther objectForKey:@"groupName"] && [dictOther objectForKey:@"roomList"])
+            {
+                RoomGroup *_roomgroup = [RoomGroup resultWithDict:dictOther];
+                [aryRoom addObject:_roomgroup];
+            }
+            if (_groupBlock)
+            {
+                _groupBlock(1,aryRoom);
             }
         }
         else

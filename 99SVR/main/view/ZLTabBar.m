@@ -41,9 +41,7 @@
                                                   blue:198/255.0
                                                  alpha:1.0];
         [self addSubview:sLine1];
-        
         [self setupButtons];
-        
         _nIndex = 0;
     }
     return self;
@@ -68,15 +66,15 @@
         [view addSubview:tabButton];
         [self addSubview:view];
         
-        if ([self.buttonData count] > count+1)
-        {
-            UILabel *lblContent = [[UILabel alloc] initWithFrame:Rect(view.frame.origin.x + view.frame.size.width,0, 0.5,49)];
-            [lblContent setBackgroundColor:[UIColor colorWithRed:198/255.0
-                                                        green:198/255.0
-                                                         blue:198/255.0
-                                                           alpha:1.0]];
-            [self addSubview:lblContent];
-        }
+//        if ([self.buttonData count] > count+1)
+//        {
+//            UILabel *lblContent = [[UILabel alloc] initWithFrame:Rect(view.frame.origin.x + view.frame.size.width,0, 0.5,49)];
+//            [lblContent setBackgroundColor:[UIColor colorWithRed:198/255.0
+//                                                        green:198/255.0
+//                                                         blue:198/255.0
+//                                                           alpha:1.0]];
+//            [self addSubview:lblContent];
+//        }
         
         count++;
     }

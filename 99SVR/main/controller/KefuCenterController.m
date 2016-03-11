@@ -41,7 +41,7 @@
     {
         for (RoomGroup *group in aryIndex)
         {
-            if ([group.groupid isEqualToString:@"16"]) {
+            if ([group.groupId isEqualToString:@"16"]) {
                 [__self.datas addObject:group];
                 break;
             }

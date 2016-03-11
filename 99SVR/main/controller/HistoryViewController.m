@@ -80,7 +80,7 @@
         if (__self.videos.count>0)
         {
             RoomGroup *group = [__self.videos objectAtIndex:0];
-            if (group.aryRoomHttp.count>0)
+            if (group.roomList.count>0)
             {
                 [__self setEmptyData:NO];
             }

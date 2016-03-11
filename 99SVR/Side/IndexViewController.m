@@ -61,36 +61,29 @@
             }
             for (RoomGroup *group in aryIndex)
             {
-                DLog(@"groupid:%@",group.groupid);
-                if([group.groupid isEqualToString:@"4"])
-                {
+                DLog(@"groupid:%@",group.groupId);
+                if([group.groupId isEqualToString:@"4"]){
                     [__self.aryHot addObject:group];
                 }
-                else if([group.groupid isEqualToString:@"18"] ||[group.groupid isEqualToString:@"200"])
-                {
+                else if([group.groupId isEqualToString:@"18"] ||[group.groupId isEqualToString:@"200"]){
                     
                 }
-                else if([group.groupid isEqualToString:@"16"])
-                {
-                    if ([UserInfo sharedUserInfo].aryHelp==nil)
-                    {
+                else if([group.groupId isEqualToString:@"16"]){
+                    if ([UserInfo sharedUserInfo].aryHelp==nil){
                         [UserInfo sharedUserInfo].aryHelp = [[NSArray alloc] initWithObjects:group, nil];
                     }
                 }
-                else
-                {
+                else{
                     [__self.aryOnline addObject:group];
                 }
             }
             for (UIViewController *viewController in __self.childViewControllers)
             {
-                if([viewController class]==[HotViewController class])
-                {
+                if([viewController class]==[HotViewController class]){
                     [__self setUpdate:__self.aryHot obj:viewController];
                     continue;
                 }
-                if([viewController class] == [MainViewController class])
-                {
+                if([viewController class] == [MainViewController class]){
                     [__self setUpdate:__self.aryOnline obj:viewController];
                     continue;
                 }

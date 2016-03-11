@@ -67,6 +67,11 @@
     rightView = [[RightViewController alloc] init];
     _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
 //    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
+    
+//    UINavigationController *navCon = [[UINavigationController alloc] init];
+//    [navCon pushViewController:_sides animated:YES];
+//    [_window setRootViewController:navCon];
+    
     [_window setRootViewController:_sides];
     _sides.speedf = 0.5;
     return YES;
