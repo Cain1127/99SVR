@@ -40,6 +40,7 @@
     _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
     [_lblContent setBackgroundColor:[UIColor whiteColor]];
     [_headView addSubview:_lblContent];
+    
 }
 
 - (void)setUserInter

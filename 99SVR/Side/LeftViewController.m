@@ -9,7 +9,6 @@
 
 #import "LeftViewController.h"
 #import "Common.h"
-#import "RegisterViewController.h"
 #import "RegMobileViewController.h"
 #import "UIView+Extension.h"
 #import "LeftCellModel.h"
@@ -18,7 +17,6 @@
 #import "AppDelegate.h"
 #import "WWSideslipViewController.h"
 #import "LoginViewController.h"
-#import "RegViewController.h"
 #import "AllColletViewController.h"
 #import "SettingCenterController.h"
 #import "KefuCenterController.h"
