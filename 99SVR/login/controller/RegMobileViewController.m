@@ -10,10 +10,8 @@
 #import "IdeaDetailRePly.h"
 #import "Toast+UIView.h"
 #import "NNSVRViewController.h"
-#import "RegisterService.h"
 #import "LSTcpSocket.h"
 #import "BaseService.h"
-#import "IdentifyService.h"
 #import "QCheckBox.h"
 #import "DecodeJson.h"
 #import "RegNameViewController.h"
@@ -26,8 +24,6 @@
 }
 
 @property (nonatomic,strong) UILabel *lblError;
-@property (nonatomic,strong) IdentifyService *idenServer;
-@property (nonatomic,strong) RegisterService *regServer;
 @property (nonatomic,strong) UIImageView *imgView;
 @property (nonatomic,strong) UITextField *txtName;
 @property (nonatomic,strong) UITextField *txtPwd;
@@ -238,8 +234,6 @@
 - (void)initUIHead
 {
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    _idenServer = [[IdentifyService alloc] init];
-    _regServer = [[RegisterService alloc] init];
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];

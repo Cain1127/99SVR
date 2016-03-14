@@ -9,7 +9,6 @@
 
 #import "LeftViewController.h"
 #import "Common.h"
-#import "RegisterViewController.h"
 #import "RegMobileViewController.h"
 #import "UIView+Extension.h"
 #import "LeftCellModel.h"
@@ -18,7 +17,6 @@
 #import "AppDelegate.h"
 #import "WWSideslipViewController.h"
 #import "LoginViewController.h"
-#import "RegViewController.h"
 #import "AllColletViewController.h"
 #import "SettingCenterController.h"
 #import "KefuCenterController.h"
@@ -32,6 +30,7 @@
 #define kHistory @"历史记录"
 #define kSetting @"设置"
 #define kMyCollection @"我的收藏"
+#define kMyAsset @"我的资产"
 #define kKefu @"客服中心"
 
 @interface LeftViewController ()<UITableViewDataSource,UITableViewDelegate, UIAlertViewDelegate,LeftHeaderDelegate>
@@ -103,6 +102,7 @@
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
         [_items addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"collect.png" goClassName:@"VideoColletionViewController"]];
+        [_items addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"setting" goClassName:@"AssetViewController"]];
         [_items addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
         [_items addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"kefu.png" goClassName:@"KefuCenterController"]];
         _footerView.hidden = NO;
