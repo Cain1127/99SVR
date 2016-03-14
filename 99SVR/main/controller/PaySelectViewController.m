@@ -66,7 +66,7 @@
         
         //NSString *param = @"partner=\"2088221194296626\"&seller_id=\"linghongli@99cj.com.cn\"&out_trade_no=\"GK1FGHI1WYBCEU8\"&subject=\"支付宝测试商品\"&body=\"支付宝测试商品描述\"&total_fee=\"0.01\"&notify_url=\"http://www.xxx.com\"&service=\"mobile.securitypay.pay\"&payment_type=\"1\"&_input_charset=\"utf-8\"&it_b_pay=\"30m\"&show_url=\"m.alipay.com\"&sign=\"J1j9cMcnWtTShMST1dWcHPKZ5JocQAatwvLRURk3UTaSJW6Q6kBqIEhOQb78UjoFRYHCjBo4aYczeGpxaEtikT3IEG%2FfDR5d3K7kTnnUq96ZZU35EiodFrAGUsYXQanuIeABcUvJsHHtybNQKFncy6DrhYxIgRfLYKHno9p5r0E%3D\"&sign_type=\"RSA\"";
         //JSValue *jsVal = args[0];
-        NSString *param = args[0];
+        NSString *param = ((JSValue *)args[0]).toString;
         //        for (JSValue *jsVal in args) {
         //            param = jsVal.toString;
         //            //NSLog(@"%@", jsVal.toString);
