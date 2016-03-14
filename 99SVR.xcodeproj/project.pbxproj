@@ -317,6 +317,12 @@
 		BB63F62C1C2D0DDF00A042E8 /* ChatButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F62B1C2D0DDF00A042E8 /* ChatButton.m */; };
 		BB7B6FF91C33D6E10018FEC1 /* MyDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7B6FF81C33D6E10018FEC1 /* MyDataController.m */; };
 		BB7B6FFC1C33D7070018FEC1 /* CircleImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7B6FFB1C33D7070018FEC1 /* CircleImageView.m */; };
+		BB7C7A761C92B01400FFB29D /* M80AttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7C7A6E1C92B01400FFB29D /* M80AttributedLabel.m */; };
+		BB7C7A771C92B01400FFB29D /* M80AttributedLabelAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7C7A701C92B01400FFB29D /* M80AttributedLabelAttachment.m */; };
+		BB7C7A781C92B01400FFB29D /* M80AttributedLabelURL.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7C7A731C92B01400FFB29D /* M80AttributedLabelURL.m */; };
+		BB7C7A791C92B01400FFB29D /* NSMutableAttributedString+M80.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7C7A751C92B01400FFB29D /* NSMutableAttributedString+M80.m */; };
+		BB7C7A801C9566BD00FFB29D /* FTCoreTextStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7C7A7D1C9566BD00FFB29D /* FTCoreTextStyle.m */; };
+		BB7C7A811C9566BD00FFB29D /* FTCoreTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7C7A7F1C9566BD00FFB29D /* FTCoreTextView.m */; };
 		BB874F6F1C74D6DB008B169D /* RoomTcpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = BB874F6E1C74D6DB008B169D /* RoomTcpSocket.m */; };
 		BB88F30A1C3FA97E00C1F8D9 /* SearchButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F3091C3FA97E00C1F8D9 /* SearchButton.m */; };
 		BB88F30D1C3FB09900C1F8D9 /* HotTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F30C1C3FB09900C1F8D9 /* HotTextView.m */; };
@@ -897,6 +903,19 @@
 		BB7B6FF81C33D6E10018FEC1 /* MyDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDataController.m; sourceTree = "<group>"; };
 		BB7B6FFA1C33D7070018FEC1 /* CircleImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleImageView.h; sourceTree = "<group>"; };
 		BB7B6FFB1C33D7070018FEC1 /* CircleImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleImageView.m; sourceTree = "<group>"; };
+		BB7C7A6D1C92B01400FFB29D /* M80AttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M80AttributedLabel.h; sourceTree = "<group>"; };
+		BB7C7A6E1C92B01400FFB29D /* M80AttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M80AttributedLabel.m; sourceTree = "<group>"; };
+		BB7C7A6F1C92B01400FFB29D /* M80AttributedLabelAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M80AttributedLabelAttachment.h; sourceTree = "<group>"; };
+		BB7C7A701C92B01400FFB29D /* M80AttributedLabelAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M80AttributedLabelAttachment.m; sourceTree = "<group>"; };
+		BB7C7A711C92B01400FFB29D /* M80AttributedLabelDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M80AttributedLabelDefines.h; sourceTree = "<group>"; };
+		BB7C7A721C92B01400FFB29D /* M80AttributedLabelURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M80AttributedLabelURL.h; sourceTree = "<group>"; };
+		BB7C7A731C92B01400FFB29D /* M80AttributedLabelURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M80AttributedLabelURL.m; sourceTree = "<group>"; };
+		BB7C7A741C92B01400FFB29D /* NSMutableAttributedString+M80.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+M80.h"; sourceTree = "<group>"; };
+		BB7C7A751C92B01400FFB29D /* NSMutableAttributedString+M80.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+M80.m"; sourceTree = "<group>"; };
+		BB7C7A7C1C9566BD00FFB29D /* FTCoreTextStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTCoreTextStyle.h; sourceTree = "<group>"; };
+		BB7C7A7D1C9566BD00FFB29D /* FTCoreTextStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTCoreTextStyle.m; sourceTree = "<group>"; };
+		BB7C7A7E1C9566BD00FFB29D /* FTCoreTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTCoreTextView.h; sourceTree = "<group>"; };
+		BB7C7A7F1C9566BD00FFB29D /* FTCoreTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTCoreTextView.m; sourceTree = "<group>"; };
 		BB874F6D1C74D6DB008B169D /* RoomTcpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomTcpSocket.h; sourceTree = "<group>"; };
 		BB874F6E1C74D6DB008B169D /* RoomTcpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomTcpSocket.m; sourceTree = "<group>"; };
 		BB88F3081C3FA97E00C1F8D9 /* SearchButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchButton.h; sourceTree = "<group>"; };
@@ -1387,6 +1406,8 @@
 		BB25D7D61C1571B400314C1E /* 99SVR */ = {
 			isa = PBXGroup;
 			children = (
+				BB7C7A7B1C9566BD00FFB29D /* FTCoreText */,
+				BB7C7A6C1C92B01400FFB29D /* M80AttributedLabel */,
 				BB1769421C7C91EF00CE947C /* tengx */,
 				BB88F3711C48BA7300C1F8D9 /* libs */,
 				BB1661A81C3E67B000D318BE /* Text */,
@@ -2015,6 +2036,33 @@
 			path = Side;
 			sourceTree = "<group>";
 		};
+		BB7C7A6C1C92B01400FFB29D /* M80AttributedLabel */ = {
+			isa = PBXGroup;
+			children = (
+				BB7C7A6D1C92B01400FFB29D /* M80AttributedLabel.h */,
+				BB7C7A6E1C92B01400FFB29D /* M80AttributedLabel.m */,
+				BB7C7A6F1C92B01400FFB29D /* M80AttributedLabelAttachment.h */,
+				BB7C7A701C92B01400FFB29D /* M80AttributedLabelAttachment.m */,
+				BB7C7A711C92B01400FFB29D /* M80AttributedLabelDefines.h */,
+				BB7C7A721C92B01400FFB29D /* M80AttributedLabelURL.h */,
+				BB7C7A731C92B01400FFB29D /* M80AttributedLabelURL.m */,
+				BB7C7A741C92B01400FFB29D /* NSMutableAttributedString+M80.h */,
+				BB7C7A751C92B01400FFB29D /* NSMutableAttributedString+M80.m */,
+			);
+			path = M80AttributedLabel;
+			sourceTree = "<group>";
+		};
+		BB7C7A7B1C9566BD00FFB29D /* FTCoreText */ = {
+			isa = PBXGroup;
+			children = (
+				BB7C7A7C1C9566BD00FFB29D /* FTCoreTextStyle.h */,
+				BB7C7A7D1C9566BD00FFB29D /* FTCoreTextStyle.m */,
+				BB7C7A7E1C9566BD00FFB29D /* FTCoreTextView.h */,
+				BB7C7A7F1C9566BD00FFB29D /* FTCoreTextView.m */,
+			);
+			path = FTCoreText;
+			sourceTree = "<group>";
+		};
 		BB88F3471C4736C100C1F8D9 /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
@@ -2445,6 +2493,7 @@
 				BB9765FC1C87C53600FAA5B7 /* NewDetailsViewController.m in Sources */,
 				BB1768991C75EB3A00CE947C /* TextPointViewController.m in Sources */,
 				BB63F5FC1C2CC7A300A042E8 /* RoomInfo.m in Sources */,
+				BB7C7A791C92B01400FFB29D /* NSMutableAttributedString+M80.m in Sources */,
 				BB1769251C7B006F00CE947C /* SDWebImageDecoder.m in Sources */,
 				BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */,
 				BB63F5C71C2CC7A300A042E8 /* NSArray+MASAdditions.m in Sources */,
@@ -2495,6 +2544,7 @@
 				BB1661AE1C3E67B000D318BE /* TextViewController.m in Sources */,
 				BB17694D1C7D9E7300CE947C /* InputPwdViewController.m in Sources */,
 				BB0436871C4E28E700A162A8 /* TextLiveModel.m in Sources */,
+				BB7C7A781C92B01400FFB29D /* M80AttributedLabelURL.m in Sources */,
 				BB63F5C31C2CC7A300A042E8 /* MASConstraintMaker.m in Sources */,
 				BB63F5C91C2CC7A300A042E8 /* View+MASAdditions.m in Sources */,
 				BB63F5D21C2CC7A300A042E8 /* MJRefreshLegendFooter.m in Sources */,
@@ -2514,6 +2564,7 @@
 				BB63F6271C2CC7A300A042E8 /* LeftViewController.m in Sources */,
 				BB88F3641C4736C100C1F8D9 /* AFURLResponseSerialization.m in Sources */,
 				BB63F5CA1C2CC7A300A042E8 /* ViewController+MASAdditions.m in Sources */,
+				BB7C7A801C9566BD00FFB29D /* FTCoreTextStyle.m in Sources */,
 				BB1769281C7B006F00CE947C /* SDWebImageManager.m in Sources */,
 				BB63F5C81C2CC7A300A042E8 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				BB16619D1C3E2DC700D318BE /* ZLButton.m in Sources */,
@@ -2550,6 +2601,7 @@
 				BB25D80F1C15729800314C1E /* AppDelegate.m in Sources */,
 				BB63F5F41C2CC7A300A042E8 /* SVRSocket.m in Sources */,
 				BB63F5D11C2CC7A300A042E8 /* MJRefreshHeader.m in Sources */,
+				BB7C7A811C9566BD00FFB29D /* FTCoreTextView.m in Sources */,
 				BB0436811C4E28B800A162A8 /* TomorrowModel.m in Sources */,
 				BB63F6081C2CC7A300A042E8 /* TitleButton.m in Sources */,
 				BB63F5B01C2CC7A300A042E8 /* FMDatabasePool.m in Sources */,
@@ -2581,6 +2633,7 @@
 				BB1769241C7B006F00CE947C /* SDWebImageCompat.m in Sources */,
 				BBE56C581C4FA1B10030E050 /* IdeaDetailRePly.m in Sources */,
 				BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */,
+				BB7C7A771C92B01400FFB29D /* M80AttributedLabelAttachment.m in Sources */,
 				BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */,
 				BB63F5C11C2CC7A300A042E8 /* MASCompositeConstraint.m in Sources */,
 				BB63F47B1C2B809800A042E8 /* UserInfo.m in Sources */,
@@ -2589,6 +2642,7 @@
 				BB63F61C1C2CC7A300A042E8 /* RoomGroup.m in Sources */,
 				BB63F6221C2CC7A300A042E8 /* MySearchBar.m in Sources */,
 				BB1769231C7B006F00CE947C /* SDImageCache.m in Sources */,
+				BB7C7A761C92B01400FFB29D /* M80AttributedLabel.m in Sources */,
 				BB1661731C3CDEE200D318BE /* IdentifyService.m in Sources */,
 				BB63F5AE1C2CC7A300A042E8 /* FMDatabase.m in Sources */,
 				BB88F3631C4736C100C1F8D9 /* AFURLRequestSerialization.m in Sources */,

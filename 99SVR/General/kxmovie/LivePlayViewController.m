@@ -57,21 +57,14 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    if (nReceiveMemory)
+    @synchronized(_media.videoBuf)
     {
-        @synchronized(_media.videoBuf)
-        {
-            [_media.videoBuf removeAllObjects];
-        }
-        @synchronized(_media.audioBuf)
-        {
-            [_media.audioBuf removeAllObjects];
-        }
-        [_openAL stopSound];
-        _playing = NO;
-        [_media closeSocket];
+        [_media.videoBuf removeAllObjects];
     }
-    nReceiveMemory++;
+    @synchronized(_media.audioBuf)
+    {
+        [_media.audioBuf removeAllObjects];
+    }
 }
 
 #pragma mark - View lifecycle

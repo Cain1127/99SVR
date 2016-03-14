@@ -232,6 +232,9 @@
 
 + (NSArray *)getSrcPath:(NSString *)urlString
 {
+    if (!urlString) {
+        return nil;
+    }
     NSError *error;
     NSMutableArray *array = [NSMutableArray array];
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"src=\"http:\"?(.*?)(\"|>|\\s+)" options:0 error:&error];

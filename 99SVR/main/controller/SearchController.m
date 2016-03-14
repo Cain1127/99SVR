@@ -102,6 +102,13 @@
                 [array removeObject:item];
                 [array addObject:item];
             }
+            for (RoomGroup *sonGroup in rGroup.groupList)
+            {
+                for (RoomHttp *item in sonGroup.roomList) {
+                    [array removeObject:item];
+                    [array addObject:item];
+                }
+            }
         }
         group.roomList = array;
         [aryDatas addObject:group];
@@ -125,6 +132,13 @@
                     {
                         [array removeObject:item];
                         [array addObject:item];
+                    }
+                    for (RoomGroup *sonGroup in rGroup.groupList)
+                    {
+                        for (RoomHttp *item in sonGroup.roomList) {
+                            [array removeObject:item];
+                            [array addObject:item];
+                        }
                     }
                 }
                 group.roomList = array;

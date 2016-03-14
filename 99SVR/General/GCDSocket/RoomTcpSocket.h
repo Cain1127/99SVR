@@ -57,6 +57,13 @@
 
 - (void)sendGift:(int)userId;
 
+- (void)sendMediaInfo:(NSString *)strInfo;
+
 @end
 
 
+@interface SVRMesssage : NSObject
+@property (nonatomic,strong)    NSString    *messageID;
+@property (nonatomic,strong)    NSString    *text;
++ (SVRMesssage *)message:(NSString *)strInfo;
+@end

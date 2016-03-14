@@ -211,6 +211,8 @@ typedef struct _tag_MediaFrameBuffer
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port
 {
     DLog(@"建立socket成功:ip:%@--port:%d",host,port);
+    NSString *strInfo = [NSString stringWithFormat:@"%@:%d",host,port];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TCP_SOCKET_SEND_MEDIA object:strInfo];
     m_jittertime = 2;
     _nFall ++;
     [_gcdSocket readDataToLength:4 withTimeout:10 tag:1];
