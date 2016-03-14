@@ -70,6 +70,7 @@
 
 // 充值支付请求URL
 #define kPay_URL @"http://abc.99ducaijing.com/mobile/wap_cz"
+//#define kPay_URL @"http://172.16.41.167/mobile/wap_cz"
 
 //#define kImage_TEXT_URL @"http://121.33.236.180:22807/test/getimage.php?tid="
 //#define kTEXT_GROUP_URL @"http://121.33.236.180:22807/test/test.php?act=script"

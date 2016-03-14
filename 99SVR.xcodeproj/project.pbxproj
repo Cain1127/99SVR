@@ -2882,7 +2882,6 @@
 				BB63F6221C2CC7A300A042E8 /* MySearchBar.m in Sources */,
 				BB1769231C7B006F00CE947C /* SDImageCache.m in Sources */,
 				BB7C7A761C92B01400FFB29D /* M80AttributedLabel.m in Sources */,
-				BB1661731C3CDEE200D318BE /* IdentifyService.m in Sources */,
 				BB63F5AE1C2CC7A300A042E8 /* FMDatabase.m in Sources */,
 				BB88F3631C4736C100C1F8D9 /* AFURLRequestSerialization.m in Sources */,
 				BB63F5B51C2CC7A300A042E8 /* DecodeJson.m in Sources */,
