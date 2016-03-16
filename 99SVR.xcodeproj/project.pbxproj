@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1827FF591C9959BF009D9C79 /* MyScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1827FF581C9959BF009D9C79 /* MyScrollView.m */; };
+		188741791C96FE25002EF25A /* NavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188741781C96FE25002EF25A /* NavigationViewController.m */; };
+		188741811C9702DA002EF25A /* Foundation+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417A1C9702DA002EF25A /* Foundation+Log.m */; };
+		188741821C9702DA002EF25A /* NSString+Regex.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417C1C9702DA002EF25A /* NSString+Regex.m */; };
+		188741831C9702DA002EF25A /* UIBarButtonItem+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */; };
+		188741871C97058F002EF25A /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188741861C97058F002EF25A /* TabBarController.m */; };
+		189D8A8E1C97982100E7D16D /* SlideBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */; };
+		18AAD55D1C9927B800438E18 /* LeftMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AAD55A1C9927B800438E18 /* LeftMenu.m */; };
+		18AAD55E1C9927B800438E18 /* LeftMenuHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AAD55C1C9927B800438E18 /* LeftMenuHeaderView.m */; };
+		18AAD5641C993CD100438E18 /* AssetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AAD5611C993CD100438E18 /* AssetViewController.m */; };
+		18AAD5651C993CD100438E18 /* PaySelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AAD5631C993CD100438E18 /* PaySelectViewController.m */; };
 		18AC14081C8FB3B000FDFF40 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 18AC14071C8FB3B000FDFF40 /* libsqlite3.0.tbd */; };
 		18AC140A1C8FB44600FDFF40 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 18AC14091C8FB44600FDFF40 /* libiconv.tbd */; };
 		18AC140C1C8FB55600FDFF40 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18AC140B1C8FB55600FDFF40 /* CoreTelephony.framework */; };
@@ -16,9 +27,7 @@
 		18AC14171C8FB8E100FDFF40 /* JSPatch.js in Resources */ = {isa = PBXBuildFile; fileRef = 18AC14151C8FB8E100FDFF40 /* JSPatch.js */; };
 		18EBF7301C964BEA0056261D /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EBF72E1C964BEA0056261D /* libWeChatSDK.a */; };
 		18EBF7311C964BEA0056261D /* libWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EBF72F1C964BEA0056261D /* libWeiboSDK.a */; };
-		18F753891C910A7B000F1D72 /* AssetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F753881C910A7B000F1D72 /* AssetViewController.m */; };
 		18F7538C1C9171C2000F1D72 /* NSString+Size.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F7538B1C9171C2000F1D72 /* NSString+Size.m */; };
-		18F7538F1C917939000F1D72 /* PaySelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F7538E1C917939000F1D72 /* PaySelectViewController.m */; };
 		18F970A51C9292DE001B2575 /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 18F970A31C9292DE001B2575 /* AlipaySDK.bundle */; };
 		18F970A61C9292DE001B2575 /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F970A41C9292DE001B2575 /* AlipaySDK.framework */; };
 		18F970A91C92945F001B2575 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F970A71C92945F001B2575 /* libcrypto.a */; };
@@ -426,6 +435,27 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1827FF571C9959BF009D9C79 /* MyScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyScrollView.h; sourceTree = "<group>"; };
+		1827FF581C9959BF009D9C79 /* MyScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyScrollView.m; sourceTree = "<group>"; };
+		188741771C96FE25002EF25A /* NavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationViewController.h; sourceTree = "<group>"; };
+		188741781C96FE25002EF25A /* NavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationViewController.m; sourceTree = "<group>"; };
+		1887417A1C9702DA002EF25A /* Foundation+Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Foundation+Log.m"; sourceTree = "<group>"; };
+		1887417B1C9702DA002EF25A /* NSString+Regex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Regex.h"; sourceTree = "<group>"; };
+		1887417C1C9702DA002EF25A /* NSString+Regex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Regex.m"; sourceTree = "<group>"; };
+		1887417D1C9702DA002EF25A /* UIBarButtonItem+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Extension.h"; sourceTree = "<group>"; };
+		1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Extension.m"; sourceTree = "<group>"; };
+		188741851C97058F002EF25A /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
+		188741861C97058F002EF25A /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
+		189D8A8C1C97982100E7D16D /* SlideBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideBaseViewController.h; sourceTree = "<group>"; };
+		189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideBaseViewController.m; sourceTree = "<group>"; };
+		18AAD5591C9927B800438E18 /* LeftMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftMenu.h; sourceTree = "<group>"; };
+		18AAD55A1C9927B800438E18 /* LeftMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftMenu.m; sourceTree = "<group>"; };
+		18AAD55B1C9927B800438E18 /* LeftMenuHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftMenuHeaderView.h; sourceTree = "<group>"; };
+		18AAD55C1C9927B800438E18 /* LeftMenuHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftMenuHeaderView.m; sourceTree = "<group>"; };
+		18AAD5601C993CD100438E18 /* AssetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetViewController.h; sourceTree = "<group>"; };
+		18AAD5611C993CD100438E18 /* AssetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetViewController.m; sourceTree = "<group>"; };
+		18AAD5621C993CD100438E18 /* PaySelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaySelectViewController.h; sourceTree = "<group>"; };
+		18AAD5631C993CD100438E18 /* PaySelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaySelectViewController.m; sourceTree = "<group>"; };
 		18AC14071C8FB3B000FDFF40 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		18AC14091C8FB44600FDFF40 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		18AC140B1C8FB55600FDFF40 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -436,12 +466,8 @@
 		18AC14151C8FB8E100FDFF40 /* JSPatch.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = JSPatch.js; sourceTree = "<group>"; };
 		18EBF72E1C964BEA0056261D /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeChatSDK.a; path = 99SVR/libs/libWeChatSDK.a; sourceTree = SOURCE_ROOT; };
 		18EBF72F1C964BEA0056261D /* libWeiboSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeiboSDK.a; path = 99SVR/libs/libWeiboSDK.a; sourceTree = SOURCE_ROOT; };
-		18F753871C910A7B000F1D72 /* AssetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetViewController.h; sourceTree = "<group>"; };
-		18F753881C910A7B000F1D72 /* AssetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetViewController.m; sourceTree = "<group>"; };
 		18F7538A1C9171C2000F1D72 /* NSString+Size.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Size.h"; sourceTree = "<group>"; };
 		18F7538B1C9171C2000F1D72 /* NSString+Size.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Size.m"; sourceTree = "<group>"; };
-		18F7538D1C917939000F1D72 /* PaySelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaySelectViewController.h; sourceTree = "<group>"; };
-		18F7538E1C917939000F1D72 /* PaySelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaySelectViewController.m; sourceTree = "<group>"; };
 		18F970A31C9292DE001B2575 /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
 		18F970A41C9292DE001B2575 /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
 		18F970A71C92945F001B2575 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
@@ -1196,6 +1222,66 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		188741721C96FD75002EF25A /* leftMenu */ = {
+			isa = PBXGroup;
+			children = (
+				188741731C96FD75002EF25A /* controller */,
+				188741741C96FD75002EF25A /* model */,
+				188741751C96FD75002EF25A /* view */,
+			);
+			path = leftMenu;
+			sourceTree = "<group>";
+		};
+		188741731C96FD75002EF25A /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				18AAD55F1C993CD100438E18 /* recharge */,
+			);
+			path = controller;
+			sourceTree = "<group>";
+		};
+		188741741C96FD75002EF25A /* model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		188741751C96FD75002EF25A /* view */ = {
+			isa = PBXGroup;
+			children = (
+				18AAD5591C9927B800438E18 /* LeftMenu.h */,
+				18AAD55A1C9927B800438E18 /* LeftMenu.m */,
+				18AAD55B1C9927B800438E18 /* LeftMenuHeaderView.h */,
+				18AAD55C1C9927B800438E18 /* LeftMenuHeaderView.m */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		188741761C96FDC8002EF25A /* common */ = {
+			isa = PBXGroup;
+			children = (
+				188741771C96FE25002EF25A /* NavigationViewController.h */,
+				188741781C96FE25002EF25A /* NavigationViewController.m */,
+				188741851C97058F002EF25A /* TabBarController.h */,
+				188741861C97058F002EF25A /* TabBarController.m */,
+				189D8A8C1C97982100E7D16D /* SlideBaseViewController.h */,
+				189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */,
+			);
+			name = common;
+			sourceTree = "<group>";
+		};
+		18AAD55F1C993CD100438E18 /* recharge */ = {
+			isa = PBXGroup;
+			children = (
+				18AAD5601C993CD100438E18 /* AssetViewController.h */,
+				18AAD5611C993CD100438E18 /* AssetViewController.m */,
+				18AAD5621C993CD100438E18 /* PaySelectViewController.h */,
+				18AAD5631C993CD100438E18 /* PaySelectViewController.m */,
+			);
+			path = recharge;
+			sourceTree = "<group>";
+		};
 		18AC140D1C8FB89A00FDFF40 /* image */ = {
 			isa = PBXGroup;
 			children = (
@@ -1642,6 +1728,7 @@
 				BB63F5411C2CC7A300A042E8 /* live */,
 				BB63F5671C2CC7A300A042E8 /* login */,
 				BB63F5711C2CC7A300A042E8 /* main */,
+				188741721C96FD75002EF25A /* leftMenu */,
 				BB63F59B1C2CC7A300A042E8 /* Side */,
 				BB63F4781C2B809800A042E8 /* singlet */,
 				BB25D9D81C167AE000314C1E /* Macro */,
@@ -1811,6 +1898,11 @@
 				BB63F48E1C2CC7A200A042E8 /* UIView+Frame.m */,
 				BB63F48F1C2CC7A200A042E8 /* UIView+Touch.h */,
 				BB63F4901C2CC7A200A042E8 /* UIView+Touch.m */,
+				1887417A1C9702DA002EF25A /* Foundation+Log.m */,
+				1887417B1C9702DA002EF25A /* NSString+Regex.h */,
+				1887417C1C9702DA002EF25A /* NSString+Regex.m */,
+				1887417D1C9702DA002EF25A /* UIBarButtonItem+Extension.h */,
+				1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */,
 			);
 			path = category;
 			sourceTree = "<group>";
@@ -2164,6 +2256,7 @@
 		BB63F5721C2CC7A300A042E8 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				188741761C96FDC8002EF25A /* common */,
 				BB1661A21C3E2F9A00D318BE /* HomeViewController.h */,
 				BB1661A31C3E2F9A00D318BE /* HomeViewController.m */,
 				BB7B6FF71C33D6E10018FEC1 /* MyDataController.h */,
@@ -2188,10 +2281,6 @@
 				BB63F5871C2CC7A300A042E8 /* SettingCenterController.m */,
 				BBB515F51C4D29E3008F2CEC /* AllColletViewController.h */,
 				BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */,
-				18F753871C910A7B000F1D72 /* AssetViewController.h */,
-				18F753881C910A7B000F1D72 /* AssetViewController.m */,
-				18F7538D1C917939000F1D72 /* PaySelectViewController.h */,
-				18F7538E1C917939000F1D72 /* PaySelectViewController.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -2239,6 +2328,8 @@
 				BB88F3091C3FA97E00C1F8D9 /* SearchButton.m */,
 				BBB515F81C4D3655008F2CEC /* DoubleView.h */,
 				BBB515F91C4D3655008F2CEC /* DoubleView.m */,
+				1827FF571C9959BF009D9C79 /* MyScrollView.h */,
+				1827FF581C9959BF009D9C79 /* MyScrollView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -2714,11 +2805,13 @@
 				BB88F30D1C3FB09900C1F8D9 /* HotTextView.m in Sources */,
 				BBD49D741C5B142400EADF74 /* LivePlayViewController.m in Sources */,
 				BB88F3611C4736C100C1F8D9 /* AFSecurityPolicy.m in Sources */,
+				188741811C9702DA002EF25A /* Foundation+Log.m in Sources */,
 				BB63F60B1C2CC7A300A042E8 /* VideoCellView.m in Sources */,
 				BB88F31F1C414A8A00C1F8D9 /* TextHomeViewController.m in Sources */,
 				BBA16D9F1C8A979000D84E80 /* TextHistoryViewController.m in Sources */,
 				BB63F5E11C2CC7A300A042E8 /* RESideMenuItem.m in Sources */,
 				BB63F6091C2CC7A300A042E8 /* UIImage+animatedGIF.m in Sources */,
+				18AAD5641C993CD100438E18 /* AssetViewController.m in Sources */,
 				BB88F3161C41462B00C1F8D9 /* TextChatViewController.m in Sources */,
 				BB9765FC1C87C53600FAA5B7 /* NewDetailsViewController.m in Sources */,
 				BB1768991C75EB3A00CE947C /* TextPointViewController.m in Sources */,
@@ -2728,6 +2821,7 @@
 				BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */,
 				BB63F5C71C2CC7A300A042E8 /* NSArray+MASAdditions.m in Sources */,
 				BB63F5E01C2CC7A300A042E8 /* RESideMenuCell.m in Sources */,
+				1827FF591C9959BF009D9C79 /* MyScrollView.m in Sources */,
 				BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */,
 				BB63F5D61C2CC7A300A042E8 /* UIView+MJExtension.m in Sources */,
 				BB63F6291C2CC7A300A042E8 /* WWSideslipViewController.m in Sources */,
@@ -2751,6 +2845,7 @@
 				BB1769411C7C090F00CE947C /* RegNameViewController.m in Sources */,
 				BB63F5B31C2CC7A300A042E8 /* GCDAsyncSocket.m in Sources */,
 				BB63F5AB1C2CC7A300A042E8 /* UIColor+Ext.m in Sources */,
+				188741871C97058F002EF25A /* TabBarController.m in Sources */,
 				BB63F6201C2CC7A300A042E8 /* GroupView.m in Sources */,
 				BB63F5B61C2CC7A300A042E8 /* GTMBase64.m in Sources */,
 				18F9710B1C92947F001B2575 /* Order.m in Sources */,
@@ -2791,13 +2886,16 @@
 				BB63F61F1C2CC7A300A042E8 /* RoomListRequest.m in Sources */,
 				BB63F6251C2CC7A300A042E8 /* LeftHeaderView.m in Sources */,
 				BB88F36D1C4772B100C1F8D9 /* NNSVRViewController.m in Sources */,
+				188741821C9702DA002EF25A /* NSString+Regex.m in Sources */,
 				BB63F5D51C2CC7A300A042E8 /* UIScrollView+MJRefresh.m in Sources */,
 				BB874F6F1C74D6DB008B169D /* RoomTcpSocket.m in Sources */,
 				BB17692F1C7B006F00CE947C /* UIImageView+WebCache.m in Sources */,
 				BB9765F31C85B55F00FAA5B7 /* DeviceUID.m in Sources */,
 				BB63F6271C2CC7A300A042E8 /* LeftViewController.m in Sources */,
+				188741831C9702DA002EF25A /* UIBarButtonItem+Extension.m in Sources */,
 				BB88F3641C4736C100C1F8D9 /* AFURLResponseSerialization.m in Sources */,
 				BB63F5CA1C2CC7A300A042E8 /* ViewController+MASAdditions.m in Sources */,
+				18AAD55E1C9927B800438E18 /* LeftMenuHeaderView.m in Sources */,
 				BB7C7A801C9566BD00FFB29D /* FTCoreTextStyle.m in Sources */,
 				BB1769281C7B006F00CE947C /* SDWebImageManager.m in Sources */,
 				BB63F5C81C2CC7A300A042E8 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
@@ -2855,11 +2953,12 @@
 				BB88F3601C4736C100C1F8D9 /* AFNetworkReachabilityManager.m in Sources */,
 				BB1769271C7B006F00CE947C /* SDWebImageDownloaderOperation.m in Sources */,
 				BB63F6121C2CC7A300A042E8 /* KefuCenterController.m in Sources */,
+				18AAD5651C993CD100438E18 /* PaySelectViewController.m in Sources */,
+				189D8A8E1C97982100E7D16D /* SlideBaseViewController.m in Sources */,
 				BB63F60A1C2CC7A300A042E8 /* VideoCell.m in Sources */,
 				BB17692C1C7B006F00CE947C /* UIImage+MultiFormat.m in Sources */,
 				18F971121C92947F001B2575 /* RSADataSigner.m in Sources */,
 				BB63F5DF1C2CC7A300A042E8 /* RESideMenu.m in Sources */,
-				18F753891C910A7B000F1D72 /* AssetViewController.m in Sources */,
 				BB16617C1C3D018C00D318BE /* PhotoToolBar.m in Sources */,
 				BB06311C1C61C827008AD41D /* NoticeModel.m in Sources */,
 				18F7538C1C9171C2000F1D72 /* NSString+Size.m in Sources */,
@@ -2867,6 +2966,7 @@
 				BB63F5DE1C2CC7A300A042E8 /* REBackgroundView.m in Sources */,
 				BB63F5B11C2CC7A300A042E8 /* FMDatabaseQueue.m in Sources */,
 				BB5F9BC11C5DDA2100285EA6 /* MediaBuffer.m in Sources */,
+				18AAD55D1C9927B800438E18 /* LeftMenu.m in Sources */,
 				BBE56C5B1C4FD5EB0030E050 /* HistoryTextModel.m in Sources */,
 				BB9765F91C86C26100FAA5B7 /* TeachView.m in Sources */,
 				BB1769241C7B006F00CE947C /* SDWebImageCompat.m in Sources */,
@@ -2893,7 +2993,7 @@
 				BB5F9BC41C5DDA6100285EA6 /* OpenAL.m in Sources */,
 				BB16617F1C3D01F400D318BE /* Photo.m in Sources */,
 				BB63F60C1C2CC7A300A042E8 /* LoginViewController.m in Sources */,
-				18F7538F1C917939000F1D72 /* PaySelectViewController.m in Sources */,
+				188741791C96FE25002EF25A /* NavigationViewController.m in Sources */,
 				BB63F61E1C2CC7A300A042E8 /* GroupListRequest.m in Sources */,
 				BB16618F1C3D500D00D318BE /* PhotoViewController.m in Sources */,
 			);

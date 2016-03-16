@@ -19,4 +19,13 @@
     return self;
 }
 
+- (id)initWithTitle:(NSString *)title icon:(NSString *)icon Vc:(UIViewController *)vc
+{
+    self = [super init];
+    _title = title;
+    _icon = icon;
+    _vc = vc;
+    return self;
+}
+
 @end

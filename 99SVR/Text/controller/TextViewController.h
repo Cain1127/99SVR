@@ -7,7 +7,8 @@
 //
 
 #import "CustomViewController.h"
+#import "SlideBaseViewController.h"
 
-@interface TextViewController : CustomViewController
+@interface TextViewController : SlideBaseViewController //CustomViewController
 
 @end

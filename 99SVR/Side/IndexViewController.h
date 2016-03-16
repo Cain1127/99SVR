@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CustomViewController.h"
+#import "SlideBaseViewController.h"
 
-@interface IndexViewController : CustomViewController
+@interface IndexViewController : SlideBaseViewController//CustomViewController
 
 - (void)leftSwitch;
 

@@ -152,5 +152,6 @@
 #define  MJRefreshHeaderRefreshing NSLocalizedString(@"devfresh", "")
 
 #define kNavColor RGB(69,128,219)
+#define kLeftMenuBgColor RGB(61, 120, 201)
 
 #endif

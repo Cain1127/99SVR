@@ -33,6 +33,8 @@
 -(void)showActivityInView:(CGPoint )point;
 -(void)hiddenActivityInView;
 
-
+// 滑动
+@property(nonatomic,assign)CGFloat ttx;
+@property(nonatomic,assign)CGFloat tty;
 
 @end

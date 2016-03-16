@@ -590,12 +590,12 @@
 -(void)loginStatus:(NSNotification *)notify
 {
     __weak LoginViewController *__self = self;
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [NSObject cancelPreviousPerformRequestsWithTarget:__self];
-        [__self.view hideToastActivity];
-        [__self.view makeToast:@"登录失败"];
-    });
+//    dispatch_async(dispatch_get_main_queue(),
+//    ^{
+//        [NSObject cancelPreviousPerformRequestsWithTarget:__self];
+//        [__self.view hideToastActivity];
+//        [__self.view makeToast:@"登录失败"];
+//    });
     if (notify==nil)
     {
         return ;

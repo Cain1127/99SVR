@@ -19,6 +19,8 @@
 #import "GroupView.h"
 #import "SearchController.h"
 
+#import "MyScrollView.h"
+
 @interface IndexViewController ()<UIScrollViewDelegate>
 {
     UISwipeGestureRecognizer *gesture;
@@ -31,7 +33,7 @@
     CGFloat scalef;
 }
 
-@property (nonatomic,strong) UIScrollView *scrollView;
+@property (nonatomic,strong) MyScrollView *scrollView;
 @property (nonatomic,strong) GroupView *group;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) GroupListRequest *grouRequest;
@@ -200,7 +202,7 @@
     _currentPage = 0;
     [self initUIHead];
     
-    [self setTitleText:@"99财经"];
+    //[self setTitleText:@"99财经"];
     
     _grouRequest = [[GroupListRequest alloc] init];
     
@@ -262,7 +264,7 @@
     _group = [[GroupView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44) ary:aryMen];
     [self.view addSubview:_group];
     [_group setBtnTag:1 tag1:2 tag2:3];
-    _scrollView = [[UIScrollView alloc] initWithFrame:Rect(0,_group.y+_group.height, kScreenWidth, kScreenHeight-_group.y-_group.height)];
+    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0,_group.y+_group.height, kScreenWidth, kScreenHeight-_group.y-_group.height)];
     [self.view addSubview:_scrollView];
     
     _scrollView.clipsToBounds = YES;
@@ -290,7 +292,7 @@
     [_scrollView addSubview:mainView.view];
     [_scrollView addSubview:historyView.view];
     _scrollView.contentSize = CGSizeMake(kScreenWidth*3, _scrollView.height);
-    [_scrollView.panGestureRecognizer addTarget:self action:@selector(scrollHandlePan:)];
+    //[_scrollView.panGestureRecognizer addTarget:self action:@selector(scrollHandlePan:)];
     
     _tag = 0;
     
@@ -301,7 +303,7 @@
          [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
      }];
     
-    [self setLeftBtn:leftBtn];
+    //[self setLeftBtn:leftBtn];
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
     __weak IndexViewController *__self = self;
@@ -310,7 +312,7 @@
         [__self presentViewController:searchVc animated:YES completion:nil];
     }];
     
-    [self setRightBtn:rightBtn];
+    //[self setRightBtn:rightBtn];
 }
 
 - (void)btnEvent:(id)sender
@@ -471,14 +473,6 @@
     else//加速
     {}
     updateCount = 0;
-}
-
-- (void)scrollHandlePan:(UIPanGestureRecognizer *)panGesture
-{
-    if(_scrollView.contentOffset.x<=0)
-    {
-        [self panGestureCallback:panGesture];
-    }
 }
 
 - (void)panGestureCallback:(UIPanGestureRecognizer *)panGesture

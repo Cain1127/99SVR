@@ -29,7 +29,7 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    [self setTitleText:@"首页"];
+    //[self setTitleText:@"首页"];
     [self initUIHead];
     [self initTableView];
     [self initLivingData];
@@ -43,7 +43,7 @@
      {
          [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
      }];
-    [self setLeftBtn:leftBtn];
+    //[self setLeftBtn:leftBtn];
 }
 
 - (void)initUIBody

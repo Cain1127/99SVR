@@ -26,6 +26,8 @@
 #import "MTAConfig.h"
 #import "WXApi.h"
 
+#import "TabBarController.h"
+
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
 
 @interface AppDelegate ()<UIAlertViewDelegate,WeiboSDKDelegate,WXApiDelegate>
@@ -47,6 +49,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    //self.tabBar = [[TabBarController alloc] init];
+    self.window.rootViewController = [[TabBarController alloc] init];
+    [self.window makeKeyAndVisible];
+    return YES;
+    
     [[CrashReporter sharedInstance] installWithAppId:@"900018787" applicationGroupIdentifier:@"com.hctt.fae99"];
     [[MTAConfig getInstance] setDebugEnable:TRUE];
     [[MTAConfig getInstance] setAutoExceptionCaught:FALSE];

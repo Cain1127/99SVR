@@ -23,7 +23,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self addDefaultHeader:@"我的资产"];
+    self.title = @"我的资产";
+    
     [self initSubviews];
 }
 
@@ -89,67 +90,7 @@
 - (void)rechargeClick
 {
     PaySelectViewController *paySelectVc = [[PaySelectViewController alloc] init];
-    [self presentViewController:paySelectVc animated:YES completion:nil];
+    [self.navigationController pushViewController:paySelectVc animated:YES];
 }
-
-/**
- *  初始化tableView
- */
-// 初始化tableView
-//- (void)setupTableView
-//{
-//    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, ScreenHeight) style:UITableViewStylePlain];
-//    tableView.delegate = self;
-//    tableView.dataSource = self;
-//    tableView.backgroundColor = [UIColor whiteColor];
-//    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    self.tableView = tableView;
-//    //self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 49, 0);
-//    [self.view addSubview:tableView];
-//}
-//
-//#pragma mark - UITableViewDelegate && UITableViewDataSource
-//
-//// 返回每组行数
-//-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-//    return 3;
-//}
-//
-//
-//// 返回每行的单元格
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    static NSString *CellWithIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellWithIdentifier];
-//    if (cell == nil) {
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellWithIdentifier];
-//    }
-//    NSUInteger row = [indexPath row];
-//    cell.textLabel.text = @"aaa";
-//    //cell.imageView.image = [UIImage imageNamed:@"green.png"];
-//    cell.detailTextLabel.text = @"详细信息";
-//    return cell;
-//}
-//
-//
-//// 点击行
-//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-//
-//    //[self.navigationController pushViewController:productDetailVc animated:YES];
-//}
-//
-//// 设置每行高度（每行高度可以不一样）
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    return 44;
-//}
-//
-//
-//- (void)didReceiveMemoryWarning {
-//    [super didReceiveMemoryWarning];
-//    // Dispose of any resources that can be recreated.
-//}
-
-
-
 
 @end

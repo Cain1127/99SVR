@@ -175,5 +175,28 @@
     }
 }
 
+// 滑动
+-(CGFloat)ttx{
+    return self.transform.tx;
+}
+
+-(void)setTtx:(CGFloat)ttx{
+    CGAffineTransform  transform=self.transform;
+    transform.tx=ttx;
+    self.transform=transform;
+    
+    
+}
+
+-(CGFloat)tty{
+    return self.transform.ty;
+}
+
+-(void)setTty:(CGFloat)tty{
+    CGAffineTransform  transform=self.transform;
+    transform.ty=tty;
+    self.transform=transform;
+}
+
 
 @end

@@ -15,6 +15,7 @@
 #import "TextHomeViewController.h"
 #import "TextLivingCell.h"
 #import "TextGroupList.h"
+#import "MyScrollView.h"
 
 @interface TextViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
@@ -27,7 +28,7 @@
     UILabel *_line1;
 }
 
-@property (nonatomic,strong) UIScrollView *scrollView;
+@property (nonatomic,strong) MyScrollView *scrollView;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryHot;
 @property (nonatomic,copy) NSArray *aryLiving;
@@ -40,7 +41,7 @@
 
 - (void)initHeadScroller
 {
-    _scrollHeader = [[UIScrollView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 46)];
+    _scrollHeader = [[MyScrollView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 46)];
     [self.view addSubview:_scrollHeader];
     _scrollHeader.clipsToBounds = YES;
     _scrollHeader.pagingEnabled = YES;
@@ -162,7 +163,7 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     _aryGroup = [NSMutableArray array];
-    [self setTitleText:@"文字直播"];
+    //[self setTitleText:@"文字直播"];
     [self initHeadScroller];
     [self initUIHead];
     _line1 = [UILabel new];
@@ -175,7 +176,7 @@
 
 - (void)initScrollView
 {
-    _scrollView = [[UIScrollView alloc] initWithFrame:Rect(0, 110, kScreenWidth,kScreenHeight - 160)];
+    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0, 110, kScreenWidth,kScreenHeight - 160)];
     [self.view addSubview:_scrollView];
     _scrollView.clipsToBounds = YES;
     _scrollView.pagingEnabled = YES;
@@ -195,7 +196,7 @@
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
     }];
-    [self setLeftBtn:leftBtn];
+    //[self setLeftBtn:leftBtn];
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
     __weak TextViewController *__self = self;
@@ -203,7 +204,7 @@
     {
         [__self initLivingData];
     }];
-    [self setRightBtn:rightBtn];
+    //[self setRightBtn:rightBtn];
 }
 
 - (void)didReceiveMemoryWarning
