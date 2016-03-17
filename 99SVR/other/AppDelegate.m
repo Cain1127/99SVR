@@ -8,7 +8,9 @@
 
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "GiftModel.h"
 #import <AVFoundation/AVAudioSession.h>
+#import "NSJSONSerialization+RemovingNulls.h"
 #import "LSTcpSocket.h"
 #import "WeiboSDK.h"
 #import "UserInfo.h"
@@ -24,10 +26,7 @@
 #import "MTA.h"
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "MTAConfig.h"
-
 #import "WXApi.h"
-#import "WXApiObject.h"
-
 #import "TabBarController.h"
 
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
@@ -44,7 +43,7 @@
 
 @property (nonatomic,unsafe_unretained) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 @property (nonatomic,strong) NSTimer *myTimer;
-
+    
 @end
 
 @implementation AppDelegate
@@ -63,56 +62,74 @@
     [WXApi registerApp:@"wxfbfe01336f468525" withDescription:@"weixin"];
     
     [self onCheckVersion];
-    
-    
-    //    _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    //    [_window makeKeyAndVisible];
-    //    leftView = [[LeftViewController alloc] init];
-    //
-    ////    indexView = [[IndexViewController alloc] init];
-    //    rightView = [[RightViewController alloc] init];
-    //    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
-    ////    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
-    //
-    ////    UINavigationController *navCon = [[UINavigationController alloc] init];
-    ////    [navCon pushViewController:_sides animated:YES];
-    ////    [_window setRootViewController:navCon];
-    //
-    //    [_window setRootViewController:_sides];
-    //    _sides.speedf = 0.5;
-    
+//    _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+//    [_window makeKeyAndVisible];
+//    leftView = [[LeftViewController alloc] init];
+//    
+//    rightView = [[RightViewController alloc] init];
+//    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
+//    [_window setRootViewController:_sides];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[TabBarController alloc] init];
     [self.window makeKeyAndVisible];
     
+    NSString *strGift = [UserDefaults objectForKey:kGiftInfo];
+    if (strGift){
+        [self setGiftInfo:strGift];
+    }
+    else{
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"gift"
+                                                         ofType:@"txt"];
+        NSString *content = [NSString stringWithContentsOfFile:path
+                                                      encoding:NSUTF8StringEncoding
+                                                         error:nil];
+        [self setGiftInfo:content];
+        [UserDefaults setObject:content forKey:kGiftInfo];
+        DLog(@"第一次拿到");
+    }
+    _sides.speedf = 0.5;
     return YES;
+}
+
+- (void)setGiftInfo:(NSString *)strGift
+{
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[strGift dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+    if (dict && [dict objectForKey:@"gift"]) {
+        [UserInfo sharedUserInfo].giftVer = [[dict objectForKey:@"ver"] intValue];
+        NSArray *array = [dict objectForKey:@"gift"];
+        NSMutableArray *aryIndex = [NSMutableArray array];
+        for (NSDictionary *dictionary in array) {
+            [aryIndex addObject:[GiftModel resultWithDict:dictionary]];
+        }
+        [UserInfo sharedUserInfo].aryGift = aryIndex;
+    }
 }
 
 -(void)onCheckVersion
 {
     __weak AppDelegate *__self = self;
     [BaseService postJSONWithUrl:APP_URL parameters:nil success:^(id responseObject)
-     {
-         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         NSArray *infoArray = [dic objectForKey:@"results"];
-         if ([infoArray count])
-         {
-             NSDictionary *releaseInfo = [infoArray objectAtIndex:0];
-             NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
-             NSString *currentVersion = [[infoDic objectForKey:@"CFBundleShortVersionString"] stringByReplacingOccurrencesOfString:@"." withString:@""];
-             NSString *lastVersion = [[releaseInfo objectForKey:@"version"] stringByReplacingOccurrencesOfString:@"." withString:@""];
-             CGFloat fLast = [lastVersion intValue] > 100 ? [lastVersion intValue] : [lastVersion intValue]*10;
-             CGFloat fCurrent = [currentVersion intValue] > 100 ? [currentVersion intValue] : [currentVersion intValue]*10;
-             if (fLast>fCurrent)
-             {
-                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"有新的版本更新，是否前往更新？" delegate:__self cancelButtonTitle:@"关闭" otherButtonTitles:@"更新", nil];
-                 [alert show];
-             }
-         }
-     } fail:^(NSError *error)
-     {
-         DLog(@"获取失败");
-     }];
+    {
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+        NSArray *infoArray = [dic objectForKey:@"results"];
+        if ([infoArray count])
+        {
+            NSDictionary *releaseInfo = [infoArray objectAtIndex:0];
+            NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+            NSString *currentVersion = [[infoDic objectForKey:@"CFBundleShortVersionString"] stringByReplacingOccurrencesOfString:@"." withString:@""];
+            NSString *lastVersion = [[releaseInfo objectForKey:@"version"] stringByReplacingOccurrencesOfString:@"." withString:@""];
+            CGFloat fLast = [lastVersion intValue] > 100 ? [lastVersion intValue] : [lastVersion intValue]*10;
+            CGFloat fCurrent = [currentVersion intValue] > 100 ? [currentVersion intValue] : [currentVersion intValue]*10;
+            if (fLast>fCurrent)
+            {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"有新的版本更新，是否前往更新？" delegate:__self cancelButtonTitle:@"关闭" otherButtonTitles:@"更新", nil];
+                [alert show];
+            }
+        }
+    } fail:^(NSError *error)
+    {
+        DLog(@"获取失败");
+    }];
     
 }
 
@@ -131,7 +148,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    
+
 }
 
 -(void)setEndBackground
@@ -150,15 +167,15 @@
     dispatch_queue_t mainQueue = dispatch_get_main_queue();
     AppDelegate *weakSelf = self;
     dispatch_async(mainQueue, ^(void)
-                   {
-                       AppDelegate *strongSelf = weakSelf;
-                       if (strongSelf != nil)
-                       {
-                           [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
-                           // 销毁后台任务标识符
-                           strongSelf.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
-                       }
-                   });
+    {
+        AppDelegate *strongSelf = weakSelf;
+        if (strongSelf != nil)
+        {
+            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+            // 销毁后台任务标识符
+            strongSelf.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+        }
+    });
 }
 
 -(void)applicationWillEnterForeground:(UIApplication *)application
@@ -253,23 +270,24 @@
 
 -(void)getAccess_token:(NSString *)strCode
 {
-    
-    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/oauth2/access_token?appid=%@&secret=%@&code=%@&grant_type=authorization_code",kWXAPP_ID,kWXAPP_SEC,strCode];
+    char cString[600]={0};
+    sprintf(cString, "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",kWXAPP_ID,kWXAPP_SEC,
+            [strCode UTF8String]);
+    NSString *url = [[NSString alloc] initWithUTF8String:cString];
     __weak AppDelegate *__self = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSURL *zoneUrl = [NSURL URLWithString:url];
         NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
         NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
         dispatch_async(dispatch_get_global_queue(0, 0),
-                       ^{
-                           if (data) {
-                               NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                               NSString *strToken = [dic objectForKey:@"access_token"];
-                               NSString *strOpenId = [dic objectForKey:@"openid"];
-                               DLog(@"strToken:%@,strOpenId:%@",strToken,strOpenId);
-                               [__self getUserInfo:strToken openid:strOpenId];
-                           }
-                       });
+        ^{
+            if (data) {
+                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                NSString *strToken = [dic objectForKey:@"access_token"];
+                NSString *strOpenId = [dic objectForKey:@"openid"];
+                [__self getUserInfo:strToken openid:strOpenId];
+            }
+        });
     });
 }
 
@@ -282,13 +300,13 @@
         NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
         NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
         dispatch_async(dispatch_get_global_queue(0, 0),
-                       ^{
-                           if (data)
-                           {
-                               NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                               DLog(@"昵称:%@",[dic objectForKey:@"nickname"]);
-                           }
-                       });
+        ^{
+            if (data)
+            {
+                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                DLog(@"昵称:%@",[dic objectForKey:@"nickname"]);
+            }
+        });
     });
 }
 
