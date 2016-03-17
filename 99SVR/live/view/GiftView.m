@@ -34,8 +34,7 @@
     _giftImage = [DecodeJson stretchImage:gift_frame capInsets:insets resizingMode:UIImageResizingModeStretch];
     
     UIImage *frame_number = [UIImage imageNamed:@"video_present_number_bg"];
-    
-    UIEdgeInsets number = UIEdgeInsetsMake(6, 6, frame_number.size.height-6,6);
+    UIEdgeInsets number = UIEdgeInsetsMake(2,2,frame_number.size.height-6,2);
     _frameImage  = [DecodeJson stretchImage:frame_number capInsets:number resizingMode:UIImageResizingModeStretch];
     
 }
@@ -169,7 +168,7 @@
     [_numberView clickWithBlock:^(UIGestureRecognizer *gesture) {
         __numberview.hidden = YES;
     }];
-    _numberImgView = [[UIImageView alloc] initWithFrame:Rect(_btnNumber.x+_btnNumber.width/2-52.5,_scrollView.y,105,_scrollView.height)];
+    _numberImgView = [[UIImageView alloc] initWithFrame:Rect(_btnNumber.x+_btnNumber.width/2-52.5,_scrollView.y,105,_scrollView.height+5)];
     [_numberImgView setImage:_frameImage];
     [_numberView addSubview:_numberImgView];
     _numberImgView.userInteractionEnabled = YES;
