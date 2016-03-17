@@ -510,7 +510,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 
 - (void)startNewPlay
 {
-    return ;
     NSArray *aryUser = _tcpSocket.aryUser;
     for (RoomUser *user in aryUser)
     {
