@@ -12,6 +12,7 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "WXApi.h"
 #import "UserInfo.h"
+#import "RechargeResultViewController.h"
 
 @interface PaySelectViewController ()<UIWebViewDelegate>
 @property (weak, nonatomic) UIWebView *webView;
@@ -28,6 +29,9 @@
     self.title = @"充值";
     
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    // 注册微信支付通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendPayResult:) name:@"WXPAY" object:nil];
     
     // 加载充值网页
     [self loadWebView];
@@ -75,24 +79,48 @@
         DLog(@"----微信开始充值----");
         NSArray *args = [JSContext currentArguments];
         NSString *param = ((JSValue *)args[0]).toString;
+        if (param) {
+            NSData *jsonData = [param dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil];
+            // 微信支付充值
+            [self weixinPayWithDict:responseDict];
+        }
         DLog(@"微信开始充值参数-----%@", param);
     };
 }
 
+#pragma mark -- 微信支付
 /**
  *  微信支付
  */
 - (void)weixinPayWithDict:(NSDictionary *)dict{
 
     PayReq* req             = [[PayReq alloc] init];
-    req.partnerId           = [dict objectForKey:@"partnerid"];
-    req.prepayId            = [dict objectForKey:@"prepayid"];
-    req.nonceStr            = [dict objectForKey:@"noncestr"];
+    req.partnerId           = [dict objectForKey:@"partnerId"];
+    req.prepayId            = [dict objectForKey:@"prepayId"];
+    req.nonceStr            = [dict objectForKey:@"nonceStr"];
     req.timeStamp           = [[dict objectForKey:@"timeStamp"] intValue];
     req.package             = [dict objectForKey:@"package"];
     req.sign                = [dict objectForKey:@"sign"];
     [WXApi sendReq:req];
 }
+
+/**
+ *  微信通知结果
+ *
+ *  @param notify 通知
+ */
+- (void)sendPayResult:(NSNotification *)notify {
+    DLog(@"%@-----",[notify.userInfo[@"key"] isEqualToString:@"1"]?@"支付成功":@"支付失败");
+    
+    RechargeResultViewController *rechargeResultVc = [[RechargeResultViewController alloc] init];
+    rechargeResultVc.isRechargeSucceed = [notify.userInfo[@"key"] isEqualToString:@"1"];
+    rechargeResultVc.title = rechargeResultVc.isRechargeSucceed ? @"支付成功":@"支付失败";
+    // 这里应该还需要一个订单号
+    [self.navigationController pushViewController:rechargeResultVc animated:YES];
+}
+
+#pragma mark -- 支付宝支付
 
 /**
  *  支付宝发起支付
@@ -104,6 +132,11 @@
     
     [[AlipaySDK defaultService] payOrder:param fromScheme:appScheme callback:^(NSDictionary *resultDic) {
         NSLog(@"reslut = %@",resultDic);
+        RechargeResultViewController *rechargeResultVc = [[RechargeResultViewController alloc] init];
+        rechargeResultVc.isRechargeSucceed = [resultDic[@"resultStatus"] isEqualToString:@"9000"];
+        rechargeResultVc.title = rechargeResultVc.isRechargeSucceed ? @"支付成功":@"支付失败";
+        // 这里应该还需要一个订单号
+        [self.navigationController pushViewController:rechargeResultVc animated:YES];
     }];
 }
 
@@ -112,4 +145,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 @end

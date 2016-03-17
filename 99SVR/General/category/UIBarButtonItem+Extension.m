@@ -36,4 +36,17 @@
     return [[UIBarButtonItem alloc] initWithCustomView:btn];
 }
 
+
++ (UIBarButtonItem *)itemWithTarget:(id)target action:(SEL)action title:(NSString *)title
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setTitle:title forState:UIControlStateNormal];
+    [btn setTintColor:[UIColor whiteColor]];
+    [btn.titleLabel setFont:kFontSize(15)];
+    [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    // 一定要设置frame，才能显示
+    btn.frame = CGRectMake(0, 0, 44 , 44);
+    
+    return [[UIBarButtonItem alloc] initWithCustomView:btn];
+}
 @end

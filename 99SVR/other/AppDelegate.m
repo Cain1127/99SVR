@@ -24,7 +24,9 @@
 #import "MTA.h"
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "MTAConfig.h"
+
 #import "WXApi.h"
+#import "WXApiObject.h"
 
 #import "TabBarController.h"
 
@@ -42,21 +44,13 @@
 
 @property (nonatomic,unsafe_unretained) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 @property (nonatomic,strong) NSTimer *myTimer;
-    
+
 @end
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor whiteColor];
-    //self.tabBar = [[TabBarController alloc] init];
-    self.window.rootViewController = [[TabBarController alloc] init];
-    [self.window makeKeyAndVisible];
-    return YES;
-    
     [[CrashReporter sharedInstance] installWithAppId:@"900018787" applicationGroupIdentifier:@"com.hctt.fae99"];
     [[MTAConfig getInstance] setDebugEnable:TRUE];
     [[MTAConfig getInstance] setAutoExceptionCaught:FALSE];
@@ -69,21 +63,28 @@
     [WXApi registerApp:@"wxfbfe01336f468525" withDescription:@"weixin"];
     
     [self onCheckVersion];
-    _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [_window makeKeyAndVisible];
-    leftView = [[LeftViewController alloc] init];
     
-//    indexView = [[IndexViewController alloc] init];
-    rightView = [[RightViewController alloc] init];
-    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
-//    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
     
-//    UINavigationController *navCon = [[UINavigationController alloc] init];
-//    [navCon pushViewController:_sides animated:YES];
-//    [_window setRootViewController:navCon];
+    //    _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    //    [_window makeKeyAndVisible];
+    //    leftView = [[LeftViewController alloc] init];
+    //
+    ////    indexView = [[IndexViewController alloc] init];
+    //    rightView = [[RightViewController alloc] init];
+    //    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
+    ////    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
+    //
+    ////    UINavigationController *navCon = [[UINavigationController alloc] init];
+    ////    [navCon pushViewController:_sides animated:YES];
+    ////    [_window setRootViewController:navCon];
+    //
+    //    [_window setRootViewController:_sides];
+    //    _sides.speedf = 0.5;
     
-    [_window setRootViewController:_sides];
-    _sides.speedf = 0.5;
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.rootViewController = [[TabBarController alloc] init];
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
@@ -91,27 +92,27 @@
 {
     __weak AppDelegate *__self = self;
     [BaseService postJSONWithUrl:APP_URL parameters:nil success:^(id responseObject)
-    {
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-        NSArray *infoArray = [dic objectForKey:@"results"];
-        if ([infoArray count])
-        {
-            NSDictionary *releaseInfo = [infoArray objectAtIndex:0];
-            NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
-            NSString *currentVersion = [[infoDic objectForKey:@"CFBundleShortVersionString"] stringByReplacingOccurrencesOfString:@"." withString:@""];
-            NSString *lastVersion = [[releaseInfo objectForKey:@"version"] stringByReplacingOccurrencesOfString:@"." withString:@""];
-            CGFloat fLast = [lastVersion intValue] > 100 ? [lastVersion intValue] : [lastVersion intValue]*10;
-            CGFloat fCurrent = [currentVersion intValue] > 100 ? [currentVersion intValue] : [currentVersion intValue]*10;
-            if (fLast>fCurrent)
-            {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"有新的版本更新，是否前往更新？" delegate:__self cancelButtonTitle:@"关闭" otherButtonTitles:@"更新", nil];
-                [alert show];
-            }
-        }
-    } fail:^(NSError *error)
-    {
-        DLog(@"获取失败");
-    }];
+     {
+         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+         NSArray *infoArray = [dic objectForKey:@"results"];
+         if ([infoArray count])
+         {
+             NSDictionary *releaseInfo = [infoArray objectAtIndex:0];
+             NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+             NSString *currentVersion = [[infoDic objectForKey:@"CFBundleShortVersionString"] stringByReplacingOccurrencesOfString:@"." withString:@""];
+             NSString *lastVersion = [[releaseInfo objectForKey:@"version"] stringByReplacingOccurrencesOfString:@"." withString:@""];
+             CGFloat fLast = [lastVersion intValue] > 100 ? [lastVersion intValue] : [lastVersion intValue]*10;
+             CGFloat fCurrent = [currentVersion intValue] > 100 ? [currentVersion intValue] : [currentVersion intValue]*10;
+             if (fLast>fCurrent)
+             {
+                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"有新的版本更新，是否前往更新？" delegate:__self cancelButtonTitle:@"关闭" otherButtonTitles:@"更新", nil];
+                 [alert show];
+             }
+         }
+     } fail:^(NSError *error)
+     {
+         DLog(@"获取失败");
+     }];
     
 }
 
@@ -130,7 +131,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-
+    
 }
 
 -(void)setEndBackground
@@ -149,15 +150,15 @@
     dispatch_queue_t mainQueue = dispatch_get_main_queue();
     AppDelegate *weakSelf = self;
     dispatch_async(mainQueue, ^(void)
-    {
-        AppDelegate *strongSelf = weakSelf;
-        if (strongSelf != nil)
-        {
-            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
-            // 销毁后台任务标识符
-            strongSelf.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
-        }
-    });
+                   {
+                       AppDelegate *strongSelf = weakSelf;
+                       if (strongSelf != nil)
+                       {
+                           [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+                           // 销毁后台任务标识符
+                           strongSelf.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+                       }
+                   });
 }
 
 -(void)applicationWillEnterForeground:(UIApplication *)application
@@ -206,19 +207,47 @@
     }
 }
 
--(void)onResp:(BaseReq *)resp
+// 微信回调
+-(void)onResp:(BaseResp *)resp
 {
-    SendAuthResp *aresp = (SendAuthResp *)resp;
-    if (aresp.errCode== 0) {
-        NSString *code = aresp.code;
-        NSDictionary *dic = @{@"code":code};
-        DLog(@"dic:%@",dic);
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_WEICHAT_VC object:dic];
-    }
-    else
-    {
-        NSDictionary *dict = @{@"errcode":@"取消"};
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_WEICHAT_VC object:dict];
+    if([resp isKindOfClass:[PayResp class]]){
+        switch (resp.errCode) { // 微信支付
+            case WXSuccess:
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"WXPAY" object:self userInfo:@{@"key":@"1"}];
+                break;
+            case WXErrCodeCommon:
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"WXPAY" object:self userInfo:@{@"key":@"0", @"error":@"普通错误类型"}];
+                break;
+            case WXErrCodeUserCancel:
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"WXPAY" object:self userInfo:@{@"key":@"0", @"error":@"取消支付"}];
+                break;
+            case WXErrCodeSentFail:
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"WXPAY" object:self userInfo:@{@"key":@"0", @"error":@"发送失败"}];
+                break;
+            case WXErrCodeAuthDeny:
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"WXPAY" object:self userInfo:@{@"key":@"0", @"error":@"授权失败"}];
+                break;
+            case WXErrCodeUnsupport:
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"WXPAY" object:self userInfo:@{@"key":@"0", @"error":@"微信不支持"}];
+                break;
+                
+            default:
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"WXPAY" object:self userInfo:@{@"key":@"0", @"error":@"支付失败"}];
+                break;
+        }
+    } else{//微信授权登录回调
+        SendAuthResp *aresp = (SendAuthResp *)resp;
+        if (aresp.errCode== 0) {
+            NSString *code = aresp.code;
+            NSDictionary *dic = @{@"code":code};
+            DLog(@"dic:%@",dic);
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_WEICHAT_VC object:dic];
+        }
+        else
+        {
+            NSDictionary *dict = @{@"errcode":@"取消"};
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_WEICHAT_VC object:dict];
+        }
     }
 }
 
@@ -232,15 +261,15 @@
         NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
         NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
         dispatch_async(dispatch_get_global_queue(0, 0),
-        ^{
-            if (data) {
-                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                NSString *strToken = [dic objectForKey:@"access_token"];
-                NSString *strOpenId = [dic objectForKey:@"openid"];
-                DLog(@"strToken:%@,strOpenId:%@",strToken,strOpenId);
-                [__self getUserInfo:strToken openid:strOpenId];
-            }
-        });
+                       ^{
+                           if (data) {
+                               NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                               NSString *strToken = [dic objectForKey:@"access_token"];
+                               NSString *strOpenId = [dic objectForKey:@"openid"];
+                               DLog(@"strToken:%@,strOpenId:%@",strToken,strOpenId);
+                               [__self getUserInfo:strToken openid:strOpenId];
+                           }
+                       });
     });
 }
 
@@ -253,13 +282,13 @@
         NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
         NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
         dispatch_async(dispatch_get_global_queue(0, 0),
-        ^{
-            if (data)
-            {
-                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                DLog(@"昵称:%@",[dic objectForKey:@"nickname"]);
-            }
-        });
+                       ^{
+                           if (data)
+                           {
+                               NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                               DLog(@"昵称:%@",[dic objectForKey:@"nickname"]);
+                           }
+                       });
     });
 }
 

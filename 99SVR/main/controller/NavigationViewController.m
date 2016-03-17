@@ -36,19 +36,19 @@
 /**
  *  设置导航栏按钮主题
  */
-+ (void)setupBarButtonItemTheme
-{
-    UIBarButtonItem *item = [UIBarButtonItem appearance];
-    // 设置文字属性
-    NSMutableDictionary *textAttrs = [NSMutableDictionary dictionary];
-    textAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
-    //textAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:16];
-    [item setTitleTextAttributes:textAttrs forState:UIControlStateNormal];
-    [item setTitleTextAttributes:textAttrs forState:UIControlStateHighlighted];
-    NSMutableDictionary *disableTextAttrs = [NSMutableDictionary dictionary];
-    disableTextAttrs[NSForegroundColorAttributeName] =  [UIColor lightGrayColor];
-    [item setTitleTextAttributes:disableTextAttrs forState:UIControlStateDisabled];
-}
+//+ (void)setupBarButtonItemTheme
+//{
+//    UIBarButtonItem *item = [UIBarButtonItem appearance];
+//    // 设置文字属性
+//    NSMutableDictionary *textAttrs = [NSMutableDictionary dictionary];
+//    textAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
+//    //textAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:16];
+//    [item setTitleTextAttributes:textAttrs forState:UIControlStateNormal];
+//    [item setTitleTextAttributes:textAttrs forState:UIControlStateHighlighted];
+//    NSMutableDictionary *disableTextAttrs = [NSMutableDictionary dictionary];
+//    disableTextAttrs[NSForegroundColorAttributeName] =  [UIColor lightGrayColor];
+//    [item setTitleTextAttributes:disableTextAttrs forState:UIControlStateDisabled];
+//}
 
 /**
  *  设置导航栏主题
@@ -58,8 +58,12 @@
     // 取出appearance对象
     UINavigationBar *navBar = [UINavigationBar appearance];
     // 设置bar的颜色
-    [navBar setBarTintColor:RGB(29, 140, 238)];
-    //[navBar setBackgroundImage:[UIImage imageNamed:@"header_bg_ios7_ip4"] forBarMetrics:UIBarMetricsDefault];
+    [navBar setBarTintColor:kNavColor];
+    // 关闭半透明开关
+    // navBar.translucent = NO;
+//    [navBar setShadowImage:[[UIImage alloc] init]];
+//    [navBar setBackgroundImage:[[UIImage alloc] init] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+
     navBar.tintColor = [UIColor whiteColor];
     // 设置状态栏颜色
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;

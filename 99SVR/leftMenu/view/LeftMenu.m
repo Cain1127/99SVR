@@ -20,6 +20,7 @@
 #import "RegMobileViewController.h"
 #import "SettingCenterController.h"
 #import "KefuCenterController.h"
+#import "ProfileViewController.h"
 
 #define kLogin @"登录"
 #define kRegist @"注册"
@@ -76,11 +77,9 @@
     _listTableView.frame = CGRectMake(0, 255, kScreenWidth * 0.75, 308);
     
     [self checkLogin];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];
 }
-
 
 - (void)refreshUI
 {
@@ -92,6 +91,7 @@
     [_itemsArray removeAllObjects];
     
     _leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
+    // 登录成功用户
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
         VideoColletionViewController *videoVc = [[VideoColletionViewController alloc] init];
@@ -99,8 +99,11 @@
         
         AssetViewController *assetVc = [[AssetViewController alloc] init];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"setting" Vc:assetVc]];
+        
+        ProfileViewController *profileVc = [[ProfileViewController alloc] init];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的资料" icon:@"setting" Vc:profileVc]];
     }
-    else
+    else  // 没登录
     {
         LoginViewController *loginVc = [[LoginViewController alloc] init];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kLogin icon:@"mydata.png" Vc:loginVc]];

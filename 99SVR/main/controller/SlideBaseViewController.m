@@ -99,12 +99,6 @@
 
 -(void)addLeftMenu
 {
-    for (UIView  *view in [UIApplication sharedApplication].keyWindow.subviews) {
-        if ([view isKindOfClass:[LeftMenu class]]) {
-            //[view  removeFromSuperview];
-            return;
-        }
-    }
     _leftMenu = [[LeftMenu alloc] initWithFrame:CGRectMake(-[UIScreen mainScreen].bounds.size.width * 0.25, 0, kScreenWidth,kScreenHeight)];
     _leftMenu.degelate = self;
     _leftMenu.hidden = YES;

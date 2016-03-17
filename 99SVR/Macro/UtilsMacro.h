@@ -27,6 +27,9 @@ enum connectP2P
     CONNECT_DEV_ERROR
 };
 
+// 定义宏
+#define WeakSelf(o)  __weak typeof(o) weakSelf = o;
+
 #define DEFINE_SINGLETON_FOR_HEADER(className) \
 \
 + (className *)shared##className;
