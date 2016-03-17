@@ -7,6 +7,7 @@
 //
 
 #import "RoomViewController.h"
+#import "ChatView.h"
 #import "RoomTcpSocket.h"
 #import "GiftView.h"
 #import "M80AttributedLabel.h"
@@ -44,7 +45,7 @@
 
 
 @interface RoomViewController ()<UITableViewDelegate,UITableViewDataSource,
-UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,EmojiViewDelegate,UIScrollViewDelegate,RoomDownDelegate>
+UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,EmojiViewDelegate,UIScrollViewDelegate,RoomDownDelegate,ChatViewDelegate>
 {
     //聊天view
     UIView *bodyView;
@@ -57,12 +58,10 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     UIButton *_btnSend;
     UITextView *_textChat;
     UILabel *_lblBlue;
-    EmojiView *_emojiView;
     CGFloat deltaY;
     float duration;    // 动画持续时间
     CGFloat originalY; // TextField原来的纵坐标
     int toUser;
-//    UIImageView *_imgGift;
     UIView  *_topHUD;
     UILabel *_lblName;
     UIView *_downHUD;
@@ -77,14 +76,17 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     int updateCount;
     int _currentPage;
     CGFloat fTempWidth;
-    UILabel *lblPlace;
     BOOL bFull;
+    
     RoomHttp *_room;
     NSCache *cellCache;
     GiftView *_giftView;
     RoomDownView *_infoView;
+    
     UIView *userHidden;
     UIView *headTable;
+    ChatView *_inputView;
+    
 }
 
 @property (nonatomic,strong) RoomTcpSocket *tcpSocket;
@@ -101,9 +103,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 @property (nonatomic,strong) UITableView *chatView;
 @property (assign,nonatomic) NSInteger keyboardPresentFlag;
 @property (nonatomic,strong) UIScrollView *scrollView;
-
-
-@property (nonatomic,strong)    NSMutableDictionary     *cellHeights;
+@property (nonatomic,strong) NSMutableDictionary *cellHeights;
 
 @end
 
@@ -244,7 +244,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)showTopHUD
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    [self closeKeyBoard];
     if(_topHUD.alpha==0)
     {
         _topHUD.alpha = 1;
@@ -374,25 +373,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     }
 }
 
-- (void)showEmojiView
-{
-    if ([_textChat isFirstResponder])
-    {
-        [_textChat resignFirstResponder];
-    }
-    _emojiView.hidden = NO;
-    downView.frame = Rect(0, kScreenHeight-266,kScreenWidth, 50);
-}
 
-#pragma mark 表情键盘
-- (void)createEmojiKeyboard
-{
-    _emojiView = [[EmojiView alloc] initWithFrame:Rect(0, kScreenHeight-216,kScreenWidth, 216)];
-    [self.view addSubview:_emojiView];
-    [_emojiView setBackgroundColor:UIColorFromRGB(0xffffff)];
-    [_emojiView setHidden:YES];
-    _emojiView.delegate = self;
-}
 
 - (void)sendRose
 {
@@ -412,37 +393,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     ^{
         [__self.tcpSocket sendChatInfo:@"[$999$]"  toid:__nUserId];
     });
-}
-
-- (void)sendChatMessage
-{
-    if(!_tcpSocket.rInfo)
-    {
-        [self.view makeToast:@"加入房间成功，才可以互动"];
-        return ;
-    }
-    if([UserInfo sharedUserInfo].nType != 1 && ![_room.nvcbid isEqualToString:@"10000"] && ![_room.nvcbid isEqualToString:@"10001"])
-    {
-        [self.view makeToast:@"游客不能发送信息"];
-        return ;
-    }
-    NSString *strContent = [NSString stringWithFormat:@"%@",[_textChat.textStorage getPlainString]];
-    if (_textChat.text.length == 0)
-    {
-        [self.view makeToast:@"不能发送空的内容"];
-        return ;
-    }
-    DLog(@"发送内容:%@",strContent);
-    __block NSString *__strContent = strContent;
-    __block int __nUserId = toUser;
-    __weak RoomViewController *__self = self;
-    dispatch_async(room_gcd,
-    ^{
-           [__self.tcpSocket sendChatInfo:__strContent  toid:__nUserId];
-    });
-    [_textChat setText:@""];
-    [self closeKeyBoard];
-    [self switchBtn:1];
 }
 
 - (void)initUIBody
@@ -484,24 +434,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     _textChat.delegate = self;
     [_textChat setReturnKeyType:UIReturnKeySend];
     
-    lblPlace = [[UILabel alloc] initWithFrame:Rect(_textChat.x+5,_textChat.y,_textChat.width,_textChat.height)];
-    lblPlace.text = @"点此和大家说点什么吧";
-    lblPlace.font = XCFONT(14);
-    lblPlace.enabled = NO;
-    lblPlace.backgroundColor = [UIColor clearColor];
-    [lblPlace setTextColor:UIColorFromRGB(0xcfcfcf)];
-    [whiteView addSubview:lblPlace];
-    
     //发送消息按钮
-    _btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_btnSend setImage:[UIImage imageNamed:@"Expression"] forState:UIControlStateNormal];
-    [_btnSend setImage:[UIImage imageNamed:@"Expression_H"] forState:UIControlStateHighlighted];
-    [_btnSend setTitleColor:UIColorFromRGB(0x000000) forState:UIControlStateNormal];
-    [_btnSend setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateHighlighted];
-    [whiteView addSubview:_btnSend];
-    _btnSend.frame = Rect(kScreenWidth-60,0, 36, 36);
-    [_btnSend addTarget:self action:@selector(showEmojiView) forControlEvents:UIControlEventTouchUpInside];
-    
     _giftView = [[GiftView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
     [self.view addSubview:_giftView];
     [_giftView setHidden:YES];
@@ -531,6 +464,15 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     _tableView.layer.shadowOffset = CGSizeMake(0,0);
     _tableView.layer.shadowOpacity = 1;
     _tableView.layer.shadowRadius = 4;
+    [self createChatView];
+}
+
+- (void)createChatView
+{
+    _inputView = [[ChatView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kScreenHeight)];
+    [self.view addSubview:_inputView];
+    _inputView.hidden = YES;
+    _inputView.delegate = self;
 }
 
 - (void)hidnUserTable
@@ -568,6 +510,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 
 - (void)startNewPlay
 {
+    return ;
     NSArray *aryUser = _tcpSocket.aryUser;
     for (RoomUser *user in aryUser)
     {
@@ -594,7 +537,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     cellCache.totalCostLimit = 20;
     _cellCache.totalCostLimit = 20;
     [self initUIHead];
-    [self createEmojiKeyboard];
     __weak RoomViewController *__self = self;
     [_group addEvent:^(id sender)
      {
@@ -692,7 +634,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 #pragma mark 横屏
 - (void)horizontalViewControl
 {
-    [self closeKeyBoard];
     
     int nWidth = kScreenHeight > kScreenWidth ? kScreenHeight : kScreenWidth;
     int nHeight = kScreenHeight > kScreenWidth ? kScreenWidth : kScreenHeight;
@@ -765,21 +706,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     }
 }
 
-- (void)closeKeyBoard
-{
-    if([_textChat isFirstResponder])
-    {
-        [_textChat resignFirstResponder];
-        [downView setFrame:Rect(0, kScreenHeight-50, kScreenWidth, 50)];
-    }
-    if(_emojiView.hidden==NO)
-    {
-        [_emojiView setHidden:YES];
-        [self.view setFrame:Rect(0,0,kScreenWidth,kScreenHeight)];
-        [downView setFrame:Rect(0,kScreenHeight-50,kScreenWidth,50)];
-    }
-}
-
 - (void)switchBtn:(int)nTag
 {
     if (_tableView.hidden==NO)
@@ -809,7 +735,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         {
             downView.hidden = NO;
         }
-        [self closeKeyBoard];
     }
 }
 
@@ -862,59 +787,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     }
 }
 
-/**
- * 键盘frame变化时执行的通知方法
- * @note 键盘弹出，收起，改变输入法时这个方法都会执行
- */
-- (void)keyboardFrameDidChange:(NSNotification *)notification
-{
-    CGSize keyboardSize = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    CGFloat keyboardOriginY = self.view.frame.size.height - keyboardSize.height;
-    deltaY = downView.frame.origin.y + downView.frame.size.height - keyboardOriginY;
-    
-    if (self.keyboardPresentFlag == 1)
-    {
-        [UIView animateWithDuration:duration delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:^{
-            downView.frame = CGRectOffset(downView.frame, 0, -deltaY);
-        } completion:nil];
-    }
-}
-
-- (void) keyboardWasShown:(NSNotification *) notification
-{
-    CGSize keyboardSize = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    // 获得弹出keyboard的动画时间，也可以手动赋值，如0.25f
-    duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    // 得到keyboard在当前controller的view中的Y轴坐标
-    DLog(@"keyboardSize:%f",keyboardSize.height);
-    CGFloat keyboardOriginY = self.view.frame.size.height - keyboardSize.height;
-    // textField下边到view顶点的距离减去keyboard的Y轴坐标就是textField要移动的距离，
-    // 这里是刚好让textField完全显示出来，也可以再在deltaY的基础上再加上一定距离，如20f、30f等
-    deltaY = downView.frame.origin.y + downView.frame.size.height - keyboardOriginY;
-    // 当deltaY大于0时说明textField会被键盘遮住，需要上移
-    // 以动画的方式改变textField的frame
-    [UIView animateWithDuration:duration delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:
-     ^{
-         downView.frame = CGRectOffset(downView.frame, 0, -deltaY);
-     } completion:nil];
-    
-    if (_emojiView.hidden == NO)
-    {
-        _emojiView.hidden = YES;
-    }
-}
-- (void) keyboardWasHidden:(NSNotification *) notification
-{
-    CGRect frame = self.view.frame;
-    frame.origin.y = originalY;
-    CGSize keyboardSize = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    if (keyboardSize.height==282)
-    {
-        downView.frame = Rect(0, kScreenHeight-50, kScreenWidth, 50);
-    }
-    // 得到keyboard在当前controller的view中的Y轴坐标
-}
-
 - (void)startPlayThread:(NSNotification *)notify
 {
     __weak RoomViewController *__self = self;
@@ -931,12 +803,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatMSg:) name:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomListNotice:) name:MESSAGE_ROOM_NOTICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomUserList:) name:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(keyboardWasHidden:)
-                                                  name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardFrameDidChange:)
-                                                 name:UIKeyboardDidChangeFrameNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(comeBack) name:MESSAGE_COME_BACK_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomBeExit:) name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(room_kickout) name:MESSAGE_ROOM_KICKOUT_VC object:nil];
@@ -1322,20 +1188,18 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 //选择某一行
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self closeKeyBoard];
     if (tableView == _tableView)
     {
         [_tableView deselectRowAtIndexPath:indexPath animated:NO];
         RoomUser *_user = [[_tcpSocket aryUser] objectAtIndex:indexPath.row];
         if(_user.m_nUserId != [UserInfo sharedUserInfo].nUserId)
         {
-            toUser = _user.m_nUserId;
-            char cString[150] = {0};
-            sprintf(cString,"@%s",[_user.m_strUserAlias UTF8String]);
-            [_btnName setTitle:[[NSString alloc] initWithUTF8String:cString] forState:UIControlStateNormal];
-            [_btnName setImage:[UIImage imageNamed:@"chat_s"] forState:UIControlStateNormal];
-            [self refreshBtnName];
+            userHidden.hidden = YES;
             _tableView.hidden = YES;
+            
+            toUser = _user.m_nUserId;
+            
+            [_inputView setChatInfo:_user];
         }
     }
 }
@@ -1445,77 +1309,19 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     {
         NSString *strNumber = [sender.URL.absoluteString stringByReplacingOccurrencesOfString:@"sqchatid://" withString:@""];
         toUser = [strNumber intValue];
-        if (toUser==0)
+        if (_tcpSocket.getRoomInfo != nil)
         {
-            [_btnName setTitle:@"大家" forState:UIControlStateNormal];
-            [_btnName setImage:[UIImage imageNamed:@"chat"] forState:UIControlStateNormal];
-            [self refreshBtnName];
-        }
-        else
-        {
-            if (_tcpSocket.getRoomInfo != nil)
-            {
-                RoomUser *rUser = [_tcpSocket.getRoomInfo findUser:toUser];
-                char cString[150]={0};
-                sprintf(cString,"@%s",[rUser.m_strUserAlias UTF8String]);
-                [_btnName setTitle:[[NSString alloc] initWithUTF8String:cString] forState:UIControlStateNormal];
-                [_btnName setImage:[UIImage imageNamed:@"chat_s"] forState:UIControlStateNormal];
-                [self refreshBtnName];
-            }
+            RoomUser *rUser = [_tcpSocket.getRoomInfo findUser:toUser];
+            [_inputView setChatInfo:rUser];
         }
     }
 }
 
-#pragma mark EmojiViewDelegate
-- (void)sendEmojiInfo:(NSInteger)nId
-{
-    [self insertEmoji:nId];
-}
 
-- (void)resetTextStyle
-{
-    NSRange wholeRange = NSMakeRange(0, _textChat.textStorage.length);
-    [_textChat.textStorage removeAttribute:NSFontAttributeName range:wholeRange];
-    [_textChat.textStorage addAttribute:NSFontAttributeName value:XCFONT(15) range:wholeRange];
-}
 
-//加入表情图片
-- (void)insertEmoji:(NSInteger)nId
-{
-    char cString[150]={0};
-    sprintf(cString,"%zi",nId);
-    NSString *strInfo = [[NSString alloc] initWithUTF8String:cString];
-    memset(cString, 0, 150);
-    sprintf(cString,"[$%zi$]",nId);
-    NSString *strContent = [[NSString alloc] initWithUTF8String:cString];
-    EmojiTextAttachment *emojiTextAttachment = [EmojiTextAttachment new];
-    emojiTextAttachment.emojiTag = strContent;
-    emojiTextAttachment.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:strInfo ofType:@"gif"]];
-    emojiTextAttachment.emojiSize = CGSizeMake(15,15);
-    [_textChat.textStorage insertAttributedString:[NSAttributedString attributedStringWithAttachment:emojiTextAttachment]
-                                          atIndex:_textChat.selectedRange.location];
-    _textChat.selectedRange = NSMakeRange(_textChat.selectedRange.location + 1, _textChat.selectedRange.length);
-    if ([_textChat.textStorage getPlainString].length==0)
-    {
-        lblPlace.text = @"点此和大家说点什么吧";
-    }
-    else
-    {
-        lblPlace.text = @"";
-    }
-    [self resetTextStyle];
-}
 
-#pragma mark 解析
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    if ([text isEqualToString:@"\n"])
-    {
-        [self sendChatMessage];
-        return NO;
-    }
-    return YES;
-}
+
+
 
 #pragma mark 重力感应设置
 -(BOOL)shouldAutorotate
@@ -1611,17 +1417,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     [_lblBlue setFrame:Rect(fx,_group.y+_group.height-2,fTempWidth,2)];
 }
 
--(void)textViewDidChange:(UITextView *)textView
-{
-    if ([_textChat.textStorage getPlainString].length==0)
-    {
-        lblPlace.text = @"点此和大家说点什么吧";
-    }
-    else
-    {
-        lblPlace.text = @"";
-    }
-}
+
 
 
 
@@ -1682,12 +1478,11 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     switch (nIndex) {
         case 0://显示聊天
         {
-            
+            _inputView.hidden = !_inputView.hidden;
         }
         break;
         case 1://显示成员
         {
-//            [_tableView setHidden:NO];
             userHidden.hidden = !userHidden.hidden;
             _tableView.hidden = userHidden.hidden;
         }
@@ -1704,6 +1499,45 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         break;
     }
 }
+
+#pragma mark ChatViewDelegate
+- (void)sendMessage:(UITextView *)textView userid:(int)nUser
+{
+    NSString *strInfo = [textView.textStorage getPlainString];
+    nUser = toUser;
+    [self sendChatMessage:strInfo];
+}
+
+- (void)sendChatMessage:(NSString *)strInfo
+{
+    if(!_tcpSocket.rInfo)
+    {
+        [self.view makeToast:@"加入房间成功，才可以互动"];
+        return ;
+    }
+    if([UserInfo sharedUserInfo].nType != 1 && ![_room.nvcbid isEqualToString:@"10000"] && ![_room.nvcbid isEqualToString:@"10001"])
+    {
+        [self.view makeToast:@"游客不能发送信息"];
+        return ;
+    }
+    if (strInfo.length == 0)
+    {
+        [self.view makeToast:@"不能发送空的内容"];
+        return ;
+    }
+    __block NSString *__strContent = strInfo;
+    __block int __nUserId = toUser;
+    __weak RoomViewController *__self = self;
+    dispatch_async(room_gcd,
+    ^{
+           [__self.tcpSocket sendChatInfo:__strContent  toid:__nUserId];
+    });
+    [_inputView.textView setText:@""];
+    [_inputView setHidden:YES];
+    
+    [self switchBtn:1];
+}
+
 
 @end
 

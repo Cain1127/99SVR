@@ -337,6 +337,7 @@
 		BB63F6271C2CC7A300A042E8 /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5A51C2CC7A300A042E8 /* LeftViewController.m */; };
 		BB63F6291C2CC7A300A042E8 /* WWSideslipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5A91C2CC7A300A042E8 /* WWSideslipViewController.m */; };
 		BB63F62C1C2D0DDF00A042E8 /* ChatButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F62B1C2D0DDF00A042E8 /* ChatButton.m */; };
+		BB6F3A5D1C9A7DCD0035EBBE /* ChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6F3A5C1C9A7DCD0035EBBE /* ChatView.m */; };
 		BB7B6FF91C33D6E10018FEC1 /* MyDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7B6FF81C33D6E10018FEC1 /* MyDataController.m */; };
 		BB7B6FFC1C33D7070018FEC1 /* CircleImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7B6FFB1C33D7070018FEC1 /* CircleImageView.m */; };
 		BB7C7A761C92B01400FFB29D /* M80AttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7C7A6E1C92B01400FFB29D /* M80AttributedLabel.m */; };
@@ -1029,6 +1030,8 @@
 		BB63F5A91C2CC7A300A042E8 /* WWSideslipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWSideslipViewController.m; sourceTree = "<group>"; };
 		BB63F62A1C2D0DDF00A042E8 /* ChatButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatButton.h; sourceTree = "<group>"; };
 		BB63F62B1C2D0DDF00A042E8 /* ChatButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatButton.m; sourceTree = "<group>"; };
+		BB6F3A5B1C9A7DCD0035EBBE /* ChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatView.h; sourceTree = "<group>"; };
+		BB6F3A5C1C9A7DCD0035EBBE /* ChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatView.m; sourceTree = "<group>"; };
 		BB7B6FF71C33D6E10018FEC1 /* MyDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDataController.h; sourceTree = "<group>"; };
 		BB7B6FF81C33D6E10018FEC1 /* MyDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDataController.m; sourceTree = "<group>"; };
 		BB7B6FFA1C33D7070018FEC1 /* CircleImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleImageView.h; sourceTree = "<group>"; };
@@ -2120,6 +2123,8 @@
 				BB5138301C97A21A00E09EF5 /* GiftView.m */,
 				BB51383B1C980F9700E09EF5 /* RoomDownView.h */,
 				BB51383C1C980F9700E09EF5 /* RoomDownView.m */,
+				BB6F3A5B1C9A7DCD0035EBBE /* ChatView.h */,
+				BB6F3A5C1C9A7DCD0035EBBE /* ChatView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -2861,6 +2866,7 @@
 				BB04368A1C4E295900A162A8 /* IdeaModel.m in Sources */,
 				BB17689F1C77052000CE947C /* GitInfo.m in Sources */,
 				BB25D80F1C15729800314C1E /* AppDelegate.m in Sources */,
+				BB6F3A5D1C9A7DCD0035EBBE /* ChatView.m in Sources */,
 				BB63F5F41C2CC7A300A042E8 /* SVRSocket.m in Sources */,
 				BB63F5D11C2CC7A300A042E8 /* MJRefreshHeader.m in Sources */,
 				BB7C7A811C9566BD00FFB29D /* FTCoreTextView.m in Sources */,
