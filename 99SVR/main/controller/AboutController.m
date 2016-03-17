@@ -39,22 +39,36 @@
     versionLabel.font = kFontSize(17);
     versionLabel.textColor = [UIColor colorWithHex:@"#343434"];
     #ifdef DEBUG
-        versionLabel.text = [NSString stringWithFormat:@"版本 V%@,build:%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
-                             [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+    char cString[255];
+    const char *version = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] UTF8String];
+    const char *bundle = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] UTF8String];
+    sprintf(cString, "版本 V%s,build:%s",version,bundle);
+    NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+    versionLabel.text = objCString;
+    objCString = nil;
     #else
-        versionLabel.text = [NSString stringWithFormat:@"版本 V%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+        char cString[255];
+        const char *version = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] UTF8String];
+        sprintf(cString, "版本 V%s",version,bundle);
+        NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+        versionLabel.text = objCString;
+        objCString = nil;
     #endif
     [self.view addSubview:versionLabel];
     __weak AboutController *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
-       UIImage *image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@",[[NSBundle mainBundle] bundlePath],@"bigest_logo.png"]];
-       if (image)
-       {
+        char cString[255];
+        const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+        sprintf(cString, "%s/bigest_logo.png",path);
+        NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+        UIImage *image = [UIImage imageWithContentsOfFile:objCString];
+        if (image)
+        {
            dispatch_async(dispatch_get_main_queue(), ^{
                __self.logoImageView.image = image;
            });
-       }
+        }
     });
     [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make)
     {

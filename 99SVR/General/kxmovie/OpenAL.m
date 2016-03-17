@@ -162,25 +162,25 @@
     }
     alGetSourcei(outSourceId, AL_BUFFERS_PROCESSED, &processed);
     alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
-//    if (queued < processed || queued == 0 ||(queued == 1 && processed ==1) || queued >50){
-//        [BaseService getJSONWithUrl:@"http://42.81.53.201/AnalyticStatistics/?c=Message&type=humanReportBlock&subtype=1&from=1&client=4&content=video_lag" parameters:nil success:nil fail:nil];
-//        DLog(@"清除缓存");
-//        alDeleteSources(1, &outSourceId);
-//        alDeleteBuffers(1, &buff);
-//        DLog(@"重新建立缓存,queued:%d--processed:%d",queued,processed);
-//        alGenBuffers(1, &buff);
-//        ALenum error = alGetError();
-//        if (error != AL_NO_ERROR){
-//            DLog(@"err:%@",[self GetALCErrorString:error]);
-//            DLog(@"建立新缓存失败");
-//        }
-//        alGenSources(1, &outSourceId);
-//        error = alGetError();
-//        if (error != AL_NO_ERROR){
-//            DLog(@"err:%@",[self GetALCErrorString:error]);
-//            DLog(@"建立新buffer失败");
-//        }
-//    }
+    if (queued < processed || queued == 0 ||(queued == 1 && processed ==1) || queued >75){
+        [BaseService getJSONWithUrl:@"http://42.81.53.201/AnalyticStatistics/?c=Message&type=humanReportBlock&subtype=1&from=1&client=4&content=video_lag" parameters:nil success:nil fail:nil];
+        DLog(@"清除缓存");
+        alDeleteSources(1, &outSourceId);
+        alDeleteBuffers(1, &buff);
+        DLog(@"重新建立缓存,queued:%d--processed:%d",queued,processed);
+        alGenBuffers(1, &buff);
+        ALenum error = alGetError();
+        if (error != AL_NO_ERROR){
+            DLog(@"err:%@",[self GetALCErrorString:error]);
+            DLog(@"建立新缓存失败");
+        }
+        alGenSources(1, &outSourceId);
+        error = alGetError();
+        if (error != AL_NO_ERROR){
+            DLog(@"err:%@",[self GetALCErrorString:error]);
+            DLog(@"建立新buffer失败");
+        }
+    }
     while(processed--){
         ALuint bufferId;
         alSourceUnqueueBuffers(outSourceId,1,&bufferId);

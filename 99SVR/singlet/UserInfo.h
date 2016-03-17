@@ -57,6 +57,10 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
 @property (nonatomic,strong) NSDateFormatter *fmt;
 
+@property (nonatomic,copy) NSArray *aryGift;
+
+@property (nonatomic) int giftVer;
+
 @end
 
 @interface RoomKey : NSObject

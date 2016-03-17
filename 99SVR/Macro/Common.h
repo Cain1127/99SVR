@@ -50,7 +50,7 @@
 
 #define kHISTORY_HTTP_URL @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=history&userid="
 
-#define kVideoImageHeight kScreenWidth*360/480
+#define kVideoImageHeight kScreenWidth*9/16
 
 #define kLineColor RGB(207, 207, 207)
 
@@ -60,9 +60,9 @@
 
 #define kRedirectURI @"http://api.99ducaijing.com/loginapi/RedirectByWeibo"
 
-#define  kWXAPP_ID @"wxfbfe01336f468525"
+#define  kWXAPP_ID "wxfbfe01336f468525"
 
-#define  kWXAPP_SEC @"acc28b09efbb768a1b5b7b6514903ef8"
+#define  kWXAPP_SEC "acc28b09efbb768a1b5b7b6514903ef8"
 
 #define kImage_TEXT_URL @"http://172.16.41.99/test/getimage.php?tid="
 #define kTEXT_GROUP_URL @"http://172.16.41.99/test/test.php?act=script"
@@ -74,6 +74,10 @@
 //#define kImage_TEXT_URL @"http://121.33.236.180:22807/test/getimage.php?tid="
 //#define kTEXT_GROUP_URL @"http://121.33.236.180:22807/test/test.php?act=script"
 //#define kTEXT_NEW_DETAILS_URL @"http://121.33.236.180:22807/viewpoint/index.php?s=/Index/getViewPoint/id/"
+
+#define kGift_URL @"http://42.81.53.201/99admintest/index.php?m=Api&c=Gift"
+
+#define kGif_Image_URL @"http://42.81.53.201/99admintest/Uploads/Picture/"
 
 #endif
 

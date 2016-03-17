@@ -8,6 +8,7 @@
 #import "FTCoreTextView.h"
 #import <QuartzCore/QuartzCore.h>
 #import <CoreText/CoreText.h>
+#import "UIImage+GIF.h"
 
 
 #define FTCT_SYSTEM_VERSION_LESS_THAN(v)			([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
@@ -811,37 +812,16 @@ CTFontRef CTFontCreateFromUIFont(UIFont *font)
                 }
                 else if (currentSupernode.isImage)
                 {
-                    //replace active string with emptySpace
                     NSRange elementContentRange = NSMakeRange(currentSupernode.startLocation, tagRange.location - currentSupernode.startLocation);
                     NSString *elementContent = [processedString substringWithRange:elementContentRange];
-                    UIImage *img =nil;
-                    if ([elementContent hasPrefix:@"base64:"])
-                    {
-                        NSData *myImgData = [NSData ftct_dataWithBase64EncodedString:[elementContent substringFromIndex:7]];
-                        img = [UIImage imageWithData:myImgData];
-                    }
-                    else
-                    {
-                        img = [UIImage imageNamed:elementContent];
-                    }
-                    if (img)
-                    {
-                        NSString *lines = @"\n";
-                        float leading = img.size.height;
-                        currentSupernode.style.leading = leading;
-                        currentSupernode.imageName = elementContent;
-                        [processedString replaceCharactersInRange:NSMakeRange(elementContentRange.location, elementContentRange.length + tagRange.length) withString:lines];
-                        
-                        [_images addObject:currentSupernode];
-                        currentSupernode.styleRange = NSMakeRange(elementContentRange.location, [lines length]);
-						
-                    }
-                    else
-                    {
-                        if (_verbose) NSLog(@"FTCoreTextView :%@ - Couldn't find image '%@' in main bundle", self,
-                                            [NSValue valueWithRange:elementContentRange]);
-                        [processedString replaceCharactersInRange:tagRange withString:@""];
-                    }
+                    
+                    NSString *lines = @"\n";
+                    float leading = 30;
+                    currentSupernode.style.leading = leading;
+                    currentSupernode.imageName = elementContent;
+                    [processedString replaceCharactersInRange:NSMakeRange(elementContentRange.location, elementContentRange.length + tagRange.length) withString:lines];
+                    [_images addObject:currentSupernode];
+                    currentSupernode.styleRange = NSMakeRange(elementContentRange.location, [lines length]);
                 }
                 else {
                     currentSupernode.styleRange = NSMakeRange(currentSupernode.startLocation, tagRange.location - currentSupernode.startLocation);
@@ -1214,10 +1194,8 @@ CTFontRef CTFontCreateFromUIFont(UIFont *font)
         {
 			NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:_processedString];
 			for (FTCoreTextNode *node in [_rootNode allSubnodes]){
-                DLog(@"node_name:%@",node.style.name);
 				[self applyStyle:node.style inRange:node.styleRange onString:&string];
 			}
-            DLog(@"***************************");
 			_attributedString = string;
 		}
 	}
@@ -1307,39 +1285,24 @@ CTFontRef CTFontCreateFromUIFont(UIFont *font)
 		CTLineRef line = (__bridge CTLineRef)[lines objectAtIndex:i];
 		CFRange cfrange = CTLineGetStringRange(line);
 		
-        if (cfrange.location > imageNode.styleRange.location) {
+        if (cfrange.location+cfrange.length > imageNode.styleRange.location) {
 			CGFloat ascent, descent;
 			CGFloat lineWidth = CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
-			
 			CGRect lineFrame = CGRectMake(baselineOrigin.x, baselineOrigin.y - ascent, lineWidth, ascent + descent);
-			
 			CTTextAlignment alignment = (CTTextAlignment)imageNode.style.textAlignment;
-            UIImage *img = nil;
-            if ([imageNode.imageName hasPrefix:@"base64:"])
-            {
-                NSData *myImgData = [NSData ftct_dataWithBase64EncodedString:[imageNode.imageName substringFromIndex:7]];
-                img = [UIImage imageWithData:myImgData];
-            }
-            else
-            {
-                img = [UIImage imageNamed:imageNode.imageName];
-            }
-			if (img)
-            {
-				int x = 0;
-				if (alignment == kCTRightTextAlignment) x = (self.frame.size.width - img.size.width);
-				if (alignment == kCTCenterTextAlignment) x = ((self.frame.size.width - img.size.width) / 2);
-				
-				CGRect frame = CGRectMake(x, (lineFrame.origin.y - img.size.height), img.size.width, img.size.height);
-                
-                UIEdgeInsets insets = imageNode.style.paragraphInset;
-                if (alignment != kCTCenterTextAlignment) frame.origin.x = (alignment == kCTLeftTextAlignment)? insets.left : (self.frame.size.width - img.size.width - insets.right);
-                frame.origin.y += insets.top;
-                frame.size.width = ((insets.left + insets.right + img.size.width ) > self.frame.size.width)? self.frame.size.width : img.size.width;
-                
-				[img drawInRect:CGRectIntegral(frame)];
-			}
-			
+            UIImage *img = [UIImage sd_animatedGIFNamed:imageNode.imageName];
+            int x = 0;
+            if (alignment == kCTRightTextAlignment) x = (self.frame.size.width - img.size.width);
+            if (alignment == kCTCenterTextAlignment) x = ((self.frame.size.width - img.size.width) / 2);
+         
+            CGRect frame = CGRectMake(x, lineFrame.origin.y, img.size.width, img.size.height);
+            
+            UIEdgeInsets insets = imageNode.style.paragraphInset;
+            
+            if (alignment != kCTCenterTextAlignment) frame.origin.x = (alignment == kCTLeftTextAlignment)? insets.left : (self.frame.size.width - img.size.width - insets.right);
+            frame.origin.y += insets.top;
+            frame.size.width = ((insets.left + insets.right + img.size.width ) > self.frame.size.width)? self.frame.size.width : img.size.width;
+            [img drawInRect:CGRectIntegral(frame)];
 			NSInteger imageNodeIndex = [_images indexOfObject:imageNode];
 			if (imageNodeIndex < [_images count] - 1) {
 				imageNode = [_images objectAtIndex:imageNodeIndex + 1];

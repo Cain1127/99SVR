@@ -901,10 +901,8 @@
         case 201:
         {
             strMsg = @"需要输入密码";
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:strMsg];
-            return ;
         }
-            break;
+        break;
         case 101:
         {
             strMsg = @"房间黑名单";

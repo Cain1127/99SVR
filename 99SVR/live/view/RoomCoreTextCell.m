@@ -16,13 +16,14 @@
     
     _textView = [[DTAttributedTextContentView alloc] init];
     [self.contentView addSubview:_textView];
+    [self.contentView setBackgroundColor:UIColorFromRGB(0xF8F8F8)];
     return self;
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [_textView setFrame:Rect(10, 5, kScreenWidth-20, self.contentView.height-10)];
+    [_textView setFrame:Rect(0,0, kScreenWidth, self.contentView.height)];
 }
 
 - (void)awakeFromNib {

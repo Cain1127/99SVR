@@ -8,7 +8,9 @@
 
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "GiftModel.h"
 #import <AVFoundation/AVAudioSession.h>
+#import "NSJSONSerialization+RemovingNulls.h"
 #import "LSTcpSocket.h"
 #import "WeiboSDK.h"
 #import "UserInfo.h"
@@ -63,18 +65,45 @@
     [_window makeKeyAndVisible];
     leftView = [[LeftViewController alloc] init];
     
-//    indexView = [[IndexViewController alloc] init];
     rightView = [[RightViewController alloc] init];
     _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
-//    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
     
+//    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:indexView andRightView:nil andBackgroundImage:nil];
 //    UINavigationController *navCon = [[UINavigationController alloc] init];
 //    [navCon pushViewController:_sides animated:YES];
 //    [_window setRootViewController:navCon];
-    
     [_window setRootViewController:_sides];
+    
+    NSString *strGift = [UserDefaults objectForKey:kGiftInfo];
+    if (strGift){
+        [self setGiftInfo:strGift];
+    }
+    else{
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"gift"
+                                                         ofType:@"txt"];
+        NSString *content = [NSString stringWithContentsOfFile:path
+                                                      encoding:NSUTF8StringEncoding
+                                                         error:nil];
+        [self setGiftInfo:content];
+        [UserDefaults setObject:content forKey:kGiftInfo];
+        DLog(@"第一次拿到");
+    }
     _sides.speedf = 0.5;
     return YES;
+}
+
+- (void)setGiftInfo:(NSString *)strGift
+{
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[strGift dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+    if (dict && [dict objectForKey:@"gift"]) {
+        [UserInfo sharedUserInfo].giftVer = [[dict objectForKey:@"ver"] intValue];
+        NSArray *array = [dict objectForKey:@"gift"];
+        NSMutableArray *aryIndex = [NSMutableArray array];
+        for (NSDictionary *dictionary in array) {
+            [aryIndex addObject:[GiftModel resultWithDict:dictionary]];
+        }
+        [UserInfo sharedUserInfo].aryGift = aryIndex;
+    }
 }
 
 -(void)onCheckVersion
@@ -214,8 +243,10 @@
 
 -(void)getAccess_token:(NSString *)strCode
 {
-    
-    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/oauth2/access_token?appid=%@&secret=%@&code=%@&grant_type=authorization_code",kWXAPP_ID,kWXAPP_SEC,strCode];
+    char cString[600]={0};
+    sprintf(cString, "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",kWXAPP_ID,kWXAPP_SEC,
+            [strCode UTF8String]);
+    NSString *url = [[NSString alloc] initWithUTF8String:cString];
     __weak AppDelegate *__self = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSURL *zoneUrl = [NSURL URLWithString:url];
@@ -227,7 +258,6 @@
                 NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                 NSString *strToken = [dic objectForKey:@"access_token"];
                 NSString *strOpenId = [dic objectForKey:@"openid"];
-                DLog(@"strToken:%@,strOpenId:%@",strToken,strOpenId);
                 [__self getUserInfo:strToken openid:strOpenId];
             }
         });
