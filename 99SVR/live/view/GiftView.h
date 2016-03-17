@@ -17,4 +17,9 @@
 @property (nonatomic,strong) UIPageControl *pageControl;
 @property (nonatomic,strong) UIButton *btnNumber;
 
+
+@property (nonatomic,strong) UIImageView *numberImgView;
+@property (nonatomic,copy) UIImage *frameImage;
+@property (nonatomic,strong) UIView *numberView;
+
 @end

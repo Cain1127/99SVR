@@ -1652,7 +1652,6 @@
 
 - (void)addChatInfo:(NSString *)strInfo
 {
-    DLog(@"addChatInfo:%@",strInfo);
     SVRMesssage *message = [SVRMesssage message:strInfo];
     message.text = [DecodeJson replaceEmojiNewString:message.text];
     [_aryChat addObject:message];

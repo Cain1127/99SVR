@@ -139,9 +139,11 @@
 
 - (void)initDecode
 {
-    av_register_all();
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        av_register_all();
+    });
     AVCodec *codec = avcodec_find_decoder(AV_CODEC_ID_H264);
-    avcodec_register(codec);
     _pCodecCtx = avcodec_alloc_context3(codec);
     if (avcodec_open2(_pCodecCtx,codec, nil)<0)
     {

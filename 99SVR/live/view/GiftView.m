@@ -14,6 +14,7 @@
 #import "DecodeJson.h"
 
 #define kGiftHeight 100
+#define kNumberGift 105
 @implementation GiftView
 
 - (id)initWithFrame:(CGRect)frame
@@ -31,6 +32,12 @@
     UIImage *gift_frame = [UIImage imageNamed:@"gift_frame"];
     UIEdgeInsets insets = UIEdgeInsetsMake(2,2,gift_frame.size.height-4,gift_frame.size.height-4);
     _giftImage = [DecodeJson stretchImage:gift_frame capInsets:insets resizingMode:UIImageResizingModeStretch];
+    
+    UIImage *frame_number = [UIImage imageNamed:@"video_present_number_bg"];
+    
+    UIEdgeInsets number = UIEdgeInsetsMake(3, 3, frame_number.size.height-6,3);
+    
+    _frameImage  = [DecodeJson stretchImage:frame_number capInsets:number resizingMode:UIImageResizingModeStretch];
 }
 
 - (void)setGestureHidden
@@ -135,6 +142,7 @@
     btnSend.frame = Rect(kScreenWidth - 100, 3, 90,44);
     btnSend.layer.masksToBounds = YES;
     btnSend.layer.cornerRadius = 3;
+    [btnSend addTarget:self action:@selector(sendGift) forControlEvents:UIControlEventTouchUpInside];
     
     self.layer.shadowColor = [UIColor blackColor].CGColor;
     self.layer.shadowOffset = CGSizeMake(0,0);
@@ -146,13 +154,35 @@
     UIImage *imgArrow = [UIImage imageNamed:@"video_present_number_point"];
     [_btnNumber setImage:imgArrow forState:UIControlStateNormal];
     [downView addSubview:_btnNumber];
-    _btnNumber.frame = Rect(btnSend.x-88, btnSend.y, 65, 35);
+    _btnNumber.frame = Rect(btnSend.x-88, btnSend.y+4, 65, 36);
     [_btnNumber setBackgroundColor:UIColorFromRGB(0xE5E5E5)];
     [_btnNumber setTitleColor:UIColorFromRGB(0xff7a1e) forState:UIControlStateNormal];
-    _btnNumber.titleLabel.font = XCFONT(17);
+    _btnNumber.titleLabel.font = XCFONT(15);
+    [_btnNumber setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 20)];
+    [_btnNumber setImageEdgeInsets:UIEdgeInsetsMake(0, 50, 0, 0)];
+    [_btnNumber addTarget:self action:@selector(selectNumber) forControlEvents:UIControlEventTouchUpInside];
     
-    [_btnNumber setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 30)];
-    [_btnNumber setImageEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 0)];
+    _numberView = [[UIView alloc] initWithFrame:self.bounds];
+    _numberView.userInteractionEnabled = YES;
+    [self addSubview:_numberView];
+    [_numberView clickWithBlock:^(UIGestureRecognizer *gesture) {
+        _numberView.hidden = YES;
+    }];
+    _numberImgView = [[UIImageView alloc] initWithFrame:Rect(_btnNumber.x+_btnNumber.width/2-52.5,_scrollView.y,105,_scrollView.height)];
+    [_numberImgView setImage:_frameImage];
+    [_numberView addSubview:_numberImgView];
+    _numberImgView.userInteractionEnabled = YES;
+    
+    _numberView.hidden = YES;
+    CGFloat height = _scrollView.height/7;
+    
+    [self createButton:@"1314" frame:Rect(0, 0, kNumberGift, height)];
+    [self createButton:@"888" frame:Rect(0,height, kNumberGift, height)];
+    [self createButton:@"520" frame:Rect(0,height*2, kNumberGift, height)];
+    [self createButton:@"88" frame:Rect(0,height*3, kNumberGift, height)];
+    [self createButton:@"66" frame:Rect(0,height*4, kNumberGift, height)];
+    [self createButton:@"16" frame:Rect(0,height*5, kNumberGift, height)];
+    [self createButton:@"1" frame:Rect(0,height*6, kNumberGift, height)];
 }
 
 - (void)selectView:(UIView *)view
@@ -171,5 +201,37 @@
     _pageControl.currentPage = page;
 }
 
+
+- (void)createButton:(NSString *)title frame:(CGRect)frame
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setTitleColor:UIColorFromRGB(0xFF87A1E) forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"video_tallk_bg_p"] forState:UIControlStateHighlighted];
+    [btn setTitle:title forState:UIControlStateNormal];
+    btn.frame = frame;
+    [_numberImgView addSubview:btn];
+    [btn addTarget:self action:@selector(clickNumber:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)clickNumber:(UIButton *)button
+{
+    [_btnNumber setTitle:button.titleLabel.text forState:UIControlStateNormal];
+    _numberView.hidden=!_numberView.hidden;
+}
+
+- (void)selectNumber
+{
+    _numberView.hidden=!_numberView.hidden;
+}
+
+- (void)sendGift
+{
+    DLog(@"发送礼物");
+}
+
+- (void)dealloc
+{
+    DLog(@"dealloc");
+}
 
 @end
