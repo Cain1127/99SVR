@@ -15,8 +15,8 @@
     UIImageView *imgView;
     UIImageView *imgViewPic;
     UILabel *lblName;
-    UILabel *lblNumber;
-    
+    UILabel *lblContent;
+    UILabel *lblLine;
 }
 
 @end
@@ -27,27 +27,35 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
-    imgView = [[UIImageView alloc] initWithFrame:Rect(10, 10, 17, 17)];
+    imgView = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth-27, 10, 17, 17)];
     
-    imgViewPic = [[UIImageView alloc] initWithFrame:Rect(imgView.x+imgView.width+10, imgView.y, 20, 20)];
+    imgViewPic = [[UIImageView alloc] initWithFrame:Rect(10, 10, 40, 40)];
+    imgViewPic.layer.masksToBounds = YES;
+    imgViewPic.layer.cornerRadius = 20;
     
-    lblName = [[UILabel alloc] initWithFrame:Rect(imgViewPic.x+imgViewPic.width+10, imgViewPic.y,150, 20)];
+    lblName = [[UILabel alloc] initWithFrame:Rect(imgViewPic.x+imgViewPic.width+12,13,150,16)];
+    [lblName setTextColor:UIColorFromRGB(0x343434)];
+    [lblName setFont:XCFONT(14)];
     
-    [lblName setTextColor:UIColorFromRGB(0x000000)];
+    lblContent = [[UILabel alloc] initWithFrame:Rect(lblName.x,lblName.y+lblName.height+10,kScreenWidth-50, 16)];
+    [lblContent setTextColor:UIColorFromRGB(0x919191)];
+    [lblContent setFont:XCFONT(14)];
     
-    lblNumber = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-100, imgViewPic.y, 90, 20)];
-    
-    [self.contentView addSubview:lblNumber];
+    [self.contentView addSubview:lblContent];
     [self.contentView addSubview:lblName];
     [self.contentView addSubview:imgViewPic];
     [self.contentView addSubview:imgView];
     
-    [lblNumber setTextAlignment:NSTextAlignmentRight];
-    
-    [lblNumber setFont:XCFONT(14)];
-    [lblName setFont:XCFONT(14)];
-    
+    lblLine = [[UILabel alloc] initWithFrame:Rect(10, 59, kScreenWidth-10, 0.5)];
+    [self.contentView addSubview:lblLine];
+    [lblLine setBackgroundColor:UIColorFromRGB(0xF0F0F0)];
     return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    lblLine.frame = Rect(10, 59,kScreenWidth-10,0.5);
 }
 
 - (void)setRoomUser:(RoomUser *)user
@@ -85,10 +93,8 @@
     {
         [imgViewPic setImage:[UIImage imageNamed:@"defaultHead"]];
     }
-    
-    [lblName setText:user.m_strUserAlias];
-    [lblNumber setText:[NSString stringWithFormat:@"%d",user.m_nUserId]];
-    
+    [lblName setText:[NSString stringWithFormat:@"%@ (%d)",user.m_strUserAlias,user.m_nUserId]];
+    [lblContent setText:@"这个家伙很懒，什么都没写"];
 }
 
 @end

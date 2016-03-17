@@ -16,6 +16,7 @@
 #import "HotViewController.h"
 #import "MainViewController.h"
 #import "HistoryViewController.h"
+#import "GiftRequest.h"
 #import "GroupView.h"
 #import "SearchController.h"
 
@@ -31,6 +32,7 @@
     int updateCount;
     int _currentPage;
     CGFloat scalef;
+    GiftRequest *_giftRequest;
 }
 
 @property (nonatomic,strong) MyScrollView *scrollView;

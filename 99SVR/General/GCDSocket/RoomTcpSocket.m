@@ -545,6 +545,7 @@
         strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
     }
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
+
     NSString *uid = [DeviceUID uid];
     if (uid && uid>0)
     {
@@ -948,15 +949,15 @@
     {
         if (strName)
         {
-//            return [NSString stringWithFormat:@"<a style=\"color:#629bff \" href=\"sqchatid://%d\" value=\"%@\">%@</a>",
-            return [NSString stringWithFormat:@"<a>sqchatid://%d|%@</a>",
-                    userId,strName];
+            return [NSString stringWithFormat:@"<a style=\"color:#629bff \" href=\"sqchatid://%d\" value=\"%@\">%@</a>",
+//            return [NSString stringWithFormat:@"<a>sqchatid://%d|%@</a>",
+                    userId,strName,strName];
         }
         else
         {
-//            return [NSString stringWithFormat:@"<a style=\"font-size:13px;COLOR: #629bff \" href=\"sqchatid://%d\">%d</a>(%d)",
-            return [NSString stringWithFormat:@"<a>sqchatid://%d|%d</a>",
-                    userId, userId];
+            return [NSString stringWithFormat:@"<a style=\"font-size:13px;COLOR: #629bff \" href=\"sqchatid://%d\">%d</a>(%d)",
+//            return [NSString stringWithFormat:@"<a>sqchatid://%d|%d</a>",
+                    userId, userId,userId];
         }
     }
 }
@@ -974,7 +975,7 @@
         NoticeModel *notice = [[NoticeModel alloc] init];
         if (msg->msgtype==1)
         {
-//            strInfo = [DecodeJson replaceEmojiString:strContent];
+//            strInfo = [DecodeJson replaceEmojiNewString:strContent];
             notice.strContent = strInfo;
             notice.strType = [[NSString alloc] initWithFormat:@"房间广播-%@",strFrom];
         }
@@ -1003,13 +1004,13 @@
         NSString *strInfo = nil;
         if (msg->toid == 0)
         {
-            strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\"> %@ 说 :</span>&nbsp;&nbsp;%@",strFrom,strTo,strContent];
+            strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\">%@说:</span><br/>%@",strFrom,strTo,strContent];
         }
         else
         {
-            strInfo = [NSString stringWithFormat:@" %@<span style=\"color:#919191\">对%@ 说 :</span>&nbsp;&nbsp;%@",strFrom,strTo,strContent];
+            strInfo = [NSString stringWithFormat:@" %@<span style=\"color:#919191\">对%@说:\n</span><br/>%@",strFrom,strTo,strContent];
         }
-//        strInfo = [DecodeJson replaceEmojiString:strInfo];
+//        strInfo = [DecodeJson replaceEmojiNewString:strInfo];
 //        [_aryChat addObject:strInfo];
         [self addChatInfo:strInfo];
         NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[UserInfo sharedUserInfo].nUserId];
@@ -1234,6 +1235,7 @@
 //    [_aryChat addObject:strMsg];
     [self addChatInfo:strMsg];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:@(pResp->errid)];
     [self closeSocket];
 }
 
@@ -1292,14 +1294,14 @@
 //推送自己发送的信息到界面
 - (void)sendLocalChat:(NSString *)strMsg to:(int)nUser
 {
-//    strMsg = [DecodeJson replaceEmojiString:strMsg];
+//    strMsg = [DecodeJson replaceEmojiNewString:strMsg];
     NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color: #629bff\" value=\"forme--%d\">你</span>",
                          [UserInfo sharedUserInfo].nUserId];
     if (nUser!=0)
     {
         RoomUser *user = [_rInfo findUser:nUser];
         NSString *strTo = [self getToUser:nUser user:user name:user.m_strUserAlias];
-        NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\">对 %@ 说:</span>%@",strFrom,strTo,strMsg];
+        NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\">对 %@ 说:</span><br/>%@",strFrom,strTo,strMsg];
 //        [_aryChat addObject:strInfo];
         [self addChatInfo:strInfo];
 //        [_aryPriChat addObject:strInfo];
@@ -1307,7 +1309,7 @@
     }
     else
     {
-        NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\"> 说:</span>%@",strFrom,strMsg];
+        NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\"> 说:</span><br/>%@",strFrom,strMsg];
 //        [_aryChat addObject:strInfo];
         [self addChatInfo:strInfo];
 //        [_aryPriChat addObject:strInfo];
@@ -1651,12 +1653,14 @@
 - (void)addChatInfo:(NSString *)strInfo
 {
     SVRMesssage *message = [SVRMesssage message:strInfo];
+    message.text = [DecodeJson replaceEmojiNewString:message.text];
     [_aryChat addObject:message];
 }
 
 - (void)addPriChatInfo:(NSString *)strInfo
 {
     SVRMesssage *message = [SVRMesssage message:strInfo];
+    message.text = [DecodeJson replaceEmojiNewString:message.text];
     [_aryPriChat addObject:message];
 }
 

@@ -198,6 +198,45 @@
     return result;
 }
 
++ (NSString *)replaceEmojiNewString:(NSString *)strInfo
+{
+    if (!strInfo){
+        return @"";
+    }
+    BOOL finished  = NO;
+    while (!finished) {
+        NSRange tagRange = [strInfo rangeOfString:@"&nbsp;" options:NSRegularExpressionSearch];
+        if (tagRange.location == NSNotFound)
+        {
+            finished = YES;
+            break;
+        }
+        strInfo = [strInfo stringByReplacingCharactersInRange:tagRange withString:@" "];
+    }
+    finished = NO;
+    NSUInteger nStart,nEnd;
+    NSString *regx = @"[$\\d{1,3}$]";
+	NSRange remainingRange = NSMakeRange(0, [strInfo length]);
+    while (!finished) {
+        NSRange tagRange = [strInfo rangeOfString:regx options:NSRegularExpressionSearch range:remainingRange];
+        if (tagRange.location==NSNotFound) {
+            break;
+        }
+        nStart = [strInfo rangeOfString:@"[$"].location != NSNotFound ? [strInfo rangeOfString:@"[$"].location :-1;
+        nEnd = [strInfo rangeOfString:@"$]"].location!= NSNotFound ? [strInfo rangeOfString:@"$]"].location :-1;;
+        if(nStart == -1 || nEnd == -1)
+        {
+            return strInfo;
+        }
+        NSString *strTemp = [strInfo substringWithRange:NSMakeRange(nStart+2,nEnd-nStart-2)];
+        strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
+                   [NSString stringWithFormat:@"<object value=%d width=30 height=30 ></object>",[strTemp intValue]]];
+        remainingRange.location = tagRange.location;
+        remainingRange.length = [strInfo length]-tagRange.location;
+    }
+    return strInfo;
+}
+
 + (NSString *)replaceEmojiString:(NSString *)strInfo
 {
     if (!strInfo)
@@ -215,9 +254,9 @@
     NSUInteger nStart,nEnd;
     while ([strInfo rangeOfString:@"[$"].location != NSNotFound && [strInfo rangeOfString:@"$]"].location != NSNotFound)
     {
-        nStart = [strInfo rangeOfString:@"[$"].location;
-        nEnd = [strInfo rangeOfString:@"$]"].location;
-        if(nStart>nEnd)
+        nStart = [strInfo rangeOfString:@"[$"].location != NSNotFound ? [strInfo rangeOfString:@"[$"].location :-1;
+        nEnd = [strInfo rangeOfString:@"$]"].location!= NSNotFound ? [strInfo rangeOfString:@"$]"].location :-1;;
+        if(nStart == -1 || nEnd == -1)
         {
             return strInfo;
         }
@@ -314,6 +353,21 @@
     {
         return -1;
     }
+}
+
+/**
+ *  局部拉伸图片
+ *
+ *  @param image        原image
+ *  @param capInsets    区域
+ *  @param resizingMode 方式
+ *
+ *  @return <#return value description#>
+ */
++ (UIImage *)stretchImage:(UIImage *)image capInsets:(UIEdgeInsets)capInsets resizingMode:(UIImageResizingMode)resizingMode{
+    UIImage *resultImage = nil;
+    resultImage = [image resizableImageWithCapInsets:capInsets resizingMode:resizingMode];
+    return resultImage;
 }
 
 @end

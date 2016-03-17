@@ -130,7 +130,7 @@
     [_txtPwd setTextColor:UIColorFromRGB(0x343434)];
     
     UIColor *color = [UIColor grayColor];
-    _txtUser.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"99账号/手号码/用户名" attributes:@{NSForegroundColorAttributeName: color}];
+    _txtUser.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"99账号/手机号码/用户名" attributes:@{NSForegroundColorAttributeName: color}];
     _txtPwd.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入密码" attributes:@{NSForegroundColorAttributeName: color}];
     
     _txtUser.delegate = self;

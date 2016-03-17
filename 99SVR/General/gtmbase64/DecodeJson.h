@@ -71,5 +71,25 @@
  *  @return 1 今天 0 昨天 
  */
 + (int)compareDate:(NSDate *)date;
+/**
+ *  新解析表情方式
+ *
+ *  @param strInfo <#strInfo description#>
+ *
+ *  @return <#return value description#>
+ */
++ (NSString *)replaceEmojiNewString:(NSString *)strInfo;
+
+
+/**
+ *  局部拉伸图片
+ *
+ *  @param image        原image
+ *  @param capInsets    拉伸区域
+ *  @param resizingMode 拉伸方式
+ *
+ *  @return 返回修改的图片
+ */
++ (UIImage *)stretchImage:(UIImage *)image capInsets:(UIEdgeInsets)capInsets resizingMode:(UIImageResizingMode)resizingMode;
 
 @end

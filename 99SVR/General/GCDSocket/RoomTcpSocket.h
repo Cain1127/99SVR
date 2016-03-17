@@ -59,6 +59,7 @@
 
 - (void)sendMediaInfo:(NSString *)strInfo;
 
+- (void)addChatInfo:(NSString *)strInfo;
 @end
 
 

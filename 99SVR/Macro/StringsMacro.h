@@ -20,4 +20,7 @@
 #define kToken @"token"
 #define kOtherLogin @"otherlogin"
 
+
+#define kGiftInfo @"SVRGiftInfo"
+
 #endif /* StringsMacro_h */

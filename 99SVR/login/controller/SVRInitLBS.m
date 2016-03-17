@@ -21,6 +21,9 @@
     __weak LSTcpSocket *__lsTcp = [LSTcpSocket sharedLSTcpSocket];
 //    NSString *strtemp = @"t";
 //    [strtemp substringWithRange:NSMakeRange(5, 20)];
+    static dispatch_once_t onceToken;
+    
+    
     [BaseService getJSONWithUrl:LBS_ROOM_WEB parameters:nil success:^(id responseObject)
     {
         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
