@@ -167,7 +167,6 @@
 - (void)leftMenuIconDidClick{
     LoginViewController *loginVc = [[LoginViewController alloc] init];
     [self presentViewController:loginVc animated:YES completion:nil];
-    
     [self coverClick:[self.navigationController.view viewWithTag:coverViewTag]];
 }
 

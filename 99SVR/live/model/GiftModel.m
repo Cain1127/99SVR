@@ -39,10 +39,9 @@
         @try
         {
             [result setValue:dict[key] forKey:key];
-            DLog(@"except:%@:%@",key,dict[key]);
         }@catch(NSException *exception)
         {
-            NSLog(@"except:%@:%@",key,dict[key]);
+            DLog(@"except:%@:%@",key,dict[key]);
         }
     }
     return result;
