@@ -13,4 +13,5 @@
  *  回调
  */
 @property (nonatomic, strong) void (^ nickNameBlock)(NSString * nickName);
+
 @end
