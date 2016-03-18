@@ -24,8 +24,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self addHeaderView:@"客服中心"];
-    self.listReuqest = [[GroupListRequest alloc] init];
+    self.title = @"客服中心";
+//    [self addHeaderView:@"客服中心"];
+    
+    self.tableView.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
+    
+    DLog(@"kScreenHeight:%f",kScreenHeight);
+    _listReuqest = [[GroupListRequest alloc] init];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     if ([UserInfo sharedUserInfo].aryHelp)
     {
         [self setVideos:[UserInfo sharedUserInfo].aryHelp];

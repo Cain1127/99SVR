@@ -71,21 +71,22 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64 + 36, self.view.width,3*kCellHeight+8)];
+    [self setTitle:@"设置"];
+    
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,64,kScreenWidth,3*kCellHeight+8)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
+    
     UIView *emptyFooter = [[UIView alloc] init];
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 0.5)];
-    
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(10, 0, self.view.width - 20, 0.5)];
     [headerView addSubview:line];
     line.backgroundColor = kLineColor;
     _tableView.tableHeaderView = headerView;
     _tableView.tableFooterView = emptyFooter;
     [_tableView registerClass:[SettingCell class] forCellReuseIdentifier:@"cellId"];
-    [self addDefaultHeader:@"设置"];
     
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {

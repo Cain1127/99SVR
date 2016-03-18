@@ -14,6 +14,7 @@
 @interface VideoColletionViewController()
 {
 //    UIView *headView;
+    UIView *_headView;
 }
 
 @property (nonatomic,strong) RoomListRequest *listReuqest;
@@ -25,38 +26,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIView *_headView = nil;
-    _headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
-    [self.view addSubview:_headView];
-    _headView.backgroundColor = kNavColor;
-    
-    UILabel *_txtTitle = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [_txtTitle setFont:XCFONT(16)];
-    [_headView addSubview:_txtTitle];
-    [_txtTitle setTextAlignment:NSTextAlignmentCenter];
-    [_txtTitle setTextColor:[UIColor whiteColor]];
-    [_txtTitle setText:@"我的收藏"];
-    
-    UILabel *_lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
-    [_lblContent setBackgroundColor:[UIColor whiteColor]];
-    [_headView addSubview:_lblContent];
-    
-    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
-    [_headView addSubview:btnBack];
-    btnBack.frame = Rect(0, 20, 44, 44);
-    
+    self.title = @"我的收藏";
     _listReuqest = [[RoomListRequest alloc] init];
-    
-    self.tableView.frame = Rect(0, 64, kScreenWidth, kScreenHeight-64);
-
+    self.tableView.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
 }
 
 - (void)navBack
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
