@@ -30,7 +30,7 @@
     //输入框底层
     UIView *inputView = [[UIView alloc] init];
     inputView.backgroundColor = [UIColor whiteColor];
-    inputView.frame = CGRectMake(0, 80, kScreenWidth, 150);
+    inputView.frame = CGRectMake(0, 10, kScreenWidth, 150);
     [self.view addSubview:inputView];
     
     //签名输入框
@@ -45,7 +45,7 @@
     [_signatureTextField setValue:kFontSize(14) forKeyPath:@"_placeholderLabel.font"];
     [_signatureTextField setValue:RGB(151, 151, 151) forKeyPath:@"_placeholderLabel.textColor"];
     [self.view addSubview:_signatureTextField];
-    _signatureTextField.frame = CGRectMake(12, 80, kScreenWidth - 2 * 12, 150);
+    _signatureTextField.frame = CGRectMake(12, 10, kScreenWidth - 2 * 12, 150);
     
     //建议提醒文字
 //    UILabel * adviceLabel = [[UILabel alloc] init];

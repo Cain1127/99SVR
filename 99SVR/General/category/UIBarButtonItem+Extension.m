@@ -27,7 +27,7 @@
     UIImage *img = [UIImage imageNamed:image];
     [btn setImage:img forState:UIControlStateNormal];
     [btn setImage:[UIImage imageNamed:highImage] forState:UIControlStateHighlighted];
-    [btn setImageEdgeInsets:UIEdgeInsetsMake(0, -15, 0, 0)];
+    [btn setImageEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 0)];
     // 设置尺寸
     //btn.size = CGSizeMake(44, 44);//btn.currentBackgroundImage.size;
     // 一定要设置frame，才能显示

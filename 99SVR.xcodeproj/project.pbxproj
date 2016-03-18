@@ -15,6 +15,12 @@
 		188741821C9702DA002EF25A /* NSString+Regex.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417C1C9702DA002EF25A /* NSString+Regex.m */; };
 		188741831C9702DA002EF25A /* UIBarButtonItem+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */; };
 		188741871C97058F002EF25A /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188741861C97058F002EF25A /* TabBarController.m */; };
+		1898AC661C9BADE600F2681D /* AboutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC5D1C9BADE600F2681D /* AboutController.m */; };
+		1898AC671C9BADE600F2681D /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC5F1C9BADE600F2681D /* HistoryViewController.m */; };
+		1898AC681C9BADE600F2681D /* KefuCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC611C9BADE600F2681D /* KefuCenterController.m */; };
+		1898AC691C9BADE600F2681D /* MyDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC631C9BADE600F2681D /* MyDataController.m */; };
+		1898AC6A1C9BADE600F2681D /* SettingCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC651C9BADE600F2681D /* SettingCenterController.m */; };
+		1898AC711C9BB77100F2681D /* VideoColletionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC701C9BB77100F2681D /* VideoColletionViewController.m */; };
 		189D8A8E1C97982100E7D16D /* SlideBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */; };
 		18AAD55D1C9927B800438E18 /* LeftMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AAD55A1C9927B800438E18 /* LeftMenu.m */; };
 		18AAD55E1C9927B800438E18 /* LeftMenuHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AAD55C1C9927B800438E18 /* LeftMenuHeaderView.m */; };
@@ -326,15 +332,10 @@
 		BB63F60C1C2CC7A300A042E8 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F56A1C2CC7A300A042E8 /* LoginViewController.m */; };
 		BB63F60D1C2CC7A300A042E8 /* RoomListInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F56D1C2CC7A300A042E8 /* RoomListInfo.m */; };
 		BB63F60E1C2CC7A300A042E8 /* LoginTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5701C2CC7A300A042E8 /* LoginTextField.m */; };
-		BB63F60F1C2CC7A300A042E8 /* AboutController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5741C2CC7A300A042E8 /* AboutController.m */; };
-		BB63F6101C2CC7A300A042E8 /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5761C2CC7A300A042E8 /* HistoryViewController.m */; };
 		BB63F6111C2CC7A300A042E8 /* HotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5781C2CC7A300A042E8 /* HotViewController.m */; };
-		BB63F6121C2CC7A300A042E8 /* KefuCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F57A1C2CC7A300A042E8 /* KefuCenterController.m */; };
 		BB63F6131C2CC7A300A042E8 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F57C1C2CC7A300A042E8 /* MainViewController.m */; };
-		BB63F6141C2CC7A300A042E8 /* VideoColletionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F57E1C2CC7A300A042E8 /* VideoColletionViewController.m */; };
 		BB63F6181C2CC7A300A042E8 /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5831C2CC7A300A042E8 /* NewViewController.m */; };
 		BB63F6191C2CC7A300A042E8 /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5851C2CC7A300A042E8 /* SearchController.m */; };
-		BB63F61A1C2CC7A300A042E8 /* SettingCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5871C2CC7A300A042E8 /* SettingCenterController.m */; };
 		BB63F61B1C2CC7A300A042E8 /* HtmlRoom.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F58A1C2CC7A300A042E8 /* HtmlRoom.m */; };
 		BB63F61C1C2CC7A300A042E8 /* RoomGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F58C1C2CC7A300A042E8 /* RoomGroup.m */; };
 		BB63F61D1C2CC7A300A042E8 /* RoomHttp.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F58E1C2CC7A300A042E8 /* RoomHttp.m */; };
@@ -351,7 +352,6 @@
 		BB63F6291C2CC7A300A042E8 /* WWSideslipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5A91C2CC7A300A042E8 /* WWSideslipViewController.m */; };
 		BB63F62C1C2D0DDF00A042E8 /* ChatButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F62B1C2D0DDF00A042E8 /* ChatButton.m */; };
 		BB6F3A5D1C9A7DCD0035EBBE /* ChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6F3A5C1C9A7DCD0035EBBE /* ChatView.m */; };
-		BB7B6FF91C33D6E10018FEC1 /* MyDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7B6FF81C33D6E10018FEC1 /* MyDataController.m */; };
 		BB7B6FFC1C33D7070018FEC1 /* CircleImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7B6FFB1C33D7070018FEC1 /* CircleImageView.m */; };
 		BB7C7A761C92B01400FFB29D /* M80AttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7C7A6E1C92B01400FFB29D /* M80AttributedLabel.m */; };
 		BB7C7A771C92B01400FFB29D /* M80AttributedLabelAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7C7A701C92B01400FFB29D /* M80AttributedLabelAttachment.m */; };
@@ -460,6 +460,18 @@
 		1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Extension.m"; sourceTree = "<group>"; };
 		188741851C97058F002EF25A /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		188741861C97058F002EF25A /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
+		1898AC5C1C9BADE600F2681D /* AboutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutController.h; path = controller/AboutController.h; sourceTree = "<group>"; };
+		1898AC5D1C9BADE600F2681D /* AboutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutController.m; path = controller/AboutController.m; sourceTree = "<group>"; };
+		1898AC5E1C9BADE600F2681D /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HistoryViewController.h; path = controller/HistoryViewController.h; sourceTree = "<group>"; };
+		1898AC5F1C9BADE600F2681D /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HistoryViewController.m; path = controller/HistoryViewController.m; sourceTree = "<group>"; };
+		1898AC601C9BADE600F2681D /* KefuCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KefuCenterController.h; path = controller/KefuCenterController.h; sourceTree = "<group>"; };
+		1898AC611C9BADE600F2681D /* KefuCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KefuCenterController.m; path = controller/KefuCenterController.m; sourceTree = "<group>"; };
+		1898AC621C9BADE600F2681D /* MyDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyDataController.h; path = controller/MyDataController.h; sourceTree = "<group>"; };
+		1898AC631C9BADE600F2681D /* MyDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyDataController.m; path = controller/MyDataController.m; sourceTree = "<group>"; };
+		1898AC641C9BADE600F2681D /* SettingCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingCenterController.h; path = controller/SettingCenterController.h; sourceTree = "<group>"; };
+		1898AC651C9BADE600F2681D /* SettingCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingCenterController.m; path = controller/SettingCenterController.m; sourceTree = "<group>"; };
+		1898AC6F1C9BB77100F2681D /* VideoColletionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoColletionViewController.h; path = controller/VideoColletionViewController.h; sourceTree = "<group>"; };
+		1898AC701C9BB77100F2681D /* VideoColletionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoColletionViewController.m; path = controller/VideoColletionViewController.m; sourceTree = "<group>"; };
 		189D8A8C1C97982100E7D16D /* SlideBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideBaseViewController.h; sourceTree = "<group>"; };
 		189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideBaseViewController.m; sourceTree = "<group>"; };
 		18AAD5591C9927B800438E18 /* LeftMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftMenu.h; sourceTree = "<group>"; };
@@ -1020,24 +1032,14 @@
 		BB63F56D1C2CC7A300A042E8 /* RoomListInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomListInfo.m; sourceTree = "<group>"; };
 		BB63F56F1C2CC7A300A042E8 /* LoginTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginTextField.h; sourceTree = "<group>"; };
 		BB63F5701C2CC7A300A042E8 /* LoginTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginTextField.m; sourceTree = "<group>"; };
-		BB63F5731C2CC7A300A042E8 /* AboutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutController.h; sourceTree = "<group>"; };
-		BB63F5741C2CC7A300A042E8 /* AboutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutController.m; sourceTree = "<group>"; };
-		BB63F5751C2CC7A300A042E8 /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
-		BB63F5761C2CC7A300A042E8 /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 		BB63F5771C2CC7A300A042E8 /* HotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotViewController.h; sourceTree = "<group>"; };
 		BB63F5781C2CC7A300A042E8 /* HotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotViewController.m; sourceTree = "<group>"; };
-		BB63F5791C2CC7A300A042E8 /* KefuCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KefuCenterController.h; sourceTree = "<group>"; };
-		BB63F57A1C2CC7A300A042E8 /* KefuCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KefuCenterController.m; sourceTree = "<group>"; };
 		BB63F57B1C2CC7A300A042E8 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		BB63F57C1C2CC7A300A042E8 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		BB63F57D1C2CC7A300A042E8 /* VideoColletionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoColletionViewController.h; sourceTree = "<group>"; };
-		BB63F57E1C2CC7A300A042E8 /* VideoColletionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoColletionViewController.m; sourceTree = "<group>"; };
 		BB63F5821C2CC7A300A042E8 /* NewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
 		BB63F5831C2CC7A300A042E8 /* NewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
 		BB63F5841C2CC7A300A042E8 /* SearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchController.h; sourceTree = "<group>"; };
 		BB63F5851C2CC7A300A042E8 /* SearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchController.m; sourceTree = "<group>"; };
-		BB63F5861C2CC7A300A042E8 /* SettingCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingCenterController.h; sourceTree = "<group>"; };
-		BB63F5871C2CC7A300A042E8 /* SettingCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingCenterController.m; sourceTree = "<group>"; };
 		BB63F5891C2CC7A300A042E8 /* HtmlRoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HtmlRoom.h; sourceTree = "<group>"; };
 		BB63F58A1C2CC7A300A042E8 /* HtmlRoom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HtmlRoom.m; sourceTree = "<group>"; };
 		BB63F58B1C2CC7A300A042E8 /* RoomGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomGroup.h; sourceTree = "<group>"; };
@@ -1070,8 +1072,6 @@
 		BB63F62B1C2D0DDF00A042E8 /* ChatButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatButton.m; sourceTree = "<group>"; };
 		BB6F3A5B1C9A7DCD0035EBBE /* ChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatView.h; sourceTree = "<group>"; };
 		BB6F3A5C1C9A7DCD0035EBBE /* ChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatView.m; sourceTree = "<group>"; };
-		BB7B6FF71C33D6E10018FEC1 /* MyDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDataController.h; sourceTree = "<group>"; };
-		BB7B6FF81C33D6E10018FEC1 /* MyDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDataController.m; sourceTree = "<group>"; };
 		BB7B6FFA1C33D7070018FEC1 /* CircleImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleImageView.h; sourceTree = "<group>"; };
 		BB7B6FFB1C33D7070018FEC1 /* CircleImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleImageView.m; sourceTree = "<group>"; };
 		BB7C7A6D1C92B01400FFB29D /* M80AttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M80AttributedLabel.h; sourceTree = "<group>"; };
@@ -1268,6 +1268,18 @@
 			isa = PBXGroup;
 			children = (
 				188741731C96FD75002EF25A /* controller */,
+				1898AC5C1C9BADE600F2681D /* AboutController.h */,
+				1898AC5D1C9BADE600F2681D /* AboutController.m */,
+				1898AC6F1C9BB77100F2681D /* VideoColletionViewController.h */,
+				1898AC701C9BB77100F2681D /* VideoColletionViewController.m */,
+				1898AC5E1C9BADE600F2681D /* HistoryViewController.h */,
+				1898AC5F1C9BADE600F2681D /* HistoryViewController.m */,
+				1898AC601C9BADE600F2681D /* KefuCenterController.h */,
+				1898AC611C9BADE600F2681D /* KefuCenterController.m */,
+				1898AC621C9BADE600F2681D /* MyDataController.h */,
+				1898AC631C9BADE600F2681D /* MyDataController.m */,
+				1898AC641C9BADE600F2681D /* SettingCenterController.h */,
+				1898AC651C9BADE600F2681D /* SettingCenterController.m */,
 				188741741C96FD75002EF25A /* model */,
 				188741751C96FD75002EF25A /* view */,
 			);
@@ -1299,19 +1311,6 @@
 				18AAD55C1C9927B800438E18 /* LeftMenuHeaderView.m */,
 			);
 			path = view;
-			sourceTree = "<group>";
-		};
-		188741761C96FDC8002EF25A /* common */ = {
-			isa = PBXGroup;
-			children = (
-				188741771C96FE25002EF25A /* NavigationViewController.h */,
-				188741781C96FE25002EF25A /* NavigationViewController.m */,
-				188741851C97058F002EF25A /* TabBarController.h */,
-				188741861C97058F002EF25A /* TabBarController.m */,
-				189D8A8C1C97982100E7D16D /* SlideBaseViewController.h */,
-				189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */,
-			);
-			name = common;
 			sourceTree = "<group>";
 		};
 		18AAD55F1C993CD100438E18 /* recharge */ = {
@@ -2312,29 +2311,22 @@
 		BB63F5721C2CC7A300A042E8 /* controller */ = {
 			isa = PBXGroup;
 			children = (
-				188741761C96FDC8002EF25A /* common */,
+				188741771C96FE25002EF25A /* NavigationViewController.h */,
+				188741781C96FE25002EF25A /* NavigationViewController.m */,
+				188741851C97058F002EF25A /* TabBarController.h */,
+				188741861C97058F002EF25A /* TabBarController.m */,
+				189D8A8C1C97982100E7D16D /* SlideBaseViewController.h */,
+				189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */,
 				BB1661A21C3E2F9A00D318BE /* HomeViewController.h */,
 				BB1661A31C3E2F9A00D318BE /* HomeViewController.m */,
-				BB7B6FF71C33D6E10018FEC1 /* MyDataController.h */,
-				BB7B6FF81C33D6E10018FEC1 /* MyDataController.m */,
-				BB63F5731C2CC7A300A042E8 /* AboutController.h */,
-				BB63F5741C2CC7A300A042E8 /* AboutController.m */,
-				BB63F5751C2CC7A300A042E8 /* HistoryViewController.h */,
-				BB63F5761C2CC7A300A042E8 /* HistoryViewController.m */,
 				BB63F5771C2CC7A300A042E8 /* HotViewController.h */,
 				BB63F5781C2CC7A300A042E8 /* HotViewController.m */,
-				BB63F5791C2CC7A300A042E8 /* KefuCenterController.h */,
-				BB63F57A1C2CC7A300A042E8 /* KefuCenterController.m */,
 				BB63F57B1C2CC7A300A042E8 /* MainViewController.h */,
 				BB63F57C1C2CC7A300A042E8 /* MainViewController.m */,
-				BB63F57D1C2CC7A300A042E8 /* VideoColletionViewController.h */,
-				BB63F57E1C2CC7A300A042E8 /* VideoColletionViewController.m */,
 				BB63F5821C2CC7A300A042E8 /* NewViewController.h */,
 				BB63F5831C2CC7A300A042E8 /* NewViewController.m */,
 				BB63F5841C2CC7A300A042E8 /* SearchController.h */,
 				BB63F5851C2CC7A300A042E8 /* SearchController.m */,
-				BB63F5861C2CC7A300A042E8 /* SettingCenterController.h */,
-				BB63F5871C2CC7A300A042E8 /* SettingCenterController.m */,
 				BBB515F51C4D29E3008F2CEC /* AllColletViewController.h */,
 				BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */,
 			);
@@ -2843,6 +2835,7 @@
 			files = (
 				18AC14161C8FB8E100FDFF40 /* JPEngine.m in Sources */,
 				BB1769301C7B006F00CE947C /* UIView+WebCacheOperation.m in Sources */,
+				1898AC6A1C9BADE600F2681D /* SettingCenterController.m in Sources */,
 				BB88F3191C41464100C1F8D9 /* TextNewViewController.m in Sources */,
 				BB88F3701C479CE000C1F8D9 /* TextLivingCell.m in Sources */,
 				BB63F61B1C2CC7A300A042E8 /* HtmlRoom.m in Sources */,
@@ -2851,14 +2844,12 @@
 				BB63F6191C2CC7A300A042E8 /* SearchController.m in Sources */,
 				BB63F6131C2CC7A300A042E8 /* MainViewController.m in Sources */,
 				BB63F6211C2CC7A300A042E8 /* HtmlRoomViewCell.m in Sources */,
-				BB63F6101C2CC7A300A042E8 /* HistoryViewController.m in Sources */,
 				BB63F5AC1C2CC7A300A042E8 /* UIView+Frame.m in Sources */,
 				BB1661A41C3E2F9A00D318BE /* HomeViewController.m in Sources */,
 				BB1769221C7B006F00CE947C /* NSData+ImageContentType.m in Sources */,
 				BB63F5F61C2CC7A300A042E8 /* ProgressHUD.m in Sources */,
 				BB63F5DD1C2CC7A300A042E8 /* Evaluate.m in Sources */,
 				BB63F6031C2CC7A300A042E8 /* RoomTitleView.m in Sources */,
-				BB63F61A1C2CC7A300A042E8 /* SettingCenterController.m in Sources */,
 				BB88F30D1C3FB09900C1F8D9 /* HotTextView.m in Sources */,
 				BB5138381C97F30400E09EF5 /* GiftRequest.m in Sources */,
 				BBD49D741C5B142400EADF74 /* LivePlayViewController.m in Sources */,
@@ -2890,6 +2881,7 @@
 				BB63F5F31C2CC7A300A042E8 /* crc32.c in Sources */,
 				BB88F3621C4736C100C1F8D9 /* AFURLConnectionOperation.m in Sources */,
 				BB63F5FA1C2CC7A300A042E8 /* FinanceOnlineVedioController.m in Sources */,
+				1898AC671C9BADE600F2681D /* HistoryViewController.m in Sources */,
 				BB9765F01C858B9500FAA5B7 /* TextGroupList.m in Sources */,
 				BB88F3661C4736C100C1F8D9 /* BaseService.m in Sources */,
 				BB63F5F81C2CC7A300A042E8 /* CustomViewController.m in Sources */,
@@ -2923,7 +2915,7 @@
 				BB16619E1C3E2DC700D318BE /* ZLTabBar.m in Sources */,
 				18BF06B51C9A7DC70071E524 /* SignatureViewController.m in Sources */,
 				BB17692B1C7B006F00CE947C /* UIImage+GIF.m in Sources */,
-				BB63F60F1C2CC7A300A042E8 /* AboutController.m in Sources */,
+				1898AC711C9BB77100F2681D /* VideoColletionViewController.m in Sources */,
 				BB17692D1C7B006F00CE947C /* UIImage+WebP.m in Sources */,
 				BB1769261C7B006F00CE947C /* SDWebImageDownloader.m in Sources */,
 				BB17692E1C7B006F00CE947C /* UIImageView+HighlightedWebCache.m in Sources */,
@@ -2932,6 +2924,7 @@
 				BB0436871C4E28E700A162A8 /* TextLiveModel.m in Sources */,
 				18BF06B81C9A86B00071E524 /* RechargeResultViewController.m in Sources */,
 				BB7C7A781C92B01400FFB29D /* M80AttributedLabelURL.m in Sources */,
+				1898AC691C9BADE600F2681D /* MyDataController.m in Sources */,
 				18F9710E1C92947F001B2575 /* DataVerifier.m in Sources */,
 				BB63F5C31C2CC7A300A042E8 /* MASConstraintMaker.m in Sources */,
 				BB63F5C91C2CC7A300A042E8 /* View+MASAdditions.m in Sources */,
@@ -2960,6 +2953,7 @@
 				BB1769281C7B006F00CE947C /* SDWebImageManager.m in Sources */,
 				BB63F5C81C2CC7A300A042E8 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				18F971111C92947F001B2575 /* openssl_wrapper.m in Sources */,
+				1898AC681C9BADE600F2681D /* KefuCenterController.m in Sources */,
 				BB16619D1C3E2DC700D318BE /* ZLButton.m in Sources */,
 				BB63F5AA1C2CC7A300A042E8 /* UIControl+BlocksKit.m in Sources */,
 				BB88F3251C4356B100C1F8D9 /* TextTcpSocket.m in Sources */,
@@ -2984,7 +2978,6 @@
 				BB63F6111C2CC7A300A042E8 /* HotViewController.m in Sources */,
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
-				BB63F6141C2CC7A300A042E8 /* VideoColletionViewController.m in Sources */,
 				BB1769211C7B006F00CE947C /* MKAnnotationView+WebCache.m in Sources */,
 				BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */,
 				BB88F3101C3FB22F00C1F8D9 /* TeacherModel.m in Sources */,
@@ -3016,7 +3009,6 @@
 				BB63F5DC1C2CC7A300A042E8 /* AccelerationAnimation.m in Sources */,
 				BB88F3601C4736C100C1F8D9 /* AFNetworkReachabilityManager.m in Sources */,
 				BB1769271C7B006F00CE947C /* SDWebImageDownloaderOperation.m in Sources */,
-				BB63F6121C2CC7A300A042E8 /* KefuCenterController.m in Sources */,
 				18AAD5651C993CD100438E18 /* PaySelectViewController.m in Sources */,
 				189D8A8E1C97982100E7D16D /* SlideBaseViewController.m in Sources */,
 				BB63F60A1C2CC7A300A042E8 /* VideoCell.m in Sources */,
@@ -3040,10 +3032,10 @@
 				BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */,
 				BB7C7A771C92B01400FFB29D /* M80AttributedLabelAttachment.m in Sources */,
 				BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */,
+				1898AC661C9BADE600F2681D /* AboutController.m in Sources */,
 				BB63F5C11C2CC7A300A042E8 /* MASCompositeConstraint.m in Sources */,
 				BB63F47B1C2B809800A042E8 /* UserInfo.m in Sources */,
 				BB9765FF1C87C7CA00FAA5B7 /* TextNewCell.m in Sources */,
-				BB7B6FF91C33D6E10018FEC1 /* MyDataController.m in Sources */,
 				BB63F61C1C2CC7A300A042E8 /* RoomGroup.m in Sources */,
 				BB63F6221C2CC7A300A042E8 /* MySearchBar.m in Sources */,
 				BB1769231C7B006F00CE947C /* SDImageCache.m in Sources */,

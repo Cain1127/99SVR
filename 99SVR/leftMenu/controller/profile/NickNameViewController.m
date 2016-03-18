@@ -31,7 +31,7 @@
     //输入框底层
     UIView *inputView = [[UIView alloc] init];
     inputView.backgroundColor = [UIColor whiteColor];
-    inputView.frame = CGRectMake(0, 80, kScreenWidth, 48);
+    inputView.frame = CGRectMake(0, 10, kScreenWidth, 48);
     [self.view addSubview:inputView];
     
     //昵称输入框
@@ -46,7 +46,7 @@
     [_nickNameTextField setValue:kFontSize(14) forKeyPath:@"_placeholderLabel.font"];
     [_nickNameTextField setValue:RGB(151, 151, 151) forKeyPath:@"_placeholderLabel.textColor"];
     [self.view addSubview:_nickNameTextField];
-    _nickNameTextField.frame = CGRectMake(12, 80, kScreenWidth - 2 * 12, 48);
+    _nickNameTextField.frame = CGRectMake(12, 10, kScreenWidth - 2 * 12, 48);
     
     //建议提醒文字
     UILabel * adviceLabel = [[UILabel alloc] init];
