@@ -60,9 +60,9 @@
     // 设置bar的颜色
     [navBar setBarTintColor:kNavColor];
     // 关闭半透明开关
-    // navBar.translucent = NO;
-//    [navBar setShadowImage:[[UIImage alloc] init]];
-//    [navBar setBackgroundImage:[[UIImage alloc] init] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+     navBar.translucent = NO;
+    [navBar setShadowImage:[[UIImage alloc] init]];
+    [navBar setBackgroundImage:[[UIImage alloc] init] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
 
     navBar.tintColor = [UIColor whiteColor];
     // 设置状态栏颜色

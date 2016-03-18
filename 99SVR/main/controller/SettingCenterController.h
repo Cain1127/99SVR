@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CustomViewController.h"
 
-@interface SettingCenterController : CustomViewController
+@interface SettingCenterController : UIViewController
 
 @end
 

@@ -40,7 +40,7 @@
 - (void)loadWebView
 {
     UIWebView *webView = [[UIWebView alloc] init];
-    webView.frame = Rect(0, 64, kScreenWidth, kScreenHeight - 64);
+    webView.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
     webView.delegate = self;
     // 伸缩页面至填充整个webView
     webView.scalesPageToFit = YES;

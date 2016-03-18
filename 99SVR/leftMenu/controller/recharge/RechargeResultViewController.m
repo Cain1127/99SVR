@@ -30,7 +30,7 @@
 {
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64)];
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight)];
     bgView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bgView];
     
