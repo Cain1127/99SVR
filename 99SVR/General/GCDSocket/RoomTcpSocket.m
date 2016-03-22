@@ -596,7 +596,7 @@
     }
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
     req.time = (uint32)time(0);
-    req.userstate = 2;
+    req.devtype = 2;
     
     req.crc32 = 15;
     uint32 crcval = crc32((void*)&req,sizeof(CMDJoinRoomReq_t),CRC_MAGIC);

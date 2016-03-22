@@ -12,6 +12,7 @@
 #import "Toast+UIView.h"
 #import "NNSVRViewController.h"
 #import "BaseService.h"
+#import "ProgressHUD.h"
 #import "DecodeJson.h"
 @interface RegNameViewController ()<UITextFieldDelegate>
 {
@@ -68,51 +69,42 @@
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     NSString *strInfo = [NSString stringWithFormat:@"%@mapi/registerMulti",kRegisterNumber];
     NSDictionary *parameters = @{@"account":_username,@"key":strMd5,@"pwd":_password,@"type":@"21"};
-    __weak RegNameViewController *__self = self;
     __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+    @WeakObj(self)
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id responseObject)
      {
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          dispatch_async(dispatch_get_main_queue(),
          ^{
-             [__self.view hideToastActivity];
+             [selfWeak.view hideToastActivity];
          });
          if ([dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
          {
-             [__tcpSocket loginServer:__self.username pwd:__self.password];
-             dispatch_async(dispatch_get_main_queue(),
-             ^{
-                 [__self.view makeToast:@"注册成功"];
-             });
-             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-             ^{
-                 [__self dismissViewControllerAnimated:YES completion:
-                 ^{
-                     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_PASSWROD_VC object:nil];
-                 }];
-             });
+             [__tcpSocket loginServer:selfWeak.username pwd:selfWeak.password];
+             [selfWeak.navigationController popToRootViewControllerAnimated:YES];
+             [ProgressHUD showSuccess:@"注册成功"];
          }
          else
          {
-             dispatch_async(dispatch_get_main_queue(),
+             gcd_main_safe(
              ^{
                  NSString *strNull = [dict objectForKey:@"errmsg"];
                  if(strNull)
                  {
-                     [__self.lblError setText:[dict objectForKey:@"errmsg"]];
+                     [selfWeak.lblError setText:[dict objectForKey:@"errmsg"]];
                  }
                  else
                  {
-                     [__self.lblError setText:@"服务器异常"];
+                     [selfWeak.lblError setText:@"服务器异常"];
                  }
              });
          }
      }fail:^(NSError *error)
      {
-         dispatch_async(dispatch_get_main_queue(),
+        gcd_main_safe(
         ^{
-             [__self.view hideToastActivity];
-             [__self.lblError setText:@"连接服务器失败"];
+             [selfWeak.view hideToastActivity];
+             [selfWeak.lblError setText:@"连接服务器失败"];
          });
      }];
 }
@@ -135,24 +127,6 @@
     }
     DLog(@"用户名只能包含数字、字母、下划线");
     return -1;
-}
-
-- (void)getMobileCode:(NSString *)strMobile
-{
-    if (strDate==nil)
-    {
-        return ;
-    }
-    NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",strMobile,strDate];
-    strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = [NSString stringWithFormat:@"%@mapi/getregmsgcode?pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
-    [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
-     {
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         DLog(@"dict:%@",dict);
-         
-     } fail:nil];
 }
 
 - (void)addLineHeight:(UILabel *)lblTemp
@@ -189,47 +163,26 @@
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
-- (void)getAuthCode
-{
-
-}
-
 - (void)initUIHead
 {
-    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
-    [self setLeftBtn:btnBack];
     
-    [self createLabelWithRect:Rect(30, 80, 80, 30)];
-    _txtName = [self createTextField:Rect(30, 80, kScreenWidth-60, 30)];
+    [self createLabelWithRect:Rect(30, 16, 80, 30)];
+    _txtName = [self createTextField:Rect(30, 16, kScreenWidth-60, 30)];
     [_txtName setPlaceholder:@"请输入用户名"];
     
-    [self createLabelWithRect:Rect(30, 130,80, 30)];
-    _txtPwd = [self createTextField:Rect(_txtName.x,130,_txtName.width,_txtName.height)];
+    [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
+    _txtPwd = [self createTextField:Rect(_txtName.x,_txtName.y+50,_txtName.width,_txtName.height)];
     [_txtPwd setPlaceholder:@"请输入密码"];
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
 
-    _btnCode.frame = Rect(_txtPwd.x+_txtPwd.width+5,_txtPwd.y, 95, 30);
-    [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
-    _btnCode.titleLabel.font = XCFONT(15);
-    
-//    [self createLabelWithRect:Rect(30, 180, 80, 30)];
-//    _txtCmdPwd = [self createTextField:Rect(_txtName.x,180,_txtName.width,_txtName.height)];
-//    [_txtCmdPwd setPlaceholder:@"请再次输入密码"];
-//    [_txtCmdPwd setSecureTextEntry:YES];
-    
-    _lblError = [[UILabel alloc] initWithFrame:Rect(30, 178, kScreenWidth-60, 20)];
+    _lblError = [[UILabel alloc] initWithFrame:Rect(30, _txtName.y+50, kScreenWidth-60, 20)];
     [_lblError setFont:XCFONT(14)];
     [_lblError setTextColor:[UIColor redColor]];
     [self.view addSubview:_lblError];
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, 200, kScreenWidth-60, 40);
+    btnRegister.frame = Rect(30, _lblError.y+50, kScreenWidth-60, 40);
     [btnRegister setTitle:@"注册" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
@@ -304,7 +257,8 @@
 {
     [super viewDidLoad];
     [self initUIHead];
-    [self setTitleText:@"账号注册"];
+    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [self setTitle:@"账号注册"];
     NSDate *date = [NSDate date];
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"yyyyMMdd"];

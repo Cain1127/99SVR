@@ -81,7 +81,7 @@
     NSString *strMd5 = [NSString stringWithFormat:@"action=find&account=%@&date=%@",strMobile,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = [NSString stringWithFormat:@"%@MApi/GetFindPasswordMsgCode?pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
+    NSString *strInfo = [NSString stringWithFormat:@"%@mapi/GetFindPasswordMsgCode?pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
     __weak ForgetPwdViewController *__self = self;
     [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
      {

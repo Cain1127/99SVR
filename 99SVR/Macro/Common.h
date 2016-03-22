@@ -20,6 +20,9 @@
 #define KServiceResponseCode @"return_code"
 #define KServiceResponseMsg @"result_msg"
 #define KServiceResponseSuccess 10000
+
+
+
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 #define SVR_LOGIN_IP @"login2.99ducaijing.cn"
@@ -78,7 +81,16 @@
 
 #define kGift_URL @"http://42.81.53.201/99admintest/index.php?m=Api&c=Gift"
 
-#define kGif_Image_URL @"http://42.81.53.201/99admintest/Uploads/Picture/"
+#define kGif_Image_URL "http://42.81.53.201/99admintest/Uploads/Picture"
+
+#define kHome_Banner_URL "http://42.81.53.201/99admintest/index.php?m=Api&c=Banner"
+
+#define WeakObj(o) try{}@finally{} __weak typeof(o) o##Weak = o;
+//#define WeakObj(o) try{}@finally{} __weak typeof(o) __o = o;
+
+#define StrongObj(o) autoreleasepool{} __strong typeof(o) o = o##Weak;
+
+
 
 #endif
 

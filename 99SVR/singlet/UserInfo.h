@@ -51,6 +51,8 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
 @property (nonatomic,strong) NSMutableArray *aryCollet;
 
+@property (nonatomic,assign) int banding;
+
 - (NSString *)getVipDescript;
 
 @property (nonatomic,copy) NSArray *aryHelp;
@@ -60,6 +62,8 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 @property (nonatomic,copy) NSArray *aryGift;
 
 @property (nonatomic) int giftVer;
+
+- (void)setUserDefault:(int)nUserid;
 
 @end
 

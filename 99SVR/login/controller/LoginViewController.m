@@ -10,6 +10,7 @@
 #import "LoginViewController.h"
 #import "DecodeJson.h"
 #import "LSTcpSocket.h"
+#import "ProgressHUD.h"
 #import "UserInfo.h"
 #import "WXApi.h"
 #import "BaseService.h"
@@ -49,39 +50,21 @@
 
 @implementation LoginViewController
 
+- (void)popBack
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 -(void)initUIHead
 {
-    
-    headView = [[UIView alloc] initWithFrame:Rect(0, 0, self.view.width,64)];
-    [self.view addSubview:headView];
-    [headView setBackgroundColor:kNavColor];
-    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 30, kScreenWidth, 25)];
-    [headView addSubview:lblName];
-    
-    UIButton *exitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [exitBtn setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
-    __weak LoginViewController *__self = self;
-    [exitBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
-        [__self dismissViewControllerAnimated:YES completion:nil];
-    }];
-    [headView addSubview:exitBtn];
-    [exitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(50, 44));
-        make.left.equalTo(headView);
-        make.bottom.equalTo(headView);
-    }];
-    
-    [lblName setTextColor:[UIColor whiteColor]];
-    [lblName setText:@"登录"];
-    [lblName setTextAlignment:NSTextAlignmentCenter];
-    [lblName setFont:XCFONT(17)];
+    [self setTitle:@"登录"];
     [self.view setBackgroundColor:RGB(245, 245, 246)];
     
-    UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 120)];
+    UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 120)];
     [bodyView setBackgroundColor:RGB(235, 239, 244)];
     [self.view addSubview:bodyView];
     
-    UILabel *lblView = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-44, 60-44, 88, 88)];
+    UILabel *lblView = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-44, 16, 88, 88)];
     [lblView setBackgroundColor:RGB(234, 239, 244)];
     [bodyView addSubview:lblView];
     lblView.layer.borderWidth = 0.5;
@@ -91,7 +74,7 @@
     
     UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
     [bodyView addSubview:logoImageView];
-    [logoImageView setFrame:Rect(kScreenWidth/2-39, 60-39, 78,78)];
+    [logoImageView setFrame:Rect(kScreenWidth/2-39, 21, 78,78)];
     
     _txtUser = [[LoginTextField alloc] initWithFrame:CGRectMake(15 + 32,bodyView.y+bodyView.height+30, kScreenWidth-30 - 32 * 2, 44)];
     _txtPwd = [[LoginTextField alloc] initWithFrame:CGRectMake(_txtUser.x, _txtUser.frame.origin.y+_txtUser.frame.size.height+10, _txtUser.width, 44)];
@@ -200,8 +183,9 @@
 
     _btnLogin.frame = Rect(30, _txtPwd.y+_txtPwd.height+20, kScreenWidth-60, 40);
     _btnFind.titleLabel.font = XCFONT(15);
-    _btnRegin.frame = Rect(30, kScreenHeight-40, 100, 40);
-    [_btnFind setFrame:Rect(kScreenWidth/2+kScreenWidth/4-findSize.width/2,kScreenHeight-40, findSize.width,40)];
+    _btnRegin.titleLabel.font = XCFONT(15);
+    _btnRegin.frame = Rect(20, kScreenHeight-100, findSize.width, 40);
+    [_btnFind setFrame:Rect(kScreenWidth-findSize.width-20,kScreenHeight-100, findSize.width,40)];
     
     hidenView = [[UIView alloc] initWithFrame:Rect(0, _btnLogin.y+_btnLogin.height, kScreenWidth,100)];
     [self.view addSubview:hidenView];
@@ -216,7 +200,7 @@
     
     UIButton *btnQQ = [UIButton buttonWithType:UIButtonTypeCustom];
     [hidenView addSubview:btnQQ];
-    btnQQ.frame = Rect(kScreenWidth/3+kScreenWidth/3/2-22, 50, 44, 44);
+    btnQQ.frame = Rect(kScreenWidth/2-22, 50, 44, 44);
     [btnQQ setImage:[UIImage imageNamed:@"QQLogin"] forState:UIControlStateNormal];
     [btnQQ setImage:[UIImage imageNamed:@"QQLogin_h"] forState:UIControlStateHighlighted];
     [btnQQ addTarget:self action:@selector(qqLogin) forControlEvents:UIControlEventTouchUpInside];
@@ -225,7 +209,7 @@
     [hidenView addSubview:btnWeiBo];
     [btnWeiBo setImage:[UIImage imageNamed:@"weibo"] forState:UIControlStateNormal];
     [btnWeiBo setImage:[UIImage imageNamed:@"weibo_h"] forState:UIControlStateHighlighted];
-    btnWeiBo.frame = Rect(kScreenWidth/3*2+ kScreenWidth/3/2-22, 50, 44, 44);
+    btnWeiBo.frame = Rect(kScreenWidth/2-102, 50, 44, 44);
     
     [btnWeiBo addTarget:self action:@selector(sinaLogin) forControlEvents:UIControlEventTouchUpInside];
     
@@ -234,7 +218,7 @@
     [btnWeiChat setImage:[UIImage imageNamed:@"weichat"] forState:UIControlStateNormal];
     [btnWeiChat setImage:[UIImage imageNamed:@"weichat_h"] forState:UIControlStateHighlighted];
     [btnWeiChat addTarget:self action:@selector(weiChatLogin) forControlEvents:UIControlEventTouchUpInside];
-    btnWeiChat.frame = Rect(kScreenWidth/3/2-22, 50, 44, 44);
+    btnWeiChat.frame = Rect(kScreenWidth/2+62, 50, 44, 44);
     
 }
 
@@ -266,7 +250,7 @@
 - (void)registerServver
 {
     RegMobileViewController *regMobile = [[RegMobileViewController alloc] init];
-    [self presentViewController:regMobile animated:YES completion:nil];
+    [self.navigationController pushViewController:regMobile animated:YES];
 }
 
 - (void)loginServer
@@ -291,9 +275,9 @@
     __weak LoginViewController *__self = self;
     //进入新的界面先
     dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       [__self.view makeToastActivity];
-                   });
+    ^{
+        [__self.view makeToastActivity];
+    });
     __block NSString *__strUser = strUser;
     __block NSString *__strPwd = strPwd;
     [self performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8.0];
@@ -348,6 +332,7 @@
 
 - (void)qqLogin
 {
+//    [ProgressHUD show:@"QQ授权中..." viewInfo:self.view];
     [self.view makeToastActivity];
     _tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1105199260" andDelegate:self];
     NSArray* permissions = [NSArray arrayWithObjects:
@@ -371,6 +356,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    DLog(@"frame:%@",NSStringFromCGRect(self.view.bounds));
     [self initUIHead];
     [self initUIBody];
     [self requestLbsSettingServer];
@@ -481,7 +467,7 @@
                 [__tcpSocket loginServer:NSStringFromInt(__user.nUserId) pwd:@""];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
                                ^{
-                                   [__self dismissViewControllerAnimated:YES completion:nil];
+                                   [__self popBack];
                                });
             }
             else
@@ -544,7 +530,7 @@
                 [__tcpSocket loginServer:NSStringFromInt(__user.nUserId) pwd:@""];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
                 ^{
-                    [__self dismissViewControllerAnimated:YES completion:nil];
+                    [__self popBack];
                 });
             }
             else
@@ -570,7 +556,7 @@
 {
     __weak LoginViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [__self dismissViewControllerAnimated:YES completion:nil];
+        [__self popBack];
     });
 }
 
@@ -611,7 +597,7 @@
         dispatch_async(dispatch_get_main_queue(),
        ^{
            [__self.view hideToastActivity];
-           [__self dismissViewControllerAnimated:YES completion:nil];
+           [__self popBack];
        });
     }
     else
@@ -649,13 +635,13 @@
         DLog(@"token:%@ openId;%@",[_tencentOAuth accessToken],[_tencentOAuth openId]);
         NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByQQ?client=2&openid=%@&token=%@",
                              kRegisterNumber,[_tencentOAuth openId],[_tencentOAuth accessToken]];
-        __weak UserInfo *__user = [UserInfo sharedUserInfo];
-        __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
-        __weak LoginViewController *__self = self;
+        @WeakObj(self)
         [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [__self.view hiddenActivityInView];
+            UserInfo *__user = [UserInfo sharedUserInfo];
+            LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+            gcd_main_safe(^{
+                [selfWeak.view hiddenActivityInView];
             });
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
             if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
@@ -665,23 +651,16 @@
                 __user.strToken = [dict objectForKey:@"token"];
                 __user.nUserId = [[dict objectForKey:@"userid"] intValue];
                 __user.otherLogin = [[dict objectForKey:@"type"] intValue];
-                DLog(@"登录成功");
-                dispatch_async(dispatch_get_main_queue(),
-                               ^{
-                                   [__self.view makeToast:@"QQ登录成功" duration:2 position:@"center"];
-                               });
                 [__tcpSocket loginServer:NSStringFromInt(__user.nUserId) pwd:@""];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-                               ^{
-                                   [__self dismissViewControllerAnimated:YES completion:nil];
-                               });
+                [selfWeak popBack];
+                [ProgressHUD showSuccess:@"QQ授权成功..."];
             }
             else
             {
                 dispatch_async(dispatch_get_main_queue(),
                ^{
-                   [__self.view hideToastActivity];
-                   [__self.view makeToast:@"QQ登录授权失败"];
+                   [selfWeak.view hideToastActivity];
+                   [selfWeak.view makeToast:@"QQ登录授权失败"];
                });
             }
         }
@@ -689,8 +668,8 @@
         {
             dispatch_async(dispatch_get_main_queue(),
             ^{
-                [__self.view hideToastActivity];
-                [__self.view makeToast:@"QQ登录授权失败"];
+                [selfWeak.view hideToastActivity];
+                [selfWeak.view makeToast:@"QQ登录授权失败"];
             });
         }];
     }
@@ -735,28 +714,28 @@
 -(void)getAccess_token:(NSString *)strCode
 {
     
-    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/oauth2/access_token?appid=%@&secret=%@&code=%@&grant_type=authorization_code",kWXAPP_ID,kWXAPP_SEC,strCode];
-    DLog(@"url:%@",url);
+//    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/oauth2/access_token?appid=%@&secret=%@&code=%@&grant_type=authorization_code",kWXAPP_ID,kWXAPP_SEC,strCode];
+//    DLog(@"url:%@",url);
     return ;
-    __weak LoginViewController *__self = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURL *zoneUrl = [NSURL URLWithString:url];
-        NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
-        NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
-        dispatch_async(dispatch_get_global_queue(0, 0),
-        ^{
-           if (data)
-           {
-               NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-               NSString *strToken = [dic objectForKey:@"access_token"];
-               NSString *strOpenId = [dic objectForKey:@"openid"];
-               __self.strOpenId = strOpenId;
-               __self.strToken = strToken;
-               DLog(@"strToken:%@,strOpenId:%@",strToken,strOpenId);
-               [__self getUserInfo:strToken openid:strOpenId];
-           }
-        });
-    });
+//    __weak LoginViewController *__self = self;
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        NSURL *zoneUrl = [NSURL URLWithString:url];
+//        NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
+//        NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
+//        dispatch_async(dispatch_get_global_queue(0, 0),
+//        ^{
+//           if (data)
+//           {
+//               NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+//               NSString *strToken = [dic objectForKey:@"access_token"];
+//               NSString *strOpenId = [dic objectForKey:@"openid"];
+//               __self.strOpenId = strOpenId;
+//               __self.strToken = strToken;
+//               DLog(@"strToken:%@,strOpenId:%@",strToken,strOpenId);
+//               [__self getUserInfo:strToken openid:strOpenId];
+//           }
+//        });
+//    });
 }
 
 -(void)getUserInfo:(NSString *)access_token openid:(NSString *)openid
@@ -819,7 +798,7 @@
             [__tcpSocket loginServer:NSStringFromInt(__user.nUserId) pwd:@""];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
             ^{
-               [__self dismissViewControllerAnimated:YES completion:nil];
+               [__self popBack];
             });
         }
     }
@@ -837,15 +816,15 @@
 {
     [UIView animateWithDuration:1.0 delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:
      ^{
-         if (kScreenHeight == 480)
+         if (kScreenHeight <= 480)
          {
-             [self.view setFrame:Rect(0, -64, kScreenWidth, kScreenHeight)];
+             [self.view setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
          }
      } completion:nil];
 }
 - (void) keyboardWasHidden:(NSNotification *) notification
 {
-    self.view.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
+    self.view.frame = Rect(0, 64, kScreenWidth, kScreenHeight);
 }
 
 @end

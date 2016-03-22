@@ -8,6 +8,6 @@
 
 #import "CustomViewController.h"
 
-@interface RegNameViewController : CustomViewController
+@interface RegNameViewController :  UIViewController
 
 @end

@@ -45,7 +45,7 @@
     [btn.titleLabel setFont:kFontSize(15)];
     [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     // 一定要设置frame，才能显示
-    btn.frame = CGRectMake(0, 0, 44 , 44);
+    btn.frame = CGRectMake(0, 0, 60, 44);
     
     return [[UIBarButtonItem alloc] initWithCustomView:btn];
 }

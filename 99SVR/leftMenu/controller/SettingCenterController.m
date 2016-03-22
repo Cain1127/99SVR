@@ -14,12 +14,32 @@
 
 #define kCellHeight 44
 
+@interface EnterModel : NSObject
+@property (nonatomic,copy) NSString *content;
+@property (nonatomic,copy) NSString *enterClass;
+
++ (id)createContent:(NSString *)content className:(NSString *)enterClass;
+@end
+
+@implementation EnterModel
++ (id)createContent:(NSString *)content className:(NSString *)enterClass
+{
+    EnterModel *model = [[EnterModel alloc] init];
+    model.content = content;
+    model.enterClass = enterClass;
+    return model;
+}
+@end
+
 @interface SettingCenterController() <UITableViewDelegate, UITableViewDataSource>
 {
     UITableView *_tableView;
     UIView *_clearTipsView;
     UIButton *_clearMsgBtn;
+    UILabel *lblContent;
+    UIButton *logoutBtn;
 }
+@property (nonatomic,copy) NSArray *array;
 
 @end
 
@@ -72,9 +92,11 @@
     [super viewDidLoad];
     self.title = @"设置";
     
+    _array = @[[EnterModel createContent:@"绑定手机" className:@"BandingMobileViewController"],
+               [EnterModel createContent:@"修改密码" className:@"UpdatePwdViewController"],
+               [EnterModel createContent:@"关于我们" className:@"AboutController"]];
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 36, self.view.width,3*kCellHeight+8)];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,30, self.view.width,(1+_array.count)*kCellHeight+8)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -89,30 +111,39 @@
     _tableView.tableFooterView = emptyFooter;
     [_tableView registerClass:[SettingCell class] forCellReuseIdentifier:@"cellId"];
     
+    lblContent = [[UILabel alloc] initWithFrame:Rect(8, _tableView.height+_tableView.y+30, kScreenWidth-16,0.5)];
+    [lblContent setBackgroundColor:kLineColor];
+    [self.view addSubview:lblContent];
+    
+    logoutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    logoutBtn.frame = CGRectMake(0,lblContent.y+5,kScreenWidth,kCellHeight);
+    [logoutBtn setTitle:@"退出" forState:UIControlStateNormal];
+    [logoutBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [logoutBtn setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateHighlighted];
+    [logoutBtn setImage:[UIImage imageNamed:@"exit_n"] forState:UIControlStateNormal];
+    [logoutBtn setImage:[UIImage imageNamed:@"exit"] forState:UIControlStateHighlighted];
+    
+    UIEdgeInsets btnInsets = logoutBtn.imageEdgeInsets;
+    btnInsets.left -= 10;
+    logoutBtn.imageEdgeInsets = btnInsets;
+    lblContent.hidden = YES;
+    logoutBtn.hidden = YES;
+    __weak SettingCenterController *__self = self;
+    [self.view addSubview:logoutBtn];
+    [logoutBtn clickWithBlock:^(UIGestureRecognizer *gesture)
+     {
+         UIAlertView *tips = [[UIAlertView alloc] initWithTitle:nil message:@"是否确认退出登录?" delegate:__self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+         [tips show];
+     }];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
-        UILabel *lblContent = [[UILabel alloc] initWithFrame:Rect(8, kScreenHeight-55, kScreenWidth-16,0.5)];
-        [lblContent setBackgroundColor:kLineColor];
-        [self.view addSubview:lblContent];
-        
-        UIButton *logoutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        logoutBtn.frame = CGRectMake(0,kScreenSourchHeight-50,kScreenWidth,kCellHeight);
-        [logoutBtn setTitle:@"退出" forState:UIControlStateNormal];
-        [logoutBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [logoutBtn setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateHighlighted];
-        [logoutBtn setImage:[UIImage imageNamed:@"exit_n"] forState:UIControlStateNormal];
-        [logoutBtn setImage:[UIImage imageNamed:@"exit"] forState:UIControlStateHighlighted];
-        UIEdgeInsets btnInsets = logoutBtn.imageEdgeInsets;
-        btnInsets.left -= 10;
-        logoutBtn.imageEdgeInsets = btnInsets;
-        
-        __weak SettingCenterController *__self = self;
-        [self.view addSubview:logoutBtn];
-        [logoutBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-         {
-             UIAlertView *tips = [[UIAlertView alloc] initWithTitle:nil message:@"是否确认退出登录?" delegate:__self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-             [tips show];
-         }];
+        lblContent.hidden = NO;
+        logoutBtn.hidden = NO;
     }
 }
 
@@ -157,6 +188,8 @@
         [UserInfo sharedUserInfo].otherLogin = 0;
         [UserInfo sharedUserInfo].nUserId = 0;
         [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
+        [logoutBtn setHidden:YES];
+        [lblContent setHidden:YES];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -178,7 +211,7 @@
 //    {
 //        return 3;
 //    }
-    return 2;
+    return 1+_array.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -194,11 +227,16 @@
         cell.nameLabel.text = @"清除缓存";
         cell.arrowImageView.hidden = YES;
     }
-    else if(indexPath.row==1)
+    else
     {
-        cell.nameLabel.text = @"关于我们";
+        if(_array.count>indexPath.row-1)
+        {
+            EnterModel *model = [_array objectAtIndex:indexPath.row-1];
+            cell.nameLabel.text = model.content;
+        }
         cell.arrowImageView.hidden = NO;
     }
+    
 //    else
 //    {
 //        cell.nameLabel.text = @"修改密码";
@@ -214,16 +252,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 1) {
-        AboutController *about = [[AboutController alloc] init];
-        [self presentViewController:about animated:YES completion:nil];
-    }
-    else if(indexPath.row == 2)
+    if(indexPath.row==0)
     {
         
     }
-    else {
-        [self clearCache];
+    else if (indexPath.row > 0 && _array.count>indexPath.row-1) {
+        EnterModel *model = [_array objectAtIndex:indexPath.row-1];
+        UIViewController *viewController = [[NSClassFromString(model.enterClass) alloc] init];
+//        AboutController *about = [[AboutController alloc] init];
+        [self.navigationController pushViewController:viewController animated:YES];
     }
 }
 

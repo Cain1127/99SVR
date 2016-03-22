@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self addDefaultHeader:@"关于我们"];
+    [self setTitle:@"关于我们"];
     [self initSubviews];
 }
 
@@ -72,7 +72,7 @@
     });
     [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make)
     {
-        make.top.equalTo(self.view).offset(108 + 64);
+        make.top.equalTo(self.view).offset(108);
         make.centerX.equalTo(self.view);
     }];
     [versionLabel mas_makeConstraints:^(MASConstraintMaker *make)

@@ -8,7 +8,6 @@
 
 #import "SlideBaseViewController.h"
 #import "LeftMenu.h"
-#import "LeftViewController.h"
 #import "LoginViewController.h"
 
 #define LeftMenu_X  -[UIScreen mainScreen].bounds.size.width * 0.25
@@ -82,7 +81,8 @@
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         [UIView animateWithDuration:0.2 animations:^{
-            if (self.tabBarController.view.x >[UIScreen mainScreen].bounds.size.width*0.5) {
+            if (self.tabBarController.view.x >[UIScreen mainScreen].bounds.size.width*0.2 &&
+                recognizer.view != [self.navigationController.view viewWithTag:coverViewTag]) {
                 
                 self.tabBarController.view.transform = rightScopeTransform;
                 _leftMenu.ttx=self.tabBarController.view.ttx/3;

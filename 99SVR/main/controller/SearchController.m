@@ -180,7 +180,8 @@
 
 - (void)addSubviews
 {
-    [self addHeaderView];
+//    [self addHeaderView];
+    [self setTitle:@"搜索"];
     self.view.backgroundColor = [UIColor whiteColor];
 #if 0
     CGFloat space = 8;
@@ -197,7 +198,7 @@
     
     _mySearchBar.frame = Rect(8,72, kScreenWidth-16, 44);
 #endif
-    _mySearchBar = [[UITextField alloc] initWithFrame:Rect(0,72,kScreenWidth, 44)];
+    _mySearchBar = [[UITextField alloc] initWithFrame:Rect(0,6,kScreenWidth, 44)];
     [self.view addSubview:_mySearchBar];
     UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(0,0,44,44)];
     _mySearchBar.leftView = imgHead;

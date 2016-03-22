@@ -23,11 +23,15 @@
 #import "UIView+Extension.h"
 #import "ImportHeader.h"
 #import "NSJSONSerialization+RemovingNulls.h"
+#import "SDWebImageCompat.h"
 
 #define UIColorFromRGBHex(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 #define SOCKET_READ_LENGTH     1
 #define SOCKET_READ_DATA       2
+
+#define gcd_main_safe(block) dispatch_async(dispatch_get_main_queue(), block);
+
 
 //播放错误信息提示
 typedef enum {

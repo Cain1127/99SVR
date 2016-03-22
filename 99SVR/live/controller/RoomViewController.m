@@ -8,6 +8,7 @@
 
 #import "RoomViewController.h"
 #import "ChatView.h"
+#import "FloatingView.h"
 #import "RoomTcpSocket.h"
 #import "GiftView.h"
 #import "M80AttributedLabel.h"
@@ -86,7 +87,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     UIView *userHidden;
     UIView *headTable;
     ChatView *_inputView;
-    
+    int nColor;
 }
 
 @property (nonatomic,strong) RoomTcpSocket *tcpSocket;
@@ -398,7 +399,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)initUIBody
 {
     //创建成员列表的tableView
-
     
     _lblBlue = [[UILabel alloc] initWithFrame:Rect(0, _group.y+_group.height-1, 0, 2)];
     [_lblBlue setBackgroundColor:UIColorFromRGB(0x629bff)];
@@ -437,7 +437,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     //发送消息按钮
     _giftView = [[GiftView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
     [self.view addSubview:_giftView];
-    [_giftView setHidden:YES];
+    _giftView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
     
     userHidden = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
     [self.view addSubview:userHidden];
@@ -465,6 +465,9 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     _tableView.layer.shadowOpacity = 1;
     _tableView.layer.shadowRadius = 4;
     [self createChatView];
+    
+//    FloatingView *_floating = [[FloatingView alloc] initWithFrame:Rect(0, _group.y, kScreenWidth, 50)];
+    
 }
 
 - (void)createChatView
@@ -1488,12 +1491,20 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         break;
         case 2://显示礼物
         {
-            [_giftView setHidden:NO];
+            [UIView animateWithDuration:0.25 animations:^{
+                [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+            } completion:^(BOOL finished) {
+                
+            }];
         }
         break;
         case 3://送玫瑰
         {
-            [self sendRose];
+//            [self sendRose];
+            FloatingView *_floating = [[FloatingView alloc] initWithFrame:Rect(0, _group.y+_group.height, kScreenWidth, 50)
+                                       color:nColor++ name:@"测试一下" number:@"X30"];
+            [self.view addSubview:_floating];
+            [_floating showGift:1];//停留一秒
         }
         break;
     }
@@ -1503,7 +1514,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser
 {
     NSString *strInfo = [textView.textStorage getPlainString];
-    nUser = toUser;
+    toUser = nUser;
     [self sendChatMessage:strInfo];
 }
 
@@ -1533,7 +1544,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     });
     [_inputView.textView setText:@""];
     [_inputView setHidden:YES];
-    
     [self switchBtn:1];
 }
 

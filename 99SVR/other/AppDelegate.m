@@ -14,8 +14,6 @@
 #import "LSTcpSocket.h"
 #import "WeiboSDK.h"
 #import "UserInfo.h"
-#import "WWSideslipViewController.h"
-#import "LeftViewController.h"
 #import "DecodeJson.h"
 #import "SVRInitLBS.h"
 #import "IndexViewController.h"
@@ -33,9 +31,7 @@
 
 @interface AppDelegate ()<UIAlertViewDelegate,WeiboSDKDelegate,WXApiDelegate>
 {
-    WWSideslipViewController *_sides;
     IndexViewController *indexView;
-    LeftViewController *leftView;
     RightViewController *rightView;
     BOOL bStatus;
     BOOL bGGLogin;
@@ -87,7 +83,6 @@
         [UserDefaults setObject:content forKey:kGiftInfo];
         DLog(@"第一次拿到");
     }
-    _sides.speedf = 0.5;
     return YES;
 }
 

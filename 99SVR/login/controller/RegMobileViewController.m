@@ -8,6 +8,7 @@
 
 #import "RegMobileViewController.h"
 #import "IdeaDetailRePly.h"
+#import "ProgressHUD.h"
 #import "Toast+UIView.h"
 #import "NNSVRViewController.h"
 #import "LSTcpSocket.h"
@@ -73,34 +74,26 @@
     [self.view makeToastActivity];
     [_lblError setText:@""];
     NSDictionary *paramters = @{@"type":@"2",@"account":_username,@"pwd":_password,@"vcode":strCode};
-    __weak RegMobileViewController *__self = self;
     NSString *strInfo = [NSString stringWithFormat:@"%@mapi/registerMulti",kRegisterNumber];
     __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+    @WeakObj(self)
     [BaseService postJSONWithUrl:strInfo parameters:paramters success:^(id responseObject)
     {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-        if(dict && ![dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
+        gcd_main_safe(^{
+            [selfWeak.view hideToastActivity];}
+        );
+        if(dict && [dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
         {
-            dispatch_async(dispatch_get_main_queue(),
-            ^{
-                [__self.view hideToastActivity];
-                [__self.view makeToast:@"注册成功"];
-            });
-            [__tcpSocket loginServer:__self.username pwd:__self.password];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-            ^{
-                [__self dismissViewControllerAnimated:YES completion:
-                 ^{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_PASSWROD_VC object:nil];
-                }];
-            });
+            [__tcpSocket loginServer:selfWeak.username pwd:selfWeak.password];
+            [selfWeak.navigationController popToRootViewControllerAnimated:YES];
+            [ProgressHUD showSuccess:@"注册成功"];
         }
         else
         {
             dispatch_async(dispatch_get_main_queue(),
             ^{
-                [__self.view hideToastActivity];
-                [__self.lblError setText:[dict objectForKey:@"errmsg"]];
+                [selfWeak.lblError setText:[dict objectForKey:@"errmsg"]];
             });
         }
     }
@@ -108,8 +101,8 @@
     {
         dispatch_async(dispatch_get_main_queue(),
         ^{
-             [__self.view hideToastActivity];
-             [__self.lblError setText:@"注册失败"];
+             [selfWeak.view hideToastActivity];
+             [selfWeak.lblError setText:@"注册失败"];
         });
     }];
 }
@@ -228,33 +221,20 @@
 - (void)gotoRegName
 {
     RegNameViewController *regName= [[RegNameViewController alloc] init];
-    [self presentViewController:regName animated:YES completion:nil];
+    [self.navigationController pushViewController:regName animated:YES];
 }
 
 - (void)initUIHead
 {
-    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
-    [self setLeftBtn:btnBack];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(gotoRegName) title:@"账号注册"];
     
-    UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnRight setTitle:@"账号注册" forState:UIControlStateNormal];
-    [btnRight setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
-    btnRight.titleLabel.font = XCFONT(14);
-    [btnRight addTarget:self action:@selector(gotoRegName) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btnRight];
-    btnRight.frame = Rect(kScreenWidth-68,20, 60, 44);
-    
-    [self createLabelWithRect:Rect(30, 80, 80, 30)];
-    _txtName = [self createTextField:Rect(30, 80, kScreenWidth-60, 30)];
+    [self createLabelWithRect:Rect(30, 8, 80, 30)];
+    _txtName = [self createTextField:Rect(30, 8, kScreenWidth-60, 30)];
     [_txtName setPlaceholder:@"请输入手机号码"];
     [_txtName setKeyboardType:UIKeyboardTypeNumberPad];
     
-    [self createLabelWithRect:Rect(30, 130,80, 30)];
-    _txtCode = [self createTextField:Rect(_txtName.x,130,_txtName.width-100,_txtName.height)];
+    [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
+    _txtCode = [self createTextField:Rect(_txtName.x,_txtName.y+50,_txtName.width-100,_txtName.height)];
     [_txtCode setPlaceholder:@"请输入验证码"];
     [_txtCode setKeyboardType:UIKeyboardTypeNumberPad];
     _btnCode = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -270,20 +250,20 @@
     _btnCode.layer.masksToBounds = YES;
     _btnCode.layer.cornerRadius = 3;
     
-    [self createLabelWithRect:Rect(30, 180, 80, 30)];
-    _txtPwd = [self createTextField:Rect(_txtName.x,180,_txtName.width,_txtName.height)];
+    [self createLabelWithRect:Rect(30, _txtCode.y+50, 80, 30)];
+    _txtPwd = [self createTextField:Rect(_txtName.x,_txtCode.y+50,_txtName.width,_txtName.height)];
     [_txtPwd setPlaceholder:@"请输入密码"];
     [_txtPwd setDelegate:self];
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
     
-    _lblError = [[UILabel alloc] initWithFrame:Rect(30, 228, kScreenWidth-60, 20)];
+    _lblError = [[UILabel alloc] initWithFrame:Rect(30, _txtPwd.y+50, kScreenWidth-60, 20)];
     [_lblError setFont:XCFONT(14)];
     [_lblError setTextColor:[UIColor redColor]];
     [self.view addSubview:_lblError];
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, 250, kScreenWidth-60, 40);
+    btnRegister.frame = Rect(30, _lblError.y+40,kScreenWidth-60, 40);
     [btnRegister setTitle:@"注册" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
@@ -375,9 +355,10 @@
 {
     [super viewDidLoad];
     [self initUIHead];
+    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _txtName.delegate = self;
     _txtPwd.delegate = self;
-    [self setTitleText:@"手机注册"];
+    [self setTitle:@"手机注册"];
     NSDate *date = [NSDate date];
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"yyyyMMdd"];
@@ -479,5 +460,7 @@
     }
     return YES;
 }
+
+
 
 @end

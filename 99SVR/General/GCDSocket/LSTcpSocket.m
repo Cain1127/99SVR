@@ -430,6 +430,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         user.nUserId = pLogonResp->userid;
         [UserInfo sharedUserInfo].bIsLogin = YES;
         [UserInfo sharedUserInfo].nType = 1;
+        [UserInfo sharedUserInfo].banding = pLogonResp->bBoundTel;
     }
     if([UserInfo sharedUserInfo].nType==1)
     {
@@ -437,7 +438,7 @@ DEFINE_SINGLETON_FOR_CLASS(LSTcpSocket);
         [UserDefaults setObject:_strUser forKey:kUserId];
         [UserDefaults setObject:_strPwd forKey:kUserPwd];
         [UserDefaults synchronize];
-        
+         
         if ([UserInfo sharedUserInfo].otherLogin ==0)
         {
             [UserDefaults setInteger:0 forKey:kOtherLogin];

@@ -36,12 +36,14 @@
     UIImage *frame_number = [UIImage imageNamed:@"video_present_number_bg"];
     UIEdgeInsets number = UIEdgeInsetsMake(2,2,frame_number.size.height-6,2);
     _frameImage  = [DecodeJson stretchImage:frame_number capInsets:number resizingMode:UIImageResizingModeStretch];
-    
 }
 
 - (void)setGestureHidden
 {
-    self.hidden = YES;
+//    self.hidden = YES;
+    [UIView animateWithDuration:0.25 animations:^{
+        self.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
+    } completion:nil];
 }
 
 - (void)initHiddenView
@@ -73,7 +75,7 @@
         GiftModel *model = [aryIndex objectAtIndex:i];
         UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(singGift.width/2-22, 5, 44, 44)];
         [singGift addSubview:imgView];
-        [imgView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kGif_Image_URL,model.pic]]];
+        [imgView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s/%@",kGif_Image_URL,model.pic]]];
         
         UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0,55, singGift.width, 18)];
         [singGift addSubview:lblName];

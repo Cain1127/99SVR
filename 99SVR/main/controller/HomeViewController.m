@@ -8,33 +8,74 @@
 
 #import "HomeViewController.h"
 #import "ZLTabBar.h"
+#import "NSJSONSerialization+RemovingNulls.h"
 #import "BaseService.h"
 #import "IndexViewController.h"
 #import "TeacherModel.h"
 #import "TextHomeViewController.h"
 #import "TextLivingCell.h"
+#import "BannerModel.h"
 #import "TextRoomModel.h"
+#import "UIImageView+WebCache.h"
+#import "SDCycleScrollView.h"
+#import "SearchController.h"
 
-@interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate>
+#define kPictureHeight 0.3*kScreenHeight
+
+@interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate>
 {
+    
 }
-
+@property (nonatomic,strong) NSMutableArray *aryBanner;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *aryLiving;
+@property (nonatomic,copy) NSTimer *timer;
+@property (nonatomic,strong) SDCycleScrollView *scrollView;
+
 @end
 
 @implementation HomeViewController
+
+- (void)createScroll
+{
+    if (_scrollView) {
+        return ;
+    }
+    _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 10, kScreenWidth, kPictureHeight) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    
+    _scrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
+    _scrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
+//    _scrollView.titlesGroup = titles;
+    _scrollView.currentPageDotColor = UIColorFromRGB(0xff7a1e); // 自定义分页控件小圆标颜色
+    _scrollView.pageDotColor = UIColorFromRGB(0xa8a8a8);
+    [self.view addSubview:_scrollView];
+    _scrollView.autoScrollTimeInterval = 2;
+}
+
+- (void)createPage
+{
+    
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    //[self setTitleText:@"首页"];
+
+    _aryBanner = [NSMutableArray array];
     [self initUIHead];
-    [self initTableView];
-    [self initLivingData];
+    [self createScroll];
+    [self createPage];
+    [self initData];
 }
 
+- (void)loadImageView
+{
+    @WeakObj(self);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+          selfWeak.scrollView.imageURLStringsGroup = selfWeak.aryBanner;
+    });
+}
 - (void)initUIHead
 {
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -43,12 +84,33 @@
      {
          [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
      }];
-    //[self setLeftBtn:leftBtn];
+}
+
+- (void)initData
+{
+    NSString *strUrl = [[NSString alloc] initWithUTF8String:kHome_Banner_URL];
+//    __weak HomeViewController *__self = self;
+    @WeakObj(self);
+    [BaseService postJSONWithUrl:strUrl parameters:nil success:^(id responseObject) {
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+        if ([dict objectForKey:@"banner"]) {
+            NSArray *array = [dict objectForKey:@"banner"];
+            for (NSDictionary *param in array) {
+                BannerModel *model = [BannerModel resultWithDict:param];
+                [selfWeak.aryBanner addObject:model];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [selfWeak loadImageView];
+            });
+        }
+    } fail:^(NSError *error) {
+        
+    }];
 }
 
 - (void)initUIBody
 {
-    
+
 }
 
 - (void)initLivingData

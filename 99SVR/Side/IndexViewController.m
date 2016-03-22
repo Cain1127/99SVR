@@ -198,22 +198,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
     updateCount = 0;
     _currentPage = 0;
     [self initUIHead];
-    
-    //[self setTitleText:@"99财经"];
-    
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(searchClick) image:@"search_normal" highImage:@"search_high"];
     _grouRequest = [[GroupListRequest alloc] init];
-    
     _listReuqest = [[RoomListRequest alloc] init];
-    
     _aryHistory = [NSMutableArray array];
     _aryHot = [NSMutableArray array];
     _aryOnline = [NSMutableArray array];
-    
     __weak IndexViewController *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
@@ -260,10 +253,16 @@
     });
 }
 
+- (void)searchClick
+{
+    SearchController *search = [[SearchController alloc] init];
+    [self.navigationController pushViewController:search animated:YES];
+}
+
 - (void)initUIHead
 {
     NSArray *aryMen = @[@"热门推荐",@"财经在线",@"我的足迹"];
-    _group = [[GroupView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44) ary:aryMen];
+    _group = [[GroupView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44) ary:aryMen];
     [self.view addSubview:_group];
     [_group setBtnTag:1 tag1:2 tag2:3];
     _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0,_group.y+_group.height, kScreenWidth, kScreenHeight-_group.y-_group.height)];

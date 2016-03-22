@@ -11,7 +11,7 @@
 #import "UserInfo.h"
 #import "LeftCellModel.h"
 #import "LeftViewCell.h"
-
+#import <Bugly/CrashReporter.h>
 #import "VideoColletionViewController.h"
 #import "AssetViewController.h"
 #import "SettingCenterController.h"
@@ -83,46 +83,36 @@
 
 - (void)refreshUI
 {
+    [[CrashReporter sharedInstance] setUserId:[NSString stringWithFormat:@"用户:%@",NSStringFromInt([UserInfo sharedUserInfo].nUserId)]];
     [self performSelectorOnMainThread:@selector(checkLogin) withObject:nil waitUntilDone:YES];
 }
 
 - (void)checkLogin
 {
     [_itemsArray removeAllObjects];
-    
     _leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
     // 登录成功用户
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
-        VideoColletionViewController *videoVc = [[VideoColletionViewController alloc] init];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"collect.png" Vc:videoVc]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"collect.png" goClassName:@"VideoColletionViewController"]];
         
-        AssetViewController *assetVc = [[AssetViewController alloc] init];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"setting" Vc:assetVc]];
-        
-        ProfileViewController *profileVc = [[ProfileViewController alloc] init];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的资料" icon:@"setting" Vc:profileVc]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"setting" goClassName:@"AssetViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的资料" icon:@"setting" goClassName:@"ProfileViewController"]];
     }
     else  // 没登录
     {
-        LoginViewController *loginVc = [[LoginViewController alloc] init];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kLogin icon:@"mydata.png" Vc:loginVc]];
-        
-        RegMobileViewController *regVc = [[RegMobileViewController alloc] init];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kRegist icon:@"regist.png" Vc:regVc]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kLogin icon:@"mydata.png" goClassName:@"LoginViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kRegist icon:@"regist.png" goClassName:@"RegMobileViewController"]];
     }
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
     
-    SettingCenterController *settingVc = [[SettingCenterController alloc] init];
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" Vc:settingVc]];
-    
-    KefuCenterController *kefuVc = [[KefuCenterController alloc] init];
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"kefu.png" Vc:kefuVc]];
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"kefu.png" goClassName:@"KefuCenterController"]];
     
     __weak LeftMenu *__self = self;
     dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       [__self.listTableView reloadData];
-                   });
+    ^{
+       [__self.listTableView reloadData];
+    });
 }
 
 
@@ -150,12 +140,12 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if ([self.degelate respondsToSelector:@selector(leftMenuDidSeletedAtRow:title:vc:)]) {
         LeftCellModel *model = _itemsArray[indexPath.row];
-        [self.degelate leftMenuDidSeletedAtRow:indexPath.row title:model.title vc:model.vc];
+        UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
+        [self.degelate leftMenuDidSeletedAtRow:indexPath.row title:model.title vc:viewController];
     }
 }
 
 #pragma mark - leftMenuHeaderViewDelegate
-
 - (void)enterLogin
 {
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType != 1)

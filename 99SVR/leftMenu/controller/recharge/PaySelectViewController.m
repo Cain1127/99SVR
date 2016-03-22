@@ -13,6 +13,7 @@
 #import "WXApi.h"
 #import "UserInfo.h"
 #import "RechargeResultViewController.h"
+#import "ProgressHUD.h"
 
 @interface PaySelectViewController ()<UIWebViewDelegate>
 @property (weak, nonatomic) UIWebView *webView;
@@ -50,7 +51,8 @@
     
     // 2.加载网页
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:kPay_URL]];
-    NSString *body = [NSString stringWithFormat: @"userid=%@&code=%@&client=%@", @"1680010",@"12345678911",@"2"];
+    //userid  code client
+    NSString *body = [NSString stringWithFormat: @"userid=%d&code=%@&client=%@",[UserInfo sharedUserInfo].nUserId,@"12345678911",@"2"];
     [request setHTTPMethod: @"POST"];
     [request setHTTPBody: [body dataUsingEncoding: NSUTF8StringEncoding]];
     [webView loadRequest:request];
@@ -64,25 +66,37 @@
 {
     // 删除蒙板
     [MBProgressHUD hideHUD];
-    
+    __weak PaySelectViewController *__self = self;
+    @WeakObj(self);
     JSContext *context = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     // 定义好JS要调用的方法, AlipayPay就是调用的AlipayPay方法名
     context[@"AlipayPay"] = ^() {
         DLog(@"----支付宝开始充值----");
         NSArray *args = [JSContext currentArguments];
+        if(args.count==0)
+        {
+            [ProgressHUD showError:@"请求支付宝支付失败"];
+            return ;
+        }
         NSString *param = ((JSValue *)args[0]).toString;
         DLog(@"支付宝开始充值参数-----%@", param);
+        @StrongObj(self);
         [self payForAlipay:param];
     };
     
     context[@"Wxpay"] = ^() {
         DLog(@"----微信开始充值----");
         NSArray *args = [JSContext currentArguments];
+        if (args.count==0) {
+            [ProgressHUD showError:@"请求微信支付失败"];
+            return ;
+        }
         NSString *param = ((JSValue *)args[0]).toString;
         if (param) {
             NSData *jsonData = [param dataUsingEncoding:NSUTF8StringEncoding];
             NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil];
             // 微信支付充值
+            @StrongObj(self);
             [self weixinPayWithDict:responseDict];
         }
         DLog(@"微信开始充值参数-----%@", param);
@@ -112,7 +126,6 @@
  */
 - (void)sendPayResult:(NSNotification *)notify {
     DLog(@"%@-----",[notify.userInfo[@"key"] isEqualToString:@"1"]?@"支付成功":@"支付失败");
-    
     RechargeResultViewController *rechargeResultVc = [[RechargeResultViewController alloc] init];
     rechargeResultVc.isRechargeSucceed = [notify.userInfo[@"key"] isEqualToString:@"1"];
     rechargeResultVc.title = rechargeResultVc.isRechargeSucceed ? @"支付成功":@"支付失败";
@@ -129,14 +142,14 @@
 {
     //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
     NSString *appScheme = @"99svrAlipay";
-    
+    __weak PaySelectViewController *__self = self;
     [[AlipaySDK defaultService] payOrder:param fromScheme:appScheme callback:^(NSDictionary *resultDic) {
         NSLog(@"reslut = %@",resultDic);
         RechargeResultViewController *rechargeResultVc = [[RechargeResultViewController alloc] init];
         rechargeResultVc.isRechargeSucceed = [resultDic[@"resultStatus"] isEqualToString:@"9000"];
         rechargeResultVc.title = rechargeResultVc.isRechargeSucceed ? @"支付成功":@"支付失败";
         // 这里应该还需要一个订单号
-        [self.navigationController pushViewController:rechargeResultVc animated:YES];
+        [__self.navigationController pushViewController:rechargeResultVc animated:YES];
     }];
 }
 
@@ -147,5 +160,6 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    DLog(@"dealloc");
 }
 @end

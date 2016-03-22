@@ -4,515 +4,516 @@
 
 #include "message_comm.h"
 
-#define MDM_Vchat_Login  103  //ç™»é™†
-#define MDM_Vchat_Hall   104  //å¤§å…
-#define MDM_Vchat_Room   105  //æˆ¿é—´
-#define MDM_Vchat_Text   108  //æ–‡å­—ç›´æ’­é—´
+#define MDM_Vchat_Login  103  //µÇÂ½
+#define MDM_Vchat_Hall   104  //´óÌü
+#define MDM_Vchat_Room   105  //·¿¼ä
+#define MDM_Vchat_Text   108  //ÎÄ×ÖÖ±²¥¼ä
 
-#define MDM_Version_Value 10  //åè®®ç‰ˆæœ¬
+#define MDM_Version_Value 10  //Ğ­Òé°æ±¾
 
 
 enum {
-    ERR_USER_IN_BLACK_LIST = 101,	//ç”¨æˆ·åœ¨é»‘åå•
-    ERR_JOINROOM_PWD_WRONG = 201,	//æˆ¿é—´å¯†ç ä¸å¯¹
-    ERR_FAIL_CREATE_USER = 203,		//åˆ›å»ºç”¨æˆ·å¤±è´¥(ç”¨æˆ·å/å¯†ç å¤±è´¥)
-    ERR_KICKOUT_SAMEACCOUNT = 107,	//åŒå·åŠ å…¥æˆ¿é—´è¸¢å‡º
-    //add new
-    ERR_EXCEPTION_QUIT_ROOM = 108,
-    //end
-    ERR_ROOM_NOT_EXIST = 404,		//æˆ¿é—´ä¸å­˜åœ¨
-    ERR_ROOM_IS_CLOSED = 405,		//æˆ¿é—´å·²ç»å…³é—­
-    ERR_ROOM_USER_IS_FULL = 502,	//æˆ¿é—´äººæ•°å·²æ»¡
-    ERR_KICKOUT_TIMEOUT = 522,		//è¶…æ—¶è¸¢å‡º
-    ERR_KICKOUT_AD = 600			//æ‰“å¹¿å‘Šè¸¢å‡º
+	ERR_USER_IN_BLACK_LIST = 101,	//ÓÃ»§ÔÚºÚÃûµ¥
+	ERR_JOINROOM_PWD_WRONG = 201,	//·¿¼äÃÜÂë²»¶Ô
+	ERR_FAIL_CREATE_USER = 203,		//´´½¨ÓÃ»§Ê§°Ü(ÓÃ»§Ãû/ÃÜÂëÊ§°Ü)
+	ERR_KICKOUT_SAMEACCOUNT = 107,	//Í¬ºÅ¼ÓÈë·¿¼äÌß³ö
+	//add new
+	ERR_EXCEPTION_QUIT_ROOM = 108,
+	//end
+	ERR_ROOM_NOT_EXIST = 404,		//·¿¼ä²»´æÔÚ
+	ERR_ROOM_IS_CLOSED = 405,		//·¿¼äÒÑ¾­¹Ø±Õ
+	ERR_ROOM_USER_IS_FULL = 502,	//·¿¼äÈËÊıÒÑÂú
+	ERR_KICKOUT_TIMEOUT = 522,		//³¬Ê±Ìß³ö
+	ERR_KICKOUT_AD = 600			//´ò¹ã¸æÌß³ö
 };
 
 
 enum {
-    Sub_Vchat_ClientHello = 1,         //æ¡æ‰‹,æ¯ä¸ªMDM mainCmdä¸ä¸€æ ·
-    Sub_Vchat_ClientPing = 2,             //ping,æ¯ä¸ªMDM mainCmdä¸ä¸€æ ·
-    Sub_Vchat_ClientPingResp = 3,         //pingå›åº”
-    
-    //logonæ¶ˆæ¯
-    Sub_Vchat_logonReq = 4,               //ç™»å½•
-    Sub_Vchat_logonErr = 5,               //ç™»é™†å¤±è´¥
-    Sub_Vchat_logonSuccess = 6,           //ç™»é™†æˆåŠŸ
-    Sub_Vchat_UserQuanxianBegin = 7,       //ç”¨æˆ·æƒé™æ•°æ®
+    Sub_Vchat_ClientHello = 1,         //ÎÕÊÖ,Ã¿¸öMDM mainCmd²»Ò»Ñù
+    Sub_Vchat_ClientPing = 2,             //ping,Ã¿¸öMDM mainCmd²»Ò»Ñù
+    Sub_Vchat_ClientPingResp = 3,         //ping»ØÓ¦
+
+	//logonÏûÏ¢
+    Sub_Vchat_logonReq = 4,               //µÇÂ¼
+    Sub_Vchat_logonErr = 5,               //µÇÂ½Ê§°Ü
+    Sub_Vchat_logonSuccess = 6,           //µÇÂ½³É¹¦
+    Sub_Vchat_UserQuanxianBegin = 7,       //ÓÃ»§È¨ÏŞÊı¾İ
     Sub_Vchat_UserQuanxianLst = 8,         //
     Sub_Vchat_UserQuanxianEnd = 9,         //
-    Sub_Vchat_logonFinished = 10,          //ç™»å½•å®Œæˆ,æ— æ•°æ®
-    
-    //æš‚ä¸ä½¿ç”¨----- ä½¿ç”¨webæ³¨å†Œ
-    Sub_Vchat_RegisteReq = 11,             //æ³¨å†Œ,ç›®å‰ç®€å•çš„æ³¨å†Œè¿˜æ˜¯èµ°web(åŒæ ·è·¨å¹³å°).é™ä½å¼€å‘æˆæœ¬,è·³è½¬æˆ–åµŒå…¥é¡µé¢æ³¨å†Œ.
+    Sub_Vchat_logonFinished = 10,          //µÇÂ¼Íê³É,ÎŞÊı¾İ
+
+	//Ôİ²»Ê¹ÓÃ----- Ê¹ÓÃweb×¢²á
+    Sub_Vchat_RegisteReq = 11,             //×¢²á,Ä¿Ç°¼òµ¥µÄ×¢²á»¹ÊÇ×ßweb(Í¬Ñù¿çÆ½Ì¨).½µµÍ¿ª·¢³É±¾,Ìø×ª»òÇ¶ÈëÒ³Ãæ×¢²á.
     Sub_Vchat_RegisteErr = 12,
     Sub_Vchat_RegisteSuccess = 13,
-    //-------------
-    
-    Sub_Vchat_SetUserIMStatusReq = 14,     //è®¾ç½®ç”¨æˆ·çŠ¶æ€(é™¤dev,micä¹‹å¤–çš„onlineçŠ¶æ€: hide,busing,online,leave)
+	//-------------
+
+    Sub_Vchat_SetUserIMStatusReq = 14,     //ÉèÖÃÓÃ»§×´Ì¬(³ıdev,micÖ®ÍâµÄonline×´Ì¬: hide,busing,online,leave)
     Sub_Vchat_setUserIMStatusResp = 15,
     Sub_Vchat_setUserIMStatusErr = 16,
-    
-    //lobbyæ¶ˆæ¯,æš‚æ—¶ä½¿ç”¨å¸¸è¿æ¥,ä¸logonsvrä½¿ç”¨ä¸€ä¸ªæœåŠ¡å™¨
-    Sub_Vchat_RoomGroupListReq = 17,        //æˆ¿é—´ç»„åˆ—è¡¨è¯·æ±‚
+
+	//lobbyÏûÏ¢,ÔİÊ±Ê¹ÓÃ³£Á¬½Ó,ÓëlogonsvrÊ¹ÓÃÒ»¸ö·şÎñÆ÷
+    Sub_Vchat_RoomGroupListReq = 17,        //·¿¼ä×éÁĞ±íÇëÇó
     Sub_Vchat_RoomGroupListBegin = 18,
     Sub_Vchat_RoomGroupListResp = 19,
     Sub_Vchat_RoomGroupListFinished = 20,
-    
-    Sub_Vchat_RoomGroupStatusReq = 21,          //æˆ¿é—´ç»„çŠ¶æ€(äººæ•°)è¯·æ±‚
+
+    Sub_Vchat_RoomGroupStatusReq = 21,          //·¿¼ä×é×´Ì¬(ÈËÊı)ÇëÇó
     Sub_Vchat_RoomGroupStatusResp = 22,         //
-    Sub_Vchat_RoomGroupStatusFinished = 23,     //æˆ¿é—´ç»„çŠ¶æ€(äººæ•°)åˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_RoomListReq = 24,             //æˆ¿é—´åˆ—è¡¨è¯·æ±‚
+    Sub_Vchat_RoomGroupStatusFinished = 23,     //·¿¼ä×é×´Ì¬(ÈËÊı)ÁĞ±í½áÊø
+
+    Sub_Vchat_RoomListReq = 24,             //·¿¼äÁĞ±íÇëÇó
     Sub_Vchat_RoomListBegin = 25,
     Sub_Vchat_RoomListResp = 26,
-    Sub_Vchat_RoomListFinished = 27,        //è·å–æˆ¿é—´åˆ—è¡¨ç»“æŸ
-    
-    //roomæ¶ˆæ¯
-    Sub_Vchat_JoinRoomReq = 28,             //åŠ å…¥æˆ¿é—´è¯·æ±‚
-    Sub_Vchat_JoinRoomErr = 29,                   //é”™è¯¯
-    Sub_Vchat_JoinRoomResp = 30,                  //æˆåŠŸ,å«ç®¡ç†åˆ—è¡¨
-    Sub_Vchat_JoinOtherRoomNoty = 31,       //è¿›å…¥ å…¶ä»–æˆ¿é—´é€šçŸ¥ (æœåŠ¡å™¨ä¹‹é—´ç”¨)
-    
-    Sub_Vchat_RoomUserListReq = 32,         //æˆ¿é—´ç”¨æˆ·åˆ—è¡¨è¯·æ±‚
+    Sub_Vchat_RoomListFinished = 27,        //»ñÈ¡·¿¼äÁĞ±í½áÊø
+
+	//roomÏûÏ¢
+    Sub_Vchat_JoinRoomReq = 28,             //¼ÓÈë·¿¼äÇëÇó
+    Sub_Vchat_JoinRoomErr = 29,                   //´íÎó
+    Sub_Vchat_JoinRoomResp = 30,                  //³É¹¦,º¬¹ÜÀíÁĞ±í
+    Sub_Vchat_JoinOtherRoomNoty = 31,       //½øÈë ÆäËû·¿¼äÍ¨Öª (·şÎñÆ÷Ö®¼äÓÃ)
+
+    Sub_Vchat_RoomUserListReq = 32,         //·¿¼äÓÃ»§ÁĞ±íÇëÇó
     Sub_Vchat_RoomUserListBegin = 33,  //ad by guchengzhi 20150202
-    Sub_Vchat_RoomUserListResp = 34,              //å›åº”(æ¨æ’­)
-    Sub_Vchat_RoomUserListFinished = 35,          //è¯·æ±‚åŠ å…¥æˆ¿é—´é˜¶æ®µå®Œæˆ,ç•Œé¢æ›´æ–°æ•°æ®
-    Sub_Vchat_RoomUserNoty = 36,            //åˆ—è¡¨æ›´æ–°é€šçŸ¥
-    
-    Sub_Vchat_RoomPubMicState = 37,         //æˆ¿é—´å…¬éº¦çŠ¶æ€
-    
-    Sub_Vchat_RoomUserExitReq = 38,         //ç”¨æˆ·è‡ªå·±é€€å‡ºæˆ¿é—´
+    Sub_Vchat_RoomUserListResp = 34,              //»ØÓ¦(ÍÆ²¥)
+    Sub_Vchat_RoomUserListFinished = 35,          //ÇëÇó¼ÓÈë·¿¼ä½×¶ÎÍê³É,½çÃæ¸üĞÂÊı¾İ
+    Sub_Vchat_RoomUserNoty = 36,            //ÁĞ±í¸üĞÂÍ¨Öª
+
+    Sub_Vchat_RoomPubMicState = 37,         //·¿¼ä¹«Âó×´Ì¬
+
+    Sub_Vchat_RoomUserExitReq = 38,         //ÓÃ»§×Ô¼ºÍË³ö·¿¼ä
     Sub_Vchat_RoomUserExitResp = 39,              //
-    Sub_Vchat_RoomUserExitNoty = 40,              //é€šçŸ¥
-    Sub_Vchat_RoomUserExceptExitNoty = 323, //ç”¨æˆ·å¼‚å¸¸é€€å‡ºé€šçŸ¥
-    
-    Sub_Vchat_RoomKickoutUserReq = 41,      //è¸¢å‡ºç”¨æˆ·è¯·æ±‚
+    Sub_Vchat_RoomUserExitNoty = 40,              //Í¨Öª
+	Sub_Vchat_RoomUserExceptExitNoty = 323, //ÓÃ»§Òì³£ÍË³öÍ¨Öª
+
+    Sub_Vchat_RoomKickoutUserReq = 41,      //Ìß³öÓÃ»§ÇëÇó
     Sub_Vchat_RoomKickoutUserResp = 42,           //
-    Sub_Vchat_RoomKickoutUserNoty = 43,           //é€šçŸ¥
-    
-    Sub_Vchat_GetFlyGiftListReq = 44,       //è¯·æ±‚å¤§ç¤¼ç‰©åˆ—è¡¨(è·‘é“ä¿¡æ¯)
-    Sub_Vchat_FlyGiftListInfo = 45,         //å¤§ç¤¼ç‰©åˆ—è¡¨(è·‘é“ä¿¡æ¯)
-    
-    Sub_Vchat_WaitiMicListInfo = 46,          //æ’éº¦ç”¨æˆ·åˆ—è¡¨
-    
-    Sub_Vchat_ChatReq = 47,                 //èŠå¤©å‘å‡ºæ¶ˆæ¯
+    Sub_Vchat_RoomKickoutUserNoty = 43,           //Í¨Öª
+
+    Sub_Vchat_GetFlyGiftListReq = 44,       //ÇëÇó´óÀñÎïÁĞ±í(ÅÜµÀĞÅÏ¢)
+    Sub_Vchat_FlyGiftListInfo = 45,         //´óÀñÎïÁĞ±í(ÅÜµÀĞÅÏ¢)
+
+    Sub_Vchat_WaitiMicListInfo = 46,          //ÅÅÂóÓÃ»§ÁĞ±í
+
+    Sub_Vchat_ChatReq = 47,                 //ÁÄÌì·¢³öÏûÏ¢
     Sub_Vchat_ChatErr = 48,                       //
-    Sub_Vchat_ChatNotify = 49,                    //è½¬å‘æ¶ˆæ¯
-    
-    Sub_Vchat_TradeGiftReq = 50,             //èµ é€ç¤¼ç‰©(è·¨æˆ¿é—´,è·¨å¹³å°)è¯·æ±‚
+    Sub_Vchat_ChatNotify = 49,                    //×ª·¢ÏûÏ¢
+
+    Sub_Vchat_TradeGiftReq = 50,             //ÔùËÍÀñÎï(¿ç·¿¼ä,¿çÆ½Ì¨)ÇëÇó
     Sub_Vchat_TradeGiftResp = 51,                 //
     Sub_Vchat_TradeGiftErr = 52,                  //
     Sub_Vchat_TradeGiftNotify = 53,               //
-    
-    Sub_Vchat_TradeFlowerReq = 54,            //èµ é€é²œèŠ±è¯·æ±‚,å› ä¸ºåªæ˜¯é™åˆ¶äºå½“å‰æˆ¿é—´çš„åº”ç”¨,å› æ­¤å‚æ•°å°†ä¼šå°‘å¾ˆå¤š
+
+    Sub_Vchat_TradeFlowerReq = 54,            //ÔùËÍÏÊ»¨ÇëÇó,ÒòÎªÖ»ÊÇÏŞÖÆÓÚµ±Ç°·¿¼äµÄÓ¦ÓÃ,Òò´Ë²ÎÊı½«»áÉÙºÜ¶à
     Sub_Vchat_TradeFlowerResp = 55,                  //
     Sub_Vchat_TradeFlowerErr = 56,                   //
     Sub_Vchat_TradeFlowerNotify = 57,                //
-    
-    Sub_Vchat_TradeFireworksReq = 58,              //èµ é€çƒŸèŠ±(ç»“æœ)è¯·æ±‚, è¯·æ±‚è€…é€çƒŸèŠ±æ—¶è¿˜æ˜¯å½“æ—¶æ™®é€šç¤¼ç‰©å‘å‡ºå»,é€šè¿‡giftidåˆ¤æ–­æ˜¯ä¸æ˜¯çƒŸèŠ±ç±»ç¤¼ç‰©
+
+    Sub_Vchat_TradeFireworksReq = 58,              //ÔùËÍÑÌ»¨(½á¹û)ÇëÇó, ÇëÇóÕßËÍÑÌ»¨Ê±»¹ÊÇµ±Ê±ÆÕÍ¨ÀñÎï·¢³öÈ¥,Í¨¹ıgiftidÅĞ¶ÏÊÇ²»ÊÇÑÌ»¨ÀàÀñÎï
     Sub_Vchat_TradeFireworksResp = 59,
     Sub_Vchat_TradeFireworksErr = 60,
-    Sub_Vchat_TradeFireworksNotify = 61,           //èµ é€çƒŸèŠ±(ç»“æœ)é€šçŸ¥?
-    
-    Sub_Vchat_LotteryPoolNotify = 62,          //å¹¸è¿å¥–æ± å¹¿æ’­æ¶ˆæ¯
-    Sub_Vchat_LotteryGiftNotify = 63,          //ä¸­å¥–å¹¸è¿ç¤¼ç‰©å¹¿æ’­æ¶ˆæ¯
-    Sub_Vchat_BoomGiftNotify = 64,             //ä¸­å¥–çˆ†ç‚¸ç¤¼ç‰©å¹¿æ’­æ¶ˆæ¯
-    Sub_Vchat_SysNoticeInfo = 65,              //ç³»ç»Ÿå¹¿æ’­(ä¸“é—¨)æ¶ˆæ¯
-    
-    Sub_Vchat_UserAccountInfo = 66,            //ç”¨æˆ·è´¦æˆ·(ä½™é¢)ä¿¡æ¯
-    
-    Sub_Vchat_RoomInfoNotify = 67,             //æˆ¿é—´ä¿¡æ¯èµ„æ–™
-    Sub_Vchat_RoomManagerNotify = 68,          //æˆ¿é—´ç®¡ç†å‘˜
-    Sub_Vchat_RoomMediaNotify = 69,            //æˆ¿é—´åª’ä½“
-    Sub_Vchat_RoomNoticeNotify = 70,           //æˆ¿é—´å…¬å‘Š
-    Sub_Vchat_RoomOPStatusNotify = 71,         //æˆ¿é—´çŠ¶æ€
-    
-    Sub_Vchat_TransMediaReq = 72,              //éŸ³è§†é¢‘åª’ä½“è¯·æ±‚
+    Sub_Vchat_TradeFireworksNotify = 61,           //ÔùËÍÑÌ»¨(½á¹û)Í¨Öª?
+	
+    Sub_Vchat_LotteryPoolNotify = 62,          //ĞÒÔË½±³Ø¹ã²¥ÏûÏ¢
+    Sub_Vchat_LotteryGiftNotify = 63,          //ÖĞ½±ĞÒÔËÀñÎï¹ã²¥ÏûÏ¢
+    Sub_Vchat_BoomGiftNotify = 64,             //ÖĞ½±±¬Õ¨ÀñÎï¹ã²¥ÏûÏ¢
+    Sub_Vchat_SysNoticeInfo = 65,              //ÏµÍ³¹ã²¥(×¨ÃÅ)ÏûÏ¢
+
+    Sub_Vchat_UserAccountInfo = 66,            //ÓÃ»§ÕË»§(Óà¶î)ĞÅÏ¢
+
+    Sub_Vchat_RoomInfoNotify = 67,             //·¿¼äĞÅÏ¢×ÊÁÏ
+    Sub_Vchat_RoomManagerNotify = 68,          //·¿¼ä¹ÜÀíÔ±
+    Sub_Vchat_RoomMediaNotify = 69,            //·¿¼äÃ½Ìå
+    Sub_Vchat_RoomNoticeNotify = 70,           //·¿¼ä¹«¸æ
+    Sub_Vchat_RoomOPStatusNotify = 71,         //·¿¼ä×´Ì¬
+
+    Sub_Vchat_TransMediaReq = 72,              //ÒôÊÓÆµÃ½ÌåÇëÇó
     Sub_Vchat_TransMediaResp = 73,                 //
     Sub_Vchat_TransMediaErr = 74,                  //
-    
-    Sub_Vchat_SetMicStateReq = 75,             //è®¾ç½®ä¸Š/ä¸‹éº¦çŠ¶æ€
+
+    Sub_Vchat_SetMicStateReq = 75,             //ÉèÖÃÉÏ/ÏÂÂó×´Ì¬
     Sub_Vchat_SetMicStateResp = 76,                //
     Sub_Vchat_SetMicStateErr = 77,                 //
     Sub_Vchat_SetMicStateNotify = 78,              //
-    
-    Sub_Vchat_SetDevStateReq = 79,             //è®¾ç½®è®¾å¤‡çŠ¶æ€
+
+    Sub_Vchat_SetDevStateReq = 79,             //ÉèÖÃÉè±¸×´Ì¬
     Sub_Vchat_SetDevStateResp = 80,                 //
     Sub_Vchat_SetDevStateErr = 81,                  //
     Sub_Vchat_SetDevStateNotify = 82,               //
-    
-    Sub_Vchat_SetUserAliasReq = 83,            //è®¾ç½®ç”¨æˆ·å‘¢ç§°
+
+    Sub_Vchat_SetUserAliasReq = 83,            //ÉèÖÃÓÃ»§ÄØ³Æ
     Sub_Vchat_SetUserAliasResp = 84,                //
     Sub_Vchat_SetUserAliasErr = 85,                 //
     Sub_Vchat_SetUserAliasNotify = 86,              //
-    
-    Sub_Vchat_SetUserPriorityReq = 87,         //è®¾ç½®ç”¨æˆ·æƒé™
+
+    Sub_Vchat_SetUserPriorityReq = 87,         //ÉèÖÃÓÃ»§È¨ÏŞ
     Sub_Vchat_SetUserPriorityResp = 88,             //
     Sub_Vchat_SetUserPriorityNotify = 89,           //
-    
-    Sub_Vchat_SeeUserIpReq = 90,                 //æŸ¥çœ‹ç”¨æˆ·IPè¯·æ±‚
+
+    Sub_Vchat_SeeUserIpReq = 90,                 //²é¿´ÓÃ»§IPÇëÇó
     Sub_Vchat_SeeUserIpResp = 91,                   //
     Sub_Vchat_SeeUserIpErr = 92,                    //
-    
-    Sub_Vchat_ThrowUserReq = 93,                 //å°æ€ç”¨æˆ·
+
+    Sub_Vchat_ThrowUserReq = 93,                 //·âÉ±ÓÃ»§
     Sub_Vchat_ThrowUserResp = 94,                   //
     Sub_Vchat_ThrowUserNotify = 95,                 //
-    
-    Sub_Vchat_SendUserSealReq = 96,              //ç›–ç« è¯·æ±‚
+
+    Sub_Vchat_SendUserSealReq = 96,              //¸ÇÕÂÇëÇó
     Sub_Vchat_SendUserSealErr = 97,
     Sub_Vchat_SendUserSealNotify = 98,              //
-    
-    Sub_Vchat_ForbidUserChatReq = 99,            //ç¦è¨€ç”¨æˆ·è¯·æ±‚
+
+    Sub_Vchat_ForbidUserChatReq = 99,            //½ûÑÔÓÃ»§ÇëÇó
     Sub_Vchat_ForbidUserChatNotify = 100,            //
-    
-    Sub_Vchat_FavoriteVcbReq = 101,                //æ”¶è—æˆ¿é—´è¯·æ±‚
+
+    Sub_Vchat_FavoriteVcbReq = 101,                //ÊÕ²Ø·¿¼äÇëÇó
     Sub_Vchat_FavoriteVcbResp = 102,                  //
-    
-    Sub_Vchat_ChangePubMicStateReq = 103,          //è®¾ç½®å…¬éº¦çŠ¶æ€
+
+    Sub_Vchat_ChangePubMicStateReq = 103,          //ÉèÖÃ¹«Âó×´Ì¬
     Sub_Vchat_ChangePubMicStateResp = 104,              //
     Sub_Vchat_ChangePubMicStateNotify = 105,            //
-    
+
     Sub_Vchat_UpWaitMicReq = 106,                 //
     Sub_Vchat_UpWaitMicResp = 107,
     Sub_Vchat_UpWaitMicErr = 108,
-    Sub_Vchat_ChangeWaitMicIndexReq = 109,        //è®¾ç½®æ’éº¦éº¦åº
+    Sub_Vchat_ChangeWaitMicIndexReq = 109,        //ÉèÖÃÅÅÂóÂóĞò
     Sub_Vchat_ChangeWaitMicIndexResp = 110,          //
     Sub_Vchat_ChangeWaitMicIndexNotify = 111,
-    
-    Sub_Vchat_LootUserMicReq = 112,                 //å¤ºç”¨æˆ·(å…¬)éº¦è¯·æ±‚
+
+    Sub_Vchat_LootUserMicReq = 112,                 //¶áÓÃ»§(¹«)ÂóÇëÇó
     Sub_Vcaht_lootUserMicResp = 113,                   //
     Sub_Vchat_LootUserMicNotify = 114,                 //
-    
-    Sub_Vchat_SetRoomInfoReq = 115,               //è®¾ç½®æˆ¿é—´ä¿¡æ¯è¯·æ±‚
+
+    Sub_Vchat_SetRoomInfoReq = 115,               //ÉèÖÃ·¿¼äĞÅÏ¢ÇëÇó
     Sub_Vchat_SetRoomInfoResp = 116,                 //
-    Sub_Vchat_SetRoomOPStatusReq = 117,           //è®¾ç½®æˆ¿é—´è¿è¡Œå±æ€§(çŠ¶æ€)
+    Sub_Vchat_SetRoomOPStatusReq = 117,           //ÉèÖÃ·¿¼äÔËĞĞÊôĞÔ(×´Ì¬)
     Sub_Vchat_SetRoomOPStatusResp = 118,              //
-    Sub_Vchat_SetRoomNoticeReq = 119,             //è®¾ç½®æˆ¿é—´å…¬å‘Šä¿¡æ¯è¯·æ±‚
+    Sub_Vchat_SetRoomNoticeReq = 119,             //ÉèÖÃ·¿¼ä¹«¸æĞÅÏ¢ÇëÇó
     Sub_Vchat_SetRoomNoticeResp = 120,                   //
-    Sub_Vchat_SetRoomMediaReq = 121,              //è®¾ç½®æˆ¿é—´åª’ä½“æœåŠ¡å™¨è¯·æ±‚ add by guchengzhi 20150202
-    
-    Sub_Vchat_SetUserProfileReq = 122,            //è®¾ç½®ç”¨æˆ·èµ„æ–™
+    Sub_Vchat_SetRoomMediaReq = 121,              //ÉèÖÃ·¿¼äÃ½Ìå·şÎñÆ÷ÇëÇó add by guchengzhi 20150202
+
+    Sub_Vchat_SetUserProfileReq = 122,            //ÉèÖÃÓÃ»§×ÊÁÏ
     Sub_Vchat_SetUserProfileResp = 123,              //
-    Sub_Vchat_SetUserPwdReq = 124,                //è®¾ç½®ç”¨æˆ·å¯†ç 
+    Sub_Vchat_SetUserPwdReq = 124,                //ÉèÖÃÓÃ»§ÃÜÂë
     Sub_Vchat_SetUserPwdResp = 125,                  //
-    
+
     Sub_Vchat_SetExecQueryReq = 126,
     Sub_Vchat_SetExecQueryResp = 127,
     Sub_Vchat_GetDBInfoReq = 128,
     Sub_Vchat_GetDBInfoResp = 129,
-    
-    Sub_Vchat_QueryUserAccountReq = 130,          // ç”¨æˆ·è´¦æˆ·æŸ¥è¯¢(é“¶è¡ŒæŸ¥è¯¢)
+
+    Sub_Vchat_QueryUserAccountReq = 130,          // ÓÃ»§ÕË»§²éÑ¯(ÒøĞĞ²éÑ¯)
     Sub_Vchat_QueryUserAccountResp = 131,
-    
-    //å­˜,å–æ¬¾ä¿¡ä»¤ //æ‰€æœ‰æœ‰å…³é‡‘å¸ç§¯åˆ†æ“ä½œä½¿ç”¨åŒä¸€ä¸ªä¿¡ä»¤
+
+	//´æ,È¡¿îĞÅÁî //ËùÓĞÓĞ¹Ø½ğ±Ò»ı·Ö²Ù×÷Ê¹ÓÃÍ¬Ò»¸öĞÅÁî
     Sub_Vchat_MoneyAndPointOpReq = 132,
     Sub_Vchat_MoneyAndPointOpResp = 133,
     Sub_Vchat_MoneyAndPointOpErr = 134,
     Sub_Vchat_MoneyAndPointOpNotify = 135,
-    
+
     Sub_Vchat_SetWatMicMaxNumLimitReq = 136,
     Sub_Vchat_SetWatMicMaxNumLimitErr = 137,
     Sub_Vchat_SetWatMicMaxNumLimitNotify = 138,
-    
+
     Sub_Vchat_SetForbidInviteUpMicReq = 139,
     Sub_Vchat_SetForbidInviteUpMicResp = 140,
     Sub_Vchat_SetForbidInviteUpMicNotify = 141,
-    
-    Sub_Vchat_GetSiegeInfoRequest = 142,      //è·å–åŸä¸»æ¶ˆæ¯
-    Sub_Vchat_SiegeInfoNotify  =143,
-    
-    Sub_Vchat_QueryVcbExistReq = 144,      //æŸ¥è¯¢æŸæˆ¿é—´æ˜¯å¦å­˜åœ¨
-    Sub_Vchat_QueryVcbExistResp = 145,     //è¯¥æ¶ˆæ¯æ²¡æœ‰err
-    Sub_Vchat_QueryUserExistReq = 146,     //æŸ¥è¯¢æŸç”¨æˆ·æ˜¯å¦å­˜åœ¨
-    Sub_Vchat_QueryUserExistResp = 147,    //è¯¥æ¶ˆæ¯æ²¡æœ‰err
-    
-    Sub_Vchat_OpenChestReq = 148,         //ç”¨æˆ·å¼€å®ç®±è¯·æ±‚
-    Sub_Vchat_OpenChestResp = 149,        //é”™è¯¯ä¹Ÿåœ¨é‡Œé¢
-    
-    Sub_Vchat_CurMobZhuboNotify = 150,      //å½“å‰ä¸»æ’­ä¿¡æ¯
-    
-    Sub_Vchat_UserCaifuCostLevelNotify = 151, //ç”¨æˆ·è´¢å¯Œæ¶ˆè´¹æ’è¡Œç­‰çº§å®æ—¶æ›´æ–°æ¶ˆæ¯
-    
-    Sub_Vchat_GetUserNetworkTypeReq = 152,  //è·å–ç”¨æˆ·ç½‘ç»œç±»å‹
+
+	Sub_Vchat_GetSiegeInfoRequest = 142,      //»ñÈ¡³ÇÖ÷ÏûÏ¢
+	Sub_Vchat_SiegeInfoNotify  =143,
+
+    Sub_Vchat_QueryVcbExistReq = 144,      //²éÑ¯Ä³·¿¼äÊÇ·ñ´æÔÚ
+    Sub_Vchat_QueryVcbExistResp = 145,     //¸ÃÏûÏ¢Ã»ÓĞerr
+    Sub_Vchat_QueryUserExistReq = 146,     //²éÑ¯Ä³ÓÃ»§ÊÇ·ñ´æÔÚ
+    Sub_Vchat_QueryUserExistResp = 147,    //¸ÃÏûÏ¢Ã»ÓĞerr
+
+    Sub_Vchat_OpenChestReq = 148,         //ÓÃ»§¿ª±¦ÏäÇëÇó
+    Sub_Vchat_OpenChestResp = 149,        //´íÎóÒ²ÔÚÀïÃæ
+
+    Sub_Vchat_CurMobZhuboNotify = 150,      //µ±Ç°Ö÷²¥ĞÅÏ¢
+
+    Sub_Vchat_UserCaifuCostLevelNotify = 151, //ÓÃ»§²Æ¸»Ïû·ÑÅÅĞĞµÈ¼¶ÊµÊ±¸üĞÂÏûÏ¢
+
+    Sub_Vchat_GetUserNetworkTypeReq = 152,  //»ñÈ¡ÓÃ»§ÍøÂçÀàĞÍ
     Sub_Vchat_GetUserNetworkTypeResp = 153,
-    Sub_Vchat_SetUserNetworkTypeReq = 154,  //è®¾ç½®ç”¨æˆ·çš„ç½‘ç»œç±»å‹
+    Sub_Vchat_SetUserNetworkTypeReq = 154,  //ÉèÖÃÓÃ»§µÄÍøÂçÀàĞÍ
     Sub_Vchat_SetUserNetworkTypeResp = 155,
-    
-    Sub_Vchat_GetUserVideoSmoothReq = 156,  //è·å–ç”¨æˆ·çš„è§†é¢‘æµç•…åº¦
+
+    Sub_Vchat_GetUserVideoSmoothReq = 156,  //»ñÈ¡ÓÃ»§µÄÊÓÆµÁ÷³©¶È
     Sub_Vchat_GetUserVideoSmoothResp = 157,
-    Sub_Vchat_SetUserVideoSmoothReq = 158, //è®¾ç½®ç”¨æˆ·çš„è§†é¢‘æµç•…åº¦
+    Sub_Vchat_SetUserVideoSmoothReq = 158, //ÉèÖÃÓÃ»§µÄÊÓÆµÁ÷³©¶È
     Sub_Vchat_SetUserVideoSmoothResp = 159,
-    
-    Sub_Vchat_SetUserMoreInfoReq = 160,    //è®¾ç½®ç”¨æˆ·æ›´å¤šä¿¡æ¯
+
+    Sub_Vchat_SetUserMoreInfoReq = 160,    //ÉèÖÃÓÃ»§¸ü¶àĞÅÏ¢
     Sub_Vchat_SetUserMoreInfoResp = 161,
-    Sub_Vchat_QueryUserMoreInfoReq = 162,   //æŸ¥è¯¢ç”¨æˆ·æ›´å¤šä¿¡æ¯
+    Sub_Vchat_QueryUserMoreInfoReq = 162,   //²éÑ¯ÓÃ»§¸ü¶àĞÅÏ¢
     Sub_Vchat_QueryUserMoreInfoResp = 163,
-    
-    Sub_Vchat_QuanxianId2ListResp =164, //æƒé™idæ•°æ®
-    Sub_Vchat_QuanxianAction2ListBegin=165, //æƒé™æ“ä½œæ•°æ®
-    Sub_Vchat_QuanxianAction2ListResp=166,
-    Sub_Vchat_QuanxianAction2ListFinished=167,
-    
-    //3å¥—ä¿ç•™æŒ‡ä»¤, å…ˆå ä½,ä½¿ç”¨çš„æ—¶å€™,åœ¨ä¿®æ”¹æŒ‡ä»¤åç§°
+
+	Sub_Vchat_QuanxianId2ListResp =164, //È¨ÏŞidÊı¾İ
+	Sub_Vchat_QuanxianAction2ListBegin=165, //È¨ÏŞ²Ù×÷Êı¾İ
+	Sub_Vchat_QuanxianAction2ListResp=166,
+	Sub_Vchat_QuanxianAction2ListFinished=167,
+
+	//3Ì×±£ÁôÖ¸Áî, ÏÈÕ¼Î»,Ê¹ÓÃµÄÊ±ºò,ÔÚĞŞ¸ÄÖ¸ÁîÃû³Æ
     Sub_Vchat_MessageReq_reserve1_req = 168,
     Sub_Vchat_MessageReq_reserve1_resp = 169,
     Sub_Vchat_MessageReq_reserve1_noty = 170,
-    
+
     Sub_Vchat_MessageReq_reserve2_req = 171,
     Sub_Vchat_MessageReq_reserve2_resp = 172,
     Sub_Vchat_MessageReq_reserve2_noty = 173,
-    
+
     Sub_Vchat_MessageReq_reserve3_req = 174,
     Sub_Vchat_MessageReq_reserve3_resp = 175,
     Sub_Vchat_MessageReq_reserve3_noty = 176,
     //~~~~
-    
-    Sub_Vchat_GateCloseObjectReq = 177,   //å…³é—­ç½‘å…³ä¸Šé¢çš„å¯¹è±¡
-    Sub_Vchat_CloseRoomNotify = 178,      //å…³é—­æˆ¿é—´é€šçŸ¥
+
+    Sub_Vchat_GateCloseObjectReq = 177,   //¹Ø±ÕÍø¹ØÉÏÃæµÄ¶ÔÏó
+    Sub_Vchat_CloseRoomNotify = 178,      //¹Ø±Õ·¿¼äÍ¨Öª
     Sub_Vchat_DoNotReachRoomServer = 179,
     Sub_Vchat_RoomGatePing = 180,
-    
-    //æ–°å¢ä¿¡ä»¤
-    Sub_Vchat_SetRoomInfoReq_v2 = 181,    //è®¾ç½®æˆ¿é—´ä¿¡æ¯è¯·æ±‚é£å‰ç‰ˆ
+
+	//ĞÂÔöĞÅÁî
+    Sub_Vchat_SetRoomInfoReq_v2 = 181,    //ÉèÖÃ·¿¼äĞÅÏ¢ÇëÇó·É²æ°æ
     Sub_Vchat_SetRoomInfoResp_v2 = 182,
     Sub_Vchat_SetRoomInfoNoty_v2 = 183,
-    
-    Sub_Vchat_QueryRoomGateAddrReq = 184,   //è·å–æˆ¿é—´ç½‘å…³åœ°å€
+
+    Sub_Vchat_QueryRoomGateAddrReq = 184,   //»ñÈ¡·¿¼äÍø¹ØµØÖ·
     Sub_Vchat_QueryRoomGateAddrResp = 185,
-    
-    Sub_Vchat_SetUserHideStateReq = 186,  //è®¾ç½®ç”¨æˆ·éšèº«çŠ¶æ€
+
+    Sub_Vchat_SetUserHideStateReq = 186,  //ÉèÖÃÓÃ»§ÒşÉí×´Ì¬
     Sub_Vchat_SetUserHideStateResp = 187,
     Sub_VChat_SetUserHideStateNoty = 188,
-    
-    Sub_Vchat_UserAddChestNumNoty = 189,  //ç”¨æˆ·æ–°å¢å®ç®±æ¶ˆæ¯
-    
-    Sub_Vchat_AddClosedFriendReq = 190,   //å¢åŠ å¯†å‹åŠŸèƒ½
+
+    Sub_Vchat_UserAddChestNumNoty = 189,  //ÓÃ»§ĞÂÔö±¦ÏäÏûÏ¢
+
+    Sub_Vchat_AddClosedFriendReq = 190,   //Ôö¼ÓÃÜÓÑ¹¦ÄÜ
     Sub_Vchat_AddClosedFriendResp = 191,
     Sub_Vchat_AddClosedFriendNoty = 192,
-    
-    Sub_Vchat_logonReq2 = 193, //æ–°çš„ç™»å½•ç»“æ„
-    
-    Sub_Vchat_AdKeyWordOperateReq = 194,	//å…³é”®å­—æ“ä½œè¯·æ±‚
-    Sub_Vchat_AdKeyWordOperateResp = 195,  //å…³é”®å­—æ“ä½œå›åº”
-    Sub_Vchat_AdKeyWordOperateNoty = 196,	//å…³é”®å­—å¹¿æ’­é€šçŸ¥
-    
-    Sub_Vchat_TeacherScoreReq = 197,//è®²å¸ˆå‘é€è¯„åˆ†å¤„ç†è¯·æ±‚
-    Sub_Vchat_TeacherScoreResp = 198,//è®²å¸ˆå‘é€è¯„åˆ†å¤„ç†å“åº”
-    Sub_Vchat_TeacherScoreRecordReq = 199,  //ç”¨æˆ·è¯„åˆ†è¯·æ±‚
-    Sub_Vchat_TeacherScoreRecordResp = 200,//ç”¨æˆ·è¯„åˆ†å“åº”
-    
-    Sub_Vchat_RoborTeacherIdNoty = 201,  //æœºå™¨äººå¯¹åº”è®²å¸ˆIDé€šçŸ¥
-    
-    Sub_Vchat_TeacherGiftListReq = 202,  //è®²å¸ˆå¿ å®åº¦å‘¨ç‰ˆè¯·æ±‚
-    Sub_Vchat_TeacherGiftListResp = 203,  //è®²å¸ˆå¿ å®åº¦å‘¨ç‰ˆå“åº”
-    
-    Sub_Vchat_MgrRefreshListReq = 204,            //åˆ·æ–°ç”¨æˆ·åˆ—è¡¨
-    Sub_Vchat_MgrRefreshListNotify = 205,            //
-    
-    Sub_Vchat_MgrRelieveBlackDBReq = 206,		//è§£å°è¯·æ±‚
-    Sub_Vchat_MgrRelieveBlackDBNoty = 207,
-    
-    Sub_Vchat_ReportMediaGateReq = 208, //å®¢æˆ·ç«¯æŠ¥å‘Šåª’ä½“æœåŠ¡å™¨å’Œç½‘å…³æœåŠ¡å™¨
-    Sub_Vchat_ReportMediaGateResp = 209, //å®¢æˆ·ç«¯æŠ¥å‘Šåª’ä½“æœåŠ¡å™¨å’Œç½‘å…³æœåŠ¡å™¨çš„å›åº”
-    
-    Sub_Vchat_UserScoreNotify = 214,  //ç”¨æˆ·å¯¹è®²å¸ˆçš„è¯„åˆ†
-    Sub_Vchat_UserScoreListNotify = 215,  //ç”¨æˆ·å¯¹è®²å¸ˆçš„è¯„åˆ†å¹¿æ’­
-    
-    Sub_Vchat_UserExitMessage_Req = 218,//ç”¨æˆ·é€€å‡ºè½¯ä»¶çš„è¯·æ±‚
-    Sub_Vchat_TeacherAvarageScore_Noty = 217, //æŸä¸ªè®²å¸ˆçš„å¹³å‡åˆ†
-    Sub_Vchat_UserExitMessage_Resp = 219,//ç”¨æˆ·é€€å‡ºè½¯ä»¶çš„å“åº”
-    
-    Sub_Vchat_SysCast_Resp = 220,//æˆ¿é—´å‘é€ç³»ç»Ÿå…¬å‘Š
-    
-    Sub_Vchat_GetSecureInfoReq = 311,//å®¢æˆ·ç«¯è¯·æ±‚åå»ç”¨æˆ·email,qq,æ‰‹æœºå·ç ,å·²æé†’æ¬¡æ•°
-    Sub_Vchat_GetSecureInfoResp = 312,//å®¢æˆ·ç«¯è¯·æ±‚åå»ç”¨æˆ·email,qq,æ‰‹æœºå·ç ,å·²æé†’æ¬¡æ•°çš„å›åº”
-    
-    Sub_Vchat_HitGoldEgg_ToClient_Noty = 1001, //ç ¸é‡‘è›‹
-    
-    Sub_Vchat_logonReq3 = 1002, //æ–°ç‰ˆç™»å½•
-    
-    Sub_Vchat_HallMessageNotify =           10000,//ä¿¡ç®±å°çº¢ç‚¹æé†’ï¼ˆæœåŠ¡å™¨ä¸»åŠ¨æ¨é€ï¼‰
-    
-    Sub_Vchat_HallMessageUnreadReq =        10001,//ä¿¡ç®±æœªè¯»è®°å½•æ•°æé†’è¯·æ±‚
-    Sub_Vchat_HallMessageUnreadRes =        10002,//ä¿¡ç®±æœªè¯»è®°å½•æ•°æé†’å“åº”
-    
-    Sub_Vchat_HallMessageReq =              10003,//æŸ¥çœ‹é‚®ç®±è¯·æ±‚ï¼ˆä¸åŒåˆ†ç±»è¯·æ±‚ç”¨åŒä¸€ä¸ªæ¶ˆæ¯ç±»å‹åŠç»“æ„ï¼‰
-    
-    Sub_Vchat_HallInteractBegin =           10004,//æŸ¥çœ‹äº’åŠ¨å›å¤ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_HallInteractRes =             10005,//æŸ¥çœ‹äº’åŠ¨å›å¤ï¼Œå“åº”
-    Sub_Vchat_HallInteractEnd =             10006,//æŸ¥çœ‹äº’åŠ¨å›å¤ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_HallAnswerBegin =             10007,//æŸ¥çœ‹é—®ç­”æé†’ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_HallAnswerRes =               10008,//æŸ¥çœ‹é—®ç­”æé†’ï¼Œå“åº”
-    Sub_Vchat_HallAnswerEnd =               10009,//æŸ¥çœ‹é—®ç­”æé†’ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_HallViewShowBegin =           10010,//æŸ¥çœ‹è§‚ç‚¹å›å¤ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_HallViewShowRes =             10011,//æŸ¥çœ‹è§‚ç‚¹å›å¤ï¼Œå“åº”
-    Sub_Vchat_HallViewShowEnd =             10012,//æŸ¥çœ‹è§‚ç‚¹å›å¤ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_HallTeacherFansBegin =        10013,//æŸ¥çœ‹æˆ‘çš„ç²‰ä¸ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_HallTeacherFansRes =          10014,//æŸ¥çœ‹æˆ‘çš„ç²‰ä¸ï¼Œå“åº”
-    Sub_Vchat_HallTeacherFansEnd =          10015,//æŸ¥çœ‹æˆ‘çš„ç²‰ä¸ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_HallInterestBegin =           10016,//æŸ¥çœ‹æˆ‘çš„å…³æ³¨ï¼ˆå·²å…³æ³¨è®²å¸ˆï¼‰ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_HallInterestRes =             10017,//æŸ¥çœ‹æˆ‘çš„å…³æ³¨ï¼ˆå·²å…³æ³¨è®²å¸ˆï¼‰ï¼Œå“åº”
-    Sub_Vchat_HallInterestEnd =             10018,//æŸ¥çœ‹æˆ‘çš„å…³æ³¨ï¼ˆå·²å…³æ³¨è®²å¸ˆï¼‰ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_HallUnInterestBegin =         10019,//æŸ¥çœ‹æˆ‘çš„å…³æ³¨ï¼ˆæ— å…³æ³¨è®²å¸ˆï¼‰ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_HallUnInterestRes =           10020,//æŸ¥çœ‹æˆ‘çš„å…³æ³¨ï¼ˆæ— å…³æ³¨è®²å¸ˆï¼‰ï¼Œå“åº”
-    Sub_Vchat_HallUnInterestEnd =           10021,//æŸ¥çœ‹æˆ‘çš„å…³æ³¨ï¼ˆæ— å…³æ³¨è®²å¸ˆï¼‰ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_TextLivePointListBegin =      10022,//æŸ¥çœ‹æ˜æ—¥é¢„æµ‹ï¼ˆå·²å…³æ³¨çš„è®²å¸ˆï¼‰ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_TextLivePointListRes =        10023,//æŸ¥çœ‹æ˜æ—¥é¢„æµ‹ï¼ˆå·²å…³æ³¨çš„è®²å¸ˆï¼‰ï¼Œå“åº”
-    Sub_Vchat_TextLivePointListEnd =        10024,//æŸ¥çœ‹æ˜æ—¥é¢„æµ‹ï¼ˆå·²å…³æ³¨çš„è®²å¸ˆï¼‰ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_HallViewAnswerReq =           10025,//è®²å¸ˆå›å¤ï¼ˆåŒ…å«è§‚ç‚¹å›å¤å’Œå›ç­”æé—®ï¼‰è¯·æ±‚
-    Sub_Vchat_HallViewAnswerRes =           10026,//è®²å¸ˆå›å¤ï¼ˆåŒ…å«è§‚ç‚¹å›å¤å’Œå›ç­”æé—®ï¼‰å“åº”
-    
-    Sub_Vchat_HallInterestForReq =          10027,//å…³æ³¨ï¼ˆæ— å…³æ³¨è®²å¸ˆæ—¶è¿”å›æ‰€æœ‰è®²å¸ˆåˆ—è¡¨ï¼Œç‚¹å‡»å…³æ³¨ï¼‰è¯·æ±‚
-    Sub_Vchat_HallInterestForRes =          10028,//å…³æ³¨ï¼ˆæ— å…³æ³¨è®²å¸ˆæ—¶è¿”å›æ‰€æœ‰è®²å¸ˆåˆ—è¡¨ï¼Œç‚¹å‡»å…³æ³¨ï¼‰å“åº”
-    
-    Sub_Vchat_HallMessageReq_Mobile =       10029,//æŸ¥çœ‹é‚®ç®±è¯·æ±‚ï¼ˆä¸åŒåˆ†ç±»è¯·æ±‚ç”¨åŒä¸€ä¸ªæ¶ˆæ¯ç±»å‹åŠç»“æ„ï¼‰(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    
-    Sub_Vchat_HallInteractRes_Mobile =      10030,//æŸ¥çœ‹äº’åŠ¨å›å¤ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_HallAnswerRes_Mobile =        10031,//æŸ¥çœ‹é—®ç­”æé†’ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_HallViewShowRes_Mobile =      10032,//æŸ¥çœ‹è§‚ç‚¹å›å¤ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_HallTeacherFansRes_Mobile =   10033,//æŸ¥çœ‹æˆ‘çš„ç²‰ä¸ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_HallInterestRes_Mobile =      10034,//æŸ¥çœ‹æˆ‘çš„å…³æ³¨ï¼ˆå·²å…³æ³¨è®²å¸ˆï¼‰ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_HallUnInterestRes_Mobile =    10035,//æŸ¥çœ‹æˆ‘çš„å…³æ³¨ï¼ˆæ— å…³æ³¨è®²å¸ˆï¼‰ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_TextLivePointListRes_Mobile = 10036,//æŸ¥çœ‹æ˜æ—¥é¢„æµ‹ï¼ˆå·²å…³æ³¨çš„è®²å¸ˆï¼‰ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    
-    
-    Sub_Vchat_TextRoomJoinReq =             10100,//åŠ å…¥æˆ¿é—´è¯·æ±‚
-    Sub_Vchat_TextRoomJoinErr =             10101,//åŠ å…¥æˆ¿é—´å‡ºé”™å“åº”
-    Sub_Vchat_TextRoomJoinRes =             10102,//åŠ å…¥æˆ¿é—´æˆåŠŸå“åº”
-    
-    Sub_Vchat_TextTeacherRoomJoinNoty =     10103,//è®²å¸ˆåŠ å…¥æˆ¿é—´æˆåŠŸé€šçŸ¥
-    Sub_Vchat_TextUserRoomJoinNoty =        10104,//ç”¨æˆ·åŠ å…¥æˆ¿é—´æˆåŠŸé€šçŸ¥
-    
-    Sub_Vchat_TextRoomTeacherReq =          10105,//åŠ å…¥æˆ¿é—´æˆåŠŸåæ¨é€è®²å¸ˆä¿¡æ¯è¯·æ±‚
-    Sub_Vchat_TextRoomTeacherNotify =       10106,//åŠ å…¥æˆ¿é—´æˆåŠŸåæ¨é€è®²å¸ˆä¿¡æ¯å“åº”
-    
-    Sub_Vchat_TextRoomLiveListReq =         10107,//åŠ è½½ç›´æ’­è®°å½•è¯·æ±‚
-    
-    Sub_Vchat_TextRoomLiveListBegin =       10108,//åŠ è½½ç›´æ’­è®°å½•ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_TextRoomLiveListNotify  =     10109,//åŠ è½½ç›´æ’­è®°å½•ï¼Œå“åº”
-    Sub_Vchat_TextRoomLiveListEnd =         10110,//åŠ è½½ç›´æ’­è®°å½•è¯·æ±‚ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_TextRoomLivePointBegin =      10111,//åŠ è½½ç›´æ’­é‡ç‚¹è®°å½•ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_TextRoomLivePointNotify  =    10112,//åŠ è½½ç›´æ’­é‡ç‚¹è®°å½•ï¼Œå“åº”
-    Sub_Vchat_TextRoomLivePointEnd =        10113,//åŠ è½½ç›´æ’­é‡ç‚¹è®°å½•ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_TextRoomForecastBegin =       10114,//åŠ è½½æ˜æ—¥é¢„æµ‹è®°å½•ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_TextRoomForecastNotify  =     10115,//åŠ è½½æ˜æ—¥é¢„æµ‹è®°å½•ï¼Œå“åº”
-    Sub_Vchat_TextRoomForecastEnd =         10116,//åŠ è½½æ˜æ—¥é¢„æµ‹è®°å½•ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_TextRoomLiveMessageReq =      10117,//è®²å¸ˆå‘é€æ–‡å­—ç›´æ’­è¯·æ±‚
-    Sub_Vchat_TextRoomLiveMessageRes =      10118,//è®²å¸ˆå‘é€æ–‡å­—ç›´æ’­å“åº”
-    
-    Sub_Vchat_TextRoomInterestForReq =      10119,//ç”¨æˆ·ç‚¹å‡»å…³æ³¨è¯·æ±‚
-    Sub_Vchat_TextRoomInterestForRes =      10120,//ç”¨æˆ·ç‚¹å‡»å…³æ³¨å“åº”
-    
-    Sub_Vchat_TextRoomQuestionReq =         10121,//ç”¨æˆ·ç‚¹å‡»æé—®è¯·æ±‚
-    Sub_Vchat_TextRoomQuestionRes =         10122,//ç”¨æˆ·ç‚¹å‡»æé—®å“åº”
-    
-    Sub_Vchat_TextRoomZanForReq =           10123,//ç”¨æˆ·å¯¹ç›´æ’­å†…å®¹ç‚¹èµè¯·æ±‚
-    Sub_Vchat_TextRoomZanForRes =           10124,//ç”¨æˆ·å¯¹ç›´æ’­å†…å®¹ç‚¹èµå“åº”
-    
-    Sub_Vchat_TextRoomLiveChatReq =         10125,//èŠå¤©è¯·æ±‚
-    Sub_Vchat_TextRoomLiveChatRes =         10126,//èŠå¤©å“åº”
-    
-    Sub_Vchat_TextLiveChatReplyReq =        10127,//èŠå¤©å›å¤(äº’åŠ¨)è¯·æ±‚
-    Sub_Vchat_TextLiveChatReplyRes =        10128,//èŠå¤©å›å¤(äº’åŠ¨)å“åº”
-    
-    Sub_Vchat_TextRoomLiveViewReq =         10129,//ç‚¹å‡»æŸ¥çœ‹è§‚ç‚¹è¯·æ±‚
-    
-    Sub_Vchat_TextRoomViewGroupBegin =      10130,//è§‚ç‚¹ç±»å‹åˆ†ç±»ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_TextRoomViewGroupRes =        10131,//è§‚ç‚¹ç±»å‹åˆ†ç±»ï¼Œå“åº”
-    Sub_Vchat_TextRoomViewGroupEnd =        10132,//è§‚ç‚¹ç±»å‹åˆ†ç±»ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_TextRoomViewListShowReq =     10133,//ç‚¹å‡»è§‚ç‚¹ç±»å‹åˆ†ç±»è¯·æ±‚
-    
-    Sub_Vchat_TextRoomLiveViewBegin =       10134,//è§‚ç‚¹åˆ—è¡¨ï¼Œå¼€å§‹
-    Sub_Vchat_TextRoomLiveViewRes =         10135,//è§‚ç‚¹åˆ—è¡¨ï¼Œå“åº”
-    Sub_Vchat_TextRoomLiveViewEnd =         10136,//è§‚ç‚¹åˆ—è¡¨ï¼Œç»“æŸ
-    
-    Sub_Vchat_TextRoomLiveViewDetailReq =   10137,//ç‚¹å‡»æŸ¥çœ‹è§‚ç‚¹è¯¦æƒ…è¯·æ±‚
-    
-    Sub_Vchat_TextRoomViewInfoBegin =       10138,//è§‚ç‚¹è¯¦ç»†ä¿¡æ¯ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_TextRoomLiveViewDetailRes =   10139,//è§‚ç‚¹è¯¦ç»†ä¿¡æ¯ï¼ˆè§‚ç‚¹ï¼‰ï¼Œå“åº”
-    Sub_Vchat_TextRoomViewInfoRes =         10140,//è§‚ç‚¹è¯¦ç»†ä¿¡æ¯ï¼ˆè¯„è®ºï¼‰ï¼Œå“åº”
-    Sub_Vchat_TextRoomViewInfoEnd =         10141,//è§‚ç‚¹è¯¦ç»†ä¿¡æ¯ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_TextRoomViewTypeReq =         10142,//è®²å¸ˆæ–°å¢/ä¿®æ”¹/åˆ é™¤è§‚ç‚¹ç±»å‹åˆ†ç±»è¯·æ±‚
-    Sub_Vchat_TextRoomViewTypeRes =         10143,//è®²å¸ˆæ–°å¢/ä¿®æ”¹/åˆ é™¤è§‚ç‚¹ç±»å‹åˆ†ç±»å“åº”
-    
-    Sub_Vchat_TextRoomViewMessageReq =      10144,//è®²å¸ˆå‘å¸ƒè§‚ç‚¹æˆ–ä¿®æ”¹è§‚ç‚¹è¯·æ±‚
-    Sub_Vchat_TextRoomViewMessageRes =      10145,//è®²å¸ˆå‘å¸ƒè§‚ç‚¹æˆ–ä¿®æ”¹è§‚ç‚¹å“åº”
-    
-    Sub_Vchat_TextRoomViewDeleteReq =       10146,//è®²å¸ˆåˆ é™¤è§‚ç‚¹è¯·æ±‚
-    Sub_Vchat_TextRoomViewDeleteRes =       10147,//è®²å¸ˆåˆ é™¤è§‚ç‚¹å“åº”
-    
-    Sub_Vchat_TextRoomViewCommentReq =      10148,//è§‚ç‚¹è¿›è¡Œè¯„è®ºè¯·æ±‚
-    Sub_Vchat_TextRoomViewCommentRes =      10149,//è§‚ç‚¹è¿›è¡Œè¯„è®ºå“åº”
-    
-    Sub_Vchat_TextLiveViewZanForReq =       10150,//è§‚ç‚¹è¯„è®ºæŸ¥çœ‹é¡µé¢ç‚¹èµè¯·æ±‚
-    Sub_Vchat_TextLiveViewZanForRes =       10151,//è§‚ç‚¹è¯„è®ºæŸ¥çœ‹é¡µé¢ç‚¹èµå“åº”
-    
-    Sub_Vchat_TextLiveViewFlowerReq =       10152,//è§‚ç‚¹è¯„è®ºè¯¦ç»†é¡µé€èŠ±è¯·æ±‚
-    Sub_Vchat_TextLiveViewFlowerRes =       10153,//è§‚ç‚¹è¯„è®ºè¯¦ç»†é¡µé€èŠ±å“åº”
-    
-    Sub_Vchat_TextLiveHistoryListReq =      10154,//ç›´æ’­å†å²ï¼ˆå¯åˆ†é¡µè¯·æ±‚å±•ç¤ºï¼‰è¯·æ±‚
-    
-    Sub_Vchat_TextLiveHistoryListBegin =    10155,//ç›´æ’­å†å²ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_TextLiveHistoryListRes =      10156,//ç›´æ’­å†å²ï¼Œå“åº”
-    Sub_Vchat_TextLiveHistoryListEnd =      10157,//ç›´æ’­å†å²ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_TextLiveHistoryDaylyReq =     10158,//æŸä¸€å¤©çš„ç›´æ’­è®°å½•åˆ—è¡¨è¯·æ±‚ï¼ˆå¯åˆ†é¡µè¯·æ±‚å±•ç¤ºï¼‰è¯·æ±‚
-    
-    Sub_Vchat_TextLiveHistoryDaylyBegin =   10159,//æŸä¸€å¤©çš„ç›´æ’­è®°å½•åˆ—è¡¨ï¼Œåˆ—è¡¨å¼€å§‹
-    Sub_Vchat_TextLiveHistoryDaylyRes =     10160,//æŸä¸€å¤©çš„ç›´æ’­è®°å½•åˆ—è¡¨ï¼Œå“åº”
-    Sub_Vchat_TextLiveHistoryDaylyEnd =     10161,//æŸä¸€å¤©çš„ç›´æ’­è®°å½•åˆ—è¡¨ï¼Œåˆ—è¡¨ç»“æŸ
-    
-    Sub_Vchat_TextLiveUserExitReq =         10162,//é€€å‡ºæˆ¿é—´è¯·æ±‚
-    Sub_Vchat_TextLiveUserExitRes =         10163,//é€€å‡ºæˆ¿é—´å“åº”
-    
-    Sub_Vchat_TextRoomViewListReq_Mobile =  10164,//ç‚¹å‡»è§‚ç‚¹ç±»å‹åˆ†ç±»è¯·æ±‚(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_TextRoomViewRes_Mobile     =  10165, //è§‚ç‚¹åˆ—è¡¨ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    
-    Sub_Vchat_TextRoomLiveListReq_Mobile =  10166,//åŠ è½½ç›´æ’­è®°å½•è¯·æ±‚(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_TextRoomLiveListRes_Mobile =  10167,//åŠ è½½ç›´æ’­è®°å½•ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_TextRoomLivePointRes_Mobile  =10168,//åŠ è½½ç›´æ’­é‡ç‚¹è®°å½•ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_TextRoomForecastRes_Mobile  = 10169,//åŠ è½½æ˜æ—¥é¢„æµ‹è®°å½•ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    
-    Sub_Vchat_TextRoomLiveViewReq_Mobile=   10170,//ç‚¹å‡»æŸ¥çœ‹è§‚ç‚¹è¯·æ±‚(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_TextRoomViewGroupRes_Mobile = 10171,///è§‚ç‚¹ç±»å‹åˆ†ç±»ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    
-    Sub_Vchat_TextRoomLiveViewDetailReq_Mobile=10172,//ç‚¹å‡»æŸ¥çœ‹è§‚ç‚¹è¯¦æƒ…è¯·æ±‚(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_TextRoomViewInfoRes_Mobile =     10173,//è§‚ç‚¹è¯¦ç»†ä¿¡æ¯ï¼ˆè¯„è®ºï¼‰ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    
-    Sub_Vchat_TextLiveHistoryListReq_Mobile=10174,//ç›´æ’­å†å²ï¼ˆå¯åˆ†é¡µè¯·æ±‚å±•ç¤ºï¼‰è¯·æ±‚(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_TextLiveHistoryListRes_Mobile=10175,//ç›´æ’­å†å²ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    
-    Sub_Vchat_TextLiveHistoryDaylyReq_Mobile=10176,//æŸä¸€å¤©çš„ç›´æ’­è®°å½•åˆ—è¡¨è¯·æ±‚ï¼ˆå¯åˆ†é¡µè¯·æ±‚å±•ç¤ºï¼‰è¯·æ±‚(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    Sub_Vchat_TextLiveHistoryDaylyRes_Mobile=10177,//æŸä¸€å¤©çš„ç›´æ’­è®°å½•åˆ—è¡¨ï¼Œå“åº”(æš‚æ—¶åªç»™æ‰‹æœºæŸ¥è¯¢åˆ—è¡¨)
-    
-    Sub_Vchat_TextRoomViewPHPReq =      10178,//è®²å¸ˆé€šè¿‡PHPé¡µé¢å‘å¸ƒè§‚ç‚¹æˆ–ä¿®æ”¹è§‚ç‚¹æˆ–åˆ é™¤è§‚ç‚¹è¯·æ±‚
-    Sub_Vchat_TextRoomViewPHPRes =      10179,//è®²å¸ˆé€šè¿‡PHPé¡µé¢å‘å¸ƒè§‚ç‚¹æˆ–ä¿®æ”¹è§‚ç‚¹æˆ–åˆ é™¤è§‚ç‚¹å“åº”
-    
-    Sub_Vchat_HallGetFansCountReq =     10180,
-    Sub_Vchat_HallGetFansCountRes =     10181,
-    
-    Sub_Vchat_logonReq4 = 1004,        //è‡ªå®šä¹‰ç™»å½•
-    Sub_Vchat_logonReq5 = 1005,        //ç¬¬ä¸‰æ–¹ç™»å½•
-    Sub_Vchat_logonErr2 = 1006,        //ç™»é™†å¤±è´¥
-    Sub_Vchat_logonSuccess2 = 1007,    //ç™»é™†æˆåŠŸ
+	
+    Sub_Vchat_logonReq2 = 193, //ĞÂµÄµÇÂ¼½á¹¹
+	
+    Sub_Vchat_AdKeyWordOperateReq = 194,	//¹Ø¼ü×Ö²Ù×÷ÇëÇó
+    Sub_Vchat_AdKeyWordOperateResp = 195,  //¹Ø¼ü×Ö²Ù×÷»ØÓ¦
+	Sub_Vchat_AdKeyWordOperateNoty = 196,	//¹Ø¼ü×Ö¹ã²¥Í¨Öª
+
+	Sub_Vchat_TeacherScoreReq = 197,//½²Ê¦·¢ËÍÆÀ·Ö´¦ÀíÇëÇó
+	Sub_Vchat_TeacherScoreResp = 198,//½²Ê¦·¢ËÍÆÀ·Ö´¦ÀíÏìÓ¦
+	Sub_Vchat_TeacherScoreRecordReq = 199,  //ÓÃ»§ÆÀ·ÖÇëÇó
+	Sub_Vchat_TeacherScoreRecordResp = 200,//ÓÃ»§ÆÀ·ÖÏìÓ¦
+
+	Sub_Vchat_RoborTeacherIdNoty = 201,  //»úÆ÷ÈË¶ÔÓ¦½²Ê¦IDÍ¨Öª  
+
+	Sub_Vchat_TeacherGiftListReq = 202,  //½²Ê¦ÖÒÊµ¶ÈÖÜ°æÇëÇó
+	Sub_Vchat_TeacherGiftListResp = 203,  //½²Ê¦ÖÒÊµ¶ÈÖÜ°æÏìÓ¦
+
+	Sub_Vchat_MgrRefreshListReq = 204,            //Ë¢ĞÂÓÃ»§ÁĞ±í
+	Sub_Vchat_MgrRefreshListNotify = 205,            //
+
+	Sub_Vchat_MgrRelieveBlackDBReq = 206,		//½â·âÇëÇó
+	Sub_Vchat_MgrRelieveBlackDBNoty = 207,
+
+	Sub_Vchat_ReportMediaGateReq = 208, //¿Í»§¶Ë±¨¸æÃ½Ìå·şÎñÆ÷ºÍÍø¹Ø·şÎñÆ÷
+	Sub_Vchat_ReportMediaGateResp = 209, //¿Í»§¶Ë±¨¸æÃ½Ìå·şÎñÆ÷ºÍÍø¹Ø·şÎñÆ÷µÄ»ØÓ¦
+
+	Sub_Vchat_UserScoreNotify = 214,  //ÓÃ»§¶Ô½²Ê¦µÄÆÀ·Ö
+	Sub_Vchat_UserScoreListNotify = 215,  //ÓÃ»§¶Ô½²Ê¦µÄÆÀ·Ö¹ã²¥
+
+	Sub_Vchat_UserExitMessage_Req = 218,//ÓÃ»§ÍË³öÈí¼şµÄÇëÇó
+	Sub_Vchat_TeacherAvarageScore_Noty = 217, //Ä³¸ö½²Ê¦µÄÆ½¾ù·Ö
+	Sub_Vchat_UserExitMessage_Resp = 219,//ÓÃ»§ÍË³öÈí¼şµÄÏìÓ¦
+
+	Sub_Vchat_SysCast_Resp = 220,//·¿¼ä·¢ËÍÏµÍ³¹«¸æ
+
+    Sub_Vchat_GetSecureInfoReq = 311,//¿Í»§¶ËÇëÇóºóÈ¥ÓÃ»§email,qq,ÊÖ»úºÅÂë,ÒÑÌáĞÑ´ÎÊı
+	Sub_Vchat_GetSecureInfoResp = 312,//¿Í»§¶ËÇëÇóºóÈ¥ÓÃ»§email,qq,ÊÖ»úºÅÂë,ÒÑÌáĞÑ´ÎÊıµÄ»ØÓ¦
+
+	Sub_Vchat_HitGoldEgg_ToClient_Noty = 1001, //ÔÒ½ğµ°
+
+	Sub_Vchat_logonReq3 = 1002, //ĞÂ°æµÇÂ¼
+	Sub_Vchat_logonReq4 = 1004, //logon new req
+	Sub_Vchat_logonReq5 = 1005, //logon through other platform
+	Sub_Vchat_logonErr2 = 1006,               //µÇÂ½Ê§°Ü
+	Sub_Vchat_logonSuccess2 = 1007,           //µÇÂ½³É¹¦
+	Sub_Vchat_logonTokenReq = 1102,
+	Sub_Vchat_logonTokenNotify = 1103,      //ÓÃ»§ÁîÅÆ
+	Sub_Vchat_HallMessageNotify =           10000,//ĞÅÏäĞ¡ºìµãÌáĞÑ£¨·şÎñÆ÷Ö÷¶¯ÍÆËÍ£©
+
+	Sub_Vchat_HallMessageUnreadReq =        10001,//ĞÅÏäÎ´¶Á¼ÇÂ¼ÊıÌáĞÑÇëÇó
+	Sub_Vchat_HallMessageUnreadRes =        10002,//ĞÅÏäÎ´¶Á¼ÇÂ¼ÊıÌáĞÑÏìÓ¦
+
+	Sub_Vchat_HallMessageReq =              10003,//²é¿´ÓÊÏäÇëÇó£¨²»Í¬·ÖÀàÇëÇóÓÃÍ¬Ò»¸öÏûÏ¢ÀàĞÍ¼°½á¹¹£©
+
+	Sub_Vchat_HallInteractBegin =           10004,//²é¿´»¥¶¯»Ø¸´£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_HallInteractRes =             10005,//²é¿´»¥¶¯»Ø¸´£¬ÏìÓ¦
+	Sub_Vchat_HallInteractEnd =             10006,//²é¿´»¥¶¯»Ø¸´£¬ÁĞ±í½áÊø
+
+	Sub_Vchat_HallAnswerBegin =             10007,//²é¿´ÎÊ´ğÌáĞÑ£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_HallAnswerRes =               10008,//²é¿´ÎÊ´ğÌáĞÑ£¬ÏìÓ¦
+	Sub_Vchat_HallAnswerEnd =               10009,//²é¿´ÎÊ´ğÌáĞÑ£¬ÁĞ±í½áÊø
+
+	Sub_Vchat_HallViewShowBegin =           10010,//²é¿´¹Ûµã»Ø¸´£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_HallViewShowRes =             10011,//²é¿´¹Ûµã»Ø¸´£¬ÏìÓ¦
+	Sub_Vchat_HallViewShowEnd =             10012,//²é¿´¹Ûµã»Ø¸´£¬ÁĞ±í½áÊø
+
+	Sub_Vchat_HallTeacherFansBegin =        10013,//²é¿´ÎÒµÄ·ÛË¿£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_HallTeacherFansRes =          10014,//²é¿´ÎÒµÄ·ÛË¿£¬ÏìÓ¦
+	Sub_Vchat_HallTeacherFansEnd =          10015,//²é¿´ÎÒµÄ·ÛË¿£¬ÁĞ±í½áÊø
+
+	Sub_Vchat_HallInterestBegin =           10016,//²é¿´ÎÒµÄ¹Ø×¢£¨ÒÑ¹Ø×¢½²Ê¦£©£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_HallInterestRes =             10017,//²é¿´ÎÒµÄ¹Ø×¢£¨ÒÑ¹Ø×¢½²Ê¦£©£¬ÏìÓ¦
+	Sub_Vchat_HallInterestEnd =             10018,//²é¿´ÎÒµÄ¹Ø×¢£¨ÒÑ¹Ø×¢½²Ê¦£©£¬ÁĞ±í½áÊø
+
+	Sub_Vchat_HallUnInterestBegin =         10019,//²é¿´ÎÒµÄ¹Ø×¢£¨ÎŞ¹Ø×¢½²Ê¦£©£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_HallUnInterestRes =           10020,//²é¿´ÎÒµÄ¹Ø×¢£¨ÎŞ¹Ø×¢½²Ê¦£©£¬ÏìÓ¦
+	Sub_Vchat_HallUnInterestEnd =           10021,//²é¿´ÎÒµÄ¹Ø×¢£¨ÎŞ¹Ø×¢½²Ê¦£©£¬ÁĞ±í½áÊø
+	
+	Sub_Vchat_TextLivePointListBegin =      10022,//²é¿´Ã÷ÈÕÔ¤²â£¨ÒÑ¹Ø×¢µÄ½²Ê¦£©£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_TextLivePointListRes =        10023,//²é¿´Ã÷ÈÕÔ¤²â£¨ÒÑ¹Ø×¢µÄ½²Ê¦£©£¬ÏìÓ¦
+	Sub_Vchat_TextLivePointListEnd =        10024,//²é¿´Ã÷ÈÕÔ¤²â£¨ÒÑ¹Ø×¢µÄ½²Ê¦£©£¬ÁĞ±í½áÊø
+
+	Sub_Vchat_HallViewAnswerReq =           10025,//½²Ê¦»Ø¸´£¨°üº¬¹Ûµã»Ø¸´ºÍ»Ø´ğÌáÎÊ£©ÇëÇó
+	Sub_Vchat_HallViewAnswerRes =           10026,//½²Ê¦»Ø¸´£¨°üº¬¹Ûµã»Ø¸´ºÍ»Ø´ğÌáÎÊ£©ÏìÓ¦
+
+	Sub_Vchat_HallInterestForReq =          10027,//¹Ø×¢£¨ÎŞ¹Ø×¢½²Ê¦Ê±·µ»ØËùÓĞ½²Ê¦ÁĞ±í£¬µã»÷¹Ø×¢£©ÇëÇó
+	Sub_Vchat_HallInterestForRes =          10028,//¹Ø×¢£¨ÎŞ¹Ø×¢½²Ê¦Ê±·µ»ØËùÓĞ½²Ê¦ÁĞ±í£¬µã»÷¹Ø×¢£©ÏìÓ¦
+
+	Sub_Vchat_HallMessageReq_Mobile =       10029,//²é¿´ÓÊÏäÇëÇó£¨²»Í¬·ÖÀàÇëÇóÓÃÍ¬Ò»¸öÏûÏ¢ÀàĞÍ¼°½á¹¹£©(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+
+	Sub_Vchat_HallInteractRes_Mobile =      10030,//²é¿´»¥¶¯»Ø¸´£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_HallAnswerRes_Mobile =        10031,//²é¿´ÎÊ´ğÌáĞÑ£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_HallViewShowRes_Mobile =      10032,//²é¿´¹Ûµã»Ø¸´£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_HallTeacherFansRes_Mobile =   10033,//²é¿´ÎÒµÄ·ÛË¿£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_HallInterestRes_Mobile =      10034,//²é¿´ÎÒµÄ¹Ø×¢£¨ÒÑ¹Ø×¢½²Ê¦£©£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_HallUnInterestRes_Mobile =    10035,//²é¿´ÎÒµÄ¹Ø×¢£¨ÎŞ¹Ø×¢½²Ê¦£©£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_TextLivePointListRes_Mobile = 10036,//²é¿´Ã÷ÈÕÔ¤²â£¨ÒÑ¹Ø×¢µÄ½²Ê¦£©£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+
+
+	Sub_Vchat_TextRoomJoinReq =             10100,//¼ÓÈë·¿¼äÇëÇó
+	Sub_Vchat_TextRoomJoinErr =             10101,//¼ÓÈë·¿¼ä³ö´íÏìÓ¦
+	Sub_Vchat_TextRoomJoinRes =             10102,//¼ÓÈë·¿¼ä³É¹¦ÏìÓ¦
+
+	Sub_Vchat_TextTeacherRoomJoinNoty =     10103,//½²Ê¦¼ÓÈë·¿¼ä³É¹¦Í¨Öª
+	Sub_Vchat_TextUserRoomJoinNoty =        10104,//ÓÃ»§¼ÓÈë·¿¼ä³É¹¦Í¨Öª
+
+	Sub_Vchat_TextRoomTeacherReq =          10105,//¼ÓÈë·¿¼ä³É¹¦ºóÍÆËÍ½²Ê¦ĞÅÏ¢ÇëÇó
+	Sub_Vchat_TextRoomTeacherNotify =       10106,//¼ÓÈë·¿¼ä³É¹¦ºóÍÆËÍ½²Ê¦ĞÅÏ¢ÏìÓ¦
+
+	Sub_Vchat_TextRoomLiveListReq =         10107,//¼ÓÔØÖ±²¥¼ÇÂ¼ÇëÇó
+
+	Sub_Vchat_TextRoomLiveListBegin =       10108,//¼ÓÔØÖ±²¥¼ÇÂ¼£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_TextRoomLiveListNotify  =     10109,//¼ÓÔØÖ±²¥¼ÇÂ¼£¬ÏìÓ¦
+	Sub_Vchat_TextRoomLiveListEnd =         10110,//¼ÓÔØÖ±²¥¼ÇÂ¼ÇëÇó£¬ÁĞ±í½áÊø
+
+	Sub_Vchat_TextRoomLivePointBegin =      10111,//¼ÓÔØÖ±²¥ÖØµã¼ÇÂ¼£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_TextRoomLivePointNotify  =    10112,//¼ÓÔØÖ±²¥ÖØµã¼ÇÂ¼£¬ÏìÓ¦
+	Sub_Vchat_TextRoomLivePointEnd =        10113,//¼ÓÔØÖ±²¥ÖØµã¼ÇÂ¼£¬ÁĞ±í½áÊø
+
+	Sub_Vchat_TextRoomForecastBegin =       10114,//¼ÓÔØÃ÷ÈÕÔ¤²â¼ÇÂ¼£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_TextRoomForecastNotify  =     10115,//¼ÓÔØÃ÷ÈÕÔ¤²â¼ÇÂ¼£¬ÏìÓ¦
+	Sub_Vchat_TextRoomForecastEnd =         10116,//¼ÓÔØÃ÷ÈÕÔ¤²â¼ÇÂ¼£¬ÁĞ±í½áÊø
+
+	Sub_Vchat_TextRoomLiveMessageReq =      10117,//½²Ê¦·¢ËÍÎÄ×ÖÖ±²¥ÇëÇó
+	Sub_Vchat_TextRoomLiveMessageRes =      10118,//½²Ê¦·¢ËÍÎÄ×ÖÖ±²¥ÏìÓ¦
+
+	Sub_Vchat_TextRoomInterestForReq =      10119,//ÓÃ»§µã»÷¹Ø×¢ÇëÇó
+	Sub_Vchat_TextRoomInterestForRes =      10120,//ÓÃ»§µã»÷¹Ø×¢ÏìÓ¦
+
+	Sub_Vchat_TextRoomQuestionReq =         10121,//ÓÃ»§µã»÷ÌáÎÊÇëÇó
+	Sub_Vchat_TextRoomQuestionRes =         10122,//ÓÃ»§µã»÷ÌáÎÊÏìÓ¦
+
+	Sub_Vchat_TextRoomZanForReq =           10123,//ÓÃ»§¶ÔÖ±²¥ÄÚÈİµãÔŞÇëÇó
+	Sub_Vchat_TextRoomZanForRes =           10124,//ÓÃ»§¶ÔÖ±²¥ÄÚÈİµãÔŞÏìÓ¦
+
+	Sub_Vchat_TextRoomLiveChatReq =         10125,//ÁÄÌìÇëÇó
+	Sub_Vchat_TextRoomLiveChatRes =         10126,//ÁÄÌìÏìÓ¦
+
+	Sub_Vchat_TextLiveChatReplyReq =        10127,//ÁÄÌì»Ø¸´(»¥¶¯)ÇëÇó
+	Sub_Vchat_TextLiveChatReplyRes =        10128,//ÁÄÌì»Ø¸´(»¥¶¯)ÏìÓ¦
+
+	Sub_Vchat_TextRoomLiveViewReq =         10129,//µã»÷²é¿´¹ÛµãÇëÇó
+
+	Sub_Vchat_TextRoomViewGroupBegin =      10130,//¹ÛµãÀàĞÍ·ÖÀà£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_TextRoomViewGroupRes =        10131,//¹ÛµãÀàĞÍ·ÖÀà£¬ÏìÓ¦
+	Sub_Vchat_TextRoomViewGroupEnd =        10132,//¹ÛµãÀàĞÍ·ÖÀà£¬ÁĞ±í½áÊø
+
+	Sub_Vchat_TextRoomViewListShowReq =     10133,//µã»÷¹ÛµãÀàĞÍ·ÖÀàÇëÇó
+
+	Sub_Vchat_TextRoomLiveViewBegin =       10134,//¹ÛµãÁĞ±í£¬¿ªÊ¼
+	Sub_Vchat_TextRoomLiveViewRes =         10135,//¹ÛµãÁĞ±í£¬ÏìÓ¦
+	Sub_Vchat_TextRoomLiveViewEnd =         10136,//¹ÛµãÁĞ±í£¬½áÊø
+
+	Sub_Vchat_TextRoomLiveViewDetailReq =   10137,//µã»÷²é¿´¹ÛµãÏêÇéÇëÇó
+
+	Sub_Vchat_TextRoomViewInfoBegin =       10138,//¹ÛµãÏêÏ¸ĞÅÏ¢£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_TextRoomLiveViewDetailRes =   10139,//¹ÛµãÏêÏ¸ĞÅÏ¢£¨¹Ûµã£©£¬ÏìÓ¦
+	Sub_Vchat_TextRoomViewInfoRes =         10140,//¹ÛµãÏêÏ¸ĞÅÏ¢£¨ÆÀÂÛ£©£¬ÏìÓ¦
+	Sub_Vchat_TextRoomViewInfoEnd =         10141,//¹ÛµãÏêÏ¸ĞÅÏ¢£¬ÁĞ±í½áÊø
+                                           
+	Sub_Vchat_TextRoomViewTypeReq =         10142,//½²Ê¦ĞÂÔö/ĞŞ¸Ä/É¾³ı¹ÛµãÀàĞÍ·ÖÀàÇëÇó
+	Sub_Vchat_TextRoomViewTypeRes =         10143,//½²Ê¦ĞÂÔö/ĞŞ¸Ä/É¾³ı¹ÛµãÀàĞÍ·ÖÀàÏìÓ¦
+                                           
+	Sub_Vchat_TextRoomViewMessageReq =      10144,//½²Ê¦·¢²¼¹Ûµã»òĞŞ¸Ä¹ÛµãÇëÇó
+	Sub_Vchat_TextRoomViewMessageRes =      10145,//½²Ê¦·¢²¼¹Ûµã»òĞŞ¸Ä¹ÛµãÏìÓ¦
+                                           
+	Sub_Vchat_TextRoomViewDeleteReq =       10146,//½²Ê¦É¾³ı¹ÛµãÇëÇó
+	Sub_Vchat_TextRoomViewDeleteRes =       10147,//½²Ê¦É¾³ı¹ÛµãÏìÓ¦
+                                           
+	Sub_Vchat_TextRoomViewCommentReq =      10148,//¹Ûµã½øĞĞÆÀÂÛÇëÇó
+	Sub_Vchat_TextRoomViewCommentRes =      10149,//¹Ûµã½øĞĞÆÀÂÛÏìÓ¦
+                                           
+	Sub_Vchat_TextLiveViewZanForReq =       10150,//¹ÛµãÆÀÂÛ²é¿´Ò³ÃæµãÔŞÇëÇó
+	Sub_Vchat_TextLiveViewZanForRes =       10151,//¹ÛµãÆÀÂÛ²é¿´Ò³ÃæµãÔŞÏìÓ¦
+                                           
+	Sub_Vchat_TextLiveViewFlowerReq =       10152,//¹ÛµãÆÀÂÛÏêÏ¸Ò³ËÍ»¨ÇëÇó
+	Sub_Vchat_TextLiveViewFlowerRes =       10153,//¹ÛµãÆÀÂÛÏêÏ¸Ò³ËÍ»¨ÏìÓ¦
+                                           
+	Sub_Vchat_TextLiveHistoryListReq =      10154,//Ö±²¥ÀúÊ·£¨¿É·ÖÒ³ÇëÇóÕ¹Ê¾£©ÇëÇó
+
+	Sub_Vchat_TextLiveHistoryListBegin =    10155,//Ö±²¥ÀúÊ·£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_TextLiveHistoryListRes =      10156,//Ö±²¥ÀúÊ·£¬ÏìÓ¦
+	Sub_Vchat_TextLiveHistoryListEnd =      10157,//Ö±²¥ÀúÊ·£¬ÁĞ±í½áÊø
+                                           
+	Sub_Vchat_TextLiveHistoryDaylyReq =     10158,//Ä³Ò»ÌìµÄÖ±²¥¼ÇÂ¼ÁĞ±íÇëÇó£¨¿É·ÖÒ³ÇëÇóÕ¹Ê¾£©ÇëÇó
+
+	Sub_Vchat_TextLiveHistoryDaylyBegin =   10159,//Ä³Ò»ÌìµÄÖ±²¥¼ÇÂ¼ÁĞ±í£¬ÁĞ±í¿ªÊ¼
+	Sub_Vchat_TextLiveHistoryDaylyRes =     10160,//Ä³Ò»ÌìµÄÖ±²¥¼ÇÂ¼ÁĞ±í£¬ÏìÓ¦
+	Sub_Vchat_TextLiveHistoryDaylyEnd =     10161,//Ä³Ò»ÌìµÄÖ±²¥¼ÇÂ¼ÁĞ±í£¬ÁĞ±í½áÊø
+                                           
+	Sub_Vchat_TextLiveUserExitReq =         10162,//ÍË³ö·¿¼äÇëÇó
+	Sub_Vchat_TextLiveUserExitRes =         10163,//ÍË³ö·¿¼äÏìÓ¦
+
+    	Sub_Vchat_TextRoomViewListReq_Mobile =  10164,//µã»÷¹ÛµãÀàĞÍ·ÖÀàÇëÇó(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+    	Sub_Vchat_TextRoomViewRes_Mobile     =  10165, //¹ÛµãÁĞ±í£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+
+	Sub_Vchat_TextRoomLiveListReq_Mobile =  10166,//¼ÓÔØÖ±²¥¼ÇÂ¼ÇëÇó(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_TextRoomLiveListRes_Mobile =  10167,//¼ÓÔØÖ±²¥¼ÇÂ¼£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_TextRoomLivePointRes_Mobile  =10168,//¼ÓÔØÖ±²¥ÖØµã¼ÇÂ¼£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_TextRoomForecastRes_Mobile  = 10169,//¼ÓÔØÃ÷ÈÕÔ¤²â¼ÇÂ¼£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+
+	Sub_Vchat_TextRoomLiveViewReq_Mobile=   10170,//µã»÷²é¿´¹ÛµãÇëÇó(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_TextRoomViewGroupRes_Mobile = 10171,///¹ÛµãÀàĞÍ·ÖÀà£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+
+	Sub_Vchat_TextRoomLiveViewDetailReq_Mobile=10172,//µã»÷²é¿´¹ÛµãÏêÇéÇëÇó(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_TextRoomViewInfoRes_Mobile =     10173,//¹ÛµãÏêÏ¸ĞÅÏ¢£¨ÆÀÂÛ£©£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+
+	Sub_Vchat_TextLiveHistoryListReq_Mobile=10174,//Ö±²¥ÀúÊ·£¨¿É·ÖÒ³ÇëÇóÕ¹Ê¾£©ÇëÇó(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_TextLiveHistoryListRes_Mobile=10175,//Ö±²¥ÀúÊ·£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+
+	Sub_Vchat_TextLiveHistoryDaylyReq_Mobile=10176,//Ä³Ò»ÌìµÄÖ±²¥¼ÇÂ¼ÁĞ±íÇëÇó£¨¿É·ÖÒ³ÇëÇóÕ¹Ê¾£©ÇëÇó(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+	Sub_Vchat_TextLiveHistoryDaylyRes_Mobile=10177,//Ä³Ò»ÌìµÄÖ±²¥¼ÇÂ¼ÁĞ±í£¬ÏìÓ¦(ÔİÊ±Ö»¸øÊÖ»ú²éÑ¯ÁĞ±í)
+
+	Sub_Vchat_TextRoomViewPHPReq =      10178,//½²Ê¦Í¨¹ıPHPÒ³Ãæ·¢²¼¹Ûµã»òĞŞ¸Ä¹Ûµã»òÉ¾³ı¹ÛµãÇëÇó
+	Sub_Vchat_TextRoomViewPHPRes =      10179,//½²Ê¦Í¨¹ıPHPÒ³Ãæ·¢²¼¹Ûµã»òĞŞ¸Ä¹Ûµã»òÉ¾³ı¹ÛµãÏìÓ¦
+
+    Sub_Vchat_HallGetFansCountReq =     10180,//»ñÈ¡½²Ê¦µÄ·ÛË¿×ÜÊıÇëÇó
+    Sub_Vchat_HallGetFansCountRes =     10181,//»ñÈ¡½²Ê¦µÄ·ÛË¿×ÜÊıÏìÓ¦
+
 };
 
 typedef enum MediaConnectActionType
 {
-    Connect_You = 1,
-    Disconnect_You = 3,
+	Connect_You = 1,
+	Disconnect_You = 3,
 }e_MediaConnectActionType;
 
 
@@ -522,45 +523,45 @@ typedef enum MediaConnectActionType
 //4 bytes
 typedef struct tag_CMDClientHello
 {
-    uint8 param1;
-    uint8 param2;
-    uint8 param3;
-    uint8 param4;
+	uint8 param1;
+	uint8 param2;
+	uint8 param3;
+	uint8 param4;
 }CMDClientHello_t;
 
 //4 bytes
 typedef struct tag_CMDClientPing
 {
-    uint32 userid;        //ç”¨æˆ·id
-    uint32 roomid;        //æˆ¿é—´id
+	uint32 userid;        //ÓÃ»§id
+	uint32 roomid;        //·¿¼äid
 }CMDClientPing_t;
 
 typedef struct tag_CMDSetExecQueryReq
 {
-    uint32 userid;
+	uint32 userid;
     int32  textlen;
-    char   content[0];
+	char   content[0];
 }CMDSetExecQueryReq_t;
 
 typedef struct tag_CMDSetExecQueryResp
 {
-    uint32 userid;
-    int32  errorid;
+   uint32 userid;
+   int32  errorid;
 }CMDSetExecQueryResp_t;
 
 typedef struct tag_CMDGetDBInfoReq
 {
-    uint32 userid;
+   uint32 userid;
 }CMDGetDBInfoReq_t;
 
 typedef struct tag_CMDGetDBInfoResp
 {
-    uint32 userid;
-    int32  dbport;
-    char szServer[32];
-    char szdbname[32];
-    char szdbuser[32];
-    char szdbuserpwd[32];
+	uint32 userid;
+	int32  dbport;
+	char szServer[32];
+	char szdbname[32];
+	char szdbuser[32];
+	char szdbuserpwd[32];
 }CMDGetDBInfoResp_t;
 
 #pragma pack()

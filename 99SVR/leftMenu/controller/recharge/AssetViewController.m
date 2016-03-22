@@ -93,4 +93,10 @@
     [self.navigationController pushViewController:paySelectVc animated:YES];
 }
 
+
+- (void)dealloc
+{
+    DLog(@"dealloc");
+}
+
 @end

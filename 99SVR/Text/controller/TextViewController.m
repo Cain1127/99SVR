@@ -26,8 +26,9 @@
     NSInteger _currentPage;
     int updateCount;
     UILabel *_line1;
+    
 }
-
+@property (nonatomic,strong) UILabel *lblLine2;
 @property (nonatomic,strong) MyScrollView *scrollView;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryHot;
@@ -41,7 +42,7 @@
 
 - (void)initHeadScroller
 {
-    _scrollHeader = [[MyScrollView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 46)];
+    _scrollHeader = [[MyScrollView alloc] initWithFrame:Rect(0,0,kScreenWidth, 46)];
     [self.view addSubview:_scrollHeader];
     _scrollHeader.clipsToBounds = YES;
     _scrollHeader.pagingEnabled = YES;
@@ -49,9 +50,11 @@
     _scrollHeader.showsVerticalScrollIndicator = NO;
     _scrollHeader.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _scrollHeader.contentSize = CGSizeMake(0, 46);
-    
     CGSize sizeWidth = [@"视频直播间" sizeWithAttributes:@{NSFontAttributeName:XCFONT(15)}];
     fWidth = sizeWidth.width;
+    _lblLine2 = [[UILabel alloc] initWithFrame:Rect(0, 44.5, kScreenWidth, 1)];
+    [_lblLine2 setBackgroundColor:kLineColor];
+    [_scrollHeader addSubview:_lblLine2];
 }
 
 - (void)settingTextGroup
@@ -74,13 +77,13 @@
             btn.frame = Rect(__self.scrollHeader.contentSize.width,0, fWidth, 44);
             [__self.scrollHeader addSubview:btn];
             __self.scrollHeader.contentSize = CGSizeMake(btn.x+btn.width, 44);
+            _lblLine2.frame = Rect(0, 44.5, btn.x+btn.width, 2);
             btn.tag = i;
             i++;
             [btn addTarget:__self action:@selector(selectTabButton:) forControlEvents:UIControlEventTouchUpInside];
         }
         [__self.scrollHeader addSubview:__line1];
         __line1.frame = Rect(0, 44, fWidth, 2);
-        
         NSInteger tag = 0;
         int  nCount = (int)[_aryGroup count];
         for (tag = 0 ; tag<nCount;tag++)
@@ -176,7 +179,7 @@
 
 - (void)initScrollView
 {
-    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0, 110, kScreenWidth,kScreenHeight - 160)];
+    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0, _scrollHeader.y+_scrollHeader.height+8, kScreenWidth,kScreenHeight - 160)];
     [self.view addSubview:_scrollView];
     _scrollView.clipsToBounds = YES;
     _scrollView.pagingEnabled = YES;
@@ -338,6 +341,5 @@
     CGFloat fx = fPointX/kScreenWidth * fWidth;
     [_line1 setFrame:Rect(fx,44,fWidth,2)];
 }
-
 
 @end
