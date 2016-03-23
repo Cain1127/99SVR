@@ -13,6 +13,7 @@
 @interface RoomTcpSocket : NSObject
 
 @property (nonatomic,strong) RoomInfo *rInfo;
+
 @property (nonatomic,strong) NSMutableArray *aryNotice;
 
 @property (nonatomic,strong) NSMutableArray *aryChat;
@@ -60,6 +61,14 @@
 - (void)sendMediaInfo:(NSString *)strInfo;
 
 - (void)addChatInfo:(NSString *)strInfo;
+/**
+ *  送礼物
+ *
+ *  @param giftId   礼物Id
+ *  @param giftNum  礼物number
+ */
+- (void)sendGift:(int)giftId num:(int)giftNum;
+
 @end
 
 

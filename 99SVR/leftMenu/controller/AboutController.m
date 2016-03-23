@@ -49,7 +49,7 @@
     #else
         char cString[255];
         const char *version = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] UTF8String];
-        sprintf(cString, "版本 V%s",version,bundle);
+        sprintf(cString, "版本 V%s",version);
         NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
         versionLabel.text = objCString;
         objCString = nil;

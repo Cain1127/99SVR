@@ -3309,8 +3309,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/99SVR",
 					"$(PROJECT_DIR)/99SVR/libs",
-					"$(PROJECT_DIR)/99SVR/General/um",
-					"$(PROJECT_DIR)/99SVR/General/baidu",
 					"$(PROJECT_DIR)/99SVR/tengx",
 					"$(PROJECT_DIR)/99SVR/libs/libWeiboSDK",
 					"$(PROJECT_DIR)/99SVR/libs/AlipaySDK",
@@ -3325,7 +3323,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b4234dd4-92eb-43d5-acc1-eccea81a17de";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "armv7 arm64";
@@ -3362,8 +3360,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/99SVR",
 					"$(PROJECT_DIR)/99SVR/libs",
-					"$(PROJECT_DIR)/99SVR/General/um",
-					"$(PROJECT_DIR)/99SVR/General/baidu",
 					"$(PROJECT_DIR)/99SVR/tengx",
 					"$(PROJECT_DIR)/99SVR/libs/libWeiboSDK",
 					"$(PROJECT_DIR)/99SVR/libs/AlipaySDK",
@@ -3378,7 +3374,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b4234dd4-92eb-43d5-acc1-eccea81a17de";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "armv7 arm64";

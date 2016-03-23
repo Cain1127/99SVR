@@ -8,7 +8,7 @@
 
 #import "SettingCenterController.h"
 #import "AboutController.h"
-#import "LSTcpSocket.h"
+#import "ZLLogonServerSing.h"
 #import "UserInfo.h"
 #import "LeftViewCell.h"
 
@@ -187,7 +187,7 @@
         [UserInfo sharedUserInfo].bIsLogin = NO;
         [UserInfo sharedUserInfo].otherLogin = 0;
         [UserInfo sharedUserInfo].nUserId = 0;
-        [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
+        [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:@"0" pwd:@""];
         [logoutBtn setHidden:YES];
         [lblContent setHidden:YES];
         [self dismissViewControllerAnimated:YES completion:nil];

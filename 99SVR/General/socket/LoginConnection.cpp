@@ -16,7 +16,8 @@ void LoginConnection::RegisterMessageListener(LoginListener* message_listener)
 void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 {
 	connect("120.197.248.11", 7401);
-
+//	connect("121.12.118.32", 7301);
+    
 	SendMsg_Hello();
 	SEND_MESSAGE(Sub_Vchat_logonReq4, req);
 
@@ -154,7 +155,7 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		case Sub_Vchat_QuanxianAction2ListResp:
 			int action_num;
 			action_num = body_len / sizeof(CMDQuanxianAction2Item_t);
-			LOG("action:%d:%d:%d", body_len, sizeof(CMDQuanxianAction2Item_t), action_num);
+			LOG("action:%d:%lu:%d", body_len, sizeof(CMDQuanxianAction2Item_t), action_num);
 		
 			for (int i = 0; i < action_num; i++)
 			{
@@ -194,9 +195,8 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 			break;
 
 		}
-
 		delete[] msg;
-
+        msg = NULL;
 }
 
 

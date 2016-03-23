@@ -46,7 +46,7 @@
 
 
 @interface RoomViewController ()<UITableViewDelegate,UITableViewDataSource,
-UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,EmojiViewDelegate,UIScrollViewDelegate,RoomDownDelegate,ChatViewDelegate>
+UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,UIScrollViewDelegate,RoomDownDelegate,ChatViewDelegate>
 {
     //聊天view
     UIView *bodyView;
@@ -54,7 +54,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     BOOL bDrag;
     UIView *defaultHeadView;
     UIView *defaultDownView;
-    
     ChatButton *_btnName;
     UIButton *_btnSend;
     UITextView *_textChat;
@@ -80,7 +79,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
     BOOL bFull;
     
     RoomHttp *_room;
-    NSCache *cellCache;
     GiftView *_giftView;
     RoomDownView *_infoView;
     
@@ -135,6 +133,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
         strPort = [strAry componentsSeparatedByString:@":"][1];
     }
     [_tcpSocket connectRoomInfo:_room.nvcbid address:strAddress port:[strPort intValue]];
+//    [_tcpSocket connectRoomInfo:_room.nvcbid address:@"172.16.41.96" port:7305];
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
 }
 
@@ -533,10 +532,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
 {
     [super viewDidLoad];
     _cellHeights = [NSMutableDictionary dictionary];
-    cellCache = [[NSCache alloc] init];
     room_gcd = dispatch_queue_create("decode_gcd",0);
     _cellCache = [[NSCache alloc] init];
-    cellCache.totalCostLimit = 20;
     _cellCache.totalCostLimit = 20;
     [self initUIHead];
     __weak RoomViewController *__self = self;
@@ -1176,11 +1173,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,E
             {
                 SVRMesssage *message = [_tcpSocket.aryPriChat objectAtIndex:[indexPath row]];
                 return [self cellHeight:message];
-            }
-            if ([cellCache objectForKey:cacheKey])
-            {
-                CGFloat suggestedHeight = [[cellCache objectForKey:cacheKey] floatValue];
-                return suggestedHeight;
             }
         }
     }

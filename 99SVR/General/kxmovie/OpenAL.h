@@ -31,8 +31,6 @@
 @property(nonatomic,retain)NSMutableArray *bufferStorageArray;
 
 
--(void)_haltOpenALSession;
--(void)_resumeOpenALSession;
 
 -(void)initOpenAL;
 -(void)openAudioFromQueue:(uint8_t *)data dataSize:(UInt32)dataSize;

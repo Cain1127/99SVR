@@ -135,7 +135,9 @@
 #pragma mark 往服务器发送消息
 - (void)sendMessage:(char *)pReq size:(int)nSize version:(int)nVersion maincmd:(int)nMainCmd subcmd:(int)nSubCmd
 {
-    char szBuf[1024]={0};
+    int msgSize = sizeof(COM_MSG_HEADER) + nSize;
+    char szBuf[msgSize];
+    memset(szBuf, 0, msgSize);
     COM_MSG_HEADER* pHead = (COM_MSG_HEADER*)szBuf;
     pHead->length = sizeof(COM_MSG_HEADER) + nSize;
     pHead->checkcode =0;
@@ -1357,15 +1359,8 @@
         downGCD = dispatch_queue_create("downgcd",0);
     }
     [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
-    //房间连接消息
     [self sendHello:MDM_Vchat_Room];
-//    if ([UserInfo sharedUserInfo].otherLogin>0) {
-        [self joinRoomInfo2];
-//    }
-//    else
-//    {
-//        [self joinRoomInfo];
-//    }
+    [self joinRoomInfo2];
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
@@ -1633,6 +1628,7 @@
 {
     [_aryChat removeAllObjects];
     [self closeSocket];
+    DLog(@"??????????");
 }
 
 - (void)sendMediaInfo:(NSString *)strInfo
@@ -1662,6 +1658,73 @@
     SVRMesssage *message = [SVRMesssage message:strInfo];
     message.text = [DecodeJson replaceEmojiNewString:message.text];
     [_aryPriChat addObject:message];
+}
+
+/**
+ *  送礼物出去
+ *
+ *  @param giftId  礼物id
+ *  @param giftNum 礼物个数
+ */
+- (void)sendGift:(int)giftId num:(int)giftNum
+{
+    CMDTradeGiftRecord_t req;
+    memset(&req, 0, sizeof(req));
+    if (_rInfo==nil) {
+        return ;
+    }
+    req.vcbid = _rInfo.m_nRoomId;
+    req.srcid = [_strUser intValue];
+    int toUserId=0;
+    const char *toUserAlias = NULL;
+    for (RoomUser *room in _rInfo.aryUser) {
+        if ([room isOnMic]) {
+            toUserId = room.m_nUserId;
+            toUserAlias = [[room.m_strUserAlias dataUsingEncoding:GBK_ENCODING] bytes];
+            break;
+        }
+    }
+    if (toUserId==0) {
+        return ;
+    }
+    req.toid = toUserId;
+    req.tovcbid = _rInfo.m_nRoomId;
+    req.totype =0;
+    req.giftid = giftId;
+    req.giftnum = giftNum;
+    req.action = 2;
+    req.servertype = 0;
+    req.banonymous = 0;
+    req.casttype = 1;
+    strcpy(req.srcvcbname, [[_rInfo.strRoomName dataUsingEncoding:GBK_ENCODING] bytes]);
+    RoomUser *fromUser= [_rInfo findUser:[UserInfo sharedUserInfo].nUserId];
+    memcpy(req.srcalias,[[fromUser.m_strUserAlias dataUsingEncoding:GBK_ENCODING] bytes],
+           [[fromUser.m_strUserAlias dataUsingEncoding:GBK_ENCODING] length]);
+    strcpy(req.toalias, toUserAlias);
+    
+    [self sendNewMessage:(char *)&req size:sizeof(CMDTradeFlowerRecord_t) version:MDM_Version_Value maincmd:MDM_Vchat_Room subcmd:Sub_Vchat_TradeGiftReq];
+}
+/**
+ *  新发送消息方案,自动匹配长度
+ *
+ */
+- (void)sendNewMessage:(char *)pReq size:(int)nSize version:(int)nVersion maincmd:(int)nMainCmd subcmd:(int)nSubCmd
+{
+    int msgSize = sizeof(COM_MSG_HEADER) + nSize;
+    char szBuf[msgSize];
+    memset(szBuf, 0, msgSize);
+    COM_MSG_HEADER* pHead = (COM_MSG_HEADER*)szBuf;
+    pHead->length = sizeof(COM_MSG_HEADER) + nSize;
+    pHead->checkcode =0;
+    pHead->version = nVersion;
+    pHead->maincmd = nMainCmd;
+    pHead->subcmd = nSubCmd;
+    memcpy(pHead->content,pReq,nSize);
+    @autoreleasepool
+    {
+        NSData *data = [NSData dataWithBytes:szBuf length:pHead->length];
+        [_asyncSocket writeData:data withTimeout:-1 tag:1];
+    }
 }
 
 @end

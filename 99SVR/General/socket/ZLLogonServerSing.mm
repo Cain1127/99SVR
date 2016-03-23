@@ -8,6 +8,7 @@
 
 #import "ZLLogonServerSing.h"
 #import "ZLLogonProtocol.h"
+#import "DecodeJson.h"
 #import "UserInfo.h"
 
 @interface ZLLogonServerSing()
@@ -20,15 +21,34 @@
 
 DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
 
-
 - (void)loginSuccess:(NSString *)username pwd:(NSString *)password
 {
+#if 0
     if(protocol==NULL)
     {
         protocol = new ZLLogonProtocol();
     }
-    [UserInfo sharedUserInfo].strPwd = password;
-    protocol->startLogin([username UTF8String], [password UTF8String]);
+    UserInfo *info = [UserInfo sharedUserInfo];
+    if (info.otherLogin){
+        const char *openId = [info.strOpenId UTF8String];
+        const char *openToken = [info.strToken UTF8String];
+        protocol->startOtherLogin([username intValue],openId,openToken);
+    }
+    else
+    {
+        info.strPwd = password;
+        NSString *strMd5 = @"";
+        if ([password length]>0) {
+            strMd5 = [DecodeJson XCmdMd5String:password];
+            [UserInfo sharedUserInfo].strMd5Pwd = strMd5;
+        }
+        if (![username isEqualToString:@"0"]) {
+            [UserDefaults setObject:username forKey:kUserId];
+            [UserDefaults setObject:password forKey:kUserPwd];
+        }
+        protocol->startLogin([username UTF8String], [strMd5 UTF8String]);
+    }
+#endif
 }
 
 @end

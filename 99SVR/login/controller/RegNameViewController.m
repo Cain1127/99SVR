@@ -12,6 +12,7 @@
 #import "Toast+UIView.h"
 #import "NNSVRViewController.h"
 #import "BaseService.h"
+#import "ZLLogonServerSing.h"
 #import "ProgressHUD.h"
 #import "DecodeJson.h"
 @interface RegNameViewController ()<UITextFieldDelegate>
@@ -69,7 +70,7 @@
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     NSString *strInfo = [NSString stringWithFormat:@"%@mapi/registerMulti",kRegisterNumber];
     NSDictionary *parameters = @{@"account":_username,@"key":strMd5,@"pwd":_password,@"type":@"21"};
-    __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+//    __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
     @WeakObj(self)
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id responseObject)
      {
@@ -80,7 +81,8 @@
          });
          if ([dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
          {
-             [__tcpSocket loginServer:selfWeak.username pwd:selfWeak.password];
+//             [__tcpSocket loginServer:selfWeak.username pwd:selfWeak.password];
+             [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:selfWeak.username pwd:selfWeak.password];
              [selfWeak.navigationController popToRootViewControllerAnimated:YES];
              [ProgressHUD showSuccess:@"注册成功"];
          }

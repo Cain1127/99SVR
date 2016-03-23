@@ -18,7 +18,6 @@ class ZLConnectionListerner : public ConnectionListener
         LOG("OnConnected");
         
     }
-    
     void OnConnectError(int err_code)
     {
         LOG("OnConnectError");
@@ -52,10 +51,10 @@ public:
 //        [[NSNotificationCenter defaultCenter] postNotificationName:@"MESSAGE_LOGON_SUC_VC" object:nil];
 //    }
     
-    void OnLogonErr(UserLogonErr2& info)
-    {
-        info.Log();
-    }
+    void OnLogonErr(UserLogonErr2& info);
+//    {
+//        info.Log();
+//    }
     
     void OnRoomGroupList(RoomGroupItem items[], int count)
     {
@@ -81,10 +80,10 @@ public:
         }
     }
     
-    void OnLogonTokenNotify(SessionTokenResp& info)
-    {
-        info.Log();
-    }
+    void OnLogonTokenNotify(SessionTokenResp& info);
+//    {
+//        info.Log();
+//    }
     
     void OnLogonFinished()
     {
@@ -115,6 +114,7 @@ class ZLLogonProtocol
 public :
     ZLLogonProtocol();
     int startLogin(const char *cloginid,const char *pwd);
+    int startOtherLogin(uint32 cloginid,const char *openid,const char *token);
     ~ZLLogonProtocol();
 };
 

@@ -29,7 +29,7 @@
 @property (nonatomic) NSInteger section;
 @property (nonatomic) int64_t viewid;
 
-- (void)hiddenThum;
+//- (void)hiddenThum;
 
 - (void)setTextModel:(TextLiveModel *)model;
 

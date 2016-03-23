@@ -8,6 +8,7 @@
 
 #import "SVRInitLBS.h"
 #import "BaseService.h"
+#import "ZLLogonServerSing.h"
 #import "LSTcpSocket.h"
 #import "DecodeJson.h"
 #import "UserInfo.h"
@@ -18,12 +19,7 @@
 {
     //获取登录服务器地址
     __weak UserInfo *__userInfo = [UserInfo sharedUserInfo];
-    __weak LSTcpSocket *__lsTcp = [LSTcpSocket sharedLSTcpSocket];
 //    NSString *strtemp = @"t";
-//    [strtemp substringWithRange:NSMakeRange(5, 20)];
-    static dispatch_once_t onceToken;
-    
-    
     [BaseService getJSONWithUrl:LBS_ROOM_WEB parameters:nil success:^(id responseObject)
     {
         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
@@ -34,69 +30,14 @@
             {
                 NSString *strWeb = [strResult substringWithRange:NSMakeRange(2,[strResult length]-3)];
                 __userInfo.strWebAddr  = strWeb;
-                BOOL isLogin = [UserDefaults boolForKey:kIsLogin];
-                if (isLogin)
-                {
-                    int otherLogin = (int)[UserDefaults integerForKey:kOtherLogin];
-                    __userInfo.otherLogin = otherLogin;
-                    __userInfo.nUserId = [[UserDefaults objectForKey:kUserId] intValue];
-                    if (otherLogin)
-                    {
-                        __userInfo.strOpenId = [UserDefaults objectForKey:kOpenId];
-                        __userInfo.strToken = [UserDefaults objectForKey:kToken];
-                        [__lsTcp setUserInfo];
-                        [__lsTcp loginServer:[UserDefaults objectForKey:kUserId] pwd:@""];
-                    }
-                    else
-                    {
-                        NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
-                        if(userPwd)
-                        {
-                            __userInfo.strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
-                            __userInfo.strPwd = userPwd;
-                        }
-                        [__lsTcp setUserInfo];
-                        [__lsTcp loginServer:[UserDefaults objectForKey:kUserId] pwd:[UserDefaults objectForKey:kUserPwd]];
-                    }
-                }
-                else
-                {
-                    [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
-                }
+                [SVRInitLBS loginLocal];
             }
         }
-    }fail:^(NSError *error)
+     }
+    fail:^(NSError *error)
      {
-         DLog(@"固定IP登录");
-         BOOL isLogin = [UserDefaults boolForKey:kIsLogin];
-         if (isLogin)
-         {
-             int otherLogin = (int)[UserDefaults integerForKey:kOtherLogin];
-             __userInfo.otherLogin = otherLogin;
-             __userInfo.nUserId = [[UserDefaults objectForKey:kUserId] intValue];
-             if (otherLogin)
-             {
-                 __userInfo.strOpenId = [UserDefaults objectForKey:kOpenId];
-                 __userInfo.strToken = [UserDefaults objectForKey:kToken];
-                 [__lsTcp setUserInfo];
-                 [__lsTcp loginServer:[UserDefaults objectForKey:kUserId] pwd:@""];
-             }
-             else
-             {
-                 NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
-                 if(userPwd)
-                 {
-                     __userInfo.strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
-                     __userInfo.strPwd = userPwd;
-                 }
-                 [__lsTcp setUserInfo];
-                 [__lsTcp loginServer:[UserDefaults objectForKey:kUserId] pwd:[UserDefaults objectForKey:kUserPwd]];
-             }
-         }
-         else
-         {
-             [[LSTcpSocket sharedLSTcpSocket] loginServer:@"0" pwd:@""];
-         }
+          DLog(@"固定IP登录");
+          [SVRInitLBS loginLocal];
      }];
     //获取房间地址
     [BaseService getJSONWithUrl:LBS_ROOM_GATE parameters:nil success:^(id responseObject)
@@ -105,6 +46,38 @@
         __userInfo.strRoomAddr = strInfo;
     }
     fail:nil];
+}
+
++ (void)loginLocal
+{
+    UserInfo *__userInfo = [UserInfo sharedUserInfo];
+    BOOL isLogin = [UserDefaults boolForKey:kIsLogin];
+    if (isLogin)
+    {
+        int otherLogin = (int)[UserDefaults integerForKey:kOtherLogin];
+        __userInfo.otherLogin = otherLogin;
+        __userInfo.nUserId = [[UserDefaults objectForKey:kUserId] intValue];
+        if (otherLogin)
+        {
+            __userInfo.strOpenId = [UserDefaults objectForKey:kOpenId];
+            __userInfo.strToken = [UserDefaults objectForKey:kToken];
+            [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:[UserDefaults objectForKey:kUserId] pwd:@""];
+        }
+        else
+        {
+            NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
+            if(userPwd)
+            {
+                __userInfo.strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
+                __userInfo.strPwd = userPwd;
+            }
+            [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:[UserDefaults objectForKey:kUserId] pwd:__userInfo.strPwd];
+        }
+    }
+    else
+    {
+        [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:@"0" pwd:@""];
+    }
 }
 
 @end

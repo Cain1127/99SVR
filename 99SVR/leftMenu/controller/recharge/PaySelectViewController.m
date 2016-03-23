@@ -14,6 +14,7 @@
 #import "UserInfo.h"
 #import "RechargeResultViewController.h"
 #import "ProgressHUD.h"
+#import "UserInfo.h"
 
 @interface PaySelectViewController ()<UIWebViewDelegate>
 @property (weak, nonatomic) UIWebView *webView;
@@ -52,7 +53,8 @@
     // 2.加载网页
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:kPay_URL]];
     //userid  code client
-    NSString *body = [NSString stringWithFormat: @"userid=%d&code=%@&client=%@",[UserInfo sharedUserInfo].nUserId,@"12345678911",@"2"];
+    UserInfo *info = [UserInfo sharedUserInfo];
+    NSString *body = [NSString stringWithFormat: @"userid=%d&code=%@&client=%@",info.nUserId,info.strToken,@"2"];
     [request setHTTPMethod: @"POST"];
     [request setHTTPBody: [body dataUsingEncoding: NSUTF8StringEncoding]];
     [webView loadRequest:request];
@@ -66,7 +68,6 @@
 {
     // 删除蒙板
     [MBProgressHUD hideHUD];
-    __weak PaySelectViewController *__self = self;
     @WeakObj(self);
     JSContext *context = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     // 定义好JS要调用的方法, AlipayPay就是调用的AlipayPay方法名
@@ -80,8 +81,7 @@
         }
         NSString *param = ((JSValue *)args[0]).toString;
         DLog(@"支付宝开始充值参数-----%@", param);
-        @StrongObj(self);
-        [self payForAlipay:param];
+        [selfWeak payForAlipay:param];
     };
     
     context[@"Wxpay"] = ^() {
@@ -96,8 +96,7 @@
             NSData *jsonData = [param dataUsingEncoding:NSUTF8StringEncoding];
             NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil];
             // 微信支付充值
-            @StrongObj(self);
-            [self weixinPayWithDict:responseDict];
+            [selfWeak weixinPayWithDict:responseDict];
         }
         DLog(@"微信开始充值参数-----%@", param);
     };

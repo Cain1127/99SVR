@@ -10,6 +10,7 @@
 #import "LoginViewController.h"
 #import "DecodeJson.h"
 #import "LSTcpSocket.h"
+#import "ZLLogonServerSing.h"
 #import "ProgressHUD.h"
 #import "UserInfo.h"
 #import "WXApi.h"
@@ -284,8 +285,9 @@
     [UserInfo sharedUserInfo].observationInfo = 0;
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
-       LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
-       [tcpSocket loginServer:__strUser pwd:__strPwd];
+//       LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+        [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:__strUser pwd:__strPwd];
+//       [tcpSocket loginServer:__strUser pwd:__strPwd];
     });
 }
 
@@ -443,7 +445,7 @@
     {
         NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByWeixin?client=2&code=%@",kRegisterNumber,[dict objectForKey:@"code"]];
         __weak LoginViewController *__self = self;
-        __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+//        __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
         __weak UserInfo *__user = [UserInfo sharedUserInfo];
         [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
         {
@@ -464,11 +466,13 @@
                                ^{
                                    [__self.view makeToast:@"微信登录成功" duration:2 position:@"center"];
                                });
-                [__tcpSocket loginServer:NSStringFromInt(__user.nUserId) pwd:@""];
+                
+                [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
+//                [__tcpSocket loginServer:NSStringFromInt(__user.nUserId) pwd:@""];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-                               ^{
-                                   [__self popBack];
-                               });
+                ^{
+                   [__self popBack];
+                });
             }
             else
             {
@@ -510,7 +514,7 @@
         NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByWeibo?client=2&openid=%@&token=%@",
                              kRegisterNumber,[dict objectForKey:@"userID"],[dict objectForKey:@"accessToken"]];
         __weak UserInfo *__user = [UserInfo sharedUserInfo];
-        __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+//        __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
         [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [__self.view hiddenActivityInView];
@@ -527,7 +531,7 @@
                 ^{
                     [__self.view makeToast:@"新浪微博登录成功" duration:2 position:@"center"];
                 });
-                [__tcpSocket loginServer:NSStringFromInt(__user.nUserId) pwd:@""];
+                [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
                 ^{
                     [__self popBack];
@@ -592,8 +596,9 @@
 //        [UserDefaults setObject:_txtUser.text forKey:kUserId];
 //        [UserDefaults setObject:_txtPwd.text forKey:kUserPwd];
 //        [UserDefaults synchronize];
-        LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
-        [tcpSocket closeSocket];
+//        LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+//        [tcpSocket closeSocket];
+        
         dispatch_async(dispatch_get_main_queue(),
        ^{
            [__self.view hideToastActivity];
@@ -639,7 +644,6 @@
         [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
         {
             UserInfo *__user = [UserInfo sharedUserInfo];
-            LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
             gcd_main_safe(^{
                 [selfWeak.view hiddenActivityInView];
             });
@@ -651,7 +655,7 @@
                 __user.strToken = [dict objectForKey:@"token"];
                 __user.nUserId = [[dict objectForKey:@"userid"] intValue];
                 __user.otherLogin = [[dict objectForKey:@"type"] intValue];
-                [__tcpSocket loginServer:NSStringFromInt(__user.nUserId) pwd:@""];
+                [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
                 [selfWeak popBack];
                 [ProgressHUD showSuccess:@"QQ授权成功..."];
             }
@@ -771,7 +775,6 @@
     NSString *strMd5 = [DecodeJson XCmdMd5String:strKey];
     strMd5 = [DecodeJson XCmdMd5String:strKey];
     __weak LoginViewController *__self = self;
-    __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
     __weak UserInfo *__user = [UserInfo sharedUserInfo];
     NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByWeixin",kRegisterNumber];
     NSDictionary *dict = @{@"client":@"2",@"openid":_strOpenId,@"token":_strToken,@"nick":_strNickName,@"key":strMd5};
@@ -795,7 +798,7 @@
             ^{
                 [__self.view makeToast:@"微信登录成功" duration:2 position:@"center"];
             });
-            [__tcpSocket loginServer:NSStringFromInt(__user.nUserId) pwd:@""];
+            [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
             ^{
                [__self popBack];

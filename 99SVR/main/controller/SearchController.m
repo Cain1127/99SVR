@@ -312,7 +312,6 @@
 - (void)connectRoom:(RoomHttp *)room
 {
 #if 0
-    LSTcpSocket *socket = [LSTcpSocket sharedLSTcpSocket];
     __weak SearchController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
     ^{

@@ -64,10 +64,10 @@ DEFINE_SINGLETON_FOR_CLASS(UserInfo)
 
 - (void)setUserDefault:(int)nUserid
 {
-    _nUserId = nUserid;
-    [UserDefaults setObject:NSStringFromInt(_nUserId) forKey:kUserId];
-    [UserDefaults setObject:_strPwd forKey:kUserId];
-    [UserDefaults synchronize];
+//    _nUserId = nUserid;
+//    [UserDefaults setObject:NSStringFromInt(_nUserId) forKey:kUserId];
+//    [UserDefaults setObject:_strPwd forKey:kUserPwd];
+//    [UserDefaults synchronize];
 }
 @end
 

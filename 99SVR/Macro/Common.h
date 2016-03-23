@@ -36,11 +36,12 @@
 //#define LBS_HTTP_HOST @"http://lbs1.99ducaijing.cn:2222/"
 
 #define LBS_HTTP_HOST @"http://lbs1.99ducaijing.cn:2222/"
-#define LBS_HTTP_HOST1 @"http://lbs1.99ducaijing.cn:2222/"
+#define LBS_HTTP_HOST1 @"http://lbs2.99ducaijing.cn:2222/"
 #define LBS_HTTP_HOST3 @"http://lbs3.99ducaijing.cn:2222/"
+#define LBS_HTTP_HOST4 @"http://testlbs.99ducaijing.cn:2222/"
 
-#define LBS_ROOM_WEB [NSString stringWithFormat:@"%@tygetweb",LBS_HTTP_HOST]
-#define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
+#define LBS_ROOM_WEB [NSString stringWithFormat:@"%@tygetweb",LBS_HTTP_HOST4]
+#define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST4]
 
 #define SVR_LBS_PORT 2222
 

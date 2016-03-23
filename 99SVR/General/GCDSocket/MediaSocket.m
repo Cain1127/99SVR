@@ -351,7 +351,6 @@ typedef struct _tag_MediaFrameBuffer
         case SOCKET_READ_DATA:
         {
             char *p = cBuf;
-            int32 nSize = *((int32 *)p);
             memcpy(p+sizeof(int32), [data bytes], data.length);
             [self getSocketHead:cBuf len:(int32)(data.length+sizeof(int32))];
         }

@@ -269,7 +269,7 @@
 #pragma mark 提问
 - (void)respTextQuestion:(char *)pInfo
 {
-    CMDTextRoomLiveActionRes_t *resp = (CMDTextRoomLiveActionRes_t *)pInfo;
+//    CMDTextRoomLiveActionRes_t *resp = (CMDTextRoomLiveActionRes_t *)pInfo;
 //    DLog(@"提问结果:%d--提问消息:%d",resp->result,resp->messageid);
 }
 
@@ -333,7 +333,7 @@
     CMDTextLiveViewFlowerRes_t *resp = (CMDTextLiveViewFlowerRes_t *)pInfo;
     if (resp->result)
     {
-        DLog(@"送花成功:%d",resp->recordflowers);
+        DLog(@"送花成功:%lld",resp->recordflowers);
     }
 }
 
@@ -489,7 +489,7 @@
 #pragma mark 某条观点的评论
 - (void)respCommentByView:(char *)pInfo
 {
-    CMDTextRoomViewInfoRes_t *resp = (CMDTextRoomViewInfoRes_t *)pInfo;
+//    CMDTextRoomViewInfoRes_t *resp = (CMDTextRoomViewInfoRes_t *)pInfo;
     DLog(@"接受到一条新的评论");
 }
 

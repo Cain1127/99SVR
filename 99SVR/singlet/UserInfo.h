@@ -53,7 +53,6 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
 @property (nonatomic,assign) int banding;
 
-- (NSString *)getVipDescript;
 
 @property (nonatomic,copy) NSArray *aryHelp;
 
@@ -62,6 +61,8 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 @property (nonatomic,copy) NSArray *aryGift;
 
 @property (nonatomic) int giftVer;
+
+- (NSString *)getVipDescript;
 
 - (void)setUserDefault:(int)nUserid;
 

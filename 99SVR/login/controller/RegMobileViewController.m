@@ -8,6 +8,7 @@
 
 #import "RegMobileViewController.h"
 #import "IdeaDetailRePly.h"
+#import "ZLLogonServerSing.h"
 #import "ProgressHUD.h"
 #import "Toast+UIView.h"
 #import "NNSVRViewController.h"
@@ -75,7 +76,6 @@
     [_lblError setText:@""];
     NSDictionary *paramters = @{@"type":@"2",@"account":_username,@"pwd":_password,@"vcode":strCode};
     NSString *strInfo = [NSString stringWithFormat:@"%@mapi/registerMulti",kRegisterNumber];
-    __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
     @WeakObj(self)
     [BaseService postJSONWithUrl:strInfo parameters:paramters success:^(id responseObject)
     {
@@ -85,7 +85,7 @@
         );
         if(dict && [dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
         {
-            [__tcpSocket loginServer:selfWeak.username pwd:selfWeak.password];
+            [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:selfWeak.username pwd:selfWeak.password];
             [selfWeak.navigationController popToRootViewControllerAnimated:YES];
             [ProgressHUD showSuccess:@"注册成功"];
         }

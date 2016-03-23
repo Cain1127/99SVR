@@ -36,7 +36,10 @@ void Connection::SendMsg_Hello()
 
 int Connection::recv(char* buf, int offset, int len) 
 {
+    LOG("recv********************");
 	int ret = socket->recv(buf + offset, len);
+    LOG("recv********************");
+
 	if (ret < 0)
 	{
 		on_io_error(CONN_ERR_READ);

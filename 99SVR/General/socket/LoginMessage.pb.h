@@ -819,9 +819,9 @@ public:
 	void Log()
 	{
 		LOG("--------Receive message: UserLogonSuccess---------");
-		LOG("nk = %d", _nk);
-		LOG("nb = %d", _nb);
-		LOG("nd = %d", _nd);
+		LOG("nk = %lld", _nk);
+		LOG("nb = %lld", _nb);
+		LOG("nd = %lld", _nd);
 		LOG("nmask = %d", _nmask);
 		LOG("userid = %d", _userid);
 		LOG("langid = %d", _langid);
@@ -1034,9 +1034,9 @@ public:
 	{
 		LOG("--------Receive message: UserLogonSuccess2---------");
 		LOG("nmessageid = %d", _nmessageid);
-		LOG("nk = %d", _nk);
-		LOG("nb = %d", _nb);
-		LOG("nd = %d", _nd);
+		LOG("nk = %lld", _nk);
+		LOG("nb = %lld", _nb);
+		LOG("nd = %lld", _nd);
 		LOG("nmask = %d", _nmask);
 		LOG("userid = %d", _userid);
 		LOG("langid = %d", _langid);
@@ -2313,9 +2313,9 @@ public:
 		LOG("op3id = %d", _op3id);
 		LOG("op4id = %d", _op4id);
 		LOG("inroomstate = %d", _inroomstate);
-		LOG("nk = %d", _nk);
-		LOG("nb = %d", _nb);
-		LOG("nlotterypool = %d", _nlotterypool);
+		LOG("nk = %lld", _nk);
+		LOG("nb = %lld", _nb);
+		LOG("nlotterypool = %lld", _nlotterypool);
 		LOG("nchestnum = %d", _nchestnum);
 		LOG("ncarid = %d", _ncarid);
 		LOG("carname = %s", _carname.c_str());
@@ -3206,12 +3206,10 @@ public:
 
 	void SerializeToArray(void* data, int size)
 	{
-		tag_CMDTradeGiftResp* cmd = (tag_CMDTradeGiftResp*) data;
 	}
 
 	void ParseFromArray(void* data, int size)
 	{
-		tag_CMDTradeGiftResp* cmd = (tag_CMDTradeGiftResp*) data;
 	}
 
 	void Log()
@@ -3794,9 +3792,9 @@ public:
 		LOG("--------Receive message: QueryUserAccountResp---------");
 		LOG("vcbid = %d", _vcbid);
 		LOG("userid = %d", _userid);
-		LOG("nk = %d", _nk);
-		LOG("nb = %d", _nb);
-		LOG("nkdeposit = %d", _nkdeposit);
+		LOG("nk = %lld", _nk);
+		LOG("nb = %lld", _nb);
+		LOG("nkdeposit = %lld", _nkdeposit);
 	}
 
 };
@@ -3859,8 +3857,8 @@ public:
 		LOG("--------Receive message: UserAccountInfo---------");
 		LOG("vcbid = %d", _vcbid);
 		LOG("userid = %d", _userid);
-		LOG("nk = %d", _nk);
-		LOG("nb = %d", _nb);
+		LOG("nk = %lldld", _nk);
+		LOG("nb = %lldld", _nb);
 		LOG("dtime = %d", _dtime);
 	}
 
@@ -6175,7 +6173,7 @@ public:
 		LOG("srcid = %d", _srcid);
 		LOG("giftid = %d", _giftid);
 		LOG("beishu = %d", _beishu);
-		LOG("winmoney = %d", _winmoney);
+		LOG("winmoney = %llu", _winmoney);
 	}
 
 };
@@ -6212,7 +6210,7 @@ public:
 	void Log()
 	{
 		LOG("--------Receive message: LotteryPoolInfo---------");
-		LOG("nlotterypool = %d", _nlotterypool);
+		LOG("nlotterypool = %llu", _nlotterypool);
 	}
 
 };
@@ -6478,7 +6476,7 @@ public:
 		LOG("vcbid = %d", _vcbid);
 		LOG("srcid = %d", _srcid);
 		LOG("touserid = %d", _touserid);
-		LOG("data = %d", _data);
+		LOG("data = %lld", _data);
 		LOG("optype = %d", _optype);
 	}
 
@@ -7035,8 +7033,8 @@ public:
 		LOG("remainchestnum = %d", _remainchestnum);
 		LOG("openresult_type = %d", _openresult_type);
 		LOG("openresult_0 = %d", _openresult_0);
-		LOG("poolvalue = %d", _poolvalue);
-		LOG("tedengvalue = %d", _tedengvalue);
+		LOG("poolvalue = %lld", _poolvalue);
+		LOG("tedengvalue = %lld", _tedengvalue);
 	}
 
 };
@@ -7548,8 +7546,8 @@ public:
 	void Log()
 	{
 		LOG("--------Receive message: CloseGateObjectReq---------");
-		LOG("object = %d", _object);
-		LOG("objectid = %d", _objectid);
+		LOG("object = %llu", _object);
+		LOG("objectid = %llu", _objectid);
 	}
 
 };
@@ -8306,7 +8304,7 @@ public:
 		LOG("teacher_userid = %d", _teacher_userid);
 		LOG("teacheralias = %s", _teacheralias.c_str());
 		LOG("vcbid = %d", _vcbid);
-		LOG("data1 = %d", _data1);
+		LOG("data1 = %lld", _data1);
 		LOG("data2 = %s", _data2.c_str());
 	}
 
@@ -8482,9 +8480,9 @@ public:
 		LOG("score = %d", _score);
 		LOG("logtime = %s", _logtime.c_str());
 		LOG("vcbid = %d", _vcbid);
-		LOG("data1 = %d", _data1);
-		LOG("data2 = %d", _data2);
-		LOG("data3 = %d", _data3);
+		LOG("data1 = %lld", _data1);
+		LOG("data2 = %lld", _data2);
+		LOG("data3 = %lld", _data3);
 		LOG("data4 = %s", _data4.c_str());
 		LOG("data5 = %s", _data5.c_str());
 	}
@@ -8697,7 +8695,7 @@ public:
 		LOG("vcbid = %d", _vcbid);
 		LOG("teacherid = %d", _teacherid);
 		LOG("useralias = %s", _useralias.c_str());
-		LOG("t_num = %d", _t_num);
+		LOG("t_num = %llu", _t_num);
 	}
 
 };
@@ -8804,7 +8802,7 @@ public:
 		LOG("--------Receive message: TeacherAvarageScoreNoty---------");
 		LOG("teacherid = %d", _teacherid);
 		LOG("roomid = %d", _roomid);
-		LOG("avarage_score = %d", _avarage_score);
+		LOG("avarage_score = %f", _avarage_score);
 		LOG("data1 = %s", _data1.c_str());
 		LOG("data2 = %d", _data2);
 	}
@@ -9284,7 +9282,7 @@ public:
 		LOG("--------Receive message: HitGoldEggClientNoty---------");
 		LOG("vcbid = %d", _vcbid);
 		LOG("userid = %d", _userid);
-		LOG("money = %d", _money);
+		LOG("money = %llu", _money);
 	}
 
 };
@@ -9493,7 +9491,7 @@ public:
 	{
 		LOG("--------Receive message: Syscast---------");
 		LOG("newtype = %d", _newtype);
-		LOG("nid = %d", _nid);
+		LOG("nid = %llu", _nid);
 		LOG("title = %s", _title.c_str());
 		LOG("content = %s", _content.c_str());
 	}
