@@ -409,9 +409,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [_lblBlue setBackgroundColor:UIColorFromRGB(0x629bff)];
     [self.view addSubview:_lblBlue];
     
-//    _infoView = [[RoomDownView alloc] initWithFrame:Rect(0, kScreenHeight-50, kScreenWidth, 50)];
      _infoView = [[RoomDownView alloc] initWithFrame:Rect(0,_scrollView.height-50, kScreenWidth, 50)];
-//    [self.view addSubview:_infoView];
     [_scrollView addSubview:_infoView];
     _infoView.delegate = self;
     
@@ -423,19 +421,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [whiteView setBackgroundColor:UIColorFromRGB(0xffffff)];
     [downView addSubview:whiteView];
     
-
-    
-    UILabel *lblContent = [[UILabel alloc] initWithFrame:Rect(_btnName.x+_btnName.width+1,5,1, 26)];
-    [lblContent setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
-    [whiteView addSubview:lblContent];
-    
-    //聊天框
-    _textChat = [[UITextView alloc] initWithFrame:Rect(_btnName.x+_btnName.width+3, _btnName.y, kScreenWidth-156, 36)];
-    [whiteView addSubview:_textChat];
-    [_textChat setFont:XCFONT(15)];
-    _textChat.delegate = self;
-    [_textChat setReturnKeyType:UIReturnKeySend];
-    
     //发送消息按钮
     _giftView = [[GiftView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
     [self.view addSubview:_giftView];
@@ -446,30 +431,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [self.view addSubview:_listView];
     _listView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
     _listView.delegate = self;
-/*
-    CGRect frame = bodyView.frame;
-    frame.origin.y += 50;
-    frame.size.height -= 100;
-    
-    _tableView = [[UITableView alloc] initWithFrame:frame];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    [self.view addSubview:_tableView];
-    _tableView.bounces = NO;
-    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    _tableView.hidden = YES;
-    _tableView.tag = 4;
-    
-    _tableView.layer.shadowColor = [UIColor blackColor].CGColor;
-    _tableView.layer.shadowOffset = CGSizeMake(0,0);
-    _tableView.layer.shadowOpacity = 1;
-    _tableView.layer.shadowRadius = 4;
- */
     
     [self createChatView];
-    
-//    FloatingView *_floating = [[FloatingView alloc] initWithFrame:Rect(0, _group.y, kScreenWidth, 50)];
-    
 }
 
 - (void)createChatView
@@ -490,11 +453,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [super viewDidAppear:animated];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
     [self showTopHUD];
-//    __weak RoomViewController *__self = self;
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_global_queue(0,0),
-//    ^{
-//        [__self startNewPlay];
-//    });
 }
 
 - (void)startNewPlay
@@ -518,7 +476,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    _cellHeights = [NSMutableDictionary dictionary];
     room_gcd = dispatch_queue_create("decode_gcd",0);
     _cellCache = [[NSCache alloc] init];
     _cellCache.totalCostLimit = 20;
@@ -542,12 +499,11 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         [selfWeak colletRoom];
     });
     _nTag = 1;
-    
     fTempWidth = [@"热门推荐" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}].width;
     [self setBluePointX:0];
     [self switchBtn:1];
     [self connectRoomInfo];
-    [self verticalViewControl];
+    
 }
 
 #pragma mark 双击事件  切换屏幕

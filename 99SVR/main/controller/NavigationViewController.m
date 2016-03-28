@@ -84,10 +84,10 @@
 /**
  *  统一设置所有的界面状态栏
  */
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleDefault;
-}
+//- (UIStatusBarStyle)preferredStatusBarStyle
+//{
+//    return UIStatusBarStyleDefault;
+//}
 
 #pragma mark -- 点击空白处收起键盘
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

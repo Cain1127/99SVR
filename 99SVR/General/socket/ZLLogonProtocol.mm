@@ -70,6 +70,7 @@ void ZLLoginListener::OnSetUserPwdResp(SetUserPwdResp &info)
  *
  *  @param info
  */
+
 void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
 {
     UserInfo *user = [UserInfo sharedUserInfo];

@@ -18,6 +18,8 @@
 
 @property (nonatomic,assign) id<GroupDelegate> delegate;
 
+@property (nonatomic,assign) NSInteger ncount;
+
 - (id)initWithFrame:(CGRect)frame ary:(NSArray *)keyName;
 
 - (void)setBtnSelect:(NSInteger)tag;

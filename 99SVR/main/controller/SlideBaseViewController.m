@@ -149,7 +149,7 @@
         self.tabBarController.view.transform = CGAffineTransformIdentity;
         _leftMenu.ttx=self.tabBarController.view.ttx/3;
 //    } completion:^(BOOL finished) {
-        self.leftMenu.hidden = YES;
+//        self.leftMenu.hidden = YES;
         [coverView removeFromSuperview];
     }];
 }

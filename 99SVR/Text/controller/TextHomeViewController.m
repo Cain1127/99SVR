@@ -273,7 +273,7 @@
     {
         if (temp > _currentPage)
         {
-            if (_tag<=2)
+            if (_tag<4)
             {
                 _tag ++;
                 [_group setBtnSelect:_tag];

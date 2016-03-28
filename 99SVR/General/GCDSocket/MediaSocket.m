@@ -187,6 +187,7 @@ typedef struct _tag_MediaFrameBuffer
     _gcdSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(0, 0)];
     
     if (![_gcdSocket connectToHost:strIp onPort:nPort error:nil])
+//    if (![_gcdSocket connectToHost:@"61.155.190.248" onPort:819 error:nil])
     {
         DLog(@"连接失败");
     }

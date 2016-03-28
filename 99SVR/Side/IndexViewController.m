@@ -223,9 +223,8 @@
     updateCount = 0;
     _currentPage = 0;
     [self initUIHead];
-//    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(searchClick) image:@"search_normal" highImage:@"search_high"];
     
-    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchClick) image:@"search_normal" highImage:@"search_high"];
+    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchClick) image:@"nav_search_icon_n" highImage:@"nav_search_icon_p"];
     [_headView addSubview:btnRight];
     [btnRight setFrame:Rect(kScreenWidth-44, 20, 44, 44)];
     
@@ -241,10 +240,6 @@
         [__self initData];
         [__self initHistoryData];
     });
-//    [_group addEvent:^(id sender)
-//     {
-//         [__self btnEvent:sender];
-//     }];
     UIButton *btnSender = [_group viewWithTag:1];
     [self btnEvent:btnSender];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
@@ -324,15 +319,6 @@
     //[_scrollView.panGestureRecognizer addTarget:self action:@selector(scrollHandlePan:)];
     
     _tag = 0;
-    
-//    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [leftBtn setImage:[UIImage imageNamed:@"switcher"] forState:UIControlStateNormal];
-//    [leftBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-//     {
-//         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
-//     }];
-    
-    //[self setLeftBtn:leftBtn];
 //    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
 //    [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
 //    __weak IndexViewController *__self = self;
