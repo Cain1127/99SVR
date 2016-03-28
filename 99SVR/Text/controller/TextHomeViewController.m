@@ -170,11 +170,11 @@
     [self.view addSubview:hidenView];
     hidenView.hidden = YES;
     
-    _teachView = [[TeachView alloc] initWithFrame:Rect(0, 64, kScreenWidth,140)];
+    _teachView = [[TeachView alloc] initWithFrame:Rect(0, 66, kScreenWidth,140)];
     [hidenView addSubview:_teachView];
     _teachView.hidden = YES;
     
-    _rightView = [[RightView alloc] initWithFrame:Rect(kScreenWidth-153, 64, 145, 133)];
+    _rightView = [[RightView alloc] initWithFrame:Rect(kScreenWidth-153, 66, 145, 133)];
     [hidenView addSubview:_rightView];
     _rightView.hidden = YES;
     _rightView.delegate = self;

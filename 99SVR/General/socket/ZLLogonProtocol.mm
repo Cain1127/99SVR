@@ -54,8 +54,9 @@ void ZLLoginListener::OnLogonErr(UserLogonErr2& info)
         strMsg = @"密码错误";
         break;
     }
-    NSString *strUrl = [NSString stringWithFormat:@"ReportItem=Login&ClientType=2&LoginType=%d&UserId=%d&ServerIP=%@&Error=%@",
-                        [UserInfo sharedUserInfo].otherLogin,[UserInfo sharedUserInfo].nUserId,@"121.14.211.60",@"login_fail"];
+    int loginType = [UserInfo sharedUserInfo].otherLogin ? [UserInfo sharedUserInfo].otherLogin : 0;
+    NSString *strUrl = [NSString stringWithFormat:@"ReportItem=Login&ClientType=3&LoginType=%d&UserId=%d&ServerIP=%@&Error=%@",
+                        loginType,[UserInfo sharedUserInfo].nUserId,@"121.14.211.60",@"login_fail"];
     [DecodeJson postPHPServerMsg:strUrl];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_ERROR_VC object:strMsg];
 }
@@ -70,7 +71,6 @@ void ZLLoginListener::OnSetUserPwdResp(SetUserPwdResp &info)
  *
  *  @param info
  */
-
 void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
 {
     UserInfo *user = [UserInfo sharedUserInfo];

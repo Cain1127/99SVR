@@ -318,8 +318,6 @@ typedef struct
     char   cIpAddr[IPADDRLEN];	  //客户端ip地址
 }CMDJoinRoomReq_t;
 
-
-
 //加入房间请求
 //281 bytes
 typedef struct

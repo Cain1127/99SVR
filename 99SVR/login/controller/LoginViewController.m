@@ -740,13 +740,13 @@
      ^{
          if (kScreenHeight <= 480)
          {
-             [self.view setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+             [self.view setFrame:Rect(0, -64, kScreenWidth, kScreenHeight)];
          }
      } completion:nil];
 }
 - (void) keyboardWasHidden:(NSNotification *) notification
 {
-    self.view.frame = Rect(0, 64, kScreenWidth, kScreenHeight);
+    self.view.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
 }
 
 - (void)dealloc

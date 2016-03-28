@@ -397,7 +397,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     __weak RoomViewController *__self = self;
     dispatch_async(room_gcd,
     ^{
-        [__self.tcpSocket sendChatInfo:@"[$999$]"  toid:__nUserId];
+        [__self.tcpSocket sendChatInfo:@"[$999$]" toid:0];
     });
 }
 
