@@ -122,8 +122,8 @@ void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 	//120.197.248.11:7401  ÒÆ¶¯
 	// "login1.99ducaijing.cn", 7401
 //	connect("121.12.118.32", 7301);
-//	int ret = connect("121.12.118.32", 7301);
-	int ret = connect("login1.99ducaijing.cn", 7401);
+	int ret = connect("121.12.118.32", 7301);
+//	int ret = connect("login1.99ducaijing.cn", 7401);
 	if (ret != 0)
 		return;
 
@@ -138,8 +138,8 @@ void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 
 void LoginConnection::SendMsg_LoginReq5(UserLogonReq5& req)
 {
-	int ret = connect("login1.99ducaijing.cn", 7401);
-
+//	int ret = connect("login1.99ducaijing.cn", 7401);
+	int ret = connect("121.12.118.32", 7301);
 	if (ret != 0)
 		return;
 

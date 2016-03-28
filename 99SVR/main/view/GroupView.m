@@ -18,10 +18,6 @@
     CGFloat fTempWidth;
 }
 
-@property (nonatomic,strong) UIButton *btnFirst;
-@property (nonatomic,strong) UIButton *btnSecond;
-@property (nonatomic,strong) UIButton *btnThird;
-
 @end
 
 @implementation GroupView
@@ -34,8 +30,8 @@
     NSInteger i=1;
     CGSize sizeWidth = [@"热门推荐" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}];
     fTempWidth = sizeWidth.width;
-    NSInteger count = keyName.count;
-    CGFloat width  = kScreenWidth/count;
+    _ncount = keyName.count;
+    CGFloat width  = kScreenWidth/_ncount;
     for (NSString *title in keyName) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         [btn setTitle:title forState:UIControlStateNormal];
@@ -105,7 +101,8 @@
 
 - (void)setBluePointX:(CGFloat)fPointX
 {
-    CGFloat fx = _btnFirst.width/2-fTempWidth/2+fPointX/kScreenWidth * _btnFirst.width;
+    CGFloat width = kScreenWidth/_ncount;
+    CGFloat fx = width/2-fTempWidth/2+fPointX/kScreenWidth * width;
     [_line1 setFrame:Rect(fx,self.height-2,fTempWidth,2)];
 }
 

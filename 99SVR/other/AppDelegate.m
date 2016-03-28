@@ -59,6 +59,7 @@
     [self onCheckVersion];
     
     NSDictionary *dict = [UserDefaults objectForKey:kVideoList];
+    
     if (!dict){
         NSString *path = [[NSBundle mainBundle] pathForResource:@"video_list"
                                                          ofType:@"txt"];
