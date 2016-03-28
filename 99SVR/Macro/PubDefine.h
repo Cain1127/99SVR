@@ -151,7 +151,7 @@
 #define  MJRefreshHeaderReleaseToRefresh NSLocalizedString(@"releaseRefresh", "")
 #define  MJRefreshHeaderRefreshing NSLocalizedString(@"devfresh", "")
 
-#define kNavColor RGB(29, 140, 238)
-#define kLeftMenuBgColor RGB(61, 120, 201)
+
+//#define kLeftMenuBgColor RGB(61, 120, 201)
 #define kTableViewBgColor RGB(247, 247, 247) // tableView 背景颜色
 #endif

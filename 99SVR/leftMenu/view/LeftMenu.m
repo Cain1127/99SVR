@@ -31,6 +31,9 @@
 #define kKefu @"客服中心"
 
 @interface LeftMenu()<UITableViewDataSource,UITableViewDelegate,LeftMenuHeaderViewDelegate>
+{
+    UINavigationController *control;
+}
 @property (nonatomic, weak) LeftMenuHeaderView *leftMenuHeaderView;
 @property (nonatomic, weak) UITableView *listTableView;
 @property (nonatomic,strong) NSMutableArray *itemsArray;
@@ -42,7 +45,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = kLeftMenuBgColor;
+        self.backgroundColor = UIColorFromRGB(0x006dc9);
         //添加头部的View
         LeftMenuHeaderView *header = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 44,kScreenWidth * 0.75, 205)];
         header.delegate = self;
@@ -95,7 +98,6 @@
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"collect.png" goClassName:@"VideoColletionViewController"]];
-        
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"setting" goClassName:@"AssetViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的资料" icon:@"setting" goClassName:@"ProfileViewController"]];
     }
@@ -105,7 +107,6 @@
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kRegist icon:@"regist.png" goClassName:@"RegMobileViewController"]];
     }
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
-    
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"kefu.png" goClassName:@"KefuCenterController"]];
     
     __weak LeftMenu *__self = self;
@@ -114,7 +115,6 @@
        [__self.listTableView reloadData];
     });
 }
-
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -148,11 +148,9 @@
 #pragma mark - leftMenuHeaderViewDelegate
 - (void)enterLogin
 {
-    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType != 1)
-    {
-        if ([self.degelate respondsToSelector:@selector(leftMenuIconDidClick)]) {
-            [self.degelate leftMenuIconDidClick];
-        }
-    }
+//    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType != 1)
+//    {
+    control = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+    [[UIApplication sharedApplication].keyWindow addSubview:control.view];
 }
 @end

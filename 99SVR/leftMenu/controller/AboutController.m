@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTitle:@"关于我们"];
+    [self setTitleText:@"关于我们"];
     [self initSubviews];
 }
 

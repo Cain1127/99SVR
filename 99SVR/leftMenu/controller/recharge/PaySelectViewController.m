@@ -28,7 +28,7 @@
 {
     [super viewDidLoad];
     
-    self.title = @"充值";
+    self.txtTitle.text = @"充值";
     
     self.view.backgroundColor = [UIColor whiteColor];
     

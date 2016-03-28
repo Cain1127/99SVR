@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol GiftDelegate <NSObject>
+
+- (void)sendGift:(int)giftId num:(int)giftNum;
+
+@end
+
 @interface GiftView : UIView <UIScrollViewDelegate>
 
 @property (nonatomic,copy) UIImage *giftImage;
@@ -16,10 +22,10 @@
 @property (nonatomic,strong) UIScrollView *scrollView;
 @property (nonatomic,strong) UIPageControl *pageControl;
 @property (nonatomic,strong) UIButton *btnNumber;
-
+@property (nonatomic,assign) id<GiftDelegate> delegate;
 
 @property (nonatomic,strong) UIImageView *numberImgView;
 @property (nonatomic,copy) UIImage *frameImage;
 @property (nonatomic,strong) UIView *numberView;
-
+- (void)setGestureHidden;
 @end

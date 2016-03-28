@@ -24,7 +24,6 @@
 
 @end
 
-
 @implementation GroupView
 
 - (id)initWithFrame:(CGRect)frame ary:(NSArray *)keyName
@@ -32,57 +31,40 @@
     self = [super initWithFrame:frame];
     
     [self setBackgroundColor:[UIColor whiteColor]];
-    
-    _btnFirst = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    _btnThird = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    _btnSecond = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    [_btnFirst setTitle:keyName[0] forState:UIControlStateNormal];
-    [_btnSecond setTitle:keyName[1] forState:UIControlStateNormal];
-    [_btnThird setTitle:keyName[2] forState:UIControlStateNormal];
-    
+    NSInteger i=1;
     CGSize sizeWidth = [@"热门推荐" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}];
     fTempWidth = sizeWidth.width;
-    
-    [self addSubview:_btnFirst];
-    [self addSubview:_btnSecond];
-    [self addSubview:_btnThird];
-    
-    UIColor *titleColor = [UIColor colorWithHex:@"#555555"];
-    UIColor *selectedColor = [UIColor colorWithHex:@"#427ede"];
-    UIFont *titleFont = XCFONT(14);
-    
-    _btnFirst.titleLabel.font = titleFont;
-    _btnSecond.titleLabel.font = titleFont;
-    _btnThird.titleLabel.font = titleFont;
-    
-    [_btnFirst setTitleColor:titleColor forState:UIControlStateNormal];
-    [_btnSecond setTitleColor:titleColor forState:UIControlStateNormal];
-    [_btnThird setTitleColor:titleColor forState:UIControlStateNormal];
-    
-    [_btnFirst setTitleColor:selectedColor forState:UIControlStateHighlighted];
-    [_btnSecond setTitleColor:selectedColor forState:UIControlStateHighlighted];
-    [_btnThird setTitleColor:selectedColor forState:UIControlStateHighlighted];
-    
-    [_btnFirst setTitleColor:selectedColor forState:UIControlStateSelected];
-    [_btnSecond setTitleColor:selectedColor forState:UIControlStateSelected];
-    [_btnThird setTitleColor:selectedColor forState:UIControlStateSelected];
-    
-    _btnFirst.frame = Rect(0, 0, kScreenWidth/3, frame.size.height);
-    _btnSecond.frame = Rect(kScreenWidth/3*1, 0, kScreenWidth/3, frame.size.height);
-    _btnThird.frame = Rect(kScreenWidth/3*2, 0, kScreenWidth/3, frame.size.height);
-    
+    NSInteger count = keyName.count;
+    CGFloat width  = kScreenWidth/count;
+    for (NSString *title in keyName) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btn setTitle:title forState:UIControlStateNormal];
+        [self addSubview:btn];
+        UIColor *titleColor = [UIColor colorWithHex:@"#555555"];
+        UIColor *selectedColor = [UIColor colorWithHex:@"#427ede"];
+        [btn setTitleColor:titleColor forState:UIControlStateNormal];
+        [btn setTitleColor:selectedColor forState:UIControlStateHighlighted];
+        [btn setTitleColor:selectedColor forState:UIControlStateSelected];
+        UIFont *titleFont = XCFONT(14);
+        btn.titleLabel.font = titleFont;
+        btn.frame  = Rect((i-1)*width, 0,width, frame.size.height);
+        btn.tag = i++;
+        [btn addTarget:self action:@selector(addEvent:) forControlEvents:UIControlEventTouchUpInside];
+    }
     [self addLineHeight];
-    
     UIView *line1 = [UIView new];
     line1.backgroundColor = UIColorFromRGB(0x629aff);
     [self addSubview:line1];
     _line1 = line1;
-    [_line1 setFrame:Rect(_btnFirst.width/2-fTempWidth/2,self.height-2,fTempWidth,2)];
-    
+    [_line1 setFrame:Rect(width/2-fTempWidth/2,self.height-2,fTempWidth,2)];
     return self;
+}
+
+- (void)addEvent:(UIButton *)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(clickIndex:tag:)]) {
+        [_delegate clickIndex:sender tag:sender.tag];
+    }
 }
 
 - (void)addLineHeight
@@ -97,35 +79,6 @@
     line2.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
     [self addSubview:line1];
     [self addSubview:line2];
-}
-
-- (void)setBtnTag:(int)tag tag1:(int)tag1 tag2:(int)tag2
-{
-    _btnFirst.tag = tag;
-    _btnSecond.tag = tag1;
-    _btnThird.tag = tag2;
-}
-
-- (void)addEventForHot:(void (^)(id sender))handler
-{
-    [_btnFirst bk_addEventHandler:handler forControlEvents:UIControlEventTouchUpInside];
-}
-
-- (void)addEventForGroup:(void (^)(id sender))handler
-{
-    [_btnSecond bk_addEventHandler:handler forControlEvents:UIControlEventTouchUpInside];
-}
-
-- (void)addEventForHelp:(void (^)(id sender))handler
-{
-    [_btnThird bk_addEventHandler:handler forControlEvents:UIControlEventTouchUpInside];
-}
-
-- (void)addEvent:(void (^)(id))handler
-{
-    [_btnFirst bk_addEventHandler:handler forControlEvents:UIControlEventTouchUpInside];
-    [_btnSecond bk_addEventHandler:handler forControlEvents:UIControlEventTouchUpInside];
-    [_btnThird bk_addEventHandler:handler forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)setBtnSelect:(NSInteger)tag

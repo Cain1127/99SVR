@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BandingMobileViewController : UIViewController
+@interface BandingMobileViewController :CustomViewController
 
 @end

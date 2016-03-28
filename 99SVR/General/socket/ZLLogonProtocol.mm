@@ -4,6 +4,25 @@
 #import "Socket.h"
 #import "ZLLogonProtocol.h"
 #import "UserInfo.h"
+#import "BaseService.h"
+#import "DecodeJson.h"
+
+
+
+void ZLConnectionListerner::OnIOError(int err_code)
+{
+    switch (err_code) {
+        case 0:
+        {
+            DLog(@"关闭登录线程");
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_PROTOCOL_DISCONNECT_VC object:nil];
+        }
+        break;
+        default:
+        break;
+    }
+}
+
 //双芳封装类
 /**
  *  登录失败
@@ -35,7 +54,15 @@ void ZLLoginListener::OnLogonErr(UserLogonErr2& info)
         strMsg = @"密码错误";
         break;
     }
+    NSString *strUrl = [NSString stringWithFormat:@"ReportItem=Login&ClientType=2&LoginType=%d&UserId=%d&ServerIP=%@&Error=%@",
+                        [UserInfo sharedUserInfo].otherLogin,[UserInfo sharedUserInfo].nUserId,@"121.14.211.60",@"login_fail"];
+    [DecodeJson postPHPServerMsg:strUrl];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_ERROR_VC object:strMsg];
+}
+
+void ZLLoginListener::OnSetUserPwdResp(SetUserPwdResp &info)
+{
+     
 }
 
 /**
@@ -51,14 +78,15 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
     user.score = info.nb();
     user.sex = info.ngender();
     user.nUserId = info.userid();
-    user.strName = [NSString stringWithCString:info.cuseralias().c_str() encoding:GBK_ENCODING];
-    if ((user.nUserId>900000000 && user.nUserId < 1000000000) || user.nUserId == 0)
+    if ((user.nUserId>900000000 && user.nUserId < 1000000000) || user.nUserId <= 0)
     {
         [UserInfo sharedUserInfo].bIsLogin = YES;
         [UserInfo sharedUserInfo].nType = 2;
+        [UserInfo sharedUserInfo].strPwd = @"";
     }
     else
     {
+        user.strName = [NSString stringWithCString:info.cuseralias().c_str() encoding:GBK_ENCODING];
         [UserInfo sharedUserInfo].bIsLogin = YES;
         [UserInfo sharedUserInfo].nType = 1;
         [UserInfo sharedUserInfo].banding = info.bboundtel();
@@ -107,7 +135,14 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd)
     
     UserLogonReq4 req4;
     req4.set_nmessageid(1);
-    req4.set_cloginid(cloginid);
+    if(cloginid==NULL)
+    {
+        req4.set_cloginid("0");
+    }
+    else
+    {
+        req4.set_cloginid(cloginid);
+    }
     req4.set_nversion(3030822 + 5);
     req4.set_nmask((uint32)time(0));
     req4.set_cuserpwd(pwd);
@@ -132,7 +167,10 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd)
 int ZLLogonProtocol::startOtherLogin(uint32 cloginid,const char *openid,const char *token){
     conn->RegisterMessageListener(login_listener);
     conn->RegisterConnectionListener(conn_listener);
-    
+    if (openid == NULL || token == NULL) {
+        DLog(@"第三方登录发生错误");
+        return 0;
+    }
     UserLogonReq5 req;
     req.set_nmessageid(1);
     req.set_userid(cloginid);
@@ -150,17 +188,49 @@ int ZLLogonProtocol::startOtherLogin(uint32 cloginid,const char *openid,const ch
     conn->SendMsg_LoginReq5(req);
     return 1;
 }
+
+/**
+ *  修改密码
+ */
+int ZLLogonProtocol::updatePwd(const char *cOld,const char *cNew)
+{
+    conn->SendMsg_SetUserPwdReq(0,1,cOld,cNew);
+    return 1;
+}
+
+int ZLLogonProtocol::updateNick(const char *cNick,const char *cBirthDat)
+{
+    if (cNick==NULL) {
+        return 0;
+    }
+    SetUserProfileReq req;
+    UserInfo *info = [UserInfo sharedUserInfo];
+    req.set_userid(info.nUserId);
+    req.set_headid(0);
+    req.set_cuseralias(cNick);
+    req.set_cbirthday(cBirthDat);
+    req.set_ngender(1);
+    conn->SendMsg_SetUserInfoReq(req);
+    return 1;
+}
+
 /**
  *  析构
  */
 ZLLogonProtocol::~ZLLogonProtocol()
 {
-    delete conn;
-    conn = NULL;
-    delete login_listener;
-    login_listener = NULL;
-    delete conn_listener;
-    conn_listener = NULL;
+    if(conn)
+    {
+        conn->RegisterMessageListener(NULL);
+        conn->RegisterConnectionListener(NULL);
+        delete conn;
+        conn = NULL;
+        delete login_listener;
+        login_listener = NULL;
+        delete conn_listener;
+        conn_listener = NULL;
+        DLog(@"释放logon protocol");
+    }
 }
 /**
  *  封装protocol类  构造方法

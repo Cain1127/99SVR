@@ -752,6 +752,8 @@
         case Sub_Vchat_TradeGiftErr:
         {
             DLog(@"赠送礼物返回错误消息!");
+            CMDTradeGiftErr_t* pInfo = (CMDTradeGiftErr_t *)pNewMsg;
+            DLog(@"error:%d",pInfo->nerrid);
         }
             break;
         case Sub_Vchat_TradeGiftNotify:
@@ -826,7 +828,16 @@
         {
             DLog(@"房间公告数据通知!");
             CMDRoomNotice_t* pInfo = (CMDRoomNotice_t *)pNewMsg;
-            if (pInfo->index==2)
+            if(pInfo->index ==0)
+            {
+                char szTemp[pInfo->textlen+1];
+                memset(szTemp, 0, pInfo->textlen+1);
+                memcpy(szTemp, pInfo->content, pInfo->textlen);
+                szTemp[pInfo->textlen]='\0';
+                _teachInfo = [NSString stringWithCString:pInfo->content encoding:GBK_ENCODING];
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
+            }
+            else if(pInfo->index==2)
             {
                 char szTemp[4096]={0};
                 memcpy(szTemp, pInfo->content, pInfo->textlen);
@@ -842,9 +853,9 @@
                 [_aryBuffer addObject:notice];
                 __weak RoomTcpSocket *__self = self;
                 dispatch_async(downGCD,
-                               ^{
-                                   [__self downloadCache];
-                               });
+                ^{
+                    [__self downloadCache];
+                });
             }
         }
             break;
@@ -1056,10 +1067,10 @@
 }
 
 #pragma mark 房间用户信息添加
-- (void)sendGift:(int)userId
-{
-    
-}
+//- (void)sendGift:(int)userId
+//{
+//    
+//}
 
 - (void)sendColletRoom:(int)nCollet
 {
@@ -1080,13 +1091,13 @@
         NSData *data = [NSData dataWithBytes:szBuf length:pHead->length];
         [_asyncSocket writeData:data withTimeout:-1 tag:1];
     }
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
 }
 
 - (void)addUserStruct:(CMDRoomUserInfo_t*)pItem
 {
     RoomUser *pUser = nil;
+    if(!_rInfo){return ;}
     assert(pItem->vcbid == _rInfo.m_nRoomId);
     pUser = [_rInfo findUser:pItem->userid];
     if (pUser==nil)
@@ -1674,7 +1685,7 @@
         return ;
     }
     req.vcbid = _rInfo.m_nRoomId;
-    req.srcid = [_strUser intValue];
+    req.srcid = [UserInfo sharedUserInfo].nUserId;
     int toUserId=0;
     const char *toUserAlias = NULL;
     for (RoomUser *room in _rInfo.aryUser) {
@@ -1702,7 +1713,8 @@
            [[fromUser.m_strUserAlias dataUsingEncoding:GBK_ENCODING] length]);
     strcpy(req.toalias, toUserAlias);
     
-    [self sendNewMessage:(char *)&req size:sizeof(CMDTradeFlowerRecord_t) version:MDM_Version_Value maincmd:MDM_Vchat_Room subcmd:Sub_Vchat_TradeGiftReq];
+    [self sendNewMessage:(char *)&req size:sizeof(CMDTradeFlowerRecord_t)
+                 version:MDM_Version_Value maincmd:MDM_Vchat_Room subcmd:Sub_Vchat_TradeGiftReq];
 }
 /**
  *  新发送消息方案,自动匹配长度

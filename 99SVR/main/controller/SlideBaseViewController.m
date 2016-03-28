@@ -28,10 +28,8 @@
     
     // 设置导航栏左上角按钮
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(leftItemClick) image:@"setting_normal" highImage:@"setting_high"];
-    
     // 添加左边的菜单
     [self addLeftMenu];
-    
     // 添加手势
     [self addRecognizer];
 }
@@ -150,7 +148,7 @@
     [UIView animateWithDuration:TIMER animations:^{
         self.tabBarController.view.transform = CGAffineTransformIdentity;
         _leftMenu.ttx=self.tabBarController.view.ttx/3;
-    } completion:^(BOOL finished) {
+//    } completion:^(BOOL finished) {
         self.leftMenu.hidden = YES;
         [coverView removeFromSuperview];
     }];

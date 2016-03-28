@@ -8,6 +8,7 @@
 
 #import "RegNameViewController.h"
 #import "QCheckBox.h"
+#import "UserInfo.h"
 #import "LSTcpSocket.h"
 #import "Toast+UIView.h"
 #import "NNSVRViewController.h"
@@ -75,10 +76,7 @@
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id responseObject)
      {
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         dispatch_async(dispatch_get_main_queue(),
-         ^{
-             [selfWeak.view hideToastActivity];
-         });
+         [selfWeak.view hideToastActivity];
          if ([dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
          {
 //             [__tcpSocket loginServer:selfWeak.username pwd:selfWeak.password];
@@ -88,8 +86,6 @@
          }
          else
          {
-             gcd_main_safe(
-             ^{
                  NSString *strNull = [dict objectForKey:@"errmsg"];
                  if(strNull)
                  {
@@ -99,15 +95,14 @@
                  {
                      [selfWeak.lblError setText:@"服务器异常"];
                  }
-             });
          }
      }fail:^(NSError *error)
      {
-        gcd_main_safe(
-        ^{
-             [selfWeak.view hideToastActivity];
-             [selfWeak.lblError setText:@"连接服务器失败"];
-         });
+         [selfWeak.view hideToastActivity];
+         [selfWeak.lblError setText:@"连接服务器失败"];
+         NSString *strUrl = [NSString stringWithFormat:@"ReportItem=Register&ClientType=2&RegType=2&ServerIP=%@&Error=%@",
+                             @"120.55.105.224",@"err_fail"];
+         [DecodeJson postPHPServerMsg:strUrl];
      }];
 }
 

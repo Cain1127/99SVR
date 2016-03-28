@@ -1052,7 +1052,7 @@
         _aryNew = [NSMutableArray array];
     }
     [_aryNew removeAllObjects];
-    [self connectTextServer:@"122.13.81.62" port:22806];
+    [self connectTextServer:@"121.33.236.180" port:22806];
     DLog(@"再次连接");
 }
 
@@ -1079,8 +1079,8 @@
 //    NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
 //    [self connectTextServer:strAddr port:nPort];
     [self closeSocket];
-//    [self connectTextServer:@"122.13.81.62" port:22806];
-    [self connectTextServer:@"172.16.41.96" port:22806];
+    [self connectTextServer:@"122.13.81.62" port:22806];
+//    [self connectTextServer:@"172.16.41.96" port:22806];
 //    [self connectTextServer:@"121.33.236.180" port:22806];
 }
 

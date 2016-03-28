@@ -8,13 +8,13 @@
 
 #import "VideoColletionViewController.h"
 #import "UserInfo.h"
+#import "CustomViewController.h"
 #import "RoomListRequest.h"
 #import "RoomGroup.h"
 
 @interface VideoColletionViewController()
 {
 //    UIView *headView;
-    UIView *_headView;
 }
 
 @property (nonatomic,strong) RoomListRequest *listReuqest;
@@ -26,9 +26,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"我的收藏";
+
+    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
+    [self.view addSubview:_headView];
+    _headView.backgroundColor = kNavColor;
+    UILabel *title;
+    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
+    [title setFont:XCFONT(16)];
+    [_headView addSubview:title];
+    [title setTextAlignment:NSTextAlignmentCenter];
+    [title setTextColor:[UIColor whiteColor]];
+    UILabel *_lblContent;
+    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
+    [_lblContent setBackgroundColor:[UIColor whiteColor]];
+    [_headView addSubview:_lblContent];
+    title.text = @"我的收藏";
+    
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(navBack) image:@"back" highImage:@"back"];
+    [self.view addSubview:btnLeft];
+    [btnLeft setFrame:Rect(0,20,44,44)];
     _listReuqest = [[RoomListRequest alloc] init];
-    self.tableView.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
+    self.tableView.frame = Rect(0, kNavigationHeight, kScreenWidth, kScreenHeight);
 }
 
 - (void)navBack

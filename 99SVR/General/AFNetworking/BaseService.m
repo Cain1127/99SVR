@@ -43,12 +43,9 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     // 设置请求格式
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    manager.requestSerializer.stringEncoding = NSUTF8StringEncoding;
     manager.requestSerializer.timeoutInterval = 10;
     // 设置返回格式
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
-    
     [manager GET:urlStr parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject)
     {
          if (success)
@@ -57,6 +54,30 @@
          }
      }
           failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         if (fail)
+         {
+             fail(error);
+         }
+     }];
+}
+
++ (void)get:(NSString *)url dictionay:(id)dict timeout:(int)time success:(void (^)(id responseObject))success
+       fail:(void (^)(NSError *error))fail
+{
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.requestSerializer.stringEncoding = NSUTF8StringEncoding;
+    manager.requestSerializer.timeoutInterval = time;
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager GET:url parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         if (success)
+         {
+             success(responseObject);
+         }
+     }
+         failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          if (fail)
          {
@@ -89,6 +110,33 @@
             fail(error);
         }
     }];
+}
+
++ (void)post:(NSString *)url dictionay:(id)dict timeout:(int)time success:(void (^)(id responseObject))success
+        fail:(void (^)(NSError *error))fail
+{
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    // 设置请求格式
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.requestSerializer.stringEncoding = NSUTF8StringEncoding;
+    manager.requestSerializer.timeoutInterval = time;
+    // 设置返回格式
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:url parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         if (success)
+         {
+             success(responseObject);
+         }
+     }
+          failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         DLog(@"error:%@",error);
+         if (fail)
+         {
+             fail(error);
+         }
+     }];
 }
 
 + (void)postUploadWithUrl:(NSString *)urlStr image:(UIImage*)imgInfo success:(void (^)(id responseObject))success fail:(void (^)())fail

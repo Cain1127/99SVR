@@ -173,7 +173,9 @@ typedef struct _tag_MediaFrameBuffer
         [self connectIpAndPort:strAddr port:port];
     }
 }
-
+/**
+ *  连接流媒体服务器ip,port
+ */
 - (void)connectIpAndPort:(NSString *)strIp port:(int)nPort
 {
     if (_aryVideo==nil)
@@ -189,7 +191,9 @@ typedef struct _tag_MediaFrameBuffer
         DLog(@"连接失败");
     }
 }
-
+/**
+ *  发送helloe消息
+ */
 - (void)sendHello
 {
     char szTemp[32]={0};
@@ -207,7 +211,9 @@ typedef struct _tag_MediaFrameBuffer
     NSData *data = [NSData dataWithBytes:szTemp length:pHead->length];
     [_gcdSocket writeData:data withTimeout:10 tag:1];
 }
-
+/**
+ *  socket 建立成功
+ */
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port
 {
     DLog(@"建立socket成功:ip:%@--port:%d",host,port);
@@ -226,7 +232,9 @@ typedef struct _tag_MediaFrameBuffer
         [__self sendAllInfo];
     });
 }
-
+/**
+ *  持续发送所有信息
+ */
 - (void)sendAllInfo
 {
     int iTime = 1;
@@ -249,7 +257,9 @@ typedef struct _tag_MediaFrameBuffer
         iTime++;
     }
 }
-
+/**
+ *  心跳
+ */
 - (void)send_keep_live_tcp
 {
     char szBuf[256]={0};
@@ -286,7 +296,9 @@ typedef struct _tag_MediaFrameBuffer
         data = nil;
     }
 }
-
+/**
+ *  注销音视频
+ */
 - (void)send_unregister_tcp:(int )ssrc room:(int)roomid pt:(int)ptId
 {
     char szBuf[256]={0};
@@ -306,7 +318,9 @@ typedef struct _tag_MediaFrameBuffer
         data = nil;
     }
 }
-
+/**
+ *  请求音视频
+ */
 - (void)send_register_tcp:(int )ssrc room:(int)roomid pt:(int)ptId
 {
     char szBuf[256]={0};
@@ -327,7 +341,9 @@ typedef struct _tag_MediaFrameBuffer
         data = nil;
     }
 }
-
+/**
+ *  socket 读取码流操作
+ */
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
     switch(tag)
@@ -358,16 +374,6 @@ typedef struct _tag_MediaFrameBuffer
         default:
             break;
     }
-}
-
-- (void)videoFrame:(cmd_video_frame_data_t *)frame
-{
-    
-}
-
-- (void)audioFrame:(cmd_video_frame_data_t *)frame
-{
-    
 }
 
 #define MediaBlock(buf,len,pt) \
@@ -520,18 +526,13 @@ if(_block) \
     {
         DLog(@"重新建立连接");
     }
-    else if ([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Connection refused"])
-    {
-        DLog(@"连接失败，重新连接");
+    else if ([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Connection refused"]){
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接流媒体失败"];
     }
-    else if([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Socket closed byremote peer"])
-    {
-        DLog(@"出现错误");
+    else if([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Socket closed byremote peer"]){
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接中断"];
     }
-    else if([err.domain isEqualToString:@"NSPOSIXErrorDomain"])
-    {
+    else if([err.domain isEqualToString:@"NSPOSIXErrorDomain"]){
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接中断"];
     }
     DLog(@"error:%@",err);

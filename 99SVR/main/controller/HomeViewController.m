@@ -41,11 +41,9 @@
     if (_scrollView) {
         return ;
     }
-    _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 10, kScreenWidth, kPictureHeight) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
-    
+    _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 10+kNavigationHeight, kScreenWidth, kPictureHeight) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
     _scrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
     _scrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
-//    _scrollView.titlesGroup = titles;
     _scrollView.currentPageDotColor = UIColorFromRGB(0xff7a1e); // 自定义分页控件小圆标颜色
     _scrollView.pageDotColor = UIColorFromRGB(0xa8a8a8);
     [self.view addSubview:_scrollView];
@@ -60,10 +58,29 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.navigationController.navigationBar setHidden:YES];
+    
+    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
+    [self.view addSubview:_headView];
+    _headView.backgroundColor = UIColorFromRGB(0xffffff);
+    UILabel *title;
+    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
+    [title setFont:XCFONT(16)];
+    [_headView addSubview:title];
+    [title setTextAlignment:NSTextAlignmentCenter];
+    [title setTextColor:UIColorFromRGB(0x0078DD)];
+    UILabel *_lblContent;
+    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
+    [_lblContent setBackgroundColor:[UIColor whiteColor]];
+    [_headView addSubview:_lblContent];
+     title.text = @"99财经";
+    
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(showLeftView) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
+    [self.view addSubview:btnLeft];
+    [btnLeft setFrame:Rect(0,20,44,44)];
+    
     [self.view setBackgroundColor:[UIColor whiteColor]];
-
     _aryBanner = [NSMutableArray array];
-    [self initUIHead];
     [self createScroll];
     [self createPage];
     [self initData];
@@ -76,14 +93,9 @@
           selfWeak.scrollView.imageURLStringsGroup = selfWeak.aryBanner;
     });
 }
-- (void)initUIHead
+- (void)showLeftView
 {
-    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftBtn setImage:[UIImage imageNamed:@"switcher"] forState:UIControlStateNormal];
-    [leftBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-     {
-         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
-     }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
 }
 
 - (void)initData
@@ -204,6 +216,11 @@
 {
     TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithRoom:80001];
     [self presentViewController:textHome animated:YES completion:nil];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
 }
 
 @end

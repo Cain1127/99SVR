@@ -17,7 +17,6 @@
 @property (nonatomic,strong) UIView *headView;
 @property (nonatomic,strong) UIButton *btnLeft;
 @property (nonatomic,strong) UIButton *btnRight;
-@property (nonatomic,strong) UILabel *txtTitle;
 
 @end
 
@@ -37,10 +36,33 @@
     [_txtTitle setTextAlignment:NSTextAlignmentCenter];
     [_txtTitle setTextColor:[UIColor whiteColor]];
     
-    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
-    [_lblContent setBackgroundColor:[UIColor whiteColor]];
-    [_headView addSubview:_lblContent];
+//    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
+//    [_lblContent setBackgroundColor:[UIColor whiteColor]];
+//    [_headView addSubview:_lblContent];
     
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(MarchBackLeft) image:@"back" highImage:@"back"];
+    [_headView addSubview:btnLeft];
+    [btnLeft setFrame:Rect(0,20,44,44)];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+/**
+ *  3月写的后退效果
+ */
+- (void)MarchBackLeft
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
++ (UIButton *)itemWithTarget:(id)target action:(SEL)action image:(NSString *)image highImage:(NSString *)highImage
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    // 设置图片
+    UIImage *img = [UIImage imageNamed:image];
+    [btn setImage:img forState:UIControlStateNormal];
+    [btn setImage:[UIImage imageNamed:highImage] forState:UIControlStateHighlighted];
+    return btn;
 }
 
 - (void)setUserInter

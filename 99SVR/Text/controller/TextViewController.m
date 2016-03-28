@@ -42,7 +42,7 @@
 
 - (void)initHeadScroller
 {
-    _scrollHeader = [[MyScrollView alloc] initWithFrame:Rect(0,0,kScreenWidth, 46)];
+    _scrollHeader = [[MyScrollView alloc] initWithFrame:Rect(0,64,kScreenWidth, 46)];
     [self.view addSubview:_scrollHeader];
     _scrollHeader.clipsToBounds = YES;
     _scrollHeader.pagingEnabled = YES;
@@ -164,9 +164,29 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.navigationController.navigationBar setHidden:YES];
     [self.view setBackgroundColor:[UIColor whiteColor]];
+    
+    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
+    [self.view addSubview:_headView];
+    _headView.backgroundColor = UIColorFromRGB(0xffffff);
+    UILabel *title;
+    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
+    [title setFont:XCFONT(16)];
+    [_headView addSubview:title];
+    [title setTextAlignment:NSTextAlignmentCenter];
+    [title setTextColor:UIColorFromRGB(0x0078DD)];
+    UILabel *_lblContent;
+    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
+    [_lblContent setBackgroundColor:[UIColor whiteColor]];
+    [_headView addSubview:_lblContent];
+    title.text = @"99财经";
+    
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(showLeftView) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
+    [self.view addSubview:btnLeft];
+    [btnLeft setFrame:Rect(0,20,44,44)];
+    
     _aryGroup = [NSMutableArray array];
-    //[self setTitleText:@"文字直播"];
     [self initHeadScroller];
     [self initUIHead];
     _line1 = [UILabel new];
@@ -175,6 +195,11 @@
     
     [self initScrollView];
     [self initLivingData];
+}
+
+- (void)showLeftView
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
 }
 
 - (void)initScrollView
@@ -193,21 +218,7 @@
 
 - (void)initUIHead
 {
-    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftBtn setImage:[UIImage imageNamed:@"switcher"] forState:UIControlStateNormal];
-    [leftBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
-    }];
-    //[self setLeftBtn:leftBtn];
-    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
-    __weak TextViewController *__self = self;
-    [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-    {
-        [__self initLivingData];
-    }];
-    //[self setRightBtn:rightBtn];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -253,7 +264,7 @@
         TextGroupList *textList = [_aryGroup objectAtIndex:tableView.tag];
         TextRoomModel *teach = [textList.rooms objectAtIndex:indexPath.row];
         TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithModel:teach];
-        [self presentViewController:textHome animated:YES completion:nil];
+        [self.navigationController pushViewController:textHome animated:YES];
     }
 }
 
@@ -299,7 +310,6 @@
                 _tag ++;
                 [self setSelectInfo:_tag];
                 CGFloat x = (_scrollHeader.contentOffset.x+fWidth*0.5+kScreenWidth) >= _scrollHeader.contentSize.width ? _scrollHeader.contentSize.width-kScreenWidth : (_scrollHeader.contentOffset.x+fWidth*0.5);
-                
                 _scrollHeader.contentOffset = CGPointMake(x, 0);
             }
         }
@@ -340,6 +350,11 @@
 {
     CGFloat fx = fPointX/kScreenWidth * fWidth;
     [_line1 setFrame:Rect(fx,44,fWidth,2)];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
 }
 
 @end

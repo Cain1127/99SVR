@@ -76,7 +76,7 @@
         UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(singGift.width/2-22, 5, 44, 44)];
         [singGift addSubview:imgView];
         [imgView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s/%@",kGif_Image_URL,model.pic]]];
-        
+        singGift.tag = [model.gid intValue];
         UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0,55, singGift.width, 18)];
         [singGift addSubview:lblName];
         [lblName setFont:XCFONT(15)];
@@ -101,7 +101,6 @@
      _pageControl.pageIndicatorTintColor = UIColorFromRGB(0xa8a8a8);
      _pageControl.currentPageIndicatorTintColor = UIColorFromRGB(0xff7a1e);
      _pageControl.enabled = NO;
-
     [self addSubview:_pageControl];
     
     UILabel *line = [[UILabel alloc] initWithFrame:Rect(10,99.5, kScreenWidth-20, 0.5)];
@@ -132,7 +131,10 @@
     [downView addSubview:lblPrice];
     [lblPrice setFont:XCFONT(15)];
     [lblPrice setTextColor:UIColorFromRGB(0xFF7A1E)];
-    [lblPrice setText:@"余额:999"];
+    
+    char cBuffer[100]={0};
+    sprintf(cBuffer, "余额:%lld",[UserInfo sharedUserInfo].goldCoin);
+    [lblPrice setText:[NSString stringWithUTF8String:cBuffer]];
     
     //赠送按钮
     UIButton *btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -195,6 +197,7 @@
         [_scrollView addSubview:_selectView];
     }
     _selectView.frame = view.frame;
+    _selectView.tag = view.tag;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -229,6 +232,12 @@
 - (void)sendGift
 {
     DLog(@"发送礼物");
+    if (_delegate && [_delegate respondsToSelector:@selector(sendGift:num:)]) {
+        int number = [_btnNumber.titleLabel.text intValue];
+        if (_selectView.tag>0) {
+            [_delegate sendGift:(int)_selectView.tag num:number];
+        }
+    }
 }
 
 - (void)dealloc

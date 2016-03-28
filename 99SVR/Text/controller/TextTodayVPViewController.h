@@ -11,6 +11,7 @@
 
 @interface TextTodayVPViewController : CustomViewController
 
+
 - (id)initWithSocket:(TextTcpSocket *)tcpSocket;
 
 @end

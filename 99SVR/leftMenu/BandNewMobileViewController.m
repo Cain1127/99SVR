@@ -36,7 +36,7 @@
 {
     [super viewDidLoad];
     
-    [self setTitle:@"绑定手机"];
+    [self setTitleText:@"绑定新手机"];
     
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     
@@ -173,13 +173,12 @@
         return ;
     }
     NSString *strMd5;
-    strMd5 = [NSString stringWithFormat:@"action=5&date=%@&account=%@",strDate,_mobile];
-
+    strMd5 = [NSString stringWithFormat:@"action=5&date=%@&pnum=%@",strDate,_mobile];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = @"http://172.16.41.158:9999/mapiphone/getmsgcode";
+    NSString *strInfo = kBand_mobile_getcode_URL;
     NSDictionary *parameters = nil;
-    parameters = @{@"action":@(5),@"account":_mobile,@"key":strMd5,@"client":@(2)};
+    parameters = @{@"action":@(5),@"pnum":_mobile,@"key":strMd5,@"client":@(2)};
     
     @WeakObj(self)
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id responseObject)
@@ -250,7 +249,7 @@
     
         //直接绑定手机
     paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(5),@"code":strCode,@"pwd":_password};
-    strInfo = @"http://172.16.41.158:9999/mapiphone/setphone";
+    strInfo = kBand_mobile_setphone_URL;
     @WeakObj(self);
     [BaseService postJSONWithUrl:strInfo parameters:paramters success:^(id responseObject)
      {

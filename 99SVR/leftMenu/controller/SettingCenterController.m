@@ -90,13 +90,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"设置";
+    self.txtTitle.text = @"设置";
     
     _array = @[[EnterModel createContent:@"绑定手机" className:@"BandingMobileViewController"],
                [EnterModel createContent:@"修改密码" className:@"UpdatePwdViewController"],
                [EnterModel createContent:@"关于我们" className:@"AboutController"]];
     self.view.backgroundColor = [UIColor whiteColor];
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,30, self.view.width,(1+_array.count)*kCellHeight+8)];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,30+kNavigationHeight, self.view.width,(1+_array.count)*kCellHeight+8)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

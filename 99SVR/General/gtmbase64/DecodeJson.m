@@ -8,6 +8,7 @@
 
 #import "DecodeJson.h"
 #import "GTMBase64.h"
+#import "BaseService.h"
 #import <CommonCrypto/CommonCryptor.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <netdb.h>
@@ -368,6 +369,31 @@
     UIImage *resultImage = nil;
     resultImage = [image resizableImageWithCapInsets:capInsets resizingMode:resizingMode];
     return resultImage;
+}
+
+
+
++ (BOOL)postServerRegError:(NSString *)strMsg type:(int)regType serverIP:(NSString *)strIp
+{
+    NSString *strInfo = [NSString stringWithFormat:@"http://121.12.118.32/AnalyticStatistics/?ReportItem=Register&ClientType=2&RegType=%d&UserId=123&ServerIP=%@&Error=%@",regType,strIp,strMsg];
+    [BaseService post:strInfo dictionay:nil timeout:10 success:^(id responseObject) {
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil removingNulls:YES ignoreArrays:YES];
+        DLog(@"DICT:%@",dict);
+    } fail:^(NSError *error) {
+        DLog(@"暂不上报,存储上报内容");
+    }];
+    return YES;
+}
+
++ (void)postPHPServerMsg:(NSString *)strUrl
+{
+    NSString *strInfo = [NSString stringWithFormat:@"http://121.12.118.32/AnalyticStatistics/?%@",strUrl];
+    [BaseService post:strInfo dictionay:nil timeout:10 success:^(id responseObject) {
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil removingNulls:YES ignoreArrays:YES];
+        DLog(@"DICT:%@",dict);
+    } fail:^(NSError *error) {
+        DLog(@"暂不上报,存储上报内容");
+    }];
 }
 
 @end

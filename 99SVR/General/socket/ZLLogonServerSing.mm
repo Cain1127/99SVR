@@ -23,12 +23,18 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
 
 - (void)loginSuccess:(NSString *)username pwd:(NSString *)password
 {
-#if 0
     if(protocol==NULL)
     {
         protocol = new ZLLogonProtocol();
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeProtocol)
+                name:MESSAGE_LOGIN_PROTOCOL_DISCONNECT_VC object:nil];
     }
     UserInfo *info = [UserInfo sharedUserInfo];
+    if (![username isEqualToString:@"0"]) {
+        [UserDefaults setObject:username forKey:kUserId];
+        [UserDefaults setObject:password forKey:kUserPwd];
+    }
+    
     if (info.otherLogin){
         const char *openId = [info.strOpenId UTF8String];
         const char *openToken = [info.strToken UTF8String];
@@ -42,13 +48,32 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
             strMd5 = [DecodeJson XCmdMd5String:password];
             [UserInfo sharedUserInfo].strMd5Pwd = strMd5;
         }
-        if (![username isEqualToString:@"0"]) {
-            [UserDefaults setObject:username forKey:kUserId];
-            [UserDefaults setObject:password forKey:kUserPwd];
-        }
         protocol->startLogin([username UTF8String], [strMd5 UTF8String]);
     }
-#endif
+}
+
+- (void)updatePwd:(NSString *)old cmd:(NSString *)password
+{
+    if (protocol) {
+        protocol->updatePwd([old UTF8String], [password UTF8String]);
+    }
+}
+
+- (void)updateNick:(NSString *)strNick
+{
+    if (protocol) {
+        protocol->updateNick("ce shi","19880909");
+    }
+}
+
+- (void)closeProtocol
+{
+    if(protocol)
+    {
+        protocol->~ZLLogonProtocol();
+        delete protocol;
+        protocol = NULL;
+    }
 }
 
 @end

@@ -23,7 +23,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"我的资产";
+    self.txtTitle.text = @"我的资产";
     
     [self initSubviews];
 }
@@ -35,7 +35,7 @@
     
     UILabel *titleLable = [[UILabel alloc] init];
     titleLable.tintColor = UIColorFromRGB(0x555555);
-    titleLable.frame = Rect(30,15,80,25);
+    titleLable.frame = Rect(30,15+kNavigationHeight,80,25);
     titleLable.font = XCFONT(15);
     titleLable.text = @"玖玖币";
     [self.view addSubview:titleLable];

@@ -10,4 +10,7 @@
 
 @interface NavigationViewController : UINavigationController
 
+@property (nonatomic,assign) BOOL fullScreenPopGestureEnable;
+
+
 @end

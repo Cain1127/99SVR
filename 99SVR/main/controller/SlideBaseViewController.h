@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CustomViewController.h"
 
-@interface SlideBaseViewController : UIViewController
+@interface SlideBaseViewController : CustomViewController
 
 - (void)didPanEvent:(UIPanGestureRecognizer *)recognizer;
 

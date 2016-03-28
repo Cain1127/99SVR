@@ -8,6 +8,7 @@
 
 #import "TextHomeViewController.h"
 #import "RightView.h"
+#import "TextEsotericaViewController.h"
 #import "TeachView.h"
 #import "TextHistoryViewController.h"
 #import "UIButton+WebCache.h"
@@ -24,8 +25,9 @@
 #import "BaseService.h"
 #import "TextRoomModel.h"
 #import "TextTodayVPViewController.h"
+#import "MyScrollView.h"
 
-@interface TextHomeViewController ()<UIScrollViewDelegate,RightViewDelegate>
+@interface TextHomeViewController ()<UIScrollViewDelegate,RightViewDelegate,GroupDelegate>
 {
     NSInteger _tag;
     CGFloat startContentOffsetX;
@@ -40,7 +42,7 @@
 @property (nonatomic,strong) RightView *rightView;
 @property (nonatomic,strong) ThumButton *btnTitle;
 @property (nonatomic,strong) GroupView *group;
-@property (nonatomic,strong) UIScrollView *scrollView;
+@property (nonatomic,strong) MyScrollView *scrollView;
 @property (nonatomic,strong) TextTcpSocket *textSocket;
 @property (nonatomic,strong) UIView *headView;
 @property (nonatomic,strong) TextRoomModel *model;
@@ -49,14 +51,6 @@
 @end
 
 @implementation TextHomeViewController
-
-//- (void)initData
-//{
-//    [BaseService postJSONWithUrl:@"http://172.16.41.99/test/test.php?act=script" parameters:nil success:^(id responseObject)
-//    {
-//        
-//    } fail:nil];
-//}
 
 - (id)initWithModel:(TextRoomModel *)model
 {
@@ -125,12 +119,12 @@
     [self refreshBtnTitle];
     [_btnTitle addTarget:self action:@selector(showTeacherView) forControlEvents:UIControlEventTouchUpInside];
     
-    NSArray *aryMen = @[@"直播",@"聊天",@"观点"];
+    NSArray *aryMen = @[@"直播",@"聊天",@"观点",@"个人秘籍"];
     _group = [[GroupView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44) ary:aryMen];
     [self.view addSubview:_group];
-    [_group setBtnTag:1 tag1:2 tag2:3];
+    _group.delegate = self;
     
-    _scrollView = [[UIScrollView alloc] initWithFrame:Rect(0,_group.y+_group.height,
+    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0,_group.y+_group.height,
                                 kScreenWidth, kScreenHeight-_group.y-_group.height)];
     [self.view addSubview:_scrollView];
     
@@ -146,28 +140,31 @@
     TextLiveViewController *textLive = [[TextLiveViewController alloc] initWithSocket:_textSocket];
     TextChatViewController *textChat = [[TextChatViewController alloc] initWithSocket:_textSocket];
     TextNewViewController *textNew = [[TextNewViewController alloc] initWithSocket:_textSocket];
-   
+    TextEsotericaViewController *esoster = [[TextEsotericaViewController alloc] initWithSocket:_textSocket];
+    
     [self addChildViewController:textLive];
     [self addChildViewController:textChat];
     [self addChildViewController:textNew];
+    [self addChildViewController:esoster];
     
     textLive.view.frame = Rect(0, 0, kScreenWidth,_scrollView.height);
     textChat.view.frame = Rect(kScreenWidth, 0, kScreenWidth, _scrollView.height);
     textNew.view.frame  = Rect(kScreenWidth*2, 0, kScreenWidth, _scrollView.height);
-
+    esoster.view.frame = Rect(kScreenWidth*3, 0, kScreenWidth, _scrollView.height);
+    
     [_scrollView addSubview:textLive.view];
     [_scrollView addSubview:textChat.view];
     [_scrollView addSubview:textNew.view];
-    _scrollView.contentSize = CGSizeMake(kScreenWidth*3, _scrollView.height);
-    _tag = 0;
+    [_scrollView addSubview:esoster.view];
     
+    _scrollView.contentSize = CGSizeMake(kScreenWidth*4, _scrollView.height);
+    _tag = 0;
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftBtn setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
     [leftBtn setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
     [_headView addSubview:leftBtn];
     leftBtn.frame = Rect(0, 20, 44, 44);
     [leftBtn addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
-    
     
     hidenView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
     [self.view addSubview:hidenView];
@@ -209,7 +206,7 @@
 - (void)navBack
 {
     [_textSocket exitRoom];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewDidLoad
@@ -224,13 +221,19 @@
         [_textSocket connectRoom:_roomId];
     }
     [self initUIHead];
-    __weak TextHomeViewController *__self = self;
-    [_group addEvent:^(id sender)
-     {
-         [__self btnEvent:sender];
-     }];
+//    __weak TextHomeViewController *__self = self;
+//    [_group addEvent:^(id sender)
+//     {
+//         [__self btnEvent:sender];
+//     }];
     UIButton *btnSender = [_group viewWithTag:1];
     [self btnEvent:btnSender];
+}
+
+
+- (void)clickIndex:(UIButton *)btn tag:(NSInteger)tag
+{
+    [self btnEvent:btn];
 }
 
 - (void)btnEvent:(id)sender

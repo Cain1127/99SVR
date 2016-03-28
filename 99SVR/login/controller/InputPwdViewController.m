@@ -115,28 +115,23 @@
 - (void)initUIHead
 {
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
-    [self setLeftBtn:btnBack];
-    
-    [self createLabelWithRect:Rect(30, 80, 80, 30)];
-    _txtName = [self createTextField:Rect(30, 80, kScreenWidth-60, 30)];
+
+    [self createLabelWithRect:Rect(30, 8, 80, 30)];
+    _txtName = [self createTextField:Rect(30, 8, kScreenWidth-60, 30)];
     [_txtName setPlaceholder:@"请输入密码"];
     
-    [self createLabelWithRect:Rect(30, 130,80, 30)];
-    _txtCode = [self createTextField:Rect(_txtName.x,130,_txtName.width,_txtName.height)];
+    [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
+    _txtCode = [self createTextField:Rect(_txtName.x,_txtName.y+50,_txtName.width,_txtName.height)];
     [_txtCode setPlaceholder:@"请确认密码"];
     
-    _lblError = [[UILabel alloc] initWithFrame:Rect(30, 178, kScreenWidth-60, 20)];
+    _lblError = [[UILabel alloc] initWithFrame:Rect(30, _txtCode.y+40, kScreenWidth-60, 20)];
     [_lblError setFont:XCFONT(14)];
     [_lblError setTextColor:[UIColor redColor]];
     [self.view addSubview:_lblError];
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, 200, kScreenWidth-60, 40);
+    btnRegister.frame = Rect(30, _lblError.y+35, kScreenWidth-60, 40);
     [btnRegister setTitle:@"完成" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];

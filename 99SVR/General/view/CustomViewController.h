@@ -10,6 +10,7 @@
 
 @interface CustomViewController : UIViewController
 
+@property (nonatomic,strong) UILabel *txtTitle;
 
 - (void)setHeadViewHidden:(BOOL)bFlag;
 - (void)setViewBgColor:(UIColor *)bgColor;
@@ -22,6 +23,7 @@
 - (void)setLineHidden:(BOOL)bHidden;
 
 
++ (UIButton *)itemWithTarget:(id)target action:(SEL)action image:(NSString *)image highImage:(NSString *)highImage;
 
 
 

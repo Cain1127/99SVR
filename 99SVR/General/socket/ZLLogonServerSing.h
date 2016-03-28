@@ -13,8 +13,25 @@
 @interface ZLLogonServerSing : NSObject
 
 DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
-
+/**
+ *  账号登录
+ *
+ *  @param username <#username description#>
+ *  @param password <#password description#>
+ */
 - (void)loginSuccess:(NSString *)username pwd:(NSString *)password;
-
+/**
+ *  修改密码
+ *
+ *  @param old      <#old description#>
+ *  @param password <#password description#>
+ */
+- (void)updatePwd:(NSString *)old cmd:(NSString *)password;
+/**
+ *  修改昵称
+ *
+ *  @param strNick <#strNick description#>
+ */
+- (void)updateNick:(NSString *)strNick;
 
 @end

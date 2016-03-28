@@ -8,6 +8,6 @@
 
 #import "CustomViewController.h"
 
-@interface AssetViewController : UIViewController
+@interface AssetViewController :CustomViewController
 
 @end

@@ -39,11 +39,11 @@
     [super viewDidLoad];
     banding = [UserInfo sharedUserInfo].banding;
     if (banding) {
-        [self setTitle:@"修改绑定手机"];
+        [self setTitleText:@"修改绑定手机"];
     }
     else
     {
-        [self setTitle:@"绑定手机"];
+        [self setTitleText:@"绑定手机"];
     }
     NSDate *date = [NSDate date];
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
@@ -61,7 +61,7 @@
         _txtName = [self createTextField:Rect(30, 20, kScreenWidth-60, 30)];
         [_txtName setPlaceholder:@"请输入手机号码"];
         [_txtName setKeyboardType:UIKeyboardTypeNumberPad];
-        frame.origin.y = _txtName.y;
+        frame.origin.y = _txtName.y+50;
     }
     else
     {
@@ -188,28 +188,25 @@
     NSString *strMd5;
     if(banding)
     {
-        strMd5 = [NSString stringWithFormat:@"action=4&date=%@&account=%d",strDate,[UserInfo sharedUserInfo].nUserId];
+        strMd5 = [NSString stringWithFormat:@"action=4&date=%@&userid=%d",strDate,[UserInfo sharedUserInfo].nUserId];
     }
     else
     {
-        strMd5 = [NSString stringWithFormat:@"action=3&date=%@&account=%@",strDate,_mobile];
+        strMd5 = [NSString stringWithFormat:@"action=3&date=%@&pnum=%@",strDate,_mobile];
     }
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = @"http://172.16.41.158:9999/mapiphone/getmsgcode";
-    
     NSDictionary *parameters = nil;
     if(!banding)
     {
-        parameters = @{@"action":@(3),@"account":_mobile,@"key":strMd5,@"client":@(2)};
+        parameters = @{@"action":@(3),@"pnum":_mobile,@"key":strMd5,@"client":@(2)};
     }
     else
     {
-        parameters = @{@"action":@(4),@"account":@([UserInfo sharedUserInfo].nUserId),@"key":strMd5,@"client":@(2)};
+        parameters = @{@"action":@(4),@"userid":@([UserInfo sharedUserInfo].nUserId),@"key":strMd5,@"client":@(2)};
     }
-//    
     @WeakObj(self)
-    [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id responseObject)
+    [BaseService postJSONWithUrl:kBand_mobile_getcode_URL parameters:parameters success:^(id responseObject)
     {
          [ProgressHUD dismiss];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
@@ -297,12 +294,12 @@
             [_lblError setText:@"请输入正确的手机号"];
             return ;
         }
-        _password = [_txtPwd text];
-        if([_password length]==0)
-        {
-            [_lblError setText:@"必须输入密码才能绑定手机"];
-            return ;
-        }
+//        _password = [_txtPwd text];
+//        if([_password length]==0)
+//        {
+//            [_lblError setText:@"必须输入密码才能绑定手机"];
+//            return ;
+//        }
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)
@@ -318,14 +315,13 @@
     if(!banding)
     {
         //直接绑定手机
-        paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(3),@"code":strCode,@"pwd":_password};
-//        strInfo = @"http://abc.99ducaijing.com/mapiphone/setphone";
-        strInfo = @"http://172.16.41.158:9999/mapiphone/setphone";
+        paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(3),@"code":strCode};
+        strInfo = kBand_mobile_setphone_URL;
     }
     else
     {
-        paramters = @{@"client":@"2",@"account":@([UserInfo sharedUserInfo].nUserId),@"action":@(4),@"code":strCode};
-        strInfo = @"http://172.16.41.158:9999/mapiphone/checkphonecode";
+        paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"action":@(4),@"code":strCode};
+        strInfo = kBand_mobile_checkcode_URL;
     }
     @WeakObj(self);
     __block int __banding = banding;

@@ -61,13 +61,6 @@
 
 - (void)initUIHead
 {
-    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
-    btnBack.frame = Rect(0, 20, 44, 44);
-    [self setLeftBtn:btnBack];
-    
     _tableView = [[UITableView alloc] initWithFrame:Rect(0, 64, kScreenWidth,kScreenHeight-64) style:UITableViewStyleGrouped];
     _tableView.dataSource = self;
     _tableView.delegate = self;

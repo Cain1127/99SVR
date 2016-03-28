@@ -37,13 +37,6 @@
     [super viewDidLoad];
     [self setTitleText:@"收藏"];
     
-    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
-    [self setLeftBtn:btnBack];
-    btnBack.frame = Rect(0, 20, 44, 44);
-    
     [self initUIBody];
 }
 

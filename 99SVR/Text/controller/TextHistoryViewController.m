@@ -56,7 +56,7 @@
     [fmt setDateFormat:@"yyyy年MM月dd日"];
     currentTime = -kOne_Day_Time;
     currentDate = [NSDate dateWithTimeIntervalSinceNow:currentTime];
-    [self setTitleText:[fmt stringFromDate:currentDate]];
+//    [self setTitleText:[fmt stringFromDate:currentDate]];
     dict = [NSMutableDictionary dictionary];
     [self initUIHead];
     [self requestHistory];
@@ -85,7 +85,7 @@
     [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
     btnBack.frame = Rect(0, 20, 44, 44);
-    [self setLeftBtn:btnBack];
+//    [self setLeftBtn:btnBack];
     
     _tableView = [[UITableView alloc] initWithFrame:Rect(0, 64, kScreenWidth,kScreenHeight-64) style:UITableViewStyleGrouped];
     _tableView.dataSource = self;
@@ -132,7 +132,7 @@
     currentTime += nTemp;
     
     currentDate = [NSDate dateWithTimeIntervalSinceNow:currentTime];
-    [self setTitleText:[fmt stringFromDate:currentDate]];
+//    [self setTitleText:[fmt stringFromDate:currentDate]];
     [self requestHistory];
 }
 

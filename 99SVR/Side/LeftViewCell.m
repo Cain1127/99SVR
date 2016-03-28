@@ -50,7 +50,7 @@
     {
         [self setBackgroundColor:kLeftViewBgColor];
         UIView *bgView = [[UIView alloc] init];
-        [bgView setBackgroundColor:RGB(47, 102, 172)];
+        [bgView setBackgroundColor:UIColorFromRGB(0x0066bc)];
         
         [self setSelectedBackgroundView:bgView];
         

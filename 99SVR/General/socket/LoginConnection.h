@@ -1,5 +1,8 @@
+#include <vector>
 #include "Connection.h"
 #include "LoginListener.h"
+#include "HallListener.h"
+#include "PushListener.h"
 #include "LoginMessage.pb.h"
 
 class LoginConnection : public Connection
@@ -7,9 +10,17 @@ class LoginConnection : public Connection
 
 private:
 
-	LoginListener* listener;
+	LoginListener* login_listener;
+	HallListener* hall_listener;
+	PushListener* push_listener;
 
 	UserLogonSuccess2 logonuser;
+
+	uint32 nmobile;
+	uint32 version;
+
+
+	void dispatch_push_message(void* body);
 
 
 protected:
@@ -20,8 +31,12 @@ protected:
 public:
 
 	void RegisterMessageListener(LoginListener* message_listener);
+	void RegisterHallListener(HallListener* message_listener);
+	void RegisterPushListener(PushListener* message_listener);
 
 	void DispatchSocketMessage(void* msg);
+
+	void SendMsg_Ping();
 
 	void SendMsg_LoginReq4(UserLogonReq4& req);
 
@@ -37,7 +52,28 @@ public:
 
 	void SendMsg_GetRoomGroupListReq();
 
+	void SendMsg_GetUserMoreInfReq(uint32 userid);
+
+	void SendMsg_ExitAlertReq();
+
+	//--------------------------------------//
+	/*
+	void SendMsg_MessageUnreadReq();
+
+	void SendMsg_HallMessageReq(HallMessageReq& req);
+
+	void SendMsg_ViewAnswerReq(ViewAnswerReq& req);
+
+	void SendMsg_InterestForReq(InterestForReq& req);
+
+	void SendMsg_FansCountReq(uint32 teacherid);
+	*/
+	//-------------------------------------//
+
+	void close();
+
 	LoginConnection();
 
-	virtual ~LoginConnection(void);
+	~LoginConnection(void);
+
 };

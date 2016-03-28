@@ -34,13 +34,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTitleText:_strTitle];
-    
-    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
-    [self setLeftBtn:btnBack];
+//    [self setTitleText:_strTitle];
+    [self setTitle:_strTitle];
     _webView = [[UIWebView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64)];
     
     [self.view addSubview:_webView];

@@ -24,7 +24,7 @@
     UIColor *color = UIColorFromRGB(0xB2CDFF);
     UIColor *linecolor = UIColorFromRGB(0x6898e5);
     
-    _lblLabel = [[UILabel alloc] initWithFrame:Rect(_imgHead.x+_imgHead.width+15,8, kScreenWidth-_imgHead.x-_imgHead.width-15,25)];
+    _lblLabel = [[UILabel alloc] initWithFrame:Rect(_imgHead.x+_imgHead.width+15,8, 0,25)];
     [self addSubview:_lblLabel];
     [_lblLabel setBackgroundColor:UIColorFromRGB(0x2263cc)];
     [_lblLabel setTextColor:UIColorFromRGB(0xffffff)];

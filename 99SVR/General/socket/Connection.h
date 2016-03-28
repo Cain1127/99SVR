@@ -1,7 +1,5 @@
-//#include <cmd_vchat.h>
-#include "cmd_vchat.h"
+#include "proto_cmd_vchat.h"
 #include "message_vchat.h"
-//#include <message_vchat.h>
 
 #include "Socket.h"
 #include "ConnectionListener.h"
@@ -25,6 +23,7 @@ protected:
 	char recv_buf[64 * 1024];
 
 	int main_cmd;
+	time_t last_ping_time;
 
 	Socket* socket;
 	
@@ -34,9 +33,17 @@ protected:
 	
 	void SendMsg_Hello();
 
+	virtual void SendMsg_Ping() = 0;
+
+	bool is_closed();
+
 	int send(const char* buf, int len);
 
 	int recv(char* buf, int offset, int len);
+
+	int close();
+
+	int get_error();
 
 	void send_message(int sub_cmd, void* req, int req_len);
 
@@ -52,11 +59,10 @@ public:
 	void RegisterConnectionListener(ConnectionListener* connection_listener);
 	virtual void DispatchSocketMessage(void* msg) = 0;
 
-	void connect(const char* host, short port);
+	int connect(const char* host, short port);
 
 	void start_read(void);
 	void start_read_thread(void);
-
 
 
 	Connection(void);
@@ -87,11 +93,13 @@ public:
 	this->send((const char*)pHead, pHead->length);
 
 
-//#define ON_MESSAGE(InfoClass, OnMethod) 
-
-#define ON_MESSAGE(InfoClass, OnMethod) \
+#define ON_MESSAGE(listener, InfoClass, OnMethod) \
 	{ \
-		InfoClass info; \
-		info.ParseFromArray(body, info.ByteSize()); \
-		listener->OnMethod(info); \
+		if ( listener != NULL ) \
+		{ \
+			InfoClass info; \
+			info.ParseFromArray(body, info.ByteSize()); \
+			listener->OnMethod(info); \
+		} \
 	}
+

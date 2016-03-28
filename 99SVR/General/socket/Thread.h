@@ -1,5 +1,8 @@
+
+#ifndef _Thread_Network_H
+#define _Thread_Network_H
+
 #ifdef WIN
-#include <windows.h>
 #include <process.h>
 #define ThreadVoid void
 #define ThreadHandle uintptr_t
@@ -12,7 +15,7 @@
 
 typedef ThreadVoid (*Runnable)(void*);
 
-static ThreadHandle thread_handle;
+extern ThreadHandle thread_handle;
 
 //static Runnable runnable;
 //static void* runnable_param;
@@ -30,3 +33,5 @@ public:
 	~Thread(void);
 
 };
+
+#endif

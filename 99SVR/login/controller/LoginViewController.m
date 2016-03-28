@@ -61,23 +61,26 @@
     [self setTitle:@"登录"];
     [self.view setBackgroundColor:RGB(245, 245, 246)];
     
-    UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 120)];
-    [bodyView setBackgroundColor:RGB(235, 239, 244)];
+    UIImageView *bodyView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenWidth*12/25)];
     [self.view addSubview:bodyView];
+    bodyView.contentMode = UIViewContentModeScaleAspectFit;
+    @WeakObj(bodyView)
+    dispatch_async(dispatch_get_global_queue(0, 0),
+    ^{
+       char cString[255];
+       const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+       sprintf(cString, "%s/login_bg.png",path);
+       NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+       UIImage *image = [UIImage imageWithContentsOfFile:objCString];
+       if (image)
+       {
+           dispatch_async(dispatch_get_main_queue(), ^{
+               bodyViewWeak.image = image;
+           });
+       }
+    });
     
-    UILabel *lblView = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-44, 16, 88, 88)];
-    [lblView setBackgroundColor:RGB(234, 239, 244)];
-    [bodyView addSubview:lblView];
-    lblView.layer.borderWidth = 0.5;
-    lblView.layer.borderColor =UIColorFromRGB(0xcfcfcf).CGColor;
-    [lblView.layer setMasksToBounds:YES];
-    [lblView.layer setCornerRadius:44];
-    
-    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
-    [bodyView addSubview:logoImageView];
-    [logoImageView setFrame:Rect(kScreenWidth/2-39, 21, 78,78)];
-    
-    _txtUser = [[LoginTextField alloc] initWithFrame:CGRectMake(15 + 32,bodyView.y+bodyView.height+30, kScreenWidth-30 - 32 * 2, 44)];
+    _txtUser = [[LoginTextField alloc] initWithFrame:CGRectMake(15,bodyView.y+bodyView.height, kScreenWidth-30, 44)];
     _txtPwd = [[LoginTextField alloc] initWithFrame:CGRectMake(_txtUser.x, _txtUser.frame.origin.y+_txtUser.frame.size.height+10, _txtUser.width, 44)];
     
     [_txtUser setBorderStyle:UITextBorderStyleNone];
@@ -139,18 +142,18 @@
     _btnLogin.layer.cornerRadius = 3;
     
     [_btnFind setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-    [_btnFind setTitleColor:UIColorFromRGB(0x343434) forState:UIControlStateNormal];
+    [_btnFind setTitleColor:UIColorFromRGB(0x0078DD) forState:UIControlStateNormal];
     [_btnFind setTitle:@"忘记密码" forState:UIControlStateNormal];
     CGSize findSize = [@"忘记密码" sizeWithAttributes:@{NSFontAttributeName:XCFONT(15)}];
     [self.view addSubview:_btnFind];
     
     [_btnLogin setTitle:@"登 录" forState:UIControlStateNormal];
-    [_btnLogin setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    [_btnLogin setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
+    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
+    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
     _btnLogin.titleLabel.font = XCFONT(15);
     
-    [_btnRegin setTitleColor:UIColorFromRGB(0x555555) forState:UIControlStateNormal];
+    [_btnRegin setTitleColor:UIColorFromRGB(0x0078DD) forState:UIControlStateNormal];
     [_btnRegin setTitle:@"快速注册" forState:UIControlStateNormal];
     [_btnRegin setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
     _btnRegin.titleLabel.font = XCFONT(15);
@@ -182,21 +185,26 @@
         make.bottom.equalTo(_txtPwd);
     }];
 
-    _btnLogin.frame = Rect(30, _txtPwd.y+_txtPwd.height+20, kScreenWidth-60, 40);
+    _btnLogin.frame = Rect(15, _txtPwd.y+_txtPwd.height+20, kScreenWidth-30, 40);
     _btnFind.titleLabel.font = XCFONT(15);
     _btnRegin.titleLabel.font = XCFONT(15);
-    _btnRegin.frame = Rect(20, kScreenHeight-100, findSize.width, 40);
-    [_btnFind setFrame:Rect(kScreenWidth-findSize.width-20,kScreenHeight-100, findSize.width,40)];
+    _btnRegin.frame = Rect(20, kScreenHeight-70, findSize.width, 40);
+    [_btnFind setFrame:Rect(kScreenWidth-findSize.width-20,kScreenHeight-70, findSize.width,40)];
     
     hidenView = [[UIView alloc] initWithFrame:Rect(0, _btnLogin.y+_btnLogin.height, kScreenWidth,100)];
     [self.view addSubview:hidenView];
     hidenView.hidden = YES;
     
-    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(0, 10, kScreenWidth, 20)];
-    [lblTemp setText:@"使用合作账号登录"];
+    UILabel *line = [[UILabel alloc] initWithFrame:Rect(15, 30, kScreenWidth-30, 0.5)];
+    [line setBackgroundColor:kLineColor];
+    [hidenView addSubview:line];
+    
+    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-10, 20, 20, 20)];
+    [lblTemp setText:@"或"];
     [lblTemp setTextColor:UIColorFromRGB(0x555555)];
     [hidenView addSubview:lblTemp];
     [lblTemp setTextAlignment:NSTextAlignmentCenter];
+    [lblTemp setBackgroundColor:RGB(245, 245, 246)];
     [lblTemp setFont:XCFONT(15)];
     
     UIButton *btnQQ = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -211,7 +219,6 @@
     [btnWeiBo setImage:[UIImage imageNamed:@"weibo"] forState:UIControlStateNormal];
     [btnWeiBo setImage:[UIImage imageNamed:@"weibo_h"] forState:UIControlStateHighlighted];
     btnWeiBo.frame = Rect(kScreenWidth/2-102, 50, 44, 44);
-    
     [btnWeiBo addTarget:self action:@selector(sinaLogin) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *btnWeiChat = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -283,11 +290,10 @@
     __block NSString *__strPwd = strPwd;
     [self performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8.0];
     [UserInfo sharedUserInfo].observationInfo = 0;
+    [UserInfo sharedUserInfo].otherLogin = 0;
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
-//       LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
         [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:__strUser pwd:__strPwd];
-//       [tcpSocket loginServer:__strUser pwd:__strPwd];
     });
 }
 
@@ -440,58 +446,7 @@
         });
         return ;
     }
-    
-    if (dict && [dict objectForKey:@"code"])
-    {
-        NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByWeixin?client=2&code=%@",kRegisterNumber,[dict objectForKey:@"code"]];
-        __weak LoginViewController *__self = self;
-//        __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
-        __weak UserInfo *__user = [UserInfo sharedUserInfo];
-        [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
-        {
-            dispatch_async(dispatch_get_main_queue(),
-            ^{
-                [__self.view hiddenActivityInView];
-            });
-            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-            if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
-                [[dict objectForKey:@"token"] isKindOfClass:[NSString class]])
-            {
-                __user.strOpenId = [dict objectForKey:@"openid"];
-                __user.strToken = [dict objectForKey:@"token"];
-                __user.nUserId = [[dict objectForKey:@"userid"] intValue];
-                __user.otherLogin = [[dict objectForKey:@"type"] intValue];
-                DLog(@"登录成功");
-                dispatch_async(dispatch_get_main_queue(),
-                               ^{
-                                   [__self.view makeToast:@"微信登录成功" duration:2 position:@"center"];
-                               });
-                
-                [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
-//                [__tcpSocket loginServer:NSStringFromInt(__user.nUserId) pwd:@""];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-                ^{
-                   [__self popBack];
-                });
-            }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(),
-                ^{
-                   [__self.view hideToastActivity];
-                   [__self.view makeToast:@"微信登录授权失败"];
-                });
-            }
-            
-        }
-        fail:^(NSError *error)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [__self.view hideToastActivity];
-                [__self.view makeToast:@"微信登录授权失败"];
-            });
-        }];
-    }
+ 
 }
 
 #pragma mark 新浪登录响应
@@ -510,15 +465,12 @@
     }
     //检测 user id
     if (dict && [dict objectForKey:@"userID"] && [dict objectForKey:@"accessToken"]) {
-        __weak LoginViewController *__self = self;
         NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByWeibo?client=2&openid=%@&token=%@",
                              kRegisterNumber,[dict objectForKey:@"userID"],[dict objectForKey:@"accessToken"]];
         __weak UserInfo *__user = [UserInfo sharedUserInfo];
-//        __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
+        @WeakObj(self)
         [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [__self.view hiddenActivityInView];
-            });
+           [selfWeak.view hiddenActivityInView];
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
             if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
                 [[dict objectForKey:@"token"] isKindOfClass:[NSString class]])
@@ -527,31 +479,19 @@
                 __user.strToken = [dict objectForKey:@"token"];
                 __user.nUserId = [[dict objectForKey:@"userid"] intValue];
                 __user.otherLogin = [[dict objectForKey:@"type"] intValue];
-                dispatch_async(dispatch_get_main_queue(),
-                ^{
-                    [__self.view makeToast:@"新浪微博登录成功" duration:2 position:@"center"];
-                });
+                [ProgressHUD showSuccess:@"授权成功"];
                 [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-                ^{
-                    [__self popBack];
-                });
+                [selfWeak performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8.0];
             }
             else
             {
-                dispatch_async(dispatch_get_main_queue(),
-                ^{
-                   [__self.view hideToastActivity];
-                   [__self.view makeToast:@"新浪微博登录失败"];
-                });
+               [selfWeak.view hideToastActivity];
+               [selfWeak.view makeToast:@"新浪微博登录失败"];
             }
         } fail:^(NSError *error)
         {
-            dispatch_async(dispatch_get_main_queue(),
-            ^{
-                [__self.view hideToastActivity];
-                [__self.view makeToast:@"新浪微博登录失败"];
-            });
+            [selfWeak.view hideToastActivity];
+            [selfWeak.view makeToast:@"新浪微博登录失败"];
         }];
     }
 }
@@ -580,40 +520,30 @@
 -(void)loginStatus:(NSNotification *)notify
 {
     __weak LoginViewController *__self = self;
-//    dispatch_async(dispatch_get_main_queue(),
-//    ^{
-//        [NSObject cancelPreviousPerformRequestsWithTarget:__self];
-//        [__self.view hideToastActivity];
-//        [__self.view makeToast:@"登录失败"];
-//    });
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:__self];
+        [__self.view hideToastActivity];
+    });
     if (notify==nil)
     {
         return ;
     }
     if ([notify.object isEqualToString:@"登录成功"])
     {
-//        [UserDefaults setBool:YES forKey:kIsLogin];
-//        [UserDefaults setObject:_txtUser.text forKey:kUserId];
-//        [UserDefaults setObject:_txtPwd.text forKey:kUserPwd];
-//        [UserDefaults synchronize];
-//        LSTcpSocket *tcpSocket = [LSTcpSocket sharedLSTcpSocket];
-//        [tcpSocket closeSocket];
-        
-        dispatch_async(dispatch_get_main_queue(),
-       ^{
-           [__self.view hideToastActivity];
-           [__self popBack];
-       });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [__self popBack];
+            [ProgressHUD showSuccess:@"登录成功"];
+        });
     }
     else
     {
         NSString *strMsg = notify.object;
-        __block NSString *__strMsg = strMsg;
         dispatch_async(dispatch_get_main_queue(),
-       ^{
-           [__self.view hideToastActivity];
-           [__self.view makeToast:__strMsg];
-       });
+        ^{
+            [__self.view hideToastActivity];
+            [ProgressHUD showError:strMsg];
+        });
     }
 }
 
@@ -634,7 +564,6 @@
 
 - (void)tencentDidLogin
 {
-    DLog(@"登录成功");
     if ([_tencentOAuth accessToken] && 0 != [[_tencentOAuth accessToken] length])
     {
         DLog(@"token:%@ openId;%@",[_tencentOAuth accessToken],[_tencentOAuth openId]);
@@ -656,8 +585,8 @@
                 __user.nUserId = [[dict objectForKey:@"userid"] intValue];
                 __user.otherLogin = [[dict objectForKey:@"type"] intValue];
                 [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
-                [selfWeak popBack];
-                [ProgressHUD showSuccess:@"QQ授权成功..."];
+                [ProgressHUD showSuccess:@"授权成功"];
+                [selfWeak performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8.0];
             }
             else
             {
@@ -774,17 +703,14 @@
     NSString *strKey = [NSString stringWithFormat:@"appid=wxfbfe01336f468525&openid=%@&token=%@&date=%@",_strOpenId,_strToken,strDate];
     NSString *strMd5 = [DecodeJson XCmdMd5String:strKey];
     strMd5 = [DecodeJson XCmdMd5String:strKey];
-    __weak LoginViewController *__self = self;
+    @WeakObj(self)
     __weak UserInfo *__user = [UserInfo sharedUserInfo];
     NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByWeixin",kRegisterNumber];
     NSDictionary *dict = @{@"client":@"2",@"openid":_strOpenId,@"token":_strToken,@"nick":_strNickName,@"key":strMd5};
     DLog(@"strInfo:%zi",strInfo.length);
     [BaseService postJSONWithUrl:strInfo parameters:dict success:^(id responseObject)
     {
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-            [__self.view hiddenActivityInView];
-        });
+        [selfWeak.view hiddenActivityInView];
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
         if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
             [[dict objectForKey:@"token"] isKindOfClass:[NSString class]])
@@ -793,25 +719,18 @@
             __user.strToken = [dict objectForKey:@"token"];
             __user.nUserId = [[dict objectForKey:@"userid"] intValue];
             __user.otherLogin = [[dict objectForKey:@"type"] intValue];
-            DLog(@"登录成功");
-            dispatch_async(dispatch_get_main_queue(),
-            ^{
-                [__self.view makeToast:@"微信登录成功" duration:2 position:@"center"];
-            });
+            [ProgressHUD showSuccess:@"授权成功"];
             [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-            ^{
-               [__self popBack];
-            });
+            [selfWeak performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8];
+        }
+        else{
+            [ProgressHUD showError:@"授权失败"];
         }
     }
     fail:^(NSError *error)
     {
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-            [__self.view hiddenActivityInView];
-            [__self.view makeToast:@"微信登录授权失败"];
-        });
+        [selfWeak.view hiddenActivityInView];
+        [selfWeak.view makeToast:@"微信登录授权失败"];
     }];
 }
 
@@ -828,6 +747,11 @@
 - (void) keyboardWasHidden:(NSNotification *) notification
 {
     self.view.frame = Rect(0, 64, kScreenWidth, kScreenHeight);
+}
+
+- (void)dealloc
+{
+    DLog(@"dealloc!");
 }
 
 @end

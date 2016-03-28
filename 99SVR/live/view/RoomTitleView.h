@@ -8,11 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol TitleViewDelegate <NSObject>
+
+- (void)roomTitleView:(UIButton *)sender;
+
+@end
+
 @interface RoomTitleView : UIView
 
-- (id)initWithFrame:(CGRect)frame ary:(NSArray *)keyName;
+@property (nonatomic,assign) id<TitleViewDelegate> delegate;
 
-- (void)addEvent:(void (^)(id sender))handler;
+- (id)initWithFrame:(CGRect)frame ary:(NSArray *)keyName;
 
 - (void)setBtnSelect:(NSInteger)tag;
 @end

@@ -18,7 +18,6 @@
 #import "SVRInitLBS.h"
 #import "IndexViewController.h"
 #import "BaseService.h"
-#import "RightViewController.h"
 #import <Bugly/BuglyLog.h>
 #import <Bugly/CrashReporter.h>
 #import "MTA.h"
@@ -26,13 +25,13 @@
 #import "MTAConfig.h"
 #import "WXApi.h"
 #import "TabBarController.h"
+#import "MainViewController.h"
 
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
 
 @interface AppDelegate ()<UIAlertViewDelegate,WeiboSDKDelegate,WXApiDelegate>
 {
     IndexViewController *indexView;
-    RightViewController *rightView;
     BOOL bStatus;
     BOOL bGGLogin;
 }
@@ -58,37 +57,37 @@
     [WXApi registerApp:@"wxfbfe01336f468525" withDescription:@"weixin"];
     
     [self onCheckVersion];
-//    _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    [_window makeKeyAndVisible];
-//    leftView = [[LeftViewController alloc] init];
-//    
-//    rightView = [[RightViewController alloc] init];
-//    _sides = [[WWSideslipViewController alloc] initWithLeftView:leftView andMainView:rightView andRightView:nil andBackgroundImage:nil];
-//    [_window setRootViewController:_sides];
+    
+    NSDictionary *dict = [UserDefaults objectForKey:kVideoList];
+    if (!dict){
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"video_list"
+                                                         ofType:@"txt"];
+        NSData *data = [NSData dataWithContentsOfFile:path];
+        NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+        [UserDefaults setObject:parameters forKey:kVideoList];
+    }
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[TabBarController alloc] init];
     [self.window makeKeyAndVisible];
     
-    NSString *strGift = [UserDefaults objectForKey:kGiftInfo];
-    if (strGift){
-        [self setGiftInfo:strGift];
+    NSDictionary *dictGift = [UserDefaults objectForKey:kGiftInfo];
+    if (dictGift){
+        [self setGiftInfo:dictGift];
     }
     else{
         NSString *path = [[NSBundle mainBundle] pathForResource:@"gift"
                                                          ofType:@"txt"];
-        NSString *content = [NSString stringWithContentsOfFile:path
-                                                      encoding:NSUTF8StringEncoding
-                                                         error:nil];
-        [self setGiftInfo:content];
-        [UserDefaults setObject:content forKey:kGiftInfo];
-        DLog(@"第一次拿到");
+        NSData *data = [NSData dataWithContentsOfFile:path];
+        NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+        [UserDefaults setObject:parameters forKey:kGiftInfo];
+        [self setGiftInfo:parameters];
     }
     return YES;
 }
 
-- (void)setGiftInfo:(NSString *)strGift
+- (void)setGiftInfo:(NSDictionary *)dict
 {
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[strGift dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
     if (dict && [dict objectForKey:@"gift"]) {
         [UserInfo sharedUserInfo].giftVer = [[dict objectForKey:@"ver"] intValue];
         NSArray *array = [dict objectForKey:@"gift"];

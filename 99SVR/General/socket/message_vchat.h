@@ -248,10 +248,10 @@ enum {
     Sub_Vchat_QueryUserMoreInfoReq = 162,   //查询用户更多信息
     Sub_Vchat_QueryUserMoreInfoResp = 163,
 
-	Sub_Vchat_QuanxianId2ListResp =164, //权限id数据
-	Sub_Vchat_QuanxianAction2ListBegin=165, //权限操作数据
-	Sub_Vchat_QuanxianAction2ListResp=166,
-	Sub_Vchat_QuanxianAction2ListFinished=167,
+	Sub_VChat_QuanxianId2ListResp =164, //权限id数据
+	Sub_VChat_QuanxianAction2ListBegin=165, //权限操作数据
+	Sub_VChat_QuanxianAction2ListResp=166,
+	Sub_VChat_QuanxianAction2ListFinished=167,
 
 	//3套保留指令, 先占位,使用的时候,在修改指令名称
     Sub_Vchat_MessageReq_reserve1_req = 168,
@@ -339,43 +339,43 @@ enum {
 	Sub_Vchat_HallMessageNotify =           10000,//信箱小红点提醒（服务器主动推送）
 
 	Sub_Vchat_HallMessageUnreadReq =        10001,//信箱未读记录数提醒请求
-	Sub_Vchat_HallMessageUnreadRes =        10002,//信箱未读记录数提醒响应
+	Sub_Vchat_HallMessageUnreadResp =        10002,//信箱未读记录数提醒响应
 
 	Sub_Vchat_HallMessageReq =              10003,//查看邮箱请求（不同分类请求用同一个消息类型及结构）
 
 	Sub_Vchat_HallInteractBegin =           10004,//查看互动回复，列表开始
-	Sub_Vchat_HallInteractRes =             10005,//查看互动回复，响应
+	Sub_Vchat_HallInteractResp =             10005,//查看互动回复，响应
 	Sub_Vchat_HallInteractEnd =             10006,//查看互动回复，列表结束
 
 	Sub_Vchat_HallAnswerBegin =             10007,//查看问答提醒，列表开始
-	Sub_Vchat_HallAnswerRes =               10008,//查看问答提醒，响应
+	Sub_Vchat_HallAnswerResp =               10008,//查看问答提醒，响应
 	Sub_Vchat_HallAnswerEnd =               10009,//查看问答提醒，列表结束
 
 	Sub_Vchat_HallViewShowBegin =           10010,//查看观点回复，列表开始
-	Sub_Vchat_HallViewShowRes =             10011,//查看观点回复，响应
+	Sub_Vchat_HallViewShowResp =             10011,//查看观点回复，响应
 	Sub_Vchat_HallViewShowEnd =             10012,//查看观点回复，列表结束
 
 	Sub_Vchat_HallTeacherFansBegin =        10013,//查看我的粉丝，列表开始
-	Sub_Vchat_HallTeacherFansRes =          10014,//查看我的粉丝，响应
+	Sub_Vchat_HallTeacherFansResp =          10014,//查看我的粉丝，响应
 	Sub_Vchat_HallTeacherFansEnd =          10015,//查看我的粉丝，列表结束
 
 	Sub_Vchat_HallInterestBegin =           10016,//查看我的关注（已关注讲师），列表开始
-	Sub_Vchat_HallInterestRes =             10017,//查看我的关注（已关注讲师），响应
+	Sub_Vchat_HallInterestResp =             10017,//查看我的关注（已关注讲师），响应
 	Sub_Vchat_HallInterestEnd =             10018,//查看我的关注（已关注讲师），列表结束
 
 	Sub_Vchat_HallUnInterestBegin =         10019,//查看我的关注（无关注讲师），列表开始
-	Sub_Vchat_HallUnInterestRes =           10020,//查看我的关注（无关注讲师），响应
+	Sub_Vchat_HallUnInterestResp =           10020,//查看我的关注（无关注讲师），响应
 	Sub_Vchat_HallUnInterestEnd =           10021,//查看我的关注（无关注讲师），列表结束
 	
 	Sub_Vchat_TextLivePointListBegin =      10022,//查看明日预测（已关注的讲师），列表开始
-	Sub_Vchat_TextLivePointListRes =        10023,//查看明日预测（已关注的讲师），响应
+	Sub_Vchat_TextLivePointListResp =        10023,//查看明日预测（已关注的讲师），响应
 	Sub_Vchat_TextLivePointListEnd =        10024,//查看明日预测（已关注的讲师），列表结束
 
 	Sub_Vchat_HallViewAnswerReq =           10025,//讲师回复（包含观点回复和回答提问）请求
-	Sub_Vchat_HallViewAnswerRes =           10026,//讲师回复（包含观点回复和回答提问）响应
+	Sub_Vchat_HallViewAnswerResp =           10026,//讲师回复（包含观点回复和回答提问）响应
 
 	Sub_Vchat_HallInterestForReq =          10027,//关注（无关注讲师时返回所有讲师列表，点击关注）请求
-	Sub_Vchat_HallInterestForRes =          10028,//关注（无关注讲师时返回所有讲师列表，点击关注）响应
+	Sub_Vchat_HallInterestForResp =          10028,//关注（无关注讲师时返回所有讲师列表，点击关注）响应
 
 	Sub_Vchat_HallMessageReq_Mobile =       10029,//查看邮箱请求（不同分类请求用同一个消息类型及结构）(暂时只给手机查询列表)
 
@@ -387,6 +387,8 @@ enum {
 	Sub_Vchat_HallUnInterestRes_Mobile =    10035,//查看我的关注（无关注讲师），响应(暂时只给手机查询列表)
 	Sub_Vchat_TextLivePointListRes_Mobile = 10036,//查看明日预测（已关注的讲师），响应(暂时只给手机查询列表)
 
+    Sub_Vchat_HallPERSECResp = 10037,//查看个人秘籍
+    Sub_Vchat_HallSystemInfoResp = 10038,//查看系统消息
 
 	Sub_Vchat_TextRoomJoinReq =             10100,//加入房间请求
 	Sub_Vchat_TextRoomJoinErr =             10101,//加入房间出错响应
@@ -506,7 +508,40 @@ enum {
 	Sub_Vchat_TextRoomViewPHPRes =      10179,//讲师通过PHP页面发布观点或修改观点或删除观点响应
 
     Sub_Vchat_HallGetFansCountReq =     10180,//获取讲师的粉丝总数请求
-    Sub_Vchat_HallGetFansCountRes =     10181,//获取讲师的粉丝总数响应
+    Sub_Vchat_HallGetFansCountResp =     10181,//获取讲师的粉丝总数响应
+    
+    
+    Sub_Vchat_ClientNotify = 10194, //推送命令
+    Sub_Vchat_BeTeacherReq = 10195, //拜师请求
+    Sub_Vchat_BeTeacherResp = 10196, //拜师请求
+    Sub_Vchat_notifyReq = 10197, //通告请求
+    
+    Sub_Vchat_TextRoomSecretsTotalReq = 10200,//返回秘籍总体信息响应
+    Sub_Vchat_TextRoomSecretsTotalResp = 10201,//返回秘籍总体信息响应
+    
+    Sub_Vchat_TextRoomSecretsListReq = 10202,//获取讲师个人秘籍列表请求
+    Sub_Vchat_TextRoomSecretsListResp = 10203,//获取讲师个人秘籍列表响应
+    Sub_Vchat_TextRoomSecBuyListResp = 10204,//获取已购买讲师个人秘籍列表响应
+    
+    Sub_Vchat_TextRoomBuySecretsReq = 10205,//个人秘籍单次订阅请求
+    Sub_Vchat_TextRoomBuySecretsResp = 10206,//个人秘籍单次订阅响应
+    
+    Sub_Vchat_TextRoomSecretsDetailReq = 10207,//个人秘籍详情请求
+    Sub_Vchat_TextRoomSecretsDetailResp = 10208,//个人秘籍详情响应
+    
+    Sub_Vchat_UserPayReq = 10290,				//付费请求
+    Sub_Vchat_UserPayResp = 10291,				//付费响应
+    Sub_Vchat_GetUserAccountBalanceReq = 10292,  //查询账户余额请求
+    Sub_Vchat_GetUserAccountBalanceResp = 10293,  //查询账户余额响应
+    Sub_Vchat_UserPayPHPReq = 10294,				//付费请求
+    Sub_Vchat_UserPayPHPResp = 10295,				//付费响应
+    Sub_Vchat_GetUserAccountBalancePHPReq = 10296,  //查询账户余额请求
+    Sub_Vchat_GetUserAccountBalancePHPResp = 10297,  //查询账户余额响应
+    Sub_Vchat_GetUserGoodStatusReq = 10298,  //查询用户商品请求
+    Sub_Vchat_GetUserGoodStatusResp = 10299,  //查询用户商品响应
+    
+    Sub_Vchat_GetUserMoreInfReq = 21001,                          //获取用户更多信息请求（手机，个性签名等）
+    Sub_Vchat_GetUserMoreInfResp = 21002,                          //获取用户更多信息应答（手机，个性签名等）
 
 };
 

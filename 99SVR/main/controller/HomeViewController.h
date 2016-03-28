@@ -10,6 +10,5 @@
 #import "SlideBaseViewController.h"
 
 @interface HomeViewController : SlideBaseViewController
-//CustomViewController
 
 @end

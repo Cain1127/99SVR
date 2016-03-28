@@ -99,11 +99,11 @@
     }
     fail:^(NSError *error)
     {
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-             [selfWeak.view hideToastActivity];
-             [selfWeak.lblError setText:@"注册失败"];
-        });
+         [selfWeak.view hideToastActivity];
+         [selfWeak.lblError setText:@"注册失败"];
+         NSString *strUrl = [NSString stringWithFormat:@"ReportItem=Register&ClientType=1&RegType=2&ServerIP=%@&Error=%@",
+                            @"120.55.105.224",@"err_fail"];
+         [DecodeJson postPHPServerMsg:strUrl];
     }];
 }
 
@@ -228,8 +228,8 @@
 {
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(gotoRegName) title:@"账号注册"];
     
-    [self createLabelWithRect:Rect(30, 8, 80, 30)];
-    _txtName = [self createTextField:Rect(30, 8, kScreenWidth-60, 30)];
+    [self createLabelWithRect:Rect(30, 8+kNavigationHeight, 80, 30)];
+    _txtName = [self createTextField:Rect(30, 8+kNavigationHeight, kScreenWidth-60, 30)];
     [_txtName setPlaceholder:@"请输入手机号码"];
     [_txtName setKeyboardType:UIKeyboardTypeNumberPad];
     
@@ -358,7 +358,7 @@
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _txtName.delegate = self;
     _txtPwd.delegate = self;
-    [self setTitle:@"手机注册"];
+    [self setTitleText:@"手机注册"];
     NSDate *date = [NSDate date];
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"yyyyMMdd"];

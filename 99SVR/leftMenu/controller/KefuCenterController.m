@@ -24,12 +24,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"客服中心";
-//    [self addHeaderView:@"客服中心"];
+    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
+    [self.view addSubview:_headView];
+    _headView.backgroundColor = kNavColor;
+    UILabel *title;
+    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
+    [title setFont:XCFONT(16)];
+    [_headView addSubview:title];
+    [title setTextAlignment:NSTextAlignmentCenter];
+    [title setTextColor:[UIColor whiteColor]];
+    UILabel *_lblContent;
+    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
+    [_lblContent setBackgroundColor:[UIColor whiteColor]];
+    [_headView addSubview:_lblContent];
+    title.text = @"客服中心";
     
-    self.tableView.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(navBack) image:@"back" highImage:@"back"];
+    [self.view addSubview:btnLeft];
+    [btnLeft setFrame:Rect(0,20,44,44)];
+    self.navigationController.navigationBar.barTintColor = kNavColor;
+    self.tableView.frame = Rect(0, 0+kNavigationHeight, kScreenWidth, kScreenHeight);
     
-    DLog(@"kScreenHeight:%f",kScreenHeight);
     _listReuqest = [[GroupListRequest alloc] init];
 }
 
@@ -41,6 +56,11 @@
         [self setVideos:[UserInfo sharedUserInfo].aryHelp];
         [self reloadData];
     }
+}
+
+- (void)navBack
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark get history

@@ -26,7 +26,7 @@
         if ([strInfo rangeOfString:@"|"].location != NSNotFound)
         {
             NSString *strResult = [strInfo componentsSeparatedByString:@"|"][0];
-            if (strResult.length>=2)
+            if (strResult.length>=10)
             {
                 NSString *strWeb = [strResult substringWithRange:NSMakeRange(2,[strResult length]-3)];
                 __userInfo.strWebAddr  = strWeb;
@@ -46,6 +46,14 @@
         __userInfo.strRoomAddr = strInfo;
     }
     fail:nil];
+    //获取礼物
+    [BaseService post:kGift_URL dictionay:nil timeout:5 success:^(id responseObject) {
+        
+    } fail:^(NSError *error) {
+        
+    }];
+//    [DecodeJson postServerRegError:@"test" type:1 serverIP:@"120.55.105.224"];
+    
 }
 
 + (void)loginLocal

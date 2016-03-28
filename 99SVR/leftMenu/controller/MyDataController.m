@@ -63,8 +63,8 @@
     [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
-    [self setLeftBtn:btnBack];
-    [self setLineHidden:YES];
+//    [self setLeftBtn:btnBack];
+//    [self setLineHidden:YES];
     [self initSubviews];
 }
 

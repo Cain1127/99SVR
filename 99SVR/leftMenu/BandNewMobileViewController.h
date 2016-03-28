@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BandNewMobileViewController : UIViewController
+@interface BandNewMobileViewController :CustomViewController
 
 @end

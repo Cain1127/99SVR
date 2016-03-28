@@ -8,19 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol GroupDelegate <NSObject>
+
+- (void)clickIndex:(UIButton *)btn tag:(NSInteger)tag;
+
+@end
+
 @interface GroupView : UIView
 
+@property (nonatomic,assign) id<GroupDelegate> delegate;
+
 - (id)initWithFrame:(CGRect)frame ary:(NSArray *)keyName;
-
-- (void)addEventForHot:(void (^)(id sender))handler;
-
-- (void)addEventForGroup:(void (^)(id sender))handler;
-
-- (void)addEventForHelp:(void (^)(id sender))handler;
-
-- (void)setBtnTag:(int)tag tag1:(int)tag1 tag2:(int)tag2;
-
-- (void)addEvent:(void (^)(id sender))handler;
 
 - (void)setBtnSelect:(NSInteger)tag;
 

@@ -11,8 +11,6 @@
 #import "FloatingView.h"
 #import "RoomTcpSocket.h"
 #import "GiftView.h"
-#import "M80AttributedLabel.h"
-#import "FTCoreTextView.h"
 #import "GitInfo.h"
 #import "RoomCoreTextCell.h"
 #import "RoomHttp.h"
@@ -40,13 +38,12 @@
 #import "ChatButton.h"
 #import "EmojiView.h"
 #import "NSAttributedString+EmojiExtension.h"
+#import "UserListView.h"
 
 #define TABLEVIEW_ARRAY_PREDICATE(A) [NSPredicate predicateWithFormat:@"SELF CONTAINS %@",A];
 
-
-
-@interface RoomViewController ()<UITableViewDelegate,UITableViewDataSource,
-UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,UIScrollViewDelegate,RoomDownDelegate,ChatViewDelegate>
+@interface RoomViewController ()<UITableViewDelegate,UITableViewDataSource,TitleViewDelegate,
+UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,UIScrollViewDelegate,RoomDownDelegate,ChatViewDelegate,GiftDelegate,UserListSelectDelegate>
 {
     //聊天view
     UIView *bodyView;
@@ -86,6 +83,10 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     UIView *headTable;
     ChatView *_inputView;
     int nColor;
+    UserListView *_listView;
+    
+    NSCache *chatCache;
+    DTAttributedLabel *lblTeachInfo;
 }
 
 @property (nonatomic,strong) RoomTcpSocket *tcpSocket;
@@ -97,12 +98,11 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 @property (nonatomic,assign) CGFloat fChatHeight;
 @property (nonatomic,strong) RoomTitleView *group;
 @property (nonatomic,strong) UITableView *priChatView;
-@property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) UITableView *noticeView;
 @property (nonatomic,strong) UITableView *chatView;
 @property (assign,nonatomic) NSInteger keyboardPresentFlag;
 @property (nonatomic,strong) UIScrollView *scrollView;
-@property (nonatomic,strong) NSMutableDictionary *cellHeights;
+//@property (nonatomic,strong) NSMutableDictionary *cellHeights;
 
 @end
 
@@ -122,7 +122,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     NSString *strPort;
     if([UserInfo sharedUserInfo].strRoomAddr)
     {
-        NSString *strAry = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@";"][0];
+        NSString *strAry = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][0];
         strAddress = [strAry componentsSeparatedByString:@":"][0];
         strPort = [strAry componentsSeparatedByString:@":"][1];
     }
@@ -133,7 +133,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         strPort = [strAry componentsSeparatedByString:@":"][1];
     }
     [_tcpSocket connectRoomInfo:_room.nvcbid address:strAddress port:[strPort intValue]];
-//    [_tcpSocket connectRoomInfo:_room.nvcbid address:@"172.16.41.96" port:7305];
+//    [_tcpSocket connectRoomInfo:_room.nvcbid address:@"121.12.118.32" port:22706];
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
 }
 
@@ -151,8 +151,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     _chatView = nil;
     [_noticeView removeFromSuperview];
     _noticeView = nil;
-    [_tableView removeFromSuperview];
-    _tableView = nil;
     [_priChatView removeFromSuperview];
     _priChatView = nil;
     [[GitInfo sharedGitInfo] removeAllIcon];
@@ -257,6 +255,11 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     }
 }
 
+- (void)roomTitleView:(UIButton *)sender
+{
+    [self switchBtn:(int)sender.tag];
+}
+
 - (void)initUIHead
 {
     _ffPlay = [[LivePlayViewController alloc] init];
@@ -296,12 +299,12 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [_btnRight setImage:[UIImage imageNamed:@"coll_high"] forState:UIControlStateSelected];
     [_btnRight addTarget:self action:@selector(colletCurrentRoom) forControlEvents:UIControlEventTouchUpInside];
     [_topHUD addSubview:_btnRight];
-    
     _btnRight.frame = Rect(kScreenWidth-44, 20, 44, 44);
     
-    NSArray *aryTitle = @[@"聊天区",@"我的",@"公告"];
+    NSArray *aryTitle = @[@"聊天区",@"我的",@"公告",@"课程表"];
     _group = [[RoomTitleView alloc] initWithFrame:Rect(0,20+kVideoImageHeight,kScreenWidth, 44) ary:aryTitle];
     [self.view addSubview:_group];
+    _group.delegate = self;
     
     bodyView = [[UIView alloc] initWithFrame:Rect(0, _group.y+_group.height, kScreenWidth,kScreenHeight-_group.y-_group.height)];
     [self.view addSubview:bodyView];
@@ -326,21 +329,24 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [_chatView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_chatView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     
-    _priChatView = [[UITableView alloc] initWithFrame:Rect(_scrollView.width,0, _scrollView.width, _scrollView.height-50)];
+    _priChatView = [[UITableView alloc] initWithFrame:Rect(_scrollView.width,0, _scrollView.width, _scrollView.height)];
     [_scrollView addSubview:_priChatView];
     _priChatView.delegate = self;
     _priChatView.dataSource = self;
     [_priChatView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_priChatView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     
-    _noticeView = [[UITableView alloc] initWithFrame:Rect(_scrollView.width*2, 0, _scrollView.width, _scrollView.height)];
+    _noticeView = [[UITableView alloc] initWithFrame:Rect(_scrollView.width*2, 0, _scrollView.width, _scrollView.height) style:UITableViewStyleGrouped];
     [_scrollView addSubview:_noticeView];
     _noticeView.delegate = self;
     _noticeView.dataSource = self;
     [_noticeView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    _scrollView.contentSize = CGSizeMake(kScreenWidth*3,_scrollView.height);
+    lblTeachInfo = [[DTAttributedLabel alloc] initWithFrame:Rect(_scrollView.width*3, 0, _scrollView.width,_scrollView.height)];
+    [_scrollView addSubview:lblTeachInfo];
+    lblTeachInfo.delegate = self;
     
+    _scrollView.contentSize = CGSizeMake(kScreenWidth*4,_scrollView.height);
     _downHUD = [[UIView alloc] initWithFrame:Rect(0, kVideoImageHeight-24, kScreenWidth, 44)];
     UIImageView *downImg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
     [downImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
@@ -403,8 +409,10 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [_lblBlue setBackgroundColor:UIColorFromRGB(0x629bff)];
     [self.view addSubview:_lblBlue];
     
-    _infoView = [[RoomDownView alloc] initWithFrame:Rect(0, kScreenHeight-50, kScreenWidth, 50)];
-    [self.view addSubview:_infoView];
+//    _infoView = [[RoomDownView alloc] initWithFrame:Rect(0, kScreenHeight-50, kScreenWidth, 50)];
+     _infoView = [[RoomDownView alloc] initWithFrame:Rect(0,_scrollView.height-50, kScreenWidth, 50)];
+//    [self.view addSubview:_infoView];
+    [_scrollView addSubview:_infoView];
     _infoView.delegate = self;
     
     UILabel *lblDownLine = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];
@@ -415,12 +423,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [whiteView setBackgroundColor:UIColorFromRGB(0xffffff)];
     [downView addSubview:whiteView];
     
-    _btnName = [[ChatButton alloc] initWithFrame:Rect(0,0,80, whiteView.height)];
-    [whiteView addSubview:_btnName];
-    [_btnName setTitle:@"大家" forState:UIControlStateNormal];
-    [_btnName setImage:[UIImage imageNamed:@"chat"] forState:UIControlStateNormal];
-    [_btnName addTarget:self action:@selector(clickBtnName:) forControlEvents:UIControlEventTouchUpInside];
-    [self refreshBtnName];
+
     
     UILabel *lblContent = [[UILabel alloc] initWithFrame:Rect(_btnName.x+_btnName.width+1,5,1, 26)];
     [lblContent setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
@@ -437,15 +440,13 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     _giftView = [[GiftView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
     [self.view addSubview:_giftView];
     _giftView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
+    _giftView.delegate = self;
     
-    userHidden = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
-    [self.view addSubview:userHidden];
-    [userHidden setHidden:YES];
-    __weak RoomViewController *__self = self;
-    [userHidden clickWithBlock:^(UIGestureRecognizer *gesture) {
-        [__self hidnUserTable];
-    }];
-    
+    _listView = [[UserListView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight) array:nil];
+    [self.view addSubview:_listView];
+    _listView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
+    _listView.delegate = self;
+/*
     CGRect frame = bodyView.frame;
     frame.origin.y += 50;
     frame.size.height -= 100;
@@ -463,6 +464,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     _tableView.layer.shadowOffset = CGSizeMake(0,0);
     _tableView.layer.shadowOpacity = 1;
     _tableView.layer.shadowRadius = 4;
+ */
+    
     [self createChatView];
     
 //    FloatingView *_floating = [[FloatingView alloc] initWithFrame:Rect(0, _group.y, kScreenWidth, 50)];
@@ -479,23 +482,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 
 - (void)hidnUserTable
 {
-    userHidden.hidden = YES;
-    _tableView.hidden = YES;
-}
 
-- (void)clickBtnName:(UIButton *)sender
-{
-    if ([sender.titleLabel.text isEqualToString:@"大家"])
-    {
-        [_tableView setHidden:!_tableView.hidden];
-    }
-    else
-    {
-        [sender setTitle:@"大家" forState:UIControlStateNormal];
-        [sender setImage:[UIImage imageNamed:@"chat"] forState:UIControlStateNormal];
-        toUser = 0;
-        [self refreshBtnName];
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -531,16 +518,11 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _cellHeights = [NSMutableDictionary dictionary];
+//    _cellHeights = [NSMutableDictionary dictionary];
     room_gcd = dispatch_queue_create("decode_gcd",0);
     _cellCache = [[NSCache alloc] init];
     _cellCache.totalCostLimit = 20;
     [self initUIHead];
-    __weak RoomViewController *__self = self;
-    [_group addEvent:^(id sender)
-     {
-         [__self switchBtn:(int)((UIButton *)sender).tag];
-     }];
     UITapGestureRecognizer* singleRecogn;
     
     singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTopHUD)];
@@ -554,16 +536,18 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [_ffPlay.view addGestureRecognizer:singleRecogn];
     
     [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:3.0];
+    @WeakObj(self)
     dispatch_async(dispatch_get_global_queue(0,0),
     ^{
-        [__self colletRoom];
+        [selfWeak colletRoom];
     });
     _nTag = 1;
-
+    
     fTempWidth = [@"热门推荐" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}].width;
     [self setBluePointX:0];
     [self switchBtn:1];
     [self connectRoomInfo];
+    [self verticalViewControl];
 }
 
 #pragma mark 双击事件  切换屏幕
@@ -591,10 +575,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         [UIView commitAnimations];
         bFull = YES;
         _btnFull.selected = YES;
-        if (_tableView.hidden==NO)
-        {
-            _tableView.hidden = YES;
-        }
     }
     else
     {
@@ -663,7 +643,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 #pragma mark 竖屏
 - (void)verticalViewControl
 {
-//    [self closeKeyBoard];
     _topHUD.frame = Rect(0, 0, kScreenWidth, 64);
     [_topHUD viewWithTag:1].frame = Rect(0, 0, kScreenWidth, 64);
     _lblName.frame = Rect(50, 35, kScreenWidth-100, 15);
@@ -707,16 +686,12 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 
 - (void)switchBtn:(int)nTag
 {
-    if (_tableView.hidden==NO)
-    {
-        _tableView.hidden = YES;
-    }
     UIButton *btnSender = [_group viewWithTag:nTag];
     if(btnSender)
     {
         int tag = (int)btnSender.tag;
         [_group setBtnSelect:tag];
-        if(tag+2 == _tag || tag-2==_tag)
+        if(tag+3 >= _tag || tag-3 <=_tag)
         {
             _tag = (int)btnSender.tag;
             [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
@@ -726,14 +701,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
             [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
             _tag = (int)btnSender.tag;
         }
-        if (_tag==3)
-        {
-            downView.hidden = YES;
-        }
-        else
-        {
-            downView.hidden = NO;
-        }
+        [self setBluePointX:_scrollView.contentOffset.x];
     }
 }
 
@@ -749,13 +717,9 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     _nTag = sender.tag;
     [self setBluePointX:kScreenWidth*(_nTag-1)];
     if (sender.tag==4){
-        _tableView.hidden = NO;
         _chatView.hidden = YES;
         _noticeView.hidden = YES;
         _priChatView.hidden = YES;
-    }
-    else{
-        _tableView.hidden = YES;
     }
     [UIView commitAnimations];
 }
@@ -810,6 +774,17 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomSucsess) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendRoomMediaInfo:) name:MESSAGE_TCP_SOCKET_SEND_MEDIA object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setTeachInfo) name:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
+}
+
+- (void)setTeachInfo
+{
+    @WeakObj(lblTeachInfo)
+    @WeakObj(self)
+    gcd_main_safe(^{
+        NSData *data = [selfWeak.tcpSocket.teachInfo dataUsingEncoding:NSUTF8StringEncoding];
+        lblTeachInfoWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:data documentAttributes:nil];
+    });
 }
 
 - (void)sendRoomMediaInfo:(NSNotification *)notify
@@ -908,7 +883,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         [__ffPlay setDefaultImg];
         [__self.chatView reloadData];
         [__self.noticeView reloadData];
-        [__self.tableView reloadData];
         [__self.priChatView reloadData];
     });
     [_tcpSocket reConnectRoomInfo];
@@ -923,7 +897,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     ^{
        [__self.chatView reloadData];
        [__self.noticeView reloadData];
-       [__self.tableView reloadData];
        [__self.priChatView reloadData];
     });
     [_ffPlay stop];
@@ -938,11 +911,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 #pragma mark Room User List Update
 - (void)roomUserList:(NSNotification*)notify
 {
-    __weak RoomViewController *__self = self;
-    dispatch_main_async_safe(
-    ^{
-       [__self.tableView reloadData];
-    });
+    [_listView reloadItems:_tcpSocket.aryUser];
 }
 
 #pragma mark 公告刷新
@@ -1026,11 +995,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(tableView == _tableView)
-    {
-        return [_tcpSocket aryUser].count;
-    }
-    else if(tableView == _noticeView)
+    if(tableView == _noticeView)
     {
         return 1;
     }
@@ -1061,44 +1026,42 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     return 0;
 }
 
-- (RoomCoreTextCell *)tableView:(UITableView *)tableView chatPreparedCellForIndexPath:(NSIndexPath *)indexPath
+- (DTAttributedTextCell *)tableView:(UITableView *)tableView chatPreparedCellForIndexPath:(NSIndexPath *)indexPath
 {
-    RoomCoreTextCell *cell = [tableView dequeueReusableCellWithIdentifier:@"newChatCoreTextCell"];
+    static NSString *cellIdentifier = @"cellIdentifier";
+    NSString *key=nil;
+    if (tableView==_chatView) {
+        char cBuffer[100];
+        sprintf(cBuffer,"chatView%zi-%zi",indexPath.section,indexPath.row);
+        key = [[NSString alloc] initWithUTF8String:cBuffer];
+    }
+    else if(tableView == _priChatView){
+        char cBuffer[100];
+        sprintf(cBuffer,"private%zi-%zi",indexPath.section,indexPath.row);
+        key = [[NSString alloc] initWithUTF8String:cBuffer];
+    }
+    if (!chatCache)
+    {
+        chatCache = [[NSCache alloc] init];
+    }
+    DTAttributedTextCell *cell = [chatCache objectForKey:key];
     if (!cell)
     {
-        cell = [[RoomCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"newChatCoreTextCell"];
+        cell = [[DTAttributedTextCell alloc] initWithReuseIdentifier:cellIdentifier];
         UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
         [selectView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
         cell.selectedBackgroundView = selectView;
+        [chatCache setObject:cell forKey:key];
     }
-    NSArray *aryObj = nil;
-    if (tableView==_chatView)
+    NSArray *aryInfo = (tableView==_chatView) ? _tcpSocket.aryChat : _tcpSocket.aryPriChat;
+    if(aryInfo.count>indexPath.row)
     {
-        aryObj = _tcpSocket.aryChat;
+        [self configureCell:cell forIndexPath:indexPath array:aryInfo];
     }
-    else
-    {
-        aryObj = _tcpSocket.aryPriChat;
-    }
-    [self configuration:cell forIndexPath:indexPath ary:aryObj];
+    [cell.attributedTextContextView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     return cell;
 }
 
-- (void)configuration:(RoomCoreTextCell *)cell forIndexPath:(NSIndexPath *)indexPath ary:(NSArray *)aryObj
-{
-    if (aryObj.count>indexPath.row)
-    {
-        SVRMesssage *message = [aryObj objectAtIndex:indexPath.row];
-        NSData *data = [message.text dataUsingEncoding:NSUTF8StringEncoding];
-        NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data options:NULL documentAttributes:NULL];
-        cell.textView.edgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
-        cell.textView.shouldDrawImages = YES;
-        cell.textView.delegate = self;
-        [cell.textView setAttributedString:string];
-        [cell.textView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
-    }
-}
-//static const NSInteger labelTag = 10;
 //设置cell
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1109,93 +1072,60 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         cell.accessoryType = UITableViewCellAccessoryNone;
         return cell;
     }
-    else if(tableView == _chatView || tableView == _priChatView)
-    {
-        RoomCoreTextCell *cell = [self tableView:tableView chatPreparedCellForIndexPath:indexPath];
-        return cell;
-    }
-    static NSString *strIdentifier = @"ROOMVIEWTABLEVIEWIDENTIFIER";
-    RoomUserCell *cell = [tableView dequeueReusableCellWithIdentifier:strIdentifier];
-    if (cell == nil)
-    {
-        cell = [[RoomUserCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
-    }
-    UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
-    
-    [selectView setBackgroundColor:UIColorFromRGB(0x629aff)];
-    [cell setSelectedBackgroundView:selectView];
-    
-    RoomUser *user = [[_tcpSocket aryUser] objectAtIndex:indexPath.row];
-    [cell setRoomUser:user];
+    DTAttributedTextCell *cell = [self tableView:tableView chatPreparedCellForIndexPath:indexPath];
     return cell;
+}
+
+- (void)configureCell:(DTAttributedTextCell *)cell forIndexPath:(NSIndexPath *)indexPath array:(NSArray *)aryInfo
+{
+    NSString *html = ((SVRMesssage *)[aryInfo objectAtIndex:indexPath.row]).text;
+    [cell setHTMLString:html];
+    cell.attributedTextContextView.shouldDrawImages = YES;
+    cell.attributedTextContextView.delegate = self;
 }
 
 - (CGFloat)cellHeight:(SVRMesssage *)message
 {
-    NSString *messageID = message.messageID;
-    CGFloat height = [[_cellHeights objectForKey:messageID] floatValue];
-    if (height == 0)
-    {
-        DTAttributedTextContentView *text = [DTAttributedTextContentView new];
-        text.attributedString = [[NSAttributedString alloc] initWithHTMLData:[message.text dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];;
-        height = [text suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
-        [_cellHeights setObject:@(height+10) forKey:messageID];
-    }
-    return height;
+    return 0;
+//    NSString *messageID = message.messageID;
+//    CGFloat height = [[_cellHeights objectForKey:messageID] floatValue];
+//    if (height == 0)
+//    {
+//        DTAttributedTextContentView *text = [DTAttributedTextContentView new];
+//        text.attributedString = [[NSAttributedString alloc] initWithHTMLData:[message.text dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];;
+//        height = [text suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
+//        [_cellHeights setObject:@(height+10) forKey:messageID];
+//    }
+//    return height;
 }
 
 //设置高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(tableView!=_tableView)
+    NSString *cacheKey;
+    if(tableView == _noticeView && _tcpSocket.aryNotice.count > indexPath.section)
     {
-        NSString *cacheKey;
-        if(tableView == _noticeView && _tcpSocket.aryNotice.count > indexPath.section)
+        char cString[100]={0};
+        sprintf(cString,"noticeView-%zi",indexPath.section);
+        cacheKey = [[NSString alloc] initWithUTF8String:cString];
+        if([_cellCache objectForKey:cacheKey])
         {
-            char cString[100]={0};
-            sprintf(cString,"noticeView-%zi",indexPath.section);
-            cacheKey = [[NSString alloc] initWithUTF8String:cString];
-            if([_cellCache objectForKey:cacheKey])
-            {
-                return [[_cellCache objectForKey:cacheKey] floatValue];
-            }
-        }
-        else
-        {
-            NSString *cacheKey = nil;
-            if (tableView==_chatView && _tcpSocket.aryChat.count > indexPath.row)
-            {
-                SVRMesssage *message = [_tcpSocket.aryChat objectAtIndex:[indexPath row]];
-                CGFloat height = [self cellHeight:message];
-                return height;
-            }
-            else if(tableView==_priChatView && _tcpSocket.aryPriChat.count > indexPath.row)
-            {
-                SVRMesssage *message = [_tcpSocket.aryPriChat objectAtIndex:[indexPath row]];
-                return [self cellHeight:message];
-            }
+            return [[_cellCache objectForKey:cacheKey] floatValue];
         }
     }
+    else
+    {
+        DTAttributedTextCell *cell = [self tableView:tableView chatPreparedCellForIndexPath:indexPath];
+        return [cell requiredRowHeightInTableView:tableView];
+    }
+    
     return 60;
 }
 
 //选择某一行
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (tableView == _tableView)
-    {
-        [_tableView deselectRowAtIndexPath:indexPath animated:NO];
-        RoomUser *_user = [[_tcpSocket aryUser] objectAtIndex:indexPath.row];
-        if(_user.m_nUserId != [UserInfo sharedUserInfo].nUserId)
-        {
-            userHidden.hidden = YES;
-            _tableView.hidden = YES;
-            
-            toUser = _user.m_nUserId;
-            
-            [_inputView setChatInfo:_user];
-        }
-    }
+
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1351,14 +1281,20 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (scrollView == _scrollView) {
+    
+    if (scrollView == _scrollView)
+    {
+        if (willEndContentOffsetX == 0 && startContentOffsetX ==0 )
+        {
+            return ;
+        }
         [self setBluePointX:scrollView.contentOffset.x];
         int temp = floor((scrollView.contentOffset.x - kScreenWidth/2.0)/kScreenWidth +1);//判断是否翻页
         if (temp != _currentPage)
         {
             if (temp > _currentPage)
             {
-                if (_tag<=2)
+                if (_tag<4)
                 {
                     _tag ++;
                     [_group setBtnSelect:_tag];
@@ -1371,14 +1307,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
                     _tag--;
                     [_group setBtnSelect:_tag];
                 }
-            }
-            if(_tag==3)
-            {
-                downView.hidden = YES;
-            }
-            else
-            {
-                downView.hidden = NO;
             }
             updateCount++;
             _currentPage = temp;
@@ -1401,13 +1329,15 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         else//加速
         {}
         updateCount = 0;
+        startContentOffsetX = 0;
+        willEndContentOffsetX = 0;
     }
 }
 
 
 - (void)setBluePointX:(CGFloat)fPointX
 {
-    CGFloat fx = kScreenWidth/3/2-fTempWidth/2+fPointX/kScreenWidth * kScreenWidth/3;
+    CGFloat fx = kScreenWidth/4/2-fTempWidth/2+fPointX/kScreenWidth * kScreenWidth/4;
     [_lblBlue setFrame:Rect(fx,_group.y+_group.height-2,fTempWidth,2)];
 }
 
@@ -1469,6 +1399,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 
 - (void)clickRoom:(UIButton *)button index:(NSInteger)nIndex
 {
+    if(!_tcpSocket.rInfo){return;}
     switch (nIndex) {
         case 0://显示聊天
         {
@@ -1477,26 +1408,19 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         break;
         case 1://显示成员
         {
-            userHidden.hidden = !userHidden.hidden;
-            _tableView.hidden = userHidden.hidden;
+            _listView.bShow = YES;
         }
         break;
         case 2://显示礼物
         {
             [UIView animateWithDuration:0.25 animations:^{
                 [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
-            } completion:^(BOOL finished) {
-                
-            }];
+            } completion:^(BOOL finished) {}];
         }
         break;
         case 3://送玫瑰
         {
-//            [self sendRose];
-            FloatingView *_floating = [[FloatingView alloc] initWithFrame:Rect(0, _group.y+_group.height, kScreenWidth, 50)
-                                       color:nColor++ name:@"测试一下" number:@"X30"];
-            [self.view addSubview:_floating];
-            [_floating showGift:1];//停留一秒
+            [self sendRose];
         }
         break;
     }
@@ -1539,6 +1463,27 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [self switchBtn:1];
 }
 
+#pragma mark 送礼物
+- (void)sendGift:(int)giftId num:(int)giftNum
+{
+    [_tcpSocket sendGift:2 num:giftNum];
+    [_giftView setGestureHidden];
+}
+
+#pragma mark 用户列表选择某一列
+- (void)selectUser:(NSInteger)nIndex
+{
+    if(_tcpSocket.aryUser.count>nIndex)
+    {
+        RoomUser *_user = [[_tcpSocket aryUser] objectAtIndex:nIndex];
+        if(_user.m_nUserId != [UserInfo sharedUserInfo].nUserId)
+        {
+            _listView.bShow = NO;
+            toUser = _user.m_nUserId;
+            [_inputView setChatInfo:_user];
+        }
+    }
+}
 
 @end
 

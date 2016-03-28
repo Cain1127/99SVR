@@ -1,5 +1,7 @@
-#include "StdAfx.h"
+#include "platform.h"
 #include "Thread.h"
+
+ThreadHandle thread_handle;
 
 Thread::Thread(void)
 {

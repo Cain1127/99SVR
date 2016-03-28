@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define kLeftViewBgColor RGB(61, 120, 201)
+#define kLeftViewBgColor UIColorFromRGB(0x006DC9)
 
 @class LeftCellModel;
 

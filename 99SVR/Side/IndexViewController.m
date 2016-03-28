@@ -22,7 +22,7 @@
 
 #import "MyScrollView.h"
 
-@interface IndexViewController ()<UIScrollViewDelegate>
+@interface IndexViewController ()<UIScrollViewDelegate,GroupDelegate>
 {
     UISwipeGestureRecognizer *gesture;
     int _tag;
@@ -195,15 +195,43 @@
     [_listReuqest requestRoomByUserId:[UserInfo sharedUserInfo].nUserId];
 }
 
+- (void)showLeftView
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.navigationController.navigationBar setHidden:YES];
+    
+    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
+    [self.view addSubview:_headView];
+    _headView.backgroundColor = UIColorFromRGB(0xffffff);
+    UILabel *title;
+    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
+    [title setFont:XCFONT(16)];
+    [_headView addSubview:title];
+    [title setTextAlignment:NSTextAlignmentCenter];
+    [title setTextColor:UIColorFromRGB(0x0078DD)];
+    title.text = @"视频直播";
+    
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(showLeftView) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
+    [_headView addSubview:btnLeft];
+    [btnLeft setFrame:Rect(0,20,44,44)];
+    
     updateCount = 0;
     _currentPage = 0;
     [self initUIHead];
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(searchClick) image:@"search_normal" highImage:@"search_high"];
+//    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(searchClick) image:@"search_normal" highImage:@"search_high"];
+    
+    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchClick) image:@"search_normal" highImage:@"search_high"];
+    [_headView addSubview:btnRight];
+    [btnRight setFrame:Rect(kScreenWidth-44, 20, 44, 44)];
+    
     _grouRequest = [[GroupListRequest alloc] init];
     _listReuqest = [[RoomListRequest alloc] init];
+    
     _aryHistory = [NSMutableArray array];
     _aryHot = [NSMutableArray array];
     _aryOnline = [NSMutableArray array];
@@ -213,10 +241,10 @@
         [__self initData];
         [__self initHistoryData];
     });
-    [_group addEvent:^(id sender)
-     {
-         [__self btnEvent:sender];
-     }];
+//    [_group addEvent:^(id sender)
+//     {
+//         [__self btnEvent:sender];
+//     }];
     UIButton *btnSender = [_group viewWithTag:1];
     [self btnEvent:btnSender];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
@@ -262,9 +290,9 @@
 - (void)initUIHead
 {
     NSArray *aryMen = @[@"热门推荐",@"财经在线",@"我的足迹"];
-    _group = [[GroupView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44) ary:aryMen];
+    _group = [[GroupView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44) ary:aryMen];
     [self.view addSubview:_group];
-    [_group setBtnTag:1 tag1:2 tag2:3];
+    _group.delegate = self;
     _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0,_group.y+_group.height, kScreenWidth, kScreenHeight-_group.y-_group.height)];
     [self.view addSubview:_scrollView];
     
@@ -297,23 +325,28 @@
     
     _tag = 0;
     
-    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftBtn setImage:[UIImage imageNamed:@"switcher"] forState:UIControlStateNormal];
-    [leftBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-     {
-         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
-     }];
+//    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [leftBtn setImage:[UIImage imageNamed:@"switcher"] forState:UIControlStateNormal];
+//    [leftBtn clickWithBlock:^(UIGestureRecognizer *gesture)
+//     {
+//         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
+//     }];
     
     //[self setLeftBtn:leftBtn];
-    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
-    __weak IndexViewController *__self = self;
-    [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
-        SearchController *searchVc = [[SearchController alloc] init];
-        [__self presentViewController:searchVc animated:YES completion:nil];
-    }];
+//    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
+//    __weak IndexViewController *__self = self;
+//    [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
+//        SearchController *searchVc = [[SearchController alloc] init];
+//        [__self presentViewController:searchVc animated:YES completion:nil];
+//    }];
     
     //[self setRightBtn:rightBtn];
+}
+
+- (void)clickIndex:(UIButton *)btn tag:(NSInteger)tag
+{
+    [self btnEvent:btn];
 }
 
 - (void)btnEvent:(id)sender
@@ -495,4 +528,8 @@
 }
 
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
 @end

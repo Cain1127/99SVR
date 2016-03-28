@@ -9,7 +9,7 @@
 #import "NavigationViewController.h"
 
 @interface NavigationViewController ()<UIGestureRecognizerDelegate>
-
+@property (nonatomic, strong) UIPanGestureRecognizer *popPanGesture;
 @end
 
 @implementation NavigationViewController
@@ -20,9 +20,10 @@
 + (void)initialize
 {
     // 1.设置导航栏主题
-    [self setupNavBarTheme];
+//    [self setupNavBarTheme];
     // 2.设置导航栏按钮主题
     //[self setupBarButtonItemTheme];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
 
 - (void)viewDidLoad {
@@ -30,25 +31,8 @@
     
     // 设置pop手势代理
     self.interactivePopGestureRecognizer.delegate = self;
+    
 }
-
-
-/**
- *  设置导航栏按钮主题
- */
-//+ (void)setupBarButtonItemTheme
-//{
-//    UIBarButtonItem *item = [UIBarButtonItem appearance];
-//    // 设置文字属性
-//    NSMutableDictionary *textAttrs = [NSMutableDictionary dictionary];
-//    textAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
-//    //textAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:16];
-//    [item setTitleTextAttributes:textAttrs forState:UIControlStateNormal];
-//    [item setTitleTextAttributes:textAttrs forState:UIControlStateHighlighted];
-//    NSMutableDictionary *disableTextAttrs = [NSMutableDictionary dictionary];
-//    disableTextAttrs[NSForegroundColorAttributeName] =  [UIColor lightGrayColor];
-//    [item setTitleTextAttributes:disableTextAttrs forState:UIControlStateDisabled];
-//}
 
 /**
  *  设置导航栏主题
@@ -80,7 +64,6 @@
  */
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
     if (self.childViewControllers.count > 0) {
-        
         /* 自动显示和隐藏tabbar */
         viewController.hidesBottomBarWhenPushed = YES;
         
@@ -103,7 +86,7 @@
  */
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleLightContent;
+    return UIStatusBarStyleDefault;
 }
 
 #pragma mark -- 点击空白处收起键盘

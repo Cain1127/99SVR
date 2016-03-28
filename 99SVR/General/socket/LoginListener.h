@@ -1,3 +1,8 @@
+
+#ifndef Login_Listener_H
+#define Login_Listener_H
+
+#include <vector>
 #include "LoginMessage.pb.h"
 
 class LoginListener
@@ -15,8 +20,6 @@ public:
 	virtual void OnLogonTokenNotify(SessionTokenResp& info) = 0;
 	virtual void OnLogonFinished() = 0;
 
-	virtual void OnSetUserProfileResp(SetUserProfileResp& info) = 0;
-	virtual void OnSetUserPwdResp(SetUserPwdResp& info) = 0;
-	virtual void OnQueryRoomGateAddrResp(QueryRoomGateAddrResp& info) = 0;
-
 };
+
+#endif

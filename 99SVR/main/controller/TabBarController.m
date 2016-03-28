@@ -59,7 +59,6 @@
 - (void)setUpAllChildViewControllers{
     
     [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
-    
     [self setUpOneViewController:[[IndexViewController alloc]init] title:@"视频直播" image:@"video_live" selectImage:@"video_live_h"];
     [self setUpOneViewController:[[TextViewController alloc]init] title:@"文字直播" image:@"text_live" selectImage:@"text_live_h"];
 }
@@ -74,7 +73,6 @@
     vc.tabBarItem.image = [UIImage imageNamed:image];
     vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
     NavigationViewController *nav = [[NavigationViewController alloc]initWithRootViewController:vc];
-    
     [self addChildViewController:nav];
 }
 

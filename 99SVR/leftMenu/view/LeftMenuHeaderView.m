@@ -30,9 +30,10 @@
 {
     if (self = [super initWithFrame:frame])
     {
-        UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(frame.size.width/2-kScreenWidth/2, 21, kScreenWidth,88)];
-        [self addSubview:imgView];
-        [imgView setImage:[UIImage imageNamed:@"left_bg"]];
+//        UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(frame.size.width/2-kScreenWidth/2, 21, kScreenWidth,88)];
+//        [self addSubview:imgView];
+//        [imgView setImage:[UIImage imageNamed:@"left_bg"]];
+        [self setBackgroundColor:UIColorFromRGB(0x006dc9)];
         
         _circleLine = [UIView new];
         _circleLine.layer.masksToBounds = YES;

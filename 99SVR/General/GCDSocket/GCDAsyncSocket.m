@@ -1374,6 +1374,7 @@ enum GCDAsyncSocketConfig
 			err = [self errnoErrorWithReason:reason];
 			
 			LogVerbose(@"close(socketFD)");
+            
 			close(socketFD);
 			return SOCKET_NULL;
 		}

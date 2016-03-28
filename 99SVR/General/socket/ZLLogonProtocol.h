@@ -23,10 +23,10 @@ class ZLConnectionListerner : public ConnectionListener
         LOG("OnConnectError");
     }
     
-    void OnIOError(int err_code)
-    {
-        LOG("OnIOError");
-    }
+    void OnIOError(int err_code);
+//    {
+//        LOG("OnIOError");
+//    }
 };
 
 
@@ -95,10 +95,10 @@ public:
         
     }
     
-    void OnSetUserPwdResp(SetUserPwdResp& info)
-    {
-        
-    }
+    void OnSetUserPwdResp(SetUserPwdResp& info);
+//    {
+//        
+//    }
     
     void OnQueryRoomGateAddrResp(QueryRoomGateAddrResp& info)
     {
@@ -113,8 +113,23 @@ class ZLLogonProtocol
     ZLConnectionListerner *conn_listener;
 public :
     ZLLogonProtocol();
+    /**
+     *  修改密码
+     */
+    int updatePwd(const char *cOld,const char *cNew);
+    /**
+     *  正常账号登录
+     */
     int startLogin(const char *cloginid,const char *pwd);
+    /**
+     *  修改昵称
+     */
+    int updateNick(const char *cNick,const char *cBirthDat="19000101");
+    /**
+     *  第三方登录
+     */
     int startOtherLogin(uint32 cloginid,const char *openid,const char *token);
+    
     ~ZLLogonProtocol();
 };
 

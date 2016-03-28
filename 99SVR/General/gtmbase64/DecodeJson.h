@@ -92,4 +92,13 @@
  */
 + (UIImage *)stretchImage:(UIImage *)image capInsets:(UIEdgeInsets)capInsets resizingMode:(UIImageResizingMode)resizingMode;
 
+/**
+ *  PHP注册出现错误上报
+ */
++ (BOOL)postServerRegError:(NSString *)strMsg type:(int)regType serverIP:(NSString *)strIp;
+/**
+ *  发送所有请求，质量报警信息
+ */
++ (void)postPHPServerMsg:(NSString *)strUrl;
+
 @end
