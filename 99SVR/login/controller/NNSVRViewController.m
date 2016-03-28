@@ -40,7 +40,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    [self setTitleText:_strTitle];
     [self setTitle:_strTitle];
     _webView = [[UIWebView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64)];
     
