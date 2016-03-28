@@ -348,7 +348,7 @@
         strPath = @"http://www.99ducaijing.com/phone/appysxy.aspx";
     }
     NNSVRViewController *nnView = [[NNSVRViewController alloc] initWithPath:strPath title:strTitle];
-    [self presentViewController:nnView animated:YES completion:nil];
+    [self.navigationController pushViewController:nnView animated:YES];
 }
 
 - (void)viewDidLoad
