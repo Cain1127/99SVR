@@ -45,19 +45,27 @@
 #pragma mark - Banner autoscroll view init
 - (void)createScroll
 {
-    if (_scrollView) {
+    
+    if (_scrollView)
+    {
         return ;
     }
-    _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 10 + kNavigationHeight, kScreenWidth, kPictureHeight) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    
+    ///CGRectMake(0.0f, 10 + kNavigationHeight, kScreenWidth, kPictureHeight)
+    _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0.0f, 0.0f, kScreenWidth, kPictureHeight) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
     _scrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
     _scrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
     _scrollView.currentPageDotColor = UIColorFromRGB(0xff7a1e); // 自定义分页控件小圆标颜色
     _scrollView.pageDotColor = UIColorFromRGB(0xa8a8a8);
-    [self.view addSubview:_scrollView];
     _scrollView.autoScrollTimeInterval = 2;
 }
 
 - (void)createPage
+{
+    
+}
+
+- (void)initUIBody
 {
     
 }
@@ -136,11 +144,6 @@
     } fail:^(NSError *error) {
         
     }];
-}
-
-- (void)initUIBody
-{
-
 }
 
 /**
@@ -270,7 +273,7 @@
 #pragma mark - UITableView init
 - (void)initTableView
 {
-    _tableView = [[UITableView alloc] initWithFrame:Rect(15.0f, 70.0f + kPictureHeight + 10.0f, kScreenWidth - 30.0f, kScreenHeight - (70.0f + kPictureHeight + 10.0f + 5.0f + 50.0f)) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0.0f, 10.0f + kNavigationHeight, kScreenWidth, kScreenHeight - (10.0f + kNavigationHeight + 5.0f + 50.0f)) style:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -284,21 +287,27 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     
-    return _aryLiving.count;
+    return _aryLiving.count + 1;
 
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
-    if (section < _aryLiving.count)
+    ///banner not include any row
+    if (0 == section)
+    {
+        return 0;
+    }
+    
+    if (section <= _aryLiving.count)
     {
         
-        if ([_aryLiving[section] isKindOfClass:[NSArray class]] ||
-            [_aryLiving[section] isKindOfClass:[NSMutableArray class]])
+        if ([_aryLiving[section - 1] isKindOfClass:[NSArray class]] ||
+            [_aryLiving[section - 1] isKindOfClass:[NSMutableArray class]])
         {
             
-            NSArray *tempArray = _aryLiving[section];
+            NSArray *tempArray = _aryLiving[section - 1];
             return tempArray.count;
             
         }
@@ -313,14 +322,14 @@
 {
     
     ///判断不同的section数据模型，返回不同的view
-    if (indexPath.section >= _aryLiving.count)
+    if (indexPath.section > _aryLiving.count)
     {
         
         return [self createDefaultTableViewCell:tableView];
         
     }
     
-    if (!([_aryLiving[indexPath.section] isKindOfClass:[NSArray class]]))
+    if (!([_aryLiving[indexPath.section - 1] isKindOfClass:[NSArray class]]))
     {
         
         return [self createDefaultTableViewCell:tableView];;
@@ -328,7 +337,7 @@
     }
     
     ///根据对象数组内的类型加载HeaderView
-    NSArray *tempArray = _aryLiving[indexPath.section];
+    NSArray *tempArray = _aryLiving[indexPath.section - 1];
     if (0 >= tempArray.count)
     {
         
@@ -423,16 +432,24 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    
+    ///banner
+    if (0 == section)
+    {
+        
+        return _scrollView;
+        
+    }
 
     ///判断不同的section数据模型，返回不同的view
-    if (section >= _aryLiving.count)
+    if (section > _aryLiving.count)
     {
         
         return nil;
         
     }
     
-    if (!([_aryLiving[section] isKindOfClass:[NSArray class]]))
+    if (!([_aryLiving[section - 1] isKindOfClass:[NSArray class]]))
     {
         
         return nil;
@@ -440,7 +457,7 @@
     }
     
     ///根据对象数组内的类型加载HeaderView
-    NSArray *tempArray = _aryLiving[section];
+    NSArray *tempArray = _aryLiving[section - 1];
     if (0 >= tempArray.count)
     {
         
@@ -464,7 +481,7 @@
             tempHeaderView = [[UIView alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tableView.frame), tempHeight)];
             
             ///title label
-            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tempHeaderView.frame) - rightButtonWidth, tempHeight)];
+            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f, CGRectGetWidth(tempHeaderView.frame) - rightButtonWidth - 30.0f, tempHeight)];
             [lblHot setText:@"视频直播"];
             [lblHot setFont:XCFONT(15)];
             [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
@@ -472,9 +489,14 @@
             [tempHeaderView addSubview:lblHot];
             
             ///see all button
-            RightImageButton *seeAllButton = [[RightImageButton alloc] initWithFrame:Rect(CGRectGetWidth(lblHot.frame), 0.0f, rightButtonWidth, tempHeight) rightImageWidth:30.0f tapActionBlock:^(UIButton *button) {
+            @WeakObj(self);
+            RightImageButton *seeAllButton = [[RightImageButton alloc] initWithFrame:Rect(CGRectGetWidth(tempHeaderView.frame) - 15.0f - rightButtonWidth, 0.0f, rightButtonWidth, tempHeight) rightImageWidth:30.0f tapActionBlock:^(UIButton *button) {
                 
-                NSLog(@":::::::::seeAllButtonAction");
+                UITabBarController *rootTabbarVC = selfWeak.tabBarController;
+                if (rootTabbarVC)
+                {
+                    rootTabbarVC.selectedIndex = 1;
+                }
                 
             }];
             [seeAllButton setTitle:@"查看全部" forState:UIControlStateNormal];
@@ -500,16 +522,21 @@
             
             tempHeaderView = [[UIView alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tableView.frame), tempHeight)];
             
-            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tempHeaderView.frame) - rightButtonWidth, tempHeight)];
+            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f, CGRectGetWidth(tempHeaderView.frame) - rightButtonWidth - 30.0f, tempHeight)];
             [lblHot setText:@"文字直播"];
             [lblHot setFont:XCFONT(15)];
             [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
             [tempHeaderView addSubview:lblHot];
             
             ///see all button
-            RightImageButton *seeAllButton = [[RightImageButton alloc] initWithFrame:Rect(CGRectGetWidth(lblHot.frame), 0.0f, rightButtonWidth, tempHeight) rightImageWidth:30.0f tapActionBlock:^(UIButton *button) {
+            @WeakObj(self);
+            RightImageButton *seeAllButton = [[RightImageButton alloc] initWithFrame:Rect(CGRectGetWidth(tempHeaderView.frame) - 15.0f - rightButtonWidth, 0.0f, rightButtonWidth, tempHeight) rightImageWidth:30.0f tapActionBlock:^(UIButton *button) {
                 
-                NSLog(@":::::::::seeAllButtonAction");
+                UITabBarController *rootTabbarVC = selfWeak.tabBarController;
+                if (rootTabbarVC)
+                {
+                    rootTabbarVC.selectedIndex = 2;
+                }
                 
             }];
             [seeAllButton setTitle:@"查看全部" forState:UIControlStateNormal];
@@ -535,7 +562,7 @@
             
             tempHeaderView = [[UIView alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tableView.frame), tempHeight)];
             
-            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tempHeaderView.frame), tempHeight)];
+            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f, CGRectGetWidth(tempHeaderView.frame) - 30.0f, tempHeight)];
             [lblHot setText:@"精彩观点"];
             [lblHot setFont:XCFONT(15)];
             [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
@@ -567,15 +594,23 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    ///判断不同的section数据模型，返回不同的view
-    if (indexPath.section >= _aryLiving.count)
+    //banner height
+    if (0 == indexPath.section)
     {
         
         return 0.0f;
         
     }
     
-    if (!([_aryLiving[indexPath.section] isKindOfClass:[NSArray class]]))
+    ///判断不同的section数据模型，返回不同的view
+    if (indexPath.section > _aryLiving.count)
+    {
+        
+        return 0.0f;
+        
+    }
+    
+    if (!([_aryLiving[indexPath.section - 1] isKindOfClass:[NSArray class]]))
     {
         
         return 0.0f;
@@ -583,7 +618,7 @@
     }
     
     ///根据对象数组内的类型加载HeaderView
-    NSArray *tempArray = _aryLiving[indexPath.section];
+    NSArray *tempArray = _aryLiving[indexPath.section - 1];
     if (0 >= tempArray.count)
     {
         
@@ -606,6 +641,14 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    
+    //banner height
+    if (0 == section)
+    {
+        
+        return kPictureHeight;
+        
+    }
 
     return 44.0f;
 

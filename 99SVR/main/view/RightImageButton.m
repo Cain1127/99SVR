@@ -92,7 +92,7 @@
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
 
-    return Rect(CGRectGetWidth(contentRect) - self.rightImageWidth - 2.0f, 0.0f, self.rightImageWidth, CGRectGetHeight(contentRect));
+    return Rect(CGRectGetWidth(contentRect) - self.rightImageWidth, 0.0f, self.rightImageWidth, CGRectGetHeight(contentRect));
 
 }
 

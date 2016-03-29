@@ -50,7 +50,7 @@
     CGFloat defaultHeight = 155.0f;
 
     ///背景图片
-    self.backgroundImageView = [[UIImageView alloc] initWithFrame:Rect(0.0f, 0.0f, kScreenWidth - 30.0f, defaultHeight)];
+    self.backgroundImageView = [[UIImageView alloc] initWithFrame:Rect(15.0f, 0.0f, kScreenWidth - 30.0f, defaultHeight)];
     self.backgroundImageView.userInteractionEnabled = YES;
     [self.backgroundImageView setImage:[UIImage imageNamed:@"default"]];
     [self.contentView addSubview:self.backgroundImageView];

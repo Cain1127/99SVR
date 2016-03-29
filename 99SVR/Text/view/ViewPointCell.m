@@ -50,10 +50,10 @@
 {
     
     ///底view
-    UIView *rootView = [[UIView alloc] initWithFrame:Rect(0.0f, 0.0f, self.defaultMaxWidth, 100.0f)];
+    UIView *rootView = [[UIView alloc] initWithFrame:Rect(15.0f, 0.0f, self.defaultMaxWidth - 30.0f, 100.0f)];
     [self.contentView addSubview:rootView];
 
-    ///标题信息:WithFrame:Rect(0.0f, 20.0f, self.defaultMaxWidth, 32.0f)
+    ///标题信息
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
     self.titleLabel.textColor = UIColorFromRGB(0x4C4C4C);
@@ -61,14 +61,14 @@
     self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [rootView addSubview:self.titleLabel];
     
-    ///讲师名字:WithFrame:Rect(0.0f, CGRectGetMaxY(self.titleLabel.frame) + CGRectGetHeight(self.titleLabel.frame) + 12.0f, 60.0f, 16.0f)
+    ///讲师名字
     self.teacherNameLabel = [[UILabel alloc] init];
     self.teacherNameLabel.font = XCFONT(10);
     self.teacherNameLabel.textColor = UIColorFromRGB(0x919191);
     self.teacherNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [rootView addSubview:self.teacherNameLabel];
     
-    ///日期信息:WithFrame:Rect(CGRectGetWidth(self.teacherNameLabel.frame) + 10.0f, CGRectGetMaxY(self.teacherNameLabel.frame), 100.0f, CGRectGetHeight(self.teacherNameLabel.frame))
+    ///日期信息
     self.dateLabel = [[UILabel alloc] init];
     self.dateLabel.font = XCFONT(10.0f);
     self.dateLabel.textColor = UIColorFromRGB(0x919191);
