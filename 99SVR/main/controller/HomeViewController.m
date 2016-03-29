@@ -19,6 +19,11 @@
 #import "UIImageView+WebCache.h"
 #import "SDCycleScrollView.h"
 #import "SearchController.h"
+#import "WonderfullView.h"
+#import "RoomHttp.h"
+#import "VideoLivingCell.h"
+#import "ViewPointCell.h"
+#import "RightImageButton.h"
 
 #define kPictureHeight 0.3*kScreenHeight
 
@@ -36,6 +41,8 @@
 
 @implementation HomeViewController
 
+#pragma mark -
+#pragma mark - Banner autoscroll view init
 - (void)createScroll
 {
     if (_scrollView) {
@@ -55,6 +62,8 @@
     
 }
 
+#pragma mark -
+#pragma mark - viewController life circle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -84,8 +93,11 @@
     [self createScroll];
     [self createPage];
     [self initData];
+    [self initLivingData];
 }
 
+#pragma mark -
+#pragma mark - asy load image for image view
 - (void)loadImageView
 {
     @WeakObj(self);
@@ -93,18 +105,23 @@
           selfWeak.scrollView.imageURLStringsGroup = selfWeak.aryBanner;
     });
 }
+
+#pragma mark -
+#pragma mark - pop show left menu
 - (void)showLeftView
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
 }
 
+#pragma mark -
+#pragma mark - home date init request and analyze
 - (void)initData
 {
     NSString *strUrl = [[NSString alloc] initWithUTF8String:kHome_Banner_URL];
-//    __weak HomeViewController *__self = self;
     @WeakObj(self);
     [BaseService postJSONWithUrl:strUrl parameters:nil success:^(id responseObject) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+        NSLog(@":::::::: Banner Data : %@", dict);
         if ([dict objectForKey:@"banner"]) {
             NSArray *array = [dict objectForKey:@"banner"];
             for (NSDictionary *param in array) {
@@ -125,90 +142,466 @@
 
 }
 
+/**
+ *  @author yangshengmeng, 16-03-29 09:03:43
+ *
+ *  @brief  request home list data
+ *
+ *  @since  v1.0.0
+ */
 - (void)initLivingData
 {
     __weak HomeViewController *__self = self;
-    [BaseService postJSONWithUrl:@"http://172.16.41.99/test/test.php?act=script" parameters:nil success:^(id responseObject)
+    NSString *requestAPI = @"http://172.16.41.99/test/index.php";
+    [BaseService getJSONWithUrl:requestAPI parameters:nil success:^(id responseObject)
      {
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if (dict && [dict objectForKey:@"groups"])
+         
+         ///check response data
+         if (!dict)
          {
-             NSMutableArray *array = [NSMutableArray array];
-             NSArray *aryResult = [dict objectForKey:@"groups"];
-             for (NSDictionary *roomDict in aryResult)
-             {
-                 if ([roomDict objectForKey:@"rooms"])
-                 {
-                     NSArray *aryRoom = [roomDict objectForKey:@"rooms"];
-                     for (NSDictionary *textRoom in aryRoom) {
-                         TextRoomModel *room = [TextRoomModel resultWithDict:textRoom];
-                         [array addObject:room];
-                     }
-                 }
-             }
-             __self.aryLiving = array;
+             DLog(@"home list data is null. http API: %@", requestAPI);
+             return;
          }
-         dispatch_async(dispatch_get_main_queue(),
-                        ^{
-                            [__self.tableView reloadData];
-                        });
+         
+         if (0 >= [[dict allKeys] count])
+         {
+             DLog(@"home list data is empty, don't include any data. http API: %@", requestAPI);
+             return;
+         }
+         
+         ///reset data model
+         if (__self.aryLiving)
+         {
+             [__self.aryLiving removeAllObjects];
+         }
+         else
+         {
+             __self.aryLiving = [NSMutableArray array];
+         }
+         
+         ///check videoroom data
+         if ([dict objectForKey:@"videoroom"])
+         {
+             ///初始化数据模型
+             NSArray *roomHttpDictionaryArray = [dict objectForKey:@"videoroom"];
+             
+             NSMutableArray *roomHttpModelArray = [NSMutableArray array];
+             for (int i = 0; i < [roomHttpDictionaryArray count]; i++) {
+                 
+                 RoomHttp *roomHttpModel = [RoomHttp resultWithDict:roomHttpDictionaryArray[i]];
+                 [roomHttpModelArray addObject:roomHttpModel];
+                 
+             }
+             
+             [__self.aryLiving addObject:roomHttpModelArray];
+         }
+         else
+         {
+             DLog(@"home list data is not include videoroom data. http API: %@", requestAPI);
+         }
+         
+         ///check textroom data
+         if ([dict objectForKey:@"textroom"])
+         {
+             ///初始化数据模型
+             NSArray *textRoomModelDictionaryArray = [dict objectForKey:@"textroom"];
+             
+             NSMutableArray *textRoomModelArray = [NSMutableArray array];
+             for (int i = 0; i < [textRoomModelDictionaryArray count]; i++) {
+                 
+                 TextRoomModel *textRoomModel = [TextRoomModel resultWithDict:textRoomModelDictionaryArray[i]];
+                 [textRoomModelArray addObject:textRoomModel];
+                 
+             }
+             
+             [__self.aryLiving addObject:textRoomModelArray];
+         }
+         else
+         {
+             DLog(@"home list data is not include textroom data. http API: %@", requestAPI);
+         }
+         
+         ///check WonderfullView data
+         if ([dict objectForKey:@"viewpoint"])
+         {
+             ///初始化数据模型
+             NSArray *wonderfullViewModelDictionaryArray = [dict objectForKey:@"viewpoint"];
+             
+             NSMutableArray *wonderfullViewModelArray = [NSMutableArray array];
+             for (int i = 0; i < [wonderfullViewModelDictionaryArray count]; i++) {
+                 
+                 WonderfullView *wonderfullViewModel = [WonderfullView resultWithDict:wonderfullViewModelDictionaryArray[i]];
+                 [wonderfullViewModelArray addObject:wonderfullViewModel];
+                 
+             }
+             
+             [__self.aryLiving addObject:wonderfullViewModelArray];
+         }
+         else
+         {
+             DLog(@"home list data is not include viewpoint data. http API: %@", requestAPI);
+         }
+         
+         ///主线程刷新UI
+         dispatch_async(dispatch_get_main_queue(), ^{
+             
+             [__self.tableView reloadData];
+         
+         });
+         
      } fail:nil];
+    
 }
 
+#pragma mark - 
+#pragma mark - UITableView init
 - (void)initTableView
 {
-    UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(8,70, kScreenWidth, 20)];
-    [lblHot setText:@"正在直播"];
-    [lblHot setFont:XCFONT(15)];
-    [lblHot setTextColor:UIColorFromRGB(0x427ede)];
-    [self.view addSubview:lblHot];
-    
-    UILabel *line = [[UILabel alloc] initWithFrame:Rect(8,92, kScreenWidth-16, 0.5)];
-    [self.view addSubview:line];
-    [line setBackgroundColor:kLineColor];
-    
-    _tableView = [[UITableView alloc] initWithFrame:Rect(0, lblHot.y+lblHot.height+5, kScreenWidth,kScreenHeight-(lblHot.y+lblHot.height+5+50))];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(15.0f, 70.0f, kScreenWidth - 30.0f, kScreenHeight - (70.0f + 5.0f + 50.0f))];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
-- (void)didReceiveMemoryWarning
+#pragma mark table view delegate
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    [super didReceiveMemoryWarning];
+    
+    return _aryLiving.count;
+
 }
 
-#pragma mark table view delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _aryLiving.count;
+    
+    if (section < _aryLiving.count)
+    {
+        
+        if ([_aryLiving[section] isKindOfClass:[NSArray class]] ||
+            [_aryLiving[section] isKindOfClass:[NSMutableArray class]])
+        {
+            
+            NSArray *tempArray = _aryLiving[section];
+            return tempArray.count;
+            
+        }
+        
+    }
+    
+    return 0;
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *strCellIdentifier = @"TextLivingIdentifier";
-    TextLivingCell *cell = [_tableView dequeueReusableCellWithIdentifier:strCellIdentifier];
-    if(cell==nil)
+    
+    ///判断不同的section数据模型，返回不同的view
+    if (indexPath.section >= _aryLiving.count)
     {
-        cell = [[TextLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strCellIdentifier];
+        
+        return [self createDefaultTableViewCell:tableView];
+        
     }
-    TextRoomModel *model = [_aryLiving objectAtIndex:indexPath.row];
-    [cell setTextRoomModel:model];
-    return cell;
+    
+    if (!([_aryLiving[indexPath.section] isKindOfClass:[NSArray class]]))
+    {
+        
+        return [self createDefaultTableViewCell:tableView];;
+        
+    }
+    
+    ///根据对象数组内的类型加载HeaderView
+    NSArray *tempArray = _aryLiving[indexPath.section];
+    if (0 >= tempArray.count)
+    {
+        
+        return [self createDefaultTableViewCell:tableView];
+        
+    }
+    
+    if (indexPath.row >= tempArray.count)
+    {
+        
+        return [self createDefaultTableViewCell:tableView];
+        
+    }
+    
+    NSObject *tempObject = tempArray[indexPath.row];
+    
+    ///视频直播内容
+    if ([tempObject isKindOfClass:[RoomHttp class]])
+    {
+        
+        static NSString *vedioCellName = @"vedioCellName";
+        VideoLivingCell *tempCell = [_tableView dequeueReusableCellWithIdentifier:vedioCellName];
+        if(!tempCell)
+        {
+            tempCell = [[VideoLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:vedioCellName];
+        }
+        [tempCell setVideoLivingRoomModel:(RoomHttp *)tempObject];
+        
+        return tempCell;
+        
+    }
+    
+    ///文字直播内容
+    if ([tempObject isKindOfClass:[TextRoomModel class]])
+    {
+        
+        static NSString *textCellName = @"textCellName";
+        TextLivingCell *tempCell = [_tableView dequeueReusableCellWithIdentifier:textCellName];
+        if(!tempCell)
+        {
+            tempCell = [[TextLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:textCellName];
+        }
+        [tempCell setTextRoomModel:(TextRoomModel *)tempObject];
+        
+        return tempCell;
+        
+    }
+    
+    ///精彩视点
+    if ([tempObject isKindOfClass:[WonderfullView class]])
+    {
+        
+        static NSString *viewPointCellName = @"viewPointCellName";
+        ViewPointCell *tempCell = [_tableView dequeueReusableCellWithIdentifier:viewPointCellName];
+        if(!tempCell)
+        {
+            tempCell = [[ViewPointCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:viewPointCellName];
+        }
+        [tempCell setViewPointModel:(WonderfullView *)tempObject];
+        
+        return tempCell;
+        
+    }
+    
+    return [self createDefaultTableViewCell:tableView];
+}
+
+/**
+ *  @author yangshengmeng, 16-03-29 13:03:16
+ *
+ *  @brief  用来生成暂时的系统cell
+ *
+ *  @return 返回一个无任何内容的系统cell
+ *
+ *  @since  v1.0.0
+ */
+- (UITableViewCell *)createDefaultTableViewCell:(UITableView *)tableView
+{
+
+    static NSString *defaultCell = @"defaultCellName";
+    UITableViewCell *tempCell = [tableView dequeueReusableCellWithIdentifier:defaultCell];
+    if (tempCell)
+    {
+        
+        tempCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:defaultCell];
+        
+    }
+    
+    return tempCell;
+
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+
+    ///判断不同的section数据模型，返回不同的view
+    if (section >= _aryLiving.count)
+    {
+        
+        return nil;
+        
+    }
+    
+    if (!([_aryLiving[section] isKindOfClass:[NSArray class]]))
+    {
+        
+        return nil;
+        
+    }
+    
+    ///根据对象数组内的类型加载HeaderView
+    NSArray *tempArray = _aryLiving[section];
+    if (0 >= tempArray.count)
+    {
+        
+        return nil;
+        
+    }
+    
+    NSObject *tempObject = tempArray[0];
+    CGFloat tempHeight = 44.0f;
+    CGFloat rightButtonWidth = 120.0f;
+    
+    ///视频直播内容
+    if ([tempObject isKindOfClass:[RoomHttp class]])
+    {
+        
+        static NSString *vedioHeaderViewName = @"vedioHeaderViewName";
+        UIView *tempHeaderView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:vedioHeaderViewName];
+        if (!tempHeaderView)
+        {
+            
+            tempHeaderView = [[UIView alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tableView.frame), tempHeight)];
+            
+            ///title label
+            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tempHeaderView.frame) - rightButtonWidth, tempHeight)];
+            [lblHot setText:@"视频直播"];
+            [lblHot setFont:XCFONT(15)];
+            [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
+            lblHot.textAlignment = NSTextAlignmentLeft;
+            [tempHeaderView addSubview:lblHot];
+            
+            ///see all button
+            RightImageButton *seeAllButton = [[RightImageButton alloc] initWithFrame:Rect(CGRectGetWidth(lblHot.frame), 0.0f, rightButtonWidth, tempHeight) rightImageWidth:30.0f tapActionBlock:^(UIButton *button) {
+                
+                NSLog(@":::::::::seeAllButtonAction");
+                
+            }];
+            [seeAllButton setTitle:@"查看全部" forState:UIControlStateNormal];
+            [seeAllButton setTitleColor:UIColorFromRGB(0x0078DD) forState:UIControlStateNormal];
+            seeAllButton.titleLabel.font = XCFONT(12);
+            [seeAllButton setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
+            [tempHeaderView addSubview:seeAllButton];
+            
+            UILabel *line = [[UILabel alloc] initWithFrame:Rect(0.0f, CGRectGetHeight(tempHeaderView.frame) - 0.5f, CGRectGetWidth(tempHeaderView.frame), 0.5f)];
+            [line setBackgroundColor:kLineColor];
+            [tempHeaderView addSubview:line];
+            
+        }
+        
+        return tempHeaderView;
+        
+    }
+    
+    ///文字直播内容
+    if ([tempObject isKindOfClass:[TextRoomModel class]])
+    {
+        
+        static NSString *textHeaderViewName = @"textHeaderViewName";
+        UIView *tempHeaderView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:textHeaderViewName];
+        if (!tempHeaderView)
+        {
+            
+            tempHeaderView = [[UIView alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tableView.frame), tempHeight)];
+            
+            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tempHeaderView.frame) - rightButtonWidth, tempHeight)];
+            [lblHot setText:@"文字直播"];
+            [lblHot setFont:XCFONT(15)];
+            [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
+            [tempHeaderView addSubview:lblHot];
+            
+            ///see all button
+            RightImageButton *seeAllButton = [[RightImageButton alloc] initWithFrame:Rect(CGRectGetWidth(lblHot.frame), 0.0f, rightButtonWidth, tempHeight) rightImageWidth:30.0f tapActionBlock:^(UIButton *button) {
+                
+                NSLog(@":::::::::seeAllButtonAction");
+                
+            }];
+            [seeAllButton setTitle:@"查看全部" forState:UIControlStateNormal];
+            [seeAllButton setTitleColor:UIColorFromRGB(0x0078DD) forState:UIControlStateNormal];
+            seeAllButton.titleLabel.font = XCFONT(12);
+            [seeAllButton setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
+            [tempHeaderView addSubview:seeAllButton];
+            
+            UILabel *line = [[UILabel alloc] initWithFrame:Rect(0.0f, CGRectGetHeight(tempHeaderView.frame) - 0.5f, CGRectGetWidth(tempHeaderView.frame), 0.5f)];
+            [line setBackgroundColor:kLineColor];
+            [tempHeaderView addSubview:line];
+            
+        }
+        
+        return tempHeaderView;
+        
+    }
+    
+    ///精彩视点
+    if ([tempObject isKindOfClass:[WonderfullView class]])
+    {
+        
+        static NSString *viewPointHeaderViewName = @"viewPointHeaderViewName";
+        UIView *tempHeaderView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:viewPointHeaderViewName];
+        if (!tempHeaderView)
+        {
+            
+            tempHeaderView = [[UIView alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tableView.frame), tempHeight)];
+            
+            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tempHeaderView.frame), tempHeight)];
+            [lblHot setText:@"精彩观点"];
+            [lblHot setFont:XCFONT(15)];
+            [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
+            [tempHeaderView addSubview:lblHot];
+            
+            UILabel *line = [[UILabel alloc] initWithFrame:Rect(8.0f, 22.5f, kScreenWidth-16.0f, 0.5f)];
+            [line setBackgroundColor:kLineColor];
+            [tempHeaderView addSubview:line];
+            
+        }
+        
+        return tempHeaderView;
+        
+    }
+    
+    return nil;
+
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    TextRoomModel *model = [_aryLiving objectAtIndex:indexPath.row];
-    TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithModel:model];
-    [self presentViewController:textHome animated:YES completion:nil];
+    NSLog(@"::::::::::tap cell: %@", indexPath);
+//    TextRoomModel *model = [_aryLiving objectAtIndex:indexPath.row];
+//    TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithModel:model];
+//    [self presentViewController:textHome animated:YES completion:nil];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    
+    ///判断不同的section数据模型，返回不同的view
+    if (indexPath.section >= _aryLiving.count)
+    {
+        
+        return 0.0f;
+        
+    }
+    
+    if (!([_aryLiving[indexPath.section] isKindOfClass:[NSArray class]]))
+    {
+        
+        return 0.0f;
+        
+    }
+    
+    ///根据对象数组内的类型加载HeaderView
+    NSArray *tempArray = _aryLiving[indexPath.section];
+    if (0 >= tempArray.count)
+    {
+        
+        return 0.0f;
+        
+    }
+    
+    NSObject *tempObject = tempArray[0];
+    if ([tempObject isKindOfClass:[RoomHttp class]] ||
+        [tempObject isKindOfClass:[TextRoomModel class]])
+    {
+        
+        return 100.0f;
+        
+    }
+    
+    return 155.0f;
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+
+    return 44.0f;
+
 }
 
 #pragma mark hotViewDelegate

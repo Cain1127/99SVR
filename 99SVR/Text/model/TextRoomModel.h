@@ -16,6 +16,8 @@
 @property (nonatomic,copy) NSString *introduce;
 @property (nonatomic,copy) NSString *ncount;
 @property (nonatomic,copy) NSString *teacherId;
+@property (nonatomic,copy) NSString *croompic;
+@property (nonatomic,copy) NSString *label;
 
 + (TextRoomModel *)resultWithDict:(NSDictionary* )dict;
 

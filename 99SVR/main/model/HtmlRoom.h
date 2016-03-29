@@ -16,6 +16,4 @@
 @property (nonatomic,copy) NSString *strRoomId;
 @property (nonatomic,copy) NSString *strRoomName;
 
-
-
 @end
