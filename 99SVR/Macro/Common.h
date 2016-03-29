@@ -63,17 +63,19 @@
 #define kBand_mobile_setphone_URL @"http://abc.99ducaijing.com/mapiphone/setphone"
 #define kBand_mobile_checkcode_URL @"http://abc.99ducaijing.com/mapiphone/checkphonecode"
 
+#define LBS_ROOM_WEB [NSString stringWithFormat:@"%@tygetweb",LBS_HTTP_HOST]
+#define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
+
 #if 1
+
 #define kImage_TEXT_URL @"http://172.16.41.99/test/getimage.php?tid="
 #define kTEXT_GROUP_URL @"http://172.16.41.99/test/test.php?act=script"
 #define kTEXT_NEW_DETAILS_URL @"http://172.16.41.99/viewpoint/index.php?s=/Index/getViewPoint/id/"
-#define LBS_ROOM_WEB [NSString stringWithFormat:@"%@tygetweb",LBS_HTTP_HOST4]
-#define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST4]
 #define kRegisterNumber @"http://abc.99ducaijing.com/"
+
 #else
+
 #define kRegisterNumber @"http://api.99ducaijing.com/"
-#define LBS_ROOM_WEB [NSString stringWithFormat:@"%@tygetweb",LBS_HTTP_HOST]
-#define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
 #define kImage_TEXT_URL @"http://121.33.236.180:22807/test/getimage.php?tid="
 #define kTEXT_GROUP_URL @"http://121.33.236.180:22807/test/test.php?act=script"
 #define kTEXT_NEW_DETAILS_URL @"http://121.33.236.180:22807/viewpoint/index.php?s=/Index/getViewPoint/id/"

@@ -25,9 +25,18 @@
     model.titlelen = resp->titlelen;
     model.textlen = resp->textlen;
     
-    char cTitle[model.titlelen+1];
-    char cText[model.textlen+1];
-    char cCover[model.coverlittlelen+1];
+    int titleLen = model.titlelen*2;
+    
+    char cTitle[titleLen];
+    memset(cTitle,0,titleLen);
+    
+    int textlen = model.textlen*2;
+    char cText[textlen];
+    memset(cText, 0, textlen);
+    
+    char cCover[model.coverlittlelen+16];
+    memset(cCover, 0, model.coverlittlelen+16);
+    
     strncpy(cCover,cBuf,model.coverlittlelen);
     strncpy(cTitle,cBuf+model.coverlittlelen,model.titlelen);
     strncpy(cText,cBuf+model.coverlittlelen+model.textlen,model.textlen);

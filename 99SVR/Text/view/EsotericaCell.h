@@ -20,5 +20,7 @@
 @property (nonatomic,strong) UILabel *lblTime;
 @property (nonatomic,strong) UIButton *btnOper;
 @property (nonatomic,strong) UIButton *btnPrice;
+@property (nonatomic,strong) UILabel *lblInfo;
+@property (nonatomic) UIEdgeInsets insets;
 
 @end

@@ -104,19 +104,19 @@
     _viewid = notify->viewid;
     [self settingTime];
     
-    char cBuf[_textlen];
-    memset(cBuf, 0, _textlen);
+    char cBuf[_textlen*2];
+    memset(cBuf, 0, _textlen*2);
     memcpy(cBuf,notify->content,_textlen);
     if (_livetype==4)
     {
-        char cTitle[_textlen];
-        memset(cTitle, 0, _textlen);
+        char cTitle[_textlen*2];
+        memset(cTitle, 0, _textlen*2);
         memcpy(cTitle, notify->content, _textlen);
         
         if (_destextlen>0)
         {
-            char cDest[_destextlen];
-            memset(cDest, 0, _destextlen);
+            char cDest[_destextlen*2];
+            memset(cDest, 0, _destextlen*2);
             memcpy(cDest, notify->content+_textlen,_destextlen);
             
             NSString *strTitle = [NSString stringWithCString:cTitle encoding:GBK_ENCODING];
@@ -129,8 +129,8 @@
     }
     else if(_livetype==5)
     {
-        char cTitle[_textlen];
-        memset(cTitle, 0, _textlen);
+        char cTitle[_textlen*2];
+        memset(cTitle, 0, _textlen*2);
         memcpy(cTitle, notify->content, _textlen);
         NSStringEncoding GBK = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
         _strContent = [NSString stringWithCString:cTitle encoding:GBK];
