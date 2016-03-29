@@ -73,7 +73,5 @@ DEFINE_SINGLETON_FOR_CLASS(UserInfo)
 
 @implementation RoomKey
 
-
-
 @end
 

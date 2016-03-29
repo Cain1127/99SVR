@@ -15,6 +15,18 @@
 		188741821C9702DA002EF25A /* NSString+Regex.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417C1C9702DA002EF25A /* NSString+Regex.m */; };
 		188741831C9702DA002EF25A /* UIBarButtonItem+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */; };
 		188741871C97058F002EF25A /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188741861C97058F002EF25A /* TabBarController.m */; };
+		18987FF01CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
+		18987FF11CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
+		18987FF21CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
+		18987FFA1CAA4A3E000E9F1C /* ViewPointCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FF91CAA4A3E000E9F1C /* ViewPointCell.m */; };
+		18987FFB1CAA4A3E000E9F1C /* ViewPointCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FF91CAA4A3E000E9F1C /* ViewPointCell.m */; };
+		18987FFC1CAA4A3E000E9F1C /* ViewPointCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FF91CAA4A3E000E9F1C /* ViewPointCell.m */; };
+		18987FFF1CAA4AC8000E9F1C /* VideoLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FFE1CAA4AC8000E9F1C /* VideoLivingCell.m */; };
+		189880001CAA4AC8000E9F1C /* VideoLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FFE1CAA4AC8000E9F1C /* VideoLivingCell.m */; };
+		189880011CAA4AC8000E9F1C /* VideoLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FFE1CAA4AC8000E9F1C /* VideoLivingCell.m */; };
+		189880041CAA52F8000E9F1C /* RightImageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 189880031CAA52F8000E9F1C /* RightImageButton.m */; };
+		189880051CAA52F8000E9F1C /* RightImageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 189880031CAA52F8000E9F1C /* RightImageButton.m */; };
+		189880061CAA52F8000E9F1C /* RightImageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 189880031CAA52F8000E9F1C /* RightImageButton.m */; };
 		1898AC661C9BADE600F2681D /* AboutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC5D1C9BADE600F2681D /* AboutController.m */; };
 		1898AC671C9BADE600F2681D /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC5F1C9BADE600F2681D /* HistoryViewController.m */; };
 		1898AC681C9BADE600F2681D /* KefuCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC611C9BADE600F2681D /* KefuCenterController.m */; };
@@ -35,6 +47,9 @@
 		18AC14171C8FB8E100FDFF40 /* JSPatch.js in Resources */ = {isa = PBXBuildFile; fileRef = 18AC14151C8FB8E100FDFF40 /* JSPatch.js */; };
 		18BF06B51C9A7DC70071E524 /* SignatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BF06B41C9A7DC70071E524 /* SignatureViewController.m */; };
 		18BF06B81C9A86B00071E524 /* RechargeResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BF06B71C9A86B00071E524 /* RechargeResultViewController.m */; };
+		18D7677D1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */; };
+		18D7677E1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */; };
+		18D7677F1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */; };
 		18EBF7301C964BEA0056261D /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EBF72E1C964BEA0056261D /* libWeChatSDK.a */; };
 		18EBF7311C964BEA0056261D /* libWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EBF72F1C964BEA0056261D /* libWeiboSDK.a */; };
 		18F7538C1C9171C2000F1D72 /* NSString+Size.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F7538B1C9171C2000F1D72 /* NSString+Size.m */; };
@@ -521,6 +536,14 @@
 		1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Extension.m"; sourceTree = "<group>"; };
 		188741851C97058F002EF25A /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		188741861C97058F002EF25A /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
+		18987FEE1CAA17E6000E9F1C /* WonderfullView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonderfullView.h; sourceTree = "<group>"; };
+		18987FEF1CAA17E6000E9F1C /* WonderfullView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonderfullView.m; sourceTree = "<group>"; };
+		18987FF81CAA4A3E000E9F1C /* ViewPointCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewPointCell.h; sourceTree = "<group>"; };
+		18987FF91CAA4A3E000E9F1C /* ViewPointCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewPointCell.m; sourceTree = "<group>"; };
+		18987FFD1CAA4AC8000E9F1C /* VideoLivingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoLivingCell.h; sourceTree = "<group>"; };
+		18987FFE1CAA4AC8000E9F1C /* VideoLivingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoLivingCell.m; sourceTree = "<group>"; };
+		189880021CAA52F8000E9F1C /* RightImageButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightImageButton.h; sourceTree = "<group>"; };
+		189880031CAA52F8000E9F1C /* RightImageButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightImageButton.m; sourceTree = "<group>"; };
 		1898AC5C1C9BADE600F2681D /* AboutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutController.h; path = controller/AboutController.h; sourceTree = "<group>"; };
 		1898AC5D1C9BADE600F2681D /* AboutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutController.m; path = controller/AboutController.m; sourceTree = "<group>"; };
 		1898AC5E1C9BADE600F2681D /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HistoryViewController.h; path = controller/HistoryViewController.h; sourceTree = "<group>"; };
@@ -555,6 +578,8 @@
 		18BF06B41C9A7DC70071E524 /* SignatureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignatureViewController.m; sourceTree = "<group>"; };
 		18BF06B61C9A86B00071E524 /* RechargeResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RechargeResultViewController.h; sourceTree = "<group>"; };
 		18BF06B71C9A86B00071E524 /* RechargeResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RechargeResultViewController.m; sourceTree = "<group>"; };
+		18D7677B1CAA7EAD00CE79B0 /* HomeTextLivingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeTextLivingCell.h; sourceTree = "<group>"; };
+		18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeTextLivingCell.m; sourceTree = "<group>"; };
 		18EBF72E1C964BEA0056261D /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeChatSDK.a; path = 99SVR/libs/libWeChatSDK.a; sourceTree = SOURCE_ROOT; };
 		18EBF72F1C964BEA0056261D /* libWeiboSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeiboSDK.a; path = 99SVR/libs/libWeiboSDK.a; sourceTree = SOURCE_ROOT; };
 		18F7538A1C9171C2000F1D72 /* NSString+Size.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Size.h"; sourceTree = "<group>"; };
@@ -1788,6 +1813,12 @@
 				BBAF97031CA9860500C16305 /* MarchLiveTextCell.m */,
 				BBAF97151CAA5E2B00C16305 /* EsotericaCell.h */,
 				BBAF97161CAA5E2B00C16305 /* EsotericaCell.m */,
+				18987FF81CAA4A3E000E9F1C /* ViewPointCell.h */,
+				18987FF91CAA4A3E000E9F1C /* ViewPointCell.m */,
+				18987FFD1CAA4AC8000E9F1C /* VideoLivingCell.h */,
+				18987FFE1CAA4AC8000E9F1C /* VideoLivingCell.m */,
+				18D7677B1CAA7EAD00CE79B0 /* HomeTextLivingCell.h */,
+				18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -2458,6 +2489,8 @@
 				BB63F58E1C2CC7A300A042E8 /* RoomHttp.m */,
 				BB6F3ABB1C9ECB3C0035EBBE /* BannerModel.h */,
 				BB6F3ABC1C9ECB3C0035EBBE /* BannerModel.m */,
+				18987FEE1CAA17E6000E9F1C /* WonderfullView.h */,
+				18987FEF1CAA17E6000E9F1C /* WonderfullView.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -2494,6 +2527,8 @@
 				BBB515F91C4D3655008F2CEC /* DoubleView.m */,
 				1827FF571C9959BF009D9C79 /* MyScrollView.h */,
 				1827FF581C9959BF009D9C79 /* MyScrollView.m */,
+				189880021CAA52F8000E9F1C /* RightImageButton.h */,
+				189880031CAA52F8000E9F1C /* RightImageButton.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -2730,7 +2765,7 @@
 				TargetAttributes = {
 					BB25D7D31C1571B400314C1E = {
 						CreatedOnToolsVersion = 7.1.1;
-						DevelopmentTeam = FMNJX2N6V6;
+						DevelopmentTeam = 3K9P9NRQ2R;
 					};
 					BB25D7EC1C1571B400314C1E = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -3083,6 +3118,7 @@
 				BB17694A1C7D88E000CE947C /* ForgetPwdViewController.m in Sources */,
 				BB5F9BC71C5DDA9D00285EA6 /* MediaSocket.m in Sources */,
 				BB63F5F91C2CC7A300A042E8 /* UIView+Extension.m in Sources */,
+				18987FFF1CAA4AC8000E9F1C /* VideoLivingCell.m in Sources */,
 				BB63F5D41C2CC7A300A042E8 /* UIScrollView+MJExtension.m in Sources */,
 				18F9710F1C92947F001B2575 /* MD5DataSigner.m in Sources */,
 				BB1769411C7C090F00CE947C /* RegNameViewController.m in Sources */,
@@ -3168,8 +3204,10 @@
 				BB0436B21C4F130500A162A8 /* ChatReplyModel.m in Sources */,
 				BB9765F61C86831D00FAA5B7 /* TextChatModel.m in Sources */,
 				BB63F5CD1C2CC7A300A042E8 /* MJRefreshConst.m in Sources */,
+				18987FFA1CAA4A3E000E9F1C /* ViewPointCell.m in Sources */,
 				BB1769291C7B006F00CE947C /* SDWebImagePrefetcher.m in Sources */,
 				BBA16DA21C8C021C00D84E80 /* NSJSONSerialization+RemovingNulls.m in Sources */,
+				189880041CAA52F8000E9F1C /* RightImageButton.m in Sources */,
 				BB88F3651C4736C100C1F8D9 /* AFURLSessionManager.m in Sources */,
 				187C07F31C9A571B007AE742 /* ProfileViewController.m in Sources */,
 				BB63F5D01C2CC7A300A042E8 /* MJRefreshGifHeader.m in Sources */,
@@ -3177,6 +3215,7 @@
 				BB63F6111C2CC7A300A042E8 /* HotViewController.m in Sources */,
 				BB6F3B121CA13E3E0035EBBE /* Thread.cpp in Sources */,
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
+				18D7677D1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */,
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
 				BB1769211C7B006F00CE947C /* MKAnnotationView+WebCache.m in Sources */,
 				BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */,
@@ -3193,6 +3232,7 @@
 				BB63F5F41C2CC7A300A042E8 /* SVRSocket.m in Sources */,
 				BBAF97171CAA5E2B00C16305 /* EsotericaCell.m in Sources */,
 				BB63F5D11C2CC7A300A042E8 /* MJRefreshHeader.m in Sources */,
+				18987FF01CAA17E6000E9F1C /* WonderfullView.m in Sources */,
 				BB0436811C4E28B800A162A8 /* TomorrowModel.m in Sources */,
 				BB63F6081C2CC7A300A042E8 /* TitleButton.m in Sources */,
 				BB63F5B01C2CC7A300A042E8 /* FMDatabasePool.m in Sources */,
@@ -3264,7 +3304,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18D7677E1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */,
+				18987FF11CAA17E6000E9F1C /* WonderfullView.m in Sources */,
+				189880001CAA4AC8000E9F1C /* VideoLivingCell.m in Sources */,
+				189880051CAA52F8000E9F1C /* RightImageButton.m in Sources */,
 				BB25D7F21C1571B400314C1E /* _9SVRTests.m in Sources */,
+				18987FFB1CAA4A3E000E9F1C /* ViewPointCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3272,7 +3317,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18D7677F1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */,
+				18987FF21CAA17E6000E9F1C /* WonderfullView.m in Sources */,
+				189880011CAA4AC8000E9F1C /* VideoLivingCell.m in Sources */,
+				189880061CAA52F8000E9F1C /* RightImageButton.m in Sources */,
 				BB25D7FD1C1571B400314C1E /* _9SVRUITests.m in Sources */,
+				18987FFC1CAA4A3E000E9F1C /* ViewPointCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3398,7 +3448,7 @@
 					"$(SRCROOT)/99SVR/libs/AlipaySDK",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/99SVR/other/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3449,7 +3499,7 @@
 					"$(SRCROOT)/99SVR/libs/AlipaySDK",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/99SVR/other/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

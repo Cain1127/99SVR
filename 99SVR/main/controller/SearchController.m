@@ -97,6 +97,10 @@
         NSMutableArray *array = [NSMutableArray array];
         for (RoomGroup *rGroup in [UserInfo sharedUserInfo].aryRoom)
         {
+            [rGroup.groupId isEqualToString:@"4"];
+        }
+        for (RoomGroup *rGroup in [UserInfo sharedUserInfo].aryRoom)
+        {
             for (RoomHttp *item in rGroup.roomList)
             {
                 [array removeObject:item];

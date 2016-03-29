@@ -58,31 +58,13 @@ void LoginConnection::on_do_connected()
 
 void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 {
-	//121.12.118.32:7301
-	//120.197.248.11:7401  ÒÆ¶¯
-	// "login1.99ducaijing.cn", 7401
-	//connect("121.12.118.32", 7301);
-	
-	/*
-	int ret = connect("121.12.118.32", 7301);
 
-	if (ret != 0)
-		return;
-	*/
 	req4 = req;
 	reqv = 4;
 
 	conenct_from_lbs();
 
-	/*
-	SendMsg_Hello();
-	SEND_MESSAGE(Sub_Vchat_logonReq4, req);
 
-	nmobile = req.nmobile();
-	version = req.nversion();
-
-	start_read_thread();
-	*/
 }
 
 void LoginConnection::SendMsg_LoginReq5(UserLogonReq5& req)
@@ -90,7 +72,6 @@ void LoginConnection::SendMsg_LoginReq5(UserLogonReq5& req)
 	req5 = req;
 	reqv = 5;
 
-	conenct_from_lbs();
 }
 
 void LoginConnection::SendMsg_SessionTokenReq(uint32 userid)
