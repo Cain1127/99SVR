@@ -74,9 +74,6 @@
 /**
  *  新解析表情方式
  *
- *  @param strInfo <#strInfo description#>
- *
- *  @return <#return value description#>
  */
 + (NSString *)replaceEmojiNewString:(NSString *)strInfo;
 
@@ -100,5 +97,14 @@
  *  发送所有请求，质量报警信息
  */
 + (void)postPHPServerMsg:(NSString *)strUrl;
+/**
+ *  推送app信息
+ */
++ (void)postApplicationInfo;
+
+/**
+ *  推送获取不到大厅
+ */
++ (void)postPageHall;
 
 @end

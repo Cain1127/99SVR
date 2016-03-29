@@ -65,7 +65,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    [self setTitleText:@"观点正文"];
+    [self setTitleText:@"观点正文"];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _tableView = [[UITableView alloc] initWithFrame:Rect(0,64, kScreenWidth,kScreenHeight-114)];
     [self.view addSubview:_tableView];
@@ -83,20 +83,11 @@
 
 - (void)initUIHead
 {
-    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
-    btnBack.frame = Rect(0, 20, 44, 44);
-//    [self setLeftBtn:btnBack];
-    
     __weak NewDetailsViewController *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
         [__self requestView];
     });
-    
-//    [_tcpSocket reqIdeaDetails:0 count:20 ideaId:_details.messageid];
     
     downView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50, kScreenWidth, 50)];
     [downView setBackgroundColor:UIColorFromRGB(0xcfcfcf)];

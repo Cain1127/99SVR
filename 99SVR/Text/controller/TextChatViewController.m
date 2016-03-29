@@ -22,10 +22,7 @@
 
 @interface TextChatViewController ()<UITableViewDataSource ,UITableViewDelegate,DTAttributedTextContentViewDelegate,EmojiViewDelegate,UITextViewDelegate>
 {
-    NSMutableDictionary *_dictIcon;
-    
     NSCache *cellCache;
-    
     UILabel *lblPlace;
     UITextView *_textChat;
     CGFloat deltaY;
@@ -173,21 +170,6 @@
     return nil;
 }
 
-- (void)findImage:(NSString *)strName imgView:(UIImageView *)imageView
-{
-    UIImage *image = [_dictIcon objectForKey:strName];
-    if (image)
-    {
-        [imageView setImage:image];
-    }
-    else
-    {
-        image = [UIImage animatedImageWithAnimatedGIFURL:[[NSBundle mainBundle] URLForResource:strName withExtension:@"gif"]];
-        [_dictIcon setObject:image forKey:strName];
-        [imageView setImage:image];
-    }
-}
-
 - (void)showImageInfo:(UITapGestureRecognizer *)tapGest
 {
     UIImageView *imageView = (UIImageView *)tapGest.view;
@@ -205,28 +187,43 @@
     return _aryChat.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (DTAttributedTextCell *)tableView:(UITableView *)tableView chatRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *strIdentifier = @"textChatViewIdentifier";
-    ChatViewCell *cell = [tableView dequeueReusableCellWithIdentifier:strIdentifier];
+    char cBuffer[100]={0};
+    sprintf(cBuffer,"%zi-%zi",indexPath.row,indexPath.section);
+    NSString *key = [[NSString alloc] initWithUTF8String:cBuffer];
+    DTAttributedTextCell *cell = [cellCache objectForKey:key];
     if (cell==nil)
     {
-        cell = [[ChatViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
+        cell = [[DTAttributedTextCell alloc] initWithReuseIdentifier:strIdentifier];
+        UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
+        [selectView setBackgroundColor:[UIColor clearColor]];
+        cell.selectedBackgroundView = selectView;
+        [cellCache setObject:cell forKey:key];
     }
-    NSString *strKey = [NSString stringWithFormat:@"%zi",indexPath.row];
     if (_aryChat.count >indexPath.row)
     {
         TextChatModel *model = [_aryChat objectAtIndex:indexPath.row];
-        cell.content.delegate = self;
-        cell.content.shouldDrawImages = YES;
-        NSData *data = [model.content dataUsingEncoding:NSUTF8StringEncoding];
-        [cell.content setAttributedString:[[NSAttributedString alloc] initWithHTMLData:data baseURL:nil documentAttributes:nil]];
-    }
-    else
-    {
-        [cellCache setObject:NSStringFromFloat(.0f) forKey:strKey];
+        cell.attributedTextContextView.shouldDrawImages = YES;
+        cell.attributedTextContextView.delegate = self;
+        [cell setHTMLString:model.content];
+        CGFloat height = [cell.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
+        cell.frame = Rect(10, 5, kScreenWidth-20, height+10);
     }
     return cell;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    DTAttributedTextCell *cell = [self tableView:tableView chatRowAtIndexPath:indexPath];
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    DTAttributedTextCell *cell = [self tableView:tableView chatRowAtIndexPath:indexPath];
+    return [cell requiredRowHeightInTableView:tableView];
 }
 
 - (void)viewWillAppear:(BOOL)animate

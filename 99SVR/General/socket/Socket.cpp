@@ -1,4 +1,4 @@
-#include "platform.h"
+#include "stdafx.h"
 #include "Socket.h"
 
 unsigned long get_inet_addr(const char* host)
@@ -52,10 +52,8 @@ int set_timeout(SOCKET socket, int recv_timeout_second, int send_timeout_second)
 	return ret;
 #else
 	int ret;
-	struct timeval recv_timeout =
-	{ recv_timeout_second, 0 };
-	struct timeval send_timeout =
-	{ send_timeout_second, 0 };
+	struct timeval recv_timeout = { recv_timeout_second, 0 };
+	struct timeval send_timeout = { send_timeout_second, 0 };
 	ret = setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, (const char*) &send_timeout, sizeof(send_timeout));
 	ret = setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, (const char*) &recv_timeout, sizeof(recv_timeout));
 	return ret;
@@ -71,7 +69,7 @@ int Socket::create(void)
 	return get_error();
 }
 
-int Socket::connect(const char* host, short port)
+int Socket::connect(const char* host, short port, int connect_timeout)
 {
 	int ret;
 	sockaddr_in sockAddr;
@@ -83,6 +81,7 @@ int Socket::connect(const char* host, short port)
 	create();
 
 	//ret = ::connect(socket, (struct sockaddr*)&sockAddr, sizeof(sockAddr));
+
 	set_block(socket, false);
 	ret = ::connect(socket, (struct sockaddr*) &sockAddr, sizeof(sockAddr));
 	if (socket == 0)
@@ -93,7 +92,7 @@ int Socket::connect(const char* host, short port)
 	if (ret == SOCKET_ERROR)
 	{
 		timeval timeout;
-		timeout.tv_sec = 5;
+		timeout.tv_sec = (long)connect_timeout;
 		timeout.tv_usec = 0;
 
 		fd_set read_set;
@@ -130,7 +129,7 @@ int Socket::connect(const char* host, short port)
 	LOG("socket connect: %d", ret);
 
 	ret = set_block(socket, true);
-	ret = set_timeout(socket, 5, 5);
+	ret = set_timeout(socket, 3, 3);
 
 	LOG("socket set_block: %d", ret);
 
@@ -172,8 +171,8 @@ int Socket::get_error()
 int Socket::get_error2()
 {
 	int socket_error = 0;
-	int socket_error_len = sizeof(int);
-    if (::getsockopt(socket, SOL_SOCKET, SO_ERROR, (char*) &socket_error, (socklen_t*)&socket_error_len) < 0)
+	int socket_error_len = sizeof(my_socklen_t);
+	if (getsockopt(socket, SOL_SOCKET, SO_ERROR, (char*) &socket_error, (my_socklen_t*) &socket_error_len) < 0)
 	{
 		return -1;
 	}

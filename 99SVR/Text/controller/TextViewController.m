@@ -42,19 +42,19 @@
 
 - (void)initHeadScroller
 {
-    _scrollHeader = [[MyScrollView alloc] initWithFrame:Rect(0,64,kScreenWidth, 46)];
-    [self.view addSubview:_scrollHeader];
-    _scrollHeader.clipsToBounds = YES;
-    _scrollHeader.pagingEnabled = YES;
-    _scrollHeader.showsHorizontalScrollIndicator = NO;
-    _scrollHeader.showsVerticalScrollIndicator = NO;
-    _scrollHeader.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _scrollHeader.contentSize = CGSizeMake(0, 46);
-    CGSize sizeWidth = [@"视频直播间" sizeWithAttributes:@{NSFontAttributeName:XCFONT(15)}];
-    fWidth = sizeWidth.width;
-    _lblLine2 = [[UILabel alloc] initWithFrame:Rect(0, 44.5, kScreenWidth, 1)];
-    [_lblLine2 setBackgroundColor:kLineColor];
-    [_scrollHeader addSubview:_lblLine2];
+//    _scrollHeader = [[MyScrollView alloc] initWithFrame:Rect(0,64,kScreenWidth, 46)];
+//    [self.view addSubview:_scrollHeader];
+//    _scrollHeader.clipsToBounds = YES;
+//    _scrollHeader.pagingEnabled = YES;
+//    _scrollHeader.showsHorizontalScrollIndicator = NO;
+//    _scrollHeader.showsVerticalScrollIndicator = NO;
+//    _scrollHeader.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+//    _scrollHeader.contentSize = CGSizeMake(0, 46);
+//    CGSize sizeWidth = [@"视频直播间" sizeWithAttributes:@{NSFontAttributeName:XCFONT(15)}];
+//    fWidth = sizeWidth.width;
+//    _lblLine2 = [[UILabel alloc] initWithFrame:Rect(0, 44.5, kScreenWidth, 1)];
+//    [_lblLine2 setBackgroundColor:kLineColor];
+//    [_scrollHeader addSubview:_lblLine2];
 }
 
 - (void)settingTextGroup
@@ -63,41 +63,14 @@
     __weak UILabel *__line1 = _line1;
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        int i=0;
-        for (TextGroupList *textList in __self.aryGroup)
-        {
-            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            [btn setTitle:textList.gname forState:UIControlStateNormal];
-            UIColor *titleColor = [UIColor colorWithHex:@"#555555"];
-            UIColor *selectedColor = [UIColor colorWithHex:@"#427ede"];
-            [btn setTitleColor:titleColor forState:UIControlStateNormal];
-            [btn setTitleColor:selectedColor forState:UIControlStateHighlighted];
-            [btn setTitleColor:selectedColor forState:UIControlStateSelected];
-            btn.titleLabel.font = XCFONT(14);
-            btn.frame = Rect(__self.scrollHeader.contentSize.width,0, fWidth, 44);
-            [__self.scrollHeader addSubview:btn];
-            __self.scrollHeader.contentSize = CGSizeMake(btn.x+btn.width, 44);
-            _lblLine2.frame = Rect(0, 44.5, btn.x+btn.width, 2);
-            btn.tag = i;
-            i++;
-            [btn addTarget:__self action:@selector(selectTabButton:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        [__self.scrollHeader addSubview:__line1];
-        __line1.frame = Rect(0, 44, fWidth, 2);
-        NSInteger tag = 0;
-        int  nCount = (int)[_aryGroup count];
-        for (tag = 0 ; tag<nCount;tag++)
-        {
-            UITableView *tableView = [[UITableView alloc] initWithFrame:Rect(tag*kScreenWidth,0,kScreenWidth,__self.scrollView.height)];
-            tableView.tag = tag;
-            tableView.delegate = __self;
-            tableView.dataSource = __self;
-            [__self.scrollView addSubview:tableView];
-            [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-            [tableView reloadData];
-        }
-        __self.scrollView.contentSize = CGSizeMake(kScreenWidth * nCount,__self.scrollView.height);
-        [__self setSelectInfo:0];
+        UITableView *tableView = [[UITableView alloc] initWithFrame:Rect(0,0,kScreenWidth,__self.scrollView.height)];
+        tableView.tag = 0;
+        tableView.delegate = __self;
+        tableView.dataSource = __self;
+        [__self.scrollView addSubview:tableView];
+        [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+        [tableView reloadData];
+        __self.scrollView.contentSize = CGSizeMake(kScreenWidth,__self.scrollView.height);
     });
 }
 
@@ -199,12 +172,12 @@
 
 - (void)showLeftView
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
+    [self leftItemClick];
 }
 
 - (void)initScrollView
 {
-    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0, _scrollHeader.y+_scrollHeader.height+8, kScreenWidth,kScreenHeight - 160)];
+    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0,72, kScreenWidth,kScreenHeight - 160)];
     [self.view addSubview:_scrollView];
     _scrollView.clipsToBounds = YES;
     _scrollView.pagingEnabled = YES;

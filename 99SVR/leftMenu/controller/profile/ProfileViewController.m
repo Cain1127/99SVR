@@ -166,8 +166,6 @@
         NickNameViewController *nickNameVc = [[NickNameViewController alloc] init];
         nickNameVc.title = @"昵称";
         nickNameVc.nickNameBlock = ^(NSString * nickName){
-            
-            // 回调处理，同步
             [weakSelf.tableView reloadData];
         };
         [self.navigationController pushViewController:nickNameVc animated:YES];
@@ -176,9 +174,7 @@
     
     } else{
         SignatureViewController *signatureVc = [[SignatureViewController alloc] init];
-        signatureVc.title = @"设置签名";
         signatureVc.signatureBlock =^(NSString * nickName){
-            
             // 回调处理，同步
             [weakSelf.tableView reloadData];
         };

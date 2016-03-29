@@ -17,9 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(rightItemClick) title:@"完成"];
-    
+    [self setTitleText:@"修改个性签名"];
     [self setupView];
 }
 
@@ -30,7 +28,7 @@
     //输入框底层
     UIView *inputView = [[UIView alloc] init];
     inputView.backgroundColor = [UIColor whiteColor];
-    inputView.frame = CGRectMake(0, 10, kScreenWidth, 150);
+    inputView.frame = CGRectMake(0, 70, kScreenWidth, 150);
     [self.view addSubview:inputView];
     
     //签名输入框
@@ -45,7 +43,7 @@
     [_signatureTextField setValue:kFontSize(14) forKeyPath:@"_placeholderLabel.font"];
     [_signatureTextField setValue:RGB(151, 151, 151) forKeyPath:@"_placeholderLabel.textColor"];
     [self.view addSubview:_signatureTextField];
-    _signatureTextField.frame = CGRectMake(12, 10, kScreenWidth - 2 * 12, 150);
+    _signatureTextField.frame = CGRectMake(12, 74, kScreenWidth - 2 * 12, 150);
     
     //建议提醒文字
 //    UILabel * adviceLabel = [[UILabel alloc] init];
@@ -55,6 +53,13 @@
 //    adviceLabel.numberOfLines = 0;
 //    adviceLabel.frame = CGRectMake(12, CGRectGetMaxY(_signatureTextField.frame), kScreenWidth - 12*2, 30);
 //    [self.view addSubview:adviceLabel];
+    UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnRight setTitle:@"保存" forState:UIControlStateNormal];
+    [btnRight setBackgroundColor:UIColorFromRGB(0x7fbbee)];
+    [self.view addSubview:btnRight];
+    btnRight.frame = Rect(10,_signatureTextField.y+_signatureTextField.height+30, kScreenWidth-20, 40);
+    [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
+    [btnRight addTarget:self action:@selector(rightItemClick) forControlEvents:UIControlEventTouchUpInside];
 }
 
 /**

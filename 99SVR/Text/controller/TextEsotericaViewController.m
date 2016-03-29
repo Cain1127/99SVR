@@ -7,11 +7,13 @@
 //
 
 #import "TextEsotericaViewController.h"
-
+#import "EsotericaCell.h"
+#import "TextEsoterModel.h"
 @interface TextEsotericaViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic,strong) TextTcpSocket *tcpSocket;
-
+@property (nonatomic,copy) NSArray *arySecret;
+@property (nonatomic,strong) UITableView *tableView;
 @end
 
 @implementation TextEsotericaViewController
@@ -32,10 +34,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UITableView *tableView = [[UITableView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-108) style:UITableViewStyleGrouped];
-    tableView.delegate = self;
-    tableView.dataSource = self;
-    [self.view addSubview:tableView];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-108) style:UITableViewStyleGrouped];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    [self.view addSubview:_tableView];
     DLog(@"frame:%@",NSStringFromCGRect(self.view.frame));
 }
 
@@ -50,22 +52,61 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 0;
+    return _arySecret.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *strIdentifier = @"esotercaTableview";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:strIdentifier];
+    EsotericaCell *cell = [tableView dequeueReusableCellWithIdentifier:strIdentifier];
     if (cell==nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
+        cell = [[EsotericaCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
+    }
+    if (_arySecret.count>indexPath.section) {
+        TextEsoterModel *text = [_arySecret objectAtIndex:indexPath.section];
+        [cell setTextModel:text];
     }
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44;
+    return 150;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadNew) name:MESSAGE_TEXT_NEW_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadNewEsoter) name:MESSAGE_TEXT_SECRET_LIST_VC object:nil];
+}
+
+- (void)loadNewEsoter
+{
+    _arySecret = _tcpSocket.aryEsoter;
+    @WeakObj(self)
+    gcd_main_safe(^{
+        [selfWeak.tableView reloadData];
+    });
+}
+
+/**
+ *  请求个人秘籍资料
+ */
+- (void)reloadNew
+{
+    [_tcpSocket reqEsotericaList:0 count:20 teach:10];
 }
 
 @end

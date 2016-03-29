@@ -62,6 +62,8 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
 @property (nonatomic) int giftVer;
 
+@property (nonatomic,copy) NSString *strMediaAddr;
+
 - (NSString *)getVipDescript;
 
 - (void)setUserDefault:(int)nUserid;

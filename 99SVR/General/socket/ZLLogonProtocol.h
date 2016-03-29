@@ -24,37 +24,56 @@ class ZLConnectionListerner : public ConnectionListener
     }
     
     void OnIOError(int err_code);
-//    {
-//        LOG("OnIOError");
-//    }
 };
 
+class ZLHallListener: public HallListener
+{
+    void OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfileReq& req){}
+    void OnSetUserPwdResp(SetUserPwdResp& info){}
+    void OnQueryRoomGateAddrResp(QueryRoomGateAddrResp& info){}
+    void OnGetUserMoreInfResp(GetUserMoreInfResp& info){}
+    void OnUserExitMessageResp(ExitAlertResp& info){}
+};
+
+class ZLPushListener: public PushListener
+{
+    
+public:
+
+    void OnConfChanged(int version);
+//    {
+//        LOG("OnConfChanged:%d", version);
+//    }
+    virtual void OnGiftListChanged(int version);
+    
+    virtual void OnShowFunctionChanged(int version);
+    
+    virtual void OnPrintLog();
+    
+    virtual void OnUpdateApp();
+    
+    virtual void OnMoneyChanged(uint64 money);
+    
+    virtual void OnBayWindow(BayWindow& info);
+    
+    virtual void OnRoomGroupChanged();
+    
+    
+    virtual void OnRoomTeacherOnMicResp(RoomTeacherOnMicResp& info);
+    
+};
 
 
 class ZLLoginListener : public LoginListener
 {
-public:
-    LoginConnection *conn;
     
 public:
-
-    ZLLoginListener(LoginConnection *_conn):conn(_conn){};
     
-    void OnMessageComming(void* msg)
-    {
-        conn->DispatchSocketMessage(msg);
-    }
-    
+    void OnMessageComming(void* msg);
+   
     void OnLogonSuccess(UserLogonSuccess2& info);
-//    {
-//        info.Log();
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"MESSAGE_LOGON_SUC_VC" object:nil];
-//    }
     
     void OnLogonErr(UserLogonErr2& info);
-//    {
-//        info.Log();
-//    }
     
     void OnRoomGroupList(RoomGroupItem items[], int count)
     {
@@ -79,38 +98,17 @@ public:
             //items[i].Log();
         }
     }
-    
     void OnLogonTokenNotify(SessionTokenResp& info);
-//    {
-//        info.Log();
-//    }
     
     void OnLogonFinished()
     {
         LOG("OnlogonFinished\n");
     }
-    
-    void OnSetUserProfileResp(SetUserProfileResp& info)
-    {
-        
-    }
-    
-    void OnSetUserPwdResp(SetUserPwdResp& info);
-//    {
-//        
-//    }
-    
-    void OnQueryRoomGateAddrResp(QueryRoomGateAddrResp& info)
-    {
-        
-    }
 };
 
 class ZLLogonProtocol
 {
-    LoginConnection *conn;
-    ZLLoginListener *login_listener;
-    ZLConnectionListerner *conn_listener;
+    
 public :
     ZLLogonProtocol();
     /**

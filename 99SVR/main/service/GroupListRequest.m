@@ -9,6 +9,8 @@
 #import "GroupListRequest.h"
 #import "RoomHttp.h"
 #import "RoomGroup.h"
+#import "UserInfo.h"
+#import "DecodeJson.h"
 
 @implementation GroupListRequest
 
@@ -41,6 +43,18 @@
             }
         }
     }
+    NSString *strMsg = nil;
+    if (responseCode>200) {
+        int nUserid = [UserInfo sharedUserInfo].nUserId;
+        strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_fail",nUserid];
+    }
+    else
+    {
+        int nUserid = [UserInfo sharedUserInfo].nUserId;
+        strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_fail",nUserid];
+    }
+    [DecodeJson postPHPServerMsg:strMsg];
+    
     NSDictionary *parameter = [UserDefaults objectForKey:kVideoList];
     NSArray *aryRoom = [self resolveDict:parameter];
     if (_groupBlock)

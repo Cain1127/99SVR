@@ -19,7 +19,6 @@
 {
     //获取登录服务器地址
     __weak UserInfo *__userInfo = [UserInfo sharedUserInfo];
-//    NSString *strtemp = @"t";
     [BaseService getJSONWithUrl:LBS_ROOM_WEB parameters:nil success:^(id responseObject)
     {
         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];

@@ -8,6 +8,7 @@
 
 #import "HomeViewController.h"
 #import "ZLTabBar.h"
+#import "NavigationViewController.h"
 #import "NSJSONSerialization+RemovingNulls.h"
 #import "BaseService.h"
 #import "IndexViewController.h"
@@ -59,7 +60,6 @@
 {
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
-    
     UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
     _headView.backgroundColor = UIColorFromRGB(0xffffff);
@@ -95,7 +95,7 @@
 }
 - (void)showLeftView
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
+    [self leftItemClick];
 }
 
 - (void)initData

@@ -19,8 +19,9 @@
 #import "MJRefresh.h"
 #import "ThumButton.h"
 #import "TeacherModel.h"
+#import "MarchLiveTextCell.h"
 
-@interface TextLiveViewController ()<UITableViewDataSource,UITableViewDelegate,DTAttributedTextContentViewDelegate,ThumCellDelagate>
+@interface TextLiveViewController ()<UITableViewDataSource,UITableViewDelegate,DTAttributedTextContentViewDelegate,MarchLiveTextDelegate>
 {
     NSCache *cellCache;
     NSMutableDictionary *_dictIcon;
@@ -118,7 +119,7 @@
 {
     if (_aryLive.count>indexPath.section)
     {
-        LiveCoreTextCell *cell = [self tableView:tableView preparedCellForIndexPath:indexPath];
+        MarchLiveTextCell *cell = [self tableView:tableView marchCellForIndexPath:indexPath];
         return cell;
     }
     return nil;
@@ -131,52 +132,36 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *cacheKey =[NSString stringWithFormat:@"LiveText-%zi", indexPath.section];
-    if([cellCache objectForKey:cacheKey])
-    {
-        return [[cellCache objectForKey:cacheKey] floatValue]+80;
-    }
-    return 0;
+    MarchLiveTextCell *cell = [self tableView:tableView marchCellForIndexPath:indexPath];
+    return [cell requiredRowHeightInTableView:tableView]+66;
 }
 
-- (LiveCoreTextCell *)tableView:(UITableView *)tableView preparedCellForIndexPath:(NSIndexPath *)indexPath
+- (MarchLiveTextCell *)tableView:(UITableView *)tableView marchCellForIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cacheKey = nil;
     NSString *strInfo = nil;
     cacheKey =[NSString stringWithFormat:@"LiveText-%zi", indexPath.section];
     TextLiveModel *textModel = [_aryLive objectAtIndex:indexPath.section];
     strInfo = textModel.strContent;
-    LiveCoreTextCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TextLiveIdentifier"];
+    MarchLiveTextCell *cell = [cellCache objectForKey:cacheKey];
     if (cell==nil)
     {
-        cell = [[LiveCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextLiveIdentifier"];
+        cell = [[MarchLiveTextCell alloc] initWithReuseIdentifier:@"TextLiveIdentifier"];
+        UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
+        [selectView setBackgroundColor:[UIColor clearColor]];
+        cell.selectedBackgroundView = selectView;
+        [cellCache setObject:cell forKey:cacheKey];
     }
-    
-    cell.textCoreView.delegate = self;
-    cell.textCoreView.shouldDrawImages = YES;
-    NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
-    cell.textCoreView.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:nil documentAttributes:nil];
-    
-    UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
-    [selectView setBackgroundColor:[UIColor clearColor]];
-    cell.selectedBackgroundView = selectView;
-    
-    
-//    [cell.lblTime setText:NSStringFromInt64(textModel.messagetime)];
+    [cell setHTMLString:strInfo];
     cell.section = indexPath.section;
-    
     [cell setTextModel:textModel];
-    
-    CGFloat fHeight = [cell.textCoreView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
-    [cellCache setObject:NSStringFromFloat(fHeight) forKey:cacheKey];
-    
     cell.messageid = textModel.messageid;
+    cell.attributedTextContextView.delegate = self;
     cell.delegate = self;
-    
     return cell;
 }
 
-- (void)liveCore:(LiveCoreTextCell *)liveCore msgid:(int64_t)messageid
+- (void)textLive:(MarchLiveTextCell *)liveCore msgid:(int64_t)messageid
 {
     if([liveCore.btnThum.titleLabel.text isEqualToString:@"详情>>>"])
     {

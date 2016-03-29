@@ -31,10 +31,8 @@
     self.txtTitle.text = @"充值";
     
     self.view.backgroundColor = [UIColor whiteColor];
-    
     // 注册微信支付通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendPayResult:) name:@"WXPAY" object:nil];
-    
     // 加载充值网页
     [self loadWebView];
 }
@@ -42,12 +40,11 @@
 - (void)loadWebView
 {
     UIWebView *webView = [[UIWebView alloc] init];
-    webView.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
+    webView.frame = Rect(0, 64, kScreenWidth, kScreenHeight);
     webView.delegate = self;
     // 伸缩页面至填充整个webView
     webView.scalesPageToFit = YES;
     self.webView = webView;
-    
     [self.view addSubview:webView];
     
     // 2.加载网页
@@ -58,7 +55,6 @@
     [request setHTTPMethod: @"POST"];
     [request setHTTPBody: [body dataUsingEncoding: NSUTF8StringEncoding]];
     [webView loadRequest:request];
-    
     // 3.加载蒙板
     [MBProgressHUD showMessage:@"加载中..."];
 }

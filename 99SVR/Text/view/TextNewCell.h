@@ -23,5 +23,4 @@
 
 - (void)setDetails:(IdeaDetails *)idea;
 
-
 @end

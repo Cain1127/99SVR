@@ -10,12 +10,12 @@
 
 @interface TextRoomModel : NSObject
 
-@property (nonatomic,copy) NSString *rid;
-@property (nonatomic,copy) NSString *roomName;
-@property (nonatomic,copy) NSString *roomPic;
-@property (nonatomic,copy) NSString *introduce;
+@property (nonatomic,copy) NSString *nvcbid;
+@property (nonatomic,copy) NSString *roomname;
+@property (nonatomic,copy) NSString *croompic;
+@property (nonatomic,copy) NSString *clabel;
 @property (nonatomic,copy) NSString *ncount;
-@property (nonatomic,copy) NSString *teacherId;
+@property (nonatomic,copy) NSString *teacherid;
 
 + (TextRoomModel *)resultWithDict:(NSDictionary* )dict;
 

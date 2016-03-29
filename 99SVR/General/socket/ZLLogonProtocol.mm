@@ -7,6 +7,67 @@
 #import "BaseService.h"
 #import "DecodeJson.h"
 
+#pragma mark ZLPushListener
+
+
+LoginConnection *conn;
+ZLPushListener push_listener;
+ZLHallListener hall_listener;
+ZLConnectionListerner conn_listener;
+ZLLoginListener login_listener;
+
+void ZLPushListener::OnConfChanged(int version)
+{
+    DLog(@"金币发生变化!");
+}
+
+void ZLPushListener::OnGiftListChanged(int version)
+{
+    
+}
+
+void ZLPushListener::OnShowFunctionChanged(int version)
+{
+    
+}
+
+void ZLPushListener::OnPrintLog()
+{
+    
+}
+
+void ZLPushListener::OnUpdateApp()
+{
+    
+}
+
+void ZLPushListener::OnMoneyChanged(uint64 money)
+{
+    DLog(@"金币更新了");
+}
+
+void ZLPushListener::OnBayWindow(BayWindow& info)
+{
+    
+}
+
+void ZLPushListener::OnRoomGroupChanged()
+{
+    
+}
+
+//ZLPushListener::ZLPushListener()
+//{
+//    
+//}
+
+void ZLPushListener::OnRoomTeacherOnMicResp(RoomTeacherOnMicResp &info)
+{
+    
+}
+
+//*********************************************************
+//*********************************************************
 
 
 void ZLConnectionListerner::OnIOError(int err_code)
@@ -61,9 +122,9 @@ void ZLLoginListener::OnLogonErr(UserLogonErr2& info)
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_ERROR_VC object:strMsg];
 }
 
-void ZLLoginListener::OnSetUserPwdResp(SetUserPwdResp &info)
+void ZLLoginListener::OnMessageComming(void *msg)
 {
-     
+    conn->DispatchSocketMessage(msg);
 }
 
 /**
@@ -131,8 +192,8 @@ void ZLLoginListener::OnLogonTokenNotify(SessionTokenResp& info)
  */
 int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd)
 {
-    conn->RegisterMessageListener(login_listener);
-    conn->RegisterConnectionListener(conn_listener);
+//    conn->RegisterMessageListener(login_listener);
+//    conn->RegisterConnectionListener(conn_listener);
     
     UserLogonReq4 req4;
     req4.set_nmessageid(1);
@@ -166,8 +227,9 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd)
  *  @return 默认1
  */
 int ZLLogonProtocol::startOtherLogin(uint32 cloginid,const char *openid,const char *token){
-    conn->RegisterMessageListener(login_listener);
-    conn->RegisterConnectionListener(conn_listener);
+//    conn->RegisterMessageListener(login_listener);
+//    conn->RegisterConnectionListener(conn_listener);
+    
     if (openid == NULL || token == NULL) {
         DLog(@"第三方登录发生错误");
         return 0;
@@ -224,12 +286,8 @@ ZLLogonProtocol::~ZLLogonProtocol()
     {
         conn->RegisterMessageListener(NULL);
         conn->RegisterConnectionListener(NULL);
-        delete conn;
-        conn = NULL;
-        delete login_listener;
-        login_listener = NULL;
-        delete conn_listener;
-        conn_listener = NULL;
+        conn->RegisterPushListener(NULL);
+        conn->RegisterHallListener(NULL);
         DLog(@"释放logon protocol");
     }
 }
@@ -239,9 +297,117 @@ ZLLogonProtocol::~ZLLogonProtocol()
 ZLLogonProtocol::ZLLogonProtocol()
 {
     conn = new LoginConnection();
-    login_listener = new ZLLoginListener(conn);
-    conn_listener = new ZLConnectionListerner();
+    conn->RegisterMessageListener(&login_listener);
+    conn->RegisterConnectionListener(&conn_listener);
+    conn->RegisterPushListener(&push_listener);
+    conn->RegisterHallListener(&hall_listener);
 }
+
+//**********************************************************************************
+//**********************************************************************************
+#pragma mark ZLHallListener
+/**
+ *  设置用户信息响应
+ */
+
+//void ZLHallListener::OnSetUserProfileResp(SetUserProfileResp& info)
+//{
+
+//}
+/**
+ *  设置用户密码响应
+ */
+//void ZLHallListener::OnSetUserPwdResp(SetUserPwdResp& info)
+//{
+
+//}
+/**
+ *  查询房间IP响应
+ */
+/*
+void ZLHallListener::OnQueryRoomGateAddrResp(QueryRoomGateAddrResp& info)
+{
+    
+}
+
+void ZLHallListener::OnUserExitMessageResp(ExitAlertResp& info)
+{
+    
+}
+
+void ZLHallListener::OnHallMessageNotify(MessageNoty& info)
+{
+    
+}
+
+void ZLHallListener::OnMessageUnreadResp(MessageUnreadResp& info)
+{
+    
+}
+
+void ZLHallListener::OnInteractResp(std::vector<InteractResp>& infos)
+{
+    
+}
+
+void ZLHallListener::OnHallAnswerResp(std::vector<AnswerResp>& infos)
+{
+    
+}
+
+void ZLHallListener::OnViewShowResp(std::vector<ViewShowResp>& infos)
+{
+    
+}
+
+void ZLHallListener::OnTeacherFansResp(std::vector<TeacherFansResp>& infos)
+{
+    
+}
+
+void ZLHallListener::OnInterestResp(std::vector<InterestResp>& infos)
+{
+    
+}
+
+void ZLHallListener::OnUnInterestResp(std::vector<UnInterestResp>& infos)
+{
+    
+}
+
+void ZLHallListener::OnTextLivePointListResp(std::vector<TextLivePointListResp>& infos)
+{
+    
+}
+
+void ZLHallListener::OnSecretsListResp(HallSecretsListResp& infos)
+{
+    
+}
+
+void ZLHallListener::OnSystemInfoResp(HallSystemInfoListResp& infos)
+{
+    
+}
+
+void ZLHallListener::OnViewAnswerResp(ViewAnswerResp& info)
+{
+    
+}
+
+void ZLHallListener::OnInterestForResp(InterestForResp& info)
+{
+    
+}
+
+void ZLHallListener::OnFansCountResp(FansCountResp& info)
+{
+    
+}
+*/
+//**********************************************************************************
+//**********************************************************************************
+
 
 
 

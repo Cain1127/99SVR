@@ -25,7 +25,6 @@
 {
     NSCache *cellCache;
     NSMutableDictionary *_dictIcon;
-    
 }
 
 @property (nonatomic,strong) UITableView *tableView;
@@ -153,7 +152,7 @@
     IdeaDetails *idea = [_aryNew objectAtIndex:indexPath.section];
     
     NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:_textSocket model:idea];
-    [self presentViewController:detailView animated:YES completion:nil];
+    [self.navigationController pushViewController:detailView animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

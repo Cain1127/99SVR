@@ -10,8 +10,6 @@
 
 @interface ChatViewCell ()
 
-
-
 @end
 
 @implementation ChatViewCell

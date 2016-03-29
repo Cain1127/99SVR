@@ -13,4 +13,6 @@
 
 - (void)didPanEvent:(UIPanGestureRecognizer *)recognizer;
 
+-(void)leftItemClick;
+
 @end

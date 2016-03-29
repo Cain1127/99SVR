@@ -8,9 +8,11 @@
 
 #import "DecodeJson.h"
 #import "GTMBase64.h"
+#import "DeviceUID.h"
 #import "BaseService.h"
 #import <CommonCrypto/CommonCryptor.h>
 #import <CommonCrypto/CommonDigest.h>
+#import "UserInfo.h"
 #import <netdb.h>
 #import <fcntl.h>
 #import <ifaddrs.h>
@@ -388,12 +390,25 @@
 + (void)postPHPServerMsg:(NSString *)strUrl
 {
     NSString *strInfo = [NSString stringWithFormat:@"http://121.12.118.32/AnalyticStatistics/?%@",strUrl];
+    DLog(@"上报链接:%@",strInfo);
     [BaseService post:strInfo dictionay:nil timeout:10 success:^(id responseObject) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil removingNulls:YES ignoreArrays:YES];
         DLog(@"DICT:%@",dict);
     } fail:^(NSError *error) {
         DLog(@"暂不上报,存储上报内容");
     }];
+}
+
++ (void)postApplicationInfo
+{
+    NSString *strNumber = [NSString stringWithFormat:@"ReportItem=UserLocalAppData&ClientType=3&Os=iOS&SerialNumber=%@&Version=1.3.2&AppList='baidu.test.99SVR'",[DeviceUID uid]];
+    [DecodeJson postPHPServerMsg:strNumber];
+}
+
++ (void)postPageHall
+{
+    NSString *strNumber = [NSString stringWithFormat:@"ReportItem=OpenFrontPageHall&ClientType=3&UserId=%d&ServerIP=127.0.0.1&Error=test",[UserInfo sharedUserInfo].nUserId];
+    [DecodeJson postPHPServerMsg:strNumber];
 }
 
 @end

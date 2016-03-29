@@ -15,7 +15,9 @@ private:
 	PushListener* push_listener;
 
 	UserLogonSuccess2 logonuser;
-
+	UserLogonReq4 req4;
+	UserLogonReq5  req5;
+	uint32 reqv;
 	uint32 nmobile;
 	uint32 version;
 
@@ -25,6 +27,7 @@ private:
 
 protected:
 
+	void on_do_connected();
 	void on_dispatch_message(void* msg);
 
 

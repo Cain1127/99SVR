@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CustomViewController.h"
 
-@interface SignatureViewController : UIViewController
+@interface SignatureViewController :CustomViewController
 /**
  *  回调
  */
 @property (nonatomic, strong) void (^ signatureBlock)(NSString * signature);
+
 @end

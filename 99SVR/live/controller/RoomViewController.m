@@ -393,7 +393,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         [self.view makeToast:@"游客不能送花"];
         return ;
     }
-    __block int __nUserId = toUser;
+//    __block int __nUserId = toUser;
     __weak RoomViewController *__self = self;
     dispatch_async(room_gcd,
     ^{
