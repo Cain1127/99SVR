@@ -8,6 +8,10 @@
 
 #import "VideoLivingCell.h"
 
+#import "RoomHttp.h"
+
+#import "UIImageView+WebCache.h"
+
 @interface VideoLivingCell ()
 
 @property (nonatomic, strong) UIImageView *backgroundImageView;     //!<直播房间背景图片
@@ -41,9 +45,44 @@
 #pragma mark - init default UI
 - (void)initVideoLivingCustomCellUI
 {
+    
+    ///默认的高度
+    CGFloat defaultHeight = 155.0f;
 
     ///背景图片
-    self.backgroundImageView = [[UIImageView alloc] initWithFrame:Rect(0.0f, 0.0f, 0.0f, 0.0f)];
+    self.backgroundImageView = [[UIImageView alloc] initWithFrame:Rect(0.0f, 0.0f, kScreenWidth - 30.0f, defaultHeight)];
+    self.backgroundImageView.userInteractionEnabled = YES;
+    [self.backgroundImageView setImage:[UIImage imageNamed:@"default"]];
+    [self.contentView addSubview:self.backgroundImageView];
+    
+    ///信息前透明底图
+    UIImageView *infoRootImageView = [[UIImageView alloc]  initWithFrame:Rect(0.0f, 0.0f, 0.0f, 0.0f)];
+    [infoRootImageView setImage:[UIImage imageNamed:@"video_info_background"]];
+    [self.backgroundImageView addSubview:infoRootImageView];
+    
+    ///直播间房号
+    self.roomChannelNumberLabel = [[UILabel alloc] initWithFrame:Rect(10.0f, defaultHeight - 10.0f - 16.0f, 80.0f, 16.0f)];
+    self.roomChannelNumberLabel.font = XCFONT(12);
+    self.roomChannelNumberLabel.textColor = UIColorFromRGB(0xFFFFFF);
+    [self.backgroundImageView addSubview:self.roomChannelNumberLabel];
+    
+    ///直播间名字:在房间号之后创建，方便计算位置
+    self.roomNameLabel = [[UILabel alloc] initWithFrame:Rect(10.0f, defaultHeight - 10.0f - 16.0f - 25.0f, 120.0f, 25.0f)];
+    self.roomNameLabel.font = [UIFont boldSystemFontOfSize:15.0f];
+    self.roomNameLabel.textColor = UIColorFromRGB(0xFFFFFF);
+    [self.backgroundImageView addSubview:self.roomNameLabel];
+    
+    ///阅读数量信息
+    self.readAccountLabel = [[UILabel alloc] initWithFrame:Rect(CGRectGetWidth(self.backgroundImageView.frame) - 80.0f - 10.0f, self.roomChannelNumberLabel.frame.origin.y, 80.0f, CGRectGetHeight(self.roomChannelNumberLabel.frame))];
+    self.readAccountLabel.font = XCFONT(12);
+    self.readAccountLabel.textColor = UIColorFromRGB(0xFFFFFF);
+    self.readAccountLabel.textAlignment = NSTextAlignmentRight;
+    [self.backgroundImageView addSubview:self.readAccountLabel];
+    
+    ///阅读指示图片
+    self.readIndicatorImageView = [[UIImageView alloc] initWithFrame:Rect(CGRectGetMaxX(self.readAccountLabel.frame) - 10.0f - 25.0f, self.roomChannelNumberLabel.frame.origin.y, 25.0f, CGRectGetHeight(self.readAccountLabel.frame))];
+    self.readIndicatorImageView.image = [UIImage imageNamed:@"eye"];
+    [self.backgroundImageView addSubview:self.readIndicatorImageView];
 
 }
 
@@ -61,7 +100,20 @@
 - (void)setVideoLivingRoomModel:(RoomHttp *)dataModel
 {
 
+    self.roomNameLabel.text = 0 < dataModel.roomname.length ? dataModel.roomname : nil;
+    self.roomChannelNumberLabel.text = dataModel.nvcbid;
+    self.readAccountLabel.text = dataModel.ncount;
     
+    ///加载图片
+    if (0 >= dataModel.croompic.length)
+    {
+        
+        return;
+        
+    }
+    
+    NSString *imageURL = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,dataModel.croompic];
+    [self.backgroundImageView sd_setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:[UIImage imageNamed:@"home_room_default_img"]];
 
 }
 

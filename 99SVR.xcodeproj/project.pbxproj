@@ -47,6 +47,9 @@
 		18AC14171C8FB8E100FDFF40 /* JSPatch.js in Resources */ = {isa = PBXBuildFile; fileRef = 18AC14151C8FB8E100FDFF40 /* JSPatch.js */; };
 		18BF06B51C9A7DC70071E524 /* SignatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BF06B41C9A7DC70071E524 /* SignatureViewController.m */; };
 		18BF06B81C9A86B00071E524 /* RechargeResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BF06B71C9A86B00071E524 /* RechargeResultViewController.m */; };
+		18D7677D1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */; };
+		18D7677E1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */; };
+		18D7677F1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */; };
 		18EBF7301C964BEA0056261D /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EBF72E1C964BEA0056261D /* libWeChatSDK.a */; };
 		18EBF7311C964BEA0056261D /* libWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EBF72F1C964BEA0056261D /* libWeiboSDK.a */; };
 		18F7538C1C9171C2000F1D72 /* NSString+Size.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F7538B1C9171C2000F1D72 /* NSString+Size.m */; };
@@ -570,6 +573,8 @@
 		18BF06B41C9A7DC70071E524 /* SignatureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignatureViewController.m; sourceTree = "<group>"; };
 		18BF06B61C9A86B00071E524 /* RechargeResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RechargeResultViewController.h; sourceTree = "<group>"; };
 		18BF06B71C9A86B00071E524 /* RechargeResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RechargeResultViewController.m; sourceTree = "<group>"; };
+		18D7677B1CAA7EAD00CE79B0 /* HomeTextLivingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeTextLivingCell.h; sourceTree = "<group>"; };
+		18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeTextLivingCell.m; sourceTree = "<group>"; };
 		18EBF72E1C964BEA0056261D /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeChatSDK.a; path = 99SVR/libs/libWeChatSDK.a; sourceTree = SOURCE_ROOT; };
 		18EBF72F1C964BEA0056261D /* libWeiboSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeiboSDK.a; path = 99SVR/libs/libWeiboSDK.a; sourceTree = SOURCE_ROOT; };
 		18F7538A1C9171C2000F1D72 /* NSString+Size.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Size.h"; sourceTree = "<group>"; };
@@ -1789,6 +1794,8 @@
 				18987FF91CAA4A3E000E9F1C /* ViewPointCell.m */,
 				18987FFD1CAA4AC8000E9F1C /* VideoLivingCell.h */,
 				18987FFE1CAA4AC8000E9F1C /* VideoLivingCell.m */,
+				18D7677B1CAA7EAD00CE79B0 /* HomeTextLivingCell.h */,
+				18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -3180,6 +3187,7 @@
 				BB63F6111C2CC7A300A042E8 /* HotViewController.m in Sources */,
 				BB6F3B121CA13E3E0035EBBE /* Thread.cpp in Sources */,
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
+				18D7677D1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */,
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
 				BB1769211C7B006F00CE947C /* MKAnnotationView+WebCache.m in Sources */,
 				BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */,
@@ -3266,6 +3274,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18D7677E1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */,
 				18987FF11CAA17E6000E9F1C /* WonderfullView.m in Sources */,
 				189880001CAA4AC8000E9F1C /* VideoLivingCell.m in Sources */,
 				189880051CAA52F8000E9F1C /* RightImageButton.m in Sources */,
@@ -3278,6 +3287,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18D7677F1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */,
 				18987FF21CAA17E6000E9F1C /* WonderfullView.m in Sources */,
 				189880011CAA4AC8000E9F1C /* VideoLivingCell.m in Sources */,
 				189880061CAA52F8000E9F1C /* RightImageButton.m in Sources */,

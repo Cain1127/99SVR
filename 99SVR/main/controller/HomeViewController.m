@@ -13,7 +13,7 @@
 #import "IndexViewController.h"
 #import "TeacherModel.h"
 #import "TextHomeViewController.h"
-#import "TextLivingCell.h"
+#import "HomeTextLivingCell.h"
 #import "BannerModel.h"
 #import "TextRoomModel.h"
 #import "UIImageView+WebCache.h"
@@ -25,7 +25,7 @@
 #import "ViewPointCell.h"
 #import "RightImageButton.h"
 
-#define kPictureHeight 0.3*kScreenHeight
+#define kPictureHeight 0.3 * kScreenHeight
 
 @interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate>
 {
@@ -48,7 +48,7 @@
     if (_scrollView) {
         return ;
     }
-    _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 10+kNavigationHeight, kScreenWidth, kPictureHeight) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 10 + kNavigationHeight, kScreenWidth, kPictureHeight) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
     _scrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
     _scrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
     _scrollView.currentPageDotColor = UIColorFromRGB(0xff7a1e); // 自定义分页控件小圆标颜色
@@ -92,6 +92,7 @@
     _aryBanner = [NSMutableArray array];
     [self createScroll];
     [self createPage];
+    [self initTableView];
     [self initData];
     [self initLivingData];
 }
@@ -244,11 +245,22 @@
          }
          
          ///主线程刷新UI
-         dispatch_async(dispatch_get_main_queue(), ^{
+         if ([NSThread isMainThread])
+         {
              
              [__self.tableView reloadData];
+             
+         }
+         else
+         {
          
-         });
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 
+                 [__self.tableView reloadData];
+                 
+             });
+         
+         }
          
      } fail:nil];
     
@@ -258,10 +270,13 @@
 #pragma mark - UITableView init
 - (void)initTableView
 {
-    _tableView = [[UITableView alloc] initWithFrame:Rect(15.0f, 70.0f, kScreenWidth - 30.0f, kScreenHeight - (70.0f + 5.0f + 50.0f))];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(15.0f, 70.0f + kPictureHeight + 10.0f, kScreenWidth - 30.0f, kScreenHeight - (70.0f + kPictureHeight + 10.0f + 5.0f + 50.0f)) style:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.showsVerticalScrollIndicator = NO;
+    _tableView.showsHorizontalScrollIndicator = NO;
+    _tableView.backgroundColor = [UIColor whiteColor];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
@@ -351,10 +366,10 @@
     {
         
         static NSString *textCellName = @"textCellName";
-        TextLivingCell *tempCell = [_tableView dequeueReusableCellWithIdentifier:textCellName];
+        HomeTextLivingCell *tempCell = [_tableView dequeueReusableCellWithIdentifier:textCellName];
         if(!tempCell)
         {
-            tempCell = [[TextLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:textCellName];
+            tempCell = [[HomeTextLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:textCellName];
         }
         [tempCell setTextRoomModel:(TextRoomModel *)tempObject];
         
@@ -435,7 +450,7 @@
     
     NSObject *tempObject = tempArray[0];
     CGFloat tempHeight = 44.0f;
-    CGFloat rightButtonWidth = 120.0f;
+    CGFloat rightButtonWidth = 140.0f;
     
     ///视频直播内容
     if ([tempObject isKindOfClass:[RoomHttp class]])
@@ -467,10 +482,6 @@
             seeAllButton.titleLabel.font = XCFONT(12);
             [seeAllButton setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
             [tempHeaderView addSubview:seeAllButton];
-            
-            UILabel *line = [[UILabel alloc] initWithFrame:Rect(0.0f, CGRectGetHeight(tempHeaderView.frame) - 0.5f, CGRectGetWidth(tempHeaderView.frame), 0.5f)];
-            [line setBackgroundColor:kLineColor];
-            [tempHeaderView addSubview:line];
             
         }
         
@@ -507,10 +518,6 @@
             [seeAllButton setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
             [tempHeaderView addSubview:seeAllButton];
             
-            UILabel *line = [[UILabel alloc] initWithFrame:Rect(0.0f, CGRectGetHeight(tempHeaderView.frame) - 0.5f, CGRectGetWidth(tempHeaderView.frame), 0.5f)];
-            [line setBackgroundColor:kLineColor];
-            [tempHeaderView addSubview:line];
-            
         }
         
         return tempHeaderView;
@@ -534,8 +541,8 @@
             [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
             [tempHeaderView addSubview:lblHot];
             
-            UILabel *line = [[UILabel alloc] initWithFrame:Rect(8.0f, 22.5f, kScreenWidth-16.0f, 0.5f)];
-            [line setBackgroundColor:kLineColor];
+            UILabel *line = [[UILabel alloc] initWithFrame:Rect(0.0f, CGRectGetHeight(tempHeaderView.frame) - 0.5f, kScreenWidth, 0.5f)];
+            [line setBackgroundColor:UIColorFromRGB(0xF0F0F0)];
             [tempHeaderView addSubview:line];
             
         }
@@ -589,11 +596,11 @@
         [tempObject isKindOfClass:[TextRoomModel class]])
     {
         
-        return 100.0f;
+        return 155.0f + 10.0f;
         
     }
     
-    return 155.0f;
+    return 100.0f;
     
 }
 

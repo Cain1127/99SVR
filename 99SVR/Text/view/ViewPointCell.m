@@ -76,7 +76,8 @@
     [rootView addSubview:self.dateLabel];
     
     ///观看提示图片
-    self.readImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"eye"]];
+    self.readImageView = [[UIImageView alloc] init];
+    self.readImageView.image = [UIImage imageNamed:@"home_viewpoint_indicator"];
     self.readImageView.translatesAutoresizingMaskIntoConstraints = NO;
     [rootView addSubview:self.readImageView];
     
@@ -104,6 +105,11 @@
     [rootView addConstraints:___titleLabelHorizalArray];
     [rootView addConstraints:___titleAndTeacherVerticalArray];
     [rootView addConstraints:___titleToReadAccountHorizalArray];
+    
+    ///分隔线
+    UILabel *line = [[UILabel alloc] initWithFrame:Rect(0.0f, CGRectGetHeight(rootView.frame) - 0.5f, CGRectGetWidth(rootView.frame), 0.5f)];
+    [line setBackgroundColor:UIColorFromRGB(0xF0F0F0)];
+    [rootView addSubview:line];
 
 }
 
