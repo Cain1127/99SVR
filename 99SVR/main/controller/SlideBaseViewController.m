@@ -9,6 +9,9 @@
 #import "SlideBaseViewController.h"
 #import "LeftMenu.h"
 #import "LoginViewController.h"
+#import "ProfileViewController.h"
+
+#import "UserInfo.h"
 
 #define LeftMenu_X  -[UIScreen mainScreen].bounds.size.width * 0.25
 #define LeftMenu_Width [UIScreen mainScreen].bounds.size.width * 0.75
@@ -161,8 +164,20 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-// 点击头像，登陆
-- (void)leftMenuIconDidClick{
+// 点击头像如果未登录->登陆/已登录->用户信息详情
+- (void)leftMenuIconDidClick {
+    
+    ///已登录
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
+    {
+        
+        ProfileViewController *profileVC = [[ProfileViewController alloc] init];
+        [self.navigationController pushViewController:profileVC animated:YES];
+        return;
+        
+    }
+    
+    ///未登录
     LoginViewController *loginVc = [[LoginViewController alloc] init];
     [self presentViewController:loginVc animated:YES completion:nil];
     [self coverClick:[self.navigationController.view viewWithTag:coverViewTag]];

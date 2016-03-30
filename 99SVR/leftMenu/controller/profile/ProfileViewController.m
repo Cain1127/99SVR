@@ -35,11 +35,6 @@
     //[self sutupData];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 /**
  *  初始化TableView
  */
