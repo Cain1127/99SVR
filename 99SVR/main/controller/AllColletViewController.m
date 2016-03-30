@@ -157,7 +157,7 @@
 {
     static NSString *strIdentifier = @"TextColletionView";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:strIdentifier];
-    if (cell==nil)
+    if (cell == nil)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
     }
