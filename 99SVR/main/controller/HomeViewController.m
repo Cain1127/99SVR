@@ -474,6 +474,25 @@ typedef enum : NSUInteger
         {
             
             NSArray *tempArray = _aryLiving[section - 1];
+            
+            if (0 >= tempArray.count)
+            {
+                
+                return 0;
+                
+            }
+            
+            NSObject *tempObject = [tempArray firstObject];
+            
+            ///文字直接数量
+            if ([tempObject isKindOfClass:[TextRoomModel class]] ||
+                [tempObject isKindOfClass:[RoomHttp class]])
+            {
+                
+                return (NSInteger)ceilf((1.0f * tempArray.count) / 2.0f);
+                
+            }
+            
             return tempArray.count;
             
         }
@@ -530,7 +549,38 @@ typedef enum : NSUInteger
         {
             tempCell = [[VideoLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:vedioCellName];
         }
-        [tempCell setVideoLivingRoomModel:(RoomHttp *)tempObject];
+        
+        ///获取准确下标
+        NSInteger leftIndex = indexPath.row * 2;
+        
+        ///左侧view
+        
+        @WeakObj(self);
+        RoomHttp *tempRoomHttpModelL = tempArray[leftIndex];
+        tempRoomHttpModelL.cname = tempRoomHttpModelL.roomname;
+        CJHomeListTypeLivingCellType tempType = cCJHomeListTypeLivingCellTypeLeft;
+        [tempCell setVideoLivingRoomModel:tempRoomHttpModelL viewType:tempType tapCallBack:^(CJHomeListTypeLivingCellType viewType) {
+            
+            RoomViewController *roomView = [[RoomViewController alloc] initWithModel:tempRoomHttpModelL];
+            [selfWeak presentViewController:roomView animated:YES completion:nil];
+            
+        }];
+        
+        ///判断是否存在右侧view
+        if (leftIndex + 1 < tempArray.count)
+        {
+            
+            RoomHttp *tempRoomHttpModelR = tempArray[leftIndex + 1];
+            tempRoomHttpModelR.cname = tempRoomHttpModelR.roomname;
+            CJHomeListTypeLivingCellType tempType = cCJHomeListTypeLivingCellTypeRight;
+            [tempCell setVideoLivingRoomModel:tempRoomHttpModelR viewType:tempType tapCallBack:^(CJHomeListTypeLivingCellType viewType) {
+                
+                RoomViewController *roomView = [[RoomViewController alloc] initWithModel:tempRoomHttpModelR];
+                [selfWeak presentViewController:roomView animated:YES completion:nil];
+                
+            }];
+            
+        }
         
         return tempCell;
         
@@ -546,7 +596,47 @@ typedef enum : NSUInteger
         {
             tempCell = [[HomeTextLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:textCellName];
         }
-        [tempCell setTextRoomModel:(TextRoomModel *)tempObject];
+        
+        ///获取准确下标
+        NSInteger leftIndex = indexPath.row * 2;
+        
+        ///左侧view
+        @WeakObj(self);
+        TextRoomModel *tempTextRoomModelL = tempArray[leftIndex];
+        CJHomeListTypeLivingCellType tempType = cCJHomeListTypeLivingCellTypeLeft;
+        [tempCell setTextRoomModel:tempTextRoomModelL viewType:tempType tapCallBack:^(CJHomeListTypeLivingCellType viewType) {
+            
+            if (cCJHomeListTypeLivingCellTypeLeft == viewType ||
+                cCJHomeListTypeLivingCellTypeRight == viewType)
+            {
+                
+                TextHomeViewController *textHomeVC = [[TextHomeViewController alloc] initWithModel:tempTextRoomModelL];
+                [selfWeak.navigationController pushViewController:textHomeVC animated:YES];
+                
+            }
+            
+        }];
+        
+        ///判断是否存在右侧view
+        if (leftIndex + 1 < tempArray.count)
+        {
+            
+            TextRoomModel *tempTextRoomModelR = tempArray[leftIndex + 1];
+            CJHomeListTypeLivingCellType tempType = cCJHomeListTypeLivingCellTypeRight;
+            [tempCell setTextRoomModel:tempTextRoomModelR viewType:tempType tapCallBack:^(CJHomeListTypeLivingCellType viewType) {
+                
+                if (cCJHomeListTypeLivingCellTypeLeft == viewType ||
+                    cCJHomeListTypeLivingCellTypeRight == viewType)
+                {
+                    
+                    TextHomeViewController *textHomeVC = [[TextHomeViewController alloc] initWithModel:tempTextRoomModelR];
+                    [selfWeak.navigationController pushViewController:textHomeVC animated:YES];
+                    
+                }
+                
+            }];
+            
+        }
         
         return tempCell;
         
@@ -787,26 +877,6 @@ typedef enum : NSUInteger
     }
     
     NSObject *tempObject = tempArray[0];
-    
-    ///视频直播项点击
-    if ([tempObject isKindOfClass:[RoomHttp class]])
-    {
-        
-        RoomHttp *model = [tempArray objectAtIndex:indexPath.row];
-        RoomViewController *roomView = [[RoomViewController alloc] initWithModel:model];
-        [self presentViewController:roomView animated:YES completion:nil];
-        
-    }
-    
-    ///文字直播项点击
-    if ([tempObject isKindOfClass:[TextRoomModel class]])
-    {
-        
-        TextRoomModel *model = [tempArray objectAtIndex:indexPath.row];
-        TextHomeViewController *textHomeVC = [[TextHomeViewController alloc] initWithModel:model];
-        [self.navigationController pushViewController:textHomeVC animated:YES];
-        
-    }
     
     ///精彩观点项点击
     if ([tempObject isKindOfClass:[WonderfullView class]])

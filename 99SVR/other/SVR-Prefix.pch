@@ -48,6 +48,18 @@ typedef enum {
     VideoPlayStateStop
 } VideoPlayState;
 
+/**
+ *  文字直播信息cell内部使用view类型
+ */
+typedef enum : NSUInteger
+{
+    
+    cCJHomeListTypeLivingCellTypeNone = 0,  //!<无效值
+    cCJHomeListTypeLivingCellTypeLeft,      //!<左侧view
+    cCJHomeListTypeLivingCellTypeRight      //!<右侧view
+    
+} CJHomeListTypeLivingCellType;
+
 #endif
 
 /*
