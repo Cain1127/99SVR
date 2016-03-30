@@ -216,6 +216,14 @@
     return 0;
 }
 
+- (void)sendPingRoom
+{
+    CMDClientPing_t ping;
+    ping.userid = [UserInfo sharedUserInfo].nUserId;
+    ping.roomid = [_strRoomId intValue];
+    [self sendMessage:(char *)&ping size:sizeof(CMDClientPing_t) version:MDM_Version_Value maincmd:MDM_Vchat_Room subcmd:Sub_Vchat_ClientPing];
+}
+
 - (void)sendHello:(int)nMDM_Vchat
 {
     char szTemp[32]={0};
@@ -638,7 +646,12 @@
             [self joinRoomError:pNewMsg];
             return ;
         }
-            break;
+        break;
+        case Sub_Vchat_ClientPingResp:
+        {
+            [self joinRoomInfo2];
+        }
+        break;
         case Sub_Vchat_JoinRoomResp:
         {
             DLog(@"加入房间成功");
@@ -1369,9 +1382,24 @@
     {
         downGCD = dispatch_queue_create("downgcd",0);
     }
-    [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
     [self sendHello:MDM_Vchat_Room];
-    [self joinRoomInfo2];
+    [_asyncSocket readDataToLength:sizeof(int32) withTimeout:3 tag:SOCKET_READ_LENGTH];
+    [self sendPingRoom];
+}
+
+/**
+ *  执行重连
+ */
+- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
+                 elapsed:(NSTimeInterval)elapsed
+               bytesDone:(NSUInteger)length
+{
+    /**
+     *  重新建立连接   请求新的lbs
+     */
+    
+    
+    return 1;
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag

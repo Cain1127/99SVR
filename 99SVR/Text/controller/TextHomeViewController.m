@@ -221,11 +221,6 @@
         [_textSocket connectRoom:_roomId];
     }
     [self initUIHead];
-//    __weak TextHomeViewController *__self = self;
-//    [_group addEvent:^(id sender)
-//     {
-//         [__self btnEvent:sender];
-//     }];
     UIButton *btnSender = [_group viewWithTag:1];
     [self btnEvent:btnSender];
 }
@@ -410,7 +405,7 @@
         case 2:
         {
             TextTodayVPViewController *todayVIP = [[TextTodayVPViewController alloc] initWithSocket:_textSocket];
-            [self presentViewController:todayVIP animated:YES completion:nil];
+            [self.navigationController pushViewController:todayVIP animated:YES];
         }
         break;
         case 3:

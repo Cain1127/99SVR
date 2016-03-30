@@ -9,7 +9,9 @@ Http::Http()
 
 char* parse_response(char* recv_buf)
 {
+	LOG("%s", recv_buf);
 	char* content = strstr(recv_buf, "\r\n\r\n");
+	LOG("%s", content + 4);
 	if (content != NULL)
 	{
 		return content + 4;
@@ -18,7 +20,7 @@ char* parse_response(char* recv_buf)
 	return NULL;
 }
 
-char* Http::GetString(const char* host, short port, const char* url, char* recv_buf)
+char* Http::GetString(const char* host, short port, const char* url)
 {
 	int ret;
 	Socket socket;

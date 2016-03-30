@@ -431,6 +431,9 @@
 		BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F31C4CD515008F2CEC /* SVRInitLBS.m */; };
 		BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */; };
 		BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F91C4D3655008F2CEC /* DoubleView.m */; };
+		BBCF99F01CABAC22005B9DCE /* TextChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF99EF1CABAC22005B9DCE /* TextChatView.m */; };
+		BBCF99FD1CABCFDC005B9DCE /* json.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBCF99FB1CABCFDC005B9DCE /* json.cpp */; };
+		BBCF9A081CABD20C005B9DCE /* SecretViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A071CABD20C005B9DCE /* SecretViewController.m */; };
 		BBD449121CA2CD7C00727070 /* video_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = BBD449111CA2CD7C00727070 /* video_list.txt */; };
 		BBD449151CA2D83B00727070 /* UserListView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD449141CA2D83B00727070 /* UserListView.m */; };
 		BBD49D741C5B142400EADF74 /* LivePlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD49D721C5B142400EADF74 /* LivePlayViewController.m */; };
@@ -1296,6 +1299,12 @@
 		BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllColletViewController.m; sourceTree = "<group>"; };
 		BBB515F81C4D3655008F2CEC /* DoubleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoubleView.h; sourceTree = "<group>"; };
 		BBB515F91C4D3655008F2CEC /* DoubleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoubleView.m; sourceTree = "<group>"; };
+		BBCF99EE1CABAC22005B9DCE /* TextChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextChatView.h; sourceTree = "<group>"; };
+		BBCF99EF1CABAC22005B9DCE /* TextChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextChatView.m; sourceTree = "<group>"; };
+		BBCF99FB1CABCFDC005B9DCE /* json.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json.cpp; sourceTree = "<group>"; };
+		BBCF99FC1CABCFDC005B9DCE /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		BBCF9A061CABD20C005B9DCE /* SecretViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecretViewController.h; sourceTree = "<group>"; };
+		BBCF9A071CABD20C005B9DCE /* SecretViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecretViewController.m; sourceTree = "<group>"; };
 		BBD449111CA2CD7C00727070 /* video_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = video_list.txt; sourceTree = "<group>"; };
 		BBD449131CA2D83B00727070 /* UserListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserListView.h; sourceTree = "<group>"; };
 		BBD449141CA2D83B00727070 /* UserListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserListView.m; sourceTree = "<group>"; };
@@ -1751,6 +1760,8 @@
 				BBA16D9E1C8A979000D84E80 /* TextHistoryViewController.m */,
 				BBAF96F71CA8B81E00C16305 /* TextEsotericaViewController.h */,
 				BBAF96F81CA8B81E00C16305 /* TextEsotericaViewController.m */,
+				BBCF9A061CABD20C005B9DCE /* SecretViewController.h */,
+				BBCF9A071CABD20C005B9DCE /* SecretViewController.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -1819,6 +1830,8 @@
 				18987FFE1CAA4AC8000E9F1C /* VideoLivingCell.m */,
 				18D7677B1CAA7EAD00CE79B0 /* HomeTextLivingCell.h */,
 				18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */,
+				BBCF99EE1CABAC22005B9DCE /* TextChatView.h */,
+				BBCF99EF1CABAC22005B9DCE /* TextChatView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -2239,6 +2252,8 @@
 		BB63F52B1C2CC7A300A042E8 /* socket */ = {
 			isa = PBXGroup;
 			children = (
+				BBCF99FB1CABCFDC005B9DCE /* json.cpp */,
+				BBCF99FC1CABCFDC005B9DCE /* json.h */,
 				BBAF9A191CAA8C2600C16305 /* Http.cpp */,
 				BBAF9A1A1CAA8C2600C16305 /* Http.h */,
 				BBD449161CA3848700727070 /* HallListener.h */,
@@ -3154,6 +3169,7 @@
 				BB1661AE1C3E67B000D318BE /* TextViewController.m in Sources */,
 				BB17694D1C7D9E7300CE947C /* InputPwdViewController.m in Sources */,
 				BB0436871C4E28E700A162A8 /* TextLiveModel.m in Sources */,
+				BBCF99FD1CABCFDC005B9DCE /* json.cpp in Sources */,
 				18BF06B81C9A86B00071E524 /* RechargeResultViewController.m in Sources */,
 				1898AC691C9BADE600F2681D /* MyDataController.m in Sources */,
 				18F9710E1C92947F001B2575 /* DataVerifier.m in Sources */,
@@ -3191,6 +3207,7 @@
 				BB63F5AA1C2CC7A300A042E8 /* UIControl+BlocksKit.m in Sources */,
 				BB88F3251C4356B100C1F8D9 /* TextTcpSocket.m in Sources */,
 				BB63F5C21C2CC7A300A042E8 /* MASConstraint.m in Sources */,
+				BBCF9A081CABD20C005B9DCE /* SecretViewController.m in Sources */,
 				BB1769391C7B045D00CE947C /* RegMobileViewController.m in Sources */,
 				BB63F5B41C2CC7A300A042E8 /* LSTcpSocket.m in Sources */,
 				BB9766081C88A07900FAA5B7 /* TextTodayVPViewController.m in Sources */,
@@ -3239,6 +3256,7 @@
 				187C07F61C9A5A52007AE742 /* NickNameViewController.m in Sources */,
 				BB63F5C51C2CC7A300A042E8 /* MASViewAttribute.m in Sources */,
 				BB16616C1C3CA0B800D318BE /* UITableView+reloadComplete.m in Sources */,
+				BBCF99F01CABAC22005B9DCE /* TextChatView.m in Sources */,
 				BB63F5C41C2CC7A300A042E8 /* MASLayoutConstraint.m in Sources */,
 				BB63F5D31C2CC7A300A042E8 /* MJRefreshLegendHeader.m in Sources */,
 				BB63F6001C2CC7A300A042E8 /* EmojiView.m in Sources */,

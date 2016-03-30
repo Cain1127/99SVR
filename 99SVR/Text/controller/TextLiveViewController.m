@@ -58,7 +58,6 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor blueColor]];
     _aryLive = [NSMutableArray array];
-    _dictIcon = [NSMutableDictionary dictionary];
     dict = [NSMutableDictionary dictionary];
     [self initData];
     [self initTabelView];
@@ -166,7 +165,7 @@
     if([liveCore.btnThum.titleLabel.text isEqualToString:@"详情>>>"])
     {
         NewDetailsViewController *newView = [[NewDetailsViewController alloc] initWithSocket:_textSocket viewID:liveCore.viewid];
-        [self presentViewController:newView animated:YES completion:nil];
+        [self.navigationController pushViewController:newView animated:YES];
     }
     else
     {
@@ -213,21 +212,6 @@
         return imageView;
     }
     return nil;
-}
-
-- (void)findImage:(NSString *)strName imgView:(UIImageView *)imageView
-{
-    UIImage *image = [_dictIcon objectForKey:strName];
-    if (image)
-    {
-        [imageView setImage:image];
-    }
-    else
-    {
-        image = [UIImage animatedImageWithAnimatedGIFURL:[[NSBundle mainBundle] URLForResource:strName withExtension:@"gif"]];
-        [_dictIcon setObject:image forKey:strName];
-        [imageView setImage:image];
-    }
 }
 
 - (void)showImageInfo:(UITapGestureRecognizer *)tapGest

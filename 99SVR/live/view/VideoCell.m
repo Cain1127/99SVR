@@ -32,7 +32,6 @@
         for (int i=0; i<2; i++)
         {
             CGFloat viewWidth = kScreenWidth / 2 - leftSpace - rightSpace;
-            //CGFloat viewHeight = ((kScreenWidth-36)/2)*5/9+8;
             CGFloat viewHeight = ((kScreenWidth-36)/2)*10/16+8;
             CGFloat viewX = 0;
             if (i == 0)

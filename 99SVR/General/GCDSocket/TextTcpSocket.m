@@ -8,6 +8,7 @@
 
 #import "TextTcpSocket.h"
 #import "GCDAsyncSocket.h"
+#import "DeviceUID.h"
 #import "TextEsoterModel.h"
 #import "textChatModel.h"
 #import "IdeaDetails.h"
@@ -253,6 +254,11 @@
         case Sub_Vchat_TextRoomSecretsListResp:
         {
             [self respSecretsResp:pNewMsg length:nMsgLen];
+        }
+        break;
+        case Sub_Vchat_TextRoomBuySecretsResp:
+        {
+            [self respBuySecret:pNewMsg];
         }
         break;
         default:
@@ -513,7 +519,6 @@
 {
     CMDTextRoomViewInfoRes_t *resp = (CMDTextRoomViewInfoRes_t *)pInfo;
     IdeaDetailRePly *idea = [[IdeaDetailRePly alloc] initWithIdeaRePly:resp];
-    DLog(@"%@---%@---%@",idea.strContent,idea.strName,idea.strSrcName);
     if (idea)
     {
         if (_aryComment==nil)
@@ -1050,8 +1055,44 @@
         _asyncSocket = nil;
     }
 }
+/**
+ *  加入房间新接口
+ */
+- (BOOL)joinRoomInfo2
+{
+    CMDJoinRoomReq2_t req;
+    memset(&req,0,sizeof(CMDJoinRoomReq2_t));
+    req.userid = [UserInfo sharedUserInfo].nUserId;
+    req.vcbid = _roomid;
+    req.coremessagever = _PRODUCT_CORE_MESSAGE_VER_;
+    if(req.userid!=0 && [UserInfo sharedUserInfo].nType == 1 &&
+       [UserInfo sharedUserInfo].strMd5Pwd && [[UserInfo sharedUserInfo].strMd5Pwd length]>0)
+    {
+        strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
+    }
+    else
+    {
+        [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:[UserInfo sharedUserInfo].strPwd];
+        strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
+    }
+    strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
+    
+    NSString *uid = [DeviceUID uid];
+    if (uid && uid>0)
+    {
+        strcpy(req.cSerial,[uid UTF8String]);
+    }
+    req.time = (uint32)time(0);
+    req.devtype = 2;
+    req.bloginSource = [UserInfo sharedUserInfo].otherLogin;
+    req.crc32 = 15;
+    uint32 crcval = crc32((void*)&req,sizeof(CMDJoinRoomReq2_t),CRC_MAGIC);
+    req.crc32 = crcval;
+    [self sendMessage:(char *)&req size:sizeof(CMDJoinRoomReq2_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text
+               subcmd:Sub_Vchat_TextRoomJoinReq];
+    return YES;
+}
 
-#pragma mark 加入房间
 - (void)joinRoomInfo
 {
     CMDJoinRoomReq_t req;
@@ -1094,7 +1135,7 @@
         _aryNew = [NSMutableArray array];
     }
     [_aryNew removeAllObjects];
-    [self connectTextServer:@"172.16.41.96" port:22806];
+    [self connectTextServer:@"122.13.81.62" port:22706];
     DLog(@"再次连接");
 }
 
@@ -1149,7 +1190,7 @@
     [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
     DLog(@"连接成功!");
     [self sendHello:MDM_Vchat_Text];
-    [self joinRoomInfo];
+    [self joinRoomInfo2];
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
@@ -1281,9 +1322,9 @@
  */
 - (void)reqEsotericaList:(int)nIndex count:(int)nCount teach:(int64_t)tid
 {
-    int nLength = sizeof(CMDTextRoomLiveListReq_t);
+    int nLength = sizeof(CMDTextRoomSecretListReq_t);
     char szBuf[nLength];
-    CMDTextRoomLiveListReq_t *req= (CMDTextRoomLiveListReq_t *)szBuf;
+    CMDTextRoomSecretListReq_t *req= (CMDTextRoomSecretListReq_t *)szBuf;
     long  randomNum = rand();
     srand((unsigned int)time(NULL));
     if (!_aryEsoter) {
@@ -1313,5 +1354,49 @@
     [self sendMessage:(char *)&req size:sizeof(CMDTextRoomSecretsTotalReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomSecretsTotalReq];
 }
 
+/**
+ *  购买个人秘籍
+ */
+- (void)reqBuySecret:(int)secretsid goodsid:(int )goodsid
+{
+    CMDTextRoomBuySecretsReq_t req = {0};
+    req.vcbid = _roomid;
+    req.userid = kUserInfoId;
+    req.teacherid = _teacher.teacherid;
+    req.secretsid = secretsid;
+    req.goodsid = goodsid;
+    [self sendMessage:(char *)&req size:sizeof(CMDTextRoomBuySecretsReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomBuySecretsReq];
+}
+
+- (void)respBuySecret:(char *)pData
+{
+    CMDTextRoomBuySecretsResp_t *resp = (CMDTextRoomBuySecretsResp_t*)pData;
+    NSString *strMsg = nil;
+    switch (resp->result) {
+        case 0:
+        {
+            DLog(@"购买成功");
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_SECRET_BUY_SUC_VC object:@(resp->secretsid)];
+            return ;
+        }
+        break;
+        case 1:
+        {
+            strMsg = @"数据错误";
+        }
+        break;
+        case 2:
+        {
+            strMsg = @"余额不足";
+        }
+        break;
+        default:
+        {
+            strMsg = @"请求异常";
+        }
+        break;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_SECRET_BUY_ERR_VC object:strMsg];
+}
 
 @end

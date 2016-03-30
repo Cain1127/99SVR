@@ -1,19 +1,19 @@
 //
-//  ChatView.m
+//  TextChatView.m
 //  99SVR
 //
-//  Created by xia zhonglin  on 3/17/16.
+//  Created by xia zhonglin  on 3/30/16.
 //  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
-#import "ChatView.h"
+#import "TextChatView.h"
 #import "EmojiView.h"
 #import "RoomUser.h"
 #import "UIView+Touch.h"
 #import "EmojiTextAttachment.h"
 #import "NSAttributedString+EmojiExtension.h"
 
-@interface ChatView ()<UITextViewDelegate,EmojiViewDelegate>
+@interface TextChatView ()<UITextViewDelegate,EmojiViewDelegate>
 {
     CGFloat deltaY;
     CGFloat duration;
@@ -25,7 +25,8 @@
 @property (nonatomic) int keyboardPresentFlag;
 
 @end
-@implementation ChatView
+
+@implementation TextChatView
 
 @synthesize lblPlace;
 @synthesize whiteView;
@@ -35,26 +36,26 @@
     self = [super initWithFrame:frame];
     if (self){
         [self createView];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:)
-                                                         name:UIKeyboardWillShowNotification object:nil];
-            [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(keyboardWasHidden:)
-                                                          name:UIKeyboardWillHideNotification object:nil];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardFrameDidChange:)
-                                                         name:UIKeyboardDidChangeFrameNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:)
+                                                     name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(keyboardWasHidden:)
+                                                      name:UIKeyboardWillHideNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardFrameDidChange:)
+                                                     name:UIKeyboardDidChangeFrameNotification object:nil];
     }
     return self;
 }
 
 - (void)createView
 {
-    UIView *hiddenView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
-    [hiddenView setUserInteractionEnabled:YES];
-    [hiddenView setBackgroundColor:[UIColor clearColor]];
-    [self addSubview:hiddenView];
-    __weak ChatView *__self = self;
-    [hiddenView clickWithBlock:^(UIGestureRecognizer *gesture) {
-        __self.hidden = YES;
-    }];
+//    UIView *hiddenView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+//    [hiddenView setUserInteractionEnabled:YES];
+//    [hiddenView setBackgroundColor:[UIColor clearColor]];
+//    [self addSubview:hiddenView];
+//    __weak TextChatView *__self = self;
+//    [hiddenView clickWithBlock:^(UIGestureRecognizer *gesture) {
+        //执行页面向下
+//    }];
     
     downView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50,kScreenWidth,50)];
     [self addSubview:downView];
@@ -71,7 +72,6 @@
     _textView = [[UITextView alloc] initWithFrame:Rect(6,0,whiteView.width-42,36)];
     [whiteView addSubview:_textView];
     [_textView setFont:XCFONT(15)];
-//    [_textView setBackgroundColor:[UIColor clearColor]];
     [_textView setTextColor:UIColorFromRGB(0x343434)];
     
     UIButton *btnEmoji = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -118,6 +118,7 @@
             [_delegate sendMessage:_textView userid:_nUserId];
         }
     }
+    [_textView resignFirstResponder];
 }
 
 - (void)setHidden:(BOOL)hidden
@@ -161,6 +162,9 @@
             downView.frame = CGRectOffset(downView.frame, 0, -deltaY);
         } completion:nil];
     }
+    if (downView.frame.origin.y != (kScreenHeight-50)) {
+        DLog(@"显示了");
+    }
 }
 
 - (void) keyboardWasShown:(NSNotification *) notification
@@ -169,6 +173,7 @@
     // 获得弹出keyboard的动画时间，也可以手动赋值，如0.25f
     duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     // 得到keyboard在当前controller的view中的Y轴坐标
+    DLog(@"keyboardSize:keyShow");
     CGFloat keyboardOriginY = self.height - keyboardSize.height;
     // textField下边到view顶点的距离减去keyboard的Y轴坐标就是textField要移动的距离，
     // 这里是刚好让textField完全显示出来，也可以再在deltaY的基础上再加上一定距离，如20f、30f等
@@ -185,16 +190,11 @@
         _emojiView.hidden = YES;
     }
 }
-- (void) keyboardWasHidden:(NSNotification *) notification
+- (void)keyboardWasHidden:(NSNotification *) notification
 {
     CGRect frame = self.frame;
     frame.origin.y = originalY;
-    CGSize keyboardSize = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    if (keyboardSize.height==282)
-    {
-        downView.frame = Rect(0, kScreenHeight-50, kScreenWidth, 50);
-        self.hidden = YES;
-    }
+    downView.frame = Rect(0, kScreenHeight-50, kScreenWidth, 50);
 }
 
 - (void)dealloc

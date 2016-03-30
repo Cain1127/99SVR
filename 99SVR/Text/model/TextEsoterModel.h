@@ -24,7 +24,7 @@
 /**
  *  订阅价格
  */
-@property (nonatomic) int32_t prices;
+@property (nonatomic) CGFloat prices;
 /**
  *  是否购买
  */

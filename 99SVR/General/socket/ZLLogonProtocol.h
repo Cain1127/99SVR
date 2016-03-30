@@ -118,7 +118,7 @@ public :
     /**
      *  正常账号登录
      */
-    int startLogin(const char *cloginid,const char *pwd);
+    int startLogin(const char *cloginid,const char *pwd,const char *md5Pwd);
     /**
      *  修改昵称
      */

@@ -67,19 +67,17 @@
 #define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
 
 #if 1
-
 #define kImage_TEXT_URL @"http://172.16.41.99/test/getimage.php?tid="
 #define kTEXT_GROUP_URL @"http://172.16.41.99/test/test.php?act=script"
 #define kTEXT_NEW_DETAILS_URL @"http://172.16.41.99/viewpoint/index.php?s=/Index/getViewPoint/id/"
-#define kRegisterNumber @"http://abc.99ducaijing.com/"
-
-#else
-
 #define kRegisterNumber @"http://api.99ducaijing.com/"
-#define kImage_TEXT_URL @"http://121.33.236.180:22807/test/getimage.php?tid="
-#define kTEXT_GROUP_URL @"http://121.33.236.180:22807/test/test.php?act=script"
-#define kTEXT_NEW_DETAILS_URL @"http://121.33.236.180:22807/viewpoint/index.php?s=/Index/getViewPoint/id/"
+#else
+#define kTEXT_NEW_DETAILS_URL @"http://122.13.81.62:22806/viewpoint/index.php?s=/Index/getViewPoint/id/"
+#define kRegisterNumber @"http://api.99ducaijing.com/"
+#define kImage_TEXT_URL @"http://122.13.81.62:22806/test/getimage.php?tid="
+#define kTEXT_GROUP_URL @"http://122.13.81.62:22806/test/test.php?act=script"
 #endif
+
 
 #endif
 

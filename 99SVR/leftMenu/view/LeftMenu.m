@@ -148,9 +148,10 @@
 #pragma mark - leftMenuHeaderViewDelegate
 - (void)enterLogin
 {
-//    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType != 1)
-//    {
-    control = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
-    [[UIApplication sharedApplication].keyWindow addSubview:control.view];
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType != 1)
+    {
+        control = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+        [[UIApplication sharedApplication].keyWindow addSubview:control.view];
+    }
 }
 @end

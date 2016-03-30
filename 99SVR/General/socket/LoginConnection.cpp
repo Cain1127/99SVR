@@ -58,13 +58,31 @@ void LoginConnection::on_do_connected()
 
 void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 {
+	//121.12.118.32:7301
+	//120.197.248.11:7401  ÒÆ¶¯
+	// "login1.99ducaijing.cn", 7401
+	//connect("121.12.118.32", 7301);
+	
+	/*
+	int ret = connect("121.12.118.32", 7301);
 
+	if (ret != 0)
+		return;
+	*/
 	req4 = req;
 	reqv = 4;
 
 	conenct_from_lbs();
 
+	/*
+	SendMsg_Hello();
+	SEND_MESSAGE(Sub_Vchat_logonReq4, req);
 
+	nmobile = req.nmobile();
+	version = req.nversion();
+
+	start_read_thread();
+	*/
 }
 
 void LoginConnection::SendMsg_LoginReq5(UserLogonReq5& req)
@@ -72,6 +90,7 @@ void LoginConnection::SendMsg_LoginReq5(UserLogonReq5& req)
 	req5 = req;
 	reqv = 5;
 
+	conenct_from_lbs();
 }
 
 void LoginConnection::SendMsg_SessionTokenReq(uint32 userid)
@@ -85,8 +104,8 @@ void LoginConnection::SendMsg_SessionTokenReq(uint32 userid)
 void LoginConnection::SendMsg_SetUserInfoReq(SetUserProfileReq& req)
 {
 	req.set_userid(logonuser.userid());
-	req.set_introducelen(req.introduce().size() + 1);
-	SEND_MESSAGE(Sub_Vchat_SetUserProfileReq, req);
+	req.set_introducelen(strlen(req.introduce().c_str()));
+	SEND_MESSAGE_EX(Sub_Vchat_SetUserProfileReq, req, req.introducelen());
 }
 
 void LoginConnection::SendMsg_SetUserPwdReq(uint32 vcbid, uint32 pwdtype, const char* oldpwd, const char* newpwd)
@@ -193,6 +212,7 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 	static int qx_ids_count = 0;
 	static int qx_actions_count = 0;
 
+	//ÁÐ±ívector
 	static std::vector<InteractResp> g_vec_InteractResp;
 	static std::vector<AnswerResp> g_vec_AnswerResp;
 	static std::vector<ViewShowResp> g_vec_ViewShowResp;

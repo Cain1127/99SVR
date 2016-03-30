@@ -7,6 +7,25 @@
 //#define __SWITCH_SERVER2__
 //-----------------------------------------------------------
 #pragma pack(1)
+
+typedef struct tag_CMDTextRoomBuySecretsReq
+{
+    uint32 vcbid;                  //房间ID
+    uint32 userid;                 //用户ID
+    uint32 teacherid;              //讲师ID
+    int32  secretsid;              //秘籍ID
+    int32  goodsid;                //商品ID
+}CMDTextRoomBuySecretsReq_t;
+
+typedef struct tag_CMDTextRoomBuySecretsResp
+{
+    uint32 vcbid;                  //房间ID
+    uint32 userid;                 //用户ID
+    int32  secretsid;              //秘籍ID
+    int16 result;                  //回复是否成功：0.操作成功1.商品不存在2.余额不足3.DB error
+    uint64  nk99;                  //用户账户玖玖币余额（成功时需要刷新客户端余额）
+}CMDTextRoomBuySecretsResp_t;
+
 /**
  *  个人秘籍请求
  */
@@ -1779,9 +1798,20 @@ typedef struct tag_CMDTextRoomTeacherNoty
 }CMDTextRoomTeacherNoty_t;
 
 //加载直播记录请求
-typedef struct tag_CMDTextRoomLiveListReq
+typedef struct tag_CMDTextRoomSecretListReq
 {
     char uuid[16];
+    uint32 vcbid;                  //房间ID
+    uint32 userid;                 //用户ID
+    uint32 teacherid;              //讲师ID
+    int16  type;                   //类型：1-文字直播；2-直播重点；3-明日预测（已关注的用户可查看）；4-观点；
+    int64  messageid;              //上一次请求得到的最小消息ID，第一次为0
+    int32  count;                  //获取多少条记录
+}CMDTextRoomSecretListReq_t;
+
+//加载直播记录请求
+typedef struct tag_CMDTextRoomLiveListReq
+{
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
     uint32 teacherid;              //讲师ID

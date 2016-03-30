@@ -103,6 +103,16 @@ public:
 	req.SerializeToArray(pHead->content, req.ByteSize());             \
 	this->send((const char*)pHead, pHead->length);
 
+#define SEND_MESSAGE_EX(sub_cmd, req, exlen)                   \
+	memset(send_buf, 0, MAX_MESSAGE_SIZE);       \
+	COM_MSG_HEADER* pHead = (COM_MSG_HEADER*)send_buf;        \
+	pHead->length = sizeof(COM_MSG_HEADER)+req.ByteSize() + exlen; \
+	pHead->version = MDM_Version_Value;                        \
+	pHead->checkcode = 0;                                      \
+	pHead->maincmd = (short)main_cmd;                          \
+	pHead->subcmd = (short)sub_cmd;                            \
+	req.SerializeToArray(pHead->content, req.ByteSize());             \
+	this->send((const char*)pHead, pHead->length);
 
 #define ON_MESSAGE(listener, InfoClass, OnMethod) \
 	{ \

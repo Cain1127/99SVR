@@ -123,5 +123,10 @@
  *  请求个人秘籍所有信息
  */
 - (void)reqSecretALl;
+/**
+ *  购买个人秘籍
+ */
+- (void)reqBuySecret:(int)secretsid goodsid:(int )goodsid;
+
 
 @end
