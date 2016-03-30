@@ -187,6 +187,7 @@
         [UserInfo sharedUserInfo].bIsLogin = NO;
         [UserInfo sharedUserInfo].otherLogin = 0;
         [UserInfo sharedUserInfo].nUserId = 0;
+        [UserInfo sharedUserInfo].banding = 0;
         [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:@"0" pwd:@""];
         [logoutBtn setHidden:YES];
         [lblContent setHidden:YES];
