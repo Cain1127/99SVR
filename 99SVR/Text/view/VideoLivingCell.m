@@ -112,7 +112,7 @@
         
     }
     
-    NSString *imageURL = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,dataModel.croompic];
+    NSString *imageURL = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_HOME_URL,dataModel.croompic];
     [self.backgroundImageView sd_setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:[UIImage imageNamed:@"home_room_default_img"]];
 
 }

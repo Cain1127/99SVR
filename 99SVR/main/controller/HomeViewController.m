@@ -27,6 +27,7 @@
 
 #import "ViewPointCell.h"
 #import "WonderfullView.h"
+#import "NewDetailsViewController.h"
 
 #import "RightImageButton.h"
 
@@ -205,7 +206,7 @@ typedef enum : NSUInteger
             ///返回主线程刷新UI
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [selfWeak updateRefreshStatus:cCJHomeRequestTypeListFinish];
+                [selfWeak updateRefreshStatus:cCJHomeRequestTypeBannerFinish];
                 [selfWeak loadImageView];
                 
             });
@@ -214,7 +215,7 @@ typedef enum : NSUInteger
         
     } fail:^(NSError *error) {
         
-        [selfWeak updateRefreshStatus:cCJHomeRequestTypeListFinish];
+        [selfWeak updateRefreshStatus:cCJHomeRequestTypeBannerFinish];
         
     }];
 }
@@ -375,16 +376,15 @@ typedef enum : NSUInteger
                 {
                     
                     self.refreshStatus = cCJHomeRequestTypeBannerFinish;
-                    break;
+                    return;
                     
                 }
-                
                 ///列表完成请求
-                if (cCJHomeRequestTypeListFinish == currentRequestStatus)
+                else if (cCJHomeRequestTypeListFinish == currentRequestStatus)
                 {
                     
                     self.refreshStatus = cCJHomeRequestTypeListFinish;
-                    break;
+                    return;
                     
                 }
             
@@ -402,7 +402,7 @@ typedef enum : NSUInteger
                     ///完成头部刷新动画
                     [self.tableView.header endRefreshing];
                     self.refreshStatus = cCJHomeRequestTypeDefault;
-                    break;
+                    return;
                     
                 }
             
@@ -420,7 +420,7 @@ typedef enum : NSUInteger
                     ///完成头部刷新动画
                     [self.tableView.header endRefreshing];
                     self.refreshStatus = cCJHomeRequestTypeDefault;
-                    break;
+                    return;
                     
                 }
             
@@ -799,20 +799,27 @@ typedef enum : NSUInteger
     }
     
     ///文字直播项点击
-    if ([tempObject isKindOfClass:[RoomHttp class]])
+    if ([tempObject isKindOfClass:[TextRoomModel class]])
     {
         
         TextRoomModel *model = [tempArray objectAtIndex:indexPath.row];
-        TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithModel:model];
-        [self presentViewController:textHome animated:YES completion:nil];
+        TextHomeViewController *textHomeVC = [[TextHomeViewController alloc] initWithModel:model];
+        [self.navigationController pushViewController:textHomeVC animated:YES];
         
     }
     
     ///精彩观点项点击
-    if ([tempObject isKindOfClass:[RoomHttp class]])
+    if ([tempObject isKindOfClass:[WonderfullView class]])
     {
         
+        ///获取直播数据模型
+        WonderfullView *model = [tempArray objectAtIndex:indexPath.row];
         
+        TextTcpSocket *textSocket = [[TextTcpSocket alloc] init];
+        [textSocket connectRoom:[model.roomid intValue]];
+        
+        NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:textSocket viewID:[model.viewid intValue]];
+        [self presentViewController:detailView animated:YES completion:nil];
         
     }
     
@@ -882,12 +889,6 @@ typedef enum : NSUInteger
 }
 
 #pragma mark hotViewDelegate
-- (void)clickTeach:(TeacherModel *)teach
-{
-    TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithRoom:80001];
-    [self presentViewController:textHome animated:YES completion:nil];
-}
-
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;

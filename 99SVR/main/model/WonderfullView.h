@@ -17,12 +17,13 @@
  */
 @interface WonderfullView : NSObject
 
-@property (nonatomic,copy) NSString *teacherid; ///观点提出专家的ID
-@property (nonatomic,copy) NSString *calias;    ///专家名字
-@property (nonatomic,copy) NSString *viewid;    ///观点记录ID
-@property (nonatomic,copy) NSString *dtime;     ///观点发布日期
-@property (nonatomic,assign) NSInteger czans;   ///观看次数
-@property (nonatomic,copy) NSString *title;     ///标题
+@property (nonatomic, copy) NSString *teacherid;    //!<观点提出专家的ID
+@property (nonatomic, copy) NSString *calias;       //!<专家名字
+@property (nonatomic, copy) NSString *viewid;       //!<观点记录ID
+@property (nonatomic, copy) NSString *dtime;        //!<观点发布日期
+@property (nonatomic, assign) NSInteger czans;      //!<观看次数
+@property (nonatomic, copy) NSString *title;        //!<标题
+@property (nonatomic, copy) NSString *roomid;       //!<房间ID
 
 /**
  *  @author yangshengmeng, 16-03-29 09:03:42

@@ -81,6 +81,11 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)MarchBackLeft
+{
+    [self navBack];
+}
+
 - (void)initUIHead
 {
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
