@@ -49,14 +49,10 @@ typedef enum : NSUInteger
 } CJHomeRequestType;
 
 @interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate>
-{
-    
-}
 
 @property (nonatomic,strong) NSMutableArray *aryBanner;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *aryLiving;
-@property (nonatomic,copy) NSTimer *timer;
 @property (nonatomic,strong) SDCycleScrollView *scrollView;
 
 ///当前数据请求状态:0-未开始请求/1-正在请求/2-banner完成请求/3-列表完成请求

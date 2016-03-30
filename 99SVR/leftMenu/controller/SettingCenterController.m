@@ -92,8 +92,15 @@
     [super viewDidLoad];
     self.txtTitle.text = @"设置";
     
+    /**
+     *  @author     yangshengmeng, 16-03-30 15:03:56
+     *
+     *  @brief      未登录前隐藏修改密码，口头确认过
+     *  @default    [EnterModel createContent:@"修改密码" className:@"UpdatePwdViewController"]
+     *
+     *  @since      v1.0.0
+     */
     _array = @[[EnterModel createContent:@"绑定手机" className:@"BandingMobileViewController"],
-               [EnterModel createContent:@"修改密码" className:@"UpdatePwdViewController"],
                [EnterModel createContent:@"关于我们" className:@"AboutController"]];
     self.view.backgroundColor = [UIColor whiteColor];
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,30+kNavigationHeight, self.view.width,(1+_array.count)*kCellHeight+8)];
