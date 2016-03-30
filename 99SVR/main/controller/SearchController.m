@@ -182,10 +182,15 @@
     [self.view setBackgroundColor:RGB(245, 245, 246)];
 }
 
+- (void)navback
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)addSubviews
 {
 //    [self addHeaderView];
-    [self setTitle:@"搜索"];
+//    [self setTitle:@"搜索"];
     self.view.backgroundColor = [UIColor whiteColor];
 #if 0
     CGFloat space = 8;
@@ -202,7 +207,23 @@
     
     _mySearchBar.frame = Rect(8,72, kScreenWidth-16, 44);
 #endif
-    _mySearchBar = [[UITextField alloc] initWithFrame:Rect(0,6,kScreenWidth, 44)];
+    
+    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
+    [self.view addSubview:_headView];
+    _headView.backgroundColor = kNavColor;
+    UILabel *title;
+    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
+    [title setFont:XCFONT(16)];
+    [_headView addSubview:title];
+    [title setTextAlignment:NSTextAlignmentCenter];
+    [title setTextColor:UIColorFromRGB(0xffffff)];
+    title.text = @"搜索";
+    
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(navback) image:@"back" highImage:@"back"];
+    [_headView addSubview:btnLeft];
+    [btnLeft setFrame:Rect(0,20,44,44)];
+    
+    _mySearchBar = [[UITextField alloc] initWithFrame:Rect(0,70,kScreenWidth, 44)];
     [self.view addSubview:_mySearchBar];
     UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(0,0,44,44)];
     _mySearchBar.leftView = imgHead;
@@ -341,6 +362,7 @@
 #if 1
     RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
     [self presentViewController:roomView animated:YES completion:nil];
+//    [self.navigationController pushViewController:roomView animated:YES];
 #endif
 }
 

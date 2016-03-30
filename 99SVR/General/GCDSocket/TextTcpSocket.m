@@ -627,9 +627,6 @@
         [_aryText insertObject:textModel atIndex:0];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
     }
-    
-    
-    
 }
 
 #pragma mark 聊天回复请求
@@ -836,7 +833,7 @@
     CMDTextRoomTeacherReq_t req;
     req.userid = kUserInfoId;
     req.vcbid = _roomid;
-    [self sendMessage:(char *)&req size:sizeof(CMDTextRoomTeacherReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomTeacherReq];
+    [self sendMessage:(char *)&req size:sizeof(CMDTextRoomTeacherReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomTeacherReq length:(sizeof(CMDTextRoomTeacherReq_t)+10)];
 }
 
 #pragma mark 加入房间成功
@@ -973,8 +970,10 @@
     pHead->maincmd = nMainCmd;
     pHead->subcmd = nSubCmd;
     memcpy(pHead->content,pReq,nSize);
-    NSData *data = [NSData dataWithBytes:szBuf length:pHead->length];
-    [_asyncSocket writeData:data withTimeout:-1 tag:1];
+    @autoreleasepool {
+        NSData *data = [NSData dataWithBytes:szBuf length:pHead->length];
+        [_asyncSocket writeData:data withTimeout:-1 tag:1];
+    }
 }
 
 #pragma mark 发送hello信息
@@ -1014,19 +1013,16 @@
     req.userid = kUserInfoId;
     req.vcbid = (uint32)_roomid;
     req.coremessagever = _PRODUCT_CORE_MESSAGE_VER_;
-//    req.devtype = 2;
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
-//    [UserInfo sharedUserInfo].strPwd = @"123456";
+    req.devtype = 2;
     if([UserInfo sharedUserInfo].strPwd)
     {
         [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:[UserInfo sharedUserInfo].strPwd];
-//        [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:@"123456"];
     }
     if([UserInfo sharedUserInfo].strMd5Pwd!=nil)
     {
         strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
     }
-//    strcpy(req.croompwd,"123");
     req.time = (uint32)time(0);
     req.crc32 = 15;
     uint32 crcval = crc32((void*)&req,sizeof(CMDJoinRoomReq_t),CRC_MAGIC);
@@ -1052,7 +1048,7 @@
         _aryNew = [NSMutableArray array];
     }
     [_aryNew removeAllObjects];
-    [self connectTextServer:@"121.33.236.180" port:22806];
+    [self connectTextServer:@"172.16.41.96" port:22806];
     DLog(@"再次连接");
 }
 
@@ -1079,8 +1075,8 @@
 //    NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
 //    [self connectTextServer:strAddr port:nPort];
     [self closeSocket];
-    [self connectTextServer:@"122.13.81.62" port:22806];
-//    [self connectTextServer:@"172.16.41.96" port:22806];
+//    [self connectTextServer:@"122.13.81.62" port:22806];
+    [self connectTextServer:@"172.16.41.96" port:22806];
 //    [self connectTextServer:@"121.33.236.180" port:22806];
 }
 
@@ -1167,6 +1163,7 @@
     else
     {
         DLog(@"%d-%d",in_msg->maincmd,in_msg->subcmd);
+        [_asyncSocket readDataToLength:4 withTimeout:-1 tag:SOCKET_READ_LENGTH];
     }
     return 0;
 }
