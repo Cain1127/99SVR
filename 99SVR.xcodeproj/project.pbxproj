@@ -15,6 +15,10 @@
 		188741821C9702DA002EF25A /* NSString+Regex.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417C1C9702DA002EF25A /* NSString+Regex.m */; };
 		188741831C9702DA002EF25A /* UIBarButtonItem+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */; };
 		188741871C97058F002EF25A /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188741861C97058F002EF25A /* TabBarController.m */; };
+		188968F81CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */; };
+		188968F91CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */; };
+		188968FA1CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */; };
+		188969081CAD828600C7E04E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188969071CAD828600C7E04E /* StoreKit.framework */; };
 		18987FF01CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
 		18987FF11CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
 		18987FF21CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
@@ -541,6 +545,9 @@
 		1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Extension.m"; sourceTree = "<group>"; };
 		188741851C97058F002EF25A /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		188741861C97058F002EF25A /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
+		188968F61CAD608100C7E04E /* InAppPurchasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InAppPurchasesViewController.h; sourceTree = "<group>"; };
+		188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InAppPurchasesViewController.m; sourceTree = "<group>"; };
+		188969071CAD828600C7E04E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		18987FEE1CAA17E6000E9F1C /* WonderfullView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonderfullView.h; sourceTree = "<group>"; };
 		18987FEF1CAA17E6000E9F1C /* WonderfullView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonderfullView.m; sourceTree = "<group>"; };
 		18987FF81CAA4A3E000E9F1C /* ViewPointCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewPointCell.h; sourceTree = "<group>"; };
@@ -1337,6 +1344,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				188969081CAD828600C7E04E /* StoreKit.framework in Frameworks */,
 				BBAF96CA1CA4DA0600C16305 /* libDTCoreText.a in Frameworks */,
 				18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */,
 				18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */,
@@ -1458,6 +1466,8 @@
 				18AAD5631C993CD100438E18 /* PaySelectViewController.m */,
 				18BF06B61C9A86B00071E524 /* RechargeResultViewController.h */,
 				18BF06B71C9A86B00071E524 /* RechargeResultViewController.m */,
+				188968F61CAD608100C7E04E /* InAppPurchasesViewController.h */,
+				188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */,
 			);
 			path = recharge;
 			sourceTree = "<group>";
@@ -2653,6 +2663,7 @@
 		BB9003C01C8D8395007E1C48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				188969071CAD828600C7E04E /* StoreKit.framework */,
 				18F971161C92A40A001B2575 /* JavaScriptCore.framework */,
 				18F971141C92971B001B2575 /* CoreMotion.framework */,
 				18AC140B1C8FB55600FDFF40 /* CoreTelephony.framework */,
@@ -2791,6 +2802,11 @@
 					BB25D7D31C1571B400314C1E = {
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = FMNJX2N6V6;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
+						};
 					};
 					BB25D7EC1C1571B400314C1E = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -3273,6 +3289,7 @@
 				BB63F5D31C2CC7A300A042E8 /* MJRefreshLegendHeader.m in Sources */,
 				BB63F6001C2CC7A300A042E8 /* EmojiView.m in Sources */,
 				BBAB82E71C719CCD00C6AC34 /* RightView.m in Sources */,
+				188968F81CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */,
 				BB63F60E1C2CC7A300A042E8 /* LoginTextField.m in Sources */,
 				BB9766051C88750300FAA5B7 /* CommentCell.m in Sources */,
 				BB88F3131C41461900C1F8D9 /* TextLiveViewController.m in Sources */,
@@ -3338,6 +3355,7 @@
 				18987FF11CAA17E6000E9F1C /* WonderfullView.m in Sources */,
 				189880001CAA4AC8000E9F1C /* VideoLivingCell.m in Sources */,
 				189880051CAA52F8000E9F1C /* RightImageButton.m in Sources */,
+				188968F91CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */,
 				BB25D7F21C1571B400314C1E /* _9SVRTests.m in Sources */,
 				18987FFB1CAA4A3E000E9F1C /* ViewPointCell.m in Sources */,
 			);
@@ -3351,6 +3369,7 @@
 				18987FF21CAA17E6000E9F1C /* WonderfullView.m in Sources */,
 				189880011CAA4AC8000E9F1C /* VideoLivingCell.m in Sources */,
 				189880061CAA52F8000E9F1C /* RightImageButton.m in Sources */,
+				188968FA1CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */,
 				BB25D7FD1C1571B400314C1E /* _9SVRUITests.m in Sources */,
 				18987FFC1CAA4A3E000E9F1C /* ViewPointCell.m in Sources */,
 			);

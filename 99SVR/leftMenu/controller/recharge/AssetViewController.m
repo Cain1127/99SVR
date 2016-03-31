@@ -11,8 +11,18 @@
 #import "UserInfo.h"
 #import "PaySelectViewController.h"
 
+#import "InAppPurchasesViewController.h"
+
 @interface AssetViewController ()
 
+/**
+ *  @author yangshengmeng, 16-03-31 22:03:07
+ *
+ *  @brief  用来区分是跳转到苹果内购页面：YES-跳转苹果内购页面进行采购金币，NO-跳转的是公司支付页面
+ *
+ *  @since  v1.0.0
+ */
+@property (nonatomic, assign) BOOL isInAppPurchases;
 
 @property (nonatomic,weak) UILabel *titleLable;
 @property (nonatomic,weak) UILabel *amountLabel;
@@ -25,6 +35,9 @@
 {
     [super viewDidLoad];
     self.txtTitle.text = @"我的资产";
+    
+    ///初始化时默认采用苹果内购
+    self.isInAppPurchases = YES;
     
     [self initSubviews];
 }
@@ -91,8 +104,20 @@
  */
 - (void)rechargeClick
 {
-    PaySelectViewController *paySelectVc = [[PaySelectViewController alloc] init];
-    [self.navigationController pushViewController:paySelectVc animated:YES];
+    
+    ///默认进入苹果的内购页面
+    if (self.isInAppPurchases)
+    {
+        
+        InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];
+        [self.navigationController pushViewController:inAppPurechasesVC animated:YES];
+        return;
+        
+    }
+    
+    ///进入公司集成的支付系统
+    PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+    [self.navigationController pushViewController:paySelectVC animated:YES];
 }
 
 
