@@ -16,6 +16,7 @@
 #import "GroupHeaderView.h"
 #import "UserInfo.h"
 #import "RoomTcpSocket.h"
+#import "MJRefresh.h"
 
 #define kGroupHeight 40
 
