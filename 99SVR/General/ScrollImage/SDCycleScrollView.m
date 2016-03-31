@@ -252,16 +252,13 @@ NSString * const ID = @"cycleCell";
 - (void)setImagePathsGroup:(NSArray *)imagePathsGroup
 {
     _imagePathsGroup = imagePathsGroup;
-    
     _totalItemsCount = self.infiniteLoop ? self.imagePathsGroup.count * 100 : self.imagePathsGroup.count;
-    
     if (imagePathsGroup.count != 1) {
         self.mainView.scrollEnabled = YES;
         [self setAutoScroll:self.autoScroll];
     } else {
         self.mainView.scrollEnabled = NO;
     }
-    
     [self setupPageControl];
     [self.mainView reloadData];
 }

@@ -96,17 +96,20 @@
     // 登录成功用户
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"collect.png" goClassName:@"VideoColletionViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"setting" goClassName:@"AssetViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的资料" icon:@"setting" goClassName:@"ProfileViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的资料" icon:@"mydata.png" goClassName:@"ProfileViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"AssetViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"personal_collection_icon" goClassName:@"VideoColletionViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"关注讲师" icon:@"personal_follow_icon" goClassName:@"VideoColletionViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的足迹" icon:@"personal_record_icon" goClassName:@"VideoColletionViewController"]];
+        
     }
     else  // 没登录
     {
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kLogin icon:@"mydata.png" goClassName:@"LoginViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kRegist icon:@"regist.png" goClassName:@"RegMobileViewController"]];
     }
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"kefu.png" goClassName:@"KefuCenterController"]];
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
     
     __weak LeftMenu *__self = self;
     dispatch_async(dispatch_get_main_queue(),

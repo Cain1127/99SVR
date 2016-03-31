@@ -15,7 +15,13 @@
 
 DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
+@property (nonatomic,copy) NSString *strEmail;
+
+@property (nonatomic,copy) NSString *strMobile;
+
 @property (nonatomic,copy) NSString *strOpenId;
+
+@property (nonatomic,copy) NSString *strBirth;
 
 @property (nonatomic,copy) NSString *strToken;
 
@@ -38,6 +44,8 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 @property (nonatomic,copy) NSString *strMd5Pwd;
 
 @property (nonatomic,copy) NSString *strName;
+
+@property (nonatomic,copy) NSString *strIntro;
 
 @property (nonatomic,assign) int nType;
 

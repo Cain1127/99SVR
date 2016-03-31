@@ -46,30 +46,30 @@
     _username = _txtName.text;
     if (_username.length==0)
     {
-        [_lblError setText:@"手机号不能为空"];
+        [ProgressHUD showError:@"手机号不能为空"];
         return ;
         
     }
     if (_username.length!=11)
     {
-        [_lblError setText:@"手机长度错误"];
+        [ProgressHUD showError:@"手机长度错误"];
         return ;
     }
     if(![DecodeJson getSrcMobile:_username])
     {
-        [_lblError setText:@"请输入正确的手机号"];
+        [ProgressHUD showError:@"请输入正确的手机号"];
         return ;
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)
     {
-        [_lblError setText:@"验证码不能为空"];
+        [ProgressHUD showError:@"验证码不能为空"];
         return ;
     }
     _password = _txtPwd.text;
     if([_password length]==0)
     {
-        [_lblError setText:@"密码不能为空"];
+        [ProgressHUD showError:@"密码不能为空"];
         return ;
     }
     [self.view makeToastActivity];
@@ -112,7 +112,7 @@
 {
     if(!strDate)
     {
-        [_lblError setText:@"系统异常"];
+        [ProgressHUD showError:@"系统异常"];
         return ;
     }
     NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",strMobile,strDate];
@@ -169,17 +169,17 @@
     NSString *strMobile = _txtName.text;
     if (strMobile.length==0)
     {
-       [_lblError setText:@"手机号不能为空"];
+       [ProgressHUD showError:@"手机号不能为空"];
        return ;
     }
     if (strMobile.length!=11)
     {
-        [_lblError setText:@"手机长度错误"];
+        [ProgressHUD showError:@"手机长度错误"];
         return ;
     }
     if(![DecodeJson getSrcMobile:strMobile])
     {
-        [_lblError setText:@"请输入正确的手机号"];
+        [ProgressHUD showError:@"请输入正确的手机号"];
         return ;
     }
     [self.view makeToastActivity];

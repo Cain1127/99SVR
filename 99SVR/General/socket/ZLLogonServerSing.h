@@ -32,6 +32,6 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
  *
  *  @param strNick <#strNick description#>
  */
-- (void)updateNick:(NSString *)strNick;
+- (void)updateNick:(NSString *)strNick intro:(NSString *)intro;
 
 @end

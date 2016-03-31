@@ -8,6 +8,7 @@
 
 #import "InputPwdViewController.h"
 #import "UserInfo.h"
+#import "ProgressHUD.h"
 #import "LSTcpSocket.h"
 #import "Toast+UIView.h"
 #import "BaseService.h"
@@ -48,21 +49,20 @@
     NSString *strMobile = _txtName.text;
     if ([strMobile length]==0)
     {
-        [_lblError setText:@"密码不能为空"];
+        [ProgressHUD showError:@"密码不能为空"];
         return ;
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)
     {
-        [_lblError setText:@"确认密码不能为空"];
+        [ProgressHUD showError:@"确认密码不能为空"];
         return ;
     }
     if (![strCode isEqualToString:strMobile])
     {
-        [_lblError setText:@"两次密码不一致"];
+        [ProgressHUD showError:@"两次密码不一致"];
         return ;
     }
-    [_lblError setText:@""];
     [self.view makeToastActivity];
     NSDictionary *parameters = @{@"phone":_strMobile,@"password":strMobile};
     NSString *strInfo = [NSString stringWithFormat:@"%@MApi/MobileFindPassword",kRegisterNumber];
@@ -78,38 +78,24 @@
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
              [__lsTcp loginServer:__self.strMobile pwd:__self.strPwd];
-             dispatch_async(dispatch_get_main_queue(),
-             ^{
-                 [__self.lblError setText:@"密码设置成功"];
-             });
-             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-             ^{
-                 [__self dismissViewControllerAnimated:YES completion:
-                  ^{
-                      [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_PASSWROD_VC object:nil];
-                  }];
-             });
+             [__self.navigationController popToRootViewControllerAnimated:YES];
+             [ProgressHUD showSuccess:@"重设密码成功"];
          }
          else
          {
              dispatch_async(dispatch_get_main_queue(),
-                            ^{
-                                [__self.lblError setText:[dict objectForKey:@"errmsg"]];
-                            });
+             ^{
+                 [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+             });
          }
          
      } fail:^(NSError *error) {
          dispatch_async(dispatch_get_main_queue(),
-                        ^{
-                            [__self.view hideToastActivity];
-                            [__self.lblError setText:@"连接服务器失败"];
-                        });
+         ^{
+             [__self.view hideToastActivity];
+             [ProgressHUD showError:@"连接服务器失败"];
+         });
      }];
-}
-
-- (void)navBack
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)initUIHead
@@ -118,15 +104,14 @@
 
     [self createLabelWithRect:Rect(30, 72, 80, 30)];
     _txtName = [self createTextField:Rect(30, 72, kScreenWidth-60, 30)];
-    [_txtName setPlaceholder:@"请输入密码"];
+    [_txtName setPlaceholder:@"请输入新密码"];
     
     [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
     _txtCode = [self createTextField:Rect(_txtName.x,_txtName.y+50,_txtName.width,_txtName.height)];
-    [_txtCode setPlaceholder:@"请确认密码"];
+    [_txtCode setPlaceholder:@"请再次输入密码"];
     
     _lblError = [[UILabel alloc] initWithFrame:Rect(30, _txtCode.y+40, kScreenWidth-60, 20)];
     [_lblError setFont:XCFONT(14)];
-    [_lblError setTextColor:[UIColor redColor]];
     [self.view addSubview:_lblError];
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -155,7 +140,7 @@
     [_txtName setDelegate:self];
     [_txtCode setDelegate:self];
     [_txtName becomeFirstResponder];
-    [self setTitleText:@"设置密码"];
+    [self setTitleText:@"设置新密码"];
 }
 
 - (void)didReceiveMemoryWarning {

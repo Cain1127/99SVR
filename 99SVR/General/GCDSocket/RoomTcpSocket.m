@@ -1319,9 +1319,8 @@
 //推送自己发送的信息到界面
 - (void)sendLocalChat:(NSString *)strMsg to:(int)nUser
 {
-//    strMsg = [DecodeJson replaceEmojiNewString:strMsg];
-    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color: #919191\" value=\"forme--%d\"> 你</spanp>",
-                         [UserInfo sharedUserInfo].nUserId];
+    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color: #919191\" value=\"forme--%d\">%@</spanp>",
+                         [UserInfo sharedUserInfo].nUserId,[UserInfo sharedUserInfo].strName];
     if (nUser!=0)
     {
         RoomUser *user = [_rInfo findUser:nUser];

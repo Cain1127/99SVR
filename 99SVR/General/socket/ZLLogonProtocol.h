@@ -28,10 +28,10 @@ class ZLConnectionListerner : public ConnectionListener
 
 class ZLHallListener: public HallListener
 {
-    void OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfileReq& req){}
+    void OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfileReq& req);
     void OnSetUserPwdResp(SetUserPwdResp& info){}
     void OnQueryRoomGateAddrResp(QueryRoomGateAddrResp& info){}
-    void OnGetUserMoreInfResp(GetUserMoreInfResp& info){}
+    void OnGetUserMoreInfResp(GetUserMoreInfResp& info);
     void OnUserExitMessageResp(ExitAlertResp& info){}
 };
 
@@ -122,7 +122,7 @@ public :
     /**
      *  修改昵称
      */
-    int updateNick(const char *cNick,const char *cBirthDat="19000101");
+    int updateNick(const char *cNick,const char *intro);
     /**
      *  第三方登录
      */

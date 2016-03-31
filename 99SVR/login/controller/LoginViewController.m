@@ -58,8 +58,8 @@
 
 -(void)initUIHead
 {
-    [self setTitle:@"登录"];
     [self.view setBackgroundColor:RGB(245, 245, 246)];
+    
     
     UIImageView *bodyView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenWidth*12/25)];
     [self.view addSubview:bodyView];
@@ -228,6 +228,9 @@
     [btnWeiChat addTarget:self action:@selector(weiChatLogin) forControlEvents:UIControlEventTouchUpInside];
     btnWeiChat.frame = Rect(kScreenWidth/2+62, 50, 44, 44);
     
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(popBack) image:@"back" highImage:@"back"];
+    [self.view addSubview:btnLeft];
+    [btnLeft setFrame:Rect(0,20,44,44)];
 }
 
 #pragma mark 微信登录请求
@@ -542,7 +545,7 @@
         dispatch_async(dispatch_get_main_queue(),
         ^{
             [__self.view hideToastActivity];
-            [ProgressHUD showError:strMsg];
+            [ProgressHUD showError:@"账号或密码错误，请重新输入"];
         });
     }
 }

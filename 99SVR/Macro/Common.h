@@ -32,8 +32,11 @@
 #define GBK_ENCODING CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
 
 #define kGROUP_REQUEST_HTTP @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=roomdata&client=android"
+
 #define kIMAGE_HTTP_URL @"http://roompic.99ducaijing.cn:8081/"
+
 #define kIMAGE_HTTP_HOME_URL @"http://172.16.41.99/images/roompic/"
+
 #define kHISTORY_HTTP_URL @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=history&userid="
 
 #define kVideoImageHeight kScreenWidth*9/16
@@ -50,11 +53,13 @@
 #define LBS_HTTP_HOST3 @"http://lbs3.99ducaijing.cn:2222/"
 #define LBS_HTTP_HOST4 @"http://testlbs.99ducaijing.cn:2222/"
 
-#define kPay_URL @"http://abc.99ducaijing.com/mobile/wap_cz"
+#define kPay_URL @"http://pcweb.99ducaijing.com/mobile/wap_cz"
 #define kGift_URL @"http://42.81.53.201/99admintest/index.php?m=Api&c=Gift"
 
 #define WeakObj(o) try{}@finally{} __weak typeof(o) o##Weak = o;
 #define StrongObj(o) autoreleasepool{} __strong typeof(o) o = o##Weak;
+
+//http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=script
 
 #define kGif_Image_URL "http://admin.99ducaijing.com/Uploads/Picture"
 #define kHome_Banner_URL "http://admin.99ducaijing.com/index.php?m=Api&c=Banner"
@@ -69,7 +74,7 @@
 #if 1
 
 #define kImage_TEXT_URL @"http://172.16.41.99/test/getimage.php?tid="
-#define kTEXT_GROUP_URL @"http://172.16.41.99/test/test.php?act=script"
+#define kTEXT_GROUP_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=script"
 #define kTEXT_NEW_DETAILS_URL @"http://172.16.41.99/viewpoint/index.php?s=/Index/getViewPoint/id/"
 #define kRegisterNumber @"http://api.99ducaijing.com/"
 

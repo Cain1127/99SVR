@@ -8,6 +8,7 @@
 
 #import "ForgetPwdViewController.h"
 #import "DecodeJson.h"
+
 #import "InputPwdViewController.h"
 #import "BaseService.h"
 #import "Toast+UIView.h"
@@ -38,7 +39,7 @@
         [_timer invalidate];
         return ;
     }
-    NSString *strInfo = [NSString stringWithFormat:@"重新发送(%d)",nSecond];
+    NSString *strInfo = [NSString stringWithFormat:@"%d s后重试",nSecond];
     [_btnCode setTitle:strInfo forState:UIControlStateNormal];
     nSecond--;
 }
@@ -58,24 +59,24 @@
     NSString *strMobile = _txtName.text;
     if (strMobile.length==0)
     {
-        [_lblError setText:@"手机号不能为空"];
+        [ProgressHUD showError:@"手机号不能为空"];
         return ;
     }
     if (strMobile.length!=11)
     {
-        [_lblError setText:@"手机长度错误"];
+        [ProgressHUD showError:@"手机长度错误"];
         return ;
     }
     if(![DecodeJson getSrcMobile:strMobile])
     {
-        [_lblError setText:@"请输入正确的手机号"];
+        [ProgressHUD showError:@"请输入正确的手机号"];
         return ;
     }
     [_lblError setText:@""];
     [self.view makeToastActivity];
     if(!strDate)
     {
-        [_lblError setText:@"手机异常"];
+        [ProgressHUD showError:@"手机异常"];
         return ;
     }
     NSString *strMd5 = [NSString stringWithFormat:@"action=find&account=%@&date=%@",strMobile,strDate];
@@ -85,34 +86,24 @@
     __weak ForgetPwdViewController *__self = self;
     [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
      {
+         [__self.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
              DLog(@"dict:%@",dict);
              [__self startTimer];
-             dispatch_async(dispatch_get_main_queue(),
-                ^{
-                    __self.btnCode.enabled = NO;
-                    [__self.view hideToastActivity];
-                    [__self.lblError setText:@"已发送验证码到目标手机"];
-                    [__self.txtCode becomeFirstResponder];
-                });
+             __self.btnCode.enabled = NO;
+             [ProgressHUD showError:@"已发送验证码到目标手机"];
+             [__self.txtCode becomeFirstResponder];
          }
          else
          {
-             dispatch_async(dispatch_get_main_queue(),
-                ^{
-                    [__self.view hideToastActivity];
-                    [__self.lblError setText:[dict objectForKey:@"errmsg"]];
-                });
+             [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
          }
      }fail:^(NSError *error)
      {
-         dispatch_async(dispatch_get_main_queue(),
-         ^{
              [__self.view hideToastActivity];
-             [__self.lblError setText:@"请求验证码失败"];
-         });
+         [ProgressHUD showError:@"请求验证码失败"];
      }];
 }
 
@@ -168,7 +159,6 @@
     
     _lblError = [[UILabel alloc] initWithFrame:Rect(30, _txtCode.y+50, kScreenWidth-60, 20)];
     [_lblError setFont:XCFONT(14)];
-    [_lblError setTextColor:[UIColor redColor]];
     [self.view addSubview:_lblError];
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -263,7 +253,7 @@
         {
             dispatch_async(dispatch_get_main_queue(),
             ^{
-                [__self.lblError setText:[dict objectForKey:@"errmsg"]];
+                [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
             });
         }
         
@@ -279,7 +269,7 @@
 {
     [super viewDidLoad];
     [self initUIHead];
-    [self setTitleText:@"修改密码"];
+    [self setTitleText:@"验证手机号"];
     NSDate *date = [NSDate date];
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"yyyyMMdd"];

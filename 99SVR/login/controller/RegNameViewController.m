@@ -44,24 +44,24 @@
     _username = _txtName.text;
     if ([_username length]==0)
     {
-        [_lblError setText:@"用户名不能为空"];
+        [ProgressHUD showError:@"用户名不能为空"];
         return ;
     }
     int flag = [self MatchLetter:_username];
     if (flag==0)
     {
-        [_lblError setText:@"用户名第一位必须是字母"];
+        [ProgressHUD showError:@"用户名第一位必须是字母"];
         return ;
     }
     else if(flag == -1)
     {
-        [_lblError setText:@"用户名只能包含数字、字母、下划线"];
+        [ProgressHUD showError:@"用户名只能包含数字、字母、下划线"];
         return ;
     }
     _password = _txtPwd.text;
     if ([_password length]==0)
     {
-        [_lblError setText:@"密码不能为空"];
+        [ProgressHUD showError:@"密码不能为空"];
         return ;
     }
     _lblError.text = @"";
@@ -273,6 +273,10 @@
 {
     if (_txtName == textField)
     {
+        if([string isEqualToString:@""])
+        {
+            return YES;
+        }
         NSString *strCode = @"[a-zA-Z0-9_\u4e00-\u9fa5]+$";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strCode];;
         if (range.location>16 || range.location+string.length>16 || ![predicate evaluateWithObject:string])

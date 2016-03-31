@@ -150,6 +150,9 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
     else
     {
         user.strName = [NSString stringWithCString:info.cuseralias().c_str() encoding:GBK_ENCODING];
+        
+        conn->SendMsg_GetUserMoreInfReq(user.nUserId);
+        
         [UserInfo sharedUserInfo].bIsLogin = YES;
         [UserInfo sharedUserInfo].nType = 1;
         [UserInfo sharedUserInfo].banding = info.bboundtel();
@@ -230,8 +233,7 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd,const char 
  *  @return 默认1
  */
 int ZLLogonProtocol::startOtherLogin(uint32 cloginid,const char *openid,const char *token){
-//    conn->RegisterMessageListener(login_listener);
-//    conn->RegisterConnectionListener(conn_listener);
+
     strUser = [NSString stringWithFormat:@"%d",cloginid];
     strPwd =@"";
     if (openid == NULL || token == NULL) {
@@ -265,19 +267,23 @@ int ZLLogonProtocol::updatePwd(const char *cOld,const char *cNew)
     return 1;
 }
 
-int ZLLogonProtocol::updateNick(const char *cNick,const char *cBirthDat)
+int ZLLogonProtocol::updateNick(const char *cNick,const char *intro)
 {
     if (cNick==NULL) {
         return 0;
     }
     SetUserProfileReq req;
+    memset(&req, 0, sizeof(req));
+
     UserInfo *info = [UserInfo sharedUserInfo];
     req.set_userid(info.nUserId);
     req.set_headid(0);
     req.set_cuseralias(cNick);
-    req.set_cbirthday(cBirthDat);
     req.set_ngender(1);
+    req.set_introduce(intro);
+    req.set_cbirthday("1989-09-09");
     conn->SendMsg_SetUserInfoReq(req);
+    
     return 1;
 }
 
@@ -301,6 +307,7 @@ ZLLogonProtocol::~ZLLogonProtocol()
 ZLLogonProtocol::ZLLogonProtocol()
 {
     conn = new LoginConnection();
+    
     conn->RegisterMessageListener(&login_listener);
     conn->RegisterConnectionListener(&conn_listener);
     conn->RegisterPushListener(&push_listener);
@@ -314,104 +321,27 @@ ZLLogonProtocol::ZLLogonProtocol()
  *  设置用户信息响应
  */
 
-//void ZLHallListener::OnSetUserProfileResp(SetUserProfileResp& info)
-//{
-
-//}
-/**
- *  设置用户密码响应
- */
-//void ZLHallListener::OnSetUserPwdResp(SetUserPwdResp& info)
-//{
-
-//}
-/**
- *  查询房间IP响应
- */
-/*
-void ZLHallListener::OnQueryRoomGateAddrResp(QueryRoomGateAddrResp& info)
+void ZLHallListener::OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfileReq& req)
 {
-    
+    DLog(@"error:%d",info.errorid());
+    switch (info.errorid()) {
+        case 0:
+        {
+            UserInfo *user = [UserInfo sharedUserInfo];
+            user.strIntro = [NSString stringWithCString:req.introduce().c_str() encoding:GBK_ENCODING];
+            user.strName = [NSString stringWithCString:req.cuseralias().c_str() encoding:GBK_ENCODING];
+            user.strBirth = [NSString stringWithCString:req.cbirthday().c_str() encoding:GBK_ENCODING];
+            DLog(@"intro:%@---strname:%@",user.strIntro,user.strName);
+        }
+        break;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_LOGIN_SET_PROFILE_VC object:@(0)];
 }
 
-void ZLHallListener::OnUserExitMessageResp(ExitAlertResp& info)
+void ZLHallListener::OnGetUserMoreInfResp(GetUserMoreInfResp& info)
 {
-    
+    UserInfo *user = [UserInfo sharedUserInfo];
+    user.strIntro = [NSString stringWithCString:info.autograph().c_str() encoding:GBK_ENCODING];
+    user.strMobile = [NSString stringWithCString:info.tel().c_str() encoding:GBK_ENCODING];
+    user.strBirth = [NSString stringWithCString:info.birth().c_str() encoding:GBK_ENCODING];
 }
-
-void ZLHallListener::OnHallMessageNotify(MessageNoty& info)
-{
-    
-}
-
-void ZLHallListener::OnMessageUnreadResp(MessageUnreadResp& info)
-{
-    
-}
-
-void ZLHallListener::OnInteractResp(std::vector<InteractResp>& infos)
-{
-    
-}
-
-void ZLHallListener::OnHallAnswerResp(std::vector<AnswerResp>& infos)
-{
-    
-}
-
-void ZLHallListener::OnViewShowResp(std::vector<ViewShowResp>& infos)
-{
-    
-}
-
-void ZLHallListener::OnTeacherFansResp(std::vector<TeacherFansResp>& infos)
-{
-    
-}
-
-void ZLHallListener::OnInterestResp(std::vector<InterestResp>& infos)
-{
-    
-}
-
-void ZLHallListener::OnUnInterestResp(std::vector<UnInterestResp>& infos)
-{
-    
-}
-
-void ZLHallListener::OnTextLivePointListResp(std::vector<TextLivePointListResp>& infos)
-{
-    
-}
-
-void ZLHallListener::OnSecretsListResp(HallSecretsListResp& infos)
-{
-    
-}
-
-void ZLHallListener::OnSystemInfoResp(HallSystemInfoListResp& infos)
-{
-    
-}
-
-void ZLHallListener::OnViewAnswerResp(ViewAnswerResp& info)
-{
-    
-}
-
-void ZLHallListener::OnInterestForResp(InterestForResp& info)
-{
-    
-}
-
-void ZLHallListener::OnFansCountResp(FansCountResp& info)
-{
-    
-}
-*/
-//**********************************************************************************
-//**********************************************************************************
-
-
-
-
