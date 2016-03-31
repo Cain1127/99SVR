@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <sys/time.h>
 #import "BaseService.h"
+#import "UserInfo.h"
 #import "MediaSocket.h"
 #import "GCDAsyncSocket.h"
 
@@ -186,15 +187,15 @@ typedef struct _tag_MediaFrameBuffer
     
     _gcdSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(0, 0)];
     
-    if (![_gcdSocket connectToHost:strIp onPort:nPort error:nil])
-//    if (![_gcdSocket connectToHost:@"61.155.190.248" onPort:819 error:nil])
+//    if (![_gcdSocket connectToHost:strIp onPort:nPort error:nil])
+    if (![_gcdSocket connectToHost:@"121.12.118.18" onPort:819 error:nil])
     {
         DLog(@"连接失败");
     }
 }
 /**
  *  发送helloe消息
- */
+*/
 - (void)sendHello
 {
     char szTemp[32]={0};
@@ -219,6 +220,7 @@ typedef struct _tag_MediaFrameBuffer
 {
     DLog(@"建立socket成功:ip:%@--port:%d",host,port);
     NSString *strInfo = [NSString stringWithFormat:@"%@:%d",host,port];
+    [UserInfo sharedUserInfo].strMediaAddr = host;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TCP_SOCKET_SEND_MEDIA object:strInfo];
     m_jittertime = 2;
     _nFall ++;

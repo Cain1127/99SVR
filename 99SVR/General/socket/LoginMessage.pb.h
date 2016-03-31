@@ -1075,6 +1075,10 @@ private:
 	uint32	_ngender;
 	string	_cbirthday;
 	string	_cuseralias;
+	string	_province;
+	string	_city;
+	int32	_introducelen;
+	string	_introduce;
 
 
 public:
@@ -1094,6 +1098,18 @@ public:
 	 inline string& cuseralias() { return _cuseralias; } const 
 	 inline void set_cuseralias(const string& value) { _cuseralias = value; }
 
+	 inline string& province() { return _province; } const 
+	 inline void set_province(const string& value) { _province = value; }
+
+	 inline string& city() { return _city; } const 
+	 inline void set_city(const string& value) { _city = value; }
+
+	 inline int32 introducelen() { return _introducelen; } const 
+	 inline void set_introducelen(const int32 value) { _introducelen = value; }
+
+	 inline string& introduce() { return _introduce; } const 
+	 inline void set_introduce(const string& value) { _introduce = value; }
+
 
 	int ByteSize() { return sizeof(protocol::tag_CMDSetUserProfileReq); }
 
@@ -1105,6 +1121,12 @@ public:
 		cmd->ngender = _ngender;
 		strcpy(cmd->cbirthday, _cbirthday.c_str());
 		strcpy(cmd->cuseralias, _cuseralias.c_str());
+		strcpy(cmd->province, _province.c_str());
+		strcpy(cmd->city, _city.c_str());
+		cmd->introducelen = _introducelen;
+		strcpy(cmd->introduce, _introduce.c_str());
+
+		LOG("ParseFromArray: %s:len:%d:cstr:%s clen:%d slen:%d", cmd->introduce, cmd->introducelen, _introduce.c_str(), strlen(_introduce.c_str()), strlen(cmd->introduce));
 	}
 
 	void ParseFromArray(void* data, int size)
@@ -1115,6 +1137,12 @@ public:
 		_ngender = cmd->ngender;
 		_cbirthday = cmd->cbirthday;
 		_cuseralias = cmd->cuseralias;
+		_province = cmd->province;
+		_city = cmd->city;
+		_introducelen = cmd->introducelen;
+		_introduce = cmd->introduce;
+
+
 	}
 
 	void Log()
@@ -1125,6 +1153,10 @@ public:
 		LOG("ngender = %d", _ngender);
 		LOG("cbirthday = %s", _cbirthday.c_str());
 		LOG("cuseralias = %s", _cuseralias.c_str());
+		LOG("province = %s", _province.c_str());
+		LOG("city = %s", _city.c_str());
+		LOG("introducelen = %d", _introducelen);
+		LOG("introduce = %s", _introduce.c_str());
 	}
 
 };
@@ -3647,6 +3679,7 @@ private:
 
 	uint32	_userid;
 	string	_sessiontoken;
+	string	_validtime;
 
 
 public:
@@ -3657,6 +3690,9 @@ public:
 	 inline string& sessiontoken() { return _sessiontoken; } const 
 	 inline void set_sessiontoken(const string& value) { _sessiontoken = value; }
 
+	 inline string& validtime() { return _validtime; } const 
+	 inline void set_validtime(const string& value) { _validtime = value; }
+
 
 	int ByteSize() { return sizeof(protocol::tag_CMDSessionTokenResp); }
 
@@ -3665,6 +3701,7 @@ public:
 		protocol::tag_CMDSessionTokenResp* cmd = (protocol::tag_CMDSessionTokenResp*) data;
 		cmd->userid = _userid;
 		strcpy(cmd->sessiontoken, _sessiontoken.c_str());
+		strcpy(cmd->validtime, _validtime.c_str());
 	}
 
 	void ParseFromArray(void* data, int size)
@@ -3672,6 +3709,7 @@ public:
 		protocol::tag_CMDSessionTokenResp* cmd = (protocol::tag_CMDSessionTokenResp*) data;
 		_userid = cmd->userid;
 		_sessiontoken = cmd->sessiontoken;
+		_validtime = cmd->validtime;
 	}
 
 	void Log()
@@ -3679,6 +3717,7 @@ public:
 		LOG("--------Receive message: SessionTokenResp---------");
 		LOG("userid = %d", _userid);
 		LOG("sessiontoken = %s", _sessiontoken.c_str());
+		LOG("validtime = %s", _validtime.c_str());
 	}
 
 };
@@ -4103,8 +4142,10 @@ class GetUserMoreInfResp
 private:
 
 	string	_tel;
+	string	_birth;
+	string	_email;
 	int32	_autographlen;
-	string	_content;
+	string	_autograph;
 
 
 public:
@@ -4112,11 +4153,17 @@ public:
 	 inline string& tel() { return _tel; } const 
 	 inline void set_tel(const string& value) { _tel = value; }
 
+	 inline string& birth() { return _birth; } const 
+	 inline void set_birth(const string& value) { _birth = value; }
+
+	 inline string& email() { return _email; } const 
+	 inline void set_email(const string& value) { _email = value; }
+
 	 inline int32 autographlen() { return _autographlen; } const 
 	 inline void set_autographlen(const int32 value) { _autographlen = value; }
 
-	 inline string& content() { return _content; } const 
-	 inline void set_content(const string& value) { _content = value; }
+	 inline string& autograph() { return _autograph; } const 
+	 inline void set_autograph(const string& value) { _autograph = value; }
 
 
 	int ByteSize() { return sizeof(protocol::tag_CMDGetUserMoreInfResp_t); }
@@ -4125,24 +4172,30 @@ public:
 	{
 		protocol::tag_CMDGetUserMoreInfResp_t* cmd = (protocol::tag_CMDGetUserMoreInfResp_t*) data;
 		strcpy(cmd->tel, _tel.c_str());
+		strcpy(cmd->birth, _birth.c_str());
+		strcpy(cmd->email, _email.c_str());
 		cmd->autographlen = _autographlen;
-		strcpy(cmd->content, _content.c_str());
+		strcpy(cmd->autograph, _autograph.c_str());
 	}
 
 	void ParseFromArray(void* data, int size)
 	{
 		protocol::tag_CMDGetUserMoreInfResp_t* cmd = (protocol::tag_CMDGetUserMoreInfResp_t*) data;
 		_tel = cmd->tel;
+		_birth = cmd->birth;
+		_email = cmd->email;
 		_autographlen = cmd->autographlen;
-		_content = cmd->content;
+		_autograph = cmd->autograph;
 	}
 
 	void Log()
 	{
 		LOG("--------Receive message: GetUserMoreInfResp---------");
 		LOG("tel = %s", _tel.c_str());
+		LOG("birth = %s", _birth.c_str());
+		LOG("email = %s", _email.c_str());
 		LOG("autographlen = %d", _autographlen);
-		LOG("content = %s", _content.c_str());
+		LOG("autograph = %s", _autograph.c_str());
 	}
 
 };

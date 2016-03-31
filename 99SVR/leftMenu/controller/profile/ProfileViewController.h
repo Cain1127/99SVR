@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProfileViewController :CustomViewController
+@interface ProfileViewController : CustomViewController
 
 @end

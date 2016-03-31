@@ -10,7 +10,7 @@ class HallListener
 
 public:
 
-	virtual void OnSetUserProfileResp(SetUserProfileResp& info) = 0;
+	virtual void OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfileReq& req) = 0;
 	virtual void OnSetUserPwdResp(SetUserPwdResp& info) = 0;
 	virtual void OnQueryRoomGateAddrResp(QueryRoomGateAddrResp& info) = 0;
 	virtual void OnGetUserMoreInfResp(GetUserMoreInfResp& info) = 0;

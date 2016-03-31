@@ -15,7 +15,7 @@
 
 #if (defined WIN32) || (defined WIN64)
 #define WIN
-#include "stdafx.h"
+
 #pragma warning(disable:4996)
 #pragma warning(disable:4200)
 #endif

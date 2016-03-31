@@ -1422,9 +1422,10 @@
     {
         if ([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Connection refused"])
         {
-//            [_aryChat addObject:@"[系统消息]加载失败,重连房间"];
+            int nUserid = [UserInfo sharedUserInfo].nUserId;
+            NSString *strErrlog =[NSString stringWithFormat:@"ReportItem=IntoRoom&ClientType=3&UserId=%d&ServerIP=%@&Error=Connection_refused",nUserid,_strRoomAddress];
+            [DecodeJson postPHPServerMsg:strErrlog];
             [self addChatInfo:@"[系统消息]加载失败,重连房间"];
-            
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
             [self ReConnectSocket];
         }
@@ -1434,7 +1435,6 @@
         }
         else if([err.domain isEqualToString:@"NSPOSIXErrorDomain"] &&_nFall < 3)
         {
-//            [_aryChat addObject:@"[系统消息]网络中断,请检测手机网络"];
             [self addChatInfo:@"[系统消息]网络中断,请检测手机网络"];
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
             [self reConnectRoomInfo];

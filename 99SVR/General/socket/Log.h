@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "platform.h"
 
 #define DEBUG
@@ -9,11 +10,9 @@
 #include <android/log.h>
 #define LOG(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native", __VA_ARGS__))
 #else
-#define LOG(fmt, ...) printf(("************* %s [Line %d] \n" fmt),__PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#define LOG(fmt, ...) printf(("%s [Line %d] \n" fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 #endif
 #else
-
 #define LOG(fmt, ...)
-
 #endif
 

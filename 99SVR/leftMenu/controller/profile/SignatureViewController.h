@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CustomViewController.h"
 
 @interface SignatureViewController : UIViewController
 

@@ -101,8 +101,8 @@
     [_btnTitle setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     if (_model)
     {
-        NSString *url = [NSString stringWithFormat:@"%@%@",kImage_TEXT_URL,_model.teacherId];
-        [_btnTitle setTitle:_model.roomName forState:UIControlStateNormal];
+        NSString *url = [NSString stringWithFormat:@"%@%@",kImage_TEXT_URL,_model.teacherid];
+        [_btnTitle setTitle:_model.roomname forState:UIControlStateNormal];
         [_btnTitle sd_setImageWithURL:[NSURL URLWithString:url]
                              forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"logo"]];
     }
@@ -214,7 +214,7 @@
     [super viewDidLoad];
     if(_model)
     {
-        [_textSocket connectRoom:[_model.rid intValue]];
+        [_textSocket connectRoom:[_model.nvcbid intValue]];
     }
     else
     {

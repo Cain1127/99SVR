@@ -84,13 +84,13 @@
 
 - (void)setTextRoomModel:(TextRoomModel *)teacher
 {
-    NSString *url = [NSString stringWithFormat:@"%@%@",kImage_TEXT_URL,teacher.teacherId];
+    NSString *url = [NSString stringWithFormat:@"%@%@",kImage_TEXT_URL,teacher.teacherid];
     [_btnClick setTitle:teacher.ncount forState:UIControlStateNormal];
     [_imgView sd_setImageWithURL:[NSURL URLWithString:url]
                 placeholderImage:[UIImage imageNamed:@"logo"]];
-    [_lblRoomId setText:teacher.rid];
-    _lblName.text = teacher.roomName;
-    _lblContent.text = teacher.introduce;
+    [_lblRoomId setText:teacher.nvcbid];
+    _lblName.text = teacher.roomname;
+    _lblContent.text = teacher.clabel;
 }
 
 @end

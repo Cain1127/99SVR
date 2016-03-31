@@ -16,5 +16,4 @@
 
 - (id)initWithSocket:(TextTcpSocket *)tcpSocket viewID:(int64_t)viewId;
 
-
 @end

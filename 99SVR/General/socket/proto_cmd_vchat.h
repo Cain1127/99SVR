@@ -176,11 +176,15 @@ namespace protocol
 	//设置用户资料
 	typedef struct tag_CMDSetUserProfileReq
 	{
-		uint32 userid;                 //id
-		uint32 headid;
-		byte   ngender;                      //性别
-		char   cbirthday[BIRTHLEN];          //生日
-		char   cuseralias[NAMELEN];         //用户昵称
+		uint32 userid;                 //用户ID
+		uint32 headid;                 //用户头像ID
+		byte   ngender;                //性别
+		char   cbirthday[BIRTHLEN];    //生日
+		char   cuseralias[NAMELEN];    //用户昵称	
+		char   province[16];           //省份
+		char   city[16];               //城市
+		int16  introducelen;           //个人签名长度
+		char   introduce[0];             //消息内容，格式：个人签名
 	}CMDSetUserProfileReq_t;
 
 	typedef struct tag_CMDSetUserProfileResp
@@ -575,6 +579,7 @@ namespace protocol
 	{
 		uint32  userid;
 		char    sessiontoken[33];
+		char    validtime[32];
 	}CMDSessionTokenResp_t;
 
 	typedef struct tag_CMDQueryRoomGateAddrReq
@@ -637,9 +642,11 @@ namespace protocol
 
 	typedef struct tag_CMDGetUserMoreInfResp_t
 	{
-		char tel[32];                   //手机号码
-		int16  autographlen;            //个性签名长度
-		char   content[0];              //个性签名内容
+		char   tel[32];                   //手机号码
+		char   birth[16];                 //生日
+		char   email[40];                 //email
+		int16  autographlen;              //个性签名长度
+		char   autograph[0];                //个性签名内容
 	}CMDGetUserMoreInfResp_t;
 
 	typedef struct tag_CMDRoomTeacherOnMicResp

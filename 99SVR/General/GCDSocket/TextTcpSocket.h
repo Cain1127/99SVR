@@ -18,6 +18,7 @@
 @property (nonatomic,strong) NSMutableArray *aryComment;
 @property (nonatomic,strong) NSMutableArray *aryVIP;
 @property (nonatomic,strong) NSMutableArray *aryHistory;
+@property (nonatomic,strong) NSMutableArray *aryEsoter;
 
 - (void)reconnectTextRoom;
 
@@ -114,5 +115,13 @@
  *  @param ideaId 观点id
  */
 - (void)reqIdeaDetails:(int)nIndex count:(int)nCount ideaId:(int64_t)ideaId;
+/**
+ *  请求个人秘籍信息
+ */
+- (void)reqEsotericaList:(int)nIndex count:(int)nCount teach:(int64_t)tid;
+/**
+ *  请求个人秘籍所有信息
+ */
+- (void)reqSecretALl;
 
 @end

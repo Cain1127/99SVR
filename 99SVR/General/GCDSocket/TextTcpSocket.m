@@ -8,6 +8,7 @@
 
 #import "TextTcpSocket.h"
 #import "GCDAsyncSocket.h"
+#import "TextEsoterModel.h"
 #import "textChatModel.h"
 #import "IdeaDetails.h"
 #import "HistoryTextModel.h"
@@ -230,19 +231,64 @@
             [self respDayHistoryList:pNewMsg];
         }
         break;
+        case Sub_Vchat_TextRoomSecretsPHPNoty:
+        {
+            DLog(@"添加秘籍通知");
+            CMDTextRoomSecretsPHPResq_t *resp = (CMDTextRoomSecretsPHPResq_t*)pNewMsg;
+            DLog(@"单次订阅价格:%d",resp->prices);
+        }
+        break;
         case Sub_Vchat_TextLiveUserExitRes:
         {
             DLog(@"退出房间成功");
             [self closeSocket];
         }
         break;
-        default:
+        case Sub_Vchat_TextRoomSecretsTotalResp:
         {
+            CMDTextRoomSecretsTotalResp_t *resp  = (CMDTextRoomSecretsTotalResp_t *)pNewMsg;
+            DLog(@"秘籍总数:%d",resp->secretsnum);
         }
+        break;
+        case Sub_Vchat_TextRoomSecretsListResp:
+        {
+            [self respSecretsResp:pNewMsg length:nMsgLen];
+        }
+        break;
+        default:
+        {}
         break;
     }
     free(pNewMsg);
     [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
+}
+
+/**
+ *  个人秘籍整体信息解析
+ *
+ *  @return
+ */
+- (void)respSecretsResp:(char *)pData length:(int)all
+{
+    CMDTextRoomListHead_t head;
+    memcpy(&head,pData,sizeof(CMDTextRoomListHead_t));
+    int temp = sizeof(CMDTextRoomListHead_t);
+//    DLog(@"订阅需要的价格:%d",resp->prices);
+    int cmd_size = sizeof(CMDTextRoomSecretsListResp_t);
+    while (temp!=all) {
+        CMDTextRoomSecretsListResp_t resp;
+        memcpy(&resp,pData+temp,cmd_size);
+        temp += cmd_size;
+        int nSize = resp.coverlittlelen+resp.titlelen+resp.textlen+1;
+        char szBuf[nSize];
+        memset(szBuf, 0, nSize);
+        memcpy(szBuf,pData+temp,nSize-1);
+        temp += (nSize-1);
+        TextEsoterModel *esoter = [TextEsoterModel createModel:&resp buf:szBuf];
+        DLog(@"cover:%@--title:%@--content:%@",esoter.cover,esoter.title,esoter.content);
+        [_aryEsoter addObject:esoter];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_SECRET_LIST_VC object:nil];
 }
 
 #pragma mark 请求观点详细记录
@@ -1075,8 +1121,8 @@
 //    NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
 //    [self connectTextServer:strAddr port:nPort];
     [self closeSocket];
-//    [self connectTextServer:@"122.13.81.62" port:22806];
-    [self connectTextServer:@"172.16.41.96" port:22806];
+    [self connectTextServer:@"122.13.81.62" port:22806];
+//    [self connectTextServer:@"172.16.41.96" port:22806];
 //    [self connectTextServer:@"121.33.236.180" port:22806];
 }
 
@@ -1230,5 +1276,42 @@
 {
     [_aryComment removeAllObjects];
 }
+/**
+ *  请求个人秘籍信息
+ */
+- (void)reqEsotericaList:(int)nIndex count:(int)nCount teach:(int64_t)tid
+{
+    int nLength = sizeof(CMDTextRoomLiveListReq_t);
+    char szBuf[nLength];
+    CMDTextRoomLiveListReq_t *req= (CMDTextRoomLiveListReq_t *)szBuf;
+    long  randomNum = rand();
+    srand((unsigned int)time(NULL));
+    if (!_aryEsoter) {
+        _aryEsoter = [NSMutableArray array];
+    }
+    if (nIndex==0) {
+        [_aryEsoter removeAllObjects];
+    }
+    sprintf(req->uuid,"%ld", randomNum);
+    req->vcbid = _roomid;
+    req->userid = kUserInfoId;
+    req->teacherid = _teacher.teacherid;
+    req->type= 5;
+    req->messageid = 0;
+    req->count = nCount;
+    [self sendMessage:szBuf size:nLength version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomSecretsListReq];
+}
+/**
+ *  请求个人秘籍所有信息
+ */
+- (void)reqSecretALl
+{
+    CMDTextRoomSecretsTotalReq_t req= {0};
+    req.vcbid = _roomid;
+    req.userid = kUserInfoId;
+    req.teacherid = _teacher.teacherid;
+    [self sendMessage:(char *)&req size:sizeof(CMDTextRoomSecretsTotalReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomSecretsTotalReq];
+}
+
 
 @end

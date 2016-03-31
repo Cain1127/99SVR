@@ -26,6 +26,8 @@
 {
     [super viewDidLoad];
     
+//    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
     _headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
     _headView.backgroundColor = kNavColor;

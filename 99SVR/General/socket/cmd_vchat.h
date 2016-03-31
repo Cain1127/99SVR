@@ -7,6 +7,67 @@
 //#define __SWITCH_SERVER2__
 //-----------------------------------------------------------
 #pragma pack(1)
+/**
+ *  个人秘籍请求
+ */
+typedef struct tag_CMDTextRoomSecretsTotalReq
+{
+    uint32 vcbid;                  //房间ID
+    uint32 userid;                 //用户ID
+    uint32 teacherid;              //讲师ID
+}CMDTextRoomSecretsTotalReq_t;
+/**
+ *  个人秘籍响应列表
+ */
+typedef struct tag_CMDTextRoomSecretsTotalResp
+{
+    uint32 vcbid;                  //房间ID
+    uint32 userid;                 //用户ID
+    uint32 teacherid;              //讲师ID
+    int32  secretsnum;             //秘籍总数
+    int32  ownsnum;                //已购买秘籍总数
+    int8   bStudent;               //是否徒弟（0-否；1-是）
+}CMDTextRoomSecretsTotalResp_t;
+
+typedef struct tag_CMDTextRoomListHead
+{
+    char  uuid[16];                //唯一标识头
+    uint32 vcbid;                  //房间ID
+    uint32 userid;                 //用户ID
+    uint32 teacherid;              //讲师ID
+}CMDTextRoomListHead_t;
+
+//个人秘籍列表
+typedef struct tag_CMDTextRoomSecretsListResp
+{
+    int32  secretsid;              //秘籍ID
+    int16  coverlittlelen;         //封面小图名称长度
+    int16  titlelen;               //秘籍标题长度
+    int16  textlen;                //秘籍简介长度
+    uint64 messagetime;            //时间(yyyymmddhhmmss)
+    int32  buynums;                //订阅人数
+    int32  prices;                 //单次订阅所需玖玖币
+    int8   buyflag;                //是否购买：-已购买；-未购买；
+    int32  goodsid;                //商品ID
+    char  content[0];              //消息内容，格式：封面小图名称+秘籍标题+秘籍简介
+}CMDTextRoomSecretsListResp_t;
+
+typedef struct tag_CMDTextRoomSecretsPHPResq
+{
+    uint32 vcbid;                  //房间ID
+    uint32 teacherid;              //请求用户ID
+    int64  messageid;              //消息ID
+    int64  businessid;             //秘籍ID
+    int8   viewtype;               //操作类型：1-新增；2-修改；3-删除；
+    int16  coverlittlelen;         //封面小图名称长度
+    int16  titlelen;               //秘籍标题长度
+    int16  textlen;                //秘籍简介长度
+    uint64 messagetime;            //时间(yyyymmddhhmmss)
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
+    int32  prices;                 //单次订阅所需玖玖币
+    int32  goodsid;                //商品ID
+    char  content[0];              //消息内容，格式：秘籍标题+秘籍简介
+}CMDTextRoomSecretsPHPResq_t;
 
 typedef struct tag_CMDSessionTokenResp
 {
@@ -1720,6 +1781,7 @@ typedef struct tag_CMDTextRoomTeacherNoty
 //加载直播记录请求
 typedef struct tag_CMDTextRoomLiveListReq
 {
+    char uuid[16];
     uint32 vcbid;                  //房间ID
     uint32 userid;                 //用户ID
     uint32 teacherid;              //讲师ID

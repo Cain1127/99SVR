@@ -1,90 +1,10 @@
+#include "stdafx.h"
 #include "platform.h"
-
+#include "Http.h"
 #include "LoginConnection.h"
 #include "Thread.h"
 #include "proto_cmd_vchat.h"
 
-/*
-char lbss[3][10][20];
-int lbs_counter[3];
-bool islogining = false;
-
-void parse_ip_port(char* s, char* ip, short& port)
-{
-	char* e = strchr(s, ':');
-	int len = e - s;
-	memcpy(ip, s, len);
-	ip[len] = 0;
-
-	port = atoi(e + 1);
-}
-
-void testlbs()
-{
-	//http://hall.99ducaijing.cn:8081/roomdata/room.php?act=roomdata
-	char recvbuf[HTTP_RECV_BUF_SIZE];
-	Http http;
-
-	memset(lbss, 0, sizeof(lbss));
-	memset(lbs_counter, 0, sizeof(lbs_counter));
-
-	int ret = http.GetString("lbs1.99ducaijing.cn", 2222, "/tygetweb", recvbuf);
-	//int ret = http.GetString("lbs1.99ducaijing.cn", 2222, "/tygetgate", recvbuf);
-	//int ret = http.GetString("hall.99ducaijing.cn", 8081, "/roomdata/room.php?act=roomdata", recvbuf);
-	char* content = strstr(recvbuf, "\r\n\r\n");
-	if (content != NULL)
-	{
-		LOG("%s", recvbuf);
-		content += 4;
-		//char s[] = "Golden Global   View,disk * desk";
-		char* end = strchr(content, '|');
-		if (end != NULL)
-		{
-			*end = '\0';
-		}
-
-		const char *d = ",";
-		char *p;
-		p = strtok(content, d);
-		int stype = -1;
-		while (p)
-		{
-			//printf("%s\n", p);
-
-			if (strlen(p) == 1)
-			{
-				stype = p[0] - '0';
-				LOG("stype:%d", stype);
-			}
-			else
-			{
-				if (stype >= 0 && stype <= 2)
-				{
-					int n = lbs_counter[stype];
-					strcpy(lbss[stype][n], p);
-					LOG("lbs:%d:%s", n, lbss[stype][n]);
-
-					char ip[20];
-					short port;
-					parse_ip_port(lbss[stype][n], ip, port);
-					LOG("ip:%s port:%d", ip, port);
-
-					if (islogining == false)
-					{
-						islogining = true;
-
-					}
-
-					lbs_counter[stype]++;
-				}
-			}
-
-			p = strtok(NULL, d);
-		}
-	}
-
-}
-*/
 
 LoginConnection::LoginConnection() :
 login_listener(NULL), hall_listener(NULL), push_listener(NULL)
@@ -116,40 +36,42 @@ void LoginConnection::SendMsg_Ping()
 	SEND_MESSAGE2(Sub_Vchat_ClientPing, CMDClientPing_t, &ping);
 }
 
-void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
+void LoginConnection::on_do_connected()
 {
-	//121.12.118.32:7301
-	//120.197.248.11:7401  ÒÆ¶¯
-	// "login1.99ducaijing.cn", 7401
-//	connect("121.12.118.32", 7301);
-//	int ret = connect("121.12.118.32", 7301);
-	int ret = connect("login1.99ducaijing.cn", 7401);
-	if (ret != 0)
-		return;
-
 	SendMsg_Hello();
-	SEND_MESSAGE(Sub_Vchat_logonReq4, req);
 
-	nmobile = req.nmobile();
-	version = req.nversion();
+	if (reqv == 4)
+	{
+		SEND_MESSAGE(Sub_Vchat_logonReq4, req4);
+		nmobile = req4.nmobile();
+		version = req4.nversion();
+	}
+	else
+	{
+		SEND_MESSAGE(Sub_Vchat_logonReq5, req5);
+		nmobile = req5.nmobile();
+		version = req5.nversion();
+	}
 
 	start_read_thread();
 }
 
+void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
+{
+
+	req4 = req;
+	reqv = 4;
+
+	conenct_from_lbs();
+
+
+}
+
 void LoginConnection::SendMsg_LoginReq5(UserLogonReq5& req)
 {
-	int ret = connect("login1.99ducaijing.cn", 7401);
-//	int ret = connect("121.12.118.32", 7301);
-	if (ret != 0)
-		return;
+	req5 = req;
+	reqv = 5;
 
-	SendMsg_Hello();
-	SEND_MESSAGE(Sub_Vchat_logonReq5, req);
-
-	nmobile = req.nmobile();
-	version = req.nversion();
-
-	start_read_thread();
 }
 
 void LoginConnection::SendMsg_SessionTokenReq(uint32 userid)
@@ -162,6 +84,8 @@ void LoginConnection::SendMsg_SessionTokenReq(uint32 userid)
 
 void LoginConnection::SendMsg_SetUserInfoReq(SetUserProfileReq& req)
 {
+	req.set_userid(logonuser.userid());
+	req.set_introducelen(req.introduce().size() + 1);
 	SEND_MESSAGE(Sub_Vchat_SetUserProfileReq, req);
 }
 
@@ -269,7 +193,6 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 	static int qx_ids_count = 0;
 	static int qx_actions_count = 0;
 
-	//ÁÐ±ívector
 	static std::vector<InteractResp> g_vec_InteractResp;
 	static std::vector<AnswerResp> g_vec_AnswerResp;
 	static std::vector<ViewShowResp> g_vec_ViewShowResp;
@@ -284,6 +207,8 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 	int sub_cmd = head->subcmd;
 	int body_len = head->length - sizeof(COM_MSG_HEADER);
 
+	LOG("message+++++++:%d", sub_cmd);
+
 	switch (sub_cmd)
 	{
 
@@ -294,7 +219,8 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 
 	case Sub_Vchat_logonSuccess2:
 		logonuser.ParseFromArray(body, logonuser.ByteSize());
-		login_listener->OnLogonSuccess(logonuser);
+		if (login_listener != NULL)
+			login_listener->OnLogonSuccess(logonuser);
 		break;
 
 	case Sub_Vchat_RoomGroupListBegin:
@@ -310,7 +236,8 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		break;
 
 	case Sub_Vchat_RoomGroupListFinished:
-		login_listener->OnRoomGroupList(room_groups, room_groups_count);
+		if (login_listener != NULL)
+			login_listener->OnRoomGroupList(room_groups, room_groups_count);
 		delete[] room_groups;
 		break;
 
@@ -322,7 +249,8 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 			qx_ids[i].ParseFromArray(body, qx_ids[i].ByteSize());
 			body += qx_ids[i].ByteSize();
 		}
-		login_listener->OnQuanxianId2List(qx_ids, qx_ids_count);
+		if (login_listener != NULL)
+			login_listener->OnQuanxianId2List(qx_ids, qx_ids_count);
 		delete[] qx_ids;
 		break;
 
@@ -347,7 +275,8 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		break;
 
 	case Sub_VChat_QuanxianAction2ListFinished:
-		login_listener->OnQuanxianAction2List(qx_actions, qx_actions_count);
+		if (login_listener != NULL)
+			login_listener->OnQuanxianAction2List(qx_actions, qx_actions_count);
 		delete[] qx_actions;
 		break;
 
@@ -356,11 +285,22 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		break;
 
 	case Sub_Vchat_logonFinished:
-		login_listener->OnLogonFinished();
+		if (login_listener != NULL)
+			login_listener->OnLogonFinished();
 		break;
 
 	case Sub_Vchat_SetUserProfileResp:
-		ON_MESSAGE(hall_listener, SetUserProfileResp, OnSetUserProfileResp)
+	{
+		SetUserProfileResp _SetUserProfileResp;
+		_SetUserProfileResp.ParseFromArray(body, _SetUserProfileResp.ByteSize());
+		body += _SetUserProfileResp.ByteSize();
+
+		SetUserProfileReq _SetUserProfileReq;
+		_SetUserProfileReq.ParseFromArray(body, _SetUserProfileReq.ByteSize());
+
+		hall_listener->OnSetUserProfileResp(_SetUserProfileResp, _SetUserProfileReq);
+	}
+		//ON_MESSAGE(hall_listener, SetUserProfileResp, OnSetUserProfileResp)
 		break;
 
 	case Sub_Vchat_SetUserPwdResp:
@@ -506,6 +446,7 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		*/
 
 	case Sub_Vchat_ClientNotify:
+	case Sub_Vchat_HitGoldEgg_ToClient_Noty:
 		LOG("Sub_Vchat_ClientNotify");
 		dispatch_push_message(body);
 		break;
@@ -552,14 +493,14 @@ void LoginConnection::dispatch_push_message(void* body)
 		}
 		else if (push->versionflag == 2)
 		{
-			if (!(push->version >= version))
+			if (!(version >= push->version))
 			{
 				return;
 			}
 		}
 		else if (push->versionflag == 3)
 		{
-			if (!(push->version <= version))
+			if (!(version <= push->version))
 			{
 				return;
 			}

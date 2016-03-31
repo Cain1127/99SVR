@@ -8,6 +8,7 @@
 
 #import "HomeViewController.h"
 #import "ZLTabBar.h"
+#import "NavigationViewController.h"
 #import "NSJSONSerialization+RemovingNulls.h"
 #import "BaseService.h"
 #import "IndexViewController.h"
@@ -174,7 +175,7 @@ typedef enum : NSUInteger
 
 - (void)showLeftView
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
+    [self leftItemClick];
 }
 
 #pragma mark -

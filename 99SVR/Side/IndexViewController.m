@@ -197,7 +197,7 @@
 
 - (void)showLeftView
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
+    [self leftItemClick];
 }
 
 - (void)viewDidLoad
@@ -284,7 +284,7 @@
 
 - (void)initUIHead
 {
-    NSArray *aryMen = @[@"热门推荐",@"财经在线",@"我的足迹"];
+    NSArray *aryMen = @[@"实力新秀",@"财经在线",@"我的足迹"];
     _group = [[GroupView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44) ary:aryMen];
     [self.view addSubview:_group];
     _group.delegate = self;

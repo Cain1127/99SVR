@@ -15,7 +15,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    [self setBackgroundColor:UIColorFromRGB(0x427ede)];
+    [self setBackgroundColor:kNavColor];
     _imgHead = [[UIImageView alloc] initWithFrame:Rect(15, 12, 65, 65)];
     [self addSubview:_imgHead];
     _imgHead.layer.masksToBounds = YES;
