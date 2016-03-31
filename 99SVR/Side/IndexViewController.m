@@ -292,7 +292,7 @@
     _group = [[GroupView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44) ary:aryMen];
     [self.view addSubview:_group];
     _group.delegate = self;
-    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0,_group.y+_group.height, kScreenWidth, kScreenHeight-_group.y-_group.height)];
+    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0,_group.y+_group.height, kScreenWidth, kScreenHeight-64-_group.y-_group.height)];
     [self.view addSubview:_scrollView];
     
     _scrollView.clipsToBounds = YES;

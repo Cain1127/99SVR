@@ -108,31 +108,28 @@
 //        [self.layer addAnimation:[self groupAnimation:myArray durTimes:3.0f Rep:MAXFLOAT] forKey:nil];
     
     //路径动画。
-        CGMutablePathRef myPah = CGPathCreateMutable();
-        DLog(@"self.y:%f",self.y);
-        CGFloat yOrigin = self.y+25;
-        CGPathMoveToPoint(myPah, nil,self.x,yOrigin);
-        CGPathAddCurveToPoint(myPah, nil, self.x, yOrigin, kScreenWidth/2, yOrigin, kScreenWidth, yOrigin);//这里的是控制点。
-        [self.layer addAnimation:[self keyframeAnimation:myPah durTimes:2.0 Rep:MAXFLOAT] forKey:nil];
+//        CGMutablePathRef myPah = CGPathCreateMutable();
+//        DLog(@"self.y:%f",self.y);
+//        CGFloat yOrigin = self.y+25;
+//        CGPathMoveToPoint(myPah, nil,self.x,yOrigin);
+//        CGPathAddCurveToPoint(myPah, nil, self.x, yOrigin, kScreenWidth/2, yOrigin, kScreenWidth, yOrigin);//
+//        [self.layer addAnimation:[self keyframeAnimation:myPah durTimes:2.0 Rep:MAXFLOAT] forKey:nil];
     //旋转动画。
 //    [self.layer addAnimation:[selfrotation:2degree:kRadianToDegrees(90) direction:1repeatCount:MAXFLOAT] forKey:nil];
-    @WeakObj(self)
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [selfWeak.layer removeAllAnimations];
-        [selfWeak removeFromSuperview];
-    });
-#if 0
+//    @WeakObj(self)
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [selfWeak.layer removeAllAnimations];
+//        [selfWeak removeFromSuperview];
+//    });
+    
     [UIView animateWithDuration:0.5
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         self.alpha = 0.1;
+                         self.alpha = 0.8;
      } completion:^(BOOL finished){
          [UIView animateWithDuration:0.5 delay:0.25 options:UIViewAnimationOptionCurveEaseIn animations:^{
                               self.alpha = 1.0;
-                              CGRect frame = self.frame;
-                              frame.origin.y += 50;
-                              self.frame = frame;
                           } completion:^(BOOL finished) {
                               __weak FloatingView *__self = self;
                               dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -140,17 +137,17 @@
                               });
                           }];
      }];
-#endif
     
 }
 
-- (id)initWithFrame:(CGRect)frame color:(int)nColor name:(NSString *)strName number:(NSString *)strNumber
+- (id)initWithFrame:(CGRect)frame color:(int)nColor name:(NSString *)strName number:(int)nNumber gid:(int)ngid
 {
     self = [super initWithFrame:frame];
     if (self) {
         _strName = strName;
-        _strNumber = strNumber;
-        [self setAlpha:0.9];
+        _nNumber = nNumber;
+        _nGid = ngid;
+        [self setAlpha:0.8];
         UIColor *backColor = nColor%2 == 1 ? UIColorFromRGB(0xfff1dc) : UIColorFromRGB(0xffedbc);
         [self setBackgroundColor:backColor];
         [self createFloating];
@@ -167,16 +164,16 @@
     [_lblName setFont:XCFONT(14)];
     [_lblName setTextAlignment:NSTextAlignmentRight];
     
-    _imgGift = [[UIImageView alloc] initWithFrame:Rect(_lblName.x+_lblName.width,0,45, 45)];
+    _imgGift = [[UIImageView alloc] initWithFrame:Rect(_lblName.x+_lblName.width+10,0,45, 45)];
     [self addSubview:_imgGift];
    
     char cBuffer[300]={0};
-    sprintf(cBuffer,"%s/6.gif",kGif_Image_URL);
+    sprintf(cBuffer,"%s/%d.gif",kGif_Image_URL,_nGid);
     NSString *strUrl = [[NSString alloc] initWithUTF8String:cBuffer];
     [_imgGift sd_setImageWithURL:[NSURL URLWithString:strUrl]];
     
-    _lblNumber = [[UILabel alloc] initWithFrame:Rect(_imgGift.x+_imgGift.width, 0,kScreenWidth-_imgGift.x-_imgGift.width, 45)];
-    [_lblNumber setText:_strNumber];
+    _lblNumber = [[UILabel alloc] initWithFrame:Rect(_imgGift.x+_imgGift.width+10, 0,kScreenWidth-_imgGift.x-_imgGift.width, 45)];
+    [_lblNumber setText:[NSString stringWithFormat:@"%d",_nNumber]];
     [self addSubview:_lblNumber];
     [_lblNumber setTextColor:UIColorFromRGB(0xEB6100)];
     [_lblNumber setFont:XCFONT(15)];

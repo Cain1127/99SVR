@@ -98,7 +98,7 @@
 
 - (void)setTeachModel:(TeacherModel *)model
 {
-    NSString *url = [NSString stringWithFormat:@"%@%d",kImage_TEXT_URL,model.teacherid];
+    NSString *url = [NSString stringWithFormat:@"%s/headid/%d.png",kGif_Image_URL,model.teacherid];
     [_imgHead sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"logo"]];
     _lblFans.text = NSStringFromInt64(model.fans);
     _lblThum.text = NSStringFromInt64(model.zans);
@@ -114,7 +114,7 @@
                                               context:nil];
     CGRect frame = _lblContent.frame;
     _lblContent.frame = Rect(frame.origin.x, frame.origin.y,kScreenWidth-30,rect.size.height);
-    self.frame = Rect(0, 64, kScreenWidth, _lblContent.y+_lblContent.height+8);
+    self.frame = Rect(0, 68, kScreenWidth, _lblContent.y+_lblContent.height+8);
 }
 
 @end

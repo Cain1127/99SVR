@@ -101,7 +101,7 @@
     [_btnTitle setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     if (_model)
     {
-        NSString *url = [NSString stringWithFormat:@"%@%@",kImage_TEXT_URL,_model.teacherid];
+        NSString *url = [NSString stringWithFormat:@"%s/headid/%@.png",kGif_Image_URL,_model.teacherid];
         [_btnTitle setTitle:_model.roomname forState:UIControlStateNormal];
         [_btnTitle sd_setImageWithURL:[NSURL URLWithString:url]
                              forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"logo"]];
@@ -119,7 +119,7 @@
     [self refreshBtnTitle];
     [_btnTitle addTarget:self action:@selector(showTeacherView) forControlEvents:UIControlEventTouchUpInside];
     
-    NSArray *aryMen = @[@"直播",@"聊天",@"观点",@"个人秘籍"];
+    NSArray *aryMen = @[@"直播",@"聊天",@"观点"];
     _group = [[GroupView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44) ary:aryMen];
     [self.view addSubview:_group];
     _group.delegate = self;
@@ -140,24 +140,20 @@
     TextLiveViewController *textLive = [[TextLiveViewController alloc] initWithSocket:_textSocket];
     TextChatViewController *textChat = [[TextChatViewController alloc] initWithSocket:_textSocket];
     TextNewViewController *textNew = [[TextNewViewController alloc] initWithSocket:_textSocket];
-    TextEsotericaViewController *esoster = [[TextEsotericaViewController alloc] initWithSocket:_textSocket];
     
     [self addChildViewController:textLive];
     [self addChildViewController:textChat];
     [self addChildViewController:textNew];
-    [self addChildViewController:esoster];
     
     textLive.view.frame = Rect(0, 0, kScreenWidth,_scrollView.height);
     textChat.view.frame = Rect(kScreenWidth, 0, kScreenWidth, _scrollView.height);
     textNew.view.frame  = Rect(kScreenWidth*2, 0, kScreenWidth, _scrollView.height);
-    esoster.view.frame = Rect(kScreenWidth*3, 0, kScreenWidth, _scrollView.height);
     
     [_scrollView addSubview:textLive.view];
     [_scrollView addSubview:textChat.view];
     [_scrollView addSubview:textNew.view];
-    [_scrollView addSubview:esoster.view];
     
-    _scrollView.contentSize = CGSizeMake(kScreenWidth*4, _scrollView.height);
+    _scrollView.contentSize = CGSizeMake(kScreenWidth*3, _scrollView.height);
     _tag = 0;
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftBtn setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
@@ -170,7 +166,7 @@
     [self.view addSubview:hidenView];
     hidenView.hidden = YES;
     
-    _teachView = [[TeachView alloc] initWithFrame:Rect(0, 66, kScreenWidth,140)];
+    _teachView = [[TeachView alloc] initWithFrame:Rect(0, 68, kScreenWidth,140)];
     [hidenView addSubview:_teachView];
     _teachView.hidden = YES;
     

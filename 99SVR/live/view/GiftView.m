@@ -127,14 +127,14 @@
     UIView *downView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50, kScreenWidth, 50)];
     [self addSubview:downView];
     [downView setBackgroundColor:UIColorFromRGB(0xffffff)];
-    UILabel *lblPrice = [[UILabel alloc] initWithFrame:Rect(10,10,100,30)];
-    [downView addSubview:lblPrice];
-    [lblPrice setFont:XCFONT(15)];
-    [lblPrice setTextColor:UIColorFromRGB(0xFF7A1E)];
+    _lblPrice = [[UILabel alloc] initWithFrame:Rect(10,10,100,30)];
+    [downView addSubview:_lblPrice];
+    [_lblPrice setFont:XCFONT(15)];
+    [_lblPrice setTextColor:UIColorFromRGB(0xFF7A1E)];
     
     char cBuffer[100]={0};
-    sprintf(cBuffer, "余额:%lld",[UserInfo sharedUserInfo].goldCoin);
-    [lblPrice setText:[NSString stringWithUTF8String:cBuffer]];
+    sprintf(cBuffer, "余额:%.01f",[UserInfo sharedUserInfo].goldCoin);
+    [_lblPrice setText:[NSString stringWithUTF8String:cBuffer]];
     
     //赠送按钮
     UIButton *btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -187,6 +187,13 @@
     [self createButton:@"66" frame:Rect(0,height*4, kNumberGift, height)];
     [self createButton:@"16" frame:Rect(0,height*5, kNumberGift, height)];
     [self createButton:@"1" frame:Rect(0,height*6, kNumberGift, height)];
+}
+
+- (void)updateGoid
+{
+    char cBuffer[100]={0};
+    sprintf(cBuffer, "余额:%.01f",[UserInfo sharedUserInfo].goldCoin);
+    [_lblPrice setText:[NSString stringWithUTF8String:cBuffer]];
 }
 
 - (void)selectView:(UIView *)view

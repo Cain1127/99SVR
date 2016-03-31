@@ -7,6 +7,8 @@
 //
 
 #import "NickNameViewController.h"
+#import "UserInfo.h"
+#import "ZLLogonServerSing.h"
 
 @interface NickNameViewController ()<UITextFieldDelegate>
 /** 昵称输入框 */
@@ -70,24 +72,50 @@
  */
 - (void)rightItemClick
 {
-    [MBProgressHUD showMessage:@""];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (self.nickNameBlock) {
-            self.nickNameBlock(@"123");
-        }
-        [MBProgressHUD hideHUD];
-        
-        [MBProgressHUD showText:@"昵称设置成功!"];
-        [self.navigationController popViewControllerAnimated:YES];
-    });
+    NSString *strMsg = _nickNameTextField.text;
+    if ([strMsg length]==0) {
+        [MBProgressHUD showError:@"昵称不能为空"];
+        return ;
+    }
+    ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
+    [sing updateNick:strMsg intro:[UserInfo sharedUserInfo].strIntro sex:[UserInfo sharedUserInfo].sex];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-    //[MBProgressHUD hideHUD];
 }
 
+- (void)updatePro:(NSNotification *)notify
+{
+    NSString *strMsg = _nickNameTextField.text;
+    __weak NSString *__strMsg = strMsg;
+    NSNumber *number = notify.object;
+    if ([number intValue]==0) {
+        @WeakObj(self)
+        gcd_main_safe(^{
+            [MBProgressHUD showSuccess:@"修改昵称成功"];
+            [selfWeak.navigationController popViewControllerAnimated:YES];
+            selfWeak.nickNameBlock(__strMsg);
+        });
+    }
+    else
+    {
+        gcd_main_safe(^{
+            [MBProgressHUD showError:@"修改昵称出错"];
+        });
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePro:) name:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end

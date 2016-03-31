@@ -8,6 +8,7 @@
 
 #import "TextTcpSocket.h"
 #import "GCDAsyncSocket.h"
+#import "BaseService.h"
 #import "DeviceUID.h"
 #import "TextEsoterModel.h"
 #import "textChatModel.h"
@@ -1135,6 +1136,7 @@
         _aryNew = [NSMutableArray array];
     }
     [_aryNew removeAllObjects];
+    
     [self connectTextServer:@"122.13.81.62" port:22706];
     DLog(@"再次连接");
 }
@@ -1157,15 +1159,19 @@
         _aryNew = [NSMutableArray array];
     }
     [_aryNew removeAllObjects];
-//    NSString *strAry = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][0];
-//    NSString *strAddr = [strAry componentsSeparatedByString:@":"][0];
-//    NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
-//    [self connectTextServer:strAddr port:nPort];
     [self closeSocket];
-    [self connectTextServer:@"122.13.81.62" port:22806];
-//    [self connectTextServer:@"172.16.41.96" port:22806];
-//    [self connectTextServer:@"121.33.236.180" port:22806];
+    NSString *strAry = [[UserInfo sharedUserInfo].strTextRoom componentsSeparatedByString:@","][0];
+    if (strAry.length>10) {
+        NSString *strAddr = [strAry componentsSeparatedByString:@":"][0];
+        NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
+        [self connectTextServer:strAddr port:nPort];
+    }
+    else{
+        
+    }
 }
+
+
 
 - (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort
 {

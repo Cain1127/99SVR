@@ -174,7 +174,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 
 - (void)colletRoom
 {
-    NSString *strId = [_tcpSocket getRoomId];
     if([UserInfo sharedUserInfo].aryCollet.count>=1)
     {
         RoomGroup *group = [[UserInfo sharedUserInfo].aryCollet objectAtIndex:0];
@@ -342,7 +341,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     _noticeView.dataSource = self;
     [_noticeView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    lblTeachInfo = [[DTAttributedLabel alloc] initWithFrame:Rect(_scrollView.width*3, 0, _scrollView.width,_scrollView.height)];
+    lblTeachInfo = [[DTAttributedLabel alloc] initWithFrame:Rect(_scrollView.width*3+8, 0, _scrollView.width-16,_scrollView.height)];
     [_scrollView addSubview:lblTeachInfo];
     lblTeachInfo.delegate = self;
     
@@ -731,6 +730,36 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomSucsess) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendRoomMediaInfo:) name:MESSAGE_TCP_SOCKET_SEND_MEDIA object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setTeachInfo) name:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendLiwuRespInfo) name:MEESAGE_ROOM_SEND_LIWU_RESP_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendLiwuNotifyInfo:) name:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:nil];
+}
+
+- (void)sendLiwuNotifyInfo:(NSNotification *)notify
+{
+    NSDictionary *parameter = notify.object;
+    __weak NSDictionary *__parameter = parameter;
+    @WeakObj(self)
+    __block int __nColor = nColor;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *strName = nil;
+        int gid ;
+        int num ;
+        if ([__parameter objectForKey:@"name"] && [__parameter objectForKey:@"gitId"] && [__parameter objectForKey:@"num"]) {
+            strName = [parameter objectForKey:@"name"];
+            gid = [[parameter objectForKey:@"gitId"] intValue];
+            num = [[parameter objectForKey:@"num"] intValue];
+            FloatingView *floatView = [[FloatingView alloc] initWithFrame:Rect(0,selfWeak.group.y+selfWeak.group.height,kScreenWidth, 45) color:__nColor++ name:strName number:num gid:gid];
+            [selfWeak.view addSubview:floatView];
+            [floatView showGift:1.0];
+        }
+    });
+}
+
+- (void)sendLiwuRespInfo
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [ProgressHUD showSuccess:@"赠送礼物成功"];
+    });
 }
 
 - (void)setTeachInfo
@@ -1061,13 +1090,8 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     NSString *cacheKey;
     if(tableView == _noticeView && _tcpSocket.aryNotice.count > indexPath.section)
     {
-        char cString[100]={0};
-        sprintf(cString,"noticeView-%zi",indexPath.section);
-        cacheKey = [[NSString alloc] initWithUTF8String:cString];
-        if([_cellCache objectForKey:cacheKey])
-        {
-            return [[_cellCache objectForKey:cacheKey] floatValue];
-        }
+        ZLCoreTextCell *coreText = [self tableView:tableView preparedCellForZLIndexPath:indexPath];
+        return [coreText.lblInfo.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
     }
     else
     {
@@ -1091,23 +1115,23 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 
 - (ZLCoreTextCell *)tableView:(UITableView *)tableView preparedCellForZLIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *cacheKey;
+    NSString *cacheKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
     NSString *strInfo;
     ZLCoreTextCell *cell = nil;
     NSString *strIdentifier = @"kNoticeIdentifier";
-    
-    cell = [tableView dequeueReusableCellWithIdentifier:@"kNoticeIdentifier"];
+    cell = [_cellCache objectForKey:cacheKey];
     if (cell==nil)
     {
         cell = [[ZLCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
+        [_cellCache setObject:cell forKey:cacheKey];
     }
-    if(tableView == _noticeView && _tcpSocket.aryNotice.count > indexPath.section)
+    if(_tcpSocket.aryNotice.count > indexPath.section)
     {
         char cString[150] = {0};
         sprintf(cString,"noticeView-%zi",indexPath.section);
         cacheKey = [[NSString alloc] initWithUTF8String:cString];
         NoticeModel *notice = [_tcpSocket.aryNotice objectAtIndex:indexPath.section];
-        strInfo = [[NSString alloc] initWithFormat:@"%@:<br>%@",notice.strType,notice.strContent];
+        strInfo = notice.strContent;
         strIdentifier = @"kNoticeIdentifier";
     }
     else
@@ -1121,7 +1145,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     cell.lblInfo.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:nil documentAttributes:nil];
     CGFloat fHeight = [cell.lblInfo.attributedTextContentView
                        suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+10;
-    [_cellCache setObject:NSStringFromFloat(fHeight) forKey:cacheKey];
     UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
     [selectView setBackgroundColor:[UIColor clearColor]];
     cell.selectedBackgroundView = selectView;
@@ -1196,9 +1219,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         }
     }
 }
-
-
-
 
 
 
@@ -1323,8 +1343,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
     {
        UITextField *login = alert.textFields.firstObject;
-       if ([login.text length]==0)
-       {
+       if ([login.text length]==0){
            dispatch_async(dispatch_get_main_queue(),
               ^{
                   [__self.view hideToastActivity];
@@ -1350,8 +1369,27 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
 }
 
-#pragma mark RoomDwonDelegate
+- (void)showInputView
+{
+    if ([UserInfo sharedUserInfo].nType != 1 && ![_room.nvcbid isEqualToString:@"10000"] && ![_room.nvcbid isEqualToString:@"10001"]) {
+        
+    }
+    else{
+        
+    }
+}
 
+- (void)createLoginAlert
+{
+    
+}
+
+- (void)enterLoginView
+{
+//    UINavigationController *navControl = [[UINavigationController alloc] init];
+}
+
+#pragma mark RoomDwonDelegate
 - (void)clickRoom:(UIButton *)button index:(NSInteger)nIndex
 {
     if(!_tcpSocket.rInfo){return;}
@@ -1368,6 +1406,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         break;
         case 2://显示礼物
         {
+            [_giftView updateGoid];
             [UIView animateWithDuration:0.5 animations:^{
                 [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
             } completion:^(BOOL finished) {}];

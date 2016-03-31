@@ -84,7 +84,7 @@
     if (0 < dataModel.croompic.length)
     {
         
-        NSString *imageURL = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_HOME_URL,dataModel.croompic];
+        NSString *imageURL = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,dataModel.croompic];
         [backgroundImageView sd_setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:[UIImage imageNamed:@"home_room_default_img"]];
         
         ///添加点击手势

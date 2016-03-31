@@ -28,10 +28,10 @@ class ZLConnectionListerner : public ConnectionListener
 
 class ZLHallListener: public HallListener
 {
-    void OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfileReq& req){}
+    void OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfileReq& req);
     void OnSetUserPwdResp(SetUserPwdResp& info){}
     void OnQueryRoomGateAddrResp(QueryRoomGateAddrResp& info){}
-    void OnGetUserMoreInfResp(GetUserMoreInfResp& info){}
+    void OnGetUserMoreInfResp(GetUserMoreInfResp& info);
     void OnUserExitMessageResp(ExitAlertResp& info){}
 };
 
@@ -82,7 +82,7 @@ public:
             items[i].Log();
         }
     }
-    
+  
     void OnQuanxianId2List(QuanxianId2Item items[], int count)
     {
         for (int i = 0; i < count; i++)
@@ -122,7 +122,7 @@ public :
     /**
      *  修改昵称
      */
-    int updateNick(const char *cNick,const char *intro);
+    int updateNick(const char *cNick,const char *intro,int sex);
     /**
      *  第三方登录
      */

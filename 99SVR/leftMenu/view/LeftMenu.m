@@ -83,6 +83,18 @@
     [self checkLogin];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadProfile:) name:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
+}
+
+- (void)reloadProfile:(NSNotification *)notify
+{
+    NSNumber *number = notify.object;
+    if ([number intValue]==0) {
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            selfWeak.leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
+        });
+    }
 }
 
 - (void)refreshUI
@@ -98,18 +110,19 @@
     // 登录成功用户
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"collect.png" goClassName:@"VideoColletionViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_gold" goClassName:@"AssetViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyProfile icon:@"personal_user" goClassName:@"ProfileViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyLivingHistory icon:@"personal_record" goClassName:@"HistoryViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的资料" icon:@"mydata.png" goClassName:@"ProfileViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"AssetViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"personal_collection_icon" goClassName:@"VideoColletionViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"关注讲师" icon:@"personal_follow_icon" goClassName:@"VideoColletionViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的足迹" icon:@"personal_record_icon" goClassName:@"HistoryViewController"]];
     }
     else  // 没登录
     {
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kLogin icon:@"mydata.png" goClassName:@"LoginViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kRegist icon:@"regist.png" goClassName:@"RegMobileViewController"]];
     }
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"kefu.png" goClassName:@"KefuCenterController"]];
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
     
     __weak LeftMenu *__self = self;
     dispatch_async(dispatch_get_main_queue(),

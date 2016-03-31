@@ -27,5 +27,9 @@
 @property (nonatomic,strong) UIImageView *numberImgView;
 @property (nonatomic,copy) UIImage *frameImage;
 @property (nonatomic,strong) UIView *numberView;
+@property (nonatomic,strong) UILabel *lblPrice;
+
+- (void)updateGoid;
+
 - (void)setGestureHidden;
 @end

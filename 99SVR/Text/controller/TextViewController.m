@@ -8,12 +8,13 @@
 
 #import "TextViewController.h"
 #import "HotTextView.h"
+#import "MJRefresh.h"
 #import "BaseService.h"
 #import "TextRoomModel.h"
 #import "TextTcpSocket.h"
+#import "TextCell.h"
 #import "TeacherModel.h"
 #import "TextHomeViewController.h"
-#import "TextLivingCell.h"
 #import "TextGroupList.h"
 #import "MyScrollView.h"
 
@@ -29,86 +30,22 @@
     
 }
 @property (nonatomic,strong) UILabel *lblLine2;
-@property (nonatomic,strong) MyScrollView *scrollView;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryHot;
 @property (nonatomic,copy) NSArray *aryLiving;
-@property (nonatomic,strong) UIScrollView *scrollHeader;
 @property (nonatomic,strong) NSMutableArray *aryGroup;
 
 @end
 
 @implementation TextViewController
 
-- (void)initHeadScroller
-{
-//    _scrollHeader = [[MyScrollView alloc] initWithFrame:Rect(0,64,kScreenWidth, 46)];
-//    [self.view addSubview:_scrollHeader];
-//    _scrollHeader.clipsToBounds = YES;
-//    _scrollHeader.pagingEnabled = YES;
-//    _scrollHeader.showsHorizontalScrollIndicator = NO;
-//    _scrollHeader.showsVerticalScrollIndicator = NO;
-//    _scrollHeader.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-//    _scrollHeader.contentSize = CGSizeMake(0, 46);
-//    CGSize sizeWidth = [@"视频直播间" sizeWithAttributes:@{NSFontAttributeName:XCFONT(15)}];
-//    fWidth = sizeWidth.width;
-//    _lblLine2 = [[UILabel alloc] initWithFrame:Rect(0, 44.5, kScreenWidth, 1)];
-//    [_lblLine2 setBackgroundColor:kLineColor];
-//    [_scrollHeader addSubview:_lblLine2];
-}
-
 - (void)settingTextGroup
 {
     __weak TextViewController *__self = self;
-    __weak UILabel *__line1 = _line1;
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        UITableView *tableView = [[UITableView alloc] initWithFrame:Rect(0,0,kScreenWidth,__self.scrollView.height)];
-        tableView.tag = 0;
-        tableView.delegate = __self;
-        tableView.dataSource = __self;
-        [__self.scrollView addSubview:tableView];
-        [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-        [tableView reloadData];
-        __self.scrollView.contentSize = CGSizeMake(kScreenWidth,__self.scrollView.height);
+        [__self.tableView reloadData];
     });
-}
-
-- (void)setSelectInfo:(NSInteger)tag
-{
-    for (UIButton *btn in _scrollHeader.subviews)
-    {
-        if (![btn isKindOfClass:[UIButton class]])
-        {
-            continue;
-        }
-        if(btn.tag == tag)
-        {
-            btn.selected = YES;
-        }
-        else
-        {
-            if(btn.selected)
-            {
-                btn.selected = NO;
-            }
-        }
-    }
-}
-
-- (void)selectTabButton:(UIButton *)btn
-{
-    for (UIView *sender in _scrollHeader.subviews)
-    {
-        if([sender isKindOfClass:[UIButton class]])
-        {
-            [(UIButton *)sender setSelected:NO];
-        }
-    }
-    [btn setSelected:YES];
-    _tag = (int)btn.tag;
-    [_scrollView setContentOffset:CGPointMake(btn.tag*kScreenWidth, 0)];
-    [self setBluePointX:_scrollView.contentOffset.x];
 }
 
 - (void)initLivingData
@@ -117,7 +54,7 @@
      [BaseService postJSONWithUrl:kTEXT_GROUP_URL parameters:nil success:^(id responseObject)
      {
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if (dict && [dict objectForKey:@"groups"])
+         if (dict && [dict respondsToSelector:@selector(objectForKey:)] && [dict objectForKey:@"groups"])
          {
              NSArray *aryResult = [dict objectForKey:@"groups"];
              for (NSDictionary *roomDict in aryResult)
@@ -129,6 +66,7 @@
          dispatch_async(dispatch_get_main_queue(),
          ^{
              [__self settingTextGroup];
+             [__self.tableView.gifHeader endRefreshing];
              [__self.tableView reloadData];
          });
      } fail:nil];
@@ -160,14 +98,45 @@
     [btnLeft setFrame:Rect(0,20,44,44)];
     
     _aryGroup = [NSMutableArray array];
-    [self initHeadScroller];
     [self initUIHead];
     _line1 = [UILabel new];
     _line1.backgroundColor = UIColorFromRGB(0x629aff);
     [_line1 setFrame:Rect(0,2,fWidth,2)];
-    
     [self initScrollView];
-    [self initLivingData];
+    @WeakObj(self);
+    [_tableView addGifHeaderWithRefreshingBlock:^{
+        ///检测当前状态
+        [selfWeak initLivingData];
+    }];
+    
+    NSArray *aryRefreshing = [self getRefresh];
+    NSArray *aryStart= [self getStartRefresh];
+    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStateIdle];
+    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStatePulling];
+    [_tableView.gifHeader setImages:aryRefreshing forState:MJRefreshHeaderStateRefreshing];
+    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStateWillRefresh];
+    _tableView.gifHeader.updatedTimeHidden = YES;
+    [self.tableView.gifHeader beginRefreshing];
+    
+}
+
+- (NSArray *)getStartRefresh
+{
+    NSMutableArray *refreshingImages = [NSMutableArray array];
+    
+    UIImage *image = [UIImage imageNamed:@"loading_40x30_0001"];
+    [refreshingImages addObject:image];
+    return refreshingImages;
+}
+
+- (NSArray *)getRefresh
+{
+    NSMutableArray *refreshingImages = [NSMutableArray array];
+    for (NSUInteger i = 2; i <= 6; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading_40x30_000%lu", (unsigned long)i]];
+        [refreshingImages addObject:image];
+    }
+    return refreshingImages;
 }
 
 - (void)showLeftView
@@ -177,21 +146,17 @@
 
 - (void)initScrollView
 {
-    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0,72, kScreenWidth,kScreenHeight - 160)];
-    [self.view addSubview:_scrollView];
-    _scrollView.clipsToBounds = YES;
-    _scrollView.pagingEnabled = YES;
-    _scrollView.bounces = NO;
-    _scrollView.delegate = self;
-    _scrollView.showsHorizontalScrollIndicator = NO;
-    _scrollView.showsVerticalScrollIndicator = NO;
-    _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _scrollView.contentSize = CGSizeMake(kScreenWidth,kScreenHeight - 110);
+
 }
 
 - (void)initUIHead
 {
-
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-114)];
+    _tableView.tag = 0;
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    [self.view addSubview:_tableView];
+    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
 - (void)didReceiveMemoryWarning
@@ -205,7 +170,8 @@
     if(_aryGroup.count > tableView.tag)
     {
         TextGroupList *textList = [_aryGroup objectAtIndex:tableView.tag];
-        return textList.rooms.count;
+        NSInteger count = (textList.rooms.count%2 == 0) ? textList.rooms.count/2 : (textList.rooms.count/2+1);
+        return count;
     }
     return 0;
 }
@@ -213,17 +179,31 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *strCellIdentifier = @"TextLivingIdentifier";
-    TextLivingCell *cell = [_tableView dequeueReusableCellWithIdentifier:strCellIdentifier];
+    TextCell *cell = [_tableView dequeueReusableCellWithIdentifier:strCellIdentifier];
     if(cell==nil)
     {
-        cell = [[TextLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strCellIdentifier];
+        cell = [[TextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strCellIdentifier];
     }
-    if(_aryGroup.count > tableView.tag)
+    TextGroupList *textList = [_aryGroup objectAtIndex:tableView.tag];
+    NSInteger count = (textList.rooms.count%2 == 0) ? textList.rooms.count/2 : (textList.rooms.count/2+1);
+    if(count > indexPath.row)
     {
         TextGroupList *textList = [_aryGroup objectAtIndex:tableView.tag];
-        TextRoomModel *model = [textList.rooms objectAtIndex:indexPath.row];
-        [cell setTextRoomModel:model];
-        return cell;
+        int length = 2;
+        int loc = (int)indexPath.row * length;
+        if (loc + length > textList.rooms.count)
+        {
+            length = (int)textList.rooms.count - loc;
+        }
+        NSRange range = NSMakeRange(loc, length);
+        NSArray *rowDatas = [textList.rooms subarrayWithRange:range];
+        @WeakObj(self)
+        cell.itemOnClick = ^(TextRoomModel *room)
+        {
+            TextHomeViewController *roomView = [[TextHomeViewController alloc] initWithModel:room];
+            [selfWeak.navigationController pushViewController:roomView animated:YES];
+        };
+        [cell setRowDatas:rowDatas];
     }
     return cell;
 }
@@ -231,98 +211,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    if(_aryGroup.count > tableView.tag)
-    {
-        TextGroupList *textList = [_aryGroup objectAtIndex:tableView.tag];
-        TextRoomModel *teach = [textList.rooms objectAtIndex:indexPath.row];
-        TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithModel:teach];
-        [self.navigationController pushViewController:textHome animated:YES];
-    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if (scrollView != _scrollView)
-    {
-        return ;
-    }
-    //拖动前的起始坐标
-    startContentOffsetX = scrollView.contentOffset.x;
-}
-
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
-{
-    if (scrollView != _scrollView)
-    {
-        return ;
-    }
-    //将要停止前的坐标
-    willEndContentOffsetX = scrollView.contentOffset.x;
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (scrollView != _scrollView || (willEndContentOffsetX == 0 && startContentOffsetX ==0) )
-    {
-        return ;
-    }
-    [self setBluePointX:scrollView.contentOffset.x];
-    int temp = floor((scrollView.contentOffset.x - kScreenWidth/2.0)/kScreenWidth +1);//判断是否翻页
-    if (temp != _currentPage)
-    {
-        if (temp > _currentPage)
-        {
-            if (_tag<_aryGroup.count)
-            {
-                _tag ++;
-                [self setSelectInfo:_tag];
-                CGFloat x = (_scrollHeader.contentOffset.x+fWidth*0.5+kScreenWidth) >= _scrollHeader.contentSize.width ? _scrollHeader.contentSize.width-kScreenWidth : (_scrollHeader.contentOffset.x+fWidth*0.5);
-                _scrollHeader.contentOffset = CGPointMake(x, 0);
-            }
-        }
-        else
-        {
-            if (_tag>=1)
-            {
-                _tag--;
-                [self setSelectInfo:_tag];
-                CGFloat x = (_scrollHeader.contentOffset.x-fWidth*0.5) <= 0 ? 0 : (_scrollHeader.contentOffset.x-fWidth*0.5);
-                _scrollHeader.contentOffset = CGPointMake(x, 0);
-            }
-        }
-        updateCount++;
-        _currentPage = temp;
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    if (scrollView != _scrollView)
-    {
-        return ;
-    }
-    if (updateCount ==1)//正常
-    {
-        
-    }
-    else if(updateCount==0 && _currentPage ==0)
-    {
-    }
-    updateCount = 0;
-    startContentOffsetX = 0;
-    willEndContentOffsetX = 0;
-}
-
-- (void)setBluePointX:(CGFloat)fPointX
-{
-    CGFloat fx = fPointX/kScreenWidth * fWidth;
-    [_line1 setFrame:Rect(fx,44,fWidth,2)];
+    return ((kScreenWidth-36)/2)*10/16+8;;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

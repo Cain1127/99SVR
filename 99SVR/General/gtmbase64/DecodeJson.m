@@ -8,6 +8,7 @@
 
 #import "DecodeJson.h"
 #import "GTMBase64.h"
+#import "GiftModel.h"
 #import "DeviceUID.h"
 #import "BaseService.h"
 #import <CommonCrypto/CommonCryptor.h>
@@ -411,4 +412,56 @@
     [DecodeJson postPHPServerMsg:strNumber];
 }
 
++ (NSString *)resoleNotice:(NSString *)strInfo index:(int)nIndex
+{
+    if (strInfo==nil || [strInfo length]==0) {
+        return @"";
+    }
+    NSString *strTilte = @"";
+    if([strInfo rangeOfString:@"<h3>"].location != NSNotFound &&
+       [strInfo rangeOfString:@"</h3>"].location != NSNotFound){
+        NSRange start = [strInfo rangeOfString:@"<h3>"];
+        NSRange end = [strInfo rangeOfString:@"</h3>"];
+        strTilte = [strInfo substringWithRange:NSMakeRange(start.location,end.location-start.location+5)];
+        DLog(@"strTitle:%@",strTilte);
+        strInfo = [strInfo stringByReplacingCharactersInRange:NSMakeRange(start.location,end.location-start.location+5) withString:@""];
+        
+    }
+    NSString *msg ;
+    if(nIndex==1)
+    {
+        msg = @"房间公告";
+    }
+    else if(nIndex==2)
+    {
+        msg = @"房间广播";
+    }
+    else if(nIndex == 3)
+    {
+        msg = @"悄悄话";
+    }
+    NSString *strMsg = [NSString stringWithFormat:@"%@<br>%@<br>%@",strTilte,msg,strInfo];
+    
+    return strMsg;
+}
+
++ (void)setGiftInfo:(NSDictionary *)dict
+{
+    if (dict && [dict objectForKey:@"gift"]) {
+        [UserInfo sharedUserInfo].giftVer = [[dict objectForKey:@"ver"] intValue];
+        NSArray *array = [dict objectForKey:@"gift"];
+        NSMutableArray *aryIndex = [NSMutableArray array];
+        for (NSDictionary *dictionary in array) {
+            [aryIndex addObject:[GiftModel resultWithDict:dictionary]];
+        }
+        [UserInfo sharedUserInfo].aryGift = aryIndex;
+    }
+}
 @end
+
+
+
+
+
+
+

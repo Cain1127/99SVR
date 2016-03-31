@@ -54,10 +54,12 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     }
 }
 
-- (void)updateNick:(NSString *)strNick intro:(NSString *)intro
+- (void)updateNick:(NSString *)strNick intro:(NSString *)strintro sex:(int)nSex
 {
     if (protocol) {
-        protocol->updateNick([strNick UTF8String],[intro UTF8String]);
+        NSData *data = [strNick dataUsingEncoding:GBK_ENCODING];
+        NSData *intro = [strintro dataUsingEncoding:GBK_ENCODING];
+        protocol->updateNick((const char *)data.bytes,(const char *)intro.bytes,nSex);
     }
 }
 

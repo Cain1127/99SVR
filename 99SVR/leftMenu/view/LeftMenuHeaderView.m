@@ -18,8 +18,10 @@
     UIView *_circleLine;
     UIImageView *_avatarImageView; // 头像
     UILabel *_nameLabel; // 名称
-    UIButton *_vipLevel; // vip等级
+    UILabel *_vipLevel; // vip等级
     UILabel *_lineView;
+    UIImageView *imageB;
+    UILabel *lblBContent;
 }
 
 @end
@@ -30,9 +32,6 @@
 {
     if (self = [super initWithFrame:frame])
     {
-//        UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(frame.size.width/2-kScreenWidth/2, 21, kScreenWidth,88)];
-//        [self addSubview:imgView];
-//        [imgView setImage:[UIImage imageNamed:@"left_bg"]];
         [self setBackgroundColor:UIColorFromRGB(0x006dc9)];
         
         _circleLine = [UIView new];
@@ -46,7 +45,7 @@
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
         _avatarImageView.layer.cornerRadius = kImageWidth / 2;
         _avatarImageView.layer.masksToBounds = YES;
-        _avatarImageView.image = [UIImage imageNamed:@"logo"];
+        _avatarImageView.image = [UIImage imageNamed:@"personal_user_head"];
         [_circleLine addSubview:_avatarImageView];
         _avatarImageView.userInteractionEnabled = YES;
         [_avatarImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loginDelegate)]];
@@ -57,15 +56,19 @@
         [_nameLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:_nameLabel];
         
-        _vipLevel = [UIButton buttonWithType:UIButtonTypeCustom];
-        _vipLevel.titleLabel.textColor = UIColorFromRGB(0xbbd0ed);
-        _vipLevel.titleLabel.font = kFontSize(13);
-        _vipLevel.titleLabel.textAlignment = NSTextAlignmentCenter;
+        _vipLevel = [UILabel new];
+        _vipLevel.textColor = UIColorFromRGB(0xffffff);
+        _vipLevel.font = XCFONT(12);
         [self addSubview:_vipLevel];
+        [_vipLevel setTextAlignment:NSTextAlignmentCenter];
         
         _lineView = [UILabel new];
         _lineView.backgroundColor = UIColorFromRGB(0x8EB1E2);
         [self addSubview:_lineView];
+        
+        imageB = [[UIImageView alloc] initWithFrame:Rect(50, 0,18,18)];
+        [imageB setImage:[UIImage imageNamed:@"personal_recharge_icon"]];
+        [self addSubview:imageB];
         
         [self layoutViews];
     }
@@ -86,7 +89,7 @@
     if (!login)
     {
         _nameLabel.text = @"";
-        [_vipLevel setTitle:@"未登录" forState:UIControlStateNormal];
+        [_vipLevel setText:@"未登录"];
     }
     else
     {
@@ -94,12 +97,20 @@
         if (userInfo.nType == 1)
         {
             _nameLabel.text = userInfo.strName;
-            [_vipLevel setTitle:NSStringFromInt(userInfo.nUserId) forState:UIControlStateNormal];
+            
+            NSString *stringGoid = [NSString stringWithFormat:@"%.01f",userInfo.goldCoin];
+            CGFloat width = [stringGoid sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}].width+10;
+            [_vipLevel setText:stringGoid];
+            _vipLevel.frame = Rect(kScreenWidth*0.75/2-width/2,_nameLabel.height+_nameLabel.y+5, width,20);
+            imageB.frame = Rect(_vipLevel.x-24,_vipLevel.y+1, 18, 18);
+            imageB.hidden = NO;
         }
         else
         {
             _nameLabel.text = @"";
-            [_vipLevel setTitle:@"未登录" forState:UIControlStateNormal];
+            [_vipLevel setText:@"未登录"];
+            _vipLevel.frame = Rect(30, _nameLabel.height+_nameLabel.y+5, self.width-60, 20);
+            imageB.hidden = YES;
         }
     }
 }

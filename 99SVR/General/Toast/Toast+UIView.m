@@ -119,39 +119,47 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
 }
 
 - (void)makeToastActivity:(id)position {
-    // sanity
     UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);
     if (existingActivityView != nil) return;
     
-    UIView *activityView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CSToastActivityWidth, CSToastActivityHeight)] ;
+    UIView *activityView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CSToastActivityWidth, CSToastActivityHeight)];
     activityView.center = [self centerPointForPosition:position withToast:activityView];
-    activityView.backgroundColor = RGB(57,64,66);
-//    activityView.alpha = 0.0;
+    activityView.backgroundColor = [UIColor clearColor];
+    //    activityView.alpha = 0.0;
     activityView.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);
     activityView.layer.cornerRadius = CSToastCornerRadius;
+    activityView.backgroundColor = RGB(57,64,66);
     
-//    if (CSToastDisplayShadow) {
-//        activityView.layer.shadowColor = [UIColor blackColor].CGColor;
-//        activityView.layer.shadowOpacity = CSToastShadowOpacity;
-//        activityView.layer.shadowRadius = CSToastShadowRadius;
-//        activityView.layer.shadowOffset = CSToastShadowOffset;
-//    }
+
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(activityView.bounds.size.width/2-15,activityView.bounds.size.height/2-15, 30, 30)];
+    NSMutableArray *images = [NSMutableArray array];
+    [activityView addSubview:imgView];
+    for (int i=1; i<13; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading-beizi80X8000%02d",i]];
+        [images addObject:image];
+    }
+    imgView.animationImages = images;
+    imgView.animationDuration= 1;
+    [imgView startAnimating];
     
-    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    activityIndicatorView.center = CGPointMake(activityView.bounds.size.width / 2, activityView.bounds.size.height / 2);
-    [activityView addSubview:activityIndicatorView];
-    [activityIndicatorView startAnimating];
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0,imgView.height+imgView.y+10, activityView.width, 16)];
+    [lblName setText:@"正在加载，请稍后"];
+    [lblName setTextColor:UIColorFromRGB(0xffffff)];
+    [lblName setTextAlignment:NSTextAlignmentCenter];
+    [activityView addSubview:lblName];
+    [lblName setFont:XCFONT(12)];
     
     objc_setAssociatedObject (self, &CSToastActivityViewKey, activityView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
+    
     [self addSubview:activityView];
     
     [UIView animateWithDuration:CSToastFadeDuration
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         activityView.alpha = 1.0;
-                     } completion:nil];
+                     animations:
+     ^{
+         activityView.alpha = 1.0;
+     } completion:nil];
 }
 
 - (void)makeToastActivity_2:(id)position
@@ -172,15 +180,8 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
     [lblName setTextColor:UIColorFromRGB(0xffffff)];
     [activityView addSubview:lblName];
     [lblName setFont:XCFONT(12)];
-    //    if (CSToastDisplayShadow) {
-    //        activityView.layer.shadowColor = [UIColor blackColor].CGColor;
-    //        activityView.layer.shadowOpacity = CSToastShadowOpacity;
-    //        activityView.layer.shadowRadius = CSToastShadowRadius;
-    //        activityView.layer.shadowOffset = CSToastShadowOffset;
-    //    }
     
     UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-//    activityIndicatorView.center = CGPointMake(activityView.bounds.size.width / 2, activityView.bounds.size.height / 2);
     activityIndicatorView.frame =Rect(0,activityView.bounds.size.height/2-15, 30, 30);
     [activityView addSubview:activityIndicatorView];
     [activityIndicatorView startAnimating];
@@ -197,6 +198,7 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
                          activityView.alpha = 1.0;
                      } completion:nil];
 }
+
 
 - (void)hideToastActivity {
     UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);

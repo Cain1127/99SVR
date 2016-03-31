@@ -8,6 +8,7 @@
 
 #import "LeftHeaderView.h"
 #import "UserInfo.h"
+#import <DTCoreText/DTCoreText.h>
 
 #define kImageWidth 107
 #define kCircle (kImageWidth + 12)
@@ -17,8 +18,10 @@
     UIView *_circleLine;
     UIImageView *_avatarImageView; // 头像
     UILabel *_nameLabel; // 名称
-    UIButton *_vipLevel; // vip等级
+    UILabel *_vipLevel; // 玖玖币
     UILabel *_lineView;
+    UIImageView *imageB;
+    UILabel *lblBContent;
 }
 
 @end
@@ -55,15 +58,18 @@
         [_nameLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:_nameLabel];
         
-        _vipLevel = [UIButton buttonWithType:UIButtonTypeCustom];
-        _vipLevel.titleLabel.textColor = UIColorFromRGB(0xbbd0ed);
-        _vipLevel.titleLabel.font = kFontSize(13);
-        _vipLevel.titleLabel.textAlignment = NSTextAlignmentCenter;
+        _vipLevel = [UILabel new];
+        _vipLevel.textColor = UIColorFromRGB(0xffffff);
+        _vipLevel.font = XCFONT(12);
         [self addSubview:_vipLevel];
         
         _lineView = [UILabel new];
         _lineView.backgroundColor = UIColorFromRGB(0x8EB1E2);
         [self addSubview:_lineView];
+        
+        imageB = [[UIImageView alloc] initWithFrame:Rect(50, 0,18,18)];
+        [imageB setImage:[UIImage imageNamed:@"personal_recharge_icon"]];
+        [self addSubview:imageB];
         
         [self layoutViews];
     }
@@ -84,7 +90,7 @@
     if (!login)
     {
         _nameLabel.text = @"";
-        [_vipLevel setTitle:@"未登录" forState:UIControlStateNormal];
+        [_vipLevel setText:@"未登录"];
     }
     else
     {
@@ -92,12 +98,20 @@
         if (userInfo.nType == 1)
         {
             _nameLabel.text = userInfo.strName;
-            [_vipLevel setTitle:NSStringFromInt(userInfo.nUserId) forState:UIControlStateNormal];
+            
+            NSString *stringGoid = [NSString stringWithFormat:@"%.01f",userInfo.goldCoin];
+            CGSize size = [stringGoid sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}];
+            [_vipLevel setText:stringGoid];
+            _vipLevel.frame = Rect(kScreenWidth*0.75/2-size.width/2,_nameLabel.height+_nameLabel.y+5, size.width,20);
+            imageB.frame = Rect(_vipLevel.x-24,_vipLevel.y+1, 18, 18);
+            imageB.hidden = NO;
         }
         else
         {
             _nameLabel.text = @"";
-            [_vipLevel setTitle:@"未登录" forState:UIControlStateNormal];
+            [_vipLevel setText:@"未登录"];
+            _vipLevel.frame = Rect(30, _nameLabel.height+_nameLabel.y+5, self.width-60, 20);
+            imageB.hidden = YES;
         }
     }
 }

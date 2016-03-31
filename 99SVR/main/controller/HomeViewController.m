@@ -22,17 +22,13 @@
 #import "TextRoomModel.h"
 #import "HomeTextLivingCell.h"
 #import "TextHomeViewController.h"
-
 #import "RoomHttp.h"
 #import "VideoLivingCell.h"
 #import "RoomViewController.h"
-
 #import "ViewPointCell.h"
 #import "WonderfullView.h"
 #import "NewDetailsViewController.h"
-
 #import "RightImageButton.h"
-
 #import "MJRefresh.h"
 
 #define kPictureHeight 0.3 * kScreenHeight
@@ -137,39 +133,57 @@ typedef enum : NSUInteger
     
     ///添加MJ头部刷新
     @WeakObj(self);
-    [self.tableView addLegendHeaderWithRefreshingBlock:^{
-        
+    [_tableView addGifHeaderWithRefreshingBlock:^{
         ///检测当前状态
         if (cCJHomeRequestTypeDefault < selfWeak.refreshStatus)
         {
-            
             return;
-            
         }
-        
         ///设置当前状态
         selfWeak.refreshStatus = cCJHomeRequestTypeRequesting;
-        
         [selfWeak initData];
         [selfWeak initLivingData];
-        
     }];
     
+    NSArray *aryRefreshing = [self getRefresh];
+    NSArray *aryStart= [self getStartRefresh];
+    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStateIdle];
+    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStatePulling];
+    [_tableView.gifHeader setImages:aryRefreshing forState:MJRefreshHeaderStateRefreshing];
+    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStateWillRefresh];
+    _tableView.gifHeader.updatedTimeHidden = YES;
     ///一开始进行一次主动刷新
-    [self.tableView.header beginRefreshing];
+    [self.tableView.gifHeader beginRefreshing];
     
+}
+
+- (NSArray *)getStartRefresh
+{
+    NSMutableArray *refreshingImages = [NSMutableArray array];
+
+        UIImage *image = [UIImage imageNamed:@"loading_40x30_0001"];
+        [refreshingImages addObject:image];
+    return refreshingImages;
+}
+
+- (NSArray *)getRefresh
+{
+    NSMutableArray *refreshingImages = [NSMutableArray array];
+    for (NSUInteger i = 2; i <= 6; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading_40x30_000%lu", (unsigned long)i]];
+        [refreshingImages addObject:image];
+    }
+    return refreshingImages;
 }
 
 #pragma mark -
 #pragma mark - Inner function : Load image for image view and show leftView
 - (void)loadImageView
 {
-    
     @WeakObj(self);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
           selfWeak.scrollView.imageURLStringsGroup = selfWeak.aryBanner;
     });
-    
 }
 
 - (void)showLeftView
@@ -398,7 +412,7 @@ typedef enum : NSUInteger
                 {
                     
                     ///完成头部刷新动画
-                    [self.tableView.header endRefreshing];
+                    [self.tableView.gifHeader endRefreshing];
                     self.refreshStatus = cCJHomeRequestTypeDefault;
                     return;
                     
@@ -414,7 +428,7 @@ typedef enum : NSUInteger
                 if (cCJHomeRequestTypeBannerFinish == currentRequestStatus)
                 {
                     ///完成头部刷新动画
-                    [self.tableView.header endRefreshing];
+                    [self.tableView.gifHeader endRefreshing];
                     self.refreshStatus = cCJHomeRequestTypeDefault;
                     return;
                 }
@@ -786,7 +800,7 @@ typedef enum : NSUInteger
         [textSocket connectRoom:[model.roomid intValue]];
         
         NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:textSocket viewID:[model.viewid intValue]];
-        [self presentViewController:detailView animated:YES completion:nil];
+        [self.navigationController pushViewController:detailView animated:YES];
         
     }
     

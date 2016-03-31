@@ -41,16 +41,13 @@
 
 - (void)setRoom:(TextRoomModel *)room
 {
-    NSString *strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_HOME_URL,room.croompic];
+    NSString *strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.croompic];
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
 }
 
 - (void)addGesture:(void (^)(id sender))handler
 {
-    //    if(_btnPwd)
-    //    {
-    //        [_btnPwd bk_addEventHandler:handler forControlEvents:UIControlEventTouchUpInside];
-    //    }
+
 }
 
 @end

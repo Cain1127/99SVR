@@ -41,14 +41,7 @@
 
 - (void)initDefaultView
 {
-//    _defaultView = [[UIView alloc] initWithFrame:Rect(0,_searchResultsTable.y,kScreenWidth,_searchResultsTable.height)];
-//    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 30, kScreenWidth,20)];
-//    [lblName setText:@"热门搜索"];
-//    [lblName setFont:XCFONT(15)];
-//    [lblName setTextAlignment:NSTextAlignmentCenter];
-//    [_defaultView addSubview:lblName];
-//    [self.view addSubview:_defaultView];
-//    [self addTitleGroup];
+
 }
 
 - (void)addTitleGroup

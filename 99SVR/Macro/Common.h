@@ -22,7 +22,9 @@
 #define KServiceResponseSuccess 10000
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 #define kNavColor UIColorFromRGB(0x0078DD)
+
 #define SVR_LOGIN_IP @"login2.99ducaijing.cn"
 #define SVR_LOGIN_PORT 7401
 #define SVR_LVBBY_IP @"lobbyip5.99ducaijing.cn"
@@ -32,11 +34,15 @@
 #define GBK_ENCODING CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
 
 #define kGROUP_REQUEST_HTTP @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=roomdata&client=android"
+
 #define kIMAGE_HTTP_URL @"http://roompic.99ducaijing.cn:8081/"
+
 #define kIMAGE_HTTP_HOME_URL @"http://172.16.41.99/images/roompic/"
+
 #define kHISTORY_HTTP_URL @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=history&userid="
 
 #define kVideoImageHeight kScreenWidth*9/16
+
 #define kLineColor RGB(207, 207, 207)
 #define kNavigationHeight 64
 #define kSinaKey @"4288225685"
@@ -50,8 +56,9 @@
 #define LBS_HTTP_HOST3 @"http://lbs3.99ducaijing.cn:2222/"
 #define LBS_HTTP_HOST4 @"http://testlbs.99ducaijing.cn:2222/"
 
-#define kPay_URL @"http://abc.99ducaijing.com/mobile/wap_cz"
-#define kGift_URL @"http://42.81.53.201/99admintest/index.php?m=Api&c=Gift"
+#define kPay_URL @"http://api.99ducaijing.com/mobile/wap_cz"
+#define kGift_URL @"http://admin.99ducaijing.com/index.php?m=Api&c=Gift"
+
 
 #define WeakObj(o) try{}@finally{} __weak typeof(o) o##Weak = o;
 #define StrongObj(o) autoreleasepool{} __strong typeof(o) o = o##Weak;
@@ -64,16 +71,12 @@
 #define kBand_mobile_setphone_URL @"http://abc.99ducaijing.com/mapiphone/setphone"
 #define kBand_mobile_checkcode_URL @"http://abc.99ducaijing.com/mapiphone/checkphonecode"
 
-#define LBS_ROOM_WEB [NSString stringWithFormat:@"%@tygetweb",LBS_HTTP_HOST]
 #define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
 
 #if 1
-
-#define kImage_TEXT_URL @"http://172.16.41.99/test/getimage.php?tid="
-#define kTEXT_GROUP_URL @"http://172.16.41.99/test/test.php?act=script"
-#define kTEXT_NEW_DETAILS_URL @"http://172.16.41.99/viewpoint/index.php?s=/Index/getViewPoint/id/"
+#define kTEXT_GROUP_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=script"
+#define kTEXT_NEW_DETAILS_URL @"http://hall.99ducaijing.cn:8081/viewpoint/index.php?s=/Index/getViewPoint/id/"
 #define kRegisterNumber @"http://api.99ducaijing.com/"
-
 #else
 #define kTEXT_NEW_DETAILS_URL @"http://122.13.81.62:22806/viewpoint/index.php?s=/Index/getViewPoint/id/"
 #define kRegisterNumber @"http://api.99ducaijing.com/"

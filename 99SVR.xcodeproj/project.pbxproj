@@ -400,7 +400,6 @@
 		BB88F3651C4736C100C1F8D9 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F35A1C4736C100C1F8D9 /* AFURLSessionManager.m */; };
 		BB88F3661C4736C100C1F8D9 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F35C1C4736C100C1F8D9 /* BaseService.m */; };
 		BB88F36D1C4772B100C1F8D9 /* NNSVRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F36C1C4772B100C1F8D9 /* NNSVRViewController.m */; };
-		BB88F3701C479CE000C1F8D9 /* TextLivingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F36F1C479CE000C1F8D9 /* TextLivingCell.m */; };
 		BB88F37E1C48BA7300C1F8D9 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3721C48BA7300C1F8D9 /* libavcodec.a */; };
 		BB88F3811C48BA7300C1F8D9 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3751C48BA7300C1F8D9 /* libavformat.a */; };
 		BB88F3821C48BA7300C1F8D9 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3761C48BA7300C1F8D9 /* libavutil.a */; };
@@ -440,6 +439,7 @@
 		BBCF9A081CABD20C005B9DCE /* SecretViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A071CABD20C005B9DCE /* SecretViewController.m */; };
 		BBCF9A0F1CACE4EF005B9DCE /* TextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A0E1CACE4EF005B9DCE /* TextCell.m */; };
 		BBCF9A1A1CACE685005B9DCE /* TextCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A191CACE685005B9DCE /* TextCellView.m */; };
+		BBCF9A4D1CAD4F81005B9DCE /* SexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A4C1CAD4F81005B9DCE /* SexViewController.m */; };
 		BBD449121CA2CD7C00727070 /* video_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = BBD449111CA2CD7C00727070 /* video_list.txt */; };
 		BBD449151CA2D83B00727070 /* UserListView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD449141CA2D83B00727070 /* UserListView.m */; };
 		BBD49D741C5B142400EADF74 /* LivePlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD49D721C5B142400EADF74 /* LivePlayViewController.m */; };
@@ -1235,8 +1235,6 @@
 		BB88F35C1C4736C100C1F8D9 /* BaseService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseService.m; sourceTree = "<group>"; };
 		BB88F36B1C4772B100C1F8D9 /* NNSVRViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNSVRViewController.h; sourceTree = "<group>"; };
 		BB88F36C1C4772B100C1F8D9 /* NNSVRViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNSVRViewController.m; sourceTree = "<group>"; };
-		BB88F36E1C479CE000C1F8D9 /* TextLivingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLivingCell.h; sourceTree = "<group>"; };
-		BB88F36F1C479CE000C1F8D9 /* TextLivingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLivingCell.m; sourceTree = "<group>"; };
 		BB88F3721C48BA7300C1F8D9 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavcodec.a; sourceTree = "<group>"; };
 		BB88F3751C48BA7300C1F8D9 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavformat.a; sourceTree = "<group>"; };
 		BB88F3761C48BA7300C1F8D9 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavutil.a; sourceTree = "<group>"; };
@@ -1318,6 +1316,8 @@
 		BBCF9A0E1CACE4EF005B9DCE /* TextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCell.m; sourceTree = "<group>"; };
 		BBCF9A181CACE685005B9DCE /* TextCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextCellView.h; sourceTree = "<group>"; };
 		BBCF9A191CACE685005B9DCE /* TextCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCellView.m; sourceTree = "<group>"; };
+		BBCF9A4B1CAD4F81005B9DCE /* SexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SexViewController.h; sourceTree = "<group>"; };
+		BBCF9A4C1CAD4F81005B9DCE /* SexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SexViewController.m; sourceTree = "<group>"; };
 		BBD449111CA2CD7C00727070 /* video_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = video_list.txt; sourceTree = "<group>"; };
 		BBD449131CA2D83B00727070 /* UserListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserListView.h; sourceTree = "<group>"; };
 		BBD449141CA2D83B00727070 /* UserListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserListView.m; sourceTree = "<group>"; };
@@ -1398,6 +1398,8 @@
 				187C07F51C9A5A52007AE742 /* NickNameViewController.m */,
 				18BF06B31C9A7DC70071E524 /* SignatureViewController.h */,
 				18BF06B41C9A7DC70071E524 /* SignatureViewController.m */,
+				BBCF9A4B1CAD4F81005B9DCE /* SexViewController.h */,
+				BBCF9A4C1CAD4F81005B9DCE /* SexViewController.m */,
 			);
 			path = profile;
 			sourceTree = "<group>";
@@ -1824,8 +1826,6 @@
 				BB88F30C1C3FB09900C1F8D9 /* HotTextView.m */,
 				BB88F3201C41795D00C1F8D9 /* LiveCoreTextCell.h */,
 				BB88F3211C41795D00C1F8D9 /* LiveCoreTextCell.m */,
-				BB88F36E1C479CE000C1F8D9 /* TextLivingCell.h */,
-				BB88F36F1C479CE000C1F8D9 /* TextLivingCell.m */,
 				BBAB82E51C719CCD00C6AC34 /* RightView.h */,
 				BBAB82E61C719CCD00C6AC34 /* RightView.m */,
 				BB17689A1C77018F00CE947C /* ChatViewCell.h */,
@@ -3108,7 +3108,6 @@
 				BB1769301C7B006F00CE947C /* UIView+WebCacheOperation.m in Sources */,
 				1898AC6A1C9BADE600F2681D /* SettingCenterController.m in Sources */,
 				BB88F3191C41464100C1F8D9 /* TextNewViewController.m in Sources */,
-				BB88F3701C479CE000C1F8D9 /* TextLivingCell.m in Sources */,
 				BB63F61B1C2CC7A300A042E8 /* HtmlRoom.m in Sources */,
 				BB63F62C1C2D0DDF00A042E8 /* ChatButton.m in Sources */,
 				BB63F5CC1C2CC7A300A042E8 /* MJRefreshComponent.m in Sources */,
@@ -3230,6 +3229,7 @@
 				BB63F5C81C2CC7A300A042E8 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				18F971111C92947F001B2575 /* openssl_wrapper.m in Sources */,
 				1898AC681C9BADE600F2681D /* KefuCenterController.m in Sources */,
+				BBCF9A4D1CAD4F81005B9DCE /* SexViewController.m in Sources */,
 				BB16619D1C3E2DC700D318BE /* ZLButton.m in Sources */,
 				BB63F5AA1C2CC7A300A042E8 /* UIControl+BlocksKit.m in Sources */,
 				BB88F3251C4356B100C1F8D9 /* TextTcpSocket.m in Sources */,

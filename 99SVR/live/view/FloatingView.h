@@ -14,11 +14,13 @@
 @property (nonatomic,strong) UILabel *lblNumber;
 @property (nonatomic,strong) UILabel *lblName;
 @property (nonatomic,copy) NSString *strName;
-@property (nonatomic,copy) NSString *strNumber;
-
+@property (nonatomic,assign) int nNumber;
+@property (nonatomic,assign) int nGid;
 
 - (void)showGift:(CGFloat)time;
 
 - (id)initWithFrame:(CGRect)frame color:(int)nColor name:(NSString *)strName number:(NSString *)strNumber;
+
+- (id)initWithFrame:(CGRect)frame color:(int)nColor name:(NSString *)strName number:(int)nNumber gid:(int)ngid;
 
 @end

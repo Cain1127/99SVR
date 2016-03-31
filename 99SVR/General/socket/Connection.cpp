@@ -9,8 +9,8 @@
 
 static Connection* _self_ = NULL;
 
-//static const char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";//,112.25.230.249:2222
-static const char* lbs0 = "testlbs.99ducaijing.cn:2222";
+static const char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";//,112.25.230.249:2222
+//static const char* lbs0 = "testlbs.99ducaijing.cn:2222";
 
 static char lbs[256];
 
@@ -101,7 +101,15 @@ ThreadVoid get_host_form_lbs_runnable(void* param)
 					LOG("first login server: %s:%d", ip, port);
 					strcpy(first_login_server, p);
 					connect_stype_index = stype;
-					(_self_)->connect(ip, port);
+                    if(_self_)
+                    {
+                        (_self_)->connect(ip, port);
+                    }
+                    else
+                    {
+                        printf("bad_ex!");
+                    }
+                    
 					break;
 				}
 
