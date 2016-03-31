@@ -9,10 +9,16 @@
 #import "HistoryViewController.h"
 #import "RoomGroup.h"
 
+#import "RoomListRequest.h"
+
+#import "UserInfo.h"
+
 @interface HistoryViewController()
 {
     UIView *_noDataView;
 }
+
+@property (nonatomic,strong) RoomListRequest *listReuqest;
 
 @end
 
@@ -49,7 +55,10 @@
     [self.view addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
     
-    [self addNoDataView];
+    ///重置一下列表的位置和大小
+    self.tableView.frame = Rect(0, kNavigationHeight, kScreenWidth, kScreenHeight - kNavigationHeight);
+    
+    [self initHistoryData];
 }
 
 - (void)addNoDataView
@@ -94,8 +103,50 @@
     }
 }
 
-- (void)randEnterRoom
+#pragma mark - get history
+- (void)initHistoryData
 {
+    
+    ///清空本地原来的数据
+    if([UserInfo sharedUserInfo].aryCollet==nil)
+    {
+        [UserInfo sharedUserInfo].aryCollet = [NSMutableArray array];
+    }
+    [[UserInfo sharedUserInfo].aryCollet removeAllObjects];
+    
+    ///判断历史数据是否为空
+    if (!_listReuqest)
+    {
+        
+        _listReuqest = [[RoomListRequest alloc] init];
+        
+    }
+    
+    @WeakObj(self);
+    _listReuqest.historyBlock = ^(int status,NSArray *aryHistory,NSArray *aryColl)
+    {
+        for (RoomGroup *group in aryHistory)
+        {
+            [[UserInfo sharedUserInfo].aryCollet addObject:group];
+        }
+        [selfWeak setVideos:[UserInfo sharedUserInfo].aryCollet];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            ///判断是否存在历史数据
+            if (0 >= selfWeak.videos.count)
+            {
+                
+                [selfWeak addNoDataView];
+                return;
+                
+            }
+            
+            [selfWeak reloadData];
+            
+        });
+    };
+    
+    [_listReuqest requestRoomByUserId:[UserInfo sharedUserInfo].nUserId];
     
 }
 
@@ -104,10 +155,10 @@
     [super reloadData];
     __weak HistoryViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (__self.videos.count>0)
+        if (__self.videos.count > 0)
         {
             RoomGroup *group = [__self.videos objectAtIndex:0];
-            if (group.roomList.count>0)
+            if (group.roomList.count > 0)
             {
                 [__self setEmptyData:NO];
             }

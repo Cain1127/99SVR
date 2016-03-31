@@ -80,6 +80,7 @@
         [selfWeak payForAlipay:param];
     };
     
+    ///微信支付
     context[@"Wxpay"] = ^() {
         DLog(@"----微信开始充值----");
         NSArray *args = [JSContext currentArguments];
@@ -96,6 +97,36 @@
         }
         DLog(@"微信开始充值参数-----%@", param);
     };
+    
+    ///京东支付和银联支付成功
+    context[@"Wap_Pay_Success"] = ^() {
+        DLog(@"----京东支付和银联支付成功----");
+        [selfWeak jdAndPayunionPayWithResult:YES];
+    };
+    
+    ///银联支付
+    context[@"Wap_Pay_Fail"] = ^() {
+        DLog(@"----京东支付和银联支付失败----");
+        NSArray *args = [JSContext currentArguments];
+        if(args.count==0)
+        {
+            [ProgressHUD showError:@"支付失败"];
+            return;
+        }
+        [selfWeak jdAndPayunionPayWithResult:NO];
+    };
+    
+}
+
+#pragma mark -- 京东和银联支付
+- (void)jdAndPayunionPayWithResult:(BOOL)reslut
+{
+
+    RechargeResultViewController *rechargeResultVc = [[RechargeResultViewController alloc] init];
+    rechargeResultVc.title = reslut ? @"支付成功" : @"支付失败";
+    // 这里应该还需要一个订单号
+    [self.navigationController pushViewController:rechargeResultVc animated:YES];
+
 }
 
 #pragma mark -- 微信支付
@@ -146,11 +177,6 @@
         // 这里应该还需要一个订单号
         [__self.navigationController pushViewController:rechargeResultVc animated:YES];
     }];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)dealloc {
