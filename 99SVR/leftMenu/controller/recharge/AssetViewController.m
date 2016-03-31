@@ -8,6 +8,7 @@
 
 #import "AssetViewController.h"
 #import "NSString+Size.h"
+#import "UserInfo.h"
 #import "PaySelectViewController.h"
 
 @interface AssetViewController ()
@@ -42,7 +43,8 @@
     
     UILabel *amountLabel = [[UILabel alloc] init];
     amountLabel.tintColor = UIColorFromRGB(0x555555);
-    amountLabel.text = @"8888币";
+    NSString *strText = [NSString stringWithFormat:@"%.01f币",[UserInfo sharedUserInfo].goldCoin];
+    amountLabel.text = strText;
     amountLabel.font = XCFONT(15);
     amountLabel.tintColor = UIColorFromRGB(0x555555);
     CGSize amountLabelSize = [amountLabel.text sizeMakeWithFont:XCFONT(15)];

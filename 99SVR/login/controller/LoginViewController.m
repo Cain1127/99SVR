@@ -243,7 +243,7 @@
 - (void)forgetPassword
 {
     ForgetPwdViewController *forget = [[ForgetPwdViewController alloc] init];
-    [self presentViewController:forget animated:YES completion:nil];
+    [self.navigationController pushViewController:forget animated:YES];
 }
 
 -(void)setTextFieldLeftPadding:(UITextField *)textField forWidth:(CGFloat)leftWidth
@@ -299,7 +299,7 @@
 
 - (void)findPwd
 {
-    [self presentViewController:[[ForgetPwdViewController alloc] init] animated:YES completion:nil];
+    [self.navigationController pushViewController:[[ForgetPwdViewController alloc] init] animated:YES];
 }
 
 -(void)initUIBody

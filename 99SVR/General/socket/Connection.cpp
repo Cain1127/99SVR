@@ -9,8 +9,8 @@
 
 static Connection* _self_ = NULL;
 
-//static const char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";//,112.25.230.249:2222
-static const char* lbs0 = "testlbs.99ducaijing.cn:2222";
+static const char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";//,112.25.230.249:2222
+//static const char* lbs0 = "testlbs.99ducaijing.cn:2222";
 static char lbs[256];
 
 static time_t start_connect_time = 0;

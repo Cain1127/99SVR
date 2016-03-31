@@ -969,19 +969,19 @@
     }
     if(userId == [UserInfo sharedUserInfo].nUserId)
     {
-        return [NSString stringWithFormat:@"<span value=\"forme--%d\">你</span>",userId];
+        return [NSString stringWithFormat:@"<span value=\"forme--%d\">%@</span>",userId,strName];
     }
     else
     {
         if (strName)
         {
-            return [NSString stringWithFormat:@"<a style=\"color:#629bff \" href=\"sqchatid://%d\" value=\"%@\">%@</a>",
+            return [NSString stringWithFormat:@"<a style=\"color:#919191\" href=\"sqchatid://%d\" value=\"%@\">%@</a>",
 //            return [NSString stringWithFormat:@"<a>sqchatid://%d|%@</a>",
                     userId,strName,strName];
         }
         else
         {
-            return [NSString stringWithFormat:@"<a style=\"font-size:13px;COLOR: #629bff \" href=\"sqchatid://%d\">%d</a>(%d)",
+            return [NSString stringWithFormat:@"<a style=\"font-size:13px;color:#919191 \" href=\"sqchatid://%d\">%d</a>(%d)",
 //            return [NSString stringWithFormat:@"<a>sqchatid://%d|%d</a>",
                     userId, userId,userId];
         }
@@ -1030,11 +1030,11 @@
         NSString *strInfo = nil;
         if (msg->toid == 0)
         {
-            strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\">%@说:</span><br/>%@",strFrom,strTo,strContent];
+            strInfo = [NSString stringWithFormat:@"  %@<p style=\"color:#919191\">%@</p><br/>%@",strFrom,strTo,strContent];
         }
         else
         {
-            strInfo = [NSString stringWithFormat:@" %@<span style=\"color:#919191\">对%@说:\n</span><br/>%@",strFrom,strTo,strContent];
+            strInfo = [NSString stringWithFormat:@" %@ <p style=\"color:#919191\">回复 %@ </p><br/>%@",strFrom,strTo,strContent];
         }
 //        strInfo = [DecodeJson replaceEmojiNewString:strInfo];
 //        [_aryChat addObject:strInfo];
@@ -1043,7 +1043,6 @@
         //查询是否有对我说的记录
         if ([strTo rangeOfString:query].location != NSNotFound || [strFrom rangeOfString:query].location != NSNotFound )
         {
-//            [_aryPriChat addObject:strInfo];
             [self addPriChatInfo:strInfo];
             if (_aryPriChat.count >= 20)
             {
@@ -1321,21 +1320,19 @@
 - (void)sendLocalChat:(NSString *)strMsg to:(int)nUser
 {
 //    strMsg = [DecodeJson replaceEmojiNewString:strMsg];
-    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color: #629bff\" value=\"forme--%d\">你</span>",
+    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color: #919191\" value=\"forme--%d\"> 你</spanp>",
                          [UserInfo sharedUserInfo].nUserId];
     if (nUser!=0)
     {
         RoomUser *user = [_rInfo findUser:nUser];
         NSString *strTo = [self getToUser:nUser user:user name:user.m_strUserAlias];
-        NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\">对 %@ 说:</span><br/>%@",strFrom,strTo,strMsg];
-//        [_aryChat addObject:strInfo];
+        NSString *strInfo = [NSString stringWithFormat:@"<p style=\"color:#919191\"> %@ 回复 %@ </span><br/>%@",strFrom,strTo,strMsg];
         [self addChatInfo:strInfo];
-//        [_aryPriChat addObject:strInfo];
         [self addPriChatInfo:strInfo];
     }
     else
     {
-        NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\"> 说:</span><br/>%@",strFrom,strMsg];
+        NSString *strInfo = [NSString stringWithFormat:@"<p style=\"color:#919191\">%@</p><br/>%@",strFrom,strMsg];
 //        [_aryChat addObject:strInfo];
         [self addChatInfo:strInfo];
 //        [_aryPriChat addObject:strInfo];

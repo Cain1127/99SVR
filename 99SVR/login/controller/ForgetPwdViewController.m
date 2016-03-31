@@ -256,14 +256,13 @@
             });
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 InputPwdViewController *input = [[InputPwdViewController alloc] initWithMobile:__self.strMobile];
-                [self presentViewController:input animated:YES completion:nil];
+                [self.navigationController pushViewController:input animated:YES];
             });
         }
         else
         {
             dispatch_async(dispatch_get_main_queue(),
             ^{
-//                [__self.view makeToast:[dict objectForKey:@"errmsg"] duration:2.0 position:@"center"];
                 [__self.lblError setText:[dict objectForKey:@"errmsg"]];
             });
         }

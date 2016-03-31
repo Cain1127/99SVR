@@ -137,7 +137,7 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
 {
     UserInfo *user = [UserInfo sharedUserInfo];
     user.m_nVipLevel = info.viplevel();
-    user.goldCoin = info.nk();
+    user.goldCoin = info.nk()/1000;
     user.score = info.nb();
     user.sex = info.ngender();
     user.nUserId = info.userid();

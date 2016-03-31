@@ -78,7 +78,6 @@
     [super layoutSubviews];
     
     _listTableView.frame = CGRectMake(0, 255, kScreenWidth * 0.75, 308);
-    
     [self checkLogin];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];

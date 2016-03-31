@@ -43,7 +43,7 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
             strMd5 = [DecodeJson XCmdMd5String:password];
             [UserInfo sharedUserInfo].strMd5Pwd = strMd5;
         }
-        protocol->startLogin([username UTF8String],[info.strPwd UTF8String],[strMd5 UTF8String]);
+        protocol->startLogin([username UTF8String],[password UTF8String],[strMd5 UTF8String]);
     }
 }
 

@@ -43,7 +43,7 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
 @property (nonatomic,assign) unsigned char m_nVipLevel;
 
-@property(nonatomic, assign) long long goldCoin; // 金币
+@property(nonatomic, assign) CGFloat goldCoin; // 金币
 
 @property(nonatomic, assign) long long score; // 积分
 

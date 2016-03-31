@@ -116,8 +116,8 @@
 {
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
 
-    [self createLabelWithRect:Rect(30, 8, 80, 30)];
-    _txtName = [self createTextField:Rect(30, 8, kScreenWidth-60, 30)];
+    [self createLabelWithRect:Rect(30, 72, 80, 30)];
+    _txtName = [self createTextField:Rect(30, 72, kScreenWidth-60, 30)];
     [_txtName setPlaceholder:@"请输入密码"];
     
     [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
@@ -141,8 +141,6 @@
     [btnRegister addTarget:self action:@selector(authMobile) forControlEvents:UIControlEventTouchUpInside];
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
-    
-    
 }
 
 - (void)closeKeyBoard
