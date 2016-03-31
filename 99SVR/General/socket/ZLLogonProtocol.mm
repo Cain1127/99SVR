@@ -193,7 +193,7 @@ void ZLLoginListener::OnLogonTokenNotify(SessionTokenResp& info)
 /**
  *  直接登录
  *
- *  @param cloginid loginId分为99财经数字Id/手机号/自定义账号
+ *  @param cloginid loginId分为99乐投数字Id/手机号/自定义账号
  *  @param pwd      密码   md5
  *
  *  @return 默认返回1

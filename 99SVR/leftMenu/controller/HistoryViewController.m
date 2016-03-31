@@ -102,12 +102,13 @@
     }
     
     @WeakObj(self);
-    _listReuqest.historyBlock = ^(int status,NSArray *aryHistory,NSArray *aryColl)
+    _listReuqest.historyBlock = ^(int status, NSArray *aryHistory, NSArray *aryColl)
     {
         for (RoomGroup *group in aryHistory)
         {
             [[UserInfo sharedUserInfo].aryCollet addObject:group];
         }
+        
         [selfWeak setVideos:[UserInfo sharedUserInfo].aryCollet];
         dispatch_async(dispatch_get_main_queue(), ^{
             

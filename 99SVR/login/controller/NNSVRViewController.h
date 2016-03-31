@@ -1,7 +1,7 @@
 //
 //  NNSVRViewController.h
 //  99SVR
-//  99财经协议
+//  99乐投协议
 //  Created by xia zhonglin  on 1/14/16.
 //  Copyright © 2016 xia zhonglin . All rights reserved.
 //

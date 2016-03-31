@@ -91,7 +91,7 @@
     _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
     [_lblContent setBackgroundColor:[UIColor whiteColor]];
     [_headView addSubview:_lblContent];
-    title.text = @"99财经";
+    title.text = @"99乐投";
     
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(showLeftView) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
     [self.view addSubview:btnLeft];
