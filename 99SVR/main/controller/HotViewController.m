@@ -31,6 +31,7 @@
          [__self.tableView.header beginRefreshing];
          [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_INDEX_GET_GROUPLIST_VC object:nil];
     }];
+    
 }
 
 - (void)reloadData
