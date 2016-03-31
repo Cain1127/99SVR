@@ -324,7 +324,7 @@
 {
     [super viewDidLoad];
     
-    [self setTitle:@"修改密码"];
+    [self setTitleText:@"修改密码"];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self createView];
     NSDate *date = [NSDate date];

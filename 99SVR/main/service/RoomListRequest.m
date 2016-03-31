@@ -52,6 +52,7 @@
                     }
                     group.roomList = array;
                 }
+                
                 NSArray *collDict = [firDict objectForKey:@"Collent"];
                 NSMutableArray *aryColl = [NSMutableArray array];
                 if(![[firDict objectForKey:@"Collent"] isKindOfClass:[NSString class]])

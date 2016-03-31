@@ -46,7 +46,8 @@ typedef enum : NSUInteger
     cCJHomeRequestTypeDefault = 1,  //!<默认状态
     cCJHomeRequestTypeRequesting,   //!<正在请求，同时所有请求都没有完成
     cCJHomeRequestTypeBannerFinish, //!<banner信息请求完成
-    cCJHomeRequestTypeListFinish    //!<列表信息请求完成
+    cCJHomeRequestTypeListFinish,   //!<列表信息请求完成
+    cCJHomeRequestTypeRequestFail   //!<请求失败或者中途断开
     
 } CJHomeRequestType;
 
@@ -108,6 +109,7 @@ typedef enum : NSUInteger
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
     self.refreshStatus = cCJHomeRequestTypeDefault;
+
     UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
     _headView.backgroundColor = UIColorFromRGB(0xffffff);
@@ -208,19 +210,33 @@ typedef enum : NSUInteger
         if ([dict objectForKey:@"banner"])
         {
             NSArray *array = [dict objectForKey:@"banner"];
+            
+            ///判断是否有数据，有新数据，则清除原数据
+            if (0 < array.count)
+            {
+                
+                [selfWeak.aryBanner removeAllObjects];
+                
+            }
+            
             for (NSDictionary *param in array)
             {
                 BannerModel *model = [BannerModel resultWithDict:param];
                 [selfWeak.aryBanner addObject:model];
             }
+            
             ///返回主线程刷新UI
             dispatch_async(dispatch_get_main_queue(), ^{
+                
                 [selfWeak updateRefreshStatus:cCJHomeRequestTypeBannerFinish];
                 [selfWeak loadImageView];
+                
             });
         }
     } fail:^(NSError *error) {
-        [selfWeak updateRefreshStatus:cCJHomeRequestTypeBannerFinish];
+        
+        [selfWeak updateRefreshStatus:cCJHomeRequestTypeRequestFail];
+        
     }];
 }
 
@@ -233,6 +249,7 @@ typedef enum : NSUInteger
  */
 - (void)initLivingData
 {
+    
     __weak HomeViewController *__self = self;
     NSString *requestAPI = @"http://hall.99ducaijing.cn:8081/mobile/index.php";
     [BaseService getJSONWithUrl:requestAPI parameters:nil success:^(id responseObject)
@@ -243,12 +260,14 @@ typedef enum : NSUInteger
          if (!dict)
          {
              DLog(@"home list data is null. http API: %@", requestAPI);
+             [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
              return;
          }
          
          if (0 >= [[dict allKeys] count])
          {
              DLog(@"home list data is empty, don't include any data. http API: %@", requestAPI);
+             [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
              return;
          }
          
@@ -261,6 +280,9 @@ typedef enum : NSUInteger
          {
              __self.aryLiving = [NSMutableArray array];
          }
+         
+         ///清空原数据
+         [__self.aryLiving removeAllObjects];
          
          ///check videoroom data
          if ([dict objectForKey:@"videoroom"])
@@ -300,6 +322,7 @@ typedef enum : NSUInteger
          {
              DLog(@"home list data is not include textroom data. http API: %@", requestAPI);
          }
+         
          if ([dict objectForKey:@"viewpoint"])
          {
              ///初始化数据模型
@@ -420,7 +443,15 @@ typedef enum : NSUInteger
             break;
             ///当前处于默认状态，无请求
             case cCJHomeRequestTypeDefault:
+            case cCJHomeRequestTypeRequestFail:
             default:
+            {
+            
+                ///完成头部刷新动画
+                [self.tableView.header endRefreshing];
+                self.refreshStatus = cCJHomeRequestTypeDefault;
+            
+            }
                 break;
         }
         

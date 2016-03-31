@@ -89,7 +89,6 @@ void LoginConnection::SendMsg_LoginReq5(UserLogonReq5& req)
 {
 	req5 = req;
 	reqv = 5;
-
 	conenct_from_lbs();
 }
 
@@ -97,7 +96,6 @@ void LoginConnection::SendMsg_SessionTokenReq(uint32 userid)
 {
 	SessionTokenReq req;
 	req.set_userid(userid);
-
 	SEND_MESSAGE(Sub_Vchat_logonTokenReq, req);
 }
 

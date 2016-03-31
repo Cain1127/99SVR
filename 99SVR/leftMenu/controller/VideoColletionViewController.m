@@ -60,7 +60,7 @@
     [self initHistoryData];
 }
 
-#pragma mark get history
+#pragma mark - get history
 - (void)initHistoryData
 {
     if([UserInfo sharedUserInfo].aryCollet==nil)
@@ -82,7 +82,5 @@
     };
     [_listReuqest requestRoomByUserId:[UserInfo sharedUserInfo].nUserId];
 }
-
-
 
 @end
