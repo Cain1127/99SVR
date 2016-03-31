@@ -2790,7 +2790,7 @@
 				TargetAttributes = {
 					BB25D7D31C1571B400314C1E = {
 						CreatedOnToolsVersion = 7.1.1;
-						DevelopmentTeam = 3K9P9NRQ2R;
+						DevelopmentTeam = FMNJX2N6V6;
 					};
 					BB25D7EC1C1571B400314C1E = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -3496,7 +3496,7 @@
 					"-force_load",
 					"$(SRCROOT)/99SVR/libs/libWeiboSDK.a",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99.Cain;
+				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -3547,7 +3547,7 @@
 					"-force_load",
 					"$(SRCROOT)/99SVR/libs/libWeiboSDK.a",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99.Cain;
+				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;

@@ -15,7 +15,7 @@
 #import "RoomGroup.h"
 #import "HotViewController.h"
 #import "MainViewController.h"
-#import "HistoryViewController.h"
+//#import "HistoryViewController.h"
 #import "GiftRequest.h"
 #import "GroupView.h"
 #import "SearchController.h"
@@ -91,9 +91,9 @@
                     [__self setUpdate:__self.aryOnline obj:viewController];
                     continue;
                 }
-                if ([viewController class] == [HistoryViewController class]) {
-                    continue;
-                }
+//                if ([viewController class] == [HistoryViewController class]) {
+//                    continue;
+//                }
             }
         }
         else
@@ -138,26 +138,28 @@
 #pragma mark get history
 - (void)initHistoryData
 {
-    if ([UserInfo sharedUserInfo].nType !=1)
-    {
-        if (_aryHistory && _aryHistory.count>0)
-        {
-            [_aryHistory removeAllObjects];
-            for (UIViewController *viewController in self.childViewControllers)
-            {
-                if ([viewController class] == [HistoryViewController class])
-                {
-                    [self setUpdate:_aryHistory obj:viewController];
-                    break;
-                }
-            }
-        }
-        return ;
-    }
+//    if ([UserInfo sharedUserInfo].nType !=1)
+//    {
+//        if (_aryHistory && _aryHistory.count>0)
+//        {
+//            [_aryHistory removeAllObjects];
+//            for (UIViewController *viewController in self.childViewControllers)
+//            {
+//                if ([viewController class] == [HistoryViewController class])
+//                {
+//                    [self setUpdate:_aryHistory obj:viewController];
+//                    break;
+//                }
+//            }
+//        }
+//        return ;
+//    }
+    
     if([UserInfo sharedUserInfo].aryCollet==nil)
     {
         [UserInfo sharedUserInfo].aryCollet = [NSMutableArray array];
     }
+    
     [[UserInfo sharedUserInfo].aryCollet removeAllObjects];
     __weak IndexViewController *__self = self;
     _listReuqest.historyBlock = ^(int status,NSArray *aryHistory,NSArray *aryColl)
@@ -175,21 +177,23 @@
                 [__self.aryHistory addObject:group];
             }
         }
-        if (aryColl && aryColl.count>0)
+        
+        if (aryColl && aryColl.count > 0)
         {
             [[UserInfo sharedUserInfo].aryCollet addObject:[aryColl objectAtIndex:0]];
         }
-        for (UIViewController *viewController in __self.childViewControllers)
-        {
-            if ([viewController class] == [HistoryViewController class])
-            {
-                if (__self.aryHistory.count>0)
-                {
-                    [__self setUpdate:__self.aryHistory obj:viewController];
-                }
-                break;
-            }
-        }
+        
+//        for (UIViewController *viewController in __self.childViewControllers)
+//        {
+//            if ([viewController class] == [HistoryViewController class])
+//            {
+//                if (__self.aryHistory.count>0)
+//                {
+//                    [__self setUpdate:__self.aryHistory obj:viewController];
+//                }
+//                break;
+//            }
+//        }
     };
     DLog(@"userid:%d",[UserInfo sharedUserInfo].nUserId);
     [_listReuqest requestRoomByUserId:[UserInfo sharedUserInfo].nUserId];
@@ -261,11 +265,11 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)switchToHistory
-{
-    UIButton *btnSender = [_group viewWithTag:3];
-    [self btnEvent:btnSender];
-}
+//- (void)switchToHistory
+//{
+//    UIButton *btnSender = [_group viewWithTag:3];
+//    [self btnEvent:btnSender];
+//}
 
 - (void)refreshUI
 {
@@ -284,7 +288,7 @@
 
 - (void)initUIHead
 {
-    NSArray *aryMen = @[@"实力新秀",@"财经在线",@"我的足迹"];
+    NSArray *aryMen = @[@"实力新秀",@"财经在线"];
     _group = [[GroupView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44) ary:aryMen];
     [self.view addSubview:_group];
     _group.delegate = self;
@@ -302,23 +306,23 @@
     
     HotViewController *hotController = [[HotViewController alloc] init];
     MainViewController *mainView = [[MainViewController alloc] init];
-    HistoryViewController *historyView = [[HistoryViewController alloc] init];
+//    HistoryViewController *historyView = [[HistoryViewController alloc] init];
     
     [self addChildViewController:hotController];
-    [self addChildViewController:historyView];
+//    [self addChildViewController:historyView];
     [self addChildViewController:mainView];
     
     hotController.view.frame = Rect(0, 0, kScreenWidth,_scrollView.height);
     mainView.view.frame = Rect(kScreenWidth, 0, kScreenWidth, _scrollView.height);
-    historyView.view.frame = Rect(kScreenWidth*2, 0, kScreenWidth, _scrollView.height);
+//    historyView.view.frame = Rect(kScreenWidth*2, 0, kScreenWidth, _scrollView.height);
     
     [_scrollView addSubview:hotController.view];
     [_scrollView addSubview:mainView.view];
-    [_scrollView addSubview:historyView.view];
-    _scrollView.contentSize = CGSizeMake(kScreenWidth*3, _scrollView.height);
+//    [_scrollView addSubview:historyView.view];
+    _scrollView.contentSize = CGSizeMake(kScreenWidth * 2, _scrollView.height);
     //[_scrollView.panGestureRecognizer addTarget:self action:@selector(scrollHandlePan:)];
     
-    _tag = 0;
+    _tag = 1;
 //    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
 //    [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
 //    __weak IndexViewController *__self = self;
@@ -344,16 +348,19 @@
     }
     int tag = (int)btnSender.tag;
     [_group setBtnSelect:tag];
-    if(tag+2 == _tag || tag-2==_tag)
-    {
-        _tag = (int)btnSender.tag;
-        [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
-    }
-    else
-    {
-        [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
-        _tag = (int)btnSender.tag;
-    }
+    [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
+    _tag = (int)btnSender.tag;
+    
+//    if(tag+2 == _tag || tag-2==_tag)
+//    {
+//        _tag = (int)btnSender.tag;
+//        [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
+//    }
+//    else
+//    {
+//        [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
+//        _tag = (int)btnSender.tag;
+//    }
 }
 
 - (void)switchController:(int)tag
@@ -373,10 +380,10 @@
         {
             [_sonView addSubview:viewController.view];
         }
-        if(tag==3 && [viewController class] == [HistoryViewController class])
-        {
-            [_sonView addSubview:viewController.view];
-        }
+//        if(tag==3 && [viewController class] == [HistoryViewController class])
+//        {
+//            [_sonView addSubview:viewController.view];
+//        }
     }
 }
 
@@ -394,18 +401,18 @@
 }
 - (void)leftSwitch
 {
-    if (_tag>1)
+    if (_tag > 1)
     {
-        UIButton *btnSender = [_group viewWithTag:_tag-1];
+        UIButton *btnSender = [_group viewWithTag:_tag - 1];
         [self btnEvent:btnSender];
     }
 }
 
 - (void)rightSwitch
 {
-    if (_tag<3)
+    if (_tag < 2)
     {
-        UIButton *btnSender = [_group viewWithTag:_tag+1];
+        UIButton *btnSender = [_group viewWithTag:_tag + 1];
         [self btnEvent:btnSender];
     }
 }
@@ -458,15 +465,15 @@
     {
         if (temp > _currentPage)
         {
-            if (_tag<=2)
+            if (_tag <= 1)
             {
-                _tag ++;
+                _tag++;
                 [_group setBtnSelect:_tag];
             }
         }
         else
         {
-            if (_tag>1)
+            if (_tag > 1)
             {
                 _tag--;
                 [_group setBtnSelect:_tag];
@@ -479,13 +486,13 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    if (updateCount ==1)//正常
+    if (updateCount == 1)//正常
     {
         
     }
-    else if(updateCount==0 && _currentPage ==0)
+    else if(updateCount == 0 && _currentPage == 0)
     {
-        if (_tag==1)
+        if (_tag == 1)
         {
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SHOW_LEFT_VC object:nil];
         }
