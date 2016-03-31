@@ -231,22 +231,21 @@ typedef enum : NSUInteger
 {
     
     __weak HomeViewController *__self = self;
-    NSString *requestAPI = @"http://hall.99ducaijing.cn:8081/mobile/index.php";
-    [BaseService getJSONWithUrl:requestAPI parameters:nil success:^(id responseObject)
+    [BaseService getJSONWithUrl:kHome_LivingList_URL parameters:nil success:^(id responseObject)
      {
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          
          ///check response data
          if (!dict)
          {
-             DLog(@"home list data is null. http API: %@", requestAPI);
+             DLog(@"home list data is null. http API: %@", kHome_LivingList_URL);
              [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
              return;
          }
          
          if (0 >= [[dict allKeys] count])
          {
-             DLog(@"home list data is empty, don't include any data. http API: %@", requestAPI);
+             DLog(@"home list data is empty, don't include any data. http API: %@", kHome_LivingList_URL);
              [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
              return;
          }
@@ -282,7 +281,7 @@ typedef enum : NSUInteger
          }
          else
          {
-             DLog(@"home list data is not include videoroom data. http API: %@", requestAPI);
+             DLog(@"home list data is not include videoroom data. http API: %@", kHome_LivingList_URL);
          }
          
          ///check textroom data
@@ -300,7 +299,7 @@ typedef enum : NSUInteger
          }
          else
          {
-             DLog(@"home list data is not include textroom data. http API: %@", requestAPI);
+             DLog(@"home list data is not include textroom data. http API: %@", kHome_LivingList_URL);
          }
          
          if ([dict objectForKey:@"viewpoint"])
@@ -320,7 +319,7 @@ typedef enum : NSUInteger
          }
          else
          {
-             DLog(@"home list data is not include viewpoint data. http API: %@", requestAPI);
+             DLog(@"home list data is not include viewpoint data. http API: %@", kHome_LivingList_URL);
          }
          
          ///主线程刷新UI
@@ -498,10 +497,12 @@ typedef enum : NSUInteger
     {
         return [self createDefaultTableViewCell:tableView];
     }
+    
     if (!([_aryLiving[indexPath.section - 1] isKindOfClass:[NSArray class]]))
     {
         return [self createDefaultTableViewCell:tableView];;
     }
+    
     ///根据对象数组内的类型加载HeaderView
     NSArray *tempArray = _aryLiving[indexPath.section - 1];
     if (0 >= tempArray.count)
@@ -533,6 +534,7 @@ typedef enum : NSUInteger
         [tempCell setRowDatas:tempArray];
         return tempCell;
     }
+    
     ///文字直播内容
     if ([tempObject isKindOfClass:[TextRoomModel class]])
     {
@@ -553,6 +555,7 @@ typedef enum : NSUInteger
         [tempCell setRowDatas:tempArray];
         return tempCell;
     }
+    
     ///精彩视点
     if ([tempObject isKindOfClass:[WonderfullView class]])
     {
@@ -825,10 +828,11 @@ typedef enum : NSUInteger
     if ([tempObject isKindOfClass:[RoomHttp class]] ||
         [tempObject isKindOfClass:[TextRoomModel class]])
     {
-        CGFloat height = ((kScreenWidth-36)/2)*10/16+8;
-        DLog(@"height:%f",height);
+        CGFloat height = ((kScreenWidth - 36.0f) / 2.0f) * 10 / 16 + 8;
         return height;
     }
+    
+    ///精彩观点的cell高度
     return 100.0f;
     
 }

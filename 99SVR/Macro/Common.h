@@ -58,6 +58,7 @@
 
 #define kGif_Image_URL "http://admin.99ducaijing.com/Uploads/Picture"
 #define kHome_Banner_URL "http://admin.99ducaijing.com/index.php?m=Api&c=Banner"
+#define kHome_LivingList_URL @"http://hall.99ducaijing.cn:8081/mobile/index.php"
 
 #define kBand_mobile_getcode_URL @"http://abc.99ducaijing.com/mapiphone/getmsgcode"
 #define kBand_mobile_setphone_URL @"http://abc.99ducaijing.com/mapiphone/setphone"
