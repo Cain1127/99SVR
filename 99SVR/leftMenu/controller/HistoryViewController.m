@@ -22,12 +22,39 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    
+    /**
+     *  @author yangshengmeng, 16-03-31 16:03:34
+     *
+     *  @brief  添加导航栏，代码是复制[我的收藏]页面
+     *
+     *  @since  v1.0.0
+     */
+    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
+    [self.view addSubview:_headView];
+    _headView.backgroundColor = kNavColor;
+    UILabel *title;
+    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
+    [title setFont:XCFONT(16)];
+    [_headView addSubview:title];
+    [title setTextAlignment:NSTextAlignmentCenter];
+    [title setTextColor:[UIColor whiteColor]];
+    UILabel *_lblContent;
+    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
+    [_lblContent setBackgroundColor:[UIColor whiteColor]];
+    [_headView addSubview:_lblContent];
+    title.text = @"我的足迹";
+    
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(navBack) image:@"back" highImage:@"back"];
+    [self.view addSubview:btnLeft];
+    [btnLeft setFrame:Rect(0,20,44,44)];
+    
     [self addNoDataView];
 }
 
 - (void)addNoDataView
 {
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 104)];
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, kNavigationHeight, self.view.width, self.view.height - kNavigationHeight)];
     [self.view addSubview:container];
     _noDataView = container;
     
@@ -105,6 +132,13 @@
     } else {
         _noDataView.hidden = YES;
     }
+}
+
+- (void)navBack
+{
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 @end

@@ -28,6 +28,8 @@
 #define kSetting @"设置"
 #define kMyCollection @"我的收藏"
 #define kMyAsset @"我的资产"
+#define kMyProfile @"我的资料"
+#define kMyLivingHistory @"我的足迹"
 #define kKefu @"客服中心"
 
 @interface LeftMenu()<UITableViewDataSource,UITableViewDelegate,LeftMenuHeaderViewDelegate>
@@ -97,8 +99,9 @@
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"collect.png" goClassName:@"VideoColletionViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"setting" goClassName:@"AssetViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的资料" icon:@"setting" goClassName:@"ProfileViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_gold" goClassName:@"AssetViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyProfile icon:@"personal_user" goClassName:@"ProfileViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyLivingHistory icon:@"personal_record" goClassName:@"HistoryViewController"]];
     }
     else  // 没登录
     {

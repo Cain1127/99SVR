@@ -146,7 +146,6 @@
     return cell;
 }
 
-
 - (void)connectRoom:(RoomHttp *)room
 {
     RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
