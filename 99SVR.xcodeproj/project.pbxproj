@@ -434,6 +434,8 @@
 		BBCF99F01CABAC22005B9DCE /* TextChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF99EF1CABAC22005B9DCE /* TextChatView.m */; };
 		BBCF99FD1CABCFDC005B9DCE /* json.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBCF99FB1CABCFDC005B9DCE /* json.cpp */; };
 		BBCF9A081CABD20C005B9DCE /* SecretViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A071CABD20C005B9DCE /* SecretViewController.m */; };
+		BBCF9A0F1CACE4EF005B9DCE /* TextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A0E1CACE4EF005B9DCE /* TextCell.m */; };
+		BBCF9A1A1CACE685005B9DCE /* TextCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A191CACE685005B9DCE /* TextCellView.m */; };
 		BBD449121CA2CD7C00727070 /* video_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = BBD449111CA2CD7C00727070 /* video_list.txt */; };
 		BBD449151CA2D83B00727070 /* UserListView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD449141CA2D83B00727070 /* UserListView.m */; };
 		BBD49D741C5B142400EADF74 /* LivePlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD49D721C5B142400EADF74 /* LivePlayViewController.m */; };
@@ -1305,6 +1307,10 @@
 		BBCF99FC1CABCFDC005B9DCE /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
 		BBCF9A061CABD20C005B9DCE /* SecretViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecretViewController.h; sourceTree = "<group>"; };
 		BBCF9A071CABD20C005B9DCE /* SecretViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecretViewController.m; sourceTree = "<group>"; };
+		BBCF9A0D1CACE4EF005B9DCE /* TextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextCell.h; sourceTree = "<group>"; };
+		BBCF9A0E1CACE4EF005B9DCE /* TextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCell.m; sourceTree = "<group>"; };
+		BBCF9A181CACE685005B9DCE /* TextCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextCellView.h; sourceTree = "<group>"; };
+		BBCF9A191CACE685005B9DCE /* TextCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCellView.m; sourceTree = "<group>"; };
 		BBD449111CA2CD7C00727070 /* video_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = video_list.txt; sourceTree = "<group>"; };
 		BBD449131CA2D83B00727070 /* UserListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserListView.h; sourceTree = "<group>"; };
 		BBD449141CA2D83B00727070 /* UserListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserListView.m; sourceTree = "<group>"; };
@@ -2404,6 +2410,10 @@
 				BB6F3AB91C9D6EC50035EBBE /* FloatingView.m */,
 				BBD449131CA2D83B00727070 /* UserListView.h */,
 				BBD449141CA2D83B00727070 /* UserListView.m */,
+				BBCF9A0D1CACE4EF005B9DCE /* TextCell.h */,
+				BBCF9A0E1CACE4EF005B9DCE /* TextCell.m */,
+				BBCF9A181CACE685005B9DCE /* TextCellView.h */,
+				BBCF9A191CACE685005B9DCE /* TextCellView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -3182,6 +3192,7 @@
 				BB63F6241C2CC7A300A042E8 /* LeftCellModel.m in Sources */,
 				BB63F5FE1C2CC7A300A042E8 /* Video.m in Sources */,
 				BB63F6071C2CC7A300A042E8 /* RoomUserCell.m in Sources */,
+				BBCF9A1A1CACE685005B9DCE /* TextCellView.m in Sources */,
 				BBD449151CA2D83B00727070 /* UserListView.m in Sources */,
 				BB17689C1C77018F00CE947C /* ChatViewCell.m in Sources */,
 				BB6F3AD91C9F86270035EBBE /* SDCycleScrollView.m in Sources */,
@@ -3206,6 +3217,7 @@
 				BB16619D1C3E2DC700D318BE /* ZLButton.m in Sources */,
 				BB63F5AA1C2CC7A300A042E8 /* UIControl+BlocksKit.m in Sources */,
 				BB88F3251C4356B100C1F8D9 /* TextTcpSocket.m in Sources */,
+				BBCF9A0F1CACE4EF005B9DCE /* TextCell.m in Sources */,
 				BB63F5C21C2CC7A300A042E8 /* MASConstraint.m in Sources */,
 				BBCF9A081CABD20C005B9DCE /* SecretViewController.m in Sources */,
 				BB1769391C7B045D00CE947C /* RegMobileViewController.m in Sources */,

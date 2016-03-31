@@ -21,9 +21,7 @@
 {
     
     [super viewDidLoad];
-<<<<<<< HEAD
     [self setTitleText:@"修改个性签名"];
-=======
     
     /**
      *  @author yangshengmeng, 16-03-30 17:03:13

@@ -41,6 +41,12 @@ int set_block(SOCKET socket, bool block)
 
 }
 
+void set_no_sigpipe(SOCKET socket)
+{
+    int set = 1;
+    setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, (void*)&set, sizeof(int));
+}
+
 int set_timeout(SOCKET socket, int recv_timeout_second, int send_timeout_second)
 {
 #ifdef WIN
@@ -84,6 +90,7 @@ int Socket::connect(const char* host, short port, int connect_timeout)
 
 	set_block(socket, false);
 	ret = ::connect(socket, (struct sockaddr*) &sockAddr, sizeof(sockAddr));
+    
 	if (socket == 0)
 	{
 		LOG("connected!:%d", ret);
@@ -119,6 +126,7 @@ int Socket::connect(const char* host, short port, int connect_timeout)
 			}
 		}
 	}
+    set_no_sigpipe(socket);
 	
 	if (ret != 0)
 	{

@@ -56,8 +56,8 @@
 #define WeakObj(o) try{}@finally{} __weak typeof(o) o##Weak = o;
 #define StrongObj(o) autoreleasepool{} __strong typeof(o) o = o##Weak;
 
-#define kGif_Image_URL "http://42.81.53.201/99admintest/Uploads/Picture"
-#define kHome_Banner_URL "http://42.81.53.201/99admintest/index.php?m=Api&c=Banner"
+#define kGif_Image_URL "http://admin.99ducaijing.com/Uploads/Picture"
+#define kHome_Banner_URL "http://admin.99ducaijing.com/index.php?m=Api&c=Banner"
 
 #define kBand_mobile_getcode_URL @"http://abc.99ducaijing.com/mapiphone/getmsgcode"
 #define kBand_mobile_setphone_URL @"http://abc.99ducaijing.com/mapiphone/setphone"
