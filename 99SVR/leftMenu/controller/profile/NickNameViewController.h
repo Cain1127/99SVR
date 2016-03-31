@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NickNameViewController : UIViewController
+@interface NickNameViewController : CustomViewController
 /**
  *  回调
  */

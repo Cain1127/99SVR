@@ -274,7 +274,7 @@ NSString * const ID = @"cycleCell";
         NSString *urlString;
         if ([obj isKindOfClass:[BannerModel class]]) {
             BannerModel *model = (BannerModel *)obj;
-            urlString = [NSString stringWithFormat:@"%s/%@",kGif_Image_URL,model.url];
+            urlString = [NSString stringWithFormat:@"%s%@",kGif_Image_URL,model.url];
         }
         if (urlString) {
             [temp addObject:urlString];

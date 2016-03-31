@@ -88,7 +88,7 @@
     [_btnClick setTitle:teacher.ncount forState:UIControlStateNormal];
     [_imgView sd_setImageWithURL:[NSURL URLWithString:url]
                 placeholderImage:[UIImage imageNamed:@"logo"]];
-    [_lblRoomId setText:teacher.nvcbid];
+//    [_lblRoomId setText:teacher.nvcbid];
     _lblName.text = teacher.roomname;
     _lblContent.text = teacher.clabel;
 }

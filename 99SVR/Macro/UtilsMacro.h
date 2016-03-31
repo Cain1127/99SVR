@@ -15,7 +15,7 @@ green:g/255.0 \
 blue:b/255.0 alpha:a]
 
 #define NSStringFromInt(intValue) [NSString stringWithFormat:@"%d",intValue]
-#define NSStringFromFloat(floatValue) [NSString stringWithFormat:@"%f",floatValue]
+#define NSStringFromFloat(floatValue) [NSString stringWithFormat:@"%.01f",floatValue]
 #define NSStringFromLong(intValue) [NSString stringWithFormat:@"%lld",intValue]
 #define NSStringFromInteger(integerValue) [NSString stringWithFormat:@"%zi",integerValue]
 #define NSStringFromInt64(integerValue) [NSString stringWithFormat:@"%lld",integerValue]

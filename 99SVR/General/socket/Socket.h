@@ -17,6 +17,7 @@ typedef int  my_socklen_t;
 
 #define SOCKET_TIMEOUT WSAETIMEDOUT
 #define SOCKET_NONE WSAENOTSOCK
+#define SOCKET_CLOSED 10058
 
 #else
 #include <sys/socket.h>
@@ -37,9 +38,13 @@ typedef socklen_t my_socklen_t;
 
 #define SOCKET_TIMEOUT EAGAIN
 #define SOCKET_NONE EBADF
+#define SOCKET_CLOSED ENOTCONN
+
 #define SOCKET_ERROR -1
 
 #endif
+
+#define IS_SOCKET_CLOSED(err_code) (err_code == SOCKET_NONE || err_code == SOCKET_CLOSED)
 
 
 class Socket

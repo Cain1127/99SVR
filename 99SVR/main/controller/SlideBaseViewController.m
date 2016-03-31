@@ -179,7 +179,7 @@
     
     ///未登录
     LoginViewController *loginVc = [[LoginViewController alloc] init];
-    [self presentViewController:loginVc animated:YES completion:nil];
+    [self.navigationController pushViewController:loginVc animated:YES];
     [self coverClick:[self.navigationController.view viewWithTag:coverViewTag]];
 }
 

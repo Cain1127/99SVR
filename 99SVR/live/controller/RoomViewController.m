@@ -1317,7 +1317,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
                        ^{
                            //如果不再登录房间，取消notification
                            [__self.view hideToastActivity];
-                           [[NSNotificationCenter defaultCenter] removeObserver:self];
                        });
     }];
     
@@ -1369,7 +1368,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         break;
         case 2://显示礼物
         {
-            [UIView animateWithDuration:0.25 animations:^{
+            [UIView animateWithDuration:0.5 animations:^{
                 [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
             } completion:^(BOOL finished) {}];
         }
@@ -1422,7 +1421,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 #pragma mark 送礼物
 - (void)sendGift:(int)giftId num:(int)giftNum
 {
-    [_tcpSocket sendGift:2 num:giftNum];
+    [_tcpSocket sendGift:giftId num:giftNum];
     [_giftView setGestureHidden];
 }
 

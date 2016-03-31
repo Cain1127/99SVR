@@ -18,9 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(rightItemClick) title:@"完成"];
-    
+    [self setTitleText:@"修改昵称"];
     [self setupView];
 }
 
@@ -31,7 +29,7 @@
     //输入框底层
     UIView *inputView = [[UIView alloc] init];
     inputView.backgroundColor = [UIColor whiteColor];
-    inputView.frame = CGRectMake(0, 10, kScreenWidth, 48);
+    inputView.frame = CGRectMake(0, 74, kScreenWidth, 48);
     [self.view addSubview:inputView];
     
     //昵称输入框
@@ -46,7 +44,7 @@
     [_nickNameTextField setValue:kFontSize(14) forKeyPath:@"_placeholderLabel.font"];
     [_nickNameTextField setValue:RGB(151, 151, 151) forKeyPath:@"_placeholderLabel.textColor"];
     [self.view addSubview:_nickNameTextField];
-    _nickNameTextField.frame = CGRectMake(12, 10, kScreenWidth - 2 * 12, 48);
+    _nickNameTextField.frame = CGRectMake(12, 74, kScreenWidth - 2 * 12, 48);
     
     //建议提醒文字
     UILabel * adviceLabel = [[UILabel alloc] init];
@@ -57,6 +55,14 @@
     adviceLabel.frame = CGRectMake(12, CGRectGetMaxY(_nickNameTextField.frame), kScreenWidth - 12*2, 30);
     [self.view addSubview:adviceLabel];
 
+    UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnRight setTitle:@"保存" forState:UIControlStateNormal];
+    [btnRight setBackgroundColor:UIColorFromRGB(0x7fbbee)];
+    [self.view addSubview:btnRight];
+    btnRight.frame = Rect(10,_nickNameTextField.y+_nickNameTextField.height+30, kScreenWidth-20, 40);
+    [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
+    [btnRight addTarget:self action:@selector(rightItemClick) forControlEvents:UIControlEventTouchUpInside];
+    
 }
 
 /**

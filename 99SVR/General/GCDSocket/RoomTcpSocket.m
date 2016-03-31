@@ -216,6 +216,14 @@
     return 0;
 }
 
+- (void)sendPingRoom
+{
+    CMDClientPing_t ping;
+    ping.userid = [UserInfo sharedUserInfo].nUserId;
+    ping.roomid = [_strRoomId intValue];
+    [self sendMessage:(char *)&ping size:sizeof(CMDClientPing_t) version:MDM_Version_Value maincmd:MDM_Vchat_Room subcmd:Sub_Vchat_ClientPing];
+}
+
 - (void)sendHello:(int)nMDM_Vchat
 {
     char szTemp[32]={0};
@@ -638,7 +646,12 @@
             [self joinRoomError:pNewMsg];
             return ;
         }
-            break;
+        break;
+        case Sub_Vchat_ClientPingResp:
+        {
+            [self joinRoomInfo2];
+        }
+        break;
         case Sub_Vchat_JoinRoomResp:
         {
             DLog(@"加入房间成功");
@@ -956,19 +969,19 @@
     }
     if(userId == [UserInfo sharedUserInfo].nUserId)
     {
-        return [NSString stringWithFormat:@"<span value=\"forme--%d\">你</span>",userId];
+        return [NSString stringWithFormat:@"<span value=\"forme--%d\">%@</span>",userId,strName];
     }
     else
     {
         if (strName)
         {
-            return [NSString stringWithFormat:@"<a style=\"color:#629bff \" href=\"sqchatid://%d\" value=\"%@\">%@</a>",
+            return [NSString stringWithFormat:@"<a style=\"color:#919191\" href=\"sqchatid://%d\" value=\"%@\">%@</a>",
 //            return [NSString stringWithFormat:@"<a>sqchatid://%d|%@</a>",
                     userId,strName,strName];
         }
         else
         {
-            return [NSString stringWithFormat:@"<a style=\"font-size:13px;COLOR: #629bff \" href=\"sqchatid://%d\">%d</a>(%d)",
+            return [NSString stringWithFormat:@"<a style=\"font-size:13px;color:#919191 \" href=\"sqchatid://%d\">%d</a>(%d)",
 //            return [NSString stringWithFormat:@"<a>sqchatid://%d|%d</a>",
                     userId, userId,userId];
         }
@@ -1017,11 +1030,11 @@
         NSString *strInfo = nil;
         if (msg->toid == 0)
         {
-            strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\">%@说:</span><br/>%@",strFrom,strTo,strContent];
+            strInfo = [NSString stringWithFormat:@"  %@<p style=\"color:#919191\">%@</p><br/>%@",strFrom,strTo,strContent];
         }
         else
         {
-            strInfo = [NSString stringWithFormat:@" %@<span style=\"color:#919191\">对%@说:\n</span><br/>%@",strFrom,strTo,strContent];
+            strInfo = [NSString stringWithFormat:@" %@ <p style=\"color:#919191\">回复 %@ </p><br/>%@",strFrom,strTo,strContent];
         }
 //        strInfo = [DecodeJson replaceEmojiNewString:strInfo];
 //        [_aryChat addObject:strInfo];
@@ -1030,7 +1043,6 @@
         //查询是否有对我说的记录
         if ([strTo rangeOfString:query].location != NSNotFound || [strFrom rangeOfString:query].location != NSNotFound )
         {
-//            [_aryPriChat addObject:strInfo];
             [self addPriChatInfo:strInfo];
             if (_aryPriChat.count >= 20)
             {
@@ -1308,21 +1320,19 @@
 - (void)sendLocalChat:(NSString *)strMsg to:(int)nUser
 {
 //    strMsg = [DecodeJson replaceEmojiNewString:strMsg];
-    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color: #629bff\" value=\"forme--%d\">你</span>",
+    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color: #919191\" value=\"forme--%d\"> 你</spanp>",
                          [UserInfo sharedUserInfo].nUserId];
     if (nUser!=0)
     {
         RoomUser *user = [_rInfo findUser:nUser];
         NSString *strTo = [self getToUser:nUser user:user name:user.m_strUserAlias];
-        NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\">对 %@ 说:</span><br/>%@",strFrom,strTo,strMsg];
-//        [_aryChat addObject:strInfo];
+        NSString *strInfo = [NSString stringWithFormat:@"<p style=\"color:#919191\"> %@ 回复 %@ </span><br/>%@",strFrom,strTo,strMsg];
         [self addChatInfo:strInfo];
-//        [_aryPriChat addObject:strInfo];
         [self addPriChatInfo:strInfo];
     }
     else
     {
-        NSString *strInfo = [NSString stringWithFormat:@"%@ <span style=\"color:#919191\"> 说:</span><br/>%@",strFrom,strMsg];
+        NSString *strInfo = [NSString stringWithFormat:@"<p style=\"color:#919191\">%@</p><br/>%@",strFrom,strMsg];
 //        [_aryChat addObject:strInfo];
         [self addChatInfo:strInfo];
 //        [_aryPriChat addObject:strInfo];
@@ -1369,9 +1379,24 @@
     {
         downGCD = dispatch_queue_create("downgcd",0);
     }
-    [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
     [self sendHello:MDM_Vchat_Room];
-    [self joinRoomInfo2];
+    [_asyncSocket readDataToLength:sizeof(int32) withTimeout:3 tag:SOCKET_READ_LENGTH];
+    [self sendPingRoom];
+}
+
+/**
+ *  执行重连
+ */
+- (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
+                 elapsed:(NSTimeInterval)elapsed
+               bytesDone:(NSUInteger)length
+{
+    /**
+     *  重新建立连接   请求新的lbs
+     */
+    
+    
+    return 1;
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag

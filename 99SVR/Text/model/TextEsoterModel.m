@@ -19,7 +19,7 @@
     model.messagetime = resp->messagetime;
     model.buyflag = resp->buyflag;
     model.buynums = resp->buynums;
-    model.prices = resp->prices;
+    model.prices = resp->prices/1000;
     model.goodsid = resp->goodsid;
     model.coverlittlelen = resp->coverlittlelen;
     model.titlelen = resp->titlelen;

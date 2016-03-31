@@ -3,6 +3,7 @@
 #include "platform.h"
 #include "Http.h"
 #include "LoginConnection.h"
+#include "json.h"
 #include <vector>
 
 LoginConnection conn;
@@ -227,10 +228,6 @@ void test()
 	conn.SendMsg_LoginReq4(req4);
 	
 
-	
-	
-	
-	
 	//LOG("%s", content);
 
 }
@@ -254,170 +251,24 @@ Java_com_example_test_ProtocolLib_testp(JNIEnv* env, jobject obj) {
 
 
 #ifdef WIN
-/*
-char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";
-char lbs[256];
 
-
-char lbss[3][10][20];
-int lbs_counter[3];
-bool islogining = false;
-
-void parse_ip_port(char* s, char* ip, short& port)
+void testjson()
 {
-	char* e = strchr(s, ':');
-	int len = e - s;
-	memcpy(ip, s, len);
-	ip[len] = 0;
-
-	port = atoi(e + 1);
-}
-
-
-ThreadVoid get_host_form_lbs_runnable(void* param)
-{
-	char recvbuf[HTTP_RECV_BUF_SIZE];
 	Http http;
-
-	char* lbs = (char*)param;
-	
-	char ip[20];
-	short port;
-	parse_ip_port(lbs, ip, port);
-
-	//LOG("thread:lbs--:%s--%d", ip, port);
-
-	char* content = http.GetString(ip, port, "/tygetweb", recvbuf);
-	if (content != NULL)
-	{
-		char* end = strchr(content, '|');
-		if (end != NULL)
-		{
-			*end = '\0';
-		}
-
-		LOG("time:%d lbs:%s host:%s", clock(), ip, content);
-		if (!islogining)
-		{
-			islogining = true;
-			LOG("****DO LOGIN***");
-
-			const char *d = ",";
-			char *p;
-			p = strtok(content, d);
-			while (p)
-			{
-				//printf("%s\n", p);
-
-				if (strlen(p) == 1)
-				{
-					LOG("stype:%s", p);
-				}
-				else
-				{
-					char ip[20];
-					short port;
-					parse_ip_port(p, ip, port);
-					LOG("first login server: %s:%d", ip, port);
-					break;
-				}
-
-				p = strtok(NULL, d);
-			}
-		}
-	}
-
-	ThreadReturn;
+	char* content = http.GetString("121.12.118.32", 80, "/caijing/?m=Api&c=ClientConfig&clientType=4&versionNumber=1&parameterName=lbs");
+	json::Array jarray = json::Deserialize(content).ToArray();
+	json::Object jobject = jarray[0].ToObject();
+	LOG("key:%s value:%s", jobject["parametername"], jobject["parametervalue"]);
 }
-
-void testlbs()
-{
-	const char *d = ",";
-	char *p;
-	strcpy(lbs, lbs0);
-	p = strtok(lbs, d);
-	int stype = -1;
-	while (p)
-	{
-		//printf("%s\n", p);
-
-		Thread::start(get_host_form_lbs_runnable, p);
-		p = strtok(NULL, d);
-	}
-}
-
-void testlbs2()
-{
-	//http://hall.99ducaijing.cn:8081/roomdata/room.php?act=roomdata
-	char recvbuf[HTTP_RECV_BUF_SIZE];
-	Http http;
-
-	memset(lbss, 0, sizeof(lbss));
-	memset(lbs_counter, 0, sizeof(lbs_counter));
-
-	char* content = http.GetString("lbs1.99ducaijing.cn", 2222, "/tygetweb", recvbuf);
-	//int ret = http.GetString("lbs1.99ducaijing.cn", 2222, "/tygetgate", recvbuf);
-	//int ret = http.GetString("hall.99ducaijing.cn", 8081, "/roomdata/room.php?act=roomdata", recvbuf);
-	if (content != NULL)
-	{
-		LOG("%s", recvbuf);
-		//char s[] = "Golden Global   View,disk * desk";
-		char* end = strchr(content, '|');
-		if (end != NULL)
-		{
-			*end = '\0';
-		}
-
-		const char *d = ",";
-		char *p;
-		p = strtok(content, d);
-		int stype = -1;
-		while (p)
-		{
-			//printf("%s\n", p);
-			
-			if (strlen(p) == 1)
-			{
-				stype = p[0] - '0';
-				LOG("stype:%d", stype);
-			}
-			else
-			{
-				if (stype >= 0 && stype <= 2)
-				{
-					int n = lbs_counter[stype];
-					strcpy(lbss[stype][n], p);
-					LOG("lbs:%d:%s", n, lbss[stype][n]);
-
-					char ip[20];
-					short port;
-					parse_ip_port(lbss[stype][n], ip, port);
-					LOG("ip:%s port:%d", ip, port);
-
-					if (islogining == false)
-					{
-						islogining = true;
-
-					}
-
-					lbs_counter[stype]++;
-				}
-			}
-
-			p = strtok(NULL, d);
-		}
-	}
-
-}
-*/
 
 int main(int argc, char* argv[])
 {
 	
 	Socket::startup();
 
-	test();
+	//test();
 	//testlbs();
+	testjson();
 
 	//WaitForSingleObject((HANDLE)thread_handle, 0);
 

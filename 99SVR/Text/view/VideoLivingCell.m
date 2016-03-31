@@ -31,7 +31,6 @@
 
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
     {
-        
         ///create default UI
         [self initVideoLivingCustomCellUI];
         
@@ -150,16 +149,11 @@
         
         if (cCJHomeListTypeLivingCellTypeLeft == viewType)
         {
-            
             self.leftViewTapCallBack = tapCallBack;
-            
         }
-        
         if (cCJHomeListTypeLivingCellTypeRight == viewType)
         {
-            
             self.rightViewTapCallBack = tapCallBack;
-            
         }
         
     }
@@ -246,15 +240,11 @@
  */
 - (void)setVideoLivingRoomModel:(RoomHttp *)dataModel viewType:(CJHomeListTypeLivingCellType)viewType tapCallBack:(void(^)(CJHomeListTypeLivingCellType viewType))tapCallBack
 {
-    
     ///左侧UI刷新
     if (cCJHomeListTypeLivingCellTypeLeft == viewType)
     {
-        
         [self createInfoShowingUI:dataModel viewType:cCJHomeListTypeLivingCellTypeLeft tapCallBack:tapCallBack];
-        
     }
-    
     ///右侧UI刷新
     if (cCJHomeListTypeLivingCellTypeRight == viewType)
     {

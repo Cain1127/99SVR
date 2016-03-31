@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CustomViewController.h"
 
-@interface SignatureViewController : UIViewController
+@interface SignatureViewController :UIViewController
 
 /**
  *  修改签名信息成功后的回调

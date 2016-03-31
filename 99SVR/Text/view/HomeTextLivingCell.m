@@ -70,11 +70,9 @@
     ///清除原UI
     for (UIView *subView in tempRootView.subviews)
     {
-        
         [subView removeFromSuperview];
-        
     }
-
+    
     ///背景图片
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tempRootView.frame), CGRectGetHeight(tempRootView.frame))];
     backgroundImageView.userInteractionEnabled = YES;
@@ -87,7 +85,6 @@
         
         NSString *imageURL = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_HOME_URL,dataModel.croompic];
         [backgroundImageView sd_setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:[UIImage imageNamed:@"home_room_default_img"]];
-        
         ///添加单击事件
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapFunction:)];
         tapGesture.numberOfTapsRequired = 1;
@@ -226,15 +223,11 @@
  */
 - (void)setTextRoomModel:(TextRoomModel *)dataModel viewType:(CJHomeListTypeLivingCellType)viewType tapCallBack:(void(^)(CJHomeListTypeLivingCellType viewType))tapCallBack
 {
-
     ///左侧UI刷新
     if (cCJHomeListTypeLivingCellTypeLeft == viewType)
     {
-        
         [self createInfoShowingUI:dataModel viewType:cCJHomeListTypeLivingCellTypeLeft tapCallBack:tapCallBack];
-        
     }
-    
     ///右侧UI刷新
     if (cCJHomeListTypeLivingCellTypeRight == viewType)
     {

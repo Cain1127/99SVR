@@ -9,10 +9,11 @@ class Http
 {
 private:
 	Socket socket;
+	char recv_buf[HTTP_RECV_BUF_SIZE];
 
 public:
 
-	char* GetString(const char* host, short port, const char* url, char* recv_buf);
+	char* GetString(const char* host, short port, const char* url);
 
 	Http();
 	~Http();

@@ -8,6 +8,7 @@
 
 #import "NewDetailsViewController.h"
 #import "TextTcpSocket.h"
+#import "ProgressHUD.h"
 #import "UIImageView+WebCache.h"
 #import "Toast+UIView.h"
 #import "IdeaDetailRePly.h"
@@ -31,7 +32,9 @@
     CGFloat duration;
     CGFloat originalY;
     EmojiView *_emojiView;
+    int _fall;
 }
+
 @property (nonatomic) int keyboardPresentFlag;
 @property (nonatomic,copy) NSString *strTo;
 @property (nonatomic,strong) UIButton *btnSend;
@@ -130,7 +133,6 @@
     _btnSend.frame = Rect(kScreenWidth - 44, 7, 36, 36);
     [_btnSend addTarget:self action:@selector(sendInfo) forControlEvents:UIControlEventTouchUpInside];
     [self createEmojiKeyboard];
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -236,6 +238,14 @@
 
 - (void)requestView
 {
+    _fall++;
+    if (_fall>3) {
+        DLog(@"请求不到数据信息");
+        dispatch_main_async_safe(^{
+           [ProgressHUD showError:@"加载观点信息失败"];
+        });
+        return ;
+    }
     NSString *strInfo = [NSString stringWithFormat:@"%@%lld.html",kTEXT_NEW_DETAILS_URL,_viewId];
     __weak NewDetailsViewController *__self = self;
     [BaseService postJSONWithUrl:strInfo parameters:nil success:^(id responseObject)

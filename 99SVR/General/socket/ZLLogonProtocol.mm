@@ -9,7 +9,8 @@
 
 #pragma mark ZLPushListener
 
-
+NSString *strUser;
+NSString *strPwd;
 LoginConnection *conn;
 ZLPushListener push_listener;
 ZLHallListener hall_listener;
@@ -136,7 +137,7 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
 {
     UserInfo *user = [UserInfo sharedUserInfo];
     user.m_nVipLevel = info.viplevel();
-    user.goldCoin = info.nk();
+    user.goldCoin = info.nk()/1000;
     user.score = info.nb();
     user.sex = info.ngender();
     user.nUserId = info.userid();
@@ -153,6 +154,8 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
         [UserInfo sharedUserInfo].nType = 1;
         [UserInfo sharedUserInfo].banding = info.bboundtel();
         [UserDefaults setBool:YES forKey:kIsLogin];
+        [UserDefaults setObject:strUser forKey:kUserId];
+        [UserDefaults setObject:strPwd forKey:kUserPwd];
         if ([UserInfo sharedUserInfo].otherLogin ==0)
         {
             [UserDefaults setInteger:0 forKey:kOtherLogin];
@@ -190,10 +193,10 @@ void ZLLoginListener::OnLogonTokenNotify(SessionTokenResp& info)
  *
  *  @return 默认返回1
  */
-int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd)
+int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd,const char *md5Pwd)
 {
-//    conn->RegisterMessageListener(login_listener);
-//    conn->RegisterConnectionListener(conn_listener);
+    strUser = [NSString stringWithUTF8String:cloginid];
+    strPwd = [NSString stringWithUTF8String:pwd];
     
     UserLogonReq4 req4;
     req4.set_nmessageid(1);
@@ -207,7 +210,7 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd)
     }
     req4.set_nversion(3030822 + 5);
     req4.set_nmask((uint32)time(0));
-    req4.set_cuserpwd(pwd);
+    req4.set_cuserpwd(md5Pwd);
     req4.set_cserial("");
     req4.set_cmacaddr("");
     req4.set_cipaddr("");
@@ -229,7 +232,8 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd)
 int ZLLogonProtocol::startOtherLogin(uint32 cloginid,const char *openid,const char *token){
 //    conn->RegisterMessageListener(login_listener);
 //    conn->RegisterConnectionListener(conn_listener);
-    
+    strUser = [NSString stringWithFormat:@"%d",cloginid];
+    strPwd =@"";
     if (openid == NULL || token == NULL) {
         DLog(@"第三方登录发生错误");
         return 0;

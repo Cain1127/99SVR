@@ -30,11 +30,6 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
                 name:MESSAGE_LOGIN_PROTOCOL_DISCONNECT_VC object:nil];
     }
     UserInfo *info = [UserInfo sharedUserInfo];
-    if (![username isEqualToString:@"0"]) {
-        [UserDefaults setObject:username forKey:kUserId];
-        [UserDefaults setObject:password forKey:kUserPwd];
-    }
-    
     if (info.otherLogin){
         const char *openId = [info.strOpenId UTF8String];
         const char *openToken = [info.strToken UTF8String];
@@ -48,7 +43,7 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
             strMd5 = [DecodeJson XCmdMd5String:password];
             [UserInfo sharedUserInfo].strMd5Pwd = strMd5;
         }
-        protocol->startLogin([username UTF8String], [strMd5 UTF8String]);
+        protocol->startLogin([username UTF8String],[password UTF8String],[strMd5 UTF8String]);
     }
 }
 

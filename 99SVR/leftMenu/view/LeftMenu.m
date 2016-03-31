@@ -78,7 +78,6 @@
     [super layoutSubviews];
     
     _listTableView.frame = CGRectMake(0, 255, kScreenWidth * 0.75, 308);
-    
     [self checkLogin];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];
@@ -148,8 +147,6 @@
 #pragma mark - leftMenuHeaderViewDelegate
 - (void)enterLogin
 {
-    
-    ///已登录
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
         
@@ -158,18 +155,13 @@
         {
             
             [self.degelate leftMenuDidSeletedAtRow:0 title:nil vc:profileVC];
-            
         }
-        
         return;
-        
     }
-    
     ///未登录
     LoginViewController *loginVC = [[LoginViewController alloc] init];
     if ([self.degelate respondsToSelector:@selector(leftMenuDidSeletedAtRow:title:vc:)])
     {
-        
         [self.degelate leftMenuDidSeletedAtRow:0 title:nil vc:loginVC];
         
     }

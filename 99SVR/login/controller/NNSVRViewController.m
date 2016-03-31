@@ -43,7 +43,6 @@
     [self setTitleText:_strTitle];
 
     _webView = [[UIWebView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64)];
-    
     [self.view addSubview:_webView];
     
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:_strPath]];
