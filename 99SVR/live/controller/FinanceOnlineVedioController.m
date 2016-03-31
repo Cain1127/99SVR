@@ -204,7 +204,7 @@
     ^{
         [__self.view hideToastActivity];
         RoomViewController *roomView = [[RoomViewController alloc] init];
-        [__self presentViewController:roomView animated:YES completion:nil];
+        [self presentViewController:roomView animated:YES completion:nil];
     }); 
 }
 

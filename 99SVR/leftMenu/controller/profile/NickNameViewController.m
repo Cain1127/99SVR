@@ -64,6 +64,7 @@
     btnRight.frame = Rect(10,_nickNameTextField.y+_nickNameTextField.height+30, kScreenWidth-20, 40);
     [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [btnRight addTarget:self action:@selector(rightItemClick) forControlEvents:UIControlEventTouchUpInside];
+    
 }
 
 /**
@@ -77,7 +78,7 @@
         return ;
     }
     ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
-    [sing updateNick:strMsg intro:[UserInfo sharedUserInfo].strIntro];
+    [sing updateNick:strMsg intro:[UserInfo sharedUserInfo].strIntro sex:[UserInfo sharedUserInfo].sex];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -99,10 +100,8 @@
     }
     else
     {
-        @WeakObj(self)
         gcd_main_safe(^{
             [MBProgressHUD showError:@"修改昵称出错"];
-            [selfWeak.navigationController popViewControllerAnimated:YES];
         });
     }
 }

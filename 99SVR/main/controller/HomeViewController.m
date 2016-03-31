@@ -22,17 +22,13 @@
 #import "TextRoomModel.h"
 #import "HomeTextLivingCell.h"
 #import "TextHomeViewController.h"
-
 #import "RoomHttp.h"
 #import "VideoLivingCell.h"
 #import "RoomViewController.h"
-
 #import "ViewPointCell.h"
 #import "WonderfullView.h"
 #import "NewDetailsViewController.h"
-
 #import "RightImageButton.h"
-
 #import "MJRefresh.h"
 
 #define kPictureHeight 0.3 * kScreenHeight
@@ -137,8 +133,6 @@ typedef enum : NSUInteger
     
     ///添加MJ头部刷新
     @WeakObj(self);
-    
-  
     [_tableView addGifHeaderWithRefreshingBlock:^{
         ///检测当前状态
         if (cCJHomeRequestTypeDefault < selfWeak.refreshStatus)
@@ -175,7 +169,7 @@ typedef enum : NSUInteger
 - (NSArray *)getRefresh
 {
     NSMutableArray *refreshingImages = [NSMutableArray array];
-    for (NSUInteger i = 2; i <= 5; i++) {
+    for (NSUInteger i = 2; i <= 6; i++) {
         UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading_40x30_000%lu", (unsigned long)i]];
         [refreshingImages addObject:image];
     }
@@ -803,7 +797,7 @@ typedef enum : NSUInteger
         [textSocket connectRoom:[model.roomid intValue]];
         
         NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:textSocket viewID:[model.viewid intValue]];
-        [self presentViewController:detailView animated:YES completion:nil];
+        [self.navigationController pushViewController:detailView animated:YES];
         
     }
     

@@ -15,6 +15,12 @@
 
 DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
+@property (nonatomic,copy) NSString *strNewName;
+
+@property (nonatomic) int headid;
+
+@property (nonatomic) int sex;
+
 @property (nonatomic,copy) NSString *strEmail;
 
 @property (nonatomic,copy) NSString *strMobile;
@@ -30,6 +36,8 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 @property (nonatomic,copy) NSString *strWebAddr;
 
 @property (nonatomic,copy) NSString *strRoomAddr;
+
+@property (nonatomic,copy) NSString *strTextRoom;
 
 @property (nonatomic,assign) BOOL bIsLogin;
 
@@ -54,8 +62,6 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 @property(nonatomic, assign) CGFloat goldCoin; // 金币
 
 @property(nonatomic, assign) long long score; // 积分
-
-@property(nonatomic, assign) Byte sex; // 性别
 
 @property (nonatomic,strong) NSMutableArray *aryCollet;
 

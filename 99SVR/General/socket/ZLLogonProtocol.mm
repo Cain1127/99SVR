@@ -141,6 +141,8 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
     user.score = info.nb();
     user.sex = info.ngender();
     user.nUserId = info.userid();
+    user.headid = info.headid();
+    user.sex = info.ngender();
     if ((user.nUserId>900000000 && user.nUserId < 1000000000) || user.nUserId <= 0)
     {
         [UserInfo sharedUserInfo].bIsLogin = YES;
@@ -150,7 +152,7 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
     else
     {
         user.strName = [NSString stringWithCString:info.cuseralias().c_str() encoding:GBK_ENCODING];
-        
+        user.strNewName = [NSString stringWithFormat:@"%s",info.cuseralias().c_str()];
         conn->SendMsg_GetUserMoreInfReq(user.nUserId);
         
         [UserInfo sharedUserInfo].bIsLogin = YES;
@@ -267,7 +269,7 @@ int ZLLogonProtocol::updatePwd(const char *cOld,const char *cNew)
     return 1;
 }
 
-int ZLLogonProtocol::updateNick(const char *cNick,const char *intro)
+int ZLLogonProtocol::updateNick(const char *cNick,const char *intro,int sex)
 {
     if (cNick==NULL) {
         return 0;
@@ -277,11 +279,11 @@ int ZLLogonProtocol::updateNick(const char *cNick,const char *intro)
 
     UserInfo *info = [UserInfo sharedUserInfo];
     req.set_userid(info.nUserId);
-    req.set_headid(0);
+    req.set_headid(info.headid);
     req.set_cuseralias(cNick);
-    req.set_ngender(1);
+    req.set_ngender(sex);
     req.set_introduce(intro);
-    req.set_cbirthday("1989-09-09");
+    req.set_cbirthday("");
     conn->SendMsg_SetUserInfoReq(req);
     
     return 1;
@@ -299,6 +301,10 @@ ZLLogonProtocol::~ZLLogonProtocol()
         conn->RegisterPushListener(NULL);
         conn->RegisterHallListener(NULL);
         DLog(@"释放logon protocol");
+        
+        conn->close();
+        delete conn;
+        conn = NULL;
     }
 }
 /**
@@ -307,7 +313,7 @@ ZLLogonProtocol::~ZLLogonProtocol()
 ZLLogonProtocol::ZLLogonProtocol()
 {
     conn = new LoginConnection();
-    
+
     conn->RegisterMessageListener(&login_listener);
     conn->RegisterConnectionListener(&conn_listener);
     conn->RegisterPushListener(&push_listener);
@@ -335,7 +341,7 @@ void ZLHallListener::OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfi
         }
         break;
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_LOGIN_SET_PROFILE_VC object:@(0)];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_LOGIN_SET_PROFILE_VC object:@(info.errorid())];
 }
 
 void ZLHallListener::OnGetUserMoreInfResp(GetUserMoreInfResp& info)

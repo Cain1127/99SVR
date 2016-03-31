@@ -38,15 +38,10 @@
     [_txtTitle setTextAlignment:NSTextAlignmentCenter];
     [_txtTitle setTextColor:[UIColor whiteColor]];
     
-//    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
-//    [_lblContent setBackgroundColor:[UIColor whiteColor]];
-//    [_headView addSubview:_lblContent];
-    
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(MarchBackLeft) image:@"back" highImage:@"back"];
     [_headView addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
     
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 /**
  *  3月写的后退效果

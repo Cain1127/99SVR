@@ -58,6 +58,7 @@
 //    adviceLabel.numberOfLines = 0;
 //    adviceLabel.frame = CGRectMake(12, CGRectGetMaxY(_signatureTextField.frame), kScreenWidth - 12*2, 30);
 //    [self.view addSubview:adviceLabel];
+    
     UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnRight setTitle:@"保存" forState:UIControlStateNormal];
     [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
@@ -80,7 +81,7 @@
         return ;
     }
     ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
-    [sing updateNick:[UserInfo sharedUserInfo].strName intro:strMsg];
+    [sing updateNick:[UserInfo sharedUserInfo].strName intro:strMsg sex:[UserInfo sharedUserInfo].sex];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -105,7 +106,6 @@
         @WeakObj(self)
         gcd_main_safe(^{
             [MBProgressHUD showError:@"修改个性签名出错"];
-            [selfWeak.navigationController popViewControllerAnimated:YES];
         });
     }
 }

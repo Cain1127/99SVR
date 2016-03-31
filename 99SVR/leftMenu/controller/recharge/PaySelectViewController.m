@@ -8,6 +8,7 @@
 
 #import "PaySelectViewController.h"
 #import "Order.h"
+#import "Toast+UIView.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "WXApi.h"
@@ -56,14 +57,14 @@
     [request setHTTPBody: [body dataUsingEncoding: NSUTF8StringEncoding]];
     [webView loadRequest:request];
     // 3.加载蒙板
-    [MBProgressHUD showMessage:@"加载中..."];
+    [self.view makeToastActivity];
 }
 
 #pragma mark - UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     // 删除蒙板
-    [MBProgressHUD hideHUD];
+    [self.view hideToastActivity];
     @WeakObj(self);
     JSContext *context = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     // 定义好JS要调用的方法, AlipayPay就是调用的AlipayPay方法名

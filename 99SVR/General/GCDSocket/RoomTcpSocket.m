@@ -760,20 +760,27 @@
         case Sub_Vchat_TradeGiftResp:
         {
             DLog(@"赠送礼物返回响应消息!");
+            [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_ROOM_SEND_LIWU_RESP_VC object:nil];
         }
-            break;
+        break;
         case Sub_Vchat_TradeGiftErr:
         {
             DLog(@"赠送礼物返回错误消息!");
             CMDTradeGiftErr_t* pInfo = (CMDTradeGiftErr_t *)pNewMsg;
             DLog(@"error:%d",pInfo->nerrid);
         }
-            break;
+        break;
         case Sub_Vchat_TradeGiftNotify:
         {
             DLog(@"赠送礼物通知数据!");
+            CMDTradeGiftRecord_t *record = (CMDTradeGiftRecord_t*)pNewMsg;
+            NSString *strName = [NSString stringWithCString:record->srcalias encoding:GBK_ENCODING];
+            int gitId = record->giftid;
+            int number = record->giftnum;
+            NSDictionary *parameters = @{@"name":strName,@"gitId":@(gitId),@"num":@(number)};
+            [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:parameters];
         }
-            break;
+        break;
         case Sub_Vchat_TradeFlowerResp:
         {
             DLog(@"赠送鲜花返回响应消息!");
@@ -825,6 +832,8 @@
         case Sub_Vchat_UserAccountInfo:
         {
             DLog(@"用户帐户数据!");
+            CMDUserAccountInfo_t *info = (CMDUserAccountInfo_t*)pNewMsg;
+            [UserInfo sharedUserInfo].goldCoin = info->nk/1000.0;
         }
             break;
         case Sub_Vchat_RoomManagerNotify:
@@ -843,11 +852,14 @@
             CMDRoomNotice_t* pInfo = (CMDRoomNotice_t *)pNewMsg;
             if(pInfo->index ==0)
             {
-                char szTemp[pInfo->textlen+1];
-                memset(szTemp, 0, pInfo->textlen+1);
+                char szTemp[(pInfo->textlen+1)*2];
+                memset(szTemp, 0, (pInfo->textlen+1)*2);
                 memcpy(szTemp, pInfo->content, pInfo->textlen);
                 szTemp[pInfo->textlen]='\0';
                 _teachInfo = [NSString stringWithCString:pInfo->content encoding:GBK_ENCODING];
+                while ([_teachInfo rangeOfString:@"\r"].location!=NSNotFound) {
+                    _teachInfo = [_teachInfo stringByReplacingOccurrencesOfString:@"\r" withString:@"<br/>"];
+                }
                 [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
             }
             else if(pInfo->index==2)
@@ -857,8 +869,7 @@
                 szTemp[pInfo->textlen]='\0';
                 NSString *strInfo = [NSString stringWithCString:szTemp encoding:GBK_ENCODING];
                 NoticeModel *notice = [[NoticeModel alloc] init];
-                notice.strContent = strInfo;
-                notice.strType = @"<span coloc=\"red\">[房间公告]</span>";
+                notice.strContent = [DecodeJson resoleNotice:strInfo index:1];
                 NSDate *date = [NSDate date];
                 NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
                 [fmt setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -997,19 +1008,14 @@
     NSString *strFrom = [self getToUser:msg->srcid user:[_rInfo findUser:msg->srcid] name:strSrcName];
     if (msg->msgtype==1 || msg->msgtype==15)
     {
-        NSString *strInfo=nil;
         NoticeModel *notice = [[NoticeModel alloc] init];
         if (msg->msgtype==1)
         {
-//            strInfo = [DecodeJson replaceEmojiNewString:strContent];
-            notice.strContent = strInfo;
-            notice.strType = [[NSString alloc] initWithFormat:@"房间广播-%@",strFrom];
+           notice.strContent = [DecodeJson resoleNotice:strContent index:2];
         }
         else
         {
-            strInfo = [NSString stringWithFormat:@"%@ &nbsp;&nbsp;%@",strFrom,strContent];
-            notice.strContent = strInfo;
-            notice.strType = @"悄悄话";
+            notice.strContent = [DecodeJson resoleNotice:strContent index:3];
         }
         NSDate *date = [NSDate date];
         NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
@@ -1731,13 +1737,13 @@
     req.servertype = 0;
     req.banonymous = 0;
     req.casttype = 1;
-    strcpy(req.srcvcbname, [[_rInfo.strRoomName dataUsingEncoding:GBK_ENCODING] bytes]);
-    RoomUser *fromUser= [_rInfo findUser:[UserInfo sharedUserInfo].nUserId];
-    memcpy(req.srcalias,[[fromUser.m_strUserAlias dataUsingEncoding:GBK_ENCODING] bytes],
-           [[fromUser.m_strUserAlias dataUsingEncoding:GBK_ENCODING] length]);
-    strcpy(req.toalias, toUserAlias);
     
-    [self sendNewMessage:(char *)&req size:sizeof(CMDTradeFlowerRecord_t)
+    strcpy(req.srcvcbname, [[_rInfo.strRoomName dataUsingEncoding:GBK_ENCODING] bytes]);
+    strcpy(req.tovcbname,[[_rInfo.strRoomName dataUsingEncoding:GBK_ENCODING] bytes]);
+    NSData *data = [[UserInfo sharedUserInfo].strName dataUsingEncoding:GBK_ENCODING];
+    strcpy(req.srcalias,data.bytes);
+    strcpy(req.toalias, toUserAlias);
+    [self sendNewMessage:(char *)&req size:sizeof(CMDTradeGiftRecord_t)
                  version:MDM_Version_Value maincmd:MDM_Vchat_Room subcmd:Sub_Vchat_TradeGiftReq];
 }
 /**

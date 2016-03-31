@@ -8,13 +8,13 @@
 
 #import "TextViewController.h"
 #import "HotTextView.h"
+#import "MJRefresh.h"
 #import "BaseService.h"
 #import "TextRoomModel.h"
 #import "TextTcpSocket.h"
 #import "TextCell.h"
 #import "TeacherModel.h"
 #import "TextHomeViewController.h"
-#import "TextLivingCell.h"
 #import "TextGroupList.h"
 #import "MyScrollView.h"
 
@@ -54,7 +54,7 @@
      [BaseService postJSONWithUrl:kTEXT_GROUP_URL parameters:nil success:^(id responseObject)
      {
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if (dict && [dict objectForKey:@"groups"])
+         if (dict && [dict respondsToSelector:@selector(objectForKey:)] && [dict objectForKey:@"groups"])
          {
              NSArray *aryResult = [dict objectForKey:@"groups"];
              for (NSDictionary *roomDict in aryResult)
@@ -66,6 +66,7 @@
          dispatch_async(dispatch_get_main_queue(),
          ^{
              [__self settingTextGroup];
+             [__self.tableView.gifHeader endRefreshing];
              [__self.tableView reloadData];
          });
      } fail:nil];
@@ -101,9 +102,41 @@
     _line1 = [UILabel new];
     _line1.backgroundColor = UIColorFromRGB(0x629aff);
     [_line1 setFrame:Rect(0,2,fWidth,2)];
-    
     [self initScrollView];
-    [self initLivingData];
+    @WeakObj(self);
+    [_tableView addGifHeaderWithRefreshingBlock:^{
+        ///检测当前状态
+        [selfWeak initLivingData];
+    }];
+    
+    NSArray *aryRefreshing = [self getRefresh];
+    NSArray *aryStart= [self getStartRefresh];
+    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStateIdle];
+    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStatePulling];
+    [_tableView.gifHeader setImages:aryRefreshing forState:MJRefreshHeaderStateRefreshing];
+    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStateWillRefresh];
+    _tableView.gifHeader.updatedTimeHidden = YES;
+    [self.tableView.gifHeader beginRefreshing];
+    
+}
+
+- (NSArray *)getStartRefresh
+{
+    NSMutableArray *refreshingImages = [NSMutableArray array];
+    
+    UIImage *image = [UIImage imageNamed:@"loading_40x30_0001"];
+    [refreshingImages addObject:image];
+    return refreshingImages;
+}
+
+- (NSArray *)getRefresh
+{
+    NSMutableArray *refreshingImages = [NSMutableArray array];
+    for (NSUInteger i = 2; i <= 6; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading_40x30_000%lu", (unsigned long)i]];
+        [refreshingImages addObject:image];
+    }
+    return refreshingImages;
 }
 
 - (void)showLeftView
@@ -155,7 +188,6 @@
     NSInteger count = (textList.rooms.count%2 == 0) ? textList.rooms.count/2 : (textList.rooms.count/2+1);
     if(count > indexPath.row)
     {
-
         TextGroupList *textList = [_aryGroup objectAtIndex:tableView.tag];
         int length = 2;
         int loc = (int)indexPath.row * length;

@@ -83,6 +83,18 @@
     [self checkLogin];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadProfile:) name:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
+}
+
+- (void)reloadProfile:(NSNotification *)notify
+{
+    NSNumber *number = notify.object;
+    if ([number intValue]==0) {
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            selfWeak.leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
+        });
+    }
 }
 
 - (void)refreshUI

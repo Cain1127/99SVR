@@ -18,11 +18,11 @@
 #import "IdeaDetails.h"
 #import "TeacherModel.h"
 #import "NewDetailsModel.h"
-#import "EmojiView.h"
 #import "NSAttributedString+EmojiExtension.h"
 #import "EmojiTextAttachment.h"
+#import "ChatView.h"
 
-@interface NewDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,EmojiViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate>
+@interface NewDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate>
 {
     UIView *contentView;
     UILabel *lblPlace;
@@ -31,8 +31,8 @@
     UIView *downView;
     CGFloat duration;
     CGFloat originalY;
-    EmojiView *_emojiView;
     int _fall;
+    ChatView *_chatView;
 }
 
 @property (nonatomic) int keyboardPresentFlag;
@@ -76,12 +76,14 @@
     _tableView.dataSource = self;
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self initUIHead];
+    _chatView = [[ChatView alloc] initWithFrame:Rect(0, kScreenHeight-50, kScreenWidth, 50)];
+    [self.view addSubview:_chatView];
 }
 
 - (void)navBack
 {
     [_tcpSocket clearCommentAry];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)MarchBackLeft
@@ -96,43 +98,6 @@
     ^{
         [__self requestView];
     });
-    
-    downView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50, kScreenWidth, 50)];
-    [downView setBackgroundColor:UIColorFromRGB(0xcfcfcf)];
-    [self.view addSubview:downView];
-    
-    //聊天框
-    _textChat = [[UITextView alloc] initWithFrame:Rect(8,7, kScreenWidth-100, 36)];
-    [_textChat setFont:XCFONT(15)];
-    _textChat.delegate = self;
-    [_textChat setReturnKeyType:UIReturnKeySend];
-    [_textChat setBackgroundColor:UIColorFromRGB(0xffffff)];
-    [downView addSubview:_textChat];
-    
-    lblPlace = [[UILabel alloc] initWithFrame:Rect(_textChat.x+5,_textChat.y,_textChat.width,_textChat.height)];
-    lblPlace.text = @"点此和大家说点什么吧";
-    lblPlace.font = XCFONT(14);
-    lblPlace.enabled = NO;
-    lblPlace.backgroundColor = [UIColor clearColor];
-    [lblPlace setTextColor:UIColorFromRGB(0xcfcfcf)];
-    [downView addSubview:lblPlace];
-    
-    //发送消息按钮
-    UIButton *btnEmoji = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnEmoji setImage:[UIImage imageNamed:@"Expression"] forState:UIControlStateNormal];
-    [btnEmoji setImage:[UIImage imageNamed:@"Expression_H"] forState:UIControlStateHighlighted];
-    [btnEmoji setTitleColor:UIColorFromRGB(0x000000) forState:UIControlStateNormal];
-    [btnEmoji setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateHighlighted];
-    [downView addSubview:btnEmoji];
-    btnEmoji.frame = Rect(kScreenWidth-85,7, 36, 36);
-    [btnEmoji addTarget:self action:@selector(showEmojiView) forControlEvents:UIControlEventTouchUpInside];
-    
-    _btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_btnSend setTitle:@"发送" forState:UIControlStateNormal];
-    [downView addSubview:_btnSend];
-    _btnSend.frame = Rect(kScreenWidth - 44, 7, 36, 36);
-    [_btnSend addTarget:self action:@selector(sendInfo) forControlEvents:UIControlEventTouchUpInside];
-    [self createEmojiKeyboard];
 }
 
 - (void)didReceiveMemoryWarning
@@ -230,9 +195,7 @@
     lblTalk.layer.masksToBounds= YES;
     lblTalk.layer.cornerRadius = 10;
     [contentView addSubview:lblTalk];
-    
     [_tableView setTableHeaderView:contentView];
-    
     [_tcpSocket reqIdeaDetails:0 count:20 ideaId:[_jsonModel.viewid integerValue]];
 }
 
@@ -280,7 +243,6 @@
     {
         IdeaDetailRePly *comment = [_aryCommont objectAtIndex:indexPath.row];
         cell.textView.shouldDrawImages = YES;
-//        cell.textView.shouldDrawLinks = YES;
         cell.textView.delegate = self;
         cell.textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[comment.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
         [cell setModel:comment];
@@ -297,8 +259,6 @@
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
         [imageView sd_setImageWithURL:attachment.contentURL];
         imageView.userInteractionEnabled = YES;
-//        [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
-//                                                                                action:@selector(showImageInfo:)]];
         return imageView;
     }
     else if([attachment isKindOfClass:[DTObjectTextAttachment class]])
@@ -340,93 +300,12 @@
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView) name:MESSAGE_TEXT_NEW_COMMENT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView) name:MESSAGE_TEXT_COMMENT_LIST_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(keyboardWasHidden:)
-                                                  name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardFrameDidChange:)
-                                                 name:UIKeyboardDidChangeFrameNotification object:nil];
     
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-}
-
-#pragma mark 表情键盘
-- (void)createEmojiKeyboard
-{
-    //216+108   324
-    _emojiView = [[EmojiView alloc] initWithFrame:Rect(0, kScreenHeight-216,kScreenWidth, 216)];
-    [self.view addSubview:_emojiView];
-    [_emojiView setBackgroundColor:UIColorFromRGB(0xffffff)];
-    [_emojiView setHidden:YES];
-    _emojiView.delegate = self;
-}
-
-- (void)keyboardFrameDidChange:(NSNotification *)notification
-{
-    CGSize keyboardSize = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    CGFloat keyboardOriginY = self.view.frame.size.height - keyboardSize.height;
-    deltaY = downView.frame.origin.y + downView.frame.size.height - keyboardOriginY;
-    
-    if (self.keyboardPresentFlag == 1)
-    {
-        [UIView animateWithDuration:duration delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:
-        ^{
-            downView.frame = CGRectOffset(downView.frame, 0, -deltaY);
-        } completion:nil];
-    }
-}
-
-- (void) keyboardWasShown:(NSNotification *) notification
-{
-    CGSize keyboardSize = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    // 获得弹出keyboard的动画时间，也可以手动赋值，如0.25f
-    duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    // 得到keyboard在当前controller的view中的Y轴坐标
-    DLog(@"keyboardSize:%f",keyboardSize.height);
-    CGFloat keyboardOriginY = self.view.frame.size.height - keyboardSize.height;
-    // textField下边到view顶点的距离减去keyboard的Y轴坐标就是textField要移动的距离，
-    // 这里是刚好让textField完全显示出来，也可以再在deltaY的基础上再加上一定距离，如20f、30f等
-    deltaY = downView.frame.origin.y + downView.frame.size.height - keyboardOriginY;
-    // 当deltaY大于0时说明textField会被键盘遮住，需要上移
-    // 以动画的方式改变textField的frame
-    [UIView animateWithDuration:duration delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:
-     ^{
-         downView.frame = CGRectOffset(downView.frame, 0, -deltaY);
-     } completion:nil];
-    
-    if (_emojiView.hidden == NO)
-    {
-        _emojiView.hidden = YES;
-    }
-}
-- (void) keyboardWasHidden:(NSNotification *) notification
-{
-    CGRect frame = self.view.frame;
-    frame.origin.y = originalY;
-    CGSize keyboardSize = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    if (keyboardSize.height==282)
-    {
-        downView.frame = Rect(0, kScreenHeight-50, kScreenWidth, 50);
-    }
-}
-
-- (void)closeKeyBoard
-{
-    if([_textChat isFirstResponder])
-    {
-        [_textChat resignFirstResponder];
-        [downView setFrame:Rect(0, kScreenHeight-50, kScreenWidth, 50)];
-    }
-    if(_emojiView.hidden==NO)
-    {
-        [_emojiView setHidden:YES];
-        [self.view setFrame:Rect(0,0,kScreenWidth,kScreenHeight)];
-        [downView setFrame:Rect(0, kScreenHeight-50, kScreenWidth, 50)];
-    }
 }
 
 -(void)textViewDidChange:(UITextView *)textView
@@ -496,18 +375,7 @@
     }
     NSString *strComment = [_textChat.textStorage getPlainString];
     [_tcpSocket replyCommentReq:strComment msgid:[_jsonModel.viewid integerValue] toid:[_jsonModel.teacherid integerValue] srccom:0];
-    [self closeKeyBoard];
     _textChat.text = @"";
-}
-
-- (void)showEmojiView
-{
-    if ([_textChat isFirstResponder])
-    {
-        [_textChat resignFirstResponder];
-    }
-    _emojiView.hidden = NO;
-    downView.frame = Rect(0, kScreenHeight-266,kScreenWidth, 50);
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView

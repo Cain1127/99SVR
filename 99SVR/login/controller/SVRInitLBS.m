@@ -18,27 +18,9 @@
 + (void)load
 {
     //获取登录服务器地址
-    __weak UserInfo *__userInfo = [UserInfo sharedUserInfo];
-    [BaseService getJSONWithUrl:LBS_ROOM_WEB parameters:nil success:^(id responseObject)
-    {
-        NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        if ([strInfo rangeOfString:@"|"].location != NSNotFound)
-        {
-            NSString *strResult = [strInfo componentsSeparatedByString:@"|"][0];
-            if (strResult.length>=10)
-            {
-                NSString *strWeb = [strResult substringWithRange:NSMakeRange(2,[strResult length]-3)];
-                __userInfo.strWebAddr  = strWeb;
-                [SVRInitLBS loginLocal];
-            }
-        }
-     }
-    fail:^(NSError *error)
-     {
-          DLog(@"固定IP登录");
-          [SVRInitLBS loginLocal];
-     }];
+    [SVRInitLBS loginLocal];
     //获取房间地址
+    UserInfo *__userInfo = [UserInfo sharedUserInfo];
     [BaseService getJSONWithUrl:LBS_ROOM_GATE parameters:nil success:^(id responseObject)
     {
         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
@@ -47,11 +29,17 @@
     fail:nil];
     //获取礼物
     [BaseService post:kGift_URL dictionay:nil timeout:5 success:^(id responseObject) {
-        
+        NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+        [UserDefaults setObject:parameters forKey:kGiftInfo];
+        [DecodeJson setGiftInfo:parameters];
     } fail:^(NSError *error) {
         
     }];
-//    [DecodeJson postServerRegError:@"test" type:1 serverIP:@"120.55.105.224"];
+    NSString *strUrl = [NSString stringWithFormat:@"%@tygettext",LBS_HTTP_HOST];
+    [BaseService get:strUrl dictionay:nil timeout:10 success:^(id responseObject) {
+        NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        __userInfo.strTextRoom = strInfo;
+    } fail:nil];
     
 }
 

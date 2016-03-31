@@ -92,16 +92,7 @@
     [super viewDidLoad];
     self.txtTitle.text = @"设置";
     
-    /**
-     *  @author     yangshengmeng, 16-03-30 15:03:56
-     *
-     *  @brief      未登录前隐藏修改密码，口头确认过
-     *
-     *  @since      v1.0.0
-     */
     [self setDefaultSettingItems];
-    
-    
     self.view.backgroundColor = [UIColor whiteColor];
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, 30.0f + kNavigationHeight, self.view.width, (1 + _array.count) * kCellHeight + 8.0f)];
     _tableView.delegate = self;
@@ -223,6 +214,9 @@
         [UserInfo sharedUserInfo].otherLogin = 0;
         [UserInfo sharedUserInfo].nUserId = 0;
         [UserInfo sharedUserInfo].banding = 0;
+        
+        [[ZLLogonServerSing sharedZLLogonServerSing] closeProtocol];
+        
         [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:@"0" pwd:@""];
         [logoutBtn setHidden:YES];
         [lblContent setHidden:YES];

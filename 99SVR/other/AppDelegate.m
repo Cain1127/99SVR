@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "DecodeJson.h"
 #import "GiftModel.h"
 #import <AVFoundation/AVAudioSession.h>
 #import "NSJSONSerialization+RemovingNulls.h"
@@ -74,7 +75,7 @@
     
     NSDictionary *dictGift = [UserDefaults objectForKey:kGiftInfo];
     if (dictGift){
-        [self setGiftInfo:dictGift];
+        [DecodeJson setGiftInfo:dictGift];
     }
     else{
         NSString *path = [[NSBundle mainBundle] pathForResource:@"gift"
@@ -82,23 +83,23 @@
         NSData *data = [NSData dataWithContentsOfFile:path];
         NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
         [UserDefaults setObject:parameters forKey:kGiftInfo];
-        [self setGiftInfo:parameters];
+        [DecodeJson setGiftInfo:parameters];
     }
     return YES;
 }
 
-- (void)setGiftInfo:(NSDictionary *)dict
-{
-    if (dict && [dict objectForKey:@"gift"]) {
-        [UserInfo sharedUserInfo].giftVer = [[dict objectForKey:@"ver"] intValue];
-        NSArray *array = [dict objectForKey:@"gift"];
-        NSMutableArray *aryIndex = [NSMutableArray array];
-        for (NSDictionary *dictionary in array) {
-            [aryIndex addObject:[GiftModel resultWithDict:dictionary]];
-        }
-        [UserInfo sharedUserInfo].aryGift = aryIndex;
-    }
-}
+//- (void)setGiftInfo:(NSDictionary *)dict
+//{
+//    if (dict && [dict objectForKey:@"gift"]) {
+//        [UserInfo sharedUserInfo].giftVer = [[dict objectForKey:@"ver"] intValue];
+//        NSArray *array = [dict objectForKey:@"gift"];
+//        NSMutableArray *aryIndex = [NSMutableArray array];
+//        for (NSDictionary *dictionary in array) {
+//            [aryIndex addObject:[GiftModel resultWithDict:dictionary]];
+//        }
+//        [UserInfo sharedUserInfo].aryGift = aryIndex;
+//    }
+//}
 
 -(void)onCheckVersion
 {

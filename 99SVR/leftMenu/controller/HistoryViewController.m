@@ -29,13 +29,6 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     
-    /**
-     *  @author yangshengmeng, 16-03-31 16:03:34
-     *
-     *  @brief  添加导航栏，代码是复制[我的收藏]页面
-     *
-     *  @since  v1.0.0
-     */
     UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
     _headView.backgroundColor = kNavColor;
@@ -78,20 +71,6 @@
     [container addSubview:lblName];
     [lblName setTextColor:[UIColor grayColor]];
     lblName.textAlignment = NSTextAlignmentCenter;
-/*
-    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 30, self.view.width, 40)];
-    [lblName setText:@"没有足迹"];
-    [lblName setFont:XCFONT(14)];
-    [container addSubview:lblName];
-    lblName.textAlignment = NSTextAlignmentCenter;
- */
-    
-//    UIButton *btnRand = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [container addSubview:btnRand];
-//    [btnRand setTitle:@"随便看看" forState:UIControlStateNormal];
-//    btnRand.frame = Rect(30, 80, kScreenWidth-60, 44);
-//    [btnRand setTitleColor:kNavColor forState:UIControlStateNormal];
-//    [btnRand addTarget:self action:@selector(randEnterRoom) forControlEvents:UIControlEventTouchUpInside];
     
     if (self.videos == nil || self.videos.count == 0)
     {

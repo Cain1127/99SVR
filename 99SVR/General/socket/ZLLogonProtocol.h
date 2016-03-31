@@ -82,7 +82,7 @@ public:
             items[i].Log();
         }
     }
-    
+  
     void OnQuanxianId2List(QuanxianId2Item items[], int count)
     {
         for (int i = 0; i < count; i++)
@@ -122,7 +122,7 @@ public :
     /**
      *  修改昵称
      */
-    int updateNick(const char *cNick,const char *intro);
+    int updateNick(const char *cNick,const char *intro,int sex);
     /**
      *  第三方登录
      */

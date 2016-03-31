@@ -278,11 +278,6 @@
         [self.view makeToast:@"密码不能为空"];
         return ;
     }
-    
-    //    BOOL bCheck = _check.checked;
-    //    int nSave = bCheck ? 1 : 0;
-    //    int nLogin = _autoLogin.checked ? 1 : 0;
-    
     __weak LoginViewController *__self = self;
     //进入新的界面先
     dispatch_async(dispatch_get_main_queue(),

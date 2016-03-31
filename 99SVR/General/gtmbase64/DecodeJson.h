@@ -106,5 +106,9 @@
  *  推送获取不到大厅
  */
 + (void)postPageHall;
-
+/**
+ *  解析公告
+ */
++ (NSString *)resoleNotice:(NSString *)strInfo index:(int)nIndex;
++ (void)setGiftInfo:(NSDictionary *)dict;
 @end

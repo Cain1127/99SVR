@@ -128,17 +128,26 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
     //    activityView.alpha = 0.0;
     activityView.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);
     activityView.layer.cornerRadius = CSToastCornerRadius;
+    activityView.backgroundColor = RGB(57,64,66);
     
-    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(35,42, activityView.width-35, 16)];
+
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(activityView.bounds.size.width/2-15,activityView.bounds.size.height/2-15, 30, 30)];
+    NSMutableArray *images = [NSMutableArray array];
+    [activityView addSubview:imgView];
+    for (int i=1; i<13; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading-beizi80X8000%02d",i]];
+        [images addObject:image];
+    }
+    imgView.animationImages = images;
+    imgView.animationDuration= 1;
+    [imgView startAnimating];
+    
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0,imgView.height+imgView.y+10, activityView.width, 16)];
     [lblName setText:@"正在加载，请稍后"];
     [lblName setTextColor:UIColorFromRGB(0xffffff)];
+    [lblName setTextAlignment:NSTextAlignmentCenter];
     [activityView addSubview:lblName];
     [lblName setFont:XCFONT(12)];
-    
-    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    activityIndicatorView.frame =Rect(0,activityView.bounds.size.height/2-15, 30, 30);
-    [activityView addSubview:activityIndicatorView];
-    [activityIndicatorView startAnimating];
     
     objc_setAssociatedObject (self, &CSToastActivityViewKey, activityView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
