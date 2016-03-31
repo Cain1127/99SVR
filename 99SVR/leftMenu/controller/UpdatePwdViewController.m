@@ -59,7 +59,7 @@
 {
     CGRect frame = Rect(10, 50, kScreenWidth-160, 30);
     if ([UserInfo sharedUserInfo].otherLogin) {
-        UILabel *lblMsg = [[UILabel alloc] initWithFrame:Rect(10, 10+kNavigationHeight, kScreenWidth-20, 20)];
+        UILabel *lblMsg = [[UILabel alloc] initWithFrame:Rect(10, 10 + kNavigationHeight, kScreenWidth - 20, 20)];
         [lblMsg setText:@"由于您使用合作账号登录,请通过绑定手机设置密码!"];
         [self.view addSubview:lblMsg];
         [lblMsg setFont:XCFONT(15)];
@@ -96,7 +96,7 @@
     }
     else
     {
-        [self createLabelWithRect:Rect(10, 20+kNavigationHeight, 80, 30)];
+        [self createLabelWithRect:Rect(10.0f, 20 + kNavigationHeight, 80.0f, 30.0f)];
         _txtOld = [self createTextField:Rect(10, 20+kNavigationHeight, kScreenWidth-60, 30)];
         [_txtOld setPlaceholder:@"请输入旧密码"];
         frame.origin.y = _txtOld.y+50;
@@ -231,7 +231,8 @@
 
 - (void)authUpdate
 {
-    if ([UserInfo sharedUserInfo].otherLogin) {
+    if ([UserInfo sharedUserInfo].otherLogin)
+    {
         [self authOtherLogin];
     }
     else
@@ -322,6 +323,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self setTitle:@"修改密码"];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self createView];

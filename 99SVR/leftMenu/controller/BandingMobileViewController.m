@@ -55,17 +55,17 @@
 
 - (void)createText
 {
-    CGRect frame = Rect(30, 50, kScreenWidth-160, 30);
+    CGRect frame = Rect(30.0f, 84.0f, kScreenWidth - 160.0f, 30.0f);
     if (!banding) {
-        [self createLabelWithRect:Rect(30, 20, 80, 30)];
-        _txtName = [self createTextField:Rect(30, 20, kScreenWidth-60, 30)];
+        [self createLabelWithRect:Rect(30.0f, 84.0f, 80.0f, 30.0f)];
+        _txtName = [self createTextField:Rect(30.0f, 84.0f, kScreenWidth - 60.0f, 30.0f)];
         [_txtName setPlaceholder:@"请输入手机号码"];
         [_txtName setKeyboardType:UIKeyboardTypeNumberPad];
-        frame.origin.y = _txtName.y+50;
+        frame.origin.y = _txtName.y + 50.0f;
     }
     else
     {
-        frame.origin.y = 20;
+        frame.origin.y = 84.0f;
     }
     
     [self createLabelWithRect:Rect(30, frame.origin.y,80, 30)];

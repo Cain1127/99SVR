@@ -13,37 +13,58 @@
 #import "BaseService.h"
 #import "IndexViewController.h"
 #import "TeacherModel.h"
-#import "TextHomeViewController.h"
-#import "HomeTextLivingCell.h"
 #import "BannerModel.h"
-#import "TextRoomModel.h"
 #import "UIImageView+WebCache.h"
 #import "SDCycleScrollView.h"
 #import "SearchController.h"
-#import "WonderfullView.h"
+
+#import "TextRoomModel.h"
+#import "HomeTextLivingCell.h"
+#import "TextHomeViewController.h"
+
 #import "RoomHttp.h"
 #import "VideoLivingCell.h"
+#import "RoomViewController.h"
+
 #import "ViewPointCell.h"
+#import "WonderfullView.h"
+#import "NewDetailsViewController.h"
+
 #import "RightImageButton.h"
+
+#import "MJRefresh.h"
 
 #define kPictureHeight 0.3 * kScreenHeight
 
-@interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate>
+/**
+ *  @brief  当前请求的类型，用来处理请求事件
+ */
+typedef enum : NSUInteger
 {
     
-}
+    cCJHomeRequestTypeDefault = 1,  //!<默认状态
+    cCJHomeRequestTypeRequesting,   //!<正在请求，同时所有请求都没有完成
+    cCJHomeRequestTypeBannerFinish, //!<banner信息请求完成
+    cCJHomeRequestTypeListFinish    //!<列表信息请求完成
+    
+} CJHomeRequestType;
+
+@interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate>
+
 @property (nonatomic,strong) NSMutableArray *aryBanner;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *aryLiving;
-@property (nonatomic,copy) NSTimer *timer;
 @property (nonatomic,strong) SDCycleScrollView *scrollView;
+
+///当前数据请求状态:0-未开始请求/1-正在请求/2-banner完成请求/3-列表完成请求
+@property (nonatomic, assign) CJHomeRequestType refreshStatus;
 
 @end
 
 @implementation HomeViewController
 
 #pragma mark -
-#pragma mark - Banner autoscroll view init
+#pragma mark - init default used UI
 - (void)createScroll
 {
     
@@ -52,13 +73,24 @@
         return ;
     }
     
-    ///CGRectMake(0.0f, 10 + kNavigationHeight, kScreenWidth, kPictureHeight)
     _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0.0f, 0.0f, kScreenWidth, kPictureHeight) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
     _scrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
     _scrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
     _scrollView.currentPageDotColor = UIColorFromRGB(0xff7a1e); // 自定义分页控件小圆标颜色
     _scrollView.pageDotColor = UIColorFromRGB(0xa8a8a8);
     _scrollView.autoScrollTimeInterval = 2;
+}
+
+- (void)initTableView
+{
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0.0f, 10.0f + kNavigationHeight, kScreenWidth, kScreenHeight - (10.0f + kNavigationHeight + 5.0f + 50.0f)) style:UITableViewStyleGrouped];
+    [self.view addSubview:_tableView];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    _tableView.showsVerticalScrollIndicator = NO;
+    _tableView.showsHorizontalScrollIndicator = NO;
+    _tableView.backgroundColor = [UIColor whiteColor];
+    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
 - (void)createPage
@@ -71,12 +103,11 @@
     
 }
 
-#pragma mark -
-#pragma mark - viewController life circle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
+    self.refreshStatus = cCJHomeRequestTypeDefault;
     UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
     _headView.backgroundColor = UIColorFromRGB(0xffffff);
@@ -101,22 +132,46 @@
     [self createScroll];
     [self createPage];
     [self initTableView];
-    [self initData];
-    [self initLivingData];
+    
+    ///添加MJ头部刷新
+    @WeakObj(self);
+    [self.tableView addLegendHeaderWithRefreshingBlock:^{
+        
+        ///检测当前状态
+        if (cCJHomeRequestTypeDefault < selfWeak.refreshStatus)
+        {
+            
+            return;
+            
+        }
+        
+        ///设置当前状态
+        selfWeak.refreshStatus = cCJHomeRequestTypeRequesting;
+        
+        [selfWeak initData];
+        [selfWeak initLivingData];
+        
+    }];
+    
+    ///一开始进行一次主动刷新
+    [self.tableView.header beginRefreshing];
+    
 }
 
 #pragma mark -
-#pragma mark - asy load image for image view
+#pragma mark - Inner function : Load image for image view and show leftView
 - (void)loadImageView
 {
+    
     @WeakObj(self);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
           selfWeak.scrollView.imageURLStringsGroup = selfWeak.aryBanner;
+        
     });
+    
 }
 
-#pragma mark -
-#pragma mark - pop show left menu
 - (void)showLeftView
 {
     [self leftItemClick];
@@ -129,19 +184,34 @@
     NSString *strUrl = [[NSString alloc] initWithUTF8String:kHome_Banner_URL];
     @WeakObj(self);
     [BaseService postJSONWithUrl:strUrl parameters:nil success:^(id responseObject) {
+        
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-        NSLog(@":::::::: Banner Data : %@", dict);
-        if ([dict objectForKey:@"banner"]) {
+
+        if ([dict objectForKey:@"banner"])
+        {
+            
             NSArray *array = [dict objectForKey:@"banner"];
-            for (NSDictionary *param in array) {
+            for (NSDictionary *param in array)
+            {
+                
                 BannerModel *model = [BannerModel resultWithDict:param];
                 [selfWeak.aryBanner addObject:model];
+                
             }
+            
+            ///返回主线程刷新UI
             dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [selfWeak updateRefreshStatus:cCJHomeRequestTypeBannerFinish];
                 [selfWeak loadImageView];
+                
             });
+            
         }
+        
     } fail:^(NSError *error) {
+        
+        [selfWeak updateRefreshStatus:cCJHomeRequestTypeBannerFinish];
         
     }];
 }
@@ -251,6 +321,7 @@
          if ([NSThread isMainThread])
          {
              
+             [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
              [__self.tableView reloadData];
              
          }
@@ -259,28 +330,119 @@
          
              dispatch_async(dispatch_get_main_queue(), ^{
                  
+                 [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
                  [__self.tableView reloadData];
                  
              });
          
          }
          
-     } fail:nil];
+     } fail:^(NSError *error) {
+         
+         [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
+         
+     }];
     
 }
 
-#pragma mark - 
-#pragma mark - UITableView init
-- (void)initTableView
+/**
+ *  @author                     yangshengmeng, 16-03-30 09:03:31
+ *
+ *  @brief                      更新当前的网络请求状态，方便进行请求的处理
+ *
+ *  @param currentRequestStatus 当前完成的请求类型
+ *
+ *  @since                      v1.0.0
+ */
+- (void)updateRefreshStatus:(CJHomeRequestType)currentRequestStatus
 {
-    _tableView = [[UITableView alloc] initWithFrame:Rect(0.0f, 10.0f + kNavigationHeight, kScreenWidth, kScreenHeight - (10.0f + kNavigationHeight + 5.0f + 50.0f)) style:UITableViewStyleGrouped];
-    [self.view addSubview:_tableView];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    _tableView.showsVerticalScrollIndicator = NO;
-    _tableView.showsHorizontalScrollIndicator = NO;
-    _tableView.backgroundColor = [UIColor whiteColor];
-    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+
+    ///判断当前线程
+    if ([NSThread isMainThread])
+    {
+        
+        switch (self.refreshStatus)
+        {
+                ///之前处于正在请求状态
+            case cCJHomeRequestTypeRequesting:
+            {
+            
+                ///banner 完成请求
+                if (cCJHomeRequestTypeBannerFinish == currentRequestStatus)
+                {
+                    
+                    self.refreshStatus = cCJHomeRequestTypeBannerFinish;
+                    return;
+                    
+                }
+                ///列表完成请求
+                else if (cCJHomeRequestTypeListFinish == currentRequestStatus)
+                {
+                    
+                    self.refreshStatus = cCJHomeRequestTypeListFinish;
+                    return;
+                    
+                }
+            
+            }
+                break;
+                
+                ///之前已完成banner请求
+            case cCJHomeRequestTypeBannerFinish:
+            {
+            
+                ///列表完成请求
+                if (cCJHomeRequestTypeListFinish == currentRequestStatus)
+                {
+                    
+                    ///完成头部刷新动画
+                    [self.tableView.header endRefreshing];
+                    self.refreshStatus = cCJHomeRequestTypeDefault;
+                    return;
+                    
+                }
+            
+            }
+                break;
+                
+                ///之前已完成list请求
+            case cCJHomeRequestTypeListFinish:
+            {
+            
+                ///banner 完成请求
+                if (cCJHomeRequestTypeBannerFinish == currentRequestStatus)
+                {
+                    
+                    ///完成头部刷新动画
+                    [self.tableView.header endRefreshing];
+                    self.refreshStatus = cCJHomeRequestTypeDefault;
+                    return;
+                    
+                }
+            
+            }
+                break;
+                
+                ///当前处于默认状态，无请求
+            case cCJHomeRequestTypeDefault:
+                
+            default:
+                break;
+        }
+        
+    }
+    else
+    {
+    
+        @WeakObj(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [selfWeak updateRefreshStatus:currentRequestStatus];
+            
+        });
+    
+    }
+
 }
 
 #pragma mark table view delegate
@@ -308,6 +470,25 @@
         {
             
             NSArray *tempArray = _aryLiving[section - 1];
+            
+            if (0 >= tempArray.count)
+            {
+                
+                return 0;
+                
+            }
+            
+            NSObject *tempObject = [tempArray firstObject];
+            
+            ///文字直接数量
+            if ([tempObject isKindOfClass:[TextRoomModel class]] ||
+                [tempObject isKindOfClass:[RoomHttp class]])
+            {
+                
+                return (NSInteger)ceilf((1.0f * tempArray.count) / 2.0f);
+                
+            }
+            
             return tempArray.count;
             
         }
@@ -364,7 +545,38 @@
         {
             tempCell = [[VideoLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:vedioCellName];
         }
-        [tempCell setVideoLivingRoomModel:(RoomHttp *)tempObject];
+        
+        ///获取准确下标
+        NSInteger leftIndex = indexPath.row * 2;
+        
+        ///左侧view
+        
+        @WeakObj(self);
+        RoomHttp *tempRoomHttpModelL = tempArray[leftIndex];
+        tempRoomHttpModelL.cname = tempRoomHttpModelL.roomname;
+        CJHomeListTypeLivingCellType tempType = cCJHomeListTypeLivingCellTypeLeft;
+        [tempCell setVideoLivingRoomModel:tempRoomHttpModelL viewType:tempType tapCallBack:^(CJHomeListTypeLivingCellType viewType) {
+            
+            RoomViewController *roomView = [[RoomViewController alloc] initWithModel:tempRoomHttpModelL];
+            [selfWeak presentViewController:roomView animated:YES completion:nil];
+            
+        }];
+        
+        ///判断是否存在右侧view
+        if (leftIndex + 1 < tempArray.count)
+        {
+            
+            RoomHttp *tempRoomHttpModelR = tempArray[leftIndex + 1];
+            tempRoomHttpModelR.cname = tempRoomHttpModelR.roomname;
+            CJHomeListTypeLivingCellType tempType = cCJHomeListTypeLivingCellTypeRight;
+            [tempCell setVideoLivingRoomModel:tempRoomHttpModelR viewType:tempType tapCallBack:^(CJHomeListTypeLivingCellType viewType) {
+                
+                RoomViewController *roomView = [[RoomViewController alloc] initWithModel:tempRoomHttpModelR];
+                [selfWeak presentViewController:roomView animated:YES completion:nil];
+                
+            }];
+            
+        }
         
         return tempCell;
         
@@ -380,7 +592,47 @@
         {
             tempCell = [[HomeTextLivingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:textCellName];
         }
-        [tempCell setTextRoomModel:(TextRoomModel *)tempObject];
+        
+        ///获取准确下标
+        NSInteger leftIndex = indexPath.row * 2;
+        
+        ///左侧view
+        @WeakObj(self);
+        TextRoomModel *tempTextRoomModelL = tempArray[leftIndex];
+        CJHomeListTypeLivingCellType tempType = cCJHomeListTypeLivingCellTypeLeft;
+        [tempCell setTextRoomModel:tempTextRoomModelL viewType:tempType tapCallBack:^(CJHomeListTypeLivingCellType viewType) {
+            
+            if (cCJHomeListTypeLivingCellTypeLeft == viewType ||
+                cCJHomeListTypeLivingCellTypeRight == viewType)
+            {
+                
+                TextHomeViewController *textHomeVC = [[TextHomeViewController alloc] initWithModel:tempTextRoomModelL];
+                [selfWeak.navigationController pushViewController:textHomeVC animated:YES];
+                
+            }
+            
+        }];
+        
+        ///判断是否存在右侧view
+        if (leftIndex + 1 < tempArray.count)
+        {
+            
+            TextRoomModel *tempTextRoomModelR = tempArray[leftIndex + 1];
+            CJHomeListTypeLivingCellType tempType = cCJHomeListTypeLivingCellTypeRight;
+            [tempCell setTextRoomModel:tempTextRoomModelR viewType:tempType tapCallBack:^(CJHomeListTypeLivingCellType viewType) {
+                
+                if (cCJHomeListTypeLivingCellTypeLeft == viewType ||
+                    cCJHomeListTypeLivingCellTypeRight == viewType)
+                {
+                    
+                    TextHomeViewController *textHomeVC = [[TextHomeViewController alloc] initWithModel:tempTextRoomModelR];
+                    [selfWeak.navigationController pushViewController:textHomeVC animated:YES];
+                    
+                }
+                
+            }];
+            
+        }
         
         return tempCell;
         
@@ -584,11 +836,59 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    ///取消选择状态
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSLog(@"::::::::::tap cell: %@", indexPath);
-//    TextRoomModel *model = [_aryLiving objectAtIndex:indexPath.row];
-//    TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithModel:model];
-//    [self presentViewController:textHome animated:YES completion:nil];
+    
+    ///判断点击的section
+    if (0 == indexPath.section)
+    {
+        
+        return;
+        
+    }
+    
+    ///判断不同的section数据模型，返回不同的view
+    if (indexPath.section > _aryLiving.count)
+    {
+        
+        return;
+        
+    }
+    
+    if (!([_aryLiving[indexPath.section - 1] isKindOfClass:[NSArray class]]))
+    {
+        
+        return;
+        
+    }
+    
+    ///根据对象数组内的类型加载HeaderView
+    NSArray *tempArray = _aryLiving[indexPath.section - 1];
+    if (0 >= tempArray.count)
+    {
+        
+        return;
+        
+    }
+    
+    NSObject *tempObject = tempArray[0];
+    
+    ///精彩观点项点击
+    if ([tempObject isKindOfClass:[WonderfullView class]])
+    {
+        
+        ///获取直播数据模型
+        WonderfullView *model = [tempArray objectAtIndex:indexPath.row];
+        
+        TextTcpSocket *textSocket = [[TextTcpSocket alloc] init];
+        [textSocket connectRoom:[model.roomid intValue]];
+        
+        NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:textSocket viewID:[model.viewid intValue]];
+        [self presentViewController:detailView animated:YES completion:nil];
+        
+    }
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -655,12 +955,6 @@
 }
 
 #pragma mark hotViewDelegate
-- (void)clickTeach:(TeacherModel *)teach
-{
-    TextHomeViewController *textHome = [[TextHomeViewController alloc] initWithRoom:80001];
-    [self presentViewController:textHome animated:YES completion:nil];
-}
-
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;

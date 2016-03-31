@@ -147,10 +147,24 @@
 #pragma mark - leftMenuHeaderViewDelegate
 - (void)enterLogin
 {
-    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType != 1)
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
-        control = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
-        [[UIApplication sharedApplication].keyWindow addSubview:control.view];
+        
+        ProfileViewController *profileVC = [[ProfileViewController alloc] init];
+        if ([self.degelate respondsToSelector:@selector(leftMenuDidSeletedAtRow:title:vc:)])
+        {
+            
+            [self.degelate leftMenuDidSeletedAtRow:0 title:nil vc:profileVC];
+        }
+        return;
     }
+    ///未登录
+    LoginViewController *loginVC = [[LoginViewController alloc] init];
+    if ([self.degelate respondsToSelector:@selector(leftMenuDidSeletedAtRow:title:vc:)])
+    {
+        [self.degelate leftMenuDidSeletedAtRow:0 title:nil vc:loginVC];
+        
+    }
+
 }
 @end

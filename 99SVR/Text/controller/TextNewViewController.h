@@ -12,5 +12,4 @@
 
 - (id)initWithSocket:(TextTcpSocket *)textSocket;
 
-
 @end

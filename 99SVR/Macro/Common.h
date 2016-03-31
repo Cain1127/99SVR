@@ -33,6 +33,7 @@
 
 #define kGROUP_REQUEST_HTTP @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=roomdata&client=android"
 #define kIMAGE_HTTP_URL @"http://roompic.99ducaijing.cn:8081/"
+#define kIMAGE_HTTP_HOME_URL @"http://172.16.41.99/images/roompic/"
 #define kHISTORY_HTTP_URL @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=history&userid="
 
 #define kVideoImageHeight kScreenWidth*9/16

@@ -84,6 +84,11 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)MarchBackLeft
+{
+    [self navBack];
+}
+
 - (void)initUIHead
 {
     __weak NewDetailsViewController *__self = self;

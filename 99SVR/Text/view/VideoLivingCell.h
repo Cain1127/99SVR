@@ -20,6 +20,6 @@
  *
  *  @since              v1.0.0
  */
-- (void)setVideoLivingRoomModel:(RoomHttp *)dataModel;
+- (void)setVideoLivingRoomModel:(RoomHttp *)dataModel viewType:(CJHomeListTypeLivingCellType)viewType tapCallBack:(void(^)(CJHomeListTypeLivingCellType viewType))tapCallBack;
 
 @end

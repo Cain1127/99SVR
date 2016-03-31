@@ -92,11 +92,18 @@
     [super viewDidLoad];
     self.txtTitle.text = @"设置";
     
-    _array = @[[EnterModel createContent:@"绑定手机" className:@"BandingMobileViewController"],
-               [EnterModel createContent:@"修改密码" className:@"UpdatePwdViewController"],
-               [EnterModel createContent:@"关于我们" className:@"AboutController"]];
+    /**
+     *  @author     yangshengmeng, 16-03-30 15:03:56
+     *
+     *  @brief      未登录前隐藏修改密码，口头确认过
+     *
+     *  @since      v1.0.0
+     */
+    [self setDefaultSettingItems];
+    
+    
     self.view.backgroundColor = [UIColor whiteColor];
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,30+kNavigationHeight, self.view.width,(1+_array.count)*kCellHeight+8)];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, 30.0f + kNavigationHeight, self.view.width, (1 + _array.count) * kCellHeight + 8.0f)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -111,7 +118,7 @@
     _tableView.tableFooterView = emptyFooter;
     [_tableView registerClass:[SettingCell class] forCellReuseIdentifier:@"cellId"];
     
-    lblContent = [[UILabel alloc] initWithFrame:Rect(8, _tableView.height+_tableView.y+30, kScreenWidth-16,0.5)];
+    lblContent = [[UILabel alloc] initWithFrame:Rect(8.0f, _tableView.height+_tableView.y+30.0f, kScreenWidth - 16.0f,0.5f)];
     [lblContent setBackgroundColor:kLineColor];
     [self.view addSubview:lblContent];
     
@@ -135,6 +142,34 @@
          UIAlertView *tips = [[UIAlertView alloc] initWithTitle:nil message:@"是否确认退出登录?" delegate:__self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
          [tips show];
      }];
+}
+
+/**
+ *  @author yangshengmeng, 16-03-30 16:03:47
+ *
+ *  @brief  区分登录和不登录时的设置菜单栏
+ *
+ *  @since  v1.0.0
+ */
+- (void)setDefaultSettingItems
+{
+
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
+    {
+        
+        _array = @[[EnterModel createContent:@"绑定手机" className:@"BandingMobileViewController"],
+                   [EnterModel createContent:@"修改密码" className:@"UpdatePwdViewController"],
+                   [EnterModel createContent:@"关于我们" className:@"AboutController"]];
+        
+    }
+    else
+    {
+        
+        _array = @[[EnterModel createContent:@"绑定手机" className:@"BandingMobileViewController"],
+                   [EnterModel createContent:@"关于我们" className:@"AboutController"]];
+        
+    }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -187,10 +222,16 @@
         [UserInfo sharedUserInfo].bIsLogin = NO;
         [UserInfo sharedUserInfo].otherLogin = 0;
         [UserInfo sharedUserInfo].nUserId = 0;
+        [UserInfo sharedUserInfo].banding = 0;
         [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:@"0" pwd:@""];
         [logoutBtn setHidden:YES];
         [lblContent setHidden:YES];
         [self dismissViewControllerAnimated:YES completion:nil];
+        
+        ///刷新设置列表
+        [self setDefaultSettingItems];
+        [_tableView reloadData];
+        
     }
 }
 
@@ -207,11 +248,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
-//    {
-//        return 3;
-//    }
-    return 1+_array.count;
+    return 1 + _array.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -229,19 +266,14 @@
     }
     else
     {
-        if(_array.count>indexPath.row-1)
+        if(_array.count > indexPath.row - 1)
         {
-            EnterModel *model = [_array objectAtIndex:indexPath.row-1];
+            EnterModel *model = [_array objectAtIndex:indexPath.row - 1];
             cell.nameLabel.text = model.content;
         }
         cell.arrowImageView.hidden = NO;
     }
-    
-//    else
-//    {
-//        cell.nameLabel.text = @"修改密码";
-//        cell.arrowImageView.hidden = NO;
-//    }
+
     return cell;
 }
 
@@ -259,7 +291,6 @@
     else if (indexPath.row > 0 && _array.count>indexPath.row-1) {
         EnterModel *model = [_array objectAtIndex:indexPath.row-1];
         UIViewController *viewController = [[NSClassFromString(model.enterClass) alloc] init];
-//        AboutController *about = [[AboutController alloc] init];
         [self.navigationController pushViewController:viewController animated:YES];
     }
 }

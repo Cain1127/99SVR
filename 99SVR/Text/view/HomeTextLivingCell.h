@@ -24,9 +24,11 @@
  *  @brief              根据给定的最新文字直播数据模型，刷新首页的文字直播cell信息
  *
  *  @param tempObject   文字直播列表使用的信息数据模型
+ *  @param viewType     视图类型
+ *  @param tapCallBack  点击时的回调
  *
  *  @since              v1.0.0
  */
-- (void)setTextRoomModel:(TextRoomModel *)dataModel;
+- (void)setTextRoomModel:(TextRoomModel *)dataModel viewType:(CJHomeListTypeLivingCellType)viewType tapCallBack:(void(^)(CJHomeListTypeLivingCellType viewType))tapCallBack;
 
 @end
