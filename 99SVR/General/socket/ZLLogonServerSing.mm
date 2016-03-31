@@ -54,10 +54,10 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     }
 }
 
-- (void)updateNick:(NSString *)strNick
+- (void)updateNick:(NSString *)strNick intro:(NSString *)intro
 {
     if (protocol) {
-        protocol->updateNick("ce shi","19880909");
+        protocol->updateNick([strNick UTF8String],[intro UTF8String]);
     }
 }
 

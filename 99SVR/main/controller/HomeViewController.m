@@ -108,10 +108,7 @@ typedef enum : NSUInteger
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
     self.refreshStatus = cCJHomeRequestTypeDefault;
-<<<<<<< HEAD
-    
-=======
->>>>>>> origin/master
+
     UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
     _headView.backgroundColor = UIColorFromRGB(0xffffff);

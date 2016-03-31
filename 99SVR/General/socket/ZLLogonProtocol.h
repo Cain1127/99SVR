@@ -122,7 +122,7 @@ public :
     /**
      *  修改昵称
      */
-    int updateNick(const char *cNick,const char *cBirthDat="19000101");
+    int updateNick(const char *cNick,const char *intro);
     /**
      *  第三方登录
      */

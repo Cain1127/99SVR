@@ -27,22 +27,12 @@
     return nil;
 }
 
-- (void)MarchBackLeft
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)navBack
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setTitleText:_strTitle];
 
-    _webView = [[UIWebView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64)];
+    _webView = [[UIWebView alloc] initWithFrame:Rect(0.0f, 64.0f, kScreenWidth, kScreenHeight - 64.0f)];
     [self.view addSubview:_webView];
     
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:_strPath]];

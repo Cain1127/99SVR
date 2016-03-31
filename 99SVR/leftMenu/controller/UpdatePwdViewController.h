@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UpdatePwdViewController : UIViewController
+@interface UpdatePwdViewController : CustomViewController
 
 @end
