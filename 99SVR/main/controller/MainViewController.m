@@ -50,6 +50,12 @@
         [refreshingImages addObject:image];
     }
     return refreshingImages;
+    __weak MainViewController *__self = self;
+    [self.tableView addLegendHeaderWithRefreshingBlock:
+     ^{
+         [__self.tableView.header beginRefreshing];
+         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_INDEX_GET_GROUPLIST_VC object:nil];
+     }];
 }
 
 - (void)reloadData

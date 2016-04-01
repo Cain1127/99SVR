@@ -13,12 +13,13 @@
 
 @interface VideoCellView()
 {
-    UIImageView *_imageView; // 图片
-    UILabel *_nameLabel; // 名称
-    UIButton *_lookCountBtn; // 观看人数
-    UILabel *_roomIdLabel; // 房间号
+    UIImageView *_imageView;        //!<图片
+    UILabel *_nameLabel;            //!<名称
+    UIButton *_lookCountBtn;        //!<观看人数
+    UILabel *_roomIdLabel;          //!<房间号
     UILabel *_count;
     UIButton *_btnPwd;
+    UILabel *_lookCountLabel;       //!<观看次数
 }
 
 @end
@@ -44,7 +45,7 @@
         _nameLabel.textAlignment = NSTextAlignmentLeft;
         [self addSubview:_nameLabel];
         
-        UIColor *smallFontColor = [UIColor colorWithHex:@"#ffffff"];
+        UIColor *smallFontColor = [UIColor colorWithHex:@"#919191"];
         _lookCountBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_lookCountBtn setTitleColor:smallFontColor forState:UIControlStateNormal];
         _lookCountBtn.titleLabel.font = [UIFont systemFontOfSize:12];
@@ -56,6 +57,14 @@
         _roomIdLabel.textColor = smallFontColor;
         [_roomIdLabel setTextAlignment:NSTextAlignmentLeft];
         [self addSubview:_roomIdLabel];
+        
+        ///观看次数
+        _lookCountLabel = [[UILabel alloc] init];
+        _lookCountLabel.font = [UIFont systemFontOfSize:12];
+        _lookCountLabel.textColor = smallFontColor;
+        [_lookCountLabel setTextAlignment:NSTextAlignmentRight];
+        [self addSubview:_lookCountLabel];
+        
         [self layoutViews];
     }
     return self;
@@ -67,8 +76,10 @@
     
     _roomIdLabel.frame = Rect(_nameLabel.x+_nameLabel.width+2,_nameLabel.y,60,15);
     
-    [_lookCountBtn setFrame:Rect(_imageView.x+_imageView.width-60,
-                            _nameLabel.y,60, 15)];
+    [_lookCountBtn setFrame:Rect(_imageView.x+_imageView.width-40,
+                            _nameLabel.y,20, 15)];
+    
+    _lookCountLabel.frame = Rect(_imageView.x+_imageView.width - 20 - 5, _nameLabel.y, 20, 15);
 }
 
 - (void)setRoom:(RoomHttp *)room
@@ -85,7 +96,8 @@
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     _nameLabel.text = room.cname;
-    [_lookCountBtn setTitle:room.ncount forState:UIControlStateNormal];
+//    [_lookCountBtn setTitle:room.ncount forState:UIControlStateNormal];
+    _lookCountLabel.text = room.ncount;
     [_roomIdLabel setText:room.nvcbid];
 }
 

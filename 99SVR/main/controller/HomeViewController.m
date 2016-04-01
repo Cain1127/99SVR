@@ -162,6 +162,7 @@ typedef enum : NSUInteger
     [_tableView.gifHeader setImages:aryRefreshing forState:MJRefreshHeaderStateRefreshing];
     [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStateWillRefresh];
     _tableView.gifHeader.updatedTimeHidden = YES;
+    
     ///一开始进行一次主动刷新
     [self.tableView.gifHeader beginRefreshing];
     
