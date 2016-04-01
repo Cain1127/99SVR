@@ -247,7 +247,6 @@
     {
         return nil;
     }
-    const char *cInfo = [strInfo UTF8String];
     char cBuffer[2048],cEnd[2048];
     char cNumber[10];
     
@@ -259,15 +258,22 @@
     while ([strInfo rangeOfString:@"[$"].location != NSNotFound && [strInfo rangeOfString:@"$]"].location != NSNotFound)
     {
         nStart = [strInfo rangeOfString:@"[$"].location != NSNotFound ? [strInfo rangeOfString:@"[$"].location :-1;
-        nEnd = [strInfo rangeOfString:@"$]"].location!= NSNotFound ? [strInfo rangeOfString:@"$]"].location :-1;;
+        NSRange endRang = [strInfo rangeOfString:@"$]" options:NSCaseInsensitiveSearch range:NSMakeRange(nStart,[strInfo length]-nStart)];
+        nEnd = endRang.location!= NSNotFound ? endRang.location :-1;;
         if(nStart == -1 || nEnd == -1)
         {
             return strInfo;
         }
-        NSString *strTemp = [strInfo substringWithRange:NSMakeRange(nStart+2,nEnd-nStart-2)];
-        strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
-                   [NSString stringWithFormat:@"<object value=%d width=24 height=24 ></object>",[strTemp intValue]]];
-        cInfo = [strInfo UTF8String];
+        if(nStart<nEnd)
+        {
+            NSString *strTemp = [strInfo substringWithRange:NSMakeRange(nStart+2,nEnd-nStart-2)];
+            strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
+                       [NSString stringWithFormat:@"<object value=%d width=24 height=24 ></object>",[strTemp intValue]]];
+        }
+        else
+        {
+            break;
+        }
     }
 
     return strInfo;

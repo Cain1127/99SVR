@@ -432,18 +432,20 @@
 - (void)replyCommentReq:(NSString *)strComment msgid:(int64_t)msgId toid:(int)toId srccom:(int64_t)srcid
 {
     NSData *commentData = [strComment dataUsingEncoding:GBK_ENCODING];
-    int nLength = (int)commentData.length+1+sizeof(CMDTextRoomViewCommentReq_t);
+    int nLength = (int)commentData.length+(int)commentData.length+sizeof(CMDTextRoomViewCommentReq_t);
     char szBuf[nLength];
     memset(szBuf, 0, nLength);
     CMDTextRoomViewCommentReq_t *req = (CMDTextRoomViewCommentReq_t *)szBuf;
     req->fromid = kUserInfoId;
     req->messageid = msgId;
     req->textlen = nLength;
-    memcpy(req->content,commentData.bytes,commentData.length);
     req->toid = toId;
+    req->commentstype = 2;
     req->srcinteractid = srcid;
-    req->content[req->textlen-1] = '\0';
-    [self sendMessage:szBuf size:nLength version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomViewCommentReq length:nLength+12];
+    memcpy(req->content,commentData.bytes,commentData.length);
+    req->content[commentData.length+1]='\0';
+    
+    [self sendMessage:szBuf size:(int)(commentData.length+sizeof(CMDTextRoomViewCommentReq_t)) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomViewCommentReq length:(int)(commentData.length+1+sizeof(CMDTextRoomViewCommentReq_t))];
 }
 #pragma mark 讲师观点删除响应
 - (void)respDeleteTeacherView:(char *)pInfo

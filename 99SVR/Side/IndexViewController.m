@@ -64,10 +64,11 @@
             {
                 [UserInfo sharedUserInfo].aryRoom = aryIndex;
             }
+            int i=0;
             for (RoomGroup *group in aryIndex)
             {
                 DLog(@"groupid:%@",group.groupId);
-                if([group.groupId isEqualToString:@"4"]){
+                if(i==0){
                     [__self.aryHot addObject:group];
                 }
                 else if([group.groupId isEqualToString:@"18"] ||[group.groupId isEqualToString:@"200"]){
@@ -81,6 +82,7 @@
                 else{
                     [__self.aryOnline addObject:group];
                 }
+                i++;
             }
             for (UIViewController *viewController in __self.childViewControllers)
             {
@@ -92,9 +94,6 @@
                     [__self setUpdate:__self.aryOnline obj:viewController];
                     continue;
                 }
-//                if ([viewController class] == [HistoryViewController class]) {
-//                    continue;
-//                }
             }
         }
         else
@@ -260,7 +259,7 @@
 
 - (void)initUIHead
 {
-    NSArray *aryMen = @[@"实力新秀",@"财经在线"];
+    NSArray *aryMen = @[@"热点时评",@"财经在线"];
     _group = [[GroupView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44) ary:aryMen];
     [self.view addSubview:_group];
     _group.delegate = self;

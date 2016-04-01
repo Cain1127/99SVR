@@ -179,7 +179,7 @@
     
     UILabel *lblAuthor = [[UILabel alloc] initWithFrame:Rect(8, lblTitle.y+lblTitle.height+20,100, 20)];
     [lblAuthor setFont:XCFONT(13)];
-    [lblAuthor setText:[NSString stringWithFormat:@"作者:%@",_tcpSocket.teacher.strName]];
+    [lblAuthor setText:[NSString stringWithFormat:@"作者:%@",_jsonModel.calias]];
     [lblAuthor setTextColor:UIColorFromRGB(0x919191)];
     [contentView addSubview:lblAuthor];
     

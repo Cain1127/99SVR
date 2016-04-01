@@ -11,6 +11,7 @@
 #import "RoomUser.h"
 #import "TextChatModel.h"
 #import "ChatViewCell.h"
+#import "UITableView+reloadComplete.h"
 #import "UIImageView+WebCache.h"
 #import "Photo.h"
 #import "PhotoViewController.h"
@@ -242,7 +243,15 @@
     __weak TextChatViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        [__self.tableView reloadData];
+        [__self.tableView reloadDataWithCompletion:
+         ^{
+             NSInteger numberOfRows = [__self.tableView numberOfRowsInSection:0];
+             if (numberOfRows > 0)
+             {
+                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
+                 [__self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+             }
+         }];
     });
 }
 

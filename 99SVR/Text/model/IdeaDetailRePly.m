@@ -35,6 +35,7 @@
     _viewuserid = resp->viewuserid;
     _viewuserid = resp->viewuserid;
     _textLen = resp->textlen;
+    
     NSDate *date = [[UserInfo sharedUserInfo].fmt dateFromString:NSStringFromInt64(_messageTime)];
     int result = [DecodeJson compareDate:date];
     
@@ -51,7 +52,7 @@
         _time = [NSString stringWithFormat:@"%02dd%02d日 %02d:%02d",date.month,date.day,date.hour,date.minute];
     }
     
-    char cBuf[_textLen];
+    char cBuf[_textLen+_textLen];
     memcpy(cBuf,resp->content,_textLen);
     _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
     _strContent = [DecodeJson replaceEmojiString:_strContent];

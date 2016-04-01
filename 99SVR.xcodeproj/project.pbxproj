@@ -421,7 +421,6 @@
 		BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA16DA41C8C75B000D84E80 /* NSDate+convenience.m */; };
 		BBAB82E41C7049FB00C6AC34 /* ThumButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAB82E31C7049FB00C6AC34 /* ThumButton.m */; };
 		BBAB82E71C719CCD00C6AC34 /* RightView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAB82E61C719CCD00C6AC34 /* RightView.m */; };
-		BBAF96CA1CA4DA0600C16305 /* libDTCoreText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAF96861CA4533700C16305 /* libDTCoreText.a */; };
 		BBAF96CF1CA5052300C16305 /* login_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAF96CD1CA5052300C16305 /* login_bg@2x.png */; };
 		BBAF96D01CA5052300C16305 /* login_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAF96CE1CA5052300C16305 /* login_bg@3x.png */; };
 		BBAF96F91CA8B81E00C16305 /* TextEsotericaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAF96F81CA8B81E00C16305 /* TextEsotericaViewController.m */; };
@@ -467,55 +466,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = BB25D7D31C1571B400314C1E;
 			remoteInfo = 99SVR;
-		};
-		BBAF96831CA4533700C16305 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BBAF96771CA4533700C16305 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1D6058910D05DD3D006BFB54;
-			remoteInfo = DemoApp;
-		};
-		BBAF96851CA4533700C16305 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BBAF96771CA4533700C16305 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A70F11DE148632CD009202BF;
-			remoteInfo = "Static Library";
-		};
-		BBAF96871CA4533700C16305 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BBAF96771CA4533700C16305 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A788CA681486456100E1AFD9;
-			remoteInfo = UnitTest;
-		};
-		BBAF96891CA4533700C16305 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BBAF96771CA4533700C16305 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A78D9F781965B7DD00C80986;
-			remoteInfo = MacUnitTest;
-		};
-		BBAF968B1CA4533700C16305 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BBAF96771CA4533700C16305 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A7F7EFCD1573603100F5A4D0;
-			remoteInfo = "Static Library (no DTFoundation)";
-		};
-		BBAF968D1CA4533700C16305 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BBAF96771CA4533700C16305 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E2262DC61638331500BFDAD7;
-			remoteInfo = "DTCoreText (Mac)";
-		};
-		BBAF968F1CA4533700C16305 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BBAF96771CA4533700C16305 /* DTCoreText.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A79BA6201B46A1FB0086C2F6;
-			remoteInfo = "DTCoreText (iOS)";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1286,7 +1236,6 @@
 		BBAB82E31C7049FB00C6AC34 /* ThumButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumButton.m; sourceTree = "<group>"; };
 		BBAB82E51C719CCD00C6AC34 /* RightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightView.h; sourceTree = "<group>"; };
 		BBAB82E61C719CCD00C6AC34 /* RightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightView.m; sourceTree = "<group>"; };
-		BBAF96771CA4533700C16305 /* DTCoreText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DTCoreText.xcodeproj; path = Externals/DTCoreText/DTCoreText.xcodeproj; sourceTree = "<group>"; };
 		BBAF96CD1CA5052300C16305 /* login_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@2x.png"; sourceTree = "<group>"; };
 		BBAF96CE1CA5052300C16305 /* login_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@3x.png"; sourceTree = "<group>"; };
 		BBAF96F71CA8B81E00C16305 /* TextEsotericaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEsotericaViewController.h; sourceTree = "<group>"; };
@@ -1324,6 +1273,7 @@
 		BBCF9A671CADAB60005B9DCE /* TextColletViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextColletViewController.m; path = controller/TextColletViewController.m; sourceTree = "<group>"; };
 		BBCF9A711CADB326005B9DCE /* TextCommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextCommentView.h; sourceTree = "<group>"; };
 		BBCF9A721CADB326005B9DCE /* TextCommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCommentView.m; sourceTree = "<group>"; };
+		BBCF9A8E1CAE6D5D005B9DCE /* libDTFoundation.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDTFoundation.a; path = "Externals/DTCoreText/Externals/DTFoundation/build/Debug-iphoneos/libDTFoundation.a"; sourceTree = SOURCE_ROOT; };
 		BBD449111CA2CD7C00727070 /* video_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = video_list.txt; sourceTree = "<group>"; };
 		BBD449131CA2D83B00727070 /* UserListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserListView.h; sourceTree = "<group>"; };
 		BBD449141CA2D83B00727070 /* UserListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserListView.m; sourceTree = "<group>"; };
@@ -1351,7 +1301,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				188969081CAD828600C7E04E /* StoreKit.framework in Frameworks */,
-				BBAF96CA1CA4DA0600C16305 /* libDTCoreText.a in Frameworks */,
 				18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */,
 				18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */,
 				18AC140C1C8FB55600FDFF40 /* CoreTelephony.framework in Frameworks */,
@@ -2673,6 +2622,7 @@
 		BB9003C01C8D8395007E1C48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BBCF9A8E1CAE6D5D005B9DCE /* libDTFoundation.a */,
 				188969071CAD828600C7E04E /* StoreKit.framework */,
 				18F971161C92A40A001B2575 /* JavaScriptCore.framework */,
 				18F971141C92971B001B2575 /* CoreMotion.framework */,
@@ -2723,23 +2673,8 @@
 		BBAF95F71CA4468C00C16305 /* Externals */ = {
 			isa = PBXGroup;
 			children = (
-				BBAF96771CA4533700C16305 /* DTCoreText.xcodeproj */,
 			);
 			name = Externals;
-			sourceTree = "<group>";
-		};
-		BBAF96781CA4533700C16305 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				BBAF96841CA4533700C16305 /* RTDemoApp.app */,
-				BBAF96861CA4533700C16305 /* libDTCoreText.a */,
-				BBAF96881CA4533700C16305 /* UnitTest.xctest */,
-				BBAF968A1CA4533700C16305 /* MacUnitTest.xctest */,
-				BBAF968C1CA4533700C16305 /* libDTCoreText_no_DTFoundation.a */,
-				BBAF968E1CA4533700C16305 /* DTCoreText.framework */,
-				BBAF96901CA4533700C16305 /* DTCoreText.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2839,12 +2774,6 @@
 			mainGroup = BB25D7CB1C1571B400314C1E;
 			productRefGroup = BB25D7D51C1571B400314C1E /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = BBAF96781CA4533700C16305 /* Products */;
-					ProjectRef = BBAF96771CA4533700C16305 /* DTCoreText.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				BB25D7D31C1571B400314C1E /* 99SVR */,
@@ -2853,58 +2782,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		BBAF96841CA4533700C16305 /* RTDemoApp.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = RTDemoApp.app;
-			remoteRef = BBAF96831CA4533700C16305 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BBAF96861CA4533700C16305 /* libDTCoreText.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libDTCoreText.a;
-			remoteRef = BBAF96851CA4533700C16305 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BBAF96881CA4533700C16305 /* UnitTest.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = UnitTest.xctest;
-			remoteRef = BBAF96871CA4533700C16305 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BBAF968A1CA4533700C16305 /* MacUnitTest.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MacUnitTest.xctest;
-			remoteRef = BBAF96891CA4533700C16305 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BBAF968C1CA4533700C16305 /* libDTCoreText_no_DTFoundation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libDTCoreText_no_DTFoundation.a;
-			remoteRef = BBAF968B1CA4533700C16305 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BBAF968E1CA4533700C16305 /* DTCoreText.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = DTCoreText.framework;
-			remoteRef = BBAF968D1CA4533700C16305 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BBAF96901CA4533700C16305 /* DTCoreText.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = DTCoreText.framework;
-			remoteRef = BBAF968F1CA4533700C16305 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		BB25D7D21C1571B400314C1E /* Resources */ = {
@@ -3507,6 +3384,7 @@
 					"${SRCROOT}/ffmpeg",
 					"${SDK_ROOT}/usr/include/libxml2",
 					"$(SRCROOT)/99SVR/libs/AlipaySDK",
+					"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/include",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/99SVR/other/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
@@ -3519,6 +3397,7 @@
 					"$(PROJECT_DIR)/99SVR/libs/libWeiboSDK",
 					"$(PROJECT_DIR)/99SVR/libs/AlipaySDK",
 					"$(PROJECT_DIR)/99SVR/libs/libWeChat",
+					"$(PROJECT_DIR)/Externals/DTCoreText/Externals/DTFoundation/build/Debug-iphoneos",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -3529,7 +3408,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b4234dd4-92eb-43d5-acc1-eccea81a17de";
+				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "armv7 arm64";
@@ -3555,6 +3435,7 @@
 				GCC_PREFIX_HEADER = "${SRCROOT}/99SVR/other/SVR-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"${TARGET_BUILD_DIR}",
+					"$(BUILD_ROOT)/../IntermediateBuildFilesPath/UninstalledProducts/include",
 					"${SRCROOT}/ffmpeg",
 					"${SDK_ROOT}/usr/include/libxml2",
 					"$(SRCROOT)/99SVR/libs/AlipaySDK",
@@ -3570,6 +3451,7 @@
 					"$(PROJECT_DIR)/99SVR/libs/libWeiboSDK",
 					"$(PROJECT_DIR)/99SVR/libs/AlipaySDK",
 					"$(PROJECT_DIR)/99SVR/libs/libWeChat",
+					"$(PROJECT_DIR)/Externals/DTCoreText/Externals/DTFoundation/build/Debug-iphoneos",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -3580,7 +3462,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6170686b-8528-4d5f-9f9a-90390c4b89e1";
+				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "armv7 arm64";

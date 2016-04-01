@@ -76,7 +76,7 @@
             strMsg = @"guan";
             break;
         case 0:
-            strMsg = @"putong";
+            strMsg = @"";
             break;
         default:
             strMsg = @"guan";

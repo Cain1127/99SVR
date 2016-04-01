@@ -237,7 +237,7 @@
 {
     [super viewDidLoad];
     [self frameView];
-    lblText = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-100,150,200,20)];
+    lblText = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-100,160,200,20)];
     [lblText setTextColor:[UIColor whiteColor]];
     [self.view addSubview:lblText];
     [lblText setFont:XCFONT(16)];
@@ -543,7 +543,7 @@
     [super viewDidLayoutSubviews];
     _smallView.frame = Rect(_glView.width/2-44,_glView.height/2-35, 88, 71);
     CGFloat originY = _glView.height == kVideoImageHeight ? _glView.height/2+30 : _glView.height/2+40;
-    lblText.frame = Rect(_glView.width/2-100,originY, 200, 20);
+    lblText.frame = Rect(_glView.width/2-100,originY+10, 200, 20);
 }
 
 #pragma mark AVAudioSession

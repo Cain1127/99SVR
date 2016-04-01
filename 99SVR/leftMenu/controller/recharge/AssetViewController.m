@@ -111,9 +111,11 @@
         PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
         [self.navigationController pushViewController:paySelectVC animated:YES];
     }
-    InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];
-    [self.navigationController pushViewController:inAppPurechasesVC animated:YES];
-    return;
+    else
+    {
+        InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];
+        [self.navigationController pushViewController:inAppPurechasesVC animated:YES];
+    }
     
     ///进入公司集成的支付系统
 }

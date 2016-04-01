@@ -24,7 +24,7 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    
+    self.tableView.frame = Rect(0, 0, kScreenWidth, kScreenHeight-158);
     [self.tableView addGifHeaderWithRefreshingBlock:^{
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_INDEX_GET_GROUPLIST_VC object:nil];
     }];
@@ -36,7 +36,6 @@
     [self.tableView.gifHeader setImages:aryRefreshing forState:MJRefreshHeaderStateRefreshing];
     [self.tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStateWillRefresh];
     self.tableView.gifHeader.updatedTimeHidden = YES;
-    ///一开始进行一次主动刷新
     [self.tableView.gifHeader beginRefreshing];
 
 }
