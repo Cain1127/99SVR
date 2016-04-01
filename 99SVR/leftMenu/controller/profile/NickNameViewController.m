@@ -49,13 +49,13 @@
     _nickNameTextField.frame = CGRectMake(12, 74, kScreenWidth - 2 * 12, 48);
     
     //建议提醒文字
-    UILabel * adviceLabel = [[UILabel alloc] init];
-    adviceLabel.text = @"昵称支持4-20中英文、数字及下划线组合";
-    adviceLabel.textColor = [UIColor blackColor];
-    adviceLabel.font = kFontSize(14);;
-    adviceLabel.numberOfLines = 0;
-    adviceLabel.frame = CGRectMake(12, CGRectGetMaxY(_nickNameTextField.frame), kScreenWidth - 12*2, 30);
-    [self.view addSubview:adviceLabel];
+//    UILabel * adviceLabel = [[UILabel alloc] init];
+//    adviceLabel.text = @"昵称支持4-20中英文、数字及下划线组合";
+//    adviceLabel.textColor = [UIColor blackColor];
+//    adviceLabel.font = kFontSize(14);;
+//    adviceLabel.numberOfLines = 0;
+//    adviceLabel.frame = CGRectMake(12, CGRectGetMaxY(_nickNameTextField.frame), kScreenWidth - 12*2, 30);
+//    [self.view addSubview:adviceLabel];
 
     UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnRight setTitle:@"保存" forState:UIControlStateNormal];

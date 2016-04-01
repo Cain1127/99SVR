@@ -44,7 +44,7 @@
     }
     else if(result == 0)
     {
-        _time = [NSString stringWithFormat:@"昨天 %02dd:%02d",date.hour,date.minute];
+        _time = [NSString stringWithFormat:@"昨天 %02d:%02d",date.hour,date.minute];
     }
     else
     {
@@ -69,11 +69,11 @@
     }
     else if(result == 0)
     {
-        _time = [NSString stringWithFormat:@"昨天 %02dd:%02d",date.hour,date.minute];
+        _time = [NSString stringWithFormat:@"昨天 %02d:%02d",date.hour,date.minute];
     }
     else
     {
-        _time = [NSString stringWithFormat:@"%02dd%02d日 %02d:%02d",date.month,date.day,date.hour,date.minute];
+        _time = [NSString stringWithFormat:@"%02d月%02d日 %02d:%02d",date.month,date.day,date.hour,date.minute];
     }
 }
 
