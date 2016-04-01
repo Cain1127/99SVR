@@ -8,7 +8,6 @@
 
 #import "LeftHeaderView.h"
 #import "UserInfo.h"
-#import <DTCoreText/DTCoreText.h>
 
 #define kImageWidth 107
 #define kCircle (kImageWidth + 12)

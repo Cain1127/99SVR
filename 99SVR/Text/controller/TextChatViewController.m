@@ -7,7 +7,7 @@
 //
 
 #import "TextChatViewController.h"
-#import <DTCoreText/DTCoreText.h>
+#import "DTCoreText.h"
 #import "RoomUser.h"
 #import "TextChatModel.h"
 #import "ChatViewCell.h"

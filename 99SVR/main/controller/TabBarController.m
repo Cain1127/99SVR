@@ -41,12 +41,12 @@
 - (void)setUpItemTextAttrs{
     // 统一设置Item文字的属性
     NSMutableDictionary *normalAttrs = [NSMutableDictionary dictionary];
-    normalAttrs[NSForegroundColorAttributeName] = RGB(39, 39, 39);
+    normalAttrs[NSForegroundColorAttributeName] = UIColorFromRGB(0x919191);
     normalAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:11];
     
     // 选中状态
     NSMutableDictionary *selectAttrs = [NSMutableDictionary dictionary];
-    selectAttrs[NSForegroundColorAttributeName] = [UIColor blackColor];
+    selectAttrs[NSForegroundColorAttributeName] = UIColorFromRGB(0x0078DD);
     
     UITabBarItem *item = [UITabBarItem appearance];
     [item setTitleTextAttributes:normalAttrs forState:UIControlStateNormal];

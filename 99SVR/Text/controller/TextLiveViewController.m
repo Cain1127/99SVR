@@ -71,9 +71,10 @@
     _tableView.dataSource = self;
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     _tableView.footer.appearencePercentTriggerAutoRefresh = 300.0;
-    [_tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(requestTextLive)];
+    [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(requestTextLive)];
     [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(requestMoreTextLive)];
     [_tableView setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
+    [_tableView.gifHeader loadDefaultImg];
 }
 
 - (void)requestMoreTextLive

@@ -40,12 +40,20 @@
     _lblLine = [UILabel new];
     [_lblLine setBackgroundColor:kLineColor];
     [self.contentView addSubview:_lblLine];
-    
+    [_btnReply addTarget:self action:@selector(eventReply) forControlEvents:UIControlEventTouchUpInside];
     return self;
+}
+
+- (void)eventReply
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(commentCell:)]) {
+        [_delegate commentCell:_reply];
+    }
 }
 
 - (void)setModel:(IdeaDetailRePly *)details
 {
+    _reply = details;
     [_lblTitle setText:details.strName];
     [_lblTime setText:details.time];
     [_imgView setImage:[UIImage imageNamed:@"personal_user_head"]];

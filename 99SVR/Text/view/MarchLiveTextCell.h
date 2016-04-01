@@ -5,9 +5,7 @@
 //  Created by xia zhonglin  on 3/28/16.
 //  Copyright © 2016 xia zhonglin . All rights reserved.
 //
-
-#import <DTCoreText/DTCoreText.h>
-
+#import "DTCoreText.h"
 @class MarchLiveTextCell;
 @class TextLiveModel;
 

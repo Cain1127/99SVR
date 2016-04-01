@@ -120,7 +120,7 @@
     
     TitleItem *cardItem = [[TitleItem alloc] init];
     cardItem.nameLabel.text = @"金币";
-    cardItem.valueLabel.text = NSStringFromLong(info.goldCoin);
+    cardItem.valueLabel.text = NSStringFromFloat(info.goldCoin);
     
     TitleItem *scoreItem = [[TitleItem alloc] init];
     scoreItem.nameLabel.text = @"积分";

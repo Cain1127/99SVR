@@ -107,17 +107,37 @@
     [self createEmojiKeyboard];
 }
 
+- (void)sendNewInfo
+{
+    if (_nUserId) {
+        _textView.text = [_textView.text stringByReplacingOccurrencesOfString:_strName withString:@""];
+        [_delegate sendMessage:_textView userid:_nUserId reply:_nDetails];
+    }
+    else{
+        [_delegate sendMessage:_textView userid:0 reply:0];
+    }
+}
+
+- (void)sendRoomInfo
+{
+    if (_nUserId) {
+        _textView.text = [_textView.text stringByReplacingOccurrencesOfString:_strName withString:@""];
+        [_delegate sendMessage:_textView userid:_nUserId];
+    }
+    else{
+        [_delegate sendMessage:_textView userid:_nUserId];
+    }
+}
+
 - (void)sendMessage
 {
     if (_delegate && [_delegate respondsToSelector:@selector(sendMessage:userid:)]) {
-        if (_nUserId) {
-            _textView.text = [_textView.text stringByReplacingOccurrencesOfString:_strName withString:@""];
-            [_delegate sendMessage:_textView userid:_nUserId];
-        }
-        else{
-            [_delegate sendMessage:_textView userid:_nUserId];
-        }
+        [self sendRoomInfo];
+    }else if(_delegate && [_delegate respondsToSelector:@selector(sendMessage:userid:reply:)])
+    {
+        [self sendNewInfo];
     }
+    
 }
 
 - (void)setHidden:(BOOL)hidden

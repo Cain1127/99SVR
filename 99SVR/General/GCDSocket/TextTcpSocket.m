@@ -59,7 +59,6 @@
 {
     int nMsgLen=in_msg->length-sizeof(COM_MSG_HEADER);
     char* pNewMsg=0;
-    DLog(@"数据指令:%d",in_msg->subcmd);
     if(nMsgLen>0)
     {
         pNewMsg= (char*) malloc(nMsgLen);
@@ -305,12 +304,13 @@
     req.vcbid = _roomid;
     req.userid = kUserInfoId;
     req.count = nCount;
-    if(nCount==0)
+    if(nIndex==0)
     {
         if (_aryComment==nil)
         {
             _aryComment = [NSMutableArray array];
         }
+        [_aryComment removeAllObjects];
     }
     req.startcommentpos = nIndex;
     req.viewid = ideaId;
@@ -406,10 +406,8 @@
 - (void)respCommentZan:(char *)pInfo
 {
     CMDTextRoomZanForRes_t *resp = (CMDTextRoomZanForRes_t *)pInfo;
-    if (resp->result)
-    {
-        DLog(@"点赞成功");
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_VIEW_ZAN_RESP_VC object:@(resp->result)];
+   
 }
 
 #pragma mark 点赞某个评论
@@ -418,6 +416,7 @@
     CMDTextRoomZanForReq_t req = {0};
     req.userid = kUserInfoId;
     req.messageid = msgid;
+    req.vcbid = _roomid;
     [self sendMessage:(char *)&req size:sizeof(CMDTextRoomZanForReq_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text
                subcmd:Sub_Vchat_TextLiveViewZanForReq];
 }
@@ -431,21 +430,21 @@
 #pragma mark 评论某条观点
 - (void)replyCommentReq:(NSString *)strComment msgid:(int64_t)msgId toid:(int)toId srccom:(int64_t)srcid
 {
+    strComment = [NSString stringWithFormat:@"<span>%@</span>",strComment];
     NSData *commentData = [strComment dataUsingEncoding:GBK_ENCODING];
-    int nLength = (int)commentData.length+(int)commentData.length+sizeof(CMDTextRoomViewCommentReq_t);
-    char szBuf[nLength];
-    memset(szBuf, 0, nLength);
+    int nLength = (int)commentData.length+sizeof(CMDTextRoomViewCommentReq_t)+1;
+    char szBuf[2048]={0};
     CMDTextRoomViewCommentReq_t *req = (CMDTextRoomViewCommentReq_t *)szBuf;
     req->fromid = kUserInfoId;
     req->messageid = msgId;
-    req->textlen = nLength;
+    req->vcbid = _roomid;
+    req->textlen = (int)commentData.length+1;
     req->toid = toId;
     req->commentstype = 2;
     req->srcinteractid = srcid;
     memcpy(req->content,commentData.bytes,commentData.length);
-    req->content[commentData.length+1]='\0';
-    
-    [self sendMessage:szBuf size:(int)(commentData.length+sizeof(CMDTextRoomViewCommentReq_t)) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomViewCommentReq length:(int)(commentData.length+1+sizeof(CMDTextRoomViewCommentReq_t))];
+    req->content[req->textlen-1]='\0';
+    [self sendMessage:szBuf size:nLength version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomViewCommentReq];
 }
 #pragma mark 讲师观点删除响应
 - (void)respDeleteTeacherView:(char *)pInfo
@@ -625,6 +624,14 @@
     req.userid = kUserInfoId;
     req.teacherid = _teacher.teacherid;
     req.viewtypeid = 0;
+    if(!nIndex)
+    {
+        if(!_aryNew)
+        {
+            _aryNew = [NSMutableArray array];
+        }
+        [_aryNew removeAllObjects];
+    }
     req.messageid = nIndex;
     req.count = nCount;
     [self sendMessage:(char *)&req size:sizeof(CMDTextRoomLiveViewListReq_t) version:MDM_Version_Value
@@ -744,6 +751,8 @@
     {
         //点赞成功
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_ZAN_SUC_VC object:NSStringFromInt64(resp->messageid)];
+        
+    
     }
     DLog(@"result:%d--zans:%lld--total:%lld",resp->result,resp->recordzans,resp->totalzans);
 }

@@ -154,37 +154,8 @@ typedef enum : NSUInteger
         [selfWeak initData];
         [selfWeak initLivingData];
     }];
-    
-    NSArray *aryRefreshing = [self getRefresh];
-    NSArray *aryStart= [self getStartRefresh];
-    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStateIdle];
-    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStatePulling];
-    [_tableView.gifHeader setImages:aryRefreshing forState:MJRefreshHeaderStateRefreshing];
-    [_tableView.gifHeader setImages:aryStart forState:MJRefreshHeaderStateWillRefresh];
-    _tableView.gifHeader.updatedTimeHidden = YES;
-    
-    ///一开始进行一次主动刷新
-    [self.tableView.gifHeader beginRefreshing];
-    
-}
-
-- (NSArray *)getStartRefresh
-{
-    NSMutableArray *refreshingImages = [NSMutableArray array];
-
-        UIImage *image = [UIImage imageNamed:@"loading_40x30_0001"];
-        [refreshingImages addObject:image];
-    return refreshingImages;
-}
-
-- (NSArray *)getRefresh
-{
-    NSMutableArray *refreshingImages = [NSMutableArray array];
-    for (NSUInteger i = 2; i <= 6; i++) {
-        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading_40x30_000%lu", (unsigned long)i]];
-        [refreshingImages addObject:image];
-    }
-    return refreshingImages;
+    [_tableView.gifHeader loadDefaultImg];
+    [_tableView.gifHeader beginRefreshing];
 }
 
 #pragma mark -

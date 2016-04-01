@@ -13,10 +13,10 @@
 #import "LiveCoreTextCell.h"
 #import "Photo.h"
 #import "PhotoViewController.h"
-#import <DTCoreText/DTCoreText.h>
 #import "UIImageView+WebCache.h"
 #import "LiveCoreTextCell.h"
 #import "TextLiveModel.h"
+#import "DTCoreText.h"
 
 @interface TextTodayVPViewController ()<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate,ThumCellDelagate>
 {

@@ -7,7 +7,9 @@
 //  观点类
 
 #import "TextNewViewController.h"
-#import <DTCoreText/DTCoreText.h>
+#import "DTCoreText.h"
+#import "MJRefresh.h"
+//#import <DTCoreText/DTCoreText.h>
 #import "NewDetailsViewController.h"
 #import "TextNewCell.h"
 #import "IdeaDetails.h"
@@ -26,7 +28,7 @@
     NSCache *cellCache;
     NSMutableDictionary *_dictIcon;
 }
-
+@property (nonatomic) int current;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryNew;
 @property (nonatomic,strong) TextTcpSocket *textSocket;
@@ -59,6 +61,9 @@
 {
     [super viewDidLoad];
     [self initUIBody];
+    [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(reqTextNewMessage)];
+    [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(reqMoreNewMsg)];
+    [_tableView.gifHeader loadDefaultImg];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -87,33 +92,6 @@
     return nil;
 }
 
-- (void)findImage:(NSString *)strName imgView:(UIImageView *)imageView
-{
-    UIImage *image = [_dictIcon objectForKey:strName];
-    if (image)
-    {
-        [imageView setImage:image];
-    }
-    else
-    {
-        image = [UIImage animatedImageWithAnimatedGIFURL:[[NSBundle mainBundle] URLForResource:strName withExtension:@"gif"]];
-        [_dictIcon setObject:image forKey:strName];
-        [imageView setImage:image];
-    }
-}
-
-- (void)showImageInfo:(UITapGestureRecognizer *)tapGest
-{
-    UIImageView *imageView = (UIImageView *)tapGest.view;
-    NSMutableArray *aryIndex = [NSMutableArray array];
-    Photo *_photo = [[Photo alloc] init];
-    _photo.nId = 0;
-    _photo.imgName = imageView.image;
-    [aryIndex addObject:_photo];
-    PhotoViewController *photoControl = [[PhotoViewController alloc] initWithArray:aryIndex current:0];
-    [photoControl show];
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return 1;
@@ -127,7 +105,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *strTextNew = @"textnewtableviewcellidentifier";
-    
     TextNewCell *cell = [tableView dequeueReusableCellWithIdentifier:strTextNew];
     if(cell==nil)
     {
@@ -150,7 +127,6 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     IdeaDetails *idea = [_aryNew objectAtIndex:indexPath.section];
-    
     NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:_textSocket model:idea];
     [self.navigationController pushViewController:detailView animated:YES];
 }
@@ -176,15 +152,35 @@
 - (void)reqTextNewMessage
 {
     [_textSocket reqNewList:0 count:20];
+    _current = 20;
+}
+
+- (void)reqMoreNewMsg
+{
+    [_textSocket reqNewList:_current count:20];
+    _current += 20;
 }
 
 - (void)reloadNew
 {
     _aryNew = _textSocket.aryNew;
-    __weak TextNewViewController *__self = self;
+    _current = (int)_aryNew.count;
+    @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        [__self.tableView reloadData];
+        if ([selfWeak.tableView.gifHeader isRefreshing]) {
+            [selfWeak.tableView.gifHeader endRefreshing];
+        }
+        else
+        {
+            [selfWeak.tableView.footer endRefreshing];
+            if (selfWeak.current != selfWeak.textSocket.aryText.count)
+            {
+                [selfWeak.tableView.footer noticeNoMoreData];
+                selfWeak.current = (int)selfWeak.textSocket.aryText.count;
+            }
+        }
+        [selfWeak.tableView reloadData];
     });
 }
 

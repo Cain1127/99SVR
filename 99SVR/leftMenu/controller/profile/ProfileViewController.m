@@ -8,6 +8,7 @@
 
 #import "ProfileViewController.h"
 #import "NickNameViewController.h"
+#import "SexViewController.h"
 #import "SignatureViewController.h"
 #import "UserInfo.h"
 #define kImageWidth 107
@@ -32,7 +33,7 @@
     _strInfo = [UserInfo sharedUserInfo].strName;
     // 初始化界面
     [self setupTableView];
-    
+    [self showSex];
     // 初始化数据
     //[self sutupData];
 }
@@ -104,7 +105,7 @@
 
 #pragma mark 返回每组行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 2;
+    return 3;
 }
 
 #pragma mark 返回每行的单元格
@@ -119,12 +120,11 @@
         cell.textLabel.text = @"昵称";
         cell.detailTextLabel.text = [UserInfo sharedUserInfo].strName;
     }
-//    else if(indexPath.row == 1){
-//        cell.textLabel.text = @"性别";
-//        [self showSex];
-//        cell.detailTextLabel.text = _strSex;
-//    }
     else if(indexPath.row == 1){
+        cell.textLabel.text = @"性别";
+        cell.detailTextLabel.text = _strSex;
+    }
+    else if(indexPath.row == 2){
         cell.textLabel.text = @"签名";
         cell.detailTextLabel.text = [UserInfo sharedUserInfo].strIntro;
     }
@@ -167,10 +167,16 @@
         };
         [self.navigationController pushViewController:nickNameVc animated:YES];
     }
-//    else if(indexPath.row == 1)
-//    {
-//    
-//    }
+    else if(indexPath.row == 1)
+    {
+        SexViewController *sexView = [[SexViewController alloc] init];
+        sexView.sexBlock = ^(NSString *strSex)
+        {
+            weakSelf.strSex = strSex;
+            [weakSelf.tableView reloadData];
+        };
+        [self.navigationController pushViewController:sexView animated:YES];
+    }
     else{
         SignatureViewController *signatureVc = [[SignatureViewController alloc] init];
         signatureVc.signatureBlock =^(NSString * nickName){

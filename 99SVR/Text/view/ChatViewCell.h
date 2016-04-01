@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <DTCoreText/DTCoreText.h>
+#import "DTCoreText.h"
 
 @interface ChatViewCell :UITableViewCell
 

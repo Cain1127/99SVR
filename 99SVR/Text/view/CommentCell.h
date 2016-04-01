@@ -7,8 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <DTCoreText/DTCoreText.h>
+#import "DTCoreText.h"
 @class IdeaDetailRePly;
+
+@protocol CommentDelegate <NSObject>
+
+- (void)commentCell:(IdeaDetailRePly *)Reply;
+
+@end
+
 @interface CommentCell : UITableViewCell
 
 @property (nonatomic,strong) UILabel *lblTitle;
@@ -17,6 +24,8 @@
 @property (nonatomic,strong) UILabel *lblTime;
 @property (nonatomic,strong) UIButton *btnReply;
 @property (nonatomic,strong) UILabel *lblLine;
+@property (nonatomic,assign) id<CommentDelegate> delegate;
+@property (nonatomic,strong) IdeaDetailRePly *reply;
 
 - (void)setModel:(IdeaDetailRePly *)details;
 

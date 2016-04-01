@@ -14,6 +14,8 @@
 
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser;
 
+- (void)sendMessage:(UITextView *)textView userid:(int)nUser reply:(int64_t) nDetails;
+
 @end
 
 
@@ -26,6 +28,7 @@
 @property (nonatomic,assign) int nUserId;
 @property (nonatomic,strong) UILabel *lblPlace;
 @property (nonatomic,copy) NSString *strName;
+@property (nonatomic,assign) int64_t nDetails;
 
 
 - (void)setChatInfo:(RoomUser *)user;

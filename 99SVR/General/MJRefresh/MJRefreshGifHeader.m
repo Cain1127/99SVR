@@ -92,8 +92,6 @@
                 break;
         }
     }
-    
-    // super里面有回调，应该在最后面调用
     [super setState:state];
 }
 
@@ -126,5 +124,35 @@
     if (image.size.height > self.mj_h) {
         self.mj_h = image.size.height;
     }
+}
+
+- (void)loadDefaultImg
+{
+    NSArray *aryRefreshing = [self getRefresh];
+    NSArray *aryStart= [self getStartRefresh];
+    [self setImages:aryStart forState:MJRefreshHeaderStateIdle];
+    [self setImages:aryStart forState:MJRefreshHeaderStatePulling];
+    [self setImages:aryRefreshing forState:MJRefreshHeaderStateRefreshing];
+    [self setImages:aryStart forState:MJRefreshHeaderStateWillRefresh];
+    self.updatedTimeHidden = YES;
+}
+
+- (NSArray *)getStartRefresh
+{
+    NSMutableArray *refreshingImages = [NSMutableArray array];
+    
+    UIImage *image = [UIImage imageNamed:@"loading_40x30_0001"];
+    [refreshingImages addObject:image];
+    return refreshingImages;
+}
+
+- (NSArray *)getRefresh
+{
+    NSMutableArray *refreshingImages = [NSMutableArray array];
+    for (NSUInteger i = 2; i <= 6; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading_40x30_000%lu", (unsigned long)i]];
+        [refreshingImages addObject:image];
+    }
+    return refreshingImages;
 }
 @end

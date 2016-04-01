@@ -95,8 +95,7 @@ struct rsa_meth_st
 			    unsigned char *to,
 			    RSA *rsa,int padding);
 	int (*rsa_priv_dec)(int flen,const unsigned char *from,
-			    unsigned char *to,
-			    RSA *rsa,int padding);
+			    unsigned char *to,RSA *rsa,int padding);
 	int (*rsa_mod_exp)(BIGNUM *r0,const BIGNUM *I,RSA *rsa,BN_CTX *ctx); /* Can be null */
 	int (*bn_mod_exp)(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 			  const BIGNUM *m, BN_CTX *ctx,

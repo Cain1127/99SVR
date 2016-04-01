@@ -25,7 +25,7 @@
 - (void)decodeResp:(CMDTextRoomViewInfoRes_t *)resp
 {
     _vcbid = resp->vcbid;
-    _userid = resp->userid;
+    _userid = resp->viewuserid;
     _strSrcName = [NSString stringWithCString:resp->srcuseralias encoding:GBK_ENCODING];
     _viewId = resp->viewid;
     _commentid = resp->commentid;
@@ -52,9 +52,7 @@
         _time = [NSString stringWithFormat:@"%02dd%02d日 %02d:%02d",date.month,date.day,date.hour,date.minute];
     }
     
-    char cBuf[_textLen+_textLen];
-    memcpy(cBuf,resp->content,_textLen);
-    _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
+    _strContent = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
     _strContent = [DecodeJson replaceEmojiString:_strContent];
 }
 

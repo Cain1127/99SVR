@@ -7,8 +7,7 @@
 //
 
 #import "ZLCoreTextCell.h"
-#import <DTCoreText/DTCoreText.h>
-
+#import "DTCoreText.h"
 @implementation ZLCoreTextCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier

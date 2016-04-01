@@ -58,8 +58,6 @@
 
 - (void)enterBackGroud;
 
-- (void)sendGift:(int)userId;
-
 - (void)sendMediaInfo:(NSString *)strInfo;
 
 - (void)addChatInfo:(NSString *)strInfo;

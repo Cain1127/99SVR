@@ -13,6 +13,6 @@
 /**
  *  修改签名信息成功后的回调
  */
-@property (nonatomic, strong) void (^ signatureBlock)(NSString * signature);
+@property (nonatomic, copy) void (^ signatureBlock)(NSString * signature);
 
 @end

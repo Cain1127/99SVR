@@ -10,4 +10,6 @@
 
 @interface SexViewController : CustomViewController
 
+@property (nonatomic, copy) void (^ sexBlock)(NSString * sex);
+
 @end

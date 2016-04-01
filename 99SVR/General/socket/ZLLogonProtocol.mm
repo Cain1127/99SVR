@@ -337,6 +337,7 @@ void ZLHallListener::OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfi
             user.strIntro = [NSString stringWithCString:req.introduce().c_str() encoding:GBK_ENCODING];
             user.strName = [NSString stringWithCString:req.cuseralias().c_str() encoding:GBK_ENCODING];
             user.strBirth = [NSString stringWithCString:req.cbirthday().c_str() encoding:GBK_ENCODING];
+            user.sex = req.ngender();
             DLog(@"intro:%@---strname:%@",user.strIntro,user.strName);
         }
         break;

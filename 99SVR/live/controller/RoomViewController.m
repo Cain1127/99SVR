@@ -31,7 +31,6 @@
 #import "UserInfo.h"
 #import "RoomUser.h"
 #import "RoomTitleView.h"
-#import <DTCoreText/DTCoreText.h>
 #import "LivePlayViewController.h"
 #import "RoomInfo.h"
 #import "UserInfo.h"
@@ -39,7 +38,7 @@
 #import "EmojiView.h"
 #import "NSAttributedString+EmojiExtension.h"
 #import "UserListView.h"
-
+#import "DTCoreText.h"
 #define TABLEVIEW_ARRAY_PREDICATE(A) [NSPredicate predicateWithFormat:@"SELF CONTAINS %@",A];
 
 @interface RoomViewController ()<UITableViewDelegate,UITableViewDataSource,TitleViewDelegate,
@@ -1143,8 +1142,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     cell.lblInfo.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
     NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
     cell.lblInfo.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:nil documentAttributes:nil];
-    CGFloat fHeight = [cell.lblInfo.attributedTextContentView
-                       suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+10;
     UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
     [selectView setBackgroundColor:[UIColor clearColor]];
     cell.selectedBackgroundView = selectView;
@@ -1220,9 +1217,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     }
 }
 
-
-
-
 #pragma mark 重力感应设置
 -(BOOL)shouldAutorotate
 {
@@ -1257,7 +1251,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
     if (scrollView == _scrollView)
     {
         if (willEndContentOffsetX == 0 && startContentOffsetX ==0 )
@@ -1316,11 +1309,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     CGFloat fx = kScreenWidth/4/2-fTempWidth/2+fPointX/kScreenWidth * kScreenWidth/4;
     [_lblBlue setFrame:Rect(fx,_group.y+_group.height-2,fTempWidth,2)];
 }
-
-
-
-
-
 
 #pragma mark 创建alert
 - (void)createAlertController

@@ -74,14 +74,13 @@
 #define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
 #define lbs_status @"http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=2&parameterName=15"
 
+#define kTEXT_NEW_DETAILS_URL @"http://admin.99ducaijing.cn:8081/viewpoint/index.php?s=/Index/getViewPoint/id/"
 
 #if 1
 #define kTEXT_FOLLOW_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=follow&userid="
 #define kTEXT_GROUP_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=script"
-#define kTEXT_NEW_DETAILS_URL @"http://hall.99ducaijing.cn:8081/viewpoint/index.php?s=/Index/getViewPoint/id/"
 #define kRegisterNumber @"http://api.99ducaijing.com/"
 #else
-#define kTEXT_NEW_DETAILS_URL @"http://122.13.81.62:22806/viewpoint/index.php?s=/Index/getViewPoint/id/"
 #define kRegisterNumber @"http://api.99ducaijing.com/"
 #define kImage_TEXT_URL @"http://122.13.81.62:22806/test/getimage.php?tid="
 #define kTEXT_GROUP_URL @"http://122.13.81.62:22806/test/test.php?act=script"

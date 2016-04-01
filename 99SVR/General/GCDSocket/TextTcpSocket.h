@@ -24,8 +24,13 @@
 - (void)reconnectTextRoom;
 
 - (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort;
-//发送聊天信息
+/**
+ *  发送直播聊天信息
+ */
 - (void)reqLiveChat:(NSString *)strContent to:(int)toId toalias:(NSString *)toName;
+/**
+ *  发送其他信息
+ */
 - (void)reqChatReply:(NSString *)strContent to:(int)toId source:(NSString *)strSrc;
 /**
  *  加入房间

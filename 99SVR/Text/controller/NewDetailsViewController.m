@@ -8,6 +8,11 @@
 
 #import "NewDetailsViewController.h"
 #import "TextTcpSocket.h"
+#import "Toast+UIView.h"
+#import "MBProgressHUD.h"
+#import "ProgressHUD.h"
+#import "ProgressHUD.h"
+#import "RoomUser.h"
 #import "UserInfo.h"
 #import "ProgressHUD.h"
 #import "ProgressHUD.h"
@@ -15,7 +20,6 @@
 #import "Toast+UIView.h"
 #import "IdeaDetailRePly.h"
 #import "CommentCell.h"
-#import <DTCoreText/DTCoreText.h>
 #import "BaseService.h"
 #import "IdeaDetails.h"
 #import "TeacherModel.h"
@@ -25,8 +29,9 @@
 #import "TextChatView.h"
 #import "ChatView.h"
 #import "TextCommentView.h"
+#import "DTCoreText.h"
 
-@interface NewDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate>
+@interface NewDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,CommentDelegate>
 {
     UIView *contentView;
     UILabel *lblPlace;
@@ -196,14 +201,21 @@
     [btnThum setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnThum setTitleColor:kNavColor forState:UIControlStateHighlighted];
     
-    [btnThum setImage:[UIImage imageNamed:@"text_viewpoint_like_icon"] forState:UIControlStateNormal];
-    [btnThum setImage:[UIImage imageNamed:@"thum_h"] forState:UIControlStateHighlighted];
-    [btnThum setBackgroundColor:kNavColor];
+    [btnThum setImage:[UIImage imageNamed:@"text_viewpoint_like_icon"] forState:UIControlStateHighlighted];
+    [btnThum setImage:[UIImage imageNamed:@"thun_new"] forState:UIControlStateNormal];
+    
+    [btnThum setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+    [btnThum setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    btnThum.tag = 1008;
     [contentView addSubview:btnThum];
     btnThum.layer.masksToBounds = YES;
     btnThum.layer.cornerRadius = 3;
     btnThum.titleLabel.font = XCFONT(17);
     btnThum.frame = Rect(contentView.width/2-92, textView.y+textView.height+30, 194,40);
+    UIEdgeInsets inset = btnThum.imageEdgeInsets;
+    inset.left -= 10;
+    btnThum.imageEdgeInsets = inset;
+    [btnThum addTarget:self action:@selector(zanViewDeatails) forControlEvents:UIControlEventTouchUpInside];
     
     UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(0, btnThum.y+btnThum.height+20, kScreenWidth, 10)];
     [lblTemp setText:@"【仅代表个人观点,不构成投资建议,风险自负】"];
@@ -228,8 +240,51 @@
     [_tcpSocket reqIdeaDetails:0 count:20 ideaId:[_jsonModel.viewid integerValue]];
 }
 
+- (void)zanViewDeatails
+{
+    [self performSelector:@selector(zanFailInfo) withObject:nil afterDelay:5.0];
+    [self.view makeToastActivity];
+    
+    [_tcpSocket reqCommentZan:[_jsonModel.viewid integerValue]];
+}
+
+- (void)zanFailInfo
+{
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+        [ProgressHUD showError:@"点赞响应超时"];
+    });
+}
+
+
+- (void)zanResult:(NSNotification *)notify
+{
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+        [NSObject cancelPreviousPerformRequestsWithTarget:selfWeak];
+    });
+    NSNumber *result = notify.object;
+    @WeakObj(contentView)
+    if ([result intValue]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIButton *sender = [contentViewWeak viewWithTag:1008];
+            [ProgressHUD showSuccess:@"点赞成功"];
+            [sender setTitle:[NSString stringWithFormat:@"已赞"] forState:UIControlStateNormal];
+            [sender setEnabled:NO];
+        });
+    }
+    else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ProgressHUD showError:@"点赞失败"];
+        });
+    }
+}
+
 - (void)requestView
 {
+    
     _fall++;
     if (_fall>3) {
         DLog(@"请求不到数据信息");
@@ -243,8 +298,8 @@
     __weak NewDetailsViewController *__self = self;
     [BaseService postJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
     {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-        if (dict && [dict objectForKey:@"data"])
+        NSDictionary *parameter = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+        if (parameter && [parameter objectForKey:@"data"])
         {
             [__self decodeDiction:[dict objectForKey:@"data"]];
         }
@@ -328,9 +383,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView) name:MESSAGE_TEXT_COMMENT_LIST_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addCommentView:) name: MESSAGE_TEXT_ROOM_REPLAY_NEW_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(zanResult:) name:MESSAGE_TEXT_VIEW_ZAN_RESP_VC object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)addCommentView:(NSNotification *)notify
@@ -348,6 +409,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if (_aryCommont.count > indexPath.row) {
+        IdeaDetailRePly *reply = [_aryCommont objectAtIndex:indexPath.row];
+        [self showChatView:reply];
+    }
 }
 
 -(void)textViewDidChange:(UITextView *)textView
@@ -399,7 +464,7 @@
     [_textChat.textStorage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:22.0f] range:wholeRange];
 }
 
-- (void)sendMessage:(UITextView *)textView userid:(int)nUser
+- (void)sendMessage:(UITextView *)textView userid:(int)nUser reply:(int64_t)nDetails
 {
     if ([textView.textStorage getPlainString].length == 0)
     {
@@ -407,10 +472,33 @@
         return ;
     }
     NSString *strComment = [textView.textStorage getPlainString];
+    
     [_tcpSocket replyCommentReq:strComment msgid:[_jsonModel.viewid integerValue]
-                           toid:(int)[_jsonModel.teacherid integerValue] srccom:0];
+                           toid:!nUser?[_jsonModel.teacherid intValue]:nUser srccom:nDetails];
     textView.text = @"";
     [_chatView setHidden:YES];
+}
+
+- (void)commentCell:(IdeaDetailRePly *)Reply
+{
+    if (Reply) {
+        [self showChatView:Reply];
+    }
+}
+
+- (void)showChatView:(IdeaDetailRePly *)reply
+{
+    UserInfo *__userInfo = [UserInfo sharedUserInfo];
+    if (reply.userid != __userInfo.nUserId) {
+        RoomUser *user = [[RoomUser alloc] init];
+        user.m_nUserId = reply.userid;
+        user.m_strUserAlias = reply.strName;
+        _chatView.nDetails = reply.srcinteractid;
+        [_chatView setChatInfo:user];
+    }
+    else{
+        [MBProgressHUD showError:@"不能对自己回复"];
+    }
 }
 
 @end

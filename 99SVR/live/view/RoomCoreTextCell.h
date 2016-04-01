@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <DTCoreText/DTCoreText.h>
-
+#import "DTCoreText.h"
 @interface RoomCoreTextCell : UITableViewCell
 
 @property (nonatomic,strong) DTAttributedTextContentView *textView;
