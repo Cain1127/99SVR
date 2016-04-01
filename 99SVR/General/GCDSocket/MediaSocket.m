@@ -11,7 +11,7 @@
 #import "UserInfo.h"
 #import "MediaSocket.h"
 #import "GCDAsyncSocket.h"
-
+#import "DecodeJson.h"
 #import "MediaBuffer.h"
 #import "cmd_vchat.h"
 #import "message_vchat.h"
@@ -525,9 +525,12 @@ if(_block) \
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
     DLog(@"socket 中断");
-    if(_nFall==3)
+    if(_nFall>=3)
     {
         DLog(@"重新建立连接");
+        NSString *strErrlog =[NSString stringWithFormat:@"ReportItem=DirectSeedingQuality&ClientType=3&UserId=%d&ServerIP=%@&Error=kadun",
+                              [UserInfo sharedUserInfo].nUserId,[UserInfo sharedUserInfo].strMediaAddr];
+        [DecodeJson postPHPServerMsg:strErrlog];
     }
     else if ([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Connection refused"]){
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接流媒体失败"];
@@ -539,6 +542,7 @@ if(_block) \
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接中断"];
     }
     DLog(@"error:%@",err);
+
     m_nLastRecvTS=0;
     _nFall ++;
 }

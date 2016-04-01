@@ -72,6 +72,8 @@
 #define kBand_mobile_checkcode_URL @"http://abc.99ducaijing.com/mapiphone/checkphonecode"
 
 #define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
+#define lbs_status @"http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=2&parameterName=15"
+
 
 #if 1
 #define kTEXT_FOLLOW_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=follow&userid="

@@ -106,18 +106,16 @@
 {
     
     ///默认进入苹果的内购页面
-    if (!self.isInAppPurchases)
+    if ([UserInfo sharedUserInfo].nStatus)
     {
-        
-        InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];
-        [self.navigationController pushViewController:inAppPurechasesVC animated:YES];
-        return;
-        
+        PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+        [self.navigationController pushViewController:paySelectVC animated:YES];
     }
+    InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];
+    [self.navigationController pushViewController:inAppPurechasesVC animated:YES];
+    return;
     
     ///进入公司集成的支付系统
-    PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
-    [self.navigationController pushViewController:paySelectVC animated:YES];
 }
 
 

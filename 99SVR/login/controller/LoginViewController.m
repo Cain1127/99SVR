@@ -194,6 +194,9 @@
     hidenView = [[UIView alloc] initWithFrame:Rect(0, _btnLogin.y+_btnLogin.height, kScreenWidth,100)];
     [self.view addSubview:hidenView];
     hidenView.hidden = YES;
+    if ([UserInfo sharedUserInfo].nStatus) {
+        hidenView.hidden = NO;
+    }
     
     UILabel *line = [[UILabel alloc] initWithFrame:Rect(15, 30, kScreenWidth-30, 0.5)];
     [line setBackgroundColor:kLineColor];
@@ -308,19 +311,7 @@
 - (void)requestLbsSettingServer
 {
 //    __weak LoginViewController *__self = self;
-    __weak UIView *__hidenView = hidenView;
-    [BaseService getJSONWithUrl:@"http://lbs1.99ducaijing.cn:2222/tygetconf" parameters:nil success:^(id responseObject) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-        if (dict && [dict objectForKey:@"checkstate"]) {
-            NSString *strStatus = [dict objectForKey:@"checkstate"];
-            if (![strStatus isEqualToString:@"1"])
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    __hidenView.hidden = NO;
-                });
-            }
-        }
-    } fail:nil];
+
 }
 
 - (void)sinaLogin

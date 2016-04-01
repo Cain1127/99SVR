@@ -378,10 +378,9 @@
 
 + (BOOL)postServerRegError:(NSString *)strMsg type:(int)regType serverIP:(NSString *)strIp
 {
-    NSString *strInfo = [NSString stringWithFormat:@"http://121.12.118.32/AnalyticStatistics/?ReportItem=Register&ClientType=2&RegType=%d&UserId=123&ServerIP=%@&Error=%@",regType,strIp,strMsg];
+    NSString *strInfo = [NSString stringWithFormat:@"http://42.81.53.201/AnalyticStatistics/??ReportItem=Register&ClientType=2&RegType=%d&UserId=123&ServerIP=%@&Error=%@",regType,strIp,strMsg];
     [BaseService post:strInfo dictionay:nil timeout:10 success:^(id responseObject) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil removingNulls:YES ignoreArrays:YES];
-        DLog(@"DICT:%@",dict);
+
     } fail:^(NSError *error) {
         DLog(@"暂不上报,存储上报内容");
     }];
@@ -390,11 +389,10 @@
 
 + (void)postPHPServerMsg:(NSString *)strUrl
 {
-    NSString *strInfo = [NSString stringWithFormat:@"http://121.12.118.32/AnalyticStatistics/?%@",strUrl];
+    NSString *strInfo = [NSString stringWithFormat:@"http://42.81.53.201/AnalyticStatistics/?%@",strUrl];
     DLog(@"上报链接:%@",strInfo);
     [BaseService post:strInfo dictionay:nil timeout:10 success:^(id responseObject) {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil removingNulls:YES ignoreArrays:YES];
-        DLog(@"DICT:%@",dict);
+
     } fail:^(NSError *error) {
         DLog(@"暂不上报,存储上报内容");
     }];
