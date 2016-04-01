@@ -37,22 +37,44 @@
     _textLen = resp->textlen;
     NSDate *date = [[UserInfo sharedUserInfo].fmt dateFromString:NSStringFromInt64(_messageTime)];
     int result = [DecodeJson compareDate:date];
+    
     if (result == 1)
     {
-        _time = [NSString stringWithFormat:@"今天 %d:%d:%d",date.hour,date.minute,date.second];
+        _time = [NSString stringWithFormat:@"今天 %02d:%02d",date.hour,date.minute];
     }
     else if(result == 0)
     {
-        _time = [NSString stringWithFormat:@"昨天 %d:%d:%d",date.hour,date.minute,date.second];
+        _time = [NSString stringWithFormat:@"昨天 %02dd:%02d",date.hour,date.minute];
     }
     else
     {
-        _time = [NSString stringWithFormat:@"%d月%d日 %d:%d:%d",date.month,date.day,date.hour,date.minute,date.second];
+        _time = [NSString stringWithFormat:@"%02dd%02d日 %02d:%02d",date.month,date.day,date.hour,date.minute];
     }
+    
     char cBuf[_textLen];
     memcpy(cBuf,resp->content,_textLen);
     _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
     _strContent = [DecodeJson replaceEmojiString:_strContent];
+}
+
+- (void)setTimeInfo
+{
+    NSDate *date = [NSDate date];
+    
+    int result = [DecodeJson compareDate:date];
+    
+    if (result == 1)
+    {
+        _time = [NSString stringWithFormat:@"今天 %02d:%02d",date.hour,date.minute];
+    }
+    else if(result == 0)
+    {
+        _time = [NSString stringWithFormat:@"昨天 %02dd:%02d",date.hour,date.minute];
+    }
+    else
+    {
+        _time = [NSString stringWithFormat:@"%02dd%02d日 %02d:%02d",date.month,date.day,date.hour,date.minute];
+    }
 }
 
 @end

@@ -54,7 +54,6 @@
         strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_fail",nUserid];
     }
     [DecodeJson postPHPServerMsg:strMsg];
-    
     NSDictionary *parameter = [UserDefaults objectForKey:kVideoList];
     NSArray *aryRoom = [self resolveDict:parameter];
     if (_groupBlock)

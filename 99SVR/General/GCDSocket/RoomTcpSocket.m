@@ -1036,11 +1036,11 @@
         NSString *strInfo = nil;
         if (msg->toid == 0)
         {
-            strInfo = [NSString stringWithFormat:@"  %@<p style=\"color:#919191\">%@</p><br/>%@",strFrom,strTo,strContent];
+            strInfo = [NSString stringWithFormat:@"  %@<spanp style=\"color:#919191\">%@</span><br>%@",strFrom,strTo,strContent];
         }
         else
         {
-            strInfo = [NSString stringWithFormat:@" %@ <p style=\"color:#919191\">回复 %@ </p><br/>%@",strFrom,strTo,strContent];
+            strInfo = [NSString stringWithFormat:@" %@ <span style=\"color:#919191\">回复 %@ </span><br>%@",strFrom,strTo,strContent];
         }
 //        strInfo = [DecodeJson replaceEmojiNewString:strInfo];
 //        [_aryChat addObject:strInfo];
@@ -1085,10 +1085,6 @@
 }
 
 #pragma mark 房间用户信息添加
-//- (void)sendGift:(int)userId
-//{
-//    
-//}
 
 - (void)sendColletRoom:(int)nCollet
 {
@@ -1325,22 +1321,20 @@
 //推送自己发送的信息到界面
 - (void)sendLocalChat:(NSString *)strMsg to:(int)nUser
 {
-    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color: #919191\" value=\"forme--%d\">%@</spanp>",
+    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color: #919191\" value=\"forme--%d\">%@</span>",
                          [UserInfo sharedUserInfo].nUserId,[UserInfo sharedUserInfo].strName];
     if (nUser!=0)
     {
         RoomUser *user = [_rInfo findUser:nUser];
         NSString *strTo = [self getToUser:nUser user:user name:user.m_strUserAlias];
-        NSString *strInfo = [NSString stringWithFormat:@"<p style=\"color:#919191\"> %@ 回复 %@ </span><br/>%@",strFrom,strTo,strMsg];
+        NSString *strInfo = [NSString stringWithFormat:@"<span style=\"color:#919191\"> %@ 回复 %@ </span><br><span style=\"color:#4C4C4C \">%@</span>",strFrom,strTo,strMsg];
         [self addChatInfo:strInfo];
         [self addPriChatInfo:strInfo];
     }
     else
     {
-        NSString *strInfo = [NSString stringWithFormat:@"<p style=\"color:#919191\">%@</p><br/>%@",strFrom,strMsg];
-//        [_aryChat addObject:strInfo];
+        NSString *strInfo = [NSString stringWithFormat:@"<p style=\"color:#919191\">%@</p><br>%@",strFrom,strMsg];
         [self addChatInfo:strInfo];
-//        [_aryPriChat addObject:strInfo];
         [self addPriChatInfo:strInfo];
     }
     if (_aryChat.count>=50)
@@ -1467,7 +1461,10 @@
         {
             [self addChatInfo:@"[系统消息]网络中断,请检测手机网络"];
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-            [self reConnectRoomInfo];
+            @WeakObj(self)
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+                [selfWeak reConnectRoomInfo];
+            });
         }
     }
     

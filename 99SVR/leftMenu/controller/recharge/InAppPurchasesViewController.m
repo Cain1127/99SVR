@@ -99,13 +99,13 @@
 ///创建默认的商品列表
 - (void)initPurchasesListTableView
 {
-
     self.purchasesListTableView = [[UITableView alloc] initWithFrame:Rect(0.0f, kNavigationHeight + 10.0f, kScreenWidth, kScreenHeight - kNavigationHeight - 10.0f) style:UITableViewStylePlain];
     self.purchasesListTableView.delegate = self;
     self.purchasesListTableView.dataSource = self;
     self.purchasesListTableView.showsVerticalScrollIndicator = NO;
     self.purchasesListTableView.showsHorizontalScrollIndicator = NO;
     self.purchasesListTableView.allowsSelection = YES;
+    self.purchasesListTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.purchasesListTableView];
     
     ///添加头部刷新

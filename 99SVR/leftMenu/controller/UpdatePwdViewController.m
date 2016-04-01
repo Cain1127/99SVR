@@ -64,11 +64,12 @@
         [self.view addSubview:lblMsg];
         [lblMsg setFont:XCFONT(15)];
         [lblMsg setTextColor:UIColorFromRGB(0xeb6100)];
+        
         UILabel *line = [[UILabel alloc] initWithFrame:Rect(10, 40+kNavigationHeight,kScreenWidth-20,0.5)];
         [line setBackgroundColor:UIColorFromRGB(0xcfcfcf)];
         [self.view addSubview:line];
         
-        [self createLabelWithRect:Rect(10, 45, 80, 30)];
+        [self createLabelWithRect:Rect(10, 45+kNavigationHeight, 80, 30)];
         _txtMobile = [self createTextField:Rect(10, 45+kNavigationHeight, kScreenWidth-60, 30)];
         [_txtMobile setPlaceholder:@"请输入手机号码"];
         [_txtMobile setKeyboardType:UIKeyboardTypeNumberPad];

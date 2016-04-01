@@ -19,6 +19,7 @@
 @property (nonatomic,strong) NSMutableArray *aryVIP;
 @property (nonatomic,strong) NSMutableArray *aryHistory;
 @property (nonatomic,strong) NSMutableArray *aryEsoter;
+@property (nonatomic) int32_t roomid;
 
 - (void)reconnectTextRoom;
 

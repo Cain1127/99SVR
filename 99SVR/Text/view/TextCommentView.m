@@ -1,19 +1,19 @@
 //
-//  TextChatView.m
+//  TextCommentView.m
 //  99SVR
 //
-//  Created by xia zhonglin  on 3/30/16.
+//  Created by xia zhonglin  on 4/1/16.
 //  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
-#import "TextChatView.h"
+#import "TextCommentView.h"
 #import "EmojiView.h"
 #import "RoomUser.h"
 #import "UIView+Touch.h"
 #import "EmojiTextAttachment.h"
 #import "NSAttributedString+EmojiExtension.h"
 
-@interface TextChatView ()<UITextViewDelegate,EmojiViewDelegate>
+@interface TextCommentView ()<UITextViewDelegate,EmojiViewDelegate>
 {
     CGFloat deltaY;
     CGFloat duration;
@@ -26,7 +26,7 @@
 
 @end
 
-@implementation TextChatView
+@implementation TextCommentView
 
 @synthesize lblPlace;
 @synthesize whiteView;
@@ -48,7 +48,7 @@
 
 - (void)createView
 {
-    downView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50,kScreenWidth,50)];
+    downView = [[UIView alloc] initWithFrame:Rect(0,0,kScreenWidth,50)];
     [self addSubview:downView];
     [downView setBackgroundColor:UIColorFromRGB(0xF0F0F0)];
     
@@ -145,11 +145,12 @@
 {
     CGSize keyboardSize = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     CGFloat keyboardOriginY = self.height - keyboardSize.height;
-    deltaY = downView.frame.origin.y + downView.frame.size.height - keyboardOriginY;
+    deltaY = self.frame.origin.y + self.frame.size.height - keyboardOriginY;
     if (self.keyboardPresentFlag == 1)
     {
         [UIView animateWithDuration:duration delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:^{
-            downView.frame = CGRectOffset(downView.frame, 0, -deltaY);
+            self.frame = CGRectOffset(self.frame, 0, -deltaY);
+//            downView.frame = CGRectOffset(downView.frame, 0, -deltaY);
         } completion:nil];
     }
     if (downView.frame.origin.y != (kScreenHeight-50)) {
@@ -172,6 +173,7 @@
     // 以动画的方式改变textField的frame
     [UIView animateWithDuration:duration delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:
      ^{
+         self.frame = CGRectOffset(self.frame, 0, -deltaY);
          downView.frame = CGRectOffset(downView.frame, 0, -deltaY);
      } completion:nil];
     
@@ -184,7 +186,8 @@
 {
     CGRect frame = self.frame;
     frame.origin.y = originalY;
-    downView.frame = Rect(0, kScreenHeight-50, kScreenWidth, 50);
+    downView.frame = Rect(0, 50, kScreenWidth, 50);
+    self.frame = Rect(0, kScreenHeight-50, kScreenWidth, 50);
 }
 
 - (void)dealloc
@@ -245,7 +248,7 @@
 //创建表情内容
 - (void)createEmojiKeyboard
 {
-    _emojiView = [[EmojiView alloc] initWithFrame:Rect(0, kScreenHeight-216,kScreenWidth, 216)];
+    _emojiView = [[EmojiView alloc] initWithFrame:Rect(0, 50,kScreenWidth, 216)];
     [self addSubview:_emojiView];
     [_emojiView setBackgroundColor:UIColorFromRGB(0xffffff)];
     [_emojiView setHidden:YES];
@@ -286,3 +289,4 @@
 }
 
 @end
+

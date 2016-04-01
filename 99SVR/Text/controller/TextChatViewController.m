@@ -8,6 +8,7 @@
 
 #import "TextChatViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "RoomUser.h"
 #import "TextChatModel.h"
 #import "ChatViewCell.h"
 #import "UIImageView+WebCache.h"
@@ -20,16 +21,17 @@
 #import "NSAttributedString+EmojiExtension.h"
 #import "TextTcpSocket.h"
 #import "GiftView.h"
+#import "ChatView.h"
 #import "TextChatView.h"
 
-@interface TextChatViewController ()<UITableViewDataSource ,UITableViewDelegate,DTAttributedTextContentViewDelegate,TextChatViewDelegate>
+@interface TextChatViewController ()<UITableViewDataSource ,UITableViewDelegate,DTAttributedTextContentViewDelegate,ChatViewDelegate>
 {
     NSCache *cellCache;
     UILabel *lblPlace;
     CGFloat deltaY;
     CGFloat duration;
     CGFloat originalY;
-    TextChatView *_chatView;
+    ChatView *_chatView;
 }
 @property (nonatomic) int keyboardPresentFlag;
 @property (nonatomic,strong) UIButton *btnSend;
@@ -63,14 +65,45 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     
     UILabel *line = [[UILabel alloc] initWithFrame:Rect(0, kScreenHeight-159, kScreenWidth, 1)];
     [self.view addSubview:line];
     [line setBackgroundColor:kLineColor];
     //聊天框
-    _chatView = [[TextChatView alloc] initWithFrame:Rect(0, -108, kScreenWidth,kScreenHeight)];
+//    _chatView = [[TextChatView alloc] initWithFrame:Rect(0, -108, kScreenWidth,kScreenHeight)];
+//    [self.view addSubview:_chatView];
+//    _chatView.delegate = self;
+    
+    UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, self.view.height-50, kScreenWidth,50)];
+    [bodyView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [self.view addSubview:bodyView];
+    [bodyView setUserInteractionEnabled:YES];
+    
+    UILabel *lblContent = [UILabel new];
+    [lblContent setBackgroundColor:kLineColor];
+    [lblContent setFrame:Rect(0, 0, kScreenWidth, 0.8)];
+    [bodyView addSubview:lblContent];
+    
+    UITextField *textField = [[UITextField alloc] initWithFrame:Rect(10,5, kScreenWidth-20, 40)];
+    [bodyView addSubview:textField];
+    [textField setUserInteractionEnabled:NO];
+    [textField setPlaceholder:@"点此和大家说点什么吧"];
+    textField.layer.masksToBounds = YES;
+    textField.layer.cornerRadius = 15;
+    textField.layer.borderColor = kLineColor.CGColor;
+    textField.layer.borderWidth = 0.5;
+    
+    _chatView = [[ChatView alloc] initWithFrame:Rect(0, -108, kScreenWidth,kScreenHeight)];
     [self.view addSubview:_chatView];
+    _chatView.hidden = YES;
     _chatView.delegate = self;
+    
+    @WeakObj(_chatView)
+    [bodyView clickWithBlock:^(UIGestureRecognizer *gesture) {
+        _chatViewWeak.hidden = !_chatViewWeak.hidden;
+    }];
+    
 }
 
 - (void)viewDidLoad
@@ -85,6 +118,37 @@
     [super didReceiveMemoryWarning];
 }
 #pragma mark DTCoreText Delegate
+- (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttributedString:(NSAttributedString *)string frame:(CGRect)frame
+{
+    NSDictionary *attributes = [string attributesAtIndex:0 effectiveRange:NULL];
+    NSURL *URL = [attributes objectForKey:DTLinkAttribute];
+    [attributes objectForKey:@"value"];
+    NSString *identifier = [attributes objectForKey:DTGUIDAttribute];
+    DTLinkButton *button = [[DTLinkButton alloc] initWithFrame:frame];
+    button.URL = URL;
+    button.minimumHitSize = CGSizeMake(25, 25); // adjusts it's bounds so that button is always large enough
+    
+    button.GUID = identifier;
+    [button addTarget:self action:@selector(linkPushed:) forControlEvents:UIControlEventTouchUpInside];
+    return button;
+}
+
+#pragma mark 点击超链接
+- (void)linkPushed:(DTLinkButton *)sender
+{
+    DLog(@"路径:%@",sender.URL.absoluteString);
+    NSArray *array = [sender.URL.absoluteString componentsSeparatedByString:@","];
+    if([array[0] rangeOfString:@"sqchatid://"].location != NSNotFound && [array[1] length]>0)
+    {
+        NSString *strNumber = [sender.URL.absoluteString stringByReplacingOccurrencesOfString:@"sqchatid://" withString:@""];
+        RoomUser *rUser = [[RoomUser alloc] init];
+        rUser.m_strUserAlias = [array[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        rUser.m_nUserId = [strNumber intValue];
+        [_chatView setChatInfo:rUser];
+    
+    }
+}
+
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame
 {
     if ([attachment isKindOfClass:[DTImageTextAttachment class]])
@@ -135,15 +199,18 @@
     {
         cell = [[DTAttributedTextCell alloc] initWithReuseIdentifier:strIdentifier];
         UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
-        [selectView setBackgroundColor:[UIColor clearColor]];
+        [selectView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
         cell.selectedBackgroundView = selectView;
+        [cell setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
         [cellCache setObject:cell forKey:key];
     }
     if (_aryChat.count >indexPath.row)
     {
         TextChatModel *model = [_aryChat objectAtIndex:indexPath.row];
         cell.attributedTextContextView.shouldDrawImages = YES;
+        cell.attributedTextContextView.shouldDrawLinks = YES;
         cell.attributedTextContextView.delegate = self;
+        [cell.attributedTextContextView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
         [cell setHTMLString:model.content];
         CGFloat height = [cell.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
         cell.frame = Rect(10, 5, kScreenWidth-20, height+10);
@@ -189,7 +256,11 @@
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser
 {
     NSString *strContent = [textView.textStorage getPlainString];
-    [_textSocket reqLiveChat:strContent to:0 toalias:@""];
+    [_textSocket reqLiveChat:strContent to:nUser toalias:@""];
+    _chatView.hidden = YES;
+    textView.text = @"";
 }
+
+
 @end
 

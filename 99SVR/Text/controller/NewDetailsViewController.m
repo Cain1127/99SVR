@@ -8,6 +8,8 @@
 
 #import "NewDetailsViewController.h"
 #import "TextTcpSocket.h"
+#import "UserInfo.h"
+#import "ProgressHUD.h"
 #import "ProgressHUD.h"
 #import "UIImageView+WebCache.h"
 #import "Toast+UIView.h"
@@ -20,13 +22,16 @@
 #import "NewDetailsModel.h"
 #import "NSAttributedString+EmojiExtension.h"
 #import "EmojiTextAttachment.h"
+#import "TextChatView.h"
 #import "ChatView.h"
+#import "TextCommentView.h"
 
 @interface NewDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate>
 {
     UIView *contentView;
     UILabel *lblPlace;
     UITextView *_textChat;
+    NSMutableDictionary *dict;
     CGFloat deltaY;
     UIView *downView;
     CGFloat duration;
@@ -74,21 +79,44 @@
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    [self.view makeToastActivity];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self initUIHead];
-    _chatView = [[ChatView alloc] initWithFrame:Rect(0, kScreenHeight-50, kScreenWidth, 50)];
+   
+    UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50, kScreenWidth,50)];
+    [bodyView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [self.view addSubview:bodyView];
+    [bodyView setUserInteractionEnabled:YES];
+    
+    UILabel *lblContent = [UILabel new];
+    [lblContent setBackgroundColor:kLineColor];
+    [lblContent setFrame:Rect(0, 0, kScreenWidth, 0.8)];
+    [bodyView addSubview:lblContent];
+    
+    UITextField *textField = [[UITextField alloc] initWithFrame:Rect(10,5, kScreenWidth-20, 40)];
+    [bodyView addSubview:textField];
+    [textField setUserInteractionEnabled:NO];
+    [textField setPlaceholder:@"点此和大家说点什么吧"];
+    textField.layer.masksToBounds = YES;
+    textField.layer.cornerRadius = 15;
+    textField.layer.borderColor = kLineColor.CGColor;
+    textField.layer.borderWidth = 0.5;
+    
+    _chatView = [[ChatView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kScreenHeight)];
     [self.view addSubview:_chatView];
-}
-
-- (void)navBack
-{
-    [_tcpSocket clearCommentAry];
-    [self.navigationController popViewControllerAnimated:YES];
+    _chatView.hidden = YES;
+    _chatView.delegate = self;
+    
+    @WeakObj(_chatView)
+    [bodyView clickWithBlock:^(UIGestureRecognizer *gesture) {
+        _chatViewWeak.hidden = !_chatViewWeak.hidden;
+    }];
 }
 
 - (void)MarchBackLeft
 {
-    [self navBack];
+    [self.navigationController popViewControllerAnimated:YES];
+    [_tcpSocket clearCommentAry];
 }
 
 - (void)initUIHead
@@ -123,6 +151,7 @@
 
 - (void)createContentView
 {
+    [self.view hideToastActivity];
     if (contentView)
     {
         for (UIView *view in contentView.subviews)
@@ -154,13 +183,13 @@
     [lblAuthor setTextColor:UIColorFromRGB(0x919191)];
     [contentView addSubview:lblAuthor];
     
-    UILabel *lblTime = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-120, lblAuthor.y, 110, 20)];
+    UILabel *lblTime = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-160, lblAuthor.y, 150, 20)];
     [lblTime setTextColor:UIColorFromRGB(0x919191)];
-    [lblTime setText:@"今天 08:30"];
+    [lblTime setText:_jsonModel.dtime];
+    [lblTime setFont:XCFONT(13)];
     [contentView addSubview:lblTime];
     
     textView.frame = Rect(8,lblTime.y+lblTime.height+20, kScreenWidth-16, height);
-   
     UIButton *btnThum = [UIButton buttonWithType:UIButtonTypeCustom];
     NSString *temp = [NSString stringWithFormat:@"%d  赞一个",[_jsonModel.czans intValue]];
     [btnThum setTitle:temp forState:UIControlStateNormal];
@@ -205,6 +234,7 @@
     if (_fall>3) {
         DLog(@"请求不到数据信息");
         dispatch_main_async_safe(^{
+           [self.view hideToastActivity];
            [ProgressHUD showError:@"加载观点信息失败"];
         });
         return ;
@@ -298,9 +328,21 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView) name:MESSAGE_TEXT_NEW_COMMENT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView) name:MESSAGE_TEXT_COMMENT_LIST_VC object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView) name:MESSAGE_TEXT_COMMENT_LIST_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addCommentView:) name: MESSAGE_TEXT_ROOM_REPLAY_NEW_VC object:nil];
+}
+
+- (void)addCommentView:(NSNotification *)notify
+{
+    NSNumber *number = notify.object;
+    if([number intValue])
+    {
+        [_tcpSocket reqIdeaDetails:0 count:20 ideaId:[_jsonModel.viewid integerValue]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ProgressHUD showSuccess:@"评论成功"];
+        });
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -357,34 +399,18 @@
     [_textChat.textStorage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:22.0f] range:wholeRange];
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+- (void)sendMessage:(UITextView *)textView userid:(int)nUser
 {
-    if ([text isEqualToString:@"\n"])
-    {
-        [self sendInfo];
-        return NO;
-    }
-    return YES;
-}
-- (void)sendInfo
-{
-    if ([_textChat.textStorage getPlainString].length == 0)
+    if ([textView.textStorage getPlainString].length == 0)
     {
         [self.view makeToast:@"不能发送空信息"];
         return ;
     }
-    NSString *strComment = [_textChat.textStorage getPlainString];
-    [_tcpSocket replyCommentReq:strComment msgid:[_jsonModel.viewid integerValue] toid:[_jsonModel.teacherid integerValue] srccom:0];
-    _textChat.text = @"";
+    NSString *strComment = [textView.textStorage getPlainString];
+    [_tcpSocket replyCommentReq:strComment msgid:[_jsonModel.viewid integerValue]
+                           toid:(int)[_jsonModel.teacherid integerValue] srccom:0];
+    textView.text = @"";
+    [_chatView setHidden:YES];
 }
-
-- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
-{
-    if ([_textChat isFirstResponder])
-    {
-        [_textChat resignFirstResponder];
-    }
-}
-
 
 @end

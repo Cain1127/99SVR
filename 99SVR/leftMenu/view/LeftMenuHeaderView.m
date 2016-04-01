@@ -69,7 +69,7 @@
         imageB = [[UIImageView alloc] initWithFrame:Rect(50, 0,18,18)];
         [imageB setImage:[UIImage imageNamed:@"personal_recharge_icon"]];
         [self addSubview:imageB];
-        
+        imageB.hidden = YES;
         [self layoutViews];
     }
     return self;
@@ -98,7 +98,7 @@
         {
             _nameLabel.text = userInfo.strName;
             
-            NSString *stringGoid = [NSString stringWithFormat:@"%.01f",userInfo.goldCoin];
+            NSString *stringGoid = [NSString stringWithFormat:@"%.01f  九九币",userInfo.goldCoin];
             CGFloat width = [stringGoid sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}].width+10;
             [_vipLevel setText:stringGoid];
             _vipLevel.frame = Rect(kScreenWidth*0.75/2-width/2,_nameLabel.height+_nameLabel.y+5, width,20);

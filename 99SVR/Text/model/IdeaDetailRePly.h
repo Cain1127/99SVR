@@ -27,4 +27,6 @@
 
 - (id)initWithIdeaRePly:(CMDTextRoomViewInfoRes_t*)resp;
 
+- (void)setTimeInfo;
+
 @end

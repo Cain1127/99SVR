@@ -109,12 +109,12 @@
     _tableView.tableFooterView = emptyFooter;
     [_tableView registerClass:[SettingCell class] forCellReuseIdentifier:@"cellId"];
     
-    lblContent = [[UILabel alloc] initWithFrame:Rect(8.0f, _tableView.height+_tableView.y+30.0f, kScreenWidth - 16.0f,0.5f)];
+    lblContent = [[UILabel alloc] initWithFrame:Rect(8.0f, kScreenHeight-50, kScreenWidth - 16.0f,0.5f)];
     [lblContent setBackgroundColor:kLineColor];
     [self.view addSubview:lblContent];
     
     logoutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    logoutBtn.frame = CGRectMake(0,lblContent.y+5,kScreenWidth,kCellHeight);
+    logoutBtn.frame = CGRectMake(0,kScreenHeight-50,kScreenWidth,kCellHeight);
     [logoutBtn setTitle:@"退出" forState:UIControlStateNormal];
     [logoutBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [logoutBtn setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateHighlighted];

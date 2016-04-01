@@ -18,7 +18,7 @@
 #import "TextGroupList.h"
 #import "MyScrollView.h"
 
-@interface TextViewController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
+@interface TextViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     NSInteger _tag;
     CGFloat fWidth;
@@ -29,6 +29,7 @@
     UILabel *_line1;
     
 }
+
 @property (nonatomic,strong) UILabel *lblLine2;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryHot;
@@ -83,7 +84,7 @@
     _headView.backgroundColor = UIColorFromRGB(0xffffff);
     UILabel *title;
     title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [title setFont:XCFONT(16)];
+    [title setFont:XCFONT(20)];
     [_headView addSubview:title];
     [title setTextAlignment:NSTextAlignmentCenter];
     [title setTextColor:UIColorFromRGB(0x0078DD)];

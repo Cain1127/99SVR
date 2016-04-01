@@ -46,9 +46,9 @@
 
 - (void)setModel:(IdeaDetailRePly *)details
 {
-    [_lblTitle setText:details.strSrcName];
+    [_lblTitle setText:details.strName];
     [_lblTime setText:details.time];
-    [_imgView setImage:[UIImage imageNamed:@"logo"]];
+    [_imgView setImage:[UIImage imageNamed:@"personal_user_head"]];
 }
 
 - (void)layoutSubviews

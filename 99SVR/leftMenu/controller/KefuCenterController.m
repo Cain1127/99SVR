@@ -29,7 +29,7 @@
     _headView.backgroundColor = kNavColor;
     UILabel *title;
     title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [title setFont:XCFONT(16)];
+    [title setFont:XCFONT(20)];
     [_headView addSubview:title];
     [title setTextAlignment:NSTextAlignmentCenter];
     [title setTextColor:[UIColor whiteColor]];
@@ -44,18 +44,14 @@
     [btnLeft setFrame:Rect(0,20,44,44)];
     self.navigationController.navigationBar.barTintColor = kNavColor;
     self.tableView.frame = Rect(0, 0+kNavigationHeight, kScreenWidth, kScreenHeight);
-    
+    _datas = [NSMutableArray array];
     _listReuqest = [[GroupListRequest alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if ([UserInfo sharedUserInfo].aryHelp)
-    {
-        [self setVideos:[UserInfo sharedUserInfo].aryHelp];
-        [self reloadData];
-    }
+    [self loadData];
 }
 
 - (void)navBack
@@ -66,22 +62,48 @@
 #pragma mark get history
 - (void)loadData
 {
-    __weak KefuCenterController *__self = self;
-    self.listReuqest.groupBlock = ^(int status,NSArray *aryIndex)
+    NSDictionary *parameter = [UserDefaults objectForKey:kVideoList];
+    NSArray *aryRoom = [self resolveDict:parameter];
+    if(_datas.count>0){[_datas removeAllObjects];}
+    for(RoomGroup *group in aryRoom)
     {
-        for (RoomGroup *group in aryIndex)
-        {
-            if ([group.groupId isEqualToString:@"16"]) {
-                [__self.datas addObject:group];
-                break;
-            }
+        if ([group.groupId isEqualToString:@"16"]) {
+            [_datas addObject:group];
+            break;
         }
-        [__self setVideos:__self.datas];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [__self reloadData];
-        });
-    };
-    [self.listReuqest requestListRequest];
+    }
+    [self setVideos:_datas];
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak reloadData];
+    });
+}
+
+- (NSArray *)resolveDict:(NSDictionary *)dict
+{
+    NSArray *firstArray = [dict objectForKey:@"groups"];
+    NSMutableArray *aryRoom = [NSMutableArray array];
+    if ([firstArray isKindOfClass:[NSArray class]] && firstArray.count>0)
+    {
+        for (NSDictionary *group in firstArray)
+        {
+            RoomGroup *_roomgroup = [RoomGroup resultWithDict:group];
+            [aryRoom addObject:_roomgroup];
+        }
+    }
+    NSDictionary *dictService = [dict objectForKey:@"service"];
+    if ([dictService objectForKey:@"groupId"] && [dictService objectForKey:@"groupName"] && [dictService objectForKey:@"roomList"])
+    {
+        RoomGroup *_roomgroup = [RoomGroup resultWithDict:dictService];
+        [aryRoom addObject:_roomgroup];
+    }
+    NSDictionary *dictOther = [dict objectForKey:@"other"];
+    if ([dictOther objectForKey:@"groupId"] && [dictOther objectForKey:@"groupName"] && [dictOther objectForKey:@"roomList"])
+    {
+        RoomGroup *_roomgroup = [RoomGroup resultWithDict:dictOther];
+        [aryRoom addObject:_roomgroup];
+    }
+    return aryRoom;
 }
 
 @end

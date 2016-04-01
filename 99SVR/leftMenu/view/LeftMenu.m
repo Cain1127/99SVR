@@ -8,6 +8,7 @@
 
 #import "LeftMenu.h"
 #import "LeftMenuHeaderView.h"
+#import "TextColletViewController.h"
 #import "UserInfo.h"
 #import "LeftCellModel.h"
 #import "LeftViewCell.h"
@@ -113,7 +114,8 @@
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的资料" icon:@"mydata.png" goClassName:@"ProfileViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"AssetViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"personal_collection_icon" goClassName:@"VideoColletionViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"关注讲师" icon:@"personal_follow_icon" goClassName:@"VideoColletionViewController"]];
+        
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"关注讲师" icon:@"personal_follow_icon" goClassName:@"TextColletViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的足迹" icon:@"personal_record_icon" goClassName:@"HistoryViewController"]];
     }
     else  // 没登录

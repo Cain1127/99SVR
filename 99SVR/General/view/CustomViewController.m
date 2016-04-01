@@ -33,7 +33,7 @@
     _headView.backgroundColor = kNavColor;
     
     _txtTitle = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [_txtTitle setFont:XCFONT(16)];
+    [_txtTitle setFont:XCFONT(20)];
     [_headView addSubview:_txtTitle];
     [_txtTitle setTextAlignment:NSTextAlignmentCenter];
     [_txtTitle setTextColor:[UIColor whiteColor]];

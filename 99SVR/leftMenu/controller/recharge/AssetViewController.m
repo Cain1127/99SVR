@@ -106,7 +106,7 @@
 {
     
     ///默认进入苹果的内购页面
-    if (self.isInAppPurchases)
+    if (!self.isInAppPurchases)
     {
         
         InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];

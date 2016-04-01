@@ -43,7 +43,6 @@
 }
 //@property (nonatomic,strong) NSMutableArray *aryText;
 @property (nonatomic,strong) GCDAsyncSocket *asyncSocket;
-@property (nonatomic) int32_t roomid;
 
 @end
 
@@ -209,6 +208,7 @@
         {
             CMDTextRoomLiveActionRes_t *resp = (CMDTextRoomLiveActionRes_t*)pNewMsg;
             DLog(@"评论结果:%d",resp->result);
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_ROOM_REPLAY_NEW_VC object:@(resp->result)];
         }
         break;
         case Sub_Vchat_TextLiveViewZanForRes:

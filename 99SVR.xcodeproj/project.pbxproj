@@ -440,6 +440,8 @@
 		BBCF9A0F1CACE4EF005B9DCE /* TextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A0E1CACE4EF005B9DCE /* TextCell.m */; };
 		BBCF9A1A1CACE685005B9DCE /* TextCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A191CACE685005B9DCE /* TextCellView.m */; };
 		BBCF9A4D1CAD4F81005B9DCE /* SexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A4C1CAD4F81005B9DCE /* SexViewController.m */; };
+		BBCF9A681CADAB60005B9DCE /* TextColletViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A671CADAB60005B9DCE /* TextColletViewController.m */; };
+		BBCF9A731CADB326005B9DCE /* TextCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A721CADB326005B9DCE /* TextCommentView.m */; };
 		BBD449121CA2CD7C00727070 /* video_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = BBD449111CA2CD7C00727070 /* video_list.txt */; };
 		BBD449151CA2D83B00727070 /* UserListView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD449141CA2D83B00727070 /* UserListView.m */; };
 		BBD49D741C5B142400EADF74 /* LivePlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD49D721C5B142400EADF74 /* LivePlayViewController.m */; };
@@ -1318,6 +1320,10 @@
 		BBCF9A191CACE685005B9DCE /* TextCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCellView.m; sourceTree = "<group>"; };
 		BBCF9A4B1CAD4F81005B9DCE /* SexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SexViewController.h; sourceTree = "<group>"; };
 		BBCF9A4C1CAD4F81005B9DCE /* SexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SexViewController.m; sourceTree = "<group>"; };
+		BBCF9A661CADAB60005B9DCE /* TextColletViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextColletViewController.h; path = controller/TextColletViewController.h; sourceTree = "<group>"; };
+		BBCF9A671CADAB60005B9DCE /* TextColletViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextColletViewController.m; path = controller/TextColletViewController.m; sourceTree = "<group>"; };
+		BBCF9A711CADB326005B9DCE /* TextCommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextCommentView.h; sourceTree = "<group>"; };
+		BBCF9A721CADB326005B9DCE /* TextCommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCommentView.m; sourceTree = "<group>"; };
 		BBD449111CA2CD7C00727070 /* video_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = video_list.txt; sourceTree = "<group>"; };
 		BBD449131CA2D83B00727070 /* UserListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserListView.h; sourceTree = "<group>"; };
 		BBD449141CA2D83B00727070 /* UserListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserListView.m; sourceTree = "<group>"; };
@@ -1410,6 +1416,8 @@
 				188741731C96FD75002EF25A /* controller */,
 				1898AC5C1C9BADE600F2681D /* AboutController.h */,
 				1898AC5D1C9BADE600F2681D /* AboutController.m */,
+				BBCF9A661CADAB60005B9DCE /* TextColletViewController.h */,
+				BBCF9A671CADAB60005B9DCE /* TextColletViewController.m */,
 				BB6F3ADB1CA117BE0035EBBE /* BandNewMobileViewController.h */,
 				BB6F3ADC1CA117BE0035EBBE /* BandNewMobileViewController.m */,
 				BB6F3AC11C9EFB070035EBBE /* UpdatePwdViewController.h */,
@@ -1848,6 +1856,8 @@
 				18D7677C1CAA7EAD00CE79B0 /* HomeTextLivingCell.m */,
 				BBCF99EE1CABAC22005B9DCE /* TextChatView.h */,
 				BBCF99EF1CABAC22005B9DCE /* TextChatView.m */,
+				BBCF9A711CADB326005B9DCE /* TextCommentView.h */,
+				BBCF9A721CADB326005B9DCE /* TextCommentView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -3181,6 +3191,7 @@
 				BB6F3AD41C9F86270035EBBE /* TAAbstractDotView.m in Sources */,
 				BB63F5AD1C2CC7A300A042E8 /* UIView+Touch.m in Sources */,
 				BB6F3ADA1C9F86270035EBBE /* UIView+SDExtension.m in Sources */,
+				BBCF9A681CADAB60005B9DCE /* TextColletViewController.m in Sources */,
 				BB88F35D1C4736C100C1F8D9 /* AFHTTPRequestOperation.m in Sources */,
 				BB9766021C87EB4D00FAA5B7 /* NewDetailsModel.m in Sources */,
 				BB16619E1C3E2DC700D318BE /* ZLTabBar.m in Sources */,
@@ -3242,6 +3253,7 @@
 				BB51383D1C980F9700E09EF5 /* RoomDownView.m in Sources */,
 				BB6F3AD81C9F86270035EBBE /* SDCollectionViewCell.m in Sources */,
 				BBAF97121CA9968F00C16305 /* TextSecretAllModel.m in Sources */,
+				BBCF9A731CADB326005B9DCE /* TextCommentView.m in Sources */,
 				18F971131C92947F001B2575 /* RSADataVerifier.m in Sources */,
 				BB6F3ABA1C9D6EC50035EBBE /* FloatingView.m in Sources */,
 				BB63F5C61C2CC7A300A042E8 /* MASViewConstraint.m in Sources */,

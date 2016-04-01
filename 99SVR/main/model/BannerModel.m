@@ -33,20 +33,19 @@
     {
         return result;
     }
-    if ([dict objectForKey:@"action"]) {
-        result.action = dict[@"action"];
-        for (NSString *strAction in result.action.allKeys) {
-            if ([strAction isEqual:@"type"]) {
-                [result setValue:result.action[strAction] forKey:strAction];
-            }
-            else
-            {
-                result.params = result.action[strAction];
-            }
-        }
+    if ([dict objectForKey:@"params"]) {
+        result.params = dict[@"params"];
         for (NSString *strParams in result.params.allKeys) {
-            [result setValue:result.params[strParams] forKey:strParams];
+            if ([strParams rangeOfString:@"url"].location != NSNotFound) {
+                [result setValue:result.params[strParams] forKey:@"webUrl"];
+            }
+            else{
+                [result setValue:result.params[strParams] forKey:strParams];
+            }
         }
+    }
+    if ([dict objectForKey:@"type"]) {
+        [result setValue:dict[@"type"] forKey:@"type"];
     }
     if ([dict objectForKey:@"url"]) {
         [result setValue:dict[@"url"] forKey:@"url"];

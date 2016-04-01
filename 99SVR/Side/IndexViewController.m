@@ -8,6 +8,7 @@
 
 #import "IndexViewController.h"
 #import "GroupListRequest.h"
+#import "MJRefresh.h"
 #import "Toast+UIView.h"
 #import "LSTcpSocket.h"
 #import "UserInfo.h"
@@ -138,22 +139,6 @@
 #pragma mark get history
 - (void)initHistoryData
 {
-//    if ([UserInfo sharedUserInfo].nType !=1)
-//    {
-//        if (_aryHistory && _aryHistory.count>0)
-//        {
-//            [_aryHistory removeAllObjects];
-//            for (UIViewController *viewController in self.childViewControllers)
-//            {
-//                if ([viewController class] == [HistoryViewController class])
-//                {
-//                    [self setUpdate:_aryHistory obj:viewController];
-//                    break;
-//                }
-//            }
-//        }
-//        return ;
-//    }
     
     if([UserInfo sharedUserInfo].aryCollet==nil)
     {
@@ -182,18 +167,6 @@
         {
             [[UserInfo sharedUserInfo].aryCollet addObject:[aryColl objectAtIndex:0]];
         }
-        
-//        for (UIViewController *viewController in __self.childViewControllers)
-//        {
-//            if ([viewController class] == [HistoryViewController class])
-//            {
-//                if (__self.aryHistory.count>0)
-//                {
-//                    [__self setUpdate:__self.aryHistory obj:viewController];
-//                }
-//                break;
-//            }
-//        }
     };
     DLog(@"userid:%d",[UserInfo sharedUserInfo].nUserId);
     [_listReuqest requestRoomByUserId:[UserInfo sharedUserInfo].nUserId];
@@ -214,11 +187,11 @@
     _headView.backgroundColor = UIColorFromRGB(0xffffff);
     UILabel *title;
     title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [title setFont:XCFONT(16)];
+    [title setFont:XCFONT(20)];
     [_headView addSubview:title];
     [title setTextAlignment:NSTextAlignmentCenter];
     [title setTextColor:UIColorFromRGB(0x0078DD)];
-    title.text = @"视频直播";
+    title.text = @"99乐投";
     
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(showLeftView) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
     [_headView addSubview:btnLeft];
@@ -251,7 +224,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initData) name:MESSAGE_INDEX_GET_GROUPLIST_VC object:nil];
 }
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];

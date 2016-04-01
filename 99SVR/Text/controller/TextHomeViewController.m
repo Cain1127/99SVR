@@ -219,6 +219,7 @@
     [self initUIHead];
     UIButton *btnSender = [_group viewWithTag:1];
     [self btnEvent:btnSender];
+    [self.view makeToastActivity];
 }
 
 
@@ -349,12 +350,12 @@
     if (notify.object)
     {
         NSString *strMsg = notify.object;
-        DLog(@"strMsg:%@",strMsg);
         __block NSString *__strMsg = strMsg;
-        __weak TextHomeViewController *__self = self;
+        @WeakObj(self)
         dispatch_async(dispatch_get_main_queue(),
         ^{
-            [__self.view makeToast:__strMsg];
+            [selfWeak.view hideToastActivity];
+            [ProgressHUD showError:__strMsg];
         });
     }
 }
@@ -376,6 +377,7 @@
     __weak TeachView *__teachView = _teachView;
     dispatch_async(dispatch_get_main_queue(),
     ^{
+        [__self.view hideToastActivity];
         [__self.btnTitle setTitle:__self.textSocket.teacher.strName forState:UIControlStateNormal];
         [__self refreshBtnTitle];
         [__teachView setTeachModel:__self.textSocket.teacher];

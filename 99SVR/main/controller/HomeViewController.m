@@ -8,6 +8,7 @@
 
 #import "HomeViewController.h"
 #import "ZLTabBar.h"
+#import "NNSVRViewController.h"
 #import "TextCell.h"
 #import "NavigationViewController.h"
 #import "NSJSONSerialization+RemovingNulls.h"
@@ -76,6 +77,15 @@ typedef enum : NSUInteger
     _scrollView.currentPageDotColor = UIColorFromRGB(0xff7a1e); // 自定义分页控件小圆标颜色
     _scrollView.pageDotColor = UIColorFromRGB(0xa8a8a8);
     _scrollView.autoScrollTimeInterval = 2;
+    @WeakObj(self)
+    _scrollView.clickItemOperationBlock = ^(NSInteger index) {
+         BannerModel *model = [selfWeak.aryBanner objectAtIndex:index];
+         DLog(@"type:%@",model.type);
+         if([model.type isEqualToString:@"web"]){
+             NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:model.webUrl title:model.title];
+             [selfWeak.navigationController pushViewController:svrView animated:YES];
+         }
+    };
 }
 
 - (void)initTableView
@@ -111,7 +121,7 @@ typedef enum : NSUInteger
     _headView.backgroundColor = UIColorFromRGB(0xffffff);
     UILabel *title;
     title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [title setFont:XCFONT(16)];
+    [title setFont:XCFONT(20)];
     [_headView addSubview:title];
     [title setTextAlignment:NSTextAlignmentCenter];
     [title setTextColor:UIColorFromRGB(0x0078DD)];
@@ -119,7 +129,7 @@ typedef enum : NSUInteger
     _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
     [_lblContent setBackgroundColor:[UIColor whiteColor]];
     [_headView addSubview:_lblContent];
-     title.text = @"99乐投";
+    title.text = @"99乐投";
     
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(showLeftView) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
     [self.view addSubview:btnLeft];
