@@ -74,7 +74,7 @@
 #define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
 #define lbs_status @"http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=2&parameterName=15"
 
-#define kTEXT_NEW_DETAILS_URL @"http://admin.99ducaijing.cn:8081/viewpoint/index.php?s=/Index/getViewPoint/id/"
+#define kTEXT_NEW_DETAILS_URL @"http://hall.99ducaijing.cn:8081/viewpoint/index.php?s=/Index/getViewPoint/id/"
 
 #if 1
 #define kTEXT_FOLLOW_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=follow&userid="

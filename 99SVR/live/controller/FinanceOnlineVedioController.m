@@ -150,7 +150,8 @@
 - (void)connectRoom:(RoomHttp *)room
 {
     RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
-    [self presentViewController:roomView animated:YES completion:nil];
+//    [self presentViewController:roomView animated:YES completion:nil];
+    [self.navigationController pushViewController:roomView animated:YES];
 }
 
 - (void)joinRoomTimeOut
@@ -205,7 +206,8 @@
     ^{
         [__self.view hideToastActivity];
         RoomViewController *roomView = [[RoomViewController alloc] init];
-        [self presentViewController:roomView animated:YES completion:nil];
+//        [self presentViewController:roomView animated:YES completion:nil];
+        [__self.navigationController pushViewController:roomView animated:YES];
     }); 
 }
 

@@ -33,11 +33,11 @@
         strFrom = [self getUserInfo:_fromNick user:_srcid name:_fromNick];
         strTo = [self getUserInfo:_toNick user:_toid name:_toNick];
         
-        _content = [NSString stringWithFormat:@"<span>%@</span> 回复 <span> %@ </span><br>%@",strFrom,strTo,_content];
+        _content = [NSString stringWithFormat:@"<span style=\"line-height:5px\">%@ 回复 %@ <br>%@</span>",strFrom,strTo,_content];
     }
     else{
         strFrom = [self getUserInfo:_fromNick user:_srcid name:_fromNick];
-        _content = [NSString stringWithFormat:@"<span style=\"color:#919191\">%@</span><br><span style=\"color:#4c4c4c\">%@</span>",strFrom,_content];
+        _content = [NSString stringWithFormat:@"<span style=\"ine-height:5px\">%@</span><br><span style=\"color:#4c4c4c\">%@</span>",strFrom,_content];
     }
     return self;
 }
@@ -45,12 +45,12 @@
 - (NSString *)getUserInfo:(NSString *)strMsg user:(int)userid name:(NSString *)strName
 {
     if (userid == [UserInfo sharedUserInfo].nUserId) {
-        NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color:0x919191\"><a href=\"sqchatid://%d\">%@</a></span>",_srcid,strName];
+        NSString *strFrom = [NSString stringWithFormat:@"<a style=\"color:#919191\" href=\"sqchatid://%d\">%@</a>",_srcid,strName];
         return strFrom;
     }
     else
     {
-        return [NSString stringWithFormat:@"<span style=\"color:0x919191\"><a href=\"sqchatid://%d,%@\">%@</a></span>",userid,strName,strName];
+        return [NSString stringWithFormat:@"<a style=\"color:#919191\" href=\"sqchatid://%d,%@\">%@</a>",userid,strName,strName];
     }
 }
 

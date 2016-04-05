@@ -29,6 +29,10 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeProtocol)
                 name:MESSAGE_LOGIN_PROTOCOL_DISCONNECT_VC object:nil];
     }
+    else
+    {
+        protocol->closeProtocol();
+    }
     UserInfo *info = [UserInfo sharedUserInfo];
     if (info.otherLogin){
         const char *openId = [info.strOpenId UTF8String];

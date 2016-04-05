@@ -354,8 +354,8 @@
 #endif
 #if 1
     RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
-    [self presentViewController:roomView animated:YES completion:nil];
-//    [self.navigationController pushViewController:roomView animated:YES];
+//    [self presentViewController:roomView animated:YES completion:nil];
+    [self.navigationController pushViewController:roomView animated:YES];
 #endif
 }
 
@@ -411,7 +411,8 @@
                    ^{
                        [__self.view hideToastActivity];
                        RoomViewController *roomView = [[RoomViewController alloc] init];
-                       [__self presentViewController:roomView animated:YES completion:nil];
+//                       [__self presentViewController:roomView animated:YES completion:nil];
+                       [__self.navigationController pushViewController:roomView animated:YES];
                    });
 }
 

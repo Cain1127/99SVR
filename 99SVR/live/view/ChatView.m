@@ -71,7 +71,6 @@
     _textView = [[UITextView alloc] initWithFrame:Rect(6,0,whiteView.width-42,36)];
     [whiteView addSubview:_textView];
     [_textView setFont:XCFONT(15)];
-//    [_textView setBackgroundColor:[UIColor clearColor]];
     [_textView setTextColor:UIColorFromRGB(0x343434)];
     
     UIButton *btnEmoji = [UIButton buttonWithType:UIButtonTypeCustom];

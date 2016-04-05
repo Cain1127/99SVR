@@ -103,7 +103,6 @@
     }
     else
     {
-        @WeakObj(self)
         gcd_main_safe(^{
             [MBProgressHUD showError:@"修改个性签名出错"];
         });

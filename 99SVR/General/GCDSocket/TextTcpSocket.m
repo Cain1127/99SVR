@@ -235,8 +235,8 @@
         case Sub_Vchat_TextRoomSecretsPHPNoty:
         {
             DLog(@"添加秘籍通知");
-            CMDTextRoomSecretsPHPResq_t *resp = (CMDTextRoomSecretsPHPResq_t*)pNewMsg;
-            DLog(@"单次订阅价格:%d",resp->prices);
+//            CMDTextRoomSecretsPHPResq_t *resp = (CMDTextRoomSecretsPHPResq_t*)pNewMsg;
+//            DLog(@"单次订阅价格:%d",resp->prices);
         }
         break;
         case Sub_Vchat_TextLiveUserExitRes:
@@ -247,8 +247,8 @@
         break;
         case Sub_Vchat_TextRoomSecretsTotalResp:
         {
-            CMDTextRoomSecretsTotalResp_t *resp  = (CMDTextRoomSecretsTotalResp_t *)pNewMsg;
-            DLog(@"秘籍总数:%d",resp->secretsnum);
+//            CMDTextRoomSecretsTotalResp_t *resp  = (CMDTextRoomSecretsTotalResp_t *)pNewMsg;
+//            DLog(@"秘籍总数:%d",resp->secretsnum);
         }
         break;
         case Sub_Vchat_TextRoomSecretsListResp:
@@ -361,9 +361,9 @@
 #pragma mark 返回历史的分页  汇总
 - (void)respHistoryList:(char *)pInfo
 {
-    CMDTextLiveHistoryListRes_t *resp = (CMDTextLiveHistoryListRes_t *)pInfo;
-    DLog(@"start:%zi--end:%zi",resp->beginTime,resp->datetime);
-    DLog(@"renqi:%zi--answer:%zi",resp->renQi,resp->cAnswer);
+//    CMDTextLiveHistoryListRes_t *resp = (CMDTextLiveHistoryListRes_t *)pInfo;
+//    DLog(@"start:%zi--end:%zi",resp->beginTime,resp->datetime);
+//    DLog(@"renqi:%zi--answer:%zi",resp->renQi,resp->cAnswer);
 }
 
 #pragma mark 点击请求直播历史记录
@@ -472,12 +472,12 @@
 #pragma mark 观点修改响应
 - (void)respMessageUpdate:(char *)pInfo
 {
-    CMDTextRoomViewMessageReqRes_t *resp = (CMDTextRoomViewMessageReqRes_t *)pInfo;
+//    CMDTextRoomViewMessageReqRes_t *resp = (CMDTextRoomViewMessageReqRes_t *)pInfo;
     //resp->messageid   查找某条id
     //从 IdeaDetails  查找messageid == resp->messageid
-    DLog(@"msgid:%zi",resp->messageid);
-    NSString *strContent = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
-    DLog(@"内容:%@",strContent);
+//    DLog(@"msgid:%zi",resp->messageid);
+//    NSString *strContent = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
+//    DLog(@"内容:%@",strContent);
 }
 
 #pragma mark 请求修改观点
@@ -520,7 +520,7 @@
 - (void)respIdeaReplay:(char*)pInfo
 {
     CMDTextRoomViewInfoRes_t *resp = (CMDTextRoomViewInfoRes_t *)pInfo;
-    IdeaDetailRePly *idea = [[IdeaDetailRePly alloc] initWithIdeaRePly:resp];
+    IdeaDetailRePly *idea = [[IdeaDetailRePly alloc] initWithIdeaRePly:resp teachId:_teacher.teacherid];
     if (idea)
     {
         if (_aryComment==nil)
@@ -534,9 +534,9 @@
 #pragma mark 观点信息
 - (void)respNewDetails:(char *)pInfo
 {
-    CMDTextRoomLiveViewRes_t *resp = (CMDTextRoomLiveViewRes_t *)pInfo;
-    IdeaDetails *idea = [[IdeaDetails alloc] initWithIdeaDetails:resp];
-    DLog(@"观点信息:%zi--%@",idea.messageid,idea.strContent);
+//    CMDTextRoomLiveViewRes_t *resp = (CMDTextRoomLiveViewRes_t *)pInfo;
+//    IdeaDetails *idea = [[IdeaDetails alloc] initWithIdeaDetails:resp];
+//    DLog(@"观点信息:%zi--%@",idea.messageid,idea.strContent);
 }
 
 #pragma mark 某条观点的评论
@@ -1058,11 +1058,23 @@
     [_asyncSocket writeData:data withTimeout:20 tag:1];
 }
 
+- (void)exit_Room
+{
+    CMDUserExitRoomInfo_t req;
+    memset(&req,0,sizeof(CMDUserExitRoomInfo_t));
+    req.userid = [UserInfo sharedUserInfo].nUserId;
+    req.vcbid = _roomid;
+    [self sendMessage:(char*)&req size:sizeof(CMDUserExitRoomInfo_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text
+               subcmd:Sub_Vchat_RoomUserExitReq];
+}
+
 #pragma mark 关闭socket
 -(void)closeSocket
 {
     if(_asyncSocket)
     {
+        [self exit_Room];
+        
         [_asyncSocket disconnectAfterReading];
         _asyncSocket = nil;
     }

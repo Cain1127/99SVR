@@ -8,6 +8,8 @@
 
 #import "NewDetailsViewController.h"
 #import "TextTcpSocket.h"
+#import "Photo.h"
+#import "PhotoViewController.h"
 #import "Toast+UIView.h"
 #import "MBProgressHUD.h"
 #import "ProgressHUD.h"
@@ -29,9 +31,10 @@
 #import "TextChatView.h"
 #import "ChatView.h"
 #import "TextCommentView.h"
-#import "DTCoreText.h"
+#import <DTCoreText/DTCoreText.h>
+//#import "DTCoreText.h"
 
-@interface NewDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,CommentDelegate>
+@interface NewDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,CommentDelegate,UIWebViewDelegate>
 {
     UIView *contentView;
     UILabel *lblPlace;
@@ -43,9 +46,12 @@
     CGFloat originalY;
     int _fall;
     ChatView *_chatView;
+    
 }
-
+@property (nonatomic,strong) DTAttributedTextView *textView;
+@property (nonatomic,strong) UIView *downContentView;
 @property (nonatomic) int keyboardPresentFlag;
+@property (nonatomic,strong) UIButton *btnThum;
 @property (nonatomic,copy) NSString *strTo;
 @property (nonatomic,strong) UIButton *btnSend;
 @property (nonatomic,copy) NSArray *aryCommont;
@@ -58,6 +64,8 @@
 @end
 
 @implementation NewDetailsViewController
+@synthesize downContentView;
+
 - (id)initWithSocket:(TextTcpSocket *)tcpSocket viewID:(int64_t)viewId
 {
     self = [super init];
@@ -93,19 +101,42 @@
     [self.view addSubview:bodyView];
     [bodyView setUserInteractionEnabled:YES];
     
-    UILabel *lblContent = [UILabel new];
-    [lblContent setBackgroundColor:kLineColor];
-    [lblContent setFrame:Rect(0, 0, kScreenWidth, 0.8)];
-    [bodyView addSubview:lblContent];
+    UIView *whiteView = [[UIView alloc] initWithFrame:Rect(8,8,kScreenWidth-76,36)];
+    [bodyView addSubview:whiteView];
+    [whiteView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    whiteView.layer.masksToBounds = YES;
+    whiteView.layer.cornerRadius = 3;
+    whiteView.layer.borderColor = UIColorFromRGB(0xE3E3E3).CGColor;
+    whiteView.layer.borderWidth = 0.5;
     
     UITextField *textField = [[UITextField alloc] initWithFrame:Rect(10,5, kScreenWidth-20, 40)];
     [bodyView addSubview:textField];
-    [textField setUserInteractionEnabled:NO];
+    [textField setFont:XCFONT(15)];
+    [textField setTextColor:UIColorFromRGB(0x343434)];
     [textField setPlaceholder:@"点此和大家说点什么吧"];
-    textField.layer.masksToBounds = YES;
-    textField.layer.cornerRadius = 15;
-    textField.layer.borderColor = kLineColor.CGColor;
-    textField.layer.borderWidth = 0.5;
+    textField.enabled = NO;
+    textField.userInteractionEnabled = NO;
+    
+    UIButton *btnEmoji = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnEmoji setImage:[UIImage imageNamed:@"Expression"] forState:UIControlStateNormal];
+    [btnEmoji setImage:[UIImage imageNamed:@"Expression_t"] forState:UIControlStateHighlighted];
+    [whiteView addSubview:btnEmoji];
+    btnEmoji.frame = Rect(whiteView.width-36, 0, 36, 36);
+    btnEmoji.userInteractionEnabled = NO;
+    
+    UIButton *btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnSend setTitle:@"发送" forState:UIControlStateNormal];
+    [btnSend setTitleColor:UIColorFromRGB(0x4c4c4c) forState:UIControlStateNormal];
+    btnSend.titleLabel.font = XCFONT(15);
+    [bodyView addSubview:btnSend];
+    btnSend.frame = Rect(kScreenWidth-60,whiteView.y, 50, 36);
+    btnSend.layer.masksToBounds = YES;
+    btnSend.layer.cornerRadius = 3;
+    btnSend.layer.borderWidth = 0.5;
+    [btnSend setBackgroundColor:UIColorFromRGB(0xffffff)];
+    btnSend.layer.borderColor = UIColorFromRGB(0xf0f0f0).CGColor;
+    [btnSend setBackgroundImage:[UIImage imageNamed:@"video_present_number_bg"] forState:UIControlStateHighlighted];
+    btnSend.userInteractionEnabled = NO;
     
     _chatView = [[ChatView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kScreenHeight)];
     [self.view addSubview:_chatView];
@@ -138,15 +169,15 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)decodeDiction:(NSDictionary *)dict
+- (void)decodeDiction:(NSDictionary *)parameters
 {
-    if (dict)
+    if (parameters)
     {
         if(_jsonModel)
         {
             _jsonModel = nil;
         }
-        _jsonModel = [NewDetailsModel resultWithDict:dict];
+        _jsonModel = [NewDetailsModel resultWithDict:parameters];
         __weak NewDetailsViewController *__self = self;
         dispatch_async(dispatch_get_main_queue(), ^{
             [__self createContentView];
@@ -167,15 +198,19 @@
     }
     
     //计算正文内容 占据的高度
-    DTAttributedTextView *textView = [DTAttributedTextView new];
-    textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[_jsonModel.ccontent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
-    CGFloat height = [textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-16].height;
+    _textView = [DTAttributedTextView new];
+    _textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[_jsonModel.ccontent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
+    _textView.textDelegate = self;
+    _textView.shouldDrawImages = YES;
+    _textView.shouldDrawLinks = YES;
+    
+    CGFloat height = [_textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-16].height;
     DLog(@"height:%f",height);
     
     CGRect frame = [_jsonModel.title boundingRectWithSize:CGSizeMake(kScreenWidth-16, 100) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(17)} context:nil];
-
+    
     contentView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, height+250+frame.size.height)];
-    [contentView addSubview:textView];
+    [contentView addSubview:_textView];
     
     UILabel *lblTitle = [[UILabel alloc] initWithFrame:Rect(8, 30, kScreenWidth-16, frame.size.height)];
     [lblTitle setFont:XCFONT(17)];
@@ -192,52 +227,67 @@
     [lblTime setTextColor:UIColorFromRGB(0x919191)];
     [lblTime setText:_jsonModel.dtime];
     [lblTime setFont:XCFONT(13)];
+    [lblTime setTextAlignment:NSTextAlignmentRight];
     [contentView addSubview:lblTime];
     
-    textView.frame = Rect(8,lblTime.y+lblTime.height+20, kScreenWidth-16, height);
-    UIButton *btnThum = [UIButton buttonWithType:UIButtonTypeCustom];
-    NSString *temp = [NSString stringWithFormat:@"%d  赞一个",[_jsonModel.czans intValue]];
-    [btnThum setTitle:temp forState:UIControlStateNormal];
-    [btnThum setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
-    [btnThum setTitleColor:kNavColor forState:UIControlStateHighlighted];
-    
-    [btnThum setImage:[UIImage imageNamed:@"text_viewpoint_like_icon"] forState:UIControlStateHighlighted];
-    [btnThum setImage:[UIImage imageNamed:@"thun_new"] forState:UIControlStateNormal];
-    
-    [btnThum setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [btnThum setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
-    btnThum.tag = 1008;
-    [contentView addSubview:btnThum];
-    btnThum.layer.masksToBounds = YES;
-    btnThum.layer.cornerRadius = 3;
-    btnThum.titleLabel.font = XCFONT(17);
-    btnThum.frame = Rect(contentView.width/2-92, textView.y+textView.height+30, 194,40);
-    UIEdgeInsets inset = btnThum.imageEdgeInsets;
-    inset.left -= 10;
-    btnThum.imageEdgeInsets = inset;
-    [btnThum addTarget:self action:@selector(zanViewDeatails) forControlEvents:UIControlEventTouchUpInside];
-    
-    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(0, btnThum.y+btnThum.height+20, kScreenWidth, 10)];
-    [lblTemp setText:@"【仅代表个人观点,不构成投资建议,风险自负】"];
-    [lblTemp setTextColor:UIColorFromRGB(0x555555)];
-    [lblTemp setTextAlignment:NSTextAlignmentCenter];
-    [contentView addSubview:lblTemp];
-    
-    UILabel *lblLine = [[UILabel alloc] initWithFrame:Rect(76,lblTemp.y+lblTemp.height+45,kScreenWidth-76, 0.5)];
-    [lblLine setBackgroundColor:kLineColor];
-    [contentView addSubview:lblLine];
-    
-    UILabel *lblTalk = [[UILabel alloc] initWithFrame:Rect(0, lblLine.y-11,75, 23)];
-    [lblTalk setText:@"发表评论"];
-    [lblTalk setTextColor:UIColorFromRGB(0xffffff)];
-    [lblTalk setFont:XCFONT(15)];
-    [lblTalk setBackgroundColor:UIColorFromRGB(0xffa200)];
-    [lblTalk setTextAlignment:NSTextAlignmentCenter];
-    lblTalk.layer.masksToBounds= YES;
-    lblTalk.layer.cornerRadius = 10;
-    [contentView addSubview:lblTalk];
+    _textView.frame = Rect(8,lblTime.y+lblTime.height+10, kScreenWidth-16, height);
+    [self updateContentView];
+   
     [_tableView setTableHeaderView:contentView];
     [_tcpSocket reqIdeaDetails:0 count:20 ideaId:[_jsonModel.viewid integerValue]];
+}
+
+- (void)updateContentView
+{
+    if (!_btnThum) {
+        _btnThum = [UIButton buttonWithType:UIButtonTypeCustom];
+        NSString *temp = [NSString stringWithFormat:@"%d  赞一个",[_jsonModel.czans intValue]];
+        [_btnThum setTitle:temp forState:UIControlStateNormal];
+        [_btnThum setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+        [_btnThum setTitleColor:kNavColor forState:UIControlStateHighlighted];
+        
+        [_btnThum setImage:[UIImage imageNamed:@"text_viewpoint_like_icon"] forState:UIControlStateHighlighted];
+        [_btnThum setImage:[UIImage imageNamed:@"thun_new"] forState:UIControlStateNormal];
+        
+        [_btnThum setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+        [_btnThum setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+        _btnThum.tag = 1008;
+        [contentView addSubview:_btnThum];
+        _btnThum.layer.masksToBounds = YES;
+        _btnThum.layer.cornerRadius = 3;
+        _btnThum.titleLabel.font = XCFONT(17);
+        _btnThum.frame = Rect(contentView.width/2-92, _textView.y+_textView.height+30, 194,40);
+        UIEdgeInsets inset = _btnThum.imageEdgeInsets;
+        inset.left -= 10;
+        _btnThum.imageEdgeInsets = inset;
+        [_btnThum addTarget:self action:@selector(zanViewDeatails) forControlEvents:UIControlEventTouchUpInside];
+    }
+    _btnThum.frame = Rect(contentView.width/2-92, _textView.y+_textView.height+30, 194,40);
+    if (!downContentView) {
+        downContentView = [[UIView alloc] initWithFrame:Rect(0, _btnThum.y+_btnThum.height+10, kScreenWidth, 67)];
+        [contentView addSubview:downContentView];
+        
+        UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 10)];
+        [lblTemp setText:@"【仅代表个人观点,不构成投资建议,风险自负】"];
+        [lblTemp setTextColor:UIColorFromRGB(0x555555)];
+        [lblTemp setTextAlignment:NSTextAlignmentCenter];
+        [downContentView addSubview:lblTemp];
+        
+        UILabel *lblLine = [[UILabel alloc] initWithFrame:Rect(76,lblTemp.y+lblTemp.height+45,kScreenWidth-76, 0.5)];
+        [lblLine setBackgroundColor:kLineColor];
+        [downContentView addSubview:lblLine];
+        
+        UILabel *lblTalk = [[UILabel alloc] initWithFrame:Rect(0, lblLine.y-11,75, 23)];
+        [lblTalk setText:@"发表评论"];
+        [lblTalk setTextColor:UIColorFromRGB(0xffffff)];
+        [lblTalk setFont:XCFONT(15)];
+        [lblTalk setBackgroundColor:UIColorFromRGB(0xffa200)];
+        [lblTalk setTextAlignment:NSTextAlignmentCenter];
+        lblTalk.layer.masksToBounds= YES;
+        lblTalk.layer.cornerRadius = 10;
+        [downContentView addSubview:lblTalk];
+    }
+    downContentView.frame = Rect(0, _btnThum.y+_btnThum.height+10, kScreenWidth,67);
 }
 
 - (void)zanViewDeatails
@@ -298,10 +348,10 @@
     __weak NewDetailsViewController *__self = self;
     [BaseService postJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
     {
-        NSDictionary *parameter = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+        NSDictionary *parameter = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil removingNulls:YES ignoreArrays:NO];
         if (parameter && [parameter objectForKey:@"data"])
         {
-            [__self decodeDiction:[dict objectForKey:@"data"]];
+            [__self decodeDiction:[parameter objectForKey:@"data"]];
         }
     }
     fail:^(NSError *error)
@@ -335,16 +385,57 @@
     return cell;
 }
 
+- (void)updateTextView:(NSURL*)url changeSize:(CGSize)size
+{
+    CGSize imageSize = size;
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"contentURL == %@", url];
+    BOOL didUpdate = NO;
+    for (DTTextAttachment *oneAttachment in [_textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
+    {
+        if (CGSizeEqualToSize(oneAttachment.originalSize, CGSizeZero))
+        {
+            oneAttachment.originalSize = imageSize;
+            didUpdate = YES;
+        }
+    }
+    if (didUpdate)
+    {
+        //重新加载图片
+        [_textView relayoutText];
+        CGRect frame = contentView.frame;
+        CGFloat height = [_textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-16].height;
+        CGRect textFrame = _textView.frame;
+        contentView.frame = Rect(0, 0, kScreenWidth,frame.size.height-textFrame.size.height+height);
+        //需要重新设置contentView  刷新tableview table HeaderView 更新
+        [_tableView setTableHeaderView:contentView];
+        _textView.frame = Rect(8,textFrame.origin.y, kScreenWidth-16, height);
+        [self updateContentView];
+    }
+}
 
 #pragma mark DTCoreText Delegate
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame
 {
     if ([attachment isKindOfClass:[DTImageTextAttachment class]])
     {
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
-        [imageView sd_setImageWithURL:attachment.contentURL];
-        imageView.userInteractionEnabled = YES;
-        return imageView;
+        UIImageView *imageView = nil;
+        if (_textView.attributedTextContentView == attributedTextContentView ) {
+            imageView = [[UIImageView alloc] initWithFrame:frame];
+            @WeakObj(self)
+            [imageView sd_setImageWithURL:attachment.contentURL placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                [selfWeak updateTextView:imageURL changeSize:image.size];
+            }];
+            imageView.userInteractionEnabled = YES;
+            [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageInfo:)]];
+            return imageView;
+        }
+        else {
+            imageView = [[UIImageView alloc] initWithFrame:frame];
+            [imageView sd_setImageWithURL:attachment.contentURL placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            }];
+            imageView.userInteractionEnabled = YES;
+            return imageView;
+        }
     }
     else if([attachment isKindOfClass:[DTObjectTextAttachment class]])
     {
@@ -357,6 +448,44 @@
     return nil;
 }
 
+/**
+ *  超链接组装
+ */
+- (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttributedString:(NSAttributedString *)string frame:(CGRect)frame
+{
+    NSDictionary *attributes = [string attributesAtIndex:0 effectiveRange:NULL];
+    NSURL *URL = [attributes objectForKey:DTLinkAttribute];
+    [attributes objectForKey:@"value"];
+    NSString *identifier = [attributes objectForKey:DTGUIDAttribute];
+    DTLinkButton *button = [[DTLinkButton alloc] initWithFrame:frame];
+    button.URL = URL;
+    button.minimumHitSize = CGSizeMake(25, 25);
+    button.GUID = identifier;
+    [button addTarget:self action:@selector(linkPushed:) forControlEvents:UIControlEventTouchUpInside];
+    return button;
+}
+
+/**
+ *  超链接点击后的事件
+ */
+- (void)linkPushed:(DTLinkButton *)sender
+{
+    DLog(@"路径:%@",sender.URL.absoluteString);
+    //只针对特殊的超链接做处理
+    if ([sender.URL.absoluteString rangeOfString:@","].location != NSNotFound) {
+        NSArray *array = [sender.URL.absoluteString componentsSeparatedByString:@","];
+        if([array[0] rangeOfString:@"sqchatid://"].location != NSNotFound && [array[1] length]>0)
+        {
+            NSString *strNumber = [sender.URL.absoluteString stringByReplacingOccurrencesOfString:@"sqchatid://" withString:@""];
+            RoomUser *rUser = [[RoomUser alloc] init];
+            rUser.m_strUserAlias = [array[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            rUser.m_nUserId = [strNumber intValue];
+            _chatView.nDetails = [array[2] intValue];
+            [_chatView setChatInfo:rUser];
+        }
+    }
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_aryCommont.count>indexPath.row)
@@ -365,7 +494,7 @@
         DTAttributedTextContentView *content = [DTAttributedTextContentView new];
         content.attributedString = [[NSAttributedString alloc] initWithHTMLData:[comment.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
         CGFloat height = [content suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-80].height;
-        return height+91;
+        return height+34;
     }
     return 0;
 }
@@ -411,7 +540,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (_aryCommont.count > indexPath.row) {
         IdeaDetailRePly *reply = [_aryCommont objectAtIndex:indexPath.row];
-        [self showChatView:reply];
+        [self showChatView:reply.viewuserid name:reply.strName commentId:reply.commentid];
     }
 }
 
@@ -472,9 +601,9 @@
         return ;
     }
     NSString *strComment = [textView.textStorage getPlainString];
-    
+    int toId = !nUser?[_jsonModel.teacherid intValue]:nUser;
     [_tcpSocket replyCommentReq:strComment msgid:[_jsonModel.viewid integerValue]
-                           toid:!nUser?[_jsonModel.teacherid intValue]:nUser srccom:nDetails];
+                           toid:toId srccom:nDetails];
     textView.text = @"";
     [_chatView setHidden:YES];
 }
@@ -482,18 +611,21 @@
 - (void)commentCell:(IdeaDetailRePly *)Reply
 {
     if (Reply) {
-        [self showChatView:Reply];
+        [self showChatView:Reply.viewuserid name:Reply.strName commentId:Reply.commentid];
     }
 }
+/**
+ *  根据评论记录，显示回复信息
+ */
 
-- (void)showChatView:(IdeaDetailRePly *)reply
+- (void)showChatView:(int)viewuserid name:(NSString *)strName commentId:(int64_t)commentId
 {
     UserInfo *__userInfo = [UserInfo sharedUserInfo];
-    if (reply.userid != __userInfo.nUserId) {
+    if (viewuserid != __userInfo.nUserId) {
         RoomUser *user = [[RoomUser alloc] init];
-        user.m_nUserId = reply.userid;
-        user.m_strUserAlias = reply.strName;
-        _chatView.nDetails = reply.srcinteractid;
+        user.m_nUserId = viewuserid;
+        user.m_strUserAlias = strName;
+        _chatView.nDetails = commentId;
         [_chatView setChatInfo:user];
     }
     else{
@@ -501,4 +633,23 @@
     }
 }
 
+- (void)dealloc
+{
+    DLog(@"dealloc");
+}
+
+- (void)showImageInfo:(UITapGestureRecognizer *)tapGest
+{
+    UIImageView *imageView = (UIImageView *)tapGest.view;
+    if (imageView.image)
+    {
+        NSMutableArray *aryIndex = [NSMutableArray array];
+        Photo *_photo = [[Photo alloc] init];
+        _photo.nId = 0;
+        _photo.imgName = imageView.image;
+        [aryIndex addObject:_photo];
+        PhotoViewController *photoControl = [[PhotoViewController alloc] initWithArray:aryIndex current:0];
+        [photoControl show];
+    }
+}
 @end

@@ -51,8 +51,6 @@
     memcpy(cContent,resp->content+_viewTitleLen,_viewTextLen);
     _strContent = [NSString stringWithCString:cContent encoding:GBK_ENCODING];
     
-    NSString *strInfo = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
-    DLog(@"整条观点:%@",strInfo);
 }
 - (void)settingTime
 {
@@ -61,15 +59,15 @@
     int result = [DecodeJson compareDate:date];
     if (result == 1)
     {
-        _strTime = [NSString stringWithFormat:@"今天 %zi:%zi:%zi",date.hour,date.minute,date.second];
+        _strTime = [NSString stringWithFormat:@"今天 %02d:%02d",date.hour,date.minute];
     }
     else if(result == 0)
     {
-        _strTime = [NSString stringWithFormat:@"昨天 %zi:%zi:%zi",date.hour,date.minute,date.second];
+        _strTime = [NSString stringWithFormat:@"昨天 %02d:%02d",date.hour,date.minute];
     }
     else
     {
-        _strTime = [NSString stringWithFormat:@"%d年%d月%d日 %d:%d:%d",date.year,date.month,date.day,date.hour,date.minute,date.second];
+        _strTime = [NSString stringWithFormat:@"%04d年%02d月%02d日 %02d:%02d",date.year,date.month,date.day,date.hour,date.minute];
     }
 }
 @end

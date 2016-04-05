@@ -16,7 +16,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
-    _lblTime = [[UILabel alloc] initWithFrame:Rect(8, 15, 100, 20)];
+    _lblTime = [[UILabel alloc] initWithFrame:Rect(8, 15, 150, 20)];
     [_lblTime setFont:XCFONT(14)];
     [_lblTime setTextColor:UIColorFromRGB(0x919191)];
     [self.contentView addSubview:_lblTime];

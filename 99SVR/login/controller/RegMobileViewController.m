@@ -8,6 +8,7 @@
 
 #import "RegMobileViewController.h"
 #import "IdeaDetailRePly.h"
+#import "RoomViewController.h"
 #import "ZLLogonServerSing.h"
 #import "ProgressHUD.h"
 #import "Toast+UIView.h"
@@ -86,7 +87,7 @@
         if(dict && [dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
         {
             [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:selfWeak.username pwd:selfWeak.password];
-            [selfWeak.navigationController popToRootViewControllerAnimated:YES];
+            [self navBack];
             [ProgressHUD showSuccess:@"注册成功"];
         }
         else
@@ -122,7 +123,13 @@
     __weak RegMobileViewController *__self = self;
     [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
      {
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+         NSDictionary *dict = nil;;
+         if ([responseObject isKindOfClass:[NSDictionary class]]) {
+             dict = responseObject;
+         }
+         else{
+             dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+         }
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
              DLog(@"dict:%@",dict);
@@ -215,7 +222,14 @@
 
 - (void)navBack
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    NSArray *aryIndex = self.navigationController.viewControllers;
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[RoomViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)gotoRegName
@@ -226,7 +240,10 @@
 
 - (void)initUIHead
 {
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(gotoRegName) title:@"账号注册"];
+    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(gotoRegName) title:@"账号注册"];
+    [self.view addSubview:btnRight];
+    btnRight.frame = Rect(kScreenWidth-60, 20, 60, 44);
+    btnRight.titleLabel.font = XCFONT(13);
     
     [self createLabelWithRect:Rect(30, 8+kNavigationHeight, 80, 30)];
     _txtName = [self createTextField:Rect(30, 8+kNavigationHeight, kScreenWidth-60, 30)];

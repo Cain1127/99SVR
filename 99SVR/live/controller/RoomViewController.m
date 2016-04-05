@@ -8,6 +8,8 @@
 
 #import "RoomViewController.h"
 #import "ChatView.h"
+#import "LoginViewController.h"
+#import "MyScrollView.h"
 #import "FloatingView.h"
 #import "RoomTcpSocket.h"
 #import "GiftView.h"
@@ -38,11 +40,13 @@
 #import "EmojiView.h"
 #import "NSAttributedString+EmojiExtension.h"
 #import "UserListView.h"
-#import "DTCoreText.h"
+#import <DTCoreText/DTCoreText.h>
+
 #define TABLEVIEW_ARRAY_PREDICATE(A) [NSPredicate predicateWithFormat:@"SELF CONTAINS %@",A];
 
 @interface RoomViewController ()<UITableViewDelegate,UITableViewDataSource,TitleViewDelegate,
-UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,UIScrollViewDelegate,RoomDownDelegate,ChatViewDelegate,GiftDelegate,UserListSelectDelegate>
+                                UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,UIScrollViewDelegate,
+                                RoomDownDelegate,ChatViewDelegate,GiftDelegate,UserListSelectDelegate>
 {
     //聊天view
     UIView *bodyView;
@@ -100,8 +104,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 @property (nonatomic,strong) UITableView *noticeView;
 @property (nonatomic,strong) UITableView *chatView;
 @property (assign,nonatomic) NSInteger keyboardPresentFlag;
-@property (nonatomic,strong) UIScrollView *scrollView;
-//@property (nonatomic,strong) NSMutableDictionary *cellHeights;
+@property (nonatomic,strong) MyScrollView *scrollView;
 
 @end
 
@@ -132,13 +135,23 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         strPort = [strAry componentsSeparatedByString:@":"][1];
     }
     [_tcpSocket connectRoomInfo:_room.nvcbid address:strAddress port:[strPort intValue]];
-//    [_tcpSocket connectRoomInfo:_room.nvcbid address:@"121.12.118.32" port:22706];
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
+}
+
+/**
+ *  释放房间中的内容
+ */
+- (void)closeRoomInfo
+{
+    [_ffPlay stop];
+    [_tcpSocket exit_Room:YES];
+    [[SDImageCache sharedImageCache] clearMemory];
 }
 
 - (void)dealloc
 {
     DLog(@"room view");
+    [self closeRoomInfo];
     _ffPlay = nil;
     [_scrollView removeFromSuperview];
     _scrollView = nil;
@@ -159,11 +172,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 {
     if(!bFull)
     {
-        [_ffPlay stop];
-        [_tcpSocket exit_Room:YES];
-        [[SDImageCache sharedImageCache] clearMemory];
-        
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self.navigationController popViewControllerAnimated:YES];
     }
     else
     {
@@ -307,7 +316,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     bodyView = [[UIView alloc] initWithFrame:Rect(0, _group.y+_group.height, kScreenWidth,kScreenHeight-_group.y-_group.height)];
     [self.view addSubview:bodyView];
     
-    _scrollView = [[UIScrollView alloc] initWithFrame:Rect(0, 0, bodyView.width, bodyView.height)];
+    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0, 0, bodyView.width, bodyView.height)];
     [bodyView addSubview:_scrollView];
     
     _scrollView.clipsToBounds = YES;
@@ -391,7 +400,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
         [self.view makeToast:@"游客不能送花"];
         return ;
     }
-//    __block int __nUserId = toUser;
     __weak RoomViewController *__self = self;
     dispatch_async(room_gcd,
     ^{
@@ -500,8 +508,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     fTempWidth = [@"热门推荐" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}].width;
     [self setBluePointX:0];
     [self switchBtn:1];
-    [self connectRoomInfo];
-    
 }
 
 #pragma mark 双击事件  切换屏幕
@@ -826,6 +832,7 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self connectRoomInfo];
     [self addNotification];
 }
 
@@ -1086,7 +1093,6 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 //设置高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *cacheKey;
     if(tableView == _noticeView && _tcpSocket.aryNotice.count > indexPath.section)
     {
         ZLCoreTextCell *coreText = [self tableView:tableView preparedCellForZLIndexPath:indexPath];
@@ -1369,13 +1375,30 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
 
 - (void)createLoginAlert
 {
-    
+    @WeakObj(self)
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
+                                                                   message:@"游客不能互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+    {
+       dispatch_async(dispatch_get_main_queue(),
+       ^{
+           [selfWeak closeRoomInfo];
+           LoginViewController *loginView = [[LoginViewController alloc] init];
+           [selfWeak.navigationController pushViewController:loginView animated:YES];
+           
+       });
+    }];
+    [alert addAction:canAction];
+    [alert addAction:okAction];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak presentViewController:alert animated:YES completion:nil];
+    });
 }
 
-- (void)enterLoginView
-{
-//    UINavigationController *navControl = [[UINavigationController alloc] init];
-}
+
 
 #pragma mark RoomDwonDelegate
 - (void)clickRoom:(UIButton *)button index:(NSInteger)nIndex
@@ -1384,7 +1407,13 @@ UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,U
     switch (nIndex) {
         case 0://显示聊天
         {
-            _inputView.hidden = !_inputView.hidden;
+            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+                _inputView.hidden = !_inputView.hidden;
+            }
+            else
+            {
+                [self createLoginAlert];
+            }
         }
         break;
         case 1://显示成员

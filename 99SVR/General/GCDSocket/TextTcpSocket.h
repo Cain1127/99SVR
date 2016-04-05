@@ -133,6 +133,10 @@
  *  购买个人秘籍
  */
 - (void)reqBuySecret:(int)secretsid goodsid:(int )goodsid;
+/**
+ *  关闭房间
+ */
+-(void)closeSocket;
 
 
 @end

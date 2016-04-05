@@ -22,11 +22,17 @@
 
 @implementation CustomViewController
 
++ (UIButton *)itemWithTarget:(id)target action:(SEL)action title:(NSString*)title
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    // 设置图片
+    [btn setTitle:title forState:UIControlStateNormal];
+    return btn;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-//    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     _headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];

@@ -2,6 +2,7 @@
 #include "platform.h"
 #include "Connection.h"
 #include "Http.h"
+#import <time.h>
 
 #define STYPE_COUNT  3
 
@@ -85,7 +86,7 @@ ThreadVoid get_host_form_lbs_runnable(void* param)
 
 			const char *d = ",";
 			char *p = strtok(content, d);
-			int stype;
+			int stype = 0;
 			while (p)
 			{
 				if (strlen(p) == 1)
@@ -128,7 +129,7 @@ ThreadVoid get_host_form_lbs_runnable(void* param)
 	if (lbs_err_counter == lbs_count)
 	{
 		//(_self_)->report_connect_error(-2);
-		time_t time0 = time(0);
+        time_t time0 = time(NULL);
 		if (time0 - start_connect_time > 60)
 		{
 			start_connect_time = 0;

@@ -45,7 +45,6 @@
 - (void)requestView
 {
     //TODD:需要加入次数限制
-    @WeakObj(self)
     NSString *strInfo = [NSString stringWithFormat:@"http://121.12.118.32/caijing/index.php?m=Api&c=PersonalSecrets&a=show&id=%lld&nuserid=%d&token=%@",_secretId,[UserInfo sharedUserInfo].nUserId,[UserInfo sharedUserInfo].strToken];
     [BaseService postJSONWithUrl:strInfo parameters:nil success:^(id responseObject) {
         /**

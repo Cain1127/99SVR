@@ -150,7 +150,7 @@
     UserInfo *userinfo = [UserInfo sharedUserInfo];
     DLog(@"time:%@",NSStringFromInt64(_messagetime));
     NSDate *date = [userinfo.fmt dateFromString:NSStringFromInt64(_messagetime)];
-    _strTime = [NSString stringWithFormat:@"%d:%d",date.hour,date.minute];
+    _strTime = [NSString stringWithFormat:@"%02d:%02d",date.hour,date.minute];
     
 }
 

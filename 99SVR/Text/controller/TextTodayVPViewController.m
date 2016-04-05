@@ -16,7 +16,7 @@
 #import "UIImageView+WebCache.h"
 #import "LiveCoreTextCell.h"
 #import "TextLiveModel.h"
-#import "DTCoreText.h"
+#import <DTCoreText/DTCoreText.h>
 
 @interface TextTodayVPViewController ()<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate,ThumCellDelagate>
 {

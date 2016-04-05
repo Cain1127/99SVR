@@ -25,7 +25,9 @@
 #import "NSJSONSerialization+RemovingNulls.h"
 #import "SDWebImageCompat.h"
 #import "ProgressHUD.h"
+#import "UserInfo.h"
 
+#define KUserSingleton [UserInfo sharedUserInfo]
 
 #define UIColorFromRGBHex(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -65,11 +67,10 @@ typedef enum : NSUInteger
 #endif
 
 /*
-2.0功能
-1.提示框改动
-2.注册，填写昵称
-3.
- 
+后续:
+ 1.JSPatch
+ 2.UserDefault 丢失账号密码的原因
+ 3.
 
 [UserInfo sharedUserInfo].nUserId = 1764964;
 [UserInfo sharedUserInfo].strPwd = @"123456";

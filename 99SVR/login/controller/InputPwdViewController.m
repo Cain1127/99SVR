@@ -8,6 +8,8 @@
 
 #import "InputPwdViewController.h"
 #import "UserInfo.h"
+#import "RoomViewController.h"
+#import "ZLLogonServerSing.h"
 #import "ProgressHUD.h"
 #import "LSTcpSocket.h"
 #import "Toast+UIView.h"
@@ -46,8 +48,8 @@
 
 - (void)authMobile
 {
-    NSString *strMobile = _txtName.text;
-    if ([strMobile length]==0)
+    NSString *strPassword = _txtName.text;
+    if ([strPassword length]==0)
     {
         [ProgressHUD showError:@"密码不能为空"];
         return ;
@@ -58,17 +60,16 @@
         [ProgressHUD showError:@"确认密码不能为空"];
         return ;
     }
-    if (![strCode isEqualToString:strMobile])
+    if (![strCode isEqualToString:strPassword])
     {
         [ProgressHUD showError:@"两次密码不一致"];
         return ;
     }
     [self.view makeToastActivity];
-    NSDictionary *parameters = @{@"phone":_strMobile,@"password":strMobile};
+    NSDictionary *parameters = @{@"phone":_strMobile,@"password":strPassword};
     NSString *strInfo = [NSString stringWithFormat:@"%@MApi/MobileFindPassword",kRegisterNumber];
-    _strPwd = strMobile;
+    _strPwd = strPassword;
     __weak InputPwdViewController *__self = self;
-    __weak LSTcpSocket *__lsTcp = [LSTcpSocket sharedLSTcpSocket];
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id response)
      {
          dispatch_async(dispatch_get_main_queue(), ^{
@@ -77,8 +78,8 @@
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
-             [__lsTcp loginServer:__self.strMobile pwd:__self.strPwd];
-             [__self.navigationController popToRootViewControllerAnimated:YES];
+             [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:__self.strMobile pwd:__self.strPwd];
+             [self navBack];
              [ProgressHUD showSuccess:@"重设密码成功"];
          }
          else
@@ -96,6 +97,18 @@
              [ProgressHUD showError:@"连接服务器失败"];
          });
      }];
+}
+
+- (void)navBack
+{
+    NSArray *aryIndex = self.navigationController.viewControllers;
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[RoomViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)initUIHead
@@ -147,16 +160,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (id)initWithMobile:(NSString *)strMobile
 {

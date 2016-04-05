@@ -227,10 +227,15 @@ typedef enum : NSUInteger
 {
     
     __weak HomeViewController *__self = self;
-    [BaseService getJSONWithUrl:kHome_LivingList_URL parameters:nil success:^(id responseObject)
+    [BaseService postJSONWithUrl:kHome_LivingList_URL parameters:nil success:^(id responseObject)
      {
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         
+         NSDictionary *dict = nil;;
+         if ([responseObject isKindOfClass:[NSDictionary class]]) {
+             dict = responseObject;
+         }
+         else{
+             dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+         }
          ///check response data
          if (!dict)
          {
@@ -525,7 +530,8 @@ typedef enum : NSUInteger
         tempCell.itemOnClick = ^(RoomHttp *room)
         {
             RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
-            [selfWeak presentViewController:roomView animated:YES completion:nil];
+//            [selfWeak presentViewController:roomView animated:YES completion:nil];
+            [selfWeak.navigationController pushViewController:roomView animated:YES];
         };
         [tempCell setRowDatas:tempArray];
         return tempCell;

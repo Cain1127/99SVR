@@ -19,8 +19,6 @@
 
 - (void)showGift:(CGFloat)time;
 
-- (id)initWithFrame:(CGRect)frame color:(int)nColor name:(NSString *)strName number:(NSString *)strNumber;
-
 - (id)initWithFrame:(CGRect)frame color:(int)nColor name:(NSString *)strName number:(int)nNumber gid:(int)ngid;
 
 @end

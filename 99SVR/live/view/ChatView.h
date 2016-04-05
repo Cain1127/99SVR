@@ -12,8 +12,9 @@
 
 @protocol ChatViewDelegate <NSObject>
 
+@optional
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser;
-
+@optional
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser reply:(int64_t) nDetails;
 
 @end

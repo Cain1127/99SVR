@@ -8,6 +8,7 @@
 
 #import "RegNameViewController.h"
 #import "QCheckBox.h"
+#import "RoomViewController.h"
 #import "UserInfo.h"
 #import "LSTcpSocket.h"
 #import "Toast+UIView.h"
@@ -79,9 +80,8 @@
          [selfWeak.view hideToastActivity];
          if ([dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
          {
-//             [__tcpSocket loginServer:selfWeak.username pwd:selfWeak.password];
              [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:selfWeak.username pwd:selfWeak.password];
-             [selfWeak.navigationController popToRootViewControllerAnimated:YES];
+             [selfWeak navBack];
              [ProgressHUD showSuccess:@"注册成功"];
          }
          else
@@ -158,13 +158,21 @@
 
 - (void)navBack
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    NSArray *aryIndex = self.navigationController.viewControllers;
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[RoomViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
+
 - (void)initUIHead
 {
     
-    [self createLabelWithRect:Rect(30, 16, 80, 30)];
-    _txtName = [self createTextField:Rect(30, 16, kScreenWidth-60, 30)];
+    [self createLabelWithRect:Rect(30, 80, 80, 30)];
+    _txtName = [self createTextField:Rect(30, 80, kScreenWidth-60, 30)];
     [_txtName setPlaceholder:@"请输入用户名"];
     
     [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
@@ -255,7 +263,7 @@
     [super viewDidLoad];
     [self initUIHead];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    [self setTitle:@"账号注册"];
+    [self setTitleText:@"账号注册"];
     NSDate *date = [NSDate date];
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"yyyyMMdd"];

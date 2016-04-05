@@ -27,6 +27,7 @@
 #import "WXApi.h"
 #import "TabBarController.h"
 #import "MainViewController.h"
+#import <DTCoreText/DTCoreText.h>
 
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
 
@@ -293,21 +294,7 @@
 
 -(void)getUserInfo:(NSString *)access_token openid:(NSString *)openid
 {
-    
-    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/userinfo?access_token=%@&openid=%@",access_token,openid];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURL *zoneUrl = [NSURL URLWithString:url];
-        NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
-        NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
-        dispatch_async(dispatch_get_global_queue(0, 0),
-        ^{
-            if (data)
-            {
-                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                DLog(@"昵称:%@",[dic objectForKey:@"nickname"]);
-            }
-        });
-    });
+
 }
 
 

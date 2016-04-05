@@ -68,8 +68,13 @@ void ZLPushListener::OnRoomTeacherOnMicResp(RoomTeacherOnMicResp &info)
 }
 
 //*********************************************************
-//*********************************************************
 
+void ZLHallListener::OnSetUserPwdResp(SetUserPwdResp& info)
+{
+    DLog(@"error:%d",info.errorid());
+}
+
+//*********************************************************
 
 void ZLConnectionListerner::OnIOError(int err_code)
 {
@@ -78,6 +83,7 @@ void ZLConnectionListerner::OnIOError(int err_code)
         {
             DLog(@"关闭登录线程");
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_PROTOCOL_DISCONNECT_VC object:nil];
+            
         }
         break;
         default:
@@ -154,13 +160,15 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
         user.strName = [NSString stringWithCString:info.cuseralias().c_str() encoding:GBK_ENCODING];
         user.strNewName = [NSString stringWithFormat:@"%s",info.cuseralias().c_str()];
         conn->SendMsg_GetUserMoreInfReq(user.nUserId);
-        
         [UserInfo sharedUserInfo].bIsLogin = YES;
         [UserInfo sharedUserInfo].nType = 1;
         [UserInfo sharedUserInfo].banding = info.bboundtel();
         [UserDefaults setBool:YES forKey:kIsLogin];
         [UserDefaults setObject:strUser forKey:kUserId];
         [UserDefaults setObject:strPwd forKey:kUserPwd];
+        if (strUser==nil || strPwd == nil) {
+            DLog(@"username:%@--password:%@",strUser,strPwd);
+        }
         if ([UserInfo sharedUserInfo].otherLogin ==0)
         {
             [UserDefaults setInteger:0 forKey:kOtherLogin];
@@ -200,9 +208,12 @@ void ZLLoginListener::OnLogonTokenNotify(SessionTokenResp& info)
  */
 int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd,const char *md5Pwd)
 {
+    if(cloginid == nil)
+    {
+        return 1;
+    }
     strUser = [NSString stringWithUTF8String:cloginid];
     strPwd = [NSString stringWithUTF8String:pwd];
-    
     UserLogonReq4 req4;
     req4.set_nmessageid(1);
     if(cloginid==NULL)
@@ -220,7 +231,7 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd,const char 
     req4.set_cmacaddr("");
     req4.set_cipaddr("");
     req4.set_nimstate(0);
-    req4.set_nmobile(0);
+    req4.set_nmobile(2);
     conn->SendMsg_LoginReq4(req4);
     return 1;
 }
@@ -255,7 +266,7 @@ int ZLLogonProtocol::startOtherLogin(uint32 cloginid,const char *openid,const ch
     req.set_cmacaddr("");
     req.set_cipaddr("");
     req.set_nimstate(0);
-    req.set_nmobile(0);
+    req.set_nmobile(2);
     conn->SendMsg_LoginReq5(req);
     return 1;
 }
@@ -318,6 +329,12 @@ ZLLogonProtocol::ZLLogonProtocol()
     conn->RegisterConnectionListener(&conn_listener);
     conn->RegisterPushListener(&push_listener);
     conn->RegisterHallListener(&hall_listener);
+}
+
+int ZLLogonProtocol::closeProtocol()
+{
+    conn->close();
+    return 1;
 }
 
 //**********************************************************************************

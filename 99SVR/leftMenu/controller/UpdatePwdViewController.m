@@ -70,13 +70,13 @@
         [self.view addSubview:line];
         
         [self createLabelWithRect:Rect(10, 45+kNavigationHeight, 80, 30)];
-        _txtMobile = [self createTextField:Rect(10, 45+kNavigationHeight, kScreenWidth-60, 30)];
+        _txtMobile = [self createTextField:Rect(10, 45+kNavigationHeight, kScreenWidth-20, 30)];
         [_txtMobile setPlaceholder:@"请输入手机号码"];
         [_txtMobile setKeyboardType:UIKeyboardTypeNumberPad];
         frame.origin.y = _txtMobile.y+50;
         
         [self createLabelWithRect:Rect(10, frame.origin.y, 80, 30)];
-        _txtCode = [self createTextField:Rect(10, frame.origin.y, kScreenWidth-160, 30)];
+        _txtCode = [self createTextField:Rect(10, frame.origin.y, kScreenWidth-120, 30)];
         [_txtCode setPlaceholder:@"请输入验证码"];
         [_txtCode setKeyboardType:UIKeyboardTypeNumberPad];
         frame.origin.y = _txtCode.y+50;
@@ -98,19 +98,19 @@
     else
     {
         [self createLabelWithRect:Rect(10.0f, 20 + kNavigationHeight, 80.0f, 30.0f)];
-        _txtOld = [self createTextField:Rect(10, 20+kNavigationHeight, kScreenWidth-60, 30)];
+        _txtOld = [self createTextField:Rect(10, 20+kNavigationHeight, kScreenWidth-20, 30)];
         [_txtOld setPlaceholder:@"请输入旧密码"];
         frame.origin.y = _txtOld.y+50;
         [_txtOld setSecureTextEntry:YES];
         
         [self createLabelWithRect:Rect(10, frame.origin.y, 80, 30)];
-        _txtCmd = [self createTextField:Rect(10, frame.origin.y, kScreenWidth-60, 30)];
+        _txtCmd = [self createTextField:Rect(10, frame.origin.y, kScreenWidth-20, 30)];
         [_txtCmd setPlaceholder:@"请输入新密码"];
         frame.origin.y = _txtCmd.y+50;
         [_txtCmd setSecureTextEntry:YES];
     }
     [self createLabelWithRect:Rect(10, frame.origin.y, 80, 30)];
-    _txtNew = [self createTextField:Rect(10, frame.origin.y, kScreenWidth-60, 30)];
+    _txtNew = [self createTextField:Rect(10, frame.origin.y, kScreenWidth-20, 30)];
     if([UserInfo sharedUserInfo].otherLogin)
     {
         [_txtNew setPlaceholder:@"请输入密码"];

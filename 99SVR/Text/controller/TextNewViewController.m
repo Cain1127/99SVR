@@ -7,9 +7,9 @@
 //  观点类
 
 #import "TextNewViewController.h"
-#import "DTCoreText.h"
+//#import "DTCoreText.h"
 #import "MJRefresh.h"
-//#import <DTCoreText/DTCoreText.h>
+#import <DTCoreText/DTCoreText.h>
 #import "NewDetailsViewController.h"
 #import "TextNewCell.h"
 #import "IdeaDetails.h"
@@ -68,28 +68,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-}
-#pragma mark DTCoreText Delegate
-- (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame
-{
-    if ([attachment isKindOfClass:[DTImageTextAttachment class]])
-    {
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
-        [imageView sd_setImageWithURL:attachment.contentURL];
-        imageView.userInteractionEnabled = YES;
-        [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                action:@selector(showImageInfo:)]];
-        return imageView;
-    }
-    else if([attachment isKindOfClass:[DTObjectTextAttachment class]])
-    {
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
-        NSString *strName = [attachment.attributes objectForKey:@"value"];
-        NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"gif"];
-        [imageView sd_setImageWithURL:url1];
-        return imageView;
-    }
-    return nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -182,6 +160,11 @@
         }
         [selfWeak.tableView reloadData];
     });
+}
+
+- (void)dealloc
+{
+    DLog(@"dealloc");
 }
 
 @end

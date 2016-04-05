@@ -275,7 +275,10 @@
             break;
         }
     }
-
+    
+//    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
+//    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
+    
     return strInfo;
 }
 
@@ -427,24 +430,22 @@
         NSRange start = [strInfo rangeOfString:@"<h3>"];
         NSRange end = [strInfo rangeOfString:@"</h3>"];
         strTilte = [strInfo substringWithRange:NSMakeRange(start.location,end.location-start.location+5)];
-        DLog(@"strTitle:%@",strTilte);
         strInfo = [strInfo stringByReplacingCharactersInRange:NSMakeRange(start.location,end.location-start.location+5) withString:@""];
-        
     }
     NSString *msg ;
     if(nIndex==1)
     {
-        msg = @"房间公告";
+        msg = @"<p>房间公告</p>";
     }
     else if(nIndex==2)
     {
-        msg = @"房间广播";
+        msg = @"<p>房间广播</p>";
     }
     else if(nIndex == 3)
     {
-        msg = @"悄悄话";
+        msg = @"<p>悄悄话</p>";
     }
-    NSString *strMsg = [NSString stringWithFormat:@"%@<br>%@<br>%@",strTilte,msg,strInfo];
+    NSString *strMsg = [NSString stringWithFormat:@"%@%@%@",strTilte,msg,strInfo];
     
     return strMsg;
 }

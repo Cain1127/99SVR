@@ -114,7 +114,7 @@
                                               context:nil];
     CGRect frame = _lblContent.frame;
     _lblContent.frame = Rect(frame.origin.x, frame.origin.y,kScreenWidth-30,rect.size.height);
-    self.frame = Rect(0, 68, kScreenWidth, _lblContent.y+_lblContent.height+8);
+    self.frame = Rect(0, 66, kScreenWidth, _lblContent.y+_lblContent.height+8);
 }
 
 @end

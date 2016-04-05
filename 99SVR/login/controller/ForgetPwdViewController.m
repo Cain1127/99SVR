@@ -87,7 +87,13 @@
     [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
      {
          [__self.view hideToastActivity];
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+         NSDictionary *dict = nil;;
+         if ([responseObject isKindOfClass:[NSDictionary class]]) {
+             dict = responseObject;
+         }
+         else{
+             dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+         }
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
              DLog(@"dict:%@",dict);

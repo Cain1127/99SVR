@@ -48,17 +48,18 @@
 
 + (void)loginLocal
 {
-    UserInfo *__userInfo = [UserInfo sharedUserInfo];
+    
     BOOL isLogin = [UserDefaults boolForKey:kIsLogin];
-    if (isLogin)
+    KUserSingleton.nUserId = [[UserDefaults objectForKey:kUserId] intValue];
+    if (isLogin && [UserDefaults objectForKey:kUserId]!=nil)
     {
         int otherLogin = (int)[UserDefaults integerForKey:kOtherLogin];
-        __userInfo.otherLogin = otherLogin;
-        __userInfo.nUserId = [[UserDefaults objectForKey:kUserId] intValue];
+        KUserSingleton.otherLogin = otherLogin;
+        KUserSingleton.nUserId = [[UserDefaults objectForKey:kUserId] intValue];
         if (otherLogin)
         {
-            __userInfo.strOpenId = [UserDefaults objectForKey:kOpenId];
-            __userInfo.strToken = [UserDefaults objectForKey:kToken];
+            KUserSingleton.strOpenId = [UserDefaults objectForKey:kOpenId];
+            KUserSingleton.strToken = [UserDefaults objectForKey:kToken];
             [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:[UserDefaults objectForKey:kUserId] pwd:@""];
         }
         else
@@ -66,10 +67,10 @@
             NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
             if(userPwd)
             {
-                __userInfo.strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
-                __userInfo.strPwd = userPwd;
+                KUserSingleton.strMd5Pwd = [DecodeJson XCmdMd5String:userPwd];
+                KUserSingleton.strPwd = userPwd;
             }
-            [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:[UserDefaults objectForKey:kUserId] pwd:__userInfo.strPwd];
+            [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:[UserDefaults objectForKey:kUserId] pwd:KUserSingleton.strPwd];
         }
     }
     else

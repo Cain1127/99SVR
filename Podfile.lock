@@ -1,0 +1,47 @@
+PODS:
+  - AFNetworking (3.0.4):
+    - AFNetworking/NSURLSession (= 3.0.4)
+    - AFNetworking/Reachability (= 3.0.4)
+    - AFNetworking/Security (= 3.0.4)
+    - AFNetworking/Serialization (= 3.0.4)
+    - AFNetworking/UIKit (= 3.0.4)
+  - AFNetworking/NSURLSession (3.0.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.0.4)
+  - AFNetworking/Security (3.0.4)
+  - AFNetworking/Serialization (3.0.4)
+  - AFNetworking/UIKit (3.0.4):
+    - AFNetworking/NSURLSession
+  - DTCoreText (1.6.17):
+    - DTFoundation/Core (~> 1.7.5)
+    - DTFoundation/DTAnimatedGIF (~> 1.7.5)
+    - DTFoundation/DTHTMLParser (~> 1.7.5)
+    - DTFoundation/UIKit (~> 1.7.5)
+  - DTFoundation/Core (1.7.9)
+  - DTFoundation/DTAnimatedGIF (1.7.9)
+  - DTFoundation/DTHTMLParser (1.7.9):
+    - DTFoundation/Core
+  - DTFoundation/UIKit (1.7.9):
+    - DTFoundation/Core
+
+DEPENDENCIES:
+  - AFNetworking (~> 3.0.0)
+  - DTCoreText (from `https://github.com/Cocoanetics/DTCoreText.git`)
+
+EXTERNAL SOURCES:
+  DTCoreText:
+    :git: https://github.com/Cocoanetics/DTCoreText.git
+
+CHECKOUT OPTIONS:
+  DTCoreText:
+    :commit: cc20ee73dec3b865105828ae428e69f39d3b0b25
+    :git: https://github.com/Cocoanetics/DTCoreText.git
+
+SPEC CHECKSUMS:
+  AFNetworking: a0075feb321559dc78d9d85b55d11caa19eabb93
+  DTCoreText: 3ea8bba23dd2141ba18adb227a7dd33a822df1c4
+  DTFoundation: 70a0765e3596f82dd421832e95c65e2166eb3102
+
+COCOAPODS: 0.39.0

@@ -76,17 +76,19 @@
  *  返回关闭窗口
  */
 - (void)blackBtnClick{
-    
     [self popViewControllerAnimated:YES];
 }
 
 /**
  *  统一设置所有的界面状态栏
  */
-//- (UIStatusBarStyle)preferredStatusBarStyle
-//{
-//    return UIStatusBarStyleDefault;
-//}
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    if (self.viewControllers.count==1) {
+        return UIStatusBarStyleDefault;
+    }
+    return UIStatusBarStyleLightContent;
+}
 
 #pragma mark -- 点击空白处收起键盘
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -96,7 +98,6 @@
 }
 
 #pragma mark - <UIGestureRecognizerDelegate>
-
 /**
  *  push进来的控制器大于1个，手势有效
  */

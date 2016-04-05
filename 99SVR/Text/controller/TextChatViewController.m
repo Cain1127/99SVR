@@ -7,7 +7,7 @@
 //
 
 #import "TextChatViewController.h"
-#import "DTCoreText.h"
+#import <DTCoreText/DTCoreText.h>
 #import "RoomUser.h"
 #import "TextChatModel.h"
 #import "ChatViewCell.h"
@@ -72,28 +72,48 @@
     [self.view addSubview:line];
     [line setBackgroundColor:kLineColor];
     //聊天框
-//    _chatView = [[TextChatView alloc] initWithFrame:Rect(0, -108, kScreenWidth,kScreenHeight)];
-//    [self.view addSubview:_chatView];
-//    _chatView.delegate = self;
     
     UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, self.view.height-50, kScreenWidth,50)];
-    [bodyView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [bodyView setBackgroundColor:UIColorFromRGB(0xF0F0F0)];
     [self.view addSubview:bodyView];
     [bodyView setUserInteractionEnabled:YES];
     
-    UILabel *lblContent = [UILabel new];
-    [lblContent setBackgroundColor:kLineColor];
-    [lblContent setFrame:Rect(0, 0, kScreenWidth, 0.8)];
-    [bodyView addSubview:lblContent];
+    UIView *whiteView = [[UIView alloc] initWithFrame:Rect(8,8,kScreenWidth-76,36)];
+    [bodyView addSubview:whiteView];
+    [whiteView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    whiteView.layer.masksToBounds = YES;
+    whiteView.layer.cornerRadius = 3;
+    whiteView.layer.borderColor = UIColorFromRGB(0xE3E3E3).CGColor;
+    whiteView.layer.borderWidth = 0.5;
     
     UITextField *textField = [[UITextField alloc] initWithFrame:Rect(10,5, kScreenWidth-20, 40)];
     [bodyView addSubview:textField];
-    [textField setUserInteractionEnabled:NO];
+    [textField setFont:XCFONT(15)];
+    [textField setTextColor:UIColorFromRGB(0x343434)];
     [textField setPlaceholder:@"点此和大家说点什么吧"];
-    textField.layer.masksToBounds = YES;
-    textField.layer.cornerRadius = 15;
-    textField.layer.borderColor = kLineColor.CGColor;
-    textField.layer.borderWidth = 0.5;
+    textField.enabled = NO;
+    textField.userInteractionEnabled = NO;
+    
+    UIButton *btnEmoji = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnEmoji setImage:[UIImage imageNamed:@"Expression"] forState:UIControlStateNormal];
+    [btnEmoji setImage:[UIImage imageNamed:@"Expression_t"] forState:UIControlStateHighlighted];
+    [whiteView addSubview:btnEmoji];
+    btnEmoji.frame = Rect(whiteView.width-36, 0, 36, 36);
+    btnEmoji.userInteractionEnabled = NO;
+    
+    UIButton *btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnSend setTitle:@"发送" forState:UIControlStateNormal];
+    [btnSend setTitleColor:UIColorFromRGB(0x4c4c4c) forState:UIControlStateNormal];
+    btnSend.titleLabel.font = XCFONT(15);
+    [bodyView addSubview:btnSend];
+    btnSend.frame = Rect(kScreenWidth-60,whiteView.y, 50, 36);
+    btnSend.layer.masksToBounds = YES;
+    btnSend.layer.cornerRadius = 3;
+    btnSend.layer.borderWidth = 0.5;
+    [btnSend setBackgroundColor:UIColorFromRGB(0xffffff)];
+    btnSend.layer.borderColor = UIColorFromRGB(0xf0f0f0).CGColor;
+    [btnSend setBackgroundImage:[UIImage imageNamed:@"video_present_number_bg"] forState:UIControlStateHighlighted];
+    btnSend.userInteractionEnabled = NO;
     
     _chatView = [[ChatView alloc] initWithFrame:Rect(0, -108, kScreenWidth,kScreenHeight)];
     [self.view addSubview:_chatView];
@@ -127,8 +147,7 @@
     NSString *identifier = [attributes objectForKey:DTGUIDAttribute];
     DTLinkButton *button = [[DTLinkButton alloc] initWithFrame:frame];
     button.URL = URL;
-    button.minimumHitSize = CGSizeMake(25, 25); // adjusts it's bounds so that button is always large enough
-    
+    button.minimumHitSize = CGSizeMake(25, 25);
     button.GUID = identifier;
     [button addTarget:self action:@selector(linkPushed:) forControlEvents:UIControlEventTouchUpInside];
     return button;
@@ -270,6 +289,10 @@
     textView.text = @"";
 }
 
+- (void)dealloc
+{
+    DLog(@"dealloc");
+}
 
 @end
 

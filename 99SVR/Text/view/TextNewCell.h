@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DTCoreText.h"
+#import <DTCoreText/DTCoreText.h>
 
 @class IdeaDetails;
 

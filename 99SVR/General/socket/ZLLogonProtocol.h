@@ -29,7 +29,7 @@ class ZLConnectionListerner : public ConnectionListener
 class ZLHallListener: public HallListener
 {
     void OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfileReq& req);
-    void OnSetUserPwdResp(SetUserPwdResp& info){}
+    void OnSetUserPwdResp(SetUserPwdResp& info);
     void OnQueryRoomGateAddrResp(QueryRoomGateAddrResp& info){}
     void OnGetUserMoreInfResp(GetUserMoreInfResp& info);
     void OnUserExitMessageResp(ExitAlertResp& info){}
@@ -127,6 +127,10 @@ public :
      *  第三方登录
      */
     int startOtherLogin(uint32 cloginid,const char *openid,const char *token);
+    /**
+     *  关闭protocol
+     */
+    int closeProtocol();
     
     ~ZLLogonProtocol();
 };

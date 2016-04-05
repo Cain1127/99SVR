@@ -460,7 +460,13 @@
         @WeakObj(self)
         [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject) {
            [selfWeak.view hiddenActivityInView];
-            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+            NSDictionary *dict = nil;;
+            if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                dict = responseObject;
+            }
+            else{
+                dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+            }
             if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
                 [[dict objectForKey:@"token"] isKindOfClass:[NSString class]])
             {
@@ -527,7 +533,6 @@
     }
     else
     {
-        NSString *strMsg = notify.object;
         dispatch_async(dispatch_get_main_queue(),
         ^{
             [__self.view hideToastActivity];
@@ -565,7 +570,13 @@
             gcd_main_safe(^{
                 [selfWeak.view hiddenActivityInView];
             });
-            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+            NSDictionary *dict = nil;;
+            if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                dict = responseObject;
+            }
+            else{
+                dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+            }
             if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
                 [[dict objectForKey:@"token"] isKindOfClass:[NSString class]] )
             {

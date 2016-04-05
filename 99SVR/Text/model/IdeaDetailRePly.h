@@ -25,7 +25,7 @@
 @property (nonatomic,copy) NSString *strName;
 @property (nonatomic,copy) NSString *time;
 
-- (id)initWithIdeaRePly:(CMDTextRoomViewInfoRes_t*)resp;
+- (id)initWithIdeaRePly:(CMDTextRoomViewInfoRes_t*)resp teachId:(int)teacherId;
 
 - (void)setTimeInfo;
 

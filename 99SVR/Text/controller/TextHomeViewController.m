@@ -170,7 +170,7 @@
     [hidenView addSubview:_teachView];
     _teachView.hidden = YES;
     
-    _rightView = [[RightView alloc] initWithFrame:Rect(kScreenWidth-153, 66, 145, 133)];
+    _rightView = [[RightView alloc] initWithFrame:Rect(kScreenWidth-153, 66, 145, 89)];
     [hidenView addSubview:_rightView];
     _rightView.hidden = YES;
     _rightView.delegate = self;
@@ -188,10 +188,10 @@
         __teachView.hidden = YES;
         __self.rightView.hidden = YES;
     }];
-    
+    __weak UIView *__hiddenView = hidenView;
     [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture)
     {
-        hidenView.hidden = NO;
+        __hiddenView.hidden = NO;
         __self.rightView.hidden = NO;
     }];
     
@@ -371,6 +371,12 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    DLog(@"animated!");
+}
+
 - (void)updateTeacherInfo
 {
     __weak TextHomeViewController *__self = self;
@@ -433,6 +439,13 @@
 - (void)gotoHistory
 {
     
+}
+
+- (void)dealloc
+{
+    DLog(@"dealloc");
+    
+    [_textSocket closeSocket];
 }
 
 @end
