@@ -84,7 +84,7 @@
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     NSString *strInfo = [NSString stringWithFormat:@"%@mapi/GetFindPasswordMsgCode?pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
     __weak ForgetPwdViewController *__self = self;
-    [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
+    [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject)
      {
          [__self.view hideToastActivity];
          NSDictionary *dict = nil;;

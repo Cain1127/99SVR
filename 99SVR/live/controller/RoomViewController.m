@@ -143,14 +143,15 @@
  */
 - (void)closeRoomInfo
 {
-    [_ffPlay stop];
     [_tcpSocket exit_Room:YES];
     [[SDImageCache sharedImageCache] clearMemory];
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
 - (void)dealloc
 {
     DLog(@"room view");
+    [_ffPlay stop];
     [self closeRoomInfo];
     _ffPlay = nil;
     [_scrollView removeFromSuperview];
@@ -172,6 +173,8 @@
 {
     if(!bFull)
     {
+        [_ffPlay stop];
+        [self closeRoomInfo];
         [self.navigationController popViewControllerAnimated:YES];
     }
     else
@@ -276,6 +279,12 @@
     _topHUD = [[UIView alloc] initWithFrame:CGRectMake(0,0,kScreenWidth,64)];
     _topHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:_topHUD];
+    _topHUD.alpha = 0;
+    
+    UIImageView *topViewBg = [[UIImageView alloc] initWithFrame:_topHUD.bounds];
+    [topViewBg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
+    [topViewBg setTag:1];
+    [_topHUD addSubview:topViewBg];
     
     _lblName = [[UILabel alloc] initWithFrame:Rect(50,35,kScreenWidth-100,20)];
     [_lblName setTextAlignment:NSTextAlignmentCenter];
@@ -286,11 +295,6 @@
     [_lblName setFont:[UIFont fontWithName:@"Helvetica" size:15.0f]];
     [_lblName setTextColor:[UIColor whiteColor]];
     [_topHUD addSubview:_lblName];
-    
-    UIImageView *topViewBg = [[UIImageView alloc] initWithFrame:_topHUD.bounds];
-    [topViewBg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
-    [topViewBg setTag:1];
-    [_topHUD insertSubview:topViewBg atIndex:0];
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
@@ -355,6 +359,7 @@
     
     _scrollView.contentSize = CGSizeMake(kScreenWidth*4,_scrollView.height);
     _downHUD = [[UIView alloc] initWithFrame:Rect(0, kVideoImageHeight-24, kScreenWidth, 44)];
+    _downHUD.alpha = 0;
     UIImageView *downImg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
     [downImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
     [_downHUD addSubview:downImg];
@@ -581,7 +586,6 @@
     _ffPlay.glView.frame = Rect(0, 0, nWidth, nHeight);
     
     _topHUD.frame = Rect(0, 0, nWidth, 44);
-    
     [_topHUD viewWithTag:1].frame = Rect(0, 0, nWidth, 44);
     [_topHUD viewWithTag:2].frame = Rect(0, 0, 44, 44);
     
@@ -719,8 +723,60 @@
     });
 }
 
+- (void)createPay
+{
+    __weak RoomViewController *__self =self;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
+                                                                   message:@"余额不足" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+        dispatch_async(dispatch_get_main_queue(),
+                       ^{
+                           //如果不再登录房间，取消notification
+                           [__self.view hideToastActivity];
+                       });
+    }];
+    
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"充值" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+    {
+       UITextField *login = alert.textFields.firstObject;
+       if ([login.text length]==0){
+           dispatch_async(dispatch_get_main_queue(),
+                          ^{
+                              [__self.view hideToastActivity];
+                              [__self.view makeToast:@"密码不能为空"];
+                              [__self createAlertController];
+                          });
+       }
+       else
+       {
+           [__self.tcpSocket connectRoomAndPwd:login.text];
+       }
+   }];
+    [alert addAction:canAction];
+    [alert addAction:okAction];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [__self presentViewController:alert animated:YES completion:nil];
+    });
+}
+
+- (void)TradeGiftError:(NSNotification *)notify
+{
+    NSNumber *number = notify.object;
+    if ([number intValue]==202) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ProgressHUD showError:@"余额不足"];
+        });
+    }
+    else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ProgressHUD showError:@"赠送礼物失败"];
+        });
+    }
+}
+
 - (void)addNotification
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(TradeGiftError:) name:MESSAGE_TRADE_GIFT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startPlayThread:) name:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatPriMsg:) name:MESSAGE_ROOM_TO_ME_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatMSg:) name:MESSAGE_ROOM_CHAT_VC object:nil];
@@ -753,7 +809,8 @@
             strName = [parameter objectForKey:@"name"];
             gid = [[parameter objectForKey:@"gitId"] intValue];
             num = [[parameter objectForKey:@"num"] intValue];
-            FloatingView *floatView = [[FloatingView alloc] initWithFrame:Rect(0,selfWeak.group.y+selfWeak.group.height,kScreenWidth, 45) color:__nColor++ name:strName number:num gid:gid];
+            
+            FloatingView *floatView = [[FloatingView alloc] initWithFrame:Rect(0,selfWeak.group.y+selfWeak.group.height,kScreenWidth, 45) color:__nColor++ name:strName number:num gid:gid userid:[[parameter objectForKey:@"userid"] intValue]];
             [selfWeak.view addSubview:floatView];
             [floatView showGift:1.0];
         }
@@ -1299,7 +1356,7 @@
         }
         else if(updateCount==0 && _currentPage ==0)
         {
-
+        
         }
         else//加速
         {}
@@ -1407,7 +1464,8 @@
     switch (nIndex) {
         case 0://显示聊天
         {
-            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+            if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
+                ([_room.nvcbid intValue]==10000 || [_room.nvcbid intValue]==10001)) {
                 _inputView.hidden = !_inputView.hidden;
             }
             else
@@ -1423,10 +1481,16 @@
         break;
         case 2://显示礼物
         {
-            [_giftView updateGoid];
-            [UIView animateWithDuration:0.5 animations:^{
-                [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
-            } completion:^(BOOL finished) {}];
+            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+                [_giftView updateGoid];
+                [UIView animateWithDuration:0.5 animations:^{
+                    [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+                } completion:^(BOOL finished) {}];
+            }
+            else
+            {
+                [self createLoginAlert];
+            }
         }
         break;
         case 3://送玫瑰

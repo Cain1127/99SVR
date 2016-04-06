@@ -8,6 +8,7 @@
 
 #import "RegNameViewController.h"
 #import "QCheckBox.h"
+#import "TextHomeViewController.h"
 #import "RoomViewController.h"
 #import "UserInfo.h"
 #import "LSTcpSocket.h"
@@ -161,6 +162,12 @@
     NSArray *aryIndex = self.navigationController.viewControllers;
     for (UIViewController *control in aryIndex) {
         if ([control isKindOfClass:[RoomViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[TextHomeViewController class]]) {
             [self.navigationController popToViewController:control animated:YES];
             return ;
         }

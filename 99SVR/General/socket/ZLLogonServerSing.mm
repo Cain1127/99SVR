@@ -54,7 +54,9 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
 - (void)updatePwd:(NSString *)old cmd:(NSString *)password
 {
     if (protocol) {
-        protocol->updatePwd([old UTF8String], [password UTF8String]);
+        NSString *strOld = [DecodeJson XCmdMd5String:old];
+        NSString *strMD5 = [DecodeJson XCmdMd5String:password];
+        protocol->updatePwd([strOld UTF8String], [strMD5 UTF8String]);
     }
 }
 
@@ -63,18 +65,17 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     if (protocol) {
         NSData *data = [strNick dataUsingEncoding:GBK_ENCODING];
         NSData *intro = [strintro dataUsingEncoding:GBK_ENCODING];
-        protocol->updateNick((const char *)data.bytes,(const char *)intro.bytes,nSex);
+        char cBuffer[100]={0};
+        char cIntro[100]={0};
+        memcpy(cBuffer, data.bytes, data.length);
+        memcpy(cIntro, intro.bytes, intro.length);
+        protocol->updateNick((const char *)cBuffer,(const char *)cIntro,nSex);
     }
 }
 
 - (void)closeProtocol
 {
-    if(protocol)
-    {
-        protocol->~ZLLogonProtocol();
-        delete protocol;
-        protocol = NULL;
-    }
+    protocol->closeProtocol();
 }
 
 @end

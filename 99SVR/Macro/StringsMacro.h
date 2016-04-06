@@ -21,7 +21,9 @@
 #define kOtherLogin @"otherlogin"
 
 #define kGiftInfo @"SVRGiftInfo"
-
+#define kBannerInfo @"BannerInfo"
+#define kLiveInfo @"kLiveInfo"
+#define kTextList @"kTextListViewInfo"
 #define kVideoList @"VideoListSVR"
 
 #endif /* StringsMacro_h */

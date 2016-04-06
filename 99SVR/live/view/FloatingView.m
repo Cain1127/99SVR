@@ -121,14 +121,14 @@
 //        [selfWeak.layer removeAllAnimations];
 //        [selfWeak removeFromSuperview];
 //    });
-    
-    [UIView animateWithDuration:0.5
+    int nTime = _nNumber/10+1;
+    [UIView animateWithDuration:0.25
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
                          self.alpha = 0.8;
      } completion:^(BOOL finished){
-         [UIView animateWithDuration:0.5 delay:0.25 options:UIViewAnimationOptionCurveEaseIn animations:^{
+         [UIView animateWithDuration:nTime delay:0.25 options:UIViewAnimationOptionCurveEaseIn animations:^{
                               self.alpha = 1.0;
                           } completion:^(BOOL finished) {
                               __weak FloatingView *__self = self;
@@ -140,12 +140,13 @@
     
 }
 
-- (id)initWithFrame:(CGRect)frame color:(int)nColor name:(NSString *)strName number:(int)nNumber gid:(int)ngid
+- (id)initWithFrame:(CGRect)frame color:(int)nColor name:(NSString *)strName number:(int)nNumber gid:(int)ngid userid:(int)nUserid
 {
     self = [super initWithFrame:frame];
     if (self) {
         _strName = strName;
         _nNumber = nNumber;
+        _nUserId = nUserid;
         _nGid = ngid;
         [self setAlpha:0.8];
         UIColor *backColor = nColor%2 == 1 ? UIColorFromRGB(0xfff1dc) : UIColorFromRGB(0xffedbc);
@@ -158,7 +159,7 @@
 - (void)createFloating
 {
     _lblName = [[UILabel alloc] initWithFrame:Rect(0,0,kScreenWidth*0.6,45)];
-    [_lblName setText:_strName];
+    [_lblName setText:[NSString stringWithFormat:@"%@(%d)送",_strName,_nUserId]];
     [_lblName setTextColor:UIColorFromRGB(0xEB6100)];
     [self addSubview:_lblName];
     [_lblName setFont:XCFONT(14)];
@@ -173,7 +174,7 @@
     [_imgGift sd_setImageWithURL:[NSURL URLWithString:strUrl]];
     
     _lblNumber = [[UILabel alloc] initWithFrame:Rect(_imgGift.x+_imgGift.width+10, 0,kScreenWidth-_imgGift.x-_imgGift.width, 45)];
-    [_lblNumber setText:[NSString stringWithFormat:@"%d",_nNumber]];
+    [_lblNumber setText:[NSString stringWithFormat:@"X %d",_nNumber]];
     [self addSubview:_lblNumber];
     [_lblNumber setTextColor:UIColorFromRGB(0xEB6100)];
     [_lblNumber setFont:XCFONT(15)];

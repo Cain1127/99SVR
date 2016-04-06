@@ -11,6 +11,7 @@
 #import "UIImageView+WebCache.h"
 
 @implementation TeachView
+@synthesize lblLine;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -82,15 +83,26 @@
     self.layer.shadowOpacity = 0.8;
     self.layer.shadowRadius = 4;
     
-    UILabel *lblLine = [[UILabel alloc] initWithFrame:Rect(15, _lblCount.y+_lblCount.height+12, kScreenWidth-30, 0.5)];
+    
+    _lblContent= [[UILabel alloc] initWithFrame:Rect(15, _lblCount.y+_lblCount.height+12,kScreenWidth-30,50)];
+    [self addSubview:_lblContent];
+    [_lblContent setTextColor:UIColorFromRGB(0xCBDCF5)];
+    _lblContent.font = XCFONT(12);
+    _lblContent.numberOfLines=0;
+    
+    lblLine = [[UILabel alloc] initWithFrame:Rect(15, _lblContent.y+_lblContent.height+8, kScreenWidth-30, 0.5)];
     [lblLine setBackgroundColor:color];
     [self addSubview:lblLine];
     
-    _lblContent= [[UILabel alloc] initWithFrame:Rect(15, lblLine.y+8,kScreenWidth-30,50)];
-    [self addSubview:_lblContent];
-    [_lblContent setTextColor:UIColorFromRGB(0xffffff)];
-    _lblContent.font = XCFONT(12);
-    _lblContent.numberOfLines=0;
+    _lblHistory = [UILabel new];
+    [self addSubview:_lblHistory];
+    [_lblHistory setTextColor:UIColorFromRGB(0xCBDCF5)];
+    _lblHistory.frame = Rect(15, lblLine.y+8,120,30);
+    [_lblHistory setText:@"历史浏览人数"];
+    
+    _lblHistoryCount = [UILabel new];
+    [_lblHistoryCount setTextColor:UIColorFromRGB(0xffffff)];
+    [self addSubview:_lblHistoryCount];
     
     return self;
 }
@@ -102,7 +114,7 @@
     [_imgHead sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"logo"]];
     _lblFans.text = NSStringFromInt64(model.fans);
     _lblThum.text = NSStringFromInt64(model.zans);
-    _lblCount.text = NSStringFromInt64(model.historymoods);
+    _lblCount.text = NSStringFromInt64(model.todaymoods);
     _lblLabel.text = model.strLabel;
     CGSize sizeLabel = [model.strLabel sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}];
     CGRect labelFrame = _lblLabel.frame;
@@ -114,7 +126,16 @@
                                               context:nil];
     CGRect frame = _lblContent.frame;
     _lblContent.frame = Rect(frame.origin.x, frame.origin.y,kScreenWidth-30,rect.size.height);
-    self.frame = Rect(0, 66, kScreenWidth, _lblContent.y+_lblContent.height+8);
+    
+    lblLine.frame = Rect(15, _lblContent.y+_lblContent.height+8, kScreenWidth-30, 0.5);
+    
+    _lblHistory.frame = Rect(15,lblLine.y+8, 120, 30);
+    
+    [_lblHistoryCount setText:NSStringFromInt64(model.historymoods)];
+    
+    _lblHistoryCount.frame = Rect(_lblHistory.x+_lblHistory.width, _lblHistory.y, 60, 30);
+    
+    self.frame = Rect(0, 66, kScreenWidth, _lblHistoryCount.y+_lblHistoryCount.height+8);
 }
 
 @end

@@ -596,6 +596,8 @@
         case Sub_Vchat_TradeGiftErr:
         {
             DLog(@"赠送礼物返回错误消息!");
+            CMDTradeGiftErr_t *err = (CMDTradeGiftErr_t *)pNewMsg;
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TRADE_GIFT_VC object:@(err->nerrid)];
         }
         break;
         case Sub_Vchat_TradeGiftNotify:
@@ -605,7 +607,7 @@
             NSString *strName = [NSString stringWithCString:record->srcalias encoding:GBK_ENCODING];
             int gitId = record->giftid;
             int number = record->giftnum;
-            NSDictionary *parameters = @{@"name":strName,@"gitId":@(gitId),@"num":@(number)};
+            NSDictionary *parameters = @{@"name":strName,@"gitId":@(gitId),@"num":@(number),@"userid":@(record->srcid)};
             [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:parameters];
         }
         break;
@@ -868,7 +870,7 @@
         {
             strInfo = [NSString stringWithFormat:@" %@ <span style=\"color:#919191\">回复 %@ </span><br>%@",strFrom,strTo,strContent];
         }
-        
+        strInfo = [DecodeJson replaceEmojiNewString:strInfo];
         [self addChatInfo:strInfo];
         NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[UserInfo sharedUserInfo].nUserId];
         //查询是否有对我说的记录
@@ -1152,7 +1154,7 @@
     {
         RoomUser *user = [_rInfo findUser:nUser];
         NSString *strTo = [self getToUser:nUser user:user name:user.m_strUserAlias];
-        NSString *strInfo = [NSString stringWithFormat:@"<span style=\"line-height:5px\"> %@ 回复 %@ </span>%@</span>",strFrom,strTo,strMsg];
+        NSString *strInfo = [NSString stringWithFormat:@"<span style=\"line-height:5px\"> %@ 回复 %@ </span><br>%@</span>",strFrom,strTo,strMsg];
         [self addChatInfo:strInfo];
         [self addPriChatInfo:strInfo];
     }
@@ -1301,7 +1303,7 @@
     if(![UserInfo sharedUserInfo].strRoomAddr)
     {
         __weak UserInfo *__userInfo = [UserInfo sharedUserInfo];
-        [BaseService getJSONWithUrl:LBS_ROOM_GATE parameters:nil success:^(id responseObject)
+        [BaseService get:LBS_ROOM_GATE dictionay:nil timeout:8 success:^(id responseObject)
          {
              NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
              __userInfo.strRoomAddr = strInfo;
@@ -1512,14 +1514,12 @@
 - (void)addChatInfo:(NSString *)strInfo
 {
     SVRMesssage *message = [SVRMesssage message:strInfo];
-    message.text = [DecodeJson replaceEmojiNewString:message.text];
     [_aryChat addObject:message];
 }
 
 - (void)addPriChatInfo:(NSString *)strInfo
 {
     SVRMesssage *message = [SVRMesssage message:strInfo];
-    message.text = [DecodeJson replaceEmojiNewString:message.text];
     [_aryPriChat addObject:message];
 }
 
@@ -1539,11 +1539,11 @@
     req.vcbid = _rInfo.m_nRoomId;
     req.srcid = [UserInfo sharedUserInfo].nUserId;
     int toUserId=0;
-    const char *toUserAlias = NULL;
+    NSData *toUser = nil;
     for (RoomUser *room in _rInfo.aryUser) {
         if ([room isOnMic]) {
             toUserId = room.m_nUserId;
-            toUserAlias = [[room.m_strUserAlias dataUsingEncoding:GBK_ENCODING] bytes];
+            toUser = [room.m_strUserAlias dataUsingEncoding:GBK_ENCODING];
             break;
         }
     }
@@ -1552,22 +1552,19 @@
     }
     req.toid = toUserId;
     req.tovcbid = _rInfo.m_nRoomId;
-    req.totype =0;
     req.giftid = giftId;
     req.giftnum = giftNum;
     req.action = 2;
-    req.servertype = 0;
-    req.banonymous = 0;
-    req.casttype = 1;
     
     strcpy(req.srcvcbname, [[_rInfo.strRoomName dataUsingEncoding:GBK_ENCODING] bytes]);
     strcpy(req.tovcbname,[[_rInfo.strRoomName dataUsingEncoding:GBK_ENCODING] bytes]);
     NSData *data = [[UserInfo sharedUserInfo].strName dataUsingEncoding:GBK_ENCODING];
-    strcpy(req.srcalias,data.bytes);
-    strcpy(req.toalias, toUserAlias);
-    [self sendNewMessage:(char *)&req size:sizeof(CMDTradeGiftRecord_t)
+    strncpy(req.srcalias,data.bytes,data.length);
+    strncpy(req.toalias, toUser.bytes,toUser.length);
+    [self sendMessage:(char *)&req size:sizeof(CMDTradeGiftRecord_t)
                  version:MDM_Version_Value maincmd:MDM_Vchat_Room subcmd:Sub_Vchat_TradeGiftReq];
 }
+
 /**
  *  新发送消息方案,自动匹配长度
  *
@@ -1600,7 +1597,7 @@
 {
     SVRMesssage *message = [[SVRMesssage alloc]init];
     message.messageID = [[NSUUID UUID] UUIDString];
-    message.text      = strInfo;
+    message.text      = [DecodeJson replaceEmojiNewString:strInfo];
     return message;
 }
 

@@ -361,4 +361,37 @@
     [_btnCode setTitle:strInfo forState:UIControlStateNormal];
     nSecond--;
 }
+
+- (void)updatePassword:(NSNotification *)notify
+{
+    int result = [[notify object] intValue];
+    if (result==0) {
+        KUserSingleton.strPwd = _txtNew.text;
+        KUserSingleton.strMd5Pwd = [DecodeJson XCmdMd5String:_txtNew.text];
+        [UserDefaults setObject:_txtNew.text forKey:kUserPwd];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ProgressHUD showSuccess:@"修改成功"];
+             [self.navigationController popViewControllerAnimated:YES];
+        });
+    }
+    else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ProgressHUD showSuccess:@"修改失败"];
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePassword:) name:MESSAGE_UPDATE_PASSWORD_VC object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 @end

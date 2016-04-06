@@ -21,7 +21,8 @@
     [SVRInitLBS loginLocal];
     //获取房间地址
     UserInfo *__userInfo = [UserInfo sharedUserInfo];
-    [BaseService getJSONWithUrl:LBS_ROOM_GATE parameters:nil success:^(id responseObject)
+    DLog(@"LBS_ROOM_GATE:%@",LBS_ROOM_GATE);
+    [BaseService get:LBS_ROOM_GATE dictionay:nil timeout:10 success:^(id responseObject)
     {
         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         __userInfo.strRoomAddr = strInfo;
@@ -48,7 +49,6 @@
 
 + (void)loginLocal
 {
-    
     BOOL isLogin = [UserDefaults boolForKey:kIsLogin];
     KUserSingleton.nUserId = [[UserDefaults objectForKey:kUserId] intValue];
     if (isLogin && [UserDefaults objectForKey:kUserId]!=nil)

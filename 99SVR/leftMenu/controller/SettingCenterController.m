@@ -156,8 +156,7 @@
     else
     {
         
-        _array = @[[EnterModel createContent:@"绑定手机" className:@"BandingMobileViewController"],
-                   [EnterModel createContent:@"关于我们" className:@"AboutController"]];
+        _array = @[[EnterModel createContent:@"关于我们" className:@"AboutController"]];
         
     }
 
@@ -277,9 +276,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.row==0)
-    {
-        
+    if(indexPath.row==0){
+        [self clearCache];
     }
     else if (indexPath.row > 0 && _array.count>indexPath.row-1) {
         EnterModel *model = [_array objectAtIndex:indexPath.row-1];

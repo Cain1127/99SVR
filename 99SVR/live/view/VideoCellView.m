@@ -76,10 +76,9 @@
     
     _roomIdLabel.frame = Rect(_nameLabel.x+_nameLabel.width+2,_nameLabel.y,60,15);
     
-    [_lookCountBtn setFrame:Rect(_imageView.x+_imageView.width-40,
+    [_lookCountBtn setFrame:Rect(_imageView.x+_imageView.width-55,
                             _nameLabel.y,20, 15)];
-    
-    _lookCountLabel.frame = Rect(_imageView.x+_imageView.width - 20 - 5, _nameLabel.y, 20, 15);
+    _lookCountLabel.frame = Rect(_lookCountBtn.x+_lookCountBtn.width+1, _nameLabel.y, 33, 15);
 }
 
 - (void)setRoom:(RoomHttp *)room
@@ -96,7 +95,6 @@
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     _nameLabel.text = room.cname;
-//    [_lookCountBtn setTitle:room.ncount forState:UIControlStateNormal];
     _lookCountLabel.text = room.ncount;
     [_roomIdLabel setText:room.nvcbid];
 }

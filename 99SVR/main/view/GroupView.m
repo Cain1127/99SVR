@@ -37,7 +37,7 @@
         [btn setTitle:title forState:UIControlStateNormal];
         [self addSubview:btn];
         UIColor *titleColor = [UIColor colorWithHex:@"#555555"];
-        UIColor *selectedColor = [UIColor colorWithHex:@"#427ede"];
+        UIColor *selectedColor = [UIColor colorWithHex:@"#0078dd"];
         [btn setTitleColor:titleColor forState:UIControlStateNormal];
         [btn setTitleColor:selectedColor forState:UIControlStateHighlighted];
         [btn setTitleColor:selectedColor forState:UIControlStateSelected];
@@ -49,7 +49,7 @@
     }
     [self addLineHeight];
     UIView *line1 = [UIView new];
-    line1.backgroundColor = UIColorFromRGB(0x629aff);
+    line1.backgroundColor = UIColorFromRGB(0x0078dd);
     [self addSubview:line1];
     _line1 = line1;
     [_line1 setFrame:Rect(width/2-fTempWidth/2,self.height-2,fTempWidth,2)];

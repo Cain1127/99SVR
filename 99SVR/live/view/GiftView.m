@@ -40,7 +40,6 @@
 
 - (void)setGestureHidden
 {
-//    self.hidden = YES;
     [UIView animateWithDuration:0.5 animations:^{
         self.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
     } completion:nil];
@@ -89,6 +88,10 @@
         [singGift addSubview:lblPrice];
         [lblPrice setText:model.price];
         [lblPrice setTextAlignment:NSTextAlignmentCenter];
+        if(i==0)
+        {
+            [self selectView:singGift];
+        }
         __weak GiftView *__self = self;
         [singGift clickWithBlock:^(UIGestureRecognizer *gesture) {
             [__self selectView:gesture.view];

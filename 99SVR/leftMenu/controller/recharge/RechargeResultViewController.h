@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RechargeResultViewController : UIViewController
+@interface RechargeResultViewController : CustomViewController
 /** true:充值成功 false:充值失败 */
 @property(nonatomic,assign) BOOL isRechargeSucceed;
 

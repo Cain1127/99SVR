@@ -90,7 +90,7 @@
     UILabel *nameLabel = [[UILabel alloc] init];
     nameLabel.textColor = [UIColor whiteColor];
     nameLabel.font = kFontSize(15);
-    nameLabel.text = @"ID:1680024";
+    nameLabel.text = [NSString stringWithFormat:@"ID:%d",[UserInfo sharedUserInfo].nUserId];
     [nameLabel setTextAlignment:NSTextAlignmentCenter];
     [headerContentView addSubview:nameLabel];
     

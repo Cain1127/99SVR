@@ -8,7 +8,7 @@
 
 #import "NNSVRViewController.h"
 
-@interface NNSVRViewController ()
+@interface NNSVRViewController ()<UIWebViewDelegate>
 
 @property (nonatomic,strong) UIWebView *webView;
 
@@ -37,6 +37,19 @@
     
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:_strPath]];
     [_webView loadRequest:request];
+}
+
+- (void)dealloc
+{
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
+    DLog(@"dealloc");
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView{
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"WebKitDiskImageCacheEnabled"];//自己添加的，原文没有提到。
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"WebKitOfflineWebApplicationCacheEnabled"];//自己添加的，原文没有提到。
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

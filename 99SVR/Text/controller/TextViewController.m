@@ -48,28 +48,39 @@
     });
 }
 
+- (void)updateTextView:(NSDictionary *)dict
+{
+    __weak TextViewController *__self = self;
+    if (dict && [dict respondsToSelector:@selector(objectForKey:)] && [dict objectForKey:@"groups"])
+    {
+        NSArray *aryResult = [dict objectForKey:@"groups"];
+        for (NSDictionary *roomDict in aryResult)
+        {
+            TextGroupList *groupList = [TextGroupList resultWithDict:roomDict];
+            [__self.aryGroup addObject:groupList];
+        }
+    }
+    dispatch_async(dispatch_get_main_queue(),
+   ^{
+       [__self settingTextGroup];
+       [__self.tableView.gifHeader endRefreshing];
+       [__self.tableView reloadData];
+   });
+}
+
 - (void)initLivingData
 {
      __weak TextViewController *__self = self;
      [BaseService postJSONWithUrl:kTEXT_GROUP_URL parameters:nil success:^(id responseObject)
      {
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if (dict && [dict respondsToSelector:@selector(objectForKey:)] && [dict objectForKey:@"groups"])
-         {
-             NSArray *aryResult = [dict objectForKey:@"groups"];
-             for (NSDictionary *roomDict in aryResult)
-             {
-                 TextGroupList *groupList = [TextGroupList resultWithDict:roomDict];
-                 [__self.aryGroup addObject:groupList];
-             }
-         }
-         dispatch_async(dispatch_get_main_queue(),
-         ^{
-             [__self settingTextGroup];
-             [__self.tableView.gifHeader endRefreshing];
-             [__self.tableView reloadData];
-         });
-     } fail:nil];
+         //kTextList
+         [UserDefaults setObject:dict forKey:kTextList];
+         [__self updateTextView:dict];
+     } fail:^(NSError *error){
+         NSDictionary *dict = [UserDefaults objectForKey:kTextList];
+         [__self updateTextView:dict];
+     }];
 }
 
 - (void)viewDidLoad

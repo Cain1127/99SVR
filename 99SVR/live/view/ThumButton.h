@@ -12,6 +12,7 @@
 
 @property (nonatomic) CGFloat fWidth;
 @property (nonatomic) CGFloat fontSize;
+@property (nonatomic) CGFloat sourceWidth;
 
 - (id)initWithFrame:(CGRect)frame size:(CGFloat)width fontSize:(CGFloat)fFont;
 

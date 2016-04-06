@@ -45,6 +45,9 @@ void ZLPushListener::OnUpdateApp()
 void ZLPushListener::OnMoneyChanged(uint64 money)
 {
     DLog(@"金币更新了");
+    DLog(@"money:%lld",money);
+    [UserInfo sharedUserInfo].goldCoin = money/1000.0f;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
 }
 
 void ZLPushListener::OnBayWindow(BayWindow& info)
@@ -72,6 +75,8 @@ void ZLPushListener::OnRoomTeacherOnMicResp(RoomTeacherOnMicResp &info)
 void ZLHallListener::OnSetUserPwdResp(SetUserPwdResp& info)
 {
     DLog(@"error:%d",info.errorid());
+    int err = info.errorid();
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_PASSWORD_VC object:@(err)];
 }
 
 //*********************************************************
@@ -143,7 +148,7 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
 {
     UserInfo *user = [UserInfo sharedUserInfo];
     user.m_nVipLevel = info.viplevel();
-    user.goldCoin = info.nk()/1000;
+    user.goldCoin = info.nk()/1000.0f;
     user.score = info.nb();
     user.sex = info.ngender();
     user.nUserId = info.userid();
@@ -154,6 +159,7 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
         [UserInfo sharedUserInfo].bIsLogin = YES;
         [UserInfo sharedUserInfo].nType = 2;
         [UserInfo sharedUserInfo].strPwd = @"";
+        [UserDefaults setBool:NO forKey:kIsLogin];
     }
     else
     {
@@ -208,7 +214,7 @@ void ZLLoginListener::OnLogonTokenNotify(SessionTokenResp& info)
  */
 int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd,const char *md5Pwd)
 {
-    if(cloginid == nil)
+    if(cloginid == nil || pwd == nil)
     {
         return 1;
     }

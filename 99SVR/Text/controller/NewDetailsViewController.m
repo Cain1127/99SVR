@@ -97,7 +97,7 @@
     [self initUIHead];
    
     UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50, kScreenWidth,50)];
-    [bodyView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [bodyView setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
     [self.view addSubview:bodyView];
     [bodyView setUserInteractionEnabled:YES];
     
@@ -121,7 +121,7 @@
     [btnEmoji setImage:[UIImage imageNamed:@"Expression"] forState:UIControlStateNormal];
     [btnEmoji setImage:[UIImage imageNamed:@"Expression_t"] forState:UIControlStateHighlighted];
     [whiteView addSubview:btnEmoji];
-    btnEmoji.frame = Rect(whiteView.width-36, 0, 36, 36);
+    btnEmoji.frame = Rect(whiteView.width-40, 0, 40, 40);
     btnEmoji.userInteractionEnabled = NO;
     
     UIButton *btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -321,7 +321,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             UIButton *sender = [contentViewWeak viewWithTag:1008];
             [ProgressHUD showSuccess:@"点赞成功"];
-            [sender setTitle:[NSString stringWithFormat:@"已赞"] forState:UIControlStateNormal];
+            [sender setTitle:[NSString stringWithFormat:@"%d 赞",[_jsonModel.czans intValue]+1] forState:UIControlStateNormal];
             [sender setEnabled:NO];
         });
     }
@@ -449,23 +449,6 @@
 }
 
 /**
- *  超链接组装
- */
-- (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttributedString:(NSAttributedString *)string frame:(CGRect)frame
-{
-    NSDictionary *attributes = [string attributesAtIndex:0 effectiveRange:NULL];
-    NSURL *URL = [attributes objectForKey:DTLinkAttribute];
-    [attributes objectForKey:@"value"];
-    NSString *identifier = [attributes objectForKey:DTGUIDAttribute];
-    DTLinkButton *button = [[DTLinkButton alloc] initWithFrame:frame];
-    button.URL = URL;
-    button.minimumHitSize = CGSizeMake(25, 25);
-    button.GUID = identifier;
-    [button addTarget:self action:@selector(linkPushed:) forControlEvents:UIControlEventTouchUpInside];
-    return button;
-}
-
-/**
  *  超链接点击后的事件
  */
 - (void)linkPushed:(DTLinkButton *)sender
@@ -477,11 +460,17 @@
         if([array[0] rangeOfString:@"sqchatid://"].location != NSNotFound && [array[1] length]>0)
         {
             NSString *strNumber = [sender.URL.absoluteString stringByReplacingOccurrencesOfString:@"sqchatid://" withString:@""];
-            RoomUser *rUser = [[RoomUser alloc] init];
-            rUser.m_strUserAlias = [array[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-            rUser.m_nUserId = [strNumber intValue];
-            _chatView.nDetails = [array[2] intValue];
-            [_chatView setChatInfo:rUser];
+            if([strNumber intValue] == KUserSingleton.nUserId)
+            {
+                [ProgressHUD showError:@"不能对自己回复"];
+            }
+            else {
+                RoomUser *rUser = [[RoomUser alloc] init];
+                rUser.m_strUserAlias = [array[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                rUser.m_nUserId = [strNumber intValue];
+                _chatView.nDetails = [array[2] intValue];
+                [_chatView setChatInfo:rUser];
+            }
         }
     }
 }
@@ -574,12 +563,10 @@
     [_textChat.textStorage insertAttributedString:[NSAttributedString attributedStringWithAttachment:emojiTextAttachment]
                                           atIndex:_textChat.selectedRange.location];
     _textChat.selectedRange = NSMakeRange(_textChat.selectedRange.location + 1, _textChat.selectedRange.length);
-    if ([_textChat.textStorage getPlainString].length==0)
-    {
+    if ([_textChat.textStorage getPlainString].length==0){
         lblPlace.text = @"点此和大家说点什么吧";
     }
-    else
-    {
+    else{
         lblPlace.text = @"";
     }
     [self resetTextStyle];
@@ -606,6 +593,7 @@
                            toid:toId srccom:nDetails];
     textView.text = @"";
     [_chatView setHidden:YES];
+    _chatView.nUserId = 0;
 }
 
 - (void)commentCell:(IdeaDetailRePly *)Reply

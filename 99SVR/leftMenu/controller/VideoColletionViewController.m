@@ -14,9 +14,9 @@
 
 @interface VideoColletionViewController()
 {
-//    UIView *headView;
+    
 }
-
+@property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) RoomListRequest *listReuqest;
 
 @end
@@ -32,7 +32,7 @@
     _headView.backgroundColor = kNavColor;
     UILabel *title;
     title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [title setFont:XCFONT(20)];
+    [title setFont:XCFONT(16)];
     [_headView addSubview:title];
     [title setTextAlignment:NSTextAlignmentCenter];
     [title setTextColor:[UIColor whiteColor]];
@@ -46,7 +46,9 @@
     [self.view addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
     _listReuqest = [[RoomListRequest alloc] init];
-    self.tableView.frame = Rect(0, kNavigationHeight, kScreenWidth, kScreenHeight);
+    
+    self.tableView.frame = Rect(0, 44, kScreenWidth, kScreenHeight-44);
+    
 }
 
 - (void)navBack

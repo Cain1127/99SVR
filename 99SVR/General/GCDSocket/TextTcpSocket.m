@@ -687,6 +687,17 @@
         TextLiveModel *textModel = [[TextLiveModel alloc] initWithNotify:notify];
         [_aryText insertObject:textModel atIndex:0];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
+    }else{
+        char cBuffer[4096] = {0};
+        CMDTextRoomLiveChatRes_t *notify = (CMDTextRoomLiveChatRes_t *)cBuffer;
+        memcpy(notify,resp,84);
+        notify->messagetime = resp->messagetime;
+        notify->textlen = resp->liveflag;
+        notify->commentstype = resp->commentstype;
+        memcpy(notify->content,resp->content+resp->reqtextlen,resp->restextlen);
+        TextChatModel *chatModel = [[TextChatModel alloc] initWithtextChat:notify];
+        [_aryChat addObject:chatModel];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_NEW_CHAT_VC object:nil];
     }
 }
 
@@ -842,7 +853,6 @@
     CMDTextRoomLiveListNoty_t *notify = (CMDTextRoomLiveListNoty_t *)pInfo;
     TextLiveModel *textModel = [[TextLiveModel alloc] initWithNotify:notify];
     [_aryText addObject:textModel];
-    DLog(@"文字直播");
 }
 
 #pragma mark 请求文字直播列表
@@ -1001,7 +1011,6 @@
     }
     DLog(@"strMsg:%@",strMsg);
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_JOIN_ROOM_ERR_VC object:strMsg];
-    
 }
 
 #pragma mark 发送消息
@@ -1089,15 +1098,13 @@
     req.userid = [UserInfo sharedUserInfo].nUserId;
     req.vcbid = _roomid;
     req.coremessagever = _PRODUCT_CORE_MESSAGE_VER_;
-    if(req.userid!=0 && [UserInfo sharedUserInfo].nType == 1 &&
-       [UserInfo sharedUserInfo].strMd5Pwd && [[UserInfo sharedUserInfo].strMd5Pwd length]>0)
-    {
-        strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
-    }
-    else
+    if(req.userid!=0 && [UserInfo sharedUserInfo].nType == 1)
     {
         [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:[UserInfo sharedUserInfo].strPwd];
         strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
+    }
+    else{
+        
     }
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
     
@@ -1305,9 +1312,7 @@
         req->forecastflag = 1;
     }
     else
-    {
-        
-    }
+    {}
     req->livetype = 1;
     req->messagetime = [self getNowTime];
     memcpy(req->content, msgData.bytes, msgData.length);
@@ -1316,12 +1321,17 @@
               maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextRoomLiveMessageReq length:nLength+100];
 }
 
-- (void)exitRoom
+- (void)exitRoomInfo
 {
     CMDUserExitRoomInfo_t req= {0};
     req.userid = kUserInfoId;
     req.vcbid = _roomid;
     [self sendMessage:(char *)&req size:sizeof(CMDUserExitRoomInfo_t) version:MDM_Version_Value maincmd:MDM_Vchat_Text subcmd:Sub_Vchat_TextLiveUserExitReq];
+}
+
+- (void)exitRoom
+{
+    [self exitRoomInfo];
     [self closeSocket];
 }
 

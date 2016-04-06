@@ -24,7 +24,7 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    self.tableView.frame = Rect(0, 0, kScreenWidth, kScreenHeight-158);
+    self.tableView.frame = Rect(0, 0, kScreenWidth, kScreenHeight-152);
     [self.tableView addGifHeaderWithRefreshingBlock:^{
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_INDEX_GET_GROUPLIST_VC object:nil];
     }];

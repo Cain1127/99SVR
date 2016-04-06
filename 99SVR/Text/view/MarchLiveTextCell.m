@@ -11,10 +11,11 @@
 
 
 @implementation MarchLiveTextCell
-
+//- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithReuseIdentifier:reuseIdentifier];
+    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+//    self = [super initWithReuseIdentifier:reuseIdentifier];
     _lblTime = [[UILabel alloc] initWithFrame:Rect(5, 5, kScreenWidth-30, 16)];
     [self.contentView addSubview:_lblTime];
     [_lblTime setTextColor:RGB(128, 128, 128)];
@@ -29,19 +30,20 @@
     _btnThum.titleLabel.font = XCFONT(14);
     [self.contentView addSubview:_btnThum];
     [_btnThum addTarget:self action:@selector(addThum) forControlEvents:UIControlEventTouchUpInside];
-    
+    _textView = [DTAttributedTextView new];
+    [self.contentView addSubview:_textView];
     return self;
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    if (!self.attributedString) {
-        self.attributedTextContextView.frame = CGRectMake(0,0,0,0);
+    if (!self.textView.attributedString) {
+        self.textView.frame = CGRectMake(0,0,0,0);
     } else{
-        self.attributedTextContextView.frame = Rect(0, _lblTime.y+_lblTime.height+5, kScreenWidth, self.contentView.height-66);
+        self.textView.frame = Rect(10, _lblTime.y+_lblTime.height+5, kScreenWidth-20, self.contentView.height-66);
     }
-    _btnThum.frame = Rect(kScreenWidth - 80, self.attributedTextContextView.y+self.attributedTextContextView.height,70, 44);
+    _btnThum.frame = Rect(kScreenWidth - 80, self.textView.attributedTextContentView.y+self.textView.attributedTextContentView.height+20,70, 44);
 }
 
 - (void)addThum
@@ -54,6 +56,7 @@
 
 - (void)setTextModel:(TextLiveModel *)model
 {
+    _strInfo = model.strContent;
     [_lblTime setText:model.strTime];
     if(model.livetype==5)
     {

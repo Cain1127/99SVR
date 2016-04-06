@@ -39,19 +39,23 @@
     _liveflag = teacher->liveflag;
     _fansflag = teacher->fansflag;
     
-    char cLevel[_levellen];
+    char cLevel[_levellen+_levellen];
+    memset(cLevel, 0, _levellen+_levellen);
     memcpy(cLevel,teacher->content,_levellen);
     _strLevel = [NSString stringWithCString:cLevel encoding:GBK_ENCODING];
     
-    char cLabel[_labellen];
+    char cLabel[_labellen+_labellen];
+    memset(cLabel, 0, _labellen*2);
     memcpy(cLabel,teacher->content+_levellen,_labellen);
     _strLabel = [NSString stringWithCString:cLabel encoding:GBK_ENCODING];
     
-    char cGoodat[_goodatlen];
+    char cGoodat[_goodatlen+_goodatlen];
+    memset(cGoodat, 0, _goodatlen*2);
     memcpy(cGoodat,teacher->content+_levellen+_labellen,_goodatlen);
     _strGoodat = [NSString stringWithCString:cGoodat encoding:GBK_ENCODING];
     
-    char cContent[_introducelen];
+    char cContent[_introducelen*2];
+    memset(cContent, 0, _introducelen*2);
     memcpy(cContent,teacher->content+_levellen+_labellen+_goodatlen, _introducelen);
     _strContent = [NSString stringWithCString:cContent encoding:GBK_ENCODING];
     

@@ -230,7 +230,7 @@
         nEnd = [strInfo rangeOfString:@"$]"].location!= NSNotFound ? [strInfo rangeOfString:@"$]"].location :-1;;
         if(nStart == -1 || nEnd == -1)
         {
-            return strInfo;
+            break;
         }
         NSString *strTemp = [strInfo substringWithRange:NSMakeRange(nStart+2,nEnd-nStart-2)];
         strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
@@ -238,6 +238,9 @@
         remainingRange.location = tagRange.location;
         remainingRange.length = [strInfo length]-tagRange.location;
     }
+    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
+    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
+    
     return strInfo;
 }
 
@@ -276,8 +279,8 @@
         }
     }
     
-//    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
-//    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
+    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
+    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
     
     return strInfo;
 }
@@ -309,7 +312,7 @@
     {
         return @"";
     }
-    strInfo = [DecodeJson replaceEmojiString:strInfo];
+    strInfo = [DecodeJson replaceEmojiNewString:strInfo];
     char inner_charStr[12];
     for( int i=0; i<10; i++ )
     {

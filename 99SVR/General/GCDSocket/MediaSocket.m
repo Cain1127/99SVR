@@ -147,7 +147,7 @@ typedef struct _tag_MediaFrameBuffer
     {
         NSString *strPath = [[NSString alloc] initWithFormat:@"http://lbs%d.99ducaijing.cn:2222/tygetmedia?id=%d",_nFall+1,_roomid];
         __weak MediaSocket *__self = self;
-        [BaseService getJSONWithUrl:strPath parameters:nil success:^(id responseObject) {
+        [BaseService get:strPath dictionay:nil timeout:5 success:^(id responseObject) {
             __self.strAddress= [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
             NSString *strAddrInfo = [__self.strAddress componentsSeparatedByString:@","][0];
             if (strAddrInfo && [strAddrInfo rangeOfString:@":"].location != NSNotFound)

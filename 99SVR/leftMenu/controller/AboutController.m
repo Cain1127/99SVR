@@ -7,6 +7,7 @@
 //  关于我们
 
 #import "AboutController.h"
+#import "NNSVRViewController.h"
 
 @interface AboutController()
 {
@@ -35,6 +36,13 @@
     self.view.backgroundColor = RGB(243, 243, 243);
     _logoImageView = [[UIImageView alloc] init];
     [self.view addSubview:_logoImageView];
+    
+    UILabel *lblName = [UILabel new];
+    [lblName setText:@"99乐投"];
+    [self.view addSubview:lblName];
+    [lblName setTextColor:UIColorFromRGB(0x0078DD)];
+    [lblName setFont:XCFONT(16)];
+    
     UILabel *versionLabel = [[UILabel alloc] init];
     versionLabel.font = kFontSize(17);
     versionLabel.textColor = [UIColor colorWithHex:@"#343434"];
@@ -70,16 +78,37 @@
            });
         }
     });
+    UIButton *btnPro = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnPro setTitle:@"使用条款及隐私政策" forState:UIControlStateNormal];
+    [btnPro setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateNormal];
+    [self.view addSubview:btnPro];
+    btnPro.titleLabel.font = XCFONT(14);
+    [btnPro addTarget:self action:@selector(openHttp) forControlEvents:UIControlEventTouchUpInside];
     [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make)
     {
         make.top.equalTo(self.view).offset(108);
         make.centerX.equalTo(self.view);
     }];
-    [versionLabel mas_makeConstraints:^(MASConstraintMaker *make)
-    {
-        make.top.mas_equalTo(_logoImageView.mas_bottom).offset(15);
+    [lblName mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_logoImageView.mas_bottom).offset(15);
         make.centerX.equalTo(self.view);
     }];
+    [versionLabel mas_makeConstraints:^(MASConstraintMaker *make)
+    {
+        make.top.mas_equalTo(_logoImageView.mas_bottom).offset(43);
+        make.centerX.equalTo(self.view);
+    }];
+    [btnPro mas_makeConstraints:^(MASConstraintMaker *make)
+     {
+         make.top.mas_equalTo(self.view.mas_bottom).offset(-50);
+         make.centerX.equalTo(self.view);
+     }];
+}
+
+- (void)openHttp
+{
+    NNSVRViewController *nnView = [[NNSVRViewController alloc] initWithPath:@"http://www.99ducaijing.com/phone/appyhxy.aspx" title:@"使用条款及隐私政策"];
+    [self.navigationController pushViewController:nnView animated:YES];
 }
 
 @end

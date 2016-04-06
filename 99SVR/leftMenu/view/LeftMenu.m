@@ -114,7 +114,6 @@
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的资料" icon:@"mydata.png" goClassName:@"ProfileViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"AssetViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"personal_collection_icon" goClassName:@"VideoColletionViewController"]];
-        
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"关注讲师" icon:@"personal_follow_icon" goClassName:@"TextColletViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的足迹" icon:@"personal_record_icon" goClassName:@"HistoryViewController"]];
     }
@@ -171,7 +170,6 @@
         ProfileViewController *profileVC = [[ProfileViewController alloc] init];
         if ([self.degelate respondsToSelector:@selector(leftMenuDidSeletedAtRow:title:vc:)])
         {
-            
             [self.degelate leftMenuDidSeletedAtRow:0 title:nil vc:profileVC];
         }
         return;

@@ -1794,6 +1794,8 @@ typedef struct tag_CMDTextRoomTeacherNoty
     int64  historyLives;           //直播历史数
     int16  liveflag;               //是否直播中（0-不在线；1-在线）
     int16  fansflag;               //是否已经关注讲师（0-未关注；1-已关注）
+    int16  bstudent;               //是否已经拜师（0-未拜师；1-已拜师）
+    int32   rTeacherLiveRoom;      //房间类型
     char   content[0];             //消息内容，格式：讲师等级+讲师标签+讲师擅长领域（多个以分号分隔）+讲师简介
 }CMDTextRoomTeacherNoty_t;
 

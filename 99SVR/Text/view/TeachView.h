@@ -17,6 +17,9 @@
 @property (nonatomic,strong) UILabel *lblContent;
 @property (nonatomic,strong) UILabel *lblLabel;
 @property (nonatomic,strong) UIImageView *imgHead;
+@property (nonatomic,strong) UILabel *lblHistory;
+@property (nonatomic,strong) UILabel *lblHistoryCount;
+@property (nonatomic,strong) UILabel *lblLine;
 
 - (void)setTeachModel:(TeacherModel *)model;
 

@@ -59,8 +59,6 @@
 -(void)initUIHead
 {
     [self.view setBackgroundColor:RGB(245, 245, 246)];
-    
-    
     UIImageView *bodyView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenWidth*12/25)];
     [self.view addSubview:bodyView];
     bodyView.contentMode = UIViewContentModeScaleAspectFit;
@@ -116,7 +114,7 @@
     [_txtPwd setBackgroundColor:[UIColor clearColor]];
     [_txtPwd setTextColor:UIColorFromRGB(0x343434)];
     
-    UIColor *color = [UIColor grayColor];
+    UIColor *color = UIColorFromRGB(0xB2B2B2);
     _txtUser.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"99账号/手机号码/用户名" attributes:@{NSForegroundColorAttributeName: color}];
     _txtPwd.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入密码" attributes:@{NSForegroundColorAttributeName: color}];
     
@@ -185,11 +183,11 @@
         make.bottom.equalTo(_txtPwd);
     }];
 
-    _btnLogin.frame = Rect(15, _txtPwd.y+_txtPwd.height+20, kScreenWidth-30, 40);
+    _btnLogin.frame = Rect(15, _txtPwd.y+_txtPwd.height+30, kScreenWidth-30, 40);
     _btnFind.titleLabel.font = XCFONT(15);
     _btnRegin.titleLabel.font = XCFONT(15);
-    _btnRegin.frame = Rect(20, kScreenHeight-70, findSize.width, 40);
-    [_btnFind setFrame:Rect(kScreenWidth-findSize.width-20,kScreenHeight-70, findSize.width,40)];
+    _btnRegin.frame = Rect(20, kScreenHeight-50, findSize.width, 40);
+    [_btnFind setFrame:Rect(kScreenWidth-findSize.width-20,kScreenHeight-50, findSize.width,40)];
     
     hidenView = [[UIView alloc] initWithFrame:Rect(0, _btnLogin.y+_btnLogin.height, kScreenWidth,100)];
     [self.view addSubview:hidenView];
@@ -221,7 +219,7 @@
     [hidenView addSubview:btnWeiBo];
     [btnWeiBo setImage:[UIImage imageNamed:@"weibo"] forState:UIControlStateNormal];
     [btnWeiBo setImage:[UIImage imageNamed:@"weibo_h"] forState:UIControlStateHighlighted];
-    btnWeiBo.frame = Rect(kScreenWidth/2-102, 50, 44, 44);
+    btnWeiBo.frame = Rect(kScreenWidth/2+62, 50, 44, 44);
     [btnWeiBo addTarget:self action:@selector(sinaLogin) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *btnWeiChat = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -229,7 +227,7 @@
     [btnWeiChat setImage:[UIImage imageNamed:@"weichat"] forState:UIControlStateNormal];
     [btnWeiChat setImage:[UIImage imageNamed:@"weichat_h"] forState:UIControlStateHighlighted];
     [btnWeiChat addTarget:self action:@selector(weiChatLogin) forControlEvents:UIControlEventTouchUpInside];
-    btnWeiChat.frame = Rect(kScreenWidth/2+62, 50, 44, 44);
+    btnWeiChat.frame = Rect(kScreenWidth/2-102, 50, 44, 44);
     
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(popBack) image:@"back" highImage:@"back"];
     [self.view addSubview:btnLeft];
@@ -353,7 +351,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    DLog(@"frame:%@",NSStringFromCGRect(self.view.bounds));
     [self initUIHead];
     [self initUIBody];
     [self requestLbsSettingServer];
@@ -424,7 +421,6 @@
 - (void)weichat_login:(NSNotification *)notify
 {
     NSDictionary *dict = [notify object];
-    
     __weak LoginViewController *__self = self;
     if (dict && [dict objectForKey:@"errcode"])
     {
@@ -435,7 +431,43 @@
         });
         return ;
     }
- 
+    if (dict && [dict objectForKey:@"code"])
+    {
+        NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByWeixin?client=2&code=%@",kRegisterNumber,[dict objectForKey:@"code"]];
+        __weak LoginViewController *__self = self;
+        __weak UserInfo *__user = [UserInfo sharedUserInfo];
+        [BaseService get:strInfo dictionay:nil timeout:10 success:^(id responseObject)
+         {
+             dispatch_async(dispatch_get_main_queue(),
+             ^{
+                 [__self.view hiddenActivityInView];
+             });
+             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+             if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
+                 [[dict objectForKey:@"token"] isKindOfClass:[NSString class]])
+             {
+                 __user.strOpenId = [dict objectForKey:@"openid"];
+                 __user.strToken = [dict objectForKey:@"token"];
+                 __user.nUserId = [[dict objectForKey:@"userid"] intValue];
+                 __user.otherLogin = [[dict objectForKey:@"type"] intValue];
+                 DLog(@"登录成功");
+                 [ProgressHUD showSuccess:@"微信授权成功"];
+                 [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
+                 [__self performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8.0];
+             }
+             else
+             {
+                [__self.view hideToastActivity];
+                [__self.view makeToast:@"微信登录授权失败"];
+             }
+             
+         }
+         fail:^(NSError *error)
+         {
+                 [__self.view hideToastActivity];
+                 [__self.view makeToast:@"微信登录授权失败"];
+         }];
+    }
 }
 
 #pragma mark 新浪登录响应
@@ -458,7 +490,7 @@
                              kRegisterNumber,[dict objectForKey:@"userID"],[dict objectForKey:@"accessToken"]];
         __weak UserInfo *__user = [UserInfo sharedUserInfo];
         @WeakObj(self)
-        [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject) {
+        [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject) {
            [selfWeak.view hiddenActivityInView];
             NSDictionary *dict = nil;;
             if ([responseObject isKindOfClass:[NSDictionary class]]) {
@@ -564,7 +596,7 @@
         NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByQQ?client=2&openid=%@&token=%@",
                              kRegisterNumber,[_tencentOAuth openId],[_tencentOAuth accessToken]];
         @WeakObj(self)
-        [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
+        [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject)
         {
             UserInfo *__user = [UserInfo sharedUserInfo];
             gcd_main_safe(^{

@@ -164,53 +164,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)joinRoomErr:(NSNotification*)notify
-{
-    __weak FinanceOnlineVedioController *__self =self;
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [NSObject cancelPreviousPerformRequestsWithTarget:__self];
-    });
-    NSString *strMsg = notify.object;
-    if ([strMsg isEqualToString:@"需要输入密码"])
-    {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-            [__self.view hideToastActivity];
-            [__self.view makeToast:@"加入房间失败"];
-        });
-    }
-    else
-    {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        __block NSString *__strMsg = strMsg;
-        dispatch_async(dispatch_get_main_queue(),
-       ^{
-           [__self.view hideToastActivity];
-           [__self.view makeToast:__strMsg];
-       });
-    }
-}
-
-- (void)joinRoomSuc:(NSNotification *)notify
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
-    __weak FinanceOnlineVedioController *__self =self;
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [NSObject cancelPreviousPerformRequestsWithTarget:__self];
-    });
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [__self.view hideToastActivity];
-        RoomViewController *roomView = [[RoomViewController alloc] init];
-//        [self presentViewController:roomView animated:YES completion:nil];
-        [__self.navigationController pushViewController:roomView animated:YES];
-    }); 
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return ((kScreenWidth-36)/2)*10/16+8;
@@ -218,7 +171,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (_videos.count>0)
+    if (_videos.count>1)
     {
         GroupHeaderView *groupBtn = [[GroupHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, kGroupHeight)];
         groupBtn.tag = section;
@@ -247,7 +200,6 @@
          {
              [__self groupClick:groupBtn];
          }];
-        
         return groupBtn;
     }
     return nil;
@@ -255,7 +207,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (_videos.count>0)
+    if (_videos.count>1)
     {
         RoomGroup *roomTemp = _videos[0];
         if (roomTemp.groupList && roomTemp.groupList.count>0)
@@ -267,7 +219,7 @@
             return 1;
         }
     }
-    return 0;
+    return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

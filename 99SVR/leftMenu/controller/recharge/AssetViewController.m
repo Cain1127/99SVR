@@ -23,13 +23,14 @@
  *  @since  v1.0.0
  */
 @property (nonatomic, assign) BOOL isInAppPurchases;
-
-@property (nonatomic,weak) UILabel *titleLable;
-@property (nonatomic,weak) UILabel *amountLabel;
+@property (nonatomic,strong) UILabel *titleLable;
+@property (nonatomic,strong) UILabel *amountLabel;
 
 @end
 
 @implementation AssetViewController
+
+@synthesize amountLabel;
 
 - (void)viewDidLoad
 {
@@ -54,15 +55,15 @@
     titleLable.text = @"玖玖币";
     [self.view addSubview:titleLable];
     
-    UILabel *amountLabel = [[UILabel alloc] init];
+    amountLabel = [[UILabel alloc] init];
     amountLabel.tintColor = UIColorFromRGB(0x555555);
     NSString *strText = [NSString stringWithFormat:@"%.01f币",[UserInfo sharedUserInfo].goldCoin];
     amountLabel.text = strText;
     amountLabel.font = XCFONT(15);
     amountLabel.tintColor = UIColorFromRGB(0x555555);
-    CGSize amountLabelSize = [amountLabel.text sizeMakeWithFont:XCFONT(15)];
-    CGFloat amountLabelX = ScreenWidth - 30 - amountLabelSize.width;
-    amountLabel.frame = Rect(amountLabelX, 80,amountLabelSize.width, 25);
+    CGFloat fWidth = [amountLabel.text sizeMakeWithFont:XCFONT(15)].width+10;
+    CGFloat amountLabelX = ScreenWidth - 30 - fWidth;
+    amountLabel.frame = Rect(amountLabelX, 80,fWidth, 25);
     [self.view addSubview:amountLabel];
     
     [self createLabelWithRect:Rect(30, CGRectGetMaxY(titleLable.frame),80, 1)];
@@ -77,6 +78,20 @@
     rechargeButton.layer.masksToBounds = YES;
     rechargeButton.layer.cornerRadius = 3;
     [rechargeButton addTarget:self action:@selector(rechargeClick) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)refreshGoid
+{
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.amountLabel setText:[NSString stringWithFormat:@"%.01f币",[UserInfo sharedUserInfo].goldCoin]];
+    });
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoid) name:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
 }
 
 - (void)createLabelWithRect:(CGRect)frame

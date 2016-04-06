@@ -26,7 +26,7 @@
     _textlen = resp->textlen;
     _commentstype = resp->commentstype;
     _content = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
-    _content = [DecodeJson replaceEmojiString:_content];
+    _content = [DecodeJson replaceEmojiNewString:_content];
     NSString *strFrom;
     NSString *strTo;
     if (_toid!=0) {

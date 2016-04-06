@@ -73,7 +73,7 @@
     memset(cBuf, 0, _textlen);
     memcpy(cBuf,notify->content,_textlen);
     _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
-    _strContent = [DecodeJson replaceEmojiString:_strContent];
+    _strContent = [DecodeJson replaceEmojiNewString:_strContent];
     DLog(@"_messageid:%zi--strContent:%@--textlen:%d",_messageid,_strContent,_textlen);
 }
 
@@ -124,7 +124,7 @@
             
             _strContent = [NSString stringWithFormat:@"<img src=\"text_live_ask_icon\" width=\"15\" height=\"15\">:%@<br><img src=\"text_live_answer_icon\" width=\"15\" height=\"15\">:%@",
                            strTitle,strDest];
-            _strContent = [DecodeJson replaceEmojiString:_strContent];
+            _strContent = [DecodeJson replaceEmojiNewString:_strContent];
         }
     }
     else if(_livetype==5)
@@ -134,21 +134,19 @@
         memcpy(cTitle, notify->content, _textlen);
         NSStringEncoding GBK = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
         _strContent = [NSString stringWithCString:cTitle encoding:GBK];
-        _strContent = [DecodeJson replaceEmojiString:_strContent];
+        _strContent = [DecodeJson replaceEmojiNewString:_strContent];
         DLog(@"消息回复长度:%d",_textlen);
     }
     else
     {
         _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
-        _strContent = [DecodeJson replaceEmojiString:_strContent];
+        _strContent = [DecodeJson replaceEmojiNewString:_strContent];
     }
-    DLog(@"_messageid:%zi--strContent:%@--textlen:%d",_messageid,_strContent,_textlen);
 }
 
 - (void)settingTime
 {
     UserInfo *userinfo = [UserInfo sharedUserInfo];
-    DLog(@"time:%@",NSStringFromInt64(_messagetime));
     NSDate *date = [userinfo.fmt dateFromString:NSStringFromInt64(_messagetime)];
     _strTime = [NSString stringWithFormat:@"%02d:%02d",date.hour,date.minute];
     

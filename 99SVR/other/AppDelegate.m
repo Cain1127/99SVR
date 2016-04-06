@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import <AlipaySDK/AlipaySDK.h>
 #import "DecodeJson.h"
 #import "GiftModel.h"
 #import <AVFoundation/AVAudioSession.h>
@@ -187,13 +188,25 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];
 }
 
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
+{
+    if ([[url absoluteString] rangeOfString:@"svrAlipay"].location != NSNotFound) {
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+            NSLog(@"result = %@",resultDic);
+        }];
+        return YES;
+    }
+    return [TencentOAuth HandleOpenURL:url] ||
+    [WeiboSDK handleOpenURL:url delegate:self] ||
+    [WXApi handleOpenURL:url delegate:self];
+}
+
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     return [TencentOAuth HandleOpenURL:url] ||
     [WeiboSDK handleOpenURL:url delegate:self] ||
-    [WXApi handleOpenURL:url delegate:self];;
-    return YES;
+    [WXApi handleOpenURL:url delegate:self];
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url

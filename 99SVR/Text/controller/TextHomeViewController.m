@@ -88,6 +88,9 @@
 
 - (void)showTeacherView
 {
+    [_btnTitle setImage:nil forState:UIControlStateNormal];
+    [_btnTitle setImage:nil forState:UIControlStateHighlighted];
+    [self refreshBtnTitle];
     hidenView.hidden = NO;
     _teachView.hidden = NO;
 }
@@ -187,6 +190,11 @@
         __hidnView.hidden = YES;
         __teachView.hidden = YES;
         __self.rightView.hidden = YES;
+        NSString *url = [NSString stringWithFormat:@"%s/headid/%@.png",kGif_Image_URL,__self.model.teacherid];
+        [__self.btnTitle setTitle:__self.model.roomname forState:UIControlStateNormal];
+        [__self.btnTitle sd_setImageWithURL:[NSURL URLWithString:url]
+                             forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"logo"]];
+        [__self refreshBtnTitle];
     }];
     __weak UIView *__hiddenView = hidenView;
     [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture)
@@ -208,14 +216,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(_model)
-    {
-        [_textSocket connectRoom:[_model.nvcbid intValue]];
-    }
-    else
-    {
-        [_textSocket connectRoom:_roomId];
-    }
+
     [self initUIHead];
     UIButton *btnSender = [_group viewWithTag:1];
     [self btnEvent:btnSender];
@@ -326,10 +327,12 @@
        {
            if([__oper isEqualToString:@"关注"])
            {
+               __self.textSocket.teacher.fansflag = 1;
                __rightView.btnFirst.selected = YES;
            }
            else
            {
+               __self.textSocket.teacher.fansflag = 0;
               __rightView.btnFirst.selected = NO;
            }
        }
@@ -343,6 +346,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reconnectTextRoom) name:MESSAGE_RECONNECT_TIMER_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respCollet:) name:MESSAGE_TEXT_COLLET_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showJoinErr:) name:MESSAGE_TEXT_JOIN_ROOM_ERR_VC object:nil];
+    if(_model)
+    {
+        [_textSocket connectRoom:[_model.nvcbid intValue]];
+    }
+    else
+    {
+        [_textSocket connectRoom:_roomId];
+    }
 }
 
 - (void)showJoinErr:(NSNotification *)notify
@@ -408,16 +419,20 @@
             break;
         case 2:
         {
-            TextTodayVPViewController *todayVIP = [[TextTodayVPViewController alloc] initWithSocket:_textSocket];
-            [self.navigationController pushViewController:todayVIP animated:YES];
+            if (_textSocket.teacher.fansflag) {
+                TextTodayVPViewController *todayVIP = [[TextTodayVPViewController alloc] initWithSocket:_textSocket];
+                [self.navigationController pushViewController:todayVIP animated:YES];
+            }else{
+                [ProgressHUD showError:@"请先关注讲师"];
+            }
         }
         break;
-        case 3:
-        {
-            TextHistoryViewController *historyView = [[TextHistoryViewController alloc] initWithSocket:_textSocket];
-            [self presentViewController:historyView animated:YES completion:nil];
-        }
-        break;
+//        case 3:
+//        {
+//            TextHistoryViewController *historyView = [[TextHistoryViewController alloc] initWithSocket:_textSocket];
+//            [self presentViewController:historyView animated:YES completion:nil];
+//        }
+//        break;
         default:
             break;
     }

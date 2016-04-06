@@ -7,7 +7,9 @@
 //  充值结果
 
 #import "RechargeResultViewController.h"
-
+#import "AssetViewController.h"
+#import "ProfileViewController.h"
+#import "RoomViewController.h"
 @interface RechargeResultViewController ()
 
 @end
@@ -36,7 +38,7 @@
     
     // 图标
     UIImageView *iconView = [[UIImageView alloc] init];
-    iconView.frame = CGRectMake(kScreenWidth/2 - 72/2, 50, 72, 72);
+    iconView.frame = CGRectMake(kScreenWidth/2 - 72/2, 114, 72, 72);
     if (_isRechargeSucceed) {
         iconView.image = [UIImage imageNamed:@"register_prompt-icon"];
     } else{
@@ -52,7 +54,7 @@
     if (_isRechargeSucceed) {
         explainLable.text = @"支付成功，请稍后查看金币余额";
     } else {
-        explainLable.text = @"支付失败，由于网络出错原因，请点击重试";
+        explainLable.text = @"充值未成功，请重试一下吧";
     }
     explainLable.textAlignment = NSTextAlignmentCenter;
     [bgView addSubview:explainLable];
@@ -80,8 +82,25 @@
  */
 - (void)checkClick
 {
-    // 当前改为了确定
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self navBack];
+}
+
+- (void)navBack
+{
+    NSArray *aryIndex = self.navigationController.viewControllers;
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[RoomViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+    
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[AssetViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
 }
 
 /**

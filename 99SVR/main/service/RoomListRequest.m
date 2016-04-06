@@ -15,7 +15,7 @@
 - (void)requestRoomByUserId:(int)userId
 {
     NSMutableURLRequest *request= [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%d",kHISTORY_HTTP_URL,userId]]];
+    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%d&client=2",kHISTORY_HTTP_URL,userId]]];
     [request setHTTPMethod:@"POST"];
     [request setTimeoutInterval:10];
     __weak RoomListRequest *__self = self;

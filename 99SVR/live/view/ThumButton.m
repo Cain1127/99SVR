@@ -14,11 +14,25 @@
 {
     if(self= [super initWithFrame:frame])
     {
+        _sourceWidth = width;
         _fWidth = width;
         _fontSize = fFont;
         return self;
     }
     return nil;
+}
+
+- (void)setImage:(UIImage *)image forState:(UIControlState)state
+{
+    [super setImage:image forState:state];
+    if(image==nil)
+    {
+        _fWidth = _sourceWidth/2;
+    }else
+    {
+        _fWidth = _sourceWidth;
+    }
+    
 }
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect

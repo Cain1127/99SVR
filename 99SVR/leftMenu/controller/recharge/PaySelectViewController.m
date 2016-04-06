@@ -32,8 +32,6 @@
     self.txtTitle.text = @"充值";
     
     self.view.backgroundColor = [UIColor whiteColor];
-    // 注册微信支付通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendPayResult:) name:@"WXPAY" object:nil];
     // 加载充值网页
     [self loadWebView];
 }
@@ -43,27 +41,35 @@
     UIWebView *webView = [[UIWebView alloc] init];
     webView.frame = Rect(0, 64, kScreenWidth, kScreenHeight);
     webView.delegate = self;
-    // 伸缩页面至填充整个webView
-    webView.scalesPageToFit = YES;
     self.webView = webView;
     [self.view addSubview:webView];
     
-    // 2.加载网页
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:kPay_URL]];
-    //userid  code client
     UserInfo *info = [UserInfo sharedUserInfo];
     NSString *body = [NSString stringWithFormat: @"userid=%d&code=%@&client=%@",info.nUserId,info.strToken,@"2"];
     [request setHTTPMethod: @"POST"];
     [request setHTTPBody: [body dataUsingEncoding: NSUTF8StringEncoding]];
     [webView loadRequest:request];
-    // 3.加载蒙板
     [self.view makeToastActivity];
+    
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    DLog(@"新的地址:%@",[request.URL absoluteString]);
+    if ([[request.URL absoluteString] rangeOfString:@"Wap_Pay_Success"].location != NSNotFound) {
+        [self jdAndPayunionPayWithResult:YES];
+    }else if([[request.URL absoluteString] rangeOfString:@"Wap_Pay_fail"].location != NSNotFound)
+    {
+        [self jdAndPayunionPayWithResult:NO];
+    }
+    
+    return YES;
 }
 
 #pragma mark - UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    // 删除蒙板
     [self.view hideToastActivity];
     @WeakObj(self);
     JSContext *context = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
@@ -98,33 +104,14 @@
         }
         DLog(@"微信开始充值参数-----%@", param);
     };
-    
-    ///京东支付和银联支付成功
-    context[@"Wap_Pay_Success"] = ^() {
-        DLog(@"----京东支付和银联支付成功----");
-        [selfWeak jdAndPayunionPayWithResult:YES];
-    };
-    
-    ///银联支付
-    context[@"Wap_Pay_Fail"] = ^() {
-        DLog(@"----京东支付和银联支付失败----");
-        NSArray *args = [JSContext currentArguments];
-        if(args.count==0)
-        {
-            [ProgressHUD showError:@"支付失败"];
-            return;
-        }
-        [selfWeak jdAndPayunionPayWithResult:NO];
-    };
-    
 }
 
 #pragma mark -- 京东和银联支付
 - (void)jdAndPayunionPayWithResult:(BOOL)reslut
 {
-
     RechargeResultViewController *rechargeResultVc = [[RechargeResultViewController alloc] init];
     rechargeResultVc.title = reslut ? @"支付成功" : @"支付失败";
+    rechargeResultVc.isRechargeSucceed = reslut;
     // 这里应该还需要一个订单号
     [self.navigationController pushViewController:rechargeResultVc animated:YES];
 
@@ -168,7 +155,7 @@
 - (void)payForAlipay:(NSString *)param
 {
     //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-    NSString *appScheme = @"99svrAlipay";
+    NSString *appScheme = @"svrAlipay";
     __weak PaySelectViewController *__self = self;
     [[AlipaySDK defaultService] payOrder:param fromScheme:appScheme callback:^(NSDictionary *resultDic) {
         NSLog(@"reslut = %@",resultDic);
@@ -180,8 +167,24 @@
     }];
 }
 
-- (void)dealloc {
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendPayResult:) name:@"WXPAY" object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)dealloc {
+    _webView.delegate = nil;
+    [_webView loadHTMLString:@"" baseURL:nil];
+    [_webView stopLoading];
+    [_webView removeFromSuperview];
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
     DLog(@"dealloc");
 }
 @end

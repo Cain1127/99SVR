@@ -18,6 +18,7 @@
 #import "QCheckBox.h"
 #import "DecodeJson.h"
 #import "RegNameViewController.h"
+#import "TextHomeViewController.h"
 
 @interface RegMobileViewController ()<UITextFieldDelegate>
 {
@@ -121,7 +122,7 @@
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     NSString *strInfo = [NSString stringWithFormat:@"%@mapi/getregmsgcode?pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
     __weak RegMobileViewController *__self = self;
-    [BaseService getJSONWithUrl:strInfo parameters:nil success:^(id responseObject)
+    [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject)
      {
          NSDictionary *dict = nil;;
          if ([responseObject isKindOfClass:[NSDictionary class]]) {
@@ -229,6 +230,12 @@
             return ;
         }
     }
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[TextHomeViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -245,19 +252,19 @@
     btnRight.frame = Rect(kScreenWidth-60, 20, 60, 44);
     btnRight.titleLabel.font = XCFONT(13);
     
-    [self createLabelWithRect:Rect(30, 8+kNavigationHeight, 80, 30)];
-    _txtName = [self createTextField:Rect(30, 8+kNavigationHeight, kScreenWidth-60, 30)];
-    [_txtName setPlaceholder:@"请输入手机号码"];
+    [self createLabelWithRect:Rect(10, 8+kNavigationHeight, 80, 30)];
+    _txtName = [self createTextField:Rect(10, 8+kNavigationHeight, kScreenWidth-20, 30)];
     [_txtName setKeyboardType:UIKeyboardTypeNumberPad];
+    UIColor *color = UIColorFromRGB(0xB2B2B2);
+    _txtName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入手机号码" attributes:@{NSForegroundColorAttributeName: color}];
     
-    [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
+    
+    [self createLabelWithRect:Rect(10, _txtName.y+50,80, 30)];
     _txtCode = [self createTextField:Rect(_txtName.x,_txtName.y+50,_txtName.width-100,_txtName.height)];
-    [_txtCode setPlaceholder:@"请输入验证码"];
+    _txtCode.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入验证码" attributes:@{NSForegroundColorAttributeName: color}];
     [_txtCode setKeyboardType:UIKeyboardTypeNumberPad];
     _btnCode = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
-    [_btnCode setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+    [_btnCode setTitleColor:UIColorFromRGB(0x0078dd) forState:UIControlStateNormal];
     [_btnCode setTitleColor:kNavColor forState:UIControlStateHighlighted];
     [_btnCode setTitle:@"获取验证码" forState:UIControlStateNormal];
     [self.view addSubview:_btnCode];
@@ -266,21 +273,18 @@
     _btnCode.titleLabel.font = XCFONT(15);
     _btnCode.layer.masksToBounds = YES;
     _btnCode.layer.cornerRadius = 3;
+    _btnCode.layer.borderColor = [UIColor grayColor].CGColor;
+    _btnCode.layer.borderWidth = 0.5;
     
-    [self createLabelWithRect:Rect(30, _txtCode.y+50, 80, 30)];
+    [self createLabelWithRect:Rect(10, _txtCode.y+50, 80, 30)];
     _txtPwd = [self createTextField:Rect(_txtName.x,_txtCode.y+50,_txtName.width,_txtName.height)];
-    [_txtPwd setPlaceholder:@"请输入密码"];
+    _txtPwd.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入密码" attributes:@{NSForegroundColorAttributeName: color}];
     [_txtPwd setDelegate:self];
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
     
-    _lblError = [[UILabel alloc] initWithFrame:Rect(30, _txtPwd.y+50, kScreenWidth-60, 20)];
-    [_lblError setFont:XCFONT(14)];
-    [_lblError setTextColor:[UIColor redColor]];
-    [self.view addSubview:_lblError];
-    
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, _lblError.y+40,kScreenWidth-60, 40);
+    btnRegister.frame = Rect(10, _txtPwd.y+_txtPwd.height+42,kScreenWidth-20, 40);
     [btnRegister setTitle:@"注册" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
@@ -292,7 +296,7 @@
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
     
     _checkAgree = [[QCheckBox alloc] initWithDelegate:self];
-    _checkAgree.frame = Rect(btnRegister.x, btnRegister.y+btnRegister.height+10,60,30);
+    _checkAgree.frame = Rect(btnRegister.x, btnRegister.y+btnRegister.height+10,45,30);
     [_checkAgree setTitle:@"同意" forState:UIControlStateNormal];
     [_checkAgree setTitleColor:UIColorFromRGB(0x555555) forState:UIControlStateNormal];
     [self.view addSubview:_checkAgree];
@@ -302,8 +306,8 @@
     UIButton *btnPri = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnPro setTitle:@"《用户服务协议》" forState:UIControlStateNormal];
     [btnPri setTitle:@"《隐私权条款》" forState:UIControlStateNormal];
-    [btnPro setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateNormal];
-    [btnPri setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateNormal];
+    [btnPro setTitleColor:UIColorFromRGB(0x0078dd) forState:UIControlStateNormal];
+    [btnPri setTitleColor:UIColorFromRGB(0x0078dd) forState:UIControlStateNormal];
     
     [self.view addSubview:btnPri];
     [self.view addSubview:btnPro];
@@ -313,14 +317,14 @@
     CGSize sizePri = [@"《隐私权条款》" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}];
     btnPro.frame = Rect(_checkAgree.x+_checkAgree.width+2, _checkAgree.y,sizePro.width,30);
     
-    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(btnPro.x+btnPro.width+3, _checkAgree.y,15,30)];
+    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(btnPro.x+btnPro.width, _checkAgree.y,15,30)];
     
     [lblTemp setText:@"和"];
     [lblTemp setFont:XCFONT(14)];
     [lblTemp setTextColor:UIColorFromRGB(0x343434)];
     [self.view addSubview:lblTemp];
     
-    btnPri.frame = Rect(btnPro.x+btnPro.width+18, _checkAgree.y, sizePri.width, 30);
+    btnPri.frame = Rect(btnPro.x+btnPro.width+12, _checkAgree.y, sizePri.width, 30);
     [btnPro addTarget:self action:@selector(openHttpView:) forControlEvents:UIControlEventTouchUpInside];
     [btnPri addTarget:self action:@selector(openHttpView:) forControlEvents:UIControlEventTouchUpInside];
     btnPro.tag = 101;

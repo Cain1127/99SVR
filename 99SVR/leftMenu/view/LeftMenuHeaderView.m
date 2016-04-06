@@ -34,11 +34,15 @@
     {
         [self setBackgroundColor:UIColorFromRGB(0x006dc9)];
         
+        UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(frame.size.width/2-kScreenWidth/2, 21, kScreenWidth,88)];
+        [self addSubview:imgView];
+        [imgView setImage:[UIImage imageNamed:@"left_bg"]];
+        
         _circleLine = [UIView new];
         _circleLine.layer.masksToBounds = YES;
         _circleLine.layer.cornerRadius = (kCircle) / 2;
         _circleLine.layer.borderWidth = 0.5;
-        _circleLine.layer.borderColor = UIColorFromRGB(0xffffff).CGColor;
+        _circleLine.layer.borderColor = UIColorFromRGB(0x2180d0).CGColor;
         [self addSubview:_circleLine];
         
         _avatarImageView = [[UIImageView alloc] init];
@@ -63,7 +67,7 @@
         [_vipLevel setTextAlignment:NSTextAlignmentCenter];
         
         _lineView = [UILabel new];
-        _lineView.backgroundColor = UIColorFromRGB(0x8EB1E2);
+        _lineView.backgroundColor = UIColorFromRGB(0x6EACE0);
         [self addSubview:_lineView];
         
         imageB = [[UIImageView alloc] initWithFrame:Rect(50, 0,18,18)];
@@ -98,7 +102,7 @@
         {
             _nameLabel.text = userInfo.strName;
             
-            NSString *stringGoid = [NSString stringWithFormat:@"%.01f  九九币",userInfo.goldCoin];
+            NSString *stringGoid = [NSString stringWithFormat:@"%.01f 玖玖币",userInfo.goldCoin];
             CGFloat width = [stringGoid sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}].width+10;
             [_vipLevel setText:stringGoid];
             _vipLevel.frame = Rect(kScreenWidth*0.75/2-width/2,_nameLabel.height+_nameLabel.y+5, width,20);
@@ -121,7 +125,7 @@
     _avatarImageView.frame = Rect(6, 6, _circleLine.width-12, _circleLine.height-12);
     _nameLabel.frame = Rect(30, _avatarImageView.height+_avatarImageView.y+15, self.width-60, 20);
     _vipLevel.frame = Rect(30, _nameLabel.height+_nameLabel.y+5, self.width-60, 20);
-    _lineView.frame = Rect(8, self.height-1.5, self.width-24, 1);
+    _lineView.frame = Rect(8, self.height-1.5, self.width-16, 1);
 }
 
 @end

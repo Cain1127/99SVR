@@ -398,24 +398,6 @@
     }
 }
 
-- (void)joinRoomSuc:(NSNotification *)notify
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
-    __weak SearchController *__self =self;
-    dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       [NSObject cancelPreviousPerformRequestsWithTarget:__self];
-                   });
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       [__self.view hideToastActivity];
-                       RoomViewController *roomView = [[RoomViewController alloc] init];
-//                       [__self presentViewController:roomView animated:YES completion:nil];
-                       [__self.navigationController pushViewController:roomView animated:YES];
-                   });
-}
-
 - (BOOL)shouldAutorotate
 {
     return NO;

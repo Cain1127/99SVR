@@ -32,7 +32,7 @@
     _zans = resp->zans;
     _msgid = resp->messageid;
     _strContent = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
-    _strContent = [DecodeJson replaceEmojiString:_strContent];
+    _strContent = [DecodeJson replaceEmojiNewString:_strContent];
 }
 
 @end

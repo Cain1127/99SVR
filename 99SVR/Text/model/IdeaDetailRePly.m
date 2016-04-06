@@ -69,7 +69,7 @@
     }else{
         _strContent = [NSString stringWithFormat:@"<p style=\"line-height:10px\">%@<p>%@</p></p>",strFrom,_strContent];
     }
-    _strContent = [DecodeJson replaceEmojiString:_strContent];
+    _strContent = [DecodeJson replaceEmojiNewString:_strContent];
 }
 
 - (void)setTimeInfo

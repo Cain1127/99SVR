@@ -8,6 +8,7 @@
 
 #import "TextChatViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "LoginViewController.h"
 #import "RoomUser.h"
 #import "TextChatModel.h"
 #import "ChatViewCell.h"
@@ -61,16 +62,13 @@
 
 - (void)initUIBody
 {
-    _tableView = [[UITableView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-159)];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-158)];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     
-    UILabel *line = [[UILabel alloc] initWithFrame:Rect(0, kScreenHeight-159, kScreenWidth, 1)];
-    [self.view addSubview:line];
-    [line setBackgroundColor:kLineColor];
     //聊天框
     
     UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, self.view.height-50, kScreenWidth,50)];
@@ -78,7 +76,7 @@
     [self.view addSubview:bodyView];
     [bodyView setUserInteractionEnabled:YES];
     
-    UIView *whiteView = [[UIView alloc] initWithFrame:Rect(8,8,kScreenWidth-76,36)];
+    UIView *whiteView = [[UIView alloc] initWithFrame:Rect(8,5,kScreenWidth-76,40)];
     [bodyView addSubview:whiteView];
     [whiteView setBackgroundColor:UIColorFromRGB(0xffffff)];
     whiteView.layer.masksToBounds = YES;
@@ -98,7 +96,7 @@
     [btnEmoji setImage:[UIImage imageNamed:@"Expression"] forState:UIControlStateNormal];
     [btnEmoji setImage:[UIImage imageNamed:@"Expression_t"] forState:UIControlStateHighlighted];
     [whiteView addSubview:btnEmoji];
-    btnEmoji.frame = Rect(whiteView.width-36, 0, 36, 36);
+    btnEmoji.frame = Rect(whiteView.width-40, 0, 40, 40);
     btnEmoji.userInteractionEnabled = NO;
     
     UIButton *btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -120,11 +118,23 @@
     _chatView.hidden = YES;
     _chatView.delegate = self;
     
-    @WeakObj(_chatView)
+    @WeakObj(self)
     [bodyView clickWithBlock:^(UIGestureRecognizer *gesture) {
-        _chatViewWeak.hidden = !_chatViewWeak.hidden;
+        [selfWeak showLogin];
     }];
     
+}
+
+- (void)showLogin
+{
+    if( [UserInfo sharedUserInfo].nType == 1 && [UserInfo sharedUserInfo].bIsLogin )
+    {
+        _chatView.hidden = !_chatView.hidden;
+    }
+    else
+    {
+        [self createLoginAlert];
+    }
 }
 
 - (void)viewDidLoad
@@ -253,6 +263,7 @@
 - (void)viewWillAppear:(BOOL)animate
 {
     [super viewWillAppear:animate];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadChat) name:MESSAGE_TEXT_NEW_CHAT_VC object:nil];
 }
 
@@ -283,15 +294,46 @@
 
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser
 {
-    NSString *strContent = [textView.textStorage getPlainString];
-    [_textSocket reqLiveChat:strContent to:nUser toalias:@""];
-    _chatView.hidden = YES;
-    textView.text = @"";
+    if([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
+    {
+        [self createLoginAlert];
+    }
+    else{
+        NSString *strContent = [textView.textStorage getPlainString];
+        [_textSocket reqLiveChat:strContent to:nUser toalias:@""];
+        _chatView.hidden = YES;
+        _chatView.nUserId = 0;
+        textView.text = @"";
+    }
 }
 
 - (void)dealloc
 {
     DLog(@"dealloc");
+}
+
+- (void)createLoginAlert
+{
+    @WeakObj(self)
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
+                                                                   message:@"游客不能互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+    {
+       dispatch_async(dispatch_get_main_queue(),
+       ^{
+           [selfWeak.textSocket exitRoomInfo];
+           LoginViewController *loginView = [[LoginViewController alloc] init];
+           [selfWeak.navigationController pushViewController:loginView animated:YES];
+       });
+    }];
+    [alert addAction:canAction];
+    [alert addAction:okAction];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 @end

@@ -39,7 +39,7 @@
 
 #define kIMAGE_HTTP_HOME_URL @"http://172.16.41.99/images/roompic/"
 
-#define kHISTORY_HTTP_URL @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=history&userid="
+#define kHISTORY_HTTP_URL @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=history&type=footprint&userid="
 
 #define kVideoImageHeight kScreenWidth*9/16
 
@@ -65,6 +65,7 @@
 
 #define kGif_Image_URL "http://admin.99ducaijing.com/Uploads/Picture"
 #define kHome_Banner_URL "http://admin.99ducaijing.com/index.php?m=Api&c=Banner"
+
 #define kHome_LivingList_URL @"http://hall.99ducaijing.cn:8081/mobile/index.php"
 
 #define kBand_mobile_getcode_URL @"http://abc.99ducaijing.com/mapiphone/getmsgcode"
@@ -72,6 +73,7 @@
 #define kBand_mobile_checkcode_URL @"http://abc.99ducaijing.com/mapiphone/checkphonecode"
 
 #define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
+
 #define lbs_status @"http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=2&parameterName=15"
 
 #define kTEXT_NEW_DETAILS_URL @"http://hall.99ducaijing.cn:8081/viewpoint/index.php?s=/Index/getViewPoint/id/"

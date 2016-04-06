@@ -83,16 +83,12 @@
             break;
     }
     [imgView setImage:[UIImage imageNamed:strMsg]];
-    
-    UIImage *image = [UIImage imageNamed:NSStringFromInt(user.m_nHeadId)];
-    if (image)
-    {
-        [imgViewPic setImage:image];
-    }
-    else
-    {
-        [imgViewPic setImage:[UIImage imageNamed:@"defaultHead"]];
-    }
+    char cBuffer[100]={0};
+    sprintf(cBuffer,"%d_1",user.m_nHeadId);
+    NSString *strName = [NSString stringWithUTF8String:cBuffer];
+    NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
+    [imgViewPic sd_setImageWithURL:url1 placeholderImage:[UIImage imageNamed:@"defaultHead_1"]];
+   
     [lblName setText:[NSString stringWithFormat:@"%@ (%d)",user.m_strUserAlias,user.m_nUserId]];
     [lblContent setText:@"这个家伙很懒，什么都没写"];
 }

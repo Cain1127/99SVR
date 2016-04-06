@@ -81,7 +81,7 @@ typedef enum : NSUInteger
     _scrollView.clickItemOperationBlock = ^(NSInteger index) {
          BannerModel *model = [selfWeak.aryBanner objectAtIndex:index];
          DLog(@"type:%@",model.type);
-         if([model.type isEqualToString:@"web"]){
+         if([model.type isEqualToString:@"web"] && model.webUrl!=nil && model.webUrl.length>10){
              NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:model.webUrl title:model.title];
              [selfWeak.navigationController pushViewController:svrView animated:YES];
          }
@@ -142,20 +142,16 @@ typedef enum : NSUInteger
     [self initTableView];
     
     ///添加MJ头部刷新
-    @WeakObj(self);
-    [_tableView addGifHeaderWithRefreshingBlock:^{
-        ///检测当前状态
-        if (cCJHomeRequestTypeDefault < selfWeak.refreshStatus)
-        {
-            return;
-        }
-        ///设置当前状态
-        selfWeak.refreshStatus = cCJHomeRequestTypeRequesting;
-        [selfWeak initData];
-        [selfWeak initLivingData];
-    }];
+    [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [_tableView.gifHeader loadDefaultImg];
     [_tableView.gifHeader beginRefreshing];
+}
+
+- (void)updateRefresh
+{
+    self.refreshStatus = cCJHomeRequestTypeRequesting;
+    [self initData];
+    [self initLivingData];
 }
 
 #pragma mark -
@@ -173,6 +169,24 @@ typedef enum : NSUInteger
     [self leftItemClick];
 }
 
+- (void)updateBannerInfo:(NSDictionary *)dict
+{
+    NSArray *array = [dict objectForKey:@"banner"];
+    if (0 < array.count)
+    {
+        [_aryBanner removeAllObjects];
+    }
+    for (NSDictionary *param in array)
+    {
+        BannerModel *model = [BannerModel resultWithDict:param];
+        [self.aryBanner addObject:model];
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateRefreshStatus:cCJHomeRequestTypeBannerFinish];
+        [self loadImageView];
+    });
+}
+
 #pragma mark -
 #pragma mark - home date init request and analyze
 - (void)initData
@@ -182,38 +196,119 @@ typedef enum : NSUInteger
     [BaseService postJSONWithUrl:strUrl parameters:nil success:^(id responseObject) {
         
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-
         if ([dict objectForKey:@"banner"])
         {
-            NSArray *array = [dict objectForKey:@"banner"];
-            
-            ///判断是否有数据，有新数据，则清除原数据
-            if (0 < array.count)
-            {
-                
-                [selfWeak.aryBanner removeAllObjects];
-                
-            }
-            
-            for (NSDictionary *param in array)
-            {
-                BannerModel *model = [BannerModel resultWithDict:param];
-                [selfWeak.aryBanner addObject:model];
-            }
-            
-            ///返回主线程刷新UI
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [selfWeak updateRefreshStatus:cCJHomeRequestTypeBannerFinish];
-                [selfWeak loadImageView];
-                
-            });
+            [UserDefaults setObject:dict forKey:kBannerInfo];
+            [selfWeak updateBannerInfo:dict];
         }
     } fail:^(NSError *error) {
-        
-        [selfWeak updateRefreshStatus:cCJHomeRequestTypeRequestFail];
-        
+        NSDictionary *dict = [UserDefaults objectForKey:kBannerInfo];
+        [self updateBannerInfo:dict];
     }];
+}
+
+- (void)updateLiveInfo:(NSDictionary *)dict
+{
+    if (!dict)
+    {
+        DLog(@"home list data is null. http API: %@", kHome_LivingList_URL);
+        [self updateRefreshStatus:cCJHomeRequestTypeListFinish];
+        return;
+    }
+    
+    if (0 >= [[dict allKeys] count])
+    {
+        DLog(@"home list data is empty, don't include any data. http API: %@", kHome_LivingList_URL);
+        [self updateRefreshStatus:cCJHomeRequestTypeListFinish];
+        return;
+    }
+    
+    ///reset data model
+    if (self.aryLiving)
+    {
+        [self.aryLiving removeAllObjects];
+    }
+    else
+    {
+        self.aryLiving = [NSMutableArray array];
+    }
+    
+    ///清空原数据
+    [self.aryLiving removeAllObjects];
+    
+    ///check videoroom data
+    if ([dict objectForKey:@"videoroom"])
+    {
+        ///初始化数据模型
+        NSArray *roomHttpDictionaryArray = [dict objectForKey:@"videoroom"];
+        
+        NSMutableArray *roomHttpModelArray = [NSMutableArray array];
+        for (int i = 0; i < [roomHttpDictionaryArray count]; i++) {
+            
+            RoomHttp *roomHttpModel = [RoomHttp resultWithDict:roomHttpDictionaryArray[i]];
+            [roomHttpModelArray addObject:roomHttpModel];
+            
+        }
+        
+        [self.aryLiving addObject:roomHttpModelArray];
+    }
+    else
+    {
+        DLog(@"home list data is not include videoroom data. http API: %@", kHome_LivingList_URL);
+    }
+    
+    ///check textroom data
+    if ([dict objectForKey:@"textroom"])
+    {
+        ///初始化数据模型
+        NSArray *textRoomModelDictionaryArray = [dict objectForKey:@"textroom"];
+        
+        NSMutableArray *textRoomModelArray = [NSMutableArray array];
+        for (int i = 0; i < [textRoomModelDictionaryArray count]; i++) {
+            TextRoomModel *textRoomModel = [TextRoomModel resultWithDict:textRoomModelDictionaryArray[i]];
+            [textRoomModelArray addObject:textRoomModel];
+        }
+        [self.aryLiving addObject:textRoomModelArray];
+    }
+    else
+    {
+        DLog(@"home list data is not include textroom data. http API: %@", kHome_LivingList_URL);
+    }
+    
+    if ([dict objectForKey:@"viewpoint"])
+    {
+        ///初始化数据模型
+        NSArray *wonderfullViewModelDictionaryArray = [dict objectForKey:@"viewpoint"];
+        
+        NSMutableArray *wonderfullViewModelArray = [NSMutableArray array];
+        for (int i = 0; i < [wonderfullViewModelDictionaryArray count]; i++) {
+            
+            WonderfullView *wonderfullViewModel = [WonderfullView resultWithDict:wonderfullViewModelDictionaryArray[i]];
+            [wonderfullViewModelArray addObject:wonderfullViewModel];
+            
+        }
+        
+        [self.aryLiving addObject:wonderfullViewModelArray];
+    }
+    else
+    {
+        DLog(@"home list data is not include viewpoint data. http API: %@", kHome_LivingList_URL);
+    }
+    
+    ///主线程刷新UI
+    if ([NSThread isMainThread])
+    {
+        [self updateRefreshStatus:cCJHomeRequestTypeListFinish];
+        [self.tableView reloadData];
+    }
+    else
+    {
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [selfWeak updateRefreshStatus:cCJHomeRequestTypeListFinish];
+            [selfWeak.tableView reloadData];
+        });
+    }
 }
 
 /**
@@ -225,7 +320,6 @@ typedef enum : NSUInteger
  */
 - (void)initLivingData
 {
-    
     __weak HomeViewController *__self = self;
     [BaseService postJSONWithUrl:kHome_LivingList_URL parameters:nil success:^(id responseObject)
      {
@@ -237,116 +331,11 @@ typedef enum : NSUInteger
              dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          }
          ///check response data
-         if (!dict)
-         {
-             DLog(@"home list data is null. http API: %@", kHome_LivingList_URL);
-             [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
-             return;
-         }
-         
-         if (0 >= [[dict allKeys] count])
-         {
-             DLog(@"home list data is empty, don't include any data. http API: %@", kHome_LivingList_URL);
-             [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
-             return;
-         }
-         
-         ///reset data model
-         if (__self.aryLiving)
-         {
-             [__self.aryLiving removeAllObjects];
-         }
-         else
-         {
-             __self.aryLiving = [NSMutableArray array];
-         }
-         
-         ///清空原数据
-         [__self.aryLiving removeAllObjects];
-         
-         ///check videoroom data
-         if ([dict objectForKey:@"videoroom"])
-         {
-             ///初始化数据模型
-             NSArray *roomHttpDictionaryArray = [dict objectForKey:@"videoroom"];
-             
-             NSMutableArray *roomHttpModelArray = [NSMutableArray array];
-             for (int i = 0; i < [roomHttpDictionaryArray count]; i++) {
-                 
-                 RoomHttp *roomHttpModel = [RoomHttp resultWithDict:roomHttpDictionaryArray[i]];
-                 [roomHttpModelArray addObject:roomHttpModel];
-                 
-             }
-             
-             [__self.aryLiving addObject:roomHttpModelArray];
-         }
-         else
-         {
-             DLog(@"home list data is not include videoroom data. http API: %@", kHome_LivingList_URL);
-         }
-         
-         ///check textroom data
-         if ([dict objectForKey:@"textroom"])
-         {
-             ///初始化数据模型
-             NSArray *textRoomModelDictionaryArray = [dict objectForKey:@"textroom"];
-             
-             NSMutableArray *textRoomModelArray = [NSMutableArray array];
-             for (int i = 0; i < [textRoomModelDictionaryArray count]; i++) {
-                 TextRoomModel *textRoomModel = [TextRoomModel resultWithDict:textRoomModelDictionaryArray[i]];
-                 [textRoomModelArray addObject:textRoomModel];
-             }
-             [__self.aryLiving addObject:textRoomModelArray];
-         }
-         else
-         {
-             DLog(@"home list data is not include textroom data. http API: %@", kHome_LivingList_URL);
-         }
-         
-         if ([dict objectForKey:@"viewpoint"])
-         {
-             ///初始化数据模型
-             NSArray *wonderfullViewModelDictionaryArray = [dict objectForKey:@"viewpoint"];
-             
-             NSMutableArray *wonderfullViewModelArray = [NSMutableArray array];
-             for (int i = 0; i < [wonderfullViewModelDictionaryArray count]; i++) {
-                 
-                 WonderfullView *wonderfullViewModel = [WonderfullView resultWithDict:wonderfullViewModelDictionaryArray[i]];
-                 [wonderfullViewModelArray addObject:wonderfullViewModel];
-                 
-             }
-             
-             [__self.aryLiving addObject:wonderfullViewModelArray];
-         }
-         else
-         {
-             DLog(@"home list data is not include viewpoint data. http API: %@", kHome_LivingList_URL);
-         }
-         
-         ///主线程刷新UI
-         if ([NSThread isMainThread])
-         {
-             
-             [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
-             [__self.tableView reloadData];
-             
-         }
-         else
-         {
-         
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 
-                 [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
-                 [__self.tableView reloadData];
-                 
-             });
-         
-         }
-         
+         [UserDefaults setObject:dict forKey:kLiveInfo];
+         [__self updateLiveInfo:dict];
      } fail:^(NSError *error) {
-         
-         [__self updateRefreshStatus:cCJHomeRequestTypeListFinish];
-         
+         NSDictionary *dict = [UserDefaults objectForKey:kLiveInfo];
+         [__self updateLiveInfo:dict];
      }];
     
 }
@@ -530,7 +519,6 @@ typedef enum : NSUInteger
         tempCell.itemOnClick = ^(RoomHttp *room)
         {
             RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
-//            [selfWeak presentViewController:roomView animated:YES completion:nil];
             [selfWeak.navigationController pushViewController:roomView animated:YES];
         };
         [tempCell setRowDatas:tempArray];

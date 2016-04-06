@@ -49,7 +49,7 @@
     [btnLeft setFrame:Rect(0,20,44,44)];
     
     ///重置一下列表的位置和大小
-    self.tableView.frame = Rect(0, kNavigationHeight, kScreenWidth, kScreenHeight - kNavigationHeight);
+    self.tableView.frame = Rect(0, kNavigationHeight-20, kScreenWidth, kScreenHeight - 44);
     
     [self initHistoryData];
 }
