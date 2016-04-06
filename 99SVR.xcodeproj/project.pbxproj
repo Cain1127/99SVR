@@ -73,6 +73,8 @@
 		18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971141C92971B001B2575 /* CoreMotion.framework */; };
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
 		87D9EE0FC59214DC02EE2C95 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A43875FF97FDC1CA789AE15 /* libPods.a */; };
+		B48591EF1CB4FBD500DAC61F /* AdaptiveWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = B48591EE1CB4FBD500DAC61F /* AdaptiveWebView.m */; };
+		B48591F11CB4FC1E00DAC61F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B48591F01CB4FC1E00DAC61F /* WebKit.framework */; };
 		BB0436811C4E28B800A162A8 /* TomorrowModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436801C4E28B800A162A8 /* TomorrowModel.m */; };
 		BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436831C4E28C500A162A8 /* TodayVIPModel.m */; };
 		BB0436871C4E28E700A162A8 /* TextLiveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436861C4E28E700A162A8 /* TextLiveModel.m */; };
@@ -616,6 +618,9 @@
 		5A43875FF97FDC1CA789AE15 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		852CCF5B274ED41B4EE71D75 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		8D4A66C414F8E52B12645457 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B48591ED1CB4FBD500DAC61F /* AdaptiveWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdaptiveWebView.h; sourceTree = "<group>"; };
+		B48591EE1CB4FBD500DAC61F /* AdaptiveWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdaptiveWebView.m; sourceTree = "<group>"; };
+		B48591F01CB4FC1E00DAC61F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		BB04367F1C4E28B800A162A8 /* TomorrowModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TomorrowModel.h; sourceTree = "<group>"; };
 		BB0436801C4E28B800A162A8 /* TomorrowModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TomorrowModel.m; sourceTree = "<group>"; };
 		BB0436821C4E28C500A162A8 /* TodayVIPModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayVIPModel.h; sourceTree = "<group>"; };
@@ -1238,6 +1243,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B48591F11CB4FC1E00DAC61F /* WebKit.framework in Frameworks */,
 				BB2E24BA1CB04C1400E0B549 /* libmtasdk.a in Frameworks */,
 				188969081CAD828600C7E04E /* StoreKit.framework in Frameworks */,
 				18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */,
@@ -2269,6 +2275,8 @@
 		BB63F56E1C2CC7A300A042E8 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				B48591ED1CB4FBD500DAC61F /* AdaptiveWebView.h */,
+				B48591EE1CB4FBD500DAC61F /* AdaptiveWebView.m */,
 				BB63F56F1C2CC7A300A042E8 /* LoginTextField.h */,
 				BB63F5701C2CC7A300A042E8 /* LoginTextField.m */,
 			);
@@ -2432,6 +2440,7 @@
 		BB9003C01C8D8395007E1C48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B48591F01CB4FC1E00DAC61F /* WebKit.framework */,
 				BB46C5E51CB05316002421F7 /* libDTFoundation.a */,
 				BB2E24B71CB04AEC00E0B549 /* libDTFoundation.a */,
 				BB2E24B51CB048B700E0B549 /* libDTCoreText.a */,
@@ -3004,6 +3013,7 @@
 				BB125B4C1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m in Sources */,
 				BB63F6021C2CC7A300A042E8 /* NSAttributedString+EmojiExtension.m in Sources */,
 				BB63F6231C2CC7A300A042E8 /* IndexViewController.m in Sources */,
+				B48591EF1CB4FBD500DAC61F /* AdaptiveWebView.m in Sources */,
 				BBAB82E41C7049FB00C6AC34 /* ThumButton.m in Sources */,
 				BB63F5DB1C2CC7A300A042E8 /* QCheckBox.m in Sources */,
 				BB6F3AD41C9F86270035EBBE /* TAAbstractDotView.m in Sources */,
@@ -3344,7 +3354,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/**";
