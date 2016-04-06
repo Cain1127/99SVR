@@ -27,6 +27,8 @@
 #import "TextTodayVPViewController.h"
 #import "MyScrollView.h"
 
+
+
 @interface TextHomeViewController ()<UIScrollViewDelegate,RightViewDelegate,GroupDelegate>
 {
     NSInteger _tag;

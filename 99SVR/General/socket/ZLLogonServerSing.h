@@ -37,4 +37,5 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
  *  关闭protocol
  */
 - (void)closeProtocol;
+
 @end
