@@ -8,6 +8,8 @@
 
 #import "RegMobileViewController.h"
 #import "IdeaDetailRePly.h"
+#import "TextTodayVPViewController.h"
+#import "NewDetailsViewController.h"
 #import "RoomViewController.h"
 #import "ZLLogonServerSing.h"
 #import "ProgressHUD.h"
@@ -72,6 +74,10 @@
     if([_password length]==0)
     {
         [ProgressHUD showError:@"密码不能为空"];
+        return ;
+    }
+    if (!_checkAgree.checked) {
+        [ProgressHUD showError:@"必须同意《用户服务协议》和《隐私权条款》"];
         return ;
     }
     [self.view makeToastActivity];
@@ -226,6 +232,18 @@
     NSArray *aryIndex = self.navigationController.viewControllers;
     for (UIViewController *control in aryIndex) {
         if ([control isKindOfClass:[RoomViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[TextTodayVPViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[NewDetailsViewController class]]) {
             [self.navigationController popToViewController:control animated:YES];
             return ;
         }

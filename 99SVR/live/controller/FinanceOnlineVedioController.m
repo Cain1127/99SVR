@@ -70,7 +70,6 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    
     if (_videos.count>0)
     {
         RoomGroup *group = [_videos objectAtIndex:0];
@@ -152,7 +151,6 @@
 - (void)connectRoom:(RoomHttp *)room
 {
     RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
-//    [self presentViewController:roomView animated:YES completion:nil];
     [self.navigationController pushViewController:roomView animated:YES];
 }
 
@@ -173,7 +171,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (_videos.count>1)
+    if (_videos.count>0)
     {
         GroupHeaderView *groupBtn = [[GroupHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, kGroupHeight)];
         groupBtn.tag = section;
@@ -202,6 +200,7 @@
          {
              [__self groupClick:groupBtn];
          }];
+        
         return groupBtn;
     }
     return nil;
@@ -209,7 +208,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (_videos.count>1)
+    if (_videos.count>0)
     {
         RoomGroup *roomTemp = _videos[0];
         if (roomTemp.groupList && roomTemp.groupList.count>0)
@@ -221,7 +220,7 @@
             return 1;
         }
     }
-    return 1;
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

@@ -8,6 +8,8 @@
 
 #import "RegNameViewController.h"
 #import "QCheckBox.h"
+#import "NewDetailsViewController.h"
+#import "TextTodayVPViewController.h"
 #import "TextHomeViewController.h"
 #import "RoomViewController.h"
 #import "UserInfo.h"
@@ -66,6 +68,11 @@
         [ProgressHUD showError:@"密码不能为空"];
         return ;
     }
+    if (!_checkAgree.checked) {
+        [ProgressHUD showError:@"必须同意《用户服务协议》和《隐私权条款》"];
+        return ;
+    }
+    
     _lblError.text = @"";
     [self.view makeToastActivity];
     NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",_username,strDate];
@@ -162,6 +169,18 @@
     NSArray *aryIndex = self.navigationController.viewControllers;
     for (UIViewController *control in aryIndex) {
         if ([control isKindOfClass:[RoomViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[TextTodayVPViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[NewDetailsViewController class]]) {
             [self.navigationController popToViewController:control animated:YES];
             return ;
         }

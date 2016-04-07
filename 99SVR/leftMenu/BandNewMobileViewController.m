@@ -50,10 +50,10 @@
 
 - (void)initView
 {
-    CGRect frame = Rect(30, 50, kScreenWidth-160, 30);
+    CGRect frame = Rect(30, 50+64, kScreenWidth-160, 30);
     
-    [self createLabelWithRect:Rect(30, 20, 80, 30)];
-    _txtName = [self createTextField:Rect(30, 20, kScreenWidth-60, 30)];
+    [self createLabelWithRect:Rect(30, 20+64, 80, 30)];
+    _txtName = [self createTextField:Rect(30, 20+64, kScreenWidth-60, 30)];
     [_txtName setPlaceholder:@"请输入手机号码"];
     [_txtName setKeyboardType:UIKeyboardTypeNumberPad];
     
@@ -89,7 +89,7 @@
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
     btnRegister.frame = Rect(30, _lblError.y+40, kScreenWidth-60, 40);
-    [btnRegister setTitle:@"注册" forState:UIControlStateNormal];
+    [btnRegister setTitle:@"确定" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];

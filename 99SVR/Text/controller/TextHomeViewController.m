@@ -22,6 +22,7 @@
 #import "TextLiveViewController.h"
 #import "Toast+UIView.h"
 #import "TextNewViewController.h"
+#import "LoginViewController.h"
 #import "BaseService.h"
 #import "TextRoomModel.h"
 #import "TextTodayVPViewController.h"
@@ -90,6 +91,7 @@
 
 - (void)showTeacherView
 {
+    [_textSocket reqTeacherInfo];
     [_btnTitle setImage:nil forState:UIControlStateNormal];
     [_btnTitle setImage:nil forState:UIControlStateHighlighted];
     [self refreshBtnTitle];
@@ -348,6 +350,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reconnectTextRoom) name:MESSAGE_RECONNECT_TIMER_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respCollet:) name:MESSAGE_TEXT_COLLET_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showJoinErr:) name:MESSAGE_TEXT_JOIN_ROOM_ERR_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTeacherInfo) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     if(_model)
     {
         [_textSocket connectRoom:[_model.nvcbid intValue]];
@@ -412,12 +415,40 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (void)createLoginAlert
+{
+    @WeakObj(self)
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
+                                                                   message:@"游客无法互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+    {
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+           [selfWeak.textSocket exitRoomInfo];
+           LoginViewController *loginView = [[LoginViewController alloc] init];
+           [selfWeak.navigationController pushViewController:loginView animated:YES];
+        });
+    }];
+    [alert addAction:canAction];
+    [alert addAction:okAction];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak presentViewController:alert animated:YES completion:nil];
+    });
+}
+
 - (void)rightView:(RightView *)rightView index:(NSInteger)nNumber
 {
     switch (nNumber) {
         case 1:
            //关注
-            [self sendCollet];
+            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+                [self sendCollet];
+            }else{
+                [self createLoginAlert];
+            }
             break;
         case 2:
         {

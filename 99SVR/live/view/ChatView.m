@@ -109,7 +109,8 @@
 - (void)sendNewInfo
 {
     if (_nUserId) {
-        _textView.text = [_textView.text stringByReplacingOccurrencesOfString:_strName withString:@""];
+        NSString *strInfo = [_textView.textStorage getPlainString];
+        _textView.text = [strInfo stringByReplacingOccurrencesOfString:_strName withString:@""];
         [_delegate sendMessage:_textView userid:_nUserId reply:_nDetails];
     }
     else{
@@ -120,7 +121,8 @@
 - (void)sendRoomInfo
 {
     if (_nUserId) {
-        _textView.text = [_textView.text stringByReplacingOccurrencesOfString:_strName withString:@""];
+        NSString *strInfo = [_textView.textStorage getPlainString];
+        _textView.text = [strInfo stringByReplacingOccurrencesOfString:_strName withString:@""];
         [_delegate sendMessage:_textView userid:_nUserId];
     }
     else{

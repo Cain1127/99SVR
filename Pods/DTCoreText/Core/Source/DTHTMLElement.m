@@ -782,7 +782,7 @@ NSDictionary *_classesForNames = nil;
         //font-size 只使用一个
 		if ([fontSize isCSSLengthValue])
 		{
-			_fontDescriptor.pointSize = [fontSize pixelSizeOfCSSMeasureRelativeToCurrentTextSize:15 textScale:_textScale];
+            _fontDescriptor.pointSize = 15.0f;
 		}
 	}
 	

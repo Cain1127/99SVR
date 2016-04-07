@@ -7,6 +7,7 @@
 //
 
 #import "RoomDownView.h"
+#import "UIControl+UIControl_XY.h"
 
 @implementation RoomDownView
 
@@ -54,6 +55,7 @@
     _btnUser.tag = 1;
     _btnGift.tag = 2;
     _btnRose.tag = 3;
+    _btnRose.cjr_acceptEventInterval = 2;
 }
 
 - (void)clickIndex:(UIButton *)button

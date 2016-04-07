@@ -98,7 +98,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    return 150;
+    if(_aryNew.count > indexPath.section)
+    {
+        IdeaDetails *idea = [_aryNew objectAtIndex:indexPath.section];
+        CGRect frame = [idea.strContent boundingRectWithSize:CGSizeMake(kScreenWidth-16, 300) options:NSStringDrawingUsesLineFragmentOrigin  attributes:@{NSFontAttributeName:XCFONT(15)} context:nil];
+        return frame.size.height+110;
+    }
+    return 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

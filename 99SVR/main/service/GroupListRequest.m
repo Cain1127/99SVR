@@ -19,7 +19,7 @@
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:kGROUP_REQUEST_HTTP]];
     [request setHTTPMethod:@"POST"];
-    [request setTimeoutInterval:5];
+    [request setTimeoutInterval:15];
     __weak GroupListRequest *__self = self;
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse * response, NSData * data, NSError * connectionError)
     {
@@ -32,7 +32,6 @@
     if (!connectErr && responseCode == 200)
     {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
-        [UserDefaults setObject:dict forKey:kVideoList];
         if (dict)
         {
             NSArray *aryRoom = [self resolveDict:dict];
@@ -46,12 +45,14 @@
     NSString *strMsg = nil;
     if (responseCode>200) {
         int nUserid = [UserInfo sharedUserInfo].nUserId;
-        strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_fail",nUserid];
+        strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_fail_%d",
+                 nUserid,(int)responseCode];
     }
     else
     {
         int nUserid = [UserInfo sharedUserInfo].nUserId;
-        strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_fail",nUserid];
+        strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_fail_%d",
+                 nUserid,(int)responseCode];
     }
     [DecodeJson postPHPServerMsg:strMsg];
     NSDictionary *parameter = [UserDefaults objectForKey:kVideoList];
@@ -65,6 +66,8 @@
 
 - (NSArray *)resolveDict:(NSDictionary *)dict
 {
+    [UserDefaults setObject:dict forKey:kVideoList];
+    [UserDefaults synchronize];
     NSArray *firstArray = [dict objectForKey:@"groups"];
     NSMutableArray *aryRoom = [NSMutableArray array];
     if ([firstArray isKindOfClass:[NSArray class]] && firstArray.count>0)

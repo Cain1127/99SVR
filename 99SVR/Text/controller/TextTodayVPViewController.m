@@ -8,6 +8,8 @@
 
 #import "TextTodayVPViewController.h"
 #import "TextTcpSocket.h"
+#import "LoginViewController.h"
+#import "MarchLiveTextCell.h"
 #import "Toast+UIView.h"
 #import "MJRefresh.h"
 #import "LiveCoreTextCell.h"
@@ -18,7 +20,8 @@
 #import "TextLiveModel.h"
 #import <DTCoreText/DTCoreText.h>
 
-@interface TextTodayVPViewController ()<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate,ThumCellDelagate>
+@interface TextTodayVPViewController ()<UITableViewDelegate,UITableViewDataSource,
+                DTAttributedTextContentViewDelegate,ThumCellDelagate,MarchLiveTextDelegate>
 {
     NSCache *cellCache;
     NSMutableDictionary *dict;
@@ -44,6 +47,7 @@
     [super viewDidLoad];
     [self setTitleText:@"直播重点"];
     [self initUIHead];
+    cellCache = [[NSCache alloc] init];
     dict = [NSMutableDictionary dictionary];
     [self requestPoint];
 }
@@ -67,8 +71,10 @@
     [self.view addSubview:_tableView];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
+    [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(requestInfo)];
     [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(requestMore)];
-    [_tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(requestInfo)];
+    [_tableView setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
+    [_tableView.gifHeader loadDefaultImg];
 }
 
 - (void)requestInfo
@@ -100,28 +106,6 @@
     return _aryLive.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_aryLive.count>indexPath.section)
-    {
-        LiveCoreTextCell *cell = [self tableView:tableView preparedCellForIndexPath:indexPath];
-        return cell;
-    }
-    return nil;
-}
-
-- (void)showImageInfo:(UITapGestureRecognizer *)tapGest
-{
-    UIImageView *imageView = (UIImageView *)tapGest.view;
-    NSMutableArray *aryIndex = [NSMutableArray array];
-    Photo *_photo = [[Photo alloc] init];
-    _photo.nId = 0;
-    _photo.imgName = imageView.image;
-    [aryIndex addObject:_photo];
-    PhotoViewController *photoControl = [[PhotoViewController alloc] initWithArray:aryIndex current:0];
-    [photoControl show];
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 1;
@@ -145,10 +129,19 @@
         {
             [imageView setImage:[UIImage imageNamed:@"text_live_answer_icon"]];
         }
+        else if([attachment.contentURL.absoluteString isEqualToString:@"text_live_notice_icon"])
+        {
+            [imageView setImage:[UIImage imageNamed:@"text_live_notice_icon"]];
+        }
         else
         {
-            [imageView sd_setImageWithURL:attachment.contentURL completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL)
-             {}];
+            @WeakObj(self)
+            [imageView sd_setImageWithURL:attachment.contentURL
+                                completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL)
+             {
+                 MarchLiveTextCell *cell = (MarchLiveTextCell*)attributedTextContentView.superview.superview.superview;
+                 [selfWeak updateTextView:cell url:imageURL changeSize:image.size];
+             }];
         }
         imageView.userInteractionEnabled = YES;
         [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
@@ -161,9 +154,59 @@
         NSString *strName = [attachment.attributes objectForKey:@"value"];
         NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"gif"];
         [imageView sd_setImageWithURL:url1];
+        MarchLiveTextCell *cell = (MarchLiveTextCell*)attributedTextContentView.superview.superview.superview;
+        [cell setNeedsLayout];
         return imageView;
     }
     return nil;
+}
+
+- (void)updateTextView:(MarchLiveTextCell*)text url:(NSURL*)url changeSize:(CGSize)size
+{
+    CGSize imageSize ;
+    if (size.width>kScreenWidth) {
+        imageSize.width = (kScreenWidth-20);
+        CGFloat width = imageSize.width;
+        imageSize.height = size.height/(size.width/width);
+    }
+    else
+    {
+        imageSize = size;
+    }
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"contentURL == %@", url];
+    BOOL didUpdate = NO;
+    for (DTTextAttachment *oneAttachment in [text.textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
+    {
+        if (CGSizeEqualToSize(oneAttachment.originalSize, CGSizeZero))
+        {
+            oneAttachment.originalSize = imageSize;
+            didUpdate = YES;
+        }
+    }
+    if (didUpdate)
+    {
+        //重新加载图片
+        [text.textView relayoutText];
+//        NSString *cacheKey = nil;
+//        cacheKey =[NSString stringWithFormat:@"LiveText-%zi", text.section];
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:text.section];
+//        NSArray *array = [[NSArray alloc] initWithObjects:indexPath, nil];
+        //        [_tableView reloadRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
+        //        [text setNeedsLayout];
+        [_tableView reloadData];
+    }
+}
+
+- (void)showImageInfo:(UITapGestureRecognizer *)tapGest
+{
+    UIImageView *imageView = (UIImageView *)tapGest.view;
+    NSMutableArray *aryIndex = [NSMutableArray array];
+    Photo *_photo = [[Photo alloc] init];
+    _photo.nId = 0;
+    _photo.imgName = imageView.image;
+    [aryIndex addObject:_photo];
+    PhotoViewController *photoControl = [[PhotoViewController alloc] initWithArray:aryIndex current:0];
+    [photoControl show];
 }
 
 - (void)liveCore:(LiveCoreTextCell *)liveCore msgid:(int64_t)messageid
@@ -176,49 +219,83 @@
     liveCore.btnThum.selected = YES;
     [dict setObject:liveCore forKey:NSStringFromInt((int)messageid)];
 }
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    MarchLiveTextCell *cell = [self tableView:tableView marchCellForIndexPath:indexPath];
+    return cell;
+}
 
-- (LiveCoreTextCell *)tableView:(UITableView *)tableView preparedCellForIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    MarchLiveTextCell *cell = [self tableView:tableView marchCellForIndexPath:indexPath];
+    CGFloat height = [cell.textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+86;
+    return height;
+}
+
+- (MarchLiveTextCell *)tableView:(UITableView *)tableView marchCellForIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cacheKey = nil;
     NSString *strInfo = nil;
+    MarchLiveTextCell *cell;
     cacheKey =[NSString stringWithFormat:@"LiveText-%zi", indexPath.section];
-    TextLiveModel *textModel = [_aryLive objectAtIndex:indexPath.section];
-    strInfo = textModel.strContent;
-    LiveCoreTextCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TextLiveIdentifier"];
-    if (cell==nil)
-    {
-        cell = [[LiveCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextLiveIdentifier"];
-    }
-    cell.textCoreView.delegate = self;
-    cell.textCoreView.shouldDrawImages = YES;
-    NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
-    cell.textCoreView.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:nil documentAttributes:nil];
-    
-    UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
-    [selectView setBackgroundColor:[UIColor clearColor]];
-    cell.selectedBackgroundView = selectView;
-   
-//    [cell.lblTime setText:NSStringFromInt64(textModel.messagetime)];
-    cell.section = indexPath.section;
-    
-    [cell setTextModel:textModel];
-    
-    CGFloat fHeight = [cell.textCoreView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
-    [cellCache setObject:NSStringFromFloat(fHeight) forKey:cacheKey];
-    if (textModel.bZan)
-    {
-        [cell.btnThum setTitle:NSStringFromInt64(textModel.zans+1) forState:UIControlStateNormal];
-        cell.btnThum.selected = YES;
+    if (_aryLive.count>indexPath.section) {
+        TextLiveModel *textModel = [_aryLive objectAtIndex:indexPath.section];
+        strInfo = textModel.strContent;
+        cell = [cellCache objectForKey:cacheKey];
+        if (cell==nil)
+        {
+            cell = [[MarchLiveTextCell alloc] initWithReuseIdentifier:@"TextLiveIdentifier"];
+            UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
+            [selectView setBackgroundColor:[UIColor clearColor]];
+            cell.selectedBackgroundView = selectView;
+            [cellCache setObject:cell forKey:cacheKey];
+        }
+        if(![strInfo isEqualToString:cell.strInfo])
+        {
+            cell.textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strInfo dataUsingEncoding:NSUTF8StringEncoding]
+                                                                       documentAttributes:nil];
+            cell.section = indexPath.section;
+            cell.delegate = self;
+            [cell setTextModel:textModel];
+            cell.messageid = textModel.messageid;
+            cell.textView.textDelegate = self;
+        }else{
+            [cell setTextModel:textModel];
+        }
     }
     else
     {
-        [cell.btnThum setTitle:NSStringFromInt64(textModel.zans) forState:UIControlStateNormal];
-        cell.btnThum.selected = NO;
+        cell = [tableView dequeueReusableCellWithIdentifier:@"TextLiveIdentifier"];
+        if (cell==nil) {
+            cell = [[MarchLiveTextCell alloc] initWithReuseIdentifier:@"TextLiveIdentifier"];
+        }
     }
-    cell.messageid = textModel.messageid;
-    cell.delegate = self;
     return cell;
 }
+
+- (void)textLive:(MarchLiveTextCell *)liveCore msgid:(int64_t)messageid
+{
+
+    if (liveCore.btnThum.selected)
+    {
+        return ;
+    }
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+        [_tcpSocket reqZans:messageid];
+        liveCore.btnThum.selected = YES;
+        [dict setObject:liveCore forKey:NSStringFromInt((int)messageid)];
+    }else{
+        [self createLoginAlert];
+    }
+    
+}
+
+
 
 - (void)respTablView
 {
@@ -280,22 +357,34 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    TextLiveModel *model = [_aryLive objectAtIndex:indexPath.section];
-    if (_aryLive.count>indexPath.row)
-    {
-        DTAttributedTextContentView *content = [DTAttributedTextContentView new];
-        content.attributedString = [[NSAttributedString alloc] initWithHTMLData:[model.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
-        CGFloat height = [content suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-80].height;
-        return height+80;
-    }
-    return 0;
-}
 
 - (void)dealloc
 {
     DLog(@"dealloc");
+}
+
+- (void)createLoginAlert
+{
+    @WeakObj(self)
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
+                                                                   message:@"游客无法互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+    {
+       dispatch_async(dispatch_get_main_queue(),
+                      ^{
+                          [selfWeak.tcpSocket exitRoomInfo];
+                          LoginViewController *loginView = [[LoginViewController alloc] init];
+                          [selfWeak.navigationController pushViewController:loginView animated:YES];
+                      });
+    }];
+    [alert addAction:canAction];
+    [alert addAction:okAction];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 @end

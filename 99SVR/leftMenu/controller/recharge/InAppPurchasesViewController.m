@@ -7,10 +7,13 @@
 //
 
 #import "InAppPurchasesViewController.h"
-
+#import "GTMBase64.h"
+#import "IAPHelper.h"
+#import "ProgressHUD.h"
 #import "MJRefresh.h"
 #import "MBProgressHUD.h"
-
+#import "SBJsonWriter.h"
+#import "IAPShare.h"
 #import <StoreKit/StoreKit.h>
 
 ///SKPaymentTransactionObserver
@@ -151,6 +154,8 @@
 
 }
 
+
+
 #pragma mark -
 #pragma mark - SKProductsRequestDelegate
 ///收到产品返回信息
@@ -162,7 +167,7 @@
     if (0 >= productsArray)
     {
         NSLog(@"::::::::::没有商品");
-        
+        [ProgressHUD showError:@"没有此商品"];
         ///停止头部刷新
         [self.purchasesListTableView.header endRefreshing];
         self.isRefreshing = NO;
@@ -176,13 +181,11 @@
     ///打印商品信息
     for (SKProduct *pro in productsArray)
     {
-        
         NSLog(@"%@", [pro description]);
         NSLog(@"%@", [pro localizedTitle]);
         NSLog(@"%@", [pro localizedDescription]);
         NSLog(@"%@", [pro price]);
         NSLog(@"%@", [pro productIdentifier]);
-        
     }
     
     ///将新商品放入数据源
@@ -197,6 +200,63 @@
     
 }
 
+- (void)failedTransaction:(SKPaymentTransaction *)transaction {
+    if(transaction.error.code != SKErrorPaymentCancelled) {
+        NSLog(@"购买失败");
+    } else {
+        NSLog(@"用户取消交易");
+    }
+    [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
+}
+
+-(BOOL)putStringToItunes:(NSData*)iapData type:(BOOL)bFlag
+{
+    //用户购成功的transactionReceipt
+    
+    NSString* encodingStr = [GTMBase64 encodeBase64Data:iapData];
+    NSString *URL;
+    if(bFlag)
+    {
+       URL =@"https://buy.itunes.apple.com/verifyReceipt";
+        
+    }else{
+       URL=@"https://sandbox.itunes.apple.com/verifyReceipt";
+    }
+    
+    //https://buy.itunes.apple.com/verifyReceipt
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];// autorelease];
+    [request setURL:[NSURL URLWithString:URL]];
+    [request setHTTPMethod:@"POST"];
+    //设置contentType
+    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    //设置Content-Length
+    [request setValue:[NSString stringWithFormat:@"%zi", [encodingStr length]] forHTTPHeaderField:@"Content-Length"];
+    
+    NSDictionary* body = [NSDictionary dictionaryWithObjectsAndKeys:encodingStr, @"receipt-data", nil];
+    SBJsonWriter *writer = [SBJsonWriter new];
+    
+    [request setHTTPBody:[[writer stringWithObject:body] dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]];
+    NSHTTPURLResponse *urlResponse=nil;
+    NSError *errorr=nil;
+    NSData *receivedData = [NSURLConnection sendSynchronousRequest:request
+                                                 returningResponse:&urlResponse
+                                                             error:&errorr];
+    
+    //解析
+    NSString *results=[[NSString alloc]initWithBytes:[receivedData bytes] length:[receivedData length] encoding:NSUTF8StringEncoding];
+    NSDictionary *resultDict = [NSJSONSerialization JSONObjectWithData:[results dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableLeaves error:nil];
+    NSLog(@"result:%@",results);
+    if([[resultDict objectForKey:@"status"] intValue]==0){
+        [self.navigationController popViewControllerAnimated:YES];
+        return true;
+    }
+    return false;
+}
+
+- (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue
+{
+    NSLog(@"?????");
+}
 #pragma mark -
 #pragma mark - in app payment delegate
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
@@ -207,23 +267,22 @@
         // 购买完成
         if (transaction.transactionState == SKPaymentTransactionStatePurchased)
         {
-            
-            NSLog(@"::::::::::购买完成：%@", transaction.payment.productIdentifier);
+            [self putStringToItunes:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL]] type:transaction.payment.simulatesAskToBuyInSandbox];
+//            NSLog(@"transaction:%@",transaction.payment);
+//            NSLog(@"transaction:%d",transaction.payment.simulatesAskToBuyInSandbox);
+//            NSLog(@"transaction:%@",transaction);
+//            NSLog(@"transaction:%@",transaction);
             [queue finishTransaction:transaction];
-            
+//            [self.navigationController popViewControllerAnimated:YES];
         }
         else if (transaction.transactionState == SKPaymentTransactionStateFailed)
         {
             
             if (transaction.error.code != SKErrorPaymentCancelled)
             {
-                
-                NSLog(@"::::::::::交易失败：%@", transaction.error.localizedDescription);
-                
+                [self failedTransaction:transaction];
             }
-            
         }
-        
     }
     
     ///隐藏HUD
@@ -231,6 +290,7 @@
     self.isRefreshing = NO;
     
 }
+
 
 #pragma mark -
 #pragma mark - UITableViewDelegate and Datasource
@@ -295,6 +355,10 @@
     ///重新刷新对应下标的rows
     [tableView reloadRowsAtIndexPaths:@[origilIndexPath, newIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 
+}
+
+- (void)dealloc{
+     [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
 }
 
 @end

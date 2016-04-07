@@ -8,6 +8,7 @@
 
 #import "HomeViewController.h"
 #import "ZLTabBar.h"
+#import "DecodeJson.h"
 #import "NNSVRViewController.h"
 #import "TextCell.h"
 #import "NavigationViewController.h"
@@ -336,6 +337,12 @@ typedef enum : NSUInteger
      } fail:^(NSError *error) {
          NSDictionary *dict = [UserDefaults objectForKey:kLiveInfo];
          [__self updateLiveInfo:dict];
+         [UserDefaults setObject:dict forKey:kVideoList];
+         [UserDefaults synchronize];
+         int nUserid = [UserInfo sharedUserInfo].nUserId;
+         NSString *strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_home_fail_%d",
+                            nUserid,(int)error.code];
+         [DecodeJson postPHPServerMsg:strMsg];
      }];
     
 }

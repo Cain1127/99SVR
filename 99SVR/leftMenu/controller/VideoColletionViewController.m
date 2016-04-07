@@ -82,7 +82,7 @@
             [__self reloadData];
         });
     };
-    [_listReuqest requestRoomByUserId:[UserInfo sharedUserInfo].nUserId];
+    [_listReuqest requestColletByUserId:[UserInfo sharedUserInfo].nUserId];
 }
 
 @end

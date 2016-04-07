@@ -11,6 +11,12 @@
 @class TeacherModel;
 
 @interface TextTcpSocket : NSObject
+
+
+@property (nonatomic,assign) BOOL bConnect;
+@property (nonatomic,assign) NSInteger nFall;
+@property (nonatomic,copy) NSString *strAddr;
+@property (nonatomic) int nPort;
 @property (nonatomic,strong) TeacherModel *teacher;
 @property (nonatomic,strong) NSMutableArray *aryText;
 @property (nonatomic,strong) NSMutableArray *aryChat;
@@ -20,6 +26,10 @@
 @property (nonatomic,strong) NSMutableArray *aryHistory;
 @property (nonatomic,strong) NSMutableArray *aryEsoter;
 @property (nonatomic) int32_t roomid;
+/**
+ *  请求讲师信息
+ */
+- (void)reqTeacherInfo;
 
 - (void)reconnectTextRoom;
 

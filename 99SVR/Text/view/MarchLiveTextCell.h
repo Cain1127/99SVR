@@ -26,7 +26,11 @@
 @property (nonatomic) int64_t viewid;
 @property (nonatomic,copy) NSString *strInfo;
 @property (nonatomic,strong) DTAttributedTextView *textView;
+@property (nonatomic,strong) TextLiveModel *model;
+
 - (void)setTextModel:(TextLiveModel *)model;
+
+- (void)setZanInfo;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 
