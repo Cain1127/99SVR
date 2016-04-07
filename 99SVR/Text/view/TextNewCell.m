@@ -76,6 +76,10 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    _lblContent.frame = Rect(_lblTime.x,_lblTitle.y+_lblTitle.height+8, kScreenWidth-16,self.contentView.height-110);
+    _btnObserved.frame = Rect(kScreenWidth/3/2-50,_lblContent.y+_lblContent.height+8, 100, 30);
+    [_btnMsg setFrame:Rect(kScreenWidth/3 + _btnObserved.x,_btnObserved.y,100, 30)];
+    [_btnThum setFrame:Rect(_btnMsg.x+kScreenWidth/3, _btnObserved.y, 100, 30)];
 }
 
 - (void)awakeFromNib

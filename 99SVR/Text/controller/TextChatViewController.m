@@ -122,12 +122,12 @@
     [bodyView clickWithBlock:^(UIGestureRecognizer *gesture) {
         [selfWeak showLogin];
     }];
-    
 }
 
 - (void)showLogin
 {
-    if( [UserInfo sharedUserInfo].nType == 1 && [UserInfo sharedUserInfo].bIsLogin )
+    UserInfo *info = KUserSingleton;
+    if( info.nType == 1 && info.bIsLogin )
     {
         _chatView.hidden = !_chatView.hidden;
     }
@@ -294,17 +294,11 @@
 
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser
 {
-    if([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
-    {
-        [self createLoginAlert];
-    }
-    else{
-        NSString *strContent = [textView.textStorage getPlainString];
-        [_textSocket reqLiveChat:strContent to:nUser toalias:@""];
-        _chatView.hidden = YES;
-        _chatView.nUserId = 0;
-        textView.text = @"";
-    }
+    NSString *strContent = [textView.textStorage getPlainString];
+    [_textSocket reqLiveChat:strContent to:nUser toalias:@""];
+    _chatView.hidden = YES;
+    _chatView.nUserId = 0;
+    textView.text = @"";
 }
 
 - (void)dealloc
@@ -316,7 +310,7 @@
 {
     @WeakObj(self)
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                   message:@"游客不能互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
+                                                                   message:@"游客无法互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
         
     }];

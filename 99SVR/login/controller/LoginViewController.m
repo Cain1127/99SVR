@@ -195,7 +195,6 @@
     if ([UserInfo sharedUserInfo].nStatus) {
         hidenView.hidden = NO;
     }
-    
     UILabel *line = [[UILabel alloc] initWithFrame:Rect(15, 30, kScreenWidth-30, 0.5)];
     [line setBackgroundColor:kLineColor];
     [hidenView addSubview:line];

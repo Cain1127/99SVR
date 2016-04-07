@@ -86,22 +86,11 @@
     _btnCode.layer.masksToBounds = YES;
     _btnCode.layer.cornerRadius = 3;
     frame = Rect(30, _txtCode.y+50, kScreenWidth-60, 20);
-    if (!banding) {
-        [self createLabelWithRect:Rect(30, _txtCode.y+50,80, 30)];
-        _txtPwd = [self createTextField:Rect(_txtCode.x,_txtCode.y+50,_txtName.width,_txtCode.height)];
-        [_txtPwd setPlaceholder:@"请输入密码"];
-        [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
-        frame.origin.y = _txtPwd.y+50;
-    }
-    _lblError = [[UILabel alloc] initWithFrame:frame];
-    [_lblError setFont:XCFONT(14)];
-    [_lblError setTextColor:[UIColor redColor]];
-    [self.view addSubview:_lblError];
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, _lblError.y+40, kScreenWidth-60, 40);
-    [btnRegister setTitle:@"注册" forState:UIControlStateNormal];
+    btnRegister.frame = Rect(30, _btnCode.y+50, kScreenWidth-60, 40);
+    [btnRegister setTitle:@"确定" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
@@ -122,10 +111,7 @@
     {
         [_txtCode resignFirstResponder];
     }
-    else if([_txtPwd isFirstResponder])
-    {
-        [_txtPwd resignFirstResponder];
-    }
+
 }
 
 - (void)dealloc
@@ -154,22 +140,22 @@
 
 - (void)getAuthCode
 {
+    _mobile = _txtName.text;
     if(!banding)
     {
-        _mobile = _txtName.text;
         if (_mobile.length==0)
         {
-            [_lblError setText:@"手机号不能为空"];
+            [ProgressHUD showError:@"手机号不能为空"];
             return ;
         }
         if (_mobile.length!=11)
         {
-            [_lblError setText:@"手机长度错误"];
+            [ProgressHUD showError:@"手机长度错误"];
             return ;
         }
         if(![DecodeJson getSrcMobile:_mobile])
         {
-            [_lblError setText:@"请输入正确的手机号"];
+            [ProgressHUD showError:@"请输入正确的手机号"];
             return ;
         }
     }
@@ -217,14 +203,15 @@
              gcd_main_safe(
              ^{
                 selfWeak.btnCode.enabled = NO;
-                [selfWeak.lblError setText:@"已发送验证码到目标手机"];
+                [ProgressHUD showSuccess:@"已发送验证码到目标手机"];
                 [selfWeak.txtCode becomeFirstResponder];
              });
+             
          }
          else
          {
              gcd_main_safe(^{
-                 [selfWeak.lblError setText:[dict objectForKey:@"errmsg"]];
+                [ProgressHUD showSuccess:[dict objectForKey:@"errmsg"]];
              });
          }
      }
@@ -232,6 +219,7 @@
      {
          [ProgressHUD dismiss];
          gcd_main_safe(^{
+             [ProgressHUD showSuccess:@"请求验证码失败"];
                 [selfWeak.lblError setText:@"请求验证码失败"];
             });
      }];
@@ -294,12 +282,6 @@
             [_lblError setText:@"请输入正确的手机号"];
             return ;
         }
-//        _password = [_txtPwd text];
-//        if([_password length]==0)
-//        {
-//            [_lblError setText:@"必须输入密码才能绑定手机"];
-//            return ;
-//        }
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)

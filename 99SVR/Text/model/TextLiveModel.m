@@ -69,8 +69,8 @@
     _messagetime = notify->messagetime;
     [self settingTime];
     _livetype = notify->livetype;
-    char cBuf[_textlen];
-    memset(cBuf, 0, _textlen);
+    char cBuf[_textlen*2];
+    memset(cBuf, 0, _textlen*2);
     memcpy(cBuf,notify->content,_textlen);
     _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
     _strContent = [DecodeJson replaceEmojiNewString:_strContent];
@@ -122,8 +122,7 @@
             NSString *strTitle = [NSString stringWithCString:cTitle encoding:GBK_ENCODING];
             NSString *strDest = [NSString stringWithCString:cDest encoding:GBK_ENCODING];
             
-            _strContent = [NSString stringWithFormat:@"<img src=\"text_live_ask_icon\" width=\"15\" height=\"15\">:%@<br><img src=\"text_live_answer_icon\" width=\"15\" height=\"15\">:%@",
-                           strTitle,strDest];
+            _strContent = [NSString stringWithFormat:@"<img src=\"text_live_ask_icon\" width=\"15\" height=\"15\"> %@:%@<br><img src=\"text_live_answer_icon\" width=\"15\" height=\"15\"> %@",_strTeacherName,strTitle,strDest];
             _strContent = [DecodeJson replaceEmojiNewString:_strContent];
         }
     }
@@ -131,16 +130,19 @@
     {
         char cTitle[_textlen*2];
         memset(cTitle, 0, _textlen*2);
-        memcpy(cTitle, notify->content, _textlen);
+        strncpy(cTitle,notify->content,notify->textlen);
         NSStringEncoding GBK = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
         _strContent = [NSString stringWithCString:cTitle encoding:GBK];
+        _strContent = [NSString stringWithFormat:@"<img src=\"text_live_notice_icon\" width=\"15\" height=\"15\" >我发表了观点《%@》",_strContent];
         _strContent = [DecodeJson replaceEmojiNewString:_strContent];
-        DLog(@"消息回复长度:%d",_textlen);
     }
     else
     {
         _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
         _strContent = [DecodeJson replaceEmojiNewString:_strContent];
+        while ([_strContent rangeOfString:@"\n"].location != NSNotFound){
+           _strContent = [_strContent stringByReplacingOccurrencesOfString:@"\n" withString:@"<br>"];
+        }
     }
 }
 

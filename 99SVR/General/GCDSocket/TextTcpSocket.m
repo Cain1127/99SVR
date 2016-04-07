@@ -106,6 +106,11 @@
             return ;
         }
             break;
+        case Sub_Vchat_ClientPingResp:
+            if (!_bConnect) {
+                [self joinRoomInfo2];
+            }
+            break;
         case Sub_Vchat_TextRoomJoinRes:
         {
             [self joinRoomSuccess:pNewMsg];
@@ -624,7 +629,7 @@
     req.userid = kUserInfoId;
     req.teacherid = _teacher.teacherid;
     req.viewtypeid = 0;
-    if(!nIndex)
+    if(nIndex==0)
     {
         if(!_aryNew)
         {
@@ -687,18 +692,18 @@
         TextLiveModel *textModel = [[TextLiveModel alloc] initWithNotify:notify];
         [_aryText insertObject:textModel atIndex:0];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
-    }else{
-        char cBuffer[4096] = {0};
-        CMDTextRoomLiveChatRes_t *notify = (CMDTextRoomLiveChatRes_t *)cBuffer;
-        memcpy(notify,resp,84);
-        notify->messagetime = resp->messagetime;
-        notify->textlen = resp->liveflag;
-        notify->commentstype = resp->commentstype;
-        memcpy(notify->content,resp->content+resp->reqtextlen,resp->restextlen);
-        TextChatModel *chatModel = [[TextChatModel alloc] initWithtextChat:notify];
-        [_aryChat addObject:chatModel];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_NEW_CHAT_VC object:nil];
     }
+    char cBuffer[4096] = {0};
+    CMDTextRoomLiveChatRes_t *notify = (CMDTextRoomLiveChatRes_t *)cBuffer;
+    memcpy(notify,resp,84);
+    notify->messagetime = resp->messagetime;
+    notify->textlen = resp->liveflag;
+    notify->commentstype = resp->commentstype;
+    memcpy(notify->content,resp->content+resp->reqtextlen,resp->restextlen);
+    TextChatModel *chatModel = [[TextChatModel alloc] initWithtextChat:notify];
+    [_aryChat addObject:chatModel];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_NEW_CHAT_VC object:nil];
+
 }
 
 #pragma mark 聊天回复请求
@@ -817,10 +822,12 @@
 - (void)respInterestForRes:(char *)pInfo
 {
     CMDTextRoomInterestForRes_t *resp = (CMDTextRoomInterestForRes_t *)pInfo;
-    DLog(@"关注 响应:%d",resp->result);
-    DLog(@"粉丝数:%d",resp->result);
-    NSDictionary *dict = @{@"result":NSStringFromInt(resp->result),@"opertype":NSStringFromInt(resp->optype)};
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_COLLET_VC object:dict];
+    if (resp->userid == [UserInfo sharedUserInfo].nUserId) {
+        DLog(@"关注 响应:%d",resp->result);
+        DLog(@"粉丝数:%d",resp->result);
+        NSDictionary *dict = @{@"result":NSStringFromInt(resp->result),@"opertype":NSStringFromInt(resp->optype)};
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_COLLET_VC object:dict];
+    }
 }
 
 #pragma mark 收到讲师发送的文字直播
@@ -869,9 +876,7 @@
         if(nType==1)
         {
             [_aryText removeAllObjects];
-        }
-        else
-        {
+        }else{
             if(_aryVIP==nil)
             {
                 _aryVIP = [NSMutableArray array];
@@ -900,7 +905,9 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
 }
 
-#pragma mark 请求讲师信息
+/**
+ *  请求讲师信息
+ */
 - (void)reqTeacherInfo
 {
     CMDTextRoomTeacherReq_t req;
@@ -913,12 +920,13 @@
 - (void)joinRoomSuccess:(char *)pInfo
 {
     DLog(@"加入房间成功!");
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
-    __weak TextTcpSocket *__self = self;
-    dispatch_async(dispatch_get_global_queue(0, 0),
-    ^{
-        [__self thread_room];//发送心跳
+    _bConnect = YES;
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSThread cancelPreviousPerformRequestsWithTarget:selfWeak];
     });
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     [self reqTeacherInfo];
 }
 
@@ -950,7 +958,7 @@
     pHead->length = sizeof(COM_MSG_HEADER) + sizeof(CMDClientPing_t);
     pHead->checkcode =0;
     pHead->version = MDM_Version_Value;
-    pHead->maincmd = MDM_Vchat_Text;
+    pHead->maincmd = MDM_Vchat_Room;
     pHead->subcmd = Sub_Vchat_ClientPing;
     memcpy(pHead->content,&req,sizeof(CMDClientPing_t));
     @autoreleasepool {
@@ -963,6 +971,11 @@
 
 - (void)joinRoomError:(char *)pInfo
 {
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSThread cancelPreviousPerformRequestsWithTarget:selfWeak];
+    });
+    
     CMDJoinRoomErr_t *pResp = (CMDJoinRoomErr_t *)pInfo;
     DLog(@"加入错误:%d",pResp->errid);
     NSString *strMsg = nil;
@@ -1114,7 +1127,7 @@
         strcpy(req.cSerial,[uid UTF8String]);
     }
     req.time = (uint32)time(0);
-    req.devtype = 2;
+    req.devtype = 0;
     req.bloginSource = [UserInfo sharedUserInfo].otherLogin;
     req.crc32 = 15;
     uint32 crcval = crc32((void*)&req,sizeof(CMDJoinRoomReq2_t),CRC_MAGIC);
@@ -1151,6 +1164,10 @@
 
 - (void)reconnectTextRoom
 {
+    if(_bConnect)
+    {
+        return ;
+    }
     if (_aryText==nil)
     {
         _aryText = [NSMutableArray array];
@@ -1167,13 +1184,16 @@
     }
     [_aryNew removeAllObjects];
     
-    [self connectTextServer:@"122.13.81.62" port:22706];
-    DLog(@"再次连接");
+    [self connectTextServer:_strAddr port:_nPort];
 }
 
 #pragma mark 连接房间
 - (void)connectRoom:(int32_t)roomId
 {
+    if (_bConnect) {
+        return ;
+    }
+    _nFall = 1;
     _roomid = roomId;
     if (_aryText==nil)
     {
@@ -1189,15 +1209,13 @@
         _aryNew = [NSMutableArray array];
     }
     [_aryNew removeAllObjects];
-    [self closeSocket];
     NSString *strAry = [[UserInfo sharedUserInfo].strTextRoom componentsSeparatedByString:@","][0];
     if (strAry.length>10) {
         NSString *strAddr = [strAry componentsSeparatedByString:@":"][0];
         NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
+        _strAddr = strAddr;
+        _nPort = (int)nPort;
         [self connectTextServer:strAddr port:nPort];
-    }
-    else{
-        
     }
 }
 
@@ -1227,6 +1245,18 @@
     DLog(@"连接成功!");
     [self sendHello:MDM_Vchat_Text];
     [self joinRoomInfo2];
+//    [self reqTeacherInfo];
+    __weak TextTcpSocket *__self = self;
+    dispatch_async(dispatch_get_global_queue(0, 0),
+       ^{
+           [__self thread_room];//发送心跳
+       });
+    [self performSelector:@selector(joinRoomTimeout) withObject:nil afterDelay:3.0];
+}
+
+- (void)joinRoomTimeout
+{
+    [self reqTeacherInfo];
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
@@ -1274,6 +1304,74 @@
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
     DLog(@"关闭连接:%@",err);
+    if (err)
+    {
+        if ([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Connection refused"])
+        {
+            int nUserid = [UserInfo sharedUserInfo].nUserId;
+            NSString *strErrlog =[NSString stringWithFormat:@"ReportItem=IntoRoom&ClientType=3&UserId=%d&ServerIP=%@&Error=text_Connection_refused",
+                                  nUserid,_strAddr];
+            [DecodeJson postPHPServerMsg:strErrlog];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+            [self ReConnectSocket];
+        }
+        else if([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Socket closed byremote peer"])
+        {
+            [self reconnectTextRoom];
+        }
+        else if([err.domain isEqualToString:@"NSPOSIXErrorDomain"] )
+        {
+            
+        }
+    }
+}
+
+- (void)ReConnectSocket
+{
+    if (_nFall>3) {
+        NSString *strErrlog =[NSString stringWithFormat:@"ReportItem=IntoRoom&ClientType=3&UserId=%d&ServerIP=%@&Error=connect_fail_3_time",
+                              [UserInfo sharedUserInfo].nUserId,@"127.0.0.1"];
+        [DecodeJson postPHPServerMsg:strErrlog];
+        return;
+    }
+    if([[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","].count>_nFall)
+    {
+        __weak UserInfo *__userInfo = [UserInfo sharedUserInfo];
+        @WeakObj(self)
+        NSString *strUrl = [NSString stringWithFormat:@"http://lbs%zi.99ducaijing.cn:2222/tygettext",_nFall%2+1];
+        [BaseService get:strUrl dictionay:nil timeout:8 success:^(id responseObject)
+         {
+             NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+             __userInfo.strRoomAddr = strInfo;
+             NSString *strAddr = nil;
+             int nPort = 0;
+             if([[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","].count > _nFall)
+             {
+                 NSString *strInfo = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][_nFall];
+                 strAddr = [strInfo componentsSeparatedByString:@":"][0];
+                 nPort = [[strInfo componentsSeparatedByString:@":"][1] intValue];
+                 selfWeak.strAddr = strAddr;
+                 selfWeak.nPort = nPort;
+                 [selfWeak reconnectTextRoom];
+                 selfWeak.nFall++;
+             }
+         }fail:^(NSError *error)
+         {
+             selfWeak.nFall++;
+             [selfWeak ReConnectSocket];
+         }];
+        _nFall++;
+    }
+    else if([[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","].count > _nFall)
+    {
+        NSString *strAddr = nil;
+        int nPort = 0;
+        NSString *strInfo = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][_nFall];
+        strAddr = [strInfo componentsSeparatedByString:@":"][0];
+        nPort = [[strInfo componentsSeparatedByString:@":"][1] intValue];
+        [self reconnectTextRoom];
+        _nFall++;
+    }
 }
 
 -(int)getSocketHead:(char *)pBuf len:(int)nLen
@@ -1323,6 +1421,7 @@
 
 - (void)exitRoomInfo
 {
+    _bConnect = YES;
     CMDUserExitRoomInfo_t req= {0};
     req.userid = kUserInfoId;
     req.vcbid = _roomid;

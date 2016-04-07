@@ -16,4 +16,6 @@ typedef void(^HistoryBlock)(int status,NSArray *aryHistory,NSArray *aryColl);
 
 - (void)requestRoomByUserId:(int)userId;
 
+- (void)requestColletByUserId:(int)userId;
+
 @end

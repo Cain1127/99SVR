@@ -32,14 +32,14 @@
 #define SVR_LBS_PORT 2222
 
 #define GBK_ENCODING CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
-
+//http://hall.99ducaijing.cn:8081/roomdata/room.php?act=history&userid=1765152&client=2
 #define kGROUP_REQUEST_HTTP @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=roomdata&client=android"
 
 #define kIMAGE_HTTP_URL @"http://roompic.99ducaijing.cn:8081/"
 
 #define kIMAGE_HTTP_HOME_URL @"http://172.16.41.99/images/roompic/"
 
-#define kHISTORY_HTTP_URL @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=history&type=footprint&userid="
+#define kHISTORY_HTTP_URL @"http://hall.99ducaijing.cn:8081/roomdata/room2.php?act=history&client=2&userid="
 
 #define kVideoImageHeight kScreenWidth*9/16
 
@@ -68,13 +68,13 @@
 
 #define kHome_LivingList_URL @"http://hall.99ducaijing.cn:8081/mobile/index.php"
 
-#define kBand_mobile_getcode_URL @"http://abc.99ducaijing.com/mapiphone/getmsgcode"
-#define kBand_mobile_setphone_URL @"http://abc.99ducaijing.com/mapiphone/setphone"
-#define kBand_mobile_checkcode_URL @"http://abc.99ducaijing.com/mapiphone/checkphonecode"
+#define kBand_mobile_getcode_URL @"http://api.99ducaijing.com/mapiphone/getmsgcode"
+#define kBand_mobile_setphone_URL @"http://api.99ducaijing.com/mapiphone/setphone"
+#define kBand_mobile_checkcode_URL @"http://api.99ducaijing.com/mapiphone/checkphonecode"
 
 #define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
 
-#define lbs_status @"http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=2&parameterName=15"
+#define lbs_status @"http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=2&parameterName=132"
 
 #define kTEXT_NEW_DETAILS_URL @"http://hall.99ducaijing.cn:8081/viewpoint/index.php?s=/Index/getViewPoint/id/"
 

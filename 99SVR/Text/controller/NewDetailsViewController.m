@@ -8,6 +8,7 @@
 
 #import "NewDetailsViewController.h"
 #import "TextTcpSocket.h"
+#import "LoginViewController.h"
 #import "Photo.h"
 #import "PhotoViewController.h"
 #import "Toast+UIView.h"
@@ -143,10 +144,21 @@
     _chatView.hidden = YES;
     _chatView.delegate = self;
     
-    @WeakObj(_chatView)
+    @WeakObj(self)
     [bodyView clickWithBlock:^(UIGestureRecognizer *gesture) {
-        _chatViewWeak.hidden = !_chatViewWeak.hidden;
+        [selfWeak showChatInfo];
     }];
+}
+
+- (void)showChatInfo
+{
+    UserInfo *info = KUserSingleton;
+    if(info.nType == 1 && info.bIsLogin)
+    {
+        _chatView.hidden = NO;
+    }else{
+        [self createLoginAlert];
+    }
 }
 
 - (void)MarchBackLeft
@@ -292,10 +304,39 @@
 
 - (void)zanViewDeatails
 {
-    [self performSelector:@selector(zanFailInfo) withObject:nil afterDelay:5.0];
-    [self.view makeToastActivity];
-    
-    [_tcpSocket reqCommentZan:[_jsonModel.viewid integerValue]];
+    UserInfo *info = KUserSingleton;
+    if(info.nType == 1 && info.bIsLogin)
+    {
+        [self performSelector:@selector(zanFailInfo) withObject:nil afterDelay:5.0];
+        [self.view makeToastActivity];
+        [_tcpSocket reqCommentZan:[_jsonModel.viewid integerValue]];
+    }else{
+        [self createLoginAlert];
+    }
+}
+
+- (void)createLoginAlert
+{
+    @WeakObj(self)
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
+                                                                   message:@"游客无法互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+        
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+    {
+       dispatch_async(dispatch_get_main_queue(),
+       ^{
+          [selfWeak.tcpSocket exitRoomInfo];
+          LoginViewController *loginView = [[LoginViewController alloc] init];
+          [selfWeak.navigationController pushViewController:loginView animated:YES];
+       });
+    }];
+    [alert addAction:canAction];
+    [alert addAction:okAction];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 - (void)zanFailInfo
@@ -501,6 +542,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.tcpSocket reconnectTextRoom];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView) name:MESSAGE_TEXT_COMMENT_LIST_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addCommentView:) name: MESSAGE_TEXT_ROOM_REPLAY_NEW_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(zanResult:) name:MESSAGE_TEXT_VIEW_ZAN_RESP_VC object:nil];
@@ -582,11 +625,17 @@
 
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser reply:(int64_t)nDetails
 {
-    if ([textView.textStorage getPlainString].length == 0)
-    {
-        [self.view makeToast:@"不能发送空信息"];
+    UserInfo *info = KUserSingleton;
+    if (info.nType != 1 && info.bIsLogin) {
+        [self createLoginAlert];
         return ;
     }
+    if ([textView.textStorage getPlainString].length == 0)
+    {
+        [ProgressHUD showError:@"不能发送空信息"];
+        return ;
+    }
+    
     NSString *strComment = [textView.textStorage getPlainString];
     int toId = !nUser?[_jsonModel.teacherid intValue]:nUser;
     [_tcpSocket replyCommentReq:strComment msgid:[_jsonModel.viewid integerValue]
@@ -640,4 +689,7 @@
         [photoControl show];
     }
 }
+
+
+
 @end

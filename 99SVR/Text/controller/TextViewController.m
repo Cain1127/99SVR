@@ -8,6 +8,7 @@
 
 #import "TextViewController.h"
 #import "HotTextView.h"
+#import "DecodeJson.h"
 #import "MJRefresh.h"
 #import "BaseService.h"
 #import "TextRoomModel.h"
@@ -80,6 +81,12 @@
      } fail:^(NSError *error){
          NSDictionary *dict = [UserDefaults objectForKey:kTextList];
          [__self updateTextView:dict];
+         [UserDefaults setObject:dict forKey:kTextList];
+         [UserDefaults synchronize];
+         int nUserid = [UserInfo sharedUserInfo].nUserId;
+         NSString *strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_text_fail_%d",
+                  nUserid,(int)error.code];
+         [DecodeJson postPHPServerMsg:strMsg];
      }];
 }
 

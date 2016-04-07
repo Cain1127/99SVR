@@ -8,6 +8,8 @@
 
 #import "InputPwdViewController.h"
 #import "UserInfo.h"
+#import "TextTodayVPViewController.h"
+#import "NewDetailsViewController.h"
 #import "TextHomeViewController.h"
 #import "RoomViewController.h"
 #import "ZLLogonServerSing.h"
@@ -105,6 +107,18 @@
     NSArray *aryIndex = self.navigationController.viewControllers;
     for (UIViewController *control in aryIndex) {
         if ([control isKindOfClass:[RoomViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[TextTodayVPViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[NewDetailsViewController class]]) {
             [self.navigationController popToViewController:control animated:YES];
             return ;
         }

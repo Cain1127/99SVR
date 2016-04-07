@@ -8,6 +8,9 @@
 
 #import "RoomViewController.h"
 #import "ChatView.h"
+#import "InAppPurchasesViewController.h"
+#import "PaySelectViewController.h"
+#import "UIControl+UIControl_XY.h"
 #import "LoginViewController.h"
 #import "MyScrollView.h"
 #import "FloatingView.h"
@@ -143,7 +146,7 @@
  */
 - (void)closeRoomInfo
 {
-    [_tcpSocket exit_Room:YES];
+    [_tcpSocket exit_Room];
     [[SDImageCache sharedImageCache] clearMemory];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
@@ -152,7 +155,8 @@
 {
     DLog(@"room view");
     [_ffPlay stop];
-    [self closeRoomInfo];
+    [_tcpSocket exit_Room:YES];
+    [[SDImageCache sharedImageCache] clearMemory];
     _ffPlay = nil;
     [_scrollView removeFromSuperview];
     _scrollView = nil;
@@ -738,19 +742,21 @@
     
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"充值" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
     {
-       UITextField *login = alert.textFields.firstObject;
-       if ([login.text length]==0){
+     
            dispatch_async(dispatch_get_main_queue(),
                           ^{
-                              [__self.view hideToastActivity];
-                              [__self.view makeToast:@"密码不能为空"];
-                              [__self createAlertController];
+                              if ([UserInfo sharedUserInfo].nStatus)
+                              {
+                                  PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+                                  [self.navigationController pushViewController:paySelectVC animated:YES];
+                              }
+                              else
+                              {
+                                  InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];
+                                  [self.navigationController pushViewController:inAppPurechasesVC animated:YES];
+                              }
+                              
                           });
-       }
-       else
-       {
-           [__self.tcpSocket connectRoomAndPwd:login.text];
-       }
    }];
     [alert addAction:canAction];
     [alert addAction:okAction];
@@ -763,8 +769,10 @@
 {
     NSNumber *number = notify.object;
     if ([number intValue]==202) {
+        @WeakObj(self)
         dispatch_async(dispatch_get_main_queue(), ^{
-            [ProgressHUD showError:@"余额不足"];
+//            [ProgressHUD showError:@"余额不足"];
+            [selfWeak createPay];
         });
     }
     else{
@@ -1434,7 +1442,7 @@
 {
     @WeakObj(self)
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                   message:@"游客不能互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
+                                                                   message:@"游客无法互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
         
     }];
@@ -1504,7 +1512,15 @@
 #pragma mark ChatViewDelegate
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser
 {
+    RoomUser *user = [_tcpSocket.rInfo findUser:[UserInfo sharedUserInfo].nUserId];
     NSString *strInfo = [textView.textStorage getPlainString];
+    if (user.m_nVipLevel>2) {}
+    else{
+        if ([strInfo length]>=20) {
+            [ProgressHUD showError:@"不能发送超过20个字符内容"];
+            return ;
+        }
+    }
     toUser = nUser;
     [self sendChatMessage:strInfo];
 }
@@ -1541,8 +1557,12 @@
 #pragma mark 送礼物
 - (void)sendGift:(int)giftId num:(int)giftNum
 {
-    [_tcpSocket sendGift:giftId num:giftNum];
-    [_giftView setGestureHidden];
+    if (_ffPlay.playing) {
+        [_tcpSocket sendGift:giftId num:giftNum];
+        [_giftView setGestureHidden];
+    }else{
+        [ProgressHUD showError:@"只能对在线讲师送礼"];
+    }
 }
 
 #pragma mark 用户列表选择某一列

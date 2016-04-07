@@ -156,6 +156,7 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
     user.sex = info.ngender();
     if ((user.nUserId>900000000 && user.nUserId < 1000000000) || user.nUserId <= 0)
     {
+        user.strName = [NSString stringWithCString:info.cuseralias().c_str() encoding:GBK_ENCODING];
         [UserInfo sharedUserInfo].bIsLogin = YES;
         [UserInfo sharedUserInfo].nType = 2;
         [UserInfo sharedUserInfo].strPwd = @"";
@@ -164,7 +165,6 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
     else
     {
         user.strName = [NSString stringWithCString:info.cuseralias().c_str() encoding:GBK_ENCODING];
-        user.strNewName = [NSString stringWithFormat:@"%s",info.cuseralias().c_str()];
         conn->SendMsg_GetUserMoreInfReq(user.nUserId);
         [UserInfo sharedUserInfo].bIsLogin = YES;
         [UserInfo sharedUserInfo].nType = 1;

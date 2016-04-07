@@ -385,16 +385,19 @@
 
 - (BOOL)connectRoomInfo:(NSString *)strId address:(NSString *)strIp port:(int)nPort
 {
-    _nFall = 0;
-    if(_aryChat == nil)
+    if(!_bJoin)
     {
-        _aryChat = [NSMutableArray array];
+        _nFall = 0;
+        if(_aryChat == nil)
+        {
+            _aryChat = [NSMutableArray array];
+        }
+        else
+        {
+            [_aryChat removeAllObjects];
+        }
+        [self reConnectRoomTime:strId address:strIp port:nPort];
     }
-    else
-    {
-        [_aryChat removeAllObjects];
-    }
-    [self reConnectRoomTime:strId address:strIp port:nPort];
     return YES;
 }
 
@@ -664,6 +667,7 @@
             DLog(@"用户帐户数据!");
             CMDUserAccountInfo_t *info = (CMDUserAccountInfo_t*)pNewMsg;
             [UserInfo sharedUserInfo].goldCoin = info->nk/1000.0;
+            [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
         }
             break;
         case Sub_Vchat_RoomManagerNotify:
@@ -1096,7 +1100,6 @@
 - (void)exit_Room:(BOOL)bClose
 {
     [self exit_Room];
-    _bJoin = NO;
     if (bClose)
     {
         _strRoomPwd = nil;
@@ -1107,6 +1110,7 @@
 
 - (void)exit_Room
 {
+    _bJoin = NO;
     CMDUserExitRoomInfo_t req;
     memset(&req,0,sizeof(CMDUserExitRoomInfo_t));
     req.userid = [UserInfo sharedUserInfo].nUserId;
@@ -1162,7 +1166,6 @@
     {
         NSString *strInfo = [NSString stringWithFormat:@"<span style=\"line-height:5px\">%@<br>%@</span>",strFrom,strMsg];
         [self addChatInfo:strInfo];
-        [self addPriChatInfo:strInfo];
     }
     if (_aryChat.count>=50)
     {
@@ -1209,6 +1212,7 @@
     [_asyncSocket readDataToLength:sizeof(int32) withTimeout:3 tag:SOCKET_READ_LENGTH];
     [self sendPingRoom];
 }
+
 
 /**
  *  执行重连

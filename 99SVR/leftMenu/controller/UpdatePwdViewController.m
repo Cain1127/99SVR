@@ -14,7 +14,7 @@
 #import "DecodeJson.h"
 #import "BaseService.h"
 
-@interface UpdatePwdViewController()
+@interface UpdatePwdViewController()<UITextFieldDelegate>
 {
     UIButton *_btnCode;
     NSString *strDate;
@@ -105,6 +105,7 @@
         
         [self createLabelWithRect:Rect(10, frame.origin.y, 80, 30)];
         _txtCmd = [self createTextField:Rect(10, frame.origin.y, kScreenWidth-20, 30)];
+        _txtCmd.delegate = self;
         [_txtCmd setPlaceholder:@"请输入新密码"];
         frame.origin.y = _txtCmd.y+50;
         [_txtCmd setSecureTextEntry:YES];
@@ -119,6 +120,7 @@
     {
         [_txtNew setPlaceholder:@"请再次输入密码"];
         [_txtNew setSecureTextEntry:YES];
+        _txtNew.delegate = self;
     }
     frame.origin.y = _txtNew.y+50;
     _lblError = [[UILabel alloc] initWithFrame:frame];
@@ -243,14 +245,25 @@
         _password = _txtNew.text;
         if (oldPwd.length==0) {
             [ProgressHUD showError:@"旧密码不能为空"];
+            return;
         }
         else if(newPwd.length==0){
             [ProgressHUD showError:@"新密码不能为空"];
+            return ;
+        }else if([self MatchLetter:newPwd]==-1)
+        {
+            [ProgressHUD showError:@"新密码必须为6-16位数字、字母组合(不能是纯数字)"];
+            return ;
         }
         else if(_password.length==0)
         {
             [ProgressHUD showError:@"确认密码不能为空"];
-        }
+            return ;
+        }else if(![_password isEqualToString:newPwd])
+         {
+             [ProgressHUD showError:@"新密码与确认密码不一致"];
+             return ;
+         }
         [[ZLLogonServerSing sharedZLLogonServerSing] updatePwd:oldPwd cmd:newPwd];
     }
 }
@@ -376,8 +389,7 @@
     }
     else{
         dispatch_async(dispatch_get_main_queue(), ^{
-            [ProgressHUD showSuccess:@"修改失败"];
-            [self.navigationController popViewControllerAnimated:YES];
+            [ProgressHUD showError:@"旧密码错误"];
         });
     }
 }
@@ -392,6 +404,36 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if([string isEqualToString:@""])
+    {
+        return YES;
+    }
+    NSString *strCode = @"[a-zA-Z0-9_\u4e00-\u9fa5]+$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strCode];;
+    if (range.location>16 || range.location+string.length>16 || ![predicate evaluateWithObject:string])
+    {
+        return NO;
+    }
+    return YES;
+}
+
+-(int)MatchLetter:(NSString *)str
+{
+    //判断是否以字母开头
+    NSString *ZIMU ;
+    NSPredicate *regextestmobile ;
+    ZIMU = @"^[a-zA-Z][a-zA-Z0-9_\u4e00-\u9fa5]+$";
+    regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", ZIMU];
+    if([regextestmobile evaluateWithObject:str]==YES)
+    {
+        return 1;
+    }
+    DLog(@"用户名只能包含数字、字母、下划线");
+    return -1;
 }
 
 @end

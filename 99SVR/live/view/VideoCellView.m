@@ -62,7 +62,7 @@
         _lookCountLabel = [[UILabel alloc] init];
         _lookCountLabel.font = [UIFont systemFontOfSize:12];
         _lookCountLabel.textColor = smallFontColor;
-        [_lookCountLabel setTextAlignment:NSTextAlignmentRight];
+        [_lookCountLabel setTextAlignment:NSTextAlignmentLeft];
         [self addSubview:_lookCountLabel];
         
         [self layoutViews];

@@ -15,7 +15,20 @@
 - (void)requestRoomByUserId:(int)userId
 {
     NSMutableURLRequest *request= [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%d&client=2",kHISTORY_HTTP_URL,userId]]];
+    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%d&type=footprint",kHISTORY_HTTP_URL,userId]]];
+    [request setHTTPMethod:@"POST"];
+    [request setTimeoutInterval:10];
+    __weak RoomListRequest *__self = self;
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
+     {
+         [__self authInfo:response data:data err:connectionError];
+     }];
+}
+
+- (void)requestColletByUserId:(int)userId
+{
+    NSMutableURLRequest *request= [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%d&type=collent",kHISTORY_HTTP_URL,userId]]];
     [request setHTTPMethod:@"POST"];
     [request setTimeoutInterval:10];
     __weak RoomListRequest *__self = self;

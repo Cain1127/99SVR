@@ -119,7 +119,6 @@
  */
 - (void)rechargeClick
 {
-    
     ///默认进入苹果的内购页面
     if ([UserInfo sharedUserInfo].nStatus)
     {
