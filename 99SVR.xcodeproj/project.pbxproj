@@ -1279,12 +1279,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-<<<<<<< HEAD
 				B48591F11CB4FC1E00DAC61F /* WebKit.framework in Frameworks */,
-=======
 				BB98EE4D1CB573380028AAEF /* libDTCoreText.a in Frameworks */,
 				BB98EE4E1CB573380028AAEF /* libDTFoundation.a in Frameworks */,
->>>>>>> master
 				BB2E24BA1CB04C1400E0B549 /* libmtasdk.a in Frameworks */,
 				188969081CAD828600C7E04E /* StoreKit.framework in Frameworks */,
 				18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */,
@@ -2484,12 +2481,9 @@
 		BB9003C01C8D8395007E1C48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
 				B48591F01CB4FC1E00DAC61F /* WebKit.framework */,
-=======
 				BB98EE4B1CB573380028AAEF /* libDTCoreText.a */,
 				BB98EE4C1CB573380028AAEF /* libDTFoundation.a */,
->>>>>>> master
 				BB46C5E51CB05316002421F7 /* libDTFoundation.a */,
 				BB2E24B71CB04AEC00E0B549 /* libDTFoundation.a */,
 				BB2E24B51CB048B700E0B549 /* libDTCoreText.a */,
