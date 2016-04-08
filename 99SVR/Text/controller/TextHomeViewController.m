@@ -234,13 +234,15 @@
 - (void)btnEvent:(id)sender
 {
     UIButton *btnSender = sender;
+    DLog(@"tag:%zi",btnSender.tag);
     if(_tag == btnSender.tag)
     {
         return ;
     }
     [_group setBtnSelect:btnSender.tag];
-    [_scrollView setContentOffset:CGPointMake((btnSender.tag-1)*kScreenWidth, 0)];
     _tag = (int)btnSender.tag;
+    [_scrollView setContentOffset:CGPointMake((_tag-1)*kScreenWidth, 0)];
+    [_group setBluePointX:_scrollView.contentOffset.x];
 }
 
 - (void)didReceiveMemoryWarning
@@ -262,13 +264,17 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    if (willEndContentOffsetX == 0 && startContentOffsetX ==0 )
+    {
+        return ;
+    }
     [_group setBluePointX:scrollView.contentOffset.x];
     int temp = floor((scrollView.contentOffset.x - kScreenWidth/2.0)/kScreenWidth +1);//判断是否翻页
     if (temp != _currentPage)
     {
         if (temp > _currentPage)
         {
-            if (_tag<4)
+            if (_tag<3)
             {
                 _tag ++;
                 [_group setBtnSelect:_tag];
@@ -303,6 +309,8 @@
     else//加速
     {}
     updateCount = 0;
+    startContentOffsetX = 0;
+    endContentOffsetX = 0;
 }
 
 - (void)respCollet:(NSNotification *)notify

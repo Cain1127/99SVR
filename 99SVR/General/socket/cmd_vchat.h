@@ -2055,24 +2055,7 @@ typedef struct tag_CMDTextRoomViewListReq_mobile
     uint32  count;                  //观点概述的条数
 }CMDTextRoomViewListReq_mobile;
 
-//观点列表响应
-typedef struct tag_CMDTextRoomLiveViewRes
-{
-    uint32 vcbid;                  //房间ID
-    uint32 userid;                 //用户ID
-    int32  viewtypeid;             //观点类型ID
-    int64  viewid;                 //消息ID
-    int16  livetype;               //文字直播类型：1-纯文字；2-文字+链接；3-文字+图片；
-    int16  viewTitlelen;           //观点标题长度
-    int16  viewtextlen;            //观点内容长度
-    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
-    int64  looks;                  //浏览次数
-    int64  zans;                   //点赞数
-    int64  comments;               //评论数
-    int64  flowers;                //送花数
-    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
-    char   content[0];             //消息内容，格式：观点标题+观点内容
-}CMDTextRoomLiveViewRes_t;
+
 
 //查看观点详情请求
 typedef struct tag_CMDTextRoomLiveViewDetailReq{
@@ -2180,13 +2163,37 @@ typedef struct tag_CMDTextRoomViewPHPReq
 //讲师通过PHP页面发布观点或修改观点或删除观点响应
 typedef struct tag_CMDTextRoomViewPHPRes
 {
-    //int64  messageid;              //消息ID
+    uint32 vcbid;                  //房间ID
+    uint32 teacherid;              //请求用户ID
+    int64  messageid;              //消息ID
+    int64  businessid;             //观点ID
     int8   viewtype;               //操作类型：1-新增；2-修改；3-删除；
     int16  titlelen;               //观点标题长度
-    //uint64 messagetime;            //发送时间(yyyymmddhhmmss)
+    int16  textlen;                //观点简介长度
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
     int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
-    char   content[0];             //格式：消息ID|观点ID|发送时间(yyyymmddhhmmss)|观点标题
+    char   content[0];             //格式：观点标题+观点简介
 }CMDTextRoomViewPHPRes_t;
+
+//观点列表响应
+typedef struct tag_CMDTextRoomLiveViewRes
+{
+    uint32 vcbid;                  //房间ID
+    uint32 userid;                 //用户ID
+    int32  viewtypeid;             //观点类型ID
+    int64  viewid;                 //消息ID
+    int16  livetype;               //文字直播类型：1-纯文字；2-文字+链接；3-文字+图片；
+    int16  viewTitlelen;           //观点标题长度
+    int16  viewtextlen;            //观点内容长度
+    uint64 messagetime;            //发送时间(yyyymmddhhmmss)
+    int64  looks;                  //浏览次数
+    int64  zans;                   //点赞数
+    int64  comments;               //评论数
+    int64  flowers;                //送花数
+    int8   commentstype;		   //客户端类型 0:PC端 1:安卓 2:IOS 3:WEB
+    char   content[0];             //消息内容，格式：观点标题+观点内容
+}CMDTextRoomLiveViewRes_t;
+
 
 //观点评论详细页送花请求
 typedef struct tag_CMDTextLiveViewFlowerReq

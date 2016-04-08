@@ -110,9 +110,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    IdeaDetails *idea = [_aryNew objectAtIndex:indexPath.section];
-    NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:_textSocket model:idea];
-    [self.navigationController pushViewController:detailView animated:YES];
+    if(_aryNew.count > indexPath.section)
+    {
+        IdeaDetails *idea = [_aryNew objectAtIndex:indexPath.section];
+        NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:_textSocket model:idea];
+        [self.navigationController pushViewController:detailView animated:YES];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -129,7 +132,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadNew) name:MESSAGE_TEXT_NEW_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadNew:) name:MESSAGE_TEXT_NEW_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reqTextNewMessage) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
 }
 
@@ -145,24 +148,26 @@
     _current += 20;
 }
 
-- (void)reloadNew
+- (void)reloadNew:(NSNotification *)notify
 {
+    if(notify && notify.object && [notify.object intValue]==1)
+    {
+        _current ++;
+    }
     _aryNew = _textSocket.aryNew;
-    _current = (int)_aryNew.count;
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(),
     ^{
         if ([selfWeak.tableView.gifHeader isRefreshing]) {
             [selfWeak.tableView.gifHeader endRefreshing];
         }
-        else
+        else if([self.tableView.footer isRefreshing])
         {
             [selfWeak.tableView.footer endRefreshing];
-            if (selfWeak.current != selfWeak.textSocket.aryText.count)
-            {
-                [selfWeak.tableView.footer noticeNoMoreData];
-                selfWeak.current = (int)selfWeak.textSocket.aryText.count;
-            }
+        }
+        if (selfWeak.current != selfWeak.textSocket.aryNew.count)
+        {
+            [selfWeak.tableView.footer noticeNoMoreData];
         }
         [selfWeak.tableView reloadData];
     });

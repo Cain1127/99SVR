@@ -59,7 +59,7 @@
  *  @param nCount 个数
  *  @param nType  类型
  */
-- (void)reqTextRoomList:(int)nIndex count:(int)nCount type:(int)nType;
+- (void)reqTextRoomList:(int64_t)nIndex count:(int)nCount type:(int)nType;
 /**
  *  关注讲师
  *

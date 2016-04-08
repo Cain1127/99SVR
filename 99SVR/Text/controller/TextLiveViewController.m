@@ -81,8 +81,14 @@
 
 - (void)requestMoreTextLive
 {
+    DLog(@"触发一次");
+    if(_aryLive.count==0)
+    {
+        return ;
+    }
+    TextLiveModel *model = [_aryLive objectAtIndex:[_aryLive count]-1];
+    [_textSocket reqTextRoomList:model.messageid count:20 type:1];
     [_tableView.footer beginRefreshing];
-    [_textSocket reqTextRoomList:_nCurrent count:20 type:1];
      _nCurrent += 20;
 }
 
@@ -98,7 +104,7 @@
     });
     _nCurrent = 0;
     [_textSocket reqTextRoomList:_nCurrent count:20 type:1];
-    _nCurrent += 20;
+    _nCurrent = 20;
 }
 
 - (void)didReceiveMemoryWarning
@@ -130,7 +136,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MarchLiveTextCell *cell = [self tableView:tableView marchCellForIndexPath:indexPath];
-    CGFloat height = [cell.textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+86;
+    CGFloat height = [cell.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+86;
     return height;
 }
 
@@ -154,13 +160,13 @@
         }
         if(![strInfo isEqualToString:cell.strInfo])
         {
-            cell.textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strInfo dataUsingEncoding:NSUTF8StringEncoding]
+            cell.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strInfo dataUsingEncoding:NSUTF8StringEncoding]
                                                                        documentAttributes:nil];
             cell.section = indexPath.section;
             cell.delegate = self;
             [cell setTextModel:textModel];
             cell.messageid = textModel.messageid;
-            cell.textView.textDelegate = self;
+            cell.textDelegate = self;
         }else{
             [cell setTextModel:textModel];
         }
@@ -222,7 +228,7 @@
             [imageView sd_setImageWithURL:attachment.contentURL
                 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL)
              {
-                    MarchLiveTextCell *cell = (MarchLiveTextCell*)attributedTextContentView.superview.superview.superview;
+                    MarchLiveTextCell *cell = (MarchLiveTextCell*)attributedTextContentView.superview.superview;
                     [selfWeak updateTextView:cell url:imageURL changeSize:image.size];
              }];
         }
@@ -258,7 +264,7 @@
     }
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"contentURL == %@", url];
     BOOL didUpdate = NO;
-    for (DTTextAttachment *oneAttachment in [text.textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
+    for (DTTextAttachment *oneAttachment in [text.attributedTextContextView.layoutFrame textAttachmentsWithPredicate:pred])
     {
         if (CGSizeEqualToSize(oneAttachment.originalSize, CGSizeZero))
         {
@@ -269,11 +275,15 @@
     if (didUpdate)
     {
         //重新加载图片
-        [text.textView relayoutText];
-        NSString *cacheKey = nil;
-        cacheKey =[NSString stringWithFormat:@"LiveText-%zi", text.section];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:text.section];
-        NSArray *array = [[NSArray alloc] initWithObjects:indexPath, nil];
+        CGFloat height = [text.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
+        DLog(@"height:%f",height);
+        [text relayoutText];
+        height = [text.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
+        DLog(@"height:%f",height);
+//        NSString *cacheKey = nil;
+//        cacheKey =[NSString stringWithFormat:@"LiveText-%zi", text.section];
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:text.section];
+//        NSArray *array = [[NSArray alloc] initWithObjects:indexPath, nil];
 //        [_tableView reloadRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
 //        [text setNeedsLayout];
         [_tableView reloadData];
@@ -322,6 +332,7 @@
             [__self.tableView.footer endRefreshing];
             if (__self.nCurrent != __self.textSocket.aryText.count)
             {
+                DLog(@"aryLve:%zi---count:%d",__self.aryLive.count,__self.nCurrent);
                 [__self.tableView.footer noticeNoMoreData];
                 __self.nCurrent = (int)__self.textSocket.aryText.count;
             }

@@ -90,7 +90,6 @@
 - (void)decodeStruct:(CMDTextRoomLiveListNoty_t *)notify
 {
     //类型：1-文字直播；2-直播重点；3-明日预测（已关注的用户可查看）；4-观点；
-    DLog(@"livetype:%d",notify->livetype);
     _livetype = notify->livetype;
     _strTeacherName = [NSString stringWithCString:notify->srcuseralias encoding:GBK_ENCODING];
     _teacherid = notify->teacherid;

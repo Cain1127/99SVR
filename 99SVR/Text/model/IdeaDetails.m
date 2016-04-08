@@ -41,10 +41,8 @@
     char cTitle[_viewTitleLen*2];
     memset(cTitle, 0, _viewTitleLen*2);
     memcpy(cTitle,resp->content,_viewTitleLen);
-    DLog(@"cTitle:%s",cTitle);
     
     _strTitle = [NSString stringWithCString:cTitle encoding:GBK_ENCODING];
-    DLog(@"title:%@",_strTitle);
     
     char cContent[_viewTextLen*2];
     memset(cContent,0, _viewTextLen*2);

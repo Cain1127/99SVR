@@ -175,7 +175,7 @@
     }
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"contentURL == %@", url];
     BOOL didUpdate = NO;
-    for (DTTextAttachment *oneAttachment in [text.textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
+    for (DTTextAttachment *oneAttachment in [text.attributedTextContextView.layoutFrame textAttachmentsWithPredicate:pred])
     {
         if (CGSizeEqualToSize(oneAttachment.originalSize, CGSizeZero))
         {
@@ -186,7 +186,7 @@
     if (didUpdate)
     {
         //重新加载图片
-        [text.textView relayoutText];
+        [text.attributedTextContextView relayoutText];
 //        NSString *cacheKey = nil;
 //        cacheKey =[NSString stringWithFormat:@"LiveText-%zi", text.section];
 //        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:text.section];
@@ -233,7 +233,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MarchLiveTextCell *cell = [self tableView:tableView marchCellForIndexPath:indexPath];
-    CGFloat height = [cell.textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+86;
+    CGFloat height = [cell.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+86;
     return height;
 }
 
@@ -257,13 +257,13 @@
         }
         if(![strInfo isEqualToString:cell.strInfo])
         {
-            cell.textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strInfo dataUsingEncoding:NSUTF8StringEncoding]
+            cell.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strInfo dataUsingEncoding:NSUTF8StringEncoding]
                                                                        documentAttributes:nil];
             cell.section = indexPath.section;
             cell.delegate = self;
             [cell setTextModel:textModel];
             cell.messageid = textModel.messageid;
-            cell.textView.textDelegate = self;
+            cell.textDelegate = self;
         }else{
             [cell setTextModel:textModel];
         }

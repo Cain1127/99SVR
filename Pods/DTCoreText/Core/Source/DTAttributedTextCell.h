@@ -82,4 +82,6 @@
  */
 @property (nonatomic, readonly) DTAttributedTextContentView *attributedTextContextView;
 
+- (void)relayoutText;
+
 @end

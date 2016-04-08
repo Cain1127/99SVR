@@ -29,7 +29,6 @@
     NSString *strDate;
 }
 
-@property (nonatomic,strong) UILabel *lblError;
 @property (nonatomic,strong) UIImageView *imgView;
 @property (nonatomic,strong) UITextField *txtName;
 @property (nonatomic,strong) UITextField *txtPwd;
@@ -81,7 +80,6 @@
         return ;
     }
     [self.view makeToastActivity];
-    [_lblError setText:@""];
     NSDictionary *paramters = @{@"type":@"2",@"account":_username,@"pwd":_password,@"vcode":strCode};
     NSString *strInfo = [NSString stringWithFormat:@"%@mapi/registerMulti",kRegisterNumber];
     @WeakObj(self)
@@ -101,14 +99,14 @@
         {
             dispatch_async(dispatch_get_main_queue(),
             ^{
-                [selfWeak.lblError setText:[dict objectForKey:@"errmsg"]];
+                [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
             });
         }
     }
     fail:^(NSError *error)
     {
          [selfWeak.view hideToastActivity];
-         [selfWeak.lblError setText:@"注册失败"];
+         [ProgressHUD showError:@"注册失败"];
          NSString *strUrl = [NSString stringWithFormat:@"ReportItem=Register&ClientType=1&RegType=2&ServerIP=%@&Error=%@",
                             @"120.55.105.224",@"err_fail"];
          [DecodeJson postPHPServerMsg:strUrl];
@@ -145,7 +143,7 @@
              ^{
                  [__self.view hideToastActivity];
                  __self.btnCode.enabled = NO;
-                 [__self.lblError setText:@"已发送验证码到目标手机"];
+                 [ProgressHUD showSuccess:@"已发送验证码到目标手机"];
                  [__self.txtCode becomeFirstResponder];
              });
          }
@@ -154,7 +152,7 @@
              dispatch_async(dispatch_get_main_queue(),
              ^{
                  [__self.view hideToastActivity];
-                 [__self.lblError setText:[dict objectForKey:@"errmsg"]];
+                 [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
              });
          }
      }
@@ -163,7 +161,7 @@
          dispatch_async(dispatch_get_main_queue(),
          ^{
              [__self.view hideToastActivity];
-             [__self.lblError setText:@"请求验证码失败"];
+             [ProgressHUD showError:@"请求验证码失败"];
          });
      }];
 }
@@ -197,7 +195,6 @@
         return ;
     }
     [self.view makeToastActivity];
-    [_lblError setText:@""];
     [self getMobileCode:strMobile];
 }
 

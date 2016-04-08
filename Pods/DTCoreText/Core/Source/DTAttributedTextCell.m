@@ -8,6 +8,7 @@
 
 #import "DTCoreText.h"
 #import "DTAttributedTextCell.h"
+#import "DTBlockFunctions.h"
 #import "DTCSSStylesheet.h"
 
 #import <DTFoundation/DTLog.h>
@@ -260,6 +261,21 @@
 {
 	_textDelegate = textDelegate;
 	_attributedTextContextView.delegate = _textDelegate;
+}
+
+- (void)relayoutText
+{
+    DTBlockPerformSyncIfOnMainThreadElseAsync(^{
+        
+        // need to reset the layouter because otherwise we get the old framesetter or cached layout frames
+        _attributedTextContextView.layouter=nil;
+        
+        // here we're layouting the entire string, might be more efficient to only relayout the paragraphs that contain these attachments
+        [_attributedTextContextView relayoutText];
+        
+        // layout custom subviews for visible area
+        [self setNeedsLayout];
+    });
 }
 
 @synthesize attributedTextContextView = _attributedTextContextView;
