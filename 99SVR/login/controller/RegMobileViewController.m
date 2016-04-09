@@ -474,7 +474,9 @@
     }
     else if(_txtPwd == textField)
     {
-        if(range.location>16 || range.location+string.length > 16)
+        NSString *strCode = @"[^ ]+$";
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strCode];;
+        if (range.location>16 || range.location+string.length>16 || ![predicate evaluateWithObject:string])
         {
             return NO;
         }

@@ -115,10 +115,15 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
 
 - (void)makeToastActivity
 {
-    [self makeToastActivity:CSToastActivityDefaultPosition];
+    [self makeToastActivity:CSToastActivityDefaultPosition msg:@"正在加载，请稍后"];
 }
 
-- (void)makeToastActivity:(id)position {
+- (void)makeToastMsgActivity:(NSString *)strMsg
+{
+    [self makeToastActivity:CSToastActivityDefaultPosition msg:strMsg];
+}
+
+- (void)makeToastActivity:(id)position msg:(NSString *)strMsg{
     UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);
     if (existingActivityView != nil) return;
     

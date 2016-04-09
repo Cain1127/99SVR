@@ -134,6 +134,7 @@
 		BB5138381C97F30400E09EF5 /* GiftRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5138371C97F30400E09EF5 /* GiftRequest.m */; };
 		BB51383A1C97F7D700E09EF5 /* gift.txt in Resources */ = {isa = PBXBuildFile; fileRef = BB5138391C97F7D700E09EF5 /* gift.txt */; };
 		BB51383D1C980F9700E09EF5 /* RoomDownView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB51383C1C980F9700E09EF5 /* RoomDownView.m */; };
+		BB5E4E891CB8E74500F8C1D4 /* AlertFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5E4E881CB8E74500F8C1D4 /* AlertFactory.m */; };
 		BB5F9BC11C5DDA2100285EA6 /* MediaBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC01C5DDA2100285EA6 /* MediaBuffer.m */; };
 		BB5F9BC41C5DDA6100285EA6 /* OpenAL.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC31C5DDA6100285EA6 /* OpenAL.m */; };
 		BB5F9BC71C5DDA9D00285EA6 /* MediaSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC61C5DDA9D00285EA6 /* MediaSocket.m */; };
@@ -760,6 +761,8 @@
 		BB5138391C97F7D700E09EF5 /* gift.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = gift.txt; sourceTree = "<group>"; };
 		BB51383B1C980F9700E09EF5 /* RoomDownView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomDownView.h; sourceTree = "<group>"; };
 		BB51383C1C980F9700E09EF5 /* RoomDownView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomDownView.m; sourceTree = "<group>"; };
+		BB5E4E871CB8E74500F8C1D4 /* AlertFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertFactory.h; sourceTree = "<group>"; };
+		BB5E4E881CB8E74500F8C1D4 /* AlertFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertFactory.m; sourceTree = "<group>"; };
 		BB5F9BBF1C5DDA2100285EA6 /* MediaBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaBuffer.h; sourceTree = "<group>"; };
 		BB5F9BC01C5DDA2100285EA6 /* MediaBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaBuffer.m; sourceTree = "<group>"; };
 		BB5F9BC21C5DDA6100285EA6 /* OpenAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenAL.h; sourceTree = "<group>"; };
@@ -1899,6 +1902,8 @@
 				BB17689E1C77052000CE947C /* GitInfo.m */,
 				BB9765F11C85B55F00FAA5B7 /* DeviceUID.h */,
 				BB9765F21C85B55F00FAA5B7 /* DeviceUID.m */,
+				BB5E4E871CB8E74500F8C1D4 /* AlertFactory.h */,
+				BB5E4E881CB8E74500F8C1D4 /* AlertFactory.m */,
 			);
 			path = singlet;
 			sourceTree = "<group>";
@@ -3236,6 +3241,7 @@
 				BB63F47B1C2B809800A042E8 /* UserInfo.m in Sources */,
 				BB9765FF1C87C7CA00FAA5B7 /* TextNewCell.m in Sources */,
 				BB63F61C1C2CC7A300A042E8 /* RoomGroup.m in Sources */,
+				BB5E4E891CB8E74500F8C1D4 /* AlertFactory.m in Sources */,
 				BB63F6221C2CC7A300A042E8 /* MySearchBar.m in Sources */,
 				BB1769231C7B006F00CE947C /* SDImageCache.m in Sources */,
 				BB6F3AD51C9F86270035EBBE /* TAAnimatedDotView.m in Sources */,

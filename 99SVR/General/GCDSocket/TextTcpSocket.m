@@ -576,10 +576,9 @@
     }
     //设置直播类型观点
     {
-        int notifysize = sizeof(CMDTextRoomLiveListNoty_t) + resp->titlelen+1;
-        char cNotify[notifysize];
+        char cNotify[1024];
         CMDTextRoomLiveListNoty_t *notify = (CMDTextRoomLiveListNoty_t*)cNotify;
-        memset(cNotify, 0, notifysize);
+        memset(cNotify, 0, 1024);
         notify->vcbid = _roomid;
         notify->userid = _teacher.teacherid;
         notify->teacherid = _teacher.teacherid;
@@ -594,7 +593,7 @@
 //        cNotify[notifysize-1] = '\0';
         TextLiveModel *textModel = [[TextLiveModel alloc] initWithNotify:notify];
         [_aryText insertObject:textModel atIndex:0];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:@(1)];
     }
     
 }
@@ -663,15 +662,13 @@
     DLog(@"content:%@",chat.strContent);
     if (chat.liveflag==1)
     {
-        int nSize = sizeof(CMDTextRoomLiveListNoty_t)+resp->reqtextlen+resp->restextlen+1;
-        char cBuffer[nSize];
-        memset(cBuffer, 0, nSize);
+        char cBuffer[1024]={0};
         CMDTextRoomLiveListNoty_t *notify= (CMDTextRoomLiveListNoty_t*)cBuffer;
         notify->vcbid = resp->vcbid;
         notify->userid = resp->toid;
         notify->teacherid = _teacher.teacherid;
         notify->srcuserid = resp->fromid;
-        strcpy(notify->srcuseralias, resp->fromalias);
+        strcpy(notify->srcuseralias, resp->toalias);
         notify->messageid = resp->messageid;
         notify->livetype = 4;
         notify->textlen = resp->reqtextlen;
@@ -679,7 +676,6 @@
         notify->messagetime = resp->messagetime;
         notify->zans = 0;
         memcpy(notify->content,resp->content,resp->reqtextlen+resp->restextlen); //源消息内容长度
-        cBuffer[nSize-1] = '\0';
         //TODD:写入进去
         TextLiveModel *textModel = [[TextLiveModel alloc] initWithNotify:notify];
         [_aryText insertObject:textModel atIndex:0];

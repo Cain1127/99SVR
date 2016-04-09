@@ -18,7 +18,6 @@
     NSString *strDate;
     int nSecond;
 }
-@property (nonatomic,strong) UILabel *lblError;
 @property (nonatomic,strong) UITextField *txtName;
 @property (nonatomic,strong) UITextField *txtCode;
 @property (nonatomic,strong) UIButton *btnCode;
@@ -81,14 +80,11 @@
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
     frame.origin.y = _txtPwd.y+50;
     
-    _lblError = [[UILabel alloc] initWithFrame:frame];
-    [_lblError setFont:XCFONT(14)];
-    [_lblError setTextColor:[UIColor redColor]];
-    [self.view addSubview:_lblError];
+
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, _lblError.y+40, kScreenWidth-60, 40);
+    btnRegister.frame = Rect(30, _txtPwd.y+40, kScreenWidth-60, 40);
     [btnRegister setTitle:@"确定" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
@@ -146,22 +142,20 @@
     _mobile = _txtName.text;
     if (_mobile.length==0)
     {
-        [_lblError setText:@"手机号不能为空"];
+        [ProgressHUD showError:@"手机号不能为空"];
         return ;
     }
     if (_mobile.length!=11)
     {
-        [_lblError setText:@"手机长度错误"];
+        [ProgressHUD showError:@"手机长度错误"];
         return ;
     }
     if(![DecodeJson getSrcMobile:_mobile])
     {
-        [_lblError setText:@"请输入正确的手机号"];
+        [ProgressHUD showError:@"请输入正确的手机号"];
         return ;
     }
-    
-    [ProgressHUD show:@"获取验证码..."];
-    [_lblError setText:@""];
+    [self.view makeToastActivity];
     [self getMobileCode:_mobile];
 }
 
@@ -169,7 +163,7 @@
 {
     if(!strDate)
     {
-        [_lblError setText:@"系统异常"];
+        [ProgressHUD showError:@"系统异常"];
         return ;
     }
     NSString *strMd5;
@@ -189,26 +183,19 @@
          {
              DLog(@"dict:%@",dict);
              [selfWeak startTimer];
-             gcd_main_safe(
-                           ^{
-                               selfWeak.btnCode.enabled = NO;
-                               [selfWeak.lblError setText:@"已发送验证码到目标手机"];
-                               [selfWeak.txtCode becomeFirstResponder];
-                           });
+               selfWeak.btnCode.enabled = NO;
+               [ProgressHUD showSuccess:@"已发送验证码到目标手机"];
+               [selfWeak.txtCode becomeFirstResponder];
          }
          else
          {
-             gcd_main_safe(^{
-                 [selfWeak.lblError setText:[dict objectForKey:@"errmsg"]];
-             });
+             [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
          }
      }
                             fail:^(NSError *error)
      {
          [ProgressHUD dismiss];
-         gcd_main_safe(^{
-             [selfWeak.lblError setText:@"请求验证码失败"];
-         });
+             [ProgressHUD showError:@"请求验证码失败"];
      }];
 }
 - (void)authMobile
@@ -216,36 +203,35 @@
     _mobile = _txtName.text;
     if (_mobile.length==0)
     {
-        [_lblError setText:@"手机号不能为空"];
+        [ProgressHUD showError:@"手机号不能为空"];
         return ;
     }
     if (_mobile.length!=11)
     {
-        [_lblError setText:@"手机长度错误"];
+        [ProgressHUD showError:@"手机长度错误"];
         return ;
     }
     if(![DecodeJson getSrcMobile:_mobile])
     {
-        [_lblError setText:@"请输入正确的手机号"];
+        [ProgressHUD showError:@"请输入正确的手机号"];
         return ;
     }
     _password = [_txtPwd text];
     if([_password length]==0)
     {
-        [_lblError setText:@"必须输入密码才能绑定手机"];
+        [ProgressHUD showError:@"必须输入密码才能绑定手机"];
         return ;
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)
     {
-        [_lblError setText:@"验证码不能为空"];
+        [ProgressHUD showError:@"验证码不能为空"];
         return ;
     }
     
     NSDictionary *paramters;
     NSString *strInfo;
     [self.view makeToastActivity];
-    [_lblError setText:@""];
     
         //直接绑定手机
     paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(5),@"code":strCode,@"pwd":_password};
@@ -263,17 +249,12 @@
          }
          else
          {
-             gcd_main_safe(
-             ^{
-                   [selfWeak.lblError setText:[dict objectForKey:@"errmsg"]];
-             });
+                   [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
          }
      }fail:^(NSError *error)
      {
-         gcd_main_safe(^{
              [selfWeak.view hideToastActivity];
-             [selfWeak.lblError setText:@"绑定失败"];
-         });
+             [ProgressHUD showError:@"绑定失败"];
      }];
 }
 

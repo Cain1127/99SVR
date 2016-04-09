@@ -49,4 +49,5 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 - (void)showToast:(UIView *)toast;
 - (void)showToast:(UIView *)toast duration:(CGFloat)interval position:(id)point;
 
+- (void)makeToastMsgActivity:(NSString *)strMsg;
 @end

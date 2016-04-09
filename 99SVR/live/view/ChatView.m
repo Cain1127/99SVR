@@ -45,6 +45,11 @@
     return self;
 }
 
+- (void)setViewHidden
+{
+    [self setHidden:YES];
+}
+
 - (void)createView
 {
     UIView *hiddenView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
@@ -52,9 +57,12 @@
     [hiddenView setBackgroundColor:[UIColor clearColor]];
     [self addSubview:hiddenView];
     __weak ChatView *__self = self;
+    
     [hiddenView clickWithBlock:^(UIGestureRecognizer *gesture) {
         __self.hidden = YES;
     }];
+    [hiddenView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(setViewHidden)]];
+    
     
     downView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50,kScreenWidth,50)];
     [self addSubview:downView];

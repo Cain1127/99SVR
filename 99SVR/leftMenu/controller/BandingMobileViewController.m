@@ -158,7 +158,8 @@
             return ;
         }
     }
-    [ProgressHUD show:@"获取验证码..."];
+//    [ProgressHUD show:@"获取验证码..."];
+    [self.view makeToastMsgActivity:@"获取验证码..."];
     [self getMobileCode:_mobile];
 }
 
@@ -192,31 +193,26 @@
     @WeakObj(self)
     [BaseService postJSONWithUrl:kBand_mobile_getcode_URL parameters:parameters success:^(id responseObject)
     {
-         [ProgressHUD dismiss];
+         [self.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
              DLog(@"dict:%@",dict);
              [selfWeak startTimer];
-             gcd_main_safe(
-             ^{
-                selfWeak.btnCode.enabled = NO;
-                [ProgressHUD showSuccess:@"已发送验证码到目标手机"];
-                [selfWeak.txtCode becomeFirstResponder];
-             });
-             
+            selfWeak.btnCode.enabled = NO;
+            [ProgressHUD showSuccess:@"已发送验证码到目标手机"];
+            [selfWeak.txtCode becomeFirstResponder];
+         
          }
          else
          {
-             gcd_main_safe(^{
-                [ProgressHUD showSuccess:[dict objectForKey:@"errmsg"]];
-             });
+             [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
          }
      }
      fail:^(NSError *error)
      {
-         [ProgressHUD dismiss];
-         [ProgressHUD showSuccess:@"请求验证码失败"];
+         [self.view hideToastActivity];
+         [ProgressHUD showError:@"请求验证码失败"];
      }];
 }
 

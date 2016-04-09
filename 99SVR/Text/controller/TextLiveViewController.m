@@ -8,6 +8,7 @@
 
 #import "TextLiveViewController.h"
 #import "LiveCoreTextCell.h"
+#import "AlertFactory.h"
 #import "LoginViewController.h"
 #import "NewDetailsViewController.h"
 #import "Toast+UIView.h"
@@ -199,7 +200,10 @@
             liveCore.btnThum.selected = YES;
             [dict setObject:liveCore forKey:NSStringFromInt((int)messageid)];
         }else{
-            [self createLoginAlert];
+            @WeakObj(self)
+            [AlertFactory createLoginAlert:self block:^{
+                [selfWeak.textSocket closeSocket];
+            }];
         }
     }
 }
@@ -317,8 +321,11 @@
 
 }
 
-- (void)reLoadTextList
+- (void)reLoadTextList:(NSNotification *)notify
 {
+    if (notify && notify.object && [notify.object intValue]) {
+        _nCurrent ++;
+    }
     _aryLive = _textSocket.aryText;
     __weak TextLiveViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
@@ -381,7 +388,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLoadTextList) name:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLoadTextList:) name:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reqTextList) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respZanSuccess:) name:MESSAGE_TEXT_ZAN_SUC_VC object:nil];
 }

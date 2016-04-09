@@ -186,7 +186,7 @@
             return ;
         }
     }
-    [ProgressHUD show:@"获取验证码..."];
+    [self.view makeToastMsgActivity:@"获取验证码..."];
     [_lblError setText:@""];
     [self getMobileCode:_mobile];
 }
@@ -208,7 +208,7 @@
     @WeakObj(_btnCode)
     [BaseService postJSONWithUrl:kBand_mobile_getcode_URL parameters:parameters success:^(id responseObject)
      {
-         [ProgressHUD dismiss];
+         [selfWeak.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
@@ -225,7 +225,7 @@
      }
                             fail:^(NSError *error)
      {
-         [ProgressHUD dismiss];
+         [selfWeak.view hideToastActivity];
          gcd_main_safe(^{
              [selfWeak.lblError setText:@"请求验证码失败"];
          });
@@ -252,7 +252,7 @@
             return ;
         }else if([self MatchLetter:newPwd]==-1)
         {
-            [ProgressHUD showError:@"新密码必须为6-16位数字、字母组合(不能是纯数字)"];
+            [ProgressHUD showError:@"密码不能包含空格"];
             return ;
         }
         else if(_password.length==0)
@@ -260,10 +260,15 @@
             [ProgressHUD showError:@"确认密码不能为空"];
             return ;
         }else if(![_password isEqualToString:newPwd])
-         {
+        {
              [ProgressHUD showError:@"新密码与确认密码不一致"];
              return ;
-         }
+        }
+        else if([self MatchLetterNumber:_password]==-1)
+        {
+            [ProgressHUD showError:@"密码不能为纯数字"];
+            return;
+        }
         [[ZLLogonServerSing sharedZLLogonServerSing] updatePwd:oldPwd cmd:newPwd];
     }
 }
@@ -274,25 +279,35 @@
         _mobile = _txtMobile.text;
         if (_mobile.length==0)
         {
-            [_lblError setText:@"手机号不能为空"];
+            [ProgressHUD showError:@"手机号不能为空"];
             return ;
         }
         if (_mobile.length!=11)
         {
-            [_lblError setText:@"手机长度错误"];
+            [ProgressHUD showError:@"手机长度错误"];
             return ;
         }
         if(![DecodeJson getSrcMobile:_mobile])
         {
-            [_lblError setText:@"请输入正确的手机号"];
+            [ProgressHUD showError:@"请输入正确的手机号"];
             return ;
         }
         _password = [_txtNew text];
         if([_password length]==0)
         {
-            [_lblError setText:@"必须输入密码才能绑定手机"];
+            [ProgressHUD showError:@"必须输入密码才能绑定手机"];
             return ;
         }
+         else if([self MatchLetter:_password]==-1)
+         {
+             [ProgressHUD showError:@"密码不能包含空格"];
+             return ;
+         }else if([self MatchLetterNumber:_password]==-1)
+         {
+             [ProgressHUD showError:@"密码不能为纯数字"];
+             return;
+         }
+         
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)
@@ -412,13 +427,28 @@
     {
         return YES;
     }
-    NSString *strCode = @"[a-zA-Z0-9_\u4e00-\u9fa5]+$";
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strCode];;
-    if (range.location>16 || range.location+string.length>16 || ![predicate evaluateWithObject:string])
-    {
-        return NO;
+    if (_txtNew == textField || _txtCmd == textField) {
+        NSString *strCode = @"[^ ]+$";
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strCode];;
+        if (range.location>16 || range.location+string.length>16 || ![predicate evaluateWithObject:string])
+        {
+            return NO;
+        }
     }
     return YES;
+}
+
+- (int)MatchLetterNumber:(NSString *)str
+{
+    NSString *ZIMU ;
+    NSPredicate *regextestmobile ;
+    ZIMU = @"\\d{6,16}";
+    regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", ZIMU];
+    if([regextestmobile evaluateWithObject:str]==YES)
+    {
+        return -1;
+    }
+    return 1;
 }
 
 -(int)MatchLetter:(NSString *)str
@@ -426,13 +456,12 @@
     //判断是否以字母开头
     NSString *ZIMU ;
     NSPredicate *regextestmobile ;
-    ZIMU = @"^[a-zA-Z][a-zA-Z0-9_\u4e00-\u9fa5]+$";
+    ZIMU = @"^[^ ]+$";
     regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", ZIMU];
     if([regextestmobile evaluateWithObject:str]==YES)
     {
         return 1;
     }
-    DLog(@"用户名只能包含数字、字母、下划线");
     return -1;
 }
 
