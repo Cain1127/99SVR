@@ -106,7 +106,7 @@
 
 - (void)createTextMessage:(uint32_t)teacherid type:(int)nType msg:(NSString *)strMsg;
 /**
- *  退出房间
+ *  退出房间,且彻底关闭socket
  */
 - (void)exitRoom;
 

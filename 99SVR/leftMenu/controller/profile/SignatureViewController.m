@@ -32,11 +32,6 @@
 {
     self.view.backgroundColor = kTableViewBgColor;
     
-    //输入框底层
-    UIView *inputView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 64.0f + 10.0f, kScreenWidth, 150.0f)];
-    inputView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:inputView];
-    
     //签名输入框
     _signatureTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0f, 64.0f + 10.0f, kScreenWidth - 2.0f * 12.0f, 150.0f)];
     _signatureTextField.placeholder = @"请输入签名";
@@ -103,7 +98,8 @@
     }
     else
     {
-        gcd_main_safe(^{
+        gcd_main_safe(
+            ^{
             [MBProgressHUD showError:@"修改个性签名出错"];
         });
     }

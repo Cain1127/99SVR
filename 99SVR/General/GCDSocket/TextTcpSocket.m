@@ -435,7 +435,7 @@
 #pragma mark 评论某条观点
 - (void)replyCommentReq:(NSString *)strComment msgid:(int64_t)msgId toid:(int)toId srccom:(int64_t)srcid
 {
-    strComment = [NSString stringWithFormat:@"<span>%@</span>",strComment];
+    strComment = [NSString stringWithFormat:@"%@",strComment];
     NSData *commentData = [strComment dataUsingEncoding:GBK_ENCODING];
     int nLength = (int)commentData.length+sizeof(CMDTextRoomViewCommentReq_t)+1;
     char szBuf[2048]={0};
@@ -1104,11 +1104,7 @@
         [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:[UserInfo sharedUserInfo].strPwd];
         strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
     }
-    else{
-        
-    }
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
-    
     NSString *uid = [DeviceUID uid];
     if (uid && uid>0)
     {
@@ -1197,16 +1193,19 @@
         _aryNew = [NSMutableArray array];
     }
     [_aryNew removeAllObjects];
+    [self connectTextServer:_strAddr port:_nPort];
+}
+
+- (void)decodeAddress
+{
     NSString *strAry = [[UserInfo sharedUserInfo].strTextRoom componentsSeparatedByString:@","][0];
     if (strAry.length>10) {
         NSString *strAddr = [strAry componentsSeparatedByString:@":"][0];
         NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
         _strAddr = strAddr;
         _nPort = (int)nPort;
-        [self connectTextServer:strAddr port:nPort];
     }
 }
-
 
 
 - (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort
@@ -1232,13 +1231,12 @@
     [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
     DLog(@"连接成功!");
     [self sendHello:MDM_Vchat_Text];
-    [self joinRoomInfo2];
-//    [self reqTeacherInfo];
     __weak TextTcpSocket *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
-         [__self thread_room];//发送心跳
+       [__self thread_room];//发送心跳
     });
+    [self joinRoomInfo2];
     [self performSelector:@selector(joinRoomTimeout) withObject:nil afterDelay:3.0];
 }
 
@@ -1523,6 +1521,18 @@
         break;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_SECRET_BUY_ERR_VC object:strMsg];
+}
+
+- (void)dealloc
+{
+    DLog(@"dealloc!");
+}
+
+- (id)init
+{
+    self = [super init];
+    [self decodeAddress];
+    return self;
 }
 
 @end

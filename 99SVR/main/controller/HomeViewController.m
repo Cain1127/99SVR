@@ -488,18 +488,15 @@ typedef enum : NSUInteger
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     ///判断不同的section数据模型，返回不同的view
     if (indexPath.section > _aryLiving.count)
     {
         return [self createDefaultTableViewCell:tableView];
     }
-    
     if (!([_aryLiving[indexPath.section - 1] isKindOfClass:[NSArray class]]))
     {
         return [self createDefaultTableViewCell:tableView];;
     }
-    
     ///根据对象数组内的类型加载HeaderView
     NSArray *tempArray = _aryLiving[indexPath.section - 1];
     if (0 >= tempArray.count)
@@ -535,7 +532,6 @@ typedef enum : NSUInteger
     ///文字直播内容
     if ([tempObject isKindOfClass:[TextRoomModel class]])
     {
-        
         static NSString *textCellName = @"textCellName";
         TextCell *tempCell = [_tableView dequeueReusableCellWithIdentifier:textCellName];
         @WeakObj(self);
@@ -780,8 +776,7 @@ typedef enum : NSUInteger
         WonderfullView *model = [tempArray objectAtIndex:indexPath.row];
         
         TextTcpSocket *textSocket = [[TextTcpSocket alloc] init];
-        [textSocket connectRoom:[model.roomid intValue]];
-        
+        textSocket.roomid = [model.roomid intValue];
         NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:textSocket viewID:[model.viewid intValue]];
         [self.navigationController pushViewController:detailView animated:YES];
         

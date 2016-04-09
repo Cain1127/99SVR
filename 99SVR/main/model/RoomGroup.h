@@ -15,8 +15,6 @@
 @property (nonatomic,copy) NSArray *roomList;
 @property (nonatomic,copy) NSArray *groupList;
 
-//@property (nonatomic,strong) NSMutableArray *aryRoomHttp;
-
 + (RoomGroup*)resultWithDict:(NSDictionary *)dict;
 
 @end

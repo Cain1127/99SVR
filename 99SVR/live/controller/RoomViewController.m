@@ -396,8 +396,6 @@
     }
 }
 
-
-
 - (void)sendRose
 {
     if(!_tcpSocket.rInfo)
@@ -419,8 +417,6 @@
 
 - (void)initUIBody
 {
-    //创建成员列表的tableView
-    
     _lblBlue = [[UILabel alloc] initWithFrame:Rect(0, _group.y+_group.height-1, 0, 2)];
     [_lblBlue setBackgroundColor:UIColorFromRGB(0x629bff)];
     [self.view addSubview:_lblBlue];
@@ -1129,21 +1125,6 @@
     cell.attributedTextContextView.delegate = self;
 }
 
-- (CGFloat)cellHeight:(SVRMesssage *)message
-{
-    return 0;
-//    NSString *messageID = message.messageID;
-//    CGFloat height = [[_cellHeights objectForKey:messageID] floatValue];
-//    if (height == 0)
-//    {
-//        DTAttributedTextContentView *text = [DTAttributedTextContentView new];
-//        text.attributedString = [[NSAttributedString alloc] initWithHTMLData:[message.text dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];;
-//        height = [text suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
-//        [_cellHeights setObject:@(height+10) forKey:messageID];
-//    }
-//    return height;
-}
-
 //设置高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1157,19 +1138,7 @@
         DTAttributedTextCell *cell = [self tableView:tableView chatPreparedCellForIndexPath:indexPath];
         return [cell requiredRowHeightInTableView:tableView];
     }
-    
     return 60;
-}
-
-//选择某一行
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
 }
 
 - (ZLCoreTextCell *)tableView:(UITableView *)tableView preparedCellForZLIndexPath:(NSIndexPath *)indexPath
@@ -1426,10 +1395,6 @@
         
     }
 }
-
-
-
-
 
 #pragma mark RoomDwonDelegate
 - (void)clickRoom:(UIButton *)button index:(NSInteger)nIndex

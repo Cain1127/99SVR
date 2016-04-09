@@ -323,7 +323,7 @@
 
 - (void)reLoadTextList:(NSNotification *)notify
 {
-    if (notify && notify.object && [notify.object intValue]) {
+    if (notify && notify.object && [notify.object intValue]==1) {
         _nCurrent ++;
     }
     _aryLive = _textSocket.aryText;

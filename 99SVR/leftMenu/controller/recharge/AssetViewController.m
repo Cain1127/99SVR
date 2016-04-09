@@ -119,21 +119,9 @@
  */
 - (void)rechargeClick
 {
-    ///默认进入苹果的内购页面
-    if ([UserInfo sharedUserInfo].nStatus)
-    {
-        PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
-        [self.navigationController pushViewController:paySelectVC animated:YES];
-    }
-    else
-    {
-        InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];
-        [self.navigationController pushViewController:inAppPurechasesVC animated:YES];
-    }
-    
-    ///进入公司集成的支付系统
+    PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+    [self.navigationController pushViewController:paySelectVC animated:YES];
 }
-
 
 - (void)dealloc
 {

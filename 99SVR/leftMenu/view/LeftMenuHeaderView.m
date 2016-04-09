@@ -98,6 +98,7 @@
     else
     {
         UserInfo *userInfo = [UserInfo sharedUserInfo];
+        _vipLevel.text = NSStringFromInt(userInfo.nUserId);
         if (userInfo.nType == 1)
         {
             _nameLabel.text = userInfo.strName;

@@ -13,6 +13,8 @@
 #import "DecodeJson.h"
 #import "UserInfo.h"
 
+#define kVersionNumber @"132"
+
 @implementation SVRInitLBS
 
 + (void)load
@@ -40,9 +42,11 @@
         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         __userInfo.strTextRoom = strInfo;
     } fail:nil];
-    [BaseService get:lbs_status dictionay:nil timeout:10 success:^(id responseObject) {
+    
+    NSString *strLbs = [NSString stringWithFormat:@"%@%@",lbs_status,kVersionNumber];
+    [BaseService get:strLbs dictionay:nil timeout:10 success:^(id responseObject) {
          NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         __userInfo.nStatus = [[parameters objectForKey:@"15"] intValue];
+         __userInfo.nStatus = [[parameters objectForKey:kVersionNumber] intValue];
     } fail:nil];
 }
 

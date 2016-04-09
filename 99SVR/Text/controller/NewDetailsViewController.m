@@ -8,6 +8,7 @@
 
 #import "NewDetailsViewController.h"
 #import "TextTcpSocket.h"
+#import "TextHomeViewController.h"
 #import "AlertFactory.h"
 #import "LoginViewController.h"
 #import "Photo.h"
@@ -317,7 +318,7 @@
     }else{
         @WeakObj(self)
         [AlertFactory createLoginAlert:self block:^{
-            [selfWeak.tcpSocket closeSocket];
+            [selfWeak.tcpSocket exitRoomInfo];
         }];
     }
 }
@@ -621,7 +622,7 @@
     if (info.nType != 1 && info.bIsLogin) {
         @WeakObj(self)
         [AlertFactory createLoginAlert:self block:^{
-            [selfWeak.tcpSocket closeSocket];
+            [selfWeak.tcpSocket exitRoomInfo];
         }];
         return ;
     }
@@ -668,6 +669,14 @@
 - (void)dealloc
 {
     DLog(@"dealloc");
+    NSArray *array = self.navigationController.viewControllers;
+    for (UIViewController *control in array) {
+        if([control isKindOfClass:[TextHomeViewController class]])
+        {
+            return ;
+        }
+    }
+    [self.tcpSocket exitRoom];
 }
 
 - (void)showImageInfo:(UITapGestureRecognizer *)tapGest

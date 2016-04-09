@@ -825,8 +825,8 @@
         }
         else
         {
-            return [NSString stringWithFormat:@"<a style=\"font-size:13px;color:#919191 \" href=\"sqchatid://%d\">%d</a>(%d)",
-                    userId, userId,userId];
+            return [NSString stringWithFormat:@"<a style=\"font-size:13px;color:#919191 \" href=\"sqchatid://%d\">%d</a>",
+                    userId, userId];
         }
     }
 }
@@ -868,7 +868,7 @@
         NSString *strInfo = nil;
         if (msg->toid == 0)
         {
-            strInfo = [NSString stringWithFormat:@"  %@<spanp style=\"color:#919191\">%@</span><br>%@",strFrom,strTo,strContent];
+            strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\">%@</span><br>%@",strFrom,strTo,strContent];
         }
         else
         {

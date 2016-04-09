@@ -20,7 +20,6 @@
     NSString *strDate;
 }
 
-@property (nonatomic,strong) UILabel *lblError;
 @property (nonatomic,copy) NSString *strMobile;
 @property (nonatomic,strong) UITextField *txtName;
 @property (nonatomic,strong) UITextField *txtCode;
@@ -72,7 +71,6 @@
         [ProgressHUD showError:@"请输入正确的手机号"];
         return ;
     }
-    [_lblError setText:@""];
     [self.view makeToastActivity];
     if(!strDate)
     {
@@ -162,14 +160,9 @@
     _btnCode.layer.masksToBounds = YES;
     _btnCode.layer.cornerRadius = 3;
     
-    
-    _lblError = [[UILabel alloc] initWithFrame:Rect(30, _txtCode.y+50, kScreenWidth-60, 20)];
-    [_lblError setFont:XCFONT(14)];
-    [self.view addSubview:_lblError];
-    
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, _lblError.y+35, kScreenWidth-60, 40);
+    btnRegister.frame = Rect(30, _btnCode.y+50, kScreenWidth-60, 40);
     [btnRegister setTitle:@"下一步" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
@@ -189,7 +182,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backLeft) name:MESSAGE_UPDATE_PASSWROD_VC object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -198,38 +190,25 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_UPDATE_PASSWROD_VC object:nil];
 }
 
-- (void)backLeft
-{
-    __weak ForgetPwdViewController *__self = self;
-    dispatch_async(dispatch_get_main_queue(), ^
-    {
-        [__self dismissViewControllerAnimated:YES completion:
-         ^{
-             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_PASSWROD_VC object:nil];
-         }];
-    });
-}
-
 - (void)authMobile
 {
     NSString *strMobile = _txtName.text;
     if ([strMobile length]==0)
     {
-        _lblError.text = @"手机号不能为空";
+        [ProgressHUD showError:@"手机号不能为空"];
         return ;
     }
     if ([strMobile length]!=11)
     {
-        _lblError.text = @"手机号格式错误";
+        [ProgressHUD showError:@"手机号格式错误"];
         return ;
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)
     {
-        _lblError.text = @"验证码不能为空";
+        [ProgressHUD showError:@"验证码不能为空"];
         return ;
     }
-    _lblError.text = @"";
     [self.view makeToastActivity];
     NSDictionary *parameters = @{@"phone":strMobile,@"code":strCode};
     NSString *strInfo = [NSString stringWithFormat:@"%@MApi/MobileFindPasswordCheckSMS",kRegisterNumber];
@@ -244,30 +223,17 @@
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
         if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
         {
-            DLog(@"dict:%@",dict);
-            dispatch_async(dispatch_get_main_queue(),
-            ^{
-                __self.btnCode.enabled = NO;
-                [__self.view makeToast:@"验证成功"];
-            });
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                InputPwdViewController *input = [[InputPwdViewController alloc] initWithMobile:__self.strMobile];
-                [self.navigationController pushViewController:input animated:YES];
-            });
+            __self.btnCode.enabled = NO;
+            [ProgressHUD showSuccess:@"验证成功"];
+            InputPwdViewController *input = [[InputPwdViewController alloc] initWithMobile:__self.strMobile];
+            [self.navigationController pushViewController:input animated:YES];
         }
         else
         {
-            dispatch_async(dispatch_get_main_queue(),
-            ^{
-                [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
-            });
+            [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
         }
-        
     } fail:^(NSError *error) {
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-           [__self.view makeToast:@"连接服务器失败"];
-        });
+        [ProgressHUD showError:@"连接服务器失败"];
     }];
 }
 
@@ -281,24 +247,12 @@
     [fmt setDateFormat:@"yyyyMMdd"];
     strDate = [fmt stringFromDate:date];
     [_txtName setDelegate:self];
-//    _txtName.text = @"17727610912";
-//    _txtCode.text = @"5614";
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {

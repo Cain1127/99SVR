@@ -173,7 +173,7 @@
     [self.view addSubview:hidenView];
     hidenView.hidden = YES;
     
-    _teachView = [[TeachView alloc] initWithFrame:Rect(0, 68, kScreenWidth,140)];
+    _teachView = [[TeachView alloc] initWithFrame:Rect(0, 68, kScreenWidth,170)];
     [hidenView addSubview:_teachView];
     _teachView.hidden = YES;
     
