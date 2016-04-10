@@ -14,7 +14,7 @@
 
 
 @property (nonatomic,assign) BOOL bConnect;
-@property (nonatomic,assign) NSInteger nFall;
+@property (nonatomic,assign) int nFall;
 @property (nonatomic,copy) NSString *strAddr;
 @property (nonatomic) int nPort;
 @property (nonatomic,strong) TeacherModel *teacher;
@@ -121,7 +121,7 @@
  *  @param nIndex 索引
  *  @param nCount 个数
  */
-- (void)reqNewList:(int)nIndex count:(int)nCount;
+- (void)reqNewList:(int64_t)nIndex count:(int)nCount;
 
 /**
  *  请求观点详情,默认请求类型为2

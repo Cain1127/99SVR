@@ -90,13 +90,23 @@
         [UserDefaults setObject:parameters forKey:kGiftInfo];
         [DecodeJson setGiftInfo:parameters];
     }
+    
+    
+    hostReach = [Reachability reachabilityWithHostName:@"www.163.com"];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name: kReachabilityChangedNotification
+                                               object: nil];
     //开启网络通知
-    hostReach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
     [hostReach startNotifier];
     
     return YES;
 }
 
+/**
+*  网络更改通知
+*/
 -(void)reachabilityChanged:(NSNotification *)note
 {
     Reachability *curReach = [note object];
@@ -120,6 +130,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [__windows makeToast:@"当前网络:WIFI"];
         });
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
     }
     else
     {
@@ -128,8 +139,11 @@
            ^{
                [__windows makeToast:@"当前网络:移动网络"];
            });
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
+    [KUserSingleton.dictRoomGate removeAllObjects];
+    [KUserSingleton.dictRoomMedia removeAllObjects];
+    [KUserSingleton.dictRoomText removeAllObjects];
 }
 
 -(void)onCheckVersion

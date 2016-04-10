@@ -220,7 +220,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     [self initUIHead];
     UIButton *btnSender = [_group viewWithTag:1];
     [self btnEvent:btnSender];

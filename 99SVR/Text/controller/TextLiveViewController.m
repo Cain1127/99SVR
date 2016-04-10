@@ -83,14 +83,13 @@
 - (void)requestMoreTextLive
 {
     DLog(@"触发一次");
-    if(_aryLive.count==0)
+    if(_aryLive.count>0)
     {
-        return ;
+        TextLiveModel *model = [_aryLive objectAtIndex:[_aryLive count]-1];
+        [_textSocket reqTextRoomList:model.messageid count:20 type:1];
+        [_tableView.footer beginRefreshing];
+         _nCurrent += 20;
     }
-    TextLiveModel *model = [_aryLive objectAtIndex:[_aryLive count]-1];
-    [_textSocket reqTextRoomList:model.messageid count:20 type:1];
-    [_tableView.footer beginRefreshing];
-     _nCurrent += 20;
 }
 
 - (void)requestTextLive
@@ -279,11 +278,11 @@
     if (didUpdate)
     {
         //重新加载图片
-        CGFloat height = [text.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
-        DLog(@"height:%f",height);
+//        CGFloat height = [text.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
+//        DLog(@"height:%f",height);
         [text relayoutText];
-        height = [text.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
-        DLog(@"height:%f",height);
+//        height = [text.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
+//        DLog(@"height:%f",height);
 //        NSString *cacheKey = nil;
 //        cacheKey =[NSString stringWithFormat:@"LiveText-%zi", text.section];
 //        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:text.section];
@@ -333,6 +332,7 @@
         if ([__self.tableView.header isRefreshing])
         {
             [__self.tableView.header endRefreshing];
+            [__self.tableView.footer resetNoMoreData];
         }
         else
         {
@@ -356,6 +356,7 @@
     }
     _aryLive = nil;
     [_textSocket reqTextRoomList:_nCurrent count:20 type:1];
+    [_tableView.gifHeader beginRefreshing];
     _nCurrent += 20;
 }
 
@@ -402,30 +403,6 @@
 - (void)dealloc
 {
     DLog(@"dealloc");
-}
-
-- (void)createLoginAlert
-{
-    @WeakObj(self)
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                   message:@"游客无法互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-       dispatch_async(dispatch_get_main_queue(),
-       ^{
-            [selfWeak.textSocket exitRoomInfo];
-            LoginViewController *loginView = [[LoginViewController alloc] init];
-            [selfWeak.navigationController pushViewController:loginView animated:YES];
-       });
-    }];
-    [alert addAction:canAction];
-    [alert addAction:okAction];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak presentViewController:alert animated:YES completion:nil];
-    });
 }
 
 @end

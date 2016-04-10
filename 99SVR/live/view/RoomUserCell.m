@@ -33,11 +33,11 @@
     imgViewPic.layer.masksToBounds = YES;
     imgViewPic.layer.cornerRadius = 20;
     
-    lblName = [[UILabel alloc] initWithFrame:Rect(imgViewPic.x+imgViewPic.width+12,13,150,16)];
+    lblName = [[UILabel alloc] initWithFrame:Rect(imgViewPic.x+imgViewPic.width+8,13,150,16)];
     [lblName setTextColor:UIColorFromRGB(0x343434)];
     [lblName setFont:XCFONT(14)];
     
-    lblContent = [[UILabel alloc] initWithFrame:Rect(lblName.x,lblName.y+lblName.height+10,kScreenWidth-50, 16)];
+    lblContent = [[UILabel alloc] initWithFrame:Rect(lblName.x,lblName.y+lblName.height+5,kScreenWidth-50, 16)];
     [lblContent setTextColor:UIColorFromRGB(0x919191)];
     [lblContent setFont:XCFONT(14)];
     

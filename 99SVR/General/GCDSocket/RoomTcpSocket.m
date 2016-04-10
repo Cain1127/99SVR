@@ -343,8 +343,10 @@
 
 - (void)reConnectRoomInfo
 {
-    _nFall++;
-    [self reConnectRoomTime:_strRoomId address:_strRoomAddress port:_nRoomPort];
+    if (!_bJoin) {
+        _nFall++;
+        [self reConnectRoomTime:_strRoomId address:_strRoomAddress port:_nRoomPort];
+    }
 }
 
 - (BOOL)connectRoomAndPwd:(NSString *)strPwd
@@ -359,6 +361,10 @@
 
 - (BOOL)reConnectRoomTime:(NSString *)strId address:(NSString *)strIp port:(int)nPort
 {
+    if (strIp.length<10) {
+        [self ReConnectSocket];
+        return YES;
+    }
     nSocketType = 2;
     if (tcpThread==nil)
     {
@@ -370,8 +376,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     if(![_asyncSocket connectToHost:strIp onPort:nPort error:nil])
     {
-        [self addChatInfo:@"[系统消息]加载房间数据失败"];
-        DLog(@"连接失败");
+        
     }
     else
     {
@@ -1213,10 +1218,9 @@
     [self sendPingRoom];
 }
 
-
 /**
- *  执行重连
- */
+*  执行重连
+*/
 - (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
                  elapsed:(NSTimeInterval)elapsed
                bytesDone:(NSUInteger)length
@@ -1224,8 +1228,6 @@
     /**
      *  重新建立连接   请求新的lbs
      */
-    
-    
     return 1;
 }
 
@@ -1273,6 +1275,7 @@
 
 -(void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
+    _bJoin = NO;
     if (err)
     {
         if ([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Connection refused"])
@@ -1288,55 +1291,71 @@
         {
             [self reConnectRoomInfo];
         }
-        else if([err.domain isEqualToString:@"NSPOSIXErrorDomain"] &&_nFall < 3)
+        else if([err.domain isEqualToString:@"NSPOSIXErrorDomain"])
         {
             [self addChatInfo:@"[系统消息]网络中断,请检测手机网络"];
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-            @WeakObj(self)
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
-                [selfWeak reConnectRoomInfo];
-            });
+            _nFall = 0;
         }
     }
-    
 }
 
 - (void)ReConnectSocket
 {
         //重连操作
-    if(![UserInfo sharedUserInfo].strRoomAddr)
-    {
-        __weak UserInfo *__userInfo = [UserInfo sharedUserInfo];
-        [BaseService get:LBS_ROOM_GATE dictionay:nil timeout:8 success:^(id responseObject)
-         {
-             NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-             __userInfo.strRoomAddr = strInfo;
-             NSString *strAddr = nil;
-             int nPort = 0;
-             if([[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","].count > _nFall)
-             {
-                 NSString *strInfo = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][_nFall];
-                 strAddr = [strInfo componentsSeparatedByString:@":"][0];
-                 nPort = [[strInfo componentsSeparatedByString:@":"][1] intValue];
-                 [self reConnectRoomTime:_strRoomId address:strAddr port:nPort];
-                 _nFall++;
-             }
-         }fail:^(NSError *error)
-         {
-             DLog(@"获取服务器信息异常");
-             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_SEND_MSG_VC object:@"获取房间数据失败"];
-         }];
-        _nFall++;
+    if (_nFall>=12) {
+        return ;
     }
-    else if([[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","].count > _nFall)
+    int nLbs = _nFall/3;
+    NSString *addrTemp = [KUserSingleton.dictRoomGate objectForKey:@(nLbs)];
+    if (addrTemp == nil)
     {
-        NSString *strAddr = nil;
-        int nPort = 0;
-        NSString *strInfo = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][_nFall];
-        strAddr = [strInfo componentsSeparatedByString:@":"][0];
-        nPort = [[strInfo componentsSeparatedByString:@":"][1] intValue];
-        [self reConnectRoomTime:_strRoomId address:strAddr port:nPort];
-        _nFall++;
+        NSString *strInfo = [kLbs_all_path componentsSeparatedByString:@";"][nLbs];
+        NSString *strPath = [[NSString alloc] initWithFormat:@"http://%@/tygetgate",strInfo];
+        @WeakObj(self)
+        __block int __nLbs = nLbs;
+        [BaseService get:strPath dictionay:nil timeout:5 success:^(id responseObject) {
+            if (responseObject) {
+                NSString *addrInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                [KUserSingleton.dictRoomGate setObject:addrInfo forKey:@(__nLbs)];
+                int nIndex = selfWeak.nFall%2;
+                if ([addrInfo rangeOfString:@";"].location!=NSNotFound) {
+                    NSArray *arrayIndex = [addrInfo componentsSeparatedByString:@";"];
+                    NSString *strAddrInfo = arrayIndex.count > nIndex ? arrayIndex[nIndex] : @"nil";
+                    if (strAddrInfo && [strAddrInfo rangeOfString:@":"].location != NSNotFound && [strAddrInfo rangeOfString:@"."].location != NSNotFound)
+                    {
+                        selfWeak.strRoomAddress = [strAddrInfo componentsSeparatedByString:@":"][0];
+                        selfWeak.nRoomPort = [[strAddrInfo componentsSeparatedByString:@":"][1] intValue];
+                        [selfWeak reConnectRoomInfo];
+                    }
+                }else{
+                    selfWeak.nFall=(__nLbs+1)*3;
+                    [selfWeak ReConnectSocket];
+                }
+            }
+        }
+        fail:^(NSError *error)
+        {
+            if(selfWeak.nFall<12)
+            {
+                selfWeak.nFall=(__nLbs+1)*3;
+                [selfWeak ReConnectSocket];
+            }
+        }];
+    }
+    else
+    {
+        int nIndex = _nFall%2;
+        NSArray *arrayIndex = [addrTemp componentsSeparatedByString:@";"];
+        NSString *strAddrInfo = arrayIndex.count > nIndex ? arrayIndex[nIndex] : @"nil";
+        if ([strAddrInfo isEqualToString:@"nil"]) {
+            _nFall=(nLbs+1)*3;
+            [self ReConnectSocket];
+        }else{
+            _strRoomAddress = [strAddrInfo componentsSeparatedByString:@":"][0];
+            _nRoomPort = [[strAddrInfo componentsSeparatedByString:@":"][1] intValue];
+            [self reConnectRoomInfo];
+        }
     }
 }
 

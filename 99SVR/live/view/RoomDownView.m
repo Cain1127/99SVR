@@ -34,7 +34,7 @@
 
 - (void)initRoomView
 {
-    int nNumber = KUserSingleton.nStatus ? 3 : 4;
+    int nNumber = KUserSingleton.nStatus ? 4 : 3;
     UILabel *line = [[UILabel alloc] initWithFrame:Rect(0, 0.5, kScreenWidth, 1)];
     [self addSubview:line];
     [line setBackgroundColor:UIColorFromRGB(0xCFCFCF)];
@@ -53,7 +53,7 @@
     CGFloat threeX = width*2;
     _btnChat.frame = Rect(0,0, width, 50);
     _btnUser.frame = Rect(width,0, width, _btnChat.height);
-    //nstatus==1 去掉gift
+    //nstatus==0 去掉gift
     if(KUserSingleton.nStatus)
     {
         _btnGift = [self createButton:@"video_present_icon" high:@""];
@@ -62,7 +62,7 @@
         threeX += width;
         _btnGift.tag = 2;
     }
-    _btnRose.frame = Rect(width,0, width, _btnChat.height);
+    _btnRose.frame = Rect(threeX,0, width, _btnChat.height);
     _btnRose.cjr_acceptEventInterval = 2;
 }
 

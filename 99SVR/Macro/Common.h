@@ -74,6 +74,8 @@
 
 #define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
 
+#define LBS_ROOM_MEDIA [NSString stringWithFormat:@"%@tygetmedia",LBS_HTTP_HOST]
+
 #define lbs_status @"http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=2&parameterName="
 
 #define kTEXT_NEW_DETAILS_URL @"http://hall.99ducaijing.cn:8081/viewpoint/index.php?s=/Index/getViewPoint/id/"
@@ -88,6 +90,7 @@
 #define kTEXT_GROUP_URL @"http://122.13.81.62:22806/test/test.php?act=script"
 #endif
 
+#define kLbs_all_path @"lbs1.99ducaijing.cn:2222;lbs2.99ducaijing.cn:2222;58.210.107.54:2222;122.193.102.23:2222;112.25.230.249:2222"
 
 #endif
 

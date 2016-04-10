@@ -144,8 +144,11 @@
 
 - (void)reqMoreNewMsg
 {
-    [_textSocket reqNewList:_current count:20];
-    _current += 20;
+    if (_aryNew.count>0) {
+        IdeaDetails *model = [_aryNew objectAtIndex:_aryNew.count-1];
+        [_textSocket reqNewList:model.messageid count:20];
+        _current += 20;
+    }
 }
 
 - (void)reloadNew:(NSNotification *)notify
@@ -160,6 +163,7 @@
     ^{
         if ([selfWeak.tableView.gifHeader isRefreshing]) {
             [selfWeak.tableView.gifHeader endRefreshing];
+            [selfWeak.tableView.footer resetNoMoreData];
         }
         else if([self.tableView.footer isRefreshing])
         {

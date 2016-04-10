@@ -86,9 +86,13 @@
 
 - (void)requestMore
 {
-//    __weak TextTodayVPViewController *__self = self;
-    [_tcpSocket reqTextRoomList:_nCurrent count:20 type:2];
-    _nCurrent += 20;
+    if(_aryLive.count>0)
+    {
+        TextLiveModel *model = [_aryLive objectAtIndex:[_aryLive count]-1];
+        [_tcpSocket reqTextRoomList:model.messageid count:20 type:2];
+        [_tableView.footer beginRefreshing];
+        _nCurrent += 20;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -141,10 +145,7 @@
                                 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL)
              {
                  MarchLiveTextCell *cell = (MarchLiveTextCell*)attributedTextContentView.superview.superview;
-                 if([cell isKindOfClass:[MarchLiveTextCell class]])
-                 {
-                     [selfWeak updateTextView:cell url:imageURL changeSize:image.size];
-                 }
+                 [selfWeak updateTextView:cell url:imageURL changeSize:image.size];
              }];
         }
         imageView.userInteractionEnabled = YES;
@@ -190,13 +191,13 @@
     if (didUpdate)
     {
         //重新加载图片
-        [text.attributedTextContextView relayoutText];
+        [text relayoutText];
 //        NSString *cacheKey = nil;
 //        cacheKey =[NSString stringWithFormat:@"LiveText-%zi", text.section];
 //        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:text.section];
 //        NSArray *array = [[NSArray alloc] initWithObjects:indexPath, nil];
-        //        [_tableView reloadRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
-        //        [text setNeedsLayout];
+//        [_tableView reloadRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
+//        [text setNeedsLayout];
         [_tableView reloadData];
     }
 }
@@ -223,6 +224,7 @@
     liveCore.btnThum.selected = YES;
     [dict setObject:liveCore forKey:NSStringFromInt((int)messageid)];
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MarchLiveTextCell *cell = [self tableView:tableView marchCellForIndexPath:indexPath];
@@ -262,7 +264,7 @@
         if(![strInfo isEqualToString:cell.strInfo])
         {
             cell.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strInfo dataUsingEncoding:NSUTF8StringEncoding]
-                                                                       documentAttributes:nil];
+                                                              documentAttributes:nil];
             cell.section = indexPath.section;
             cell.delegate = self;
             [cell setTextModel:textModel];
@@ -313,6 +315,7 @@
         if ([__self.tableView.header isRefreshing])
         {
             [__self.tableView.header endRefreshing];
+            [__self.tableView.footer resetNoMoreData];
         }
         else
         {
