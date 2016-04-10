@@ -87,27 +87,21 @@
         RoomGroup *group = [[RoomGroup alloc] init];
         group.groupId = @"1";
         group.groupName = @"搜索";
-        NSMutableArray *array = [NSMutableArray array];
-        for (RoomGroup *rGroup in [UserInfo sharedUserInfo].aryRoom)
-        {
-            [rGroup.groupId isEqualToString:@"4"];
-        }
+        NSMutableDictionary *array = [NSMutableDictionary dictionary];
         for (RoomGroup *rGroup in [UserInfo sharedUserInfo].aryRoom)
         {
             for (RoomHttp *item in rGroup.roomList)
             {
-                [array removeObject:item];
-                [array addObject:item];
+                [array setObject:item forKey:item.nvcbid];
             }
             for (RoomGroup *sonGroup in rGroup.groupList)
             {
                 for (RoomHttp *item in sonGroup.roomList) {
-                    [array removeObject:item];
-                    [array addObject:item];
+                    [array setObject:item forKey:item.nvcbid];
                 }
             }
         }
-        group.roomList = array;
+        group.roomList = [array allValues];
         [aryDatas addObject:group];
         _allDatas = aryDatas;
     }
@@ -122,23 +116,21 @@
                 RoomGroup *group = [[RoomGroup alloc] init];
                 group.groupId = @"1";
                 group.groupName = @"搜索";
-                NSMutableArray *array = [NSMutableArray array];
-                for (RoomGroup *rGroup in aryIndex)
+                NSMutableDictionary *array = [NSMutableDictionary dictionary];
+                for (RoomGroup *rGroup in [UserInfo sharedUserInfo].aryRoom)
                 {
                     for (RoomHttp *item in rGroup.roomList)
                     {
-                        [array removeObject:item];
-                        [array addObject:item];
+                        [array setObject:item forKey:item.nvcbid];
                     }
                     for (RoomGroup *sonGroup in rGroup.groupList)
                     {
                         for (RoomHttp *item in sonGroup.roomList) {
-                            [array removeObject:item];
-                            [array addObject:item];
+                            [array setObject:item forKey:item.nvcbid];
                         }
                     }
                 }
-                group.roomList = array;
+                group.roomList = [array allValues];
                 [__aryDatas addObject:group];
                 __self.allDatas = __aryDatas;
             }
@@ -282,6 +274,7 @@
             NSPredicate *pre = [NSPredicate predicateWithFormat:searchWords];
             _aryResult = [group.roomList filteredArrayUsingPredicate:pre];
             [_searchResultsTable reloadData];
+            
         }
         else
         {

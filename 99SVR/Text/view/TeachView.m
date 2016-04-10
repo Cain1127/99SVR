@@ -84,7 +84,7 @@
     self.layer.shadowRadius = 4;
     
     
-    _lblContent= [[UILabel alloc] initWithFrame:Rect(15, _lblCount.y+_lblCount.height+12,kScreenWidth-30,50)];
+    _lblContent= [[UILabel alloc] initWithFrame:Rect(15, _lblCount.y+_lblCount.height+12,kScreenWidth-30,10)];
     [self addSubview:_lblContent];
     [_lblContent setTextColor:UIColorFromRGB(0xCBDCF5)];
     _lblContent.font = XCFONT(12);

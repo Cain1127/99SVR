@@ -208,12 +208,12 @@
     if (buttonIndex == 1)
     {
         [[ZLLogonServerSing sharedZLLogonServerSing] closeProtocol];
-        [UserDefaults removeObjectForKey:kIsLogin];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_EXIT_LOGIN_VC object:nil];
         [UserInfo sharedUserInfo].bIsLogin = NO;
         [UserInfo sharedUserInfo].otherLogin = 0;
         [UserInfo sharedUserInfo].nUserId = 0;
         [UserInfo sharedUserInfo].banding = 0;
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_EXIT_LOGIN_VC object:nil];
+        [UserDefaults setObject:0 forKey:kIsLogin];
         
         [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:@"0" pwd:@""];
         [logoutBtn setHidden:YES];

@@ -56,8 +56,6 @@
     _btnThum.titleLabel.font = XCFONT(13);
     [self.contentView addSubview:_btnThum];
     
-    DLog(@"thumframe:%@",NSStringFromCGRect(_btnThum.frame));
-    
     UIEdgeInsets image = _btnObserved.imageEdgeInsets;
     image.left-=10;
     _btnObserved.imageEdgeInsets = image;

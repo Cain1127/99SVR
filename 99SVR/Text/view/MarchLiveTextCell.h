@@ -15,7 +15,7 @@
 
 @end
 
-@interface MarchLiveTextCell : UITableViewCell
+@interface MarchLiveTextCell : DTAttributedTextCell
 
 @property (nonatomic,strong) UILabel *lblTime;
 @property (nonatomic,strong) UIButton *btnThum;
@@ -25,7 +25,7 @@
 @property (nonatomic) NSInteger section;
 @property (nonatomic) int64_t viewid;
 @property (nonatomic,copy) NSString *strInfo;
-@property (nonatomic,strong) DTAttributedTextView *textView;
+//@property (nonatomic,strong) DTAttributedTextView *textView;
 @property (nonatomic,strong) TextLiveModel *model;
 
 - (void)setTextModel:(TextLiveModel *)model;

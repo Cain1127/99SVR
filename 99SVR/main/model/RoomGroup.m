@@ -38,9 +38,10 @@
     for (NSString* key in propertyArray) {
         @try
         {
-            if ([key isEqual:@"roomList"])
+            if ([key isEqual:@"roomList"] && [dict[key] isKindOfClass:[NSArray class]])
             {
                 NSArray *array = dict[key];
+                
                 NSMutableArray *aryCount = [[NSMutableArray alloc] init];
                 for (NSDictionary *dict in array)
                 {
@@ -49,7 +50,7 @@
                 }
                 result.roomList = aryCount;
             }
-            else if ([key isEqual:@"groupList"])
+            else if ([key isEqual:@"groupList"] && [dict[key] isKindOfClass:[NSArray class]] )
             {
                 NSArray *array = dict[key];
                 NSMutableArray *aryList = [NSMutableArray array];

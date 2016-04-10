@@ -8,6 +8,8 @@
 
 #import "NewDetailsViewController.h"
 #import "TextTcpSocket.h"
+#import "TextHomeViewController.h"
+#import "AlertFactory.h"
 #import "LoginViewController.h"
 #import "Photo.h"
 #import "PhotoViewController.h"
@@ -157,7 +159,10 @@
     {
         _chatView.hidden = NO;
     }else{
-        [self createLoginAlert];
+        @WeakObj(self)
+        [AlertFactory createLoginAlert:self block:^{
+            [selfWeak.tcpSocket exitRoomInfo];
+        }];
     }
 }
 
@@ -311,32 +316,11 @@
         [self.view makeToastActivity];
         [_tcpSocket reqCommentZan:[_jsonModel.viewid integerValue]];
     }else{
-        [self createLoginAlert];
+        @WeakObj(self)
+        [AlertFactory createLoginAlert:self block:^{
+            [selfWeak.tcpSocket exitRoomInfo];
+        }];
     }
-}
-
-- (void)createLoginAlert
-{
-    @WeakObj(self)
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                   message:@"游客无法互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-       dispatch_async(dispatch_get_main_queue(),
-       ^{
-          [selfWeak.tcpSocket exitRoomInfo];
-          LoginViewController *loginView = [[LoginViewController alloc] init];
-          [selfWeak.navigationController pushViewController:loginView animated:YES];
-       });
-    }];
-    [alert addAction:canAction];
-    [alert addAction:okAction];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak presentViewController:alert animated:YES completion:nil];
-    });
 }
 
 - (void)zanFailInfo
@@ -428,7 +412,16 @@
 
 - (void)updateTextView:(NSURL*)url changeSize:(CGSize)size
 {
-    CGSize imageSize = size;
+    CGSize imageSize ;
+    if (size.width>kScreenWidth) {
+        imageSize.width = (kScreenWidth-20);
+        CGFloat width = imageSize.width;
+        imageSize.height = size.height/(size.width/width);
+    }
+    else
+    {
+        imageSize = size;
+    }
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"contentURL == %@", url];
     BOOL didUpdate = NO;
     for (DTTextAttachment *oneAttachment in [_textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
@@ -627,7 +620,10 @@
 {
     UserInfo *info = KUserSingleton;
     if (info.nType != 1 && info.bIsLogin) {
-        [self createLoginAlert];
+        @WeakObj(self)
+        [AlertFactory createLoginAlert:self block:^{
+            [selfWeak.tcpSocket exitRoomInfo];
+        }];
         return ;
     }
     if ([textView.textStorage getPlainString].length == 0)
@@ -673,6 +669,14 @@
 - (void)dealloc
 {
     DLog(@"dealloc");
+    NSArray *array = self.navigationController.viewControllers;
+    for (UIViewController *control in array) {
+        if([control isKindOfClass:[TextHomeViewController class]])
+        {
+            return ;
+        }
+    }
+    [self.tcpSocket exitRoom];
 }
 
 - (void)showImageInfo:(UITapGestureRecognizer *)tapGest

@@ -77,6 +77,22 @@
     [self addSubview:line2];
 }
 
+- (void)setBtn:(UIButton *)sender
+{
+    for (UIButton *btn in self.subviews)
+    {
+        if (![btn isKindOfClass:[UIButton class]])
+        {
+            continue;
+        }
+        if(btn.selected)
+        {
+            btn.selected = NO;
+        }
+    }
+    [sender setSelected:YES];
+}
+
 - (void)setBtnSelect:(NSInteger)tag
 {
     for (UIButton *btn in self.subviews)
@@ -85,18 +101,10 @@
         {
             continue;
         }
-        if(btn.tag == tag)
-        {
-            btn.selected = YES;
-        }
-        else
-        {
-            if(btn.selected)
-            {
-               btn.selected = NO;
-            }
-        }
+        btn.selected = NO;
     }
+    UIButton *btnSender = (UIButton *)[self viewWithTag:tag];
+    [btnSender setSelected:YES];
 }
 
 - (void)setBluePointX:(CGFloat)fPointX

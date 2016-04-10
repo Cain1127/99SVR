@@ -435,7 +435,7 @@
 #pragma mark 评论某条观点
 - (void)replyCommentReq:(NSString *)strComment msgid:(int64_t)msgId toid:(int)toId srccom:(int64_t)srcid
 {
-    strComment = [NSString stringWithFormat:@"<span>%@</span>",strComment];
+    strComment = [NSString stringWithFormat:@"%@",strComment];
     NSData *commentData = [strComment dataUsingEncoding:GBK_ENCODING];
     int nLength = (int)commentData.length+sizeof(CMDTextRoomViewCommentReq_t)+1;
     char szBuf[2048]={0};
@@ -555,56 +555,47 @@
 - (void)respPHPNewInfo:(char *)pInfo
 {
     CMDTextRoomViewPHPRes_t *resp = (CMDTextRoomViewPHPRes_t *)pInfo;
-    NSString *strText = [NSString stringWithCString:resp->content encoding:GBK_ENCODING];
-    NSArray *aryInfo = [strText componentsSeparatedByString:@"|"];
-    if (aryInfo.count==4)
-    {
         //将PHP获取到的观点组合成新的结构体
-        {
-            int nSize = sizeof(CMDTextRoomViewInfoRes_t)+resp->titlelen+1;
-            char cBuffer[nSize];
-            memset(cBuffer, 0, nSize);
-            CMDTextRoomLiveViewRes_t *new_struct= (CMDTextRoomLiveViewRes_t*)cBuffer;
-            new_struct->vcbid = _roomid;
-            new_struct->userid = _teacher.teacherid;
-            new_struct->viewTitlelen = resp->titlelen;
-            new_struct->commentstype = resp->commentstype;
-            new_struct->viewid = [aryInfo[1] intValue];
-            new_struct->messagetime = [aryInfo[2] intValue];
-            NSData *data = [aryInfo[3] dataUsingEncoding:GBK_ENCODING];
-            strncpy(new_struct->content,data.bytes,data.length);
-            IdeaDetails *idea = [[IdeaDetails alloc] initWithIdeaDetails:new_struct];
-            [_aryNew addObject:idea];
-            
-            cBuffer[nSize-1] = '\0';
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_NEW_VC object:nil];
-        }
-        //设置直播类型观点
-        {
-            int notifysize = sizeof(CMDTextRoomLiveListNoty_t) + resp->titlelen+1;
-            char cNotify[notifysize];
-            CMDTextRoomLiveListNoty_t *notify = (CMDTextRoomLiveListNoty_t*)cNotify;
-            memset(cNotify, 0, notifysize);
-            notify->vcbid = _roomid;
-            notify->userid = _teacher.teacherid;
-            notify->teacherid = _teacher.teacherid;
-            notify->srcuserid = _teacher.teacherid;
-            NSData *teachdata = [_teacher.strName dataUsingEncoding:GBK_ENCODING];
-            strncpy(notify->srcuseralias,teachdata.bytes,teachdata.length);
-            NSData *data = [aryInfo[3] dataUsingEncoding:GBK_ENCODING];
-            notify->messageid = [aryInfo[0] intValue];
-            notify->livetype = 4;
-            notify->textlen = resp->titlelen;
-            notify->destextlen = 0;
-            notify->messagetime = [aryInfo[2] intValue];
-            notify->zans = 0;
-            memcpy(notify->content,data.bytes,data.length); //源消息内容长度
-            cNotify[notifysize-1] = '\0';
-            TextLiveModel *textModel = [[TextLiveModel alloc] initWithNotify:notify];
-            [_aryText insertObject:textModel atIndex:0];
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
-        }
+    {
+        int nSize = sizeof(CMDTextRoomViewInfoRes_t)+resp->titlelen+resp->textlen+1;
+        char cBuffer[nSize];
+        memset(cBuffer, 0, nSize);
+        CMDTextRoomLiveViewRes_t *new_struct= (CMDTextRoomLiveViewRes_t*)cBuffer;
+        new_struct->vcbid = _roomid;
+        new_struct->userid = _teacher.teacherid;
+        new_struct->viewTitlelen = resp->titlelen;
+        new_struct->commentstype = resp->commentstype;
+        new_struct->viewid = resp->businessid;
+        new_struct->messagetime = resp->messagetime;
+        new_struct->viewtextlen = resp->textlen;
+        strncpy(new_struct->content,resp->content,resp->titlelen+resp->textlen);
+        IdeaDetails *idea = [[IdeaDetails alloc] initWithIdeaDetails:new_struct];
+        [_aryNew insertObject:idea atIndex:0];
+//        cBuffer[nSize-1] = '\0';
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_NEW_VC object:@(1)];
     }
+    //设置直播类型观点
+    {
+        char cNotify[1024];
+        CMDTextRoomLiveListNoty_t *notify = (CMDTextRoomLiveListNoty_t*)cNotify;
+        memset(cNotify, 0, 1024);
+        notify->vcbid = _roomid;
+        notify->userid = _teacher.teacherid;
+        notify->teacherid = _teacher.teacherid;
+        notify->srcuserid = _teacher.teacherid;
+        NSData *teachdata = [_teacher.strName dataUsingEncoding:GBK_ENCODING];
+        strncpy(notify->srcuseralias,teachdata.bytes,teachdata.length);
+        notify->messageid = resp->messageid;
+        notify->livetype = 5;
+        notify->textlen = resp->titlelen;
+        notify->messagetime = resp->messagetime;
+        memcpy(notify->content,resp->content,resp->titlelen); //源消息内容长度
+//        cNotify[notifysize-1] = '\0';
+        TextLiveModel *textModel = [[TextLiveModel alloc] initWithNotify:notify];
+        [_aryText insertObject:textModel atIndex:0];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:@(1)];
+    }
+    
 }
 
 #pragma mark 观点列表返回
@@ -671,15 +662,13 @@
     DLog(@"content:%@",chat.strContent);
     if (chat.liveflag==1)
     {
-        int nSize = sizeof(CMDTextRoomLiveListNoty_t)+resp->reqtextlen+resp->restextlen+1;
-        char cBuffer[nSize];
-        memset(cBuffer, 0, nSize);
+        char cBuffer[1024]={0};
         CMDTextRoomLiveListNoty_t *notify= (CMDTextRoomLiveListNoty_t*)cBuffer;
         notify->vcbid = resp->vcbid;
         notify->userid = resp->toid;
         notify->teacherid = _teacher.teacherid;
         notify->srcuserid = resp->fromid;
-        strcpy(notify->srcuseralias, resp->fromalias);
+        strcpy(notify->srcuseralias, resp->toalias);
         notify->messageid = resp->messageid;
         notify->livetype = 4;
         notify->textlen = resp->reqtextlen;
@@ -687,7 +676,6 @@
         notify->messagetime = resp->messagetime;
         notify->zans = 0;
         memcpy(notify->content,resp->content,resp->reqtextlen+resp->restextlen); //源消息内容长度
-        cBuffer[nSize-1] = '\0';
         //TODD:写入进去
         TextLiveModel *textModel = [[TextLiveModel alloc] initWithNotify:notify];
         [_aryText insertObject:textModel atIndex:0];
@@ -863,7 +851,7 @@
 }
 
 #pragma mark 请求文字直播列表
-- (void)reqTextRoomList:(int)nIndex count:(int)nCount type:(int)nType
+- (void)reqTextRoomList:(int64_t)nIndex count:(int)nCount type:(int)nType
 {
     CMDTextRoomLiveListReq_t req;
     memset(&req, 0, sizeof(CMDTextRoomLiveListReq_t));
@@ -1116,11 +1104,7 @@
         [UserInfo sharedUserInfo].strMd5Pwd = [DecodeJson XCmdMd5String:[UserInfo sharedUserInfo].strPwd];
         strcpy(req.cuserpwd, [[UserInfo sharedUserInfo].strMd5Pwd UTF8String]);
     }
-    else{
-        
-    }
     strcpy(req.cMacAddr,[[DecodeJson macaddress] UTF8String]);
-    
     NSString *uid = [DeviceUID uid];
     if (uid && uid>0)
     {
@@ -1209,16 +1193,19 @@
         _aryNew = [NSMutableArray array];
     }
     [_aryNew removeAllObjects];
+    [self connectTextServer:_strAddr port:_nPort];
+}
+
+- (void)decodeAddress
+{
     NSString *strAry = [[UserInfo sharedUserInfo].strTextRoom componentsSeparatedByString:@","][0];
     if (strAry.length>10) {
         NSString *strAddr = [strAry componentsSeparatedByString:@":"][0];
         NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
         _strAddr = strAddr;
         _nPort = (int)nPort;
-        [self connectTextServer:strAddr port:nPort];
     }
 }
-
 
 
 - (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort
@@ -1244,13 +1231,12 @@
     [_asyncSocket readDataToLength:sizeof(int32) withTimeout:-1 tag:SOCKET_READ_LENGTH];
     DLog(@"连接成功!");
     [self sendHello:MDM_Vchat_Text];
-    [self joinRoomInfo2];
-//    [self reqTeacherInfo];
     __weak TextTcpSocket *__self = self;
     dispatch_async(dispatch_get_global_queue(0, 0),
-       ^{
-           [__self thread_room];//发送心跳
-       });
+    ^{
+       [__self thread_room];//发送心跳
+    });
+    [self joinRoomInfo2];
     [self performSelector:@selector(joinRoomTimeout) withObject:nil afterDelay:3.0];
 }
 
@@ -1535,6 +1521,18 @@
         break;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_SECRET_BUY_ERR_VC object:strMsg];
+}
+
+- (void)dealloc
+{
+    DLog(@"dealloc!");
+}
+
+- (id)init
+{
+    self = [super init];
+    [self decodeAddress];
+    return self;
 }
 
 @end

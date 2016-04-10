@@ -8,6 +8,7 @@
 
 #import "RoomViewController.h"
 #import "ChatView.h"
+#import "AlertFactory.h"
 #import "InAppPurchasesViewController.h"
 #import "PaySelectViewController.h"
 #import "UIControl+UIControl_XY.h"
@@ -395,8 +396,6 @@
     }
 }
 
-
-
 - (void)sendRose
 {
     if(!_tcpSocket.rInfo)
@@ -418,8 +417,6 @@
 
 - (void)initUIBody
 {
-    //创建成员列表的tableView
-    
     _lblBlue = [[UILabel alloc] initWithFrame:Rect(0, _group.y+_group.height-1, 0, 2)];
     [_lblBlue setBackgroundColor:UIColorFromRGB(0x629bff)];
     [self.view addSubview:_lblBlue];
@@ -655,22 +652,15 @@
 - (void)switchBtn:(int)nTag
 {
     UIButton *btnSender = [_group viewWithTag:nTag];
-    if(btnSender)
+    if(_tag == nTag)
     {
-        int tag = (int)btnSender.tag;
-        [_group setBtnSelect:tag];
-        if(tag+3 >= _tag || tag-3 <=_tag)
-        {
-            _tag = (int)btnSender.tag;
-            [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
-        }
-        else
-        {
-            [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
-            _tag = (int)btnSender.tag;
-        }
-        [self setBluePointX:_scrollView.contentOffset.x];
+        return ;
     }
+    [_group setBtnSelect:nTag];
+    _tag = (int)btnSender.tag;
+    [_scrollView setContentOffset:CGPointMake((_tag-1)*kScreenWidth, 0)];
+    [self setBluePointX:_scrollView.contentOffset.x];
+    
 }
 
 - (void)groupEventInfo:(UIButton *)sender
@@ -727,37 +717,33 @@
     });
 }
 
-- (void)createPay
+- (void)createPaySVR
 {
     __weak RoomViewController *__self =self;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
                                                                    message:@"余额不足" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
         dispatch_async(dispatch_get_main_queue(),
-                       ^{
-                           //如果不再登录房间，取消notification
-                           [__self.view hideToastActivity];
-                       });
+        ^{
+            [__self.view hideToastActivity];
+        });
     }];
-    
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"充值" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
     {
-     
            dispatch_async(dispatch_get_main_queue(),
-                          ^{
-                              if ([UserInfo sharedUserInfo].nStatus)
-                              {
-                                  PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
-                                  [self.navigationController pushViewController:paySelectVC animated:YES];
-                              }
-                              else
-                              {
-                                  InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];
-                                  [self.navigationController pushViewController:inAppPurechasesVC animated:YES];
-                              }
-                              
-                          });
-   }];
+           ^{
+              if (!KUserSingleton.nStatus)
+              {
+                  PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+                  [self.navigationController pushViewController:paySelectVC animated:YES];
+              }
+              else
+              {
+                  InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];
+                  [self.navigationController pushViewController:inAppPurechasesVC animated:YES];
+              }
+           });
+    }];
     [alert addAction:canAction];
     [alert addAction:okAction];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -771,8 +757,7 @@
     if ([number intValue]==202) {
         @WeakObj(self)
         dispatch_async(dispatch_get_main_queue(), ^{
-//            [ProgressHUD showError:@"余额不足"];
-            [selfWeak createPay];
+            [selfWeak createPaySVR];
         });
     }
     else{
@@ -1140,21 +1125,6 @@
     cell.attributedTextContextView.delegate = self;
 }
 
-- (CGFloat)cellHeight:(SVRMesssage *)message
-{
-    return 0;
-//    NSString *messageID = message.messageID;
-//    CGFloat height = [[_cellHeights objectForKey:messageID] floatValue];
-//    if (height == 0)
-//    {
-//        DTAttributedTextContentView *text = [DTAttributedTextContentView new];
-//        text.attributedString = [[NSAttributedString alloc] initWithHTMLData:[message.text dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];;
-//        height = [text suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
-//        [_cellHeights setObject:@(height+10) forKey:messageID];
-//    }
-//    return height;
-}
-
 //设置高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1168,19 +1138,7 @@
         DTAttributedTextCell *cell = [self tableView:tableView chatPreparedCellForIndexPath:indexPath];
         return [cell requiredRowHeightInTableView:tableView];
     }
-    
     return 60;
-}
-
-//选择某一行
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
 }
 
 - (ZLCoreTextCell *)tableView:(UITableView *)tableView preparedCellForZLIndexPath:(NSIndexPath *)indexPath
@@ -1438,33 +1396,6 @@
     }
 }
 
-- (void)createLoginAlert
-{
-    @WeakObj(self)
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                   message:@"游客无法互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-       dispatch_async(dispatch_get_main_queue(),
-       ^{
-           [selfWeak closeRoomInfo];
-           LoginViewController *loginView = [[LoginViewController alloc] init];
-           [selfWeak.navigationController pushViewController:loginView animated:YES];
-           
-       });
-    }];
-    [alert addAction:canAction];
-    [alert addAction:okAction];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak presentViewController:alert animated:YES completion:nil];
-    });
-}
-
-
-
 #pragma mark RoomDwonDelegate
 - (void)clickRoom:(UIButton *)button index:(NSInteger)nIndex
 {
@@ -1478,7 +1409,10 @@
             }
             else
             {
-                [self createLoginAlert];
+                @WeakObj(self)
+                [AlertFactory createLoginAlert:self block:^{
+                    [selfWeak closeRoomInfo];
+                }];
             }
         }
         break;
@@ -1497,7 +1431,10 @@
             }
             else
             {
-                [self createLoginAlert];
+                @WeakObj(self)
+                [AlertFactory createLoginAlert:self block:^{
+                    [selfWeak closeRoomInfo];
+                }];
             }
         }
         break;

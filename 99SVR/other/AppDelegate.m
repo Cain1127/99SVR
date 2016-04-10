@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "Toast+UIView.h"
+#import "Reachability.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import "DecodeJson.h"
 #import "GiftModel.h"
@@ -37,6 +39,7 @@
     IndexViewController *indexView;
     BOOL bStatus;
     BOOL bGGLogin;
+    Reachability *hostReach;
 }
 
 @property (nonatomic,unsafe_unretained) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
@@ -87,21 +90,47 @@
         [UserDefaults setObject:parameters forKey:kGiftInfo];
         [DecodeJson setGiftInfo:parameters];
     }
+    //开启网络通知
+    hostReach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+    [hostReach startNotifier];
+    
     return YES;
 }
 
-//- (void)setGiftInfo:(NSDictionary *)dict
-//{
-//    if (dict && [dict objectForKey:@"gift"]) {
-//        [UserInfo sharedUserInfo].giftVer = [[dict objectForKey:@"ver"] intValue];
-//        NSArray *array = [dict objectForKey:@"gift"];
-//        NSMutableArray *aryIndex = [NSMutableArray array];
-//        for (NSDictionary *dictionary in array) {
-//            [aryIndex addObject:[GiftModel resultWithDict:dictionary]];
-//        }
-//        [UserInfo sharedUserInfo].aryGift = aryIndex;
-//    }
-//}
+-(void)reachabilityChanged:(NSNotification *)note
+{
+    Reachability *curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+    NetworkStatus status = [curReach currentReachabilityStatus];
+    
+    if (status == NotReachable)
+    {
+        DLog(@"网络状态:中断");
+        __weak UIWindow *__windows = self.window;
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+            [__windows makeToast:@"无网络"];
+        });
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_ERR_VC object:nil];
+        return ;
+    }
+    else if(status == ReachableViaWiFi)
+    {
+        __weak UIWindow *__windows = self.window;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [__windows makeToast:@"当前网络:WIFI"];
+        });
+    }
+    else
+    {
+        __weak UIWindow *__windows = self.window;
+        dispatch_async(dispatch_get_main_queue(),
+           ^{
+               [__windows makeToast:@"当前网络:移动网络"];
+           });
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
+}
 
 -(void)onCheckVersion
 {

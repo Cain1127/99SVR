@@ -14,15 +14,17 @@
 //- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
-//    self = [super initWithReuseIdentifier:reuseIdentifier];
+//    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    self = [super initWithReuseIdentifier:reuseIdentifier];
     _lblTime = [[UILabel alloc] initWithFrame:Rect(5, 5, kScreenWidth-30, 16)];
     [self.contentView addSubview:_lblTime];
     [_lblTime setTextColor:RGB(128, 128, 128)];
     [_lblTime setFont:XCFONT(14)];
     
+//    _textView = [DTAttributedTextView new];
+//    [self.contentView addSubview:_textView];
+    
     _btnThum = [UIButton buttonWithType:UIButtonTypeCustom];
-    _btnThum.frame = Rect(0, -70, 70, 44);
     [_btnThum setImage:[UIImage imageNamed:@"thum"] forState:UIControlStateNormal];
     [_btnThum setImage:[UIImage imageNamed:@"thum_h"] forState:UIControlStateHighlighted];
     [_btnThum setImage:[UIImage imageNamed:@"thum_s"] forState:UIControlStateSelected];
@@ -30,22 +32,15 @@
     _btnThum.titleLabel.font = XCFONT(14);
     [self.contentView addSubview:_btnThum];
     [_btnThum addTarget:self action:@selector(addThum) forControlEvents:UIControlEventTouchUpInside];
-    _textView = [DTAttributedTextView new];
-    [self.contentView addSubview:_textView];
     return self;
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    if (!self.textView.attributedString) {
-        self.textView.frame = CGRectMake(0,0,0,0);
-    } else{
-        CGFloat height = [_textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:(kScreenWidth-20)].height;
-        _textView.frame = Rect(10, 26, kScreenWidth-20,height);
-    }
-    _btnThum.frame = Rect(kScreenWidth - 80, self.textView.attributedTextContentView.y+self.textView.attributedTextContentView.height+40,70, 44);
-    DLog(@"frame:%@",NSStringFromCGRect(_btnThum.frame));
+    CGFloat height = [self.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:(kScreenWidth-20)].height;
+    self.attributedTextContextView.frame = Rect(10, 26, kScreenWidth-20,height);
+    self.btnThum.frame = Rect(kScreenWidth - 80, self.attributedTextContextView.y+self.attributedTextContextView.height+5,70, 44);
 }
 
 - (void)addThum
@@ -72,7 +67,6 @@
         [_btnThum setTitle:@"详情>>" forState:UIControlStateSelected];
         [_btnThum setTitleColor:kNavColor forState:UIControlStateNormal];
         _viewid = model.viewid;
-        DLog(@"model:%lld",model.viewid);
     }
     else
     {

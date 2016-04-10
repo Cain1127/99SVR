@@ -91,11 +91,11 @@
 }
 
 #pragma mark -- 点击空白处收起键盘
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesBegan:touches withEvent:event];
-    [self.view endEditing:YES];
-}
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [super touchesBegan:touches withEvent:event];
+//    [self.view endEditing:YES];
+//}
 
 #pragma mark - <UIGestureRecognizerDelegate>
 /**

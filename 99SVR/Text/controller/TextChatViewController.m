@@ -8,6 +8,7 @@
 
 #import "TextChatViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "AlertFactory.h"
 #import "LoginViewController.h"
 #import "RoomUser.h"
 #import "TextChatModel.h"
@@ -133,7 +134,10 @@
     }
     else
     {
-        [self createLoginAlert];
+        @WeakObj(self)
+        [AlertFactory createLoginAlert:self block:^{
+            [selfWeak.textSocket exitRoomInfo];
+        }];
     }
 }
 
@@ -175,7 +179,6 @@
         rUser.m_strUserAlias = [array[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         rUser.m_nUserId = [strNumber intValue];
         [_chatView setChatInfo:rUser];
-    
     }
 }
 
@@ -304,30 +307,6 @@
 - (void)dealloc
 {
     DLog(@"dealloc");
-}
-
-- (void)createLoginAlert
-{
-    @WeakObj(self)
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                   message:@"游客无法互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-       dispatch_async(dispatch_get_main_queue(),
-       ^{
-           [selfWeak.textSocket exitRoomInfo];
-           LoginViewController *loginView = [[LoginViewController alloc] init];
-           [selfWeak.navigationController pushViewController:loginView animated:YES];
-       });
-    }];
-    [alert addAction:canAction];
-    [alert addAction:okAction];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak presentViewController:alert animated:YES completion:nil];
-    });
 }
 
 @end

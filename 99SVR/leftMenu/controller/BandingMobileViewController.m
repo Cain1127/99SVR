@@ -20,7 +20,6 @@
     NSString *strDate;
     int banding;
 }
-@property (nonatomic,strong) UILabel *lblError;
 @property (nonatomic,strong) UITextField *txtName;
 @property (nonatomic,strong) UITextField *txtCode;
 @property (nonatomic,strong) UIButton *btnCode;
@@ -159,8 +158,8 @@
             return ;
         }
     }
-    [ProgressHUD show:@"获取验证码..."];
-    [_lblError setText:@""];
+//    [ProgressHUD show:@"获取验证码..."];
+    [self.view makeToastMsgActivity:@"获取验证码..."];
     [self getMobileCode:_mobile];
 }
 
@@ -168,7 +167,7 @@
 {
     if(!strDate)
     {
-        [_lblError setText:@"系统异常"];
+        [ProgressHUD showError:@"获取信息失败"];
         return ;
     }
     NSString *strMd5;
@@ -194,34 +193,26 @@
     @WeakObj(self)
     [BaseService postJSONWithUrl:kBand_mobile_getcode_URL parameters:parameters success:^(id responseObject)
     {
-         [ProgressHUD dismiss];
+         [self.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
              DLog(@"dict:%@",dict);
              [selfWeak startTimer];
-             gcd_main_safe(
-             ^{
-                selfWeak.btnCode.enabled = NO;
-                [ProgressHUD showSuccess:@"已发送验证码到目标手机"];
-                [selfWeak.txtCode becomeFirstResponder];
-             });
-             
+            selfWeak.btnCode.enabled = NO;
+            [ProgressHUD showSuccess:@"已发送验证码到目标手机"];
+            [selfWeak.txtCode becomeFirstResponder];
+         
          }
          else
          {
-             gcd_main_safe(^{
-                [ProgressHUD showSuccess:[dict objectForKey:@"errmsg"]];
-             });
+             [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
          }
      }
      fail:^(NSError *error)
      {
-         [ProgressHUD dismiss];
-         gcd_main_safe(^{
-             [ProgressHUD showSuccess:@"请求验证码失败"];
-                [selfWeak.lblError setText:@"请求验证码失败"];
-            });
+         [self.view hideToastActivity];
+         [ProgressHUD showError:@"请求验证码失败"];
      }];
 }
 
@@ -269,31 +260,30 @@
         _mobile = _txtName.text;
         if (_mobile.length==0)
         {
-            [_lblError setText:@"手机号不能为空"];
+            [ProgressHUD showError:@"手机号不能为空"];
             return ;
         }
         if (_mobile.length!=11)
         {
-            [_lblError setText:@"手机长度错误"];
+            [ProgressHUD showError:@"手机长度错误"];
             return ;
         }
         if(![DecodeJson getSrcMobile:_mobile])
         {
-            [_lblError setText:@"请输入正确的手机号"];
+            [ProgressHUD showError:@"请输入正确的手机号"];
             return ;
         }
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)
     {
-        [_lblError setText:@"验证码不能为空"];
+        [ProgressHUD showError:@"验证码不能为空"];
         return ;
     }
     
     NSDictionary *paramters;
     NSString *strInfo;
     [self.view makeToastActivity];
-    [_lblError setText:@""];
     if(!banding)
     {
         //直接绑定手机
@@ -327,14 +317,14 @@
          {
              gcd_main_safe(
              ^{
-                   [selfWeak.lblError setText:[dict objectForKey:@"errmsg"]];
+                   [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
              });
          }
      }fail:^(NSError *error)
      {
          gcd_main_safe(^{
              [selfWeak.view hideToastActivity];
-             [selfWeak.lblError setText:@"注册失败"];
+             [ProgressHUD showError:@"注册失败"];
          });
      }];
 }

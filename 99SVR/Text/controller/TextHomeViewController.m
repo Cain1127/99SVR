@@ -7,7 +7,9 @@
 //
 
 #import "TextHomeViewController.h"
+#import "AlertFactory.h"
 #import "RightView.h"
+#import "ProgressHUD.h"
 #import "TextEsotericaViewController.h"
 #import "TeachView.h"
 #import "TextHistoryViewController.h"
@@ -173,7 +175,7 @@
     [self.view addSubview:hidenView];
     hidenView.hidden = YES;
     
-    _teachView = [[TeachView alloc] initWithFrame:Rect(0, 68, kScreenWidth,140)];
+    _teachView = [[TeachView alloc] initWithFrame:Rect(0, 68, kScreenWidth,170)];
     [hidenView addSubview:_teachView];
     _teachView.hidden = YES;
     
@@ -236,13 +238,15 @@
 - (void)btnEvent:(id)sender
 {
     UIButton *btnSender = sender;
+    DLog(@"tag:%zi",btnSender.tag);
     if(_tag == btnSender.tag)
     {
         return ;
     }
     [_group setBtnSelect:btnSender.tag];
-    [_scrollView setContentOffset:CGPointMake((btnSender.tag-1)*kScreenWidth, 0)];
     _tag = (int)btnSender.tag;
+    [_scrollView setContentOffset:CGPointMake((_tag-1)*kScreenWidth, 0)];
+    [_group setBluePointX:_scrollView.contentOffset.x];
 }
 
 - (void)didReceiveMemoryWarning
@@ -264,13 +268,17 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    if (willEndContentOffsetX == 0 && startContentOffsetX ==0 )
+    {
+        return ;
+    }
     [_group setBluePointX:scrollView.contentOffset.x];
     int temp = floor((scrollView.contentOffset.x - kScreenWidth/2.0)/kScreenWidth +1);//判断是否翻页
     if (temp != _currentPage)
     {
         if (temp > _currentPage)
         {
-            if (_tag<4)
+            if (_tag<3)
             {
                 _tag ++;
                 [_group setBtnSelect:_tag];
@@ -305,6 +313,8 @@
     else//加速
     {}
     updateCount = 0;
+    startContentOffsetX = 0;
+    endContentOffsetX = 0;
 }
 
 - (void)respCollet:(NSNotification *)notify
@@ -326,9 +336,9 @@
     __weak RightView *__rightView = _rightView;
     dispatch_async(dispatch_get_main_queue(),
    ^{
-       [__self.view makeToast:[NSString stringWithFormat:@"%@%@",__oper,__result]];
        if ([__result isEqualToString:@"成功"])
        {
+           [ProgressHUD showSuccess:[NSString stringWithFormat:@"%@%@",__oper,__result]];
            if([__oper isEqualToString:@"关注"])
            {
                __self.textSocket.teacher.fansflag = 1;
@@ -339,13 +349,24 @@
                __self.textSocket.teacher.fansflag = 0;
               __rightView.btnFirst.selected = NO;
            }
+       }else{
+           [ProgressHUD showError:[NSString stringWithFormat:@"%@%@",__oper,__result]];
        }
    });
+}
+
+- (void)updateHidden
+{
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHidden) name:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTeacherInfo) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reconnectTextRoom) name:MESSAGE_RECONNECT_TIMER_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respCollet:) name:MESSAGE_TEXT_COLLET_VC object:nil];
@@ -399,7 +420,6 @@
     __weak TeachView *__teachView = _teachView;
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        [__self.view hideToastActivity];
         [__self.btnTitle setTitle:__self.textSocket.teacher.strName forState:UIControlStateNormal];
         [__self refreshBtnTitle];
         [__teachView setTeachModel:__self.textSocket.teacher];
@@ -415,29 +435,7 @@
     return UIStatusBarStyleLightContent;
 }
 
-- (void)createLoginAlert
-{
-    @WeakObj(self)
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                   message:@"游客无法互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-           [selfWeak.textSocket exitRoomInfo];
-           LoginViewController *loginView = [[LoginViewController alloc] init];
-           [selfWeak.navigationController pushViewController:loginView animated:YES];
-        });
-    }];
-    [alert addAction:canAction];
-    [alert addAction:okAction];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak presentViewController:alert animated:YES completion:nil];
-    });
-}
+
 
 - (void)rightView:(RightView *)rightView index:(NSInteger)nNumber
 {
@@ -447,7 +445,10 @@
             if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
                 [self sendCollet];
             }else{
-                [self createLoginAlert];
+                @WeakObj(self)
+                [AlertFactory createLoginAlert:self block:^{
+                    [selfWeak.textSocket closeSocket];
+                }];
             }
             break;
         case 2:
@@ -460,12 +461,6 @@
             }
         }
         break;
-//        case 3:
-//        {
-//            TextHistoryViewController *historyView = [[TextHistoryViewController alloc] initWithSocket:_textSocket];
-//            [self presentViewController:historyView animated:YES completion:nil];
-//        }
-//        break;
         default:
             break;
     }

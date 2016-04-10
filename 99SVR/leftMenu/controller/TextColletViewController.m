@@ -36,6 +36,7 @@
 
 - (void)initLivingData
 {
+    [_aryGroup removeAllObjects];
     @WeakObj(self)
     NSString *strUrl = [NSString stringWithFormat:@"%@%d",kTEXT_FOLLOW_URL,[UserInfo sharedUserInfo].nUserId];
     [BaseService postJSONWithUrl:strUrl parameters:nil success:^(id responseObject)
@@ -66,7 +67,17 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     _aryGroup = [NSMutableArray array];
     [self initUIHead];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self initLivingData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
 }
 
 - (void)initUIHead

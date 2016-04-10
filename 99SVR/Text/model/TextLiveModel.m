@@ -25,24 +25,21 @@
 
 - (void)decodeMessageList:(CMDTextRoomLiveMessageRes_t *)notify
 {
-    if (notify->pointflag)
-    {
-        _type = 2;
-    }
-    else if(notify->forecastflag)
-    {
-        _type = 3;
-    }
-    else
-    {
-        _type = 1;
-    }
-    _teacherid = notify->teacherid;
     _vcbid = notify->vcbid;
+    _userid = notify->teacherid;
+    _time = notify->messagetime;
+    _teacherid = notify->teacherid;
     _messageid = notify->messageid;
     _textlen = notify->textlen;
     _time = notify->messagetime;
-    _strContent = [NSString stringWithCString:notify->content encoding:GBK_ENCODING];
+    _messagetime = notify->messagetime;
+    [self settingTime];
+    _livetype = notify->livetype;
+    char cBuf[_textlen*2];
+    memset(cBuf, 0, _textlen*2);
+    memcpy(cBuf,notify->content,_textlen);
+    _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
+    _strContent = [DecodeJson replaceEmojiNewString:_strContent];
 }
 
 - (id)initWithPointNotify:(CMDTextRoomLivePointNoty_t *)notify
@@ -90,7 +87,6 @@
 - (void)decodeStruct:(CMDTextRoomLiveListNoty_t *)notify
 {
     //类型：1-文字直播；2-直播重点；3-明日预测（已关注的用户可查看）；4-观点；
-    DLog(@"livetype:%d",notify->livetype);
     _livetype = notify->livetype;
     _strTeacherName = [NSString stringWithCString:notify->srcuseralias encoding:GBK_ENCODING];
     _teacherid = notify->teacherid;

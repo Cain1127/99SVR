@@ -34,7 +34,6 @@
 @property (nonatomic,strong) UITextField *txtCmdPwd;
 @property (nonatomic,copy) NSString *strCode;
 @property (nonatomic,strong) QCheckBox *checkAgree;
-@property (nonatomic,strong) UILabel *lblError;
 
 @end
 
@@ -73,7 +72,6 @@
         return ;
     }
     
-    _lblError.text = @"";
     [self.view makeToastActivity];
     NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",_username,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
@@ -97,17 +95,17 @@
                  NSString *strNull = [dict objectForKey:@"errmsg"];
                  if(strNull)
                  {
-                     [selfWeak.lblError setText:[dict objectForKey:@"errmsg"]];
+                     [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
                  }
                  else
                  {
-                     [selfWeak.lblError setText:@"服务器异常"];
+                     [ProgressHUD showError:@"服务器异常"];
                  }
          }
      }fail:^(NSError *error)
      {
          [selfWeak.view hideToastActivity];
-         [selfWeak.lblError setText:@"连接服务器失败"];
+         [ProgressHUD showError:@"连接服务器失败"];
          NSString *strUrl = [NSString stringWithFormat:@"ReportItem=Register&ClientType=2&RegType=2&ServerIP=%@&Error=%@",
                              @"120.55.105.224",@"err_fail"];
          [DecodeJson postPHPServerMsg:strUrl];
@@ -206,14 +204,11 @@
     [_txtPwd setPlaceholder:@"请输入密码"];
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
 
-    _lblError = [[UILabel alloc] initWithFrame:Rect(30, _txtName.y+50, kScreenWidth-60, 20)];
-    [_lblError setFont:XCFONT(14)];
-    [_lblError setTextColor:[UIColor redColor]];
-    [self.view addSubview:_lblError];
+
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, _lblError.y+50, kScreenWidth-60, 40);
+    btnRegister.frame = Rect(30, _txtPwd.y+50, kScreenWidth-60, 40);
     [btnRegister setTitle:@"注册" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
@@ -305,12 +300,12 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    if([string isEqualToString:@""])
+    {
+        return YES;
+    }
     if (_txtName == textField)
     {
-        if([string isEqualToString:@""])
-        {
-            return YES;
-        }
         NSString *strCode = @"[a-zA-Z0-9_\u4e00-\u9fa5]+$";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strCode];;
         if (range.location>16 || range.location+string.length>16 || ![predicate evaluateWithObject:string])
@@ -320,7 +315,9 @@
     }
     else if(_txtPwd == textField)
     {
-        if(range.location>16 || range.location+string.length > 16)
+        NSString *strCode = @"[^ ]+$";
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strCode];;
+        if (range.location>16 || range.location+string.length>16 || ![predicate evaluateWithObject:string])
         {
             return NO;
         }

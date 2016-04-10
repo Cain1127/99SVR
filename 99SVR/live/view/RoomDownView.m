@@ -34,27 +34,35 @@
 
 - (void)initRoomView
 {
+    int nNumber = KUserSingleton.nStatus ? 3 : 4;
     UILabel *line = [[UILabel alloc] initWithFrame:Rect(0, 0.5, kScreenWidth, 1)];
     [self addSubview:line];
     [line setBackgroundColor:UIColorFromRGB(0xCFCFCF)];
     
     _btnChat = [self createButton:@"video_tallk_icon" high:@""];
     _btnUser = [self createButton:@"video_member_icon" high:@""];
-    _btnGift = [self createButton:@"video_present_icon" high:@""];
     _btnRose = [self createButton:@"video_flower_icon" high:@""];
     [self addSubview:_btnChat];
     [self addSubview:_btnUser];
-    [self addSubview:_btnGift];
     [self addSubview:_btnRose];
-    CGFloat width = kScreenWidth/4;
-    _btnChat.frame = Rect(0,0, width, 50);
-    _btnUser.frame = Rect(width,0, width, _btnChat.height);
-    _btnGift.frame = Rect(width*2,0, width, _btnChat.height);
-    _btnRose.frame = Rect(width*3,0, width, _btnChat.height);
+    CGFloat width = kScreenWidth/nNumber;
     _btnChat.tag = 0;
     _btnUser.tag = 1;
-    _btnGift.tag = 2;
     _btnRose.tag = 3;
+    
+    CGFloat threeX = width*2;
+    _btnChat.frame = Rect(0,0, width, 50);
+    _btnUser.frame = Rect(width,0, width, _btnChat.height);
+    //nstatus==1 去掉gift
+    if(KUserSingleton.nStatus)
+    {
+        _btnGift = [self createButton:@"video_present_icon" high:@""];
+        [self addSubview:_btnGift];
+        _btnGift.frame = Rect(threeX,0, width, _btnChat.height);
+        threeX += width;
+        _btnGift.tag = 2;
+    }
+    _btnRose.frame = Rect(width,0, width, _btnChat.height);
     _btnRose.cjr_acceptEventInterval = 2;
 }
 

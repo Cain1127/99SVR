@@ -136,6 +136,8 @@
 		BB5138381C97F30400E09EF5 /* GiftRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5138371C97F30400E09EF5 /* GiftRequest.m */; };
 		BB51383A1C97F7D700E09EF5 /* gift.txt in Resources */ = {isa = PBXBuildFile; fileRef = BB5138391C97F7D700E09EF5 /* gift.txt */; };
 		BB51383D1C980F9700E09EF5 /* RoomDownView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB51383C1C980F9700E09EF5 /* RoomDownView.m */; };
+		BB5E4E891CB8E74500F8C1D4 /* AlertFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5E4E881CB8E74500F8C1D4 /* AlertFactory.m */; };
+		BB5E4E8C1CB92D6E00F8C1D4 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5E4E8B1CB92D6E00F8C1D4 /* Reachability.m */; };
 		BB5F9BC11C5DDA2100285EA6 /* MediaBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC01C5DDA2100285EA6 /* MediaBuffer.m */; };
 		BB5F9BC41C5DDA6100285EA6 /* OpenAL.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC31C5DDA6100285EA6 /* OpenAL.m */; };
 		BB5F9BC71C5DDA9D00285EA6 /* MediaSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC61C5DDA9D00285EA6 /* MediaSocket.m */; };
@@ -179,11 +181,6 @@
 		BB63F5AB1C2CC7A300A042E8 /* UIColor+Ext.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F48C1C2CC7A200A042E8 /* UIColor+Ext.m */; };
 		BB63F5AC1C2CC7A300A042E8 /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F48E1C2CC7A200A042E8 /* UIView+Frame.m */; };
 		BB63F5AD1C2CC7A300A042E8 /* UIView+Touch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4901C2CC7A200A042E8 /* UIView+Touch.m */; };
-		BB63F5AE1C2CC7A300A042E8 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4931C2CC7A200A042E8 /* FMDatabase.m */; };
-		BB63F5AF1C2CC7A300A042E8 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4951C2CC7A200A042E8 /* FMDatabaseAdditions.m */; };
-		BB63F5B01C2CC7A300A042E8 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4971C2CC7A200A042E8 /* FMDatabasePool.m */; };
-		BB63F5B11C2CC7A300A042E8 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4991C2CC7A200A042E8 /* FMDatabaseQueue.m */; };
-		BB63F5B21C2CC7A300A042E8 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F49C1C2CC7A200A042E8 /* FMResultSet.m */; };
 		BB63F5B31C2CC7A300A042E8 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F49F1C2CC7A200A042E8 /* GCDAsyncSocket.m */; };
 		BB63F5B41C2CC7A300A042E8 /* LSTcpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4A11C2CC7A200A042E8 /* LSTcpSocket.m */; };
 		BB63F5B51C2CC7A300A042E8 /* DecodeJson.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4A41C2CC7A200A042E8 /* DecodeJson.m */; };
@@ -313,10 +310,6 @@
 		BB98EE601CB588C70028AAEF /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE581CB588C70028AAEF /* SBJsonBase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BB98EE611CB588C70028AAEF /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE5A1CB588C70028AAEF /* SBJsonParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE5C1CB588C70028AAEF /* SBJsonWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		BB98EE6C1CB5928C0028AAEF /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE651CB5928C0028AAEF /* IAPHelper.m */; };
-		BB98EE6D1CB5928C0028AAEF /* IAPShare.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE671CB5928C0028AAEF /* IAPShare.m */; };
-		BB98EE6E1CB5928C0028AAEF /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE691CB5928C0028AAEF /* NSString+Base64.m */; };
-		BB98EE6F1CB5928C0028AAEF /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE6B1CB5928C0028AAEF /* SFHFKeychainUtils.m */; };
 		BBA16D9F1C8A979000D84E80 /* TextHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA16D9E1C8A979000D84E80 /* TextHistoryViewController.m */; };
 		BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA16DA41C8C75B000D84E80 /* NSDate+convenience.m */; };
 		BBAB82E41C7049FB00C6AC34 /* ThumButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAB82E31C7049FB00C6AC34 /* ThumButton.m */; };
@@ -765,6 +758,10 @@
 		BB5138391C97F7D700E09EF5 /* gift.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = gift.txt; sourceTree = "<group>"; };
 		BB51383B1C980F9700E09EF5 /* RoomDownView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomDownView.h; sourceTree = "<group>"; };
 		BB51383C1C980F9700E09EF5 /* RoomDownView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomDownView.m; sourceTree = "<group>"; };
+		BB5E4E871CB8E74500F8C1D4 /* AlertFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertFactory.h; sourceTree = "<group>"; };
+		BB5E4E881CB8E74500F8C1D4 /* AlertFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertFactory.m; sourceTree = "<group>"; };
+		BB5E4E8A1CB92D6E00F8C1D4 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		BB5E4E8B1CB92D6E00F8C1D4 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BB5F9BBF1C5DDA2100285EA6 /* MediaBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaBuffer.h; sourceTree = "<group>"; };
 		BB5F9BC01C5DDA2100285EA6 /* MediaBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaBuffer.m; sourceTree = "<group>"; };
 		BB5F9BC21C5DDA6100285EA6 /* OpenAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenAL.h; sourceTree = "<group>"; };
@@ -820,17 +817,6 @@
 		BB63F48E1C2CC7A200A042E8 /* UIView+Frame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Frame.m"; sourceTree = "<group>"; };
 		BB63F48F1C2CC7A200A042E8 /* UIView+Touch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Touch.h"; sourceTree = "<group>"; };
 		BB63F4901C2CC7A200A042E8 /* UIView+Touch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Touch.m"; sourceTree = "<group>"; };
-		BB63F4921C2CC7A200A042E8 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
-		BB63F4931C2CC7A200A042E8 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
-		BB63F4941C2CC7A200A042E8 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
-		BB63F4951C2CC7A200A042E8 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
-		BB63F4961C2CC7A200A042E8 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
-		BB63F4971C2CC7A200A042E8 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
-		BB63F4981C2CC7A200A042E8 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
-		BB63F4991C2CC7A200A042E8 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
-		BB63F49A1C2CC7A200A042E8 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
-		BB63F49B1C2CC7A200A042E8 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
-		BB63F49C1C2CC7A200A042E8 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		BB63F49E1C2CC7A200A042E8 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
 		BB63F49F1C2CC7A200A042E8 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		BB63F4A01C2CC7A200A042E8 /* LSTcpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSTcpSocket.h; sourceTree = "<group>"; };
@@ -1107,14 +1093,6 @@
 		BB98EE5A1CB588C70028AAEF /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		BB98EE5B1CB588C70028AAEF /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		BB98EE5C1CB588C70028AAEF /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
-		BB98EE641CB5928C0028AAEF /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
-		BB98EE651CB5928C0028AAEF /* IAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPHelper.m; sourceTree = "<group>"; };
-		BB98EE661CB5928C0028AAEF /* IAPShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPShare.h; sourceTree = "<group>"; };
-		BB98EE671CB5928C0028AAEF /* IAPShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPShare.m; sourceTree = "<group>"; };
-		BB98EE681CB5928C0028AAEF /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
-		BB98EE691CB5928C0028AAEF /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
-		BB98EE6A1CB5928C0028AAEF /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
-		BB98EE6B1CB5928C0028AAEF /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		BBA16D9D1C8A979000D84E80 /* TextHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextHistoryViewController.h; sourceTree = "<group>"; };
 		BBA16D9E1C8A979000D84E80 /* TextHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextHistoryViewController.m; sourceTree = "<group>"; };
 		BBA16DA31C8C75B000D84E80 /* NSDate+convenience.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+convenience.h"; sourceTree = "<group>"; };
@@ -1905,6 +1883,8 @@
 				BB17689E1C77052000CE947C /* GitInfo.m */,
 				BB9765F11C85B55F00FAA5B7 /* DeviceUID.h */,
 				BB9765F21C85B55F00FAA5B7 /* DeviceUID.m */,
+				BB5E4E871CB8E74500F8C1D4 /* AlertFactory.h */,
+				BB5E4E881CB8E74500F8C1D4 /* AlertFactory.m */,
 			);
 			path = singlet;
 			sourceTree = "<group>";
@@ -1912,7 +1892,6 @@
 		BB63F4861C2CC7A200A042E8 /* General */ = {
 			isa = PBXGroup;
 			children = (
-				BB98EE631CB5928C0028AAEF /* IAPHelper */,
 				BB98EE4F1CB588C60028AAEF /* SBJSON */,
 				BB125B471CB112FC00C573E0 /* BaseService.h */,
 				BB125B481CB112FC00C573E0 /* BaseService.m */,
@@ -1925,7 +1904,6 @@
 				BB1661801C3D029200D318BE /* MBProgressHUD */,
 				BB63F4871C2CC7A200A042E8 /* blocks */,
 				BB63F48A1C2CC7A200A042E8 /* category */,
-				BB63F4911C2CC7A200A042E8 /* fmdb */,
 				BB63F49D1C2CC7A200A042E8 /* GCDSocket */,
 				BB63F4A21C2CC7A200A042E8 /* gtmbase64 */,
 				BB63F4BB1C2CC7A200A042E8 /* kxmovie */,
@@ -1942,6 +1920,8 @@
 		BB63F4871C2CC7A200A042E8 /* blocks */ = {
 			isa = PBXGroup;
 			children = (
+				BB5E4E8A1CB92D6E00F8C1D4 /* Reachability.h */,
+				BB5E4E8B1CB92D6E00F8C1D4 /* Reachability.m */,
 				BBA16DA31C8C75B000D84E80 /* NSDate+convenience.h */,
 				BBA16DA41C8C75B000D84E80 /* NSDate+convenience.m */,
 				BB63F4881C2CC7A200A042E8 /* UIControl+BlocksKit.h */,
@@ -1970,24 +1950,6 @@
 				1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */,
 			);
 			path = category;
-			sourceTree = "<group>";
-		};
-		BB63F4911C2CC7A200A042E8 /* fmdb */ = {
-			isa = PBXGroup;
-			children = (
-				BB63F4921C2CC7A200A042E8 /* FMDatabase.h */,
-				BB63F4931C2CC7A200A042E8 /* FMDatabase.m */,
-				BB63F4941C2CC7A200A042E8 /* FMDatabaseAdditions.h */,
-				BB63F4951C2CC7A200A042E8 /* FMDatabaseAdditions.m */,
-				BB63F4961C2CC7A200A042E8 /* FMDatabasePool.h */,
-				BB63F4971C2CC7A200A042E8 /* FMDatabasePool.m */,
-				BB63F4981C2CC7A200A042E8 /* FMDatabaseQueue.h */,
-				BB63F4991C2CC7A200A042E8 /* FMDatabaseQueue.m */,
-				BB63F49A1C2CC7A200A042E8 /* FMDB.h */,
-				BB63F49B1C2CC7A200A042E8 /* FMResultSet.h */,
-				BB63F49C1C2CC7A200A042E8 /* FMResultSet.m */,
-			);
-			path = fmdb;
 			sourceTree = "<group>";
 		};
 		BB63F49D1C2CC7A200A042E8 /* GCDSocket */ = {
@@ -2556,21 +2518,6 @@
 			path = SBJSON;
 			sourceTree = "<group>";
 		};
-		BB98EE631CB5928C0028AAEF /* IAPHelper */ = {
-			isa = PBXGroup;
-			children = (
-				BB98EE641CB5928C0028AAEF /* IAPHelper.h */,
-				BB98EE651CB5928C0028AAEF /* IAPHelper.m */,
-				BB98EE661CB5928C0028AAEF /* IAPShare.h */,
-				BB98EE671CB5928C0028AAEF /* IAPShare.m */,
-				BB98EE681CB5928C0028AAEF /* NSString+Base64.h */,
-				BB98EE691CB5928C0028AAEF /* NSString+Base64.m */,
-				BB98EE6A1CB5928C0028AAEF /* SFHFKeychainUtils.h */,
-				BB98EE6B1CB5928C0028AAEF /* SFHFKeychainUtils.m */,
-			);
-			path = IAPHelper;
-			sourceTree = "<group>";
-		};
 		BBCE9CAA1CB3AD5600DA56D6 /* head */ = {
 			isa = PBXGroup;
 			children = (
@@ -3056,7 +3003,6 @@
 				BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */,
 				BB63F5C71C2CC7A300A042E8 /* NSArray+MASAdditions.m in Sources */,
 				BBAF97041CA9860500C16305 /* MarchLiveTextCell.m in Sources */,
-				BB98EE6E1CB5928C0028AAEF /* NSString+Base64.m in Sources */,
 				1827FF591C9959BF009D9C79 /* MyScrollView.m in Sources */,
 				BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */,
 				BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */,
@@ -3102,7 +3048,6 @@
 				BB6F3ADA1C9F86270035EBBE /* UIView+SDExtension.m in Sources */,
 				BBCF9A681CADAB60005B9DCE /* TextColletViewController.m in Sources */,
 				BB9766021C87EB4D00FAA5B7 /* NewDetailsModel.m in Sources */,
-				BB98EE6D1CB5928C0028AAEF /* IAPShare.m in Sources */,
 				BB16619E1C3E2DC700D318BE /* ZLTabBar.m in Sources */,
 				18BF06B51C9A7DC70071E524 /* SignatureViewController.m in Sources */,
 				BB17692B1C7B006F00CE947C /* UIImage+GIF.m in Sources */,
@@ -3161,7 +3106,6 @@
 				BB51383D1C980F9700E09EF5 /* RoomDownView.m in Sources */,
 				BB6F3AD81C9F86270035EBBE /* SDCollectionViewCell.m in Sources */,
 				BBAF97121CA9968F00C16305 /* TextSecretAllModel.m in Sources */,
-				BB98EE6C1CB5928C0028AAEF /* IAPHelper.m in Sources */,
 				BBCF9A731CADB326005B9DCE /* TextCommentView.m in Sources */,
 				18F971131C92947F001B2575 /* RSADataVerifier.m in Sources */,
 				BB6F3ABA1C9D6EC50035EBBE /* FloatingView.m in Sources */,
@@ -3187,8 +3131,6 @@
 				BB88F3101C3FB22F00C1F8D9 /* TeacherModel.m in Sources */,
 				BB63F60D1C2CC7A300A042E8 /* RoomListInfo.m in Sources */,
 				18F9710C1C92947F001B2575 /* base64.m in Sources */,
-				BB63F5AF1C2CC7A300A042E8 /* FMDatabaseAdditions.m in Sources */,
-				BB63F5B21C2CC7A300A042E8 /* FMResultSet.m in Sources */,
 				BB6F3B101CA13E3E0035EBBE /* Socket.cpp in Sources */,
 				BB04368A1C4E295900A162A8 /* IdeaModel.m in Sources */,
 				BB17689F1C77052000CE947C /* GitInfo.m in Sources */,
@@ -3201,7 +3143,6 @@
 				18987FF01CAA17E6000E9F1C /* WonderfullView.m in Sources */,
 				BB0436811C4E28B800A162A8 /* TomorrowModel.m in Sources */,
 				BB63F6081C2CC7A300A042E8 /* TitleButton.m in Sources */,
-				BB63F5B01C2CC7A300A042E8 /* FMDatabasePool.m in Sources */,
 				187C07F61C9A5A52007AE742 /* NickNameViewController.m in Sources */,
 				BB63F5C51C2CC7A300A042E8 /* MASViewAttribute.m in Sources */,
 				BB16616C1C3CA0B800D318BE /* UITableView+reloadComplete.m in Sources */,
@@ -3228,13 +3169,11 @@
 				18F7538C1C9171C2000F1D72 /* NSString+Size.m in Sources */,
 				BB5138311C97A21A00E09EF5 /* GiftView.m in Sources */,
 				BB63F5FF1C2CC7A300A042E8 /* EmojiTextAttachment.m in Sources */,
-				BB63F5B11C2CC7A300A042E8 /* FMDatabaseQueue.m in Sources */,
 				BB5F9BC11C5DDA2100285EA6 /* MediaBuffer.m in Sources */,
 				18AAD55D1C9927B800438E18 /* LeftMenu.m in Sources */,
 				BBE56C5B1C4FD5EB0030E050 /* HistoryTextModel.m in Sources */,
 				BB9765F91C86C26100FAA5B7 /* TeachView.m in Sources */,
 				BB5138341C97E67300E09EF5 /* GiftModel.m in Sources */,
-				BB98EE6F1CB5928C0028AAEF /* SFHFKeychainUtils.m in Sources */,
 				BB1769241C7B006F00CE947C /* SDWebImageCompat.m in Sources */,
 				BBE56C581C4FA1B10030E050 /* IdeaDetailRePly.m in Sources */,
 				BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */,
@@ -3246,10 +3185,11 @@
 				BB63F47B1C2B809800A042E8 /* UserInfo.m in Sources */,
 				BB9765FF1C87C7CA00FAA5B7 /* TextNewCell.m in Sources */,
 				BB63F61C1C2CC7A300A042E8 /* RoomGroup.m in Sources */,
+				BB5E4E891CB8E74500F8C1D4 /* AlertFactory.m in Sources */,
 				BB63F6221C2CC7A300A042E8 /* MySearchBar.m in Sources */,
 				BB1769231C7B006F00CE947C /* SDImageCache.m in Sources */,
+				BB5E4E8C1CB92D6E00F8C1D4 /* Reachability.m in Sources */,
 				BB6F3AD51C9F86270035EBBE /* TAAnimatedDotView.m in Sources */,
-				BB63F5AE1C2CC7A300A042E8 /* FMDatabase.m in Sources */,
 				BB63F5B51C2CC7A300A042E8 /* DecodeJson.m in Sources */,
 				BBAF970F1CA994DF00C16305 /* TextEsoterModel.m in Sources */,
 				BB63F6261C2CC7A300A042E8 /* LeftViewCell.m in Sources */,

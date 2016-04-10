@@ -59,7 +59,6 @@
     memcpy(cContent,teacher->content+_levellen+_labellen+_goodatlen, _introducelen);
     _strContent = [NSString stringWithCString:cContent encoding:GBK_ENCODING];
     
-    _strContent = [NSString stringWithFormat:@"简介:%@",_strContent];
 }
 
 

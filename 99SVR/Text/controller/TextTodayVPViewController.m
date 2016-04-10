@@ -8,6 +8,7 @@
 
 #import "TextTodayVPViewController.h"
 #import "TextTcpSocket.h"
+#import "AlertFactory.h"
 #import "LoginViewController.h"
 #import "MarchLiveTextCell.h"
 #import "Toast+UIView.h"
@@ -139,8 +140,11 @@
             [imageView sd_setImageWithURL:attachment.contentURL
                                 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL)
              {
-                 MarchLiveTextCell *cell = (MarchLiveTextCell*)attributedTextContentView.superview.superview.superview;
-                 [selfWeak updateTextView:cell url:imageURL changeSize:image.size];
+                 MarchLiveTextCell *cell = (MarchLiveTextCell*)attributedTextContentView.superview.superview;
+                 if([cell isKindOfClass:[MarchLiveTextCell class]])
+                 {
+                     [selfWeak updateTextView:cell url:imageURL changeSize:image.size];
+                 }
              }];
         }
         imageView.userInteractionEnabled = YES;
@@ -175,7 +179,7 @@
     }
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"contentURL == %@", url];
     BOOL didUpdate = NO;
-    for (DTTextAttachment *oneAttachment in [text.textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
+    for (DTTextAttachment *oneAttachment in [text.attributedTextContextView.layoutFrame textAttachmentsWithPredicate:pred])
     {
         if (CGSizeEqualToSize(oneAttachment.originalSize, CGSizeZero))
         {
@@ -186,7 +190,7 @@
     if (didUpdate)
     {
         //重新加载图片
-        [text.textView relayoutText];
+        [text.attributedTextContextView relayoutText];
 //        NSString *cacheKey = nil;
 //        cacheKey =[NSString stringWithFormat:@"LiveText-%zi", text.section];
 //        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:text.section];
@@ -233,7 +237,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MarchLiveTextCell *cell = [self tableView:tableView marchCellForIndexPath:indexPath];
-    CGFloat height = [cell.textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+86;
+    CGFloat height = [cell.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height+86;
     return height;
 }
 
@@ -257,13 +261,13 @@
         }
         if(![strInfo isEqualToString:cell.strInfo])
         {
-            cell.textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strInfo dataUsingEncoding:NSUTF8StringEncoding]
+            cell.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strInfo dataUsingEncoding:NSUTF8StringEncoding]
                                                                        documentAttributes:nil];
             cell.section = indexPath.section;
             cell.delegate = self;
             [cell setTextModel:textModel];
             cell.messageid = textModel.messageid;
-            cell.textView.textDelegate = self;
+            cell.textDelegate = self;
         }else{
             [cell setTextModel:textModel];
         }
@@ -290,7 +294,10 @@
         liveCore.btnThum.selected = YES;
         [dict setObject:liveCore forKey:NSStringFromInt((int)messageid)];
     }else{
-        [self createLoginAlert];
+        @WeakObj(self)
+        [AlertFactory createLoginAlert:self block:^{
+            [selfWeak.tcpSocket closeSocket];
+        }];
     }
     
 }
@@ -351,40 +358,16 @@
         }
     }
 }
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-
 - (void)dealloc
 {
     DLog(@"dealloc");
-}
-
-- (void)createLoginAlert
-{
-    @WeakObj(self)
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                   message:@"游客无法互动，请登录" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-        
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-       dispatch_async(dispatch_get_main_queue(),
-                      ^{
-                          [selfWeak.tcpSocket exitRoomInfo];
-                          LoginViewController *loginView = [[LoginViewController alloc] init];
-                          [selfWeak.navigationController pushViewController:loginView animated:YES];
-                      });
-    }];
-    [alert addAction:canAction];
-    [alert addAction:okAction];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak presentViewController:alert animated:YES completion:nil];
-    });
 }
 
 @end

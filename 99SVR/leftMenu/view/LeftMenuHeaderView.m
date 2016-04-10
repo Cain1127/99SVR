@@ -98,16 +98,18 @@
     else
     {
         UserInfo *userInfo = [UserInfo sharedUserInfo];
+        _vipLevel.text = NSStringFromInt(userInfo.nUserId);
         if (userInfo.nType == 1)
         {
             _nameLabel.text = userInfo.strName;
-            
-            NSString *stringGoid = [NSString stringWithFormat:@"%.01f 玖玖币",userInfo.goldCoin];
-            CGFloat width = [stringGoid sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}].width+10;
-            [_vipLevel setText:stringGoid];
-            _vipLevel.frame = Rect(kScreenWidth*0.75/2-width/2,_nameLabel.height+_nameLabel.y+5, width,20);
-            imageB.frame = Rect(_vipLevel.x-24,_vipLevel.y+1, 18, 18);
-            imageB.hidden = NO;
+            if (KUserSingleton.nStatus) {
+                NSString *stringGoid = [NSString stringWithFormat:@"%.01f 玖玖币",userInfo.goldCoin];
+                CGFloat width = [stringGoid sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}].width+10;
+                [_vipLevel setText:stringGoid];
+                _vipLevel.frame = Rect(kScreenWidth*0.75/2-width/2,_nameLabel.height+_nameLabel.y+5, width,20);
+                imageB.frame = Rect(_vipLevel.x-24,_vipLevel.y+1, 18, 18);
+                imageB.hidden = NO;
+            }
         }
         else
         {

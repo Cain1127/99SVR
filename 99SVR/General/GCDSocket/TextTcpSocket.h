@@ -59,7 +59,7 @@
  *  @param nCount 个数
  *  @param nType  类型
  */
-- (void)reqTextRoomList:(int)nIndex count:(int)nCount type:(int)nType;
+- (void)reqTextRoomList:(int64_t)nIndex count:(int)nCount type:(int)nType;
 /**
  *  关注讲师
  *
@@ -106,7 +106,7 @@
 
 - (void)createTextMessage:(uint32_t)teacherid type:(int)nType msg:(NSString *)strMsg;
 /**
- *  退出房间
+ *  退出房间,且彻底关闭socket
  */
 - (void)exitRoom;
 
