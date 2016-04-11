@@ -549,7 +549,7 @@ typedef enum : NSUInteger
         return tempCell;
     }
     
-    ///精彩视点
+    //精彩视点
     if ([tempObject isKindOfClass:[WonderfullView class]])
     {
         static NSString *viewPointCellName = @"viewPointCellName";
@@ -771,15 +771,12 @@ typedef enum : NSUInteger
     ///精彩观点项点击
     if ([tempObject isKindOfClass:[WonderfullView class]])
     {
-        
         ///获取直播数据模型
         WonderfullView *model = [tempArray objectAtIndex:indexPath.row];
-        
         TextTcpSocket *textSocket = [[TextTcpSocket alloc] init];
         textSocket.roomid = [model.roomid intValue];
         NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:textSocket viewID:[model.viewid intValue]];
         [self.navigationController pushViewController:detailView animated:YES];
-        
     }
     
 }

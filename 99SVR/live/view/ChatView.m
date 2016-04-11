@@ -8,6 +8,7 @@
 
 #import "ChatView.h"
 #import "EmojiView.h"
+#import "UIControl+UIControl_XY.h"
 #import "RoomUser.h"
 #import "UIView+Touch.h"
 #import "EmojiTextAttachment.h"
@@ -63,10 +64,14 @@
     }];
     [hiddenView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(setViewHidden)]];
     
-    
     downView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50,kScreenWidth,50)];
     [self addSubview:downView];
     [downView setBackgroundColor:UIColorFromRGB(0xF0F0F0)];
+    
+    UILabel *lblLine = [UILabel new];
+    [lblLine setBackgroundColor:UIColorFromRGB(0xCFCFCF)];
+    [downView addSubview:lblLine];
+    lblLine.frame = Rect(0, 0.1, kScreenWidth, 0.5);
     
     whiteView = [[UIView alloc] initWithFrame:Rect(8,8,kScreenWidth-76,36)];
     [downView addSubview:whiteView];
@@ -101,6 +106,8 @@
     btnSend.layer.borderColor = UIColorFromRGB(0xf0f0f0).CGColor;
     [btnSend addTarget:self action:@selector(sendMessage) forControlEvents:UIControlEventTouchUpInside];
     [btnSend setBackgroundImage:[UIImage imageNamed:@"video_present_number_bg"] forState:UIControlStateHighlighted];
+    btnSend.cjr_acceptEventInterval = 0.5f;
+    
     _textView.delegate = self;
     
     lblPlace = [[UILabel alloc] initWithFrame:Rect(_textView.x+5,_textView.y,_textView.width,_textView.height)];
@@ -173,7 +180,6 @@
     
     
 }
-
 
 /**
  * 键盘frame变化时执行的通知方法

@@ -71,7 +71,7 @@
     memcpy(cBuf,notify->content,_textlen);
     _strContent = [NSString stringWithCString:cBuf encoding:GBK_ENCODING];
     _strContent = [DecodeJson replaceEmojiNewString:_strContent];
-    DLog(@"_messageid:%zi--strContent:%@--textlen:%d",_messageid,_strContent,_textlen);
+    _strContent = [_strContent stringByReplacingOccurrencesOfString:@"\n" withString:@"<br>"];
 }
 
 - (id)initWithNotify:(CMDTextRoomLiveListNoty_t *)notify

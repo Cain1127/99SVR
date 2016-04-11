@@ -88,7 +88,7 @@
     _glView.contentMode = UIViewContentModeScaleAspectFit;
     _glView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:_glView];
-    [self.view setBackgroundColor:UIColorFromRGB(0x000000)];
+//    [self.view setBackgroundColor:UIColorFromRGB(0x000000)];
     [self setDefaultImg];
 }
 
@@ -113,7 +113,7 @@
 
 - (void)setDefaultImg
 {
-    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
+//    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
     [_glView setImage:[UIImage imageNamed:@"live_default"]];
     lblText.hidden = YES;
 }

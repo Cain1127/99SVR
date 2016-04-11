@@ -31,31 +31,25 @@
 
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
     {
-        
         ///init default size
         self.defaultMaxWidth = kScreenWidth - 30.0f;
-        
         ///create default UI
         [self initViewPointCustomCellUI];
-        
     }
-    
     return self;
-
 }
 
 #pragma mark -
 #pragma mark - create viewPoint custom UI
 - (void)initViewPointCustomCellUI
 {
-    
     ///底view
-    UIView *rootView = [[UIView alloc] initWithFrame:Rect(15.0f, 0.0f, self.defaultMaxWidth - 30.0f, 100.0f)];
+    UIView *rootView = [[UIView alloc] initWithFrame:Rect(15.0f, 0.0f, kScreenWidth-30, 100.0f)];
     [self.contentView addSubview:rootView];
 
     ///标题信息
     self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+    self.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
     self.titleLabel.textColor = UIColorFromRGB(0x4C4C4C);
     self.titleLabel.numberOfLines = 2;
     self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -63,14 +57,14 @@
     
     ///讲师名字
     self.teacherNameLabel = [[UILabel alloc] init];
-    self.teacherNameLabel.font = XCFONT(10);
+    self.teacherNameLabel.font = XCFONT(12);
     self.teacherNameLabel.textColor = UIColorFromRGB(0x919191);
     self.teacherNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [rootView addSubview:self.teacherNameLabel];
     
     ///日期信息
     self.dateLabel = [[UILabel alloc] init];
-    self.dateLabel.font = XCFONT(10.0f);
+    self.dateLabel.font = XCFONT(12.0f);
     self.dateLabel.textColor = UIColorFromRGB(0x919191);
     self.dateLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [rootView addSubview:self.dateLabel];
@@ -84,7 +78,7 @@
     ///观看次数
     self.readAccountLabel = [[UILabel alloc] init];
     self.readAccountLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.readAccountLabel.font = XCFONT(10);
+    self.readAccountLabel.font = XCFONT(12);
     self.readAccountLabel.textColor = UIColorFromRGB(0x919191);
     [rootView addSubview:self.readAccountLabel];
     
@@ -110,7 +104,7 @@
     UILabel *line = [[UILabel alloc] initWithFrame:Rect(0.0f, CGRectGetHeight(rootView.frame) - 0.5f, CGRectGetWidth(rootView.frame), 0.5f)];
     [line setBackgroundColor:UIColorFromRGB(0xF0F0F0)];
     [rootView addSubview:line];
-
+    
 }
 
 #pragma mark -
@@ -126,12 +120,10 @@
  */
 - (void)setViewPointModel:(WonderfullView *)dataModel
 {
-
     self.titleLabel.text = 0 < dataModel.title.length ? dataModel.title : nil;
     self.teacherNameLabel.text = 0 < dataModel.calias.length ? dataModel.calias : nil;
     self.dateLabel.text = 0 < dataModel.dtime.length ? dataModel.dtime : nil;
     self.readAccountLabel.text = NSStringFromInteger(0 < dataModel.czans ? dataModel.czans : 0);
-
 }
 
 @end

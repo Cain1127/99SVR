@@ -8,12 +8,10 @@
 
 #import "InAppPurchasesViewController.h"
 #import "GTMBase64.h"
-#import "IAPHelper.h"
 #import "ProgressHUD.h"
 #import "MJRefresh.h"
 #import "MBProgressHUD.h"
 #import "SBJsonWriter.h"
-#import "IAPShare.h"
 #import <StoreKit/StoreKit.h>
 
 ///SKPaymentTransactionObserver

@@ -126,17 +126,17 @@
 {
     NSString *strAddress;
     NSString *strPort;
-    if([UserInfo sharedUserInfo].strRoomAddr)
+    NSString *roomAddr = [KUserSingleton.dictRoomGate objectForKey:@(0)];
+    if(roomAddr!=nil)
     {
-        NSString *strAry = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@","][0];
+        NSString *strAry = [roomAddr componentsSeparatedByString:@","][0];
         strAddress = [strAry componentsSeparatedByString:@":"][0];
         strPort = [strAry componentsSeparatedByString:@":"][1];
     }
     else
     {
-        NSString *strAry = [_room.cgateaddr componentsSeparatedByString:@";"][0];
-        strAddress = [strAry componentsSeparatedByString:@":"][0];
-        strPort = [strAry componentsSeparatedByString:@":"][1];
+        strAddress = @"";
+        strPort = @"0";
     }
     [_tcpSocket connectRoomInfo:_room.nvcbid address:strAddress port:[strPort intValue]];
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
@@ -281,7 +281,7 @@
     [self.view insertSubview:_ffPlay.view atIndex:1];
     _ffPlay.view.frame = Rect(0, 20, kScreenWidth, kScreenHeight);
     
-    _topHUD = [[UIView alloc] initWithFrame:CGRectMake(0,0,kScreenWidth,64)];
+    _topHUD = [[UIView alloc] initWithFrame:CGRectMake(0,20,kScreenWidth,44)];
     _topHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:_topHUD];
     _topHUD.alpha = 0;
@@ -307,7 +307,7 @@
     [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
     [_topHUD addSubview:btnBack];
     btnBack.tag = 2;
-    btnBack.frame = Rect(0, 20, 44, 44);
+    btnBack.frame = Rect(0, 0, 44, 44);
     
     _btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnRight setImage:[UIImage imageNamed:@"coll_normal"] forState:UIControlStateNormal];
@@ -315,7 +315,7 @@
     [_btnRight setImage:[UIImage imageNamed:@"coll_high"] forState:UIControlStateSelected];
     [_btnRight addTarget:self action:@selector(colletCurrentRoom) forControlEvents:UIControlEventTouchUpInside];
     [_topHUD addSubview:_btnRight];
-    _btnRight.frame = Rect(kScreenWidth-44, 20, 44, 44);
+    _btnRight.frame = Rect(kScreenWidth-44, 0, 44, 44);
     
     NSArray *aryTitle = @[@"聊天区",@"我的",@"公告",@"课程表"];
     _group = [[RoomTitleView alloc] initWithFrame:Rect(0,20+kVideoImageHeight,kScreenWidth, 44) ary:aryTitle];
@@ -490,7 +490,6 @@
     [super viewDidLoad];
     room_gcd = dispatch_queue_create("decode_gcd",0);
     _cellCache = [[NSCache alloc] init];
-    _cellCache.totalCostLimit = 20;
     [self initUIHead];
     UITapGestureRecognizer* singleRecogn;
     
@@ -767,8 +766,12 @@
     }
 }
 
+
+
 - (void)addNotification
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_NETWORK_ERR_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reConnectRoomInfo) name:MESSAGE_NETWORK_OK_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(TradeGiftError:) name:MESSAGE_TRADE_GIFT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startPlayThread:) name:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatPriMsg:) name:MESSAGE_ROOM_TO_ME_VC object:nil];
@@ -779,7 +782,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomBeExit:) name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(room_kickout) name:MESSAGE_ROOM_KICKOUT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reConnectRoomInfo) name:MESSAGE_RECONNECT_TIMER_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomSucsess) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendRoomMediaInfo:) name:MESSAGE_TCP_SOCKET_SEND_MEDIA object:nil];

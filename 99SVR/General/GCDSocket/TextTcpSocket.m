@@ -603,7 +603,6 @@
 {
     CMDTextRoomLiveViewRes_t *resp = (CMDTextRoomLiveViewRes_t *)pInfo;
     IdeaDetails *idea = [[IdeaDetails alloc] initWithIdeaDetails:resp];
-    DLog(@"观点信息:%zi--%@--%lld",idea.messageid,idea.strContent,idea.comments);
     [_aryNew addObject:idea];
     if(flag)
     {
@@ -613,7 +612,7 @@
 }
 
 #pragma mark 观点列表
-- (void)reqNewList:(int)nIndex count:(int)nCount
+- (void)reqNewList:(int64_t)nIndex count:(int)nCount
 {
     CMDTextRoomLiveViewListReq_t req= {0};
     req.vcbid = _roomid;
@@ -1196,28 +1195,20 @@
     [self connectTextServer:_strAddr port:_nPort];
 }
 
-- (void)decodeAddress
-{
-    NSString *strAry = [[UserInfo sharedUserInfo].strTextRoom componentsSeparatedByString:@","][0];
-    if (strAry.length>10) {
-        NSString *strAddr = [strAry componentsSeparatedByString:@":"][0];
-        NSInteger nPort = [[strAry componentsSeparatedByString:@":"][1] integerValue];
-        _strAddr = strAddr;
-        _nPort = (int)nPort;
-    }
-}
-
-
 - (void)connectTextServer:(NSString *)strIp port:(NSInteger)nPort
 {
-    if (socketQueue==nil)
-    {
-        socketQueue = dispatch_queue_create("tcp_socket", 0);
-    }
-    _asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:socketQueue];
-    if (![_asyncSocket connectToHost:strIp onPort:nPort error:nil])
-    {
-        DLog(@"连接失败");
+    if (strIp.length>5) {
+        if (socketQueue==nil)
+        {
+            socketQueue = dispatch_queue_create("tcp_socket", 0);
+        }
+        _asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:socketQueue];
+        if (![_asyncSocket connectToHost:strIp onPort:nPort error:nil])
+        {
+            DLog(@"连接失败");
+        }
+    }else{
+        [self ReConnectSocket];
     }
 }
 
@@ -1311,7 +1302,7 @@
         }
     }
 }
-
+/*
 - (void)ReConnectSocket
 {
     if (_nFall>3) {
@@ -1358,7 +1349,7 @@
         [self reconnectTextRoom];
         _nFall++;
     }
-}
+}*/
 
 -(int)getSocketHead:(char *)pBuf len:(int)nLen
 {
@@ -1531,8 +1522,80 @@
 - (id)init
 {
     self = [super init];
-    [self decodeAddress];
+    
     return self;
+}
+
+- (void)decodeAddress{
+    int nLbs = _nFall/3+1;
+    NSArray *arrayIndex = [[KUserSingleton.dictRoomText objectForKey:@(nLbs)] componentsSeparatedByString:@";"];
+    NSString *strAddrInfo = arrayIndex.count > 0 ? arrayIndex[0] : @"nil";
+    if (strAddrInfo!=nil) {
+        _strAddr = [strAddrInfo componentsSeparatedByString:@":"][0];
+        _nPort = [[strAddrInfo componentsSeparatedByString:@":"][1] intValue];
+    }else{
+        _strAddr = @"";
+        _nPort = 0;
+    }
+}
+
+- (void)ReConnectSocket
+{
+    //重连操作
+    if (_nFall>=12) {
+        return ;
+    }
+    int nLbs = _nFall/3;
+    NSString *addrTemp = [KUserSingleton.dictRoomText objectForKey:@(nLbs)];
+    if (addrTemp == nil)
+    {
+        NSString *strInfo = [kLbs_all_path componentsSeparatedByString:@";"][nLbs];
+        NSString *strPath = [[NSString alloc] initWithFormat:@"http://%@/tygettext",strInfo];
+        @WeakObj(self)
+        __block int __nLbs = nLbs;
+        [BaseService get:strPath dictionay:nil timeout:5 success:^(id responseObject) {
+            if (responseObject) {
+                NSString *addrInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                [KUserSingleton.dictRoomText setObject:addrInfo forKey:@(__nLbs)];
+                int nIndex = selfWeak.nFall%2;
+                if ([addrInfo rangeOfString:@";"].location!=NSNotFound) {
+                    NSArray *arrayIndex = [addrInfo componentsSeparatedByString:@";"];
+                    NSString *strAddrInfo = arrayIndex.count > nIndex ? arrayIndex[nIndex] : @"nil";
+                    if (strAddrInfo && [strAddrInfo rangeOfString:@":"].location != NSNotFound && [strAddrInfo rangeOfString:@"."].location != NSNotFound)
+                    {
+                        selfWeak.strAddr = [strAddrInfo componentsSeparatedByString:@":"][0];
+                        selfWeak.nPort = [[strAddrInfo componentsSeparatedByString:@":"][1] intValue];
+                        [selfWeak reconnectTextRoom];
+                    }
+                }else{
+                    selfWeak.nFall = (__nLbs+1)*3;
+                    [selfWeak ReConnectSocket];
+                }
+            }
+        }
+        fail:^(NSError *error)
+         {
+             if(selfWeak.nFall<12)
+             {
+                 selfWeak.nFall = (__nLbs+1)*3;
+                 [selfWeak ReConnectSocket];
+             }
+         }];
+    }
+    else
+    {
+        int nIndex = _nFall%2;
+        NSArray *arrayIndex = [addrTemp componentsSeparatedByString:@";"];
+        NSString *strAddrInfo = arrayIndex.count > nIndex ? arrayIndex[nIndex] : @"nil";
+        if ([strAddrInfo isEqualToString:@"nil"]) {
+            _nFall = (nLbs+1)*3;
+            [self ReConnectSocket];
+        }else{
+            _strAddr = [strAddrInfo componentsSeparatedByString:@":"][0];
+            _nPort = [[strAddrInfo componentsSeparatedByString:@":"][1] intValue];
+            [self reconnectTextRoom];
+        }
+    }
 }
 
 @end

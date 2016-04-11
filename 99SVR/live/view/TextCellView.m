@@ -59,18 +59,13 @@
         
         [_roomIdLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(_imageView.mas_left).offset(8);
-            make.top.equalTo(imgView.mas_top).offset(3);
+            make.top.equalTo(imgView.mas_top).offset(20);
             make.width.equalTo(@(60));
         }];
         
-        [_roomIdLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(_imageView.mas_left).offset(8);
-            make.top.equalTo(imgView.mas_top).offset(3);
-            make.width.equalTo(@(60));
-        }];
         [_lookCountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(_imageView.mas_right).offset(8);
-            make.top.equalTo(imgView.mas_top).offset(8);
+            make.top.equalTo(_roomIdLabel.mas_top);
             make.width.equalTo(@(60));
         }];
        [imgCount mas_makeConstraints:^(MASConstraintMaker *make) {

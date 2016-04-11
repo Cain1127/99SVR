@@ -104,6 +104,11 @@
     [self.view addSubview:bodyView];
     [bodyView setUserInteractionEnabled:YES];
     
+    UILabel *lblLine = [UILabel new];
+    [lblLine setBackgroundColor:UIColorFromRGB(0xCFCFCF)];
+    [bodyView addSubview:lblLine];
+    lblLine.frame = Rect(0, 0.1, kScreenWidth, 0.5);
+    
     UIView *whiteView = [[UIView alloc] initWithFrame:Rect(8,8,kScreenWidth-76,36)];
     [bodyView addSubview:whiteView];
     [whiteView setBackgroundColor:UIColorFromRGB(0xffffff)];

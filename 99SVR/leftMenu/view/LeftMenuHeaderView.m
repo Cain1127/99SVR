@@ -71,7 +71,7 @@
         [self addSubview:_lineView];
         
         imageB = [[UIImageView alloc] initWithFrame:Rect(50, 0,18,18)];
-        [imageB setImage:[UIImage imageNamed:@"personal_recharge_icon"]];
+        [imageB setImage:[UIImage imageNamed:@"personal_gold_icon"]];
         [self addSubview:imageB];
         imageB.hidden = YES;
         [self layoutViews];

@@ -59,7 +59,8 @@
 
     UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnRight setTitle:@"保存" forState:UIControlStateNormal];
-    [btnRight setBackgroundColor:UIColorFromRGB(0x7fbbee)];
+    [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+    [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
     [self.view addSubview:btnRight];
     btnRight.frame = Rect(10,_nickNameTextField.y+_nickNameTextField.height+30, kScreenWidth-20, 40);
     [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];

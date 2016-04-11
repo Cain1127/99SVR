@@ -72,12 +72,17 @@
     
     //聊天框
     
-    UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, self.view.height-50, kScreenWidth,50)];
-    [bodyView setBackgroundColor:UIColorFromRGB(0xF0F0F0)];
+    UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, self.view.height-50 , kScreenWidth,50)];
+    [bodyView setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
     [self.view addSubview:bodyView];
     [bodyView setUserInteractionEnabled:YES];
     
-    UIView *whiteView = [[UIView alloc] initWithFrame:Rect(8,5,kScreenWidth-76,40)];
+    UILabel *lblLine = [UILabel new];
+    [lblLine setBackgroundColor:UIColorFromRGB(0xCFCFCF)];
+    [bodyView addSubview:lblLine];
+    lblLine.frame = Rect(0, 0.1, kScreenWidth, 0.5);
+    
+    UIView *whiteView = [[UIView alloc] initWithFrame:Rect(8,8,kScreenWidth-76,36)];
     [bodyView addSubview:whiteView];
     [whiteView setBackgroundColor:UIColorFromRGB(0xffffff)];
     whiteView.layer.masksToBounds = YES;

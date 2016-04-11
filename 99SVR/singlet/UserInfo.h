@@ -39,6 +39,12 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
 @property (nonatomic,copy) NSString *strRoomAddr;
 
+@property (nonatomic,strong) NSMutableDictionary *dictRoomMedia;
+
+@property (nonatomic,strong) NSMutableDictionary *dictRoomGate;
+
+@property (nonatomic,strong) NSMutableDictionary *dictRoomText;
+
 @property (nonatomic,copy) NSString *strTextRoom;
 
 @property (nonatomic,assign) BOOL bIsLogin;

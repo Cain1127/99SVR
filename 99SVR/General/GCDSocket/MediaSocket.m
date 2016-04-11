@@ -143,36 +143,62 @@ typedef struct _tag_MediaFrameBuffer
 
 - (void)getMediaHost
 {
-    if (_strAddress == nil)
+    //重连操作
+    if (_nFall>=12) {
+        return ;
+    }
+    int nLbs = _nFall/3;
+    NSString *addrTemp = [KUserSingleton.dictRoomMedia objectForKey:@(nLbs)];
+    if (addrTemp == nil)
     {
-        NSString *strPath = [[NSString alloc] initWithFormat:@"http://lbs%d.99ducaijing.cn:2222/tygetmedia?id=%d",_nFall+1,_roomid];
-        __weak MediaSocket *__self = self;
+        NSString *strInfo = [kLbs_all_path componentsSeparatedByString:@";"][nLbs];
+        NSString *strPath = [[NSString alloc] initWithFormat:@"http://%@/tygetgate",strInfo];
+        @WeakObj(self)
+        __block int __nLbs = nLbs;
         [BaseService get:strPath dictionay:nil timeout:5 success:^(id responseObject) {
-            __self.strAddress= [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-            NSString *strAddrInfo = [__self.strAddress componentsSeparatedByString:@","][0];
-            if (strAddrInfo && [strAddrInfo rangeOfString:@":"].location != NSNotFound)
-            {
-                NSString *strAddr = [strAddrInfo componentsSeparatedByString:@":"][0];
-                int port = [[strAddrInfo componentsSeparatedByString:@":"][1] intValue];
-                [__self connectIpAndPort:strAddr port:port];
+            if (responseObject) {
+                NSString *addrInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                [KUserSingleton.dictRoomMedia setObject:addrInfo forKey:@(__nLbs)];
+                int nIndex = selfWeak.nFall%2;
+                if ([addrInfo rangeOfString:@";"].location!=NSNotFound) {
+                    NSArray *arrayIndex = [addrInfo componentsSeparatedByString:@";"];
+                    NSString *strAddrInfo = arrayIndex.count > nIndex ? arrayIndex[nIndex] : @"nil";
+                    if (strAddrInfo && [strAddrInfo rangeOfString:@":"].location != NSNotFound && [strAddrInfo rangeOfString:@"."].location != NSNotFound)
+                    {
+                        NSString *strAddr = [strAddrInfo componentsSeparatedByString:@":"][0];
+                        int nPort = [[strAddrInfo componentsSeparatedByString:@":"][1] intValue];
+                        [selfWeak connectIpAndPort:strAddr port:nPort];
+                    }
+                }else{
+                    selfWeak.nFall=(__nLbs+1)*3;
+                    [selfWeak getMediaHost];
+                }
             }
         }
-         fail:^(NSError *error)
-         {
-             __self.nFall++;
-             if(__self.nFall<3)
+        fail:^(NSError *error)
+        {
+             if(selfWeak.nFall<12)
              {
-                [__self getMediaHost];
+                 selfWeak.nFall=(__nLbs+1)*3;
+                 [selfWeak getMediaHost];
              }
          }];
     }
     else
     {
-        NSString *strAddrInfo = [_strAddress componentsSeparatedByString:@","][0];
-        NSString *strAddr = [strAddrInfo componentsSeparatedByString:@":"][0];
-        int port = [[strAddrInfo componentsSeparatedByString:@":"][1] intValue];
-        [self connectIpAndPort:strAddr port:port];
+        int nIndex = _nFall%2;
+        NSArray *arrayIndex = [addrTemp componentsSeparatedByString:@";"];
+        NSString *strAddrInfo = arrayIndex.count > nIndex ? arrayIndex[nIndex] : @"nil";
+        if ([strAddrInfo isEqualToString:@"nil"]) {
+            _nFall=(nLbs+1)*3;
+            [self getMediaHost];
+        }else{
+            NSString *strAddr = [strAddrInfo componentsSeparatedByString:@":"][0];
+            int nPort = [[strAddrInfo componentsSeparatedByString:@":"][1] intValue];
+            [self connectIpAndPort:strAddr port:nPort];
+        }
     }
+    
 }
 /**
  *  连接流媒体服务器ip,port
@@ -186,9 +212,7 @@ typedef struct _tag_MediaFrameBuffer
     [_aryVideo removeAllObjects];
     
     _gcdSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(0, 0)];
-    
     if (![_gcdSocket connectToHost:strIp onPort:nPort error:nil])
-//    if (![_gcdSocket connectToHost:@"121.12.118.18" onPort:819 error:nil])
     {
         DLog(@"连接失败");
     }
@@ -525,24 +549,23 @@ if(_block) \
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
     DLog(@"socket 中断");
-    if(_nFall>=3)
+    if(_nFall>=12)
     {
         DLog(@"重新建立连接");
         NSString *strErrlog =[NSString stringWithFormat:@"ReportItem=DirectSeedingQuality&ClientType=3&UserId=%d&ServerIP=%@&Error=kadun",
                               [UserInfo sharedUserInfo].nUserId,[UserInfo sharedUserInfo].strMediaAddr];
         [DecodeJson postPHPServerMsg:strErrlog];
+        _nFall = 0;
     }
     else if ([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Connection refused"]){
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接流媒体失败"];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接流媒体失败"];
+        //直接进行重连
     }
     else if([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Socket closed byremote peer"]){
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接中断"];
-    }
-    else if([err.domain isEqualToString:@"NSPOSIXErrorDomain"]){
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接中断"];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接中断"];
+        //直接进行重连
     }
     DLog(@"error:%@",err);
-
     m_nLastRecvTS=0;
     _nFall ++;
 }

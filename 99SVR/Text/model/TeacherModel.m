@@ -48,6 +48,7 @@
     memset(cLabel, 0, _labellen*2);
     memcpy(cLabel,teacher->content+_levellen,_labellen);
     _strLabel = [NSString stringWithCString:cLabel encoding:GBK_ENCODING];
+    _strLabel = [NSString stringWithFormat:@" %@ ",_strLabel];
     
     char cGoodat[_goodatlen+_goodatlen];
     memset(cGoodat, 0, _goodatlen*2);

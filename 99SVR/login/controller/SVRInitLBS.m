@@ -13,8 +13,6 @@
 #import "DecodeJson.h"
 #import "UserInfo.h"
 
-#define kVersionNumber @"132"
-
 @implementation SVRInitLBS
 
 + (void)load
@@ -22,14 +20,39 @@
     //获取登录服务器地址
     [SVRInitLBS loginLocal];
     //获取房间地址
-    UserInfo *__userInfo = [UserInfo sharedUserInfo];
+    [SVRInitLBS requestLbs];
+    
+    [SVRInitLBS requestGift];
+    
+    [SVRInitLBS authVersion];
+}
+/**
+ *  请求lbs服务器信息
+ */
++ (void)requestLbs{
+    //存放lbs地址
+    KUserSingleton.dictRoomGate = [NSMutableDictionary dictionary];
+    KUserSingleton.dictRoomText = [NSMutableDictionary dictionary];
+    KUserSingleton.dictRoomMedia = [NSMutableDictionary dictionary];
+    
+    //获取视频服务器地址
     [BaseService get:LBS_ROOM_GATE dictionay:nil timeout:10 success:^(id responseObject)
-    {
+     {
+         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+         [KUserSingleton.dictRoomGate setObject:strInfo forKey:@(0)];
+     }fail:nil];
+     
+    //获取文字直播服务器
+    [BaseService get:LBS_ROOM_MEDIA dictionay:nil timeout:10 success:^(id responseObject) {
         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        __userInfo.strRoomAddr = strInfo;
-    }
-    fail:nil];
-    //获取礼物
+        [KUserSingleton.dictRoomMedia setObject:strInfo forKey:@(0)];
+    } fail:nil];
+}
+
+/**
+ *  请求礼物的信息
+ */
++ (void)requestGift{
     [BaseService post:kGift_URL dictionay:nil timeout:5 success:^(id responseObject) {
         NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
         [UserDefaults setObject:parameters forKey:kGiftInfo];
@@ -37,16 +60,28 @@
     } fail:^(NSError *error) {
         
     }];
-    NSString *strUrl = [NSString stringWithFormat:@"%@tygettext",LBS_HTTP_HOST];
-    [BaseService get:strUrl dictionay:nil timeout:10 success:^(id responseObject) {
-        NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        __userInfo.strTextRoom = strInfo;
-    } fail:nil];
-    
-    NSString *strLbs = [NSString stringWithFormat:@"%@%@",lbs_status,kVersionNumber];
+}
+
+/**
+ *  请求版本内容操作
+ */
++ (void)authVersion{
+    NSString *strVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] stringByReplacingOccurrencesOfString:@"." withString:@""];
+    if ([UserDefaults objectForKey:strVersion]!=nil) {
+        BOOL bStatus = [[UserDefaults objectForKey:strVersion] boolValue];
+        if (bStatus) {
+            KUserSingleton.nStatus = bStatus;
+            return ;
+        }
+    }else{
+        [UserDefaults setBool:0 forKey:strVersion];
+    }
+    __block NSString *__strVersion = strVersion;
+    NSString *strLbs = [NSString stringWithFormat:@"%@%@",lbs_status,strVersion];
     [BaseService get:strLbs dictionay:nil timeout:10 success:^(id responseObject) {
          NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         __userInfo.nStatus = [[parameters objectForKey:kVersionNumber] intValue];
+         KUserSingleton.nStatus = [[parameters objectForKey:__strVersion] intValue];
+        [UserDefaults setBool:KUserSingleton.nStatus forKey:__strVersion];
     } fail:nil];
 }
 
