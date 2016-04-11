@@ -43,7 +43,7 @@
     NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
     if (!connectErr && responseCode == 200)
     {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil removingNulls:YES ignoreArrays:NO];
         if (dict)
         {
             NSDictionary *firDict = [dict objectForKey:@"arr"];

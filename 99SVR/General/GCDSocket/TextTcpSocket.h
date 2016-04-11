@@ -130,7 +130,7 @@
  *  @param nCount 个数
  *  @param ideaId 观点id
  */
-- (void)reqIdeaDetails:(int)nIndex count:(int)nCount ideaId:(int64_t)ideaId;
+- (void)reqIdeaDetails:(int64_t)nIndex count:(int)nCount ideaId:(int64_t)ideaId;
 /**
  *  请求个人秘籍信息
  */

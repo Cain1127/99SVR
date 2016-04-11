@@ -465,6 +465,24 @@
         [UserInfo sharedUserInfo].aryGift = aryIndex;
     }
 }
+
++ (NSString *)getArrayAddr:(NSString *)strInfo{
+    NSString *strMatch = @"[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}:[0-9]{1,5}";
+    NSRange range = [strInfo rangeOfString:strMatch options:NSRegularExpressionSearch];
+    NSMutableString *strNew = [[NSMutableString alloc] init];
+    while (range.location != NSNotFound){
+        if (strNew.length>10) {
+            [strNew appendString:@";"];
+        }
+        [strNew appendString:[strInfo substringWithRange:range]];
+        NSLog(@"%@", [strInfo substringWithRange:range]);
+        strInfo = [strInfo stringByReplacingCharactersInRange:range withString:@""];
+        range = [strInfo rangeOfString:strMatch options:NSRegularExpressionSearch];
+    }
+    return strNew;
+}
+
+
 @end
 
 

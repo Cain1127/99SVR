@@ -90,6 +90,7 @@
         [_tableView.footer beginRefreshing];
          _nCurrent += 20;
     }
+    [self performSelector:@selector(reqTimeOut) withObject:nil afterDelay:6.0f];
 }
 
 - (void)requestTextLive
@@ -99,12 +100,11 @@
     dispatch_async(dispatch_get_main_queue(),
     ^{
         [__table reloadData];
-        [__table.header beginRefreshing];
-        [__table.footer resetNoMoreData];
     });
     _nCurrent = 0;
     [_textSocket reqTextRoomList:_nCurrent count:20 type:1];
     _nCurrent = 20;
+    [self performSelector:@selector(reqTimeOut) withObject:nil afterDelay:6.0f];
 }
 
 - (void)didReceiveMemoryWarning
@@ -325,8 +325,12 @@
     if (notify && notify.object && [notify.object intValue]==1) {
         _nCurrent ++;
     }
+    DLog(@"1234567");
     _aryLive = _textSocket.aryText;
     __weak TextLiveViewController *__self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    });
     dispatch_async(dispatch_get_main_queue(),
     ^{
         if ([__self.tableView.header isRefreshing])
@@ -390,7 +394,7 @@
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLoadTextList:) name:MESSAGE_TEXT_LOAD_TODAY_LIST_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reqTextList) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector() name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respZanSuccess:) name:MESSAGE_TEXT_ZAN_SUC_VC object:nil];
 }
 
@@ -403,6 +407,20 @@
 - (void)dealloc
 {
     DLog(@"dealloc");
+}
+
+- (void)reqTimeOut
+{
+    @WeakObj(self)
+    dispatch_main_async_safe(^{
+        [ProgressHUD showError:@"获取观点超时!"];
+        if([selfWeak.tableView.header isRefreshing]){
+            [selfWeak.tableView.header endRefreshing];
+        }
+        else if([selfWeak.tableView.footer isRefreshing]){
+            [selfWeak.tableView.footer endRefreshing];
+        }
+    });
 }
 
 @end

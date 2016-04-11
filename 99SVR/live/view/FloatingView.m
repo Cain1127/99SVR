@@ -97,30 +97,6 @@
 
 - (void)showGift:(CGFloat)time
 {
-//    [self.layer addAnimation:[self opacityForever_Animation:0.5] forKey:nil];
-    
-    ///移动的动画。
-//        [self.layer addAnimation:[self moveX:1.0f X:[NSNumber numberWithFloat:200.0f]] forKey:nil];
-    //缩放效果。
-//        [self.layer addAnimation:[self scale:[NSNumber numberWithFloat:1.0f] orgin:[NSNumber numberWithFloat:3.0f] durTimes:2.0f Rep:MAXFLOAT] forKey:nil];
-    //组合动画。
-//        NSArray *myArray = [NSArray arrayWithObjects:[self opacityForever_Animation:0.5],[self moveX:1.0f X:[NSNumber numberWithFloat:200.0f]],[self scale:[NSNumber numberWithFloat:1.0f] orgin:[NSNumber numberWithFloat:3.0f] durTimes:2.0f Rep:MAXFLOAT], nil];
-//        [self.layer addAnimation:[self groupAnimation:myArray durTimes:3.0f Rep:MAXFLOAT] forKey:nil];
-    
-    //路径动画。
-//        CGMutablePathRef myPah = CGPathCreateMutable();
-//        DLog(@"self.y:%f",self.y);
-//        CGFloat yOrigin = self.y+25;
-//        CGPathMoveToPoint(myPah, nil,self.x,yOrigin);
-//        CGPathAddCurveToPoint(myPah, nil, self.x, yOrigin, kScreenWidth/2, yOrigin, kScreenWidth, yOrigin);//
-//        [self.layer addAnimation:[self keyframeAnimation:myPah durTimes:2.0 Rep:MAXFLOAT] forKey:nil];
-    //旋转动画。
-//    [self.layer addAnimation:[selfrotation:2degree:kRadianToDegrees(90) direction:1repeatCount:MAXFLOAT] forKey:nil];
-//    @WeakObj(self)
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [selfWeak.layer removeAllAnimations];
-//        [selfWeak removeFromSuperview];
-//    });
     int nTime = _nNumber/10+1;
     [UIView animateWithDuration:0.25
                           delay:0.0
@@ -128,7 +104,7 @@
                      animations:^{
                          self.alpha = 0.8;
      } completion:^(BOOL finished){
-         [UIView animateWithDuration:nTime delay:0.25 options:UIViewAnimationOptionCurveEaseIn animations:^{
+         [UIView animateWithDuration:nTime-0.25 delay:0.25 options:UIViewAnimationOptionCurveEaseIn animations:^{
                               self.alpha = 1.0;
                           } completion:^(BOOL finished) {
                               __weak FloatingView *__self = self;
@@ -148,7 +124,7 @@
         _nNumber = nNumber;
         _nUserId = nUserid;
         _nGid = ngid;
-        [self setAlpha:0.8];
+        [self setAlpha:1.0];
         UIColor *backColor = nColor%2 == 1 ? UIColorFromRGB(0xfff1dc) : UIColorFromRGB(0xffedbc);
         [self setBackgroundColor:backColor];
         [self createFloating];

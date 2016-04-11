@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "ZLLogonServerSing.h"
 #import "Toast+UIView.h"
 #import "Reachability.h"
 #import <AlipaySDK/AlipaySDK.h>
@@ -40,6 +41,7 @@
     BOOL bStatus;
     BOOL bGGLogin;
     Reachability *hostReach;
+    NetworkStatus nowStatus;
 }
 
 @property (nonatomic,unsafe_unretained) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
@@ -113,7 +115,7 @@
     NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
     NetworkStatus status = [curReach currentReachabilityStatus];
     
-    if (status == NotReachable)
+    if (nowStatus != NotReachable)
     {
         DLog(@"网络状态:中断");
         __weak UIWindow *__windows = self.window;
@@ -122,9 +124,10 @@
             [__windows makeToast:@"无网络"];
         });
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_ERR_VC object:nil];
+        nowStatus = status;
         return ;
     }
-    else if(status == ReachableViaWiFi)
+    else if(nowStatus != ReachableViaWiFi)
     {
         __weak UIWindow *__windows = self.window;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -132,7 +135,7 @@
         });
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
     }
-    else
+    else if(nowStatus != ReachableViaWWAN)
     {
         __weak UIWindow *__windows = self.window;
         dispatch_async(dispatch_get_main_queue(),
@@ -141,6 +144,7 @@
            });
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
     }
+    nowStatus = status;
     [KUserSingleton.dictRoomGate removeAllObjects];
     [KUserSingleton.dictRoomMedia removeAllObjects];
     [KUserSingleton.dictRoomText removeAllObjects];
@@ -194,13 +198,45 @@
 
 -(void)setEndBackground
 {
-    
+    if (bStatus)
+    {
+        DLog(@"等待时间不够");
+        return ;
+    }
+    [[ZLLogonServerSing sharedZLLogonServerSing] closeProtocol];
+    bGGLogin = YES;
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"ON"];
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    bStatus = NO;
+    self.backgroundTaskIdentifier = [application beginBackgroundTaskWithExpirationHandler:^(void)
+     {
+         [self endBackgroundTask];
+     }];
+    _myTimer = [NSTimer scheduledTimerWithTimeInterval:3.0f
+                                                target:self
+                                              selector:@selector(timerMethod:)
+                                              userInfo:nil
+                                               repeats:YES];
+    [self performSelector:@selector(setEndBackground) withObject:nil afterDelay:180.0f];
+}
+
+-(void)timerMethod:(NSTimer *)paramSender
+{
+    NSTimeInterval backgroundTimeRemaining =[[UIApplication sharedApplication] backgroundTimeRemaining];
+    if (backgroundTimeRemaining == DBL_MAX)
+    {
+        DLog(@"Background Time Remaining = Undetermined");
+    }
+    else
+    {
+        DLog(@"Background Time Remaining = %.02f Seconds", backgroundTimeRemaining);
+        if (backgroundTimeRemaining<10) {
+            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+            self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+        }
+    }
 }
 
 -(void)endBackgroundTask
@@ -224,13 +260,28 @@
     
 }
 
+/**
+ *  从后台返回
+ */
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    DLog(@"返回");
+    bStatus = YES;
+    [self.myTimer invalidate];
+    if (bGGLogin)
+    {
+        [SVRInitLBS loginLocal];
+    }
     [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];
 }
 
+
+
+
+
+/**
+ *  连接跳转
+ */
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
 {
     if ([[url absoluteString] rangeOfString:@"svrAlipay"].location != NSNotFound) {
@@ -263,6 +314,7 @@
 {
     
 }
+
 -(void)didReceiveWeiboResponse:(WBBaseResponse *)response
 {
     if ([response isKindOfClass:WBAuthorizeResponse.class])
@@ -324,35 +376,5 @@
         }
     }
 }
-
--(void)getAccess_token:(NSString *)strCode
-{
-    char cString[600]={0};
-    sprintf(cString, "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",kWXAPP_ID,kWXAPP_SEC,
-            [strCode UTF8String]);
-    NSString *url = [[NSString alloc] initWithUTF8String:cString];
-    __weak AppDelegate *__self = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURL *zoneUrl = [NSURL URLWithString:url];
-        NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
-        NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
-        dispatch_async(dispatch_get_global_queue(0, 0),
-        ^{
-            if (data) {
-                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                NSString *strToken = [dic objectForKey:@"access_token"];
-                NSString *strOpenId = [dic objectForKey:@"openid"];
-                [__self getUserInfo:strToken openid:strOpenId];
-            }
-        });
-    });
-}
-
--(void)getUserInfo:(NSString *)access_token openid:(NSString *)openid
-{
-
-}
-
-
 
 @end

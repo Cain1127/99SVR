@@ -68,8 +68,8 @@ typedef enum : NSUInteger
 
 /*
 后续:
- 1.JSPatch
- 2.UserDefault 丢失账号密码的原因
+ 1.  礼物循环
+ 2.  后台保留时间
  3.
 
 [UserInfo sharedUserInfo].nUserId = 1764964;

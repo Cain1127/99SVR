@@ -8,6 +8,7 @@
 
 #import "TextNewViewController.h"
 //#import "DTCoreText.h"
+#import "ProgressHUD.h"
 #import "MJRefresh.h"
 #import <DTCoreText/DTCoreText.h>
 #import "NewDetailsViewController.h"
@@ -136,10 +137,25 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reqTextNewMessage) name:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
 }
 
+- (void)reqTimeOut
+{
+    @WeakObj(self)
+    dispatch_main_async_safe(^{
+        [ProgressHUD showError:@"获取观点超时!"];
+         if([selfWeak.tableView.header isRefreshing]){
+             [selfWeak.tableView.header endRefreshing];
+         }
+         else if([selfWeak.tableView.footer isRefreshing]){
+             [selfWeak.tableView.footer endRefreshing];
+         }
+    });
+}
+
 - (void)reqTextNewMessage
 {
     [_textSocket reqNewList:0 count:20];
     _current = 20;
+    [self performSelector:@selector(reqTimeOut) withObject:nil afterDelay:6.0];
 }
 
 - (void)reqMoreNewMsg
@@ -148,6 +164,7 @@
         IdeaDetails *model = [_aryNew objectAtIndex:_aryNew.count-1];
         [_textSocket reqNewList:model.messageid count:20];
         _current += 20;
+        [self performSelector:@selector(reqTimeOut) withObject:nil afterDelay:6.0];
     }
 }
 
@@ -157,8 +174,12 @@
     {
         _current ++;
     }
-    _aryNew = _textSocket.aryNew;
+    
     @WeakObj(self)
+    _aryNew = _textSocket.aryNew;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:selfWeak];
+    });
     dispatch_async(dispatch_get_main_queue(),
     ^{
         if ([selfWeak.tableView.gifHeader isRefreshing]) {
@@ -179,6 +200,7 @@
 
 - (void)dealloc
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     DLog(@"dealloc");
 }
 

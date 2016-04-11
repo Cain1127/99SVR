@@ -65,7 +65,7 @@
     if (images.count != 0) {
         switch (state) {
             case MJRefreshHeaderStateIdle: {
-                if (oldState == MJRefreshHeaderStateRefreshing) {
+                if (oldState == MJRefreshHeaderStateRefreshing){
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJRefreshSlowAnimationDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         self.pullingPercent = 0.0;
                     });
