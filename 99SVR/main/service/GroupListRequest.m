@@ -31,7 +31,7 @@
     NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
     if (!connectErr && responseCode == 200)
     {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil removingNulls:YES ignoreArrays:NO];
         if (dict)
         {
             NSArray *aryRoom = [self resolveDict:dict];
@@ -66,31 +66,34 @@
 
 - (NSArray *)resolveDict:(NSDictionary *)dict
 {
-    [UserDefaults setObject:dict forKey:kVideoList];
-    [UserDefaults synchronize];
     NSArray *firstArray = [dict objectForKey:@"groups"];
-    NSMutableArray *aryRoom = [NSMutableArray array];
-    if ([firstArray isKindOfClass:[NSArray class]] && firstArray.count>0)
-    {
-        for (NSDictionary *group in firstArray)
+    if ([firstArray isKindOfClass:[NSArray class]]) {
+        NSMutableArray *aryRoom = [NSMutableArray array];
+        if ([firstArray isKindOfClass:[NSArray class]] && firstArray.count>0)
         {
-            RoomGroup *_roomgroup = [RoomGroup resultWithDict:group];
+            for (NSDictionary *group in firstArray)
+            {
+                RoomGroup *_roomgroup = [RoomGroup resultWithDict:group];
+                [aryRoom addObject:_roomgroup];
+            }
+        }
+        NSDictionary *dictService = [dict objectForKey:@"service"];
+        if ([dictService objectForKey:@"groupId"] && [dictService objectForKey:@"groupName"] && [dictService objectForKey:@"roomList"])
+        {
+            RoomGroup *_roomgroup = [RoomGroup resultWithDict:dictService];
             [aryRoom addObject:_roomgroup];
         }
+        NSDictionary *dictOther = [dict objectForKey:@"other"];
+        if ([dictOther objectForKey:@"groupId"] && [dictOther objectForKey:@"groupName"] && [dictOther objectForKey:@"roomList"])
+        {
+            RoomGroup *_roomgroup = [RoomGroup resultWithDict:dictOther];
+            [aryRoom addObject:_roomgroup];
+        }
+        [UserDefaults setObject:dict forKey:kVideoList];
+        [UserDefaults synchronize];
+        return aryRoom;
     }
-    NSDictionary *dictService = [dict objectForKey:@"service"];
-    if ([dictService objectForKey:@"groupId"] && [dictService objectForKey:@"groupName"] && [dictService objectForKey:@"roomList"])
-    {
-        RoomGroup *_roomgroup = [RoomGroup resultWithDict:dictService];
-        [aryRoom addObject:_roomgroup];
-    }
-    NSDictionary *dictOther = [dict objectForKey:@"other"];
-    if ([dictOther objectForKey:@"groupId"] && [dictOther objectForKey:@"groupName"] && [dictOther objectForKey:@"roomList"])
-    {
-        RoomGroup *_roomgroup = [RoomGroup resultWithDict:dictOther];
-        [aryRoom addObject:_roomgroup];
-    }
-    return aryRoom;
+    return [[NSArray alloc] init];
 }
 
 @end

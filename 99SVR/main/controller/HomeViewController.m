@@ -775,7 +775,8 @@ typedef enum : NSUInteger
         WonderfullView *model = [tempArray objectAtIndex:indexPath.row];
         TextTcpSocket *textSocket = [[TextTcpSocket alloc] init];
         textSocket.roomid = [model.roomid intValue];
-        NewDetailsViewController *detailView = [[NewDetailsViewController alloc] initWithSocket:textSocket viewID:[model.viewid intValue]];
+        NewDetailsViewController *detailView = [[NewDetailsViewController alloc]
+                                                initWithSocket:textSocket viewID:[model.viewid intValue] home:YES];
         [self.navigationController pushViewController:detailView animated:YES];
     }
     

@@ -370,7 +370,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reconnectTextRoom) name:MESSAGE_RECONNECT_TIMER_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respCollet:) name:MESSAGE_TEXT_COLLET_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showJoinErr:) name:MESSAGE_TEXT_JOIN_ROOM_ERR_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTeacherInfo) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showTeacherView) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     if(_model)
     {
         [_textSocket connectRoom:[_model.nvcbid intValue]];

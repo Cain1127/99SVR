@@ -318,7 +318,6 @@ ZLLogonProtocol::~ZLLogonProtocol()
         conn->RegisterPushListener(NULL);
         conn->RegisterHallListener(NULL);
         DLog(@"释放logon protocol");
-        
         conn->close();
         delete conn;
         conn = NULL;

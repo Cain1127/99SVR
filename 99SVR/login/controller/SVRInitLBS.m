@@ -47,6 +47,12 @@
         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         [KUserSingleton.dictRoomMedia setObject:strInfo forKey:@(0)];
     } fail:nil];
+    
+    [BaseService get:LBS_ROOM_TEXT dictionay:nil timeout:10 success:^(id responseObject) {
+        NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSString *strAddr = [DecodeJson getArrayAddr:strInfo];
+        [KUserSingleton.dictRoomText setObject:strAddr forKey:@(0)];
+    } fail:nil];
 }
 
 /**
@@ -82,6 +88,7 @@
          NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          KUserSingleton.nStatus = [[parameters objectForKey:__strVersion] intValue];
         [UserDefaults setBool:KUserSingleton.nStatus forKey:__strVersion];
+        [UserDefaults synchronize];
     } fail:nil];
 }
 

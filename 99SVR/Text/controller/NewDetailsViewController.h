@@ -16,4 +16,6 @@
 
 - (id)initWithSocket:(TextTcpSocket *)tcpSocket viewID:(int64_t)viewId;
 
+- (id)initWithSocket:(TextTcpSocket *)tcpSocket viewID:(int64_t)viewId home:(BOOL)bHome;
+
 @end

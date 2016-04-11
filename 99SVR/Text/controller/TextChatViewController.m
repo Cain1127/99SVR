@@ -181,9 +181,11 @@
     {
         NSString *strNumber = [sender.URL.absoluteString stringByReplacingOccurrencesOfString:@"sqchatid://" withString:@""];
         RoomUser *rUser = [[RoomUser alloc] init];
-        rUser.m_strUserAlias = [array[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         rUser.m_nUserId = [strNumber intValue];
-        [_chatView setChatInfo:rUser];
+        if([strNumber intValue]!=KUserSingleton.nUserId){
+            rUser.m_strUserAlias = [array[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            [_chatView setChatInfo:rUser];
+        }
     }
 }
 

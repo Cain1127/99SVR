@@ -52,18 +52,15 @@
 #define  kWXAPP_SEC "acc28b09efbb768a1b5b7b6514903ef8"
 
 #define LBS_HTTP_HOST @"http://lbs1.99ducaijing.cn:2222/"
-#define LBS_HTTP_HOST1 @"http://lbs2.99ducaijing.cn:2222/"
-#define LBS_HTTP_HOST3 @"http://lbs3.99ducaijing.cn:2222/"
-#define LBS_HTTP_HOST4 @"http://testlbs.99ducaijing.cn:2222/"
 
 #define kPay_URL @"http://api.99ducaijing.com/mobile/wap_cz"
 #define kGift_URL @"http://admin.99ducaijing.com/index.php?m=Api&c=Gift"
-
 
 #define WeakObj(o) try{}@finally{} __weak typeof(o) o##Weak = o;
 #define StrongObj(o) autoreleasepool{} __strong typeof(o) o = o##Weak;
 
 #define kGif_Image_URL "http://admin.99ducaijing.com/Uploads/Picture"
+
 #define kHome_Banner_URL "http://admin.99ducaijing.com/index.php?m=Api&c=Banner"
 
 #define kHome_LivingList_URL @"http://hall.99ducaijing.cn:8081/mobile/index.php"
@@ -75,6 +72,8 @@
 #define LBS_ROOM_GATE [NSString stringWithFormat:@"%@tygetgate",LBS_HTTP_HOST]
 
 #define LBS_ROOM_MEDIA [NSString stringWithFormat:@"%@tygetmedia",LBS_HTTP_HOST]
+
+#define LBS_ROOM_TEXT [NSString stringWithFormat:@"%@tygettext",LBS_HTTP_HOST]
 
 #define lbs_status @"http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=2&parameterName="
 

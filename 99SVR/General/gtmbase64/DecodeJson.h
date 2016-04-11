@@ -111,4 +111,12 @@
  */
 + (NSString *)resoleNotice:(NSString *)strInfo index:(int)nIndex;
 + (void)setGiftInfo:(NSDictionary *)dict;
+
+
+
+/**
+ *  解析字符串中的ip与端口
+ */
++ (NSString *)getArrayAddr:(NSString *)strInfo;
+
 @end

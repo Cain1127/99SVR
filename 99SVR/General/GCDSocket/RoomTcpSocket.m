@@ -372,7 +372,7 @@
     }
     _asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:tcpThread];
     
-    [self addChatInfo:@"[系统消息]正在加载房间数据..."];
+    [self addChatInfo:@"[系统消息]正在连接聊天服务器"];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     if(![_asyncSocket connectToHost:strIp onPort:nPort error:nil])
     {
@@ -1037,7 +1037,7 @@
     _bJoin = YES;
     _rInfo = [[RoomInfo alloc] initWithRoom:pResp];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
-    [self addChatInfo:@"[系统消息]登录房间成功!"];
+    [self addChatInfo:@"[系统消息]聊天服务器连接成功"];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     __weak RoomTcpSocket *__self = self;

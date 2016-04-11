@@ -98,7 +98,7 @@
         NSString *param = ((JSValue *)args[0]).toString;
         if (param) {
             NSData *jsonData = [param dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil];
+            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil removingNulls:YES ignoreArrays:NO];
             // 微信支付充值
             [selfWeak weixinPayWithDict:responseDict];
         }

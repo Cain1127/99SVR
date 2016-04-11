@@ -303,7 +303,7 @@
 }
 
 #pragma mark 请求观点详细记录
-- (void)reqIdeaDetails:(int)nIndex count:(int)nCount ideaId:(int64_t)ideaId
+- (void)reqIdeaDetails:(int64_t)nIndex count:(int)nCount ideaId:(int64_t)ideaId
 {
     CMDTextRoomLiveViewDetailReq_t req = {0};
     req.vcbid = _roomid;
@@ -317,6 +317,7 @@
         }
         [_aryComment removeAllObjects];
     }
+    req.messageid = 0;
     req.startcommentpos = nIndex;
     req.viewid = ideaId;
     req.type = 2;
@@ -586,6 +587,7 @@
         NSData *teachdata = [_teacher.strName dataUsingEncoding:GBK_ENCODING];
         strncpy(notify->srcuseralias,teachdata.bytes,teachdata.length);
         notify->messageid = resp->messageid;
+        notify->viewid = resp->businessid;
         notify->livetype = 5;
         notify->textlen = resp->titlelen;
         notify->messagetime = resp->messagetime;
@@ -890,6 +892,9 @@
     }
     _teacher = [[TeacherModel alloc] initWithTeacher:notify];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEXT_TEACHER_INFO_VC object:nil];
+    if(_aryChat.count==0){
+        [self reqTextRoomList:0 count:20 type:1];
+    }
 }
 
 /**
@@ -912,8 +917,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [NSThread cancelPreviousPerformRequestsWithTarget:selfWeak];
     });
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     [self reqTeacherInfo];
 }
 
@@ -1176,7 +1180,7 @@
     if (_bConnect) {
         return ;
     }
-    _nFall = 1;
+    _nFall = 0;
     _roomid = roomId;
     if (_aryText==nil)
     {
@@ -1555,7 +1559,8 @@
         __block int __nLbs = nLbs;
         [BaseService get:strPath dictionay:nil timeout:5 success:^(id responseObject) {
             if (responseObject) {
-                NSString *addrInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                NSString *strAddr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                NSString *addrInfo = [DecodeJson getArrayAddr:strAddr];
                 [KUserSingleton.dictRoomText setObject:addrInfo forKey:@(__nLbs)];
                 int nIndex = selfWeak.nFall%2;
                 if ([addrInfo rangeOfString:@";"].location!=NSNotFound) {

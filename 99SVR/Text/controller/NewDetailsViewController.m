@@ -8,6 +8,7 @@
 
 #import "NewDetailsViewController.h"
 #import "TextTcpSocket.h"
+#import "MJRefresh.h"
 #import "TextHomeViewController.h"
 #import "AlertFactory.h"
 #import "LoginViewController.h"
@@ -35,7 +36,6 @@
 #import "ChatView.h"
 #import "TextCommentView.h"
 #import <DTCoreText/DTCoreText.h>
-//#import "DTCoreText.h"
 
 @interface NewDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,CommentDelegate,UIWebViewDelegate>
 {
@@ -49,7 +49,7 @@
     CGFloat originalY;
     int _fall;
     ChatView *_chatView;
-    
+    int nCurrent;
 }
 @property (nonatomic,strong) DTAttributedTextView *textView;
 @property (nonatomic,strong) UIView *downContentView;
@@ -63,12 +63,20 @@
 @property (nonatomic,strong) IdeaDetails *details;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic) int64_t viewId;
+@property (nonatomic,assign) BOOL bHome;
 
 @end
 
 @implementation NewDetailsViewController
 @synthesize downContentView;
 
+- (id)initWithSocket:(TextTcpSocket *)tcpSocket viewID:(int64_t)viewId home:(BOOL)bHome{
+    self = [super init];
+    _tcpSocket = tcpSocket;
+    _viewId = viewId;
+    _bHome = bHome;
+    return self;
+}
 - (id)initWithSocket:(TextTcpSocket *)tcpSocket viewID:(int64_t)viewId
 {
     self = [super init];
@@ -155,6 +163,21 @@
     [bodyView clickWithBlock:^(UIGestureRecognizer *gesture) {
         [selfWeak showChatInfo];
     }];
+    
+    [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(requestMoreReply)];
+}
+
+/**
+ *  获取更多评论
+ */
+- (void)requestMoreReply{
+    if (_aryCommont.count>0) {
+//        IdeaDetailRePly *reply = [_aryCommont objectAtIndex:_aryCommont.count-1];
+        [_tcpSocket reqIdeaDetails:nCurrent count:20 ideaId:[_jsonModel.viewid intValue]];
+        nCurrent+=20;
+    }else{
+        [_tableView.footer endRefreshing];
+    }
 }
 
 - (void)showChatInfo
@@ -257,6 +280,7 @@
    
     [_tableView setTableHeaderView:contentView];
     [_tcpSocket reqIdeaDetails:0 count:20 ideaId:[_jsonModel.viewid integerValue]];
+    nCurrent = 20;
 }
 
 - (void)updateContentView
@@ -351,7 +375,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             UIButton *sender = [contentViewWeak viewWithTag:1008];
             [ProgressHUD showSuccess:@"点赞成功"];
-            [sender setTitle:[NSString stringWithFormat:@"%d 赞",[_jsonModel.czans intValue]+1] forState:UIControlStateNormal];
+            [sender setTitle:[NSString stringWithFormat:@"%d 已赞",[_jsonModel.czans intValue]+1] forState:UIControlStateNormal];
             [sender setEnabled:NO];
         });
     }
@@ -514,6 +538,9 @@
     }
 }
 
+/**
+ *
+ */
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_aryCommont.count>indexPath.row)
@@ -527,12 +554,20 @@
     return 0;
 }
 
+/**
+ *  加载评论信息
+ */
 - (void)loadCommentView
 {
     _aryCommont = _tcpSocket.aryComment;
     __weak UITableView *__tableView = _tableView;
+    __block int __nCount = nCurrent;
     dispatch_async(dispatch_get_main_queue(),
     ^{
+        [__tableView.footer endRefreshing];
+        if (__nCount!=_aryCommont.count) {
+            [__tableView.footer noticeNoMoreData];
+        }
         [__tableView reloadData];
     });
 }
@@ -553,6 +588,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+/**
+ * 评论成功响应
+ */
 - (void)addCommentView:(NSNotification *)notify
 {
     NSNumber *number = notify.object;
@@ -565,6 +603,9 @@
     }
 }
 
+/**
+ *  选中行后，互动
+ */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -572,24 +613,6 @@
         IdeaDetailRePly *reply = [_aryCommont objectAtIndex:indexPath.row];
         [self showChatView:reply.viewuserid name:reply.strName commentId:reply.commentid];
     }
-}
-
--(void)textViewDidChange:(UITextView *)textView
-{
-    if ([_textChat.textStorage getPlainString].length==0)
-    {
-        lblPlace.text = @"点此和大家说点什么吧";
-    }
-    else
-    {
-        lblPlace.text = @"";
-    }
-}
-
-#pragma mark EmojiViewDelegate
-- (void)sendEmojiInfo:(NSInteger)nId
-{
-    [self insertEmoji:nId];
 }
 
 //加入表情图片
@@ -613,6 +636,7 @@
     [self resetTextStyle];
 }
 
+
 #pragma mark TextChat CoreText
 - (void)resetTextStyle
 {
@@ -621,6 +645,10 @@
     [_textChat.textStorage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:22.0f] range:wholeRange];
 }
 
+/**
+ *  发送消息
+ *
+ */
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser reply:(int64_t)nDetails
 {
     UserInfo *info = KUserSingleton;
@@ -646,6 +674,9 @@
     _chatView.nUserId = 0;
 }
 
+/**
+ *  cell设置
+ */
 - (void)commentCell:(IdeaDetailRePly *)Reply
 {
     if (Reply) {
@@ -674,16 +705,14 @@
 - (void)dealloc
 {
     DLog(@"dealloc");
-    NSArray *array = self.navigationController.viewControllers;
-    for (UIViewController *control in array) {
-        if([control isKindOfClass:[TextHomeViewController class]])
-        {
-            return ;
-        }
+    if(_bHome){
+        [self.tcpSocket exitRoom];
     }
-    [self.tcpSocket exitRoom];
 }
 
+/**
+ *  显示图片
+ */
 - (void)showImageInfo:(UITapGestureRecognizer *)tapGest
 {
     UIImageView *imageView = (UIImageView *)tapGest.view;
@@ -698,7 +727,5 @@
         [photoControl show];
     }
 }
-
-
 
 @end

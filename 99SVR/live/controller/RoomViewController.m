@@ -94,8 +94,11 @@
     
     NSCache *chatCache;
     DTAttributedLabel *lblTeachInfo;
+    BOOL bGiftView;
+    NSMutableDictionary *dictGift;
 }
 
+@property (nonatomic,assign) int nCurGift;
 @property (nonatomic,strong) RoomTcpSocket *tcpSocket;
 @property (nonatomic,strong) NSCache *cellCache;
 @property (nonatomic,strong) NSMutableDictionary *dictIcon;
@@ -488,9 +491,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    nColor = 10000;
     room_gcd = dispatch_queue_create("decode_gcd",0);
     _cellCache = [[NSCache alloc] init];
     [self initUIHead];
+    dictGift = [NSMutableDictionary dictionary];
     UITapGestureRecognizer* singleRecogn;
     
     singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTopHUD)];
@@ -731,16 +736,8 @@
     {
            dispatch_async(dispatch_get_main_queue(),
            ^{
-              if (!KUserSingleton.nStatus)
-              {
                   PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
                   [self.navigationController pushViewController:paySelectVC animated:YES];
-              }
-              else
-              {
-                  InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];
-                  [self.navigationController pushViewController:inAppPurechasesVC animated:YES];
-              }
            });
     }];
     [alert addAction:canAction];
@@ -790,26 +787,69 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendLiwuNotifyInfo:) name:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:nil];
 }
 
+
+/**
+ *  赠送礼物成功
+ */
 - (void)sendLiwuNotifyInfo:(NSNotification *)notify
 {
+    /**
+     *  1.加入dictGift
+     *  2.查看当前是否有显示的
+     */
     NSDictionary *parameter = notify.object;
-    __weak NSDictionary *__parameter = parameter;
     @WeakObj(self)
-    __block int __nColor = nColor;
+    [dictGift setObject:parameter forKey:@(nColor)];
+    nColor++;
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *strName = nil;
-        int gid ;
-        int num ;
-        if ([__parameter objectForKey:@"name"] && [__parameter objectForKey:@"gitId"] && [__parameter objectForKey:@"num"]) {
-            strName = [parameter objectForKey:@"name"];
-            gid = [[parameter objectForKey:@"gitId"] intValue];
-            num = [[parameter objectForKey:@"num"] intValue];
-            
-            FloatingView *floatView = [[FloatingView alloc] initWithFrame:Rect(0,selfWeak.group.y+selfWeak.group.height,kScreenWidth, 45) color:__nColor++ name:strName number:num gid:gid userid:[[parameter objectForKey:@"userid"] intValue]];
-            [selfWeak.view addSubview:floatView];
-            [floatView showGift:1.0];
-        }
+        [selfWeak showGiftInfo];
     });
+}
+
+- (FloatingView*)createFloatView:(NSDictionary *)parameter color:(int)ncolor onlyOne:(int)nOnly{
+    NSString *strName = nil;
+    int gid ;
+    int num ;
+    if ([parameter objectForKey:@"name"] && [parameter objectForKey:@"gitId"] && [parameter objectForKey:@"num"]) {
+        strName = [parameter objectForKey:@"name"];
+        gid = [[parameter objectForKey:@"gitId"] intValue];
+        num = [[parameter objectForKey:@"num"] intValue];
+        FloatingView *floatView = [[FloatingView alloc] initWithFrame:Rect(0,self.group.y+self.group.height+nOnly*45,kScreenWidth, 45) color:ncolor++ name:strName number:num gid:gid userid:[[parameter objectForKey:@"userid"] intValue]];
+        return floatView;
+    }
+    return nil;
+}
+
+- (void)showGiftInfo{
+    if(bGiftView){
+        return ;
+    }
+    bGiftView = YES;
+    while (dictGift.allKeys.count>0) {
+        if (_nCurGift<2) {
+            NSNumber *number = [dictGift allKeys][0];
+            NSDictionary *parameter = [dictGift objectForKey:number];
+            @WeakObj(self)
+            @WeakObj(dictGift)
+            FloatingView *floatView = [selfWeak createFloatView:parameter color:[number intValue] onlyOne:_nCurGift];
+            [self.view addSubview:floatView];
+            DLog(@"frame:%@",NSStringFromCGRect(floatView.frame));
+            floatView.tag = [number integerValue];
+            _nCurGift ++;
+            int num = [[parameter objectForKey:@"num"] intValue];
+            CGFloat nTime = num/10+1;
+            @WeakObj(number)
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(nTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                FloatingView *giftFloat = [selfWeak.view viewWithTag:[numberWeak integerValue]];
+                [dictGiftWeak removeObjectForKey:numberWeak];
+                [giftFloat removeFromSuperview];
+                selfWeak.nCurGift--;
+            });
+            [dictGift removeObjectForKey:number];
+        }
+        [NSThread sleepForTimeInterval:0.2f];
+    }
+    bGiftView = NO;
 }
 
 - (void)sendLiwuRespInfo
