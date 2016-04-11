@@ -177,7 +177,7 @@
     @WeakObj(self)
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id responseObject)
      {
-         [ProgressHUD dismiss];
+         [selfWeak.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
          {
@@ -194,8 +194,8 @@
      }
                             fail:^(NSError *error)
      {
-         [ProgressHUD dismiss];
-             [ProgressHUD showError:@"请求验证码失败"];
+            [selfWeak.view hideToastActivity];
+            [ProgressHUD showError:@"请求验证码失败"];
      }];
 }
 - (void)authMobile
@@ -239,7 +239,7 @@
     @WeakObj(self);
     [BaseService postJSONWithUrl:strInfo parameters:paramters success:^(id responseObject)
      {
-         gcd_main_safe(^{[selfWeak.view hideToastActivity];});
+         [selfWeak.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if(dict && [dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
          {
@@ -249,7 +249,7 @@
          }
          else
          {
-                   [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+              [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
          }
      }fail:^(NSError *error)
      {

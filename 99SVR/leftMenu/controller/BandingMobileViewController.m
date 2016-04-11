@@ -244,8 +244,7 @@
 {
     if (_txtName == textField)
     {
-        if (range.location>11 || range.location+string.length>11)
-        {
+        if (range.location>11 || range.location+string.length>11){
             return NO;
         }
     }
@@ -299,7 +298,7 @@
     __block int __banding = banding;
     [BaseService postJSONWithUrl:strInfo parameters:paramters success:^(id responseObject)
      {
-         gcd_main_safe(^{[selfWeak.view hideToastActivity];});
+         [selfWeak.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          if(dict && [dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
          {

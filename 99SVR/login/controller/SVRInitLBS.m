@@ -88,6 +88,7 @@
          NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          KUserSingleton.nStatus = [[parameters objectForKey:__strVersion] intValue];
         [UserDefaults setBool:KUserSingleton.nStatus forKey:__strVersion];
+        [UserDefaults synchronize];
     } fail:nil];
 }
 

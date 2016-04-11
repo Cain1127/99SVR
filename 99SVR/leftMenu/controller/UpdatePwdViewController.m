@@ -250,7 +250,12 @@
         else if(newPwd.length==0){
             [ProgressHUD showError:@"新密码不能为空"];
             return ;
-        }else if([self MatchLetter:newPwd]==-1)
+        }
+        else if(newPwd.length<6){
+            [ProgressHUD showError:@"密码不能小于6位"];
+            return ;
+        }
+        else if([self MatchLetter:newPwd]==-1)
         {
             [ProgressHUD showError:@"密码不能包含空格"];
             return ;
@@ -296,6 +301,10 @@
         if([_password length]==0)
         {
             [ProgressHUD showError:@"必须输入密码才能绑定手机"];
+            return ;
+        }
+        else if(_password.length<6){
+            [ProgressHUD showError:@"密码不能小于6位"];
             return ;
         }
          else if([self MatchLetter:_password]==-1)
@@ -442,7 +451,7 @@
 {
     NSString *ZIMU ;
     NSPredicate *regextestmobile ;
-    ZIMU = @"\\d{6,16}";
+    ZIMU = @"\\d{1,16}";
     regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", ZIMU];
     if([regextestmobile evaluateWithObject:str]==YES)
     {

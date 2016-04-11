@@ -63,12 +63,20 @@
 @property (nonatomic,strong) IdeaDetails *details;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic) int64_t viewId;
+@property (nonatomic,assign) BOOL bHome;
 
 @end
 
 @implementation NewDetailsViewController
 @synthesize downContentView;
 
+- (id)initWithSocket:(TextTcpSocket *)tcpSocket viewID:(int64_t)viewId home:(BOOL)bHome{
+    self = [super init];
+    _tcpSocket = tcpSocket;
+    _viewId = viewId;
+    _bHome = bHome;
+    return self;
+}
 - (id)initWithSocket:(TextTcpSocket *)tcpSocket viewID:(int64_t)viewId
 {
     self = [super init];
@@ -697,14 +705,9 @@
 - (void)dealloc
 {
     DLog(@"dealloc");
-    NSArray *array = self.navigationController.viewControllers;
-    for (UIViewController *control in array) {
-        if([control isKindOfClass:[TextHomeViewController class]])
-        {
-            return ;
-        }
+    if(_bHome){
+        [self.tcpSocket exitRoom];
     }
-    [self.tcpSocket exitRoom];
 }
 
 /**

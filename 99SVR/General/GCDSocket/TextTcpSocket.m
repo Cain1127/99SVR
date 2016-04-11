@@ -587,6 +587,7 @@
         NSData *teachdata = [_teacher.strName dataUsingEncoding:GBK_ENCODING];
         strncpy(notify->srcuseralias,teachdata.bytes,teachdata.length);
         notify->messageid = resp->messageid;
+        notify->viewid = resp->businessid;
         notify->livetype = 5;
         notify->textlen = resp->titlelen;
         notify->messagetime = resp->messagetime;

@@ -736,16 +736,8 @@
     {
            dispatch_async(dispatch_get_main_queue(),
            ^{
-              if (!KUserSingleton.nStatus)
-              {
                   PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
                   [self.navigationController pushViewController:paySelectVC animated:YES];
-              }
-              else
-              {
-                  InAppPurchasesViewController *inAppPurechasesVC = [[InAppPurchasesViewController alloc] init];
-                  [self.navigationController pushViewController:inAppPurechasesVC animated:YES];
-              }
            });
     }];
     [alert addAction:canAction];

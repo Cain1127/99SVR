@@ -71,6 +71,8 @@
 
 - (void)initLivingData
 {
+    [_aryGroup removeAllObjects];
+    [_tableView reloadData];
      __weak TextViewController *__self = self;
      [BaseService postJSONWithUrl:kTEXT_GROUP_URL parameters:nil success:^(id responseObject)
      {
@@ -84,8 +86,7 @@
          [UserDefaults setObject:dict forKey:kTextList];
          [UserDefaults synchronize];
          int nUserid = [UserInfo sharedUserInfo].nUserId;
-         NSString *strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_text_fail_%d",
-                  nUserid,(int)error.code];
+         NSString *strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_text_fail_%d",nUserid,(int)error.code];
          [DecodeJson postPHPServerMsg:strMsg];
      }];
 }

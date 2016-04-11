@@ -32,7 +32,6 @@
     if (_toid!=0) {
         strFrom = [self getUserInfo:_fromNick user:_srcid name:_fromNick];
         strTo = [self getUserInfo:_toNick user:_toid name:_toNick];
-        
         _content = [NSString stringWithFormat:@"<span style=\"line-height:5px\">%@ 回复 %@ <br>%@</span>",strFrom,strTo,_content];
     }
     else{
@@ -45,7 +44,7 @@
 - (NSString *)getUserInfo:(NSString *)strMsg user:(int)userid name:(NSString *)strName
 {
     if (userid == [UserInfo sharedUserInfo].nUserId) {
-        NSString *strFrom = [NSString stringWithFormat:@"<a style=\"color:#919191\" href=\"sqchatid://%d\">%@</a>",_srcid,strName];
+        NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color:#919191\">%@</span>",strName];
         return strFrom;
     }
     else

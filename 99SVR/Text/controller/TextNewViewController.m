@@ -142,12 +142,8 @@
     @WeakObj(self)
     dispatch_main_async_safe(^{
         [ProgressHUD showError:@"获取观点超时!"];
-         if([selfWeak.tableView.header isRefreshing]){
-             [selfWeak.tableView.header endRefreshing];
-         }
-         else if([selfWeak.tableView.footer isRefreshing]){
-             [selfWeak.tableView.footer endRefreshing];
-         }
+        [selfWeak.tableView.header endRefreshing];
+        [selfWeak.tableView.footer endRefreshing];
     });
 }
 

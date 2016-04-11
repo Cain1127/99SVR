@@ -87,7 +87,6 @@
     {
         TextLiveModel *model = [_aryLive objectAtIndex:[_aryLive count]-1];
         [_textSocket reqTextRoomList:model.messageid count:20 type:1];
-        [_tableView.footer beginRefreshing];
          _nCurrent += 20;
     }
     [self performSelector:@selector(reqTimeOut) withObject:nil afterDelay:6.0f];
@@ -322,6 +321,7 @@
 
 - (void)reLoadTextList:(NSNotification *)notify
 {
+    _nCurrent = !_nCurrent ? 20 : _nCurrent;
     if (notify && notify.object && [notify.object intValue]==1) {
         _nCurrent ++;
     }
@@ -360,7 +360,6 @@
     }
     _aryLive = nil;
     [_textSocket reqTextRoomList:_nCurrent count:20 type:1];
-    [_tableView.gifHeader beginRefreshing];
     _nCurrent += 20;
 }
 
@@ -388,6 +387,9 @@
     }
 }
 
+//- (void)updateCurrent{
+//    _nCurrent = 20;
+//}
 
 
 - (void)viewWillAppear:(BOOL)animated

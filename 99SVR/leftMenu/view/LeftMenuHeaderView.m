@@ -70,7 +70,7 @@
         _lineView.backgroundColor = UIColorFromRGB(0x6EACE0);
         [self addSubview:_lineView];
         
-        imageB = [[UIImageView alloc] initWithFrame:Rect(50, 0,18,18)];
+        imageB = [[UIImageView alloc] initWithFrame:Rect(50, 0,13,13)];
         [imageB setImage:[UIImage imageNamed:@"personal_gold_icon"]];
         [self addSubview:imageB];
         imageB.hidden = YES;
@@ -107,7 +107,7 @@
                 CGFloat width = [stringGoid sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}].width+10;
                 [_vipLevel setText:stringGoid];
                 _vipLevel.frame = Rect(kScreenWidth*0.75/2-width/2,_nameLabel.height+_nameLabel.y+5, width,20);
-                imageB.frame = Rect(_vipLevel.x-24,_vipLevel.y+1, 18, 18);
+                imageB.frame = Rect(_vipLevel.x-24,_vipLevel.y+1, 13, 13);
                 imageB.hidden = NO;
             }
         }
