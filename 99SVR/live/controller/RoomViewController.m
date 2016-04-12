@@ -72,7 +72,6 @@
     UIButton *_btnVideo;
     NSInteger _nTag;
     dispatch_queue_t room_gcd;
-    
     int _tag;
     CGFloat startContentOffsetX;
     CGFloat willEndContentOffsetX;
@@ -81,21 +80,19 @@
     int _currentPage;
     CGFloat fTempWidth;
     BOOL bFull;
-    
     RoomHttp *_room;
     GiftView *_giftView;
     RoomDownView *_infoView;
-    
     UIView *userHidden;
     UIView *headTable;
     ChatView *_inputView;
     int nColor;
     UserListView *_listView;
-    
     NSCache *chatCache;
     DTAttributedLabel *lblTeachInfo;
     BOOL bGiftView;
     NSMutableDictionary *dictGift;
+    
 }
 
 @property (nonatomic,assign) int nCurGift;
@@ -142,6 +139,7 @@
         strPort = @"0";
     }
     [_tcpSocket connectRoomInfo:_room.nvcbid address:strAddress port:[strPort intValue]];
+    DLog(@"roomid:%@",_room.nvcbid);
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
 }
 
