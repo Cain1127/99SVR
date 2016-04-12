@@ -28,6 +28,9 @@
 @property (nonatomic,copy) NSString *username;
 @property (nonatomic,copy) NSString *password;
 @property (nonatomic,strong) UIButton *btnCode;
+/**注册*/
+@property (nonatomic, strong) UIButton *btnDetermine;
+
 @property (nonatomic,strong) UIImageView *imgView;
 @property (nonatomic,strong) UITextField *txtName;
 @property (nonatomic,strong) UITextField *txtPwd;
@@ -204,6 +207,9 @@
     [_txtPwd setPlaceholder:@"请输入密码"];
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
 
+    [_txtName addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [_txtPwd addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+
 
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -213,8 +219,12 @@
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
+
     btnRegister.layer.masksToBounds = YES;
     btnRegister.layer.cornerRadius = 3;
+    self.btnDetermine = btnRegister;
+    [self checkLogBtnIsEnableWithPwd:_txtPwd.text withUser:_txtName.text];
     [btnRegister addTarget:self action:@selector(registerServer) forControlEvents:UIControlEventTouchUpInside];
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
@@ -296,6 +306,40 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+-(void)textFieldDidChange:(id)sender{
+    
+    [self checkLogBtnIsEnableWithPwd:_txtPwd.text withUser:_txtName.text];
+    
+}
+
+
+/**
+ *  检测loginBtn是否可点击
+ *
+ *  @param pwdText  密码
+ *  @param userText 账号
+ */
+-(void)checkLogBtnIsEnableWithPwd:(NSString *)pwdText withUser:(NSString *)userText{
+    
+    BOOL isPwdBool;
+    BOOL isUserBool;
+    
+    if (([pwdText isEqualToString:@""]||[pwdText length]==0)) {
+        
+        isPwdBool = NO;
+        
+    }else{
+        isPwdBool = YES;
+    }
+    
+    if (([userText isEqualToString:@""]||[userText length]==0)) {
+        isUserBool = NO;
+    }else{
+        isUserBool = YES;
+    }
+    self.btnDetermine.enabled = (isPwdBool && isUserBool);
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

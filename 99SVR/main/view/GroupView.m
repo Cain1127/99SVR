@@ -26,7 +26,7 @@
 {
     self = [super initWithFrame:frame];
     
-    [self setBackgroundColor:[UIColor whiteColor]];
+    [self setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     NSInteger i=1;
     CGSize sizeWidth = [@"热门推荐" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}];
     fTempWidth = sizeWidth.width;

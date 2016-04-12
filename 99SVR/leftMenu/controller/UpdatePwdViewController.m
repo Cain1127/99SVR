@@ -32,6 +32,9 @@
 
 @property (nonatomic,strong) UILabel *lblError;
 
+@property (nonatomic, strong) UIButton *btnDetermine;
+
+
 @end
 
 @implementation UpdatePwdViewController
@@ -121,6 +124,10 @@
         [_txtNew setPlaceholder:@"请再次输入密码"];
         [_txtNew setSecureTextEntry:YES];
         _txtNew.delegate = self;
+        
+        [_txtOld addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+        [_txtNew addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+        [_txtCmd addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     }
     frame.origin.y = _txtNew.y+50;
     _lblError = [[UILabel alloc] initWithFrame:frame];
@@ -128,18 +135,28 @@
     [_lblError setTextColor:[UIColor redColor]];
     [self.view addSubview:_lblError];
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnDetermine = btnRegister;
     [self.view addSubview:btnRegister];
     btnRegister.frame = Rect(10, _lblError.y+50, kScreenWidth-20, 40);
     [btnRegister setTitle:@"确定" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     btnRegister.layer.masksToBounds = YES;
     btnRegister.layer.cornerRadius = 3;
     [btnRegister addTarget:self action:@selector(authUpdate) forControlEvents:UIControlEventTouchUpInside];
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
+    [self checkLogBtnIsEnableWithOldPwd:_txtOld.text withNewPwd:_txtNew.text withCmdPwd:_txtCmd.text];
+
 }
+
+-(void)textFieldDidChange:(id)sender{
+    
+    [self checkLogBtnIsEnableWithOldPwd:_txtOld.text withNewPwd:_txtNew.text withCmdPwd:_txtCmd.text];
+}
+
 
 - (void)closeKeyBoard
 {
@@ -243,6 +260,9 @@
         NSString *oldPwd = _txtOld.text;
         NSString *newPwd = _txtCmd.text;
         _password = _txtNew.text;
+        
+        [self checkLogBtnIsEnableWithOldPwd:_txtOld.text withNewPwd:_txtNew.text withCmdPwd:_txtCmd.text];
+        
         if (oldPwd.length==0) {
             [ProgressHUD showError:@"旧密码不能为空"];
             return;
@@ -277,6 +297,43 @@
         [[ZLLogonServerSing sharedZLLogonServerSing] updatePwd:oldPwd cmd:newPwd];
     }
 }
+
+/**
+ *  检测修改密码的确定按钮是否可点击
+ *
+ *  @param oldPwdText 旧密码
+ *  @param newPwdText 新密码
+ *  @param cmdPwdText 再次输入的密码
+ */
+-(void)checkLogBtnIsEnableWithOldPwd:(NSString *)oldPwdText withNewPwd:(NSString *)newPwdText withCmdPwd:(NSString *)cmdPwdText{
+    
+    BOOL isOldPwdBool;
+    BOOL isNewPwdBool;
+    BOOL isCmdPwdBool;
+    
+    if (([oldPwdText isEqualToString:@""]||[oldPwdText length]==0)) {
+        
+        isOldPwdBool = NO;
+        
+    }else{
+        isOldPwdBool = YES;
+    }
+    
+    if (([newPwdText isEqualToString:@""]||[newPwdText length]==0)) {
+        isNewPwdBool = NO;
+    }else{
+        isNewPwdBool = YES;
+    }
+    
+    if (([cmdPwdText isEqualToString:@""]||[cmdPwdText length]==0)) {
+        isCmdPwdBool = NO;
+    }else{
+        isCmdPwdBool = YES;
+    }
+    
+    self.btnDetermine.enabled = (isOldPwdBool && isNewPwdBool && isCmdPwdBool);
+}
+
 
 - (void)authOtherLogin
 {

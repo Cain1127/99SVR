@@ -37,6 +37,8 @@
 @property (nonatomic,copy) NSString *strCode;
 @property (nonatomic,strong) QCheckBox *checkAgree;
 @property (nonatomic,strong) UIButton *btnCode;
+/**注册*/
+@property (nonatomic, strong) UIButton *btnDetermine;
 @property (nonatomic,copy) NSString *username;
 @property (nonatomic,copy) NSString *password;
 
@@ -298,6 +300,7 @@
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnDetermine = btnRegister;
     [self.view addSubview:btnRegister];
     btnRegister.frame = Rect(10, _txtPwd.y+_txtPwd.height+42,kScreenWidth-20, 40);
     [btnRegister setTitle:@"注册" forState:UIControlStateNormal];
@@ -309,6 +312,12 @@
     [btnRegister addTarget:self action:@selector(regMobile) forControlEvents:UIControlEventTouchUpInside];
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
+    
+    [_txtPwd addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [_txtName addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [_txtCode addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+
+    [self checkLogBtnIsEnableWithPhoneNum:_txtName.text withCode:_txtCode.text withPwd:_txtPwd.text];
     
     _checkAgree = [[QCheckBox alloc] initWithDelegate:self];
     _checkAgree.frame = Rect(btnRegister.x, btnRegister.y+btnRegister.height+10,45,30);
@@ -416,6 +425,49 @@
     [_btnCode setTitle:strInfo forState:UIControlStateNormal];
     nSecond--;
 }
+
+-(void)textFieldDidChange:(id)sender{
+    
+    [self checkLogBtnIsEnableWithPhoneNum:_txtName.text withCode:_txtCode.text withPwd:_txtPwd.text];
+}
+
+
+/**
+ *  检测修改密码的确定按钮是否可点击
+ *
+ *  @param oldPwdText 旧密码
+ *  @param newPwdText 新密码
+ *  @param cmdPwdText 再次输入的密码
+ */
+-(void)checkLogBtnIsEnableWithPhoneNum:(NSString *)phoneNum withCode:(NSString *)code withPwd:(NSString *)pwdText{
+    
+    BOOL isPhoneNumBool;
+    BOOL isCodeBool;
+    BOOL isPwdBool;
+    
+    if (([phoneNum isEqualToString:@""]||[phoneNum length]==0)) {
+        
+        isPhoneNumBool = NO;
+        
+    }else{
+        isPhoneNumBool = YES;
+    }
+    
+    if (([code isEqualToString:@""]||[code length]==0)) {
+        isCodeBool = NO;
+    }else{
+        isCodeBool = YES;
+    }
+    
+    if (([pwdText isEqualToString:@""]||[pwdText length]==0)) {
+        isPwdBool = NO;
+    }else{
+        isPwdBool = YES;
+    }
+    
+    self.btnDetermine.enabled = (isPhoneNumBool && isCodeBool && isPwdBool);
+}
+
 
 - (void)dealloc
 {
