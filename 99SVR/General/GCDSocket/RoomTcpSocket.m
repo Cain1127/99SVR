@@ -408,6 +408,7 @@
 
 - (BOOL)joinRoomInfo2
 {
+    _nFall = 0;
     if (_aryNotice==nil)
     {
         _aryNotice = [NSMutableArray array];
@@ -1317,6 +1318,7 @@
         [BaseService get:strPath dictionay:nil timeout:5 success:^(id responseObject) {
             if (responseObject) {
                 NSString *addrInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                addrInfo = [DecodeJson getArrayAddr:addrInfo];
                 [KUserSingleton.dictRoomGate setObject:addrInfo forKey:@(__nLbs)];
                 int nIndex = selfWeak.nFall%2;
                 if ([addrInfo rangeOfString:@";"].location!=NSNotFound) {
@@ -1590,7 +1592,6 @@
 
 /**
  *  新发送消息方案,自动匹配长度
- *
  */
 - (void)sendNewMessage:(char *)pReq size:(int)nSize version:(int)nVersion maincmd:(int)nMainCmd subcmd:(int)nSubCmd
 {

@@ -240,10 +240,10 @@
     {
         return ;
     }
-    [_group setBtnSelect:btnSender.tag];
+    [_group setBtnNewSelect:sender];
     _tag = (int)btnSender.tag;
     [_scrollView setContentOffset:CGPointMake((_tag-1)*kScreenWidth, 0)];
-    [_group setBluePointX:_scrollView.contentOffset.x];
+    [_group setBluePointX:(_tag-1)*kScreenWidth];
 }
 
 - (void)didReceiveMemoryWarning

@@ -93,6 +93,19 @@
     [sender setSelected:YES];
 }
 
+
+- (void)setBtnNewSelect:(UIButton *)sender{
+    for (UIButton *btn in self.subviews)
+    {
+        if (![btn isKindOfClass:[UIButton class]])
+        {
+            continue;
+        }
+        btn.selected = NO;
+    }
+    [sender setSelected:YES];
+}
+
 - (void)setBtnSelect:(NSInteger)tag
 {
     for (UIButton *btn in self.subviews)

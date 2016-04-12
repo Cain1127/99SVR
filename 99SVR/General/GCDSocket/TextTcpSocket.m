@@ -1220,6 +1220,7 @@
 {
     //连接成功
     //sendHello,sendJoinRoom
+    _nFall = 0;
     [_asyncSocket performBlock:^{
         [_asyncSocket enableBackgroundingOnSocket];
     }];
