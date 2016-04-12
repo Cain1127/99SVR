@@ -115,7 +115,11 @@
     NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
     NetworkStatus status = [curReach currentReachabilityStatus];
     
-    if (nowStatus != NotReachable)
+    if (status == nowStatus) {
+        return ;
+    }
+    
+    if (status == NotReachable)
     {
         DLog(@"网络状态:中断");
         __weak UIWindow *__windows = self.window;
@@ -124,10 +128,13 @@
             [__windows makeToast:@"无网络"];
         });
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_ERR_VC object:nil];
+        if(!nowStatus == status){
+            
+        }
         nowStatus = status;
         return ;
     }
-    else if(nowStatus != ReachableViaWiFi)
+    else if(status == ReachableViaWiFi)
     {
         __weak UIWindow *__windows = self.window;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -135,7 +142,7 @@
         });
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
     }
-    else if(nowStatus != ReachableViaWWAN)
+    else if(status == ReachableViaWWAN)
     {
         __weak UIWindow *__windows = self.window;
         dispatch_async(dispatch_get_main_queue(),

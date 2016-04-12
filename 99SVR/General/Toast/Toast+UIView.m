@@ -169,14 +169,12 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
 
 - (void)makeToastActivity_2:(id)position
 {
-    // sanity
     UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);
     if (existingActivityView != nil) return;
     
     UIView *activityView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CSToastActivityWidth, CSToastActivityHeight)];
     activityView.center = [self centerPointForPosition:position withToast:activityView];
     activityView.backgroundColor = [UIColor clearColor];
-    //    activityView.alpha = 0.0;
     activityView.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);
     activityView.layer.cornerRadius = CSToastCornerRadius;
     

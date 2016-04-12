@@ -34,20 +34,21 @@
     KUserSingleton.dictRoomGate = [NSMutableDictionary dictionary];
     KUserSingleton.dictRoomText = [NSMutableDictionary dictionary];
     KUserSingleton.dictRoomMedia = [NSMutableDictionary dictionary];
-    
     //获取视频服务器地址
     [BaseService get:LBS_ROOM_GATE dictionay:nil timeout:10 success:^(id responseObject)
      {
          NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-         [KUserSingleton.dictRoomGate setObject:strInfo forKey:@(0)];
+         NSString *strAddr = [DecodeJson getArrayAddr:strInfo];
+         [KUserSingleton.dictRoomGate setObject:strAddr forKey:@(0)];
      }fail:nil];
      
-    //获取文字直播服务器
-    [BaseService get:LBS_ROOM_MEDIA dictionay:nil timeout:10 success:^(id responseObject) {
-        NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        [KUserSingleton.dictRoomMedia setObject:strInfo forKey:@(0)];
-    } fail:nil];
+//    [BaseService get:LBS_ROOM_MEDIA dictionay:nil timeout:10 success:^(id responseObject) {
+//        NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+//        NSString *strAddr = [DecodeJson getArrayAddr:strInfo];
+//        [KUserSingleton.dictRoomMedia setObject:strAddr forKey:@(0)];
+//    } fail:nil];
     
+    //获取文字直播服务器
     [BaseService get:LBS_ROOM_TEXT dictionay:nil timeout:10 success:^(id responseObject) {
         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         NSString *strAddr = [DecodeJson getArrayAddr:strInfo];

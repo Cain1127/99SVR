@@ -152,18 +152,20 @@ typedef struct _tag_MediaFrameBuffer
     if (addrTemp == nil)
     {
         NSString *strInfo = [kLbs_all_path componentsSeparatedByString:@";"][nLbs];
-        NSString *strPath = [[NSString alloc] initWithFormat:@"http://%@/tygetgate",strInfo];
+        NSString *strPath = [[NSString alloc] initWithFormat:@"http://%@/tygetmedia?id=%d",strInfo,_roomid];
         @WeakObj(self)
         __block int __nLbs = nLbs;
         [BaseService get:strPath dictionay:nil timeout:5 success:^(id responseObject) {
             if (responseObject) {
                 NSString *addrInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                addrInfo = [DecodeJson getArrayAddr:addrInfo];
                 [KUserSingleton.dictRoomMedia setObject:addrInfo forKey:@(__nLbs)];
                 int nIndex = selfWeak.nFall%2;
                 if ([addrInfo rangeOfString:@";"].location!=NSNotFound) {
                     NSArray *arrayIndex = [addrInfo componentsSeparatedByString:@";"];
                     NSString *strAddrInfo = arrayIndex.count > nIndex ? arrayIndex[nIndex] : @"nil";
-                    if (strAddrInfo && [strAddrInfo rangeOfString:@":"].location != NSNotFound && [strAddrInfo rangeOfString:@"."].location != NSNotFound)
+                    if (strAddrInfo && [strAddrInfo rangeOfString:@":"].location != NSNotFound &&
+                                            [strAddrInfo rangeOfString:@"."].location != NSNotFound)
                     {
                         NSString *strAddr = [strAddrInfo componentsSeparatedByString:@":"][0];
                         int nPort = [[strAddrInfo componentsSeparatedByString:@":"][1] intValue];
@@ -247,7 +249,7 @@ typedef struct _tag_MediaFrameBuffer
     [UserInfo sharedUserInfo].strMediaAddr = host;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TCP_SOCKET_SEND_MEDIA object:strInfo];
     m_jittertime = 2;
-    _nFall ++;
+    _nFall=0;
     [_gcdSocket readDataToLength:4 withTimeout:10 tag:1];
     [self sendHello];
     struct timeval result;
@@ -537,7 +539,9 @@ if(_block) \
 {
     DLog(@"超时，重连");
     [self closeSocket];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接中断"];
+    _nFall ++;
+    [self getMediaHost];
+    
     return 1;
 }
 

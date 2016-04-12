@@ -26,4 +26,6 @@
 
 - (void)setBluePointX:(CGFloat)fPointX;
 
+- (void)setBtnNewSelect:(UIButton *)sender;
+
 @end
