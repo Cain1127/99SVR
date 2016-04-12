@@ -73,6 +73,12 @@
 		18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971141C92971B001B2575 /* CoreMotion.framework */; };
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
 		87D9EE0FC59214DC02EE2C95 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A43875FF97FDC1CA789AE15 /* libPods.a */; };
+		B48591EF1CB4FBD500DAC61F /* AdaptiveWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = B48591EE1CB4FBD500DAC61F /* AdaptiveWebView.m */; };
+		B48591F11CB4FC1E00DAC61F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B48591F01CB4FC1E00DAC61F /* WebKit.framework */; };
+		B4C4B36D1CBAA5FF00B20A58 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B3661CBAA5FF00B20A58 /* IAPHelper.m */; };
+		B4C4B36E1CBAA5FF00B20A58 /* IAPShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B3681CBAA5FF00B20A58 /* IAPShare.m */; };
+		B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */; };
+		B4C4B3701CBAA5FF00B20A58 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */; };
 		BB0436811C4E28B800A162A8 /* TomorrowModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436801C4E28B800A162A8 /* TomorrowModel.m */; };
 		BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436831C4E28C500A162A8 /* TodayVIPModel.m */; };
 		BB0436871C4E28E700A162A8 /* TextLiveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436861C4E28E700A162A8 /* TextLiveModel.m */; };
@@ -621,6 +627,17 @@
 		5A43875FF97FDC1CA789AE15 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		852CCF5B274ED41B4EE71D75 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		8D4A66C414F8E52B12645457 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B48591ED1CB4FBD500DAC61F /* AdaptiveWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdaptiveWebView.h; sourceTree = "<group>"; };
+		B48591EE1CB4FBD500DAC61F /* AdaptiveWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdaptiveWebView.m; sourceTree = "<group>"; };
+		B48591F01CB4FC1E00DAC61F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		B4C4B3651CBAA5FF00B20A58 /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
+		B4C4B3661CBAA5FF00B20A58 /* IAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPHelper.m; sourceTree = "<group>"; };
+		B4C4B3671CBAA5FF00B20A58 /* IAPShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPShare.h; sourceTree = "<group>"; };
+		B4C4B3681CBAA5FF00B20A58 /* IAPShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPShare.m; sourceTree = "<group>"; };
+		B4C4B3691CBAA5FF00B20A58 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
+		B4C4B36B1CBAA5FF00B20A58 /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
+		B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		BB04367F1C4E28B800A162A8 /* TomorrowModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TomorrowModel.h; sourceTree = "<group>"; };
 		BB0436801C4E28B800A162A8 /* TomorrowModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TomorrowModel.m; sourceTree = "<group>"; };
 		BB0436821C4E28C500A162A8 /* TodayVIPModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayVIPModel.h; sourceTree = "<group>"; };
@@ -1252,6 +1269,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B48591F11CB4FC1E00DAC61F /* WebKit.framework in Frameworks */,
 				BB98EE4D1CB573380028AAEF /* libDTCoreText.a in Frameworks */,
 				BB98EE4E1CB573380028AAEF /* libDTFoundation.a in Frameworks */,
 				BB2E24BA1CB04C1400E0B549 /* libmtasdk.a in Frameworks */,
@@ -1536,6 +1554,21 @@
 				8D4A66C414F8E52B12645457 /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		B4C4B3641CBAA5FF00B20A58 /* IAPHelper */ = {
+			isa = PBXGroup;
+			children = (
+				B4C4B3651CBAA5FF00B20A58 /* IAPHelper.h */,
+				B4C4B3661CBAA5FF00B20A58 /* IAPHelper.m */,
+				B4C4B3671CBAA5FF00B20A58 /* IAPShare.h */,
+				B4C4B3681CBAA5FF00B20A58 /* IAPShare.m */,
+				B4C4B3691CBAA5FF00B20A58 /* NSString+Base64.h */,
+				B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */,
+				B4C4B36B1CBAA5FF00B20A58 /* SFHFKeychainUtils.h */,
+				B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */,
+			);
+			path = IAPHelper;
 			sourceTree = "<group>";
 		};
 		BB1661801C3D029200D318BE /* MBProgressHUD */ = {
@@ -1886,6 +1919,7 @@
 		BB63F4861C2CC7A200A042E8 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				B4C4B3641CBAA5FF00B20A58 /* IAPHelper */,
 				BB98EE4F1CB588C60028AAEF /* SBJSON */,
 				BB125B471CB112FC00C573E0 /* BaseService.h */,
 				BB125B481CB112FC00C573E0 /* BaseService.m */,
@@ -2272,6 +2306,8 @@
 		BB63F56E1C2CC7A300A042E8 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				B48591ED1CB4FBD500DAC61F /* AdaptiveWebView.h */,
+				B48591EE1CB4FBD500DAC61F /* AdaptiveWebView.m */,
 				BB63F56F1C2CC7A300A042E8 /* LoginTextField.h */,
 				BB63F5701C2CC7A300A042E8 /* LoginTextField.m */,
 			);
@@ -2435,6 +2471,7 @@
 		BB9003C01C8D8395007E1C48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B48591F01CB4FC1E00DAC61F /* WebKit.framework */,
 				BB98EE4B1CB573380028AAEF /* libDTCoreText.a */,
 				BB98EE4C1CB573380028AAEF /* libDTFoundation.a */,
 				BB46C5E51CB05316002421F7 /* libDTFoundation.a */,
@@ -2984,6 +3021,7 @@
 				BBA16D9F1C8A979000D84E80 /* TextHistoryViewController.m in Sources */,
 				BB63F6091C2CC7A300A042E8 /* UIImage+animatedGIF.m in Sources */,
 				18AAD5641C993CD100438E18 /* AssetViewController.m in Sources */,
+				B4C4B36E1CBAA5FF00B20A58 /* IAPShare.m in Sources */,
 				BB88F3161C41462B00C1F8D9 /* TextChatViewController.m in Sources */,
 				BB9765FC1C87C53600FAA5B7 /* NewDetailsViewController.m in Sources */,
 				BB1768991C75EB3A00CE947C /* TextPointViewController.m in Sources */,
@@ -3016,6 +3054,7 @@
 				18F9710F1C92947F001B2575 /* MD5DataSigner.m in Sources */,
 				BB98EE5E1CB588C70028AAEF /* NSObject+SBJSON.m in Sources */,
 				BB1769411C7C090F00CE947C /* RegNameViewController.m in Sources */,
+				B4C4B3701CBAA5FF00B20A58 /* SFHFKeychainUtils.m in Sources */,
 				BB63F5B31C2CC7A300A042E8 /* GCDAsyncSocket.m in Sources */,
 				BB63F5AB1C2CC7A300A042E8 /* UIColor+Ext.m in Sources */,
 				188741871C97058F002EF25A /* TabBarController.m in Sources */,
@@ -3031,6 +3070,7 @@
 				BB125B4C1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m in Sources */,
 				BB63F6021C2CC7A300A042E8 /* NSAttributedString+EmojiExtension.m in Sources */,
 				BB63F6231C2CC7A300A042E8 /* IndexViewController.m in Sources */,
+				B48591EF1CB4FBD500DAC61F /* AdaptiveWebView.m in Sources */,
 				BBAB82E41C7049FB00C6AC34 /* ThumButton.m in Sources */,
 				BB63F5DB1C2CC7A300A042E8 /* QCheckBox.m in Sources */,
 				BB6F3AD41C9F86270035EBBE /* TAAbstractDotView.m in Sources */,
@@ -3165,6 +3205,7 @@
 				BB9765F91C86C26100FAA5B7 /* TeachView.m in Sources */,
 				BB5138341C97E67300E09EF5 /* GiftModel.m in Sources */,
 				BB1769241C7B006F00CE947C /* SDWebImageCompat.m in Sources */,
+				B4C4B36D1CBAA5FF00B20A58 /* IAPHelper.m in Sources */,
 				BBE56C581C4FA1B10030E050 /* IdeaDetailRePly.m in Sources */,
 				BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */,
 				BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */,
@@ -3181,6 +3222,7 @@
 				BB5E4E8C1CB92D6E00F8C1D4 /* Reachability.m in Sources */,
 				BB6F3AD51C9F86270035EBBE /* TAAnimatedDotView.m in Sources */,
 				BB63F5B51C2CC7A300A042E8 /* DecodeJson.m in Sources */,
+				B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */,
 				BBAF970F1CA994DF00C16305 /* TextEsoterModel.m in Sources */,
 				BB63F6261C2CC7A300A042E8 /* LeftViewCell.m in Sources */,
 				BB1661881C3D029200D318BE /* MBProgressHUD.m in Sources */,
@@ -3372,7 +3414,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "29210d47-fd0f-4824-9529-30cfa3ce8cf9";
+				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/**";
@@ -3425,7 +3467,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "accd3a0e-be4d-4a10-9575-25dc39480081";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/**";
