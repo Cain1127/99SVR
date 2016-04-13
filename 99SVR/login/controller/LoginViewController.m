@@ -246,6 +246,7 @@
     
 }
 
+
 #pragma mark 微信登录请求
 - (void)weiChatLogin
 {

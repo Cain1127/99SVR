@@ -114,6 +114,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+        cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
+        cell.textLabel.textColor = UIColorFromRGB(0x4c4c4c);
     }
     if(indexPath.row ==0)
     {
@@ -128,6 +130,9 @@
         cell.textLabel.text = @"签名";
         cell.detailTextLabel.text = [UserInfo sharedUserInfo].strIntro;
     }
+    
+    cell.selectedBackgroundView.backgroundColor = UIColorFromRGB(0xe5e5e5);
+    
     return cell;
 }
 

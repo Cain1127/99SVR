@@ -13,6 +13,8 @@
 @interface NickNameViewController ()<UITextFieldDelegate>
 /** 昵称输入框 */
 @property(nonatomic,strong) UITextField *nickNameTextField;
+/**修改昵称按钮*/
+@property (nonatomic, strong) UIButton *commitBtn;
 
 @end
 
@@ -46,6 +48,7 @@
     [_nickNameTextField setValue:kFontSize(14) forKeyPath:@"_placeholderLabel.font"];
     [_nickNameTextField setValue:RGB(151, 151, 151) forKeyPath:@"_placeholderLabel.textColor"];
     [self.view addSubview:_nickNameTextField];
+    [_nickNameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     _nickNameTextField.frame = CGRectMake(12, 74, kScreenWidth - 2 * 12, 48);
     
     //建议提醒文字
@@ -61,12 +64,40 @@
     [btnRight setTitle:@"保存" forState:UIControlStateNormal];
     [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
     [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     [self.view addSubview:btnRight];
+    self.commitBtn = btnRight;
+    [self checkLogBtnIsEnableWithText:self.nickNameTextField.text];
     btnRight.frame = Rect(10,_nickNameTextField.y+_nickNameTextField.height+30, kScreenWidth-20, 40);
     [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [btnRight addTarget:self action:@selector(rightItemClick) forControlEvents:UIControlEventTouchUpInside];
     
 }
+
+
+-(void)textFieldDidChange:(id)sender{
+    
+    [self checkLogBtnIsEnableWithText:self.nickNameTextField.text];
+    
+}
+
+/**
+ *  检测loginBtn是否可点击
+ */
+-(void)checkLogBtnIsEnableWithText:(NSString *)text{
+    
+    BOOL isTextBool;
+    
+    if (([text isEqualToString:@""]||[text length]==0)) {
+        
+        isTextBool = NO;
+        
+    }else{
+        isTextBool = YES;
+    }
+    self.commitBtn.enabled = isTextBool;
+}
+
 
 /**
  *  完成
