@@ -24,6 +24,9 @@
 @property (nonatomic,strong) UILabel *lblError;
 @property (nonatomic,copy) NSString *strPwd;
 @property (nonatomic,strong) UITextField *txtCode;
+/**完成*/
+@property (nonatomic, strong) UIButton *commitBtn;
+
 @end
 
 @implementation InputPwdViewController
@@ -144,6 +147,10 @@
     _txtCode = [self createTextField:Rect(_txtName.x,_txtName.y+50,_txtName.width,_txtName.height)];
     [_txtCode setPlaceholder:@"请再次输入密码"];
     
+    [_txtName addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [_txtCode addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
+    
     _lblError = [[UILabel alloc] initWithFrame:Rect(30, _txtCode.y+40, kScreenWidth-60, 20)];
     [_lblError setFont:XCFONT(14)];
     [self.view addSubview:_lblError];
@@ -155,8 +162,11 @@
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     btnRegister.layer.masksToBounds = YES;
     btnRegister.layer.cornerRadius = 3;
+    self.commitBtn = btnRegister;
+    [self checkLogBtnIsEnableWithPwd:_txtName.text withAgainPwd:_txtCode.text];
     [btnRegister addTarget:self action:@selector(authMobile) forControlEvents:UIControlEventTouchUpInside];
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
@@ -187,6 +197,39 @@
     self = [super init];
     _strMobile = strMobile;
     return  self;
+}
+
+-(void)textFieldDidChange:(id)sender{
+    
+    [self checkLogBtnIsEnableWithPwd:_txtName.text withAgainPwd:_txtCode.text];
+    
+}
+
+/**
+ *  检测loginBtn是否可点击
+ *
+ *  @param pwdText  密码
+ *  @param userText 账号
+ */
+-(void)checkLogBtnIsEnableWithPwd:(NSString *)pwdText withAgainPwd:(NSString *)againPwdText{
+    
+    BOOL isPwdBool;
+    BOOL isAgainPwdBool;
+    
+    if (([pwdText isEqualToString:@""]||[pwdText length]==0)) {
+        
+        isPwdBool = NO;
+        
+    }else{
+        isPwdBool = YES;
+    }
+    
+    if (([againPwdText isEqualToString:@""]||[againPwdText length]==0)) {
+        isAgainPwdBool = NO;
+    }else{
+        isAgainPwdBool = YES;
+    }
+    self.commitBtn.enabled = (isPwdBool && isAgainPwdBool);
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

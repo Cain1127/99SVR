@@ -24,6 +24,8 @@
 @property (nonatomic,strong) UITextField *txtName;
 @property (nonatomic,strong) UITextField *txtCode;
 @property (nonatomic,strong) UIButton *btnCode;
+@property (nonatomic, strong) UIButton *nextBtn;
+
 
 @end
 
@@ -146,10 +148,15 @@
     
     [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
     _txtCode = [self createTextField:Rect(_txtName.x, _txtName.y+50,_txtName.width-100,_txtName.height)];
+    
+    [_txtName addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [_txtCode addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
     [_txtCode setPlaceholder:@"请输入验证码"];
     _btnCode = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
     [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    
     [_btnCode setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [_btnCode setTitleColor:kNavColor forState:UIControlStateHighlighted];
     [_btnCode setTitle:@"获取验证码" forState:UIControlStateNormal];
@@ -167,6 +174,10 @@
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
+    self.nextBtn = btnRegister;
+    [self checkLogBtnIsEnableWithPhone:_txtName.text withCode:_txtCode.text];
+
     btnRegister.layer.masksToBounds = YES;
     btnRegister.layer.cornerRadius = 3;
     [btnRegister addTarget:self action:@selector(authMobile) forControlEvents:UIControlEventTouchUpInside];
@@ -254,6 +265,40 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+-(void)textFieldDidChange:(id)sender{
+    
+    [self checkLogBtnIsEnableWithPhone:_txtName.text withCode:_txtCode.text];
+    
+}
+
+
+/**
+ *  检测loginBtn是否可点击
+ *
+ *  @param pwdText  密码
+ *  @param userText 账号
+ */
+-(void)checkLogBtnIsEnableWithPhone:(NSString *)phoneText withCode:(NSString *)codeText{
+    
+    BOOL isPhoneBool;
+    BOOL isCodeBool;
+    
+    if (([phoneText isEqualToString:@""]||[phoneText length]==0)) {
+        
+        isPhoneBool = NO;
+        
+    }else{
+        isPhoneBool = YES;
+    }
+    
+    if (([codeText isEqualToString:@""]||[codeText length]==0)) {
+        isCodeBool = NO;
+    }else{
+        isCodeBool = YES;
+    }
+    self.nextBtn.enabled = (isCodeBool && isCodeBool);
+}
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if (_txtName == textField)

@@ -67,7 +67,6 @@
 @property (nonatomic,copy) NSString *strRoomPwd;
 @property (nonatomic,copy) NSString *strRoomAddress;
 @property (nonatomic,assign) int nRoomPort;
-@property (nonatomic,copy) NSString *strRoomId;
 @property (nonatomic,strong) GCDAsyncSocket *asyncSocket;
 @property (nonatomic,strong) NSMutableArray *aryBuffer;
 @property (nonatomic,strong) NSMutableDictionary *dictDownLoad;
@@ -365,6 +364,7 @@
         [self ReConnectSocket];
         return YES;
     }
+    _strRoomId = strId;
     nSocketType = 2;
     if (tcpThread==nil)
     {

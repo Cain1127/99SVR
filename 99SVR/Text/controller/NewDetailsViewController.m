@@ -323,7 +323,7 @@
         [lblLine setBackgroundColor:kLineColor];
         [downContentView addSubview:lblLine];
         
-        UILabel *lblTalk = [[UILabel alloc] initWithFrame:Rect(0, lblLine.y-11,75, 23)];
+        UILabel *lblTalk = [[UILabel alloc] initWithFrame:Rect(10, lblLine.y-11,75, 23)];
         [lblTalk setText:@"发表评论"];
         [lblTalk setTextColor:UIColorFromRGB(0xffffff)];
         [lblTalk setFont:XCFONT(15)];

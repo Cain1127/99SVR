@@ -127,6 +127,7 @@
     NSString *strAddress;
     NSString *strPort;
     NSString *roomAddr = [KUserSingleton.dictRoomGate objectForKey:@(0)];
+    _tcpSocket.strRoomId = _room.nvcbid;
     if(roomAddr!=nil)
     {
         NSString *strAry = [roomAddr componentsSeparatedByString:@","][0];
@@ -139,7 +140,6 @@
         strPort = @"0";
     }
     [_tcpSocket connectRoomInfo:_room.nvcbid address:strAddress port:[strPort intValue]];
-    DLog(@"roomid:%@",_room.nvcbid);
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
 }
 
@@ -156,9 +156,11 @@
 - (void)dealloc
 {
     DLog(@"room view");
-    [_ffPlay stop];
     [_tcpSocket exit_Room:YES];
+    _tcpSocket = nil;
+    [_ffPlay stop];
     [[SDImageCache sharedImageCache] clearMemory];
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
     _ffPlay = nil;
     [_scrollView removeFromSuperview];
     _scrollView = nil;
@@ -492,6 +494,7 @@
     nColor = 10000;
     room_gcd = dispatch_queue_create("decode_gcd",0);
     _cellCache = [[NSCache alloc] init];
+    [_cellCache setTotalCostLimit:20];
     [self initUIHead];
     dictGift = [NSMutableDictionary dictionary];
     UITapGestureRecognizer* singleRecogn;
