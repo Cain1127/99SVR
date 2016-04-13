@@ -32,9 +32,12 @@
 @property (nonatomic, strong) UIButton *btnDetermine;
 
 @property (nonatomic,strong) UIImageView *imgView;
-@property (nonatomic,strong) UITextField *txtName;
-@property (nonatomic,strong) UITextField *txtPwd;
-@property (nonatomic,strong) UITextField *txtCmdPwd;
+/**用户名*/
+@property (nonatomic,strong) RegisterTextField *txtName;
+/**密码*/
+@property (nonatomic,strong) RegisterTextField *txtPwd;
+/**再次输入密码*/
+@property (nonatomic,strong) RegisterTextField *txtCmd;
 @property (nonatomic,copy) NSString *strCode;
 @property (nonatomic,strong) QCheckBox *checkAgree;
 
@@ -152,9 +155,9 @@
     return lbl1;
 }
 
-- (UITextField *)createTextField:(CGRect)frame
+- (RegisterTextField *)createTextField:(CGRect)frame
 {
-    UITextField *textField = [[UITextField alloc] initWithFrame:frame];
+    RegisterTextField *textField = [[RegisterTextField alloc] initWithFrame:frame];
     [self.view addSubview:textField];
     [textField setTextColor:UIColorFromRGB(0x555555)];
     [textField setFont:XCFONT(15)];
@@ -197,24 +200,41 @@
 
 - (void)initUIHead
 {
-    
-    [self createLabelWithRect:Rect(30, 80, 80, 30)];
-    _txtName = [self createTextField:Rect(30, 80, kScreenWidth-60, 30)];
+    [self createLabelWithRect:Rect(10, 80, kScreenWidth-20, 30)];
+    _txtName = [self createTextField:Rect(10, 80, kScreenWidth-20, 30)];
+    _txtName.leftViewImageName = @"register_mob";
+
     [_txtName setPlaceholder:@"请输入用户名"];
     
-    [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
-    _txtPwd = [self createTextField:Rect(_txtName.x,_txtName.y+50,_txtName.width,_txtName.height)];
+    [self createLabelWithRect:Rect(10, _txtName.y+50,kScreenWidth-20, 30)];
+    _txtPwd = [self createTextField:Rect(_txtName.x,_txtName.y+50,kScreenWidth-20,_txtName.height)];
+    _txtPwd.leftViewImageName = @"register_pwd";
+    _txtPwd.isShowTextBool = YES;
     [_txtPwd setPlaceholder:@"请输入密码"];
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
+    
+    CGRect frame;
+    
+    frame.origin.y = _txtPwd.y+50;
+    
+    [self createLabelWithRect:Rect(10, frame.origin.y, kScreenWidth-20, 30)];
+    _txtCmd = [self createTextField:Rect(10, frame.origin.y, kScreenWidth-20, 30)];
+    _txtCmd.delegate = self;
+    [_txtCmd setPlaceholder:@"请重复输入密码"];
+    _txtCmd.isShowTextBool = YES;
+    _txtCmd.leftViewImageName = @"register_pwd_ok";
+    frame.origin.y = _txtCmd.y+50;
+    [_txtCmd setSecureTextEntry:YES];
 
     [_txtName addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [_txtPwd addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [_txtCmd addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 
 
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, _txtPwd.y+50, kScreenWidth-60, 40);
+    btnRegister.frame = Rect(30, _txtCmd.y+50, kScreenWidth-60, 40);
     [btnRegister setTitle:@"注册" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
@@ -224,7 +244,7 @@
     btnRegister.layer.masksToBounds = YES;
     btnRegister.layer.cornerRadius = 3;
     self.btnDetermine = btnRegister;
-    [self checkLogBtnIsEnableWithPwd:_txtPwd.text withUser:_txtName.text];
+    [self checkLogBtnIsEnableWithPwd:_txtPwd.text withCmdPwd:_txtCmd.text withUser:_txtName.text];
     [btnRegister addTarget:self action:@selector(registerServer) forControlEvents:UIControlEventTouchUpInside];
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
@@ -268,7 +288,13 @@
 
 - (void)closeKeyBoard
 {
-    
+
+    [self.txtName resignFirstResponder];
+
+    [self.txtCmd resignFirstResponder];
+
+    [self.txtPwd resignFirstResponder];
+
 }
 
 - (void)openHttpView:(UIButton *)btnSender
@@ -294,7 +320,7 @@
     [super viewDidLoad];
     [self initUIHead];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    [self setTitleText:@"账号注册"];
+    [self setTitleText:@"用户名注册"];
     NSDate *date = [NSDate date];
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"yyyyMMdd"];
@@ -310,7 +336,7 @@
 
 -(void)textFieldDidChange:(id)sender{
     
-    [self checkLogBtnIsEnableWithPwd:_txtPwd.text withUser:_txtName.text];
+    [self checkLogBtnIsEnableWithPwd:_txtPwd.text withCmdPwd:_txtCmd.text withUser:_txtName.text];
     
 }
 
@@ -321,10 +347,11 @@
  *  @param pwdText  密码
  *  @param userText 账号
  */
--(void)checkLogBtnIsEnableWithPwd:(NSString *)pwdText withUser:(NSString *)userText{
+-(void)checkLogBtnIsEnableWithPwd:(NSString *)pwdText withCmdPwd:(NSString *)cmdPwdText withUser:(NSString *)userText{
     
     BOOL isPwdBool;
     BOOL isUserBool;
+    BOOL isCmdPwdBool;
     
     if (([pwdText isEqualToString:@""]||[pwdText length]==0)) {
         
@@ -339,7 +366,14 @@
     }else{
         isUserBool = YES;
     }
-    self.btnDetermine.enabled = (isPwdBool && isUserBool);
+    
+    if (([cmdPwdText isEqualToString:@""]||[cmdPwdText length]==0)) {
+        isCmdPwdBool = NO;
+    }else{
+        isCmdPwdBool = YES;
+    }
+
+    self.btnDetermine.enabled = (isPwdBool && isUserBool && isCmdPwdBool);
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

@@ -23,9 +23,12 @@
 }
 @property (nonatomic,copy) NSString *mobile;
 @property (nonatomic,copy) NSString *password;
-@property (nonatomic,strong) UITextField *txtOld;
-@property (nonatomic,strong) UITextField *txtNew;
-@property (nonatomic,strong) UITextField *txtCmd;
+/**旧密码*/
+@property (nonatomic,strong) RegisterTextField *txtOld;
+/**新的密码*/
+@property (nonatomic,strong) RegisterTextField *txtNew;
+/**再次输入密码*/
+@property (nonatomic,strong) RegisterTextField *txtCmd;
 
 @property (nonatomic,strong) UITextField *txtMobile;
 @property (nonatomic,strong) UITextField *txtCode;
@@ -39,9 +42,9 @@
 
 @implementation UpdatePwdViewController
 
-- (UITextField *)createTextField:(CGRect)frame
+- (RegisterTextField *)createTextField:(CGRect)frame
 {
-    UITextField *textField = [[UITextField alloc] initWithFrame:frame];
+    RegisterTextField *textField = [[RegisterTextField alloc] initWithFrame:frame];
     [self.view addSubview:textField];
     [textField setTextColor:UIColorFromRGB(0x555555)];
     [textField setFont:XCFONT(15)];
@@ -102,6 +105,8 @@
     {
         [self createLabelWithRect:Rect(10.0f, 20 + kNavigationHeight, 80.0f, 30.0f)];
         _txtOld = [self createTextField:Rect(10, 20+kNavigationHeight, kScreenWidth-20, 30)];
+        _txtOld.isShowTextBool = YES;
+        _txtOld.leftViewImageName = @"register_pwd";
         [_txtOld setPlaceholder:@"请输入旧密码"];
         frame.origin.y = _txtOld.y+50;
         [_txtOld setSecureTextEntry:YES];
@@ -110,6 +115,8 @@
         _txtCmd = [self createTextField:Rect(10, frame.origin.y, kScreenWidth-20, 30)];
         _txtCmd.delegate = self;
         [_txtCmd setPlaceholder:@"请输入新密码"];
+        _txtCmd.isShowTextBool = YES;
+        _txtCmd.leftViewImageName = @"register_pwd_new";
         frame.origin.y = _txtCmd.y+50;
         [_txtCmd setSecureTextEntry:YES];
     }
@@ -122,6 +129,9 @@
     else
     {
         [_txtNew setPlaceholder:@"请再次输入密码"];
+        _txtNew.isShowTextBool = YES;
+        _txtNew.leftViewImageName = @"register_pwd_ok";
+
         [_txtNew setSecureTextEntry:YES];
         _txtNew.delegate = self;
         

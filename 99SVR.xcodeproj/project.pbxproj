@@ -79,6 +79,7 @@
 		B4C4B36E1CBAA5FF00B20A58 /* IAPShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B3681CBAA5FF00B20A58 /* IAPShare.m */; };
 		B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */; };
 		B4C4B3701CBAA5FF00B20A58 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */; };
+		B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C6B7B11CBE1B220072795B /* RegisterTextField.m */; };
 		BB0436811C4E28B800A162A8 /* TomorrowModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436801C4E28B800A162A8 /* TomorrowModel.m */; };
 		BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436831C4E28C500A162A8 /* TodayVIPModel.m */; };
 		BB0436871C4E28E700A162A8 /* TextLiveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436861C4E28E700A162A8 /* TextLiveModel.m */; };
@@ -638,6 +639,8 @@
 		B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		B4C4B36B1CBAA5FF00B20A58 /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
+		B4C6B7B01CBE1B220072795B /* RegisterTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTextField.h; sourceTree = "<group>"; };
+		B4C6B7B11CBE1B220072795B /* RegisterTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTextField.m; sourceTree = "<group>"; };
 		BB04367F1C4E28B800A162A8 /* TomorrowModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TomorrowModel.h; sourceTree = "<group>"; };
 		BB0436801C4E28B800A162A8 /* TomorrowModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TomorrowModel.m; sourceTree = "<group>"; };
 		BB0436821C4E28C500A162A8 /* TodayVIPModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayVIPModel.h; sourceTree = "<group>"; };
@@ -2159,6 +2162,8 @@
 				BB63F53E1C2CC7A300A042E8 /* CustomViewController.m */,
 				BB63F53F1C2CC7A300A042E8 /* UIView+Extension.h */,
 				BB63F5401C2CC7A300A042E8 /* UIView+Extension.m */,
+				B4C6B7B01CBE1B220072795B /* RegisterTextField.h */,
+				B4C6B7B11CBE1B220072795B /* RegisterTextField.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -3031,6 +3036,7 @@
 				BB6F3B111CA13E3E0035EBBE /* ZLLogonProtocol.mm in Sources */,
 				BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */,
 				BB63F5C71C2CC7A300A042E8 /* NSArray+MASAdditions.m in Sources */,
+				B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */,
 				BBAF97041CA9860500C16305 /* MarchLiveTextCell.m in Sources */,
 				1827FF591C9959BF009D9C79 /* MyScrollView.m in Sources */,
 				BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */,

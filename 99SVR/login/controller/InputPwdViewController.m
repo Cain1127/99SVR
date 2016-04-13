@@ -19,11 +19,11 @@
 #import "BaseService.h"
 
 @interface InputPwdViewController ()<UITextFieldDelegate>
-@property (nonatomic,strong) UITextField *txtName;
+@property (nonatomic,strong) RegisterTextField *txtName;
 @property (nonatomic,copy) NSString *strMobile;
 @property (nonatomic,strong) UILabel *lblError;
 @property (nonatomic,copy) NSString *strPwd;
-@property (nonatomic,strong) UITextField *txtCode;
+@property (nonatomic,strong) RegisterTextField *txtCode;
 /**完成*/
 @property (nonatomic, strong) UIButton *commitBtn;
 
@@ -38,9 +38,9 @@
     [self.view addSubview:lblContent];
 }
 
-- (UITextField *)createTextField:(CGRect)frame
+- (RegisterTextField *)createTextField:(CGRect)frame
 {
-    UITextField *textField = [[UITextField alloc] initWithFrame:frame];
+    RegisterTextField *textField = [[RegisterTextField alloc] initWithFrame:frame];
     [self.view addSubview:textField];
     [textField setTextColor:UIColorFromRGB(0x555555)];
     [textField setFont:XCFONT(15)];
@@ -141,10 +141,14 @@
 
     [self createLabelWithRect:Rect(30, 72, 80, 30)];
     _txtName = [self createTextField:Rect(30, 72, kScreenWidth-60, 30)];
+    _txtName.leftViewImageName = @"register_pwd_new";
+    _txtName.isShowTextBool = YES;
     [_txtName setPlaceholder:@"请输入新密码"];
     
     [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
     _txtCode = [self createTextField:Rect(_txtName.x,_txtName.y+50,_txtName.width,_txtName.height)];
+    _txtCode.leftViewImageName = @"register_pwd_ok";
+    _txtCode.isShowTextBool = YES;
     [_txtCode setPlaceholder:@"请再次输入密码"];
     
     [_txtName addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];

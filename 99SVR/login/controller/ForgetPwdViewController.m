@@ -21,8 +21,8 @@
 }
 
 @property (nonatomic,copy) NSString *strMobile;
-@property (nonatomic,strong) UITextField *txtName;
-@property (nonatomic,strong) UITextField *txtCode;
+@property (nonatomic,strong) RegisterTextField *txtName;
+@property (nonatomic,strong) RegisterTextField *txtCode;
 @property (nonatomic,strong) UIButton *btnCode;
 @property (nonatomic, strong) UIButton *nextBtn;
 
@@ -120,9 +120,9 @@
     [self.view addSubview:lblContent];
 }
 
-- (UITextField *)createTextField:(CGRect)frame
+- (RegisterTextField *)createTextField:(CGRect)frame
 {
-    UITextField *textField = [[UITextField alloc] initWithFrame:frame];
+    RegisterTextField *textField = [[RegisterTextField alloc] initWithFrame:frame];
     [self.view addSubview:textField];
     [textField setTextColor:UIColorFromRGB(0x555555)];
     [textField setFont:XCFONT(15)];
@@ -145,9 +145,11 @@
     [self createLabelWithRect:Rect(30, 8+kNavigationHeight, 80, 30)];
     _txtName = [self createTextField:Rect(30, 8+kNavigationHeight, kScreenWidth-60, 30)];
     [_txtName setPlaceholder:@"请输入手机号码"];
+    _txtName.leftViewImageName = @"register_mob";
     
     [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
     _txtCode = [self createTextField:Rect(_txtName.x, _txtName.y+50,_txtName.width-100,_txtName.height)];
+    _txtCode.leftViewImageName = @"register_code";
     
     [_txtName addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [_txtCode addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -297,7 +299,7 @@
     }else{
         isCodeBool = YES;
     }
-    self.nextBtn.enabled = (isCodeBool && isCodeBool);
+    self.nextBtn.enabled = (isCodeBool && isPhoneBool);
 }
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {

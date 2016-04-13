@@ -15,6 +15,7 @@
 #import "StringsMacro.h"
 #import "UIColor+Ext.h"
 #import "CustomViewController.h"
+#import "RegisterTextField.h"
 
 #import "UIBarButtonItem+Extension.h"
 #import "MBProgressHUD+Add.h"
