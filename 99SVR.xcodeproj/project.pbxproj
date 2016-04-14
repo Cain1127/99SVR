@@ -81,6 +81,8 @@
 		B48591F11CB4FC1E00DAC61F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B48591F01CB4FC1E00DAC61F /* WebKit.framework */; };
 		B4A15E9B1CBFA91300587E3F /* BaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A15E971CBFA91300587E3F /* BaseCell.m */; };
 		B4A15E9C1CBFA91300587E3F /* TraderHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A15E9A1CBFA91300587E3F /* TraderHomeCell.m */; };
+		B4A15E9F1CBFAA9E00587E3F /* StockDealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.m */; };
+		B4A15EA21CBFACFE00587E3F /* StockDealCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A15EA11CBFACFE00587E3F /* StockDealCell.m */; };
 		B4C4B36D1CBAA5FF00B20A58 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B3661CBAA5FF00B20A58 /* IAPHelper.m */; };
 		B4C4B36E1CBAA5FF00B20A58 /* IAPShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B3681CBAA5FF00B20A58 /* IAPShare.m */; };
 		B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */; };
@@ -650,6 +652,10 @@
 		B4A15E981CBFA91300587E3F /* MacroHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacroHeader.h; sourceTree = "<group>"; };
 		B4A15E991CBFA91300587E3F /* TraderHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TraderHomeCell.h; sourceTree = "<group>"; };
 		B4A15E9A1CBFA91300587E3F /* TraderHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TraderHomeCell.m; sourceTree = "<group>"; };
+		B4A15E9D1CBFAA9E00587E3F /* StockDealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealViewController.h; sourceTree = "<group>"; };
+		B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockDealViewController.m; sourceTree = "<group>"; };
+		B4A15EA01CBFACFE00587E3F /* StockDealCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealCell.h; sourceTree = "<group>"; };
+		B4A15EA11CBFACFE00587E3F /* StockDealCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockDealCell.m; sourceTree = "<group>"; };
 		B4C4B3651CBAA5FF00B20A58 /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
 		B4C4B3661CBAA5FF00B20A58 /* IAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPHelper.m; sourceTree = "<group>"; };
 		B4C4B3671CBAA5FF00B20A58 /* IAPShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPShare.h; sourceTree = "<group>"; };
@@ -1596,6 +1602,8 @@
 			children = (
 				B47DD5961CBF2D9400C47EF7 /* TraderViewController.h */,
 				B47DD5971CBF2D9400C47EF7 /* TraderViewController.m */,
+				B4A15E9D1CBFAA9E00587E3F /* StockDealViewController.h */,
+				B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -1635,6 +1643,8 @@
 				B4A15E981CBFA91300587E3F /* MacroHeader.h */,
 				B4A15E991CBFA91300587E3F /* TraderHomeCell.h */,
 				B4A15E9A1CBFA91300587E3F /* TraderHomeCell.m */,
+				B4A15EA01CBFACFE00587E3F /* StockDealCell.h */,
+				B4A15EA11CBFACFE00587E3F /* StockDealCell.m */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -3146,6 +3156,7 @@
 				BB63F5AB1C2CC7A300A042E8 /* UIColor+Ext.m in Sources */,
 				188741871C97058F002EF25A /* TabBarController.m in Sources */,
 				BB63F6201C2CC7A300A042E8 /* GroupView.m in Sources */,
+				B4A15E9F1CBFAA9E00587E3F /* StockDealViewController.m in Sources */,
 				BB63F5B61C2CC7A300A042E8 /* GTMBase64.m in Sources */,
 				18F9710B1C92947F001B2575 /* Order.m in Sources */,
 				BB88F30A1C3FA97E00C1F8D9 /* SearchButton.m in Sources */,
@@ -3300,6 +3311,7 @@
 				BBE56C581C4FA1B10030E050 /* IdeaDetailRePly.m in Sources */,
 				BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */,
 				BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */,
+				B4A15EA21CBFACFE00587E3F /* StockDealCell.m in Sources */,
 				BB98EE611CB588C70028AAEF /* SBJsonParser.m in Sources */,
 				BB6F3AD71C9F86270035EBBE /* TAPageControl.m in Sources */,
 				1898AC661C9BADE600F2681D /* AboutController.m in Sources */,

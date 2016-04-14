@@ -1,7 +1,7 @@
 
 
 
-/**高手操盘的首页*/
+/**高手操盘的首页的cell*/
 
 #import "BaseCell.h"
 

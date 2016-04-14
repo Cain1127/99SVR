@@ -7,6 +7,8 @@
 #import "SearchController.h"
 #import "TraderHomeCell.h"
 #import "MacroHeader.h"
+#import "StockDealViewController.h"
+
 @interface TraderViewController ()<UITableViewDelegate,UITableViewDataSource>
 /**滑动控制器*/
 @property (nonatomic, strong) SliderMenuView *sliderMenuView;
@@ -168,6 +170,12 @@
     cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [self.navigationController pushViewController:[[StockDealViewController alloc]init] animated:YES];
+    
 }
 
 @end
