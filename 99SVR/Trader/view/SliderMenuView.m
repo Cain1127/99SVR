@@ -128,12 +128,15 @@
 
 #pragma mark 显示指定标题的红点提示图标
 -(void)setShowBadgeIndex:(NSInteger)showBadgeIndex{
-    
     [self.topScroView setTitleIndex:showBadgeIndex badgeHide:NO];
 }
 
 -(void)setBadgeColor:(UIColor *)badgeColor{
     [self.topScroView setTitleBadgeColor:badgeColor];
+}
+
+-(void)setTitleBagColor:(UIColor *)titleBagColor{
+    [self.topScroView setTitleBagColor:titleBagColor];
 }
 
 @end

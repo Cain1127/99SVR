@@ -15,6 +15,9 @@
 @property (nonatomic, assign) NSInteger showBadgeIndex;
 /**H红色提示的颜色*/
 @property (nonatomic, strong) UIColor *badgeColor;
+/**标题的背景色*/
+@property (nonatomic, strong) UIColor *titleBagColor;
+
 
 
 - (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles;

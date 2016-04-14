@@ -38,9 +38,10 @@
 
 /**指定的title是否显示红点提示*/
 -(void)setTitleIndex:(NSInteger)index badgeHide:(BOOL)value;
-
 /**外部修改badge的颜色*/
 -(void)setTitleBadgeColor:(UIColor *)color;
+/**提供给外部修改标题背景的颜色*/
+-(void)setTitleBagColor:(UIColor *)color;
 @end
 
 

@@ -310,6 +310,17 @@
     }
 }
 
+#pragma mark 提供给外部修改标题背景的颜色
+-(void)setTitleBagColor:(UIColor *)color{
+    for (int i=0; i!=self.subviews.count; i++) {
+        UIView *view = [self viewWithTag:i];
+        if ([view isKindOfClass:[SliderLabel class]]) {
+            SliderLabel *sliderLabel = (SliderLabel *)view;
+            sliderLabel.backgroundColor = color;
+        }
+    }
+}
+
 /**
  *  重写手势，如果是左滑，则禁用掉scrollview自带的
  */
