@@ -80,7 +80,7 @@
     });
     UIButton *btnPro = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnPro setTitle:@"使用条款及隐私政策" forState:UIControlStateNormal];
-    [btnPro setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateNormal];
+    [btnPro setTitleColor:UIColorFromRGB(0x0078dd) forState:UIControlStateNormal];
     [self.view addSubview:btnPro];
     btnPro.titleLabel.font = XCFONT(14);
     [btnPro addTarget:self action:@selector(openHttp) forControlEvents:UIControlEventTouchUpInside];

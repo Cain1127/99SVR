@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		1827FF591C9959BF009D9C79 /* MyScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1827FF581C9959BF009D9C79 /* MyScrollView.m */; };
+		185DABA71CBFDC970019C5A3 /* IdeaDetailedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 185DAB991CBFDC970019C5A3 /* IdeaDetailedTableViewController.m */; };
+		185DABA81CBFDC970019C5A3 /* IdeaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 185DAB9B1CBFDC970019C5A3 /* IdeaViewController.m */; };
+		185DABA91CBFDC970019C5A3 /* DetaileHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 185DAB9F1CBFDC970019C5A3 /* DetaileHeaderView.m */; };
+		185DABAA1CBFDC970019C5A3 /* DetaileHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 185DABA01CBFDC970019C5A3 /* DetaileHeaderView.xib */; };
+		185DABAB1CBFDC970019C5A3 /* ideaDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 185DABA21CBFDC970019C5A3 /* ideaDetailTableViewCell.m */; };
+		185DABAC1CBFDC970019C5A3 /* ideaDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 185DABA31CBFDC970019C5A3 /* ideaDetailTableViewCell.xib */; };
+		185DABAD1CBFDC970019C5A3 /* TQideaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 185DABA51CBFDC970019C5A3 /* TQideaTableViewCell.m */; };
+		185DABAE1CBFDC970019C5A3 /* TQideaTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 185DABA61CBFDC970019C5A3 /* TQideaTableViewCell.xib */; };
 		187C07F31C9A571B007AE742 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C07F21C9A571B007AE742 /* ProfileViewController.m */; };
 		187C07F61C9A5A52007AE742 /* NickNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C07F51C9A5A52007AE742 /* NickNameViewController.m */; };
 		188741791C96FE25002EF25A /* NavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188741781C96FE25002EF25A /* NavigationViewController.m */; };
@@ -79,6 +87,7 @@
 		B4C4B36E1CBAA5FF00B20A58 /* IAPShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B3681CBAA5FF00B20A58 /* IAPShare.m */; };
 		B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */; };
 		B4C4B3701CBAA5FF00B20A58 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */; };
+		B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C6B7B11CBE1B220072795B /* RegisterTextField.m */; };
 		BB0436811C4E28B800A162A8 /* TomorrowModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436801C4E28B800A162A8 /* TomorrowModel.m */; };
 		BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436831C4E28C500A162A8 /* TodayVIPModel.m */; };
 		BB0436871C4E28E700A162A8 /* TextLiveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436861C4E28E700A162A8 /* TextLiveModel.m */; };
@@ -460,6 +469,19 @@
 /* Begin PBXFileReference section */
 		1827FF571C9959BF009D9C79 /* MyScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyScrollView.h; sourceTree = "<group>"; };
 		1827FF581C9959BF009D9C79 /* MyScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyScrollView.m; sourceTree = "<group>"; };
+		185DAB981CBFDC970019C5A3 /* IdeaDetailedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdeaDetailedTableViewController.h; sourceTree = "<group>"; };
+		185DAB991CBFDC970019C5A3 /* IdeaDetailedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdeaDetailedTableViewController.m; sourceTree = "<group>"; };
+		185DAB9A1CBFDC970019C5A3 /* IdeaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdeaViewController.h; sourceTree = "<group>"; };
+		185DAB9B1CBFDC970019C5A3 /* IdeaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdeaViewController.m; sourceTree = "<group>"; };
+		185DAB9E1CBFDC970019C5A3 /* DetaileHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetaileHeaderView.h; sourceTree = "<group>"; };
+		185DAB9F1CBFDC970019C5A3 /* DetaileHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetaileHeaderView.m; sourceTree = "<group>"; };
+		185DABA01CBFDC970019C5A3 /* DetaileHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetaileHeaderView.xib; sourceTree = "<group>"; };
+		185DABA11CBFDC970019C5A3 /* ideaDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ideaDetailTableViewCell.h; sourceTree = "<group>"; };
+		185DABA21CBFDC970019C5A3 /* ideaDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ideaDetailTableViewCell.m; sourceTree = "<group>"; };
+		185DABA31CBFDC970019C5A3 /* ideaDetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ideaDetailTableViewCell.xib; sourceTree = "<group>"; };
+		185DABA41CBFDC970019C5A3 /* TQideaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQideaTableViewCell.h; sourceTree = "<group>"; };
+		185DABA51CBFDC970019C5A3 /* TQideaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQideaTableViewCell.m; sourceTree = "<group>"; };
+		185DABA61CBFDC970019C5A3 /* TQideaTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQideaTableViewCell.xib; sourceTree = "<group>"; };
 		187C07F11C9A571B007AE742 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		187C07F21C9A571B007AE742 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ProfileViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		187C07F41C9A5A52007AE742 /* NickNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NickNameViewController.h; sourceTree = "<group>"; };
@@ -638,6 +660,8 @@
 		B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		B4C4B36B1CBAA5FF00B20A58 /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
+		B4C6B7B01CBE1B220072795B /* RegisterTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTextField.h; sourceTree = "<group>"; };
+		B4C6B7B11CBE1B220072795B /* RegisterTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTextField.m; sourceTree = "<group>"; };
 		BB04367F1C4E28B800A162A8 /* TomorrowModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TomorrowModel.h; sourceTree = "<group>"; };
 		BB0436801C4E28B800A162A8 /* TomorrowModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TomorrowModel.m; sourceTree = "<group>"; };
 		BB0436821C4E28C500A162A8 /* TodayVIPModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayVIPModel.h; sourceTree = "<group>"; };
@@ -1318,6 +1342,50 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		185DAB961CBFDC970019C5A3 /* Idea */ = {
+			isa = PBXGroup;
+			children = (
+				185DAB971CBFDC970019C5A3 /* Controller */,
+				185DAB9C1CBFDC970019C5A3 /* Model */,
+				185DAB9D1CBFDC970019C5A3 /* View */,
+			);
+			path = Idea;
+			sourceTree = "<group>";
+		};
+		185DAB971CBFDC970019C5A3 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				185DAB9A1CBFDC970019C5A3 /* IdeaViewController.h */,
+				185DAB9B1CBFDC970019C5A3 /* IdeaViewController.m */,
+				185DAB981CBFDC970019C5A3 /* IdeaDetailedTableViewController.h */,
+				185DAB991CBFDC970019C5A3 /* IdeaDetailedTableViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		185DAB9C1CBFDC970019C5A3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		185DAB9D1CBFDC970019C5A3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				185DAB9E1CBFDC970019C5A3 /* DetaileHeaderView.h */,
+				185DAB9F1CBFDC970019C5A3 /* DetaileHeaderView.m */,
+				185DABA01CBFDC970019C5A3 /* DetaileHeaderView.xib */,
+				185DABA11CBFDC970019C5A3 /* ideaDetailTableViewCell.h */,
+				185DABA21CBFDC970019C5A3 /* ideaDetailTableViewCell.m */,
+				185DABA31CBFDC970019C5A3 /* ideaDetailTableViewCell.xib */,
+				185DABA41CBFDC970019C5A3 /* TQideaTableViewCell.h */,
+				185DABA51CBFDC970019C5A3 /* TQideaTableViewCell.m */,
+				185DABA61CBFDC970019C5A3 /* TQideaTableViewCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		187C07F01C9A571B007AE742 /* profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -1772,6 +1840,7 @@
 		BB25D7D61C1571B400314C1E /* 99SVR */ = {
 			isa = PBXGroup;
 			children = (
+				185DAB961CBFDC970019C5A3 /* Idea */,
 				BBD468BD1CB00C0C00E2B767 /* Externals */,
 				BB1769421C7C91EF00CE947C /* tengx */,
 				BB88F3711C48BA7300C1F8D9 /* libs */,
@@ -2159,6 +2228,8 @@
 				BB63F53E1C2CC7A300A042E8 /* CustomViewController.m */,
 				BB63F53F1C2CC7A300A042E8 /* UIView+Extension.h */,
 				BB63F5401C2CC7A300A042E8 /* UIView+Extension.m */,
+				B4C6B7B01CBE1B220072795B /* RegisterTextField.h */,
+				B4C6B7B11CBE1B220072795B /* RegisterTextField.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -2777,6 +2848,7 @@
 				BB63F2B21C27FB2800A042E8 /* 11.gif in Resources */,
 				BBCE9D561CB3AD5700DA56D6 /* 410_1.png in Resources */,
 				BB63F2B11C27FB2800A042E8 /* 10.gif in Resources */,
+				185DABAA1CBFDC970019C5A3 /* DetaileHeaderView.xib in Resources */,
 				BBCE9D121CB3AD5600DA56D6 /* 112_1.png in Resources */,
 				BB63F2B61C27FB2800A042E8 /* 15.gif in Resources */,
 				BBFA851D1C30D216000466E4 /* 999.gif in Resources */,
@@ -2814,6 +2886,7 @@
 				BBCE9D531CB3AD5600DA56D6 /* 407_1.png in Resources */,
 				BBCE9D591CB3AD5700DA56D6 /* 413_1.png in Resources */,
 				BB63F2BB1C27FB2800A042E8 /* 2.gif in Resources */,
+				185DABAC1CBFDC970019C5A3 /* ideaDetailTableViewCell.xib in Resources */,
 				BBCE9D571CB3AD5700DA56D6 /* 411_1.png in Resources */,
 				BBCE9D3E1CB3AD5600DA56D6 /* 156_1.png in Resources */,
 				BB63F2C71C27FB2800A042E8 /* 30.gif in Resources */,
@@ -2894,6 +2967,7 @@
 				BB63F2BA1C27FB2800A042E8 /* 19.gif in Resources */,
 				BBCE9D0C1CB3AD5600DA56D6 /* 106_1.png in Resources */,
 				BBCE9D4E1CB3AD5600DA56D6 /* 402_1.png in Resources */,
+				185DABAE1CBFDC970019C5A3 /* TQideaTableViewCell.xib in Resources */,
 				BB63F2CC1C27FB2800A042E8 /* 4.gif in Resources */,
 				BBCE9D181CB3AD5600DA56D6 /* 118_1.png in Resources */,
 				BBCE9D241CB3AD5600DA56D6 /* 130_1.png in Resources */,
@@ -3000,6 +3074,7 @@
 				BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */,
 				BB1769301C7B006F00CE947C /* UIView+WebCacheOperation.m in Sources */,
 				1898AC6A1C9BADE600F2681D /* SettingCenterController.m in Sources */,
+				185DABA91CBFDC970019C5A3 /* DetaileHeaderView.m in Sources */,
 				BB88F3191C41464100C1F8D9 /* TextNewViewController.m in Sources */,
 				BB63F61B1C2CC7A300A042E8 /* HtmlRoom.m in Sources */,
 				BB63F62C1C2D0DDF00A042E8 /* ChatButton.m in Sources */,
@@ -3031,6 +3106,7 @@
 				BB6F3B111CA13E3E0035EBBE /* ZLLogonProtocol.mm in Sources */,
 				BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */,
 				BB63F5C71C2CC7A300A042E8 /* NSArray+MASAdditions.m in Sources */,
+				B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */,
 				BBAF97041CA9860500C16305 /* MarchLiveTextCell.m in Sources */,
 				1827FF591C9959BF009D9C79 /* MyScrollView.m in Sources */,
 				BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */,
@@ -3123,9 +3199,11 @@
 				BB63F5C81C2CC7A300A042E8 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				18F971111C92947F001B2575 /* openssl_wrapper.m in Sources */,
 				1898AC681C9BADE600F2681D /* KefuCenterController.m in Sources */,
+				185DABA81CBFDC970019C5A3 /* IdeaViewController.m in Sources */,
 				BBCF9A4D1CAD4F81005B9DCE /* SexViewController.m in Sources */,
 				BB16619D1C3E2DC700D318BE /* ZLButton.m in Sources */,
 				BB63F5AA1C2CC7A300A042E8 /* UIControl+BlocksKit.m in Sources */,
+				185DABAD1CBFDC970019C5A3 /* TQideaTableViewCell.m in Sources */,
 				BB88F3251C4356B100C1F8D9 /* TextTcpSocket.m in Sources */,
 				BBCF9A0F1CACE4EF005B9DCE /* TextCell.m in Sources */,
 				BB63F5C21C2CC7A300A042E8 /* MASConstraint.m in Sources */,
@@ -3157,6 +3235,7 @@
 				18D7677D1CAA7EAD00CE79B0 /* HomeTextLivingCell.m in Sources */,
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
 				BB1769211C7B006F00CE947C /* MKAnnotationView+WebCache.m in Sources */,
+				185DABAB1CBFDC970019C5A3 /* ideaDetailTableViewCell.m in Sources */,
 				BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */,
 				BB88F3101C3FB22F00C1F8D9 /* TeacherModel.m in Sources */,
 				BB63F60D1C2CC7A300A042E8 /* RoomListInfo.m in Sources */,
@@ -3190,6 +3269,7 @@
 				BB1769271C7B006F00CE947C /* SDWebImageDownloaderOperation.m in Sources */,
 				BB6F3AD61C9F86270035EBBE /* TADotView.m in Sources */,
 				18AAD5651C993CD100438E18 /* PaySelectViewController.m in Sources */,
+				185DABA71CBFDC970019C5A3 /* IdeaDetailedTableViewController.m in Sources */,
 				189D8A8E1C97982100E7D16D /* SlideBaseViewController.m in Sources */,
 				BB63F60A1C2CC7A300A042E8 /* VideoCell.m in Sources */,
 				BB17692C1C7B006F00CE947C /* UIImage+MultiFormat.m in Sources */,
@@ -3414,7 +3494,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/**";

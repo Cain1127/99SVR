@@ -75,7 +75,7 @@ typedef enum : NSUInteger
     _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0.0f, 0.0f, kScreenWidth, kPictureHeight) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
     _scrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
     _scrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
-    _scrollView.currentPageDotColor = UIColorFromRGB(0xff7a1e); // 自定义分页控件小圆标颜色
+    _scrollView.currentPageDotColor = UIColorFromRGB(0x4c4c4c); // 自定义分页控件小圆标颜色
     _scrollView.pageDotColor = UIColorFromRGB(0xa8a8a8);
     _scrollView.autoScrollTimeInterval = 2;
     @WeakObj(self)

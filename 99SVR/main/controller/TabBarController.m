@@ -11,6 +11,7 @@
 #import "HomeViewController.h"
 #import "IndexViewController.h"
 #import "TextViewController.h"
+#import "IdeaViewController.h"
 
 @interface TabBarController ()
 
@@ -60,6 +61,8 @@
     
     [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
     [self setUpOneViewController:[[IndexViewController alloc]init] title:@"热点时评" image:@"video_live" selectImage:@"video_live_h"];
+    [self setUpOneViewController:[[IdeaViewController alloc]init] title:@"专家观点" image:@"video_live" selectImage:@"video_live_h"];
+
     [self setUpOneViewController:[[TextViewController alloc]init] title:@"高手秘籍" image:@"text_live" selectImage:@"text_live_h"];
 }
 
