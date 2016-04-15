@@ -35,13 +35,13 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m8W-R4-eaz">
-                        <rect key="frame" x="280" y="18" width="42" height="20.5"/>
+                        <rect key="frame" x="260" y="18" width="42" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LGv-F9-CkT">
-                        <rect key="frame" x="272" y="48.5" width="30" height="30"/>
+                        <rect key="frame" x="272" y="48" width="30" height="30"/>
                         <state key="normal" title="回复"/>
                     </button>
                 </subviews>
@@ -55,8 +55,14 @@
                     <constraint firstItem="1o7-Z9-edA" firstAttribute="top" secondItem="urb-Ye-9N3" secondAttribute="topMargin" id="l4H-37-U0P"/>
                     <constraint firstItem="m8W-R4-eaz" firstAttribute="trailing" secondItem="urb-Ye-9N3" secondAttribute="trailingMargin" constant="10" id="nsO-co-INI"/>
                     <constraint firstItem="Cbd-4t-HiM" firstAttribute="leading" secondItem="1o7-Z9-edA" secondAttribute="trailing" constant="10" id="ty9-IN-H43"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="m8W-R4-eaz" secondAttribute="trailing" constant="10" id="vYO-cc-lUq"/>
                     <constraint firstItem="1o7-Z9-edA" firstAttribute="leading" secondItem="urb-Ye-9N3" secondAttribute="leadingMargin" constant="10" id="zpF-qy-tfs"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="nsO-co-INI"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
             <point key="canvasLocation" x="307" y="212"/>

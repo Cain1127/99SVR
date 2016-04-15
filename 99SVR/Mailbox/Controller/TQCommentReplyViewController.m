@@ -1,32 +1,27 @@
 //
-//  IdeaDetailedTableViewController.m
+//  TQCommentReplyViewController.m
 //  99SVR
 //
-//  Created by apple on 16/4/14.
+//  Created by apple on 16/4/15.
 //  Copyright © 2016年 xia zhonglin . All rights reserved.
-//
+/**************************************** < 评论回复 >**********************************/
 
-#import "IdeaDetailedTableViewController.h"
-#import "ideaDetailTableViewCell.h"
-#import "DetaileHeaderView.h"
+#import "TQCommentReplyViewController.h"
 
-@interface IdeaDetailedTableViewController ()
+@interface TQCommentReplyViewController ()
 
 @end
 
-@implementation IdeaDetailedTableViewController
-static NSString *const deataileCell = @"deataileCell";
+@implementation TQCommentReplyViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"观点详情页";
-    [self.tableView registerClass:([ideaDetailTableViewCell class]) forCellReuseIdentifier:deataileCell];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索" style:0 target:self action:@selector(share)];
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
     
-    DetaileHeaderView *headView = [[NSBundle mainBundle] loadNibNamed:@"DetaileHeaderView" owner:self options:nil].lastObject;
-    self.tableView.tableHeaderView = headView;
-
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -35,35 +30,26 @@ static NSString *const deataileCell = @"deataileCell";
 }
 
 #pragma mark - Table view data source
--(void)share {
-    
-    
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+#warning Incomplete implementation, return the number of sections
+    return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 20;
+#warning Incomplete implementation, return the number of rows
+    return 0;
 }
 
+/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *const detaileCell = @"detaileCell";
-
-    ideaDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:deataileCell];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
     
-    if (!cell)
-    {
-        [tableView registerNib:[UINib nibWithNibName:@"ideaDetailTableViewCell" bundle:nil] forCellReuseIdentifier:detaileCell];
-        cell = [tableView dequeueReusableCellWithIdentifier:detaileCell];
-    }
-    
+    // Configure the cell...
     
     return cell;
-
 }
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 100;
-}
+*/
 
 /*
 // Override to support conditional editing of the table view.
@@ -96,22 +82,6 @@ static NSString *const deataileCell = @"deataileCell";
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the item to be re-orderable.
     return YES;
-}
-*/
-
-/*
-#pragma mark - Table view delegate
-
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:<#@"Nib name"#> bundle:nil];
-    
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
 }
 */
 
