@@ -61,7 +61,6 @@
 		18B0CECC1CC07CC700BA82DF /* NSCalendar+init.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B0CEC61CC07CC700BA82DF /* NSCalendar+init.m */; };
 		18B0CECD1CC07CC700BA82DF /* NSDate+TQInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B0CEC81CC07CC700BA82DF /* NSDate+TQInterval.m */; };
 		18B0CECE1CC07CC700BA82DF /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B0CECA1CC07CC700BA82DF /* UIColor+Hex.m */; };
-		18B0CED11CC07CD800BA82DF /* TQTopWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B0CED01CC07CD800BA82DF /* TQTopWindow.m */; };
 		18B0CED41CC0804100BA82DF /* UIView+TQFram.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B0CED31CC0804100BA82DF /* UIView+TQFram.m */; };
 		18B0CEDD1CC08ADD00BA82DF /* TQIdeaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B0CEDC1CC08ADD00BA82DF /* TQIdeaItem.m */; };
 		18B0CEE01CC08AF800BA82DF /* TQDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B0CEDF1CC08AF800BA82DF /* TQDetailItem.m */; };
@@ -567,8 +566,6 @@
 		18B0CEC81CC07CC700BA82DF /* NSDate+TQInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+TQInterval.m"; sourceTree = "<group>"; };
 		18B0CEC91CC07CC700BA82DF /* UIColor+Hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
 		18B0CECA1CC07CC700BA82DF /* UIColor+Hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
-		18B0CECF1CC07CD800BA82DF /* TQTopWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQTopWindow.h; sourceTree = "<group>"; };
-		18B0CED01CC07CD800BA82DF /* TQTopWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQTopWindow.m; sourceTree = "<group>"; };
 		18B0CED21CC0804100BA82DF /* UIView+TQFram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+TQFram.h"; sourceTree = "<group>"; };
 		18B0CED31CC0804100BA82DF /* UIView+TQFram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+TQFram.m"; sourceTree = "<group>"; };
 		18B0CEDB1CC08ADD00BA82DF /* TQIdeaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIdeaItem.h; sourceTree = "<group>"; };
@@ -1569,8 +1566,6 @@
 			children = (
 				18B0CED21CC0804100BA82DF /* UIView+TQFram.h */,
 				18B0CED31CC0804100BA82DF /* UIView+TQFram.m */,
-				18B0CECF1CC07CD800BA82DF /* TQTopWindow.h */,
-				18B0CED01CC07CD800BA82DF /* TQTopWindow.m */,
 				18B0CEC31CC07CC700BA82DF /* GlobeConst.h */,
 				18B0CEC41CC07CC700BA82DF /* GlobeConst.m */,
 				18B0CEC51CC07CC700BA82DF /* NSCalendar+init.h */,
@@ -3349,7 +3344,6 @@
 				BB63F6071C2CC7A300A042E8 /* RoomUserCell.m in Sources */,
 				BBCF9A1A1CACE685005B9DCE /* TextCellView.m in Sources */,
 				BBD449151CA2D83B00727070 /* UserListView.m in Sources */,
-				18B0CED11CC07CD800BA82DF /* TQTopWindow.m in Sources */,
 				BB17689C1C77018F00CE947C /* ChatViewCell.m in Sources */,
 				BB6F3AD91C9F86270035EBBE /* SDCycleScrollView.m in Sources */,
 				BB7B6FFC1C33D7070018FEC1 /* CircleImageView.m in Sources */,

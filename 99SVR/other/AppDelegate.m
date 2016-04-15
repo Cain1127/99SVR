@@ -32,8 +32,6 @@
 #import "TabBarController.h"
 #import "MainViewController.h"
 #import <DTCoreText/DTCoreText.h>
-#import "TQTopWindow.h"
-#import "UIView+TQFram.h"
 
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
 
@@ -102,39 +100,12 @@
                                              selector:@selector(reachabilityChanged:)
                                                  name: kReachabilityChangedNotification
                                                object: nil];
-    //添加状态栏统一颜色设置及点导航栏,tableview返回顶部功能
-    [TQTopWindow showWithStatusBarCilickBlock:^{
-        
-        [self searchAllscrollViewInView:application.keyWindow];
-    }];
     
     //开启网络通知
     [hostReach startNotifier];
     
     return YES;
 }
-
-
-
--(void)searchAllscrollViewInView:(UIView *)view
-{
-    
-    if (![view TQ_intersectWithView:nil]) return;
-    
-    for (UIView * subView in view.subviews) {
-        [self searchAllscrollViewInView:subView];
-    }
-    //    TQLog(@"%@", view);
-    if (![view isKindOfClass:[UIScrollView class]]) return;
-    
-    UIScrollView *scrollView = (UIScrollView *)view;
-    CGPoint offset = scrollView.contentOffset;
-    offset.y = - scrollView.contentInset.top;
-    
-    [scrollView setContentOffset:offset animated:YES];
-    
-}
-
 
 /**
 *  网络更改通知
