@@ -12,6 +12,7 @@
 #import "TextHomeViewController.h"
 #import "TextCell.h"
 #import "BaseService.h"
+#import "TextRoomModel.h"
 
 @interface TextColletViewController ()<UITableViewDataSource,UITableViewDelegate>
 

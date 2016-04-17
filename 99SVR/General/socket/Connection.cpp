@@ -1,92 +1,178 @@
-#include "stdafx.h"
+/**
+ * todo
+ * 测试多次 close
+ */
+#include <stdio.h>
 #include "platform.h"
 #include "Connection.h"
 #include "Http.h"
-#import <time.h>
+#include "Json.h"
+#include "StatisticReport.h"
 
-#define STYPE_COUNT  3
+static char cache_path[256] = { 0 };
 
-//void (Connection::*PConnect)(const char* host, short port);//指针的声明
-
-static Connection* _self_ = NULL;
-
-static const char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";//,112.25.230.249:2222
-//static const char* lbs0 = "testlbs.99ducaijing.cn:2222";
-
-static char lbs[256];
-
-static time_t start_connect_time = 0;
+static const char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,lbs3.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";//,112.25.230.249:2222
+//static const char* lbs0 = "testlbs.99ducaijing.cn:1999";
+static char lbs_from_file[256] = {0};
+static char lbs_from_http[256] = {0};
+static char lbs_from_set[256] = {0};
+static char lbs_curr[256] = {0};
 static int lbs_count;
-static int lbs_err_counter;
-static int get_host_index;
-static char host_from_lbs[8][128];
-static char lbss[STYPE_COUNT][8][24];
-static int lbs_counter[STYPE_COUNT];
-static bool islogining = false;
-static bool isfirst_read = true;
-static bool isfirst_error = true;
 
-static char first_login_server[24];
-static int connect_stype_index;
-static int connect_stype_counter[STYPE_COUNT];
-static char conncted_host[384];
 
-static ThreadLock conn_lock;
-
-void parse_ip_port(char* s, char* ip, short& port)
+void SetProtocolCachePath(const char* path)
 {
-	char* e = strchr(s, ':');
-	int len = e - s;
-	memcpy(ip, s, len);
-	ip[len] = 0;
-
-	port = atoi(e + 1);
+	strcpy(cache_path, path);
 }
 
+void Connection::SetLBS(char* lbs)
+{
+	is_set_lbs = true;
+	strcpy(lbs_from_set, lbs);
+}
+
+char* get_lbs_from_file()
+{
+	char filename[256];
+	strcpy(filename, cache_path);
+	strcat(filename, FILE_SEPARATOR);
+	strcat(filename, "lbs.dat");
+
+	FILE *fp;
+	if ((fp = fopen(filename, "r")) == NULL)
+	{
+		return NULL;
+	}
+
+	char* ret = fgets(lbs_from_file, 256, fp);
+	
+	fclose(fp);
+
+	return ret;
+}
+
+int save_lbs_to_file(const char* lbs)
+{
+	char filename[256];
+	strcpy(filename, cache_path);
+	strcat(filename, FILE_SEPARATOR);
+	strcat(filename, "lbs.dat");
+
+	FILE *fp;
+	if ((fp = fopen(filename, "w")) == NULL)
+	{
+		LOG("can not open lbs file to save.");
+		return -1;
+	}
+
+	int ret = fputs(lbs, fp);
+
+	fclose(fp);
+
+	return ret;
+}
+#if 0
+ThreadVoid get_lbs_from_http(void* param)
+{
+	Http http;
+	char* json = http.request("http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=4&versionNumber=1&parameterName=lbs");
+	//char* json = http.request("http://121.12.118.32/caijing/?m=Api&c=ClientConfig&clientType=4&versionNumber=1&parameterName=lbs");
+	if (json)
+	{
+		JsonReader reader;
+		JsonValue root;
+		reader.parse(json, root);
+
+		if (root.isObject())
+		{
+			const char* lbs = root["lbs"].asCString();
+			strcpy(lbs_from_http, lbs);
+
+			save_lbs_to_file(lbs);
+			LOG("get lbs from http:%s", lbs);
+
+			ThreadReturn;
+		}
+	}
+
+	*lbs_from_http = '\0';
+	LOG("get lbs from http faild");
+
+	ThreadReturn;
+}
+#endif
+
+typedef struct LbsThreadParam
+{
+	Connection* conn;
+	char lbs[64];
+} LbsThreadParam;
+
+typedef struct ConnectThreadParam
+{
+	Connection* conn;
+	char ip[32];
+	short port;
+}ConnectThreadParam;
 
 ThreadVoid get_host_form_lbs_runnable(void* param)
 {
+	LbsThreadParam* p = (LbsThreadParam*)param;
+    p->conn->get_host_form_lbs(p->lbs);
+	delete p;
+	ThreadReturn;
+}
 
-	char* lbs = (char*)param;
+void parse_ip_port(char* s, char* ip, short& port)
+{
+	*ip = '\0';
+	port =0;
+
+	char* e = strchr(s, ':');
+	if ( e )
+	{
+		int len = e - s;
+		memcpy(ip, s, len);
+		ip[len] = 0;
+
+		port = atoi(e + 1);
+	}
+}
+
+void Connection::get_host_form_lbs(char* lbs)
+{
+
 	char ip[64];
 	short port;
 	parse_ip_port(lbs, ip, port);
 
-	//char recvbuf[HTTP_RECV_BUF_SIZE];
-	Http http;
-	
 	char url[384];
-	strcpy(url, "/tygetlogon");
-	if (conncted_host[0] != '\0')
+	strcpy(url, lbs_type);
+	if (*connected_host)
 	{
 		strcat(url, "?no=");
-		strcat(url, conncted_host);
+		strcat(url, connected_host);
 	}
 	LOG("url:%s", url);
-	
-	char* content = http.GetString(ip, port, url);
+
+	Http http;
+	char* content = http.request(ip, port, url);
 	if (content != NULL && strlen(content) > 10)
 	{
 		Thread::lock(&conn_lock);
 		char* end = strchr(content, '|');
-		if (end != NULL)
-		{
+		if (end)
 			*end = '\0';
-		}
 
-		++get_host_index;
 		strcpy(host_from_lbs[get_host_index], content);
 		LOG("index:%d time:%ld lbs:%s host:%s", get_host_index, clock(), ip, host_from_lbs[get_host_index]);
-		Thread::unlock(&conn_lock);
+		get_host_index++;
 
 		if (!islogining)
 		{
-			islogining = true;
-			LOG("****DO LOGIN***");
-
-			const char *d = ",";
+			const char *d = ",;";
 			char *p = strtok(content, d);
-			int stype = 0;
+			int stype;
 			while (p)
 			{
 				if (strlen(p) == 1)
@@ -96,28 +182,26 @@ ThreadVoid get_host_form_lbs_runnable(void* param)
 				}
 				else
 				{
-					char ip[24];
+					char ip[32];
 					short port;
 					parse_ip_port(p, ip, port);
-					LOG("first login server: %s:%d", ip, port);
-					strcpy(first_login_server, p);
-					connect_stype_index = stype;
-                    if(_self_)
-                    {
-                        (_self_)->connect(ip, port);
-                    }
-                    else
-                    {
-                        printf("bad_ex!");
-                    }
-                    
+					if ( *ip && port )
+					{
+						LOG("****DO CONNECT***");
+						LOG("first login server: %s:%d", ip, port);
+						strcpy(first_login_server, p);
+						connect_stype_index = stype;
+						islogining = true;
+						connect_asyn(ip, port);
+					}
 					break;
 				}
 
 				p = strtok(NULL, d);
 			}  // end while split host
 		} // end if logining
-	}   
+		Thread::unlock(&conn_lock);
+	}
 	else
 	{
 		Thread::lock(&conn_lock);
@@ -128,31 +212,16 @@ ThreadVoid get_host_form_lbs_runnable(void* param)
 
 	if (lbs_err_counter == lbs_count)
 	{
-		//(_self_)->report_connect_error(-2);
-        time_t time0 = time(NULL);
-		if (time0 - start_connect_time > 60)
-		{
-			start_connect_time = 0;
-			(_self_)->report_connect_error(-3);
-		}
-		else
-		{
-			conncted_host[0] = '\0';
-			(_self_)->conenct_from_lbs();
-		}
+		connect_start_time = 0;
+		report_connect_error(-3);
 	}
-
-	ThreadReturn;
 }
 
-void Connection::conenct_from_lbs()
+void Connection::connect_from_lbs_asyn()
 {
-	_self_ = this;
-	Thread::initlock(&conn_lock);
 	
-	lbs_count = 0;
 	lbs_err_counter = 0;
-	get_host_index = -1;
+	get_host_index = 0;
 	memset(host_from_lbs, 0, sizeof(host_from_lbs));
 	memset(lbss, 0, sizeof(lbss));
 	memset(lbs_counter, 0, sizeof(lbs_counter));
@@ -164,23 +233,70 @@ void Connection::conenct_from_lbs()
 	memset(connect_stype_counter, 0, sizeof(connect_stype_counter));
 	connect_stype_index = 0;
 
-	strcpy(lbs, lbs0);
+	memset(connect_ip, 0, sizeof(connect_ip));
+	connect_port = 0;
 
-	if (start_connect_time == 0)
+	if (!is_set_lbs)
 	{
-		start_connect_time = time(0);
-		conncted_host[0] = '\0';
+		const char* lbs = lbs0;
+//		if (*cache_path)
+//		{
+//			lbs = get_lbs_from_file();
+//			if (lbs == NULL)
+//			{
+//				get_lbs_from_http(NULL);
+//				if (*lbs_from_http)
+//				{
+//					lbs = lbs_from_http;
+//					LOG("use lbs from http:%s", lbs);
+//				}
+//				else
+//				{
+//					lbs = lbs0;
+//					LOG("use lbs from default:%s", lbs);
+//				}
+//			}
+//			else
+//			{
+//				LOG("use lbs from file:%s", lbs);
+//				Thread::start(get_lbs_from_http, NULL);
+//			}
+//		}
+		
+		strcpy(lbs_curr, lbs);
+	}
+	else
+	{
+		strcpy(lbs_curr, lbs_from_set);
 	}
 
-	const char *d = ",";
-	char *p = strtok(lbs, d);
+	if (connect_start_time == 0)
+	{
+		connect_start_time = time(0);
+		connected_host[0] = '\0';
+	}
+
+	char lbs_splited[8][64];
+	memset(lbs_splited, 0, sizeof(lbs_splited));
+
+	const char *d = ",;";
+	char *p = strtok(lbs_curr, d);
+	lbs_count = 0;
+
 	while (p)
 	{
+		strcpy(lbs_splited[lbs_count], p);
 		lbs_count++;
-		Thread::start(get_host_form_lbs_runnable, p);
 		p = strtok(NULL, d);
 	}
 
+	for (int i = 0; i < lbs_count; i++)
+	{
+		LbsThreadParam* param = new LbsThreadParam();
+		param->conn = this;
+		strcpy(param->lbs, lbs_splited[i]);
+		Thread::start(get_host_form_lbs_runnable, param);
+	}
 }
 
 void Connection::do_error()
@@ -192,18 +308,16 @@ void Connection::do_error()
 		memset(lbss, 0, sizeof(lbss));
 		memset(lbs_counter, 0, sizeof(lbs_counter));
 
-		LOG("size:%d:%d", sizeof(lbss), sizeof(lbs_counter));
-
-		for (int i = 0; i <= get_host_index; i++)
+		for (int i = 0; i < get_host_index; i++)
 		{
-
-			const char *d = ",";
 			char* content = host_from_lbs[i];
+			if (strlen(content) < 10) continue;
+
+			const char *d = ",;";
 			char *p = strtok(content, d);
 			int stype = -1;
 			while (p)
 			{
-				//printf("%s\n", p);
 
 				if (strlen(p) == 1)
 				{
@@ -253,13 +367,13 @@ void Connection::do_error()
 
 		if (lbss[connect_stype_index][curr_stype_counter][0] != '\0')
 		{
-			char ip[24];
+			char ip[32];
 			short port;
 			char* p = lbss[connect_stype_index][curr_stype_counter];
 			parse_ip_port(p, ip, port);
 			LOG("try... login server: stype:%d host %s:%d", connect_stype_index, ip, port);
 			connect_stype_counter[connect_stype_index]++;
-			(_self_)->connect(ip, port);
+			connect_asyn(ip, port);
 			break;
 		}
 		else
@@ -274,14 +388,14 @@ void Connection::do_error()
 		LOG("all host tried.. all failed");
 
 		time_t time0 = time(0);
-		if (time0 - start_connect_time > 60)
+		if (time0 - connect_start_time > 60)
 		{
-			start_connect_time = 0;
+			connect_start_time = 0;
 			report_connect_error(get_error());
 		} 
 		else
 		{
-			conncted_host[0] = '\0';
+			connected_host[0] = '\0';
 			for (int i = 0; i < STYPE_COUNT; i++)
 			{
 				for (int j = 0; j < lbs_counter[i]; j++)
@@ -289,11 +403,11 @@ void Connection::do_error()
 					char* host = lbss[i][j];
 					char* end = strchr(host, ':');
 					*end = '\0';
-					strcat(conncted_host, host);
-					strcat(conncted_host, ",");
+					strcat(connected_host, host);
+					strcat(connected_host, ",");
 				}
 			}
-			conenct_from_lbs();
+			connect_from_lbs_asyn();
 		}
 	}
 
@@ -305,14 +419,25 @@ void Connection::RegisterConnectionListener(
 	conn_listener = connection_listener;
 }
 
+ThreadVoid connect_runnable(void * vparam)
+{
+	ConnectThreadParam* param = (ConnectThreadParam*)vparam;
+	param->conn->connect(param->ip, param->port);
+	delete param;
+
+	ThreadReturn;
+}
+
 int Connection::connect(const char* host, short port)
 {
-	socket = new Socket();
-	int ret = socket->connect(host, port);
-
+	int ret = socket.connect(host, port);
+	isfirst_read = true;
+	read_counter = 0;
 	if (ret == 0)
 	{
-		isfirst_read = true;
+		closed = false;
+		strcpy(connect_ip, host);
+		connect_port = port;
 		on_connected();
 	}
 	else
@@ -323,23 +448,32 @@ int Connection::connect(const char* host, short port)
 	return ret;
 }
 
+void Connection::connect_asyn(const char* host, short port)
+{
+	ConnectThreadParam* param = new ConnectThreadParam();
+	param->conn = this;
+	param->port = port;
+	strcpy(param->ip, host);
+	Thread::start(connect_runnable, param);
+}
+
 void Connection::SendMsg_Hello()
 {
-	CMDClientHello_t hello;
+	protocol::CMDClientHello_t hello;
 	hello.param1 = 12;
 	hello.param2 = 8;
 	hello.param3 = 7;
 	hello.param4 = 1;
 
-	SEND_MESSAGE2(Sub_Vchat_ClientHello, CMDClientHello_t, &hello);
+	SEND_MESSAGE2(protocol::Sub_Vchat_ClientHello, protocol::CMDClientHello_t, &hello);
 }
 
 int Connection::recv(char* buf, int offset, int len)
 {
-	if (socket == NULL)
+	if (is_closed())
 		return -1;
 
-	int ret = socket->recv(buf + offset, len);
+	int ret = socket.recv(buf + offset, len);
 
 	if (ret <= 0)
 	{
@@ -369,22 +503,22 @@ int Connection::recv(char* buf, int offset, int len)
 
 int Connection::send(const char* buf, int len)
 {
-	if (socket == NULL)
+	if (is_closed())
 		return -1;
 
-	int ret = socket->send(buf, len);
+	int ret = socket.send(buf, len);
 
 	if (ret <= 0)
 	{
 		int err_code = get_error();
 		if (IS_SOCKET_CLOSED(err_code))    // Socket operation on non-socket 
 		{
-			LOG("socket closed.");
+			LOG("socket closed when send.");
 		}
 		else
 		{
 			LOG("send errno:%d:%d", ret, err_code);
-			on_io_error(err_code);
+			//on_io_error(err_code);
 		}
 
 		return -1;
@@ -399,40 +533,31 @@ int Connection::send(const char* buf, int len)
 
 int Connection::close()
 {
-	if (socket == NULL)
-		return -1;
-
-
-	Socket* tsocket = socket;
-	socket = NULL;
-
-	int ret = tsocket->close_();
-
-	delete tsocket;
-
+	closed = true;
+	int ret = socket.close_();
 	return ret;
 }
 
 int Connection::get_error()
 {
-	if (socket == NULL)
+	if (is_closed())
 		return -1;
 
-	return socket->get_error();
+	return socket.get_error();
 }
 
 void Connection::send_message(int sub_cmd, void* req, int req_len)
 {
-	COM_MSG_HEADER* pHead = (COM_MSG_HEADER*) send_buf;
-	pHead->length = sizeof(COM_MSG_HEADER) + req_len;
-	pHead->version = MDM_Version_Value;
+	protocol::COM_MSG_HEADER* pHead = (protocol::COM_MSG_HEADER*)send_buf;
+	pHead->length = sizeof(protocol::COM_MSG_HEADER) + req_len;
+	pHead->version = protocol::MDM_Version_Value;
 	pHead->checkcode = 0;
 	pHead->maincmd = (short) main_cmd;
 	pHead->subcmd = (short) sub_cmd;
 
 	memcpy(pHead->content, req, req_len);
 
-	socket->send((const char*) pHead, pHead->length);
+	socket.send((const char*) pHead, pHead->length);
 }
 
 int Connection::read_message(void)
@@ -453,7 +578,7 @@ int Connection::read_message(void)
 	if (msgLen <= 0 || msgLen > MAX_MESSAGE_SIZE)
 	{
 		LOG("message len error: %d", msgLen);
-		on_io_error(-1);
+		on_io_error(-4);
 		return -1;
 	}
 
@@ -477,52 +602,51 @@ int Connection::read_message(void)
 	return recvLen;
 }
 
-ThreadVoid read_runnable(void* param)
-{
-	Connection* conn = (Connection*)param;
-	conn->read_loop();
-
-	ThreadReturn;
-}
-
 void Connection::read_loop(void)
 {
-	static int read_i = 0;
 
 	while (!is_closed())
 	{
-		read_i++;
 		int ret = read_message();
 
 		if (ret < 0)
 		{
 			int err_no = get_error();
 
-			if (err_no != SOCKET_TIMEOUT)  // 10060 =  time out
+			if (err_no == SOCKET_TIMEOUT)  // 10060 =  time out
 			{
-				LOG("exit read thread: exit code:%d", err_no);
-				return;
-			}
-			else
-			{
-				//LOG("read time out:%d", socket->get_error());
+				//LOG("read time out:%d", socket.get_error());
 				if (isfirst_read)
 				{
 					LOG("first recv time out..error..");
-					on_io_error(err_no);
+					on_connect_error(err_no);
 					return;
 				}
+			}
+			else
+			{
+				LOG("exit read thread: exit code:%d", err_no);
+				//on_io_error() in recv method
+				return;
 			}
 			
 		}
 
-		if (ret > 0 && isfirst_read)
+		if (ret > 0)
 		{
-			if (conn_listener != NULL)
+			if ( isfirst_read )
 			{
-				conn_listener->OnConnected();
+				if (conn_listener != NULL)
+				{
+					conn_listener->OnConnected();
+				}
 			}
-			start_connect_time = 0;
+
+			read_counter++;
+			if ( read_counter >= 2 )
+			{
+				connect_start_time = 0;
+			}
 		}
 
 		isfirst_read = false;
@@ -534,14 +658,25 @@ void Connection::read_loop(void)
 			last_ping_time = time(0);
 			LOG("send ping");
 		}
-
-		
-		 LOG("read no:%d", read_i);
-		 if (read_i > 23) {
-			 //socket->close_();
-			 //close();
-		 }
 	}
+
+}
+
+
+ThreadVoid read_runnable(void* param)
+{
+	Connection* conn = (Connection*)param;
+	if ( conn != NULL )
+	{
+		conn->read_loop();
+	}
+
+	ThreadReturn;
+}
+
+void Connection::start_read_thread(void)
+{
+	Thread::start(read_runnable, this);
 }
 
 void Connection::do_connect_error()
@@ -554,16 +689,6 @@ void Connection::do_io_error()
 	do_error();
 }
 
-void Connection::start_read_thread(void)
-{
-	Thread::start(read_runnable, this);
-}
-
-bool Connection::is_closed()
-{
-	return socket == NULL;
-}
-
 void Connection::on_connected()
 {
 	on_do_connected();
@@ -571,6 +696,7 @@ void Connection::on_connected()
 
 void Connection::on_connect_error(int err_code)
 {
+	close();
 	do_connect_error();
 }
 
@@ -578,25 +704,25 @@ void Connection::on_io_error(int err_code)
 {
 	LOG("on_io_error: %d", err_code);
 
-	if (socket == NULL) return;
+	if (is_closed()) return;
 
 	close();
 
-	if (start_connect_time != 0)  // 5 + 2
+	if (connect_start_time != 0)  // 5 + 2
 	{
 		do_io_error();
 	}
 	else
 	{
-		conenct_from_lbs();
+		connect_from_lbs_asyn();
 	}
 }
 
 void Connection::report_connect_error(int err_code)
 {
-	//if (socket == NULL) return;
-
 	close();
+
+	//ReportLoginFailed();
 
 	if (conn_listener != NULL)
 	{
@@ -604,15 +730,17 @@ void Connection::report_connect_error(int err_code)
 	}
 }
 
-Connection::Connection(void) :
-		socket(NULL), conn_listener(NULL), last_ping_time(0)
+bool Connection::is_closed()
 {
+	return closed;
+}
+
+Connection::Connection(void) :
+conn_listener(NULL), last_ping_time(0), is_set_lbs(false), closed(true),connect_start_time(0),read_counter(0)
+{
+	Thread::initlock(&conn_lock);
 }
 
 Connection::~Connection(void)
 {
-	if (socket != NULL)
-	{
-		delete socket;
-	}
 }

@@ -8,6 +8,9 @@
 
 #import "FinanceOnlineVedioController.h"
 #import "RoomViewController.h"
+#import "DecodeJson.h"
+#import "AlertFactory.h"
+#import "ProgressHUD.h"
 #import "LSTcpSocket.h"
 #import "RoomHttp.h"
 #import "RoomGroup.h"
@@ -24,6 +27,7 @@
 {
     NSMutableDictionary *_groupStatus;
 }
+@property (nonatomic,strong) RoomHttp *room;
 //@property(nonatomic, strong) UITableView *tableView;
 @end
 
@@ -146,20 +150,63 @@
     return cell;
 }
 
+/**
+ *  修改加入房间结构
+ */
 - (void)connectRoom:(RoomHttp *)room
 {
-    RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
-    [self.navigationController pushViewController:roomView animated:YES];
+    _room = room;
+    [kProtocolSingle connectVideoRoom:[room.nvcbid intValue] roomPwd:@""];
+    [self.view makeToastActivity];
+    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
+}
+
+- (void)joinRoomErr:(NSNotification *)notify{
+    [DecodeJson cancelPerfor:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if ([notify.object isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *dict = [notify object];
+        int errid = [[dict objectForKey:@"err"] intValue];
+        NSString *strMsg = [dict objectForKey:@"msg"];
+        if (errid==201) {
+            [AlertFactory createPassswordAlert:self room:_room];
+        }
+        else{
+            @WeakObj(strMsg)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [ProgressHUD showError:strMsgWeak];
+            });
+        }
+    }
+}
+
+- (void)joinSuc{
+    [DecodeJson cancelPerfor:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+        [ProgressHUD showSuccess:@"加入房间成功"];
+        RoomViewController *roomView = [[RoomViewController alloc] initWithModel:_room];
+        [self.navigationController pushViewController:roomView animated:YES];
+    });
 }
 
 - (void)joinRoomTimeOut
 {
     __weak FinanceOnlineVedioController *__self = self;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     dispatch_async(dispatch_get_main_queue(), ^{
         [__self.view hideToastActivity];
-        [__self.view makeToast:@"加入房间超时"];
+        [ProgressHUD showError:@"加入房间失败" ];
     });
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

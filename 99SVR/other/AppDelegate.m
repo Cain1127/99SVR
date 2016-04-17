@@ -80,6 +80,8 @@
     self.window.rootViewController = [[TabBarController alloc] init];
     [self.window makeKeyAndVisible];
     
+    [SVRInitLBS loadAllInfo];
+    
     NSDictionary *dictGift = [UserDefaults objectForKey:kGiftInfo];
     if (dictGift){
         [DecodeJson setGiftInfo:dictGift];
@@ -234,11 +236,9 @@
     NSTimeInterval backgroundTimeRemaining =[[UIApplication sharedApplication] backgroundTimeRemaining];
     if (backgroundTimeRemaining == DBL_MAX)
     {
-        DLog(@"Background Time Remaining = Undetermined");
     }
     else
     {
-        DLog(@"Background Time Remaining = %.02f Seconds", backgroundTimeRemaining);
         if (backgroundTimeRemaining<10) {
             [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
             self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
@@ -282,10 +282,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];
 }
 
-
-
-
-
 /**
  *  连接跳转
  */
@@ -301,7 +297,6 @@
     [WeiboSDK handleOpenURL:url delegate:self] ||
     [WXApi handleOpenURL:url delegate:self];
 }
-
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {

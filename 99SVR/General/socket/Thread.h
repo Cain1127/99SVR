@@ -1,6 +1,6 @@
 
-#ifndef _Thread_Network_H
-#define _Thread_Network_H
+#ifndef __Thread_Network_H__
+#define __Thread_Network_H__
 
 #ifdef WIN
 #include <process.h>
@@ -8,7 +8,7 @@
 #define ThreadVoid void
 #define ThreadHandle uintptr_t
 #define ThreadLock CRITICAL_SECTION
-#define ThreadReturn 
+#define ThreadReturn return
 #else
 #include <pthread.h>
 #include <unistd.h>

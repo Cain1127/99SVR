@@ -37,4 +37,26 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
  *  关闭protocol
  */
 - (void)closeProtocol;
+/**
+ *  加入房间
+ */
+- (void)connectVideoRoom:(int)nRoomId roomPwd:(NSString *)roomPwd;
+/**
+ *  送花
+ */
+- (void)sendRose;
+/**
+ *  发送消息
+ */
+- (void)sendMessage:(NSString *)strMsg toId:(int)toId;
+/**
+ *  赠送礼物
+ */
+- (void)sendGiftInfo:(int)nGiftId number:(int)num;
+
+/**
+ *  退出房间
+ */
+- (void)exitRoom;
+
 @end

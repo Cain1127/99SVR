@@ -10,10 +10,18 @@
 
 @class  RoomHttp;
 
+@protocol VideoViewDelegate <NSObject>
+
+- (void)joinRoomSuccess;
+
+- (void)joinRoomErr;
+
+@end
+
 @interface VideoCellView : UIView
 
-@property (nonatomic,strong) RoomHttp *room;
+@property (nonatomic,assign) id<VideoViewDelegate> delegate;
 
-- (void)addGesture:(void (^)(id sender))handler;
+@property (nonatomic,strong) RoomHttp *room;
 
 @end

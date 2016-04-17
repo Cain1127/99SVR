@@ -17,7 +17,6 @@
 #import "BaseService.h"
 #import "QCheckBox.h"
 #import "Toast+UIView.h"
-#import "SVRSocket.h"
 #import "RegMobileViewController.h"
 #import "LSTcpSocket.h"
 #import "NewViewController.h"

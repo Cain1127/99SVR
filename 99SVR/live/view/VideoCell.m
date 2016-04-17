@@ -71,13 +71,6 @@
             cellView.room = room;
             __weak RoomHttp *__room = room;
             __weak VideoCell *__self = self;
-            [cellView addGesture:^(id sender)
-            {
-                if (__self.itemOnClick)
-                {
-                    __self.itemOnClick(__room);
-                }
-            }];
             [cellView clickWithBlock:^(UIGestureRecognizer *gesture)
             {
                 if (__self.itemOnClick)

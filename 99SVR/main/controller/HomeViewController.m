@@ -8,6 +8,8 @@
 
 #import "HomeViewController.h"
 #import "ZLTabBar.h"
+#import "AlertFactory.h"
+#import "Toast+UIView.h"
 #import "DecodeJson.h"
 #import "NNSVRViewController.h"
 #import "TextCell.h"
@@ -58,7 +60,7 @@ typedef enum : NSUInteger
 
 ///当前数据请求状态:0-未开始请求/1-正在请求/2-banner完成请求/3-列表完成请求
 @property (nonatomic, assign) CJHomeRequestType refreshStatus;
-
+@property (nonatomic,strong) RoomHttp *room;
 @end
 
 @implementation HomeViewController
@@ -331,13 +333,12 @@ typedef enum : NSUInteger
          else{
              dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          }
-         ///check response data
          [UserDefaults setObject:dict forKey:kLiveInfo];
          [__self updateLiveInfo:dict];
      } fail:^(NSError *error) {
          NSDictionary *dict = [UserDefaults objectForKey:kLiveInfo];
          [__self updateLiveInfo:dict];
-         [UserDefaults setObject:dict forKey:kVideoList];
+         [UserDefaults setObject:dict forKey:kLiveInfo];
          [UserDefaults synchronize];
          int nUserid = [UserInfo sharedUserInfo].nUserId;
          NSString *strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_home_fail_%d",
@@ -522,8 +523,9 @@ typedef enum : NSUInteger
         @WeakObj(self);
         tempCell.itemOnClick = ^(RoomHttp *room)
         {
-            RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
-            [selfWeak.navigationController pushViewController:roomView animated:YES];
+//            RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
+//            [selfWeak.navigationController pushViewController:roomView animated:YES];
+            [selfWeak connectRoom:room];
         };
         [tempCell setRowDatas:tempArray];
         return tempCell;
@@ -848,6 +850,65 @@ typedef enum : NSUInteger
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)joinRoomErr:(NSNotification *)notify{
+    [DecodeJson cancelPerfor:self];
+    if ([notify.object isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *dict = [notify object];
+        int errid = [[dict objectForKey:@"err"] intValue];
+        NSString *strMsg = [dict objectForKey:@"msg"];
+        if (errid==201) {
+            [AlertFactory createPassswordAlert:self room:_room];
+        }
+        else{
+            @WeakObj(strMsg)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [ProgressHUD showError:strMsgWeak];
+            });
+        }
+    }
+}
+
+- (void)joinSuc{
+    [DecodeJson cancelPerfor:self];
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+        [ProgressHUD showSuccess:@"加入房间成功"];
+        RoomViewController *roomView = [[RoomViewController alloc] initWithModel:_room];
+        [selfWeak.navigationController pushViewController:roomView animated:YES];
+    });
+    
+}
+
+- (void)joinRoomTimeOut
+{
+    [DecodeJson cancelPerfor:self];
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+        [ProgressHUD showError:@"加入房间失败" ];
+    });
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)connectRoom:(RoomHttp *)room{
+    _room = room;
+    [kProtocolSingle connectVideoRoom:[room.nvcbid intValue] roomPwd:@""];
+    [self.view makeToastActivity];
+    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
 }
 
 @end

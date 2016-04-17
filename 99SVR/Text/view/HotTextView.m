@@ -59,6 +59,7 @@
 - (void)setHotText:(TeacherModel *)teach
 {
     _teach = teach;
+    
     [_imgView sd_setImageWithURL:[NSURL URLWithString:teach.strImg] placeholderImage:[UIImage imageNamed:@"logo"]];
     _lblName.text = teach.strName;
     _lblContent.text = teach.strContent;
