@@ -73,6 +73,8 @@
 		18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971141C92971B001B2575 /* CoreMotion.framework */; };
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
 		87D9EE0FC59214DC02EE2C95 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A43875FF97FDC1CA789AE15 /* libPods.a */; };
+		B44F77681CC39FF1008E3B26 /* StockDealHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B44F77671CC39FF1008E3B26 /* StockDealHeaderView.m */; };
+		B44F776B1CC3B98D008E3B26 /* StockDealRecordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B44F776A1CC3B98D008E3B26 /* StockDealRecordVC.m */; };
 		B47DD5981CBF2D9400C47EF7 /* TraderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5971CBF2D9400C47EF7 /* TraderViewController.m */; };
 		B47DD59D1CBF345300C47EF7 /* SliderMenuTopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD59A1CBF345300C47EF7 /* SliderMenuTopScrollView.m */; };
 		B47DD59E1CBF345300C47EF7 /* SliderMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD59C1CBF345300C47EF7 /* SliderMenuView.m */; };
@@ -636,6 +638,10 @@
 		5A43875FF97FDC1CA789AE15 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		852CCF5B274ED41B4EE71D75 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		8D4A66C414F8E52B12645457 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B44F77661CC39FF1008E3B26 /* StockDealHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealHeaderView.h; sourceTree = "<group>"; };
+		B44F77671CC39FF1008E3B26 /* StockDealHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockDealHeaderView.m; sourceTree = "<group>"; };
+		B44F77691CC3B98D008E3B26 /* StockDealRecordVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealRecordVC.h; sourceTree = "<group>"; };
+		B44F776A1CC3B98D008E3B26 /* StockDealRecordVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockDealRecordVC.m; sourceTree = "<group>"; };
 		B47DD5961CBF2D9400C47EF7 /* TraderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TraderViewController.h; sourceTree = "<group>"; };
 		B47DD5971CBF2D9400C47EF7 /* TraderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TraderViewController.m; sourceTree = "<group>"; };
 		B47DD5991CBF345300C47EF7 /* SliderMenuTopScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderMenuTopScrollView.h; sourceTree = "<group>"; };
@@ -1604,6 +1610,8 @@
 				B47DD5971CBF2D9400C47EF7 /* TraderViewController.m */,
 				B4A15E9D1CBFAA9E00587E3F /* StockDealViewController.h */,
 				B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.m */,
+				B44F77691CC3B98D008E3B26 /* StockDealRecordVC.h */,
+				B44F776A1CC3B98D008E3B26 /* StockDealRecordVC.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -1631,6 +1639,8 @@
 				B47DD59A1CBF345300C47EF7 /* SliderMenuTopScrollView.m */,
 				B47DD59B1CBF345300C47EF7 /* SliderMenuView.h */,
 				B47DD59C1CBF345300C47EF7 /* SliderMenuView.m */,
+				B44F77661CC39FF1008E3B26 /* StockDealHeaderView.h */,
+				B44F77671CC39FF1008E3B26 /* StockDealHeaderView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -3106,6 +3116,7 @@
 				BB63F5AC1C2CC7A300A042E8 /* UIView+Frame.m in Sources */,
 				BB1661A41C3E2F9A00D318BE /* HomeViewController.m in Sources */,
 				BB1769221C7B006F00CE947C /* NSData+ImageContentType.m in Sources */,
+				B44F77681CC39FF1008E3B26 /* StockDealHeaderView.m in Sources */,
 				BB63F5F61C2CC7A300A042E8 /* ProgressHUD.m in Sources */,
 				BB63F6031C2CC7A300A042E8 /* RoomTitleView.m in Sources */,
 				BB88F30D1C3FB09900C1F8D9 /* HotTextView.m in Sources */,
@@ -3342,6 +3353,7 @@
 				BB98EE4A1CB4D2B00028AAEF /* UIControl+UIControl_XY.m in Sources */,
 				BB63F61E1C2CC7A300A042E8 /* GroupListRequest.m in Sources */,
 				BB6F3ADD1CA117BE0035EBBE /* BandNewMobileViewController.m in Sources */,
+				B44F776B1CC3B98D008E3B26 /* StockDealRecordVC.m in Sources */,
 				BB16618F1C3D500D00D318BE /* PhotoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3519,7 +3531,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/**";
