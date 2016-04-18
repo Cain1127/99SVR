@@ -72,7 +72,6 @@
     UIButton *_btnVideo;
     NSInteger _nTag;
     dispatch_queue_t room_gcd;
-    
     int _tag;
     CGFloat startContentOffsetX;
     CGFloat willEndContentOffsetX;
@@ -81,21 +80,19 @@
     int _currentPage;
     CGFloat fTempWidth;
     BOOL bFull;
-    
     RoomHttp *_room;
     GiftView *_giftView;
     RoomDownView *_infoView;
-    
     UIView *userHidden;
     UIView *headTable;
     ChatView *_inputView;
     int nColor;
     UserListView *_listView;
-    
     NSCache *chatCache;
     DTAttributedLabel *lblTeachInfo;
     BOOL bGiftView;
     NSMutableDictionary *dictGift;
+    
 }
 
 @property (nonatomic,assign) int nCurGift;
@@ -130,6 +127,7 @@
     NSString *strAddress;
     NSString *strPort;
     NSString *roomAddr = [KUserSingleton.dictRoomGate objectForKey:@(0)];
+    _tcpSocket.strRoomId = _room.nvcbid;
     if(roomAddr!=nil)
     {
         NSString *strAry = [roomAddr componentsSeparatedByString:@","][0];
@@ -158,9 +156,11 @@
 - (void)dealloc
 {
     DLog(@"room view");
-    [_ffPlay stop];
     [_tcpSocket exit_Room:YES];
+    _tcpSocket = nil;
+    [_ffPlay stop];
     [[SDImageCache sharedImageCache] clearMemory];
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
     _ffPlay = nil;
     [_scrollView removeFromSuperview];
     _scrollView = nil;
@@ -494,6 +494,7 @@
     nColor = 10000;
     room_gcd = dispatch_queue_create("decode_gcd",0);
     _cellCache = [[NSCache alloc] init];
+    [_cellCache setTotalCostLimit:20];
     [self initUIHead];
     dictGift = [NSMutableDictionary dictionary];
     UITapGestureRecognizer* singleRecogn;
