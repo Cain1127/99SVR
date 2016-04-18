@@ -7,49 +7,99 @@
 /**************************************** < 系统消息 >**********************************/
 
 #import "TQMessageViewController.h"
-
+#import "TQMessageCell.h"
+#import "Masonry.h"
 @interface TQMessageViewController ()
 
 @end
 
 @implementation TQMessageViewController
+static NSString *const messageCell = @"messageCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQMessageCell class]) bundle:nil] forCellReuseIdentifier:messageCell];
+    /*设置头部vieiw*/
+    [self addtableHeaderView];
+}
+
+-(void)addtableHeaderView {
+    UIView *headerview = [[UIView alloc] init];
+    headerview.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 150);
+    self.tableView.tableHeaderView = headerview;
+    /*添加子控件*/
+    UILabel *titileLabel = [[UILabel alloc] init];
+    titileLabel.text = @"尊敬的用户:";
+    titileLabel.textColor = [UIColor colorWithHex:@"#262626"];
+    titileLabel.font = [UIFont fontWithName:@"Helvetica-BoldOblique" size:20];
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    UILabel *contentLabel = [[UILabel alloc] init];
+    contentLabel.font = [UIFont systemFontOfSize:15];
+    contentLabel.numberOfLines = 0;
+    contentLabel.text = @"恭喜您开通“一夜岛”的VIP6，服务周期为2016.1.1至2017.1.1。您可以享受以下服务:";
+    contentLabel.textColor = [UIColor colorWithHex:@"#878787"];
+
+    UILabel *vipLabel = [[UILabel alloc] init];
+    vipLabel.font = [UIFont systemFontOfSize:15];
+    vipLabel.text = @"VIP6：一对一私人定制";
+    vipLabel.textColor = [UIColor colorWithHex:@"#878787"];
+
+    [headerview addSubview:titileLabel];
+    [headerview addSubview:contentLabel];
+    [headerview addSubview:vipLabel];
+    
+    //添加头部子控件布局
+    [titileLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(headerview.mas_left).offset(20);
+        make.top.equalTo(headerview.mas_top).offset(20);
+        make.right.equalTo(headerview.mas_right).offset(-20);
+    }];
+    [contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(headerview.mas_left).offset(20);
+        make.top.equalTo(titileLabel.mas_bottom).offset(10);
+        make.right.equalTo(headerview.mas_right).offset(-20);
+        
+    }];
+    [vipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(headerview.mas_left).offset(20);
+        make.top.equalTo(contentLabel.mas_bottom).offset(10);
+        make.right.equalTo(headerview.mas_right).offset(-20);
+        
+    }];
+
+
+    
+}
+-(void)setUpheaderchildView {
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
+    return 10;
 }
 
-/*
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
     
-    // Configure the cell...
+    TQMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:messageCell];
     
     return cell;
 }
-*/
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 200;
+}
+
 
 /*
 // Override to support conditional editing of the table view.

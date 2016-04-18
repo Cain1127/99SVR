@@ -12,9 +12,5 @@
 
 
 
--(void)setIdeaItem:(TQIdeaItem *)ideaItem
-{
-    _ideaItem = ideaItem;
-}
 
 @end

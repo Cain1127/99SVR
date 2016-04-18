@@ -1,14 +1,14 @@
 //
-//  TQCommentReplyCell.m
+//  TQAllReplyCell.m
 //  99SVR
 //
-//  Created by apple on 16/4/15.
+//  Created by apple on 16/4/18.
 //  Copyright © 2016年 xia zhonglin . All rights reserved.
 //
 
-#import "TQCommentReplyCell.h"
+#import "TQAllReplyCell.h"
 
-@implementation TQCommentReplyCell
+@implementation TQAllReplyCell
 
 - (void)awakeFromNib {
     // Initialization code
