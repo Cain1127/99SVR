@@ -111,7 +111,10 @@
 		B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */; };
 		B4C4B3701CBAA5FF00B20A58 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */; };
 		B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C6B7B11CBE1B220072795B /* RegisterTextField.m */; };
-		BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0436831C4E28C500A162A8 /* TodayVIPModel.m */; };
+		B4C9FAB91CC4A41C00E8A872 /* RoomTcpSocket.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB874F6E1C74D6DB008B169D /* RoomTcpSocket.mm */; };
+		B4C9FABA1CC4A42D00E8A872 /* RoomInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5491C2CC7A300A042E8 /* RoomInfo.mm */; };
+		B4C9FABB1CC4A43800E8A872 /* MASConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4C51C2CC7A200A042E8 /* MASConstraint.m */; };
+		B4C9FABC1CC4A44500E8A872 /* TextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A0E1CACE4EF005B9DCE /* TextCell.m */; };
 		BB06311C1C61C827008AD41D /* NoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB06311B1C61C827008AD41D /* NoticeModel.m */; };
 		BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B481CB112FC00C573E0 /* BaseService.m */; };
 		BB125B4C1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B4A1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m */; };
@@ -272,7 +275,6 @@
 		BB63F5B51C2CC7A300A042E8 /* DecodeJson.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4A41C2CC7A200A042E8 /* DecodeJson.m */; };
 		BB63F5B61C2CC7A300A042E8 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4A61C2CC7A200A042E8 /* GTMBase64.m */; };
 		BB63F5C11C2CC7A300A042E8 /* MASCompositeConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4C21C2CC7A200A042E8 /* MASCompositeConstraint.m */; };
-		BB63F5C21C2CC7A300A042E8 /* MASConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4C51C2CC7A200A042E8 /* MASConstraint.m */; };
 		BB63F5C31C2CC7A300A042E8 /* MASConstraintMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4C71C2CC7A200A042E8 /* MASConstraintMaker.m */; };
 		BB63F5C41C2CC7A300A042E8 /* MASLayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4C91C2CC7A200A042E8 /* MASLayoutConstraint.m */; };
 		BB63F5C51C2CC7A300A042E8 /* MASViewAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4CD1C2CC7A200A042E8 /* MASViewAttribute.m */; };
@@ -305,7 +307,6 @@
 		BB63F5F91C2CC7A300A042E8 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5401C2CC7A300A042E8 /* UIView+Extension.m */; };
 		BB63F5FA1C2CC7A300A042E8 /* FinanceOnlineVedioController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5441C2CC7A300A042E8 /* FinanceOnlineVedioController.m */; };
 		BB63F5FB1C2CC7A300A042E8 /* RoomViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5461C2CC7A300A042E8 /* RoomViewController.mm */; };
-		BB63F5FC1C2CC7A300A042E8 /* RoomInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5491C2CC7A300A042E8 /* RoomInfo.mm */; };
 		BB63F5FD1C2CC7A300A042E8 /* RoomUser.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F54B1C2CC7A300A042E8 /* RoomUser.m */; };
 		BB63F5FE1C2CC7A300A042E8 /* Video.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F54D1C2CC7A300A042E8 /* Video.m */; };
 		BB63F5FF1C2CC7A300A042E8 /* EmojiTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5511C2CC7A300A042E8 /* EmojiTextAttachment.m */; };
@@ -352,7 +353,6 @@
 		BB6F3ADA1C9F86270035EBBE /* UIView+SDExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6F3AD31C9F86270035EBBE /* UIView+SDExtension.m */; };
 		BB6F3ADD1CA117BE0035EBBE /* BandNewMobileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6F3ADC1CA117BE0035EBBE /* BandNewMobileViewController.m */; };
 		BB7B6FFC1C33D7070018FEC1 /* CircleImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB7B6FFB1C33D7070018FEC1 /* CircleImageView.m */; };
-		BB874F6F1C74D6DB008B169D /* RoomTcpSocket.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB874F6E1C74D6DB008B169D /* RoomTcpSocket.mm */; };
 		BB88F30A1C3FA97E00C1F8D9 /* SearchButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F3091C3FA97E00C1F8D9 /* SearchButton.m */; };
 		BB88F36D1C4772B100C1F8D9 /* NNSVRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB88F36C1C4772B100C1F8D9 /* NNSVRViewController.m */; };
 		BB88F37E1C48BA7300C1F8D9 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB88F3721C48BA7300C1F8D9 /* libavcodec.a */; };
@@ -471,7 +471,6 @@
 		BBCE9D5E1CB3AD5700DA56D6 /* 418_1.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCE9D031CB3AD5600DA56D6 /* 418_1.png */; };
 		BBCE9D5F1CB3AD5700DA56D6 /* 419_1.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCE9D041CB3AD5600DA56D6 /* 419_1.png */; };
 		BBCE9D601CB3AD5700DA56D6 /* defaultHead_1.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCE9D051CB3AD5600DA56D6 /* defaultHead_1.png */; };
-		BBCF9A0F1CACE4EF005B9DCE /* TextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A0E1CACE4EF005B9DCE /* TextCell.m */; };
 		BBCF9A1A1CACE685005B9DCE /* TextCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A191CACE685005B9DCE /* TextCellView.m */; };
 		BBCF9A4D1CAD4F81005B9DCE /* SexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A4C1CAD4F81005B9DCE /* SexViewController.m */; };
 		BBCF9A681CADAB60005B9DCE /* TextColletViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A671CADAB60005B9DCE /* TextColletViewController.m */; };
@@ -752,7 +751,6 @@
 		B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		B4C6B7B01CBE1B220072795B /* RegisterTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTextField.h; sourceTree = "<group>"; };
 		B4C6B7B11CBE1B220072795B /* RegisterTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTextField.m; sourceTree = "<group>"; };
-		BB0436831C4E28C500A162A8 /* TodayVIPModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodayVIPModel.m; sourceTree = "<group>"; };
 		BB06311A1C61C827008AD41D /* NoticeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeModel.h; sourceTree = "<group>"; };
 		BB06311B1C61C827008AD41D /* NoticeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeModel.m; sourceTree = "<group>"; };
 		BB125B471CB112FC00C573E0 /* BaseService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseService.h; path = blocks/BaseService.h; sourceTree = "<group>"; };
@@ -3376,6 +3374,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4C9FABC1CC4A44500E8A872 /* TextCell.m in Sources */,
+				B4C9FABB1CC4A43800E8A872 /* MASConstraint.m in Sources */,
+				B4C9FABA1CC4A42D00E8A872 /* RoomInfo.mm in Sources */,
+				B4C9FAB91CC4A41C00E8A872 /* RoomTcpSocket.mm in Sources */,
 				BB5E4FB71CBF7D1B00F8C1D4 /* TextNewCell.m in Sources */,
 				18AC14161C8FB8E100FDFF40 /* JPEngine.m in Sources */,
 				BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */,
@@ -3406,10 +3408,8 @@
 				BB63F60B1C2CC7A300A042E8 /* VideoCellView.m in Sources */,
 				BB63F6091C2CC7A300A042E8 /* UIImage+animatedGIF.m in Sources */,
 				18AAD5641C993CD100438E18 /* AssetViewController.m in Sources */,
-				BB63F5FC1C2CC7A300A042E8 /* RoomInfo.mm in Sources */,
 				B4C4B36E1CBAA5FF00B20A58 /* IAPShare.m in Sources */,
 				18D3CB7E1CC0CF1600816BD0 /* TQCommentReplyViewController.m in Sources */,
-				BB63F5FC1C2CC7A300A042E8 /* RoomInfo.mm in Sources */,
 				18D3CB9A1CC0E3A900816BD0 /* TQAnswerCell.m in Sources */,
 				BB1769251C7B006F00CE947C /* SDWebImageDecoder.m in Sources */,
 				18D3CB901CC0E37700816BD0 /* TQMessageCell.m in Sources */,
@@ -3515,9 +3515,7 @@
 				BB5E4FB81CBF7D1B00F8C1D4 /* VideoLivingCell.m in Sources */,
 				188741821C9702DA002EF25A /* NSString+Regex.m in Sources */,
 				BB63F5D51C2CC7A300A042E8 /* UIScrollView+MJRefresh.m in Sources */,
-				BB874F6F1C74D6DB008B169D /* RoomTcpSocket.mm in Sources */,
 				BB5E4FA61CBF7D1B00F8C1D4 /* TextRoomModel.m in Sources */,
-				BB874F6F1C74D6DB008B169D /* RoomTcpSocket.mm in Sources */,
 				B47DD59E1CBF345300C47EF7 /* SliderMenuView.m in Sources */,
 				BB17692F1C7B006F00CE947C /* UIImageView+WebCache.m in Sources */,
 				BB9765F31C85B55F00FAA5B7 /* DeviceUID.m in Sources */,
@@ -3536,12 +3534,8 @@
 				BB16619D1C3E2DC700D318BE /* ZLButton.m in Sources */,
 				BB5E4F991CBF7D1B00F8C1D4 /* TextPointViewController.m in Sources */,
 				BB63F5AA1C2CC7A300A042E8 /* UIControl+BlocksKit.m in Sources */,
-				BBCF9A0F1CACE4EF005B9DCE /* TextCell.m in Sources */,
-				BB63F5C21C2CC7A300A042E8 /* MASConstraint.m in Sources */,
 				185DABAD1CBFDC970019C5A3 /* TQideaTableViewCell.m in Sources */,
 				18D3CB781CC0A3FA00816BD0 /* TQCustomizedCell.m in Sources */,
-				BBCF9A0F1CACE4EF005B9DCE /* TextCell.m in Sources */,
-				BB63F5C21C2CC7A300A042E8 /* MASConstraint.m in Sources */,
 				18D3CB871CC0D13600816BD0 /* TQPersonalTailorViewController.m in Sources */,
 				BB1769391C7B045D00CE947C /* RegMobileViewController.m in Sources */,
 				BB63F5B41C2CC7A300A042E8 /* LSTcpSocket.m in Sources */,
@@ -3572,7 +3566,6 @@
 				BB5E4F9F1CBF7D1B00F8C1D4 /* IdeaDetails.m in Sources */,
 				BB1769211C7B006F00CE947C /* MKAnnotationView+WebCache.m in Sources */,
 				185DABAB1CBFDC970019C5A3 /* ideaDetailTableViewCell.m in Sources */,
-				BB0436841C4E28C500A162A8 /* TodayVIPModel.m in Sources */,
 				18D3CB7B1CC0A41E00816BD0 /* TQMailboxCell.m in Sources */,
 				BB63F60D1C2CC7A300A042E8 /* RoomListInfo.m in Sources */,
 				18F9710C1C92947F001B2575 /* base64.m in Sources */,

@@ -123,13 +123,10 @@
                                              selector:@selector(reachabilityChanged:)
                                                  name: kReachabilityChangedNotification
                                                object: nil];
-<<<<<<< HEAD
     [self updateVersion];
     
-=======
     
     //开启网络通知
->>>>>>> b42a92c92ce8f11905585b472801a797ffaf1c38
     [hostReach startNotifier];
     
     return YES;
@@ -311,10 +308,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];
 }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> b42a92c92ce8f11905585b472801a797ffaf1c38
 /**
  *  连接跳转
  */
