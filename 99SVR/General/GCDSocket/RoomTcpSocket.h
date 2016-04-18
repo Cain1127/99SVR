@@ -26,6 +26,8 @@
 
 @property (nonatomic,copy) NSString *teachInfo;
 
+@property (nonatomic,copy) NSString *strRoomId;
+
 - (NSArray *)aryUser;
 
 - (NSString *)getRoomId;
