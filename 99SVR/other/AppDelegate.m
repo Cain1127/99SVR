@@ -123,10 +123,10 @@
                                              selector:@selector(reachabilityChanged:)
                                                  name: kReachabilityChangedNotification
                                                object: nil];
-    //开启网络通知
-    [self updateVersion];
 
-    [hostReach startNotifier];
+    //开启网络通知
+
+    [self updateVersion];
     
     return YES;
 }
@@ -307,10 +307,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 /**
  *  连接跳转
  */
