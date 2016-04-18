@@ -213,8 +213,8 @@
         [UserInfo sharedUserInfo].nUserId = 0;
         [UserInfo sharedUserInfo].banding = 0;
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_EXIT_LOGIN_VC object:nil];
-        [UserDefaults setObject:0 forKey:kIsLogin];
-        
+        [UserDefaults setBool:NO forKey:kIsLogin];
+        [UserDefaults synchronize];
         [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:@"0" pwd:@""];
         [logoutBtn setHidden:YES];
         [lblContent setHidden:YES];

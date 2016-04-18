@@ -1,21 +1,35 @@
-
-#import "stdafx.h"
 #import "cmd_vchat.h"
 #import "Socket.h"
 #import "ZLLogonProtocol.h"
 #import "UserInfo.h"
 #import "BaseService.h"
 #import "DecodeJson.h"
-
-#pragma mark ZLPushListener
+#include <fstream>
+#include <cassert>
+#include "crc32.h"
+#include "json/json.h"
+#import "RoomUser.h"
+#import "RoomInfo.h"
+#import "RoomService.h"
+#import "DeviceUID.h"
 
 NSString *strUser;
 NSString *strPwd;
+
 LoginConnection *conn;
 ZLPushListener push_listener;
 ZLHallListener hall_listener;
 ZLConnectionListerner conn_listener;
 ZLLoginListener login_listener;
+RoomConnection *video_room;
+ZLRoomListener room_listener;
+
+NSMutableArray *aryRoomChat;
+NSMutableArray *aryRoomPrichat;
+NSMutableArray *aryRoomUser;
+NSMutableArray *aryRoomNotice;
+NSMutableDictionary *dictRoomUser;
+RoomInfo *currentRoom;
 
 void ZLPushListener::OnConfChanged(int version)
 {
@@ -306,6 +320,41 @@ int ZLLogonProtocol::updateNick(const char *cNick,const char *intro,int sex)
     return 1;
 }
 
+
+
+void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomPwd){
+    if (aryRoomChat==nil) {
+        aryRoomChat = [NSMutableArray array];
+    }
+    [aryRoomChat removeAllObjects];
+    
+    if (aryRoomPrichat==nil) {
+        aryRoomPrichat = [NSMutableArray array];
+    }
+    [aryRoomPrichat removeAllObjects];
+    if (aryRoomUser == nil) {
+        aryRoomUser = [NSMutableArray array];
+    }
+    if(dictRoomUser == nil){
+        dictRoomUser = [NSMutableDictionary dictionary];
+    }
+    [dictRoomUser removeAllObjects];
+    if (aryRoomNotice == nil) {
+        aryRoomNotice = [NSMutableArray array];
+    }
+    [aryRoomNotice removeAllObjects];
+    
+    JoinRoomReq2 req;
+    const char *uId = [[DeviceUID uid] UTF8String];
+    req.set_cserial(uId);
+    req.set_vcbid(nRoomId);
+    req.set_croompwd("");
+    req.set_devtype(2);
+    req.set_bloginsource(platform);
+    video_room->SendMsg_JoinRoomReq2(req);
+    
+}
+
 /**
  *  析构
  */
@@ -334,6 +383,11 @@ ZLLogonProtocol::ZLLogonProtocol()
     conn->RegisterConnectionListener(&conn_listener);
     conn->RegisterPushListener(&push_listener);
     conn->RegisterHallListener(&hall_listener);
+    
+    video_room = new RoomConnection();
+    video_room->RegisterMessageListener(&room_listener);
+    video_room->RegisterConnectionListener(&conn_listener);
+    
 }
 
 int ZLLogonProtocol::closeProtocol()
@@ -342,13 +396,65 @@ int ZLLogonProtocol::closeProtocol()
     return 1;
 }
 
+void ZLLogonProtocol::sendRose(){
+    const char *cRose = "[$999$]";
+    RoomChatMsg msg;
+    msg.set_content(cRose);
+    uint32_t nLength = (int)strlen(cRose)+1;
+    msg.set_textlen(nLength);
+    video_room->SendMsg_RoomChatReq(msg);
+}
+
+void ZLLogonProtocol::sendMessage(const char *msg,int toId,const char *toalias){
+    RoomChatMsg roomMsg;
+    roomMsg.set_content(msg);
+    uint32_t nLength = (int)strlen(msg)+1;
+    roomMsg.set_textlen(nLength);
+    roomMsg.set_toid(toId);
+    roomMsg.set_toalias(toalias);
+    
+    video_room->SendMsg_RoomChatReq(roomMsg);
+}
+
+void ZLLogonProtocol::exitRoomInfo(){
+    video_room->SendMsg_ExitRoomReq();
+    [currentRoom.aryUser removeAllObjects];
+    [currentRoom.dictUser removeAllObjects];
+}
+/**
+ *  发送礼物
+ */
+void ZLLogonProtocol::sendGift(int giftId,int num){
+    TradeGiftRecord req;
+    int toUserId=0;
+    NSData *toUser = nil;
+    for (RoomUser *room in currentRoom.aryUser) {
+        if ([room isOnMic]) {
+            toUserId = room.m_nUserId;
+            toUser = [room.m_strUserAlias dataUsingEncoding:GBK_ENCODING];
+            break;
+        }
+    }
+    if (toUserId==0) {
+        return ;
+    }
+    req.set_toid(toUserId);
+    req.set_giftid(giftId);
+    req.set_giftnum(num);
+    req.set_action(2);
+    const char *toName = (const char *)toUser.bytes;
+    if(toName){
+        req.set_toalias(toName);
+    }
+    video_room->SendMsg_TradeGiftReq(req);
+}
+
 //**********************************************************************************
 //**********************************************************************************
 #pragma mark ZLHallListener
 /**
  *  设置用户信息响应
  */
-
 void ZLHallListener::OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfileReq& req)
 {
     DLog(@"error:%d",info.errorid());
@@ -374,3 +480,136 @@ void ZLHallListener::OnGetUserMoreInfResp(GetUserMoreInfResp& info)
     user.strMobile = [NSString stringWithCString:info.tel().c_str() encoding:GBK_ENCODING];
     user.strBirth = [NSString stringWithCString:info.birth().c_str() encoding:GBK_ENCODING];
 }
+
+void ZLRoomListener::OnMessageComming(void* msg){
+    video_room->DispatchSocketMessage(msg);
+}
+
+/**
+ *  加入房间成功
+ */
+void ZLRoomListener::OnJoinRoomResp(JoinRoomResp& info){
+    DLog(@"加入房间成功");
+    if(currentRoom==nil){
+        currentRoom = [[RoomInfo alloc] init];
+    }
+    [currentRoom setRoomInfo:&info];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
+}
+
+/**
+ *   加入房间失败
+ */
+void ZLRoomListener::OnJoinRoomErr(JoinRoomErr& info){
+    DLog(@"加入房间失败");
+    NSDictionary *parameters = @{@"err":@(info.errid()),@"msg":@"test"};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:parameters];
+}
+
+/**
+ *  用户列表
+ */
+void ZLRoomListener::OnRoomUserList(std::vector<RoomUserInfo>& infos){
+    for(int i = 0; i < infos.size(); i++){
+        [RoomService addRoomUser:currentRoom user:&infos[i]];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+}
+
+/**
+ *  用户加入房间通知
+ */
+void ZLRoomListener::OnRoomUserNoty(RoomUserInfo& info){
+    [RoomService addRoomUser:currentRoom user:&info];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+}
+
+/**
+ *  麦克风消息
+ */
+void ZLRoomListener::OnRoomPubMicStateNoty(std::vector<RoomPubMicState>& infos){
+    for(int i = 0; i < infos.size(); i++){
+        //	int32	_mictimetype;
+        DLog(@"mic状态:%d--类型:%d--userId:%d",infos[i].micid(),infos[i].mictimetype(),infos[i].userid());
+    }
+}
+
+/**
+ *  用户退出消息
+ */
+void ZLRoomListener::OnRoomUserExceptExitNoty(UserExceptExitRoomInfo_ext& info){
+    RoomUser *user = [currentRoom findUser:info.userid()];
+    [currentRoom.aryUser removeObject:user];
+    [currentRoom removeUser:info.userid()];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+}
+
+/**
+ *  消息信息
+ */
+void ZLRoomListener::OnChatNotify(RoomChatMsg& info){
+    if(info.msgtype()==1){
+        //解析广播
+        DLog(@"广播");
+        [RoomService getRibao:&info notice:aryRoomNotice];
+    }else{
+        //解析消息记录
+        [RoomService getChatInfo:&info array:aryRoomChat prichat:aryRoomPrichat];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+    }
+}
+
+/**
+ *  用户被踢出通知
+ */
+void ZLRoomListener::OnRoomKickoutUserNoty(UserKickoutRoomInfo_ext& info){
+    RoomUser *user = [currentRoom findUser:info.toid()];
+    [currentRoom.aryUser removeObject:user];
+    [currentRoom removeUser:info.toid()];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+    
+    
+}
+
+void ZLRoomListener::OnRoomNoticeNotify(RoomNotice& info){
+    [RoomService getNoticeInfo:&info notice:aryRoomNotice];
+}
+
+void ZLRoomListener::OnSetMicStateNotify(UserMicState& info){
+    DLog(@"mic状态:%d",info.micstate());
+}
+
+void ZLRoomListener::OnTradeGiftRecordResp(TradeGiftRecord& info){
+    DLog(@"赠送礼物成功");
+    [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_ROOM_SEND_LIWU_RESP_VC object:nil];
+}
+
+void ZLRoomListener::OnTradeGiftErr(TradeGiftErr& info){
+    DLog(@"赠送礼物失败");
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TRADE_GIFT_VC object:@(info.nerrid())];
+}
+void ZLRoomListener::OnTradeGiftNotify(TradeGiftRecord& info){
+    DLog(@"收到赠送礼物的通知");
+    NSString *strName = [NSString stringWithCString:info.srcalias().c_str() encoding:GBK_ENCODING];
+    int gitId = info.giftid();
+    int number = info.giftnum();
+    NSDictionary *parameters = @{@"name":strName,@"gitId":@(gitId),@"num":@(number),@"userid":@(info.srcid())};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:parameters];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

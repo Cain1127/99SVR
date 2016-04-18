@@ -11,7 +11,7 @@
 
 @interface TextCell : UITableViewCell
 
-@property(nonatomic, copy) void (^itemOnClick)(TextRoomModel *vedio); // 点击事件
+@property(nonatomic, copy) void (^itemOnClick)(TextRoomModel *model); // 点击事件
 
 - (void)setRowDatas:(NSArray *)datas; // 设置每一行数据
 

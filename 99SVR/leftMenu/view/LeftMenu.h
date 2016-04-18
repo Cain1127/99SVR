@@ -11,6 +11,7 @@
 @protocol LeftMenuDegelate <NSObject>
 
 -(void)leftMenuDidSeletedAtRow:(NSInteger)row title:(NSString *)title vc:(UIViewController *)vc;
+
 -(void)leftMenuIconDidClick;
 
 @end

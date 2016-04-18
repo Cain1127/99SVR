@@ -8,6 +8,8 @@
 
 #import "SearchController.h"
 #import "MySearchBar.h"
+#import "AlertFactory.h"
+#import "DecodeJson.h"
 #import "GroupListRequest.h"
 #import "RoomGroup.h"
 #import "RoomHttp.h"
@@ -34,6 +36,7 @@
 @property(nonatomic, strong) UITableView *searchResultsTable;
 @property (nonatomic,copy) NSArray *aryResult;
 @property (nonatomic,copy) NSArray *allDatas;
+@property (nonatomic,strong) RoomHttp *room;
 
 @end
 
@@ -322,73 +325,18 @@
 
 - (void)connectRoom:(RoomHttp *)room
 {
-#if 0
-    __weak SearchController *__self = self;
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [__self.view makeToastActivity];
-    });
-    NSString *strAddress;
-    NSString *strPort;
-    if([UserInfo sharedUserInfo].strRoomAddr)
-    {
-        NSString *strAry = [[UserInfo sharedUserInfo].strRoomAddr componentsSeparatedByString:@";"][0];
-        strAddress = [strAry componentsSeparatedByString:@":"][0];
-        strPort = [strAry componentsSeparatedByString:@":"][1];
-    }
-    else
-    {
-        NSString *strAry = [room.cgateaddr componentsSeparatedByString:@";"][0];
-        strAddress = [strAry componentsSeparatedByString:@":"][0];
-        strPort = [strAry componentsSeparatedByString:@":"][1];
-    }
-    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
-    [socket connectRoomInfo:room.nvcbid address:strAddress port:[strPort intValue]];
-#endif
 #if 1
+    
+    _room = room;
+    [kProtocolSingle connectVideoRoom:[room.nvcbid intValue] roomPwd:@""];
+    [self.view makeToastActivity];
+    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
+    
+#endif
+#if 0
     RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
-//    [self presentViewController:roomView animated:YES completion:nil];
     [self.navigationController pushViewController:roomView animated:YES];
 #endif
-}
-
-- (void)joinRoomTimeOut
-{
-    __weak SearchController *__self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [__self.view hideToastActivity];
-        [__self.view makeToast:@"加入房间超时"];
-    });
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)joinRoomErr:(NSNotification*)notify
-{
-    __weak SearchController *__self =self;
-    dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       [NSObject cancelPreviousPerformRequestsWithTarget:__self];
-                   });
-    NSString *strMsg = notify.object;
-    if ([strMsg isEqualToString:@"需要输入密码"])
-    {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-           [__self.view hideToastActivity];
-           [__self.view makeToast:@"连接失败"];
-        });
-    }
-    else
-    {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        __block NSString *__strMsg = strMsg;
-        dispatch_async(dispatch_get_main_queue(),
-                       ^{
-                           [__self.view hideToastActivity];
-                           [__self.view makeToast:__strMsg];
-                       });
-    }
 }
 
 - (BOOL)shouldAutorotate
@@ -425,5 +373,65 @@
     }
     return YES;
 }
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)joinRoomErr:(NSNotification *)notify{
+    [DecodeJson cancelPerfor:self];
+    if ([notify.object isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *dict = [notify object];
+        int errid = [[dict objectForKey:@"err"] intValue];
+        NSString *strMsg = [dict objectForKey:@"msg"];
+        if (errid==201) {
+            [AlertFactory createPassswordAlert:self room:_room];
+        }
+        else{
+            @WeakObj(strMsg)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [ProgressHUD showError:strMsgWeak];
+            });
+        }
+    }
+}
+
+- (void)joinSuc{
+    [DecodeJson cancelPerfor:self];
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+        [ProgressHUD showSuccess:@"加入房间成功"];
+        RoomViewController *roomView = [[RoomViewController alloc] initWithModel:_room];
+        [selfWeak.navigationController pushViewController:roomView animated:YES];
+    });
+    
+}
+
+- (void)joinRoomTimeOut
+{
+    [DecodeJson cancelPerfor:self];
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+        [ProgressHUD showError:@"加入房间失败" ];
+    });
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+/*
+- (void)connectRoom:(RoomHttp *)room{
+    _room = room;
+    [kProtocolSingle connectVideoRoom:[room.nvcbid intValue] roomPwd:@""];
+    [self.view makeToastActivity];
+    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
+}*/
 
 @end

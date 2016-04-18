@@ -1,9 +1,10 @@
 
-#ifndef Push_Listener_H
-#define Push_Listener_H
+#ifndef __PUSH_LISTENER_H__
+#define __PUSH_LISTENER_H__
 
 #include <vector>
 #include "LoginMessage.pb.h"
+#include "VideoRoomMessage.pb.h"
 
 class PushListener
 {

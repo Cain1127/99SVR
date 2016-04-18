@@ -10,6 +10,8 @@
 
 @interface SVRInitLBS : NSObject
 
++ (void)loadAllInfo;
+
 + (void)loginLocal;
 
 @end

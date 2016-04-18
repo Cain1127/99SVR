@@ -8,6 +8,7 @@
 
 #import "ZLLogonServerSing.h"
 #import "ZLLogonProtocol.h"
+#include <string.h>
 #import "DecodeJson.h"
 #import "UserInfo.h"
 
@@ -75,7 +76,42 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
 
 - (void)closeProtocol
 {
-    protocol->closeProtocol();
+    if (protocol) {
+        protocol->closeProtocol();
+    }
+}
+
+- (void)connectVideoRoom:(int)nRoomId roomPwd:(NSString *)roomPwd{
+    if (protocol) {
+        protocol->connectRoomInfo(nRoomId,KUserSingleton.otherLogin);
+    }
+}
+
+- (void)sendRose{
+    if (protocol)
+    protocol->sendRose();
+}
+
+- (void)sendMessage:(NSString *)strMsg toId:(int)toId{
+    
+    char cBuffer[2048];
+    NSData *data = [strMsg dataUsingEncoding:GBK_ENCODING];
+    ::strncpy(cBuffer, (const char *)data.bytes,data.length);
+    if (protocol)
+    protocol->sendMessage(cBuffer, toId, "");
+    
+}
+
+- (void)exitRoom{
+    if(protocol){
+        protocol->exitRoomInfo();
+    }
+}
+
+- (void)sendGiftInfo:(int)nGiftId number:(int)num{
+    if(protocol){
+        protocol->sendGift(nGiftId, num);
+    }
 }
 
 @end

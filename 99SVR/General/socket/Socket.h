@@ -18,6 +18,9 @@ typedef int  my_socklen_t;
 #define SOCKET_TIMEOUT WSAETIMEDOUT
 #define SOCKET_NONE WSAENOTSOCK
 #define SOCKET_CLOSED 10058
+#define SOCKET_INVALID INVALID_SOCKET
+
+#define SOCKET_SEND_FLAG 0
 
 #else
 #include <sys/socket.h>
@@ -32,6 +35,7 @@ typedef int  my_socklen_t;
 #include <sys/poll.h>
 #include <sys/uio.h>
 #include <unistd.h>
+#include <signal.h>
 
 #define SOCKET int
 typedef socklen_t my_socklen_t;
@@ -41,6 +45,13 @@ typedef socklen_t my_socklen_t;
 #define SOCKET_CLOSED ENOTCONN
 
 #define SOCKET_ERROR -1
+#define SOCKET_INVALID -1
+
+#ifdef ANDROID
+#define SOCKET_SEND_FLAG (MSG_DONTWAIT | MSG_NOSIGNAL)
+#else
+#define SOCKET_SEND_FLAG MSG_DONTWAIT
+#endif
 
 #endif
 
@@ -49,10 +60,10 @@ typedef socklen_t my_socklen_t;
 
 class Socket
 {
-private:
-	SOCKET socket;
 
-	int create(void);
+private:
+
+	SOCKET socket;
 
 public:
 	
@@ -60,6 +71,8 @@ public:
 	int close_(void);
 	int send(const char* buf, int len);
 	int recv(char* buf, int len);
+	
+	int get_address();
 	int get_error();
 	int get_error2();
 
@@ -68,6 +81,7 @@ public:
 
 	Socket(void);
 	~Socket(void);
+
 };
 
 

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "Socket.h"
 
 unsigned long get_inet_addr(const char* host)
@@ -41,12 +41,6 @@ int set_block(SOCKET socket, bool block)
 
 }
 
-void set_no_sigpipe(SOCKET socket)
-{
-    int set = 1;
-    setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, (void*)&set, sizeof(int));
-}
-
 int set_timeout(SOCKET socket, int recv_timeout_second, int send_timeout_second)
 {
 #ifdef WIN
@@ -66,36 +60,36 @@ int set_timeout(SOCKET socket, int recv_timeout_second, int send_timeout_second)
 #endif
 }
 
-int Socket::create(void)
+void set_no_sigpipe(SOCKET socket)
 {
-	socket = ::socket(AF_INET, SOCK_STREAM, 0);
-
-	LOG("socket create: %d", socket);
-
-	return get_error();
+#ifdef WIN
+#elif defined ANDROID
+#else
+	int set = 1;
+	setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, (void*)&set, sizeof(int));
+#endif
 }
 
 int Socket::connect(const char* host, short port, int connect_timeout)
 {
-	int ret;
+	if (!host || !(*host) || !port) return -2;
+
 	sockaddr_in sockAddr;
 	memset(&sockAddr, 0, sizeof(sockAddr));
 	sockAddr.sin_family = AF_INET;
 	sockAddr.sin_port = htons(port);
 	sockAddr.sin_addr.s_addr = get_inet_addr(host);
 
-	create();
+	socket = ::socket(AF_INET, SOCK_STREAM, 0);
+	if (socket < 0 || socket == SOCKET_INVALID)
+	{
+		return -2;
+	}
 
-	//ret = ::connect(socket, (struct sockaddr*)&sockAddr, sizeof(sockAddr));
+	LOG("socket create: %d host:%s port:%d", socket, host, port);
 
 	set_block(socket, false);
-	ret = ::connect(socket, (struct sockaddr*) &sockAddr, sizeof(sockAddr));
-    
-	if (socket == 0)
-	{
-		LOG("connected!:%d", ret);
-		return 0;
-	}
+	int ret = ::connect(socket, (struct sockaddr*) &sockAddr, sizeof(sockAddr));
 	if (ret == SOCKET_ERROR)
 	{
 		timeval timeout;
@@ -115,7 +109,8 @@ int Socket::connect(const char* host, short port, int connect_timeout)
 #endif
 		if (n <= 0)
 		{
-			LOG("socket connect error: %d:%d", ret, get_error2());
+			LOG("socket connect error0: %d host:%s port:%d", ret, host, port);
+			close_();
 			return -1;
 		}
 		if (FD_ISSET(socket, &read_set) || FD_ISSET(socket, &write_set))
@@ -126,27 +121,28 @@ int Socket::connect(const char* host, short port, int connect_timeout)
 			}
 		}
 	}
-    set_no_sigpipe(socket);
 	
 	if (ret != 0)
 	{
-		LOG("socket connect error: %d:%d", ret, get_error());
+		LOG("socket connect error1: %d host:%s port:%d", ret, host, port);
+		close_();
 		return -1;
 	}
 		
-	LOG("socket connect: %d", ret);
+	LOG("socket connect: %d host:%s port:%d", ret, host, port);
 
-	ret = set_block(socket, true);
-	ret = set_timeout(socket, 3, 3);
+	set_no_sigpipe(socket);
+	set_block(socket, true);
+	set_timeout(socket, 3, 3);
 
-	LOG("socket set_block: %d", ret);
+	//get_address();
 
 	return ret;
 }
 
 int Socket::send(const char *buf, int len)
 {
-	return ::send(socket, buf, len, 0);
+	return ::send(socket, buf, len, SOCKET_SEND_FLAG);
 }
 
 int Socket::recv(char* buf, int len)
@@ -156,15 +152,45 @@ int Socket::recv(char* buf, int len)
 
 int Socket::close_(void)
 {
+	if ((socket < 0) || (socket == SOCKET_INVALID))
+	{
+		return -1;
+	}
+
 #ifdef WIN
-	//return closesocket(socket);
-	return ::shutdown(socket, 2);
+	closesocket(socket);
+#elif defined ANDROID
+	::close(socket);
 #else
-	//::close(socket);
 	::shutdown(socket, 2);
-	return 0;
 #endif
+
+	socket = SOCKET_INVALID;
+	return 0;
 }
+
+//通过套接字获取IP、Port等地址信息
+int Socket::get_address()
+{
+	sockaddr_in sockAddr;
+	memset(&sockAddr, 0, sizeof(sockAddr));
+	socklen_t nAddrLen = sizeof(sockAddr);
+
+	//根据套接字获取地址信息
+	//if (::getpeername(socket, (struct sockaddr*)&sockAddr, &nAddrLen) != 0)
+	if (::getsockname(socket, (struct sockaddr*)&sockAddr, &nAddrLen) != 0)
+	{
+		printf("Get IP address by socket failed!n");
+		return -1;
+	}
+
+	LOG("IP:%s PORT:%d", ::inet_ntoa(sockAddr.sin_addr), ntohs(sockAddr.sin_port));
+	//读取IP和Port
+	//cout << "IP: " << ::inet_ntoa(m_address.sin_addr) << "  PORT: " << ntohs(m_address.sin_port) << endl;
+	return 0;
+}
+
+
 
 int Socket::get_error()
 {
@@ -172,7 +198,6 @@ int Socket::get_error()
 	return GetLastError();
 #else
 	return errno;
-	//get_error2();
 #endif
 }
 
@@ -207,7 +232,7 @@ int Socket::cleanup(void)
 }
 
 Socket::Socket(void) :
-		socket(-1)
+		socket(SOCKET_INVALID)
 {
 }
 

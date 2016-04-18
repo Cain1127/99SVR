@@ -541,7 +541,6 @@ if(_block) \
     [self closeSocket];
     _nFall ++;
     [self getMediaHost];
-    
     return 1;
 }
 
