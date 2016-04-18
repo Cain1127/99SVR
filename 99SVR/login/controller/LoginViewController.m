@@ -79,6 +79,12 @@
     
     _txtUser = [[LoginTextField alloc] initWithFrame:CGRectMake(15,bodyView.y+bodyView.height, kScreenWidth-30, 44)];
     _txtPwd = [[LoginTextField alloc] initWithFrame:CGRectMake(_txtUser.x, _txtUser.frame.origin.y+_txtUser.frame.size.height+10, _txtUser.width, 44)];
+    _txtUser.delegate = self;
+    _txtPwd.delegate = self;
+    
+    [_txtUser addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [_txtPwd addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+
     
     [_txtUser setBorderStyle:UITextBorderStyleNone];
     [_txtPwd setBorderStyle:UITextBorderStyleNone];
@@ -148,6 +154,7 @@
     [_btnLogin setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
     [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
+    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     _btnLogin.titleLabel.font = XCFONT(15);
     
     [_btnRegin setTitleColor:UIColorFromRGB(0x0078DD) forState:UIControlStateNormal];
@@ -231,6 +238,13 @@
     [self.view addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
 }
+
+-(void)textFieldDidChange:(id)sender{
+    
+    [self checkLogBtnIsEnableWithPwd:_txtPwd.text withUser:_txtUser.text];
+    
+}
+
 
 #pragma mark 微信登录请求
 - (void)weiChatLogin
@@ -356,6 +370,16 @@
     NSString *userPwd = [UserDefaults objectForKey:kUserPwd];
     _txtUser.text = userId == nil ? @"" : userId;
     _txtPwd.text = userPwd == nil ? @"" : userPwd;
+    
+    if ([userId isEqualToString:@""] || [userId length]==0) {
+
+        self.btnLogin.enabled = NO;
+        
+    }else if([userPwd isEqualToString:@""] || [userPwd length]==0)
+    {
+        self.btnLogin.enabled = NO;
+    }
+    
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
 }
@@ -396,7 +420,37 @@
     {
         [textField resignFirstResponder];
     }
+    
+    [self checkLogBtnIsEnableWithPwd:_txtPwd.text withUser:_txtUser.text];
+    
     return YES;
+}
+
+/**
+ *  检测loginBtn是否可点击
+ *
+ *  @param pwdText  密码
+ *  @param userText 账号
+ */
+-(void)checkLogBtnIsEnableWithPwd:(NSString *)pwdText withUser:(NSString *)userText{
+    
+    BOOL isPwdBool;
+    BOOL isUserBool;
+    
+    if (([pwdText isEqualToString:@""]||[pwdText length]==0)) {
+        
+        isPwdBool = NO;
+        
+    }else{
+        isPwdBool = YES;
+    }
+    
+    if (([userText isEqualToString:@""]||[userText length]==0)) {
+        isUserBool = NO;
+    }else{
+        isUserBool = YES;
+    }
+    _btnLogin.enabled = (isPwdBool && isUserBool);
 }
 
 #pragma mark 加入通知
@@ -779,10 +833,7 @@
     self.view.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
 }
 
-- (void)dealloc
-{
-    DLog(@"dealloc!");
-}
+
 
 @end
 

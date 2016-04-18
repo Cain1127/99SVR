@@ -37,6 +37,7 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
  *  关闭protocol
  */
 - (void)closeProtocol;
+<<<<<<< HEAD
 /**
  *  加入房间
  */
@@ -58,5 +59,7 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
  *  退出房间
  */
 - (void)exitRoom;
+=======
+>>>>>>> LiuHaiDong
 
 @end

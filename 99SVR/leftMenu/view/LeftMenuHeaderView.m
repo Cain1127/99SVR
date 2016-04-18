@@ -102,6 +102,7 @@
         if (userInfo.nType == 1)
         {
             _nameLabel.text = userInfo.strName;
+            _vipLevel.font = [UIFont systemFontOfSize:12];
             if (KUserSingleton.nStatus) {
                 NSString *stringGoid = [NSString stringWithFormat:@"%.01f 玖玖币",userInfo.goldCoin];
                 CGFloat width = [stringGoid sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}].width+10;
@@ -115,6 +116,7 @@
         {
             _nameLabel.text = @"";
             [_vipLevel setText:@"未登录"];
+            _vipLevel.font = [UIFont systemFontOfSize:20];
             _vipLevel.frame = Rect(30, _nameLabel.height+_nameLabel.y+5, self.width-60, 20);
             imageB.hidden = YES;
         }

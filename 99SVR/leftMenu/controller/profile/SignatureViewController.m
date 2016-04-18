@@ -15,6 +15,9 @@
 ///最新签名信息输入框
 @property(nonatomic,strong) UITextField *signatureTextField;
 
+@property (nonatomic, strong) UIButton *commitBtn;
+
+
 @end
 
 @implementation SignatureViewController
@@ -44,6 +47,8 @@
     [_signatureTextField setValue:kFontSize(14) forKeyPath:@"_placeholderLabel.font"];
     [_signatureTextField setValue:RGB(151, 151, 151) forKeyPath:@"_placeholderLabel.textColor"];
     [self.view addSubview:_signatureTextField];
+    [_signatureTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+
     
     //建议提醒文字
 //    UILabel * adviceLabel = [[UILabel alloc] init];
@@ -58,12 +63,37 @@
     [btnRight setTitle:@"保存" forState:UIControlStateNormal];
     [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
     [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
+    [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     [self.view addSubview:btnRight];
+    self.commitBtn = btnRight;
+    [self checkLogBtnIsEnableWithText:self.signatureTextField.text];
     btnRight.frame = Rect(10,_signatureTextField.y+_signatureTextField.height+30, kScreenWidth-20, 40);
     [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [btnRight addTarget:self action:@selector(rightItemClick) forControlEvents:UIControlEventTouchUpInside];
 }
 
+-(void)textFieldDidChange:(id)sender{
+    
+    [self checkLogBtnIsEnableWithText:self.signatureTextField.text];
+    
+}
+
+/**
+ *  检测loginBtn是否可点击
+ */
+-(void)checkLogBtnIsEnableWithText:(NSString *)text{
+    
+    BOOL isTextBool;
+    
+    if (([text isEqualToString:@""]||[text length]==0)) {
+        
+        isTextBool = NO;
+        
+    }else{
+        isTextBool = YES;
+    }
+    self.commitBtn.enabled = isTextBool;
+}
 
 /**
  *  完成

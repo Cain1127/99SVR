@@ -30,13 +30,17 @@
 }
 
 @property (nonatomic,strong) UIImageView *imgView;
-@property (nonatomic,strong) UITextField *txtName;
-@property (nonatomic,strong) UITextField *txtPwd;
-@property (nonatomic,strong) UITextField *txtCmdPwd;
-@property (nonatomic,strong) UITextField *txtCode;
+/**手机号*/
+@property (nonatomic,strong) RegisterTextField *txtName;
+/**密码*/
+@property (nonatomic,strong) RegisterTextField *txtPwd;
+/**验证码*/
+@property (nonatomic,strong) RegisterTextField *txtCode;
 @property (nonatomic,copy) NSString *strCode;
 @property (nonatomic,strong) QCheckBox *checkAgree;
 @property (nonatomic,strong) UIButton *btnCode;
+/**注册*/
+@property (nonatomic, strong) UIButton *btnDetermine;
 @property (nonatomic,copy) NSString *username;
 @property (nonatomic,copy) NSString *password;
 
@@ -212,9 +216,9 @@
     [self.view addSubview:lblContent];
 }
 
-- (UITextField *)createTextField:(CGRect)frame
+- (RegisterTextField *)createTextField:(CGRect)frame
 {
-    UITextField *textField = [[UITextField alloc] initWithFrame:frame];
+    RegisterTextField *textField = [[RegisterTextField alloc] initWithFrame:frame];
     [self.view addSubview:textField];
     [textField setTextColor:UIColorFromRGB(0x555555)];
     [textField setFont:XCFONT(15)];
@@ -267,17 +271,21 @@
     btnRight.frame = Rect(kScreenWidth-60, 20, 60, 44);
     btnRight.titleLabel.font = XCFONT(13);
     
+    //手机号
     [self createLabelWithRect:Rect(10, 8+kNavigationHeight, 80, 30)];
     _txtName = [self createTextField:Rect(10, 8+kNavigationHeight, kScreenWidth-20, 30)];
     [_txtName setKeyboardType:UIKeyboardTypeNumberPad];
     UIColor *color = UIColorFromRGB(0xB2B2B2);
     _txtName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入手机号码" attributes:@{NSForegroundColorAttributeName: color}];
+    _txtName.leftViewImageName = @"register_mob";
     
     
     [self createLabelWithRect:Rect(10, _txtName.y+50,80, 30)];
     _txtCode = [self createTextField:Rect(_txtName.x,_txtName.y+50,_txtName.width-100,_txtName.height)];
     _txtCode.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入验证码" attributes:@{NSForegroundColorAttributeName: color}];
     [_txtCode setKeyboardType:UIKeyboardTypeNumberPad];
+    _txtCode.leftViewImageName = @"register_code";
+
     _btnCode = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnCode setTitleColor:UIColorFromRGB(0x0078dd) forState:UIControlStateNormal];
     [_btnCode setTitleColor:kNavColor forState:UIControlStateHighlighted];
@@ -296,8 +304,12 @@
     _txtPwd.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入密码" attributes:@{NSForegroundColorAttributeName: color}];
     [_txtPwd setDelegate:self];
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
+    _txtPwd.leftViewImageName = @"register_pwd";
+    _txtPwd.isShowTextBool =YES;
+
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnDetermine = btnRegister;
     [self.view addSubview:btnRegister];
     btnRegister.frame = Rect(10, _txtPwd.y+_txtPwd.height+42,kScreenWidth-20, 40);
     [btnRegister setTitle:@"注册" forState:UIControlStateNormal];
@@ -309,6 +321,12 @@
     [btnRegister addTarget:self action:@selector(regMobile) forControlEvents:UIControlEventTouchUpInside];
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
+    
+    [_txtPwd addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [_txtName addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [_txtCode addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+
+    [self checkLogBtnIsEnableWithPhoneNum:_txtName.text withCode:_txtCode.text withPwd:_txtPwd.text];
     
     _checkAgree = [[QCheckBox alloc] initWithDelegate:self];
     _checkAgree.frame = Rect(btnRegister.x, btnRegister.y+btnRegister.height+10,45,30);
@@ -416,6 +434,49 @@
     [_btnCode setTitle:strInfo forState:UIControlStateNormal];
     nSecond--;
 }
+
+-(void)textFieldDidChange:(id)sender{
+    
+    [self checkLogBtnIsEnableWithPhoneNum:_txtName.text withCode:_txtCode.text withPwd:_txtPwd.text];
+}
+
+
+/**
+ *  检测修改密码的确定按钮是否可点击
+ *
+ *  @param oldPwdText 旧密码
+ *  @param newPwdText 新密码
+ *  @param cmdPwdText 再次输入的密码
+ */
+-(void)checkLogBtnIsEnableWithPhoneNum:(NSString *)phoneNum withCode:(NSString *)code withPwd:(NSString *)pwdText{
+    
+    BOOL isPhoneNumBool;
+    BOOL isCodeBool;
+    BOOL isPwdBool;
+    
+    if (([phoneNum isEqualToString:@""]||[phoneNum length]==0)) {
+        
+        isPhoneNumBool = NO;
+        
+    }else{
+        isPhoneNumBool = YES;
+    }
+    
+    if (([code isEqualToString:@""]||[code length]==0)) {
+        isCodeBool = NO;
+    }else{
+        isCodeBool = YES;
+    }
+    
+    if (([pwdText isEqualToString:@""]||[pwdText length]==0)) {
+        isPwdBool = NO;
+    }else{
+        isPwdBool = YES;
+    }
+    
+    self.btnDetermine.enabled = (isPhoneNumBool && isCodeBool && isPwdBool);
+}
+
 
 - (void)dealloc
 {
