@@ -147,7 +147,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return ValueWithTheIPhoneModelString(@"150,180,200");
+    return ValueWithTheIPhoneModelString(@"100,120,140,160");
 }
 
 
