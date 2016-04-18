@@ -130,13 +130,12 @@
     return self;
 }
 
-<<<<<<< HEAD:99SVR/live/controller/RoomViewController.m
 - (void)connectRoomInfo
 {
     NSString *strAddress;
     NSString *strPort;
     NSString *roomAddr = [KUserSingleton.dictRoomGate objectForKey:@(0)];
-    _tcpSocket.strRoomId = _room.nvcbid;
+//    _tcpSocket.strRoomId = _room.nvcbid;
     if(roomAddr!=nil)
     {
         NSString *strAry = [roomAddr componentsSeparatedByString:@","][0];
@@ -148,12 +147,10 @@
         strAddress = @"";
         strPort = @"0";
     }
-    [_tcpSocket connectRoomInfo:_room.nvcbid address:strAddress port:[strPort intValue]];
-    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
+//    [_tcpSocket connectRoomInfo:_room.nvcbid address:strAddress port:[strPort intValue]];
+//    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
 }
 
-=======
->>>>>>> b42a92c92ce8f11905585b472801a797ffaf1c38:99SVR/live/controller/RoomViewController.mm
 /**
  *  释放房间中的内容
  */
@@ -167,15 +164,12 @@
 - (void)dealloc
 {
     DLog(@"room view");
-<<<<<<< HEAD:99SVR/live/controller/RoomViewController.m
-    [_tcpSocket exit_Room:YES];
-    _tcpSocket = nil;
+//    [_tcpSocket exit_Room:YES];
+//    _tcpSocket = nil;
     [_ffPlay stop];
-=======
     [_ffPlay stop];
     //TODD:关闭房间   清楚所有信息
     [kProtocolSingle exitRoom];
->>>>>>> b42a92c92ce8f11905585b472801a797ffaf1c38:99SVR/live/controller/RoomViewController.mm
     [[SDImageCache sharedImageCache] clearMemory];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
     _ffPlay = nil;
