@@ -102,6 +102,7 @@
                                              selector:@selector(reachabilityChanged:)
                                                  name: kReachabilityChangedNotification
                                                object: nil];
+    
     //开启网络通知
     [hostReach startNotifier];
     
