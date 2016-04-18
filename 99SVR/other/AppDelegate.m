@@ -51,6 +51,27 @@
 
 @implementation AppDelegate
 
+- (void)createUpdateAlert{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"有新的版本更新，是否前往更新？" delegate:self cancelButtonTitle:@"关闭" otherButtonTitles:@"更新", nil];
+    [alert show];
+}
+
+- (void)updateVersion{
+    @WeakObj(self)
+    [BaseService post:@"http://hall.99ducaijing.cn:8081/iosVersionUpdate.php?version_code=1" dictionay:nil timeout:10 success:^(id responseObject) {
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil removingNulls:YES ignoreArrays:NO];
+        if([dict objectForKey:@"update"]!=nil){
+            if ([[dict objectForKey:@"update"] intValue]==1) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_VERSION_VC object:nil];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [selfWeak createUpdateAlert];
+                });
+            }
+            DLog(@"update:%@",[dict objectForKey:@"update"]);
+        }
+    } fail:nil];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[CrashReporter sharedInstance] installWithAppId:@"900018787" applicationGroupIdentifier:@"com.hctt.fae99"];
@@ -59,7 +80,7 @@
     [[MTAConfig getInstance] setSmartReporting:false];
     [[MTAConfig getInstance] setReportStrategy:MTA_STRATEGY_INSTANT];
     [MTA startWithAppkey:@"ILQ4T8A5X5JA"];
-    
+//    [self createUpdateAlert];
     [WeiboSDK enableDebugMode:YES];
     [WeiboSDK registerApp:kSinaKey];
     [WXApi registerApp:@"wxfbfe01336f468525" withDescription:@"weixin"];
@@ -100,8 +121,13 @@
                                              selector:@selector(reachabilityChanged:)
                                                  name: kReachabilityChangedNotification
                                                object: nil];
+<<<<<<< HEAD
     
     //开启网络通知
+=======
+    [self updateVersion];
+    
+>>>>>>> b269230b12cfd1a0f4346f74b423ba98c12c6dc1
     [hostReach startNotifier];
     
     return YES;
@@ -176,7 +202,9 @@
             if (fLast>fCurrent)
             {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"有新的版本更新，是否前往更新？" delegate:__self cancelButtonTitle:@"关闭" otherButtonTitles:@"更新", nil];
+                alert.tag = 100;
                 [alert show];
+                
             }
         }
     } fail:^(NSError *error)
@@ -282,9 +310,6 @@
     [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];
 }
-
-
-
 
 
 /**

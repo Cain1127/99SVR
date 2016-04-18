@@ -67,7 +67,6 @@
 @property (nonatomic,copy) NSString *strRoomPwd;
 @property (nonatomic,copy) NSString *strRoomAddress;
 @property (nonatomic,assign) int nRoomPort;
-@property (nonatomic,copy) NSString *strRoomId;
 @property (nonatomic,strong) GCDAsyncSocket *asyncSocket;
 @property (nonatomic,strong) NSMutableArray *aryBuffer;
 @property (nonatomic,strong) NSMutableDictionary *dictDownLoad;
@@ -365,6 +364,7 @@
         [self ReConnectSocket];
         return YES;
     }
+    _strRoomId = strId;
     nSocketType = 2;
     if (tcpThread==nil)
     {
@@ -450,6 +450,7 @@
     req.crc32 = 15;
     uint32 crcval = crc32((void*)&req,sizeof(CMDJoinRoomReq2_t),CRC_MAGIC);
     req.crc32 = crcval;
+    DLog(@"vcbid:%d",req.vcbid);
     [self sendMessage:(char *)&req size:sizeof(CMDJoinRoomReq2_t) version:MDM_Version_Value maincmd:MDM_Vchat_Room
                subcmd:Sub_Vchat_JoinRoomReq];
     return YES;
