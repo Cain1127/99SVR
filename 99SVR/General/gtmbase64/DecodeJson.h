@@ -119,4 +119,6 @@
  */
 + (NSString *)getArrayAddr:(NSString *)strInfo;
 
++ (void)cancelPerfor:(id)object;
+
 @end

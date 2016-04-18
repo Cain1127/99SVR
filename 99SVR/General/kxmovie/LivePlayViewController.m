@@ -7,6 +7,7 @@
 //
 
 #import "LivePlayViewController.h"
+#import "UIImageView+WebCache.h"
 #import "Toast+UIView.h"
 #import "OpenAL.h"
 #import "KxMovieDecoder.h"
@@ -113,15 +114,26 @@
 
 - (void)setDefaultImg
 {
-//    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
-    [_glView setImage:[UIImage imageNamed:@"live_default"]];
+    
+    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
+    char cBuffer[100]={0};
+    sprintf(cBuffer,"video_logo_bg@2x");
+    NSString *strName = [NSString stringWithUTF8String:cBuffer];
+    NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
+    [_glView sd_setImageWithURL:url1];
+    
     lblText.hidden = YES;
 }
 
 - (void)setNoVideo
 {
-    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
-    [_glView setImage:[UIImage imageNamed:@"noVideo"]];
+//    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
+    char cBuffer[100]={0};
+    sprintf(cBuffer,"video_shangmai_bg@2x");
+    NSString *strName = [NSString stringWithUTF8String:cBuffer];
+    NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
+    [_glView sd_setImageWithURL:url1];
+    
     lblText.hidden = NO;
     [lblText setText:@"音频模式"];
 }
@@ -178,7 +190,6 @@
                 returnValue = opus_decode(_decoder,data.bytes,(int32_t)data.length,_out_buffer, 1920, 0);
                 if (returnValue<0)
                 {
-                    DLog(@"解码失败");
                     continue;
                 }
                 int32_t length = returnValue * sizeof(opus_int16) * 2;
@@ -247,8 +258,12 @@
 
 - (void)setNullMic
 {
-    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
-    [_glView setImage:[UIImage imageNamed:@"noMic"]];
+    char cBuffer[100]={0};
+    sprintf(cBuffer,"noMic@2x");
+    NSString *strName = [NSString stringWithUTF8String:cBuffer];
+    NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
+    [_glView sd_setImageWithURL:url1];
+    
     lblText.hidden = NO;
     lblText.text = @"没有讲师上麦";
 }
@@ -381,9 +396,7 @@
                     int len;
                     len = avcodec_decode_video2(_pCodecCtx,_pFrame,&got_pictrue,&packet);
                     if (len<0)
-                    {
-                        DLog(@"解码失败");
-                    }
+                    {}
                     else
                     {
                         [self createVideoFrame];
@@ -463,7 +476,9 @@
                 {
                     [__self.view setBackgroundColor:UIColorFromRGB(0x000000)];
                 }
-                __self.glView.image = __rgbImage;
+                if(__rgbImage){
+                    __self.glView.image = __rgbImage;
+                }
             }
         });
     }
@@ -532,7 +547,9 @@
                                        NO,
                                        kCGRenderingIntentDefault);
     CGColorSpaceRelease(colorSpace);
-    _currentImage = [UIImage imageWithCGImage:cgImage];
+    if (cgImage) {
+        _currentImage = [UIImage imageWithCGImage:cgImage];
+    }
     CGImageRelease(cgImage);
     CGDataProviderRelease(provider);
     CFRelease(data);
