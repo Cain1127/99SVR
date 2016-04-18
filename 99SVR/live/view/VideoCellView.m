@@ -99,12 +99,5 @@
     [_roomIdLabel setText:room.nvcbid];
 }
 
-- (void)addGesture:(void (^)(id sender))handler
-{
-//    if(_btnPwd)
-//    {
-//        [_btnPwd bk_addEventHandler:handler forControlEvents:UIControlEventTouchUpInside];
-//    }
-}
 
 @end

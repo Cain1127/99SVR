@@ -482,6 +482,12 @@
     return strNew;
 }
 
++ (void)cancelPerfor:(id)object{
+    @WeakObj(object)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:objectWeak];
+    });
+}
 
 @end
 

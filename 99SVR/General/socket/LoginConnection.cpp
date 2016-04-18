@@ -1,15 +1,25 @@
-#include "stdafx.h"
+
 #include "platform.h"
 #include "Http.h"
 #include "LoginConnection.h"
 #include "Thread.h"
-#include "proto_cmd_vchat.h"
+#include "login_cmd_vchat.h"
 
+ UserLogonSuccess2 loginuser;
+  UserLogonReq4 login_req4;
+  UserLogonReq5  login_req5;
+
+  uint32 login_reqv;
+  uint32 login_nmobile;
+  uint32 login_version;
+  uint32 login_userid;
+  string login_password;
 
 LoginConnection::LoginConnection() :
 login_listener(NULL), hall_listener(NULL), push_listener(NULL)
 {
-	main_cmd = MDM_Vchat_Login;
+	main_cmd = protocol::MDM_Vchat_Login;
+	strcpy(lbs_type, "/tygetlogon");
 }
 
 void LoginConnection::RegisterMessageListener(LoginListener* message_listener)
@@ -29,28 +39,32 @@ void LoginConnection::RegisterPushListener(PushListener* message_listener)
 
 void LoginConnection::SendMsg_Ping()
 {
-	CMDClientPing_t ping;
-	ping.userid = logonuser.userid();
+	protocol::CMDClientPing_t ping;
+	ping.userid = loginuser.userid();
 	ping.roomid = 0;
 
-	SEND_MESSAGE2(Sub_Vchat_ClientPing, CMDClientPing_t, &ping);
+	SEND_MESSAGE2(protocol::Sub_Vchat_ClientPing, protocol::CMDClientPing_t, &ping);
 }
 
 void LoginConnection::on_do_connected()
 {
 	SendMsg_Hello();
 
-	if (reqv == 4)
+	if (login_reqv == 4)
 	{
-		SEND_MESSAGE(Sub_Vchat_logonReq4, req4);
-		nmobile = req4.nmobile();
-		version = req4.nversion();
+		login_req4.set_nmobile(CLIENT_TYPE);
+		SEND_MESSAGE(protocol::Sub_Vchat_logonReq4, login_req4);
+		login_nmobile = login_req4.nmobile();
+		login_version = login_req4.nversion();
+		login_password = login_req4.cuserpwd();
 	}
 	else
 	{
-		SEND_MESSAGE(Sub_Vchat_logonReq5, req5);
-		nmobile = req5.nmobile();
-		version = req5.nversion();
+		login_req5.set_nmobile(CLIENT_TYPE);
+		SEND_MESSAGE(protocol::Sub_Vchat_logonReq5, login_req5);
+		login_nmobile = login_req5.nmobile();
+		login_version = login_req5.nversion();
+		login_password = "";
 	}
 
 	start_read_thread();
@@ -64,19 +78,19 @@ void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 	//connect("121.12.118.32", 7301);
 	
 	/*
-	int ret = connect("121.12.118.32", 7301);
+	int ret = connect("121.14.211.60",7402);
 
 	if (ret != 0)
 		return;
 	*/
-	req4 = req;
-	reqv = 4;
-
-	conenct_from_lbs();
+	login_req4 = req;
+	login_reqv = 4;
+	
+	connect_from_lbs_asyn();
 
 	/*
 	SendMsg_Hello();
-	SEND_MESSAGE(Sub_Vchat_logonReq4, req);
+	SEND_MESSAGE(protocol::Sub_Vchat_logonReq4, req);
 
 	nmobile = req.nmobile();
 	version = req.nversion();
@@ -87,35 +101,37 @@ void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 
 void LoginConnection::SendMsg_LoginReq5(UserLogonReq5& req)
 {
-	req5 = req;
-	reqv = 5;
-	conenct_from_lbs();
+	login_req5 = req;
+	login_reqv = 5;
+
+	connect_from_lbs_asyn();
 }
 
 void LoginConnection::SendMsg_SessionTokenReq(uint32 userid)
 {
 	SessionTokenReq req;
 	req.set_userid(userid);
-	SEND_MESSAGE(Sub_Vchat_logonTokenReq, req);
+
+	SEND_MESSAGE(protocol::Sub_Vchat_logonTokenReq, req);
 }
 
 void LoginConnection::SendMsg_SetUserInfoReq(SetUserProfileReq& req)
 {
-	req.set_userid(logonuser.userid());
+	req.set_userid(loginuser.userid());
 	req.set_introducelen(strlen(req.introduce().c_str()));
-	SEND_MESSAGE_EX(Sub_Vchat_SetUserProfileReq, req, req.introducelen());
+	SEND_MESSAGE_EX(protocol::Sub_Vchat_SetUserProfileReq, req, req.introducelen());
 }
 
 void LoginConnection::SendMsg_SetUserPwdReq(uint32 vcbid, uint32 pwdtype, const char* oldpwd, const char* newpwd)
 {
 	SetUserPwdReq req;
-	req.set_userid(logonuser.userid());
+	req.set_userid(loginuser.userid());
 	req.set_vcbid(vcbid);
 	req.set_pwdtype(pwdtype);
 	req.set_oldpwd(oldpwd);
 	req.set_newpwd(newpwd);
 
-	SEND_MESSAGE(Sub_Vchat_SetUserPwdReq, req);
+	SEND_MESSAGE(protocol::Sub_Vchat_SetUserPwdReq, req);
 }
 
 void LoginConnection::SendMsg_QueryRoomGateAddrReq(uint32 userid, uint32 roomid, uint32 flags)
@@ -125,15 +141,15 @@ void LoginConnection::SendMsg_QueryRoomGateAddrReq(uint32 userid, uint32 roomid,
 	req.set_roomid(roomid);
 	req.set_flags(flags);
 
-	SEND_MESSAGE(Sub_Vchat_QueryRoomGateAddrReq, req);
+	SEND_MESSAGE(protocol::Sub_Vchat_QueryRoomGateAddrReq, req);
 }
 
 void LoginConnection::SendMsg_GetRoomGroupListReq()
 {
 	RoomGroupListReq req;
-	req.set_userid(logonuser.userid());
+	req.set_userid(loginuser.userid());
 
-	SEND_MESSAGE(Sub_Vchat_RoomGroupListReq, req);
+	SEND_MESSAGE(protocol::Sub_Vchat_RoomGroupListReq, req);
 }
 
 void LoginConnection::SendMsg_GetUserMoreInfReq(uint32 userid)
@@ -141,39 +157,44 @@ void LoginConnection::SendMsg_GetUserMoreInfReq(uint32 userid)
 	GetUserMoreInfReq req;
 	req.set_userid(userid);
 
-	SEND_MESSAGE(Sub_Vchat_GetUserMoreInfReq, req);
+	SEND_MESSAGE(protocol::Sub_Vchat_GetUserMoreInfReq, req);
 }
 
 void LoginConnection::SendMsg_ExitAlertReq()
 {
 	ExitAlertReq req;
-	req.set_userid(logonuser.userid());
+	req.set_userid(loginuser.userid());
 
-	SEND_MESSAGE(Sub_Vchat_UserExitMessage_Req, req);
+	SEND_MESSAGE(protocol::Sub_Vchat_UserExitMessage_Req, req);
 }
 
-/*
+
 void LoginConnection::SendMsg_MessageUnreadReq()
 {
 	MessageNoty noty;
-	noty.set_userid(logonuser.userid());
+	noty.set_userid(loginuser.userid());
 
-	SEND_MESSAGE(Sub_Vchat_HallMessageUnreadReq, noty);
+	SEND_MESSAGE(protocol::Sub_Vchat_HallMessageUnreadReq, noty);
 }
 
 void LoginConnection::SendMsg_HallMessageReq(HallMessageReq& req)
 {
-	SEND_MESSAGE(Sub_Vchat_HallMessageReq, req);
+	SEND_MESSAGE(protocol::Sub_Vchat_HallMessageReq, req);
+}
+
+void LoginConnection::SendMsg_HallMessageReq2(TextRoomList_mobile& head,HallMessageReq& req)
+{
+	SEND_MESSAGE(protocol::Sub_Vchat_HallMessageReq_Mobile, req);
 }
 
 void LoginConnection::SendMsg_ViewAnswerReq(ViewAnswerReq& req)
 {
-	SEND_MESSAGE(Sub_Vchat_HallViewAnswerReq, req);
+	SEND_MESSAGE(protocol::Sub_Vchat_HallViewAnswerReq, req);
 }
 
 void LoginConnection::SendMsg_InterestForReq(InterestForReq& req)
 {
-	SEND_MESSAGE(Sub_Vchat_HallInterestForReq, req);
+	SEND_MESSAGE(protocol::Sub_Vchat_HallInterestForReq, req);
 }
 
 void LoginConnection::SendMsg_FansCountReq(uint32 teacherid)
@@ -181,9 +202,8 @@ void LoginConnection::SendMsg_FansCountReq(uint32 teacherid)
 	FansCountReq req;
 	req.set_teacherid(teacherid);
 
-	SEND_MESSAGE(Sub_Vchat_HallGetFansCountReq, req);
+	SEND_MESSAGE(protocol::Sub_Vchat_HallGetFansCountReq, req);
 }
-*/
 
 void LoginConnection::on_dispatch_message(void* msg)
 {
@@ -219,47 +239,47 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 	static std::vector<UnInterestResp> g_vec_UnInterestResp;
 	static std::vector<TextLivePointListResp> g_vec_TextLivePointListResp;
 
-	COM_MSG_HEADER*head = (COM_MSG_HEADER*) msg;
+	protocol::COM_MSG_HEADER*head = (protocol::COM_MSG_HEADER*)msg;
 	uint8* body = (uint8*) (head->content);
 
 	int sub_cmd = head->subcmd;
-	int body_len = head->length - sizeof(COM_MSG_HEADER);
+	int body_len = head->length - sizeof(protocol::COM_MSG_HEADER);
 
 	LOG("message+++++++:%d", sub_cmd);
 
 	switch (sub_cmd)
 	{
 
-	case Sub_Vchat_logonErr2:
+	case protocol::Sub_Vchat_logonErr2:
 		ON_MESSAGE(login_listener, UserLogonErr2, OnLogonErr)
 		close();
 		break;
 
-	case Sub_Vchat_logonSuccess2:
-		logonuser.ParseFromArray(body, logonuser.ByteSize());
+	case protocol::Sub_Vchat_logonSuccess2:
+		loginuser.ParseFromArray(body, loginuser.ByteSize());
 		if (login_listener != NULL)
-			login_listener->OnLogonSuccess(logonuser);
+			login_listener->OnLogonSuccess(loginuser);
 		break;
 
-	case Sub_Vchat_RoomGroupListBegin:
+	case protocol::Sub_Vchat_RoomGroupListBegin:
 		room_groups_count = 0;
 		room_groups = new RoomGroupItem[20];
 		break;
 
-	case Sub_Vchat_RoomGroupListResp:
+	case protocol::Sub_Vchat_RoomGroupListResp:
 		body += sizeof(uint32);
 		room_groups[room_groups_count].ParseFromArray(body,
 				room_groups[room_groups_count].ByteSize());
 		room_groups_count++;
 		break;
 
-	case Sub_Vchat_RoomGroupListFinished:
+	case protocol::Sub_Vchat_RoomGroupListFinished:
 		if (login_listener != NULL)
 			login_listener->OnRoomGroupList(room_groups, room_groups_count);
 		delete[] room_groups;
 		break;
 
-	case Sub_VChat_QuanxianId2ListResp:
+	case protocol::Sub_Vchat_QuanxianId2ListResp:
 		qx_ids_count = body_len / sizeof(protocol::CMDQuanxianId2Item_t);
 		qx_ids = new QuanxianId2Item[qx_ids_count];
 		for (int i = 0; i < qx_ids_count; i++)
@@ -272,12 +292,12 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		delete[] qx_ids;
 		break;
 
-	case Sub_VChat_QuanxianAction2ListBegin:
+	case protocol::Sub_Vchat_QuanxianAction2ListBegin:
 		qx_actions_count = 0;
 		qx_actions = new QuanxianAction2Item[4000];
 		break;
 
-	case Sub_VChat_QuanxianAction2ListResp:
+	case protocol::Sub_Vchat_QuanxianAction2ListResp:
 		int action_num;
 		action_num = body_len / sizeof(protocol::CMDQuanxianAction2Item_t);
 		LOG("action:%d:%d:%d", body_len,
@@ -292,22 +312,22 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		}
 		break;
 
-	case Sub_VChat_QuanxianAction2ListFinished:
+	case protocol::Sub_Vchat_QuanxianAction2ListFinished:
 		if (login_listener != NULL)
 			login_listener->OnQuanxianAction2List(qx_actions, qx_actions_count);
 		delete[] qx_actions;
 		break;
 
-	case Sub_Vchat_logonTokenNotify:
+	case protocol::Sub_Vchat_logonTokenNotify:
 		ON_MESSAGE(login_listener, SessionTokenResp, OnLogonTokenNotify)
 		break;
 
-	case Sub_Vchat_logonFinished:
+	case protocol::Sub_Vchat_logonFinished:
 		if (login_listener != NULL)
 			login_listener->OnLogonFinished();
 		break;
 
-	case Sub_Vchat_SetUserProfileResp:
+	case protocol::Sub_Vchat_SetUserProfileResp:
 	{
 		SetUserProfileResp _SetUserProfileResp;
 		_SetUserProfileResp.ParseFromArray(body, _SetUserProfileResp.ByteSize());
@@ -318,154 +338,304 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 
 		hall_listener->OnSetUserProfileResp(_SetUserProfileResp, _SetUserProfileReq);
 	}
-		//ON_MESSAGE(hall_listener, SetUserProfileResp, OnSetUserProfileResp)
 		break;
 
-	case Sub_Vchat_SetUserPwdResp:
+	case protocol::Sub_Vchat_SetUserPwdResp:
 		ON_MESSAGE(hall_listener, SetUserPwdResp, OnSetUserPwdResp)
 		break;
 
-	case Sub_Vchat_QueryRoomGateAddrResp:
+	case protocol::Sub_Vchat_QueryRoomGateAddrResp:
 		ON_MESSAGE(hall_listener, QueryRoomGateAddrResp, OnQueryRoomGateAddrResp)
 		break;
 
-	case Sub_Vchat_GetUserMoreInfResp:
+	case protocol::Sub_Vchat_GetUserMoreInfResp:
 		ON_MESSAGE(hall_listener, GetUserMoreInfResp, OnGetUserMoreInfResp)
 		break;
 
-	case Sub_Vchat_UserExitMessage_Resp:
+	case protocol::Sub_Vchat_UserExitMessage_Resp:
 		ON_MESSAGE(hall_listener, ExitAlertResp, OnUserExitMessageResp)
 		break;
 
-		/*
-	case Sub_Vchat_HallMessageNotify:
+	case protocol::Sub_Vchat_HallMessageNotify:
 		ON_MESSAGE(hall_listener, MessageNoty, OnHallMessageNotify)
 		break;
-	case Sub_Vchat_HallMessageUnreadResp:
+	case protocol::Sub_Vchat_HallMessageUnreadResp:
 		ON_MESSAGE(hall_listener, MessageUnreadResp, OnMessageUnreadResp)
 		break;
 
 		//这里下面七个回应全是列表
-	case Sub_Vchat_HallInteractBegin:
+	case protocol::Sub_Vchat_HallInteractBegin:
 		g_vec_InteractResp.clear();
 		break;
-	case Sub_Vchat_HallInteractResp:
+	case protocol::Sub_Vchat_HallInteractResp:
 	{
 		InteractResp objInteractResp;
 		objInteractResp.ParseFromArray(body, objInteractResp.ByteSize());
 		g_vec_InteractResp.push_back(objInteractResp);
 	}
 		break;
-	case Sub_Vchat_HallInteractEnd:
+	case protocol::Sub_Vchat_HallInteractEnd:
 		hall_listener->OnInteractResp(g_vec_InteractResp);
 		break;
 
-	case Sub_Vchat_HallAnswerBegin:
+	case protocol::Sub_Vchat_HallAnswerBegin:
 		g_vec_AnswerResp.clear();
 		break;
-	case Sub_Vchat_HallAnswerResp:
+	case protocol::Sub_Vchat_HallAnswerResp:
 	{
 		AnswerResp objAnswerResp;
 		objAnswerResp.ParseFromArray(body, objAnswerResp.ByteSize());
 		g_vec_AnswerResp.push_back(objAnswerResp);
 	}
 		break;
-	case Sub_Vchat_HallAnswerEnd:
+	case protocol::Sub_Vchat_HallAnswerEnd:
 		hall_listener->OnHallAnswerResp(g_vec_AnswerResp);
 		break;
 
-	case Sub_Vchat_HallViewShowBegin:
+	case protocol::Sub_Vchat_HallViewShowBegin:
 		g_vec_ViewShowResp.clear();
 		break;
-	case Sub_Vchat_HallViewShowResp:
+	case protocol::Sub_Vchat_HallViewShowResp:
 	{
 		ViewShowResp objViewShowResp;
 		objViewShowResp.ParseFromArray(body, objViewShowResp.ByteSize());
 		g_vec_ViewShowResp.push_back(objViewShowResp);
 	}
 		break;
-	case Sub_Vchat_HallViewShowEnd:
+	case protocol::Sub_Vchat_HallViewShowEnd:
 		hall_listener->OnViewShowResp(g_vec_ViewShowResp);
 		break;
 
-	case Sub_Vchat_HallTeacherFansBegin:
+	case protocol::Sub_Vchat_HallTeacherFansBegin:
 		g_vec_TeacherFansResp.clear();
 		break;
-	case Sub_Vchat_HallTeacherFansResp:
+	case protocol::Sub_Vchat_HallTeacherFansResp:
 	{
 		TeacherFansResp objTeacherFansResp;
 		objTeacherFansResp.ParseFromArray(body, objTeacherFansResp.ByteSize());
 		g_vec_TeacherFansResp.push_back(objTeacherFansResp);
 	}
 		break;
-	case Sub_Vchat_HallTeacherFansEnd:
+	case protocol::Sub_Vchat_HallTeacherFansEnd:
 		hall_listener->OnTeacherFansResp(g_vec_TeacherFansResp);
 		break;
 
-	case Sub_Vchat_HallInterestBegin:
+	case protocol::Sub_Vchat_HallInterestBegin:
 		g_vec_InterestResp.clear();
 		break;
-	case Sub_Vchat_HallInterestResp:
+	case protocol::Sub_Vchat_HallInterestResp:
 	{
 		InterestResp objInterestResp;
 		objInterestResp.ParseFromArray(body, objInterestResp.ByteSize());
 		g_vec_InterestResp.push_back(objInterestResp);
 	}
 		break;
-	case Sub_Vchat_HallInterestEnd:
+	case protocol::Sub_Vchat_HallInterestEnd:
 		hall_listener->OnInterestResp(g_vec_InterestResp);
 		break;
 
-	case Sub_Vchat_HallUnInterestBegin:
+	case protocol::Sub_Vchat_HallUnInterestBegin:
 		g_vec_UnInterestResp.clear();
 		break;
-	case Sub_Vchat_HallUnInterestResp:
+	case protocol::Sub_Vchat_HallUnInterestResp:
 	{
 		UnInterestResp objUnInterestResp;
 		objUnInterestResp.ParseFromArray(body, objUnInterestResp.ByteSize());
 		g_vec_UnInterestResp.push_back(objUnInterestResp);
 	}
 		break;
-	case Sub_Vchat_HallUnInterestEnd:
+	case protocol::Sub_Vchat_HallUnInterestEnd:
 		hall_listener->OnUnInterestResp(g_vec_UnInterestResp);
 		break;
 
-	case Sub_Vchat_TextLivePointListBegin:
+	case protocol::Sub_Vchat_TextLivePointListBegin:
 		g_vec_TextLivePointListResp.clear();
 		break;
-	case Sub_Vchat_TextLivePointListResp:
+	case protocol::Sub_Vchat_TextLivePointListResp:
 	{
 		TextLivePointListResp objTextLivePointListResp;
 		objTextLivePointListResp.ParseFromArray(body, objTextLivePointListResp.ByteSize());
 		g_vec_TextLivePointListResp.push_back(objTextLivePointListResp);
 	}
 		break;
-	case Sub_Vchat_TextLivePointListEnd:
+	case protocol::Sub_Vchat_TextLivePointListEnd:
 		hall_listener->OnTextLivePointListResp(g_vec_TextLivePointListResp);
 		break;
 
-	case Sub_Vchat_HallPERSECResp:
-		ON_MESSAGE(hall_listener, HallSecretsListResp, OnSecretsListResp)
+
+
+
+	case protocol::Sub_Vchat_HallInteractResp_Mobile:
+	{
+		g_vec_InteractResp.clear();
+
+		int msglen=body_len;
+		TextRoomList_mobile headmsg;
+		headmsg.ParseFromArray(body, headmsg.ByteSize());
+		body += headmsg.ByteSize();
+		msglen -= headmsg.ByteSize();
+		while(msglen>0)
+		{
+			InteractResp objInteractResp;
+			objInteractResp.ParseFromArray(body, objInteractResp.ByteSize());
+			g_vec_InteractResp.push_back(objInteractResp);
+			body += objInteractResp.ByteSize() + objInteractResp.sortextlen() + objInteractResp.destextlen();
+			msglen -= objInteractResp.ByteSize() + objInteractResp.sortextlen() + objInteractResp.destextlen();
+		}
+
+		hall_listener->OnInteractResp(g_vec_InteractResp);
+	}
+	break;
+	case protocol::Sub_Vchat_HallAnswerResp_Mobile:
+	{
+		g_vec_AnswerResp.clear();
+
+		int msglen=body_len;
+		TextRoomList_mobile headmsg;
+		headmsg.ParseFromArray(body, headmsg.ByteSize());
+		body += headmsg.ByteSize();
+		msglen -= headmsg.ByteSize();
+		while(msglen>0)
+		{
+			AnswerResp objAnswerResp;
+			objAnswerResp.ParseFromArray(body, objAnswerResp.ByteSize());
+			g_vec_AnswerResp.push_back(objAnswerResp);
+			body += objAnswerResp.ByteSize() + objAnswerResp.answerlen() + objAnswerResp.stokeidlen() + objAnswerResp.questionlen();
+			msglen -= objAnswerResp.ByteSize() + objAnswerResp.answerlen() + objAnswerResp.stokeidlen() + objAnswerResp.questionlen();
+		}
+
+		hall_listener->OnHallAnswerResp(g_vec_AnswerResp);
+	}
+	break;
+	case protocol::Sub_Vchat_HallViewShowResp_Mobile:
+	{
+		g_vec_ViewShowResp.clear();
+
+		int msglen=body_len;
+		TextRoomList_mobile headmsg;
+		headmsg.ParseFromArray(body, headmsg.ByteSize());
+		body += headmsg.ByteSize();
+		msglen -= headmsg.ByteSize();
+		while(msglen>0)
+		{
+			ViewShowResp objViewShowResp;
+			objViewShowResp.ParseFromArray(body, objViewShowResp.ByteSize());
+			g_vec_ViewShowResp.push_back(objViewShowResp);
+			body += objViewShowResp.ByteSize() + objViewShowResp.viewtitlelen() + objViewShowResp.viewtextlen() + objViewShowResp.srctextlen() + objViewShowResp.replytextlen();
+			msglen -= objViewShowResp.ByteSize() + objViewShowResp.viewtitlelen() + objViewShowResp.viewtextlen() + objViewShowResp.srctextlen() + objViewShowResp.replytextlen();
+		}
+
+		hall_listener->OnViewShowResp(g_vec_ViewShowResp);
+	}
+	break;
+	case protocol::Sub_Vchat_HallTeacherFansResp_Mobile:
+	{
+		g_vec_TeacherFansResp.clear();
+
+		int msglen=body_len;
+		TextRoomList_mobile headmsg;
+		headmsg.ParseFromArray(body, headmsg.ByteSize());
+		body += headmsg.ByteSize();
+		msglen -= headmsg.ByteSize();
+		while(msglen>0)
+		{
+			TeacherFansResp objTeacherFansResp;
+			objTeacherFansResp.ParseFromArray(body, objTeacherFansResp.ByteSize());
+			g_vec_TeacherFansResp.push_back(objTeacherFansResp);
+			body += objTeacherFansResp.ByteSize();
+			msglen -= objTeacherFansResp.ByteSize();
+		}
+
+		hall_listener->OnTeacherFansResp(g_vec_TeacherFansResp);
+	}
+	break;
+	case protocol::Sub_Vchat_HallInterestResp_Mobile:
+	{
+		g_vec_InterestResp.clear();
+
+		int msglen=body_len;
+		TextRoomList_mobile headmsg;
+		headmsg.ParseFromArray(body, headmsg.ByteSize());
+		body += headmsg.ByteSize();
+		msglen -= headmsg.ByteSize();
+		while(msglen>0)
+		{
+			InterestResp objInterestResp;
+			objInterestResp.ParseFromArray(body, objInterestResp.ByteSize());
+			g_vec_InterestResp.push_back(objInterestResp);
+			body += objInterestResp.ByteSize();
+			msglen -= objInterestResp.ByteSize();
+		}
+
+		hall_listener->OnInterestResp(g_vec_InterestResp);
+	}
+	break;
+	case protocol::Sub_Vchat_HallUnInterestResp_Mobile:
+	{
+		g_vec_UnInterestResp.clear();
+
+		int msglen=body_len;
+		TextRoomList_mobile headmsg;
+		headmsg.ParseFromArray(body, headmsg.ByteSize());
+		body += headmsg.ByteSize();
+		msglen -= headmsg.ByteSize();
+		while(msglen>0)
+		{
+			UnInterestResp objUnInterestResp;
+			objUnInterestResp.ParseFromArray(body, objUnInterestResp.ByteSize());
+			g_vec_UnInterestResp.push_back(objUnInterestResp);
+			body += objUnInterestResp.ByteSize() + objUnInterestResp.levellen() + objUnInterestResp.labellen() + objUnInterestResp.goodatlen();
+			msglen -= objUnInterestResp.ByteSize() + objUnInterestResp.levellen() + objUnInterestResp.labellen() + objUnInterestResp.goodatlen();
+		}
+
+		hall_listener->OnUnInterestResp(g_vec_UnInterestResp);
+	}
+	break;
+	case protocol::Sub_Vchat_TextLivePointListResp_Mobile:
+	{
+		g_vec_TextLivePointListResp.clear();
+
+		int msglen=body_len;
+		TextRoomList_mobile headmsg;
+		headmsg.ParseFromArray(body, headmsg.ByteSize());
+		body += headmsg.ByteSize();
+		msglen -= headmsg.ByteSize();
+		while(msglen>0)
+		{
+			TextLivePointListResp objTextLivePointListResp;
+			objTextLivePointListResp.ParseFromArray(body, objTextLivePointListResp.ByteSize());
+			g_vec_TextLivePointListResp.push_back(objTextLivePointListResp);
+			body += objTextLivePointListResp.ByteSize() + objTextLivePointListResp.textlen();
+			msglen -= objTextLivePointListResp.ByteSize() + objTextLivePointListResp.textlen();
+		}
+
+		hall_listener->OnTextLivePointListResp(g_vec_TextLivePointListResp);
+	}
+	break;
+
+
+
+	case protocol::Sub_Vchat_HallPERSECResp:
+		//ON_MESSAGE(hall_listener, HallSecretsListResp, OnSecretsListResp)
 		break;
-	case Sub_Vchat_HallSystemInfoResp:
-		ON_MESSAGE(hall_listener, HallSystemInfoListResp, OnSystemInfoResp)
+	case protocol::Sub_Vchat_HallSystemInfoResp:
+		//ON_MESSAGE(hall_listener, HallSystemInfoListResp, OnSystemInfoResp)
 		break;
 		//end of 这里下面七个回应全是列表
 
-	case Sub_Vchat_HallViewAnswerResp:
+	case protocol::Sub_Vchat_HallViewAnswerResp:
 		ON_MESSAGE(hall_listener, ViewAnswerResp, OnViewAnswerResp)
 		break;
-	case Sub_Vchat_HallInterestForResp:
+	case protocol::Sub_Vchat_HallInterestForResp:
 		ON_MESSAGE(hall_listener, InterestForResp, OnInterestForResp)
 		break;
-	case Sub_Vchat_HallGetFansCountResp:
+	case protocol::Sub_Vchat_HallGetFansCountResp:
 		ON_MESSAGE(hall_listener, FansCountResp, OnFansCountResp)
 		break;
-		*/
 
-	case Sub_Vchat_ClientNotify:
-	case Sub_Vchat_HitGoldEgg_ToClient_Noty:
-		LOG("Sub_Vchat_ClientNotify");
+	case protocol::Sub_Vchat_ClientNotify:
+	case protocol::Sub_Vchat_HitGoldEgg_ToClient_Noty:
+		LOG("protocol::Sub_Vchat_ClientNotify");
 		dispatch_push_message(body);
 		break;
 	default:
@@ -486,7 +656,7 @@ void LoginConnection::dispatch_push_message(void* body)
 
 	if (push->userid != 0)
 	{
-		if (push->userid != logonuser.userid())
+		if (push->userid != loginuser.userid())
 		{
 			return;
 		}
@@ -494,7 +664,7 @@ void LoginConnection::dispatch_push_message(void* body)
 
 	if (push->termtype != 4)
 	{
-		if (push->termtype != nmobile)
+		if (push->termtype != login_nmobile)
 		{
 			return;
 		}
@@ -504,21 +674,21 @@ void LoginConnection::dispatch_push_message(void* body)
 	{
 		if (push->versionflag == 1)
 		{
-			if (!(push->version == version))
+			if (!(push->version == login_version))
 			{
 				return;
 			}
 		}
 		else if (push->versionflag == 2)
 		{
-			if (!(version >= push->version))
+			if (!(login_version >= push->version))
 			{
 				return;
 			}
 		}
 		else if (push->versionflag == 3)
 		{
-			if (!(version <= push->version))
+			if (!(login_version <= push->version))
 			{
 				return;
 			}

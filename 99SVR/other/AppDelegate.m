@@ -101,6 +101,8 @@
     self.window.rootViewController = [[TabBarController alloc] init];
     [self.window makeKeyAndVisible];
     
+    [SVRInitLBS loadAllInfo];
+    
     NSDictionary *dictGift = [UserDefaults objectForKey:kGiftInfo];
     if (dictGift){
         [DecodeJson setGiftInfo:dictGift];
@@ -121,8 +123,13 @@
                                              selector:@selector(reachabilityChanged:)
                                                  name: kReachabilityChangedNotification
                                                object: nil];
+<<<<<<< HEAD
     [self updateVersion];
     
+=======
+    
+    //开启网络通知
+>>>>>>> b42a92c92ce8f11905585b472801a797ffaf1c38
     [hostReach startNotifier];
     
     return YES;
@@ -258,11 +265,9 @@
     NSTimeInterval backgroundTimeRemaining =[[UIApplication sharedApplication] backgroundTimeRemaining];
     if (backgroundTimeRemaining == DBL_MAX)
     {
-        DLog(@"Background Time Remaining = Undetermined");
     }
     else
     {
-        DLog(@"Background Time Remaining = %.02f Seconds", backgroundTimeRemaining);
         if (backgroundTimeRemaining<10) {
             [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
             self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
@@ -306,7 +311,10 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b42a92c92ce8f11905585b472801a797ffaf1c38
 /**
  *  连接跳转
  */
@@ -322,7 +330,6 @@
     [WeiboSDK handleOpenURL:url delegate:self] ||
     [WXApi handleOpenURL:url delegate:self];
 }
-
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {

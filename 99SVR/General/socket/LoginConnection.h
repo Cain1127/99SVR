@@ -1,9 +1,23 @@
+#ifndef __LOGIN_CONNECTION_H__
+#define __LOGIN_CONNECTION_H__
+
 #include <vector>
 #include "Connection.h"
 #include "LoginListener.h"
 #include "HallListener.h"
 #include "PushListener.h"
 #include "LoginMessage.pb.h"
+
+extern UserLogonSuccess2 loginuser;
+extern  UserLogonReq4 login_req4;
+extern  UserLogonReq5  login_req5;
+
+extern  uint32 login_reqv;
+extern  uint32 login_nmobile;
+extern  uint32 login_version;
+extern  uint32 login_userid;
+extern  string login_password;
+
 
 class LoginConnection : public Connection
 {
@@ -13,13 +27,6 @@ private:
 	LoginListener* login_listener;
 	HallListener* hall_listener;
 	PushListener* push_listener;
-
-	UserLogonSuccess2 logonuser;
-	UserLogonReq4 req4;
-	UserLogonReq5  req5;
-	uint32 reqv;
-	uint32 nmobile;
-	uint32 version;
 
 
 	void dispatch_push_message(void* body);
@@ -59,19 +66,19 @@ public:
 
 	void SendMsg_ExitAlertReq();
 
-	//--------------------------------------//
-	/*
+	
+
 	void SendMsg_MessageUnreadReq();
 
 	void SendMsg_HallMessageReq(HallMessageReq& req);
+	void SendMsg_HallMessageReq2(TextRoomList_mobile& head,HallMessageReq& req);
 
 	void SendMsg_ViewAnswerReq(ViewAnswerReq& req);
 
 	void SendMsg_InterestForReq(InterestForReq& req);
 
 	void SendMsg_FansCountReq(uint32 teacherid);
-	*/
-	//-------------------------------------//
+	
 
 	void close();
 
@@ -80,3 +87,5 @@ public:
 	~LoginConnection(void);
 
 };
+
+#endif

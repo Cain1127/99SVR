@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "cmd_vchat.h"
 #import "yc_datatypes.h"
+#import "CommonMessage.pb.h"
 
 @class RoomUser;
 
@@ -16,12 +17,12 @@
 {
     int _m_nOp[4];
     char cCarName[NAMELEN];
-//    SiegeInfo_t *_m_tSiegeInfo;
     char cRoomName[NAMELEN];
 }
 
-- (id)initWithRoom:(CMDJoinRoomResp_t*)pResp;
+- (id)initWithRoom:(CMDJoinRoomResp_t *)pResp;
 
+- (void)setRoomInfo:(JoinRoomResp *)pResp;
 - (BOOL)IsRoomFangzhu:(int) userid;   //是不是房主
 - (BOOL)IsRoomFuFangzhu:(int)userid;  //是不是副房主
 - (int)getUserCount;
@@ -45,18 +46,16 @@
 @property (nonatomic,assign) int  m_bGetUserListFinished;   //用户列表是否下载完成
 @property (nonatomic,copy) NSString *strGateURL;
 @property (nonatomic,copy) NSString *strRoomName;
-//@property (nonatomic,strong) NSMutableArray *aryNotice;
 @property (nonatomic,assign) uint32 m_nMaxWaitMicUser;
 @property (nonatomic,assign) uint32 m_nMaxUserWitMic;
 @property (nonatomic,assign) uint32 m_bUsePwd;
 @property (nonatomic,assign) uint32 m_bCollectRoom;
 @property (nonatomic,assign) int ncarid;
+
 @property (nonatomic,copy) NSString *strPwd;
 
 @property (nonatomic,strong) NSMutableDictionary *dictUser;
-//@property (nonatomic,strong) NSMutableArray *aryWaitMic;
-//@property (nonatomic,strong) NSMutableArray *arySendFireWork;
-//@property (nonatomic,copy) NSString *strStatus;
+
 @property (nonatomic,strong) NSMutableArray *aryUser;
 
 @end

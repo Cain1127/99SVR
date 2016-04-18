@@ -15,7 +15,7 @@
 
 @implementation SVRInitLBS
 
-+ (void)load
++ (void)loadAllInfo
 {
     //获取登录服务器地址
     [SVRInitLBS loginLocal];
