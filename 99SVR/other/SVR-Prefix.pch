@@ -27,9 +27,17 @@
 #import "ProgressHUD.h"
 #import "UserInfo.h"
 #import "ZLLogonServerSing.h"
+#import "UIImageView+WebCache.h"
+#import "SDImageCache.h"
+#import "Toast+UIView.h"
+#import "HttpManagerSing.h"
+
+
+#define kMain_color UIColorFromRGB(0x0078FF)
 
 #define KUserSingleton [UserInfo sharedUserInfo]
 #define kProtocolSingle [ZLLogonServerSing sharedZLLogonServerSing]
+#define kHTTPSingle [HttpProtocolManager sharedHttpProtocolManager]
 
 #define UIColorFromRGBHex(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -38,21 +46,6 @@
 
 #define gcd_main_safe(block) dispatch_async(dispatch_get_main_queue(), block);
 
-
-//播放错误信息提示
-typedef enum {
-    VideoPlayErrorTypeInput,
-    VideoPlayErrorTypeSDLError,
-    VideoPlayErrorTypeInitError,
-    VideoPlayErrorTypeHDError
-} VideoPlayErrorType;
-//播放状态
-
-typedef enum {
-    VideoPlayStatePlaying = 10000,
-    VideoPlayStatePause,
-    VideoPlayStateStop
-} VideoPlayState;
 
 /**
  *  文字直播信息cell内部使用view类型

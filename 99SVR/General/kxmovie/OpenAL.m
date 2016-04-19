@@ -126,12 +126,12 @@
         aSampleRate = 48000;
         aBit = 16;
         aChannel = 2;
-        ALenum format=AL_FORMAT_STEREO16;
+//        ALenum format=AL_FORMAT_STEREO16;
         
-        alBufferData(bufferID, format,data, (ALsizei)dataSize,aSampleRate);
+        alBufferData(bufferID, AL_FORMAT_STEREO16,data,(ALsizei)dataSize,44100);
+        
         if ((error =alGetError())!=AL_NO_ERROR){
             DLog(@"err:%@",[self GetALCErrorString:error]);
-            DLog(@"create bufferData failed");
             [ticketCondition unlock];
             return;
         }

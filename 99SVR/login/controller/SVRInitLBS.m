@@ -25,7 +25,14 @@
     [SVRInitLBS requestGift];
     
     [SVRInitLBS authVersion];
+    
+    [SVRInitLBS httpTest];
 }
+
++ (void)httpTest{
+    [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
+}
+
 /**
  *  请求lbs服务器信息
  */

@@ -8,6 +8,7 @@
 
 #import "SearchController.h"
 #import "MySearchBar.h"
+#import "ConnectRoomViewModel.h"
 #import "AlertFactory.h"
 #import "DecodeJson.h"
 #import "GroupListRequest.h"
@@ -33,6 +34,7 @@
     UITextField *_mySearchBar;
 }
 
+@property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
 @property(nonatomic, strong) UITableView *searchResultsTable;
 @property (nonatomic,copy) NSArray *aryResult;
 @property (nonatomic,copy) NSArray *allDatas;
@@ -326,12 +328,12 @@
 - (void)connectRoom:(RoomHttp *)room
 {
 #if 1
-    
-    _room = room;
-    [kProtocolSingle connectVideoRoom:[room.nvcbid intValue] roomPwd:@""];
     [self.view makeToastActivity];
-    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
-    
+    if (_roomViewModel==nil) {
+        _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
+    }
+    [_roomViewModel connectViewModel:room];
+
 #endif
 #if 0
     RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
@@ -354,16 +356,6 @@
     return UIStatusBarStyleLightContent;
 }
 
-//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-//{
-//    DLog(@"string:%@",string);
-//    if (textField.text.length>0)
-//    {
-//        [self startSearch:textField.text];
-//    }
-//    return YES;
-//}
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.text.length>0)
@@ -374,57 +366,7 @@
     return YES;
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
-}
 
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)joinRoomErr:(NSNotification *)notify{
-    [DecodeJson cancelPerfor:self];
-    if ([notify.object isKindOfClass:[NSDictionary class]]) {
-        NSDictionary *dict = [notify object];
-        int errid = [[dict objectForKey:@"err"] intValue];
-        NSString *strMsg = [dict objectForKey:@"msg"];
-        if (errid==201) {
-            [AlertFactory createPassswordAlert:self room:_room];
-        }
-        else{
-            @WeakObj(strMsg)
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [ProgressHUD showError:strMsgWeak];
-            });
-        }
-    }
-}
-
-- (void)joinSuc{
-    [DecodeJson cancelPerfor:self];
-    @WeakObj(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak.view hideToastActivity];
-        [ProgressHUD showSuccess:@"加入房间成功"];
-        RoomViewController *roomView = [[RoomViewController alloc] initWithModel:_room];
-        [selfWeak.navigationController pushViewController:roomView animated:YES];
-    });
-    
-}
-
-- (void)joinRoomTimeOut
-{
-    [DecodeJson cancelPerfor:self];
-    @WeakObj(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak.view hideToastActivity];
-        [ProgressHUD showError:@"加入房间失败" ];
-    });
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 /*
 - (void)connectRoom:(RoomHttp *)room{

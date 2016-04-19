@@ -21,4 +21,5 @@
 - (id)initWithFrame:(CGRect)frame ary:(NSArray *)keyName;
 
 - (void)setBtnSelect:(NSInteger)tag;
+
 @end

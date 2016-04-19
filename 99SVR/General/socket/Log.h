@@ -4,8 +4,6 @@
 
 #include "platform.h"
 
-#define DEBUG
-
 #ifdef DEBUG
 #ifdef WIN
 #define LOG(format,...) printf("LINE: %d: "format"\n", __LINE__, ##__VA_ARGS__)
