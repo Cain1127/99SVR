@@ -89,6 +89,8 @@
     CGFloat _titleOffset;
     //linview 下划线比标签左右的偏移量
     CGFloat _lineViewOffset;
+    //默认选择的模块
+    CGFloat _selectIndex;
 }
 /**文字底部下划线*/
 @property (nonatomic, strong) UIView *lineView;
@@ -97,7 +99,7 @@
 @end
 @implementation SliderMenuTopScrollView
 
-- (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles
+- (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles withDefaultSelectIndex:(NSInteger)index
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -114,6 +116,7 @@
         _titleFont = 15;
         _lineViewOffset = 5;
         _titleOffset = 20;
+        _selectIndex = index;
         [self calculateJianGeWithTitleArrays:titles];
         [self createTitle];
         
@@ -162,7 +165,7 @@
         titleLabel.tag = i+1;
         [titleLabel addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(titleLabelClick:)]];
         
-        if (i==0) {
+        if (i==_selectIndex) {
             titleLabel.textColor = titleSelectColor;
             titleLabel.userInteractionEnabled = NO;
             self.lineView.frame = (CGRect){CGRectGetMinX(titleLabel.frame) - (_lineViewOffset),_selfHeight-1,CGRectGetWidth(titleLabel.frame)+ (2*_lineViewOffset),1};

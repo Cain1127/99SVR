@@ -115,6 +115,8 @@
 		B4C9FABA1CC4A42D00E8A872 /* RoomInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5491C2CC7A300A042E8 /* RoomInfo.mm */; };
 		B4C9FABB1CC4A43800E8A872 /* MASConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4C51C2CC7A200A042E8 /* MASConstraint.m */; };
 		B4C9FABC1CC4A44500E8A872 /* TextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A0E1CACE4EF005B9DCE /* TextCell.m */; };
+		B4EA09021CC602E100E8F933 /* BaseTableViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09011CC602E100E8F933 /* BaseTableViewModel.m */; };
+		B4EA09051CC6048300E8F933 /* TraderTableViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09041CC6048300E8F933 /* TraderTableViewModel.m */; };
 		BB06311C1C61C827008AD41D /* NoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB06311B1C61C827008AD41D /* NoticeModel.m */; };
 		BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B481CB112FC00C573E0 /* BaseService.m */; };
 		BB125B4C1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B4A1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m */; };
@@ -751,6 +753,10 @@
 		B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		B4C6B7B01CBE1B220072795B /* RegisterTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTextField.h; sourceTree = "<group>"; };
 		B4C6B7B11CBE1B220072795B /* RegisterTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTextField.m; sourceTree = "<group>"; };
+		B4EA09001CC602E100E8F933 /* BaseTableViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewModel.h; sourceTree = "<group>"; };
+		B4EA09011CC602E100E8F933 /* BaseTableViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewModel.m; sourceTree = "<group>"; };
+		B4EA09031CC6048300E8F933 /* TraderTableViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TraderTableViewModel.h; sourceTree = "<group>"; };
+		B4EA09041CC6048300E8F933 /* TraderTableViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TraderTableViewModel.m; sourceTree = "<group>"; };
 		BB06311A1C61C827008AD41D /* NoticeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeModel.h; sourceTree = "<group>"; };
 		BB06311B1C61C827008AD41D /* NoticeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeModel.m; sourceTree = "<group>"; };
 		BB125B471CB112FC00C573E0 /* BaseService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseService.h; path = blocks/BaseService.h; sourceTree = "<group>"; };
@@ -1831,6 +1837,7 @@
 		B47DD5911CBF2C1B00C47EF7 /* Trader(高手操盘) */ = {
 			isa = PBXGroup;
 			children = (
+				B4EA08FF1CC602E100E8F933 /* viewModel */,
 				B4A15E951CBFA91300587E3F /* cell */,
 				B47DD5921CBF2C9300C47EF7 /* controller */,
 				B47DD5931CBF2C9300C47EF7 /* model */,
@@ -1910,6 +1917,17 @@
 				B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */,
 			);
 			path = IAPHelper;
+			sourceTree = "<group>";
+		};
+		B4EA08FF1CC602E100E8F933 /* viewModel */ = {
+			isa = PBXGroup;
+			children = (
+				B4EA09001CC602E100E8F933 /* BaseTableViewModel.h */,
+				B4EA09011CC602E100E8F933 /* BaseTableViewModel.m */,
+				B4EA09031CC6048300E8F933 /* TraderTableViewModel.h */,
+				B4EA09041CC6048300E8F933 /* TraderTableViewModel.m */,
+			);
+			path = viewModel;
 			sourceTree = "<group>";
 		};
 		BB1661801C3D029200D318BE /* MBProgressHUD */ = {
@@ -3517,6 +3535,7 @@
 				BB63F5D51C2CC7A300A042E8 /* UIScrollView+MJRefresh.m in Sources */,
 				BB5E4FA61CBF7D1B00F8C1D4 /* TextRoomModel.m in Sources */,
 				B47DD59E1CBF345300C47EF7 /* SliderMenuView.m in Sources */,
+				B4EA09021CC602E100E8F933 /* BaseTableViewModel.m in Sources */,
 				BB17692F1C7B006F00CE947C /* UIImageView+WebCache.m in Sources */,
 				BB9765F31C85B55F00FAA5B7 /* DeviceUID.m in Sources */,
 				188741831C9702DA002EF25A /* UIBarButtonItem+Extension.m in Sources */,
@@ -3628,6 +3647,7 @@
 				1898AC661C9BADE600F2681D /* AboutController.m in Sources */,
 				BB63F5C11C2CC7A300A042E8 /* MASCompositeConstraint.m in Sources */,
 				BB63F47B1C2B809800A042E8 /* UserInfo.m in Sources */,
+				B4EA09051CC6048300E8F933 /* TraderTableViewModel.m in Sources */,
 				BB63F61C1C2CC7A300A042E8 /* RoomGroup.m in Sources */,
 				BB5E4E891CB8E74500F8C1D4 /* AlertFactory.m in Sources */,
 				BB63F6221C2CC7A300A042E8 /* MySearchBar.m in Sources */,
