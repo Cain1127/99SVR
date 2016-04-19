@@ -21,7 +21,14 @@
 @property (nonatomic , assign) NSInteger defaultSelectIndex;
 
 
-
+/**
+ *  滚动控制视图
+ *
+ *  @param frame       frame
+ *  @param titles      标题
+ *  @param selectIndex 默认选择的模块（1，2，3，4....下标是按照1开始计算 不是从0开始计算）
+ *
+ */
 - (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles withDefaultSelectIndex:(NSInteger)selectIndex;
 /**存储view的数组*/
 @property (nonatomic, strong) NSArray *viewArrays;

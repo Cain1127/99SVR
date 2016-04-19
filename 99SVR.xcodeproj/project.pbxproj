@@ -117,6 +117,7 @@
 		B4C9FABC1CC4A44500E8A872 /* TextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A0E1CACE4EF005B9DCE /* TextCell.m */; };
 		B4EA09021CC602E100E8F933 /* BaseTableViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09011CC602E100E8F933 /* BaseTableViewModel.m */; };
 		B4EA09051CC6048300E8F933 /* TraderTableViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09041CC6048300E8F933 /* TraderTableViewModel.m */; };
+		B4EA09071CC62CC000E8F933 /* StockDealHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4EA09061CC62CC000E8F933 /* StockDealHeaderView.xib */; };
 		BB06311C1C61C827008AD41D /* NoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB06311B1C61C827008AD41D /* NoticeModel.m */; };
 		BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B481CB112FC00C573E0 /* BaseService.m */; };
 		BB125B4C1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B4A1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m */; };
@@ -757,6 +758,7 @@
 		B4EA09011CC602E100E8F933 /* BaseTableViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewModel.m; sourceTree = "<group>"; };
 		B4EA09031CC6048300E8F933 /* TraderTableViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TraderTableViewModel.h; sourceTree = "<group>"; };
 		B4EA09041CC6048300E8F933 /* TraderTableViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TraderTableViewModel.m; sourceTree = "<group>"; };
+		B4EA09061CC62CC000E8F933 /* StockDealHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StockDealHeaderView.xib; sourceTree = "<group>"; };
 		BB06311A1C61C827008AD41D /* NoticeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeModel.h; sourceTree = "<group>"; };
 		BB06311B1C61C827008AD41D /* NoticeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeModel.m; sourceTree = "<group>"; };
 		BB125B471CB112FC00C573E0 /* BaseService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseService.h; path = blocks/BaseService.h; sourceTree = "<group>"; };
@@ -1886,6 +1888,7 @@
 				B47DD59C1CBF345300C47EF7 /* SliderMenuView.m */,
 				B44F77661CC39FF1008E3B26 /* StockDealHeaderView.h */,
 				B44F77671CC39FF1008E3B26 /* StockDealHeaderView.m */,
+				B4EA09061CC62CC000E8F933 /* StockDealHeaderView.xib */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -3238,6 +3241,7 @@
 				BBCE9D3F1CB3AD5600DA56D6 /* 157_1.png in Resources */,
 				BB63F2BD1C27FB2800A042E8 /* 21.gif in Resources */,
 				18D3CB911CC0E37700816BD0 /* TQMessageCell.xib in Resources */,
+				B4EA09071CC62CC000E8F933 /* StockDealHeaderView.xib in Resources */,
 				BBCE9D361CB3AD5600DA56D6 /* 148_1.png in Resources */,
 				BBCE9D401CB3AD5600DA56D6 /* 158_1.png in Resources */,
 				BBCE9D101CB3AD5600DA56D6 /* 110_1.png in Resources */,
