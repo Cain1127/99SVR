@@ -104,6 +104,7 @@
     }
     return _sliderMenuView;
 }
+
 -(UITableView *)dayTab{
 
     if (!_dayTab) {
@@ -140,5 +141,45 @@
     return tableView;
 }
 
+<<<<<<< HEAD
+=======
+#pragma mark tableView delegate dataSource
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    return 20;
+    
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return ValueWithTheIPhoneModelString(@"150,180,200");
+}
+
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    static NSString * cellId = @"cellId";
+    
+    TraderHomeCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (!cell) {
+        
+        cell = [[TraderHomeCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        
+    }
+    
+    cell.backgroundColor = [UIColor clearColor];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [self.navigationController pushViewController:[[StockDealViewController alloc]init] animated:YES];
+    
+}
+>>>>>>> master
 
 @end

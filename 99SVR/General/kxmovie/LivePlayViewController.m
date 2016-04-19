@@ -89,7 +89,6 @@
     _glView.contentMode = UIViewContentModeScaleAspectFit;
     _glView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:_glView];
-//    [self.view setBackgroundColor:UIColorFromRGB(0x000000)];
     [self setDefaultImg];
 }
 
@@ -115,7 +114,6 @@
 - (void)setDefaultImg
 {
     
-    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
     char cBuffer[100]={0};
     sprintf(cBuffer,"video_logo_bg@2x");
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
@@ -127,7 +125,6 @@
 
 - (void)setNoVideo
 {
-//    [self.view setBackgroundColor:UIColorFromRGB(0x3976cc)];
     char cBuffer[100]={0};
     sprintf(cBuffer,"video_shangmai_bg@2x");
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
@@ -472,10 +469,6 @@
         ^{
             if(__self.bVideo && !__self.backGroud)
             {
-                if(__self.glView.height != kVideoImageHeight && self.view.backgroundColor != UIColorFromRGB(0x000000))
-                {
-                    [__self.view setBackgroundColor:UIColorFromRGB(0x000000)];
-                }
                 if(__rgbImage){
                     __self.glView.image = __rgbImage;
                 }
@@ -501,11 +494,6 @@
 - (void)handleDoubleTapFrom
 {
     
-}
-
-- (void)stopWithError:(VideoPlayErrorType)errotType andError:(NSError *)error
-{
-    [self stop];
 }
 
 #pragma mark -

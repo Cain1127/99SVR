@@ -21,8 +21,11 @@
     [self initData];
     [self initUI];
 
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> master
 }
 
 -(void)initUI{

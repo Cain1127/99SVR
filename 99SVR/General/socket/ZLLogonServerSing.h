@@ -58,5 +58,9 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
  *  退出房间
  */
 - (void)exitRoom;
+<<<<<<< HEAD
+=======
+
+>>>>>>> c608927bbd9d0e7936b560ab4c2f81b023a778e4
 
 @end
