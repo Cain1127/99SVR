@@ -101,6 +101,7 @@
     }
     return _sliderMenuView;
 }
+
 -(UITableView *)dayTab{
 
     if (!_dayTab) {
@@ -146,13 +147,11 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     return ValueWithTheIPhoneModelString(@"150,180,200");
 }
 
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    
     return 1;
 }
 

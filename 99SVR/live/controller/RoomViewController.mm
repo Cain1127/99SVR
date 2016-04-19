@@ -7,46 +7,50 @@
 //
 
 #import "RoomViewController.h"
-#import "ChatView.h"
+
+#import "XTraderView.h"
+#import "XExpertIdeaView.h"
+#import "XPriPersonView.h"
+
 #import "RoomService.h"
 #import "AlertFactory.h"
-#import "InAppPurchasesViewController.h"
+
 #import "ZLLogonProtocol.h"
 #import "ZLLogonServerSing.h"
+
+#import "InAppPurchasesViewController.h"
 #import "PaySelectViewController.h"
-#import "UIControl+UIControl_XY.h"
-#import "LoginViewController.h"
+
+#import "LivePlayViewController.h"
+#import "Photo.h"
+#import "PhotoViewController.h"
+
+#import "ZLCoreTextCell.h"
+#import "RoomCoreTextCell.h"
+
+#import "NoticeModel.h"
+#import "RoomHttp.h"
+#import "RoomGroup.h"
+
+#import "ChatView.h"
 #import "MyScrollView.h"
 #import "FloatingView.h"
 #import "GiftView.h"
-#import "GitInfo.h"
-#import "RoomCoreTextCell.h"
-#import "RoomHttp.h"
-#import "SDImageCache.h"
-#import "NoticeModel.h"
-#import "UIImageView+WebCache.h"
 #import "RoomDownView.h"
-#import "Photo.h"
-#import "PhotoViewController.h"
-#import "ZLCoreTextCell.h"
-#import "UITableView+reloadComplete.h"
-#import "RoomHttp.h"
-#import "RoomGroup.h"
 #import "RoomUserCell.h"
-#import "Toast+UIView.h"
-#import "EmojiTextAttachment.h"
-#import "UIImage+animatedGIF.h"
-#import "UserInfo.h"
 #import "RoomUser.h"
 #import "RoomTitleView.h"
-#import "LivePlayViewController.h"
 #import "RoomInfo.h"
-#import "UserInfo.h"
-#import "ChatButton.h"
-#import "EmojiView.h"
-#import "NSAttributedString+EmojiExtension.h"
 #import "UserListView.h"
+#import "SliderMenuView.h"
+#import "RoomHeaderView.h"
+
+#import "NSAttributedString+EmojiExtension.h"
+#import "UIControl+UIControl_XY.h"
+#import "UITableView+reloadComplete.h"
 #import <DTCoreText/DTCoreText.h>
+
+#import "XVideoLiveViewcontroller.h"
 
 #define TABLEVIEW_ARRAY_PREDICATE(A) [NSPredicate predicateWithFormat:@"SELF CONTAINS %@",A];
 
@@ -60,7 +64,6 @@
     BOOL bDrag;
     UIView *defaultHeadView;
     UIView *defaultDownView;
-    ChatButton *_btnName;
     UIButton *_btnSend;
     UITextView *_textChat;
     UILabel *_lblBlue;
@@ -68,9 +71,8 @@
     float duration;    // 动画持续时间
     CGFloat originalY; // TextField原来的纵坐标
     int toUser;
-    UIView  *_topHUD;
+   
     UILabel *_lblName;
-    UIView *_downHUD;
     UIButton *_btnVideo;
     NSInteger _nTag;
     dispatch_queue_t room_gcd;
@@ -83,6 +85,7 @@
     CGFloat fTempWidth;
     BOOL bFull;
     RoomHttp *_room;
+<<<<<<< HEAD
     GiftView *_giftView;
     RoomDownView *_infoView;
     UIView *userHidden;
@@ -90,6 +93,13 @@
     ChatView *_inputView;
     int nColor;
     UserListView *_listView;
+=======
+    
+    UIView *userHidden;
+    UIView *headTable;
+    ChatView *_inputView;
+    
+>>>>>>> c608927bbd9d0e7936b560ab4c2f81b023a778e4
     NSCache *chatCache;
     DTAttributedLabel *lblTeachInfo;
     BOOL bGiftView;
@@ -97,31 +107,47 @@
     
 }
 
-@property (nonatomic,assign) int nCurGift;
+
 
 @property (nonatomic,strong) NSCache *cellCache;
-@property (nonatomic,strong) NSMutableDictionary *dictIcon;
-@property (nonatomic,strong) LivePlayViewController *ffPlay;
+
 @property (nonatomic,strong) UIButton *btnRight;
 @property (nonatomic,strong) UIButton *btnFull;
 @property (nonatomic,assign) CGFloat fChatHeight;
+
 @property (nonatomic,strong) RoomTitleView *group;
+
 @property (nonatomic,strong) UITableView *priChatView;
 @property (nonatomic,strong) UITableView *noticeView;
 @property (nonatomic,strong) UITableView *chatView;
 @property (assign,nonatomic) NSInteger keyboardPresentFlag;
-@property (nonatomic,strong) MyScrollView *scrollView;
 
+@property (nonatomic,strong) MyScrollView *scrollView;
 
 @property (nonatomic,copy) NSArray *aryUser;
 @property (nonatomic,copy) NSArray *aryNotice;
 @property (nonatomic,copy) NSArray *aryPriChat;
 @property (nonatomic,copy) NSArray *aryChat;
 
+@property (nonatomic,strong) XExpertIdeaView *expertView;
+@property (nonatomic,strong) XTraderView *tradeView;
+@property (nonatomic,strong) XPriPersonView *personView;
+@property (nonatomic,strong) XVideoLiveViewcontroller *liveControl;
 
 @end
 
 @implementation RoomViewController
+
+//-(SliderMenuView *)sliderMenuView{
+//    if (!sliderMenu) {
+//        
+//        CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
+//        CGFloat tabbarH = CGRectGetHeight(self.tabBarController.tabBar.frame);
+//        sliderMenu = [[SliderMenuView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH-tabbarH} withTitles:@[@"日收益",@"月收益",@"总收益"]];
+//        sliderMenu.viewArrays = @[self.dayTab,self.monTab,self.totalTab];
+//    }
+//    return _sliderMenuView;
+//}
 
 - (id)initWithModel:(RoomHttp *)room
 {
@@ -130,6 +156,7 @@
     return self;
 }
 
+<<<<<<< HEAD
 - (void)connectRoomInfo
 {
     NSString *strAddress;
@@ -161,10 +188,14 @@
     [[SDImageCache sharedImageCache] clearMemory];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
+=======
+
+>>>>>>> c608927bbd9d0e7936b560ab4c2f81b023a778e4
 
 - (void)dealloc
 {
     DLog(@"room view");
+<<<<<<< HEAD
 
 //    [_tcpSocket exit_Room:YES];
 //    _tcpSocket = nil;
@@ -172,39 +203,27 @@
 
     [_ffPlay stop];
     //TODD:关闭房间   清楚所有信息
+=======
+>>>>>>> c608927bbd9d0e7936b560ab4c2f81b023a778e4
     [kProtocolSingle exitRoom];
 
     [[SDImageCache sharedImageCache] clearMemory];
+<<<<<<< HEAD
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
     _ffPlay = nil;
+=======
+>>>>>>> c608927bbd9d0e7936b560ab4c2f81b023a778e4
     [_scrollView removeFromSuperview];
     _scrollView = nil;
-    [_dictIcon removeAllObjects];
-    _dictIcon = nil;
-    [_group removeFromSuperview];
-    _group = nil;
     [_chatView removeFromSuperview];
     _chatView = nil;
     [_noticeView removeFromSuperview];
     _noticeView = nil;
     [_priChatView removeFromSuperview];
     _priChatView = nil;
-    [[GitInfo sharedGitInfo] removeAllIcon];
 }
 
-- (void)navBack
-{
-    if(!bFull)
-    {
-        [_ffPlay stop];
-        [self closeRoomInfo];
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    else
-    {
-        [self fullPlayMode];
-    }
-}
+
 
 - (void)colletRoom
 {
@@ -226,16 +245,6 @@
     }
 }
 
-#pragma mark 刷新文字与图片的位置
-- (void)refreshBtnName
-{
-    CGSize size = [_btnName.titleLabel.text sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}];
-    CGFloat fTemp = (_btnName.width-20)/2+size.width/2;
-    CGFloat fWidth = fTemp >= (_btnName.width-20) ? (_btnName.width-20+3) :fTemp+3;
-    _btnName.imageEdgeInsets = UIEdgeInsetsMake(0.,fWidth, 0., 0.);
-    _btnName.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 20);
-}
-
 #pragma mark 关注
 - (void)colletCurrentRoom
 {
@@ -254,482 +263,88 @@
     }
 }
 
-//隐藏透明栏
-- (void)hiddenTopHud
-{
-    if ([NSThread isMainThread])
-    {
-        _topHUD.alpha = 0;
-        _downHUD.alpha = 0;
-    }
-    else
-    {
-        __weak UIView *__topHud = _topHUD;
-        __weak UIView *__downHUD = _downHUD;
-        dispatch_main_async_safe(
-       ^{
-           __topHud.alpha = 0;
-           __downHUD.alpha = 0;
-       });
+- (void)createScrolView:(CGRect)frame{
+    if (_scrollView==nil) {
+        _scrollView = [[MyScrollView alloc] initWithFrame:frame];
+        [self.view addSubview:_scrollView];
+        _scrollView.clipsToBounds = YES;
+        _scrollView.pagingEnabled = YES;
+        _scrollView.bounces = NO;
+        _scrollView.userInteractionEnabled = YES;
+        _scrollView.showsHorizontalScrollIndicator = NO;
+        _scrollView.showsVerticalScrollIndicator = NO;
+        _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        _scrollView.delegate = self;
+        [_scrollView setBackgroundColor:UIColorFromRGB(0xffffff)];
+        _scrollView.contentSize = CGSizeMake(kScreenWidth*4, _scrollView.height);
     }
 }
 
-- (void)showTopHUD
-{
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    if(_topHUD.alpha==0)
-    {
-        _topHUD.alpha = 1;
-        _downHUD.alpha = 1;
-        [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:2.0];
-    }
-    else
-    {
-        _topHUD.alpha = 0;
-        _downHUD.alpha = 0;
-    }
-}
-
-- (void)roomTitleView:(UIButton *)sender
-{
-    [self switchBtn:(int)sender.tag];
-}
-
+/**
+ *  新初始化方案
+ */
 - (void)initUIHead
 {
-    _ffPlay = [[LivePlayViewController alloc] init];
-    [self.view insertSubview:_ffPlay.view atIndex:1];
-    _ffPlay.view.frame = Rect(0, 20, kScreenWidth, kScreenHeight);
+    RoomHeaderView *headView = [[RoomHeaderView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kRoom_head_view_height)];
+    [self.view addSubview:headView];
     
-    _topHUD = [[UIView alloc] initWithFrame:CGRectMake(0,20,kScreenWidth,44)];
-    _topHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [self.view addSubview:_topHUD];
-    _topHUD.alpha = 0;
+    [self createScrolView:Rect(0, headView.height, kScreenWidth, kScreenHeight-headView.height)];
+    CGRect frame = _scrollView.bounds;
+    _liveControl = [[XVideoLiveViewcontroller alloc] initWithModel:_room];
+    [self addChildViewController:_liveControl];
+    _liveControl.view.frame = frame;
     
-    UIImageView *topViewBg = [[UIImageView alloc] initWithFrame:_topHUD.bounds];
-    [topViewBg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
-    [topViewBg setTag:1];
-    [_topHUD addSubview:topViewBg];
+    frame.origin.x += kScreenWidth;
+    _expertView = [[XExpertIdeaView alloc] initWithFrame:frame];
     
-    _lblName = [[UILabel alloc] initWithFrame:Rect(50,35,kScreenWidth-100,20)];
-    [_lblName setTextAlignment:NSTextAlignmentCenter];
-    char cString[150] = {0};
-    sprintf(cString,"%s %s",[_room.cname UTF8String],[_room.nvcbid UTF8String]);
-    [_lblName setText:[[NSString alloc] initWithUTF8String:cString]];
+    frame.origin.x += kScreenWidth;
+    _tradeView = [[XTraderView alloc] initWithFrame:frame];
     
-    [_lblName setFont:[UIFont fontWithName:@"Helvetica" size:15.0f]];
-    [_lblName setTextColor:[UIColor whiteColor]];
-    [_topHUD addSubview:_lblName];
+    frame.origin.x += kScreenWidth;
+    _personView = [[XPriPersonView alloc] initWithFrame:frame];
     
-    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setImage:[UIImage imageNamed:@"back_normal"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_high"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(navBack) forControlEvents:UIControlEventTouchUpInside];
-    [_topHUD addSubview:btnBack];
-    btnBack.tag = 2;
-    btnBack.frame = Rect(0, 0, 44, 44);
-    
-    _btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_btnRight setImage:[UIImage imageNamed:@"coll_normal"] forState:UIControlStateNormal];
-    [_btnRight setImage:[UIImage imageNamed:@"coll_high"] forState:UIControlStateHighlighted];
-    [_btnRight setImage:[UIImage imageNamed:@"coll_high"] forState:UIControlStateSelected];
-    [_btnRight addTarget:self action:@selector(colletCurrentRoom) forControlEvents:UIControlEventTouchUpInside];
-    [_topHUD addSubview:_btnRight];
-    _btnRight.frame = Rect(kScreenWidth-44, 0, 44, 44);
-    
-    NSArray *aryTitle = @[@"聊天区",@"我的",@"公告",@"课程表"];
-    _group = [[RoomTitleView alloc] initWithFrame:Rect(0,20+kVideoImageHeight,kScreenWidth, 44) ary:aryTitle];
-    [self.view addSubview:_group];
-    _group.delegate = self;
-    
-    bodyView = [[UIView alloc] initWithFrame:Rect(0, _group.y+_group.height, kScreenWidth,kScreenHeight-_group.y-_group.height)];
-    [self.view addSubview:bodyView];
-    
-    _scrollView = [[MyScrollView alloc] initWithFrame:Rect(0, 0, bodyView.width, bodyView.height)];
-    [bodyView addSubview:_scrollView];
-    
-    _scrollView.clipsToBounds = YES;
-    _scrollView.pagingEnabled = YES;
-    _scrollView.bounces = NO;
-    _scrollView.userInteractionEnabled = YES;
-    _scrollView.showsHorizontalScrollIndicator = NO;
-    _scrollView.showsVerticalScrollIndicator = NO;
-    _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _scrollView.delegate = self;
-    [_scrollView setBackgroundColor:UIColorFromRGB(0xffffff)];
-    
-    _chatView = [[UITableView alloc] initWithFrame:Rect(0, 0, _scrollView.width, _scrollView.height-50)];
-    [_scrollView addSubview:_chatView];
-    _chatView.delegate = self;
-    _chatView.dataSource = self;
-    [_chatView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [_chatView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
-    
-    _priChatView = [[UITableView alloc] initWithFrame:Rect(_scrollView.width,0, _scrollView.width, _scrollView.height)];
-    [_scrollView addSubview:_priChatView];
-    _priChatView.delegate = self;
-    _priChatView.dataSource = self;
-    [_priChatView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [_priChatView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
-    
-    _noticeView = [[UITableView alloc] initWithFrame:Rect(_scrollView.width*2, 0, _scrollView.width, _scrollView.height) style:UITableViewStyleGrouped];
-    [_scrollView addSubview:_noticeView];
-    _noticeView.delegate = self;
-    _noticeView.dataSource = self;
-    [_noticeView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    
-    lblTeachInfo = [[DTAttributedLabel alloc] initWithFrame:Rect(_scrollView.width*3+8, 0, _scrollView.width-16,_scrollView.height)];
-    [_scrollView addSubview:lblTeachInfo];
-    lblTeachInfo.delegate = self;
-    
-    _scrollView.contentSize = CGSizeMake(kScreenWidth*4,_scrollView.height);
-    _downHUD = [[UIView alloc] initWithFrame:Rect(0, kVideoImageHeight-24, kScreenWidth, 44)];
-    _downHUD.alpha = 0;
-    UIImageView *downImg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
-    [downImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
-    [_downHUD addSubview:downImg];
-    [downImg setTag:1];
-    [self.view addSubview:_downHUD];
-    
-    _btnVideo = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_downHUD addSubview:_btnVideo];
-    _btnVideo.frame = Rect(10, 0, 44, 44);
-    [_btnVideo setImage:[UIImage imageNamed:@"video_h"] forState:UIControlStateNormal];
-    [_btnVideo setImage:[UIImage imageNamed:@"video"] forState:UIControlStateSelected];
-    [_btnVideo addTarget:self action:@selector(connectUnVideo:) forControlEvents:UIControlEventTouchUpInside];
-    
-    _btnFull = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_downHUD addSubview:_btnFull];
-    _btnFull.frame = Rect(kScreenWidth-54, 0, 44, 44);
-    [_btnFull setImage:[UIImage imageNamed:@"full"] forState:UIControlStateNormal];
-    [_btnFull setImage:[UIImage imageNamed:@"full_h"] forState:UIControlStateSelected];
-    [_btnFull addTarget:self action:@selector(fullPlayMode) forControlEvents:UIControlEventTouchUpInside];
-    [self initUIBody];
+    [_scrollView addSubview:_liveControl.view];
+    [_scrollView addSubview:_expertView];
+    [_scrollView addSubview:_tradeView];
+    [_scrollView addSubview:_personView];
+   
 }
 
-- (void)connectUnVideo:(UIButton *)sender
-{
-    if (_ffPlay.playing)
-    {
-        [_ffPlay setOnlyAudio:sender.selected];
-        sender.selected = !sender.selected;
-    }
-}
-
-- (void)sendRose
-{
-    if([UserInfo sharedUserInfo].nType != 1 && ![_room.nvcbid isEqualToString:@"10000"] && ![_room.nvcbid isEqualToString:@"10001"])
-    {
-        [self.view makeToast:@"游客不能送花"];
-        return ;
-    }
-    [RoomService sendLocalInfo:@"[$999$]" toid:0 roomInfo:currentRoom aryChat:aryRoomChat];
-    [kProtocolSingle sendRose];
-}
-
-- (void)initUIBody
-{
-    _lblBlue = [[UILabel alloc] initWithFrame:Rect(0, _group.y+_group.height-1, 0, 2)];
-    [_lblBlue setBackgroundColor:UIColorFromRGB(0x629bff)];
-    [self.view addSubview:_lblBlue];
-    
-     _infoView = [[RoomDownView alloc] initWithFrame:Rect(0,_scrollView.height-50, kScreenWidth, 50)];
-    [_scrollView addSubview:_infoView];
-    _infoView.delegate = self;
-    
-    UILabel *lblDownLine = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];
-    [lblDownLine setBackgroundColor:UIColorFromRGB(0xcfcfcf)];
-    [downView addSubview:lblDownLine];
-    
-    UIView *whiteView = [[UIView alloc] initWithFrame:Rect(10, 7, kScreenWidth-20, 36)];
-    [whiteView setBackgroundColor:UIColorFromRGB(0xffffff)];
-    [downView addSubview:whiteView];
-    
-    //发送消息按钮
-    _giftView = [[GiftView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
-    [self.view addSubview:_giftView];
-    _giftView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
-    _giftView.delegate = self;
-    
-    _listView = [[UserListView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight) array:nil];
-    [self.view addSubview:_listView];
-    _listView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
-    _listView.delegate = self;
-    
-    [self createChatView];
-}
-
-- (void)createChatView
-{
-    _inputView = [[ChatView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kScreenHeight)];
-    [self.view addSubview:_inputView];
-    _inputView.hidden = YES;
-    _inputView.delegate = self;
-}
-
-- (void)hidnUserTable
-{
-
-}
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
-    [self showTopHUD];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
 }
 
-- (void)startNewPlay
-{
-    for (RoomUser *user in _aryUser)
-    {
-        if ([user isOnMic])
-        {
-            [_ffPlay startPlayRoomId:[_room.nvcbid intValue] user:user.m_nUserId];
-            return ;
-        }
-    }
-    __weak LivePlayViewController *__ffPlay = _ffPlay;
-    dispatch_main_async_safe(
-    ^{
-        [__ffPlay setNullMic];
-    });
-}
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    nColor = 10000;
     room_gcd = dispatch_queue_create("decode_gcd",0);
     _cellCache = [[NSCache alloc] init];
     [_cellCache setTotalCostLimit:20];
     [self initUIHead];
     dictGift = [NSMutableDictionary dictionary];
-    UITapGestureRecognizer* singleRecogn;
-    
-    singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTopHUD)];
-    singleRecogn.numberOfTapsRequired = 1; // 双击
-    [_ffPlay.view setUserInteractionEnabled:YES];
-    [_ffPlay.view addGestureRecognizer:singleRecogn];
-    
-    singleRecogn = nil;
-    singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapFrom)];
-    singleRecogn.numberOfTapsRequired = 2;
-    [_ffPlay.view addGestureRecognizer:singleRecogn];
-    
-    [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:3.0];
     @WeakObj(self)
     dispatch_async(dispatch_get_global_queue(0,0),
     ^{
         [selfWeak colletRoom];
     });
-    _nTag = 1;
-    fTempWidth = [@"热门推荐" sizeWithAttributes:@{NSFontAttributeName:XCFONT(14)}].width;
-    [self setBluePointX:0];
-    [self switchBtn:1];
-}
-
-#pragma mark 双击事件  切换屏幕
-- (void)handleDoubleTapFrom
-{
-    [self fullPlayMode];
-}
-
-#pragma mark 切换
-#pragma mark 全屏与四屏切换，设置frame与bounds
--(void)fullPlayMode
-{
-    if (!bFull)//NO状态表示当前竖屏，需要转换成横屏
-    {
-        CGFloat _duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-        [[UIDevice currentDevice] setValue: [NSNumber numberWithInteger:UIDeviceOrientationLandscapeRight] forKey:@"orientation"];
-        [UIViewController attemptRotationToDeviceOrientation];
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:_duration];
-        CGRect frame = [UIScreen mainScreen].bounds;
-        CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
-        self.view.center = center;
-        self.view.transform = [self transformView];
-        self.view.bounds = Rect(0, 0,kScreenHeight,kScreenWidth);
-        [UIView commitAnimations];
-        bFull = YES;
-        _btnFull.selected = YES;
-    }
-    else
-    {
-        [self setHorizontal];
-        bFull = NO;
-        _btnFull.selected = NO;
-    }
-}
-
--(void)setHorizontal
-{
-    [[UIDevice currentDevice] setValue: [NSNumber numberWithInteger:UIDeviceOrientationPortrait] forKey:@"orientation"];
-    CGFloat _duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:_duration];
-    CGRect frame = [UIScreen mainScreen].bounds;
-    CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
-    self.view.center = center;
-    self.view.transform = [self transformView];
-    self.view.bounds = CGRectMake(0, 0, kScreenSourchWidth, kScreenSourchHeight);
-    [UIView commitAnimations];
-}
-
--(CGAffineTransform)transformView
-{
-    if (!_group.hidden)
-    {
-        return CGAffineTransformMakeRotation(M_PI/2);
-    }
-    else
-    {
-        return CGAffineTransformIdentity;
-    }
-}
-
-#pragma mark 横屏
-- (void)horizontalViewControl
-{
-    
-    int nWidth = kScreenHeight > kScreenWidth ? kScreenHeight : kScreenWidth;
-    int nHeight = kScreenHeight > kScreenWidth ? kScreenWidth : kScreenHeight;
-    
-    _ffPlay.view.frame = Rect(0, 0, nWidth, nHeight);
-    _ffPlay.glView.frame = Rect(0, 0, nWidth, nHeight);
-    
-    _topHUD.frame = Rect(0, 0, nWidth, 44);
-    [_topHUD viewWithTag:1].frame = Rect(0, 0, nWidth, 44);
-    [_topHUD viewWithTag:2].frame = Rect(0, 0, 44, 44);
-    
-    _lblName.frame = Rect(50, 12, nWidth-100, 15);
-    _btnRight.frame = Rect(nWidth-50, 0, 44, 44);
-    
-    _downHUD.frame = Rect(0, nHeight-44, nWidth, 44);
-    [[_downHUD viewWithTag:1] setFrame:_downHUD.bounds];
-    _btnFull.frame = Rect(nWidth-54, 0, 44, 44);
-    
-    _group.hidden = YES;
-    downView.hidden = YES;
-    _scrollView.hidden = YES;
-    _lblBlue.hidden = YES;
-    
-    [self setNeedsStatusBarAppearanceUpdate];
-}
-
-#pragma mark 竖屏
-- (void)verticalViewControl
-{
-    _topHUD.frame = Rect(0, 0, kScreenWidth, 64);
-    [_topHUD viewWithTag:1].frame = Rect(0, 0, kScreenWidth, 64);
-    _lblName.frame = Rect(50, 35, kScreenWidth-100, 15);
-    [_topHUD viewWithTag:2].frame = Rect(0, 20, 44, 44);
-    _btnRight.frame = Rect(kScreenWidth-50, 20, 44, 44);
-    _downHUD.frame = Rect(0, kVideoImageHeight-24, kScreenWidth, 44);
-    _ffPlay.view.frame = Rect(0, 20, kScreenWidth, kScreenHeight);
-    _ffPlay.glView.frame = Rect(0,1,kScreenWidth, kVideoImageHeight);
-    
-    _btnFull.frame = Rect(kScreenWidth-54, 0, 44, 44);
-    
-    _group.hidden = NO;
-    downView.hidden = NO;
-    _lblBlue.hidden = NO;
-    _scrollView.hidden = NO;
-    [self setNeedsStatusBarAppearanceUpdate];
-}
-
-- (BOOL)prefersStatusBarHidden//for iOS7.0
-{
-    if (!bFull)
-    {
-        return NO;
-    }
-    return YES;
-}
-
-#pragma mark ViewLayout
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    if(!bFull)
-    {
-        [self verticalViewControl];
-    }
-    else
-    {
-        [self horizontalViewControl];
-    }
-}
-
-- (void)switchBtn:(int)nTag
-{
-    UIButton *btnSender = [_group viewWithTag:nTag];
-    if(_tag == nTag)
-    {
-        return ;
-    }
-    [_group setBtnSelect:nTag];
-    _tag = (int)btnSender.tag;
-    [_scrollView setContentOffset:CGPointMake((_tag-1)*kScreenWidth, 0)];
-    [self setBluePointX:_scrollView.contentOffset.x];
-    
-}
-
-- (void)groupEventInfo:(UIButton *)sender
-{
-    for (id view in _group.subviews){
-        if([view isKindOfClass:[UIButton class]]){
-            UIButton *btn = (UIButton *)view;
-            btn.selected = NO;
-        }
-    }
-    sender.selected = YES;
-    _nTag = sender.tag;
-    [self setBluePointX:kScreenWidth*(_nTag-1)];
-    if (sender.tag==4){
-        _chatView.hidden = YES;
-        _noticeView.hidden = YES;
-        _priChatView.hidden = YES;
-    }
-    [UIView commitAnimations];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     DLog(@"收到内存警告");
-    [_cellCache removeAllObjects];
-    if ([NSThread isMainThread])
-    {
-        [_chatView reloadData];
-        [_priChatView reloadData];
-        [_noticeView reloadData];
-    }
-    else
-    {
-        __weak RoomViewController *__self = self;
-        dispatch_main_async_safe(^{
-             [__self.chatView reloadData];
-             [__self.priChatView reloadData];
-             [__self.noticeView reloadData];
-        });
-    }
 }
 
-- (void)startPlayThread:(NSNotification *)notify
-{
-    __weak RoomViewController *__self = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0),
-    ^{
-        [__self startNewPlay];
-    });
-}
 
 - (void)createPaySVR
 {
@@ -757,179 +372,9 @@
     });
 }
 
-- (void)TradeGiftError:(NSNotification *)notify
-{
-    NSNumber *number = notify.object;
-    if ([number intValue]==202) {
-        @WeakObj(self)
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [selfWeak createPaySVR];
-        });
-    }
-    else{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [ProgressHUD showError:@"赠送礼物失败"];
-        });
-    }
-}
-
-
-
-- (void)addNotification
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_NETWORK_ERR_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reConnectRoomInfo) name:MESSAGE_NETWORK_OK_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(TradeGiftError:) name:MESSAGE_TRADE_GIFT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startPlayThread:) name:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatPriMsg:) name:MESSAGE_ROOM_TO_ME_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatMSg:) name:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomListNotice:) name:MESSAGE_ROOM_NOTICE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomUserList:) name:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(comeBack) name:MESSAGE_COME_BACK_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomBeExit:) name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(room_kickout) name:MESSAGE_ROOM_KICKOUT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendRoomMediaInfo:) name:MESSAGE_TCP_SOCKET_SEND_MEDIA object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setTeachInfo) name:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendLiwuRespInfo) name:MEESAGE_ROOM_SEND_LIWU_RESP_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendLiwuNotifyInfo:) name:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:nil];
-}
-
-
-/**
- *  赠送礼物成功
- */
-- (void)sendLiwuNotifyInfo:(NSNotification *)notify
-{
-    /**
-     *  1.加入dictGift
-     *  2.查看当前是否有显示的
-     */
-    NSDictionary *parameter = notify.object;
-    @WeakObj(self)
-    [dictGift setObject:parameter forKey:@(nColor)];
-    nColor++;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak showGiftInfo];
-    });
-}
-
-- (FloatingView*)createFloatView:(NSDictionary *)parameter color:(int)ncolor onlyOne:(int)nOnly{
-    NSString *strName = nil;
-    int gid ;
-    int num ;
-    if ([parameter objectForKey:@"name"] && [parameter objectForKey:@"gitId"] && [parameter objectForKey:@"num"]) {
-        strName = [parameter objectForKey:@"name"];
-        gid = [[parameter objectForKey:@"gitId"] intValue];
-        num = [[parameter objectForKey:@"num"] intValue];
-        FloatingView *floatView = [[FloatingView alloc] initWithFrame:Rect(0,self.group.y+self.group.height+nOnly*45,kScreenWidth, 45) color:ncolor++ name:strName number:num gid:gid userid:[[parameter objectForKey:@"userid"] intValue]];
-        return floatView;
-    }
-    return nil;
-}
-
-- (void)showGiftInfo{
-    if(bGiftView){
-        return ;
-    }
-    bGiftView = YES;
-    while (dictGift.allKeys.count>0) {
-        if (_nCurGift<2) {
-            NSNumber *number = [dictGift allKeys][0];
-            NSDictionary *parameter = [dictGift objectForKey:number];
-            @WeakObj(self)
-            @WeakObj(dictGift)
-            FloatingView *floatView = [selfWeak createFloatView:parameter color:[number intValue] onlyOne:_nCurGift];
-            [self.view addSubview:floatView];
-            DLog(@"frame:%@",NSStringFromCGRect(floatView.frame));
-            floatView.tag = [number integerValue];
-            _nCurGift ++;
-            int num = [[parameter objectForKey:@"num"] intValue];
-            CGFloat nTime = num/10+1;
-            @WeakObj(number)
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(nTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                FloatingView *giftFloat = [selfWeak.view viewWithTag:[numberWeak integerValue]];
-                [dictGiftWeak removeObjectForKey:numberWeak];
-                [giftFloat removeFromSuperview];
-                selfWeak.nCurGift--;
-            });
-            [dictGift removeObjectForKey:number];
-        }
-        [NSThread sleepForTimeInterval:0.2f];
-    }
-    bGiftView = NO;
-}
-
-- (void)sendLiwuRespInfo
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [ProgressHUD showSuccess:@"赠送礼物成功"];
-    });
-}
-
-- (void)setTeachInfo
-{
-
-}
-
-- (void)sendRoomMediaInfo:(NSNotification *)notify
-{
-
-}
-
-- (void)reConnectRoomInfo
-{
-    
-}
-
-- (void)removeNotification
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self addNotification];
-}
-
-#pragma mark stop Play
-- (void)stopPlay
-{
-    if(_ffPlay)
-    {
-        [_ffPlay stop];
-    }
-    __weak LivePlayViewController *__ffPlay = _ffPlay;
-    dispatch_main_async_safe(
-    ^{
-        [__ffPlay setNullMic];
-    });
-}
-
-#pragma mark被人踢出房间 触发的notification
-- (void)room_kickout
-{
-    __weak RoomViewController *__self = self;
-    dispatch_main_async_safe(
-    ^{
-        [__self.view makeToast:@"您被人踢出当前房间" duration:2 position:@"center"];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-           [__self navBack];
-        });
-    });
-}
-
-#pragma mark 从后台返回
-- (void)comeBack
-{
-   
-}
-
-#pragma mark 进入后台
-- (void)enterBack
-{
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -938,83 +383,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark Room User List Update
-- (void)roomUserList:(NSNotification*)notify
-{
-    _aryUser = currentRoom.aryUser;
-    [_listView reloadItems:_aryUser];
-}
-
-#pragma mark 公告刷新
-- (void)roomListNotice:(NSNotification *)notify
-{
-    @WeakObj(self)
-    _aryNotice = aryRoomNotice;
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [selfWeak.noticeView reloadDataWithCompletion:
-         ^{
-             if (selfWeak.aryNotice.count > 0)
-             {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:selfWeak.aryNotice.count-1];
-                [selfWeak.noticeView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-             }
-         }];
-    });
-}
-
-- (void)roomExitOrJoin:(NSNotification *)notify
-{
-    
-}
-
-- (void)roomBeExit:(NSNotification *)notify
-{
-    __weak RoomViewController *__self = self;
-    dispatch_async(dispatch_get_main_queue(),
-       ^{
-           [__self.view makeToast:@"当前房间被关闭" duration:2.0 position:@"center"];
-           dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-           ^{
-               [__self navBack];
-           });
-       });
-}
-
-- (void)roomChatPriMsg:(NSNotification *)notify
-{
-    _aryPriChat = aryRoomPrichat;
-    __weak RoomViewController *__self = self;
-    dispatch_async(dispatch_get_main_queue(),^{
-      [__self.priChatView reloadDataWithCompletion:
-       ^{
-           NSInteger numberOfRows = [__self.priChatView numberOfRowsInSection:0];
-           if (numberOfRows > 0)
-           {
-               NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
-               [__self.priChatView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-           }
-       }];
-   });
-}
-
-- (void)roomChatMSg:(NSNotification *)notify
-{
-    _aryChat = aryRoomChat;
-    __weak RoomViewController *__self = self;
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [__self.chatView reloadDataWithCompletion:
-         ^{
-             NSInteger numberOfRows = [__self.chatView numberOfRowsInSection:0];
-              if (numberOfRows > 0)
-              {
-                  NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
-                  [__self.chatView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-              }
-         }];
-    });
-}
 
 #pragma mark tableview delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -1341,120 +709,7 @@
     }
 }
 
-#pragma mark RoomDwonDelegate
-- (void)clickRoom:(UIButton *)button index:(NSInteger)nIndex
-{
-    switch (nIndex) {
-        case 0://显示聊天
-        {
-            if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
-                ([_room.nvcbid intValue]==10000 || [_room.nvcbid intValue]==10001)) {
-                _inputView.hidden = !_inputView.hidden;
-            }
-            else
-            {
-                @WeakObj(self)
-                [AlertFactory createLoginAlert:self block:^{
-                    [selfWeak closeRoomInfo];
-                }];
-            }
-        }
-        break;
-        case 1://显示成员
-        {
-            _listView.bShow = YES;
-        }
-        break;
-        case 2://显示礼物
-        {
-            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
-                [_giftView updateGoid];
-                [UIView animateWithDuration:0.5 animations:^{
-                    [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
-                } completion:^(BOOL finished) {}];
-            }
-            else
-            {
-                @WeakObj(self)
-                [AlertFactory createLoginAlert:self block:^{
-                    [selfWeak closeRoomInfo];
-                }];
-            }
-        }
-        break;
-        case 3://送玫瑰
-        {
-            [self sendRose];
-        }
-        break;
-    }
-}
 
-#pragma mark ChatViewDelegate
-- (void)sendMessage:(UITextView *)textView userid:(int)nUser
-{
-    RoomUser *user = [currentRoom findUser:[UserInfo sharedUserInfo].nUserId];
-    NSString *strInfo = [textView.textStorage getPlainString];
-    if (user.m_nVipLevel>2) {}
-    else{
-        if ([strInfo length]>=20) {
-            [ProgressHUD showError:@"不能发送超过20个字符内容"];
-            return ;
-        }
-    }
-    toUser = nUser;
-    [self sendChatMessage:strInfo];
-}
-
-- (void)sendChatMessage:(NSString *)strInfo
-{
-    if([UserInfo sharedUserInfo].nType != 1 && ![_room.nvcbid isEqualToString:@"10000"] && ![_room.nvcbid isEqualToString:@"10001"])
-    {
-        [self.view makeToast:@"游客不能发送信息"];
-        return ;
-    }
-    if (strInfo.length == 0)
-    {
-        [self.view makeToast:@"不能发送空的内容"];
-        return ;
-    }
-    __block NSString *__strContent = strInfo;
-    __block int __nUserId = toUser;
-    [RoomService sendLocalInfo:strInfo toid:toUser roomInfo:currentRoom aryChat:aryRoomChat];
-    dispatch_async(room_gcd,
-    ^{
-        [kProtocolSingle sendMessage:__strContent toId:__nUserId];
-    });
-    [_inputView.textView setText:@""];
-    [_inputView setHidden:YES];
-    [self switchBtn:1];
-}
-
-#pragma mark 送礼物
-- (void)sendGift:(int)giftId num:(int)giftNum
-{
-    if (_ffPlay.playing) {
-        [kProtocolSingle sendGiftInfo:giftId number:giftNum];
-        [_giftView setGestureHidden];
-    }else{
-        [ProgressHUD showError:@"只能对在线讲师送礼"];
-    }
-}
-
-#pragma mark 用户列表选择某一列
-- (void)selectUser:(NSInteger)nIndex
-{
-    if(_aryUser.count>nIndex)
-    {
-        RoomUser *_user = [currentRoom.aryUser objectAtIndex:nIndex];
-        if(_user.m_nUserId != [UserInfo sharedUserInfo].nUserId)
-        {
-            _listView.bShow = NO;
-            toUser = _user.m_nUserId;
-            [_inputView setChatInfo:_user];
-        }
-    }
-}
 
 @end
 

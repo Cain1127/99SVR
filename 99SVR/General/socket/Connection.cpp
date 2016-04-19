@@ -144,6 +144,7 @@ void Connection::get_host_form_lbs(char* lbs)
 
 	char ip[64];
 	short port;
+    //121.12.118.32
 	parse_ip_port(lbs, ip, port);
 
 	char url[384];

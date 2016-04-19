@@ -18,7 +18,6 @@
     [self initUI];
     [self initData];
 
-
 }
 
 -(void)initUI{

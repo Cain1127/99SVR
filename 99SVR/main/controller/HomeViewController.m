@@ -8,6 +8,7 @@
 
 #import "HomeViewController.h"
 #import "ZLTabBar.h"
+#import "ConnectRoomViewModel.h"
 #import "AlertFactory.h"
 #import "Toast+UIView.h"
 #import "DecodeJson.h"
@@ -60,7 +61,8 @@ typedef enum : NSUInteger
 
 ///当前数据请求状态:0-未开始请求/1-正在请求/2-banner完成请求/3-列表完成请求
 @property (nonatomic, assign) CJHomeRequestType refreshStatus;
-@property (nonatomic,strong) RoomHttp *room;
+@property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
+
 @end
 
 @implementation HomeViewController
@@ -852,63 +854,12 @@ typedef enum : NSUInteger
     return UIStatusBarStyleDefault;
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)joinRoomErr:(NSNotification *)notify{
-    [DecodeJson cancelPerfor:self];
-    if ([notify.object isKindOfClass:[NSDictionary class]]) {
-        NSDictionary *dict = [notify object];
-        int errid = [[dict objectForKey:@"err"] intValue];
-        NSString *strMsg = [dict objectForKey:@"msg"];
-        if (errid==201) {
-            [AlertFactory createPassswordAlert:self room:_room];
-        }
-        else{
-            @WeakObj(strMsg)
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [ProgressHUD showError:strMsgWeak];
-            });
-        }
-    }
-}
-
-- (void)joinSuc{
-    [DecodeJson cancelPerfor:self];
-    @WeakObj(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak.view hideToastActivity];
-        [ProgressHUD showSuccess:@"加入房间成功"];
-        RoomViewController *roomView = [[RoomViewController alloc] initWithModel:_room];
-        [selfWeak.navigationController pushViewController:roomView animated:YES];
-    });
-    
-}
-
-- (void)joinRoomTimeOut
-{
-    [DecodeJson cancelPerfor:self];
-    @WeakObj(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak.view hideToastActivity];
-        [ProgressHUD showError:@"加入房间失败" ];
-    });
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)connectRoom:(RoomHttp *)room{
-    _room = room;
-    [kProtocolSingle connectVideoRoom:[room.nvcbid intValue] roomPwd:@""];
     [self.view makeToastActivity];
-    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
+    if (_roomViewModel==nil) {
+        _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
+    }
+    [_roomViewModel connectViewModel:room];
 }
 
 @end
