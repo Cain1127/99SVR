@@ -39,6 +39,12 @@
 		188968F91CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */; };
 		188968FA1CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */; };
 		188969081CAD828600C7E04E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188969071CAD828600C7E04E /* StoreKit.framework */; };
+		188E4A0A1CC5B61C00D97254 /* ComposeTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E4A091CC5B61C00D97254 /* ComposeTextView.m */; };
+		188E4A0D1CC5B9C900D97254 /* TQcontentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E4A0C1CC5B9C900D97254 /* TQcontentView.m */; };
+		188E4A131CC600DD00D97254 /* TQSuspensionBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E4A121CC600DD00D97254 /* TQSuspensionBtn.m */; };
+		188E4A161CC60D0C00D97254 /* TQSuspension.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E4A151CC60D0C00D97254 /* TQSuspension.m */; };
+		188E4A181CC60D1A00D97254 /* TQSuspension.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188E4A171CC60D1A00D97254 /* TQSuspension.xib */; };
+		188E4A1B1CC616E100D97254 /* TQDetailedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E4A1A1CC616E100D97254 /* TQDetailedTableView.m */; };
 		18987FF01CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
 		18987FF11CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
 		18987FF21CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
@@ -563,6 +569,17 @@
 		188968F61CAD608100C7E04E /* InAppPurchasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InAppPurchasesViewController.h; sourceTree = "<group>"; };
 		188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InAppPurchasesViewController.m; sourceTree = "<group>"; };
 		188969071CAD828600C7E04E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		188E4A081CC5B61C00D97254 /* ComposeTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeTextView.h; sourceTree = "<group>"; };
+		188E4A091CC5B61C00D97254 /* ComposeTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeTextView.m; sourceTree = "<group>"; };
+		188E4A0B1CC5B9C900D97254 /* TQcontentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQcontentView.h; sourceTree = "<group>"; };
+		188E4A0C1CC5B9C900D97254 /* TQcontentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQcontentView.m; sourceTree = "<group>"; };
+		188E4A111CC600DD00D97254 /* TQSuspensionBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQSuspensionBtn.h; sourceTree = "<group>"; };
+		188E4A121CC600DD00D97254 /* TQSuspensionBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQSuspensionBtn.m; sourceTree = "<group>"; };
+		188E4A141CC60D0C00D97254 /* TQSuspension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQSuspension.h; sourceTree = "<group>"; };
+		188E4A151CC60D0C00D97254 /* TQSuspension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQSuspension.m; sourceTree = "<group>"; };
+		188E4A171CC60D1A00D97254 /* TQSuspension.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQSuspension.xib; sourceTree = "<group>"; };
+		188E4A191CC616E100D97254 /* TQDetailedTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQDetailedTableView.h; sourceTree = "<group>"; };
+		188E4A1A1CC616E100D97254 /* TQDetailedTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQDetailedTableView.m; sourceTree = "<group>"; };
 		18987FEE1CAA17E6000E9F1C /* WonderfullView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonderfullView.h; sourceTree = "<group>"; };
 		18987FEF1CAA17E6000E9F1C /* WonderfullView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonderfullView.m; sourceTree = "<group>"; };
 		189880021CAA52F8000E9F1C /* RightImageButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightImageButton.h; sourceTree = "<group>"; };
@@ -1526,6 +1543,17 @@
 				185DABA41CBFDC970019C5A3 /* TQideaTableViewCell.h */,
 				185DABA51CBFDC970019C5A3 /* TQideaTableViewCell.m */,
 				185DABA61CBFDC970019C5A3 /* TQideaTableViewCell.xib */,
+				188E4A081CC5B61C00D97254 /* ComposeTextView.h */,
+				188E4A091CC5B61C00D97254 /* ComposeTextView.m */,
+				188E4A0B1CC5B9C900D97254 /* TQcontentView.h */,
+				188E4A0C1CC5B9C900D97254 /* TQcontentView.m */,
+				188E4A111CC600DD00D97254 /* TQSuspensionBtn.h */,
+				188E4A121CC600DD00D97254 /* TQSuspensionBtn.m */,
+				188E4A141CC60D0C00D97254 /* TQSuspension.h */,
+				188E4A151CC60D0C00D97254 /* TQSuspension.m */,
+				188E4A171CC60D1A00D97254 /* TQSuspension.xib */,
+				188E4A191CC616E100D97254 /* TQDetailedTableView.h */,
+				188E4A1A1CC616E100D97254 /* TQDetailedTableView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3302,6 +3330,7 @@
 				BB63F2CE1C27FB2800A042E8 /* 6.gif in Resources */,
 				BBCE9D231CB3AD5600DA56D6 /* 129_1.png in Resources */,
 				BB63F2BC1C27FB2800A042E8 /* 20.gif in Resources */,
+				188E4A181CC60D1A00D97254 /* TQSuspension.xib in Resources */,
 				BBCE9D1B1CB3AD5600DA56D6 /* 121_1.png in Resources */,
 				BBCE9D111CB3AD5600DA56D6 /* 111_1.png in Resources */,
 				BBCE9D161CB3AD5600DA56D6 /* 116_1.png in Resources */,
@@ -3455,9 +3484,11 @@
 				188741811C9702DA002EF25A /* Foundation+Log.m in Sources */,
 				BB63F60B1C2CC7A300A042E8 /* VideoCellView.m in Sources */,
 				BB63F6091C2CC7A300A042E8 /* UIImage+animatedGIF.m in Sources */,
+				188E4A0A1CC5B61C00D97254 /* ComposeTextView.m in Sources */,
 				18AAD5641C993CD100438E18 /* AssetViewController.m in Sources */,
 				185F596A1CC4CAD600F605F5 /* NSObject+MJCoding.m in Sources */,
 				B4C4B36E1CBAA5FF00B20A58 /* IAPShare.m in Sources */,
+				188E4A0D1CC5B9C900D97254 /* TQcontentView.m in Sources */,
 				18D3CB7E1CC0CF1600816BD0 /* TQCommentReplyViewController.m in Sources */,
 				BB1769251C7B006F00CE947C /* SDWebImageDecoder.m in Sources */,
 				18D3CB901CC0E37700816BD0 /* TQMessageCell.m in Sources */,
@@ -3473,6 +3504,7 @@
 				BB63F6011C2CC7A300A042E8 /* GroupHeaderView.m in Sources */,
 				BB5E4FA81CBF7D1B00F8C1D4 /* TodayVIPModel.m in Sources */,
 				BB5E4FB11CBF7D1B00F8C1D4 /* RightView.m in Sources */,
+				188E4A131CC600DD00D97254 /* TQSuspensionBtn.m in Sources */,
 				BB63F5CE1C2CC7A300A042E8 /* MJRefreshFooter.m in Sources */,
 				BB63F5FB1C2CC7A300A042E8 /* RoomViewController.mm in Sources */,
 				BB5E4FB01CBF7D1B00F8C1D4 /* MarchLiveTextCell.m in Sources */,
@@ -3534,6 +3566,7 @@
 				BB1769261C7B006F00CE947C /* SDWebImageDownloader.m in Sources */,
 				BB5E4F251CBF7B5800F8C1D4 /* Http.cpp in Sources */,
 				185F59701CC4CC8100F605F5 /* TQIdeaModel.m in Sources */,
+				188E4A1B1CC616E100D97254 /* TQDetailedTableView.m in Sources */,
 				BB17692E1C7B006F00CE947C /* UIImageView+HighlightedWebCache.m in Sources */,
 				BB5E4F2D1CBF7B5800F8C1D4 /* LoginConnection.cpp in Sources */,
 				BB17694D1C7D9E7300CE947C /* InputPwdViewController.m in Sources */,
@@ -3554,6 +3587,7 @@
 				BB5E4FAF1CBF7D1B00F8C1D4 /* LiveCoreTextCell.m in Sources */,
 				BB63F6071C2CC7A300A042E8 /* RoomUserCell.m in Sources */,
 				BBCF9A1A1CACE685005B9DCE /* TextCellView.m in Sources */,
+				188E4A161CC60D0C00D97254 /* TQSuspension.m in Sources */,
 				BBD449151CA2D83B00727070 /* UserListView.m in Sources */,
 				BB6F3AD91C9F86270035EBBE /* SDCycleScrollView.m in Sources */,
 				BB7B6FFC1C33D7070018FEC1 /* CircleImageView.m in Sources */,

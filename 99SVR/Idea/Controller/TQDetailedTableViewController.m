@@ -8,25 +8,54 @@
 
 #import "ideaDetailTableViewCell.h"
 #import "TQDetailedTableViewController.h"
-#import "DetaileHeaderView.h"
 #import "MJExtension.h"
-@interface TQDetailedTableViewController ()
+#import "TQcontentView.h"
+#import "Masonry.h"
+#import "ComposeTextView.h"
+#import "TQSuspension.h"
+#import "TQDetailedTableView.h"
 
+
+
+@interface TQDetailedTableViewController () 
+/** 悬浮框 */
+@property (nonatomic ,weak)TQSuspension *Suspension;
+/** tableView */
+@property (nonatomic ,weak)TQDetailedTableView *tableView;
 @end
 
 @implementation TQDetailedTableViewController
-static NSString *const detaileCell = @"detaileCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //初始化的设置
+    [self initSubViews];
+    
+}
+//初始化的设置
+-(void)initSubViews {
+    TQDetailedTableView *tableView = [[TQDetailedTableView alloc] init];
     self.title = @"观点详情页";
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([ideaDetailTableViewCell class]) bundle:nil] forCellReuseIdentifier:detaileCell];
-    
+    [self.view addSubview:tableView];
+    self.tableView = tableView;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"分享" style:0 target:self action:@selector(share)];
+
+    //设置献花和评论悬浮按钮
+    [self setUpSuspensionBtn];
+}
+
+-(void)viewWillLayoutSubviews {
+    //设置tableview的尺寸
+    self.tableView.frame = self.view.bounds;
+}
+//悬浮液按钮
+-(void)setUpSuspensionBtn {
     
-    DetaileHeaderView *headView = [[NSBundle mainBundle] loadNibNamed:@"DetaileHeaderView" owner:self options:nil].lastObject;
-    self.tableView.tableHeaderView = headView;
-    
+    TQSuspension *Suspension = [TQSuspension SuspensionForXib];
+    [self.view addSubview:Suspension];
+    Suspension.frame = CGRectMake(kScreenWidth - 60, (kScreenHeight - 110 - 64), 50, 100);
+    [self.view bringSubviewToFront:Suspension];
+    self.Suspension = Suspension;
 
 }
 
@@ -46,98 +75,23 @@ static NSString *const detaileCell = @"detaileCell";
     
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 20;
-}
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    ideaDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:detaileCell];
+-(void)dealloc {
     
-    
-    
-    return cell;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//    self.Suspension.frame = CGRectMake(<#CGFloat x#>, CGFloat y, <#CGFloat width#>, <#CGFloat height#>)
+    DLog(@"%@",NSStringFromCGRect(self.Suspension.frame));
 
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    return 100;
-}
 
-/**
- *  选中行后，互动
- */
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-//    if (_aryCommont.count > indexPath.row) {
-//        IdeaDetailRePly *reply = [_aryCommont objectAtIndex:indexPath.row];
-//        [self showChatView:reply.viewuserid name:reply.strName commentId:reply.commentid];
-//    }
-    
-    
-    
-}
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Table view delegate
-
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:<#@"Nib name"#> bundle:nil];
-    
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

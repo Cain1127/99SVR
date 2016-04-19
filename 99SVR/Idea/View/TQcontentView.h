@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class ComposeTextView;
 @interface TQcontentView : UIView
+/** 输入框 */
+@property (nonatomic ,weak)ComposeTextView *textView;
 
 @end
