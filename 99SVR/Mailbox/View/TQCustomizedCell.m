@@ -45,7 +45,7 @@
     [self.contentView addSubview:TItileLabel];
     TItileLabel.text = @"私人定制";
     TItileLabel.textAlignment = NSTextAlignmentCenter;
-    TItileLabel.font = [UIFont boldSystemFontOfSize:25];
+    TItileLabel.font = [UIFont boldSystemFontOfSize:22];
     TItileLabel.backgroundColor = [UIColor redColor];
     self.TItileLabel = TItileLabel;
 

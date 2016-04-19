@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-@class TQIdeaItem;
+@class TQIdeaModel;
 @interface TQideaTableViewCell : UITableViewCell
 
 /** 模型 */
-@property (nonatomic ,weak)TQIdeaItem *ideaItem;
+@property (nonatomic ,weak)TQIdeaModel *ideaModel;
 
 
 @end

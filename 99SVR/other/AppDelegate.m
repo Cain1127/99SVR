@@ -124,11 +124,8 @@
                                                  name: kReachabilityChangedNotification
                                                object: nil];
     [self updateVersion];
-    
-    
     //开启网络通知
     [hostReach startNotifier];
-    
     return YES;
 }
 
@@ -307,7 +304,6 @@
     [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];
 }
-
 
 /**
  *  连接跳转

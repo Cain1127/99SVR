@@ -141,30 +141,6 @@
     return self;
 }
 
-<<<<<<< HEAD
-
-=======
-- (void)connectRoomInfo
-{
-    NSString *strAddress;
-    NSString *strPort;
-    NSString *roomAddr = [KUserSingleton.dictRoomGate objectForKey:@(0)];
-//    _tcpSocket.strRoomId = _room.nvcbid;
-    if(roomAddr!=nil)
-    {
-        NSString *strAry = [roomAddr componentsSeparatedByString:@","][0];
-        strAddress = [strAry componentsSeparatedByString:@":"][0];
-        strPort = [strAry componentsSeparatedByString:@":"][1];
-    }
-    else
-    {
-        strAddress = @"";
-        strPort = @"0";
-    }
-//    [_tcpSocket connectRoomInfo:_room.nvcbid address:strAddress port:[strPort intValue]];
-//    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:6];
-}
-
 /**
  *  释放房间中的内容
  */
@@ -174,25 +150,13 @@
     [[SDImageCache sharedImageCache] clearMemory];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
->>>>>>> LiuHaiDong
 
 - (void)dealloc
 {
     DLog(@"room view");
-<<<<<<< HEAD
     [kProtocolSingle exitRoom];
     [[SDImageCache sharedImageCache] clearMemory];
-=======
-//    [_tcpSocket exit_Room:YES];
-//    _tcpSocket = nil;
-    [_ffPlay stop];
-    [_ffPlay stop];
-    //TODD:关闭房间   清楚所有信息
-    [kProtocolSingle exitRoom];
-    [[SDImageCache sharedImageCache] clearMemory];
-    [[NSURLCache sharedURLCache] removeAllCachedResponses];
-    _ffPlay = nil;
->>>>>>> LiuHaiDong
+
     [_scrollView removeFromSuperview];
     _scrollView = nil;
     [_chatView removeFromSuperview];

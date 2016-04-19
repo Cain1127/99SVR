@@ -9,7 +9,7 @@
 #import "ideaDetailTableViewCell.h"
 #import "TQDetailedTableViewController.h"
 #import "DetaileHeaderView.h"
-
+#import "MJExtension.h"
 @interface TQDetailedTableViewController ()
 
 @end
@@ -26,6 +26,7 @@ static NSString *const detaileCell = @"detaileCell";
     
     DetaileHeaderView *headView = [[NSBundle mainBundle] loadNibNamed:@"DetaileHeaderView" owner:self options:nil].lastObject;
     self.tableView.tableHeaderView = headView;
+    
 
 }
 
@@ -33,8 +34,7 @@ static NSString *const detaileCell = @"detaileCell";
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
+- (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
     
 }
@@ -60,9 +60,24 @@ static NSString *const detaileCell = @"detaileCell";
 
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     return 100;
+}
+
+/**
+ *  选中行后，互动
+ */
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+//    if (_aryCommont.count > indexPath.row) {
+//        IdeaDetailRePly *reply = [_aryCommont objectAtIndex:indexPath.row];
+//        [self showChatView:reply.viewuserid name:reply.strName commentId:reply.commentid];
+//    }
+    
+    
+    
 }
 
 /*
