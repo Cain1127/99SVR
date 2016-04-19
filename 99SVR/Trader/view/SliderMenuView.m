@@ -45,7 +45,11 @@
     /**底部scroViewFrame*/
     CGRect _bottomoScroV_F;
     /**记录上次的值*/
-    int _lastInt;
+    __block NSInteger _lastInt;
+    //记录滑动之后的 值
+    __block NSInteger _lastSelectIndex;
+    /**记录第一次初始化时 setContentOffset*/
+    BOOL _isFirstInit;
 }
 @property (nonatomic, strong) SliderMenuTopScrollView *topScroView;
 //@property (nonatomic, strong) UIScrollView *bottomScroView;
@@ -57,7 +61,7 @@
 @implementation SliderMenuView
 
 
-- (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles
+- (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles withDefaultSelectIndex:(NSInteger)selectIndex
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -68,24 +72,36 @@
         _self_H = frame.size.height;
         _topScroV_F = (CGRect){0,0,_self_W,40};
         _bottomoScroV_F = (CGRect){0,CGRectGetMaxY(_topScroV_F),_self_W,(_self_H-CGRectGetMaxY(_topScroV_F))};
+        _lastSelectIndex = selectIndex;
         //顶部控制menu
-        self.topScroView = [[SliderMenuTopScrollView alloc]initWithFrame:_topScroV_F withTitles:titles];
+        self.topScroView = [[SliderMenuTopScrollView alloc]initWithFrame:_topScroV_F withTitles:titles withDefaultSelectIndex:(selectIndex-1)];
         [self addSubview:self.topScroView];
         weakSelf(self);
         self.topScroView.DidSelectSliderIndex = ^(NSInteger index){
             weakself.isHandle = NO;
             [weakself.bottomScroView setContentOffset:(CGPoint){(index-1)*_self_W,0} animated:NO];
-            weakself.DidSelectSliderIndex(index);
+            [weakself hanleBlockWith:index];
+            _lastSelectIndex = index;
             [weakself.topScroView setTitleIndex:index badgeHide:YES];
             weakself.isHandle = YES;
         };
         //底部视图
+        _isFirstInit = YES;
         [self addSubview:self.bottomScroView];
+        [self.bottomScroView setContentOffset:(CGPoint){(selectIndex-1)*_self_W,0} animated:YES];
+        _isFirstInit = NO;
 
     }
     return self;
 }
 
+-(void)hanleBlockWith:(NSInteger)index{
+    
+    if (_lastSelectIndex!=index) {
+        self.DidSelectSliderIndex(index);
+        _lastSelectIndex = index;
+    }
+}
 
 
 -(UIScrollView *)bottomScroView{
@@ -114,14 +130,16 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
-    NSString *index = [NSString stringWithFormat:@"%.0f",scrollView.contentOffset.x/_self_W];
-    [self.topScroView setLineViewOriginX:scrollView.contentOffset.x withIndex:[index integerValue]];
-    weakSelf(self);
-    if (self.isHandle) {
-        if (_lastInt!=[index intValue]) {
-            _lastInt = [index intValue];
-            weakself.DidSelectSliderIndex((_lastInt + 1));
-            [weakself.topScroView setTitleIndex:(_lastInt +1) badgeHide:YES];
+    if (!_isFirstInit) {
+        NSString *index = [NSString stringWithFormat:@"%.0f",scrollView.contentOffset.x/_self_W];
+        [self.topScroView setLineViewOriginX:scrollView.contentOffset.x withIndex:[index integerValue]];
+        weakSelf(self);
+        if (self.isHandle) {
+            if (_lastInt!=[index intValue]) {
+                _lastInt = [index intValue];
+                [weakself hanleBlockWith:(_lastInt+1)];
+                [weakself.topScroView setTitleIndex:(_lastInt +1) badgeHide:YES];
+            }
         }
     }
 }

@@ -80,6 +80,8 @@
  *  请求版本内容操作
  */
 + (void)authVersion{
+    
+    
     NSString *strVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] stringByReplacingOccurrencesOfString:@"." withString:@""];
     if ([UserDefaults objectForKey:strVersion]!=nil) {
         BOOL bStatus = [[UserDefaults objectForKey:strVersion] boolValue];

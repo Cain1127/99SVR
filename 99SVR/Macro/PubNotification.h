@@ -139,19 +139,6 @@
 /**
  *  Http Message Notification
  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#define MESSAGE_UPDATE_VERSION_VC @"MESSAGE_UPDATE_VERSION_VC"
 
 #endif

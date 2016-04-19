@@ -21,13 +21,13 @@
 @property (nonatomic, copy) void (^DidSelectSliderIndex)(NSInteger index);
 
 /**
- *  初始化顶部控件
+ *  初始化顶部的控件
  *
  *  @param frame  frame
- *  @param titles 标题组
- *
+ *  @param titles 控件的标题
+ *  @param index  默认选择的下标
  */
-- (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles;
+- (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles withDefaultSelectIndex:(NSInteger)index;
 /**
  *  设置顶部lineView的滑动
  *

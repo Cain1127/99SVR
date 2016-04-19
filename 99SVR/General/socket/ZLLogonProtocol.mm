@@ -132,7 +132,7 @@ void ZLLoginListener::OnLogonErr(UserLogonErr2& info)
             strMsg = @"密码错误";
         break;
         case 105:
-            strMsg = @"请升级";
+            strMsg = @"请升级版本";
         break;
         case 107:
             strMsg = @"账号已冻结";

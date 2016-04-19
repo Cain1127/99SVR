@@ -17,12 +17,12 @@
 @property (nonatomic, strong) UIColor *badgeColor;
 /**标题的背景色*/
 @property (nonatomic, strong) UIColor *titleBagColor;
+/**默认选择的是哪一个按钮*/
+@property (nonatomic , assign) NSInteger defaultSelectIndex;
 
 
 
-
-
-- (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles;
+- (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles withDefaultSelectIndex:(NSInteger)selectIndex;
 /**存储view的数组*/
 @property (nonatomic, strong) NSArray *viewArrays;
 /**点击顶部按钮 或者滑动切换对应页面时候的回调*/
