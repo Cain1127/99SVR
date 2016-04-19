@@ -136,4 +136,22 @@
 
 #define MESSAGE_NETWORK_ERR_VC  @"MESSAGE_NETWORK_ERR_VC"
 
+/**
+ *  Http Message Notification
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #endif

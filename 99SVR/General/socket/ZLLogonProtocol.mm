@@ -529,7 +529,6 @@ void ZLRoomListener::OnRoomUserNoty(RoomUserInfo& info){
  */
 void ZLRoomListener::OnRoomPubMicStateNoty(std::vector<RoomPubMicState>& infos){
     for(int i = 0; i < infos.size(); i++){
-        //	int32	_mictimetype;
         DLog(@"mic状态:%d--类型:%d--userId:%d",infos[i].micid(),infos[i].mictimetype(),infos[i].userid());
     }
 }
@@ -575,8 +574,37 @@ void ZLRoomListener::OnRoomNoticeNotify(RoomNotice& info){
     [RoomService getNoticeInfo:&info notice:aryRoomNotice];
 }
 
+/**
+ *  麦状态变换触发
+ */
 void ZLRoomListener::OnSetMicStateNotify(UserMicState& info){
     DLog(@"mic状态:%d",info.micstate());
+    RoomUser *roomUser = [currentRoom.dictUser objectForKey:NSStringFromInt(info.toid())];
+    roomUser.m_nInRoomState = info.micstate();
+    for (int i=0; i<currentRoom.aryUser.count;i++)
+    {
+        RoomUser *rUser = [currentRoom.aryUser objectAtIndex:i];
+        if (![rUser isManager])
+        {
+            break;
+        }
+        if (rUser.m_nUserId == info.toid())
+        {
+            rUser.m_nInRoomState = info.micstate();
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+            break;
+        }
+    }
+    if (info.micstate() == 0)
+    {
+        DLog(@"有人下麦了");
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
+    }
+    else
+    {
+        DLog(@"有人上M了,pInfo->toid:%d",info.toid());
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
+    }
 }
 
 void ZLRoomListener::OnTradeGiftRecordResp(TradeGiftRecord& info){

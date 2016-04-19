@@ -191,7 +191,7 @@
     }
     [RoomService clearChatInfo:aryChat];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-    return self;
+    return YES;
 }
 
 @end
