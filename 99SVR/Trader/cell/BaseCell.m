@@ -25,9 +25,6 @@
     if (self) {
         
         //隐藏分割线
-        
-        
-    
         self.bakImageView = [[UIImageView alloc]init];
         self.bakImageView.userInteractionEnabled = YES;
         self.bakImageView.backgroundColor = [UIColor whiteColor];
