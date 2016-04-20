@@ -15,7 +15,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="526" height="256.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A4T-3y-VkF">
+                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A4T-3y-VkF">
                         <rect key="frame" x="395" y="180" width="46" height="30"/>
                         <state key="normal" title="Button"/>
                     </button>
@@ -45,14 +45,14 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5AK-8m-3wS">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5AK-8m-3wS">
                         <rect key="frame" x="23" y="109" width="480" height="61"/>
                         <string key="text">三板建设将成为刘士余主席上任后第一个工作重点。三板建设将成为刘士余主席上任后第一个工作重点三板建设将成为刘士余主席上任后第一个工作重点分层制、公开透明的信息披露与严格的为刘士余主席上任后第一个工作重点三板建设将成为刘士余主席上任后第一个工作重点分层制、公开透明的信息披露与严格的</string>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="80T-2y-Hr9">
+                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="80T-2y-Hr9">
                         <rect key="frame" x="451" y="180" width="46" height="30"/>
                         <state key="normal" title="Button"/>
                     </button>
@@ -84,11 +84,11 @@
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
+                        <exclude reference="IFo-oc-SuO"/>
                         <exclude reference="7nS-va-e0Z"/>
                         <exclude reference="SAT-eO-TRU"/>
                         <exclude reference="aAy-wF-TsD"/>
                         <exclude reference="ylc-JP-NEG"/>
-                        <exclude reference="IFo-oc-SuO"/>
                         <exclude reference="1pz-EU-AR7"/>
                         <exclude reference="SJK-z2-a3o"/>
                     </mask>

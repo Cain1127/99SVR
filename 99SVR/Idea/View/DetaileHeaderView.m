@@ -7,15 +7,27 @@
 //
 
 #import "DetaileHeaderView.h"
+@interface DetaileHeaderView ()
+
+@property (weak, nonatomic) IBOutlet UILabel *contenLabel;
+
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+
+@property (weak, nonatomic) IBOutlet UILabel *DateLabel;
+
+@end
 
 @implementation DetaileHeaderView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
++ (instancetype)DetaileHeaderViewForXib
+{
+    return [[NSBundle mainBundle] loadNibNamed:NSStringFromClass(self) owner:nil options:nil][0];
 }
-*/
 
+
+//- (void)layoutSubviews
+//{
+//    [super layoutSubviews];
+//    self.frame = CGRectMake(0, 0, 0, 2000);
+//}
 @end

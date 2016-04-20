@@ -81,6 +81,7 @@
     CGFloat fTempWidth;
     BOOL bFull;
     RoomHttp *_room;
+
     NSCache *chatCache;
     DTAttributedLabel *lblTeachInfo;
     BOOL bGiftView;
@@ -124,6 +125,7 @@
     return self;
 }
 
+
 /**
  *  释放房间中的内容
  */
@@ -134,9 +136,11 @@
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
+
 - (void)dealloc
 {
     DLog(@"room view");
+
     [kProtocolSingle exitRoom];
     [[SDImageCache sharedImageCache] clearMemory];
 
