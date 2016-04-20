@@ -7,5 +7,8 @@
 
 @interface StockDealTableModel : NSObject<UITableViewDelegate,UITableViewDataSource>
 
+@property (nonatomic , strong) NSArray *dataArray;
+
+
 
 @end

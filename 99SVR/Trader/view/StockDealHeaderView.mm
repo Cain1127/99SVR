@@ -87,9 +87,9 @@
     self.monLabView.titLab.text = @"月收益";
     self.rankLabView.titLab.text = @"收益排行";
     
-    self.dayLabView.numLab.text = @"1.13%";
-    self.monLabView.numLab.text = @"1.13%";
-    NSString *rankStr = @"跑赢99.99%";
+    self.dayLabView.numLab.text = model.dayprofit;
+    self.monLabView.numLab.text = model.monthprofit;
+    NSString *rankStr = [NSString stringWithFormat:@"跑赢%@",model.winrate];
     NSMutableAttributedString *AttributedStr = [[NSMutableAttributedString alloc]initWithString:rankStr];
     
     [AttributedStr addAttribute:NSFontAttributeName
@@ -109,7 +109,7 @@
     
     
     
-    NSString *stockStr = @"专注断线";
+    NSString *stockStr = model.focus;
     self.stockLab.text = stockStr;
     [self.stockLab sizeToFit];
     CGSize stockSize = self.stockLab.size;
@@ -123,7 +123,7 @@
         make.bottom.equalTo(@(-bottom));
     }];
     
-    NSString *totalStr = @"19.99% 总收益";
+    NSString *totalStr = [NSString stringWithFormat:@"%@ 总收益",model.totalprofit];
     NSMutableAttributedString *totalAttributedStr = [[NSMutableAttributedString alloc]initWithString:totalStr];
     
     [totalAttributedStr addAttribute:NSFontAttributeName
@@ -178,12 +178,16 @@
 
     
     [self.titLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.top.and.right.equalTo(@0);
+        make.left.equalTo(@0);
+        make.top.equalTo(@0);
+        make.right.equalTo(@0);
         make.height.equalTo(@20);
     }];
     
     [self.numLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.bottom.and.right.equalTo(@0);
+        make.left.equalTo(@0);
+        make.bottom.equalTo(@0);
+        make.right.equalTo(@0);
         make.height.equalTo(@25);
     }];
 }

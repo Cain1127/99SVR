@@ -1,7 +1,7 @@
 
 
 #define headerView_h ValueWithTheIPhoneModelString(@"150,180,200,220") //表头的高度
-#define warningLab_h ValueWithTheIPhoneModelString(@"30,30,30,30") //提示信息的高度
+#define warningLab_h ValueWithTheIPhoneModelString(@"50,50,50,50") //提示信息的高度
 
 #import "StockDealViewController.h"
 #import "StockDealHeaderView.h"
@@ -27,7 +27,6 @@
     [super viewDidLoad];
     
 
-
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self initData];
@@ -40,6 +39,7 @@
     [self.view addSubview:self.tableView];
     
     self.tableView.tableHeaderView = self.headerView;
+    self.tableView.tableFooterView = self.warningLab;
 }
 
 -(void)initData{
@@ -69,12 +69,20 @@
     NSDictionary *dic = notify.object;
     //拿到头部视图的数据
     self.headerModel = dic[@"headerModel"];
+    [self.headerView setHeaderViewWithDataModel:self.headerModel];
     //拿到股票视图的数据
     [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
     //交易详情
     [self.tableViewDataArray addObject:dic[@"trans"]];
     //持仓记录
     [self.tableViewDataArray addObject:dic[@"stocks"]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.tableViewModel.dataArray = self.tableViewDataArray;
+        [self.tableView reloadData];
+    });
+    
+    
 }
 
 
@@ -85,7 +93,6 @@
         _headerView = [[StockDealHeaderView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,headerView_h}];
         
     }
-    
     return _headerView;
 }
 
@@ -94,7 +101,7 @@
     if (!_tableView) {
         
         CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
-        _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH - warningLab_h} style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} style:UITableViewStyleGrouped];
         self.tableViewModel = [[StockDealTableModel alloc]init];
         _tableView.delegate = self.tableViewModel;
         _tableView.dataSource = self.tableViewModel;
@@ -113,13 +120,7 @@
         _warningLab.backgroundColor = [UIColor grayColor];
         _warningLab.font = [UIFont systemFontOfSize:12];
         _warningLab.textAlignment = NSTextAlignmentCenter;
-        [self.view addSubview:_warningLab];
-        [_warningLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(@0);
-            make.left.equalTo(@0);
-            make.right.equalTo(@0);
-            make.height.equalTo(@(warningLab_h));
-        }];
+        _warningLab.frame = (CGRect){0,0,ScreenWidth,warningLab_h};
     }
     return _warningLab;
 }
