@@ -39,7 +39,6 @@
 #import "RoomDownView.h"
 #import "RoomUserCell.h"
 #import "RoomUser.h"
-#import "RoomTitleView.h"
 #import "RoomInfo.h"
 #import "UserListView.h"
 #import "SliderMenuView.h"
@@ -54,13 +53,10 @@
 
 #define TABLEVIEW_ARRAY_PREDICATE(A) [NSPredicate predicateWithFormat:@"SELF CONTAINS %@",A];
 
-@interface RoomViewController ()<UITableViewDelegate,UITableViewDataSource,TitleViewDelegate,
-                                UITextViewDelegate,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,UIScrollViewDelegate,
-                                RoomDownDelegate,ChatViewDelegate,GiftDelegate,UserListSelectDelegate>
+@interface RoomViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     //聊天view
     UIView *bodyView;
-    UIView *downView;
     BOOL bDrag;
     UIView *defaultHeadView;
     UIView *defaultDownView;
@@ -100,8 +96,6 @@
 @property (nonatomic,strong) UIButton *btnFull;
 @property (nonatomic,assign) CGFloat fChatHeight;
 
-@property (nonatomic,strong) RoomTitleView *group;
-
 @property (nonatomic,strong) UITableView *priChatView;
 @property (nonatomic,strong) UITableView *noticeView;
 @property (nonatomic,strong) UITableView *chatView;
@@ -122,17 +116,6 @@
 @end
 
 @implementation RoomViewController
-
-//-(SliderMenuView *)sliderMenuView{
-//    if (!sliderMenu) {
-//        
-//        CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
-//        CGFloat tabbarH = CGRectGetHeight(self.tabBarController.tabBar.frame);
-//        sliderMenu = [[SliderMenuView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH-tabbarH} withTitles:@[@"日收益",@"月收益",@"总收益"]];
-//        sliderMenu.viewArrays = @[self.dayTab,self.monTab,self.totalTab];
-//    }
-//    return _sliderMenuView;
-//}
 
 - (id)initWithModel:(RoomHttp *)room
 {
@@ -426,7 +409,6 @@
     NSString *html = [aryInfo objectAtIndex:indexPath.row];
     [cell setHTMLString:html];
     cell.attributedTextContextView.shouldDrawImages = YES;
-    cell.attributedTextContextView.delegate = self;
 }
 
 //设置高度
@@ -470,7 +452,6 @@
     {
         return cell;
     }
-    cell.lblInfo.attributedTextContentView.delegate = self;
     cell.lblInfo.attributedTextContentView.shouldDrawImages = YES;
     cell.lblInfo.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
     NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
@@ -564,96 +545,6 @@
 {
     return UIStatusBarStyleLightContent;
 }
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if (scrollView == _scrollView)
-    {
-        //拖动前的起始坐标
-        startContentOffsetX = scrollView.contentOffset.x;
-    }
-}
-
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
-{
-    if (scrollView == _scrollView) {
-        //将要停止前的坐标
-        willEndContentOffsetX = scrollView.contentOffset.x;
-    }
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (scrollView == _scrollView)
-    {
-        if (willEndContentOffsetX == 0 && startContentOffsetX ==0 )
-        {
-            return ;
-        }
-        [self setBluePointX:scrollView.contentOffset.x];
-        int temp = floor((scrollView.contentOffset.x - kScreenWidth/2.0)/kScreenWidth +1);//判断是否翻页
-        if (temp != _currentPage)
-        {
-            if (temp > _currentPage)
-            {
-                if (_tag<4)
-                {
-                    _tag ++;
-                    [_group setBtnSelect:_tag];
-                }
-            }
-            else
-            {
-                if (_tag>1)
-                {
-                    _tag--;
-                    [_group setBtnSelect:_tag];
-                }
-            }
-            updateCount++;
-            _currentPage = temp;
-        }
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    if(scrollView == _scrollView)
-    {
-        if (updateCount ==1)//正常
-        {
-            
-        }
-        else if(updateCount==0 && _currentPage ==0)
-        {
-        
-        }
-        else//加速
-        {}
-        updateCount = 0;
-        startContentOffsetX = 0;
-        willEndContentOffsetX = 0;
-    }
-}
-
-
-- (void)setBluePointX:(CGFloat)fPointX
-{
-    CGFloat fx = kScreenWidth/4/2-fTempWidth/2+fPointX/kScreenWidth * kScreenWidth/4;
-    [_lblBlue setFrame:Rect(fx,_group.y+_group.height-2,fTempWidth,2)];
-}
-
-- (void)showInputView
-{
-    if ([UserInfo sharedUserInfo].nType != 1 && ![_room.nvcbid isEqualToString:@"10000"] && ![_room.nvcbid isEqualToString:@"10001"]) {
-        
-    }
-    else{
-        
-    }
-}
-
-
 
 @end
 

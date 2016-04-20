@@ -134,7 +134,6 @@
 
 
 -(UITableView *)createTableViewWithFrame:(CGRect)frame withStyle:(UITableViewStyle)style{
-    
     UITableView *tableView = [[UITableView alloc]initWithFrame:frame style:style];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.backgroundColor = [UIColor grayColor];

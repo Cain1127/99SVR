@@ -8,6 +8,8 @@
 
 #import "XVideoLiveViewcontroller.h"
 #import "LivePlayViewController.h"
+#import "RoomChatDataSource.h"
+#import "TableViewFactory.h"
 #import "AlertFactory.h"
 #import "RoomDownView.h"
 #import "RoomService.h"
@@ -21,7 +23,9 @@
 #import "GiftView.h"
 #import "ChatView.h"
 #import "RoomDownView.h"
-
+#import "SliderMenuView.h"
+#import <DTCoreText/DTCoreText.h>
+#import "RoomNoticeDataSource.h"
 
 @interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,RoomDownDelegate,ChatViewDelegate>
 {
@@ -29,7 +33,6 @@
     RoomDownView *_infoView;
     GiftView *_giftView;
     ChatView *_inputView;
-    
     
     NSMutableDictionary *dictGift;
     BOOL bGiftView;
@@ -43,6 +46,7 @@
     UIView  *_topHUD;
     UIView *_downHUD;
     
+    DTAttributedTextView *_teachView;
 }
 
 @property (nonatomic,strong) LivePlayViewController *ffPlay;
@@ -60,6 +64,14 @@
 
 @property (nonatomic,strong) UIButton *btnVideo;
 @property (nonatomic,strong) UIButton *btnFull;
+
+@property (nonatomic,strong) SliderMenuView *menuView;
+
+@property (nonatomic,strong) RoomChatDataSource *chatDataSource;
+
+@property (nonatomic,strong) RoomChatDataSource *prichatDataSource;
+
+@property (nonatomic,strong) RoomNoticeDataSource *noticeDataSource;
 
 @end
 
@@ -113,14 +125,45 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
+    
+}
+
+- (void)initTableView{
+    CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-kVideoImageHeight);
+    _chatView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
+    [_chatView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    _chatDataSource = [[RoomChatDataSource alloc] init];
+    _chatView.dataSource = _chatDataSource;
+    _chatView.delegate = _chatDataSource;
+    
+    _priChatView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
+    [_priChatView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    _prichatDataSource = [[RoomChatDataSource alloc] init];
+    _priChatView.dataSource = _prichatDataSource;
+    _priChatView.delegate = _prichatDataSource;
+    
+    _noticeView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
+    _noticeDataSource = [[RoomNoticeDataSource alloc] init];
+    _noticeView.dataSource = _noticeDataSource;
+    _noticeView.delegate = _noticeDataSource;
+    
+    _teachView = [[DTAttributedTextView alloc] initWithFrame:frame];
+}
+
+- (void)initSlideView{
+    _menuView = [[SliderMenuView alloc] initWithFrame:Rect(0,kVideoImageHeight, kScreenWidth,self.view.height-kVideoImageHeight)
+                                           withTitles:@[@"聊天",@"我的",@"公告",@"课程表",@"贡献榜"] withDefaultSelectIndex:0];
+    _menuView.viewArrays = @[_chatView,_priChatView,_noticeView,_teachView];
+     
 }
 
 - (void)initUIHead{
+    
     _ffPlay = [[LivePlayViewController alloc] init];
     [self.view insertSubview:_ffPlay.view atIndex:1];
     _ffPlay.view.frame = Rect(0,0, kScreenWidth, kScreenHeight);
     
-    _downHUD = [[UIView alloc] initWithFrame:Rect(0, kVideoImageHeight-24, kScreenWidth, 44)];
+    _downHUD = [[UIView alloc] initWithFrame:Rect(0, kVideoImageHeight-44, kScreenWidth, 44)];
     _downHUD.alpha = 0;
     UIImageView *downImg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
     [downImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
@@ -144,6 +187,16 @@
     
     _infoView = [[RoomDownView alloc] initWithFrame:Rect(0,self.view.height-50, kScreenWidth, 50)];
     _infoView.delegate = self;
+    
+    [self initTableView];
+    [self initSlideView];
+    [self.view addSubview:_menuView];
+    self.menuView.DidSelectSliderIndex = ^(NSInteger index){
+        NSLog(@"模块%ld",(long)index);
+        
+    };
+    
+    
     
     UILabel *lblDownLine = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];
     [lblDownLine setBackgroundColor:UIColorFromRGB(0xcfcfcf)];
@@ -272,7 +325,8 @@
  */
 - (void)roomChatPriMsg:(NSNotification *)notify
 {
-    _aryPriChat = aryRoomPrichat;
+//    _aryPriChat = aryRoomPrichat;
+    [_prichatDataSource setModel:aryRoomPrichat];
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(),^{
         [selfWeak.priChatView reloadDataWithCompletion:
@@ -292,7 +346,8 @@
  */
 - (void)roomChatMSg:(NSNotification *)notify
 {
-    _aryChat = aryRoomChat;
+//    _aryChat = aryRoomChat;
+    [_chatDataSource setModel:aryRoomChat];
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(),
     ^{
@@ -314,7 +369,8 @@
 - (void)roomListNotice:(NSNotification *)notify
 {
     @WeakObj(self)
-    _aryNotice = aryRoomNotice;
+//    _aryNotice = aryRoomNotice;
+    [_noticeDataSource setModel:aryRoomNotice];
     dispatch_async(dispatch_get_main_queue(),
        ^{
            [selfWeak.noticeView reloadDataWithCompletion:
