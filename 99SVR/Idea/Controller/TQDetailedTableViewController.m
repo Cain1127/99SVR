@@ -11,7 +11,6 @@
 #import "MJExtension.h"
 #import "TQcontentView.h"
 #import "Masonry.h"
-#import "ComposeTextView.h"
 #import "TQSuspension.h"
 #import "TQDetailedTableView.h"
 
@@ -34,7 +33,7 @@
 }
 //初始化的设置
 -(void)initSubViews {
-    TQDetailedTableView *tableView = [[TQDetailedTableView alloc] init];
+    TQDetailedTableView *tableView = [[TQDetailedTableView alloc] initWithFrame:self.view.bounds];
     self.title = @"观点详情页";
     [self.view addSubview:tableView];
     self.tableView = tableView;
@@ -46,7 +45,6 @@
 
 -(void)viewWillLayoutSubviews {
     //设置tableview的尺寸
-    self.tableView.frame = self.view.bounds;
 }
 //悬浮液按钮
 -(void)setUpSuspensionBtn {

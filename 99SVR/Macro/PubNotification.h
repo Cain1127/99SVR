@@ -136,9 +136,7 @@
 
 #define MESSAGE_NETWORK_ERR_VC  @"MESSAGE_NETWORK_ERR_VC"
 
-<<<<<<< HEAD
 #define MESSAGE_UPDATE_VERSION_VC @"MESSAGE_UPDATE_VERSION_VC"
-=======
 /**
  *  Http Message Notification
  */
@@ -156,6 +154,5 @@
 
 
 
->>>>>>> c608927bbd9d0e7936b560ab4c2f81b023a778e4
 
 #endif

@@ -11,11 +11,11 @@
             <rect key="frame" x="0.0" y="0.0" width="50" height="150"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="85M-Ne-GQ4">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="85M-Ne-GQ4" customClass="TQSuspensionBtn">
                     <rect key="frame" x="0.0" y="0.0" width="50" height="44"/>
                     <state key="normal" title="献花" image="video_flower_icon"/>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f6o-Wa-zHc">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f6o-Wa-zHc" customClass="TQSuspensionBtn">
                     <rect key="frame" x="0.0" y="106" width="50" height="44"/>
                     <state key="normal" title="献花" image="video_flower_icon"/>
                 </button>

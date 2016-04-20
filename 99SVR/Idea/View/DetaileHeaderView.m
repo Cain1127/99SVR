@@ -24,4 +24,10 @@
     return [[NSBundle mainBundle] loadNibNamed:NSStringFromClass(self) owner:nil options:nil][0];
 }
 
+
+//- (void)layoutSubviews
+//{
+//    [super layoutSubviews];
+//    self.frame = CGRectMake(0, 0, 0, 2000);
+//}
 @end

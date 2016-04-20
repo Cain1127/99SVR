@@ -7,15 +7,22 @@
 //
 
 #import "TQcontentView.h"
+#import "ComposeTextView.h"
 
 @implementation TQcontentView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        
+//        UIView *titleView = [UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 30);
+        
+//        ComposeTextView *textView = [ComposeTextView alloc] initWithFrame:CGRectMake(<#CGFloat x#>, <#CGFloat y#>, CGFloat width, <#CGFloat height#>)
+        
+    }
+    return self;
 }
-*/
+
 
 @end

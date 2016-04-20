@@ -14,7 +14,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "MJRefresh.h"
 #import "TQMailboxViewController.h"
-
+#import "TQcontentView.h"
 
 #import "TQDetailedTableViewController.h"
 
@@ -47,7 +47,9 @@ static NSString *const ideaCell = @"status";
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
-
+    TQcontentView *view1 = [[TQcontentView alloc] initWithFrame:CGRectMake(0, 300, kScreenWidth, 44)];
+    [self.tableView addSubview:view1];
+    
     
 }
 

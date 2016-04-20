@@ -16,6 +16,7 @@
 #import "ComposeTextView.h"
 
 
+
 @interface TQDetailedTableView () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate>
 /** 输入框 */
 @property (nonatomic ,weak)TQcontentView *contentView;
@@ -27,9 +28,9 @@
 @implementation TQDetailedTableView
 static NSString *const detaileCell = @"detaileCell";
 
-- (instancetype)init
+- (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
     if (self) {
         self.dataSource = self;
         self.delegate = self;
@@ -37,13 +38,20 @@ static NSString *const detaileCell = @"detaileCell";
         
         DetaileHeaderView *headerView = [DetaileHeaderView DetaileHeaderViewForXib];
         self.headerView = headerView;
-        self.tableHeaderView.height = headerView.frame.size.height;
-        [self setTableHeaderView:headerView];
+        //        CGRect frame = headerView.frame;
+        //        frame.size.height = 200;
+//        headerView.frame = CGRectMake(0, 0, 0, 250);
         
+        self.tableHeaderView = headerView;
+        
+        TQcontentView *contentView = [[TQcontentView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 44)];
+        [self addSubview:contentView];
+        self.contentView = contentView;
+
+
     }
     return self;
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 20;
@@ -70,24 +78,16 @@ static NSString *const detaileCell = @"detaileCell";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
     [self setUpInputBox];
     
     
 }
 -(void)setUpInputBox{
-    TQcontentView *contentView = [[TQcontentView alloc] init];
-    [self addSubview:contentView];
-    self.contentView = contentView;
-    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.mas_left).offset(0);
-        make.right.equalTo(self.mas_right).offset(0);
-        make.bottom.equalTo(self.mas_bottom).offset(44);
-        make.height.offset(44);
-    }];
-    contentView.textView.delegate = self;
+    self.contentView.textView.delegate = self;
     
-    [contentView.textView becomeFirstResponder];
+    [self.contentView.textView becomeFirstResponder];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
+
 }
 
 
@@ -101,14 +101,13 @@ static NSString *const detaileCell = @"detaileCell";
     DLog(@"%@",NSStringFromCGRect(keyboardRect));
     
     //更新约束
-    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.mas_bottom).offset(-offsetY);
-        DLog(@"%@",NSStringFromCGRect(self.contentView.frame));
-        
-    }];
     
     [UIView animateWithDuration:0.25 animations:^{
         
+        CGRect frame = self.contentView.frame;
+        frame.origin.y = keyboardRect.origin.y;
+        self.contentView.frame = frame;
+
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
         [self layoutIfNeeded];
     }];

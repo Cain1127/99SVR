@@ -85,7 +85,6 @@
     CGFloat fTempWidth;
     BOOL bFull;
     RoomHttp *_room;
-<<<<<<< HEAD
     GiftView *_giftView;
     RoomDownView *_infoView;
     UIView *userHidden;
@@ -93,13 +92,8 @@
     ChatView *_inputView;
     int nColor;
     UserListView *_listView;
-=======
     
-    UIView *userHidden;
-    UIView *headTable;
-    ChatView *_inputView;
     
->>>>>>> c608927bbd9d0e7936b560ab4c2f81b023a778e4
     NSCache *chatCache;
     DTAttributedLabel *lblTeachInfo;
     BOOL bGiftView;
@@ -156,7 +150,6 @@
     return self;
 }
 
-<<<<<<< HEAD
 - (void)connectRoomInfo
 {
     NSString *strAddress;
@@ -188,31 +181,20 @@
     [[SDImageCache sharedImageCache] clearMemory];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
-=======
 
->>>>>>> c608927bbd9d0e7936b560ab4c2f81b023a778e4
 
 - (void)dealloc
 {
     DLog(@"room view");
-<<<<<<< HEAD
 
 //    [_tcpSocket exit_Room:YES];
 //    _tcpSocket = nil;
-    [_ffPlay stop];
 
-    [_ffPlay stop];
     //TODD:关闭房间   清楚所有信息
-=======
->>>>>>> c608927bbd9d0e7936b560ab4c2f81b023a778e4
     [kProtocolSingle exitRoom];
 
     [[SDImageCache sharedImageCache] clearMemory];
-<<<<<<< HEAD
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
-    _ffPlay = nil;
-=======
->>>>>>> c608927bbd9d0e7936b560ab4c2f81b023a778e4
     [_scrollView removeFromSuperview];
     _scrollView = nil;
     [_chatView removeFromSuperview];
