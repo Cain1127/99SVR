@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include "HttpListener.h"
-
+#include "StockDealModel.h"
 /**
  *  闪屏响应
  */
@@ -52,29 +52,36 @@ void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day, vec
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks){
     
-    
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
+    //股票头部数据
+    StockDealModel *headerModel = [[StockDealModel alloc]initWithProfit:profit];
     //头部数据
-    muDic[@"profit"] = [NSValue valueWithPointer:&profit];
+    muDic[@"headerModel"] = headerModel;
+    
     //股票数据
-    muDic[@"data"] = [NSValue valueWithPointer:&data];
+    StockDealModel *stockDataModel = [[StockDealModel alloc]initWithStockData:data];
+    muDic[@"stockModel"] = stockDataModel;
+    
     //交易详情
     NSMutableArray *transArray = [NSMutableArray array];
     for (size_t i =0; i < trans.size(); i ++) {
-        NSValue *value = [NSValue valueWithPointer:&trans[i]];
-        [transArray addObject:value];
+        
+        OperateStockTransaction *transaction = &trans[i];
+        StockDealModel *transactionModel = [[StockDealModel alloc]initWithOperateStockTransaction:transaction];
+        [transArray addObject:transactionModel];
     }
     muDic[@"trans"] = transArray;
+    
     //持仓详情
     NSMutableArray *stocksArray = [NSMutableArray array];
     for (size_t i =0; i < stocks.size(); i ++) {
-        NSValue *value = [NSValue valueWithPointer:&stocks[i]];
-        [stocksArray addObject:value];
+        
+        OperateStocks *operateStocks = &stocks[i];
+        StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithOperateStocks:operateStocks];
+        [stocksArray addObject:operateStocksModel];
     }
     muDic[@"stocks"] = stocksArray;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
-    
-    
 }
 /**
  *  请求操盘详情--交易记录

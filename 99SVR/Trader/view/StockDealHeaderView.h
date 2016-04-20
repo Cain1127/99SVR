@@ -3,6 +3,7 @@
 
 
 #import <UIKit/UIKit.h>
+#import "StockDealModel.h"
 
 
 @interface StockLabel : UIView
@@ -32,4 +33,7 @@
 @property (strong, nonatomic)  UILabel *totalNumLab;
 /**总收益*/
 @property (nonatomic , strong) UILabel *totalLab;
+
+-(void)setHeaderViewWithDataModel:(StockDealModel *)model;
+
 @end

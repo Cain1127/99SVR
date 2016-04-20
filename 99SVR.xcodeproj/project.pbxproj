@@ -128,7 +128,7 @@
 		B4EA09101CC757D500E8F933 /* DDLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA090D1CC757D500E8F933 /* DDLineChartView.m */; };
 		B4EA09111CC757D500E8F933 /* StockChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA090F1CC757D500E8F933 /* StockChartView.m */; };
 		B4EA09141CC764C300E8F933 /* StockDealCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09131CC764C300E8F933 /* StockDealCellView.m */; };
-		B4EA09171CC76B6700E8F933 /* StockDealModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09161CC76B6700E8F933 /* StockDealModel.m */; };
+		B4EA09171CC76B6700E8F933 /* StockDealModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09161CC76B6700E8F933 /* StockDealModel.mm */; };
 		BB06311C1C61C827008AD41D /* NoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB06311B1C61C827008AD41D /* NoticeModel.m */; };
 		BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B481CB112FC00C573E0 /* BaseService.m */; };
 		BB125B4C1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B4A1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m */; };
@@ -826,7 +826,7 @@
 		B4EA09121CC764C300E8F933 /* StockDealCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealCellView.h; sourceTree = "<group>"; };
 		B4EA09131CC764C300E8F933 /* StockDealCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockDealCellView.m; sourceTree = "<group>"; };
 		B4EA09151CC76B6700E8F933 /* StockDealModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealModel.h; sourceTree = "<group>"; };
-		B4EA09161CC76B6700E8F933 /* StockDealModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockDealModel.m; sourceTree = "<group>"; };
+		B4EA09161CC76B6700E8F933 /* StockDealModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealModel.mm; sourceTree = "<group>"; };
 		BB06311A1C61C827008AD41D /* NoticeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeModel.h; sourceTree = "<group>"; };
 		BB06311B1C61C827008AD41D /* NoticeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeModel.m; sourceTree = "<group>"; };
 		BB125B471CB112FC00C573E0 /* BaseService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseService.h; path = blocks/BaseService.h; sourceTree = "<group>"; };
@@ -2001,7 +2001,7 @@
 			isa = PBXGroup;
 			children = (
 				B4EA09151CC76B6700E8F933 /* StockDealModel.h */,
-				B4EA09161CC76B6700E8F933 /* StockDealModel.m */,
+				B4EA09161CC76B6700E8F933 /* StockDealModel.mm */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -3788,7 +3788,7 @@
 				BB5E4FAB1CBF7D1B00F8C1D4 /* CommentCell.m in Sources */,
 				B47DD59D1CBF345300C47EF7 /* SliderMenuTopScrollView.m in Sources */,
 				18F971111C92947F001B2575 /* openssl_wrapper.m in Sources */,
-				B4EA09171CC76B6700E8F933 /* StockDealModel.m in Sources */,
+				B4EA09171CC76B6700E8F933 /* StockDealModel.mm in Sources */,
 				1898AC681C9BADE600F2681D /* KefuCenterController.m in Sources */,
 				185DABA81CBFDC970019C5A3 /* TQIdeaViewController.m in Sources */,
 				BBCF9A4D1CAD4F81005B9DCE /* SexViewController.m in Sources */,

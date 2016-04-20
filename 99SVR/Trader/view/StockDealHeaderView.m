@@ -78,11 +78,9 @@
     self.totalLab.textColor = [UIColor whiteColor];
     self.totalLab.font = [UIFont systemFontOfSize:totalTitLabFont];
     [self addSubview:self.totalLab];
-    
-    [self setHeaderViewWithData];
 }
 
--(void)setHeaderViewWithData{
+-(void)setHeaderViewWithDataModel:(StockDealModel *)model{
 
     
     self.dayLabView.titLab.text = @"日收益";

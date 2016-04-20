@@ -21,5 +21,11 @@
 #define IphoneStringWithIntValue(string,X) [IphoneModelArray(string)[X] floatValue]
 #define ValueWithTheIPhoneModelString(string) (G_IPhone__4 ? (IphoneStringWithIntValue(string,0)) : (G_IPhone__5 ? (IphoneStringWithIntValue(string,1)) :((G_IPhone__6 ? (IphoneStringWithIntValue(string,2)) :(IphoneStringWithIntValue(string,3))))))
 
+/**字符转换成UTF8 字符串*/
+#define StrTransformCToUTF8(x) [NSString stringWithCString:x encoding:NSUTF8StringEncoding]
+/**int 转换成字符串*/
+#define IntTransformIntToStr(x) [NSString stringWithFormat:@"%d",x]
+/**float 转成字符串*/
+#define FloatTransformFloatToStr(x) [NSString stringWithFormat:@"%f",x]
 
 #endif /* MacroHeader_h */
