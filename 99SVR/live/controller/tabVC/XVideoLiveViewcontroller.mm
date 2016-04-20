@@ -146,6 +146,7 @@
     _noticeDataSource = [[RoomNoticeDataSource alloc] init];
     _noticeView.dataSource = _noticeDataSource;
     _noticeView.delegate = _noticeDataSource;
+    [_noticeView setBackgroundColor:UIColorFromRGB(0xffffff)];
     
     _teachView = [[DTAttributedTextView alloc] initWithFrame:frame];
 }
