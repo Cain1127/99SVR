@@ -7,7 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class ComposeTextView;
 @interface TQcontentView : UIView
+/** 聊天框 */
+@property (nonatomic ,weak)ComposeTextView *textView;
 
+/**提示占位文字*/
+@property (nonatomic ,weak)UILabel *lblPlace;
+
+/** 取消 */
+@property (nonatomic ,weak)UIButton *sendBtn;
+
+/** 发送评论 */
+@property (nonatomic ,weak)UIButton *commentBtn;
 @end

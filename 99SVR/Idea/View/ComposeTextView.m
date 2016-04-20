@@ -16,7 +16,7 @@
     if (self) {
         
         self.font = [UIFont systemFontOfSize:15];
-        self.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+        self.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     }
     return self;
 }

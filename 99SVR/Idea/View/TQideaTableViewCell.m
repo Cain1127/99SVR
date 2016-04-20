@@ -7,7 +7,18 @@
 //
 
 #import "TQideaTableViewCell.h"
+@interface TQideaTableViewCell ()
 
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+
+@property (weak, nonatomic) IBOutlet UIView *nameLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *DateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *conTentLabel;
+@property (weak, nonatomic) IBOutlet UIButton *commentBtn;
+@property (weak, nonatomic) IBOutlet UIButton *giftBtn;
+
+@end
 @implementation TQideaTableViewCell
 
 

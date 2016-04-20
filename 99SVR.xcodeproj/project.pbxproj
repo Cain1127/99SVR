@@ -28,6 +28,7 @@
 		185F59731CC4CCA700F605F5 /* TQIdeaDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 185F59721CC4CCA700F605F5 /* TQIdeaDetailModel.m */; };
 		187C07F31C9A571B007AE742 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C07F21C9A571B007AE742 /* ProfileViewController.m */; };
 		187C07F61C9A5A52007AE742 /* NickNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C07F51C9A5A52007AE742 /* NickNameViewController.m */; };
+		188490FF1CC73F79007FD1ED /* UIBarButtonItem+Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 188490FE1CC73F79007FD1ED /* UIBarButtonItem+Item.m */; };
 		188741791C96FE25002EF25A /* NavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188741781C96FE25002EF25A /* NavigationViewController.m */; };
 		188741811C9702DA002EF25A /* Foundation+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417A1C9702DA002EF25A /* Foundation+Log.m */; };
 		188741821C9702DA002EF25A /* NSString+Regex.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417C1C9702DA002EF25A /* NSString+Regex.m */; };
@@ -40,7 +41,6 @@
 		188E4A0A1CC5B61C00D97254 /* ComposeTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E4A091CC5B61C00D97254 /* ComposeTextView.m */; };
 		188E4A131CC600DD00D97254 /* TQSuspensionBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E4A121CC600DD00D97254 /* TQSuspensionBtn.m */; };
 		188E4A161CC60D0C00D97254 /* TQSuspension.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E4A151CC60D0C00D97254 /* TQSuspension.m */; };
-		188E4A181CC60D1A00D97254 /* TQSuspension.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188E4A171CC60D1A00D97254 /* TQSuspension.xib */; };
 		188E4A1B1CC616E100D97254 /* TQDetailedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E4A1A1CC616E100D97254 /* TQDetailedTableView.m */; };
 		18987FF01CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
 		18987FF11CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
@@ -572,6 +572,8 @@
 		187C07F21C9A571B007AE742 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ProfileViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		187C07F41C9A5A52007AE742 /* NickNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NickNameViewController.h; sourceTree = "<group>"; };
 		187C07F51C9A5A52007AE742 /* NickNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NickNameViewController.m; sourceTree = "<group>"; };
+		188490FD1CC73F79007FD1ED /* UIBarButtonItem+Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Item.h"; sourceTree = "<group>"; };
+		188490FE1CC73F79007FD1ED /* UIBarButtonItem+Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Item.m"; sourceTree = "<group>"; };
 		188741771C96FE25002EF25A /* NavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationViewController.h; sourceTree = "<group>"; };
 		188741781C96FE25002EF25A /* NavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationViewController.m; sourceTree = "<group>"; };
 		1887417A1C9702DA002EF25A /* Foundation+Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Foundation+Log.m"; sourceTree = "<group>"; };
@@ -590,7 +592,6 @@
 		188E4A121CC600DD00D97254 /* TQSuspensionBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQSuspensionBtn.m; sourceTree = "<group>"; };
 		188E4A141CC60D0C00D97254 /* TQSuspension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQSuspension.h; sourceTree = "<group>"; };
 		188E4A151CC60D0C00D97254 /* TQSuspension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQSuspension.m; sourceTree = "<group>"; };
-		188E4A171CC60D1A00D97254 /* TQSuspension.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQSuspension.xib; sourceTree = "<group>"; };
 		188E4A191CC616E100D97254 /* TQDetailedTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQDetailedTableView.h; sourceTree = "<group>"; };
 		188E4A1A1CC616E100D97254 /* TQDetailedTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQDetailedTableView.m; sourceTree = "<group>"; };
 		18987FEE1CAA17E6000E9F1C /* WonderfullView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonderfullView.h; sourceTree = "<group>"; };
@@ -1601,7 +1602,6 @@
 				188E4A121CC600DD00D97254 /* TQSuspensionBtn.m */,
 				188E4A141CC60D0C00D97254 /* TQSuspension.h */,
 				188E4A151CC60D0C00D97254 /* TQSuspension.m */,
-				188E4A171CC60D1A00D97254 /* TQSuspension.xib */,
 				188E4A191CC616E100D97254 /* TQDetailedTableView.h */,
 				188E4A1A1CC616E100D97254 /* TQDetailedTableView.m */,
 				18CE9CD11CC70676004AF7C8 /* TQcontentView.h */,
@@ -1749,6 +1749,8 @@
 		18B0CEC21CC07CC700BA82DF /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				188490FD1CC73F79007FD1ED /* UIBarButtonItem+Item.h */,
+				188490FE1CC73F79007FD1ED /* UIBarButtonItem+Item.m */,
 				18B0CED21CC0804100BA82DF /* UIView+TQFram.h */,
 				18B0CED31CC0804100BA82DF /* UIView+TQFram.m */,
 				18B0CEC31CC07CC700BA82DF /* GlobeConst.h */,
@@ -3459,7 +3461,6 @@
 				BB63F2CE1C27FB2800A042E8 /* 6.gif in Resources */,
 				BBCE9D231CB3AD5600DA56D6 /* 129_1.png in Resources */,
 				BB63F2BC1C27FB2800A042E8 /* 20.gif in Resources */,
-				188E4A181CC60D1A00D97254 /* TQSuspension.xib in Resources */,
 				BBCE9D1B1CB3AD5600DA56D6 /* 121_1.png in Resources */,
 				BBCE9D111CB3AD5600DA56D6 /* 111_1.png in Resources */,
 				BBCE9D161CB3AD5600DA56D6 /* 116_1.png in Resources */,
@@ -3656,6 +3657,7 @@
 				BB17694A1C7D88E000CE947C /* ForgetPwdViewController.m in Sources */,
 				BB5F9BC71C5DDA9D00285EA6 /* MediaSocket.m in Sources */,
 				BB63F5F91C2CC7A300A042E8 /* UIView+Extension.m in Sources */,
+				188490FF1CC73F79007FD1ED /* UIBarButtonItem+Item.m in Sources */,
 				BB63F5D41C2CC7A300A042E8 /* UIScrollView+MJExtension.m in Sources */,
 				18F9710F1C92947F001B2575 /* MD5DataSigner.m in Sources */,
 				BB98EE5E1CB588C70028AAEF /* NSObject+SBJSON.m in Sources */,
