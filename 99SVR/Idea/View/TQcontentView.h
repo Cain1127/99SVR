@@ -2,14 +2,12 @@
 //  TQcontentView.h
 //  99SVR
 //
-//  Created by apple on 16/4/19.
+//  Created by apple on 16/4/20.
 //  Copyright © 2016年 xia zhonglin . All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-@class ComposeTextView;
+
 @interface TQcontentView : UIView
-/** 输入框 */
-@property (nonatomic ,weak)ComposeTextView *textView;
 
 @end
