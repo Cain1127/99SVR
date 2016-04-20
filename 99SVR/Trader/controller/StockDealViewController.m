@@ -20,7 +20,6 @@
     
     [self initData];
     [self initUI];
-
 }
 
 -(void)initUI{
@@ -44,7 +43,7 @@
     
     if (!_headerView) {
         
-        _headerView = [[StockDealHeaderView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,headerView_h}];
+
         _headerView.backgroundColor = [UIColor grayColor];
     }
     
