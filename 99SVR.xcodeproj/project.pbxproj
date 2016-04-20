@@ -116,7 +116,7 @@
 		B48591F11CB4FC1E00DAC61F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B48591F01CB4FC1E00DAC61F /* WebKit.framework */; };
 		B4A15E9B1CBFA91300587E3F /* BaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A15E971CBFA91300587E3F /* BaseCell.m */; };
 		B4A15E9C1CBFA91300587E3F /* TraderHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A15E9A1CBFA91300587E3F /* TraderHomeCell.m */; };
-		B4A15E9F1CBFAA9E00587E3F /* StockDealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.m */; };
+		B4A15E9F1CBFAA9E00587E3F /* StockDealViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.mm */; };
 		B4A15EA21CBFACFE00587E3F /* StockDealCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A15EA11CBFACFE00587E3F /* StockDealCell.m */; };
 		B4C4B36D1CBAA5FF00B20A58 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B3661CBAA5FF00B20A58 /* IAPHelper.m */; };
 		B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */; };
@@ -799,7 +799,7 @@
 		B4A15E991CBFA91300587E3F /* TraderHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TraderHomeCell.h; sourceTree = "<group>"; };
 		B4A15E9A1CBFA91300587E3F /* TraderHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TraderHomeCell.m; sourceTree = "<group>"; };
 		B4A15E9D1CBFAA9E00587E3F /* StockDealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealViewController.h; sourceTree = "<group>"; };
-		B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockDealViewController.m; sourceTree = "<group>"; };
+		B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealViewController.mm; sourceTree = "<group>"; };
 		B4A15EA01CBFACFE00587E3F /* StockDealCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealCell.h; sourceTree = "<group>"; };
 		B4A15EA11CBFACFE00587E3F /* StockDealCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockDealCell.m; sourceTree = "<group>"; };
 		B4C4B3651CBAA5FF00B20A58 /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
@@ -1988,7 +1988,7 @@
 				B47DD5961CBF2D9400C47EF7 /* TraderViewController.h */,
 				B47DD5971CBF2D9400C47EF7 /* TraderViewController.m */,
 				B4A15E9D1CBFAA9E00587E3F /* StockDealViewController.h */,
-				B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.m */,
+				B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.mm */,
 				B44F77691CC3B98D008E3B26 /* StockDealRecordVC.h */,
 				B44F776A1CC3B98D008E3B26 /* StockDealRecordVC.m */,
 			);
@@ -3697,7 +3697,7 @@
 				188741871C97058F002EF25A /* TabBarController.m in Sources */,
 				BB63F6201C2CC7A300A042E8 /* GroupView.m in Sources */,
 				BB5E4F931CBF7D1B00F8C1D4 /* TextChatViewController.m in Sources */,
-				B4A15E9F1CBFAA9E00587E3F /* StockDealViewController.m in Sources */,
+				B4A15E9F1CBFAA9E00587E3F /* StockDealViewController.mm in Sources */,
 				BB63F5B61C2CC7A300A042E8 /* GTMBase64.m in Sources */,
 				18F9710B1C92947F001B2575 /* Order.m in Sources */,
 				BB5E4F921CBF7D1B00F8C1D4 /* SecretViewController.m in Sources */,

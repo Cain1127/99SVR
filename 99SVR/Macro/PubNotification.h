@@ -141,5 +141,9 @@
  */
 #define MESSAGE_UPDATE_VERSION_VC @"MESSAGE_UPDATE_VERSION_VC"
 
+/**
+ *  股票详情StockDealViewController
+ */
+#define MESSAGE_STOCK_DEAL_VC @"MESSAGE_STOCK_DEAL_VC"
 
 #endif

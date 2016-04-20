@@ -52,6 +52,29 @@ void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day, vec
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks){
     
+    
+    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
+    //头部数据
+    muDic[@"profit"] = [NSValue valueWithPointer:&profit];
+    //股票数据
+    muDic[@"data"] = [NSValue valueWithPointer:&data];
+    //交易详情
+    NSMutableArray *transArray = [NSMutableArray array];
+    for (size_t i =0; i < trans.size(); i ++) {
+        NSValue *value = [NSValue valueWithPointer:&trans[i]];
+        [transArray addObject:value];
+    }
+    muDic[@"trans"] = transArray;
+    //持仓详情
+    NSMutableArray *stocksArray = [NSMutableArray array];
+    for (size_t i =0; i < stocks.size(); i ++) {
+        NSValue *value = [NSValue valueWithPointer:&stocks[i]];
+        [stocksArray addObject:value];
+    }
+    muDic[@"stocks"] = stocksArray;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
+    
+    
 }
 /**
  *  请求操盘详情--交易记录

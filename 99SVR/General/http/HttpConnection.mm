@@ -91,9 +91,9 @@ void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAll
     std::vector<OperateStockTransaction> trans;
     std::vector<OperateStocks> stocks;
     int i=0;
-    for (i=0; i<10; i++) {
+    for (i=0; i<2; i++) {
         OperateStockTransaction saction;
-        OperateStocks stocks;
+        OperateStocks stock;
 
         saction.set_operateid(i+1);
         saction.set_stockid("12345");
@@ -103,14 +103,17 @@ void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAll
         saction.set_count(123);
         saction.set_money(9999);
         
-        stocks.set_operateid(i+1);
-        stocks.set_stockid("321");
-        stocks.set_stockname("shenme");
-        stocks.set_count(12+i);
-        stocks.set_cost(123);
-        stocks.set_currprice(55);
-        stocks.set_profitrate(1);
-        stocks.set_profitmoney(888);
+        trans.push_back(saction);
+        
+        stock.set_operateid(i+1);
+        stock.set_stockid("321");
+        stock.set_stockname("shenme");
+        stock.set_count(12+i);
+        stock.set_cost(123);
+        stock.set_currprice(55);
+        stock.set_profitrate(1);
+        stock.set_profitmoney(888);
+        stocks.push_back(stock);
     }
     listener->onResponse(profit,data, trans,stocks);
     

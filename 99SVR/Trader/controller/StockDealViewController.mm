@@ -7,6 +7,7 @@
 #import "StockDealHeaderView.h"
 #import "MacroHeader.h"
 #import "StockDealTableModel.h"
+#import "HttpMessage.pb.h"
 @interface StockDealViewController ()
 @property (nonatomic , strong) UITableView *tableView;
 @property (nonatomic , strong) StockDealHeaderView *headerView;
@@ -18,6 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
 
 
     self.view.backgroundColor = [UIColor whiteColor];
@@ -43,6 +45,27 @@
     self.warningLab.text = @"仅代表讲师个人操盘记录,不构成投资建议，风险自负";
 
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
+    [kHTTPSingle RequestOperateStockAllDetail:100];
+
+
+}
+
+- (void)printInfo:(NSNotification *)notify{
+
+    NSDictionary *dic = notify.object;
+
+    NSValue *headerValue = dic[@"profit"];
+    NSValue *stockValue = dic[@"data"];
+    NSValue *jiaoYiValue = dic[@"trans"];
+    NSValue *chiCangValue = dic[@"stocks"];
+
+    OperateStockProfit *profit = (OperateStockProfit *)headerValue.pointerValue;
+    
+    
+    
+    NSLog(@"%s",profit->focus().c_str());
+    
 }
 
 #pragma mark lazyUI
@@ -81,7 +104,9 @@
         _warningLab.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:_warningLab];
         [_warningLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.and.left.and.right.equalTo(@0);
+            make.bottom.equalTo(@0);
+            make.left.equalTo(@0);
+            make.right.equalTo(@0);
             make.height.equalTo(@(warningLab_h));
         }];
     }
