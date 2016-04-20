@@ -10,6 +10,5 @@
 
 @interface TQSuspension : UIView
 
-+ (instancetype)SuspensionForXib;
 
 @end

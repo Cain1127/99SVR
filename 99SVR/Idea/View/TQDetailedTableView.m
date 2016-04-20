@@ -18,11 +18,10 @@
 
 
 @interface TQDetailedTableView () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate>
-/** 输入框 */
-@property (nonatomic ,weak) TQcontentView *contentView;
 /** 头部试图 */
 @property (nonatomic ,weak) DetaileHeaderView *headerView;
-
+/** 聊天框 */
+@property (nonatomic ,weak)TQcontentView *contentView;
 @end
 
 @implementation TQDetailedTableView
@@ -33,25 +32,59 @@ static NSString *const detaileCell = @"detaileCell";
 {
     self = [super initWithFrame:frame];
     if (self) {
+        //初始化设置
         self.dataSource = self;
         self.delegate = self;
+        self.backgroundColor = [UIColor colorWithHex:@"#EEEEEE"];
         [self registerNib:[UINib nibWithNibName:NSStringFromClass([ideaDetailTableViewCell class]) bundle:nil] forCellReuseIdentifier:detaileCell];
+        //添加手势监听,退出键盘
+        @WeakObj(self)
+        [self clickWithBlock:^(UIGestureRecognizer *gesture) {
+            [selfWeak.contentView.textView resignFirstResponder];
+        }];
         
-        DetaileHeaderView *headerView = [DetaileHeaderView DetaileHeaderViewForXib];
-        self.headerView = headerView;
-//        CGRect frame = headerView.frame;
-//        frame.size.height = 200;
-//        headerView.frame = CGRectMake(0, 0, 0, 250);
-        
-        self.tableHeaderView = headerView;
-        
-        TQcontentView *contentView = [[TQcontentView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 44)];
-        [self addSubview:contentView];
-        self.contentView = contentView;
-
+        //创建子控件
+        [self creatChildView];
 
     }
     return self;
+}
+
+-(void)keyboardHide:(UITapGestureRecognizer*)tap{
+    [self.contentView.textView resignFirstResponder];
+}
+
+//创建子控件
+-(void)creatChildView {
+    
+    DetaileHeaderView *headerView = [DetaileHeaderView DetaileHeaderViewForXib];
+    self.headerView = headerView;
+    headerView.backgroundColor = [UIColor colorWithHex:@"#EEEEEE"];
+    self.tableHeaderView = headerView;
+
+    
+    TQcontentView *contentView = [[TQcontentView alloc] initWithFrame:CGRectMake(2, self.height, kScreenWidth - 4, 100)];
+    contentView.layer.borderWidth = 1;
+    contentView.layer.borderColor = [[UIColor blackColor] CGColor];
+    [self addSubview:contentView];
+    contentView.hidden = YES;
+    self.contentView = contentView;
+    
+    //监听评论按钮的点击
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(popKeyboard) name:@"TQ_ideadatail_sendcomment" object:nil];
+    //键盘即将退出
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:@"UIKeyboardWillHideNotification" object:nil];
+    //键盘弹出
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
+}
+
+-(void)popKeyboard {
+    self.scrollEnabled = YES;
+    
+    if (self.contentView.hidden) {
+        
+        [self.contentView.textView becomeFirstResponder];
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -61,16 +94,13 @@ static NSString *const detaileCell = @"detaileCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     ideaDetailTableViewCell *cell = [self dequeueReusableCellWithIdentifier:detaileCell];
-    
+
     return cell;
-    
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 200;
 }
-
-
 #pragma mark - Table view delegate
 /**
  *  选中行后，弹出输入框和键盘.进行互动,
@@ -79,19 +109,7 @@ static NSString *const detaileCell = @"detaileCell";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    [self setUpInputBox];
-    
-    
 }
--(void)setUpInputBox{
-//    self.contentView.textView.delegate = self;
-    
-//    [self.contentView.textView becomeFirstResponder];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
-
-}
-
 
 
 //监听键盘状态,动画弹出对话框
@@ -102,22 +120,53 @@ static NSString *const detaileCell = @"detaileCell";
     CGFloat offsetY = kScreenHeight - keyboardRect.origin.y;
     DLog(@"%@",NSStringFromCGRect(keyboardRect));
     
-    //更新约束
-    
-    [UIView animateWithDuration:0.25 animations:^{
-        
-        CGRect frame = self.contentView.frame;
-        frame.origin.y = keyboardRect.origin.y;
-        self.contentView.frame = frame;
+    self.contentView.hidden = NO;
+    CGRect frame = self.contentView.frame;
+    frame.origin.y = offsetY;
+    self.contentView.frame = frame;
 
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [self layoutIfNeeded];
+    [UIView animateWithDuration:0.2 animations:^{
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+        [self setNeedsLayout];
+    }];
+
+}
+//收起聊天框的动画
+-(void)packUpComment {
+    
+        CGRect frame = self.contentView.frame;
+        frame.origin.y = self.height;
+        self.contentView.frame = frame;
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+        [self setNeedsLayout];
+    }completion:^(BOOL finished) {
+        self.contentView.hidden = YES;
     }];
 }
+//滚动退出键盘
+//-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    
+//    if (!self.contentView.hidden) {
+//        [self.contentView.textView resignFirstResponder];
+//    }
+//
+//}
+//键盘即将退出执行
 - (void)keyboardWillHide:(NSNotification *)notif {
-    
-    self.contentView.hidden = YES;
+    if (self.contentView.hidden) {
+        return;
+    }
+    [self packUpComment];
 }
+
+
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 
 @end

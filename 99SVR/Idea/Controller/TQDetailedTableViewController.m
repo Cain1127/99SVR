@@ -9,10 +9,11 @@
 #import "ideaDetailTableViewCell.h"
 #import "TQDetailedTableViewController.h"
 #import "MJExtension.h"
-#import "TQcontentView.h"
 #import "Masonry.h"
 #import "TQSuspension.h"
 #import "TQDetailedTableView.h"
+#import "TQcontentView.h"
+
 
 
 
@@ -21,6 +22,7 @@
 @property (nonatomic ,weak)TQSuspension *Suspension;
 /** tableView */
 @property (nonatomic ,weak)TQDetailedTableView *tableView;
+
 @end
 
 @implementation TQDetailedTableViewController
@@ -41,6 +43,8 @@
 
     //设置献花和评论悬浮按钮
     [self setUpSuspensionBtn];
+    
+    
 }
 
 -(void)viewWillLayoutSubviews {
@@ -49,13 +53,13 @@
 //悬浮液按钮
 -(void)setUpSuspensionBtn {
     
-    TQSuspension *Suspension = [TQSuspension SuspensionForXib];
+    TQSuspension *Suspension = [[TQSuspension alloc] initWithFrame:CGRectMake(kScreenWidth - 60, (kScreenHeight - 110 - 64), 50, 120)];
     [self.view addSubview:Suspension];
-    Suspension.frame = CGRectMake(kScreenWidth - 60, (kScreenHeight - 110 - 64), 50, 100);
     [self.view bringSubviewToFront:Suspension];
     self.Suspension = Suspension;
 
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -71,13 +75,6 @@
 -(void)share {
     
     
-}
-
-
-
--(void)dealloc {
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
