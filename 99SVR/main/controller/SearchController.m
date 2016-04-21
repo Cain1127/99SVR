@@ -21,10 +21,10 @@
 #import "UserInfo.h"
 #import "SearchButton.h"
 #import "RoomTcpSocket.h"
+#import "HistorySearchDataSource.h"
+#import "TableViewFactory.h"
 
-
-
-@interface SearchController()<UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate>
+@interface SearchController()<UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate,HistoryDelegate>
 {
     NSArray *_keywordsArr;
     UIView *_accessoryView; // 遮盖层
@@ -32,6 +32,8 @@
     GroupListRequest *_grouRequest;
     UIView *_defaultView;
     UITextField *_mySearchBar;
+    HistorySearchDataSource *_dataSource;
+    UITableView *_historyTable;
 }
 
 @property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
@@ -43,23 +45,6 @@
 @end
 
 @implementation SearchController
-
-- (void)initDefaultView
-{
-
-}
-
-- (void)addTitleGroup
-{
-    NSArray *arySB = @[@"股林争霸",@"财富一家",@"股上云霄"];
-    for (int i=0; i<arySB.count; i++)
-    {
-        SearchButton *sb1 = [[SearchButton alloc] initWithFrame:Rect(0, (30*i+1)+60, kScreenWidth, 16)];
-        [_defaultView addSubview:sb1];
-        [sb1 setTitle:[arySB objectAtIndex:i] forState:UIControlStateNormal];
-        [sb1 addTarget:self action:@selector(searchBtnEvent:) forControlEvents:UIControlEventTouchUpInside];
-    }
-}
 
 - (void)searchBtnEvent:(UIButton *)sender
 {
@@ -73,9 +58,6 @@
     _grouRequest = [[GroupListRequest alloc] init];
     [self addSubviews];
     [self loadData];
-    [self initDefaultView];
-    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenKeyBoard)]];
-    [self.view setUserInteractionEnabled:YES];
     [_mySearchBar becomeFirstResponder];
 }
 
@@ -179,25 +161,7 @@
 
 - (void)addSubviews
 {
-//    [self addHeaderView];
-//    [self setTitle:@"搜索"];
     self.view.backgroundColor = [UIColor whiteColor];
-#if 0
-    CGFloat space = 8;
-    MySearchBar *searchBar = [[MySearchBar alloc] init];
-    [searchBar setPlaceholder:@"输入房间ID或者房间名称"];
-    searchBar.text = @"";
-    [searchBar setShowsScopeBar:YES];
-    searchBar.delegate = self;
-    searchBar.layer.borderColor = [kLineColor CGColor];
-    searchBar.layer.borderWidth = 0.5;
-    searchBar.layer.masksToBounds = YES;
-    [self.view addSubview:searchBar];
-    _mySearchBar = searchBar;
-    
-    _mySearchBar.frame = Rect(8,72, kScreenWidth-16, 44);
-#endif
-    
     UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
     _headView.backgroundColor = kNavColor;
@@ -224,6 +188,7 @@
     _mySearchBar.layer.borderColor = UIColorFromRGB(0xcfcfcf).CGColor;
     _mySearchBar.layer.borderWidth = 0.5;
     _mySearchBar.returnKeyType = UIReturnKeySearch;
+    [_mySearchBar addTarget:self action:@selector(onChange:) forControlEvents:UIControlEventEditingChanged];
     _mySearchBar.delegate = self;
     
     UITableView *keywordsTable = [[UITableView alloc] init];
@@ -236,28 +201,18 @@
     _searchResultsTable.frame = Rect(0,_mySearchBar.y+_mySearchBar.height+8,kScreenWidth,kScreenHeight-(_mySearchBar.y+_mySearchBar.height+8));
     [_searchResultsTable registerClass:[VideoCell class] forCellReuseIdentifier:@"cellId"];
     
-//    _accessoryView = [UIView new];
-//    _accessoryView.backgroundColor = [UIColor blackColor];
-//    _accessoryView.alpha = 0;
-//    [self.view addSubview:_accessoryView];
-//    [_accessoryView clickWithBlock:^(UIGestureRecognizer *gesture)
-//     {
-//         [self startSearch:_mySearchBar.text];
-//         [self changeView:_accessoryView withAlpha:0];
-//         [_mySearchBar endEditing:YES];
-//     }];
-//    [_accessoryView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.view);
-//        make.right.equalTo(self.view);
-//        make.top.mas_equalTo(searchBar.mas_bottom).offset(space);
-//        make.bottom.equalTo(self.view);
-//    }];
-    
-//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [btn setTitle:[NSString stringWithFormat:@"未搜索到包含\"%@\"的结果", _mySearchBar.text] forState:UIControlStateNormal];
-//    btn.titleLabel.font = kFontSize(18);
-//    btn.titleLabel.textColor = [UIColor redColor];
-//    [self.view addSubview:btn];
+    _historyTable = [TableViewFactory createTableViewWithFrame:Rect(0, _mySearchBar.y+_mySearchBar.height, kScreenWidth, 200) withStyle:UITableViewStylePlain];
+    [self.view addSubview:_historyTable];
+    [_historyTable setBackgroundColor:UIColorFromRGB(0xffffff)];
+    _dataSource = [[HistorySearchDataSource alloc] init];
+    _historyTable.dataSource = _dataSource;
+    _historyTable.delegate = _dataSource;
+    _dataSource.delegate = self;
+    NSArray *array = [UserDefaults objectForKey:kHistoryList];
+    if (array.count) {
+        [_dataSource setModel:array];
+        [_historyTable reloadData];
+    }
 }
 
 #pragma mark 开始搜索
@@ -268,6 +223,12 @@
         _aryResult = [NSArray array];
         [_searchResultsTable reloadData];
         _defaultView.hidden = NO;
+        _historyTable.hidden =  NO;
+        NSArray *array = [UserDefaults objectForKey:kHistoryList];
+        if (array.count) {
+            [_dataSource setModel:array];
+            [_historyTable reloadData];
+        }
     }
     else
     {
@@ -278,12 +239,18 @@
             NSString *searchWords = [NSString stringWithFormat:@"cname like '*%@*' or nvcbid like '*%@*'" , keywords, keywords];
             NSPredicate *pre = [NSPredicate predicateWithFormat:searchWords];
             _aryResult = [group.roomList filteredArrayUsingPredicate:pre];
+            _historyTable.hidden = _aryResult.count ? YES : NO;
             [_searchResultsTable reloadData];
-            
         }
         else
         {
             _defaultView.hidden = NO;
+            _historyTable.hidden =  NO;
+            NSArray *array = [UserDefaults objectForKey:kHistoryList];
+            if (array.count) {
+                [_dataSource setModel:array];
+                [_historyTable reloadData];
+            }
         }
     }
 }
@@ -327,18 +294,29 @@
 
 - (void)connectRoom:(RoomHttp *)room
 {
-#if 1
+    NSArray *array = [UserDefaults objectForKey:kHistoryList];
+    NSMutableArray *tableAry = [NSMutableArray array];
+    if (array!=nil) {
+        [tableAry addObjectsFromArray:array];
+    }
+    NSString *strText = _mySearchBar.text;
+    for (NSString *strInfo in tableAry) {
+        if ([strInfo isEqualToString:strText]) {
+            [tableAry removeObject:strInfo];
+        }
+    }
+    [tableAry addObject:strText];
+    if (tableAry.count>5) {
+        [tableAry removeObjectAtIndex:0];
+    }
+    [UserDefaults setObject:tableAry forKey:kHistoryList];
+    [UserDefaults synchronize];
+    
     [self.view makeToastActivity];
     if (_roomViewModel==nil) {
         _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
     }
     [_roomViewModel connectViewModel:room];
-
-#endif
-#if 0
-    RoomViewController *roomView = [[RoomViewController alloc] initWithModel:room];
-    [self.navigationController pushViewController:roomView animated:YES];
-#endif
 }
 
 - (BOOL)shouldAutorotate
@@ -366,14 +344,27 @@
     return YES;
 }
 
+- (void)onChange:(UITextField *)textField{
+    [self startSearch:textField.text];
+}
 
+- (void)delSelectIndex:(NSString *)strInfo{
+    NSArray *array = [UserDefaults objectForKey:kHistoryList];
+    NSMutableArray *tableAry = [NSMutableArray array];
+    if (array!=nil) {
+        [tableAry addObjectsFromArray:array];
+    }
+    [tableAry removeObject:strInfo];
+    [UserDefaults setObject:tableAry forKey:kHistoryList];
+    [UserDefaults synchronize];
+    
+    [_dataSource setModel:tableAry];
+    [_historyTable reloadData];
+}
 
-/*
-- (void)connectRoom:(RoomHttp *)room{
-    _room = room;
-    [kProtocolSingle connectVideoRoom:[room.nvcbid intValue] roomPwd:@""];
-    [self.view makeToastActivity];
-    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
-}*/
+- (void)selectIndex:(NSString *)strInfo{
+    _mySearchBar.text = strInfo;
+    [self startSearch:strInfo];
+}
 
 @end

@@ -26,4 +26,6 @@
 #define kTextList @"kTextListViewInfo"
 #define kVideoList @"VideoListSVR"
 
+#define kHistoryList @"HistoryList"
+
 #endif /* StringsMacro_h */

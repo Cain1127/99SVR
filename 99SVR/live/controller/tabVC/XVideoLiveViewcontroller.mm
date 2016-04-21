@@ -26,8 +26,10 @@
 #import "SliderMenuView.h"
 #import <DTCoreText/DTCoreText.h>
 #import "RoomNoticeDataSource.h"
+#import "ChatRightView.h"
 
-@interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,RoomDownDelegate,ChatViewDelegate>
+@interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
+                                ChatRightDelegate,ChatViewDelegate>
 {
     UserListView *_listView;
     RoomDownView *_infoView;
@@ -38,15 +40,14 @@
     BOOL bGiftView;
     BOOL bFull;
     int nColor;
-    
     UIView *downView;
-    
     int toUser;
-    
     UIView  *_topHUD;
     UIView *_downHUD;
     
     DTAttributedTextView *_teachView;
+    UIView *_chatAllView;
+    ChatRightView *_rightView;
 }
 
 @property (nonatomic,strong) LivePlayViewController *ffPlay;
@@ -66,11 +67,8 @@
 @property (nonatomic,strong) UIButton *btnFull;
 
 @property (nonatomic,strong) SliderMenuView *menuView;
-
 @property (nonatomic,strong) RoomChatDataSource *chatDataSource;
-
 @property (nonatomic,strong) RoomChatDataSource *prichatDataSource;
-
 @property (nonatomic,strong) RoomNoticeDataSource *noticeDataSource;
 
 @end
@@ -130,8 +128,19 @@
 
 - (void)initTableView{
     CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-kVideoImageHeight);
-    _chatView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
+    
+    _chatAllView = [[UIView alloc] initWithFrame:frame];
+    
+    _chatView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth-54,frame.size.height) withStyle:UITableViewStylePlain];
     [_chatView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    [_chatAllView addSubview:_chatView];
+    
+    _rightView = [[ChatRightView alloc] initWithFrame:Rect(kScreenWidth-54, 0, 54, frame.size.height)];
+    [_rightView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    [_chatAllView addSubview:_rightView];
+    
+    _rightView.delegate = self;
+    
     _chatDataSource = [[RoomChatDataSource alloc] init];
     _chatView.dataSource = _chatDataSource;
     _chatView.delegate = _chatDataSource;
@@ -154,7 +163,7 @@
 - (void)initSlideView{
     _menuView = [[SliderMenuView alloc] initWithFrame:Rect(0,kVideoImageHeight, kScreenWidth,self.view.height-kVideoImageHeight)
                                            withTitles:@[@"聊天",@"我的",@"公告",@"课程表",@"贡献榜"] withDefaultSelectIndex:0];
-    _menuView.viewArrays = @[_chatView,_priChatView,_noticeView,_teachView];
+    _menuView.viewArrays = @[_chatAllView,_priChatView,_noticeView,_teachView];
      
 }
 
@@ -186,18 +195,13 @@
     [_btnFull setImage:[UIImage imageNamed:@"full_h"] forState:UIControlStateSelected];
     [_btnFull addTarget:self action:@selector(fullPlayMode) forControlEvents:UIControlEventTouchUpInside];
     
-    _infoView = [[RoomDownView alloc] initWithFrame:Rect(0,self.view.height-50, kScreenWidth, 50)];
-    _infoView.delegate = self;
     
     [self initTableView];
     [self initSlideView];
     [self.view addSubview:_menuView];
     self.menuView.DidSelectSliderIndex = ^(NSInteger index){
         NSLog(@"模块%ld",(long)index);
-        
     };
-    
-    
     
     UILabel *lblDownLine = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];
     [lblDownLine setBackgroundColor:UIColorFromRGB(0xcfcfcf)];
@@ -208,23 +212,20 @@
     [downView addSubview:whiteView];
     
     //发送消息按钮
-    _giftView = [[GiftView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
+    _giftView = [[GiftView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth, kScreenHeight)];
     [self.view addSubview:_giftView];
     _giftView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
     _giftView.delegate = self;
     
-    _listView = [[UserListView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight) array:nil];
+    _listView = [[UserListView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth, kScreenHeight) array:nil];
     [self.view addSubview:_listView];
     _listView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
     _listView.delegate = self;
-    
 
-    _inputView = [[ChatView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kScreenHeight)];
+    _inputView = [[ChatView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth,kScreenHeight)];
     [self.view addSubview:_inputView];
     _inputView.hidden = YES;
     _inputView.delegate = self;
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -250,7 +251,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomBeExit:) name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(room_kickout) name:MESSAGE_ROOM_KICKOUT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendLiwuRespInfo) name:MEESAGE_ROOM_SEND_LIWU_RESP_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendLiwuNotifyInfo:) name:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:nil];
 }
@@ -504,7 +504,7 @@
 - (void)clickRoom:(UIButton *)button index:(NSInteger)nIndex
 {
     switch (nIndex) {
-        case 0://显示聊天
+        case 4://显示聊天
         {
             if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
                 ([_room.nvcbid intValue]==10000 || [_room.nvcbid intValue]==10001)) {
@@ -519,17 +519,17 @@
             }
         }
             break;
-        case 1://显示成员
+        case 5://显示成员
         {
             _listView.bShow = YES;
         }
             break;
-        case 2://显示礼物
+        case 3://显示礼物
         {
             if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
                 [_giftView updateGoid];
                 [UIView animateWithDuration:0.5 animations:^{
-                    [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+                    [_giftView setFrame:Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight)];
                 } completion:^(BOOL finished) {}];
             }
             else
@@ -540,12 +540,13 @@
                 }];
             }
         }
-            break;
-        case 3://送玫瑰
+        break;
+        case 2:
+        case 1:
         {
-            [self sendRose];
+            //暂不实现
         }
-            break;
+        break;
     }
 }
 
@@ -805,5 +806,7 @@
 - (void)dealloc{
     [_ffPlay stop];
 }
+
+
 
 @end

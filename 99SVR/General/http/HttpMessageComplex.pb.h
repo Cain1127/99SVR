@@ -44,9 +44,7 @@ public:
 
 class TeamIntroduce
 {
-    
 private:
-    
     string _teamName;
     string _teamIcon;
     string _introduce;

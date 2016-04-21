@@ -31,7 +31,7 @@
 #define SVR_LVBBY_PORT  7301
 #define SVR_LBS_PORT 2222
 
-#define kRoom_head_view_height 138
+#define kRoom_head_view_height 118
 
 #define GBK_ENCODING CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
 //http://hall.99ducaijing.cn:8081/roomdata/room.php?act=history&userid=1765152&client=2

@@ -26,17 +26,16 @@
     _btnRight.frame = Rect(kScreenWidth-50, 20, 44, 44);
     [self addSubview:_btnRight];
     
-    _lblTitle = [[UILabel alloc] initWithFrame:Rect(50,20, kScreenWidth-100, 30)];
+    _lblTitle = [[UILabel alloc] initWithFrame:Rect(50,20, kScreenWidth-100, 20)];
     [self addSubview:_lblTitle];
     [_lblTitle setFont:XCFONT(15)];
     [_lblTitle setTextColor:UIColorFromRGB(0xffffff)];
     [_lblTitle setTextAlignment:NSTextAlignmentCenter];
-    [_lblTitle setText:@"牛出没"];
     
-    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-130,55,80, 20)];
+    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-130,45,80, 16)];
     [self addSubview:lblTemp];
     [lblTemp setFont:XCFONT(13)];
-    [lblTemp setTextColor:UIColorFromRGB(0xffffff)];
+    [lblTemp setTextColor:UIColorFromRGB(0xf8f8f8)];
     [lblTemp setTextAlignment:NSTextAlignmentRight];
     [lblTemp setText:@"累计人气:"];
     
@@ -44,13 +43,13 @@
     [self addSubview:_lblCount];
     [_lblCount setFont:XCFONT(13)];
     [_lblCount setTextColor:UIColorFromRGB(0xffffff)];
-    [_lblCount setText:@"8888"];
     [_lblFans setTextAlignment:NSTextAlignmentLeft];
     
-    UILabel *lblFanTemp = [[UILabel alloc] initWithFrame:Rect(_lblCount.x+_lblCount.width+15,_lblCount.y,80, 20)];
+    UILabel *lblFanTemp = [[UILabel alloc] initWithFrame:Rect(_lblCount.x+_lblCount.width+15,_lblCount.y,30, 20)];
+    
     [self addSubview:lblFanTemp];
     [lblFanTemp setFont:XCFONT(13)];
-    [lblFanTemp setTextColor:UIColorFromRGB(0xffffff)];
+    [lblFanTemp setTextColor:UIColorFromRGB(0xf8f8f8)];
     [lblFanTemp setTextAlignment:NSTextAlignmentRight];
     [lblFanTemp setText:@"粉丝:"];
     
@@ -58,7 +57,6 @@
     [self addSubview:_lblFans];
     [_lblFans setFont:XCFONT(13)];
     [_lblFans setTextColor:UIColorFromRGB(0xffffff)];
-    [_lblFans setText:@"9999"];
     [_lblFans setTextAlignment:NSTextAlignmentLeft];
     
     _segmented = [[UISegmentedControl alloc] initWithItems:@[@"直播",@"专家观点",@"高手直播",@"私人订制"]];

@@ -36,8 +36,12 @@ public:
     // 回复观点
     void PostReply(int viewpointId, int parentReplyId, int authorId, char* content, PostReplyListener* listener);
     
-    // 请求操盘列表
-    void RequestOperateStockProfit(int teamId, OperateStockProfitListener* listener);
+    // 请求操盘列表-日收益排序
+    void RequestOperateStockProfitOrderByDay(int teamId, int startId, int count, OperateStockProfitListener* listener);
+    // 请求操盘列表-月收益排序
+    void RequestOperateStockProfitOrderByMonth(int teamId, int startId, int count, OperateStockProfitListener* listener);
+    // 请求操盘列表-总收益排序
+    void RequestOperateStockProfitOrderByTotal(int teamId, int startId, int count, OperateStockProfitListener* listener);
     
     // 请求操盘详情
     void RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener);
@@ -47,7 +51,6 @@ public:
     
     // 请求操盘详情--持仓情况
     void RequestOperateStocks(int operateId, OperateStocksListener* listener);
-
     // 什么是我的私人定制
     void RequestWhatIsPrivateService(WhatIsPrivateServiceListener* listener);
     
@@ -78,25 +81,41 @@ public:
     
     // 提问
     void PostAskQuestion(int teamId, string stock, string question, AskQuestionListener* listener);
-
     
-    //void GetRoomDataListHttpRequest(HomePageListener* listner);
     
-    //void GetHomePageHttpRequest(std::string url, HomePageListener* listener);//首页列表数据
+    // 请求系统消息
+    void RequestSystemMessage(int startId, int count, SystemMessageListener* listener);
     
-    //void GetVideoRoomListHttpRequest(std::string url, VideoRoomListListener* listener);//所有房间数据url（新版已废弃）
+    // 请求问题回复--已回答的
+    void RequestQuestionAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer = false);
     
-    //void GetTextRoomListHttpRequest(std::string url, TextRoomListListener* listener);//所有文字直播房间数据url（新版已废弃）
+    // 请求评论回复--收到的评论
+    void RequestMailReply(int startId, int count, MailReplyListener* listener);
     
-    //void GetFollowTeacherHttpRequest(std::string url, FollowTeacherListener* listener);//关注的讲师
+    // 请求私人定制
+    void RequestPrivateServiceSummary(int startId, int count, PrivateServiceSummaryListener* listener);
     
-    //void GetFootPrintHttpRequest(std::string url, FootPrintListener* listener);//足迹url
+    // 请求未读数
+    void RequestUnreadCount(UnreadListener* listener);
     
-    //void GetCollectionHttpRequest(std::string url, CollectionListener* listener);////收藏url
+    // 请求问题回复--未回回答的（PC端接口）
+    void RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer = false);
     
-    //void GetBannerHttpRequest(std::string url, BannerListener* listener);////获取Banner
+    // 请求评论回复--发出的评论（PC端接口）
+    void RequestMailSendReply(int startId, int count, MailReplyListener* listener);
     
-    //void GetPersonalSecretHttpRequest(std::string url, PersonalSecretsListener* listener);//个人秘籍
+    // 讲师团队回答提问（PC端接口）
+    void PostAnswer(int questionId, string content, HttpListener* listener);
+    
+    void RequestHomePage(std::string devType, HomePageListener* listener);//首页列表数据
+    
+    void RequestFollowTeacher(int userId, std::string devType, FollowTeacherListener* listener);//关注的讲师
+    
+    void RequestFootPrint(int userId, std::string devType, FootPrintListener* listener);//足迹url
+    
+    void RequestCollection(int userId, std::string devType, CollectionListener* listener);////收藏url
+    
+    void RequestBanner(std::string url, BannerListener* listener);////获取Banner
     
 };
 

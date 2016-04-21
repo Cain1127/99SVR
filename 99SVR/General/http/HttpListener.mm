@@ -20,7 +20,7 @@ void SplashImageListener::onResponse(Splash& info){
  */
 void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
     for (int i=0; i<infos.size(); i++) {
-        DLog(@"flowerCount:%d",infos[i].flowercount());
+        DLog(@"flowerCount:%d",infos[i].giftcount());
     }
 }
 /**
@@ -44,8 +44,8 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
 /**
  *  请求操盘列表
  */
-void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day, vector<OperateStockProfit>& month, vector<OperateStockProfit>& total){
-    
+void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day){
+     
 }
 /**
  *  请求操盘详情

@@ -29,7 +29,18 @@ ChargeRuleListener chargeListener;
 TeamListListener _teamListListener;
 TeamIntroduceListener _teamIntroduceListener;
 ConsumeRankListener _consumeRankListener;
+HomePageListener _homePageListener;
 AskQuestionListener _askQuestionListener;
+SystemMessageListener _systemMessageListener;
+QuestionAnswerListener _questionAnswerListener;
+MailReplyListener _mailReplyListener;
+PrivateServiceSummaryListener _privateServiceSummaryListener;
+UnreadListener _unreadListener;
+//HttpListener _httpListener;
+FollowTeacherListener _followTeacherListener;
+FootPrintListener _footPrintListener;
+CollectionListener _collectionListener;
+BannerListener _bannerListener;
 
 @interface HttpProtocolManager()
 {
@@ -91,9 +102,22 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 /**
  * 请求操盘列表
  */
-- (void)RequestOperateStockProfit:(int)teamId{
+- (void)RequestOperateStockProfitByDay:(int)teamId start:(int)startId count:(int)count
+{
     [self createHttpConnection];
-    hConnection->RequestOperateStockProfit(teamId,&operProfitListener);
+    hConnection->RequestOperateStockProfitOrderByDay(teamId, startId, count, &operProfitListener);
+}
+
+- (void)RequestOperateStockProfitByMonth:(int)teamId start:(int)startId count:(int)count
+{
+    [self createHttpConnection];
+    hConnection->RequestOperateStockProfitOrderByDay(teamId, startId, count, &operProfitListener);
+}
+
+- (void)RequestOperateStockProfitByAll:(int)teamId start:(int)startId count:(int)count
+{
+    [self createHttpConnection];
+    hConnection->RequestOperateStockProfitOrderByTotal(teamId,startId, count, &operProfitListener);
 }
 
 /**
@@ -144,19 +168,19 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
     [self createHttpConnection];
     hConnection->RequestTeamPriviteServiceSummaryPack(teamId,&teamPriListener);
 
-}// TeamPriviteServiceSummaryPackListener* listener);
+}
 
 // 请求私人定制详情
 - (void) RequestPrivateServiceDetail:(int)nId{
     [self createHttpConnection];
     hConnection->RequestPrivateServiceDetail(nId,&privateDetailListener);
-}// PrivateServiceDetailListener* listener);
+}
 
 // 请求充值规则列表
 - (void) RequestChargeRuleList{
     [self createHttpConnection];
     hConnection->RequestChargeRuleList(&chargeListener);
-}//(ChargeRuleListener* listener);
+}
 
 // 请求战队（财经直播）列表
 - (void) RequestTeamList{
@@ -181,5 +205,95 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
     [self createHttpConnection];
     hConnection->PostAskQuestion(teamId,stock,question, &_askQuestionListener);
 }
+
+// 请求系统消息
+- (void)RequestSystemMessage:(int)startId count:(int)count
+{
+    [self createHttpConnection];
+    hConnection->RequestSystemMessage(startId, count, &_systemMessageListener);
+}
+
+// 请求问题回复--已回答的
+- (void)RequestQuestionAnswer:(int)startId count:(int)count teamer:(BOOL)isTeamer
+{
+    [self createHttpConnection];
+    hConnection->RequestQuestionAnswer(startId, count, &_questionAnswerListener);
+}
+
+// 请求评论回复--收到的评论
+- (void)RequestMailReply:(int)startId count:(int)count
+{
+    [self createHttpConnection];
+    hConnection->RequestMailReply(startId, count, &_mailReplyListener);
+}
+
+// 请求私人定制
+- (void)RequestPrivateServiceSummary:(int)startId count:(int)count
+{
+    [self createHttpConnection];
+    hConnection->RequestPrivateServiceSummary(startId, count, &_privateServiceSummaryListener);
+}
+
+// 请求未读数
+- (void)RequestUnreadCount
+{
+    [self createHttpConnection];
+    hConnection->RequestUnreadCount(&_unreadListener);
+}
+
+// 请求问题回复--未回回答的（PC端接口）
+- (void)RequestQuestionUnAnswer:(int)startId count:(int)count
+{
+    [self createHttpConnection];
+    hConnection->RequestMailReply(startId, count, &_mailReplyListener);
+}
+
+// 请求评论回复--发出的评论（PC端接口）
+- (void)RequestMailSendReply:(int)startId count:(int)count
+{
+    [self createHttpConnection];
+    hConnection->RequestMailSendReply(startId, count, &_mailReplyListener);
+}
+
+// 讲师团队回答提问（PC端接口）
+- (void)PostAnswer:(int)questionId content:(const char *) content
+{
+    [self createHttpConnection];
+    hConnection->PostAnswer(questionId, content, &_mailReplyListener);
+}
+//首页列表数据
+- (void)RequestHomePage:(const char *)devType//首页列表数据
+{
+    [self createHttpConnection];
+    hConnection->RequestHomePage(devType, &_homePageListener);
+}
+
+//关注的讲师
+- (void)RequestFollowTeacher:(int)userId type:(const char *)devType
+{
+    [self createHttpConnection];
+    hConnection->RequestFollowTeacher(userId, devType, &_followTeacherListener);
+}
+
+//足迹url
+- (void)RequestFootPrint:(int)userId type:(const char *)devType
+{
+    [self createHttpConnection];
+    hConnection->RequestFootPrint(userId, devType, &_footPrintListener);
+}
+
+//收藏url
+- (void)RequestCollection:(int)userId type:(const char *)devType
+{
+    [self createHttpConnection];
+    hConnection->RequestCollection(userId, devType, &_collectionListener);
+}
+//获取Banner{
+- (void)RequestBanner:(const char *)url
+{
+    [self createHttpConnection];
+    hConnection->RequestBanner(url,&_bannerListener);
+}
+
 
 @end

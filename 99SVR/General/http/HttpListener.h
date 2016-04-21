@@ -1,168 +1,223 @@
 #ifndef __HTTP_LISTENER_H__
 #define __HTTP_LISTENER_H__
 
-#include "HttpMessage.pb.h"
+#include "JsonMessage.pb.h"
+#include "HttpMessageComplex.pb.h"
+
 #include <vector>
 #include "ConnectionListener.h"
-#include "HttpMessageComplex.pb.h"
 
 using std::vector;
 
 class HttpListener
 {
 public:
-
-//	virtual void OnError() = 0;
+    virtual void OnError(int errCode) = 0;
 };
 
 class SplashImageListener : public HttpListener
 {
 public:
-	virtual void onResponse(Splash& info);
-
+    virtual void onResponse(Splash& info);
+    virtual void OnError(int errCode){}
 };
 
 class ViewpointSummaryListener : public HttpListener
 {
 public:
     virtual void onResponse(vector<ViewpointSummary>& infos);
+    virtual void OnError(int errCode){}
 };
 
 class ViewpointDetailListener : public HttpListener
 {
 public:
-	virtual void onResponse(ViewpointDetail& infos);
+    virtual void onResponse(ViewpointDetail& infos);
+    virtual void OnError(int errCode){}
 };
 
 class ReplyListener : public HttpListener
 {
 public:
-	virtual void onResponse(vector<Reply>& infos);
+    virtual void onResponse(vector<Reply>& infos);
+    virtual void OnError(int errCode){}
 };
 
 class PostReplyListener : public HttpListener
 {
 public:
-	virtual void onResponse(int errorCode, Reply& info);
+    virtual void onResponse(int errorCode, Reply& info);
+    virtual void OnError(int errCode){}
 };
 
 class OperateStockProfitListener : public HttpListener
 {
 public:
-	virtual void onResponse(vector<OperateStockProfit>& day, vector<OperateStockProfit>& month, vector<OperateStockProfit>& total);
+    virtual void onResponse(vector<OperateStockProfit>& infos);
+    virtual void OnError(int errCode){}
 };
 
 class OperateStockAllDetailListener : public HttpListener
 {
 public:
-	virtual void onResponse(OperateStockProfit& profit, OperateStockData& data,
-                            vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks);
+    virtual void onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks);
+    virtual void OnError(int errCode){}
 };
 
 class OperateStockTransactionListener : public HttpListener
 {
 public:
-	virtual void onResponse(vector<OperateStockTransaction>& trans);
+    virtual void onResponse(vector<OperateStockTransaction>& trans);
+    void OnError(int errCode){}
 };
 
 class OperateStocksListener : public HttpListener
 {
 public:
-	virtual void onResponse(vector<OperateStocks>& stocks);
+    virtual void onResponse(vector<OperateStocks>& stocks);
+    void OnError(int errCode){}
 };
 
 class MyPrivateServiceListener : public HttpListener
 {
 public:
     virtual void onResponse(vector<MyPrivateService>& infos, Team recommendTeam, TeamPriviteServiceSummaryPack& teamSummaryPack);
+    void OnError(int errCode){}
 };
 
 class WhatIsPrivateServiceListener : public HttpListener
 {
 public:
     virtual void onResponse(WhatIsPrivateService& infos);
+    void OnError(int errCode){}
 };
 
 class BuyPrivateServiceListener : public HttpListener
 {
     public :
     virtual void onResponse(vector<PrivateServiceLevelDescription>& infos, string expirationDate, uint32 currLevelId);
+    void OnError(int errCode){}
 };
 
 class TeamPriviteServiceSummaryPackListener : public HttpListener
 {
     public :
     virtual void onResponse(vector<TeamPriviteServiceSummaryPack>& infos);
+    void OnError(int errCode){}
 };
 
 class PrivateServiceDetailListener : public HttpListener
 {
 public:
     virtual void onResponse(PrivateServiceDetail& info);
+    void OnError(int errCode){}
 };
 
 class ChargeRuleListener: public HttpListener
 {
 public:
     virtual void onResponse(vector<ChargeRule>& infos);
+    void OnError(int errCode){}
 };
 
 class TeamListListener : public HttpListener
 {
 public:
     virtual void onResponse(vector<Team>& infos);
+    void OnError(int errCode){}
 };
 
 class TeamIntroduceListener : public HttpListener
 {
 public:
     virtual void onResponse(TeamIntroduce& info);
+    void OnError(int errCode){}
 };
 
 class ConsumeRankListener : public HttpListener
 {
 public:
     virtual void onResponse(vector<ConsumeRank>& info);
+    void OnError(int errCode){}
 };
 
 class AskQuestionListener : public HttpListener
 {
-    public :
+public:
     virtual void onResponse(int errCode, string errMsg);
+    void OnError(int errCode){}
+};
+
+class SystemMessageListener : public HttpListener
+{
+public:
+    virtual void onResponse(vector<SystemMessage>& info);
+    void OnError(int errCode){}
+};
+
+class QuestionAnswerListener : public HttpListener
+{
+public:
+    virtual void onResponse(vector<QuestionAnswer>& info);
+    void OnError(int errCode){}
+};
+
+class MailReplyListener : public HttpListener
+{
+public:
+    virtual void onResponse(vector<MailReply>& info);
+    void OnError(int errCode){}
+};
+
+class PrivateServiceSummaryListener : public HttpListener
+{
+public:
+    virtual void onResponse(vector<PrivateServiceSummary>& info);
+    void OnError(int errCode){}
+};
+
+class UnreadListener : public HttpListener
+{
+public:
+    virtual void onResponse(Unread& info);
+    void OnError(int errCode){}
 };
 
 
-
-/*
 class HomePageListener : public HttpListener
 {
 public:
-	virtual void onResponse(std::vector<HomePageHttpResponseVideoroomItem> vedio_data, std::vector<HomePageHttpResponseTextroomItem> textroom_data, std::vector<HomePageHttpResponseViewpointItem> viewpoint_data) = 0;
+    virtual void onResponse(std::vector<HomePageVideoroomItem> vedioroom_data, std::vector<HomePageTextroomItem> textroom_data, std::vector<HomePageViewpointItem> viewpoint_data);
+    void OnError(int errCode){}
 };
 
 class FollowTeacherListener : public HttpListener
 {
 public:
-	virtual void onResponse(std::vector<FollowTeacherHttpResponseRoomItem> room_data) = 0;
+    virtual void onResponse(std::vector<FollowTeacherRoomItem> room_data);
+    void OnError(int errCode){}
 };
 
 class FootPrintListener : public HttpListener
 {
 public:
-	virtual void onResponse(std::vector<FootPrintHttpResponseItem> room_data) = 0;
+    virtual void onResponse(std::vector<FootPrintItem> room_data);
+    void OnError(int errCode){}
 };
 
 class CollectionListener : public HttpListener
 {
 public:
-	virtual void onResponse(std::vector<CollectHttpResponseItem> room_data) = 0;
+    virtual void onResponse(std::vector<CollectItem> room_data);
+    void OnError(int errCode){}
 };
 
 class BannerListener : public HttpListener
 {
 public:
-	virtual void onResponse(std::vector<BannerHttpResponseItem> room_data) = 0;
+    virtual void onResponse(std::vector<BannerItem> room_data);
+    void OnError(int errCode){}
 };
-*/
+
 
 #endif

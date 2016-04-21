@@ -48,7 +48,7 @@
     _bShow = bShow;
     [UIView animateWithDuration:0.5 animations:^{
         if (_bShow) {
-            self.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
+            self.frame = Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight);
         }
         else
         {
@@ -66,7 +66,7 @@
 //    self.layer.shadowOpacity = 1;
 //    self.layer.shadowRadius = 4;
     
-    _hiddenView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+    _hiddenView = [[UIView alloc] initWithFrame:Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight)];
     [self addSubview:_hiddenView];
     [_hiddenView setUserInteractionEnabled:YES];
     [_hiddenView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];

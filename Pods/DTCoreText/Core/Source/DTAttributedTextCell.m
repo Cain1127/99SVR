@@ -234,13 +234,10 @@
 {
 	if (!_attributedTextContextView)
 	{
-		// don't know size jetzt because there's no string in it
 		_attributedTextContextView = [[DTAttributedTextContentView alloc] initWithFrame:self.contentView.bounds];
-		
 		_attributedTextContextView.edgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
 		_attributedTextContextView.layoutFrameHeightIsConstrainedByBounds = _hasFixedRowHeight;
 		_attributedTextContextView.delegate = _textDelegate;
-		
 		[self.contentView addSubview:_attributedTextContextView];
 	}
 	

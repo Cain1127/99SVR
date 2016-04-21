@@ -212,12 +212,15 @@
 }
 
 /**
- *  新初始化方案
- */
+*  新初始化方案
+*/
 - (void)initUIHead
 {
     RoomHeaderView *headView = [[RoomHeaderView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kRoom_head_view_height)];
     [self.view addSubview:headView];
+    headView.lblTitle.text = _room.cname;
+    headView.lblCount.text = _room.ncount;
+    headView.lblFans.text = _room.ncount;
     
     [self createScrolView:Rect(0, headView.height, kScreenWidth, kScreenHeight-headView.height)];
     CGRect frame = _scrollView.bounds;
