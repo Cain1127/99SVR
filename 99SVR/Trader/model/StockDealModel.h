@@ -11,17 +11,17 @@
 
 /**股票头部详情数据*/
 - (instancetype)initWithProfit:(OperateStockProfit &)profit;
-/**<#type#>*/
+/**操盘id*/
 @property (nonatomic , copy) NSString *operateid;
-/**<#type#>*/
+/**战队id*/
 @property (nonatomic , copy) NSString *teamid;
-/**<#type#>*/
+/**战队名称*/
 @property (nonatomic , copy) NSString *teamname;
-/**<#type#>*/
+/**战队头像*/
 @property (nonatomic , copy) NSString *teamicon;
-/**<#type#>*/
+/**操盘名称*/
 @property (nonatomic , copy) NSString *focus;
-/**<#type#>*/
+/**目标收益*/
 @property (nonatomic , copy) NSString *goalprofit;
 /**总收益*/
 @property (nonatomic , copy) NSString *totalprofit;
@@ -31,36 +31,37 @@
 @property (nonatomic , copy) NSString *monthprofit;
 /**超赢*/
 @property (nonatomic , copy) NSString *winrate;
-
+/**vip等级*/
+@property (nonatomic , copy) NSString *vipLevel;
 /**股票走势图*/
 - (instancetype)initWithStockData:(OperateStockData &)stockData;
 
 /**交易动态*/
 - (instancetype)initWithOperateStockTransaction:(OperateStockTransaction *)trans;
-/**buytype*/
+/**交易类型 买入 卖出*/
 @property (nonatomic , copy) NSString *buytype;
-/**stockid*/
+/**股票代码*/
 @property (nonatomic , copy) NSString *stockid;
-/**stockname*/
+/**股票名称*/
 @property (nonatomic , copy) NSString *stockname;
-/**price*/
+/**成交价*/
 @property (nonatomic , copy) NSString *price;
-/**count*/
+/**成交量*/
 @property (nonatomic , copy) NSString *count;
-/**_money*/
+/**成交额*/
 @property (nonatomic , copy) NSString *money;
-/**time*/
+/**成交时间*/
 @property (nonatomic , copy) NSString *time;
 
 /**持仓情况*/
 - (instancetype)initWithOperateStocks:(OperateStocks *)stocks;
-/**cost*/
+/**cost 成本*/
 @property (nonatomic , copy) NSString *cost;
-/**currprice*/
+/**currprice 现价*/
 @property (nonatomic , copy) NSString *currprice;;
-/**profitrate*/
+/**profitrate 利润率*/
 @property (nonatomic , copy) NSString *profitrate;
-/**profitmoney*/
+/**profitmoney 盈利的钱*/
 @property (nonatomic , copy) NSString *profitmoney;
 
 

@@ -28,17 +28,17 @@
 -(void)initUI{
     
     //日收益
-    self.dayLabView = [[StockLabel alloc]initWithFrame:(CGRect){0,typeLab_Top_h,self.width/3.0,typeLab_h}];
+    self.dayLabView = [[StockLabel alloc]initWithFrame:(CGRect){0,static_cast<CGFloat>(typeLab_Top_h),static_cast<CGFloat>(self.width/3.0),typeLab_h}];
     self.dayLabView.isShowLine = YES;
     [self addSubview:self.dayLabView];
     
     //月收益
-    self.monLabView = [[StockLabel alloc]initWithFrame:(CGRect){CGRectGetMaxX(self.dayLabView.frame),CGRectGetMinY(self.dayLabView.frame),self.width/3.0,typeLab_h}];
+    self.monLabView = [[StockLabel alloc]initWithFrame:(CGRect){CGRectGetMaxX(self.dayLabView.frame),CGRectGetMinY(self.dayLabView.frame),static_cast<CGFloat>(self.width/3.0),typeLab_h}];
     self.monLabView.isShowLine = YES;
     [self addSubview:self.monLabView];
 
     //总收益
-    self.rankLabView = [[StockLabel alloc]initWithFrame:(CGRect){CGRectGetMaxX(self.monLabView.frame),CGRectGetMinY(self.dayLabView.frame),self.width/3.0,typeLab_h}];
+    self.rankLabView = [[StockLabel alloc]initWithFrame:(CGRect){CGRectGetMaxX(self.monLabView.frame),CGRectGetMinY(self.dayLabView.frame),static_cast<CGFloat>(self.width/3.0),typeLab_h}];
     [self addSubview:self.rankLabView];
     
     //中间的线

@@ -130,6 +130,7 @@
 		B4EA09141CC764C300E8F933 /* StockDealCellLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09131CC764C300E8F933 /* StockDealCellLabelView.m */; };
 		B4EA09171CC76B6700E8F933 /* StockDealModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09161CC76B6700E8F933 /* StockDealModel.mm */; };
 		B4EA091D1CC7BDD700E8F933 /* StockDealCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA091C1CC7BDD700E8F933 /* StockDealCellView.m */; };
+		B4EA09201CC86A8100E8F933 /* StockNotVipView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA091F1CC86A8100E8F933 /* StockNotVipView.m */; };
 		BB06311C1C61C827008AD41D /* NoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB06311B1C61C827008AD41D /* NoticeModel.m */; };
 		BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B481CB112FC00C573E0 /* BaseService.m */; };
 		BB125B4C1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B4A1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m */; };
@@ -830,6 +831,8 @@
 		B4EA09161CC76B6700E8F933 /* StockDealModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealModel.mm; sourceTree = "<group>"; };
 		B4EA091B1CC7BDD700E8F933 /* StockDealCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealCellView.h; sourceTree = "<group>"; };
 		B4EA091C1CC7BDD700E8F933 /* StockDealCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockDealCellView.m; sourceTree = "<group>"; };
+		B4EA091E1CC86A8100E8F933 /* StockNotVipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockNotVipView.h; sourceTree = "<group>"; };
+		B4EA091F1CC86A8100E8F933 /* StockNotVipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockNotVipView.m; sourceTree = "<group>"; };
 		BB06311A1C61C827008AD41D /* NoticeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeModel.h; sourceTree = "<group>"; };
 		BB06311B1C61C827008AD41D /* NoticeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeModel.m; sourceTree = "<group>"; };
 		BB125B471CB112FC00C573E0 /* BaseService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseService.h; path = blocks/BaseService.h; sourceTree = "<group>"; };
@@ -2032,6 +2035,8 @@
 				B4EA09131CC764C300E8F933 /* StockDealCellLabelView.m */,
 				B4EA091B1CC7BDD700E8F933 /* StockDealCellView.h */,
 				B4EA091C1CC7BDD700E8F933 /* StockDealCellView.m */,
+				B4EA091E1CC86A8100E8F933 /* StockNotVipView.h */,
+				B4EA091F1CC86A8100E8F933 /* StockNotVipView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -3658,6 +3663,7 @@
 				188E4A0A1CC5B61C00D97254 /* ComposeTextView.m in Sources */,
 				18AAD5641C993CD100438E18 /* AssetViewController.m in Sources */,
 				185F596A1CC4CAD600F605F5 /* NSObject+MJCoding.m in Sources */,
+				B4EA09201CC86A8100E8F933 /* StockNotVipView.m in Sources */,
 				BB1769251C7B006F00CE947C /* SDWebImageDecoder.m in Sources */,
 				18D3CB901CC0E37700816BD0 /* TQMessageCell.m in Sources */,
 				BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */,

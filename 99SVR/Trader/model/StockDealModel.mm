@@ -26,7 +26,6 @@
         _dayprofit = FloatTransformFloatToStr(profit.dayprofit());
         _monthprofit = FloatTransformFloatToStr(profit.monthprofit());
         _winrate = FloatTransformFloatToStr(profit.winrate());
-        
     }
     return self;
 }

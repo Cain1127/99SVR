@@ -52,6 +52,8 @@ void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day, vec
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks){
     
+    int vipLevel = 0;
+    
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     //股票头部数据
     StockDealModel *headerModel = [[StockDealModel alloc]initWithProfit:profit];
@@ -64,23 +66,41 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     
     //交易详情
     NSMutableArray *transArray = [NSMutableArray array];
-    for (size_t i =0; i < trans.size(); i ++) {
+    if (vipLevel!=0) {
+
+        for (size_t i =0; i < trans.size(); i ++) {
+            
+            OperateStockTransaction *transaction = &trans[i];
+            StockDealModel *transactionModel = [[StockDealModel alloc]initWithOperateStockTransaction:transaction];
+            transactionModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
+            [transArray addObject:transactionModel];
+        }
         
-        OperateStockTransaction *transaction = &trans[i];
-        StockDealModel *transactionModel = [[StockDealModel alloc]initWithOperateStockTransaction:transaction];
-        [transArray addObject:transactionModel];
+    }else{
+     
+        StockDealModel *model = [[StockDealModel alloc]init];
+        model.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
+        [transArray addObject:model];
     }
     muDic[@"trans"] = transArray;
     
     //持仓详情
     NSMutableArray *stocksArray = [NSMutableArray array];
-    for (size_t i =0; i < stocks.size(); i ++) {
-        
-        OperateStocks *operateStocks = &stocks[i];
-        StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithOperateStocks:operateStocks];
-        [stocksArray addObject:operateStocksModel];
+    if (vipLevel!=0) {
+        for (size_t i =0; i < stocks.size(); i ++) {
+            
+            OperateStocks *operateStocks = &stocks[i];
+            StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithOperateStocks:operateStocks];
+            operateStocksModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
+            [stocksArray addObject:operateStocksModel];
+        }
+    }else{
+        StockDealModel *model = [[StockDealModel alloc]init];
+        model.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
+        [stocksArray addObject:model];
     }
     muDic[@"stocks"] = stocksArray;
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
 }
 /**

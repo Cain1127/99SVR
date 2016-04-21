@@ -9,6 +9,13 @@
 #import "StockDealTableModel.h"
 #import "StockDealCell.h"
 #import "StockDealCellLabelView.h"
+
+@interface StockDealTableModel ()
+{
+    NSCache *_cache;
+}
+@end
+
 @implementation StockDealTableModel
 
 - (instancetype)init
@@ -16,6 +23,7 @@
     self = [super init];
     if (self) {
         _dataArray = @[];
+        _cache = [[NSCache alloc]init];
     }
     return self;
 }
@@ -29,18 +37,25 @@
     
     CGFloat height = 0.0;
     
+    
+    StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
+    BOOL vipBool = YES;
+    if ([model.vipLevel integerValue]>0) {
+        vipBool = YES;
+    }else{
+        vipBool = NO;
+    }
+    
     if (indexPath.section==0) {
         
         height =ScreenWidth * 0.75;
     }else if (indexPath.section ==1){
         
-        height = 50;
+        height = vipBool? 50: 100;
     }else{
         
-        height = 150;
+        height = vipBool? 120: 200;
     }
-    
-    
     return height;
 }
 
@@ -75,27 +90,42 @@
     if (!headerView) {
         
         headerView = [[UITableViewHeaderFooterView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,0}];
-
+        headerView.contentView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.5];
         headerView.layer.borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.2].CGColor;
         headerView.layer.borderWidth = 1.0f;
         headerView.layer.masksToBounds = YES;
+        
+        UIView *backView = [[UIView alloc]init];
+        backView.layer.borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.2].CGColor;
+        backView.layer.borderWidth = 1.0f;
+        backView.layer.masksToBounds = YES;
+        backView.backgroundColor = [UIColor whiteColor];
+        [headerView.contentView addSubview:backView];
         
         //左边标题
         UILabel *leftLabel = [[UILabel alloc]init];
         leftLabel.textAlignment = NSTextAlignmentLeft;
         leftLabel.tag = 100;
-        [headerView.contentView addSubview:leftLabel];
+        [backView addSubview:leftLabel];
         
         //右边标题
         UILabel *rightLab = [[UILabel alloc]init];
         rightLab.textAlignment = NSTextAlignmentRight;
         rightLab.tag = 101;
-        [headerView.contentView addSubview:rightLab];
+        [backView addSubview:rightLab];
 
         //右边的图标
         UIImageView *imageView = [[UIImageView alloc]init];
         imageView.tag = 102;
-        [headerView.contentView addSubview:imageView];
+        [backView addSubview:imageView];
+        
+        [backView mas_makeConstraints:^(MASConstraintMaker *make) {
+           
+            make.right.equalTo(@0);
+            make.left.equalTo(@0);
+            make.top.equalTo(@10);
+            make.bottom.equalTo(@0);
+        }];
         
         [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
            
@@ -130,8 +160,12 @@
     UIImageView *imageView = [headerView.contentView viewWithTag:102];
     
     if (section==0) {
-        
-        return nil;
+    
+        leftLab.text = @"";
+        rightLab.text = @"";
+        imageView.backgroundColor = [UIColor whiteColor];
+
+
     }else if (section==1){
     
         leftLab.text = @"交易动态";
@@ -161,19 +195,22 @@
     
     
     NSArray *cellIdArray = @[@"section0",@"section1",@"section2"];
-    
     NSString *cellId = cellIdArray[indexPath.section];
-    
     StockDealCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
-        
         cell = [[StockDealCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        
     }
     
     cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    [cell setCellDataWithModel:_dataArray[indexPath.section][indexPath.row] withIsVip:NO withCellId:cellIdArray[indexPath.section]];
+    StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
+    BOOL vipBool = YES;
+    if ([model.vipLevel integerValue]>0) {
+        vipBool = YES;
+    }else{
+        vipBool = NO;
+    }
+    [cell setCellDataWithModel:model withIsVip:vipBool withCellId:cellIdArray[indexPath.section]];
     return cell;
 }
 
