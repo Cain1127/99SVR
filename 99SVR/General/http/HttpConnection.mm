@@ -111,7 +111,7 @@ void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAll
         stock.set_count(12+i);
         stock.set_cost(123);
         stock.set_currprice(55);
-        stock.set_profitrate(1);
+        stock.set_profitrate(0.5);
         stock.set_profitmoney(888);
         stocks.push_back(stock);
     }

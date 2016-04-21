@@ -26,6 +26,6 @@
 /**int 转换成字符串*/
 #define IntTransformIntToStr(x) [NSString stringWithFormat:@"%d",x]
 /**float 转成字符串*/
-#define FloatTransformFloatToStr(x) [NSString stringWithFormat:@"%f",x]
+#define FloatTransformFloatToStr(x) [NSString stringWithFormat:@"%.2f",x]
 
 #endif /* MacroHeader_h */

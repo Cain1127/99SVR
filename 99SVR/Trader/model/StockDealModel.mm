@@ -22,13 +22,18 @@
         _teamname = StrTransformCToUTF8(profit.teamname().c_str());
         _operateid = IntTransformIntToStr(profit.operateid());
         _goalprofit = FloatTransformFloatToStr(profit.goalprofit());
-        _totalprofit = FloatTransformFloatToStr(profit.totalprofit());
-        _dayprofit = FloatTransformFloatToStr(profit.dayprofit());
-        _monthprofit = FloatTransformFloatToStr(profit.monthprofit());
-        _winrate = FloatTransformFloatToStr(profit.winrate());
+        _totalprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.totalprofit()*100))];
+        //日利率
+        _dayprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.dayprofit()*100))];
+        //月收益
+        _monthprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.monthprofit()*100))];
+        //超赢
+        _winrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.winrate()*100))];
     }
     return self;
 }
+
+
 
 - (instancetype)initWithStockData:(OperateStockData &)stockData{
     
@@ -68,7 +73,7 @@
         _count = IntTransformIntToStr(stocks->count());
         _cost = FloatTransformFloatToStr(stocks->cost());
         _currprice = FloatTransformFloatToStr(stocks->currprice());
-        _profitrate = FloatTransformFloatToStr(stocks->profitrate());
+        _profitrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((stocks->profitrate()*100))];
         _profitmoney = FloatTransformFloatToStr(stocks->profitmoney());
     }
     return self;

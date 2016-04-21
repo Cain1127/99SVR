@@ -23,8 +23,7 @@
     }];
     self.lineView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
 
-    
-    
+        
     //股票走势图
     self.chartView = [[StockChartView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,static_cast<CGFloat>(ScreenWidth*0.75)}];
     self.chartView.topTitItems = @[@"全部",@"三个月",@"一个月"];
@@ -37,7 +36,8 @@
     [self.bakImageView addSubview:self.tradeLabeView];
     
     //仓库
-    self.wareHouseViw = [[StockDealCellView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,150}];
+    self.wareHouseViw = [[StockDealCellView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,120}];
+    self.wareHouseViw.nowRmbLabV.rightLab.textColor = COLOR_STOCK_YingKui;
     [self.bakImageView addSubview:self.wareHouseViw];
     
     //不是vip的view

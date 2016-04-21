@@ -81,6 +81,19 @@
     }
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+
+    if (scrollView.contentOffset.y<0) {
+        
+        scrollView.scrollEnabled = NO;
+        scrollView.backgroundColor = COLOR_STOCK_Blue;
+    }else{
+        
+        scrollView.scrollEnabled = YES;
+        scrollView.backgroundColor = COLOR_STOCK_BackGroundColor;
+
+    }
+}
 
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -90,7 +103,7 @@
     if (!headerView) {
         
         headerView = [[UITableViewHeaderFooterView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,0}];
-        headerView.contentView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.5];
+        headerView.contentView.backgroundColor = COLOR_STOCK_BackGroundColor;
         headerView.layer.borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.2].CGColor;
         headerView.layer.borderWidth = 1.0f;
         headerView.layer.masksToBounds = YES;

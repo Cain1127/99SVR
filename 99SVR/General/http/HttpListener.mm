@@ -52,7 +52,7 @@ void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day, vec
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks){
     
-    int vipLevel = 0;
+    int vipLevel = 3;
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     //股票头部数据

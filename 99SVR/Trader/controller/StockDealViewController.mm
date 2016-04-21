@@ -27,7 +27,7 @@
     [super viewDidLoad];
     
 
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = COLOR_STOCK_BackGroundColor;
     
     [self initData];
     [self initUI];
@@ -106,7 +106,7 @@
         _tableView.delegate = self.tableViewModel;
         _tableView.dataSource = self.tableViewModel;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = kTableViewBgColor;
+        _tableView.backgroundColor = COLOR_STOCK_BackGroundColor;
         _tableView.tableHeaderView = self.headerView;
     }
     return _tableView;
@@ -117,9 +117,10 @@
     if (!_warningLab) {
      
         _warningLab = [[UILabel alloc]init];
-        _warningLab.backgroundColor = [UIColor grayColor];
+        _warningLab.backgroundColor = COLOR_STOCK_BackGroundColor;
         _warningLab.font = [UIFont systemFontOfSize:12];
         _warningLab.textAlignment = NSTextAlignmentCenter;
+        _warningLab.textColor = UIColorFromRGB(0xb2b2b2);
         _warningLab.frame = (CGRect){0,0,ScreenWidth,warningLab_h};
     }
     return _warningLab;

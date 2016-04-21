@@ -79,7 +79,7 @@
             [path addLineToPoint:CGPointMake(_width,i*offsetX)];
             [path closePath];
             shapeLayer.path = path.CGPath;
-            shapeLayer.strokeColor = [[[UIColor blackColor] colorWithAlphaComponent:0.1] CGColor];
+            shapeLayer.strokeColor = COLOR_STOCK_Line_Kuang.CGColor;
             shapeLayer.fillColor = [[UIColor whiteColor] CGColor];
             shapeLayer.lineWidth = 1;
             [self.layer addSublayer:shapeLayer];
@@ -112,7 +112,7 @@
             [path addLineToPoint:CGPointMake(i*offsetX,_height)];
             [path closePath];
             shapeLayer.path = path.CGPath;
-            shapeLayer.strokeColor = [[[UIColor blackColor] colorWithAlphaComponent:0.1] CGColor];
+            shapeLayer.strokeColor =  COLOR_STOCK_Line_Kuang.CGColor;
             shapeLayer.fillColor = [[UIColor whiteColor] CGColor];
             shapeLayer.lineWidth = 1;
             [self.layer addSublayer:shapeLayer];
