@@ -37,46 +37,61 @@ static NSString *const ideaCell = @"status";
 
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     //导航栏初始化
-    [self initNavgation];
+    [self setNavgation];
     //tableview初始化
-    [self initIdeaTableView];
-    
+    [self setIdeaTableView];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+    title.text = @"专家观点";
+    title.textAlignment = NSTextAlignmentCenter;
+    title.textColor = [UIColor colorWithHex:@"#0062D5"];
+    self.navigationItem.titleView = title;
     
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
-//    [kHTTPSingle RequestViewpointSummary:<#(int)#> start:<#(int)#> count:<#(int)#>]
-    
+
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:@"TQ_ideaLiist_VC" object:nil];
+    
+    [kHTTPSingle RequestViewpointSummary:16 start:0 count:20];
 
+}
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
+- (void)printInfo:(NSNotification *)notify{
+    NSMutableArray *array = notify.object;
+    for (NSValue *value in array) {
+        ViewpointSummary *summary = (ViewpointSummary*)value.pointerValue;
+        DLog(@"%s",summary->authorname().c_str());
+    }
+}
 
 -(void)updateRefresh {
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.tableView.gifHeader endRefreshing];
+
+    [self.tableView.gifHeader endRefreshing];
     });
 }
 
--(void)initNavgation {
+-(void)setNavgation {
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithImage:[UIImage imageNamed:@"nav_menu_icon_n"] highImage:[UIImage imageNamed:@"nav_menu_icon_p"] target:self action:@selector(mailboxClick)];
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImage:[UIImage imageNamed:@"nav_search_icon_p"] highImage:[UIImage imageNamed:@"nav_search_icon_n"] target:self action:@selector(searchClick)];
+    
 
 }
 
--(void)initIdeaTableView {
-//    UITableView *tableView = [[UITableView alloc] init];
-//    //    tableView.backgroundColor = [UIColor redColor];
-//    tableView.frame = self.view.frame;
-//    [self.view addSubview:tableView];
-//    tableView.delegate = self;
-//    tableView.dataSource = self;
-//    tableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
-//    tableView.rowHeight = 200;
-//    self.ideaTableView = tableView;
+-(void)setIdeaTableView {
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQideaTableViewCell class]) bundle:nil] forCellReuseIdentifier:ideaCell];
 }
 

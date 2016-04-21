@@ -20,9 +20,15 @@ void SplashImageListener::onResponse(Splash& info){
  */
 void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
     for (int i=0; i<infos.size(); i++) {
-        DLog(@"flowerCount:%d",infos[i].flowercount());
+//        DLog(@"flowerCount:%d",infos[i].flowercount());
+        NSMutableArray *ary = [NSMutableArray array];
+        for (int i=0; i<infos.size(); i++) {
+            [ary addObject:[NSValue valueWithPointer:&infos[i]]];
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"TQ_ideaLiist_VC" object:ary];
     }
 }
+
 /**
  *  请求观点详情
  */

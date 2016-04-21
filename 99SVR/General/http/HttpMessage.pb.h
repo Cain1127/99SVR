@@ -148,13 +148,13 @@ class ViewpointSummary
 private:
     
     string	_authorid;
-    string	_authorname;
-    string	_authoricon;
+    string	_authorname; //用户名
+    string	_authoricon;//
     uint32	_viewpointid;
     string	_publishtime;
-    string	_content;
-    uint32	_replycount;
-    uint32	_flowercount;
+    string	_content; //内容
+    uint32	_replycount; //回复数
+    uint32	_flowercount; //献花数
     
     
 public:

@@ -34,7 +34,7 @@ static NSString *const commentCell = @"commentCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TQAllReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:commentCell];
-    
+
     
     return cell;
 }

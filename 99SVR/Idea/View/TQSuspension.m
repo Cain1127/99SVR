@@ -8,6 +8,7 @@
 
 #import "TQSuspension.h"
 #import "TQSuspensionBtn.h"
+
 @interface TQSuspension ()
 
 
@@ -27,8 +28,10 @@
         [floweBtn addTarget:self action:@selector(giftsTO:) forControlEvents:UIControlEventTouchUpInside];
         
         TQSuspensionBtn *commentBtn = [[TQSuspensionBtn alloc] initWithFrame:CGRectMake(0, floweBtn.height, self.width, self.height * 0.4999)];
+        
         [commentBtn setTitle:@"评论" forState:UIControlStateNormal];
         [commentBtn setTitleColor:[UIColor colorWithHex:@"#b2b2b2"] forState:UIControlStateNormal];
+        
         [commentBtn setImage:[UIImage imageNamed:@"video_present_icon"] forState:UIControlStateNormal];
         [self addSubview:commentBtn];
         [commentBtn addTarget:self action:@selector(sendComment:) forControlEvents:UIControlEventTouchUpInside];
@@ -38,12 +41,13 @@
 }
 
 -(void)giftsTO:(TQSuspensionBtn *)btn {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"TQ_modal_Controller" object:nil];
     
 }
 
 -(void)sendComment:(TQSuspensionBtn *)btn {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"TQ_ideadatail_sendcomment" object:nil];
-
+    
 }
 
 

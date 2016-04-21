@@ -8,6 +8,16 @@
 
 #import "TQcontentView.h"
 #import "ComposeTextView.h"
+#import "EmojiView.h"
+
+@interface TQcontentView() <EmojiViewDelegate>
+{
+    EmojiView *_emojiView;
+    UIView *downView;
+
+}
+
+@end
 
 @implementation TQcontentView
 
@@ -16,60 +26,88 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 40)];
-        [self addSubview:titleView];
-        titleView.backgroundColor = [UIColor whiteColor];
+        UIView *downView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50,kScreenWidth,50)];
+        [self addSubview:downView];
+        [downView setBackgroundColor:UIColorFromRGB(0xF0F0F0)];
+
+        self.backgroundColor = [UIColor colorWithHex:@"#EEEEEE"];
+//        UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 40)];
+//        [self addSubview:titleView];
+//        titleView.backgroundColor = [UIColor whiteColor];
         
-        UIView *blueView = [[UIView alloc] initWithFrame:CGRectMake(0, titleView.height, self.width, 3)];
-        blueView.backgroundColor = [UIColor colorWithHex:@"#EEEEEE"];
-        [self addSubview:blueView];
+//        UIView *blueView = [[UIView alloc] initWithFrame:CGRectMake(0, titleView.height, self.width, 3)];
+//        blueView.backgroundColor =[UIColor colorWithHex:@"#EEEEEE"] ;
+//        [self addSubview:blueView];
+        UIButton *btnEmoji = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btnEmoji setImage:[UIImage imageNamed:@"Expression"] forState:UIControlStateNormal];
+        [btnEmoji setImage:[UIImage imageNamed:@"Expression_t"] forState:UIControlStateHighlighted];
+        [self addSubview:btnEmoji];
+        btnEmoji.frame = Rect(self.width-38, 5, 36, 36);
+        [btnEmoji addTarget:self action:@selector(showEmojiView) forControlEvents:UIControlEventTouchUpInside];
         
-        ComposeTextView *textView = [[ComposeTextView alloc] initWithFrame:CGRectMake(0, titleView.height + blueView.height, self.width, self.height - 43)];
-        [textView setFont:XCFONT(15)];
+        ComposeTextView *textView = [[ComposeTextView alloc] initWithFrame:CGRectMake(5, 5, self.width - 50, self.height - 10)];
+        [textView setFont:XCFONT(14)];
         [textView setTextColor:UIColorFromRGB(0x343434)];
         [self addSubview:textView];
         self.textView = textView;
         
-        UILabel *lblPlace = [[UILabel alloc] initWithFrame:CGRectMake(_textView.x+5,_textView.y - 10,_textView.width,_textView.height)];
-        lblPlace.text = @"说点什么吧";
-        lblPlace.font = XCFONT(14);
-        lblPlace.enabled = NO;
-        self.lblPlace = lblPlace;
-        lblPlace.backgroundColor = [UIColor clearColor];
-        [lblPlace setTextColor:UIColorFromRGB(0xcfcfcf)];
-        [self addSubview:lblPlace];
+        //发送按钮
+//        UIButton *sendBtn = [[UIButton alloc] initWithFrame:CGRectMake(5, 5, 36, 24)];
+//        [sendBtn setTitle:@"取消" forState:UIControlStateNormal];
+//        [sendBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+//        [sendBtn sizeToFit];
+//        [titleView addSubview:sendBtn];
+//        [sendBtn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
+//        self.sendBtn = sendBtn;
+        //取消按钮
+//        UIButton *commentBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.width - 80, 5, 60, 24)];
+//        [commentBtn setTitle:@"发表评论" forState:UIControlStateNormal];
+//        [commentBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+//        [commentBtn sizeToFit];
+//        [titleView addSubview:commentBtn];
+//        self.commentBtn = commentBtn;
+//        [commentBtn addTarget:self action:@selector(CancelComment:) forControlEvents:UIControlEventTouchUpInside];
         
-        UIButton *sendBtn = [[UIButton alloc] initWithFrame:CGRectMake(5, 5, 36, 24)];
-        [sendBtn setTitle:@"取消" forState:UIControlStateNormal];
-        [sendBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-        [sendBtn sizeToFit];
-        self.sendBtn = sendBtn;
-
-        UIButton *commentBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.width - 70, 5, 60, 24)];
-        [commentBtn setTitle:@"发表评论" forState:UIControlStateNormal];
-        [commentBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-        [commentBtn sizeToFit];
-        [titleView addSubview:sendBtn];
-        [titleView addSubview:commentBtn];
-        self.commentBtn = commentBtn;
-        [sendBtn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
-        [commentBtn addTarget:self action:@selector(CancelComment:) forControlEvents:UIControlEventTouchUpInside];
-        
-        commentBtn.enabled = textView.hasText;
-
     }
     return self;
 }
 
-
-//点击监听
--(void)sendMessage:(UIButton *)btn {
-    [self.textView resignFirstResponder];
+//显示表情页
+- (void)showEmojiView
+{
+    if ([_textView isFirstResponder])
+    {
+        [_textView resignFirstResponder];
+    }
+    _emojiView.hidden = NO;
+    downView.frame = Rect(0, kScreenHeight-266,kScreenWidth, 50);
 }
 
--(void)CancelComment:(UIButton *)btn {
-    DLog("+++++++++++++++++________________");
+//创建表情内容
+- (void)createEmojiKeyboard
+{
+    _emojiView = [[EmojiView alloc] initWithFrame:Rect(0, kScreenHeight-216,kScreenWidth, 216)];
+    [self addSubview:_emojiView];
+    [_emojiView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [_emojiView setHidden:YES];
+    _emojiView.delegate = self;
 }
+
+
+//-(void)sendMessage:(UIButton *)btn {
+//    [self.textView resignFirstResponder];
+//}
+//
+//-(void)CancelComment:(UIButton *)btn {
+//    DLog("--------------------------");
+//    if (self.textView.text.length == 0) {
+//        [MBProgressHUD showError:@"请勿发送空消息"];
+//    }else {
+//        [self.textView resignFirstResponder];
+//        [MBProgressHUD showSuccess:@"评论成功"];
+//
+//    }
+//}
 
 
 
