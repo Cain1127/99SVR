@@ -289,24 +289,47 @@ void HttpConnection::RequestUnreadCount(UnreadListener* listener)
     info.set_reply(7);
     info.set_privateservice(1);
     listener->onResponse(info);
-    
 }
 
-
 // 请求问题回复--未回回答的（PC端接口）
-void RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer = false)
+void HttpConnection::RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer)
 {
     
 }
 
 // 请求评论回复--发出的评论（PC端接口）
-void RequestMailSendReply(int startId, int count, MailReplyListener* listener)
+void HttpConnection::RequestMailSendReply(int startId, int count, MailReplyListener* listener)
 {
     
 }
 
 // 讲师团队回答提问（PC端接口）
-void PostAnswer(int questionId, string content, HttpListener* listener)
+void HttpConnection::PostAnswer(int questionId, string content, HttpListener* listener)
+{
+    
+}
+
+void HttpConnection::RequestHomePage(std::string devType, HomePageListener* listener)//首页列表数据
+{
+    
+}
+
+void HttpConnection::RequestFollowTeacher(int userId, std::string devType, FollowTeacherListener* listener)//关注的讲师
+{
+    
+}
+
+void HttpConnection::RequestFootPrint(int userId, std::string devType, FootPrintListener* listener)//足迹url
+{
+    
+}
+
+void HttpConnection::RequestCollection(int userId, std::string devType, CollectionListener* listener)////收藏url
+{
+    
+}
+
+void HttpConnection::RequestBanner(std::string url, BannerListener* listener)////获取Banner
 {
     
 }
@@ -623,7 +646,6 @@ void parse_bannerlist(char* json, HttpListener* listener)
         banner_listener->OnError(PERR_JSON_PARSE_ERROR);
     }
 }
- 
 //请求
  
 //首页列表数据

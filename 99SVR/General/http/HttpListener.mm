@@ -106,6 +106,66 @@ void AskQuestionListener::onResponse(int errCode, string errMsg){
     
 }
 
+void SystemMessageListener::onResponse(vector<SystemMessage>& info)
+{
+    
+}
+   
+void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info)
+{
+    
+}
+  
+
+
+void MailReplyListener::onResponse(vector<MailReply>& info)
+{
+    
+}
+
+void PrivateServiceSummaryListener::onResponse(vector<PrivateServiceSummary>& info)
+{
+    
+}
+
+void UnreadListener::onResponse(Unread& info)
+{
+    
+}
+
+void HomePageListener::onResponse(std::vector<HomePageVideoroomItem> vedioroom_data, std::vector<HomePageTextroomItem> textroom_data, std::vector<HomePageViewpointItem> viewpoint_data)
+{
+    
+}
+
+
+void FollowTeacherListener::onResponse(std::vector<FollowTeacherRoomItem> room_data)
+{
+    
+}
+
+void FootPrintListener::onResponse(std::vector<FootPrintItem> room_data)
+{
+    
+}
+
+void CollectionListener::onResponse(std::vector<CollectItem> room_data)
+{
+    
+}
+
+void BannerListener::onResponse(std::vector<BannerItem> room_data)
+{
+    
+}
+
+
+
+
+
+
+
+
 
 
 
