@@ -6,9 +6,9 @@
 typedef NS_ENUM(NSInteger,RecordType){
     
     //交易动态
-    RecordType_Business,
+    RecordType_Business=1,
     //持仓详情
-    RecordType_StoreHouse,
+    RecordType_StoreHouse=2,
 };
 
 @interface StockRecordViewController : CustomViewController
