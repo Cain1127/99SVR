@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include "HttpListener.h"
-
+#include "StockDealModel.h"
 /**
  *  闪屏响应
  */
@@ -52,6 +52,56 @@ void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day){
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks){
     
+    int vipLevel = 3;
+    
+    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
+    //股票头部数据
+    StockDealModel *headerModel = [[StockDealModel alloc]initWithProfit:profit];
+    //头部数据
+    muDic[@"headerModel"] = headerModel;
+    
+    //股票数据
+    StockDealModel *stockDataModel = [[StockDealModel alloc]initWithStockData:data];
+    muDic[@"stockModel"] = stockDataModel;
+    
+    //交易详情
+    NSMutableArray *transArray = [NSMutableArray array];
+    if (vipLevel!=0) {
+
+        for (size_t i =0; i < trans.size(); i ++) {
+            
+            OperateStockTransaction *transaction = &trans[i];
+            StockDealModel *transactionModel = [[StockDealModel alloc]initWithOperateStockTransaction:transaction];
+            transactionModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
+            [transArray addObject:transactionModel];
+        }
+        
+    }else{
+     
+        StockDealModel *model = [[StockDealModel alloc]init];
+        model.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
+        [transArray addObject:model];
+    }
+    muDic[@"trans"] = transArray;
+    
+    //持仓详情
+    NSMutableArray *stocksArray = [NSMutableArray array];
+    if (vipLevel!=0) {
+        for (size_t i =0; i < stocks.size(); i ++) {
+            
+            OperateStocks *operateStocks = &stocks[i];
+            StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithOperateStocks:operateStocks];
+            operateStocksModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
+            [stocksArray addObject:operateStocksModel];
+        }
+    }else{
+        StockDealModel *model = [[StockDealModel alloc]init];
+        model.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
+        [stocksArray addObject:model];
+    }
+    muDic[@"stocks"] = stocksArray;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
 }
 /**
  *  请求操盘详情--交易记录

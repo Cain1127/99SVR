@@ -15,7 +15,7 @@
 #import "MJRefresh.h"
 #import "TQMailboxViewController.h"
 #import "TQcontentView.h"
-
+#import "UIBarButtonItem+Item.h"
 #import "TQDetailedTableViewController.h"
 
 @interface TQIdeaViewController ()
@@ -47,11 +47,12 @@ static NSString *const ideaCell = @"status";
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
-    TQcontentView *view1 = [[TQcontentView alloc] initWithFrame:CGRectMake(0, 300, kScreenWidth, 44)];
-    [self.tableView addSubview:view1];
-    
+//    [kHTTPSingle RequestViewpointSummary:<#(int)#> start:<#(int)#> count:<#(int)#>]
     
 }
+
+
+
 
 -(void)updateRefresh {
     
@@ -61,8 +62,8 @@ static NSString *const ideaCell = @"status";
 }
 
 -(void)initNavgation {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"信箱" style:0 target:self action:@selector(mailboxClick)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索" style:0 target:self action:@selector(searchClick)];
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithImage:[UIImage imageNamed:@"nav_menu_icon_n"] highImage:[UIImage imageNamed:@"nav_menu_icon_p"] target:self action:@selector(mailboxClick)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImage:[UIImage imageNamed:@"nav_search_icon_p"] highImage:[UIImage imageNamed:@"nav_search_icon_n"] target:self action:@selector(searchClick)];
 
 }
 
