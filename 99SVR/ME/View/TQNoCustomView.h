@@ -1,15 +1,13 @@
 //
-//  TQSuspension.h
+//  TQNoCustomView.h
 //  99SVR
 //
-//  Created by apple on 16/4/19.
+//  Created by apple on 16/4/20.
 //  Copyright © 2016年 xia zhonglin . All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-@class TQSuspensionBtn;
 
-@interface TQSuspension : UIView
-
+@interface TQNoCustomView : UITableView
 
 @end

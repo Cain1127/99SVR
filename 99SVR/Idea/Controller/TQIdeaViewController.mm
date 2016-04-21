@@ -15,14 +15,15 @@
 #import "MJRefresh.h"
 #import "TQMailboxViewController.h"
 #import "TQcontentView.h"
+#import "UIBarButtonItem+Item.h"
 #import "TQDetailedTableViewController.h"
-
-#include "HttpMessage.pb.h"
+#import "TQIdeaModel.h"
 
 @interface TQIdeaViewController ()
 /*AFN管理者*/
 @property (nonatomic ,weak) AFHTTPSessionManager *manager;
-
+/** 数据数租 */
+@property (nonatomic ,weak)NSMutableArray *ideaArray;
 @end
 
 @implementation TQIdeaViewController
@@ -38,66 +39,67 @@ static NSString *const ideaCell = @"status";
 
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     //导航栏初始化
-    [self initNavgation];
+    [self setNavgation];
     //tableview初始化
-    [self initIdeaTableView];
+    [self setIdeaTableView];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+    title.text = @"专家观点";
+    title.textAlignment = NSTextAlignmentCenter;
+    title.textColor = [UIColor colorWithHex:@"#0062D5"];
+    self.navigationItem.titleView = title;
     
-    
-    [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
-    [self.tableView.gifHeader loadDefaultImg];
-    [self.tableView.gifHeader beginRefreshing];
-    TQcontentView *view1 = [[TQcontentView alloc] initWithFrame:CGRectMake(0, 300, kScreenWidth, 44)];
-    [self.tableView addSubview:view1];
-    
-//    [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
-}
-
--(void)updateRefresh {
-    [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.tableView.gifHeader endRefreshing];
-    });
-}
-
--(void)initNavgation {
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"信箱" style:0 target:self action:@selector(mailboxClick)];
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索" style:0 target:self action:@selector(searchClick)];
 
 }
-
--(void)initIdeaTableView {
-//    UITableView *tableView = [[UITableView alloc] init];
-//    //    tableView.backgroundColor = [UIColor redColor];
-//    tableView.frame = self.view.frame;
-//    [self.view addSubview:tableView];
-//    tableView.delegate = self;
-//    tableView.dataSource = self;
-//    tableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
-//    tableView.rowHeight = 200;
-//    self.ideaTableView = tableView;
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQideaTableViewCell class]) bundle:nil] forCellReuseIdentifier:ideaCell];
-}
-
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_REQUEST_VIEW_VC object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:@"TQ_ideaLiist_VC" object:nil];
+    [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
+    [self.tableView.gifHeader loadDefaultImg];
+    [self.tableView.gifHeader beginRefreshing];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
 }
+/*
+ string	_authorid; //用户ID
+ string	_authorname; //用户名
+ string	_authoricon;//头像
+ uint32	_viewpointid;
+ string	_publishtime;//发布时间
+ string	_content; //内容
+ uint32	_replycount; //回复数
+ uint32	_flowercount; //献花数
+*/
 
 - (void)printInfo:(NSNotification *)notify{
-    NSMutableArray *array = notify.object;
-    for (NSValue *value in array) {
-        ViewpointSummary *summary = (ViewpointSummary*)value.pointerValue;
-        DLog(@"%s",summary->authorname().c_str());
-    }
+    TQIdeaModel *ideaModel = [[TQIdeaModel alloc] init];
+    ideaModel.ideaArry = notify.object;
+    
+}
+
+-(void)updateRefresh {
+    
+    [kHTTPSingle RequestViewpointSummary:10 start:0 count:1];
+    [self.tableView.gifHeader endRefreshing];
+}
+
+-(void)setNavgation {
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithImage:[UIImage imageNamed:@"nav_menu_icon_n"] highImage:[UIImage imageNamed:@"nav_menu_icon_p"] target:self action:@selector(mailboxClick)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImage:[UIImage imageNamed:@"nav_search_icon_p"] highImage:[UIImage imageNamed:@"nav_search_icon_n"] target:self action:@selector(searchClick)];
+    
+
+}
+
+-(void)setIdeaTableView {
+    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQideaTableViewCell class]) bundle:nil] forCellReuseIdentifier:ideaCell];
 }
 
 -(void)mailboxClick {
