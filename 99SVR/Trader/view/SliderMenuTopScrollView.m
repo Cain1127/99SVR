@@ -1,7 +1,8 @@
 
 
 #import "SliderMenuTopScrollView.h"
-#define titleSelectColor [UIColor colorWithRed:11/255.0 green:179/255.0 blue:252/255.0 alpha:1]//字体选中的颜色
+#define titleSelectColor UIColorFromRGB(0x0078dd)//字体选中的颜色
+#define titleNormalColor UIColorFromRGB(0x4c4c4c)//字体默认的颜色
 #define badgeView_W 10
 
 
@@ -19,6 +20,8 @@
     if (self) {
         //默认是不显示Badge
         _isHideBadge = YES;
+        
+    
         
         self.badgeView = [[UIView alloc]initWithFrame:(CGRect){10,10,badgeView_W,badgeView_W}];
         self.badgeView.layer.cornerRadius = (badgeView_W/2.0);
@@ -104,7 +107,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        self.backgroundColor = [UIColor colorWithRed:236/255.0 green:236/255.0 blue:236/255.0 alpha:1];
         //取消横竖的滑动滚动条
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
@@ -168,7 +170,7 @@
         if (i==_selectIndex) {
             titleLabel.textColor = titleSelectColor;
             titleLabel.userInteractionEnabled = NO;
-            self.lineView.frame = (CGRect){CGRectGetMinX(titleLabel.frame) - (_lineViewOffset),_selfHeight-1,CGRectGetWidth(titleLabel.frame)+ (2*_lineViewOffset),1};
+            self.lineView.frame = (CGRect){CGRectGetMinX(titleLabel.frame) - (_lineViewOffset),_selfHeight-1,CGRectGetWidth(titleLabel.frame)+ (2*_lineViewOffset),2};
         }
         
         if (i==_titleArrays.count-1) {
@@ -218,13 +220,13 @@
     for (int i=0; i!=_titleArrays.count; i++) {
         SliderLabel *label = [self viewWithTag:i+1];
         label.userInteractionEnabled = YES;
-        label.textColor = tag==(i+1)? titleSelectColor : [UIColor grayColor];
+        label.textColor = tag==(i+1)? titleSelectColor : titleNormalColor;
     }
     titleLable.userInteractionEnabled = NO;
     
     [UIView animateWithDuration:0.5 animations:^{
         
-        self.lineView.frame = (CGRect){CGRectGetMinX(titleLable.frame) - _lineViewOffset,_selfHeight-1,CGRectGetWidth(titleLable.frame)+ (2*_lineViewOffset),1};
+        self.lineView.frame = (CGRect){CGRectGetMinX(titleLable.frame) - _lineViewOffset,_selfHeight-1,CGRectGetWidth(titleLable.frame)+ (2*_lineViewOffset),2};
     }];
     
     if (self.contentSize.width > _selfWidth) {
@@ -271,7 +273,7 @@
     
 //    NSLog(@"下标%d 变化%@  下标的对应值%f 偏移量%f 坐标%f",titelIndex,tempDecimalStr,[self.titleOrginXArrays[titelIndex] floatValue],(jiange_X * [tempDecimalStr floatValue]),lineViewOrginX);
     [UIView animateWithDuration:0.5 animations:^{
-        self.lineView.frame = (CGRect){lineViewOrginX,_selfHeight-1,CGRectGetWidth(titleLable.frame)+(2*_lineViewOffset),1};
+        self.lineView.frame = (CGRect){lineViewOrginX,_selfHeight-1,CGRectGetWidth(titleLable.frame)+(2*_lineViewOffset),2};
     }];
     
     
@@ -323,6 +325,8 @@
         }
     }
 }
+
+
 
 /**
  *  重写手势，如果是左滑，则禁用掉scrollview自带的

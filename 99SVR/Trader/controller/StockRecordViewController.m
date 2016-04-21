@@ -34,6 +34,11 @@
 -(void)initUI{
     
     [self.view addSubview:self.sliderMenuView];
+    
+    self.sliderMenuView.DidSelectSliderIndex = ^(NSInteger index){
+      
+        
+    };
 }
 
 -(void)initData{
@@ -47,9 +52,10 @@
     if (!_sliderMenuView) {
         
         CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
-        CGFloat tabbarH = CGRectGetHeight(self.tabBarController.tabBar.frame);
-        _sliderMenuView = [[SliderMenuView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH-tabbarH} withTitles:@[@"日收益",@"月收益",@"总收益"] withDefaultSelectIndex:self.recordType];
-//        _sliderMenuView.viewArrays = @[self.dayTab,self.monTab,self.totalTab];
+        _sliderMenuView = [[SliderMenuView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} withTitles:@[@"交易记录",@"持仓情况"] withDefaultSelectIndex:self.recordType];
+        _sliderMenuView.topBagColor = [UIColor whiteColor];
+        _sliderMenuView.titleBagColor = [UIColor whiteColor];
+        _sliderMenuView.viewArrays = @[self.busTab,self.houseTab];
     }
     return _sliderMenuView;
 }
@@ -79,7 +85,7 @@
 -(UITableView *)createTableViewWithFrame:(CGRect)frame withStyle:(UITableViewStyle)style{
     UITableView *tableView = [[UITableView alloc]initWithFrame:frame style:style];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    tableView.backgroundColor = [UIColor grayColor];
+    tableView.backgroundColor = COLOR_STOCK_BackGroundColor;
     return tableView;
 }
 
