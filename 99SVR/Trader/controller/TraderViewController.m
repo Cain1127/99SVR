@@ -68,10 +68,7 @@
     
     [self.view addSubview:self.sliderMenuView];
     self.sliderMenuView.DidSelectSliderIndex = ^(NSInteger index){
-        
-      
         NSLog(@"模块%ld",(long)index);
-        
     };
 }
 

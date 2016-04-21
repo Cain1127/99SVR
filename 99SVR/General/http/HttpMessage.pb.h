@@ -163,7 +163,6 @@ private:
     uint32	_replycount;
     uint32	_giftcount;
     
-    
 public:
     
     inline string& authorid() { return _authorid; } const

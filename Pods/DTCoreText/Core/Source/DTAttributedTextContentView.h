@@ -194,7 +194,7 @@ typedef NSUInteger DTAttributedTextContentViewRelayoutMask;
  
  By default this is generated automatically for the current <attributedString>. You can also supply your own if you require special layouting behavior.
  */
-@property (atomic, strong) DTCoreTextLayouter *layouter;
+@property (atomic, copy) DTCoreTextLayouter *layouter;
 
 
 /**
@@ -202,7 +202,7 @@ typedef NSUInteger DTAttributedTextContentViewRelayoutMask;
  
  A layout frame is basically one rectangle, inset by the <edgeInsets>. By default this is automatically generated for the current <attributedString>. You can also create a <DTCoreTextLayoutFrame> seperately and set this property to display the layout frame. This is usedful for example if you layout entire e-book and then set the <layoutFrame> for displaying individual pages.
  */
-@property (atomic, strong) DTCoreTextLayoutFrame *layoutFrame;
+@property (atomic, copy) DTCoreTextLayoutFrame *layoutFrame;
 
 
 /**

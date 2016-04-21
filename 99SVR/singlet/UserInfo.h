@@ -17,8 +17,6 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 
 @property (nonatomic) int nStatus;
 
-@property (nonatomic,copy) NSString *strNewName;
-
 @property (nonatomic) int headid;
 
 @property (nonatomic) int sex;
