@@ -1,13 +1,13 @@
-//
-//  MacroHeader.h
-//  99SVR
-//
-//  Created by 刘海东 on 16/4/14.
-//  Copyright © 2016年 xia zhonglin . All rights reserved.
-//
 
-#ifndef MacroHeader_h
-#define MacroHeader_h
+
+/**
+ *  股票系列的宏
+ *
+ */
+
+
+#ifndef StockMacro_h
+#define StockMacro_h
 
 #define G_IPhone__4 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)  //iPhone4
 #define G_IPhone__5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)  //iPhone5
@@ -28,4 +28,4 @@
 /**float 转成字符串*/
 #define FloatTransformFloatToStr(x) [NSString stringWithFormat:@"%.2f",x]
 
-#endif /* MacroHeader_h */
+#endif /* StockMacro_h */

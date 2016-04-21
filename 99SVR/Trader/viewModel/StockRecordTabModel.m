@@ -7,7 +7,7 @@
 //
 
 #import "StockRecordTabModel.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 #import "StockRecordCell.h"
 @interface StockRecordTabModel ()
 /**交易记录*/

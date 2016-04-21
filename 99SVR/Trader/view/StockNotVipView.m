@@ -8,7 +8,7 @@
 
 
 #import "StockNotVipView.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 
 @implementation StockNotVipView
 

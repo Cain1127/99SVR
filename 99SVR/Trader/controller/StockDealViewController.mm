@@ -5,7 +5,7 @@
 
 #import "StockDealViewController.h"
 #import "StockDealHeaderView.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 #import "StockDealTableModel.h"
 #import "HttpMessage.pb.h"
 #import "StockDealModel.h"

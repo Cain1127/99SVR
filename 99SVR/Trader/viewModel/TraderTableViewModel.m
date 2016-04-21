@@ -8,7 +8,7 @@
 
 #import "TraderTableViewModel.h"
 #import "TraderHomeCell.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 #import "StockDealViewController.h"
 
 @interface TraderTableViewModel ()

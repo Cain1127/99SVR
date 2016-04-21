@@ -6,7 +6,7 @@
 #import "ShareFunction.h"
 #import "SearchController.h"
 #import "TraderHomeCell.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 #import "StockDealViewController.h"
 #import "TraderTableViewModel.h"
 

@@ -7,7 +7,7 @@
 //
 
 #import "StockDealModel.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 
 @implementation StockDealModel
 

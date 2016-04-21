@@ -8,7 +8,7 @@
 
 #import "StockRecordViewController.h"
 #import "SliderMenuView.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 #import "StockRecordTabModel.h"
 @interface StockRecordViewController ()
 @property (nonatomic , strong) SliderMenuView *sliderMenuView;
