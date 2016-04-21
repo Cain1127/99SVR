@@ -9,12 +9,15 @@
 #import "StockRecordViewController.h"
 #import "SliderMenuView.h"
 #import "MacroHeader.h"
+#import "StockRecordTabModel.h"
 @interface StockRecordViewController ()
 @property (nonatomic , strong) SliderMenuView *sliderMenuView;
 /**交易记录*/
 @property (nonatomic , strong) UITableView *busTab;
 /**持仓情况*/
 @property (nonatomic , strong) UITableView *houseTab;
+
+@property (nonatomic , strong) StockRecordTabModel *recordModel;
 @end
 
 @implementation StockRecordViewController
@@ -65,6 +68,8 @@
     if (!_busTab) {
         
         _busTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,ScreenHeight} withStyle:UITableViewStylePlain];
+        _busTab.delegate = self.recordModel;
+        _busTab.dataSource = self.recordModel;
         
     }
     
@@ -76,9 +81,21 @@
     if (!_houseTab) {
         
         _houseTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,ScreenHeight} withStyle:UITableViewStylePlain];
+        _houseTab.delegate = self.recordModel;
+        _houseTab.dataSource = self.recordModel;
 
     }
     return _houseTab;
+}
+
+-(StockRecordTabModel *)recordModel{
+    
+    if (!_recordModel) {
+        
+        _recordModel = [[StockRecordTabModel alloc]initWithViewController:self withDayTabViews:@[self.busTab,self.houseTab]];
+        
+    }
+    return _recordModel;
 }
 
 
