@@ -45,9 +45,6 @@
 -(void)initData{
 
     self.txtTitle.text = @"金山";
-    //是否是会员
-    self.stockState = Stock_State_Vip;
-    
     self.warningLab.text = @"仅代表讲师个人操盘记录,不构成投资建议，风险自负";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
@@ -103,6 +100,7 @@
         CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
         _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} style:UITableViewStyleGrouped];
         self.tableViewModel = [[StockDealTableModel alloc]init];
+        self.tableViewModel.viewController = self;
         _tableView.delegate = self.tableViewModel;
         _tableView.dataSource = self.tableViewModel;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

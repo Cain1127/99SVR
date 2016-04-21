@@ -9,6 +9,6 @@
 
 @property (nonatomic , strong) NSArray *dataArray;
 
-
+@property (nonatomic , weak) UIViewController *viewController;
 
 @end

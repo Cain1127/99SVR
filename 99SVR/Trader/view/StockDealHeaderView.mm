@@ -167,6 +167,7 @@
     self.titLab = [[UILabel alloc]init];
     self.titLab.font = [UIFont systemFontOfSize:15];
     self.titLab.textAlignment = NSTextAlignmentCenter;
+    self.titLab.textColor = UIColorFromRGB(0xb2b2b2);
     [self addSubview:self.titLab];
     
     

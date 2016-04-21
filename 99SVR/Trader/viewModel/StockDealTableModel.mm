@@ -9,10 +9,12 @@
 #import "StockDealTableModel.h"
 #import "StockDealCell.h"
 #import "StockDealCellLabelView.h"
-
+#import "StockRecordViewController.h"
 @interface StockDealTableModel ()
 {
     NSCache *_cache;
+    UIViewController *_vc;
+    BOOL _isVipBool;
 }
 @end
 
@@ -33,10 +35,16 @@
     _dataArray = dataArray;
 }
 
+-(void)setViewController:(UIViewController *)viewController{
+    
+    _viewController = viewController;
+    _vc = viewController;
+}
+
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     CGFloat height = 0.0;
-    
     
     StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
     BOOL vipBool = YES;
@@ -84,14 +92,10 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
 
     if (scrollView.contentOffset.y<0) {
-        
-        scrollView.scrollEnabled = NO;
+        [scrollView setContentOffset:(CGPoint){0,0} animated:NO];
         scrollView.backgroundColor = COLOR_STOCK_Blue;
     }else{
-        
-        scrollView.scrollEnabled = YES;
         scrollView.backgroundColor = COLOR_STOCK_BackGroundColor;
-
     }
 }
 
@@ -107,6 +111,11 @@
         headerView.layer.borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.2].CGColor;
         headerView.layer.borderWidth = 1.0f;
         headerView.layer.masksToBounds = YES;
+        headerView.userInteractionEnabled = YES;
+        headerView.tag = section;
+        UITapGestureRecognizer *headerViewTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(headerViewClick:)];
+        headerViewTap.numberOfTapsRequired = 1;
+        [headerView addGestureRecognizer:headerViewTap];
         
         UIView *backView = [[UIView alloc]init];
         backView.layer.borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.2].CGColor;
@@ -206,14 +215,14 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    
     NSArray *cellIdArray = @[@"section0",@"section1",@"section2"];
     NSString *cellId = cellIdArray[indexPath.section];
+    
+
     StockDealCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
         cell = [[StockDealCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
-    
     cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
@@ -223,8 +232,47 @@
     }else{
         vipBool = NO;
     }
+    _isVipBool = vipBool;
     [cell setCellDataWithModel:model withIsVip:vipBool withCellId:cellIdArray[indexPath.section]];
     return cell;
 }
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (_isVipBool) {
+        
+        if (indexPath.section==1 || indexPath.section==2) {
+            StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
+            recordVC.recordType = indexPath.section==1 ? RecordType_Business : RecordType_StoreHouse;
+            [_vc.navigationController pushViewController:recordVC animated:YES];
+        }        
+    }
+    
+}
+
+#pragma mark 点击hederView
+-(void)headerViewClick:(UIGestureRecognizer *)gap{
+    
+    UIView *view = gap.view;
+    NSInteger tag = view.tag;
+    
+    if (tag==1 || tag==2) {
+        
+        if (_isVipBool) {
+            
+            StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
+            recordVC.recordType = tag==1 ? RecordType_Business : RecordType_StoreHouse;
+            [_vc.navigationController pushViewController:recordVC animated:YES];
+
+        }else{
+            
+            DLog(@"不是VIP 看输出");
+            
+        }
+        
+    }
+}
+
 
 @end
