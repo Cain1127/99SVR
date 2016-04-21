@@ -12,9 +12,6 @@
 /** 聊天框 */
 @property (nonatomic ,weak)ComposeTextView *textView;
 
-/**提示占位文字*/
-@property (nonatomic ,weak)UILabel *lblPlace;
-
 /** 取消 */
 @property (nonatomic ,weak)UIButton *sendBtn;
 

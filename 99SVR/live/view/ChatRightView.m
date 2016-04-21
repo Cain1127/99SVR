@@ -7,6 +7,8 @@
 //
 
 #import "ChatRightView.h"
+#import "UIImageFactory.h"
+#import "UIButton+WebCache.h"
 
 @implementation ChatRightView
 
@@ -16,6 +18,7 @@
     btn.layer.borderColor = UIColorFromRGB(0xffffff).CGColor;
     btn.layer.masksToBounds = YES;
     btn.layer.cornerRadius = 22;
+    btn.frame = frame;
     return btn;
 }
 
@@ -34,18 +37,27 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    _scrollView = [[UIScrollView alloc] initWithFrame:frame];
-    
-    CGRect buttonFrame = Rect(0, 0, frame.size.width, 44);
+    [self setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    _scrollView = [[UIScrollView alloc] initWithFrame:Rect(0, 0, frame.size.width, frame.size.height)];
+    [self addSubview:_scrollView];
+    CGRect buttonFrame = Rect(5, 6, 44, 44);
     for (int i=0; i<5; i++) {
         UIButton *btnQuestion = [self createButton:buttonFrame];
-        buttonFrame.origin.y+=44;
-        btnQuestion.tag = i+1;
+        NSString *strName = [NSString stringWithFormat:@"chatRightView%d",i+1];
+        [UIImageFactory createBtnImage:strName btn:btnQuestion state:UIControlStateNormal];
         [_scrollView addSubview:btnQuestion];
+        buttonFrame.origin.y+=50;
+        btnQuestion.tag = i+1;
+        [btnQuestion addTarget:self action:@selector(addEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
     [_scrollView setContentSize:CGSizeMake(44,buttonFrame.origin.y)];
     return self;
 }
 
+- (void)addEvent:(UIButton *)sender{
+    if (_delegate && [_delegate respondsToSelector:@selector(clickRoom:index:)]) {
+        [_delegate clickRoom:sender index:sender.tag];
+    }
+}
 
 @end

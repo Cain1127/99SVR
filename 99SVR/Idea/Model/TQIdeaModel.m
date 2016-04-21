@@ -10,4 +10,19 @@
 
 @implementation TQIdeaModel
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        
+    }
+    return self;
+}
+
+-(void)setIdeaArry:(NSMutableArray *)ideaArry {
+    _ideaArry = ideaArry;
+
+    
+}
+
 @end

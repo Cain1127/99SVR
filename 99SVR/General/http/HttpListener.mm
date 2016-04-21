@@ -20,9 +20,15 @@ void SplashImageListener::onResponse(Splash& info){
  */
 void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
     for (int i=0; i<infos.size(); i++) {
-        DLog(@"flowerCount:%d",infos[i].flowercount());
+        DLog(@"flowerCount:%d",infos[i].giftcount());
+        NSMutableArray *ary = [NSMutableArray array];
+        for (int i=0; i<infos.size(); i++) {
+            [ary addObject:[NSValue valueWithPointer:&infos[i]]];
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"TQ_ideaLiist_VC" object:ary];
     }
 }
+
 /**
  *  请求观点详情
  */
@@ -44,8 +50,8 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
 /**
  *  请求操盘列表
  */
-void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day, vector<OperateStockProfit>& month, vector<OperateStockProfit>& total){
-    
+void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day){
+     
 }
 /**
  *  请求操盘详情
@@ -155,6 +161,66 @@ void ConsumeRankListener::onResponse(vector<ConsumeRank>& info){
 void AskQuestionListener::onResponse(int errCode, string errMsg){
     
 }
+
+void SystemMessageListener::onResponse(vector<SystemMessage>& info)
+{
+    
+}
+   
+void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info)
+{
+    
+}
+  
+
+
+void MailReplyListener::onResponse(vector<MailReply>& info)
+{
+    
+}
+
+void PrivateServiceSummaryListener::onResponse(vector<PrivateServiceSummary>& info)
+{
+    
+}
+
+void UnreadListener::onResponse(Unread& info)
+{
+    
+}
+
+void HomePageListener::onResponse(std::vector<HomePageVideoroomItem> vedioroom_data, std::vector<HomePageTextroomItem> textroom_data, std::vector<HomePageViewpointItem> viewpoint_data)
+{
+    
+}
+
+
+void FollowTeacherListener::onResponse(std::vector<FollowTeacherRoomItem> room_data)
+{
+    
+}
+
+void FootPrintListener::onResponse(std::vector<FootPrintItem> room_data)
+{
+    
+}
+
+void CollectionListener::onResponse(std::vector<CollectItem> room_data)
+{
+    
+}
+
+void BannerListener::onResponse(std::vector<BannerItem> room_data)
+{
+    
+}
+
+
+
+
+
+
+
 
 
 

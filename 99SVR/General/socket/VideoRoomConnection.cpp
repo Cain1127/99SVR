@@ -362,7 +362,7 @@ void RoomConnection::DispatchSocketMessage(void* msg)
 	int sub_cmd = head->subcmd;
 	int body_len = head->length - sizeof(protocol::COM_MSG_HEADER);
 
-	LOG("on message:%d", sub_cmd);
+	LOG("on message:%d\n", sub_cmd);
 
 	switch ( sub_cmd ) {
 		case protocol::Sub_Vchat_JoinRoomResp:

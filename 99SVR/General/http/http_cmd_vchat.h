@@ -23,6 +23,7 @@ namespace protocol
     {
         char imageUrl[256];  // 图片地址
         char text[256];  // 文字说明（应该用不到）
+        char url[256];
         uint64 starTime;  // 生效时间
         uint64 endTime;  // 失效时间
     }CMDSplash_t;
@@ -47,7 +48,7 @@ namespace protocol
         char publishTime[32];  // 发表时间
         char content[256];  // 观点简要
         uint32 replyCount;  // 回复数
-        uint32 flowerCount;  // 献花数
+        uint32 giftCount;  // 献花数
     }CMDViewpointSummary_t;
     
     //观点详情
@@ -60,7 +61,7 @@ namespace protocol
         char publishTime[32];
         char content[4096];   // 观点正文
         uint32 replyCount;
-        uint32 flowerCount;
+        uint32 giftCount;
     }CMDViewpointDetail_t;
     
     // 观点回复
@@ -72,6 +73,8 @@ namespace protocol
         char authorId[16];  // 回复者ID
         char authorName[64];  // 回复者名称
         char authorIcon[256];  // 头像
+        char fromAuthorName[64];  // 被回复者名称
+        char fromAuthorIcon[256];  // 被头像
         char publishTime[32];  // 回复时间
         char content[256];  // 回复内容
     }CMDReply_t;
@@ -151,6 +154,8 @@ namespace protocol
         uint32 levelId;  // 序号
         char levelName[16];  // vip等级名称
         char description[128];  // 描述
+        float buyPrice;
+        float updatePrice;
     }CMDPrivateServiceLevelDescription_t;
     
     // 私人定制缩略信息
@@ -160,6 +165,7 @@ namespace protocol
         char title[64];  // 标题
         char summary[256];  // 简要
         char publishTime[32];  // 发布日期
+        char teamName[32];
     }CMDPrivateServiceSummary_t;
     
     //私人定制详情
@@ -195,9 +201,64 @@ namespace protocol
     typedef struct tag_CMDConsumeRank
     {
         char userName[32];  // 用户名
-        char userIcon[64];  // 头像
+        int headId;  // 头像
         float consume;  // 消费金币数
     }CMDConsumeRank_t;
+    
+    // 信箱--系统消息
+    typedef struct tag_CMDSystemMessage
+    {
+        uint32 id;  // 消息ID
+        char title[64];  // 标题
+        char content[256];  // 内容
+        char publishTime[32];  // 发布时间
+    }CMDSystemMessage_t;
+    
+    // 信箱--问题
+    typedef struct tag_CMDQuestionAnswer
+    {
+        uint32 id;
+        char answerAuthorId[16];  // 回答者
+        char answerAuthorName[32];  // 回答者名称
+        char answerAuthorIcon[64];  // 回答者ICON
+        char answerTime[32];  // 回答时间
+        char answerContent[256];  // 回答内容
+        char askAuthorName[32];  // 提问者
+        uint32 askAuthorHeadId;  // 提问者头像
+        char askStock[32];  // 提问的股票
+        char askContent[256];  // 提问内容
+        char askTime[32];  // 提问时间
+        uint32 fromClient;
+    }CMDQuestionAnswer_t;
+    
+    // 信箱--评论
+    typedef struct tag_CMDMailReply
+    {
+        uint32 id;
+        uint32 viewpointId;  // 观点ID
+        char title[32];  // 观点标题
+        char askAuthorName[32];  // 原评论
+        uint32 askAuthorHeadId;
+        char askContent[256];
+        char askTime[32];
+        char answerAuthorId[16];  //回复的评论
+        char answerAuthorName[32];
+        char answerAuthorIcon[64];
+        char answerTime[32];
+        char answerContent[256];
+        uint32 fromClient;
+    }CMDMailReply_t;
+    
+    // 信箱--未读数量
+    typedef struct tag_CMDUnread
+    {
+        uint32 total;  // 总的未读数
+        uint32 system;  // 系统消息未读数
+        uint32 answer;  // 问题回复未读数
+        uint32 reply;  // 评论回复未读数
+        uint32 privateService;  // 私人定制未读数
+    }CMDUnread_t;
+    
     
 };
 

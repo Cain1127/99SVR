@@ -58,7 +58,8 @@ enum connectP2P
 #define DLog(...)
 #endif
 
-#define XCFONT(x) [UIFont fontWithName:@"Helvetica" size:x]
+#define XCFONT(x) [UIFont systemFontOfSize:x]
+
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 

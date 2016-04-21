@@ -188,7 +188,7 @@ typedef struct _tag_MediaFrameBuffer
     }
     else
     {
-        int nIndex = _nFall%2;
+        int nIndex = _nFall%3;
         NSArray *arrayIndex = [addrTemp componentsSeparatedByString:@";"];
         NSString *strAddrInfo = arrayIndex.count > nIndex ? arrayIndex[nIndex] : @"nil";
         if ([strAddrInfo isEqualToString:@"nil"]) {
@@ -249,7 +249,7 @@ typedef struct _tag_MediaFrameBuffer
     [UserInfo sharedUserInfo].strMediaAddr = host;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TCP_SOCKET_SEND_MEDIA object:strInfo];
     m_jittertime = 2;
-    _nFall=0;
+    
     [_gcdSocket readDataToLength:4 withTimeout:10 tag:1];
     [self sendHello];
     struct timeval result;
@@ -375,6 +375,7 @@ typedef struct _tag_MediaFrameBuffer
  */
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
+    _nFall=0;
     switch(tag)
     {
         case SOCKET_READ_LENGTH:
@@ -568,9 +569,9 @@ if(_block) \
 //        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接中断"];
         //直接进行重连
     }
-    DLog(@"error:%@",err);
     m_nLastRecvTS=0;
     _nFall ++;
+    DLog(@"fall:%d",_nFall);
 }
 
 - (void)closeSocket

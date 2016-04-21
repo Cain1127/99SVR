@@ -83,9 +83,11 @@
 {
 
     /// 2 实例化产品请求：模拟商品
-    NSArray *productArray = @[@"com.HCTT.FAE99.JJGold10000",
-                              @"com.HCTT.FAE99.JJGold20000",
-                              @"com.HCTT.FAE99.JJGold30000"];
+    NSArray *productArray = @[@"com.HCTT.SVRNN.JJGold1",
+                              @"com.HCTT.SVRNN.JJGold2",
+                              @"com.HCTT.SVRNN.JJGold3",
+                              @"com.HCTT.SVRNN.JJGold4",
+                              @"com.HCTT.SVRNN.JJGold5"];
     self.purchasesRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[NSSet setWithArray:productArray]];
     
     /// 3 设置代理

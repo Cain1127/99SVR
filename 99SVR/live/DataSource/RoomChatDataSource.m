@@ -25,6 +25,7 @@
 - (id)init{
     self = [super init];
     chatCache = [[NSCache alloc] init];
+    [chatCache setTotalCostLimit:20];
     return self;
 }
 
@@ -63,12 +64,12 @@
         cell.selectedBackgroundView = selectView;
         [chatCache setObject:cell forKey:key];
     }
-    
     if(_aryChat.count>indexPath.row)
     {
         [self configureCell:cell forIndexPath:indexPath array:_aryChat];
     }
     [cell.attributedTextContextView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    cell.textDelegate = self;
     return cell;
 }
 

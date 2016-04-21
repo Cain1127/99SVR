@@ -43,7 +43,10 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 /**
  * 请求操盘列表
  */
-- (void)RequestOperateStockProfit:(int)teamId;
+- (void)RequestOperateStockProfitByDay:(int)teamId start:(int)startId count:(int)count;
+- (void)RequestOperateStockProfitByMonth:(int)teamId start:(int)startId count:(int)count;
+- (void)RequestOperateStockProfitByAll:(int)teamId start:(int)startId count:(int)count;
+
 
 /**
  *  请求操盘详情
@@ -90,6 +93,39 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 // 提问
 - (void) PostAskQuestion:(int)teamId stock:(const char*)stock question:(const char *)question;
 
+//请求系统消息
+- (void)RequestSystemMessage:(int)startId count:(int)count;
+
+// 请求问题回复--已回答的
+- (void)RequestQuestionAnswer:(int)startId count:(int)count teamer:(BOOL)isTeamer;
+
+// 请求评论回复--收到的评论
+- (void)RequestMailReply:(int)startId count:(int)count;
+
+// 请求私人定制
+- (void)RequestPrivateServiceSummary:(int)startId count:(int)count;
+
+// 请求未读数
+- (void)RequestUnreadCount;
+
+// 请求问题回复--未回回答的（PC端接口）
+- (void)RequestQuestionUnAnswer:(int)startId count:(int)count;
+
+// 请求评论回复--发出的评论（PC端接口）
+- (void)RequestMailSendReply:(int)startId count:(int)count;
+
+// 讲师团队回答提问（PC端接口）
+- (void)PostAnswer:(int)questionId content:(const char *) content;
+
+- (void)RequestHomePage:(const char *)devType;//首页列表数据
+
+- (void)RequestFollowTeacher:(int)userId type:(const char *)devType;//关注的讲师
+
+- (void)RequestFootPrint:(int)userId type:(const char *)devType;//足迹url
+
+- (void)RequestCollection:(int)userId type:(const char *)devType;////收藏url
+
+- (void)RequestBanner:(const char *)url;////获取Banner
 
 
 @end
