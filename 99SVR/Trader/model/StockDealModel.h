@@ -80,6 +80,10 @@
 #pragma mark 交易记录详情--持仓情况的模型
 /**初始化交易记录详情--持仓情况的模型*/
 - (instancetype)initWithStockRecordWareHouseData:(OperateStocks *)data;
+#pragma mark 股票首页
+/**股票首页*/
+- (instancetype)initWithHomeRecordData:(OperateStockProfit &)data;
+
 
 
 

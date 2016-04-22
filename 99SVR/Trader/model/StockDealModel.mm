@@ -115,7 +115,31 @@
     }
     return self;
 }
+#pragma mark 股票首页
+- (instancetype)initWithHomeRecordData:(OperateStockProfit &)data{
+    
+    
+    self = [super init];
+    
+    if (self) {
+//    
+//        _operateid;
+//        _teamid;
+//        _teamname;
+//        _teamicon;
+//        _focus;
+//        _goalprofit;
+//        _totalprofit;
+//        _dayprofit;
+//        _monthprofit;
+//        _winrate;
 
+        
+        
+    }
+    
+    return self;
+}
 
 
 @end

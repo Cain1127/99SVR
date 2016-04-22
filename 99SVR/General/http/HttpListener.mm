@@ -54,7 +54,12 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
  *  请求操盘列表
  */
 void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day){
-     
+    
+    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
+    
+    
+    
+    
 }
 /**
  *  请求操盘详情
