@@ -52,19 +52,22 @@ public:
 class OperateStockProfitListenerDay : public HttpListener
 {
 public:
-    virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode){}
+    virtual void onResponse(vector<OperateStockProfit>& infos);
+    void OnError(int errCode){}
 };
 
 class OperateStockProfitListenerMonth : public HttpListener
 {
 public:
-    virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode){}
+    virtual void onResponse(vector<OperateStockProfit>& infos);
+    void OnError(int errCode){}
 };
 
 class OperateStockProfitListenerAll : public HttpListener
 {
 public:
-    virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode){}
+    virtual void onResponse(vector<OperateStockProfit>& infos);
+    void OnError(int errCode){}
 };
 
 class OperateStockAllDetailListener : public HttpListener

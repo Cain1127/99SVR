@@ -77,11 +77,11 @@
     
 
     //day
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_STOCK_RECORD_BUSINESS_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_STOCK_HOME_DAY__VC object:nil];
     //mon
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMonData:) name:MESSAGE_STOCK_WAREHOUSE__VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMonData:) name:MESSAGE_STOCK_HOME_MON__VC object:nil];
     //total
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_RECORD_BUSINESS_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
 }
 
 
@@ -185,7 +185,11 @@
 
 -(void)dealloc{
     
-    
+    DLog(@"释放");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_DAY__VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_MON__VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+
 }
 
 

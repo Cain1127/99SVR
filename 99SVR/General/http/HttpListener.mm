@@ -61,22 +61,33 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
     
 }
 /**
- *  请求操盘列表
+ *  请求操盘列表日
  */
 void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:muDic];
+
 }
-void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& day){
+/**
+ *  请求操盘列表月
+ */
+
+void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& mon){
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:muDic];
+
     
 }
-void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& day){
+/**
+ *  请求操盘列表总的
+ */
+void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total){
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:muDic];
+
 }
 
 

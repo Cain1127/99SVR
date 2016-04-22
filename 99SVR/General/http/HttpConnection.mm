@@ -161,7 +161,7 @@ void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId,
 }
 
 // 请求操盘列表-日收益排序
-void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId, int count, OperateStockProfitListener* listener){
+void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId, int count, OperateStockProfitListenerDay* listener){
     std::vector<OperateStockProfit> day;
     for (int i=0; i<10; i++) {
         OperateStockProfit profit;
@@ -181,7 +181,7 @@ void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId
     listener->onResponse(day);
 }
 // 请求操盘列表-月收益排序
-void HttpConnection::RequestOperateStockProfitOrderByMonth(int teamId, int startId, int count, OperateStockProfitListener* listener)
+void HttpConnection::RequestOperateStockProfitOrderByMonth(int teamId, int startId, int count, OperateStockProfitListenerMonth* listener)
 {
     std::vector<OperateStockProfit> day;
     for (int i=0; i<10; i++) {
@@ -202,7 +202,7 @@ void HttpConnection::RequestOperateStockProfitOrderByMonth(int teamId, int start
     listener->onResponse(day);
 }
 // 请求操盘列表-总收益排序
-void HttpConnection::RequestOperateStockProfitOrderByTotal(int teamId, int startId, int count, OperateStockProfitListener* listener)
+void HttpConnection::RequestOperateStockProfitOrderByTotal(int teamId, int startId, int count, OperateStockProfitListenerAll* listener)
 {
     std::vector<OperateStockProfit> day;
     for (int i=0; i<10; i++) {

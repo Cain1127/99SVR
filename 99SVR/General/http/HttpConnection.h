@@ -47,11 +47,11 @@ public:
 
 
 	// 请求操盘列表-日收益排序
-	void RequestOperateStockProfitOrderByDay(int teamId, int startId, int count, OperateStockProfitListener* listener);
+	void RequestOperateStockProfitOrderByDay(int teamId, int startId, int count, OperateStockProfitListenerDay* listener);
 	// 请求操盘列表-月收益排序
-	void RequestOperateStockProfitOrderByMonth(int teamId, int startId, int count, OperateStockProfitListener* listener);
+	void RequestOperateStockProfitOrderByMonth(int teamId, int startId, int count, OperateStockProfitListenerMonth* listener);
 	// 请求操盘列表-总收益排序
-	void RequestOperateStockProfitOrderByTotal(int teamId, int startId, int count, OperateStockProfitListener* listener);
+	void RequestOperateStockProfitOrderByTotal(int teamId, int startId, int count, OperateStockProfitListenerAll* listener);
 
 	// 请求操盘详情
 	void RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener);

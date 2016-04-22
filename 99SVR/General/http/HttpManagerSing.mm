@@ -15,9 +15,9 @@ ViewpointSummaryListener pointSummaryListener;
 ViewpointDetailListener detailsListener;
 ReplyListener _replayListener;
 PostReplyListener _postReplyListener;
-OperateStockProfitListenerAll *_operProfitListenerAll;
-OperateStockProfitListenerMonth *_operProfitListenerMonth;
-OperateStockProfitListenerDay *_operProfitListenerDay;
+OperateStockProfitListenerAll _operProfitListenerAll;
+OperateStockProfitListenerMonth _operProfitListenerMonth;
+OperateStockProfitListenerDay _operProfitListenerDay;
 OperateStockAllDetailListener _stockAllListener;
 OperateStockTransactionListener _transacionListener;
 OperateStocksListener stocksListener;
@@ -114,7 +114,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void)RequestOperateStockProfitByMonth:(int)teamId start:(int)startId count:(int)count
 {
     [self createHttpConnection];
-    hConnection->RequestOperateStockProfitOrderByDay(teamId, startId, count, &_operProfitListenerMonth);
+    hConnection->RequestOperateStockProfitOrderByMonth(teamId, startId, count, &_operProfitListenerMonth);
 }
 
 - (void)RequestOperateStockProfitByAll:(int)teamId start:(int)startId count:(int)count
