@@ -9,7 +9,6 @@
 #import "RoomViewController.h"
 
 #import "XTraderView.h"
-#import "XExpertIdeaView.h"
 #import "XPriPersonView.h"
 
 #import "RoomService.h"
@@ -50,6 +49,7 @@
 #import <DTCoreText/DTCoreText.h>
 
 #import "XVideoLiveViewcontroller.h"
+#import "XIdeaViewController.h"
 
 #define TABLEVIEW_ARRAY_PREDICATE(A) [NSPredicate predicateWithFormat:@"SELF CONTAINS %@",A];
 
@@ -80,23 +80,18 @@
     int _currentPage;
     CGFloat fTempWidth;
     BOOL bFull;
-    RoomHttp *_room;
 
     NSCache *chatCache;
     DTAttributedLabel *lblTeachInfo;
     BOOL bGiftView;
     NSMutableDictionary *dictGift;
-    
+    RoomHeaderView *headView;
 }
 
-
-
 @property (nonatomic,strong) NSCache *cellCache;
-
 @property (nonatomic,strong) UIButton *btnRight;
 @property (nonatomic,strong) UIButton *btnFull;
 @property (nonatomic,assign) CGFloat fChatHeight;
-
 @property (nonatomic,strong) UITableView *priChatView;
 @property (nonatomic,strong) UITableView *noticeView;
 @property (nonatomic,strong) UITableView *chatView;
@@ -109,26 +104,30 @@
 @property (nonatomic,copy) NSArray *aryPriChat;
 @property (nonatomic,copy) NSArray *aryChat;
 
-@property (nonatomic,strong) XExpertIdeaView *expertView;
 @property (nonatomic,strong) XTraderView *tradeView;
 @property (nonatomic,strong) XPriPersonView *personView;
 @property (nonatomic,strong) XVideoLiveViewcontroller *liveControl;
+@property (nonatomic,strong) XIdeaViewController *ideaControl;
 
 @end
 
 @implementation RoomViewController
 
-- (id)initWithModel:(RoomHttp *)room
+DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
+
+- (void)setRoom:(RoomHttp*)room
 {
-    self = [super init];
     _room = room;
-    return self;
+    if([self isViewLoaded]){
+        [self loadHeadModel];
+        [_liveControl stopNewPlay];
+        [_liveControl reloadModel:_room];
+    }
 }
 
-
 /**
- *  释放房间中的内容
- */
+*  释放房间中的内容
+*/
 - (void)closeRoomInfo
 {
     //TODD:关闭房间
@@ -136,14 +135,18 @@
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
+- (void)exitRoom
+{
+    [_liveControl stopNewPlay];
+    [kProtocolSingle exitRoom];
+    [[SDImageCache sharedImageCache] clearMemory];
+}
 
 - (void)dealloc
 {
     DLog(@"room view");
-
     [kProtocolSingle exitRoom];
     [[SDImageCache sharedImageCache] clearMemory];
-
     [_scrollView removeFromSuperview];
     _scrollView = nil;
     [_chatView removeFromSuperview];
@@ -211,25 +214,33 @@
     }
 }
 
+- (void)loadHeadModel
+{
+    headView.lblTitle.text = _room.cname;
+    headView.lblCount.text = _room.ncount;
+    headView.lblFans.text = _room.ncount;
+}
+
 /**
 *  新初始化方案
 */
 - (void)initUIHead
 {
-    RoomHeaderView *headView = [[RoomHeaderView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kRoom_head_view_height)];
+    headView = [[RoomHeaderView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kRoom_head_view_height)];
     [self.view addSubview:headView];
-    headView.lblTitle.text = _room.cname;
-    headView.lblCount.text = _room.ncount;
-    headView.lblFans.text = _room.ncount;
+    [self loadHeadModel];
     
     [self createScrolView:Rect(0, headView.height, kScreenWidth, kScreenHeight-headView.height)];
     CGRect frame = _scrollView.bounds;
+    
     _liveControl = [[XVideoLiveViewcontroller alloc] initWithModel:_room];
     [self addChildViewController:_liveControl];
     _liveControl.view.frame = frame;
     
     frame.origin.x += kScreenWidth;
-    _expertView = [[XExpertIdeaView alloc] initWithFrame:frame];
+    _ideaControl = [[XIdeaViewController alloc] initWihModel:_room];
+    [self addChildViewController:_ideaControl];
+    _ideaControl.view.frame = frame;
     
     frame.origin.x += kScreenWidth;
     _tradeView = [[XTraderView alloc] initWithFrame:frame];
@@ -238,7 +249,7 @@
     _personView = [[XPriPersonView alloc] initWithFrame:frame];
     
     [_scrollView addSubview:_liveControl.view];
-    [_scrollView addSubview:_expertView];
+    [_scrollView addSubview:_ideaControl.view];
     [_scrollView addSubview:_tradeView];
     [_scrollView addSubview:_personView];
    
@@ -248,12 +259,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
+
 }
 
 

@@ -84,7 +84,8 @@ class Team
     
 private:
     
-    string	_teamid;
+    uint32  _roomid;
+    uint32	_teamid;
     string	_teamname;
     string	_teamicon;
     uint32	_onlineusercount;
@@ -93,9 +94,13 @@ private:
     
 public:
     
-    inline string& teamid() { return _teamid; } const
+    inline uint32 roomid() { return _roomid; } const
     
-    inline void set_teamid(const string& value) { _teamid = value; }
+    inline void set_roomid(const uint32& value) { _roomid = value; }
+    
+    inline uint32& teamid() { return _teamid; } const
+    
+    inline void set_teamid(const uint32& value) { _teamid = value; }
     
     inline string& teamname() { return _teamname; } const
     
@@ -119,7 +124,8 @@ public:
     void SerializeToArray(void* data, int size)
     {
         protocol::tag_CMDTeam* cmd = (protocol::tag_CMDTeam*) data;
-        strcpy(cmd->teamId, _teamid.c_str());
+        cmd->roomId = _roomid;
+        cmd->teamId = _teamid;
         strcpy(cmd->teamName, _teamname.c_str());
         strcpy(cmd->teamIcon, _teamicon.c_str());
         cmd->onlineUserCount = _onlineusercount;
@@ -129,6 +135,7 @@ public:
     void ParseFromArray(void* data, int size)
     {
         protocol::tag_CMDTeam* cmd = (protocol::tag_CMDTeam*) data;
+        _roomid = cmd->roomId;
         _teamid = cmd->teamId;
         _teamname = cmd->teamName;
         _teamicon = cmd->teamIcon;
@@ -139,7 +146,8 @@ public:
     void Log()
     {
         LOG("--------Receive message: Team---------");
-        LOG("teamid = %s", _teamid.c_str());
+        LOG("roomid = %d", _roomid);
+        LOG("teamid = %d", _teamid);
         LOG("teamname = %s", _teamname.c_str());
         LOG("teamicon = %s", _teamicon.c_str());
         LOG("onlineusercount = %d", _onlineusercount);
@@ -162,6 +170,7 @@ private:
     string	_content;
     uint32	_replycount;
     uint32	_giftcount;
+    
     
 public:
     
@@ -1050,6 +1059,8 @@ private:
     string	_videoname;
     string	_attachmenturl;
     string	_attachmentname;
+    uint32	_operatestockid;
+    string	_html5url;
     
     
 public:
@@ -1082,6 +1093,14 @@ public:
     
     inline void set_attachmentname(const string& value) { _attachmentname = value; }
     
+    inline uint32 operatestockid() { return _operatestockid; } const
+    
+    inline void set_operatestockid(const uint32 value) { _operatestockid = value; }
+    
+    inline string& html5url() { return _html5url; } const
+    
+    inline void set_html5url(const string& value) { _html5url = value; }
+    
     
     int ByteSize() { return sizeof(protocol::tag_CMDPrivateServiceDetail); }
     
@@ -1095,6 +1114,8 @@ public:
         strcpy(cmd->videoName, _videoname.c_str());
         strcpy(cmd->attachmentUrl, _attachmenturl.c_str());
         strcpy(cmd->attachmentName, _attachmentname.c_str());
+        cmd->operateStockId = _operatestockid;
+        strcpy(cmd->html5Url, _html5url.c_str());
     }
     
     void ParseFromArray(void* data, int size)
@@ -1107,6 +1128,8 @@ public:
         _videoname = cmd->videoName;
         _attachmenturl = cmd->attachmentUrl;
         _attachmentname = cmd->attachmentName;
+        _operatestockid = cmd->operateStockId;
+        _html5url = cmd->html5Url;
     }
     
     void Log()
@@ -1119,6 +1142,8 @@ public:
         LOG("videoname = %s", _videoname.c_str());
         LOG("attachmenturl = %s", _attachmenturl.c_str());
         LOG("attachmentname = %s", _attachmentname.c_str());
+        LOG("operatestockid = %d", _operatestockid);
+        LOG("html5url = %s", _html5url.c_str());
     }
     
 };
@@ -1183,12 +1208,17 @@ class VideoInfo
     
 private:
     
+    int32	_id;
     string	_name;
     string	_picurl;
     string	_videourl;
     
     
 public:
+    
+    inline int32 id() { return _id; } const
+    
+    inline void set_id(const int32 value) { _id = value; }
     
     inline string& name() { return _name; } const
     
@@ -1208,6 +1238,7 @@ public:
     void SerializeToArray(void* data, int size)
     {
         protocol::tag_CMDVideoInfo* cmd = (protocol::tag_CMDVideoInfo*) data;
+        cmd->id = _id;
         strcpy(cmd->name, _name.c_str());
         strcpy(cmd->picUrl, _picurl.c_str());
         strcpy(cmd->videoUrl, _videourl.c_str());
@@ -1216,6 +1247,7 @@ public:
     void ParseFromArray(void* data, int size)
     {
         protocol::tag_CMDVideoInfo* cmd = (protocol::tag_CMDVideoInfo*) data;
+        _id = cmd->id;
         _name = cmd->name;
         _picurl = cmd->picUrl;
         _videourl = cmd->videoUrl;
@@ -1224,6 +1256,7 @@ public:
     void Log()
     {
         LOG("--------Receive message: VideoInfo---------");
+        LOG("id = %d", _id);
         LOG("name = %s", _name.c_str());
         LOG("picurl = %s", _picurl.c_str());
         LOG("videourl = %s", _videourl.c_str());
@@ -1280,7 +1313,7 @@ public:
         LOG("--------Receive message: ConsumeRank---------");
         LOG("username = %s", _username.c_str());
         LOG("headid = %d", _headid);
-        LOG("consume = %f", _consume);
+        LOG("consume = %lld", _consume);
     }
     
 };
@@ -1356,11 +1389,13 @@ private:
     uint32	_id;
     string	_answerauthorid;
     string	_answerauthorname;
-    string	_answerauthoricon;
+    string	_answerauthorhead;
+    uint32	_answerauthorrole;
     string	_answertime;
     string	_answercontent;
     string	_askauthorname;
-    uint32	_askauthorheadid;
+    string	_askauthorhead;
+    uint32	_askauthorrole;
     string	_askstock;
     string	_askcontent;
     string	_asktime;
@@ -1381,9 +1416,13 @@ public:
     
     inline void set_answerauthorname(const string& value) { _answerauthorname = value; }
     
-    inline string& answerauthoricon() { return _answerauthoricon; } const
+    inline string& answerauthorhead() { return _answerauthorhead; } const
     
-    inline void set_answerauthoricon(const string& value) { _answerauthoricon = value; }
+    inline void set_answerauthorhead(const string& value) { _answerauthorhead = value; }
+    
+    inline uint32 answerauthorrole() { return _answerauthorrole; } const
+    
+    inline void set_answerauthorrole(const uint32 value) { _answerauthorrole = value; }
     
     inline string& answertime() { return _answertime; } const
     
@@ -1397,9 +1436,13 @@ public:
     
     inline void set_askauthorname(const string& value) { _askauthorname = value; }
     
-    inline uint32 askauthorheadid() { return _askauthorheadid; } const
+    inline string& askauthorhead() { return _askauthorhead; } const
     
-    inline void set_askauthorheadid(const uint32 value) { _askauthorheadid = value; }
+    inline void set_askauthorhead(const string& value) { _askauthorhead = value; }
+    
+    inline uint32 askauthorrole() { return _askauthorrole; } const
+    
+    inline void set_askauthorrole(const uint32 value) { _askauthorrole = value; }
     
     inline string& askstock() { return _askstock; } const
     
@@ -1426,11 +1469,13 @@ public:
         cmd->id = _id;
         strcpy(cmd->answerAuthorId, _answerauthorid.c_str());
         strcpy(cmd->answerAuthorName, _answerauthorname.c_str());
-        strcpy(cmd->answerAuthorIcon, _answerauthoricon.c_str());
+        strcpy(cmd->answerAuthorHead, _answerauthorhead.c_str());
+        cmd->answerAuthorRole = _answerauthorrole;
         strcpy(cmd->answerTime, _answertime.c_str());
         strcpy(cmd->answerContent, _answercontent.c_str());
         strcpy(cmd->askAuthorName, _askauthorname.c_str());
-        cmd->askAuthorHeadId = _askauthorheadid;
+        strcpy(cmd->askAuthorHead, _askauthorhead.c_str());
+        cmd->askAuthorRole = _askauthorrole;
         strcpy(cmd->askStock, _askstock.c_str());
         strcpy(cmd->askContent, _askcontent.c_str());
         strcpy(cmd->askTime, _asktime.c_str());
@@ -1443,11 +1488,13 @@ public:
         _id = cmd->id;
         _answerauthorid = cmd->answerAuthorId;
         _answerauthorname = cmd->answerAuthorName;
-        _answerauthoricon = cmd->answerAuthorIcon;
+        _answerauthorhead = cmd->answerAuthorHead;
+        _answerauthorrole = cmd->answerAuthorRole;
         _answertime = cmd->answerTime;
         _answercontent = cmd->answerContent;
         _askauthorname = cmd->askAuthorName;
-        _askauthorheadid = cmd->askAuthorHeadId;
+        _askauthorhead = cmd->askAuthorHead;
+        _askauthorrole = cmd->askAuthorRole;
         _askstock = cmd->askStock;
         _askcontent = cmd->askContent;
         _asktime = cmd->askTime;
@@ -1460,11 +1507,13 @@ public:
         LOG("id = %d", _id);
         LOG("answerauthorid = %s", _answerauthorid.c_str());
         LOG("answerauthorname = %s", _answerauthorname.c_str());
-        LOG("answerauthoricon = %s", _answerauthoricon.c_str());
+        LOG("answerauthorhead = %s", _answerauthorhead.c_str());
+        LOG("answerauthorrole = %d", _answerauthorrole);
         LOG("answertime = %s", _answertime.c_str());
         LOG("answercontent = %s", _answercontent.c_str());
         LOG("askauthorname = %s", _askauthorname.c_str());
-        LOG("askauthorheadid = %d", _askauthorheadid);
+        LOG("askauthorhead = %s", _askauthorhead.c_str());
+        LOG("askauthorrole = %d", _askauthorrole);
         LOG("askstock = %s", _askstock.c_str());
         LOG("askcontent = %s", _askcontent.c_str());
         LOG("asktime = %s", _asktime.c_str());
@@ -1483,12 +1532,14 @@ private:
     uint32	_viewpointid;
     string	_title;
     string	_askauthorname;
-    uint32	_askauthorheadid;
+    string	_askauthorhead;
+    uint32	_askauthorrole;
     string	_askcontent;
     string	_asktime;
     string	_answerauthorid;
     string	_answerauthorname;
-    string	_answerauthoricon;
+    string	_answerauthorhead;
+    uint32	_answerauthorrole;
     string	_answertime;
     string	_answercontent;
     uint32	_fromclient;
@@ -1500,41 +1551,49 @@ public:
     
     inline void set_id(const uint32 value) { _id = value; }
     
-    inline uint32 viewpointid() { return _viewpointid; } const 
+    inline uint32 viewpointid() { return _viewpointid; } const
     
     inline void set_viewpointid(const uint32 value) { _viewpointid = value; }
     
-    inline string& title() { return _title; } const 
+    inline string& title() { return _title; } const
     
     inline void set_title(const string& value) { _title = value; }
     
-    inline string& askauthorname() { return _askauthorname; } const 
+    inline string& askauthorname() { return _askauthorname; } const
     
     inline void set_askauthorname(const string& value) { _askauthorname = value; }
     
-    inline uint32 askauthorheadid() { return _askauthorheadid; } const 
+    inline string& askauthorhead() { return _askauthorhead; } const
     
-    inline void set_askauthorheadid(const uint32 value) { _askauthorheadid = value; }
+    inline void set_askauthorhead(const string& value) { _askauthorhead = value; }
     
-    inline string& askcontent() { return _askcontent; } const 
+    inline uint32 askauthorrole() { return _askauthorrole; } const
+    
+    inline void set_askauthorrole(const uint32 value) { _askauthorrole = value; }
+    
+    inline string& askcontent() { return _askcontent; } const
     
     inline void set_askcontent(const string& value) { _askcontent = value; }
     
-    inline string& asktime() { return _asktime; } const 
+    inline string& asktime() { return _asktime; } const
     
     inline void set_asktime(const string& value) { _asktime = value; }
     
-    inline string& answerauthorid() { return _answerauthorid; } const 
+    inline string& answerauthorid() { return _answerauthorid; } const
     
     inline void set_answerauthorid(const string& value) { _answerauthorid = value; }
     
-    inline string& answerauthorname() { return _answerauthorname; } const 
+    inline string& answerauthorname() { return _answerauthorname; } const
     
     inline void set_answerauthorname(const string& value) { _answerauthorname = value; }
     
-    inline string& answerauthoricon() { return _answerauthoricon; } const 
+    inline string& answerauthorhead() { return _answerauthorhead; } const
     
-    inline void set_answerauthoricon(const string& value) { _answerauthoricon = value; }
+    inline void set_answerauthorhead(const string& value) { _answerauthorhead = value; }
+    
+    inline uint32 answerauthorrole() { return _answerauthorrole; } const 
+    
+    inline void set_answerauthorrole(const uint32 value) { _answerauthorrole = value; }
     
     inline string& answertime() { return _answertime; } const 
     
@@ -1558,12 +1617,14 @@ public:
         cmd->viewpointId = _viewpointid;
         strcpy(cmd->title, _title.c_str());
         strcpy(cmd->askAuthorName, _askauthorname.c_str());
-        cmd->askAuthorHeadId = _askauthorheadid;
+        strcpy(cmd->askAuthorHead, _askauthorhead.c_str());
+        cmd->askAuthorRole = _askauthorrole;
         strcpy(cmd->askContent, _askcontent.c_str());
         strcpy(cmd->askTime, _asktime.c_str());
         strcpy(cmd->answerAuthorId, _answerauthorid.c_str());
         strcpy(cmd->answerAuthorName, _answerauthorname.c_str());
-        strcpy(cmd->answerAuthorIcon, _answerauthoricon.c_str());
+        strcpy(cmd->answerAuthorHead, _answerauthorhead.c_str());
+        cmd->answerAuthorRole = _answerauthorrole;
         strcpy(cmd->answerTime, _answertime.c_str());
         strcpy(cmd->answerContent, _answercontent.c_str());
         cmd->fromClient = _fromclient;
@@ -1576,12 +1637,14 @@ public:
         _viewpointid = cmd->viewpointId;
         _title = cmd->title;
         _askauthorname = cmd->askAuthorName;
-        _askauthorheadid = cmd->askAuthorHeadId;
+        _askauthorhead = cmd->askAuthorHead;
+        _askauthorrole = cmd->askAuthorRole;
         _askcontent = cmd->askContent;
         _asktime = cmd->askTime;
         _answerauthorid = cmd->answerAuthorId;
         _answerauthorname = cmd->answerAuthorName;
-        _answerauthoricon = cmd->answerAuthorIcon;
+        _answerauthorhead = cmd->answerAuthorHead;
+        _answerauthorrole = cmd->answerAuthorRole;
         _answertime = cmd->answerTime;
         _answercontent = cmd->answerContent;
         _fromclient = cmd->fromClient;
@@ -1594,12 +1657,14 @@ public:
         LOG("viewpointid = %d", _viewpointid);
         LOG("title = %s", _title.c_str());
         LOG("askauthorname = %s", _askauthorname.c_str());
-        LOG("askauthorheadid = %d", _askauthorheadid);
+        LOG("askauthorhead = %s", _askauthorhead.c_str());
+        LOG("askauthorrole = %d", _askauthorrole);
         LOG("askcontent = %s", _askcontent.c_str());
         LOG("asktime = %s", _asktime.c_str());
         LOG("answerauthorid = %s", _answerauthorid.c_str());
         LOG("answerauthorname = %s", _answerauthorname.c_str());
-        LOG("answerauthoricon = %s", _answerauthoricon.c_str());
+        LOG("answerauthorhead = %s", _answerauthorhead.c_str());
+        LOG("answerauthorrole = %d", _answerauthorrole);
         LOG("answertime = %s", _answertime.c_str());
         LOG("answercontent = %s", _answercontent.c_str());
         LOG("fromclient = %d", _fromclient);
@@ -1673,6 +1738,60 @@ public:
         LOG("answer = %d", _answer);
         LOG("reply = %d", _reply);
         LOG("privateservice = %d", _privateservice);
+    }
+    
+};
+
+
+class TeamTopN
+{
+    
+private:
+    
+    string	_teamname;
+    string	_teamicon;
+    float	_yieldrate;
+    
+    
+public:
+    
+    inline string& teamname() { return _teamname; } const 
+    
+    inline void set_teamname(const string& value) { _teamname = value; }
+    
+    inline string& teamicon() { return _teamicon; } const 
+    
+    inline void set_teamicon(const string& value) { _teamicon = value; }
+    
+    inline float yieldrate() { return _yieldrate; } const 
+    
+    inline void set_yieldrate(const float value) { _yieldrate = value; }
+    
+    
+    int ByteSize() { return sizeof(protocol::tag_CMDTeamTopN); }
+    
+    void SerializeToArray(void* data, int size)
+    {
+        protocol::tag_CMDTeamTopN* cmd = (protocol::tag_CMDTeamTopN*) data;
+        strcpy(cmd->teamName, _teamname.c_str());
+        strcpy(cmd->teamIcon, _teamicon.c_str());
+        cmd->yieldRate = _yieldrate;
+    }
+    
+    void ParseFromArray(void* data, int size)
+    {
+        protocol::tag_CMDTeamTopN* cmd = (protocol::tag_CMDTeamTopN*) data;
+        _teamname = cmd->teamName;
+        _teamicon = cmd->teamIcon;
+        _yieldrate = cmd->yieldRate;
+    }
+    
+    void Log()
+    {
+        LOG("--------Receive message: TeamTopN---------");
+        LOG("teamname = %s", _teamname.c_str());
+        LOG("teamicon = %s", _teamicon.c_str());
+        LOG("yieldrate = %f", _yieldrate);
     }
     
 };

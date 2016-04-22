@@ -1,13 +1,12 @@
 //
-//  TQIdeaViewController.m
+//  XIdeaViewController.m
 //  99SVR
 //
-//  Created by apple on 16/4/13.
-//  Copyright © 2016年 xia zhonglin . All rights reserved.
+//  Created by xia zhonglin  on 4/22/16.
+//  Copyright © 2016 xia zhonglin . All rights reserved.
 //
-/**************************************** < 专家观点首页 >**********************************/
 
-#import "TQIdeaViewController.h"
+#import "XIdeaViewController.h"
 #import "TableViewFactory.h"
 #import "TQideaTableViewCell.h"
 #import "GroupListRequest.h"
@@ -21,41 +20,37 @@
 #import "UIBarButtonItem+Item.h"
 #import "TQDetailedTableViewController.h"
 #import "TQIdeaModel.h"
+#import "RoomHttp.h"
 
-@interface TQIdeaViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface XIdeaViewController ()<UITableViewDataSource,UITableViewDelegate>
 /** 数据数租 */
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryModel;
+@property (nonatomic,strong) RoomHttp *room;
 
 @end
 
-@implementation TQIdeaViewController
+@implementation XIdeaViewController
 
 static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
+- (id)initWihModel:(RoomHttp *)room
+{
+    self = [super init];
+    _room = room;
+    return self;
+}
+
+- (void)setModel:(RoomHttp *)room
+{
+    _room = room;
+}
+
+- (void)loadView{
+    self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
+}
+
 -(void)initUi{
-    [self.navigationController.navigationBar setHidden:YES];
-    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
-    [self.view addSubview:_headView];
-    _headView.backgroundColor = UIColorFromRGB(0xffffff);
-    UILabel *title;
-    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [title setFont:XCFONT(20)];
-    [_headView addSubview:title];
-    [title setTextAlignment:NSTextAlignmentCenter];
-    [title setTextColor:UIColorFromRGB(0x0078DD)];
-    UILabel *_lblContent;
-    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
-    [_lblContent setBackgroundColor:[UIColor whiteColor]];
-    [_headView addSubview:_lblContent];
-    title.text = @"专家观点";
-    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(mailboxClick) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
-    [self.view addSubview:btnLeft];
-    [btnLeft setFrame:Rect(0,20,44,44)];
-    
-    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchClick) image:@"nav_search_icon_n" highImage:@"nav_search_icon_p"];
-    [_headView addSubview:btnRight];
-    [btnRight setFrame:Rect(kScreenWidth-44, 20, 44, 44)];
     self.view.backgroundColor = [UIColor whiteColor];
 }
 
@@ -71,8 +66,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor colorWithHex:@"#0062D5"];
     self.navigationItem.titleView = title;
-    
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -94,21 +87,23 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     _aryModel = aryModel;
     @WeakObj(_tableView)
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_tableViewWeak.header isRefreshing]) {
-            [_tableViewWeak.header endRefreshing];
-        }else{
-            [_tableViewWeak.footer endRefreshing];
-        }
         [_tableViewWeak reloadData];
+        [_tableViewWeak.gifHeader endRefreshing];
     });
 }
 
 -(void)updateRefresh {
-    [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
+    if (_room) {
+        [kHTTPSingle RequestViewpointSummary:[_room.nvcbid intValue] start:0 count:10];
+    }else{
+        [kHTTPSingle RequestViewpointSummary:0 start:0 count:10];
+    }
+    
+    [self.tableView.gifHeader endRefreshing];
 }
 
 -(void)setIdeaTableView {
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-108) withStyle:UITableViewStylePlain];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth,self.view.height) withStyle:UITableViewStylePlain];
     [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
@@ -158,3 +153,4 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 
 @end
+

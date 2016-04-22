@@ -13,17 +13,16 @@
 SplashImageListener splashListener;
 ViewpointSummaryListener pointSummaryListener;
 ViewpointDetailListener detailsListener;
-ReplyListener replayListener;
-PostReplyListener postReplyListener;
-OperateStockProfitListener operProfitListener;
-OperateStockAllDetailListener stockAllListener;
-OperateStockTransactionListener transacionListener;
+ReplyListener _replayListener;
+PostReplyListener _postReplyListener;
+OperateStockProfitListener _operProfitListener;
+OperateStockAllDetailListener _stockAllListener;
+OperateStockTransactionListener _transacionListener;
 OperateStocksListener stocksListener;
 
 WhatIsPrivateServiceListener whatsPrivateListener;
 MyPrivateServiceListener myPrivateListener;
 BuyPrivateServiceListener buyPrivateListener;
-TeamPriviteServiceSummaryPackListener teamPriListener;
 PrivateServiceDetailListener privateDetailListener;
 ChargeRuleListener chargeListener;
 TeamListListener _teamListListener;
@@ -41,6 +40,7 @@ FollowTeacherListener _followTeacherListener;
 FootPrintListener _footPrintListener;
 CollectionListener _collectionListener;
 BannerListener _bannerListener;
+TeamPrivateServiceSummaryPackListener _teamPrivateListener;
 
 @interface HttpProtocolManager()
 {
@@ -88,15 +88,16 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
  */
 - (void)RequestReply:(int)viewpointId start:(int)startId count:(int)requestCount{
     [self createHttpConnection];
-    hConnection->RequestReply(viewpointId, startId,requestCount,&replayListener);
+    hConnection->RequestReply(viewpointId, startId,requestCount,&_replayListener);
 }
 
 /**
  *  回复观点
  */
-- (void)PostReply:(int)viewpointId replyId:(int)parentReplyId author:(int)authorId content:(char*)content{
+- (void)PostReply:(int)viewpointId replyId:(int)parentReplyId author:(int)authorId content:(char*)content fromId:(int)fromAuthorId
+{
     [self createHttpConnection];
-    hConnection->PostReply(viewpointId, parentReplyId, authorId, content,&postReplyListener);
+    hConnection->PostReply(viewpointId, parentReplyId, authorId, fromAuthorId, content, &_postReplyListener);
 }
 
 /**
@@ -105,19 +106,19 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void)RequestOperateStockProfitByDay:(int)teamId start:(int)startId count:(int)count
 {
     [self createHttpConnection];
-    hConnection->RequestOperateStockProfitOrderByDay(teamId, startId, count, &operProfitListener);
+    hConnection->RequestOperateStockProfitOrderByDay(teamId, startId, count, &_operProfitListener);
 }
 
 - (void)RequestOperateStockProfitByMonth:(int)teamId start:(int)startId count:(int)count
 {
     [self createHttpConnection];
-    hConnection->RequestOperateStockProfitOrderByDay(teamId, startId, count, &operProfitListener);
+    hConnection->RequestOperateStockProfitOrderByDay(teamId, startId, count, &_operProfitListener);
 }
 
 - (void)RequestOperateStockProfitByAll:(int)teamId start:(int)startId count:(int)count
 {
     [self createHttpConnection];
-    hConnection->RequestOperateStockProfitOrderByTotal(teamId,startId, count, &operProfitListener);
+    hConnection->RequestOperateStockProfitOrderByTotal(teamId,startId, count, &_operProfitListener);
 }
 
 /**
@@ -125,15 +126,16 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
  */
 - (void)RequestOperateStockAllDetail:(int)operateId{
     [self createHttpConnection];
-    hConnection->RequestOperateStockAllDetail(operateId,&stockAllListener);
+    hConnection->RequestOperateStockAllDetail(operateId,&_stockAllListener);
 }
 
 /**
  * 请求操盘详情--交易记录
  */
-- (void)RequestOperateStockTransaction:(int)operateId{
+- (void)RequestOperateStockTransaction:(int)operateId start:(int)startId cout:(int)count
+{
     [self createHttpConnection];
-    hConnection->RequestOperateStockTransaction(operateId,&transacionListener);
+    hConnection->RequestOperateStockTransaction(operateId,startId,count,&_transacionListener);
 }
 
 /**
@@ -164,9 +166,9 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 }
 
 // 请求战队的私人定制缩略信息
-- (void) RequestTeamPriviteServiceSummaryPack:(int)teamId{
+- (void) RequestTeamPrivateServiceSummaryPack:(int)teamId{
     [self createHttpConnection];
-    hConnection->RequestTeamPriviteServiceSummaryPack(teamId,&teamPriListener);
+    hConnection->RequestTeamPrivateServiceSummaryPack(teamId,&_teamPrivateListener);
 
 }
 
@@ -197,7 +199,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 // 请求贡献榜
 - (void) RequestConsumeRank:(int)teamId{
     [self createHttpConnection];
-    hConnection->RequestConsumeRank(teamId,&_consumeRankListener);
+    hConnection->RequestConsumeRankList(teamId,&_consumeRankListener);
 }
 
 // 提问
@@ -262,37 +264,37 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
     hConnection->PostAnswer(questionId, content, &_mailReplyListener);
 }
 //首页列表数据
-- (void)RequestHomePage:(const char *)devType//首页列表数据
+- (void)RequestHomePage//首页列表数据
 {
     [self createHttpConnection];
-    hConnection->RequestHomePage(devType, &_homePageListener);
+    hConnection->RequestHomePage(&_homePageListener);
 }
 
 //关注的讲师
-- (void)RequestFollowTeacher:(int)userId type:(const char *)devType
+- (void)RequestFollowTeacher
 {
     [self createHttpConnection];
-    hConnection->RequestFollowTeacher(userId, devType, &_followTeacherListener);
+    hConnection->RequestFollowTeacher(&_followTeacherListener);
 }
 
 //足迹url
-- (void)RequestFootPrint:(int)userId type:(const char *)devType
+- (void)RequestFootPrint
 {
     [self createHttpConnection];
-    hConnection->RequestFootPrint(userId, devType, &_footPrintListener);
+    hConnection->RequestFootPrint(&_footPrintListener);
 }
 
 //收藏url
-- (void)RequestCollection:(int)userId type:(const char *)devType
+- (void)RequestCollection
 {
     [self createHttpConnection];
-    hConnection->RequestCollection(userId, devType, &_collectionListener);
+    hConnection->RequestCollection(&_collectionListener);
 }
 //获取Banner{
-- (void)RequestBanner:(const char *)url
+- (void)RequestBanner
 {
     [self createHttpConnection];
-    hConnection->RequestBanner(url,&_bannerListener);
+    hConnection->RequestBanner(&_bannerListener);
 }
 
 

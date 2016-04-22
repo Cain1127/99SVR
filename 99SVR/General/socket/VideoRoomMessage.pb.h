@@ -2708,8 +2708,7 @@ public:
 };
 
 
-class TradeFireworksErr
-{
+class TransacionListener{
 
 private:
 

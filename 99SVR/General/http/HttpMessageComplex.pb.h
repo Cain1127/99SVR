@@ -1,22 +1,16 @@
-//
-//  HttpMessageComplex.pb.h
-//  99SVR
-//
-//  Created by xia zhonglin  on 4/19/16.
-//  Copyright © 2016 xia zhonglin . All rights reserved.
-//
 #ifndef __HTTP_COMPLEX_MESSAGE_H__
 #define __HTTP_COMPLEX_MESSAGE_H__
+
+
 
 #include <string>
 #include <vector>
 #include "Log.h"
 #include "HttpMessage.pb.h"
-
 using std::string;
 using std::vector;
 
-class TeamPriviteServiceSummaryPack
+class TeamPrivateServiceSummaryPack
 {
     
 private:
@@ -44,7 +38,9 @@ public:
 
 class TeamIntroduce
 {
+    
 private:
+    
     string _teamName;
     string _teamIcon;
     string _introduce;
@@ -70,4 +66,6 @@ public:
     
 };
 
-#endif /* HttpMessageComplex_pb_h */
+
+
+#endif

@@ -75,6 +75,12 @@
 
 @implementation XVideoLiveViewcontroller
 
+- (void)reloadModel:(RoomHttp *)room
+{
+    _room = room;
+    
+}
+
 - (id)initWithModel:(RoomHttp *)room
 {
     self = [super init];
@@ -122,12 +128,10 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
-    
 }
 
 - (void)initTableView{
     CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-kVideoImageHeight);
-    
     _chatAllView = [[UIView alloc] initWithFrame:frame];
     
     _chatView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth-54,frame.size.height) withStyle:UITableViewStylePlain];
@@ -235,7 +239,17 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_NETWORK_ERR_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_TRADE_GIFT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_TO_ME_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_CHAT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_NOTICE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_ALL_USER_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_KICKOUT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MEESAGE_ROOM_SEND_LIWU_RESP_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:nil];
 }
 
 - (void)addNotification
@@ -262,10 +276,23 @@
     {
         [_ffPlay stop];
     }
-    __weak LivePlayViewController *__ffPlay = _ffPlay;
+    @WeakObj(_ffPlay)
     dispatch_main_async_safe(
      ^{
-         [__ffPlay setNullMic];
+         [_ffPlayWeak setNullMic];
+     });
+}
+
+- (void)stopNewPlay
+{
+    if(_ffPlay)
+    {
+        [_ffPlay stop];
+    }
+    @WeakObj(_ffPlay)
+    dispatch_main_async_safe(
+     ^{
+         [_ffPlayWeak setDefaultImg];
      });
 }
 
@@ -294,7 +321,8 @@
 - (void)startPlayThread:(NSNotification *)notify
 {
     @WeakObj(self)
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0),
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)),
+    dispatch_get_global_queue(0, 0),
     ^{
        [selfWeak startNewPlay];
     });

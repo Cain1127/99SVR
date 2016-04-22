@@ -25,7 +25,7 @@
 - (id)init{
     self = [super init];
     chatCache = [[NSCache alloc] init];
-    [chatCache setTotalCostLimit:10];
+    [chatCache setTotalCostLimit:30];
     return self;
 }
 
