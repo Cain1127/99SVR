@@ -230,15 +230,14 @@ void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info)
 
 void MailReplyListener::onResponse(vector<MailReply>& info)
 {
-    for (int i=0; i<info.size(); i++) {
-        NSMutableArray *ary = [NSMutableArray array];
-        for (int i=0; i<info.size(); i++) {
-            TQAnswerModel *model = [[TQAnswerModel alloc] initWithAnswer:&info[i]];
-            [ary addObject:model];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:ary];
-    }
-
+//    for (int i=0; i<info.size(); i++) {
+//        NSMutableArray *ary = [NSMutableArray array];
+//        for (int i=0; i<info.size(); i++) {
+//            TQAnswerModel *model = [[TQAnswerModel alloc] initWithAnswer:&info[i]];
+//            [ary addObject:model];
+//        }
+//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:ary];
+//    }
 }
 
 void PrivateServiceSummaryListener::onResponse(vector<PrivateServiceSummary>& info)

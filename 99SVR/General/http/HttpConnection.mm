@@ -8,6 +8,12 @@
 
 #define HTTP_API "http://hall.99ducaijing.cn:8081"
 
+void parse_WhatIsPrivateService(char* json, HttpListener* listener);
+void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener);
+void parse_PrivateServiceDetail(char* json, HttpListener* listener);
+void parse_TeamList(char* json, HttpListener* listener);
+void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener);
+
 static ThreadVoid http_request(void* _param)
 {
     HttpThreadParam* param = (HttpThreadParam*)_param;
@@ -315,7 +321,19 @@ void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, 
 
 // 什么是我的私人定制
 void HttpConnection::RequestWhatIsPrivateService(WhatIsPrivateServiceListener* listener){
+    std::string url = "http://testphp.99ducaijing.cn/api.php";
     
+    HttpThreadParam* param = new HttpThreadParam();
+    strcpy(param->url, url.c_str());
+    param->parser = parse_WhatIsPrivateService;
+    param->http_listener = listener;
+    
+    RequestParamter& request = get_request_param();
+    param->request = &request;
+    
+    request["s"] = "Personalsecrets/getWhatIsPrivateService";
+    
+    Thread::start(http_request, param);
 }
 
 // 请求我已经购买的私人定制
@@ -327,17 +345,67 @@ void HttpConnection::RequestMyPrivateService(int userId, MyPrivateServiceListene
 void HttpConnection::RequestBuyPrivateServicePage(int userId, BuyPrivateServiceListener* listener){}
 
 // 请求战队的私人定制缩略信息
-void HttpConnection::RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivateServiceSummaryPackListener* listener){}
+void HttpConnection::RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivateServiceSummaryPackListener* listener){
+    std::string url = "http://testphp.99ducaijing.cn/api.php";
+    char tmp[32] = {0};
+    
+    HttpThreadParam* param = new HttpThreadParam();
+    strcpy(param->url, url.c_str());
+    param->parser = parse_PrivateServiceSummaryPack;
+    param->http_listener = listener;
+    
+    RequestParamter& request = get_request_param();
+    param->request = &request;
+    
+    request["s"] = "Personalsecrets/getPSList";
+    
+    sprintf(tmp, "%d", teamId);
+    //request["teacherid"] = tmp;
+    request["teamid"] = tmp;
+    
+    Thread::start(http_request, param);
+}
 
 // 请求私人定制详情
-void HttpConnection::RequestPrivateServiceDetail(int id, PrivateServiceDetailListener* listener){}
+void HttpConnection::RequestPrivateServiceDetail(int id, PrivateServiceDetailListener* listener){
+    std::string url = "http://testphp.99ducaijing.cn/api.php";
+    char tmp[32] = {0};
+    
+    HttpThreadParam* param = new HttpThreadParam();
+    strcpy(param->url, url.c_str());
+    param->parser = parse_PrivateServiceDetail;
+    param->http_listener = listener;
+    
+    RequestParamter& request = get_request_param();
+    param->request = &request;
+    
+    request["s"] = "Personalsecrets/getPSDetail";
+    
+    sprintf(tmp, "%d", id);
+    request["psid"] = tmp;
+    
+    Thread::start(http_request, param);
+}
 
 
 // 请求充值规则列表
 void HttpConnection::RequestChargeRuleList(ChargeRuleListener* listener){}
 
 // 请求战队（财经直播）列表
-void HttpConnection::RequestTeamList(TeamListListener* listener){}
+void HttpConnection::RequestTeamList(TeamListListener* listener){
+    std::string url = "http://testphp.99ducaijing.cn/api.php";
+    HttpThreadParam* param = new HttpThreadParam();
+    strcpy(param->url, url.c_str());
+    param->parser = parse_TeamList;
+    param->http_listener = listener;
+    
+    RequestParamter& request = get_request_param();
+    param->request = &request;
+    
+    request["s"] = "room/getRoomList";
+    
+    Thread::start(http_request, param);
+}
 
 // 请求战队简介
 void HttpConnection::RequestTeamIntroduce(int teamId, TeamIntroduceListener* listener){}
@@ -460,17 +528,61 @@ void HttpConnection::RequestHomePage(HomePageListener* listener)//首页列表�
 
 void HttpConnection::RequestFollowTeacher(FollowTeacherListener* listener)//关注的讲师
 {
-    
+//    std::string url = "http://hall.99ducaijing.cn:8081/mobile/text_rooms.php";
+//    
+//    HttpThreadParam* param = new HttpThreadParam();
+//    strcpy(param->url, url.c_str());
+//    param->parser = parse_followteacherlist;
+//    param->http_listener = listener;
+//    
+//    RequestParamter& request = get_request_param();
+//    param->request = &request;
+//    
+//    request["act"] = "follow";
+//    request["userid"] = get_user_id();
+//    request["client"] = get_client_type();
+//    
+//    Thread::start(http_request, param);
 }
 
 void HttpConnection::RequestFootPrint(FootPrintListener* listener)//足迹url
 {
-    
+//    std::string url = "http://hall.99ducaijing.cn:8081/roomdata/room.php";
+//
+//    HttpThreadParam* param = new HttpThreadParam();
+//    strcpy(param->url, url.c_str());
+//    param->parser = parse_footprintlist;
+//    param->http_listener = listener;
+//    
+//    RequestParamter& request = get_request_param();
+//    param->request = &request;
+//    
+//    request["act"] = "history";
+//    request["type"] = "footprint";
+//    request["userid"] = get_user_id();
+//    request["client"] = get_client_type();
+//    
+//    Thread::start(http_request, param);
 }
 
 void HttpConnection::RequestCollection(CollectionListener* listener)////收藏url
 {
-    
+//    std::string url = "http://hall.99ducaijing.cn:8081/roomdata/room.php";
+//    
+//    HttpThreadParam* param = new HttpThreadParam();
+//    strcpy(param->url, url.c_str());
+//    param->parser = parse_collectionlist;
+//    param->http_listener = listener;
+//    
+//    RequestParamter& request = get_request_param();
+//    param->request = &request;
+//    
+//    request["act"] = "history";
+//    request["type"] = "collent";
+//    request["userid"] = get_user_id();
+//    request["client"] = get_client_type();
+//    
+//    Thread::start(http_request, param);
 }
 
 void HttpConnection::RequestBanner(BannerListener* listener)////获取Banner
@@ -872,3 +984,290 @@ void HttpConnection::RequestBanner(std::string devType, BannerListener* listener
 
 */
 
+void parse_PrivateServiceDetail(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    JsonValue value;
+    JsonReader reader;
+    PrivateServiceDetail detail;
+    PrivateServiceDetailListener* detail_listener = (PrivateServiceDetailListener*)listener;
+    try
+    {
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                if(0 == status)
+                {
+                    if(!value["data"].isNull())
+                    {
+                        JsonValue& data = value["data"];
+                        
+                        if(data.size() > 0)
+                        {
+                            JsonValue& data_item = data[0];
+                            detail.set_title(data_item["title"].asString());
+                            detail.set_content(data_item["content"].asString());
+                            detail.set_publishtime(data_item["publishtime"].asString());
+                            detail.set_videourl(data_item["videourl"].asString());
+                            detail.set_videoname(data_item["videoname"].asString());
+                            detail.set_attachmenturl(data_item["attachmenturl"].asString());
+                            detail.set_attachmentname(data_item["attachmentname"].asString());
+                            detail_listener->onResponse(detail);
+                        }
+                    }
+                }
+                else
+                {
+                    detail_listener->OnError(status);
+                }
+            }
+        }
+    }
+    catch( std::exception& ex )
+    {
+        detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+    
+}
+
+void parse_ViewpointSummary(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    JsonValue value;
+    JsonReader reader;
+    int i;
+    std::vector<ViewpointSummary> viewpoint_list;
+    ViewpointSummaryListener* view_listener = (ViewpointSummaryListener*)listener;
+    try
+    {
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                if(0 == status)
+                {
+                    if(!value["data"].isNull())
+                    {
+                        JsonValue& data = value["data"];
+                        
+                        int size_ = data.size();
+                        
+                        viewpoint_list.clear();
+                        for(i = 0; i < size_; i++)
+                        {
+                            ViewpointSummary viewpoint;
+                            
+                            JsonValue& data_item = data[i];
+                            viewpoint.set_viewpointid(atoi(data_item["viewpointid"].asString().c_str()));
+                            viewpoint.set_authorid(data_item["authorid"].asString());
+                            viewpoint.set_authorname(data_item["authorname"].asString());
+                            viewpoint.set_authoricon(data_item["authoricon"].asString());
+                            viewpoint.set_publishtime(data_item["publishtime"].asString());
+                            viewpoint.set_content(data_item["content"].asString());
+                            viewpoint.set_replycount(atoi(data_item["replycount"].asString().c_str()));
+                            viewpoint.set_giftcount(atoi(data_item["giftcount"].asString().c_str()));
+                            
+                            viewpoint_list.push_back(viewpoint);
+                        }
+                        
+                        view_listener->onResponse(viewpoint_list);
+                    }
+                    else
+                    {
+                        view_listener->OnError(PERR_JSON_PARSE_ERROR);
+                    }
+                }
+                else
+                {
+                    view_listener->OnError(status);
+                }
+            }
+        }
+    }
+    catch( std::exception& ex )
+    {
+        view_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
+void parse_TeamList(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    int i;
+    
+    std::vector<Team> team_list;
+    
+    TeamListListener* team_listener = (TeamListListener*)listener;
+    
+    try
+    {
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                if(0 == status)
+                {
+                    if(!value["data"].isNull())
+                    {
+                        JsonValue& data = value["data"];
+                        
+                        int size_ = data.size();
+                        
+                        team_list.clear();
+                        for(i = 0; i < size_; i++)
+                        {
+                            Team team;
+                            
+                            JsonValue& data_item = data[i];
+                            team.set_roomid(data_item["nvcbid"].asInt());
+                            team.set_teamname(data_item["cname"].asString());
+                            team.set_teamicon(data_item["croompic"].asString());
+                            team.set_onlineusercount(data_item["ncount"].asInt());
+                            
+                            team_list.push_back(team);
+                        }
+                        
+                        team_listener->onResponse(team_list);
+                    }
+                    else
+                    {
+                        team_listener->OnError(PERR_JSON_PARSE_ERROR);
+                    }
+                }
+                else
+                {
+                    team_listener->OnError(status);
+                }
+            }
+        }
+    }
+    catch( std::exception& ex )
+    {
+        team_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
+void parse_WhatIsPrivateService(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    WhatIsPrivateService wips;
+    
+    WhatIsPrivateServiceListener* what_listener = (WhatIsPrivateServiceListener*)listener;
+    
+    try
+    {
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                if(0 == status)
+                {
+                    std::string data = value["data"].asString();
+                    
+                    wips.set_content(data);
+                    what_listener->onResponse(wips);
+                }
+                else
+                {
+                    what_listener->OnError(status);
+                }
+            }
+        }
+    }
+    catch( std::exception& ex )
+    {
+        what_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
+void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    int i,j;
+    
+    std::vector<TeamPrivateServiceSummaryPack> summary;
+    
+    TeamPrivateServiceSummaryPackListener* summary_listener = (TeamPrivateServiceSummaryPackListener*)listener;
+    
+    try
+    {
+        summary.clear();
+        
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                if(0 == status)
+                {
+                    if(!value["data"].isNull())
+                    {
+                        JsonValue& data = value["data"];
+                        
+                        int size_ = data.size();
+                        
+                        for(i = 0; i < size_; i++)
+                        {
+                            JsonValue& data_item = data[i];
+                            
+                            TeamPrivateServiceSummaryPack pack;
+                            int size1_ = data_item["list"].size();
+                            
+                            pack.set_vipLevelId(data_item["id"].asInt());
+                            pack.set_vipLevelName(data_item["vipinfoname"].asString());
+                            
+                            std::vector<PrivateServiceSummary> ss_list;
+                            for(j = 0; j < size1_; j++)
+                            {
+                                PrivateServiceSummary ss;
+                                
+                                JsonValue& list_item = data_item["list"][j];
+                                ss.set_id(atoi(list_item["psid"].asString().c_str()));
+                                ss.set_title(list_item["title"].asString());
+                                ss.set_summary(list_item["summary"].asString());
+                                ss.set_publishtime(list_item["publishtime"].asString());
+                                
+                                ss_list.push_back(ss);
+                            }
+                            
+                            pack.set_summaryList(ss_list);
+                            
+                            summary.push_back(pack);
+                        }
+                        
+                        summary_listener->onResponse(summary, 0);
+                    }
+                    else
+                    {
+                        summary_listener->OnError(PERR_JSON_PARSE_ERROR);
+                    }
+                    
+                }
+                else
+                {
+                    summary_listener->OnError(status);
+                }
+            }
+        }
+    }
+    catch( std::exception& ex )
+    {
+        summary_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+    
+}

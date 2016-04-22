@@ -112,7 +112,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void)RequestOperateStockProfitByMonth:(int)teamId start:(int)startId count:(int)count
 {
     [self createHttpConnection];
-    hConnection->RequestOperateStockProfitOrderByDay(teamId, startId, count, &_operProfitListener);
+    hConnection->RequestOperateStockProfitOrderByMonth(teamId, startId, count, &_operProfitListener);
 }
 
 - (void)RequestOperateStockProfitByAll:(int)teamId start:(int)startId count:(int)count

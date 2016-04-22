@@ -47,7 +47,6 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 - (void)RequestOperateStockProfitByMonth:(int)teamId start:(int)startId count:(int)count;
 - (void)RequestOperateStockProfitByAll:(int)teamId start:(int)startId count:(int)count;
 
-
 /**
  *  请求操盘详情
  */

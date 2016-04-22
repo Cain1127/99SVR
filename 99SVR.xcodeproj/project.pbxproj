@@ -4258,11 +4258,8 @@
 				BB5E4F9B1CBF7D1B00F8C1D4 /* TextViewController.m in Sources */,
 				BB6F3AC01C9EFADC0035EBBE /* BandingMobileViewController.m in Sources */,
 				BB6F117E1CC60B2000F02064 /* XVideoLiveViewcontroller.mm in Sources */,
-<<<<<<< HEAD
 				18E09E451CC78D6600C63A6D /* TQMecustomView.m in Sources */,
 				B4EA09291CC8DF8400E8F933 /* StockRecordTabModel.mm in Sources */,
-=======
->>>>>>> zuoweidong
 				18F9710D1C92947F001B2575 /* DataSigner.m in Sources */,
 				BB63F6241C2CC7A300A042E8 /* LeftCellModel.m in Sources */,
 				BB6F11781CC60B0500F02064 /* XPriPersonView.m in Sources */,
@@ -4621,11 +4618,8 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-<<<<<<< HEAD
 				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
-=======
 				PROVISIONING_PROFILE = "";
->>>>>>> zuoweidong
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
