@@ -443,6 +443,7 @@ void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswe
     {
         QuestionAnswer info;
         info.set_id(i);
+        info.set_answerauthorid("personal_user_head");
         info.set_answerauthorid("80060");
         info.set_answerauthorname("牛出没");
         info.set_answercontent("测试数据:这里是回答内容!这里是回答内容!这里是回答内容!这里是回答内容这里是回答内容这里是回答内容");
@@ -463,6 +464,7 @@ void HttpConnection::RequestMailReply(int startId, int count, MailReplyListener*
         MailReply info;
         info.set_id(i);
         info.set_viewpointid(1);
+//        info.set_answerauthoricon("personal_user_head");
         info.set_answerauthorid("80060");
         info.set_answerauthorname("牛出没");
         info.set_answercontent("是啊，真不错。这里是回答内容这里是回答内容这里是回答内容这里是回答内容");

@@ -1539,6 +1539,7 @@ private:
     string	_answerauthorid;
     string	_answerauthorname;
     string	_answerauthorhead;
+    //性别
     uint32	_answerauthorrole;
     string	_answertime;
     string	_answercontent;

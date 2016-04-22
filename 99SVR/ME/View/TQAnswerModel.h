@@ -38,6 +38,6 @@
 
 - (id)initWithAnswer:(QuestionAnswer *)QuestionAnswer;
 
-//- (id)initWithAnswer:(QuestionAnswer *)QuestionAnswer;
+- (id)initWithRplay:(MailReply *)MailReply;
 
 @end

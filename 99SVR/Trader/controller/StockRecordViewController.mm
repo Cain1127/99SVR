@@ -81,6 +81,7 @@
     //交易记录
     [kHTTPSingle RequestOperateStockTransaction:0 start:0 cout:20];
 
+
     //持仓记录
 //    [kHTTPSingle RequestOperateStockTransaction:0 start:0 cout:20];
 
