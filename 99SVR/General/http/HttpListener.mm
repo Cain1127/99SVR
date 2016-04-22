@@ -117,6 +117,10 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
  */
 void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>& trans){
     
+    
+    
+    
+    
 }
 /**
  *  请求操盘详情--持仓情况
