@@ -49,7 +49,19 @@ public:
     virtual void onResponse(int errorCode, Reply& info);void OnError(int errCode){}
 };
 
-class OperateStockProfitListener : public HttpListener
+class OperateStockProfitListenerDay : public HttpListener
+{
+public:
+    virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode){}
+};
+
+class OperateStockProfitListenerMonth : public HttpListener
+{
+public:
+    virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode){}
+};
+
+class OperateStockProfitListenerAll : public HttpListener
 {
 public:
     virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode){}

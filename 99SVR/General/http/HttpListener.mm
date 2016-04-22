@@ -63,14 +63,23 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
 /**
  *  请求操盘列表
  */
-void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day){
+void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
+}
+void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& day){
     
-    
+    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
 }
+void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& day){
+    
+    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
+    
+}
+
+
 /**
  *  请求操盘详情
  */
