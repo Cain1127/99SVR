@@ -14,10 +14,11 @@
 @interface StockRecordViewController ()
 @property (nonatomic , strong) SliderMenuView *sliderMenuView;
 /**交易记录*/
-@property (nonatomic , strong) UITableView *busTab;
+@property (nonatomic , strong) UITableView *businessTab;
 /**持仓情况*/
 @property (nonatomic , strong) UITableView *houseTab;
-@property (nonatomic , strong) StockRecordTabModel *recordModel;
+@property (nonatomic , strong) StockRecordTabModel *businessdTabModel;
+@property (nonatomic , strong) StockRecordTabModel *houseTabModel;
 
 /**公车交易记录的数据*/
 @property (nonatomic , strong) NSMutableArray *busTabArray;
@@ -46,8 +47,14 @@
     
     [self.view addSubview:self.sliderMenuView];
     
+    WeakSelf(self);
     self.sliderMenuView.DidSelectSliderIndex = ^(NSInteger index){
-      
+        if (index==1) {
+            
+            [weakSelf.businessdTabModel setDataArray:weakSelf.busTabArray WithRecordTableTag:index];
+        }else{
+            [weakSelf.houseTabModel setDataArray:weakSelf.houseTabArray WithRecordTableTag:index];
+        }
     };
     
 }
@@ -68,43 +75,40 @@
 #pragma mark 刷新交易记录数据
 -(void)refreshBusinessData:(NSNotification *)notfi{
 
-    NSArray *array = notfi.object;
-    for (int i=0; i!=array.count; i++) {
-        
-        StockDealModel *model = array[i];
-        [self.busTabArray addObject:model];
-    }
+    WeakSelf(self);
     
     dispatch_async(dispatch_get_main_queue(), ^{
-       
-        [self.recordModel setTableViewData:self.busTabArray WithTag:1];
-//        [self.busTab reloadData];
+        
+        NSArray *array = notfi.object;
+        for (int i=0; i!=array.count; i++) {
+            
+            StockDealModel *model = array[i];
+            [weakSelf.busTabArray addObject:model];
+        }
+
+        [weakSelf.businessdTabModel setDataArray:weakSelf.busTabArray WithRecordTableTag:1];
+        [weakSelf.businessTab reloadData];
     });
 
 }
 
 #pragma mark 刷新持仓记录数据
 -(void)refreshWareHouseData:(NSNotification *)notfi{
-    
-    NSArray *array = notfi.object;
-    for (int i=0; i!=array.count; i++) {
-        
-        StockDealModel *model = array[i];
-        [self.houseTabArray addObject:model];
-    }
+    WeakSelf(self);
+
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray *array = notfi.object;
         
-        [self.recordModel setTableViewData:self.houseTabArray WithTag:2];
-//        [self.houseTab reloadData];
+        for (int i=0; i!=array.count; i++) {
+            
+            StockDealModel *model = array[i];
+            [weakSelf.houseTabArray addObject:model];
+        }
+        [weakSelf.houseTabModel setDataArray:weakSelf.houseTabArray WithRecordTableTag:2];
+        [weakSelf.houseTab reloadData];
     });
-
-    
 }
-
-
-
-
 #pragma mark lazy 懒加载
 -(NSMutableArray *)busTabArray{
 
@@ -133,22 +137,22 @@
         _sliderMenuView = [[SliderMenuView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} withTitles:@[@"交易记录",@"持仓情况"] withDefaultSelectIndex:self.recordType];
         _sliderMenuView.topBagColor = [UIColor whiteColor];
         _sliderMenuView.titleBagColor = [UIColor whiteColor];
-        _sliderMenuView.viewArrays = @[self.busTab,self.houseTab];
+        _sliderMenuView.viewArrays = @[self.businessTab,self.houseTab];
     }
     return _sliderMenuView;
 }
 
--(UITableView *)busTab{
+-(UITableView *)businessTab{
     
-    if (!_busTab) {
+    if (!_businessTab) {
         
-        _busTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,ScreenHeight} withStyle:UITableViewStylePlain];
-        _busTab.delegate = self.recordModel;
-        _busTab.dataSource = self.recordModel;
+        _businessTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,ScreenHeight} withStyle:UITableViewStylePlain];
+        _businessTab.delegate = self.businessdTabModel;
+        _businessTab.dataSource = self.businessdTabModel;
         
     }
     
-    return _busTab;
+    return _businessTab;
 }
 
 -(UITableView *)houseTab{
@@ -156,21 +160,31 @@
     if (!_houseTab) {
         
         _houseTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,ScreenHeight} withStyle:UITableViewStylePlain];
-        _houseTab.delegate = self.recordModel;
-        _houseTab.dataSource = self.recordModel;
+        _houseTab.delegate = self.houseTabModel;
+        _houseTab.dataSource = self.houseTabModel;
 
     }
     return _houseTab;
 }
 
--(StockRecordTabModel *)recordModel{
+-(StockRecordTabModel *)businessdTabModel{
     
-    if (!_recordModel) {
+    if (!_businessdTabModel) {
         
-        _recordModel = [[StockRecordTabModel alloc]initWithViewController:self withDayTabViews:@[self.busTab,self.houseTab]];
+        _businessdTabModel = [[StockRecordTabModel alloc]init];
         
     }
-    return _recordModel;
+    return _businessdTabModel;
+}
+
+-(StockRecordTabModel *)houseTabModel{
+    
+    if (!_houseTabModel) {
+        
+        _houseTabModel = [[StockRecordTabModel alloc]init];
+        
+    }
+    return _houseTabModel;
 }
 
 
@@ -179,6 +193,18 @@
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.backgroundColor = COLOR_STOCK_BackGroundColor;
     return tableView;
+}
+
+-(void)dealloc{
+   
+    DLog(@"释放");
+    
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    
+    [super viewDidDisappear:animated];
+
 }
 
 - (void)didReceiveMemoryWarning {
