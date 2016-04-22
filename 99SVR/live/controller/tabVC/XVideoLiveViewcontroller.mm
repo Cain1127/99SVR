@@ -84,7 +84,6 @@
 
 - (void)loadView{
     self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
-    
 }
 
 - (void)viewDidLoad{

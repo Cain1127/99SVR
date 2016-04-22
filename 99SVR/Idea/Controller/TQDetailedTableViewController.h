@@ -7,7 +7,10 @@
 /**************************************** < 专家观点详情>**********************************/
 
 #import <UIKit/UIKit.h>
+#import "CustomViewController.h"
 
-@interface TQDetailedTableViewController : UIViewController
+@interface TQDetailedTableViewController : CustomViewController
+
+- (id)initWithViewId:(int)viewId;
 
 @end

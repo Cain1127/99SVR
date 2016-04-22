@@ -7,7 +7,31 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "HttpMessage.pb.h"
 
 @interface TQIdeaDetailModel : NSObject
+/**
+ string	_authorid;
+ string	_authorname;
+ string	_authoricon;
+ string	_publishtime;
+ string	_content;
+ 
+ uint32	_viewpointid;
+ uint32	_replycount;
+ uint32	_giftcount;
+ */
+
+@property (nonatomic,copy) NSString *authorId;
+@property (nonatomic,copy) NSString *authorname;
+@property (nonatomic,copy) NSString *authoricon;
+@property (nonatomic,copy) NSString *publishtime;
+@property (nonatomic,copy) NSString *content;
+
+@property (nonatomic) int replycount;
+@property (nonatomic) int giftcount;
+@property (nonatomic) int viewpointid;
+
+- (id)initWithViewpointDetail:(ViewpointDetail *)details;
 
 @end

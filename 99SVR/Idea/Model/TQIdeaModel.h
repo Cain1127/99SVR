@@ -7,27 +7,28 @@
 //
 
 #import <Foundation/Foundation.h>
+#include "HttpMessage.pb.h"
 
 @interface TQIdeaModel : NSObject
 /** 数据 */
-@property (nonatomic ,strong)NSMutableArray *ideaArry;
+@property (nonatomic ,strong) NSMutableArray *ideaArry;
 /** authorID房间ID */
-@property (nonatomic ,weak)NSString *authorid;
+@property (nonatomic ,copy) NSString *authorid;
 /** 头像 */
-@property (nonatomic ,weak)NSString *icon;
+@property (nonatomic ,copy) NSString *authoricon;
 /** name */
-@property (nonatomic ,weak)NSString *name;
+@property (nonatomic ,copy) NSString *authorname;
 /** 时间 */
-@property (nonatomic ,weak)NSString *time;
+@property (nonatomic ,copy) NSString *publishtime;
 /** 评论数 */
-@property (nonatomic ,assign)int commentCount;
+@property (nonatomic)int replycount;
 /** 内容 */
-@property (nonatomic ,weak)NSString *content;
+@property (nonatomic ,copy)NSString *content;
 /** viewpointid */
-@property (nonatomic ,assign)int32_t viewpointid;
+@property (nonatomic)int32_t viewpointid;
 /** 礼物数 */
-@property (nonatomic ,assign)int flowercount;
+@property (nonatomic)int giftcount;
 
-
+- (id)initWithViewpointSummary:(ViewpointSummary *)ViewPoint;
 
 @end

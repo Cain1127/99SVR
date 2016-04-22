@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		1827FF591C9959BF009D9C79 /* MyScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1827FF581C9959BF009D9C79 /* MyScrollView.m */; };
-		185DABA71CBFDC970019C5A3 /* TQDetailedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 185DAB991CBFDC970019C5A3 /* TQDetailedTableViewController.m */; };
+		185DABA71CBFDC970019C5A3 /* TQDetailedTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 185DAB991CBFDC970019C5A3 /* TQDetailedTableViewController.mm */; };
 		185DABA81CBFDC970019C5A3 /* TQIdeaViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 185DAB9B1CBFDC970019C5A3 /* TQIdeaViewController.mm */; };
 		185DABA91CBFDC970019C5A3 /* DetaileHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 185DAB9F1CBFDC970019C5A3 /* DetaileHeaderView.m */; };
 		185DABAB1CBFDC970019C5A3 /* ideaDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 185DABA21CBFDC970019C5A3 /* ideaDetailTableViewCell.m */; };
 		185DABAC1CBFDC970019C5A3 /* ideaDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 185DABA31CBFDC970019C5A3 /* ideaDetailTableViewCell.xib */; };
-		185DABAD1CBFDC970019C5A3 /* TQideaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 185DABA51CBFDC970019C5A3 /* TQideaTableViewCell.m */; };
+		185DABAD1CBFDC970019C5A3 /* TQideaTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 185DABA51CBFDC970019C5A3 /* TQideaTableViewCell.mm */; };
 		185DABAE1CBFDC970019C5A3 /* TQideaTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 185DABA61CBFDC970019C5A3 /* TQideaTableViewCell.xib */; };
 		185F59641CC4CAD600F605F5 /* MJExtensionConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 185F59511CC4CAD600F605F5 /* MJExtensionConst.m */; };
 		185F59651CC4CAD600F605F5 /* MJFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 185F59531CC4CAD600F605F5 /* MJFoundation.m */; };
@@ -24,8 +24,8 @@
 		185F596B1CC4CAD600F605F5 /* NSObject+MJKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 185F595F1CC4CAD600F605F5 /* NSObject+MJKeyValue.m */; };
 		185F596C1CC4CAD600F605F5 /* NSObject+MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 185F59611CC4CAD600F605F5 /* NSObject+MJProperty.m */; };
 		185F596D1CC4CAD600F605F5 /* NSString+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 185F59631CC4CAD600F605F5 /* NSString+MJExtension.m */; };
-		185F59701CC4CC8100F605F5 /* TQIdeaModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 185F596F1CC4CC8100F605F5 /* TQIdeaModel.m */; };
-		185F59731CC4CCA700F605F5 /* TQIdeaDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 185F59721CC4CCA700F605F5 /* TQIdeaDetailModel.m */; };
+		185F59701CC4CC8100F605F5 /* TQIdeaModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 185F596F1CC4CC8100F605F5 /* TQIdeaModel.mm */; };
+		185F59731CC4CCA700F605F5 /* TQIdeaDetailModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 185F59721CC4CCA700F605F5 /* TQIdeaDetailModel.mm */; };
 		1879B8FD1CC85C9400E981A5 /* TQGifConllectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1879B8FB1CC85C9400E981A5 /* TQGifConllectionCell.m */; };
 		1879B8FE1CC85C9400E981A5 /* TQGifConllectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1879B8FC1CC85C9400E981A5 /* TQGifConllectionCell.xib */; };
 		1879B9051CC868C400E981A5 /* PhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1879B9031CC868C400E981A5 /* PhotoCell.m */; };
@@ -616,7 +616,7 @@
 		1827FF571C9959BF009D9C79 /* MyScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyScrollView.h; sourceTree = "<group>"; };
 		1827FF581C9959BF009D9C79 /* MyScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyScrollView.m; sourceTree = "<group>"; };
 		185DAB981CBFDC970019C5A3 /* TQDetailedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQDetailedTableViewController.h; sourceTree = "<group>"; };
-		185DAB991CBFDC970019C5A3 /* TQDetailedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQDetailedTableViewController.m; sourceTree = "<group>"; };
+		185DAB991CBFDC970019C5A3 /* TQDetailedTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQDetailedTableViewController.mm; sourceTree = "<group>"; };
 		185DAB9A1CBFDC970019C5A3 /* TQIdeaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIdeaViewController.h; sourceTree = "<group>"; };
 		185DAB9B1CBFDC970019C5A3 /* TQIdeaViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQIdeaViewController.mm; sourceTree = "<group>"; };
 		185DAB9E1CBFDC970019C5A3 /* DetaileHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetaileHeaderView.h; sourceTree = "<group>"; };
@@ -625,7 +625,7 @@
 		185DABA21CBFDC970019C5A3 /* ideaDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ideaDetailTableViewCell.m; sourceTree = "<group>"; };
 		185DABA31CBFDC970019C5A3 /* ideaDetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ideaDetailTableViewCell.xib; sourceTree = "<group>"; };
 		185DABA41CBFDC970019C5A3 /* TQideaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQideaTableViewCell.h; sourceTree = "<group>"; };
-		185DABA51CBFDC970019C5A3 /* TQideaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQideaTableViewCell.m; sourceTree = "<group>"; };
+		185DABA51CBFDC970019C5A3 /* TQideaTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQideaTableViewCell.mm; sourceTree = "<group>"; };
 		185DABA61CBFDC970019C5A3 /* TQideaTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQideaTableViewCell.xib; sourceTree = "<group>"; };
 		185F594F1CC4CAD600F605F5 /* MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJExtension.h; sourceTree = "<group>"; };
 		185F59501CC4CAD600F605F5 /* MJExtensionConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJExtensionConst.h; sourceTree = "<group>"; };
@@ -649,9 +649,9 @@
 		185F59621CC4CAD600F605F5 /* NSString+MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MJExtension.h"; sourceTree = "<group>"; };
 		185F59631CC4CAD600F605F5 /* NSString+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MJExtension.m"; sourceTree = "<group>"; };
 		185F596E1CC4CC8100F605F5 /* TQIdeaModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIdeaModel.h; sourceTree = "<group>"; };
-		185F596F1CC4CC8100F605F5 /* TQIdeaModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQIdeaModel.m; sourceTree = "<group>"; };
+		185F596F1CC4CC8100F605F5 /* TQIdeaModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQIdeaModel.mm; sourceTree = "<group>"; };
 		185F59711CC4CCA700F605F5 /* TQIdeaDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIdeaDetailModel.h; sourceTree = "<group>"; };
-		185F59721CC4CCA700F605F5 /* TQIdeaDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQIdeaDetailModel.m; sourceTree = "<group>"; };
+		185F59721CC4CCA700F605F5 /* TQIdeaDetailModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQIdeaDetailModel.mm; sourceTree = "<group>"; };
 		1879B8FA1CC85C9400E981A5 /* TQGifConllectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQGifConllectionCell.h; sourceTree = "<group>"; };
 		1879B8FB1CC85C9400E981A5 /* TQGifConllectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQGifConllectionCell.m; sourceTree = "<group>"; };
 		1879B8FC1CC85C9400E981A5 /* TQGifConllectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQGifConllectionCell.xib; sourceTree = "<group>"; };
@@ -1762,7 +1762,7 @@
 				185DAB9A1CBFDC970019C5A3 /* TQIdeaViewController.h */,
 				185DAB9B1CBFDC970019C5A3 /* TQIdeaViewController.mm */,
 				185DAB981CBFDC970019C5A3 /* TQDetailedTableViewController.h */,
-				185DAB991CBFDC970019C5A3 /* TQDetailedTableViewController.m */,
+				185DAB991CBFDC970019C5A3 /* TQDetailedTableViewController.mm */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1771,9 +1771,9 @@
 			isa = PBXGroup;
 			children = (
 				185F596E1CC4CC8100F605F5 /* TQIdeaModel.h */,
-				185F596F1CC4CC8100F605F5 /* TQIdeaModel.m */,
+				185F596F1CC4CC8100F605F5 /* TQIdeaModel.mm */,
 				185F59711CC4CCA700F605F5 /* TQIdeaDetailModel.h */,
-				185F59721CC4CCA700F605F5 /* TQIdeaDetailModel.m */,
+				185F59721CC4CCA700F605F5 /* TQIdeaDetailModel.mm */,
 				18EA822A1CC8C41C00BDB735 /* TQideaViewModel.h */,
 				18EA822B1CC8C41C00BDB735 /* TQideaViewModel.mm */,
 			);
@@ -1793,7 +1793,7 @@
 				185DABA21CBFDC970019C5A3 /* ideaDetailTableViewCell.m */,
 				185DABA31CBFDC970019C5A3 /* ideaDetailTableViewCell.xib */,
 				185DABA41CBFDC970019C5A3 /* TQideaTableViewCell.h */,
-				185DABA51CBFDC970019C5A3 /* TQideaTableViewCell.m */,
+				185DABA51CBFDC970019C5A3 /* TQideaTableViewCell.mm */,
 				185DABA61CBFDC970019C5A3 /* TQideaTableViewCell.xib */,
 				188E4A081CC5B61C00D97254 /* ComposeTextView.h */,
 				188E4A091CC5B61C00D97254 /* ComposeTextView.m */,
@@ -4132,7 +4132,7 @@
 				BB17692D1C7B006F00CE947C /* UIImage+WebP.m in Sources */,
 				BB1769261C7B006F00CE947C /* SDWebImageDownloader.m in Sources */,
 				BB5E4F251CBF7B5800F8C1D4 /* Http.cpp in Sources */,
-				185F59701CC4CC8100F605F5 /* TQIdeaModel.m in Sources */,
+				185F59701CC4CC8100F605F5 /* TQIdeaModel.mm in Sources */,
 				BB17692E1C7B006F00CE947C /* UIImageView+HighlightedWebCache.m in Sources */,
 				BB5E4F2D1CBF7B5800F8C1D4 /* LoginConnection.cpp in Sources */,
 				BB17694D1C7D9E7300CE947C /* InputPwdViewController.m in Sources */,
@@ -4198,7 +4198,7 @@
 				B4EA090A1CC754C500E8F933 /* StockDealTableModel.mm in Sources */,
 				BB5E4F991CBF7D1B00F8C1D4 /* TextPointViewController.m in Sources */,
 				BB63F5AA1C2CC7A300A042E8 /* UIControl+BlocksKit.m in Sources */,
-				185DABAD1CBFDC970019C5A3 /* TQideaTableViewCell.m in Sources */,
+				185DABAD1CBFDC970019C5A3 /* TQideaTableViewCell.mm in Sources */,
 				18D3CB781CC0A3FA00816BD0 /* TQCustomizedCell.m in Sources */,
 				18D3CB871CC0D13600816BD0 /* TQPersonalTailorViewController.m in Sources */,
 				BB1769391C7B045D00CE947C /* RegMobileViewController.m in Sources */,
@@ -4229,7 +4229,7 @@
 				BB1661861C3D029200D318BE /* MBProgressHUD+Add.m in Sources */,
 				185F59691CC4CAD600F605F5 /* NSObject+MJClass.m in Sources */,
 				BB63F6111C2CC7A300A042E8 /* HotViewController.m in Sources */,
-				185F59731CC4CCA700F605F5 /* TQIdeaDetailModel.m in Sources */,
+				185F59731CC4CCA700F605F5 /* TQIdeaDetailModel.mm in Sources */,
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
 				BB5E4F301CBF7B5800F8C1D4 /* Test.cpp in Sources */,
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
@@ -4274,7 +4274,7 @@
 				185F596B1CC4CAD600F605F5 /* NSObject+MJKeyValue.m in Sources */,
 				18AAD5651C993CD100438E18 /* PaySelectViewController.m in Sources */,
 				BB5E4FB41CBF7D1B00F8C1D4 /* TextCommentView.m in Sources */,
-				185DABA71CBFDC970019C5A3 /* TQDetailedTableViewController.m in Sources */,
+				185DABA71CBFDC970019C5A3 /* TQDetailedTableViewController.mm in Sources */,
 				189D8A8E1C97982100E7D16D /* SlideBaseViewController.m in Sources */,
 				BB5E4FB31CBF7D1B00F8C1D4 /* TextChatView.m in Sources */,
 				BB63F60A1C2CC7A300A042E8 /* VideoCell.m in Sources */,
