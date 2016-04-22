@@ -78,10 +78,10 @@ void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
-        profit.set_teamname("组合");
+        profit.set_teamname("日收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("长线跟短线有关系吗");
+        profit.set_focus("日收益");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
@@ -99,10 +99,10 @@ void HttpConnection::RequestOperateStockProfitOrderByMonth(int teamId, int start
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
-        profit.set_teamname("组合");
+        profit.set_teamname("月收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("长线跟短线有关系吗");
+        profit.set_focus("月收益");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
@@ -120,10 +120,10 @@ void HttpConnection::RequestOperateStockProfitOrderByTotal(int teamId, int start
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
-        profit.set_teamname("组合");
+        profit.set_teamname("总收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("长线跟短线有关系吗");
+        profit.set_focus("总收益");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);

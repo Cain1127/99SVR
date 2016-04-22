@@ -221,9 +221,9 @@
 }
 
 -(void)dealloc{
-   
     DLog(@"释放");
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_RECORD_BUSINESS_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_WAREHOUSE__VC object:nil];
 }
 
 -(void)viewDidDisappear:(BOOL)animated{

@@ -9,10 +9,10 @@
 #define icon_w (ValueWithTheIPhoneModelString(@"100,120,140,160")-30-10) //头像的大小
 
 #import "StockMacro.h"
-#import "TraderHomeCell.h"
+#import "StockHomeCell.h"
 #import "ShareFunction.h"
 
-@implementation TraderHomeCell
+@implementation StockHomeCell
 
 
 -(void)initUI{

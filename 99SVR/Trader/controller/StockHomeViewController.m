@@ -1,31 +1,30 @@
 
 
 
-#import "TraderViewController.h"
+#import "StockHomeViewController.h"
 #import "SliderMenuView.h"
 #import "ShareFunction.h"
 #import "SearchController.h"
-#import "TraderHomeCell.h"
 #import "StockMacro.h"
 #import "StockDealViewController.h"
-#import "TraderTableViewModel.h"
+#import "StockHomeTableViewModel.h"
 
-@interface TraderViewController ()
+@interface StockHomeViewController ()
 /**滑动控制器*/
 @property (nonatomic, strong) SliderMenuView *sliderMenuView;
 /**日*/
 @property (nonatomic, strong) UITableView *dayTab;
-@property (nonatomic ,strong) TraderTableViewModel *dayTableViewModel;
+@property (nonatomic ,strong) StockHomeTableViewModel *dayTableViewModel;
 /**月*/
 @property (nonatomic, strong) UITableView *monTab;
-@property (nonatomic ,strong) TraderTableViewModel *monTableViewModel;
+@property (nonatomic ,strong) StockHomeTableViewModel *monTableViewModel;
 /**总的*/
 @property (nonatomic, strong) UITableView *totalTab;
-@property (nonatomic ,strong) TraderTableViewModel *totalTableViewModel;
+@property (nonatomic ,strong) StockHomeTableViewModel *totalTableViewModel;
 
 @end
 
-@implementation TraderViewController
+@implementation StockHomeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -138,23 +137,23 @@
     return _totalTab;
 }
 
--(TraderTableViewModel *)dayTableViewModel{
+-(StockHomeTableViewModel *)dayTableViewModel{
     if (!_dayTableViewModel) {
-        _dayTableViewModel = [[TraderTableViewModel alloc]initWithViewController:self];
+        _dayTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:self];
     }
     return _dayTableViewModel;
 }
 
--(TraderTableViewModel *)monTableViewModel{
+-(StockHomeTableViewModel *)monTableViewModel{
     if (!_monTableViewModel) {
-        _monTableViewModel = [[TraderTableViewModel alloc]initWithViewController:self];
+        _monTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:self];
     }
     return _monTableViewModel;
 }
 
--(TraderTableViewModel *)totalTableViewModel{
+-(StockHomeTableViewModel *)totalTableViewModel{
     if (!_totalTableViewModel) {
-        _totalTableViewModel = [[TraderTableViewModel alloc]initWithViewController:self];
+        _totalTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:self];
     }
     return _totalTableViewModel;
 }

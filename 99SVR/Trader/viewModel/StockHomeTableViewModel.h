@@ -3,9 +3,9 @@
 /**高手操盘TableViewModel首页*/
 
 
-#import "BaseTableViewModel.h"
+#import <Foundation/Foundation.h>
 
-@interface TraderTableViewModel : NSObject<UITableViewDelegate,UITableViewDataSource>
+@interface StockHomeTableViewModel : NSObject<UITableViewDelegate,UITableViewDataSource>
 - (instancetype)initWithViewController:(UIViewController *)viewController;
 /**
  *  数据源
