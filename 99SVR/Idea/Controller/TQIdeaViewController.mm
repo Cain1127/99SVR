@@ -50,6 +50,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [_headView addSubview:_lblContent];
     title.text = @"专家观点";
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(mailboxClick) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
+
     [self.view addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
     
@@ -114,7 +115,8 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 -(void)mailboxClick {
-    TQMailboxViewController *mailbox = [[TQMailboxViewController alloc] init];
+    UIStoryboard *board = [UIStoryboard storyboardWithName: @"TQMailboxViewController" bundle: nil];
+    TQMailboxViewController *mailbox = [board instantiateViewControllerWithIdentifier: @"MailboxViewController"];
     [self.navigationController pushViewController:mailbox animated:YES];
 }
 

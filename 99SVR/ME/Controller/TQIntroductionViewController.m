@@ -9,34 +9,30 @@
 #import "TQIntroductionViewController.h"
 #import "TQNoCustomHeader.h"
 #import "TQIntroductCell.h"
-#import "TQSectionsHeaderView.h"
 
 @interface TQIntroductionViewController ()
-/** <#desc#> */
-@property (nonatomic ,weak)TQSectionsHeaderView *Sectionsheader;
 @end
 
 @implementation TQIntroductionViewController
 static NSString *const IntroductCell = @"IntroductCell";
-static NSString *const Sectionsheader = @"Sectionsheader";
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self setupHeaderView];
     
     
 
 }
 -(void)setupHeaderView {
+    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQIntroductCell class]) bundle:nil] forCellReuseIdentifier:IntroductCell];
+
     //头部视图
     UIView *headerView = [[[NSBundle mainBundle] loadNibNamed:@"TQNoCustomHeader" owner:nil options:nil] lastObject];
-    headerView.frame = CGRectMake(0, 0, 0, 200);
+//    headerView.frame = CGRectMake(0, 0, 0, 200);
     self.tableView.tableHeaderView = headerView;
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQIntroductCell class]) bundle:nil] forCellReuseIdentifier:IntroductCell];
+    
     //注册组头部视图
-    [self.tableView registerClass:[TQSectionsHeaderView class] forHeaderFooterViewReuseIdentifier:Sectionsheader];
-
 }
 
 
@@ -47,7 +43,7 @@ static NSString *const Sectionsheader = @"Sectionsheader";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return 10;
 }
 
 
@@ -62,12 +58,8 @@ static NSString *const Sectionsheader = @"Sectionsheader";
     return 200;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    TQSectionsHeaderView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:Sectionsheader];
-    _Sectionsheader = header;
-    return header;
-}
+
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -1482,14 +1482,23 @@ private:
     uint32	_id;
     uint32	_viewpointid;
     string	_title;
+    //提问姓名
     string	_askauthorname;
+    //提问内容
     uint32	_askauthorheadid;
+    //提问内容
     string	_askcontent;
+    //提问者时间
     string	_asktime;
+    //    回答者ID
     string	_answerauthorid;
+//    回答者姓名
     string	_answerauthorname;
+//    回答者头像
     string	_answerauthoricon;
+    //回答者时间
     string	_answertime;
+    //回答内容
     string	_answercontent;
     uint32	_fromclient;
     

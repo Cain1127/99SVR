@@ -16,19 +16,19 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x6h-8C-NNC">
-                        <rect key="frame" x="13" y="18" width="313" height="20.5"/>
+                        <rect key="frame" x="13" y="28" width="313" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1zF-m3-ZSe">
-                        <rect key="frame" x="13" y="74.5" width="313" height="20.5"/>
+                        <rect key="frame" x="13" y="84.5" width="313" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KSh-md-EoA">
-                        <rect key="frame" x="13" y="43" width="323" height="21"/>
+                        <rect key="frame" x="13" y="53" width="323" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="NTi-eL-LkL"/>
                         </constraints>
@@ -43,7 +43,7 @@
                     <constraint firstItem="1zF-m3-ZSe" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="5sO-8a-Xkj"/>
                     <constraint firstItem="1zF-m3-ZSe" firstAttribute="top" secondItem="KSh-md-EoA" secondAttribute="bottom" constant="10" id="DVy-mS-eFG"/>
                     <constraint firstAttribute="bottomMargin" secondItem="1zF-m3-ZSe" secondAttribute="bottom" constant="10" id="OC9-bx-3jy"/>
-                    <constraint firstItem="x6h-8C-NNC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="10" id="Yy8-ge-5JB"/>
+                    <constraint firstItem="x6h-8C-NNC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="20" id="Yy8-ge-5JB"/>
                     <constraint firstAttribute="trailingMargin" secondItem="x6h-8C-NNC" secondAttribute="trailing" constant="5" id="dzE-2w-u13"/>
                     <constraint firstAttribute="trailingMargin" secondItem="1zF-m3-ZSe" secondAttribute="trailing" constant="5" id="iTX-4H-qeQ"/>
                     <constraint firstItem="x6h-8C-NNC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="uKG-Lo-f7y"/>
