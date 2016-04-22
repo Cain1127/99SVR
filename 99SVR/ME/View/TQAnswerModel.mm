@@ -77,6 +77,33 @@ uint32	_fromclient;
 
     return self;
 }
+- (id)initWithRplay:(MailReply *)MailReply;
+{
+    self = [super init];
+    
+    _answercontent = [NSString stringWithUTF8String:MailReply->answercontent().c_str()];
+    
+    _answerauthorid = [NSString stringWithUTF8String:MailReply->answerauthorid().c_str()];
+    
+    _answerauthoricon = [NSString stringWithUTF8String:MailReply->answerauthoricon().c_str()];
+    _answerauthorname = [NSString stringWithUTF8String:MailReply->answerauthorname().c_str()];
+    _answertime = [NSString stringWithUTF8String:MailReply->answertime().c_str()];
+    _askauthorname = [NSString stringWithUTF8String:MailReply->askauthorname().c_str()];
+//    _askstock = [NSString stringWithUTF8String:MailReply->askstock().c_str()];
+    _askcontent = [NSString stringWithUTF8String:MailReply->askcontent().c_str()];
+    _asktime = [NSString stringWithUTF8String:MailReply->asktime().c_str()];
+    
+    
+    _userID = MailReply->id();
+    _askauthorheadid = MailReply->askauthorheadid();
+    _fromclient = MailReply->fromclient();
+    
+    [self settingTime:_answertime];
+    [self settingTime:_asktime];
+
+    return self;
+}
+
 - (void)settingTime:(NSString *)_publishtime
 {
     UserInfo *userinfo = [UserInfo sharedUserInfo];
