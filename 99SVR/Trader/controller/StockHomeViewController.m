@@ -82,18 +82,33 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMonData:) name:MESSAGE_STOCK_HOME_MON__VC object:nil];
     //total
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+    [kHTTPSingle RequestOperateStockProfitByDay:0 start:0 count:10];
+    [kHTTPSingle RequestOperateStockProfitByMonth:0 start:0 count:10];
+    [kHTTPSingle RequestOperateStockProfitByAll:0 start:0 count:10];
+    
+
+    
 }
 
 
 #pragma mark 刷新数据
 -(void)refreshDayData:(NSNotification *)notfi{
     WeakSelf(self);
+    
+    DLog(@"天的数据");
+    
 }
 -(void)refreshMonData:(NSNotification *)notfi{
     WeakSelf(self);
+    DLog(@"月的数据");
+    
+    
 }
 -(void)refreshTotalData:(NSNotification *)notfi{
     WeakSelf(self);
+    DLog(@"总的的数据");
+
+    
 }
 
 
