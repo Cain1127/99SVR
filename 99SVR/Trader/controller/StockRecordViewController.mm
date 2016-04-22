@@ -79,8 +79,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshWareHouseData:) name:MESSAGE_STOCK_WAREHOUSE__VC object:nil];
 
     
-    [kHTTPSingle RequestOperateStockTransaction:100];
-    [kHTTPSingle RequestOperateStocks:100];
+//    [kHTTPSingle RequestOperateStockTransaction:100];
+//    [kHTTPSingle RequestOperateStocks:100];
 
     
 }
