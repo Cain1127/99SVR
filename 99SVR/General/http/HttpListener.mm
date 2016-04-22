@@ -13,24 +13,24 @@
 #import "TQIdeaDetailModel.h"
 #import "TQMessageModel.h"
 #import "TQAnswerModel.h"
+
 /**
  *  闪屏响应
  */
 void SplashImageListener::onResponse(Splash& info){
     
 }
+
 /**
- *  请求观点列表
- */
+*  请求观点列表
+*/
 void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
+    NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<infos.size(); i++) {
-        NSMutableArray *ary = [NSMutableArray array];
-        for (int i=0; i<infos.size(); i++) {
-            TQIdeaModel *model = [[TQIdeaModel alloc] initWithViewpointSummary:&infos[i]];
-            [ary addObject:model];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:ary];
+        TQIdeaModel *model = [[TQIdeaModel alloc] initWithViewpointSummary:&infos[i]];
+        [ary addObject:model];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:ary];
 }
 
 /**
@@ -40,11 +40,19 @@ void ViewpointDetailListener::onResponse(ViewpointDetail& infos){
     TQIdeaDetailModel *model = [[TQIdeaDetailModel alloc] initWithViewpointDetail:&infos];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTDETAIL_VC object:model];
 }
+
 /**
- *  请求观点回复
+ *  请求观点列表
  */
 void ReplyListener::onResponse(vector<Reply>& infos){
-    
+//    for (int i=0; i<infos.size(); i++) {
+//        NSMutableArray *ary = [NSMutableArray array];
+//        for (int i=0; i<infos.size(); i++) {
+//            TQIdeaModel *model = [[TQIdeaModel alloc] initWithViewpointSummary:&infos[i]];
+//            [ary addObject:model];
+//        }
+//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:ary];
+//    }
 }
 /**
  *  回复观点
@@ -56,25 +64,28 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
  *  请求操盘列表
  */
 void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day){
-     
+    
+    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
+    
+    
+    
+    
 }
 /**
  *  请求操盘详情
  */
-void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks){
+void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks,uint32 currLevelId){
     
     int vipLevel = 3;
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     //股票头部数据
-    StockDealModel *headerModel = [[StockDealModel alloc]initWithProfit:profit];
+    StockDealModel *headerModel = [[StockDealModel alloc]initWithStockDealHeaderData:profit];
     //头部数据
     muDic[@"headerModel"] = headerModel;
-    
     //股票数据
-    StockDealModel *stockDataModel = [[StockDealModel alloc]initWithStockData:data];
+    StockDealModel *stockDataModel = [[StockDealModel alloc]initWithStockDealStockData:data];
     muDic[@"stockModel"] = stockDataModel;
-    
     //交易详情
     NSMutableArray *transArray = [NSMutableArray array];
     if (vipLevel!=0) {
@@ -82,11 +93,10 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
         for (size_t i =0; i < trans.size(); i ++) {
             
             OperateStockTransaction *transaction = &trans[i];
-            StockDealModel *transactionModel = [[StockDealModel alloc]initWithOperateStockTransaction:transaction];
+            StockDealModel *transactionModel = [[StockDealModel alloc]initWithStockDealBusinessRecoreData:transaction];
             transactionModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
             [transArray addObject:transactionModel];
         }
-        
     }else{
      
         StockDealModel *model = [[StockDealModel alloc]init];
@@ -101,7 +111,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
         for (size_t i =0; i < stocks.size(); i ++) {
             
             OperateStocks *operateStocks = &stocks[i];
-            StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithOperateStocks:operateStocks];
+            StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithStockDealWareHouseRecoreData:operateStocks];
             operateStocksModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
             [stocksArray addObject:operateStocksModel];
         }
@@ -114,20 +124,41 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
 }
+
 /**
  *  请求操盘详情--交易记录
  */
 void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>& trans){
     
+    NSMutableArray *muArray = [NSMutableArray array];
+    for (size_t i=0; i!=trans.size(); i++) {
+        
+        OperateStockTransaction *operateStockTransaction = &trans[i];
+        StockDealModel *model = [[StockDealModel alloc]initWithStockRecordBusinessData:operateStockTransaction];
+        [muArray addObject:model];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:muArray];
 }
 /**
  *  请求操盘详情--持仓情况
  */
 void OperateStocksListener::onResponse(vector<OperateStocks>& stocks){
     
+    
+    NSMutableArray *muArray = [NSMutableArray array];
+    for (size_t i=0; i!=stocks.size(); i++) {
+        
+        OperateStocks *stocksModel = &stocks[i];
+        StockDealModel *model = [[StockDealModel alloc]initWithStockRecordWareHouseData:stocksModel];
+        [muArray addObject:model];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
+    
 }
 
-void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team recommendTeam, TeamPriviteServiceSummaryPack& teamSummaryPack){
+void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team recommendTeam, TeamPrivateServiceSummaryPack& teamSummaryPack){
     
 }
 
@@ -139,7 +170,7 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
     
 }
 
-void TeamPriviteServiceSummaryPackListener::onResponse(vector<TeamPriviteServiceSummaryPack>& infos){
+void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateServiceSummaryPack>& infos, uint32 currLevelId){
     
 }
 
@@ -196,8 +227,6 @@ void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info)
 
     
 }
-  
-
 
 void MailReplyListener::onResponse(vector<MailReply>& info)
 {

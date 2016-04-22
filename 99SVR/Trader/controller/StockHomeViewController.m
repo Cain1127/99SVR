@@ -1,29 +1,30 @@
 
 
 
-#import "TraderViewController.h"
+#import "StockHomeViewController.h"
 #import "SliderMenuView.h"
 #import "ShareFunction.h"
 #import "SearchController.h"
-#import "TraderHomeCell.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 #import "StockDealViewController.h"
-#import "TraderTableViewModel.h"
+#import "StockHomeTableViewModel.h"
 
-@interface TraderViewController ()
+@interface StockHomeViewController ()
 /**滑动控制器*/
 @property (nonatomic, strong) SliderMenuView *sliderMenuView;
-@property (nonatomic ,strong) TraderTableViewModel *tableViewModel;
 /**日*/
 @property (nonatomic, strong) UITableView *dayTab;
+@property (nonatomic ,strong) StockHomeTableViewModel *dayTableViewModel;
 /**月*/
 @property (nonatomic, strong) UITableView *monTab;
+@property (nonatomic ,strong) StockHomeTableViewModel *monTableViewModel;
 /**总的*/
 @property (nonatomic, strong) UITableView *totalTab;
+@property (nonatomic ,strong) StockHomeTableViewModel *totalTableViewModel;
 
 @end
 
-@implementation TraderViewController
+@implementation StockHomeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -40,7 +41,6 @@
 #pragma mark initUi
 -(void)initUi{
     
-
     [self.navigationController.navigationBar setHidden:YES];
     UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
@@ -75,7 +75,8 @@
 #pragma mark initData
 -(void)initData{
     
-    _tableViewModel = [[TraderTableViewModel alloc]initWithViewController:self withDayTabViews:@[self.dayTab,self.monTab,self.totalTab]];
+
+    
 }
 
 #pragma mark nabbar左右两边按钮事件
@@ -107,6 +108,8 @@
     if (!_dayTab) {
         
         _dayTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,ScreenHeight} withStyle:UITableViewStylePlain];
+        _dayTab.delegate = self.dayTableViewModel;
+        _dayTab.dataSource = self.dayTableViewModel;
     }
     
     return _dayTab;
@@ -117,6 +120,8 @@
     if (!_monTab) {
      
         _monTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,ScreenHeight} withStyle:UITableViewStylePlain];
+        _monTab.delegate = self.monTableViewModel;
+        _monTab.dataSource = self.monTableViewModel;
     }
     return _monTab;
 }
@@ -125,8 +130,31 @@
     
     if (!_totalTab) {
         _totalTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,ScreenHeight} withStyle:UITableViewStylePlain];
+        _totalTab.delegate = self.totalTableViewModel;
+        _totalTab.dataSource = self.totalTableViewModel;
     }
     return _totalTab;
+}
+
+-(StockHomeTableViewModel *)dayTableViewModel{
+    if (!_dayTableViewModel) {
+        _dayTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:self];
+    }
+    return _dayTableViewModel;
+}
+
+-(StockHomeTableViewModel *)monTableViewModel{
+    if (!_monTableViewModel) {
+        _monTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:self];
+    }
+    return _monTableViewModel;
+}
+
+-(StockHomeTableViewModel *)totalTableViewModel{
+    if (!_totalTableViewModel) {
+        _totalTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:self];
+    }
+    return _totalTableViewModel;
 }
 
 
@@ -137,42 +165,5 @@
     return tableView;
 }
 
-#pragma mark tableView delegate dataSource
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    
-    return 20;
-    
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return ValueWithTheIPhoneModelString(@"150,180,200");
-}
-
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
-}
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    static NSString * cellId = @"cellId";
-    
-    TraderHomeCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        
-        cell = [[TraderHomeCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        
-    }
-    
-    cell.backgroundColor = [UIColor clearColor];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    return cell;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    [self.navigationController pushViewController:[[StockDealViewController alloc]init] animated:YES];
-    
-}
 
 @end

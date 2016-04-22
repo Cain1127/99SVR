@@ -55,7 +55,8 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [_controlWeak.view hideToastActivity];
         [ProgressHUD showSuccess:@"加入房间成功"];
-        RoomViewController *roomView = [[RoomViewController alloc] initWithModel:_room];
+        RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+        [roomView setRoom:_room];
         [_controlWeak.navigationController pushViewController:roomView animated:YES];
     });
     

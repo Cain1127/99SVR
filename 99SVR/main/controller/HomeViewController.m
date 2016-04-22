@@ -8,7 +8,9 @@
 
 #import "HomeViewController.h"
 #import "ZLTabBar.h"
+#import "UIButton+WebCache.h"
 #import "ConnectRoomViewModel.h"
+#import "RoomViewController.h"
 #import "AlertFactory.h"
 #import "Toast+UIView.h"
 #import "DecodeJson.h"
@@ -16,6 +18,7 @@
 #import "TextCell.h"
 #import "NavigationViewController.h"
 #import "NSJSONSerialization+RemovingNulls.h"
+#import "UIImageFactory.h"
 #import "BaseService.h"
 #import "IndexViewController.h"
 #import "TeacherModel.h"
@@ -35,6 +38,7 @@
 #import "NewDetailsViewController.h"
 #import "RightImageButton.h"
 #import "MJRefresh.h"
+#import "PlayIconView.h"
 
 #define kPictureHeight 0.3 * kScreenHeight
 
@@ -52,7 +56,7 @@ typedef enum : NSUInteger
     
 } CJHomeRequestType;
 
-@interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate>
+@interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate,PlayIconDelegate>
 
 @property (nonatomic,strong) NSMutableArray *aryBanner;
 @property (nonatomic,strong) UITableView *tableView;
@@ -63,6 +67,9 @@ typedef enum : NSUInteger
 @property (nonatomic, assign) CJHomeRequestType refreshStatus;
 @property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
 
+@property (nonatomic,strong) PlayIconView *iConView;
+@property (nonatomic,strong) UIButton *btnPlay;
+
 @end
 
 @implementation HomeViewController
@@ -71,7 +78,6 @@ typedef enum : NSUInteger
 #pragma mark - init default used UI
 - (void)createScroll
 {
-    
     if (_scrollView)
     {
         return ;
@@ -95,7 +101,7 @@ typedef enum : NSUInteger
 
 - (void)initTableView
 {
-    _tableView = [[UITableView alloc] initWithFrame:Rect(0.0f, 10.0f + kNavigationHeight, kScreenWidth, kScreenHeight - (10.0f + kNavigationHeight + 5.0f + 50.0f)) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0.0f, kNavigationHeight, kScreenWidth, kScreenHeight - (10.0f + kNavigationHeight + 5.0f + 50.0f)) style:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -150,6 +156,68 @@ typedef enum : NSUInteger
     [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [_tableView.gifHeader loadDefaultImg];
     [_tableView.gifHeader beginRefreshing];
+    
+    _iConView = [[PlayIconView alloc] initWithFrame:Rect(0, kScreenHeight-108, kScreenWidth, 64)];
+    [self.view addSubview:_iConView];
+    _iConView.hidden = YES;
+    _iConView.delegate = self;
+    
+    _btnPlay = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.view addSubview:_btnPlay];
+    _btnPlay.frame = Rect(kScreenWidth-55, kScreenHeight-98, 44, 44);
+    [UIImageFactory createBtnImage:@"home_play_icon" btn:_btnPlay state:UIControlStateNormal];
+    _btnPlay.hidden=YES;
+    [_btnPlay addTarget:self action:@selector(showPlayInfo) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)showPlayInfo
+{
+    _btnPlay.hidden = YES;
+    _iConView.hidden = NO;
+}
+
+- (void)showIconView
+{
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    NSString *strUrl=nil;
+    if([roomView.room.croompic length]==0)
+    {
+        strUrl = @"";
+    }
+    else
+    {
+        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,roomView.room.croompic];
+    }
+    [_iConView.imgView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
+    [_iConView.lblName setText:roomView.room.cname];
+    [_iConView.lblNumber setText:roomView.room.nvcbid];
+    [_iConView.btnQuery setTitle:roomView.room.ncount forState:UIControlStateNormal];
+    _iConView.hidden = NO;
+}
+
+- (void)exitPlay{
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    [roomView exitRoom];
+    _iConView.hidden = YES;
+}
+
+- (void)gotoPlay{
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    [self.navigationController pushViewController:roomView animated:YES];
+}
+
+- (void)hidenPlay{
+    _btnPlay.hidden = NO;
+    _iConView.hidden = YES;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if (roomView.room!=nil) {
+        [self showIconView];
+    }
 }
 
 - (void)updateRefresh

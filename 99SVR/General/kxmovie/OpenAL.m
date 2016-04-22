@@ -53,8 +53,6 @@
        ticketCondition = [[NSCondition alloc] init];
        AVAudioSession *session = [AVAudioSession sharedInstance];
        [session setCategory:AVAudioSessionCategoryPlayback error:nil];
-       [session setActive:YES error:nil];
-       [session setPreferredSampleRate:48000 error:nil];
        [[NSNotificationCenter defaultCenter] addObserver:self
                                                 selector:@selector(handleAudioNotify:) name:AVAudioSessionInterruptionNotification object:nil];
         return self;
@@ -99,11 +97,6 @@
         if (newContext != NULL){
             alcMakeContextCurrent(mContext);
             alcProcessContext(mContext);
-//            alGenBuffers(1, &buff);
-//            if((error = alGetError()) != AL_NO_ERROR){
-//                DLog(@"err:%@",[self GetALCErrorString:error]);
-//                printf("Error Generating Buffers: %x\n", error);
-//            }
             alGenSources(1, &outSourceId);
             if(alGetError() != AL_NO_ERROR){
                 DLog(@"err:%@",[self GetALCErrorString:error]);
@@ -122,16 +115,9 @@
         ALenum  error =AL_NO_ERROR;
         ALuint bufferID = 0;
         alGenBuffers(1, &bufferID);
-        int aSampleRate,aBit,aChannel;
-        aSampleRate = 48000;
-        aBit = 16;
-        aChannel = 2;
-//        ALenum format=AL_FORMAT_STEREO16;
-        
-        alBufferData(bufferID, AL_FORMAT_STEREO16,data,(ALsizei)dataSize,44100);
-        
+        int aSampleRate = 48000;
+        alBufferData(bufferID, AL_FORMAT_STEREO16,data,(ALsizei)dataSize,aSampleRate);
         if ((error =alGetError())!=AL_NO_ERROR){
-            DLog(@"err:%@",[self GetALCErrorString:error]);
             [ticketCondition unlock];
             return;
         }

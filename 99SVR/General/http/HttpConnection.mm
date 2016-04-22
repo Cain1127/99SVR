@@ -1,32 +1,125 @@
 #include "HttpConnection.h"
 #import "UserInfo.h"
+#include "Http.h"
+#include "http_common.h"
+#include "Thread.h"
+#include <cstring>
+#include "proto_err.h"
+
+#define HTTP_API "http://hall.99ducaijing.cn:8081"
+
+static ThreadVoid http_request(void* _param)
+{
+    HttpThreadParam* param = (HttpThreadParam*)_param;
+    Http http;
+    http.register_http_listener(param->http_listener);
+    http.register_parser(param->parser);
+    
+    http.request(param->url, param->request);
+    
+    if(param)
+    {
+        if ( param->request ) {
+            delete param->request;
+        }
+        delete param;
+    }
+    
+    ThreadReturn;
+}
+
+static void http_request_asyn(HttpListener* uiListener, ParseJson jsonPaser, RequestParamter* httpParam)
+{
+    HttpThreadParam* param = new HttpThreadParam();
+    strcpy(param->url, HTTP_API);
+    param->parser = jsonPaser;
+    param->http_listener = uiListener;
+    param->request = httpParam;
+    
+    Thread::start(http_request, param);
+}
 
 //请求闪屏图片
 void HttpConnection::RequestSplashImage(SplashImageListener* listener)
 {
     Splash info;
+    info.set_text("info");
+    info.set_url("http://www.baidu.com");
     info.set_imageurl("http://xx.x.x/x.png");
+    //model
     listener->onResponse(info);
+}
+
+void testRequest(const char *curl)
+{
+//    HttpThreadParam* param = new HttpThreadParam();
+//    strcpy(param->url, curl);
+//    param->parser = parse_viewpoint;
+//    param->http_listener = listener;
+//    Thread::start(http_request, param);
+}
+
+void parse_viewpoint(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    JsonValue value;
+    JsonReader reader;
+    std::vector<ViewpointSummary> vec_viewpoint;
+    int size_ = 0;
+    int i = 0;
+    ViewpointSummaryListener* viewpoint_listener = (ViewpointSummaryListener*)listener;
+    try
+    {
+        // 解析逻辑
+        //..
+        if (reader.parse(strJson, value))
+        {
+            JsonValue& viewpoints = value["data"];
+            if(!viewpoints.isNull())
+            {
+                size_ = viewpoints.size();
+                vec_viewpoint.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    ViewpointSummary viewpoint;
+                    viewpoint.set_authorid(viewpoints[i]["authorid"].asString());
+                    viewpoint.set_authorname(viewpoints[i]["authorname"].asString());
+                    viewpoint.set_authoricon(viewpoints[i]["authoricon"].asString());
+                    viewpoint.set_viewpointid(atoi((viewpoints[i]["viewpointid"].asString()).c_str()));
+                    viewpoint.set_publishtime(viewpoints[i]["publishtime"].asString());
+                    viewpoint.set_content(viewpoints[i]["content"].asString());
+                    viewpoint.set_replycount(atoi((viewpoints[i]["replycount"].asString()).c_str()));
+                    viewpoint.set_giftcount(atoi((viewpoints[i]["giftcount"].asString()).c_str()));
+                    vec_viewpoint.push_back(viewpoint);
+                }
+                viewpoint_listener->onResponse(vec_viewpoint);
+            }
+            else
+            {
+                viewpoint_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            viewpoint_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex)
+    {
+        viewpoint_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
 }
 
 // 请求观点列表
 void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requestCount, ViewpointSummaryListener* listener){
-    
-    std::vector<ViewpointSummary> infos;
-    for (int i=0; i<20; i++) {
-        ViewpointSummary summary;
-        summary.set_authoricon("personal_user_head");
-        char cBuf[10]={0};
-        sprintf(cBuf,"%d",80000+i);
-        summary.set_authorid(cBuf);
-        summary.set_authorname("第九");
-        summary.set_content("这是一段用来测试的文字.....需要很长很长很长");
-        summary.set_viewpointid(i+1);
-        summary.set_replycount(0);
-        summary.set_publishtime("20160109122340");
-        infos.push_back(summary);
-    }
-    listener->onResponse(infos);
+
+    char curl[512];
+    sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=Viewpoint/viewpointList&authorid=%d&startid=%d&pagecount=%d",authorId,startId,requestCount);
+    HttpThreadParam* param = new HttpThreadParam();
+    strcpy(param->url, curl);
+    param->parser = parse_viewpoint;
+    param->http_listener = listener;
+    Thread::start(http_request, param);
 }
 
 // 请求观点详情
@@ -47,11 +140,9 @@ void HttpConnection::RequestReply(int viewpointId, int startId, int requestCount
         Reply summary;
         char cBuf[10]={0};
         sprintf(cBuf,"%d",80000+i);
-        
         summary.set_replytid(i+1);
         summary.set_viewpointid(viewpointId);
         summary.set_parentreplyid(0);
-
         summary.set_authorid(cBuf);
         summary.set_authorname("第九");
         summary.set_authoricon("personal_user_head");
@@ -65,7 +156,7 @@ void HttpConnection::RequestReply(int viewpointId, int startId, int requestCount
 }
 
 // 回复观点
-void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId, char* content, PostReplyListener* listener){
+void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId, int fromAuthorId, char* content, PostReplyListener* listener){
 
 }
 
@@ -78,10 +169,10 @@ void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
-        profit.set_teamname("组合");
+        profit.set_teamname("日收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("长线跟短线有关系吗");
+        profit.set_focus("日收益");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
@@ -99,10 +190,10 @@ void HttpConnection::RequestOperateStockProfitOrderByMonth(int teamId, int start
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
-        profit.set_teamname("组合");
+        profit.set_teamname("月收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("长线跟短线有关系吗");
+        profit.set_focus("月收益");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
@@ -120,10 +211,10 @@ void HttpConnection::RequestOperateStockProfitOrderByTotal(int teamId, int start
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
-        profit.set_teamname("组合");
+        profit.set_teamname("总收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("长线跟短线有关系吗");
+        profit.set_focus("总收益");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
@@ -175,16 +266,50 @@ void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAll
         stock.set_profitmoney(888);
         stocks.push_back(stock);
     }
-    listener->onResponse(profit,data, trans,stocks);
+    listener->onResponse(profit,data, trans,stocks,operateId);
 }
 
 // 请求操盘详情--持仓情况
 void HttpConnection::RequestOperateStocks(int operateId, OperateStocksListener* listener){
     
+    std::vector<OperateStocks>house;
+    for (int i=0; i!=10; i++) {
+        
+        OperateStocks stock;
+        stock.set_stockname("仓库详情");
+        stock.set_operateid(i+100);
+        stock.set_stockid("1008699");
+        stock.set_count(i+110);
+        stock.set_cost(10000+1);
+        stock.set_profitrate(1+i);
+        stock.set_profitmoney(20000+i);
+        stock.set_currprice(30000+i);
+        house.push_back(stock);
+    }
+    listener->onResponse(house);
 }
 
 // 请求操盘详情--交易记录
-void HttpConnection::RequestOperateStockTransaction(int operateId, OperateStockTransactionListener* listener){
+void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, int count, OperateStockTransactionListener* listener){
+    
+    std::vector<OperateStockTransaction>trans;
+    
+    for (int i=0; i!=5; i++) {
+        
+        OperateStockTransaction stock;
+        stock.set_stockname("交易记录");
+        stock.set_operateid(i+200);
+        stock.set_stockid("1008699");
+        stock.set_count(i+220);
+        stock.set_money(110000+1);
+        stock.set_price(9999);
+        stock.set_time("2015 15 15");
+        stock.set_buytype("买入 卖出");
+        trans.push_back(stock);
+    }
+    listener->onResponse(trans);
+
+    
     
 }
 
@@ -202,7 +327,7 @@ void HttpConnection::RequestMyPrivateService(int userId, MyPrivateServiceListene
 void HttpConnection::RequestBuyPrivateServicePage(int userId, BuyPrivateServiceListener* listener){}
 
 // 请求战队的私人定制缩略信息
-void HttpConnection::RequestTeamPriviteServiceSummaryPack(int teamId, TeamPriviteServiceSummaryPackListener* listener){}
+void HttpConnection::RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivateServiceSummaryPackListener* listener){}
 
 // 请求私人定制详情
 void HttpConnection::RequestPrivateServiceDetail(int id, PrivateServiceDetailListener* listener){}
@@ -218,7 +343,7 @@ void HttpConnection::RequestTeamList(TeamListListener* listener){}
 void HttpConnection::RequestTeamIntroduce(int teamId, TeamIntroduceListener* listener){}
 
 // 请求贡献榜
-void HttpConnection::RequestConsumeRank(int teamId, ConsumeRankListener* listener){}
+void HttpConnection::RequestConsumeRankList(int teamId, ConsumeRankListener* listener){}
 
 // 提问
 void HttpConnection::PostAskQuestion(int teamId, string stock, string question, AskQuestionListener* listener){
@@ -250,7 +375,7 @@ void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswe
     {
         QuestionAnswer info;
         info.set_id(i);
-        info.set_answerauthoricon("personal_user_head");
+        info.set_answerauthorid("personal_user_head");
         info.set_answerauthorid("80060");
         info.set_answerauthorname("牛出没");
         info.set_answercontent("测试数据:这里是回答内容!这里是回答内容!这里是回答内容!这里是回答内容这里是回答内容这里是回答内容");
@@ -271,7 +396,7 @@ void HttpConnection::RequestMailReply(int startId, int count, MailReplyListener*
         MailReply info;
         info.set_id(i);
         info.set_viewpointid(1);
-        info.set_answerauthoricon("personal_user_head");
+//        info.set_answerauthoricon("personal_user_head");
         info.set_answerauthorid("80060");
         info.set_answerauthorname("牛出没");
         info.set_answercontent("是啊，真不错。这里是回答内容这里是回答内容这里是回答内容这里是回答内容");
@@ -330,27 +455,27 @@ void HttpConnection::PostAnswer(int questionId, string content, HttpListener* li
     
 }
 
-void HttpConnection::RequestHomePage(std::string devType, HomePageListener* listener)//首页列表数据
+void HttpConnection::RequestHomePage(HomePageListener* listener)//首页列表数据
 {
     
 }
 
-void HttpConnection::RequestFollowTeacher(int userId, std::string devType, FollowTeacherListener* listener)//关注的讲师
+void HttpConnection::RequestFollowTeacher(FollowTeacherListener* listener)//关注的讲师
 {
     
 }
 
-void HttpConnection::RequestFootPrint(int userId, std::string devType, FootPrintListener* listener)//足迹url
+void HttpConnection::RequestFootPrint(FootPrintListener* listener)//足迹url
 {
     
 }
 
-void HttpConnection::RequestCollection(int userId, std::string devType, CollectionListener* listener)////收藏url
+void HttpConnection::RequestCollection(CollectionListener* listener)////收藏url
 {
     
 }
 
-void HttpConnection::RequestBanner(std::string url, BannerListener* listener)////获取Banner
+void HttpConnection::RequestBanner(BannerListener* listener)////获取Banner
 {
     
 }

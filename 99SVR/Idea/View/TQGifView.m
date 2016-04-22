@@ -27,7 +27,6 @@ static NSString * const GifConllectionCell = @"GifConllectionCell";
         self.backgroundColor = [UIColor whiteColor];
         // 创建UICollectionView流水布局
         UICollectionViewFlowLayout *layout = [self setupCollectionLayout];
-        
         // 创建UICollectionView,UICollectionView默认为黑色
         [self setupCollectionView:layout];
         
@@ -65,14 +64,11 @@ static NSString * const GifConllectionCell = @"GifConllectionCell";
         
         [self addSubview:view];
         
-////        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-////        [btn setImage:[UIImage imageNamed:@"chat_s"] forState:UIControlStateNormal];
-////        [self addSubview:btn];
-////        btn.frame = CGRectMake(self.width - 30, 0, 30, 30);
-////        [btn addTarget:self action:@selector(exitCurrentController) forControlEvents:UIControlEventTouchUpInside];
-        
-        
-        
+//      UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//      [btn setImage:[UIImage imageNamed:@"chat_s"] forState:UIControlStateNormal];
+//      [self addSubview:btn];
+//      btn.frame = CGRectMake(self.width - 30, 0, 30, 30);
+//        [btn addTarget:self action:@selector(exitCurrentController) forControlEvents:UIControlEventTouchUpInside];
     }
     // 创建UICollectionView流水布局
     - (UICollectionViewFlowLayout *)setupCollectionLayout

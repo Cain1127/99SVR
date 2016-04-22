@@ -8,11 +8,11 @@
 #define totalTitLab_fot ValueWithTheIPhoneModelString(@"25,17,18,20") //总收益文字大小
 #define icon_w (ValueWithTheIPhoneModelString(@"100,120,140,160")-30-10) //头像的大小
 
-#import "MacroHeader.h"
-#import "TraderHomeCell.h"
+#import "StockMacro.h"
+#import "StockHomeCell.h"
 #import "ShareFunction.h"
 
-@implementation TraderHomeCell
+@implementation StockHomeCell
 
 
 -(void)initUI{

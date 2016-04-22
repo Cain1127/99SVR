@@ -13,7 +13,13 @@
 
 @interface RoomViewController : UIViewController
 
-- (id)initWithModel:(RoomHttp *)room;
+DEFINE_SINGLETON_FOR_HEADER(RoomViewController)
+
+- (void)setRoom:(RoomHttp*)room;
+
+@property (nonatomic,strong) RoomHttp *room;
+
+- (void)exitRoom;
 
 @end
 

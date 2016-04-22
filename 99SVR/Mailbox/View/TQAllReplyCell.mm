@@ -36,6 +36,7 @@
     self.ansNamelb.text = model.answerauthorname;
     self.ansTimelb.text = model.answertime;
     self.ansContentV.text = model.answercontent;
+    DLog(@"%@", model);
     self.askNamelb.text = model.askauthorname;
     self.askContentV.text = model.askcontent;
     

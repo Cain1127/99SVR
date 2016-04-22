@@ -485,9 +485,9 @@ void RoomConnection::DispatchSocketMessage(void* msg)
 		case protocol::Sub_Vchat_TradeFireworksNotify:
 			ON_MESSAGE(room_listener, TradeFireworksNotify, OnTradeFireworksNotify);
 			break;
-		case protocol::Sub_Vchat_TradeFireworksErr:
-			ON_MESSAGE(room_listener, TradeFireworksErr, OnTradeFireworksErr);
-			break;
+//		case protocol::Sub_Vchat_TradeFireworksErr:
+//			ON_MESSAGE(room_listener, TradeFireworksErr, OnTradeFireworksErr);
+//			break;
 
 		case protocol::Sub_Vchat_LotteryGiftNotify:
 			ON_MESSAGE(room_listener, LotteryGiftNotice, OnLotteryGiftNotify);

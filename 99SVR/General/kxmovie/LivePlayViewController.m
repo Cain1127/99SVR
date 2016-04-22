@@ -279,7 +279,12 @@
 {
     if (_playing)
     {
-        DLog(@"解码已开启!");
+        if (roomid!=_roomid) {
+            [self stop];
+            _nuserid = userid;
+            _roomid = roomid;
+            [self startPlayRoomId:_roomid user:_nuserid];
+        }
         return ;
     }
     _playing = YES;

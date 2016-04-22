@@ -19,6 +19,9 @@
 @property (nonatomic, strong) UIColor *titleBagColor;
 /**默认选择的是哪一个按钮*/
 @property (nonatomic , assign) NSInteger defaultSelectIndex;
+/**顶部的控制menu的背景色*/
+@property (nonatomic , strong) UIColor *topBagColor;
+
 
 
 /**

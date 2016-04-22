@@ -43,7 +43,7 @@ public:
     virtual void OnTradeFlowerNotify(TradeFlowerRecord& info) = 0;
     
     //烟火
-    virtual void OnTradeFireworksErr(TradeFireworksErr& info) = 0;
+//    virtual void OnTradeFireworksErr(TradeFireworksErr& info) = 0;
     virtual void OnTradeFireworksNotify(TradeFireworksNotify& info) = 0;
     
     virtual void OnLotteryGiftNotify(LotteryGiftNotice& info) = 0;//礼物中奖通知数据

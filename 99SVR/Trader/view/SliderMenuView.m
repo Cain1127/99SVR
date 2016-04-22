@@ -157,6 +157,11 @@
     [self.topScroView setTitleBagColor:titleBagColor];
 }
 
+-(void)setTopBagColor:(UIColor *)topBagColor{
+    
+    self.topScroView.backgroundColor = topBagColor;
+}
+
 @end
 
 

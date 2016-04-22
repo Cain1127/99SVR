@@ -253,10 +253,10 @@ class ZLRoomListener : public RoomListener
     }
     
     //—Ãª
-    void OnTradeFireworksErr(TradeFireworksErr& info)
-    {
-        info.Log();
-    }
+//    void OnTradeFireworksErr(TradeFireworksErr& info)
+//    {
+//        info.Log();
+//    }
     void OnTradeFireworksNotify(TradeFireworksNotify& info)
     {
         info.Log();

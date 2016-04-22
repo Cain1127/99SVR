@@ -8,7 +8,11 @@
 
 #import "TQCommentReplyViewController.h"
 #import "TQAllReplyCell.h"
+#import "MJRefresh.h"
+
+
 @interface TQCommentReplyViewController ()
+@property (nonatomic ,strong)NSArray *aryModel;
 
 @end
 
@@ -20,21 +24,44 @@ static NSString *const commentCell = @"commentCell";
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQAllReplyCell class]) bundle:nil] forCellReuseIdentifier:commentCell];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    //开始刷新,注册数据接受通知
+    [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
+    [self.tableView.gifHeader loadDefaultImg];
+    [self.tableView.gifHeader beginRefreshing];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_MAILREPLY_VC object:nil];
+    
+}
+
+- (void)loadRplayView:(NSNotification *)notify
+{
+    NSArray *aryModel = notify.object;
+    _aryModel = aryModel;
+    DLog(@"+++++++++++++++++++++++++++++++++++++++++%@", _aryModel);
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.tableView reloadData];
+    });
+}
+
+//开始请求.结束下拉刷新
+-(void)updateRefresh {
+    [kHTTPSingle RequestMailReply:0 count:10];
+    [self.tableView.gifHeader endRefreshing];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return _aryModel.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TQAllReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:commentCell];
-
+    cell.model = _aryModel[indexPath.row];
     
     return cell;
 }
@@ -44,48 +71,6 @@ static NSString *const commentCell = @"commentCell";
     return 250;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
