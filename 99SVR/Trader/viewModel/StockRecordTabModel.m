@@ -53,7 +53,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 200;
+    return STORCK_RecordCell_H + 10;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -69,13 +69,11 @@
     
     cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    cell.textLabel.text = @"sss";
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-//    [self.viewController.navigationController pushViewController:[[StockDealViewController alloc]init] animated:YES];
     
 }
 

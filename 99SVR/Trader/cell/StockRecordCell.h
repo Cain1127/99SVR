@@ -7,6 +7,6 @@
 #import "StockDealCellView.h"
 
 @interface StockRecordCell : BaseCell
-@property (nonatomic , strong) StockDealCellView *wareHouseViw;
+@property (nonatomic , strong) StockDealCellView *dealView;
 
 @end

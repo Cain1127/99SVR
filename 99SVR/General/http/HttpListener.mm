@@ -65,12 +65,12 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     //股票头部数据
-    StockDealModel *headerModel = [[StockDealModel alloc]initWithProfit:profit];
+    StockDealModel *headerModel = [[StockDealModel alloc]initWithStockDealHeaderData:profit];
     //头部数据
     muDic[@"headerModel"] = headerModel;
     
     //股票数据
-    StockDealModel *stockDataModel = [[StockDealModel alloc]initWithStockData:data];
+    StockDealModel *stockDataModel = [[StockDealModel alloc]initWithStockDealStockData:data];
     muDic[@"stockModel"] = stockDataModel;
     
     //交易详情
@@ -80,7 +80,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
         for (size_t i =0; i < trans.size(); i ++) {
             
             OperateStockTransaction *transaction = &trans[i];
-            StockDealModel *transactionModel = [[StockDealModel alloc]initWithOperateStockTransaction:transaction];
+            StockDealModel *transactionModel = [[StockDealModel alloc]initWithStockDealBusinessRecoreData:transaction];
             transactionModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
             [transArray addObject:transactionModel];
         }
@@ -99,7 +99,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
         for (size_t i =0; i < stocks.size(); i ++) {
             
             OperateStocks *operateStocks = &stocks[i];
-            StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithOperateStocks:operateStocks];
+            StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithStockDealWareHouseRecoreData:operateStocks];
             operateStocksModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
             [stocksArray addObject:operateStocksModel];
         }

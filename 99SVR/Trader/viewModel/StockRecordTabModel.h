@@ -1,6 +1,6 @@
 
 
-/**股票交易记录*/
+/**股票交易记录 持仓详情*/
 
 #import <Foundation/Foundation.h>
 
@@ -8,4 +8,5 @@
 
 - (instancetype)initWithViewController:(UIViewController *)viewController withDayTabViews:(NSArray *)tableViews;
 
+-(void)setTableViewDataWithModel:(id)s;
 @end

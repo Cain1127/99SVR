@@ -39,6 +39,6 @@
 #define STORCK_Deal_BusinessRecordCell_NotVIP_H ValueWithTheIPhoneModelString(@"100,100,100,100")//股票交易详情 交易纪录 不是VIP状态
 #define STORCK_Deal_WareHouseRecordCell_VIP_H ValueWithTheIPhoneModelString(@"120,120,120,120")//股票交易详情 持仓纪录 VIP状态
 #define STORCK_Deal_WareHouseRecordCell_NotVIP_H ValueWithTheIPhoneModelString(@"200,200,200,200")//股票交易详情 持仓纪录 不是VIP状态
-
+#define STORCK_RecordCell_H  ValueWithTheIPhoneModelString(@"120,120,120,120")//股票交易记录，持仓情况cell
 
 #endif /* StockMacro_h */
