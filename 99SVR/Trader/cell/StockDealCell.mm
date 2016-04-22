@@ -2,7 +2,7 @@
 
 
 #import "StockDealCell.h"
-
+#import "StockMacro.h"
 @implementation StockDealCell
 
 
@@ -31,12 +31,12 @@
     self.chartView.lowTitArrays = @[@"2016-1-3",@"2016-1-3",@"2016-1-3"];
     [self.bakImageView addSubview:self.chartView];
     
-    //交易动态的
-    self.tradeLabeView = [[StockDealCellLabelView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,50}];
+    //交易动态的 VIP
+    self.tradeLabeView = [[StockDealCellLabelView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,STORCK_Deal_BusinessRecordCell_VIP_H}];
     [self.bakImageView addSubview:self.tradeLabeView];
     
-    //仓库
-    self.wareHouseViw = [[StockDealCellView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,120}];
+    //仓库 VIP
+    self.wareHouseViw = [[StockDealCellView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,STORCK_Deal_WareHouseRecordCell_VIP_H}];
     self.wareHouseViw.nowRmbLabV.rightLab.textColor = COLOR_STOCK_YingKui;
     [self.bakImageView addSubview:self.wareHouseViw];
     

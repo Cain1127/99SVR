@@ -184,10 +184,10 @@ void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
-        profit.set_teamname("组合");
+        profit.set_teamname("日收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("长线跟短线有关系吗");
+        profit.set_focus("日收益");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
@@ -205,10 +205,10 @@ void HttpConnection::RequestOperateStockProfitOrderByMonth(int teamId, int start
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
-        profit.set_teamname("组合");
+        profit.set_teamname("月收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("长线跟短线有关系吗");
+        profit.set_focus("月收益");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
@@ -226,10 +226,10 @@ void HttpConnection::RequestOperateStockProfitOrderByTotal(int teamId, int start
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
-        profit.set_teamname("组合");
+        profit.set_teamname("总收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("长线跟短线有关系吗");
+        profit.set_focus("总收益");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
@@ -287,10 +287,44 @@ void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAll
 // 请求操盘详情--持仓情况
 void HttpConnection::RequestOperateStocks(int operateId, OperateStocksListener* listener){
     
+    std::vector<OperateStocks>house;
+    for (int i=0; i!=10; i++) {
+        
+        OperateStocks stock;
+        stock.set_stockname("仓库详情");
+        stock.set_operateid(i+100);
+        stock.set_stockid("1008699");
+        stock.set_count(i+110);
+        stock.set_cost(10000+1);
+        stock.set_profitrate(1+i);
+        stock.set_profitmoney(20000+i);
+        stock.set_currprice(30000+i);
+        house.push_back(stock);
+    }
+    listener->onResponse(house);
 }
 
 // 请求操盘详情--交易记录
 void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, int count, OperateStockTransactionListener* listener){
+    
+    std::vector<OperateStockTransaction>trans;
+    
+    for (int i=0; i!=5; i++) {
+        
+        OperateStockTransaction stock;
+        stock.set_stockname("交易记录");
+        stock.set_operateid(i+200);
+        stock.set_stockid("1008699");
+        stock.set_count(i+220);
+        stock.set_money(110000+1);
+        stock.set_price(9999);
+        stock.set_time("2015 15 15");
+        stock.set_buytype("买入 卖出");
+        trans.push_back(stock);
+    }
+    listener->onResponse(trans);
+
+    
     
 }
 

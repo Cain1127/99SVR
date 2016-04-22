@@ -7,7 +7,7 @@
 #define totalNumLabFont ValueWithTheIPhoneModelString(@"25,25,25,25")//总收益的大小
 
 #import "StockDealHeaderView.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 #import "ShareFunction.h"
 @interface StockDealHeaderView ()
 

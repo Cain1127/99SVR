@@ -9,7 +9,7 @@
 #define lowLab_w   ValueWithTheIPhoneModelString(@"60,60,60,60") //底部标题的宽度
 #define lowLab_h ValueWithTheIPhoneModelString(@"17,17,17,17") //底部标题的高度
 #import "StockChartView.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 @interface StockChartView ()
 {
     CGFloat _width;

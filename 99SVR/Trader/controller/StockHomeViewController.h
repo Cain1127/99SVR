@@ -5,6 +5,6 @@
 
 #import "SlideBaseViewController.h"
 
-@interface TraderViewController : SlideBaseViewController
+@interface StockHomeViewController : SlideBaseViewController
 
 @end

@@ -6,7 +6,7 @@
 
 
 #import "StockDealCellView.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 @implementation StockDealCellView
 
 

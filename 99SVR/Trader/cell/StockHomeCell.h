@@ -5,7 +5,7 @@
 
 #import "BaseCell.h"
 
-@interface TraderHomeCell : BaseCell
+@interface StockHomeCell : BaseCell
 
 /**头像*/
 @property (nonatomic, strong) UIImageView *iconImv;
