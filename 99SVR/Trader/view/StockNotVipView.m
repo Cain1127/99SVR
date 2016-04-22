@@ -62,7 +62,7 @@
     
     CGFloat buyLab_top = 0;
     if (type==StockNotVipViewType_Business) {//交易动态
-        self.frame = (CGRect){0,0,ScreenWidth,100};
+        self.frame = (CGRect){0,0,ScreenWidth,STORCK_Deal_BusinessRecordCell_NotVIP_H};
         self.textLab.text = @"购买私人订制服务可查看详细交易记录";
         buyLab_top = buy_top_bottom;
         self.serviceLab.hidden = YES;
@@ -74,7 +74,7 @@
 
         
     }else{//持仓情况
-        self.frame = (CGRect){0,0,ScreenWidth,200};
+        self.frame = (CGRect){0,0,ScreenWidth,STORCK_Deal_WareHouseRecordCell_NotVIP_H};
         self.textLab.text = @"购买私人订制服务可查看详细持仓情况";
         buyLab_top = storehouse_top_bottom;
         self.serviceLab.hidden = NO;

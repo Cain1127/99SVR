@@ -10,6 +10,7 @@
 #import "StockDealCell.h"
 #import "StockDealCellLabelView.h"
 #import "StockRecordViewController.h"
+#import "StockMacro.h"
 @interface StockDealTableModel ()
 {
     NSCache *_cache;
@@ -56,13 +57,13 @@
     
     if (indexPath.section==0) {
         
-        height =ScreenWidth * 0.75;
+        height = STORCK_Deal_StockCell_H;
     }else if (indexPath.section ==1){
         
-        height = vipBool? 50: 100;
+        height = vipBool? STORCK_Deal_BusinessRecordCell_VIP_H: STORCK_Deal_BusinessRecordCell_NotVIP_H;
     }else{
         
-        height = vipBool? 120: 200;
+        height = vipBool? STORCK_Deal_WareHouseRecordCell_VIP_H: STORCK_Deal_WareHouseRecordCell_NotVIP_H;
     }
     return height;
 }

@@ -1,6 +1,5 @@
 
 
-#define headerView_h ValueWithTheIPhoneModelString(@"150,180,200,220") //表头的高度
 #define warningLab_h ValueWithTheIPhoneModelString(@"50,50,50,50") //提示信息的高度
 
 #import "StockDealViewController.h"
@@ -87,7 +86,7 @@
 -(StockDealHeaderView *)headerView{
     
     if (!_headerView) {
-        _headerView = [[StockDealHeaderView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,headerView_h}];
+        _headerView = [[StockDealHeaderView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,STORCK_Deal_HeaderView_H}];
         
     }
     return _headerView;
