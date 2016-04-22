@@ -8,7 +8,6 @@
 
 #import "TQNoCustomView.h"
 #import "TQPersonalTailorCell.h"
-
 @interface TQNoCustomView () <UITableViewDelegate, UITableViewDataSource>
 
 
@@ -48,9 +47,17 @@ static NSString *const NoCustomCell = @"NoCustomCell";
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    //    TQIntroductionViewController *vc = [[TQIntroductionViewController alloc] init];
-    //    [self.navigationController pushViewController:vc animated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQINTORDUCT_VC object:Nil];
 }
 
+- (UIViewController *)viewController {
+    for (UIView* next = [self superview]; next; next = next.superview) {
+        UIResponder *nextResponder = [next nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController *)nextResponder;
+        }
+    }
+    return nil;
+}
 
 @end

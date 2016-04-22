@@ -11,6 +11,8 @@
 #include "StockDealModel.h"
 #import "TQIdeaModel.h"
 #import "TQIdeaDetailModel.h"
+#import "TQMessageModel.h"
+#import "TQAnswerModel.h"
 
 /**
  *  闪屏响应
@@ -195,20 +197,48 @@ void ConsumeRankListener::onResponse(vector<ConsumeRank>& info){
 void AskQuestionListener::onResponse(int errCode, string errMsg){
     
 }
+/**
+ *  请求信息--系统消息
+ */
 
 void SystemMessageListener::onResponse(vector<SystemMessage>& info)
 {
+        for (int i=0; i<info.size(); i++) {
+        NSMutableArray *ary = [NSMutableArray array];
+        for (int i=0; i<info.size(); i++) {
+            TQMessageModel *model = [[TQMessageModel alloc] initWithSystemMessage:&info[i]];
+            [ary addObject:model];
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SYSTEMMESSAGE_VC object:ary];
+    }
     
 }
-   
+
 void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info)
 {
+    for (int i=0; i<info.size(); i++) {
+        NSMutableArray *ary = [NSMutableArray array];
+        for (int i=0; i<info.size(); i++) {
+            TQAnswerModel *model = [[TQAnswerModel alloc] initWithAnswer:&info[i]];
+            [ary addObject:model];
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ANSWERREPLY_VC object:ary];
+    }
+
     
 }
 
 void MailReplyListener::onResponse(vector<MailReply>& info)
 {
-    
+    for (int i=0; i<info.size(); i++) {
+        NSMutableArray *ary = [NSMutableArray array];
+        for (int i=0; i<info.size(); i++) {
+            TQAnswerModel *model = [[TQAnswerModel alloc] initWithAnswer:&info[i]];
+            [ary addObject:model];
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:ary];
+    }
+
 }
 
 void PrivateServiceSummaryListener::onResponse(vector<PrivateServiceSummary>& info)

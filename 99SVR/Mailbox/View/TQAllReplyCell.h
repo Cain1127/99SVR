@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class TQAnswerModel;
 @interface TQAllReplyCell : UITableViewCell
+/** 模型 */
+@property (nonatomic ,weak)TQAnswerModel *model;
 
 @end

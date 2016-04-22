@@ -1,47 +1,63 @@
 //
-//  TQAnswerViewController.m
+//  TQIntroductionViewController.m
 //  99SVR
 //
-//  Created by apple on 16/4/15.
+//  Created by apple on 16/4/21.
 //  Copyright © 2016年 xia zhonglin . All rights reserved.
-/**************************************** < 问题答复 >**********************************/
+//
 
-#import "TQAnswerViewController.h"
-#import "TQAllReplyCell.h"
+#import "TQIntroductionViewController.h"
+#import "TQNoCustomHeader.h"
+#import "TQIntroductCell.h"
 
-@interface TQAnswerViewController ()
-
+@interface TQIntroductionViewController ()
 @end
 
-@implementation TQAnswerViewController
-static NSString *const answerCell = @"answerCell";
+@implementation TQIntroductionViewController
+static NSString *const IntroductCell = @"IntroductCell";
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setupHeaderView];
     
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQAllReplyCell class]) bundle:nil] forCellReuseIdentifier:answerCell];
+    
+
+}
+-(void)setupHeaderView {
+    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQIntroductCell class]) bundle:nil] forCellReuseIdentifier:IntroductCell];
+
+    //头部视图
+    UIView *headerView = [[[NSBundle mainBundle] loadNibNamed:@"TQNoCustomHeader" owner:nil options:nil] lastObject];
+//    headerView.frame = CGRectMake(0, 0, 0, 200);
+    self.tableView.tableHeaderView = headerView;
+    
+    //注册组头部视图
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 #pragma mark - Table view data source
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 10;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TQAllReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:answerCell];
+    TQIntroductCell *cell = [tableView dequeueReusableCellWithIdentifier:IntroductCell];
     
     
     return cell;
 }
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 250;
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 200;
 }
+
 
 
 /*

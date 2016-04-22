@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TQMeCustomizedViewController : UITableViewController
+@interface TQMeCustomizedViewController : UIViewController
 
 @end

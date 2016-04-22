@@ -25,5 +25,4 @@
 + (UIButton *)itemWithTarget:(id)target action:(SEL)action image:(NSString *)image highImage:(NSString *)highImage;
 + (UIButton *)itemWithTarget:(id)target action:(SEL)action title:(NSString*)title;
 
-
 @end

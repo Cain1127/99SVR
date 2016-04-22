@@ -112,22 +112,7 @@ void parse_viewpoint(char* json, HttpListener* listener)
 
 // 请求观点列表
 void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requestCount, ViewpointSummaryListener* listener){
-    
-//    std::vector<ViewpointSummary> infos;
-//    for (int i=0; i<20; i++) {
-//        ViewpointSummary summary;
-//        summary.set_authoricon("personal_user_head");
-//        char cBuf[10]={0};
-//        sprintf(cBuf,"%d",80000+i);
-//        summary.set_authorid(cBuf);
-//        summary.set_authorname("第九");
-//        summary.set_content("这是一段用来测试的文字.....需要很长很长很长");
-//        summary.set_viewpointid(i+1);
-//        summary.set_replycount(0);
-//        summary.set_publishtime("201601091223");
-//        infos.push_back(summary);
-//    }
-//    listener->onResponse(infos);
+
     char curl[512];
     sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=Viewpoint/viewpointList&authorid=%d&startid=%d&pagecount=%d",authorId,startId,requestCount);
     HttpThreadParam* param = new HttpThreadParam();
@@ -376,7 +361,7 @@ void HttpConnection::RequestSystemMessage(int startId, int count, SystemMessageL
         info.set_id(i);
         info.set_publishtime("2016.4.19 12:20");
         info.set_title("系统消息：");
-        info.set_content("系统维护，请注意。");
+        info.set_content("系统维护，请注意。用于测试的一段长文,用于测试的一段长文用于测试的一段长文用于测试的一段长文用于测试的一段长文用于测试的一段长文用于测试的一段长文用于测试的一段长文用于测试的一段长文");
         list.push_back(info);
     }
     listener->onResponse(list);
@@ -392,7 +377,7 @@ void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswe
         info.set_id(i);
         info.set_answerauthorid("80060");
         info.set_answerauthorname("牛出没");
-        info.set_answercontent("这里是回答内容这里是回答内容这里是回答内容这里是回答内容");
+        info.set_answercontent("测试数据:这里是回答内容!这里是回答内容!这里是回答内容!这里是回答内容这里是回答内容这里是回答内容");
         info.set_answertime("2016.4.19 12:20");
         info.set_askauthorname("张三");
         info.set_askcontent("老师，这个票怎么样");
@@ -413,7 +398,7 @@ void HttpConnection::RequestMailReply(int startId, int count, MailReplyListener*
         info.set_answerauthorid("80060");
         info.set_answerauthorname("牛出没");
         info.set_answercontent("是啊，真不错。这里是回答内容这里是回答内容这里是回答内容这里是回答内容");
-        info.set_answertime("2016.4.19 12:20");
+        info.set_answertime("201604191220");
         info.set_askauthorname("李四");
         info.set_askcontent("很好的观点，我觉得不错");
         list.push_back(info);

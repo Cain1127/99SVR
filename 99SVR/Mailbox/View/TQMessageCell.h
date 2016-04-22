@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class TQMessageModel;
 @interface TQMessageCell : UITableViewCell
-
+/** <#desc#> */
+@property (nonatomic ,weak)TQMessageModel *messageModel;
 @end
