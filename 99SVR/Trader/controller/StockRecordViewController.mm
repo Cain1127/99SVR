@@ -78,10 +78,14 @@
     //持仓记录通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshWareHouseData:) name:MESSAGE_STOCK_WAREHOUSE__VC object:nil];
 
-    
+    //交易记录
+    [kHTTPSingle RequestOperateStockTransaction:0 start:0 cout:20];
+
+    //持仓记录
+//    [kHTTPSingle RequestOperateStockTransaction:0 start:0 cout:20];
+
     [kHTTPSingle RequestOperateStockTransaction:100 start:0 cout:20];
     [kHTTPSingle RequestOperateStocks:100];
-
     
 }
 #pragma mark 刷新交易记录数据

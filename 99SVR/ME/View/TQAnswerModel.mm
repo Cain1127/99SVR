@@ -59,7 +59,6 @@ uint32	_fromclient;
     
     _answerauthorid = [NSString stringWithUTF8String:QuestionAnswer->answerauthorid().c_str()];
     
-  
     _answerauthorname = [NSString stringWithUTF8String:QuestionAnswer->answerauthorname().c_str()];
     _answertime = [NSString stringWithUTF8String:QuestionAnswer->answertime().c_str()];
     _askauthorname = [NSString stringWithUTF8String:QuestionAnswer->askauthorname().c_str()];

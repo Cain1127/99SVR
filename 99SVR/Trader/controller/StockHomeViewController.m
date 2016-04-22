@@ -29,8 +29,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self initUi];
     [self initData];
+    [self initUi];
     
 }
 
@@ -76,8 +76,41 @@
 -(void)initData{
     
 
+    //day
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_STOCK_HOME_DAY__VC object:nil];
+    //mon
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMonData:) name:MESSAGE_STOCK_HOME_MON__VC object:nil];
+    //total
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+    [kHTTPSingle RequestOperateStockProfitByDay:0 start:0 count:10];
+    [kHTTPSingle RequestOperateStockProfitByMonth:0 start:0 count:10];
+    [kHTTPSingle RequestOperateStockProfitByAll:0 start:0 count:10];
+    
+
     
 }
+
+
+#pragma mark 刷新数据
+-(void)refreshDayData:(NSNotification *)notfi{
+    WeakSelf(self);
+    
+    DLog(@"天的数据");
+    
+}
+-(void)refreshMonData:(NSNotification *)notfi{
+    WeakSelf(self);
+    DLog(@"月的数据");
+    
+    
+}
+-(void)refreshTotalData:(NSNotification *)notfi{
+    WeakSelf(self);
+    DLog(@"总的的数据");
+
+    
+}
+
 
 #pragma mark nabbar左右两边按钮事件
 - (void)showLeftView
@@ -163,6 +196,15 @@
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.backgroundColor = [UIColor grayColor];
     return tableView;
+}
+
+-(void)dealloc{
+    
+    DLog(@"释放");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_DAY__VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_MON__VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+
 }
 
 

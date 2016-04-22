@@ -61,16 +61,36 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
     
 }
 /**
- *  请求操盘列表
+ *  请求操盘列表日
  */
-void OperateStockProfitListener::onResponse(vector<OperateStockProfit>& day){
+void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:muDic];
+
+}
+/**
+ *  请求操盘列表月
+ */
+
+void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& mon){
     
-    
-    
+    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:muDic];
+
     
 }
+/**
+ *  请求操盘列表总的
+ */
+void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total){
+    
+    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:muDic];
+
+}
+
+
 /**
  *  请求操盘详情
  */
@@ -238,6 +258,14 @@ void MailReplyListener::onResponse(vector<MailReply>& info)
 //        }
 //        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:ary];
 //    }
+    for (int i=0; i<info.size(); i++) {
+        NSMutableArray *ary = [NSMutableArray array];
+        for (int i=0; i<info.size(); i++) {
+//            TQAnswerModel *model = [[TQAnswerModel alloc] initWithAnswer:&info[i]];
+//            [ary addObject:model];
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:ary];
+    }
 }
 
 void PrivateServiceSummaryListener::onResponse(vector<PrivateServiceSummary>& info)
