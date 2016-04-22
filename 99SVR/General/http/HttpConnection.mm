@@ -1,4 +1,5 @@
 #include "HttpConnection.h"
+#import "UserInfo.h"
 
 //请求闪屏图片
 void HttpConnection::RequestSplashImage(SplashImageListener* listener)
@@ -14,16 +15,15 @@ void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requ
     std::vector<ViewpointSummary> infos;
     for (int i=0; i<20; i++) {
         ViewpointSummary summary;
-        summary.set_authoricon("");
+        summary.set_authoricon("personal_user_head");
         char cBuf[10]={0};
         sprintf(cBuf,"%d",80000+i);
         summary.set_authorid(cBuf);
-        summary.set_authorname("帅哥");
-        summary.set_content("你是个好人");
+        summary.set_authorname("第九");
+        summary.set_content("这是一段用来测试的文字.....需要很长很长很长");
         summary.set_viewpointid(i+1);
         summary.set_replycount(0);
         summary.set_publishtime("201601091223");
-
         infos.push_back(summary);
     }
     listener->onResponse(infos);
@@ -35,15 +35,33 @@ void HttpConnection::RequestViewpointDetail(int viewpointId, ViewpointDetailList
     infos.set_authorid("123");
     infos.set_authorname("测试");
     infos.set_viewpointid(viewpointId);
-    infos.set_content("是附近的卡萨积分可是大家福克斯");
-    infos.set_replycount(0);
-
+    infos.set_content("真是一个无语的情况");
+    infos.set_replycount(15);
     listener->onResponse(infos);
 }
 
 // 请求观点回复
 void HttpConnection::RequestReply(int viewpointId, int startId, int requestCount, ReplyListener* listener){
-    
+    vector<Reply> infos;
+    for (int i=0; i<20; i++) {
+        Reply summary;
+        char cBuf[10]={0};
+        sprintf(cBuf,"%d",80000+i);
+        
+        summary.set_replytid(i+1);
+        summary.set_viewpointid(viewpointId);
+        summary.set_parentreplyid(0);
+
+        summary.set_authorid(cBuf);
+        summary.set_authorname("第九");
+        summary.set_authoricon("personal_user_head");
+        summary.set_publishtime("201601091223");
+        summary.set_fromauthorname([[UserInfo sharedUserInfo].strName UTF8String]);
+        summary.set_fromauthoricon("personal_user_head");
+        summary.set_content("这是一段用来测试的文字.....需要很长很长很长");
+        infos.push_back(summary);
+    }
+    listener->onResponse(infos);
 }
 
 // 回复观点

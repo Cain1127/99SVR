@@ -7,12 +7,15 @@
 //
 
 #import "TQideaTableViewCell.h"
+#import "UIImageView+WebCache.h"
+#import "TQIdeaModel.h"
+
 @interface TQideaTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
-
 @property (weak, nonatomic) IBOutlet UIView *nameLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *authorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *DateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *conTentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *commentBtn;
@@ -23,5 +26,14 @@
 
 
 
+- (void)setIdeaModel:(TQIdeaModel *)ideaModel
+{
+    [_conTentLabel setText:ideaModel.content];
+    [_authorLabel setText:ideaModel.authorname];
+    [_DateLabel setText:ideaModel.publishtime];
+    [_commentBtn setTitle:NSStringFromInt(ideaModel.replycount) forState:UIControlStateNormal];
+    [_giftBtn setTitle:NSStringFromInt(ideaModel.giftcount) forState:UIControlStateNormal];
+    [_iconView setImage:[UIImage imageNamed:ideaModel.authoricon]];
+}
 
 @end

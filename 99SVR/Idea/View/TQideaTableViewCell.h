@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class TQIdeaModel;
+
 @interface TQideaTableViewCell : UITableViewCell
 
 /** 模型 */

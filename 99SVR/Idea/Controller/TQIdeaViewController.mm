@@ -6,7 +6,9 @@
 //  Copyright © 2016年 xia zhonglin . All rights reserved.
 //
 /**************************************** < 专家观点首页 >**********************************/
+
 #import "TQIdeaViewController.h"
+#import "TableViewFactory.h"
 #import "TQideaTableViewCell.h"
 #import "GroupListRequest.h"
 #import "MJRefresh.h"
@@ -15,34 +17,53 @@
 #import "MJRefresh.h"
 #import "TQMailboxViewController.h"
 #import "TQcontentView.h"
+#import "CustomViewController.h"
 #import "UIBarButtonItem+Item.h"
 #import "TQDetailedTableViewController.h"
 #import "TQIdeaModel.h"
 
-@interface TQIdeaViewController ()
-/*AFN管理者*/
-@property (nonatomic ,weak) AFHTTPSessionManager *manager;
+@interface TQIdeaViewController ()<UITableViewDataSource,UITableViewDelegate>
 /** 数据数租 */
-@property (nonatomic ,weak)NSMutableArray *ideaArray;
+@property (nonatomic,strong) UITableView *tableView;
+@property (nonatomic,copy) NSArray *aryModel;
+
 @end
 
 @implementation TQIdeaViewController
-static NSString *const ideaCell = @"status";
 
--(AFHTTPSessionManager *)manager
-{
-    if (!_manager) {
-        _manager = [AFHTTPSessionManager manager];
-    }
-    return _manager;
+static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
+
+-(void)initUi{
+    [self.navigationController.navigationBar setHidden:YES];
+    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
+    [self.view addSubview:_headView];
+    _headView.backgroundColor = UIColorFromRGB(0xffffff);
+    UILabel *title;
+    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
+    [title setFont:XCFONT(20)];
+    [_headView addSubview:title];
+    [title setTextAlignment:NSTextAlignmentCenter];
+    [title setTextColor:UIColorFromRGB(0x0078DD)];
+    UILabel *_lblContent;
+    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
+    [_lblContent setBackgroundColor:[UIColor whiteColor]];
+    [_headView addSubview:_lblContent];
+    title.text = @"专家观点";
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(mailboxClick) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
+    [self.view addSubview:btnLeft];
+    [btnLeft setFrame:Rect(0,20,44,44)];
+    
+    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchClick) image:@"nav_search_icon_n" highImage:@"nav_search_icon_p"];
+    [_headView addSubview:btnRight];
+    [btnRight setFrame:Rect(kScreenWidth-44, 20, 44, 44)];
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
-
-- (void)viewDidLoad {
+- (void)viewDidLoad{
     
     [super viewDidLoad];
     //导航栏初始化
-    [self setNavgation];
+    [self initUi];
     //tableview初始化
     [self setIdeaTableView];
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
@@ -57,61 +78,45 @@ static NSString *const ideaCell = @"status";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:@"TQ_ideaLiist_VC" object:nil];
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
 }
-/*
- string	_authorid; //用户ID
- string	_authorname; //用户名
- string	_authoricon;//头像
- uint32	_viewpointid;
- string	_publishtime;//发布时间
- string	_content; //内容
- uint32	_replycount; //回复数
- uint32	_flowercount; //献花数
-*/
 
-- (void)printInfo:(NSNotification *)notify{
-    TQIdeaModel *ideaModel = [[TQIdeaModel alloc] init];
-    ideaModel.ideaArry = notify.object;
-    
+- (void)loadViewPoint:(NSNotification *)notify{
+    NSArray *aryModel = notify.object;
+    _aryModel = aryModel;
+    @WeakObj(_tableView)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_tableViewWeak reloadData];
+    });
 }
 
 -(void)updateRefresh {
-    
     [kHTTPSingle RequestViewpointSummary:10 start:0 count:1];
     [self.tableView.gifHeader endRefreshing];
 }
 
--(void)setNavgation {
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithImage:[UIImage imageNamed:@"nav_menu_icon_n"] highImage:[UIImage imageNamed:@"nav_menu_icon_p"] target:self action:@selector(mailboxClick)];
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImage:[UIImage imageNamed:@"nav_search_icon_p"] highImage:[UIImage imageNamed:@"nav_search_icon_n"] target:self action:@selector(searchClick)];
-    
-
-}
-
 -(void)setIdeaTableView {
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-108) withStyle:UITableViewStylePlain];
+    [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [self.view addSubview:_tableView];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQideaTableViewCell class]) bundle:nil] forCellReuseIdentifier:ideaCell];
 }
 
 -(void)mailboxClick {
- 
     TQMailboxViewController *mailbox = [[TQMailboxViewController alloc] init];
     [self.navigationController pushViewController:mailbox animated:YES];
-
 }
-//- (void)showLeftView
-//{
-//    [self leftItemClick];
-//}
 
 - (void)searchClick
 {
@@ -119,27 +124,27 @@ static NSString *const ideaCell = @"status";
     [self.navigationController pushViewController:search animated:YES];
 }
 
-
-
-
 #pragma mark - TableView dataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 20;
+    return _aryModel.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     TQideaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ideaCell];
-
-
+    
+    if (_aryModel.count>indexPath.row) {
+        [cell setIdeaModel:[_aryModel objectAtIndex:indexPath.row]];
+    }
+    
     return cell;
 }
 #pragma mark - TableViewDelegete
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] init];
-//    [self presentViewController:detaileVc animated:YES completion:nil];
-    [self.navigationController pushViewController:detaileVc animated:YES];
+    if (_aryModel.count>indexPath.row) {
+        TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] init];
+        [self.navigationController pushViewController:detaileVc animated:YES];
+    }
     
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

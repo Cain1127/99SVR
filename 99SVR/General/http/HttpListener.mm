@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include "HttpListener.h"
 #include "StockDealModel.h"
+#import "TQIdeaModel.h"
+#import "TQIdeaDetailModel.h"
 /**
  *  闪屏响应
  */
@@ -20,12 +22,12 @@ void SplashImageListener::onResponse(Splash& info){
  */
 void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
     for (int i=0; i<infos.size(); i++) {
-        DLog(@"flowerCount:%d",infos[i].giftcount());
         NSMutableArray *ary = [NSMutableArray array];
         for (int i=0; i<infos.size(); i++) {
-            [ary addObject:[NSValue valueWithPointer:&infos[i]]];
+            TQIdeaModel *model = [[TQIdeaModel alloc] initWithViewpointSummary:&infos[i]];
+            [ary addObject:model];
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"TQ_ideaLiist_VC" object:ary];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:ary];
     }
 }
 
@@ -33,7 +35,8 @@ void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
  *  请求观点详情
  */
 void ViewpointDetailListener::onResponse(ViewpointDetail& infos){
-    
+    TQIdeaDetailModel *model = [[TQIdeaDetailModel alloc] initWithViewpointDetail:&infos];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTDETAIL_VC object:model];
 }
 /**
  *  请求观点回复
