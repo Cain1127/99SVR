@@ -80,7 +80,7 @@
     
 }
 #pragma mark 初始化交易记录详情--交易记录的模型
-- (instancetype)initWithStockBusinessRecordData:(OperateStockTransaction *)data
+- (instancetype)initWithStockRecordBusinessData:(OperateStockTransaction *)data
 {
     self = [super init];
     if (self) {
@@ -100,7 +100,7 @@
 }
 
 #pragma mark 初始化持仓情况的模型
-- (instancetype)initWithStockWareHouseRecordData:(OperateStocks *)data
+- (instancetype)initWithStockRecordWareHouseData:(OperateStocks *)data
 {
     self = [super init];
     if (self) {

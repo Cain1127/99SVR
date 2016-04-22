@@ -203,7 +203,7 @@ void HttpConnection::RequestOperateStockTransaction(int operateId, OperateStockT
     
     std::vector<OperateStockTransaction>trans;
     
-    for (int i=0; i!=10; i++) {
+    for (int i=0; i!=5; i++) {
         
         OperateStockTransaction stock;
         stock.set_stockname("交易记录");

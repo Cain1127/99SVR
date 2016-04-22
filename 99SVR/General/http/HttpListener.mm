@@ -117,15 +117,31 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
  */
 void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>& trans){
     
+    NSMutableArray *muArray = [NSMutableArray array];
+    for (size_t i=0; i!=trans.size(); i++) {
+        
+        OperateStockTransaction *operateStockTransaction = &trans[i];
+        StockDealModel *model = [[StockDealModel alloc]initWithStockRecordBusinessData:operateStockTransaction];
+        [muArray addObject:model];
+    }
     
-    
-    
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:muArray];
 }
 /**
  *  请求操盘详情--持仓情况
  */
 void OperateStocksListener::onResponse(vector<OperateStocks>& stocks){
+    
+    
+    NSMutableArray *muArray = [NSMutableArray array];
+    for (size_t i=0; i!=stocks.size(); i++) {
+        
+        OperateStocks *stocksModel = &stocks[i];
+        StockDealModel *model = [[StockDealModel alloc]initWithStockRecordWareHouseData:stocksModel];
+        [muArray addObject:model];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
     
 }
 

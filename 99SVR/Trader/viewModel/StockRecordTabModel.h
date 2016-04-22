@@ -8,5 +8,6 @@
 
 - (instancetype)initWithViewController:(UIViewController *)viewController withDayTabViews:(NSArray *)tableViews;
 
--(void)setTableViewDataWithModel:(id)s;
+-(void)setTableViewData:(NSArray *)dataArray WithTag:(NSInteger)tag;
+
 @end

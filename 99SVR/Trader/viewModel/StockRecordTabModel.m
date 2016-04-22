@@ -15,6 +15,9 @@
 /**持仓情况*/
 @property (nonatomic , strong) UITableView *houseTab;
 @property (nonatomic , strong) UIViewController *viewController;
+/**仓库记录的数据*/
+@property (nonatomic , strong) NSArray *tabDataArray;
+
 
 @end
 
@@ -30,6 +33,7 @@
             [self setTabDelegateAndTabDataSoure:(UITableView *)tableViews[i]];
         }
         self.viewController = viewController;
+        self.tabDataArray = @[];
     }
     return self;
 }
@@ -43,7 +47,7 @@
 #pragma mark tableView delegate dataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return 20;
+    return self.tabDataArray.count;
     
 }
 
@@ -75,6 +79,12 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
+}
+
+-(void)setTableViewData:(NSArray *)dataArray WithTag:(NSInteger)tag{
+    
+    self.tabDataArray = dataArray;
+    tag==1? [self.busTab reloadData] : [self.houseTab reloadData];
 }
 
 @end

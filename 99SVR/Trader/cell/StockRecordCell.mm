@@ -23,7 +23,7 @@
     }];
     
     self.bakImageView.layer.borderWidth = 1.0f;
-    self.bakImageView.layer.borderColor = COLOR_StyleLines.CGColor;
+    self.bakImageView.layer.borderColor = [COLOR_StyleLines colorWithAlphaComponent:0.5].CGColor;
     
     //交易记录或者持仓情况
     self.dealView = [[StockDealCellView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,STORCK_RecordCell_H}];

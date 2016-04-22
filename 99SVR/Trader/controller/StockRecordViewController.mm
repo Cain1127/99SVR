@@ -10,14 +10,20 @@
 #import "SliderMenuView.h"
 #import "StockMacro.h"
 #import "StockRecordTabModel.h"
+#import "StockDealModel.h"
 @interface StockRecordViewController ()
 @property (nonatomic , strong) SliderMenuView *sliderMenuView;
 /**交易记录*/
 @property (nonatomic , strong) UITableView *busTab;
 /**持仓情况*/
 @property (nonatomic , strong) UITableView *houseTab;
-
 @property (nonatomic , strong) StockRecordTabModel *recordModel;
+
+/**公车交易记录的数据*/
+@property (nonatomic , strong) NSMutableArray *busTabArray;
+/**仓库记录的数据*/
+@property (nonatomic , strong) NSMutableArray *houseTabArray;
+
 @end
 
 @implementation StockRecordViewController
@@ -28,6 +34,8 @@
     self.txtTitle.text = @"交易记录";
     self.view.backgroundColor = COLOR_STOCK_BackGroundColor;
 
+    
+    
 
     [self initData];
     [self initUI];
@@ -40,16 +48,83 @@
     
     self.sliderMenuView.DidSelectSliderIndex = ^(NSInteger index){
       
-        
     };
+    
 }
 
 -(void)initData{
     
+    //交易记录通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBusinessData:) name:MESSAGE_STOCK_RECORD_BUSINESS_VC object:nil];
+    //持仓记录通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshWareHouseData:) name:MESSAGE_STOCK_WAREHOUSE__VC object:nil];
+
+    
+    [kHTTPSingle RequestOperateStockTransaction:100];
+    [kHTTPSingle RequestOperateStocks:100];
+
+    
+}
+#pragma mark 刷新交易记录数据
+-(void)refreshBusinessData:(NSNotification *)notfi{
+
+    NSArray *array = notfi.object;
+    for (int i=0; i!=array.count; i++) {
+        
+        StockDealModel *model = array[i];
+        [self.busTabArray addObject:model];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        [self.recordModel setTableViewData:self.busTabArray WithTag:1];
+//        [self.busTab reloadData];
+    });
+
+}
+
+#pragma mark 刷新持仓记录数据
+-(void)refreshWareHouseData:(NSNotification *)notfi{
+    
+    NSArray *array = notfi.object;
+    for (int i=0; i!=array.count; i++) {
+        
+        StockDealModel *model = array[i];
+        [self.houseTabArray addObject:model];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self.recordModel setTableViewData:self.houseTabArray WithTag:2];
+//        [self.houseTab reloadData];
+    });
+
     
 }
 
-#pragma mark lazyView 懒加载
+
+
+
+#pragma mark lazy 懒加载
+-(NSMutableArray *)busTabArray{
+
+    if (!_busTabArray) {
+        
+        _busTabArray = [NSMutableArray array];
+    }
+    
+    return _busTabArray;
+}
+
+-(NSMutableArray *)houseTabArray{
+    
+    if (!_houseTabArray) {
+        
+        _houseTabArray = [NSMutableArray array];
+    }
+    return _houseTabArray;
+}
+
 -(SliderMenuView *)sliderMenuView{
     
     if (!_sliderMenuView) {
