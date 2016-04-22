@@ -12,8 +12,7 @@
 @interface StockRecordTabModel ()
 
 /**仓库记录的数据*/
-@property (nonatomic , strong) NSArray *tabDataArray;
-
+@property (nonatomic , copy) NSArray *tabDataArray;
 @property (nonatomic , assign) NSInteger tableTag;
 @end
 

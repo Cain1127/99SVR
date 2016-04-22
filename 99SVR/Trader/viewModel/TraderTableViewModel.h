@@ -5,6 +5,12 @@
 
 #import "BaseTableViewModel.h"
 
-@interface TraderTableViewModel : BaseTableViewModel
-
+@interface TraderTableViewModel : NSObject<UITableViewDelegate,UITableViewDataSource>
+- (instancetype)initWithViewController:(UIViewController *)viewController;
+/**
+ *  数据源
+ *
+ *  @param dataArray 数据源
+ */
+-(void)setDataArray:(NSArray *)dataArray;
 @end

@@ -11,6 +11,8 @@
 #import "StockMacro.h"
 #import "StockRecordTabModel.h"
 #import "StockDealModel.h"
+#import "MJRefresh.h"
+
 @interface StockRecordViewController ()
 @property (nonatomic , strong) SliderMenuView *sliderMenuView;
 /**交易记录*/
@@ -19,7 +21,7 @@
 @property (nonatomic , strong) UITableView *houseTab;
 @property (nonatomic , strong) StockRecordTabModel *businessdTabModel;
 @property (nonatomic , strong) StockRecordTabModel *houseTabModel;
-
+@property (nonatomic, assign) int nCurrent;
 /**公车交易记录的数据*/
 @property (nonatomic , strong) NSMutableArray *busTabArray;
 /**仓库记录的数据*/
@@ -34,10 +36,6 @@
 
     self.txtTitle.text = @"交易记录";
     self.view.backgroundColor = COLOR_STOCK_BackGroundColor;
-
-    
-    
-
     [self initData];
     [self initUI];
     
@@ -56,8 +54,22 @@
             [weakSelf.houseTabModel setDataArray:weakSelf.houseTabArray WithRecordTableTag:index];
         }
     };
+//    [_businessTab addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(test)] ;
+//    
+//    _businessTab addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(test1)
+//    _businessTab addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(test)] ;
     
 }
+//
+//- (void)test1{
+//    [kHTTPSingle RequestReply:0 start:_nCurrent count:20];
+//    _nCurrent += 20;
+//}
+//
+//- (void)test{
+//    [kHTTPSingle RequestReply:0 start:0 count:20];
+//    _nCurrent = 20;
+//}
 
 -(void)initData{
     
@@ -74,18 +86,33 @@
 }
 #pragma mark 刷新交易记录数据
 -(void)refreshBusinessData:(NSNotification *)notfi{
-
+//    NSArray *aryModel = notfi.object;
     WeakSelf(self);
+#if 0
+    if (aryModel) {
+        //_aryModel = aryModel;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([_businessTab.header isRefreshing]) {
+                [_businessTab.footer resetNoMoreData];
+            }else if([_businessTab.footer isRefreshing])
+            {}
+            if (selfWeak.nCurrent!=_aryModel.count) {
+                [_businessTab.footer noticeNoMoreData];
+            }
+            else{
+                [_businessTab.footer resetNoMoreData];
+            }
+        });
+    }
+#endif
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
         NSArray *array = notfi.object;
         for (int i=0; i!=array.count; i++) {
-            
             StockDealModel *model = array[i];
             [weakSelf.busTabArray addObject:model];
         }
-
         [weakSelf.businessdTabModel setDataArray:weakSelf.busTabArray WithRecordTableTag:1];
         [weakSelf.businessTab reloadData];
     });
@@ -95,8 +122,6 @@
 #pragma mark 刷新持仓记录数据
 -(void)refreshWareHouseData:(NSNotification *)notfi{
     WeakSelf(self);
-
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray *array = notfi.object;
         
