@@ -165,6 +165,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void) RequestBuyPrivateServicePage:(int)userId{//, BuyPrivateServiceListener* listener);
     [self createHttpConnection];
     hConnection->RequestBuyPrivateServicePage(userId,&buyPrivateListener);
+    
 }
 
 // 请求战队的私人定制缩略信息

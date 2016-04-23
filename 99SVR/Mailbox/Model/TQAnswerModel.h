@@ -9,6 +9,8 @@
 #import "HttpMessage.pb.h"
 
 @interface TQAnswerModel : NSObject
+/** 头像 */
+@property (nonatomic ,weak)NSString *answerauthorhead;
 /** 回答ID */
 @property(nonatomic,copy) NSString *answerauthorid;
 /** 回答名称 */

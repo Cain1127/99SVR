@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class TQPersonalModel;
 @interface TQPersonalTailorCell : UITableViewCell
-
+/** 模型 */
+@property (nonatomic ,weak)TQPersonalModel *personalModel;
 @end

@@ -41,16 +41,13 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="87x-FO-3TL">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="87x-FO-3TL" customClass="TQButton_RoundedRectBtn">
                                                     <rect key="frame" x="154" y="30.5" width="10" height="10"/>
                                                     <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="10" id="HAI-9e-WqC"/>
                                                         <constraint firstAttribute="width" constant="10" id="ZK2-BN-xQP"/>
                                                     </constraints>
-                                                    <state key="normal" title="Button">
-                                                        <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </state>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -65,105 +62,135 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="89" id="R5A-Yb-7Qu">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="89" id="8AX-9V-I30">
                                         <rect key="frame" x="0.0" y="89" width="600" height="89"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="R5A-Yb-7Qu" id="mWW-TS-ulD">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8AX-9V-I30" id="y4E-dy-1bF">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="88.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3tD-o3-zUM">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="32l-IX-whb">
                                                     <rect key="frame" x="23" y="29" width="46" height="30"/>
                                                     <state key="normal" title="Button"/>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="系统消息" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u3k-dZ-Txh">
-                                                    <rect key="frame" x="79" y="33.5" width="72" height="22"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="系统消息" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jtv-Pn-R5p">
+                                                    <rect key="frame" x="79" y="33" width="72" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03-12" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6RW-6T-otc">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03-12" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wih-wd-KF9">
                                                     <rect key="frame" x="531" y="34" width="46" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FhD-bA-g0C" customClass="TQButton_RoundedRectBtn">
+                                                    <rect key="frame" x="154" y="30.5" width="10" height="10"/>
+                                                    <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="10" id="11z-01-JX7"/>
+                                                        <constraint firstAttribute="height" constant="10" id="qCa-Zj-cja"/>
+                                                    </constraints>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="u3k-dZ-Txh" firstAttribute="leading" secondItem="3tD-o3-zUM" secondAttribute="trailing" constant="10" id="0Xz-BB-dmf"/>
-                                                <constraint firstItem="3tD-o3-zUM" firstAttribute="centerY" secondItem="mWW-TS-ulD" secondAttribute="centerY" id="9mL-A9-aVI"/>
-                                                <constraint firstItem="u3k-dZ-Txh" firstAttribute="centerY" secondItem="mWW-TS-ulD" secondAttribute="centerY" id="Xv6-zp-p4b"/>
-                                                <constraint firstItem="3tD-o3-zUM" firstAttribute="leading" secondItem="mWW-TS-ulD" secondAttribute="leadingMargin" constant="15" id="bF1-ZV-Qcg"/>
-                                                <constraint firstItem="6RW-6T-otc" firstAttribute="trailing" secondItem="mWW-TS-ulD" secondAttribute="trailingMargin" constant="-15" id="dOb-3O-Htp"/>
-                                                <constraint firstItem="6RW-6T-otc" firstAttribute="centerY" secondItem="mWW-TS-ulD" secondAttribute="centerY" id="hpW-1V-dvc"/>
+                                                <constraint firstItem="FhD-bA-g0C" firstAttribute="centerY" secondItem="y4E-dy-1bF" secondAttribute="centerY" multiplier="0.8" id="3He-HT-vr5"/>
+                                                <constraint firstItem="Jtv-Pn-R5p" firstAttribute="leading" secondItem="32l-IX-whb" secondAttribute="trailing" constant="10" id="O7B-MP-9NV"/>
+                                                <constraint firstItem="wih-wd-KF9" firstAttribute="trailing" secondItem="y4E-dy-1bF" secondAttribute="trailingMargin" constant="-15" id="RYe-yl-Stz"/>
+                                                <constraint firstItem="32l-IX-whb" firstAttribute="centerY" secondItem="y4E-dy-1bF" secondAttribute="centerY" id="Tdt-aL-0Jh"/>
+                                                <constraint firstItem="FhD-bA-g0C" firstAttribute="leading" secondItem="Jtv-Pn-R5p" secondAttribute="trailing" constant="3" id="WDh-Lt-Hyd"/>
+                                                <constraint firstItem="Jtv-Pn-R5p" firstAttribute="centerY" secondItem="y4E-dy-1bF" secondAttribute="centerY" id="eYW-2w-YfJ"/>
+                                                <constraint firstItem="32l-IX-whb" firstAttribute="leading" secondItem="y4E-dy-1bF" secondAttribute="leadingMargin" constant="15" id="hJG-g9-uD7"/>
+                                                <constraint firstItem="wih-wd-KF9" firstAttribute="centerY" secondItem="y4E-dy-1bF" secondAttribute="centerY" id="nOo-ex-0aN"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="89" id="exp-aw-htb">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="89" id="P4h-Mu-Sd8">
                                         <rect key="frame" x="0.0" y="178" width="600" height="89"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="exp-aw-htb" id="ngu-l6-MPW">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="P4h-Mu-Sd8" id="uE4-2g-mK6">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="88.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FMD-WP-LAJ">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Klj-5S-Tkn">
                                                     <rect key="frame" x="23" y="29" width="46" height="30"/>
                                                     <state key="normal" title="Button"/>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="评论回复" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PW6-M9-8RA">
-                                                    <rect key="frame" x="79" y="33.5" width="72" height="22"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="评论回复" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OeQ-Et-xrp">
+                                                    <rect key="frame" x="79" y="33" width="72" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03-12" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rPb-n4-HPR">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03-12" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RGn-Ma-kab">
                                                     <rect key="frame" x="531" y="34" width="46" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eCw-z1-7kH" customClass="TQButton_RoundedRectBtn">
+                                                    <rect key="frame" x="154" y="30.5" width="10" height="10"/>
+                                                    <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="10" id="3qj-pl-ipI"/>
+                                                        <constraint firstAttribute="height" constant="10" id="IvB-1v-Yw3"/>
+                                                    </constraints>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="PW6-M9-8RA" firstAttribute="centerY" secondItem="ngu-l6-MPW" secondAttribute="centerY" id="GNx-4f-axi"/>
-                                                <constraint firstItem="FMD-WP-LAJ" firstAttribute="leading" secondItem="ngu-l6-MPW" secondAttribute="leadingMargin" constant="15" id="I9j-jj-izw"/>
-                                                <constraint firstItem="rPb-n4-HPR" firstAttribute="trailing" secondItem="ngu-l6-MPW" secondAttribute="trailingMargin" constant="-15" id="KY2-RO-4Qh"/>
-                                                <constraint firstItem="PW6-M9-8RA" firstAttribute="leading" secondItem="FMD-WP-LAJ" secondAttribute="trailing" constant="10" id="NKN-Np-MaJ"/>
-                                                <constraint firstItem="rPb-n4-HPR" firstAttribute="centerY" secondItem="ngu-l6-MPW" secondAttribute="centerY" id="hBs-tf-Qkc"/>
-                                                <constraint firstItem="FMD-WP-LAJ" firstAttribute="centerY" secondItem="ngu-l6-MPW" secondAttribute="centerY" id="xWR-Xm-MFz"/>
+                                                <constraint firstItem="OeQ-Et-xrp" firstAttribute="leading" secondItem="Klj-5S-Tkn" secondAttribute="trailing" constant="10" id="WpE-yz-09e"/>
+                                                <constraint firstItem="eCw-z1-7kH" firstAttribute="leading" secondItem="OeQ-Et-xrp" secondAttribute="trailing" constant="3" id="WqC-fb-fPa"/>
+                                                <constraint firstItem="RGn-Ma-kab" firstAttribute="centerY" secondItem="uE4-2g-mK6" secondAttribute="centerY" id="fWU-M1-Eov"/>
+                                                <constraint firstItem="OeQ-Et-xrp" firstAttribute="centerY" secondItem="uE4-2g-mK6" secondAttribute="centerY" id="gkb-Qe-3jF"/>
+                                                <constraint firstItem="RGn-Ma-kab" firstAttribute="trailing" secondItem="uE4-2g-mK6" secondAttribute="trailingMargin" constant="-15" id="iaN-uV-zkX"/>
+                                                <constraint firstItem="Klj-5S-Tkn" firstAttribute="leading" secondItem="uE4-2g-mK6" secondAttribute="leadingMargin" constant="15" id="oNV-5c-gbb"/>
+                                                <constraint firstItem="eCw-z1-7kH" firstAttribute="centerY" secondItem="uE4-2g-mK6" secondAttribute="centerY" multiplier="0.8" id="rCG-h2-YMf"/>
+                                                <constraint firstItem="Klj-5S-Tkn" firstAttribute="centerY" secondItem="uE4-2g-mK6" secondAttribute="centerY" id="yT5-nW-x3v"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="89" id="pE1-LT-JKz">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="89" id="Esm-zw-lf3">
                                         <rect key="frame" x="0.0" y="267" width="600" height="89"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pE1-LT-JKz" id="3Vw-A5-dme">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Esm-zw-lf3" id="Tco-Ys-Zl1">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="88.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QL8-Zj-YNu">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tr5-qP-h3V">
                                                     <rect key="frame" x="23" y="29" width="46" height="30"/>
                                                     <state key="normal" title="Button"/>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="提问回复" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pMm-rb-nDj">
-                                                    <rect key="frame" x="79" y="33.5" width="72" height="22"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="提问回复" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CIa-5Y-XM0">
+                                                    <rect key="frame" x="79" y="33" width="72" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03-12" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pci-Ft-MVC">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03-12" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FN6-at-3OH">
                                                     <rect key="frame" x="531" y="34" width="46" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YDw-co-69J" customClass="TQButton_RoundedRectBtn">
+                                                    <rect key="frame" x="154" y="30.5" width="10" height="10"/>
+                                                    <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="10" id="f2J-0t-iXS"/>
+                                                        <constraint firstAttribute="width" constant="10" id="nSa-5t-pZP"/>
+                                                    </constraints>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="pMm-rb-nDj" firstAttribute="leading" secondItem="QL8-Zj-YNu" secondAttribute="trailing" constant="10" id="0Bb-0V-ySh"/>
-                                                <constraint firstItem="QL8-Zj-YNu" firstAttribute="centerY" secondItem="3Vw-A5-dme" secondAttribute="centerY" id="0cH-mT-53K"/>
-                                                <constraint firstItem="pMm-rb-nDj" firstAttribute="centerY" secondItem="3Vw-A5-dme" secondAttribute="centerY" id="3m3-fE-Hq1"/>
-                                                <constraint firstItem="Pci-Ft-MVC" firstAttribute="trailing" secondItem="3Vw-A5-dme" secondAttribute="trailingMargin" constant="-15" id="afL-Y5-eEy"/>
-                                                <constraint firstItem="Pci-Ft-MVC" firstAttribute="centerY" secondItem="3Vw-A5-dme" secondAttribute="centerY" id="iMu-lq-x4A"/>
-                                                <constraint firstItem="QL8-Zj-YNu" firstAttribute="leading" secondItem="3Vw-A5-dme" secondAttribute="leadingMargin" constant="15" id="snU-8p-vfD"/>
+                                                <constraint firstItem="FN6-at-3OH" firstAttribute="trailing" secondItem="Tco-Ys-Zl1" secondAttribute="trailingMargin" constant="-15" id="7qj-Dh-sVF"/>
+                                                <constraint firstItem="tr5-qP-h3V" firstAttribute="centerY" secondItem="Tco-Ys-Zl1" secondAttribute="centerY" id="BOn-Fe-HhG"/>
+                                                <constraint firstItem="YDw-co-69J" firstAttribute="leading" secondItem="CIa-5Y-XM0" secondAttribute="trailing" constant="3" id="Vfr-Xi-Itk"/>
+                                                <constraint firstItem="CIa-5Y-XM0" firstAttribute="centerY" secondItem="Tco-Ys-Zl1" secondAttribute="centerY" id="W7p-cq-MQL"/>
+                                                <constraint firstItem="CIa-5Y-XM0" firstAttribute="leading" secondItem="tr5-qP-h3V" secondAttribute="trailing" constant="10" id="cw2-66-ZWO"/>
+                                                <constraint firstItem="FN6-at-3OH" firstAttribute="centerY" secondItem="Tco-Ys-Zl1" secondAttribute="centerY" id="gxc-6h-amh"/>
+                                                <constraint firstItem="YDw-co-69J" firstAttribute="centerY" secondItem="Tco-Ys-Zl1" secondAttribute="centerY" multiplier="0.8" id="pgQ-20-irr"/>
+                                                <constraint firstItem="tr5-qP-h3V" firstAttribute="leading" secondItem="Tco-Ys-Zl1" secondAttribute="leadingMargin" constant="15" id="qOz-Xx-S2t"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -175,6 +202,12 @@
                             <outlet property="delegate" destination="hLr-y9-sua" id="kI9-2u-xeC"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="askRedBtn" destination="YDw-co-69J" id="M3G-QF-BuZ"/>
+                        <outlet property="commetnRedBtn" destination="eCw-z1-7kH" id="jfq-TR-L1T"/>
+                        <outlet property="redPromptBtn" destination="87x-FO-3TL" id="S29-jt-Zoq"/>
+                        <outlet property="systemBtn" destination="FhD-bA-g0C" id="fqb-Ek-84q"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nE1-2o-epY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

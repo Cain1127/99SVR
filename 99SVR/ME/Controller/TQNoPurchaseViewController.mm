@@ -4,43 +4,77 @@
 //
 //  Created by apple on 16/4/21.
 //  Copyright © 2016年 xia zhonglin . All rights reserved.
-//
+//未购买的私人定制页面
 
-#import "TQIntroductionViewController.h"
+#import "TQNoPurchaseViewController.h"
 #import "TQNoCustomHeader.h"
 #import "TQIntroductCell.h"
+#import "TQNoCustomHeader.h"
+#import "TQPurchaseView.h"
+#import "TQPurchaseViewController.h"
 
-@interface TQIntroductionViewController ()
+
+
+@interface TQNoPurchaseViewController ()
+/** 头部试图 */
+@property (nonatomic ,weak)TQNoCustomHeader *headerView;
+/** 购买框 */
+@property (nonatomic ,weak)TQPurchaseView *purchaseView;
 @end
 
-@implementation TQIntroductionViewController
+@implementation TQNoPurchaseViewController
 static NSString *const IntroductCell = @"IntroductCell";
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UILabel *title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
+    [title setFont:XCFONT(20)];
+    title.text = @"我的私人定制";
+    [title setTextAlignment:NSTextAlignmentCenter];
+    [title setTextColor:UIColorFromRGB(0x0078DD)];
+    [self.navigationItem setTitleView:title];
     [self setupHeaderView];
-    
+    TQPurchaseView *purchaseView = [[NSBundle mainBundle] loadNibNamed:@"purchaseView" owner:nil options:nil] [0];
+    [purchaseView.purchaseBtn addTarget:self action:@selector(purchaseViewPage) forControlEvents:UIControlEventTouchUpInside];
+    purchaseView.frame = CGRectMake(10, kScreenHeight - 64, kScreenWidth - 20, 44);
+//    purchaseView.hidden = YES;
+    _purchaseView = purchaseView;
+    [self.tableView addSubview:purchaseView];
     
 
 }
+//跳转购买页
+-(void)purchaseViewPage {
+    TQPurchaseViewController *purchaseVC = [[TQPurchaseViewController alloc] init];
+    [self.navigationController pushViewController:purchaseVC animated:YES];
+    
+}
+//跳转详情页
+-(void)DetailsPage {
+    
+}
+
+
 -(void)setupHeaderView {
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQIntroductCell class]) bundle:nil] forCellReuseIdentifier:IntroductCell];
 
     //头部视图
-    UIView *headerView = [[[NSBundle mainBundle] loadNibNamed:@"TQNoCustomHeader" owner:nil options:nil] lastObject];
+    TQNoCustomHeader *headerView = [[[NSBundle mainBundle] loadNibNamed:@"TQNoCustomHeader" owner:nil options:nil] lastObject];
+    self.headerView = headerView;
 //    headerView.frame = CGRectMake(0, 0, 0, 200);
     self.tableView.tableHeaderView = headerView;
-    
-    //注册组头部视图
+    [headerView.questionBtn addTarget:self action:@selector(DetailsPage) forControlEvents:UIControlEventTouchUpInside];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setHidden:NO];
+    
+}
 
 #pragma mark - Table view data source
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 10;

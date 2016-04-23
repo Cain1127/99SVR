@@ -32,7 +32,8 @@
 
 -(void)setModel:(TQAnswerModel *)model {
     _model = model;
-    [self.iconImageView xmg_setHeader:model.answerauthoricon];
+    [self.iconImageView xmg_setHeader:model.answerauthorhead];
+//    self.iconImageView.image = [UIImage imageNamed:model.answerauthorhead];
     self.ansNamelb.text = model.answerauthorname;
     self.ansTimelb.text = model.answertime;
     self.ansContentV.text = model.answercontent;

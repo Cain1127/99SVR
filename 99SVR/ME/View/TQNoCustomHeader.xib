@@ -440,6 +440,9 @@
                     <exclude reference="t0u-4z-PJl"/>
                 </mask>
             </variation>
+            <connections>
+                <outlet property="questionBtn" destination="r2A-te-79F" id="bQa-8N-lsd"/>
+            </connections>
             <point key="canvasLocation" x="462.5" y="-37"/>
         </view>
     </objects>

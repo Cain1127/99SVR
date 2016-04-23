@@ -13,8 +13,15 @@
 #import "TQMessageViewController.h"
 #import "TQCommentReplyViewController.h"
 #import "TQPersonalTailorViewController.h"
+#import "TQButton-RoundedRectBtn.h"
+#import "TQMeCustomizedViewController.h"
+
 
 @interface TQMailboxViewController () 
+@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *redPromptBtn;
+@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *systemBtn;
+@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *commetnRedBtn;
+@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *askRedBtn;
 
 @end
 
@@ -28,66 +35,41 @@
 //    [self.tableView registerClass:[TQMailboxCell class] forCellReuseIdentifier:MailboxCell];
     
     [self.navigationController.navigationBar setHidden:NO];
-
+    [self.navigationController.navigationBar setBarTintColor:[UIColor blueColor]];
 
 }
-//
-//- (void)didReceiveMemoryWarning {
-//    [super didReceiveMemoryWarning];
-//    // Dispose of any resources that can be recreated.
-//}
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    
-//    return 4;
-//}
-//
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    static NSString *const CustomizedCell = @"CustomizedCell";
-//    static NSString *const MailboxCell = @"MailboxCell";
-//
-//    UITableViewCell *cell;
-//    if (indexPath.row == 0) {
-//        //展示私人定制的cell
-//        cell = (TQCustomizedCell *)[tableView dequeueReusableCellWithIdentifier:CustomizedCell];
-//        if (!cell) {
-//            cell = [[TQCustomizedCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CustomizedCell];
-//        }
-//    }else {
-//        //展示其他相同的cell
-//        cell= (TQMailboxCell *)[tableView dequeueReusableCellWithIdentifier:MailboxCell];
-//        if (!cell) {
-//            cell = [[TQMailboxCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MailboxCell];
-//        }
-//    }
-//    cell.backgroundColor = [UIColor lightGrayColor];
-//    return cell;
-//
-//}
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return 130;
-//}
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setHidden:NO];
 
+}
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
         //跳入私人定制
         TQPersonalTailorViewController *personalTailVC = [[TQPersonalTailorViewController alloc] init];
         [self.navigationController pushViewController:personalTailVC animated:YES];
+        self.redPromptBtn.backgroundColor  = [UIColor clearColor];
         
     }else if (indexPath.row == 1) {
         //跳入系统信息
         TQMessageViewController *messageVC = [[TQMessageViewController alloc] init];
         [self.navigationController pushViewController:messageVC animated:YES];
+        self.systemBtn.backgroundColor  = [UIColor clearColor];
+
     }else if (indexPath.row == 2) {
         //跳入评论回复
         TQCommentReplyViewController *commentVC = [[TQCommentReplyViewController alloc] init];
         [self.navigationController pushViewController:commentVC animated:YES];
+        self.commetnRedBtn.backgroundColor  = [UIColor clearColor];
+
         
     }else if (indexPath.row == 3) {
         //跳入问题回复
         TQAnswerViewController *answerVC = [[TQAnswerViewController alloc] init];
         [self.navigationController pushViewController:answerVC animated:YES];
+        self.askRedBtn.backgroundColor  = [UIColor clearColor];
+
     }
 
 }

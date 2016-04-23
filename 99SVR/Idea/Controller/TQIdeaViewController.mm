@@ -79,6 +79,8 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setHidden:YES];
+
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];

@@ -66,6 +66,7 @@ uint32	_fromclient;
     _askstock = [NSString stringWithUTF8String:QuestionAnswer->askstock().c_str()];
     _askcontent = [NSString stringWithUTF8String:QuestionAnswer->askcontent().c_str()];
     _asktime = [NSString stringWithUTF8String:QuestionAnswer->asktime().c_str()];
+    _answerauthorhead = [NSString stringWithUTF8String:QuestionAnswer->answerauthorhead().c_str()];
 
     
     _userID = QuestionAnswer->id();
@@ -93,7 +94,8 @@ uint32	_fromclient;
     //    _askstock = [NSString stringWithUTF8String:MailReply->askstock().c_str()];
     _askcontent = [NSString stringWithUTF8String:MailReply->askcontent().c_str()];
     _asktime = [NSString stringWithUTF8String:MailReply->asktime().c_str()];
-    
+    _answerauthorhead = [NSString stringWithUTF8String:MailReply->answerauthorhead().c_str()];
+
     
     _userID = MailReply->id();
     _fromclient = MailReply->fromclient();

@@ -8,16 +8,16 @@
 //  Copyright © 2016年 XMG. All rights reserved.
 //
 
-#import "TQDemoViewController.h"
+#import "TQPurchaseViewController.h"
 #import "Masonry.h"
 #import "TQHeadView.h"
 #import "TableViewCell.h"
 
-@interface TQDemoViewController () <UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate>
+@interface TQPurchaseViewController () <UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate>
 @property (nonatomic,strong)UITableView *tableView;
 @end
 
-@implementation TQDemoViewController
+@implementation TQPurchaseViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

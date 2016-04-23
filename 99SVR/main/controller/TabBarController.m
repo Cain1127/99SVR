@@ -15,6 +15,7 @@
 #import "TQIdeaViewController.h"
 #import "TQMeCustomizedViewController.h"
 
+
 @interface TabBarController ()
 
 @end
@@ -61,12 +62,12 @@
  */
 - (void)setUpAllChildViewControllers{
     
-    [self setUpOneViewController:[[TQIdeaViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
+//    [self setUpOneViewController:[[TQIdeaViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
     [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
     [self setUpOneViewController:[[IndexViewController alloc]init] title:@"热点时评" image:@"video_live" selectImage:@"video_live_h"];
     [self setUpOneViewController:[[TextViewController alloc]init] title:@"高手秘籍" image:@"text_live" selectImage:@"text_live_h"];
     [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"text_live" selectImage:@"text_live_h"];
-//    [self setUpOneViewController:[[TQMeCustomizedViewController alloc]init] title:@"我" image:@"text_live" selectImage:@"text_live_h"];
+    [self setUpOneViewController:[[TQMeCustomizedViewController alloc]init] title:@"我" image:@"text_live" selectImage:@"text_live_h"];
 
 
 }

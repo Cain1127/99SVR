@@ -9,8 +9,10 @@
 #import "TQPersonalTailorViewController.h"
 #import "TQPersonalTailorCell.h"
 
-@interface TQPersonalTailorViewController ()
 
+@interface TQPersonalTailorViewController ()
+/** 模型数组 */
+@property (nonatomic ,strong)NSArray *aryModel;
 @end
 
 @implementation TQPersonalTailorViewController
@@ -21,31 +23,45 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     
     self.title = @"私人定制";
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
+//    开始刷新,注册数据接受通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:nil];
+    [kHTTPSingle RequestPrivateServiceSummary:0 count:10];
     
 }
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+- (void)loadRplayView:(NSNotification *)notify
+{
+    NSArray *aryModel = notify.object;
+    _aryModel = aryModel;
+    DLog(@"+++++++++++++++++++++++++++++++++++++++++%@", _aryModel);
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.tableView reloadData];
+    });
 }
 
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 20;
+    return _aryModel.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     TQPersonalTailorCell *cell = [tableView dequeueReusableCellWithIdentifier:PersonalTailorCell];
-    
+    cell.personalModel = self.aryModel[indexPath.row];
     
     return cell;
     
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 100;
-}
+//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return 100;
+//}
 
 
 @end
