@@ -13,6 +13,7 @@ void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener);
 void parse_PrivateServiceDetail(char* json, HttpListener* listener);
 void parse_TeamList(char* json, HttpListener* listener);
 void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener);
+void parse_consumerank(char* json, HttpListener* listener);
 
 static ThreadVoid http_request(void* _param)
 {
@@ -360,7 +361,7 @@ void HttpConnection::RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivat
     request["s"] = "Personalsecrets/getPSList";
     
     sprintf(tmp, "%d", teamId);
-    //request["teacherid"] = tmp;
+
     request["teamid"] = tmp;
     
     Thread::start(http_request, param);
@@ -411,7 +412,24 @@ void HttpConnection::RequestTeamList(TeamListListener* listener){
 void HttpConnection::RequestTeamIntroduce(int teamId, TeamIntroduceListener* listener){}
 
 // 请求贡献榜
-void HttpConnection::RequestConsumeRankList(int teamId, ConsumeRankListener* listener){}
+void HttpConnection::RequestConsumeRankList(int teamId, ConsumeRankListener* listener){
+//    char curl[512];
+//    sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=rankinglist/getWeeklyChart&teacherid=%d",teamId);
+//    HttpThreadParam* param = new HttpThreadParam();
+//    strcpy(param->url, curl);
+//    param->parser = parse_consumerank;
+//    param->http_listener = listener;
+//    Thread::start(http_request, param);
+    std::vector<ConsumeRank> info;
+    for (int i=0; i<10; i++) {
+        ConsumeRank rank;
+        rank.set_username("大中大");
+        rank.set_headid(1);
+        rank.set_consume((i+1)*11);
+        info.push_back(rank);
+    }
+    listener->onResponse(info);
+}
 
 // 提问
 void HttpConnection::PostAskQuestion(int teamId, string stock, string question, AskQuestionListener* listener){
@@ -1272,4 +1290,61 @@ void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener)
         summary_listener->OnError(PERR_JSON_PARSE_ERROR);
     }
     
+}
+
+void parse_consumerank(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    std::vector<ConsumeRank> vec_consume;
+    
+    int size_ = 0;
+    int i = 0;
+    
+    ConsumeRankListener* consumerank_listener = (ConsumeRankListener*)listener;
+    
+    try
+    {
+        // Ω‚Œˆ¬ﬂº≠
+        //..
+        if (reader.parse(strJson, value))
+        {
+            JsonValue& consumes = value["data"];
+            
+            if(!consumes.isNull())
+            {
+                size_ = consumes.size();
+                vec_consume.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    ConsumeRank consume;
+                    //consume.set_username(ConvertUtf8ToGBK(consumes[i]["calias"].asCString()));
+                    consume.set_username(consumes[i]["username"].asString());
+                    consume.set_headid(atoi((consumes[i]["headid"].asString()).c_str()));
+                    consume.set_consume(atol((consumes[i]["consume"].asString()).c_str()));
+                    
+                    //consume.set_headid(consumes[i]["nuserid"].asInt());
+                    //consume.set_consume(consumes[i]["totalmoney"].asUInt64());
+                    vec_consume.push_back(consume);
+                }
+                
+                consumerank_listener->onResponse(vec_consume);
+            }
+            else
+            {
+                consumerank_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            consumerank_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex)
+    {
+        consumerank_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
 }

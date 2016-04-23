@@ -13,6 +13,7 @@
 #import "TQIdeaDetailModel.h"
 #import "TQMessageModel.h"
 #import "TQAnswerModel.h"
+#import "XConsumeRankModel.h"
 
 /**
  *  闪屏响应
@@ -211,7 +212,17 @@ void TeamIntroduceListener::onResponse(TeamIntroduce& info){
 }
 
 void ConsumeRankListener::onResponse(vector<ConsumeRank>& info){
-    
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i= 0; i<info.size();i++) {
+        ConsumeRank rank = info[i];
+        NSString *strUserName = [NSString stringWithUTF8String:rank.username().c_str()];
+        int headid = rank.headid();
+        float consume = rank.consume();
+        NSDictionary *dict = @{@"username":strUserName,@"headid":@(headid),@"consume":@(consume)};
+        XConsumeRankModel *model = [XConsumeRankModel mj_objectWithKeyValues:dict];
+        [array addObject:model];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:array];
 }
 
 void AskQuestionListener::onResponse(int errCode, string errMsg){

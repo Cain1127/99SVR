@@ -604,6 +604,13 @@
 		BBD58EB91CCA2026009250DB /* json_valueiterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = BBD58EB11CCA2026009250DB /* json_valueiterator.inl */; };
 		BBD58EBA1CCA2026009250DB /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EB21CCA2026009250DB /* json_writer.cpp */; };
 		BBD58EBD1CCA61EE009250DB /* XMyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EBC1CCA61EE009250DB /* XMyViewController.m */; };
+		BBD58ED11CCB4A85009250DB /* ConsumeRankDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBD58ED01CCB4A85009250DB /* ConsumeRankDataSource.mm */; };
+		BBD58ED41CCB4B5B009250DB /* ConsumeRankCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58ED31CCB4B5B009250DB /* ConsumeRankCell.m */; };
+		BBD58ED71CCB4E29009250DB /* XConsumeRankModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58ED61CCB4E29009250DB /* XConsumeRankModel.m */; };
+		BBD58EDB1CCB6017009250DB /* video_profiles_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBD58ED91CCB6017009250DB /* video_profiles_bg@2x.png */; };
+		BBD58EDC1CCB6017009250DB /* video_profiles_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBD58EDA1CCB6017009250DB /* video_profiles_bg@3x.png */; };
+		BBD58EDF1CCB6D88009250DB /* MyNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EDE1CCB6D88009250DB /* MyNavigationViewController.m */; };
+		BBD58EE21CCB96FF009250DB /* MyPrivateView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EE11CCB96FF009250DB /* MyPrivateView.m */; };
 		BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB52B1C1E959500D7230F /* libxml2.tbd */; };
 		BBF22F771C80050400907AD9 /* RoomCoreTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */; };
 		BBFA851D1C30D216000466E4 /* 999.gif in Resources */ = {isa = PBXBuildFile; fileRef = BBFA851C1C30D216000466E4 /* 999.gif */; };
@@ -1739,6 +1746,18 @@
 		BBD58EB61CCA2026009250DB /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
 		BBD58EBB1CCA61EE009250DB /* XMyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMyViewController.h; sourceTree = "<group>"; };
 		BBD58EBC1CCA61EE009250DB /* XMyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMyViewController.m; sourceTree = "<group>"; };
+		BBD58ECF1CCB4A85009250DB /* ConsumeRankDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsumeRankDataSource.h; sourceTree = "<group>"; };
+		BBD58ED01CCB4A85009250DB /* ConsumeRankDataSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ConsumeRankDataSource.mm; sourceTree = "<group>"; };
+		BBD58ED21CCB4B5B009250DB /* ConsumeRankCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsumeRankCell.h; sourceTree = "<group>"; };
+		BBD58ED31CCB4B5B009250DB /* ConsumeRankCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConsumeRankCell.m; sourceTree = "<group>"; };
+		BBD58ED51CCB4E29009250DB /* XConsumeRankModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XConsumeRankModel.h; sourceTree = "<group>"; };
+		BBD58ED61CCB4E29009250DB /* XConsumeRankModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XConsumeRankModel.m; sourceTree = "<group>"; };
+		BBD58ED91CCB6017009250DB /* video_profiles_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_profiles_bg@2x.png"; sourceTree = "<group>"; };
+		BBD58EDA1CCB6017009250DB /* video_profiles_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_profiles_bg@3x.png"; sourceTree = "<group>"; };
+		BBD58EDD1CCB6D88009250DB /* MyNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNavigationViewController.h; sourceTree = "<group>"; };
+		BBD58EDE1CCB6D88009250DB /* MyNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyNavigationViewController.m; sourceTree = "<group>"; };
+		BBD58EE01CCB96FF009250DB /* MyPrivateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPrivateView.h; sourceTree = "<group>"; };
+		BBD58EE11CCB96FF009250DB /* MyPrivateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPrivateView.m; sourceTree = "<group>"; };
 		BBECB52B1C1E959500D7230F /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		BBF22F751C80050400907AD9 /* RoomCoreTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCoreTextCell.h; sourceTree = "<group>"; };
 		BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCoreTextCell.m; sourceTree = "<group>"; };
@@ -2518,6 +2537,7 @@
 		BB25D7D71C1571B400314C1E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				BBD58ED81CCB6017009250DB /* message */,
 				BB5E1C741CC3C1B10076C416 /* live */,
 				BBCE9CAA1CB3AD5600DA56D6 /* head */,
 				BBAF9A171CAA709000C16305 /* Assets.xcassets */,
@@ -3157,6 +3177,8 @@
 				BB9765F51C86831D00FAA5B7 /* TextChatModel.m */,
 				BB5138321C97E67300E09EF5 /* GiftModel.h */,
 				BB5138331C97E67300E09EF5 /* GiftModel.m */,
+				BBD58ED51CCB4E29009250DB /* XConsumeRankModel.h */,
+				BBD58ED61CCB4E29009250DB /* XConsumeRankModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -3214,6 +3236,10 @@
 				BBCF9A191CACE685005B9DCE /* TextCellView.m */,
 				BB5E1CAA1CC4CF310076C416 /* RoomHeaderView.h */,
 				BB5E1CAB1CC4CF310076C416 /* RoomHeaderView.m */,
+				BBD58ED21CCB4B5B009250DB /* ConsumeRankCell.h */,
+				BBD58ED31CCB4B5B009250DB /* ConsumeRankCell.m */,
+				BBD58EE01CCB96FF009250DB /* MyPrivateView.h */,
+				BBD58EE11CCB96FF009250DB /* MyPrivateView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -3305,6 +3331,8 @@
 				BB63F5851C2CC7A300A042E8 /* SearchController.m */,
 				BBB515F51C4D29E3008F2CEC /* AllColletViewController.h */,
 				BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */,
+				BBD58EDD1CCB6D88009250DB /* MyNavigationViewController.h */,
+				BBD58EDE1CCB6D88009250DB /* MyNavigationViewController.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -3416,6 +3444,8 @@
 				BB6F11891CC6975500F02064 /* RoomChatDataSource.m */,
 				BB6F118B1CC69C3900F02064 /* RoomNoticeDataSource.h */,
 				BB6F118C1CC69C3900F02064 /* RoomNoticeDataSource.m */,
+				BBD58ECF1CCB4A85009250DB /* ConsumeRankDataSource.h */,
+				BBD58ED01CCB4A85009250DB /* ConsumeRankDataSource.mm */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";
@@ -3686,6 +3716,16 @@
 			path = json;
 			sourceTree = "<group>";
 		};
+		BBD58ED81CCB6017009250DB /* message */ = {
+			isa = PBXGroup;
+			children = (
+				BBD58ED91CCB6017009250DB /* video_profiles_bg@2x.png */,
+				BBD58EDA1CCB6017009250DB /* video_profiles_bg@3x.png */,
+			);
+			name = message;
+			path = other/message;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3878,6 +3918,7 @@
 				BBCE9D341CB3AD5600DA56D6 /* 146_1.png in Resources */,
 				18D7A9131CC4E6A8006D9B74 /* TQAllReplyCell.xib in Resources */,
 				BB63F2B81C27FB2800A042E8 /* 17.gif in Resources */,
+				BBD58EDB1CCB6017009250DB /* video_profiles_bg@2x.png in Resources */,
 				BB6F12151CC7D5BA00F02064 /* chatRightView3@2x.png in Resources */,
 				BB6F11F01CC7C2E000F02064 /* video_list_2_icon@2x.png in Resources */,
 				BBCE9D291CB3AD5600DA56D6 /* 135_1.png in Resources */,
@@ -3896,6 +3937,7 @@
 				BBCE9D3C1CB3AD5600DA56D6 /* 154_1.png in Resources */,
 				18EA82B01CCA148F00BDB735 /* TQNoCustomHeader.xib in Resources */,
 				BB6F12041CC7C2E000F02064 /* video_share_qq_icon@2x.png in Resources */,
+				BBD58EDC1CCB6017009250DB /* video_profiles_bg@3x.png in Resources */,
 				BBCE9D1D1CB3AD5600DA56D6 /* 123_1.png in Resources */,
 				BB6F12061CC7C2E000F02064 /* video_share_weibo_icon@2x.png in Resources */,
 				BBCE9D321CB3AD5600DA56D6 /* 144_1.png in Resources */,
@@ -4110,6 +4152,7 @@
 				BB6F11801CC67E9700F02064 /* RoomInfo.mm in Sources */,
 				BB6F117F1CC676DF00F02064 /* TextCell.m in Sources */,
 				18F15C991CC4A4D2003223BE /* RoomTcpSocket.h in Sources */,
+				BBD58ED41CCB4B5B009250DB /* ConsumeRankCell.m in Sources */,
 				18F15C991CC4A4D2003223BE /* RoomTcpSocket.h in Sources */,
 				BB5E4FB71CBF7D1B00F8C1D4 /* TextNewCell.m in Sources */,
 				18AC14161C8FB8E100FDFF40 /* JPEngine.m in Sources */,
@@ -4260,8 +4303,10 @@
 				BB6F11781CC60B0500F02064 /* XPriPersonView.m in Sources */,
 				BB5E4FAE1CBF7D1B00F8C1D4 /* HotTextView.m in Sources */,
 				BB63F5FE1C2CC7A300A042E8 /* Video.m in Sources */,
+				BBD58ED11CCB4A85009250DB /* ConsumeRankDataSource.mm in Sources */,
 				18EA82AB1CCA148F00BDB735 /* TQMeCustomizedCell.m in Sources */,
 				BB5E4FAF1CBF7D1B00F8C1D4 /* LiveCoreTextCell.m in Sources */,
+				BBD58EDF1CCB6D88009250DB /* MyNavigationViewController.m in Sources */,
 				BB63F6071C2CC7A300A042E8 /* RoomUserCell.m in Sources */,
 				BBCF9A1A1CACE685005B9DCE /* TextCellView.m in Sources */,
 				188E4A161CC60D0C00D97254 /* TQSuspension.m in Sources */,
@@ -4288,6 +4333,7 @@
 				BB1769281C7B006F00CE947C /* SDWebImageManager.m in Sources */,
 				BB63F5C81C2CC7A300A042E8 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				185F59681CC4CAD600F605F5 /* MJPropertyType.m in Sources */,
+				BBD58EE21CCB96FF009250DB /* MyPrivateView.m in Sources */,
 				BB6F11A11CC78AE000F02064 /* ChatRightView.m in Sources */,
 				BB5E4F341CBF7B5800F8C1D4 /* VideoRoomConnection.cpp in Sources */,
 				BB5E1C8F1CC4BB920076C416 /* HttpManagerSing.mm in Sources */,
@@ -4352,6 +4398,7 @@
 				BB98EE5F1CB588C70028AAEF /* NSString+SBJSON.m in Sources */,
 				BB5E4F321CBF7B5800F8C1D4 /* Thread.cpp in Sources */,
 				BB25D80F1C15729800314C1E /* AppDelegate.m in Sources */,
+				BBD58ED71CCB4E29009250DB /* XConsumeRankModel.m in Sources */,
 				BB5E4F2E1CBF7B5800F8C1D4 /* Socket.cpp in Sources */,
 				BB5E4FB51CBF7D1B00F8C1D4 /* TextLiveCell.m in Sources */,
 				BB6F3A5D1C9A7DCD0035EBBE /* ChatView.m in Sources */,

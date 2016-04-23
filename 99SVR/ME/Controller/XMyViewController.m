@@ -48,19 +48,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _itemsArray = [NSMutableArray array];
     [self.navigationController.navigationBar setHidden:YES];
-    _leftMenuHeaderView = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 44,kScreenWidth, 205)];
+    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    _leftMenuHeaderView = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 0,kScreenWidth, 185)];
     _leftMenuHeaderView.delegate = self;
     [self.view addSubview:_leftMenuHeaderView];
-    
     //添加一个tableView
-    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, 255, kScreenWidth, 308) style:UITableViewStylePlain];
+    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, _leftMenuHeaderView.height, kScreenWidth, kScreenHeight-44) style:UITableViewStyleGrouped];
     _listTableView.delegate = self;
     _listTableView.dataSource = self;
     _listTableView.bounces = NO;
-    _listTableView.backgroundColor = [UIColor clearColor];
-    _listTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
     [self.view addSubview:_listTableView];
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];
@@ -117,14 +118,32 @@
     
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(),
-       ^{
-           [selfWeak.listTableView reloadData];
-       });
+    ^{
+        [selfWeak.listTableView reloadData];
+    });
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.itemsArray.count;
+    if (section==0) {
+        return _itemsArray.count-2;
+    }
+    return 2;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.5;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 9;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -136,17 +155,25 @@
         cell = [[LeftViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     cell.textLabel.textColor = [UIColor whiteColor];
-    LeftCellModel *model = _itemsArray[indexPath.row];
-    [cell setModel:model];
+    NSInteger nRow = indexPath.row + indexPath.section * (_itemsArray.count-2);
+    if (_itemsArray.count>nRow) {
+        LeftCellModel *model = _itemsArray[nRow];
+        [cell setModel:model];
+    }
+    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+    
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    LeftCellModel *model = _itemsArray[indexPath.row];
-    UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
-    [self.navigationController pushViewController:viewController animated:YES];
+    NSInteger nRow = indexPath.row + indexPath.section * (_itemsArray.count-2);
+    if (_itemsArray.count>nRow) {
+        LeftCellModel *model = _itemsArray[indexPath.row];
+        UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
 }
 
 #pragma mark - leftMenuHeaderViewDelegate

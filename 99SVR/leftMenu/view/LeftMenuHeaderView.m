@@ -8,7 +8,7 @@
 
 #import "LeftMenuHeaderView.h"
 #import "UserInfo.h"
-
+#import "UIImageView+WebCache.h"
 
 #define kImageWidth 107
 #define kCircle (kImageWidth + 12)
@@ -22,6 +22,7 @@
     UILabel *_lineView;
     UIImageView *imageB;
     UILabel *lblBContent;
+    
 }
 
 @end
@@ -34,9 +35,13 @@
     {
         [self setBackgroundColor:UIColorFromRGB(0x006dc9)];
         
-        UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(frame.size.width/2-kScreenWidth/2, 21, kScreenWidth,88)];
+        UIImageView *imgView = [[UIImageView alloc] initWithFrame:self.bounds];
         [self addSubview:imgView];
-        [imgView setImage:[UIImage imageNamed:@"left_bg"]];
+        char cBuffer[100]={0};
+        sprintf(cBuffer,"video_profiles_bg@2x");
+        NSString *strName = [NSString stringWithUTF8String:cBuffer];
+        NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
+        [imgView sd_setImageWithURL:url1];
         
         _circleLine = [UIView new];
         _circleLine.layer.masksToBounds = YES;
@@ -60,20 +65,10 @@
         [_nameLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:_nameLabel];
         
-        _vipLevel = [UILabel new];
-        _vipLevel.textColor = UIColorFromRGB(0xffffff);
-        _vipLevel.font = XCFONT(12);
-        [self addSubview:_vipLevel];
-        [_vipLevel setTextAlignment:NSTextAlignmentCenter];
-        
         _lineView = [UILabel new];
         _lineView.backgroundColor = UIColorFromRGB(0x6EACE0);
         [self addSubview:_lineView];
-        
-        imageB = [[UIImageView alloc] initWithFrame:Rect(50, 0,13,13)];
-        [imageB setImage:[UIImage imageNamed:@"personal_gold_icon"]];
-        [self addSubview:imageB];
-        imageB.hidden = YES;
+
         [self layoutViews];
     }
     return self;
@@ -93,7 +88,6 @@
     if (!login)
     {
         _nameLabel.text = @"";
-        [_vipLevel setText:@"未登录"];
     }
     else
     {
@@ -101,35 +95,21 @@
         _vipLevel.text = NSStringFromInt(userInfo.nUserId);
         if (userInfo.nType == 1)
         {
-            _nameLabel.text = userInfo.strName;
-            _vipLevel.font = [UIFont systemFontOfSize:12];
-            if (KUserSingleton.nStatus) {
-                NSString *stringGoid = [NSString stringWithFormat:@"%.01f 玖玖币",userInfo.goldCoin];
-                CGFloat width = [stringGoid sizeWithAttributes:@{NSFontAttributeName:XCFONT(12)}].width+10;
-                [_vipLevel setText:stringGoid];
-                _vipLevel.frame = Rect(kScreenWidth*0.75/2-width/2,_nameLabel.height+_nameLabel.y+5, width,20);
-                imageB.frame = Rect(_vipLevel.x-24,_vipLevel.y+1, 13, 13);
-                imageB.hidden = NO;
-            }
+            NSString *strInfo = [[NSString alloc] initWithFormat:@"%@ ID:%d",userInfo.strName,userInfo.nUserId];
+            _nameLabel.text = strInfo;
         }
         else
         {
             _nameLabel.text = @"";
-            [_vipLevel setText:@"未登录"];
-            _vipLevel.font = [UIFont systemFontOfSize:20];
-            _vipLevel.frame = Rect(30, _nameLabel.height+_nameLabel.y+5, self.width-60, 20);
-            imageB.hidden = YES;
         }
     }
 }
 
 - (void)layoutViews
 {
-    _circleLine.frame = Rect(self.width/2-kCircle/2, 1, kCircle, kCircle);
+    _circleLine.frame = Rect(self.width/2-kCircle/2, 40, kCircle, kCircle);
     _avatarImageView.frame = Rect(6, 6, _circleLine.width-12, _circleLine.height-12);
-    _nameLabel.frame = Rect(30, _avatarImageView.height+_avatarImageView.y+15, self.width-60, 20);
-    _vipLevel.frame = Rect(30, _nameLabel.height+_nameLabel.y+5, self.width-60, 20);
-    _lineView.frame = Rect(8, self.height-1.5, self.width-16, 1);
+    _nameLabel.frame = Rect(30,self.height-25, self.width-60, 20);
 }
 
 @end
