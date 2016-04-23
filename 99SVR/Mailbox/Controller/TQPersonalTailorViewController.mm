@@ -20,24 +20,30 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.title = @"私人定制";
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
-//    开始刷新,注册数据接受通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:nil];
-    [kHTTPSingle RequestPrivateServiceSummary:0 count:10];
-    
+    [self initUI];
 }
+-(void)initUI {
+    self.title = @"私人定制";
+
+    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
+    //    开始刷新,注册数据接受通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:nil];
+    // cell自动计算高度
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    // 估算高度
+    self.tableView.estimatedRowHeight = 44;
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [kHTTPSingle RequestPrivateServiceSummary:0 count:10];
 }
 
 - (void)loadRplayView:(NSNotification *)notify
 {
     NSArray *aryModel = notify.object;
     _aryModel = aryModel;
-    DLog(@"+++++++++++++++++++++++++++++++++++++++++%@", _aryModel);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.tableView reloadData];
@@ -58,10 +64,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     
 }
 
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return 100;
-//}
+
 
 
 @end

@@ -10,7 +10,6 @@
 #import "TQMecustomView.h"
 #import "TQNoCustomView.h"
 #import "TQNoPurchaseViewController.h"
-#import "TQMailboxViewController.h"
 #import "UIBarButtonItem+Item.h"
 
 @interface TQMeCustomizedViewController ()
@@ -21,29 +20,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//        TQMecustomView *MeView = [[TQMecustomView alloc] initWithFrame:self.view.bounds];
-//        [self.view addSubview:MeView];
+        TQMecustomView *MeView = [[TQMecustomView alloc] initWithFrame:self.view.bounds];
+        [self.view addSubview:MeView];
     
-        TQNoCustomView *NOView = [[TQNoCustomView alloc] initWithFrame:self.view.bounds];
-        [self.view addSubview:NOView];
+//        TQNoCustomView *NOView = [[TQNoCustomView alloc] initWithFrame:self.view.bounds];
+//        [self.view addSubview:NOView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushIntroductController) name:MESSAGE_TQINTORDUCT_VC object:nil];
     
     [self initUi];
 }
 -(void)initUi{
-    self.title = @"私人定制";
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(BackClick) title:@"信箱"];
+    self.title = @"我的私人定制";
 }
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setHidden:NO];
-
-}
-//准备删除
--(void)BackClick {
-    UIStoryboard *board = [UIStoryboard storyboardWithName: @"TQMailboxViewController" bundle: nil];
-    TQMailboxViewController *mailbox = [board instantiateViewControllerWithIdentifier: @"MailboxViewController"];
-    [self.navigationController pushViewController:mailbox animated:YES];
 
 }
 

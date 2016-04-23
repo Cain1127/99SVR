@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 @class TQMessageModel;
 @interface TQMessageCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIButton *openBtn;
 /** <#desc#> */
 @property (nonatomic ,weak)TQMessageModel *messageModel;
 @end

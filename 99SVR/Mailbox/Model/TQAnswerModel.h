@@ -8,6 +8,21 @@
 #import <Foundation/Foundation.h>
 #import "HttpMessage.pb.h"
 
+/*        char answerAuthorId[16];  // 回答者
+ char answerAuthorName[32];  // 回答者名称
+ char answerAuthorHead[64];  // 回答者ICON
+ uint32 answerAuthorRole; // 0：普通用户 1：讲师
+ char answerTime[32];  // 回答时间
+ char answerContent[256];  // 回答内容
+ char askAuthorName[32];  // 提问者
+ char askAuthorHead[64];  // 提问者头像
+ uint32 askAuthorRole; // 0：普通用户 1：讲师
+ char askStock[32];  // 提问的股票
+ char askContent[256];  // 提问内容
+ char askTime[32];  // 提问时间
+ uint32 fromClient;
+*/
+
 @interface TQAnswerModel : NSObject
 /** 头像 */
 @property (nonatomic ,weak)NSString *answerauthorhead;

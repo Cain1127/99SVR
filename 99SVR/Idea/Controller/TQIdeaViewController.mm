@@ -116,7 +116,9 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    
+    // cell自动计算高度
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 44;
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQideaTableViewCell class]) bundle:nil] forCellReuseIdentifier:ideaCell];
 }
 

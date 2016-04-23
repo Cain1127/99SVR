@@ -15,8 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UIButton *seeBtn;
-
-
+@property (weak, nonatomic) IBOutlet UIView *buttomView;
 
 @end
 @implementation TQPersonalTailorCell
@@ -27,9 +26,12 @@
 
 -(void)setPersonalModel:(TQPersonalModel *)personalModel {
     _personalModel = personalModel;
+    DLog("%@", personalModel);
+    
     self.TITLELabel.text = personalModel.title;
     self.summaryLabel.text = personalModel.summary;
     self.timeLabel.text = personalModel.publishtime;
+    self.nameLabel.text = personalModel.teamname;
 }
 
 

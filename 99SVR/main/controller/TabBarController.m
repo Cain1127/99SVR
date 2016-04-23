@@ -13,7 +13,7 @@
 #import "TextViewController.h"
 #import "StockHomeViewController.h"
 #import "TQIdeaViewController.h"
-#import "TQMeCustomizedViewController.h"
+#import "TQMyViewController.h"
 
 
 @interface TabBarController ()
@@ -67,7 +67,7 @@
     [self setUpOneViewController:[[IndexViewController alloc]init] title:@"热点时评" image:@"video_live" selectImage:@"video_live_h"];
     [self setUpOneViewController:[[TextViewController alloc]init] title:@"高手秘籍" image:@"text_live" selectImage:@"text_live_h"];
     [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"text_live" selectImage:@"text_live_h"];
-    [self setUpOneViewController:[[TQMeCustomizedViewController alloc]init] title:@"我" image:@"text_live" selectImage:@"text_live_h"];
+    [self setUpOneViewController:[[TQMyViewController alloc]init] title:@"我" image:@"text_live" selectImage:@"text_live_h"];
 
 
 }

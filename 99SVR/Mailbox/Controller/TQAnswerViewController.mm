@@ -21,6 +21,11 @@ static NSString *const answerCell = @"answerCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // cell自动计算高度
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    // 估算高度
+    self.tableView.estimatedRowHeight = 44;
+
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQAllReplyCell class]) bundle:nil] forCellReuseIdentifier:answerCell];
 }
 

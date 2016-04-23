@@ -21,17 +21,25 @@ static NSString *const messageCell = @"messageCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self initui];
+}
+-(void)initui{
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     title.text = @"专家观点";
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor colorWithHex:@"#0062D5"];
     self.navigationItem.titleView = title;
-
+    // cell自动计算高度
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    // 估算高度
+    self.tableView.estimatedRowHeight = 44;
     
-//    RequestSystemMessage
+    
+    //    RequestSystemMessage
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQMessageCell class]) bundle:nil] forCellReuseIdentifier:messageCell];
     /*设置头部vieiw*/
     [self addTableHeaderView];
+
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -130,10 +138,6 @@ static NSString *const messageCell = @"messageCell";
     return cell;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 200;
-}
 
 
 /*
