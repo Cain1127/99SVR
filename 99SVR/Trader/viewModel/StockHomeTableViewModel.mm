@@ -72,8 +72,11 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    [self.viewController.navigationController pushViewController:[[StockDealViewController alloc]init] animated:YES];
+    
+    StockDealModel *model = self.tabDataArray[indexPath.row];
+    StockDealViewController *stockVC = [[StockDealViewController alloc]init];
+    stockVC.operateId = [model.operateid integerValue];
+    [self.viewController.navigationController pushViewController:stockVC animated:YES];
 }
 
 -(void)setDataArray:(NSArray *)dataArray{

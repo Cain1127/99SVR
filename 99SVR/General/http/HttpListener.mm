@@ -173,6 +173,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     }
     muDic[@"stocks"] = stocksArray;
     muDic[@"vipLevel"] = @(vipLevel);
+    muDic[@"operateId"] = @(profit.operateid());
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
 }
 

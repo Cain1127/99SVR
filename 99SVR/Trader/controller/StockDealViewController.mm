@@ -47,7 +47,7 @@
     self.warningLab.text = @"仅代表讲师个人操盘记录,不构成投资建议，风险自负";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
-    [kHTTPSingle RequestOperateStockAllDetail:100];
+    [kHTTPSingle RequestOperateStockAllDetail:self.operateId];
 
 
 }
@@ -77,7 +77,7 @@
     [self.tableViewDataArray addObject:dic[@"stocks"]];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.tableViewModel setVipLevel:[dic[@"vipLevel"] integerValue]];
+        [weakSelf.tableViewModel setVipLevel:[dic[@"vipLevel"] integerValue] withOperateId:[dic[@"operateId"] integerValue]];
         weakSelf.tableViewModel.dataArray = weakSelf.tableViewDataArray;
         [weakSelf.tableView reloadData];
     });

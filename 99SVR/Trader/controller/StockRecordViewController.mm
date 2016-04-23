@@ -69,13 +69,13 @@
     [self.businessTab addGifHeaderWithRefreshingBlock:^{
         
         [weakSelf.busTabArray removeAllObjects];
-        [kHTTPSingle RequestOperateStockTransaction:0 start:0 cout:10];
+        [kHTTPSingle RequestOperateStockTransaction:weakSelf.operateId start:0 cout:10];
     }];
     
     [self.businessTab addLegendFooterWithRefreshingBlock:^{
         
         StockDealModel *model = [weakSelf.busTabArray lastObject];
-        [kHTTPSingle RequestOperateStockTransaction:0 start:[model.transId intValue] cout:10];
+        [kHTTPSingle RequestOperateStockTransaction:weakSelf.operateId start:[model.transId intValue] cout:10];
         
     }];
     
@@ -83,12 +83,12 @@
     //持仓详情
     [self.houseTab addGifHeaderWithRefreshingBlock:^{
         [weakSelf.houseTabArray removeAllObjects];
-        [kHTTPSingle RequestOperateStockTransaction:0 start:0 cout:10];
+        [kHTTPSingle RequestOperateStockTransaction:weakSelf.operateId start:0 cout:10];
     }];
     
     [self.houseTab addLegendFooterWithRefreshingBlock:^{
         StockDealModel *model = [weakSelf.houseTabArray lastObject];
-        [kHTTPSingle RequestOperateStockTransaction:0 start:[model.transId intValue] cout:10];
+        [kHTTPSingle RequestOperateStockTransaction:weakSelf.operateId start:[model.transId intValue] cout:10];
         
     }];
 

@@ -186,7 +186,7 @@ void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId
     
     for (; i>startId - count; i--) {
         OperateStockProfit profit;
-        profit.set_operateid(i+1);
+        profit.set_operateid(1990);
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);

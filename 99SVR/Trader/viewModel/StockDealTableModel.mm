@@ -16,6 +16,7 @@
     NSCache *_cache;
     UIViewController *_vc;
     BOOL _isVipBool;
+    NSInteger _operateId;
 }
 @end
 
@@ -33,7 +34,6 @@
 }
 
 -(void)setDataArray:(NSArray *)dataArray{
-    
     _dataArray = dataArray;
 }
 
@@ -220,13 +220,6 @@
     cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
-    
-    if (_isVipBool) {
-        NSLog(@" vip");
-    }else{
-        NSLog(@"不是 VIP");
-    }
-    
     [cell setCellDataWithModel:model withIsVip:_isVipBool withCellId:cellIdArray[indexPath.section]];
     return cell;
 }
@@ -239,8 +232,9 @@
         if (indexPath.section==1 || indexPath.section==2) {
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = indexPath.section==1 ? RecordType_Business : RecordType_StoreHouse;
+            recordVC.operateId = _operateId;
             [_vc.navigationController pushViewController:recordVC animated:YES];
-        }        
+        }
     }
     
 }
@@ -257,6 +251,7 @@
             
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = tag==1 ? RecordType_Business : RecordType_StoreHouse;
+            recordVC.operateId = _operateId;
             [_vc.navigationController pushViewController:recordVC animated:YES];
 
         }else{
@@ -267,7 +262,8 @@
     }
 }
 
--(void)setVipLevel:(NSInteger)vipLevel{
+-(void)setVipLevel:(NSInteger)vipLevel withOperateId:(NSInteger)operateId{
+    _operateId = operateId;
     if (vipLevel!=0) {
         _isVipBool = YES;
     }else{
