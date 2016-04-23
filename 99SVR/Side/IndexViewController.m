@@ -8,6 +8,7 @@
 
 #import "IndexViewController.h"
 #import "GroupListRequest.h"
+#import "TQMailboxViewController.h"
 #import "MJRefresh.h"
 #import "Toast+UIView.h"
 #import "LSTcpSocket.h"
@@ -173,7 +174,8 @@
 
 - (void)showLeftView
 {
-    [self leftItemClick];
+    TQMailboxViewController *mailbox = [[TQMailboxViewController alloc] init];
+    [self.navigationController pushViewController:mailbox animated:YES];
 }
 
 - (void)viewDidLoad

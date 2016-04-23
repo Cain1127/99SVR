@@ -7,7 +7,7 @@
 /**************************************** < 系统消息 >**********************************/
 
 #import <UIKit/UIKit.h>
-
-@interface TQMessageViewController : UITableViewController
+#import "CustomViewController.h"
+@interface TQMessageViewController : CustomViewController
 
 @end

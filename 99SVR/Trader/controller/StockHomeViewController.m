@@ -8,6 +8,7 @@
 #import "StockMacro.h"
 #import "StockDealViewController.h"
 #import "StockHomeTableViewModel.h"
+#import "TQMailboxViewController.h"
 
 @interface StockHomeViewController ()
 /**滑动控制器*/
@@ -115,7 +116,8 @@
 #pragma mark nabbar左右两边按钮事件
 - (void)showLeftView
 {
-    [self leftItemClick];
+    TQMailboxViewController *mailbox = [[TQMailboxViewController alloc] init];
+    [self.navigationController pushViewController:mailbox animated:YES];
 }
 
 - (void)searchClick

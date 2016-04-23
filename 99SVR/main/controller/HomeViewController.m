@@ -18,6 +18,7 @@
 #import "TextCell.h"
 #import "NavigationViewController.h"
 #import "NSJSONSerialization+RemovingNulls.h"
+#import "TQMailboxViewController.h"
 #import "UIImageFactory.h"
 #import "BaseService.h"
 #import "IndexViewController.h"
@@ -145,8 +146,8 @@ typedef enum : NSUInteger
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(showLeftView) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
     [self.view addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
-    
     [self.view setBackgroundColor:[UIColor whiteColor]];
+    
     _aryBanner = [NSMutableArray array];
     [self createScroll];
     [self createPage];
@@ -239,7 +240,8 @@ typedef enum : NSUInteger
 
 - (void)showLeftView
 {
-    [self leftItemClick];
+    TQMailboxViewController *mailbox = [[TQMailboxViewController alloc] init];
+    [self.navigationController pushViewController:mailbox animated:YES];
 }
 
 - (void)updateBannerInfo:(NSDictionary *)dict

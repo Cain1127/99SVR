@@ -18,9 +18,9 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self setTitleText:@"私人定制"];
     self.title = @"私人定制";
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
+//    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
     
 }
 
