@@ -8,13 +8,10 @@
 #import "StockMacro.h"
 #import "StockDealViewController.h"
 #import "StockHomeTableViewModel.h"
-<<<<<<< HEAD:99SVR/Trader/controller/StockHomeViewController.mm
 #import "MJRefresh.h"
 #import "MJRefreshComponent.h"
 #import "StockDealModel.h"
-=======
 #import "TQMailboxViewController.h"
->>>>>>> 4d172a5617d17c0e348071ce6299f41ca43d1ee0:99SVR/Trader/controller/StockHomeViewController.m
 
 @interface StockHomeViewController ()
 /**滑动控制器*/

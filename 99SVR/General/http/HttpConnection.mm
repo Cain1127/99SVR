@@ -297,7 +297,7 @@ void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAll
     std::vector<OperateStockTransaction> trans;
     std::vector<OperateStocks> stocks;
     int i=0;
-    for (i=0; i<2; i++) {
+    for (i=0; i<1; i++) {
         OperateStockTransaction saction;
         OperateStocks stock;
 

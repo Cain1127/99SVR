@@ -221,6 +221,12 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
     
+    if (_isVipBool) {
+        NSLog(@" vip");
+    }else{
+        NSLog(@"不是 VIP");
+    }
+    
     [cell setCellDataWithModel:model withIsVip:_isVipBool withCellId:cellIdArray[indexPath.section]];
     return cell;
 }
@@ -261,15 +267,12 @@
     }
 }
 
--(void)setVipLevel:(NSInteger )vipLevel{
-    
-    _vipLevel = vipLevel;
+-(void)setVipLevel:(NSInteger)vipLevel{
     if (vipLevel!=0) {
         _isVipBool = YES;
     }else{
         _isVipBool = NO;
     }
-    
 }
 
 

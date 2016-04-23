@@ -7,8 +7,9 @@
 
 @interface StockDealTableModel : NSObject<UITableViewDelegate,UITableViewDataSource>
 /**vip等级*/
-@property (nonatomic , assign) NSInteger vipLevel;
 @property (nonatomic , strong) NSArray *dataArray;
 @property (nonatomic , weak) UIViewController *viewController;
+
+-(void)setVipLevel:(NSInteger)vipLevel;
 
 @end

@@ -21,7 +21,6 @@
 @property (nonatomic , strong) UITableView *houseTab;
 @property (nonatomic , strong) StockRecordTabModel *businessdTabModel;
 @property (nonatomic , strong) StockRecordTabModel *houseTabModel;
-@property (nonatomic, assign) int nCurrent;
 /**公车交易记录的数据*/
 @property (nonatomic , strong) NSMutableArray *busTabArray;
 /**仓库记录的数据*/
@@ -54,24 +53,12 @@
             [weakSelf.houseTabModel setDataArray:weakSelf.houseTabArray WithRecordTableTag:index];
         }
     };
-//    [_businessTab addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(test)] ;
-//    
-//    _businessTab addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(test1)
-//    _businessTab addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(test)] ;
-    
 }
-//
-//- (void)test1{
-//    [kHTTPSingle RequestReply:0 start:_nCurrent count:20];
-//    _nCurrent += 20;
-//}
-//
-//- (void)test{
-//    [kHTTPSingle RequestReply:0 start:0 count:20];
-//    _nCurrent = 20;
-//}
+
 
 -(void)initData{
+    
+    WeakSelf(self);
     
     //交易记录通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBusinessData:) name:MESSAGE_STOCK_RECORD_BUSINESS_VC object:nil];
@@ -79,63 +66,93 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshWareHouseData:) name:MESSAGE_STOCK_WAREHOUSE__VC object:nil];
 
     //交易记录
-    [kHTTPSingle RequestOperateStockTransaction:0 start:0 cout:20];
-
-
-    //持仓记录
-    [kHTTPSingle RequestOperateStocks:100];
+    [self.businessTab addGifHeaderWithRefreshingBlock:^{
+        
+        [weakSelf.busTabArray removeAllObjects];
+        [kHTTPSingle RequestOperateStockTransaction:0 start:0 cout:10];
+    }];
     
+    [self.businessTab addLegendFooterWithRefreshingBlock:^{
+        
+        StockDealModel *model = [weakSelf.busTabArray lastObject];
+        [kHTTPSingle RequestOperateStockTransaction:0 start:[model.transId intValue] cout:10];
+        
+    }];
+    
+    
+    //持仓详情
+    [self.houseTab addGifHeaderWithRefreshingBlock:^{
+        [weakSelf.houseTabArray removeAllObjects];
+        [kHTTPSingle RequestOperateStockTransaction:0 start:0 cout:10];
+    }];
+    
+    [self.houseTab addLegendFooterWithRefreshingBlock:^{
+        StockDealModel *model = [weakSelf.houseTabArray lastObject];
+        [kHTTPSingle RequestOperateStockTransaction:0 start:[model.transId intValue] cout:10];
+        
+    }];
+
+    
+    [self.businessTab.gifHeader loadDefaultImg];
+    [self.houseTab.gifHeader loadDefaultImg];
+    
+    
+    [self.businessTab.gifHeader beginRefreshing];
+    [self.houseTab.gifHeader beginRefreshing];
+
+    
+
 }
 #pragma mark 刷新交易记录数据
 -(void)refreshBusinessData:(NSNotification *)notfi{
-//    NSArray *aryModel = notfi.object;
-    WeakSelf(self);
-#if 0
-    if (aryModel) {
-        //_aryModel = aryModel;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([_businessTab.header isRefreshing]) {
-                [_businessTab.footer resetNoMoreData];
-            }else if([_businessTab.footer isRefreshing])
-            {}
-            if (selfWeak.nCurrent!=_aryModel.count) {
-                [_businessTab.footer noticeNoMoreData];
-            }
-            else{
-                [_businessTab.footer resetNoMoreData];
-            }
-        });
-    }
-#endif
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        NSArray *array = notfi.object;
-        for (int i=0; i!=array.count; i++) {
-            StockDealModel *model = array[i];
-            [weakSelf.busTabArray addObject:model];
-        }
-        [weakSelf.businessdTabModel setDataArray:weakSelf.busTabArray WithRecordTableTag:1];
-        [weakSelf.businessTab reloadData];
-    });
+
+    [self refreshTableDataWithTable:self.businessTab WithTableViewModel:self.businessdTabModel fromDataArray:(NSArray *)notfi.object toDataArray:self.busTabArray withTabTag:1];
+
 
 }
 
 #pragma mark 刷新持仓记录数据
 -(void)refreshWareHouseData:(NSNotification *)notfi{
-    WeakSelf(self);
+    
+    [self refreshTableDataWithTable:self.houseTab WithTableViewModel:self.houseTabModel fromDataArray:(NSArray *)notfi.object toDataArray:self.houseTabArray withTabTag:2];
+}
+
+/**
+ *  刷新数据
+ *
+ *  @param table         对应的tab
+ *  @param tableModel    对应的tableMldel
+ *  @param fromDataArray 原始数据
+ *  @param toDataArray   实际的数据
+ *  @param tag           tableView的tag
+ */
+-(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockRecordTabModel *)tableModel fromDataArray:(NSArray *)fromDataArray toDataArray:(NSMutableArray *)toDataArray withTabTag:(NSInteger )tag{
+    
+    if ([fromDataArray  count]==0) {
+        [table.footer noticeNoMoreData];
+        [UIView animateWithDuration:1 animations:^{
+            table.footer.hidden = YES;
+        }];
+    }else{
+        table.footer.hidden = NO;
+        [table.footer resetNoMoreData];
+    }
+    
+    [table.gifHeader endRefreshing];
+    [table.footer endRefreshing];
+    
+    for (int i=0; i!=[fromDataArray  count]; i++) {
+        [toDataArray addObject:fromDataArray[i]];
+    }
+    [tableModel setDataArray:toDataArray WithRecordTableTag:tag];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSArray *array = notfi.object;
-        
-        for (int i=0; i!=array.count; i++) {
-            
-            StockDealModel *model = array[i];
-            [weakSelf.houseTabArray addObject:model];
-        }
-        [weakSelf.houseTabModel setDataArray:weakSelf.houseTabArray WithRecordTableTag:2];
-        [weakSelf.houseTab reloadData];
+        [table reloadData];
     });
 }
+
+
+
 #pragma mark lazy 懒加载
 -(NSMutableArray *)busTabArray{
 

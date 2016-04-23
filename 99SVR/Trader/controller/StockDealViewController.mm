@@ -65,7 +65,7 @@
     WeakSelf(self);
     
     NSDictionary *dic = notify.object;
-    weakSelf.tableViewModel.vipLevel = [dic[@"vipLevel"] integerValue];
+    
     //拿到头部视图的数据
     self.headerModel = dic[@"headerModel"];
     [self.headerView setHeaderViewWithDataModel:self.headerModel];
@@ -77,6 +77,7 @@
     [self.tableViewDataArray addObject:dic[@"stocks"]];
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.tableViewModel setVipLevel:[dic[@"vipLevel"] integerValue]];
         weakSelf.tableViewModel.dataArray = weakSelf.tableViewDataArray;
         [weakSelf.tableView reloadData];
     });
