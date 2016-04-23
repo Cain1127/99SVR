@@ -134,7 +134,7 @@
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
 		87D9EE0FC59214DC02EE2C95 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A43875FF97FDC1CA789AE15 /* libPods.a */; };
 		B44F77681CC39FF1008E3B26 /* StockDealHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */; };
-		B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.m */; };
+		B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.mm */; };
 		B47DD59D1CBF345300C47EF7 /* SliderMenuTopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD59A1CBF345300C47EF7 /* SliderMenuTopScrollView.m */; };
 		B47DD59E1CBF345300C47EF7 /* SliderMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD59C1CBF345300C47EF7 /* SliderMenuView.m */; };
 		B47DD5A11CBF6D8C00C47EF7 /* ShareFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5A01CBF6D8C00C47EF7 /* ShareFunction.m */; };
@@ -926,7 +926,7 @@
 		B44F77661CC39FF1008E3B26 /* StockDealHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealHeaderView.h; sourceTree = "<group>"; };
 		B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealHeaderView.mm; sourceTree = "<group>"; };
 		B47DD5961CBF2D9400C47EF7 /* StockHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeViewController.h; sourceTree = "<group>"; };
-		B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockHomeViewController.m; sourceTree = "<group>"; };
+		B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockHomeViewController.mm; sourceTree = "<group>"; };
 		B47DD5991CBF345300C47EF7 /* SliderMenuTopScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderMenuTopScrollView.h; sourceTree = "<group>"; };
 		B47DD59A1CBF345300C47EF7 /* SliderMenuTopScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderMenuTopScrollView.m; sourceTree = "<group>"; };
 		B47DD59B1CBF345300C47EF7 /* SliderMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderMenuView.h; sourceTree = "<group>"; };
@@ -2304,7 +2304,7 @@
 			isa = PBXGroup;
 			children = (
 				B47DD5961CBF2D9400C47EF7 /* StockHomeViewController.h */,
-				B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.m */,
+				B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.mm */,
 				B4A15E9D1CBFAA9E00587E3F /* StockDealViewController.h */,
 				B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.mm */,
 				B4EA09211CC8B9E000E8F933 /* StockRecordViewController.h */,
@@ -4258,7 +4258,6 @@
 				BB5E4F9B1CBF7D1B00F8C1D4 /* TextViewController.m in Sources */,
 				BB6F3AC01C9EFADC0035EBBE /* BandingMobileViewController.m in Sources */,
 				BB6F117E1CC60B2000F02064 /* XVideoLiveViewcontroller.mm in Sources */,
-				18E09E451CC78D6600C63A6D /* TQMecustomView.m in Sources */,
 				B4EA09291CC8DF8400E8F933 /* StockRecordTabModel.mm in Sources */,
 				18F9710D1C92947F001B2575 /* DataSigner.m in Sources */,
 				BB63F6241C2CC7A300A042E8 /* LeftCellModel.m in Sources */,
@@ -4438,7 +4437,7 @@
 				B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */,
 				18D3CB751CC0920300816BD0 /* TQMailboxViewController.m in Sources */,
 				BB63F6261C2CC7A300A042E8 /* LeftViewCell.m in Sources */,
-				B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.m in Sources */,
+				B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */,
 				18B0CECE1CC07CC700BA82DF /* UIColor+Hex.m in Sources */,
 				BB1661881C3D029200D318BE /* MBProgressHUD.m in Sources */,
 				BB63F6181C2CC7A300A042E8 /* NewViewController.m in Sources */,
@@ -4618,7 +4617,6 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;

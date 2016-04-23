@@ -22,6 +22,7 @@
         _teamname = StrTransformCToUTF8(profit.teamname().c_str());
         _operateid = IntTransformIntToStr(profit.operateid());
         _goalprofit = FloatTransformFloatToStr(profit.goalprofit());
+        _transId = IntTransformIntToStr(profit.transid());
         _totalprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.totalprofit()*100))];
         //日利率
         _dayprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.dayprofit()*100))];
@@ -116,25 +117,27 @@
     return self;
 }
 #pragma mark 股票首页
-- (instancetype)initWithHomeRecordData:(OperateStockProfit &)data{
+- (instancetype)initWithHomeRecordData:(OperateStockProfit *)profit{
     
     
     self = [super init];
     
     if (self) {
-//    
-//        _operateid;
-//        _teamid;
-//        _teamname;
-//        _teamicon;
-//        _focus;
-//        _goalprofit;
-//        _totalprofit;
-//        _dayprofit;
-//        _monthprofit;
-//        _winrate;
 
-        
+        _teamid = StrTransformCToUTF8(profit->teamid().c_str());
+        _teamicon = StrTransformCToUTF8(profit->teamicon().c_str());
+        _focus = StrTransformCToUTF8(profit->focus().c_str());
+        _teamname = StrTransformCToUTF8(profit->teamname().c_str());
+        _operateid = IntTransformIntToStr(profit->operateid());
+        _goalprofit = FloatTransformFloatToStr(profit->goalprofit());
+        _totalprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->totalprofit()*100))];
+        //日利率
+        _dayprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->dayprofit()*100))];
+        //月收益
+        _monthprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->monthprofit()*100))];
+        //超赢
+        _winrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->winrate()*100))];
+        _transId = IntTransformIntToStr(profit->transid());
         
     }
     

@@ -168,13 +168,29 @@ void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId,
 
 // 请求操盘列表-日收益排序
 void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId, int count, OperateStockProfitListenerDay* listener){
+    
+    NSLog(@"startId= %d",startId);
+
+    
     std::vector<OperateStockProfit> day;
-    for (int i=0; i<10; i++) {
+    static int initId = 10;
+    int i = startId;
+    if ( startId == 0 ) {
+        i = initId;
+        startId = initId;
+    }else if (startId ==2){
+        
+        listener->onResponse(day);
+        return;
+    }
+    
+    for (; i>startId - count; i--) {
         OperateStockProfit profit;
         profit.set_operateid(i+1);
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
+        profit.set_transid(i);
         profit.set_teamname("日收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
@@ -183,19 +199,35 @@ void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
         day.push_back(profit);
+        NSLog(@" -----  transid %d",i);
+    
     }
     listener->onResponse(day);
 }
 // 请求操盘列表-月收益排序
 void HttpConnection::RequestOperateStockProfitOrderByMonth(int teamId, int startId, int count, OperateStockProfitListenerMonth* listener)
 {
-    std::vector<OperateStockProfit> day;
-    for (int i=0; i<10; i++) {
+    std::vector<OperateStockProfit> mon;
+    static int initId = 15;
+    int i = startId;
+    if ( startId == 0 ) {
+        i = initId;
+        startId = initId;
+    }else if (startId ==3){
+        
+        listener->onResponse(mon);
+        return;
+    }
+    
+    NSLog(@"startId= %d",startId);
+    
+    for (; i>startId - count; i--) {
         OperateStockProfit profit;
         profit.set_operateid(i+1);
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
+        profit.set_transid(i);
         profit.set_teamname("月收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
@@ -203,20 +235,36 @@ void HttpConnection::RequestOperateStockProfitOrderByMonth(int teamId, int start
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
-        day.push_back(profit);
+        mon.push_back(profit);
+        
     }
-    listener->onResponse(day);
+    listener->onResponse(mon);
+
 }
 // 请求操盘列表-总收益排序
 void HttpConnection::RequestOperateStockProfitOrderByTotal(int teamId, int startId, int count, OperateStockProfitListenerAll* listener)
 {
-    std::vector<OperateStockProfit> day;
-    for (int i=0; i<10; i++) {
+    std::vector<OperateStockProfit> total;
+    
+    static int initId = 15;
+    int i = startId;
+    if ( startId == 0 ) {
+        i = initId;
+        startId = initId;
+    }else if (startId ==3){
+        
+        listener->onResponse(total);
+        return;
+    }
+
+    
+    for (; i>startId - count; i--) {
         OperateStockProfit profit;
         profit.set_operateid(i+1);
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
+        profit.set_transid(i);
         profit.set_teamname("总收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
@@ -224,9 +272,10 @@ void HttpConnection::RequestOperateStockProfitOrderByTotal(int teamId, int start
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
-        day.push_back(profit);
+        total.push_back(profit);
+        
     }
-    listener->onResponse(day);
+    listener->onResponse(total);
 }
 
 // 请求操盘详情
@@ -299,12 +348,17 @@ void HttpConnection::RequestOperateStocks(int operateId, OperateStocksListener* 
 void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, int count, OperateStockTransactionListener* listener){
     
     std::vector<OperateStockTransaction>trans;
-    
-    for (int i=0; i!=5; i++) {
+    static int initId = 10000;
+    int i = startId;
+    if ( startId == 0 ) {
+        i = initId;
+    }
+    for (; i>=startId - count; i--) {
         
         OperateStockTransaction stock;
         stock.set_stockname("交易记录");
-        stock.set_operateid(i+200);
+        stock.set_transid(i);
+        stock.set_operateid(100);
         stock.set_stockid("1008699");
         stock.set_count(i+220);
         stock.set_money(110000+1);
@@ -312,6 +366,8 @@ void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, 
         stock.set_time("2015 15 15");
         stock.set_buytype("买入 卖出");
         trans.push_back(stock);
+        
+        DLog(@"transid---%d",i);
     }
     listener->onResponse(trans);
 

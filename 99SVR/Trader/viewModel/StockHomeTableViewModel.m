@@ -40,7 +40,7 @@
 #pragma mark tableView delegate dataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return self.tabDataArray.count+1;
+    return self.tabDataArray.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

@@ -8,6 +8,9 @@
 #import "StockMacro.h"
 #import "StockDealViewController.h"
 #import "StockHomeTableViewModel.h"
+#import "MJRefresh.h"
+#import "MJRefreshComponent.h"
+#import "StockDealModel.h"
 
 @interface StockHomeViewController ()
 /**滑动控制器*/
@@ -15,12 +18,19 @@
 /**日*/
 @property (nonatomic, strong) UITableView *dayTab;
 @property (nonatomic ,strong) StockHomeTableViewModel *dayTableViewModel;
+@property (nonatomic , strong) NSMutableArray *dayDataArray;
+
 /**月*/
 @property (nonatomic, strong) UITableView *monTab;
 @property (nonatomic ,strong) StockHomeTableViewModel *monTableViewModel;
+@property (nonatomic , strong) NSMutableArray *monDataArray;
+
 /**总的*/
 @property (nonatomic, strong) UITableView *totalTab;
 @property (nonatomic ,strong) StockHomeTableViewModel *totalTableViewModel;
+@property (nonatomic , strong) NSMutableArray *totalDataArray;
+
+
 
 @end
 
@@ -75,6 +85,7 @@
 #pragma mark initData
 -(void)initData{
     
+    WeakSelf(self);
 
     //day
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_STOCK_HOME_DAY__VC object:nil];
@@ -82,35 +93,133 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMonData:) name:MESSAGE_STOCK_HOME_MON__VC object:nil];
     //total
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
-    [kHTTPSingle RequestOperateStockProfitByDay:0 start:0 count:10];
-    [kHTTPSingle RequestOperateStockProfitByMonth:0 start:0 count:10];
-    [kHTTPSingle RequestOperateStockProfitByAll:0 start:0 count:10];
+    [self.dayTab addGifHeaderWithRefreshingBlock:^{
+        
+        [weakSelf.dayDataArray removeAllObjects];
+        [kHTTPSingle RequestOperateStockProfitByDay:0 start:0 count:2];
+    }];
+    
+    [self.dayTab addLegendFooterWithRefreshingBlock:^{
+        
+        StockDealModel *model = [weakSelf.dayDataArray lastObject];
+        [kHTTPSingle RequestOperateStockProfitByDay:0 start:[model.transId intValue] count:2];
+
+        
+    }];
+    
+    
+    
+    [self.monTab addGifHeaderWithRefreshingBlock:^{
+        [weakSelf.monDataArray removeAllObjects];
+        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:0 count:5];
+        
+    }];
+    
+    [self.monTab addLegendFooterWithRefreshingBlock:^{
+        
+        StockDealModel *model = [weakSelf.monDataArray lastObject];
+        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:[model.transId intValue] count:5];
+
+    }];
+    
     
 
+    [self.totalTab addGifHeaderWithRefreshingBlock:^{
+        [weakSelf.totalDataArray removeAllObjects];
+        [kHTTPSingle RequestOperateStockProfitByAll:0 start:0 count:5];
+    }];
+    
+    [self.totalTab addLegendFooterWithRefreshingBlock:^{
+        
+        StockDealModel *model = [weakSelf.totalDataArray lastObject];
+        [kHTTPSingle RequestOperateStockProfitByAll:0 start:[model.transId intValue] count:5];
+    }];
+
+    [self.dayTab.gifHeader loadDefaultImg];
+    [self.monTab.gifHeader loadDefaultImg];
+    [self.totalTab.gifHeader loadDefaultImg];
+    
+
+    [self.dayTab.gifHeader beginRefreshing];
+    [self.monTab.gifHeader beginRefreshing];
+    [self.totalTab.gifHeader beginRefreshing];
     
 }
 
 
 #pragma mark 刷新数据
 -(void)refreshDayData:(NSNotification *)notfi{
-    WeakSelf(self);
-    
-    DLog(@"天的数据");
-    
+    [self refreshTableDataWithTable:self.dayTab WithTableViewModel:self.dayTableViewModel fromDataArray:(NSArray *)notfi.object toDataArray:self.dayDataArray];
 }
 -(void)refreshMonData:(NSNotification *)notfi{
-    WeakSelf(self);
-    DLog(@"月的数据");
-    
-    
+
+    [self refreshTableDataWithTable:self.monTab WithTableViewModel:self.monTableViewModel fromDataArray:(NSArray *)notfi.object toDataArray:self.monDataArray];
+
 }
 -(void)refreshTotalData:(NSNotification *)notfi{
-    WeakSelf(self);
-    DLog(@"总的的数据");
 
+    [self refreshTableDataWithTable:self.totalTab WithTableViewModel:self.totalTableViewModel fromDataArray:(NSArray *)notfi.object toDataArray:self.totalDataArray];
+}
+/**
+ *  刷新数据
+ *
+ *  @param table         对应的tab
+ *  @param tableModel    对应的tableMldel
+ *  @param fromDataArray 原始数据
+ *  @param toDataArray   实际的数据
+ */
+-(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockHomeTableViewModel *)tableModel fromDataArray:(NSArray *)fromDataArray toDataArray:(NSMutableArray *)toDataArray{
     
+    if ([fromDataArray  count]==0) {
+        [table.footer noticeNoMoreData];
+        [UIView animateWithDuration:1 animations:^{
+            table.footer.hidden = YES;
+        }];
+    }else{
+        table.footer.hidden = NO;
+        [table.footer resetNoMoreData];
+    }
+    
+    [table.gifHeader endRefreshing];
+    [table.footer endRefreshing];
+    
+    for (int i=0; i!=[fromDataArray  count]; i++) {
+        [toDataArray addObject:fromDataArray[i]];
+    }
+    [tableModel setDataArray:toDataArray];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [table reloadData];
+    });
 }
 
+
+-(NSMutableArray *)dayDataArray{
+    
+    if (!_dayDataArray) {
+        
+        _dayDataArray = [NSMutableArray array];
+    }
+    return _dayDataArray;
+}
+
+-(NSMutableArray *)monDataArray{
+    
+    if (!_monDataArray) {
+        
+        _monDataArray = [NSMutableArray array];
+    }
+    return _monDataArray;
+}
+
+-(NSMutableArray *)totalDataArray{
+    
+    if (!_totalDataArray) {
+        
+        _totalDataArray = [NSMutableArray array];
+    }
+    return _totalDataArray;
+}
 
 #pragma mark nabbar左右两边按钮事件
 - (void)showLeftView

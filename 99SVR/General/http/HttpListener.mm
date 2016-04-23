@@ -65,9 +65,22 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
  */
 void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
     
-    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:muDic];
+    NSMutableArray *muArray = [NSMutableArray array];
+    
+    for (size_t i=0; i!=day.size(); i++) {
+        
+        OperateStockProfit *profit = &day[i];
+        StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
+        [muArray addObject:allModel];
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:muArray];
 
+    });
+    
+    
 }
 /**
  *  请求操盘列表月
@@ -75,19 +88,41 @@ void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
 
 void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& mon){
     
-    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:muDic];
-
+    NSMutableArray *muArray = [NSMutableArray array];
     
+    for (size_t i=0; i!=mon.size(); i++) {
+        
+        OperateStockProfit *profit = &mon[i];
+        StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
+        [muArray addObject:allModel];
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:muArray];
+
+    });
+    
+
 }
 /**
  *  请求操盘列表总的
  */
 void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total){
     
-    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:muDic];
-
+    NSMutableArray *muArray = [NSMutableArray array];
+    
+    for (size_t i=0; i!=total.size(); i++) {
+        
+        OperateStockProfit *profit = &total[i];
+        StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
+        [muArray addObject:allModel];
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:muArray];
+    });
+    
 }
 
 

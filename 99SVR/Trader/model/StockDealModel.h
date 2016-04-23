@@ -45,7 +45,8 @@
 @property (nonatomic , copy) NSString *money;
 /**成交时间*/
 @property (nonatomic , copy) NSString *time;
-
+/**记录下面最新的id*/
+@property (nonatomic , copy) NSString *transId;
 
 /**cost 成本*/
 @property (nonatomic , copy) NSString *cost;
@@ -82,7 +83,7 @@
 - (instancetype)initWithStockRecordWareHouseData:(OperateStocks *)data;
 #pragma mark 股票首页
 /**股票首页*/
-- (instancetype)initWithHomeRecordData:(OperateStockProfit &)data;
+- (instancetype)initWithHomeRecordData:(OperateStockProfit *)profit;
 
 
 
