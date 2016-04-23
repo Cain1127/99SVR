@@ -40,7 +40,7 @@
 #pragma mark tableView delegate dataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return self.tabDataArray.count+1;
+    return self.tabDataArray.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -59,14 +59,24 @@
     if (!cell) {
         cell = [[StockHomeCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
+    
+    if (self.tabDataArray.count==0) {
+        return nil;
+    }
+    
+    StockDealModel *model = self.tabDataArray[indexPath.row];
+    [cell setCellDataWithModel:model];
     cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    [self.viewController.navigationController pushViewController:[[StockDealViewController alloc]init] animated:YES];
+    
+    StockDealModel *model = self.tabDataArray[indexPath.row];
+    StockDealViewController *stockVC = [[StockDealViewController alloc]init];
+    stockVC.operateId = [model.operateid integerValue];
+    [self.viewController.navigationController pushViewController:stockVC animated:YES];
 }
 
 -(void)setDataArray:(NSArray *)dataArray{

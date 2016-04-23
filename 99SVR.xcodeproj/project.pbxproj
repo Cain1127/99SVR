@@ -142,21 +142,21 @@
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
 		87D9EE0FC59214DC02EE2C95 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A43875FF97FDC1CA789AE15 /* libPods.a */; };
 		B44F77681CC39FF1008E3B26 /* StockDealHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */; };
-		B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.m */; };
+		B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.mm */; };
 		B47DD59D1CBF345300C47EF7 /* SliderMenuTopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD59A1CBF345300C47EF7 /* SliderMenuTopScrollView.m */; };
 		B47DD59E1CBF345300C47EF7 /* SliderMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD59C1CBF345300C47EF7 /* SliderMenuView.m */; };
 		B47DD5A11CBF6D8C00C47EF7 /* ShareFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5A01CBF6D8C00C47EF7 /* ShareFunction.m */; };
 		B48591EF1CB4FBD500DAC61F /* AdaptiveWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = B48591EE1CB4FBD500DAC61F /* AdaptiveWebView.m */; };
 		B48591F11CB4FC1E00DAC61F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B48591F01CB4FC1E00DAC61F /* WebKit.framework */; };
 		B4A15E9B1CBFA91300587E3F /* BaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A15E971CBFA91300587E3F /* BaseCell.m */; };
-		B4A15E9C1CBFA91300587E3F /* StockHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A15E9A1CBFA91300587E3F /* StockHomeCell.m */; };
+		B4A15E9C1CBFA91300587E3F /* StockHomeCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4A15E9A1CBFA91300587E3F /* StockHomeCell.mm */; };
 		B4A15E9F1CBFAA9E00587E3F /* StockDealViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.mm */; };
 		B4A15EA21CBFACFE00587E3F /* StockDealCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4A15EA11CBFACFE00587E3F /* StockDealCell.mm */; };
 		B4C4B36D1CBAA5FF00B20A58 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B3661CBAA5FF00B20A58 /* IAPHelper.m */; };
 		B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */; };
 		B4C4B3701CBAA5FF00B20A58 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */; };
 		B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C6B7B11CBE1B220072795B /* RegisterTextField.m */; };
-		B4EA09051CC6048300E8F933 /* StockHomeTableViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.m */; };
+		B4EA09051CC6048300E8F933 /* StockHomeTableViewModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.mm */; };
 		B4EA090A1CC754C500E8F933 /* StockDealTableModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09091CC754C500E8F933 /* StockDealTableModel.mm */; };
 		B4EA09101CC757D500E8F933 /* DDLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA090D1CC757D500E8F933 /* DDLineChartView.m */; };
 		B4EA09111CC757D500E8F933 /* StockChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA090F1CC757D500E8F933 /* StockChartView.m */; };
@@ -955,7 +955,7 @@
 		B44F77661CC39FF1008E3B26 /* StockDealHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealHeaderView.h; sourceTree = "<group>"; };
 		B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealHeaderView.mm; sourceTree = "<group>"; };
 		B47DD5961CBF2D9400C47EF7 /* StockHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeViewController.h; sourceTree = "<group>"; };
-		B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockHomeViewController.m; sourceTree = "<group>"; };
+		B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockHomeViewController.mm; sourceTree = "<group>"; };
 		B47DD5991CBF345300C47EF7 /* SliderMenuTopScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderMenuTopScrollView.h; sourceTree = "<group>"; };
 		B47DD59A1CBF345300C47EF7 /* SliderMenuTopScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderMenuTopScrollView.m; sourceTree = "<group>"; };
 		B47DD59B1CBF345300C47EF7 /* SliderMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderMenuView.h; sourceTree = "<group>"; };
@@ -968,7 +968,7 @@
 		B4A15E961CBFA91300587E3F /* BaseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseCell.h; sourceTree = "<group>"; };
 		B4A15E971CBFA91300587E3F /* BaseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseCell.m; sourceTree = "<group>"; };
 		B4A15E991CBFA91300587E3F /* StockHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeCell.h; sourceTree = "<group>"; };
-		B4A15E9A1CBFA91300587E3F /* StockHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockHomeCell.m; sourceTree = "<group>"; };
+		B4A15E9A1CBFA91300587E3F /* StockHomeCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockHomeCell.mm; sourceTree = "<group>"; };
 		B4A15E9D1CBFAA9E00587E3F /* StockDealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealViewController.h; sourceTree = "<group>"; };
 		B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealViewController.mm; sourceTree = "<group>"; };
 		B4A15EA01CBFACFE00587E3F /* StockDealCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealCell.h; sourceTree = "<group>"; };
@@ -984,7 +984,7 @@
 		B4C6B7B01CBE1B220072795B /* RegisterTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTextField.h; sourceTree = "<group>"; };
 		B4C6B7B11CBE1B220072795B /* RegisterTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTextField.m; sourceTree = "<group>"; };
 		B4EA09031CC6048300E8F933 /* StockHomeTableViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeTableViewModel.h; sourceTree = "<group>"; };
-		B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockHomeTableViewModel.m; sourceTree = "<group>"; };
+		B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockHomeTableViewModel.mm; sourceTree = "<group>"; };
 		B4EA09081CC754C500E8F933 /* StockDealTableModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealTableModel.h; sourceTree = "<group>"; };
 		B4EA09091CC754C500E8F933 /* StockDealTableModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealTableModel.mm; sourceTree = "<group>"; };
 		B4EA090C1CC757D500E8F933 /* DDLineChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLineChartView.h; sourceTree = "<group>"; };
@@ -2356,7 +2356,7 @@
 			isa = PBXGroup;
 			children = (
 				B47DD5961CBF2D9400C47EF7 /* StockHomeViewController.h */,
-				B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.m */,
+				B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.mm */,
 				B4A15E9D1CBFAA9E00587E3F /* StockDealViewController.h */,
 				B4A15E9E1CBFAA9E00587E3F /* StockDealViewController.mm */,
 				B4EA09211CC8B9E000E8F933 /* StockRecordViewController.h */,
@@ -2409,7 +2409,7 @@
 				B4A15E961CBFA91300587E3F /* BaseCell.h */,
 				B4A15E971CBFA91300587E3F /* BaseCell.m */,
 				B4A15E991CBFA91300587E3F /* StockHomeCell.h */,
-				B4A15E9A1CBFA91300587E3F /* StockHomeCell.m */,
+				B4A15E9A1CBFA91300587E3F /* StockHomeCell.mm */,
 				B4A15EA01CBFACFE00587E3F /* StockDealCell.h */,
 				B4A15EA11CBFACFE00587E3F /* StockDealCell.mm */,
 				B4EA092A1CC8E12600E8F933 /* StockRecordCell.h */,
@@ -2437,7 +2437,7 @@
 			isa = PBXGroup;
 			children = (
 				B4EA09031CC6048300E8F933 /* StockHomeTableViewModel.h */,
-				B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.m */,
+				B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.mm */,
 				B4EA09081CC754C500E8F933 /* StockDealTableModel.h */,
 				B4EA09091CC754C500E8F933 /* StockDealTableModel.mm */,
 				B4EA09271CC8DF8400E8F933 /* StockRecordTabModel.h */,
@@ -4294,7 +4294,7 @@
 				BB6F3AC31C9EFB070035EBBE /* UpdatePwdViewController.m in Sources */,
 				BB17692A1C7B006F00CE947C /* UIButton+WebCache.m in Sources */,
 				BB125B4C1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m in Sources */,
-				B4A15E9C1CBFA91300587E3F /* StockHomeCell.m in Sources */,
+				B4A15E9C1CBFA91300587E3F /* StockHomeCell.mm in Sources */,
 				BB63F6021C2CC7A300A042E8 /* NSAttributedString+EmojiExtension.m in Sources */,
 				BB63F6231C2CC7A300A042E8 /* IndexViewController.m in Sources */,
 				B48591EF1CB4FBD500DAC61F /* AdaptiveWebView.m in Sources */,
@@ -4507,7 +4507,7 @@
 				1898AC661C9BADE600F2681D /* AboutController.m in Sources */,
 				BB63F5C11C2CC7A300A042E8 /* MASCompositeConstraint.m in Sources */,
 				BB63F47B1C2B809800A042E8 /* UserInfo.m in Sources */,
-				B4EA09051CC6048300E8F933 /* StockHomeTableViewModel.m in Sources */,
+				B4EA09051CC6048300E8F933 /* StockHomeTableViewModel.mm in Sources */,
 				BB63F61C1C2CC7A300A042E8 /* RoomGroup.m in Sources */,
 				BB5E4E891CB8E74500F8C1D4 /* AlertFactory.m in Sources */,
 				BB63F6221C2CC7A300A042E8 /* MySearchBar.m in Sources */,
@@ -4523,7 +4523,7 @@
 				18D3CB751CC0920300816BD0 /* TQMailboxViewController.m in Sources */,
 				BBD58EBD1CCA61EE009250DB /* XMyViewController.m in Sources */,
 				BB63F6261C2CC7A300A042E8 /* LeftViewCell.m in Sources */,
-				B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.m in Sources */,
+				B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */,
 				18B0CECE1CC07CC700BA82DF /* UIColor+Hex.m in Sources */,
 				BB1661881C3D029200D318BE /* MBProgressHUD.m in Sources */,
 				BB63F6181C2CC7A300A042E8 /* NewViewController.m in Sources */,

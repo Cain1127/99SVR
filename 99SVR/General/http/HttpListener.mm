@@ -73,9 +73,22 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
  */
 void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
     
-    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:muDic];
+    NSMutableArray *muArray = [NSMutableArray array];
+    
+    for (size_t i=0; i!=day.size(); i++) {
+        
+        OperateStockProfit *profit = &day[i];
+        StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
+        [muArray addObject:allModel];
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:muArray];
 
+    });
+    
+    
 }
 /**
  *  请求操盘列表月
@@ -83,19 +96,41 @@ void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
 
 void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& mon){
     
-    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:muDic];
-
+    NSMutableArray *muArray = [NSMutableArray array];
     
+    for (size_t i=0; i!=mon.size(); i++) {
+        
+        OperateStockProfit *profit = &mon[i];
+        StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
+        [muArray addObject:allModel];
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:muArray];
+
+    });
+    
+
 }
 /**
  *  请求操盘列表总的
  */
 void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total){
     
-    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:muDic];
-
+    NSMutableArray *muArray = [NSMutableArray array];
+    
+    for (size_t i=0; i!=total.size(); i++) {
+        
+        OperateStockProfit *profit = &total[i];
+        StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
+        [muArray addObject:allModel];
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:muArray];
+    });
+    
 }
 
 
@@ -104,7 +139,7 @@ void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks,uint32 currLevelId){
     
-    int vipLevel = 3;
+    int vipLevel = 1;
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     //股票头部数据
@@ -122,13 +157,11 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
             
             OperateStockTransaction *transaction = &trans[i];
             StockDealModel *transactionModel = [[StockDealModel alloc]initWithStockDealBusinessRecoreData:transaction];
-            transactionModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
             [transArray addObject:transactionModel];
         }
     }else{
      
         StockDealModel *model = [[StockDealModel alloc]init];
-        model.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
         [transArray addObject:model];
     }
     muDic[@"trans"] = transArray;
@@ -140,16 +173,15 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
             
             OperateStocks *operateStocks = &stocks[i];
             StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithStockDealWareHouseRecoreData:operateStocks];
-            operateStocksModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
             [stocksArray addObject:operateStocksModel];
         }
     }else{
         StockDealModel *model = [[StockDealModel alloc]init];
-        model.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
         [stocksArray addObject:model];
     }
     muDic[@"stocks"] = stocksArray;
-    
+    muDic[@"vipLevel"] = @(vipLevel);
+    muDic[@"operateId"] = @(profit.operateid());
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
 }
 
@@ -166,7 +198,15 @@ void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>
         [muArray addObject:model];
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:muArray];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:muArray];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
+        
+    });
+
+    
+
 }
 /**
  *  请求操盘详情--持仓情况
@@ -179,8 +219,8 @@ void OperateStocksListener::onResponse(vector<OperateStocks>& stocks){
         StockDealModel *model = [[StockDealModel alloc]initWithStockRecordWareHouseData:stocksModel];
         [muArray addObject:model];
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
+//    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
     
 }
 /**

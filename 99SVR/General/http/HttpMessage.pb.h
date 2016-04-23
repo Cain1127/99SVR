@@ -460,6 +460,7 @@ class OperateStockProfit
     
 private:
     
+    uint32  _transId;
     uint32	_operateid;
     string	_teamid;
     string	_teamname;
@@ -473,6 +474,10 @@ private:
     
     
 public:
+    
+    inline uint32 transid() { return _transId; } const
+    
+    inline void set_transid(const uint32 value) { _transId = value; }
     
     inline uint32 operateid() { return _operateid; } const
     
@@ -607,7 +612,7 @@ class OperateStockTransaction
 {
     
 private:
-    
+    uint32  _transId;
     uint32	_operateid;
     string	_buytype;
     string	_stockid;
@@ -619,6 +624,11 @@ private:
     
     
 public:
+    
+    inline uint32 transid() { return _transId; } const
+    
+    inline void set_transid(const uint32 value) { _transId = value; }
+
     
     inline uint32 operateid() { return _operateid; } const
     

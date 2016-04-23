@@ -16,6 +16,7 @@
     NSCache *_cache;
     UIViewController *_vc;
     BOOL _isVipBool;
+    NSInteger _operateId;
 }
 @end
 
@@ -27,12 +28,12 @@
     if (self) {
         _dataArray = @[];
         _cache = [[NSCache alloc]init];
+        _isVipBool = NO;
     }
     return self;
 }
 
 -(void)setDataArray:(NSArray *)dataArray{
-    
     _dataArray = dataArray;
 }
 
@@ -47,23 +48,15 @@
     
     CGFloat height = 0.0;
     
-    StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
-    BOOL vipBool = YES;
-    if ([model.vipLevel integerValue]>0) {
-        vipBool = YES;
-    }else{
-        vipBool = NO;
-    }
-    
     if (indexPath.section==0) {
         
         height = STORCK_Deal_StockCell_H;
     }else if (indexPath.section ==1){
         
-        height = vipBool? STORCK_Deal_BusinessRecordCell_VIP_H: STORCK_Deal_BusinessRecordCell_NotVIP_H;
+        height = _isVipBool? STORCK_Deal_BusinessRecordCell_VIP_H: STORCK_Deal_BusinessRecordCell_NotVIP_H;
     }else{
         
-        height = vipBool? STORCK_Deal_WareHouseRecordCell_VIP_H: STORCK_Deal_WareHouseRecordCell_NotVIP_H;
+        height = _isVipBool? STORCK_Deal_WareHouseRecordCell_VIP_H: STORCK_Deal_WareHouseRecordCell_NotVIP_H;
     }
     return height;
 }
@@ -140,6 +133,8 @@
         //右边的图标
         UIImageView *imageView = [[UIImageView alloc]init];
         imageView.tag = 102;
+        imageView.image =[UIImage imageNamed:@"stock_right_next_icon"];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
         [backView addSubview:imageView];
         
         [backView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -154,7 +149,7 @@
            
             make.right.equalTo(@(-10));
             make.top.equalTo(@0);
-            make.width.equalTo(@20);
+            make.width.equalTo(@18);
             make.bottom.equalTo(@0);
         }];
         
@@ -186,20 +181,19 @@
     
         leftLab.text = @"";
         rightLab.text = @"";
-        imageView.backgroundColor = [UIColor whiteColor];
+        imageView.hidden = YES;
 
 
     }else if (section==1){
     
         leftLab.text = @"交易动态";
         rightLab.text = @"全部记录";
-        imageView.backgroundColor = [UIColor yellowColor];
-        
+        imageView.hidden = NO;
     }else{
         
         leftLab.text = @"持仓详情";
         rightLab.text = @"全部持仓";
-        imageView.backgroundColor = [UIColor yellowColor];
+        imageView.hidden = NO;
     }
     return headerView;
 }
@@ -227,14 +221,7 @@
     cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
-    BOOL vipBool = YES;
-    if ([model.vipLevel integerValue]>0) {
-        vipBool = YES;
-    }else{
-        vipBool = NO;
-    }
-    _isVipBool = vipBool;
-    [cell setCellDataWithModel:model withIsVip:vipBool withCellId:cellIdArray[indexPath.section]];
+    [cell setCellDataWithModel:model withIsVip:_isVipBool withCellId:cellIdArray[indexPath.section]];
     return cell;
 }
 
@@ -246,8 +233,9 @@
         if (indexPath.section==1 || indexPath.section==2) {
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = indexPath.section==1 ? RecordType_Business : RecordType_StoreHouse;
+            recordVC.operateId = _operateId;
             [_vc.navigationController pushViewController:recordVC animated:YES];
-        }        
+        }
     }
     
 }
@@ -264,6 +252,7 @@
             
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = tag==1 ? RecordType_Business : RecordType_StoreHouse;
+            recordVC.operateId = _operateId;
             [_vc.navigationController pushViewController:recordVC animated:YES];
 
         }else{
@@ -271,6 +260,15 @@
             DLog(@"不是VIP 看输出");
         }
         
+    }
+}
+
+-(void)setVipLevel:(NSInteger)vipLevel withOperateId:(NSInteger)operateId{
+    _operateId = operateId;
+    if (vipLevel!=0) {
+        _isVipBool = YES;
+    }else{
+        _isVipBool = NO;
     }
 }
 
