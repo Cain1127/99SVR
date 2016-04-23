@@ -119,8 +119,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 -(void)mailboxClick {
-    UIStoryboard *board = [UIStoryboard storyboardWithName: @"TQMailboxViewController" bundle: nil];
-    TQMailboxViewController *mailbox = [board instantiateViewControllerWithIdentifier: @"MailboxViewController"];
+    TQMailboxViewController *mailbox = [[TQMailboxViewController alloc] init];
     [self.navigationController pushViewController:mailbox animated:YES];
 }
 

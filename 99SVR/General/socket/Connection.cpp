@@ -168,7 +168,6 @@ void Connection::get_host_form_lbs(char* lbs)
 		strcpy(host_from_lbs[get_host_index], content);
 		LOG("index:%d time:%ld lbs:%s host:%s", get_host_index, clock(), ip, host_from_lbs[get_host_index]);
 		get_host_index++;
-
 		if (!islogining)
 		{
 			const char *d = ",;";
@@ -455,6 +454,8 @@ void Connection::connect_asyn(const char* host, short port)
 	param->conn = this;
 	param->port = port;
 	strcpy(param->ip, host);
+//    param->port = 7401;
+//    strcpy(param->ip, "121.12.118.32");
 	Thread::start(connect_runnable, param);
 }
 

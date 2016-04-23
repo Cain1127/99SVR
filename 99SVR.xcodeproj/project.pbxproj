@@ -60,7 +60,6 @@
 		1898AC6A1C9BADE600F2681D /* SettingCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC651C9BADE600F2681D /* SettingCenterController.m */; };
 		1898AC711C9BB77100F2681D /* VideoColletionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC701C9BB77100F2681D /* VideoColletionViewController.m */; };
 		189D8A8E1C97982100E7D16D /* SlideBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */; };
-		18AAD55D1C9927B800438E18 /* LeftMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AAD55A1C9927B800438E18 /* LeftMenu.m */; };
 		18AAD55E1C9927B800438E18 /* LeftMenuHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AAD55C1C9927B800438E18 /* LeftMenuHeaderView.m */; };
 		18AAD5641C993CD100438E18 /* AssetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AAD5611C993CD100438E18 /* AssetViewController.m */; };
 		18AAD5651C993CD100438E18 /* PaySelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18AAD5631C993CD100438E18 /* PaySelectViewController.m */; };
@@ -95,7 +94,6 @@
 		18EA82261CC8A4C200BDB735 /* UIImage+Antialias.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82251CC8A4C200BDB735 /* UIImage+Antialias.m */; };
 		18EA82291CC8A5B200BDB735 /* UIImageView+Header.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82281CC8A5B200BDB735 /* UIImageView+Header.m */; };
 		18EA822C1CC8C41C00BDB735 /* TQideaViewModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA822B1CC8C41C00BDB735 /* TQideaViewModel.mm */; };
-		18EA824F1CCA09F000BDB735 /* TQMailboxViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18EA824E1CCA09F000BDB735 /* TQMailboxViewController.storyboard */; };
 		18EA82A21CCA148F00BDB735 /* TQIntroductionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82861CCA148F00BDB735 /* TQIntroductionViewController.m */; };
 		18EA82A31CCA148F00BDB735 /* TQMeCustomizedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.m */; };
 		18EA82A41CCA148F00BDB735 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA828C1CCA148F00BDB735 /* TableViewCell.m */; };
@@ -605,6 +603,7 @@
 		BBD58EB81CCA2026009250DB /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EB01CCA2026009250DB /* json_value.cpp */; };
 		BBD58EB91CCA2026009250DB /* json_valueiterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = BBD58EB11CCA2026009250DB /* json_valueiterator.inl */; };
 		BBD58EBA1CCA2026009250DB /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EB21CCA2026009250DB /* json_writer.cpp */; };
+		BBD58EBD1CCA61EE009250DB /* XMyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EBC1CCA61EE009250DB /* XMyViewController.m */; };
 		BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB52B1C1E959500D7230F /* libxml2.tbd */; };
 		BBF22F771C80050400907AD9 /* RoomCoreTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */; };
 		BBFA851D1C30D216000466E4 /* 999.gif in Resources */ = {isa = PBXBuildFile; fileRef = BBFA851C1C30D216000466E4 /* 999.gif */; };
@@ -718,8 +717,6 @@
 		1898AC701C9BB77100F2681D /* VideoColletionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoColletionViewController.m; path = controller/VideoColletionViewController.m; sourceTree = "<group>"; };
 		189D8A8C1C97982100E7D16D /* SlideBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideBaseViewController.h; sourceTree = "<group>"; };
 		189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideBaseViewController.m; sourceTree = "<group>"; };
-		18AAD5591C9927B800438E18 /* LeftMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftMenu.h; sourceTree = "<group>"; };
-		18AAD55A1C9927B800438E18 /* LeftMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftMenu.m; sourceTree = "<group>"; };
 		18AAD55B1C9927B800438E18 /* LeftMenuHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftMenuHeaderView.h; sourceTree = "<group>"; };
 		18AAD55C1C9927B800438E18 /* LeftMenuHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftMenuHeaderView.m; sourceTree = "<group>"; };
 		18AAD5601C993CD100438E18 /* AssetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetViewController.h; sourceTree = "<group>"; };
@@ -786,7 +783,6 @@
 		18EA82491CC9D50E00BDB735 /* TQMessageModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TQMessageModel.mm; path = 99SVR/ME/View/TQMessageModel.mm; sourceTree = SOURCE_ROOT; };
 		18EA824B1CC9FADC00BDB735 /* TQAnswerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TQAnswerModel.h; path = 99SVR/ME/View/TQAnswerModel.h; sourceTree = SOURCE_ROOT; };
 		18EA824C1CC9FADC00BDB735 /* TQAnswerModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TQAnswerModel.mm; path = 99SVR/ME/View/TQAnswerModel.mm; sourceTree = SOURCE_ROOT; };
-		18EA824E1CCA09F000BDB735 /* TQMailboxViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TQMailboxViewController.storyboard; sourceTree = "<group>"; };
 		18EA82851CCA148F00BDB735 /* TQIntroductionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIntroductionViewController.h; sourceTree = "<group>"; };
 		18EA82861CCA148F00BDB735 /* TQIntroductionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQIntroductionViewController.m; sourceTree = "<group>"; };
 		18EA82871CCA148F00BDB735 /* TQMeCustomizedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMeCustomizedViewController.h; sourceTree = "<group>"; };
@@ -1741,6 +1737,8 @@
 		BBD58EB41CCA2026009250DB /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value.h; sourceTree = "<group>"; };
 		BBD58EB51CCA2026009250DB /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
 		BBD58EB61CCA2026009250DB /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
+		BBD58EBB1CCA61EE009250DB /* XMyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMyViewController.h; sourceTree = "<group>"; };
+		BBD58EBC1CCA61EE009250DB /* XMyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMyViewController.m; sourceTree = "<group>"; };
 		BBECB52B1C1E959500D7230F /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		BBF22F751C80050400907AD9 /* RoomCoreTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCoreTextCell.h; sourceTree = "<group>"; };
 		BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCoreTextCell.m; sourceTree = "<group>"; };
@@ -1959,8 +1957,6 @@
 		188741751C96FD75002EF25A /* view */ = {
 			isa = PBXGroup;
 			children = (
-				18AAD5591C9927B800438E18 /* LeftMenu.h */,
-				18AAD55A1C9927B800438E18 /* LeftMenu.m */,
 				18AAD55B1C9927B800438E18 /* LeftMenuHeaderView.h */,
 				18AAD55C1C9927B800438E18 /* LeftMenuHeaderView.m */,
 			);
@@ -2044,7 +2040,6 @@
 			children = (
 				18D3CB731CC0920300816BD0 /* TQMailboxViewController.h */,
 				18D3CB741CC0920300816BD0 /* TQMailboxViewController.m */,
-				18EA824E1CCA09F000BDB735 /* TQMailboxViewController.storyboard */,
 				18D3CB7C1CC0CF1600816BD0 /* TQCommentReplyViewController.h */,
 				18D3CB7D1CC0CF1600816BD0 /* TQCommentReplyViewController.m */,
 				18D3CB7F1CC0CFB400816BD0 /* TQMessageViewController.h */,
@@ -2114,6 +2109,8 @@
 				18EA82861CCA148F00BDB735 /* TQIntroductionViewController.m */,
 				18EA82871CCA148F00BDB735 /* TQMeCustomizedViewController.h */,
 				18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.m */,
+				BBD58EBB1CCA61EE009250DB /* XMyViewController.h */,
+				BBD58EBC1CCA61EE009250DB /* XMyViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -4019,7 +4016,6 @@
 				BB63F2BF1C27FB2800A042E8 /* 23.gif in Resources */,
 				BBCE9D061CB3AD5600DA56D6 /* 100_1.png in Resources */,
 				BB6F11E51CC7C2E000F02064 /* tab_me_icon_n@3x.png in Resources */,
-				18EA824F1CCA09F000BDB735 /* TQMailboxViewController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4407,7 +4403,6 @@
 				BB5E4FA51CBF7D1B00F8C1D4 /* TextLiveModel.m in Sources */,
 				BB63F5FF1C2CC7A300A042E8 /* EmojiTextAttachment.m in Sources */,
 				BB5F9BC11C5DDA2100285EA6 /* MediaBuffer.m in Sources */,
-				18AAD55D1C9927B800438E18 /* LeftMenu.m in Sources */,
 				BB5E4F361CBF7B5800F8C1D4 /* ZLLogonServerSing.mm in Sources */,
 				BB5138341C97E67300E09EF5 /* GiftModel.m in Sources */,
 				BB5E4FA01CBF7D1B00F8C1D4 /* IdeaModel.m in Sources */,
@@ -4436,6 +4431,7 @@
 				18EA82A31CCA148F00BDB735 /* TQMeCustomizedViewController.m in Sources */,
 				B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */,
 				18D3CB751CC0920300816BD0 /* TQMailboxViewController.m in Sources */,
+				BBD58EBD1CCA61EE009250DB /* XMyViewController.m in Sources */,
 				BB63F6261C2CC7A300A042E8 /* LeftViewCell.m in Sources */,
 				B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */,
 				18B0CECE1CC07CC700BA82DF /* UIColor+Hex.m in Sources */,

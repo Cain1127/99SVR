@@ -138,6 +138,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 - (void)exitRoom
 {
     [_liveControl stopNewPlay];
+    _room = nil;
     [kProtocolSingle exitRoom];
     [[SDImageCache sharedImageCache] clearMemory];
 }

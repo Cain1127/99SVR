@@ -1,15 +1,14 @@
 //
-//  LeftMenu.m
+//  XMyViewController.m
 //  99SVR
 //
-//  Created by apple on 16/3/15.
-//  Copyright © 2016年 xia zhonglin . All rights reserved.
+//  Created by xia zhonglin  on 4/22/16.
+//  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
-#import "LeftMenu.h"
+#import "XMyViewController.h"
 #import "LeftMenuHeaderView.h"
 #import "TextColletViewController.h"
-#import "UserInfo.h"
 #import "LeftCellModel.h"
 #import "LeftViewCell.h"
 #import <Bugly/CrashReporter.h>
@@ -33,58 +32,40 @@
 #define kMyLivingHistory @"我的足迹"
 #define kKefu @"客服中心"
 
-@interface LeftMenu()<UITableViewDataSource,UITableViewDelegate,LeftMenuHeaderViewDelegate>
+@interface XMyViewController()<UITableViewDataSource,UITableViewDelegate,LeftMenuHeaderViewDelegate>
 {
-    UINavigationController *control;
+    
 }
-@property (nonatomic, weak) LeftMenuHeaderView *leftMenuHeaderView;
-@property (nonatomic, weak) UITableView *listTableView;
-@property (nonatomic,strong) NSMutableArray *itemsArray;
+
+@property (nonatomic, strong) LeftMenuHeaderView *leftMenuHeaderView;
+@property (nonatomic, strong) UITableView *listTableView;
+@property (nonatomic, strong) NSMutableArray *itemsArray;
+
 @end
 
-@implementation LeftMenu
+@implementation XMyViewController
 
--(instancetype)initWithFrame:(CGRect)frame
+- (void)viewDidLoad
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        self.backgroundColor = UIColorFromRGB(0x006dc9);
-        //添加头部的View
-        LeftMenuHeaderView *header = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 44,kScreenWidth * 0.75, 205)];
-        header.delegate = self;
-        [self addSubview:header];
-        self.leftMenuHeaderView = header;
-        
-        //添加一个tableView
-        UITableView *tableview = [[UITableView alloc] init];
-        tableview.delegate = self;
-        tableview.dataSource = self;
-        tableview.bounces = NO;
-        tableview.backgroundColor = [UIColor clearColor];
-        tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _listTableView = tableview;
-        [self addSubview:tableview];
-    }
-    return self;
-}
-
-- (NSMutableArray *)itemsArray
-{
-    if (!_itemsArray) {
-        _itemsArray = [NSMutableArray array];
-    }
-    return _itemsArray;
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
+    [super viewDidLoad];
+    [self.navigationController.navigationBar setHidden:YES];
+    _leftMenuHeaderView = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 44,kScreenWidth, 205)];
+    _leftMenuHeaderView.delegate = self;
+    [self.view addSubview:_leftMenuHeaderView];
     
-    _listTableView.frame = CGRectMake(0, 255, kScreenWidth * 0.75, 308);
-    [self checkLogin];
+    //添加一个tableView
+    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, 255, kScreenWidth, 308) style:UITableViewStylePlain];
+    _listTableView.delegate = self;
+    _listTableView.dataSource = self;
+    _listTableView.bounces = NO;
+    _listTableView.backgroundColor = [UIColor clearColor];
+    _listTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:_listTableView];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadProfile:) name:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
+    
 }
 
 - (void)reloadProfile:(NSNotification *)notify
@@ -102,6 +83,12 @@
 {
     [[CrashReporter sharedInstance] setUserId:[NSString stringWithFormat:@"用户:%@",NSStringFromInt([UserInfo sharedUserInfo].nUserId)]];
     [self performSelectorOnMainThread:@selector(checkLogin) withObject:nil waitUntilDone:YES];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self checkLogin];
 }
 
 - (void)checkLogin
@@ -128,11 +115,11 @@
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"kefu.png" goClassName:@"KefuCenterController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
     
-    __weak LeftMenu *__self = self;
+    @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-       [__self.listTableView reloadData];
-    });
+       ^{
+           [selfWeak.listTableView reloadData];
+       });
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -157,11 +144,9 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([self.degelate respondsToSelector:@selector(leftMenuDidSeletedAtRow:title:vc:)]) {
-        LeftCellModel *model = _itemsArray[indexPath.row];
-        UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
-        [self.degelate leftMenuDidSeletedAtRow:indexPath.row title:model.title vc:viewController];
-    }
+    LeftCellModel *model = _itemsArray[indexPath.row];
+    UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 #pragma mark - leftMenuHeaderViewDelegate
@@ -171,19 +156,13 @@
     {
         
         ProfileViewController *profileVC = [[ProfileViewController alloc] init];
-        if ([self.degelate respondsToSelector:@selector(leftMenuDidSeletedAtRow:title:vc:)])
-        {
-            [self.degelate leftMenuDidSeletedAtRow:0 title:nil vc:profileVC];
-        }
+        [self.navigationController pushViewController:profileVC animated:YES];
         return;
     }
     ///未登录
     LoginViewController *loginVC = [[LoginViewController alloc] init];
-    if ([self.degelate respondsToSelector:@selector(leftMenuDidSeletedAtRow:title:vc:)])
-    {
-        [self.degelate leftMenuDidSeletedAtRow:0 title:nil vc:loginVC];
-        
-    }
-
+    [self.navigationController pushViewController:loginVC animated:YES];
+    
 }
+
 @end
