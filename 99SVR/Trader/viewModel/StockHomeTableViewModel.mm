@@ -59,6 +59,13 @@
     if (!cell) {
         cell = [[StockHomeCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
+    
+    if (self.tabDataArray.count==0) {
+        return nil;
+    }
+    
+    StockDealModel *model = self.tabDataArray[indexPath.row];
+    [cell setCellDataWithModel:model];
     cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;

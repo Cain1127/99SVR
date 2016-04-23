@@ -194,7 +194,7 @@ void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId
         profit.set_teamname("日收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("日收益");
+        profit.set_focus("日收益专注短线");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
@@ -231,7 +231,7 @@ void HttpConnection::RequestOperateStockProfitOrderByMonth(int teamId, int start
         profit.set_teamname("月收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("月收益");
+        profit.set_focus("月专注长线");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
@@ -268,7 +268,7 @@ void HttpConnection::RequestOperateStockProfitOrderByTotal(int teamId, int start
         profit.set_teamname("总收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("总收益");
+        profit.set_focus("总长期");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
@@ -348,10 +348,15 @@ void HttpConnection::RequestOperateStocks(int operateId, OperateStocksListener* 
 void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, int count, OperateStockTransactionListener* listener){
     
     std::vector<OperateStockTransaction>trans;
-    static int initId = 10000;
+    static int initId = 15;
     int i = startId;
     if ( startId == 0 ) {
         i = initId;
+        startId = initId;
+    }else if (startId ==3){
+        
+        listener->onResponse(trans);
+        return;
     }
     for (; i>=startId - count; i--) {
         
@@ -366,8 +371,6 @@ void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, 
         stock.set_time("2015 15 15");
         stock.set_buytype("买入 卖出");
         trans.push_back(stock);
-        
-        DLog(@"transid---%d",i);
     }
     listener->onResponse(trans);
 

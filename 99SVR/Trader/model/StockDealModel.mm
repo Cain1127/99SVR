@@ -129,7 +129,7 @@
         _focus = StrTransformCToUTF8(profit->focus().c_str());
         _teamname = StrTransformCToUTF8(profit->teamname().c_str());
         _operateid = IntTransformIntToStr(profit->operateid());
-        _goalprofit = FloatTransformFloatToStr(profit->goalprofit());
+        _goalprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->goalprofit()*100))];
         _totalprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->totalprofit()*100))];
         //日利率
         _dayprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->dayprofit()*100))];

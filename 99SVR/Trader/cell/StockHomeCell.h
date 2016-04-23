@@ -4,6 +4,7 @@
 /**高手操盘的首页的cell*/
 
 #import "BaseCell.h"
+#import "StockDealModel.h"
 
 @interface StockHomeCell : BaseCell
 
@@ -19,5 +20,7 @@
 @property (nonatomic, strong) UILabel *totalNumLab;
 /**总收益标题*/
 @property (nonatomic, strong) UILabel *totalTitLab;
+
+-(void)setCellDataWithModel:(StockDealModel *)model;
 
 @end
