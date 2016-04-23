@@ -9,11 +9,18 @@
 #include <stdio.h>
 #include "HttpListener.h"
 #include "StockDealModel.h"
+#import "DecodeJson.h"
 #import "TQIdeaModel.h"
 #import "TQIdeaDetailModel.h"
 #import "TQMessageModel.h"
 #import "TQAnswerModel.h"
 #import "XConsumeRankModel.h"
+#import "TQPersonalModel.h"
+#import "TQMeCustomizedModel.h"
+#import "TQNoPurchaseModel.h"
+#import "TQIntroductModel.h"
+#import "MJExtension.h"
+
 
 /**
  *  闪屏响应
@@ -165,8 +172,6 @@ void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>
  *  请求操盘详情--持仓情况
  */
 void OperateStocksListener::onResponse(vector<OperateStocks>& stocks){
-    
-    
     NSMutableArray *muArray = [NSMutableArray array];
     for (size_t i=0; i!=stocks.size(); i++) {
         
@@ -178,20 +183,46 @@ void OperateStocksListener::onResponse(vector<OperateStocks>& stocks){
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
     
 }
-
+/**
+ *  请求信息--已购买的私人定制(购买或者未购买)
+ */
 void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team recommendTeam, TeamPrivateServiceSummaryPack& teamSummaryPack){
-    
+    if (infos.size() == 0) {
+        //获取直播未购买页数据
+        NSMutableArray *noPurArray = [NSMutableArray array];
+        TQNoPurchaseModel *noPurModel = [[TQNoPurchaseModel alloc] initWithTeamSummaryPack:&teamSummaryPack];
+        [noPurArray addObject:noPurModel];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_NOPURCHASE_VC object:noPurArray];
+
+    }else {
+        
+        for (int i=0; i<infos.size(); i++) {
+        //获取已经购买数据
+            NSMutableArray *ary = [NSMutableArray array];
+            for (int i=0; i<infos.size(); i++) {
+                TQMeCustomizedModel *cusModel = [[TQMeCustomizedModel alloc] initWithMyPrivateService:&infos[i]];
+                
+                [ary addObject:cusModel];
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:ary];
+    }
+ }
 }
 
 void WhatIsPrivateServiceListener::onResponse(WhatIsPrivateService& infos){
     
 }
 
+/**
+ *  请求信息--购买
+ */
+
 void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription>& infos, string expirationDate, uint32 currLevelId){
     
 }
 
 void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateServiceSummaryPack>& infos, uint32 currLevelId){
+    
     
 }
 
@@ -244,6 +275,9 @@ void SystemMessageListener::onResponse(vector<SystemMessage>& info)
     }
     
 }
+/**
+ *  请求信息--提问回复
+ */
 
 void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info)
 {
@@ -258,17 +292,12 @@ void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info)
 
     
 }
+/**
+ *  请求信息--评论回复
+ */
 
 void MailReplyListener::onResponse(vector<MailReply>& info)
 {
-//    for (int i=0; i<info.size(); i++) {
-//        NSMutableArray *ary = [NSMutableArray array];
-//        for (int i=0; i<info.size(); i++) {
-//            TQAnswerModel *model = [[TQAnswerModel alloc] initWithAnswer:&info[i]];
-//            [ary addObject:model];
-//        }
-//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:ary];
-//    }
     for (int i=0; i<info.size(); i++) {
         NSMutableArray *ary = [NSMutableArray array];
         for (int i=0; i<info.size(); i++) {
@@ -278,10 +307,19 @@ void MailReplyListener::onResponse(vector<MailReply>& info)
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:ary];
     }
 }
-
+//信息请求私人定制
 void PrivateServiceSummaryListener::onResponse(vector<PrivateServiceSummary>& info)
 {
     
+    for (int i=0; i<info.size(); i++) {
+        NSMutableArray *ary = [NSMutableArray array];
+        for (int i=0; i<info.size(); i++) {
+            TQPersonalModel *model = [[TQPersonalModel alloc] initWithMyPrivateService:&info[i]];
+            [ary addObject:model];
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:ary];
+    }
+
 }
 
 void UnreadListener::onResponse(Unread& info)

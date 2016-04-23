@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TQDemoViewController : UIViewController
+@interface TQPurchaseViewController : UIViewController
 
 @end

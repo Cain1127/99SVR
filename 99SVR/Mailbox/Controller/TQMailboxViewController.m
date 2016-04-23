@@ -17,18 +17,26 @@
 #import "LeftCellModel.h"
 #import "UIImageView+WebCache.h"
 #import "UIImageFactory.h"
+#import "TQButton-RoundedRectBtn.h"
+#import "TQMeCustomizedViewController.h"
 
 @interface TQMailboxViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryModel;
 
+@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *redPromptBtn;
+@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *systemBtn;
+@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *commetnRedBtn;
+@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *askRedBtn;
+
 @end
 
 @implementation TQMailboxViewController
 
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     [self setTitleText:@"信息"];
     _aryModel = [[NSArray alloc] initWithObjects:
@@ -49,6 +57,13 @@
 {
     return 1;
 }
+//    self.title = @"信息";
+    /*死界面*/
+//    [self.tableView registerClass:[TQCustomizedCell class] forCellReuseIdentifier:CustomizedCell];
+//    [self.tableView registerClass:[TQMailboxCell class] forCellReuseIdentifier:MailboxCell];
+    
+//    [self.navigationController.navigationBar setHidden:NO];
+//    [self.navigationController.navigationBar setBarTintColor:[UIColor blueColor]];
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

@@ -128,7 +128,6 @@ void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requ
     param->http_listener = listener;
     Thread::start(http_request, param);
 }
-
 // 请求观点详情
 void HttpConnection::RequestViewpointDetail(int viewpointId, ViewpointDetailListener* listener){
     ViewpointDetail infos;
@@ -337,13 +336,20 @@ void HttpConnection::RequestWhatIsPrivateService(WhatIsPrivateServiceListener* l
     Thread::start(http_request, param);
 }
 
-// 请求我已经购买的私人定制
+//请求已经购买的私人定制
 void HttpConnection::RequestMyPrivateService(int userId, MyPrivateServiceListener* listener){
-    
+    MyPrivateService infos;
+    infos.set_teamid("123");
+    infos.set_teamname("三刀流");
+    infos.set_teamicon("personal_user_head");
+    infos.set_levelid(1);
+    infos.set_levelname("VIP3");
 }
 
 // 显示购买私人定制页
-void HttpConnection::RequestBuyPrivateServicePage(int userId, BuyPrivateServiceListener* listener){}
+void HttpConnection::RequestBuyPrivateServicePage(int userId, BuyPrivateServiceListener* listener){
+
+}
 
 // 请求战队的私人定制缩略信息
 void HttpConnection::RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivateServiceSummaryPackListener* listener){
@@ -461,7 +467,7 @@ void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswe
     {
         QuestionAnswer info;
         info.set_id(i);
-        info.set_answerauthorid("personal_user_head");
+        info.set_answerauthorhead("http://www.iconpng.com/png/ios7_app_style/messenger.png");
         info.set_answerauthorid("80060");
         info.set_answerauthorname("牛出没");
         info.set_answercontent("测试数据:这里是回答内容!这里是回答内容!这里是回答内容!这里是回答内容这里是回答内容这里是回答内容");
@@ -482,10 +488,10 @@ void HttpConnection::RequestMailReply(int startId, int count, MailReplyListener*
         MailReply info;
         info.set_id(i);
         info.set_viewpointid(1);
-//        info.set_answerauthoricon("personal_user_head");
+        info.set_answerauthorhead("http://www.iconpng.com/png/ios7_app_style/messenger.png");
         info.set_answerauthorid("80060");
         info.set_answerauthorname("牛出没");
-        info.set_answercontent("是啊，真不错。这里是回答内容这里是回答内容这里是回答内容这里是回答内容");
+        info.set_answercontent("r是啊，真不错。这里是回答内容这里是回答内容这里是回答内容这里是回答内容");
         info.set_answertime("201604191220");
         info.set_askauthorname("李四");
         info.set_askcontent("很好的观点，我觉得不错");
@@ -504,7 +510,7 @@ void HttpConnection::RequestPrivateServiceSummary(int startId, int count, Privat
         info.set_id(i);
         info.set_publishtime("2016.4.19 12:20");
         info.set_title("互联网+股票池");
-        info.set_summary("今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌");
+        info.set_summary("今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌");
         info.set_teamname("三刀流");
         list.push_back(info);
     }

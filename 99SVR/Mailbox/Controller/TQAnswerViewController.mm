@@ -39,7 +39,6 @@ static NSString *const answerCell = @"answerCell";
 {
     NSArray *aryModel = notify.object;
     _aryModel = aryModel;
-    DLog(@"+++++++++++++++++++++++++++++++++++++++++%@", _aryModel);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.tableView reloadData];
