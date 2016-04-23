@@ -190,8 +190,14 @@ void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>
         [muArray addObject:model];
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:muArray];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:muArray];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
+        
+    });
+
+    
 
 }
 /**
@@ -207,8 +213,8 @@ void OperateStocksListener::onResponse(vector<OperateStocks>& stocks){
         StockDealModel *model = [[StockDealModel alloc]initWithStockRecordWareHouseData:stocksModel];
         [muArray addObject:model];
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
+//    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
     
 }
 

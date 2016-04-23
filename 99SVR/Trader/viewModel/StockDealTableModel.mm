@@ -133,6 +133,8 @@
         //右边的图标
         UIImageView *imageView = [[UIImageView alloc]init];
         imageView.tag = 102;
+        imageView.image =[UIImage imageNamed:@"stock_right_next_icon"];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
         [backView addSubview:imageView];
         
         [backView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -147,7 +149,7 @@
            
             make.right.equalTo(@(-10));
             make.top.equalTo(@0);
-            make.width.equalTo(@20);
+            make.width.equalTo(@18);
             make.bottom.equalTo(@0);
         }];
         
@@ -179,20 +181,19 @@
     
         leftLab.text = @"";
         rightLab.text = @"";
-        imageView.backgroundColor = [UIColor whiteColor];
+        imageView.hidden = YES;
 
 
     }else if (section==1){
     
         leftLab.text = @"交易动态";
         rightLab.text = @"全部记录";
-        imageView.backgroundColor = [UIColor yellowColor];
-        
+        imageView.hidden = NO;
     }else{
         
         leftLab.text = @"持仓详情";
         rightLab.text = @"全部持仓";
-        imageView.backgroundColor = [UIColor yellowColor];
+        imageView.hidden = NO;
     }
     return headerView;
 }

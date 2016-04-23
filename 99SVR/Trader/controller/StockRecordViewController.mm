@@ -69,26 +69,26 @@
     [self.businessTab addGifHeaderWithRefreshingBlock:^{
         
         [weakSelf.busTabArray removeAllObjects];
-        [kHTTPSingle RequestOperateStockTransaction:weakSelf.operateId start:0 cout:10];
+        [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
     }];
     
     [self.businessTab addLegendFooterWithRefreshingBlock:^{
         
         StockDealModel *model = [weakSelf.busTabArray lastObject];
-        [kHTTPSingle RequestOperateStockTransaction:weakSelf.operateId start:[model.transId intValue] cout:10];
+        [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:[model.transId intValue] cout:10];
         
     }];
     
-    
+#warning 暂时缺接口。用交易记录模拟。
     //持仓详情
     [self.houseTab addGifHeaderWithRefreshingBlock:^{
         [weakSelf.houseTabArray removeAllObjects];
-        [kHTTPSingle RequestOperateStockTransaction:weakSelf.operateId start:0 cout:10];
+        [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
     }];
     
     [self.houseTab addLegendFooterWithRefreshingBlock:^{
         StockDealModel *model = [weakSelf.houseTabArray lastObject];
-        [kHTTPSingle RequestOperateStockTransaction:weakSelf.operateId start:[model.transId intValue] cout:10];
+        [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:[model.transId intValue] cout:10];
         
     }];
 
