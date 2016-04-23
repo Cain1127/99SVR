@@ -348,6 +348,7 @@ void HttpConnection::RequestOperateStocks(int operateId, OperateStocksListener* 
 void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, int count, OperateStockTransactionListener* listener){
     
     std::vector<OperateStockTransaction>trans;
+    
     static int initId = 15;
     int i = startId;
     if ( startId == 0 ) {

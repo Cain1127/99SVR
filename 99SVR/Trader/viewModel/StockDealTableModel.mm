@@ -27,6 +27,7 @@
     if (self) {
         _dataArray = @[];
         _cache = [[NSCache alloc]init];
+        _isVipBool = NO;
     }
     return self;
 }
@@ -47,23 +48,15 @@
     
     CGFloat height = 0.0;
     
-    StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
-    BOOL vipBool = YES;
-    if ([model.vipLevel integerValue]>0) {
-        vipBool = YES;
-    }else{
-        vipBool = NO;
-    }
-    
     if (indexPath.section==0) {
         
         height = STORCK_Deal_StockCell_H;
     }else if (indexPath.section ==1){
         
-        height = vipBool? STORCK_Deal_BusinessRecordCell_VIP_H: STORCK_Deal_BusinessRecordCell_NotVIP_H;
+        height = _isVipBool? STORCK_Deal_BusinessRecordCell_VIP_H: STORCK_Deal_BusinessRecordCell_NotVIP_H;
     }else{
         
-        height = vipBool? STORCK_Deal_WareHouseRecordCell_VIP_H: STORCK_Deal_WareHouseRecordCell_NotVIP_H;
+        height = _isVipBool? STORCK_Deal_WareHouseRecordCell_VIP_H: STORCK_Deal_WareHouseRecordCell_NotVIP_H;
     }
     return height;
 }
@@ -227,14 +220,8 @@
     cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
-    BOOL vipBool = YES;
-    if ([model.vipLevel integerValue]>0) {
-        vipBool = YES;
-    }else{
-        vipBool = NO;
-    }
-    _isVipBool = vipBool;
-    [cell setCellDataWithModel:model withIsVip:vipBool withCellId:cellIdArray[indexPath.section]];
+    
+    [cell setCellDataWithModel:model withIsVip:_isVipBool withCellId:cellIdArray[indexPath.section]];
     return cell;
 }
 
@@ -272,6 +259,17 @@
         }
         
     }
+}
+
+-(void)setVipLevel:(NSInteger )vipLevel{
+    
+    _vipLevel = vipLevel;
+    if (vipLevel!=0) {
+        _isVipBool = YES;
+    }else{
+        _isVipBool = NO;
+    }
+    
 }
 
 

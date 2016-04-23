@@ -131,7 +131,7 @@ void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks,uint32 currLevelId){
     
-    int vipLevel = 3;
+    int vipLevel = 0;
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     //股票头部数据
@@ -149,13 +149,11 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
             
             OperateStockTransaction *transaction = &trans[i];
             StockDealModel *transactionModel = [[StockDealModel alloc]initWithStockDealBusinessRecoreData:transaction];
-            transactionModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
             [transArray addObject:transactionModel];
         }
     }else{
      
         StockDealModel *model = [[StockDealModel alloc]init];
-        model.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
         [transArray addObject:model];
     }
     muDic[@"trans"] = transArray;
@@ -167,16 +165,14 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
             
             OperateStocks *operateStocks = &stocks[i];
             StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithStockDealWareHouseRecoreData:operateStocks];
-            operateStocksModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
             [stocksArray addObject:operateStocksModel];
         }
     }else{
         StockDealModel *model = [[StockDealModel alloc]init];
-        model.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
         [stocksArray addObject:model];
     }
     muDic[@"stocks"] = stocksArray;
-    
+    muDic[@"vipLevel"] = @(vipLevel);
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
 }
 

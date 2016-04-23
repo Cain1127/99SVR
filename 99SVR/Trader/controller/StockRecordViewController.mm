@@ -83,9 +83,6 @@
 
 
     //持仓记录
-//    [kHTTPSingle RequestOperateStockTransaction:0 start:0 cout:20];
-
-    [kHTTPSingle RequestOperateStockTransaction:100 start:0 cout:20];
     [kHTTPSingle RequestOperateStocks:100];
     
 }

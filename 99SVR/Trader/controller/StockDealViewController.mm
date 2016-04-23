@@ -65,6 +65,7 @@
     WeakSelf(self);
     
     NSDictionary *dic = notify.object;
+    weakSelf.tableViewModel.vipLevel = [dic[@"vipLevel"] integerValue];
     //拿到头部视图的数据
     self.headerModel = dic[@"headerModel"];
     [self.headerView setHeaderViewWithDataModel:self.headerModel];
