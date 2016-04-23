@@ -483,7 +483,21 @@ void HttpConnection::RequestTeamList(TeamListListener* listener){
 }
 
 // 请求战队简介
-void HttpConnection::RequestTeamIntroduce(int teamId, TeamIntroduceListener* listener){}
+void HttpConnection::RequestTeamIntroduce(int teamId, TeamIntroduceListener* listener){
+    TeamIntroduce introduce;
+    introduce.set_teamIcon("qq");
+    introduce.set_teamName("牛出没");
+    introduce.set_introduce("简介:fhjdksahjkfsdhakiouwerklwflksdajlkuiokljfkldsjaiouwlkjklfdsjaoiuwfkkljkl");
+    for (int i=0; i<5; i++) {
+        VideoInfo video;
+        video.set_id(i+1);
+        video.set_name("happy");
+        video.set_picurl("www.baidu.com");
+        video.set_videourl("www.baidu.com");
+        introduce.videoList().push_back(video);
+    }
+    listener->onResponse(introduce);
+}
 
 // 请求贡献榜
 void HttpConnection::RequestConsumeRankList(int teamId, ConsumeRankListener* listener){

@@ -38,14 +38,14 @@
     // 3.多少秒后跳过，广告倒计时
     UIButton *adButton = [UIButton buttonWithType:UIButtonTypeCustom];
     adButton.titleLabel.font = [UIFont systemFontOfSize:20];
-    [adButton setTitle:@"15秒跳过" forState:UIControlStateNormal];
+    [adButton setTitle:@"2秒跳过" forState:UIControlStateNormal];
     adButton.backgroundColor = [UIColor redColor];
     [adButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [adButton addTarget:self action:@selector(adSkipClick) forControlEvents:UIControlEventTouchUpInside];
     adButton.frame = CGRectMake(kScreenWidth - 120, 50 , 100, 40);
     [self.view addSubview:adButton];
     
-    [self startTimerWithSeconds:15 showButton:adButton strFormat:@"%@秒跳过" endBlock:^{
+    [self startTimerWithSeconds:2 showButton:adButton strFormat:@"%@秒跳过" endBlock:^{
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
         [window switchRootViewController];
     }];

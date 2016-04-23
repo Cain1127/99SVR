@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface XTeamViewController : UIViewController
+@interface XTeamViewController :CustomViewController
 
 @end

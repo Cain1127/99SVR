@@ -94,7 +94,8 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 -(void)updateRefresh {
     if (_room) {
-        [kHTTPSingle RequestViewpointSummary:[_room.nvcbid intValue] start:0 count:10];
+//        [kHTTPSingle RequestViewpointSummary:[_room.nvcbid intValue] start:0 count:10];
+        [kHTTPSingle RequestViewpointSummary:0 start:0 count:10];
     }else{
         [kHTTPSingle RequestViewpointSummary:0 start:0 count:10];
     }
