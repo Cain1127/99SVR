@@ -87,7 +87,6 @@ uint32	_fromclient;
     
     _answerauthorid = [NSString stringWithUTF8String:MailReply->answerauthorid().c_str()];
     
-//    _answerauthoricon = [NSString stringWithUTF8String:MailReply->answerauthoricon().c_str()];
     _answerauthorname = [NSString stringWithUTF8String:MailReply->answerauthorname().c_str()];
     _answertime = [NSString stringWithUTF8String:MailReply->answertime().c_str()];
     _askauthorname = [NSString stringWithUTF8String:MailReply->askauthorname().c_str()];

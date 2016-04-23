@@ -29,6 +29,12 @@ static NSString *const answerCell = @"answerCell";
     _tableView.dataSource = self;
     _tableView.delegate = self;
     [self.view addSubview:_tableView];
+    
+    // cell自动计算高度
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    // 估算高度
+    self.tableView.estimatedRowHeight = 44;
+
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQAllReplyCell class]) bundle:nil] forCellReuseIdentifier:answerCell];
 }
 
@@ -95,10 +101,11 @@ static NSString *const answerCell = @"answerCell";
     }
     return cell;
 }
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 250;
-}
+
+//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return 250;
+//}
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];

@@ -66,16 +66,26 @@
                             <constraint firstAttribute="trailing" secondItem="sxH-GC-OGx" secondAttribute="trailing" id="Eng-nE-fVH"/>
                             <constraint firstItem="bne-cC-kNg" firstAttribute="top" secondItem="sxH-GC-OGx" secondAttribute="bottom" constant="5" id="Rya-MK-Z1a"/>
                             <constraint firstItem="7ol-ab-W4E" firstAttribute="top" secondItem="Gf3-dz-tDU" secondAttribute="top" id="Syc-zZ-gHX"/>
-                            <constraint firstItem="sxH-GC-OGx" firstAttribute="top" secondItem="Gf3-dz-tDU" secondAttribute="top" constant="8" id="V74-4e-UtN"/>
+                            <constraint firstItem="sxH-GC-OGx" firstAttribute="top" secondItem="Gf3-dz-tDU" secondAttribute="top" constant="5" id="V74-4e-UtN"/>
+                            <constraint firstAttribute="height" constant="63" id="YI5-d4-w2W"/>
                             <constraint firstItem="7ol-ab-W4E" firstAttribute="leading" secondItem="Gf3-dz-tDU" secondAttribute="leading" id="nMD-Qo-fI4"/>
+                            <constraint firstAttribute="bottom" secondItem="bne-cC-kNg" secondAttribute="bottom" constant="5" id="w7Z-dF-y8a"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="w7Z-dF-y8a"/>
+                            </mask>
+                        </variation>
                     </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="eh9-Sy-9xy" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="2w0-6S-yDy"/>
-                    <constraint firstItem="Gf3-dz-tDU" firstAttribute="top" secondItem="AeZ-84-ZcU" secondAttribute="bottom" constant="3" id="6IE-87-R68"/>
+                    <constraint firstItem="Gf3-dz-tDU" firstAttribute="top" secondItem="AeZ-84-ZcU" secondAttribute="bottom" constant="5" id="6IE-87-R68"/>
                     <constraint firstItem="Gf3-dz-tDU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="8Mc-hI-VLt"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Gf3-dz-tDU" secondAttribute="bottom" constant="5" id="HM7-D7-ROJ"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Gf3-dz-tDU" secondAttribute="bottom" constant="5" id="NtY-AZ-AMf"/>
                     <constraint firstItem="AeZ-84-ZcU" firstAttribute="top" secondItem="eh9-Sy-9xy" secondAttribute="bottom" constant="8" id="OyI-4K-jCt"/>
+                    <constraint firstItem="Gf3-dz-tDU" firstAttribute="top" secondItem="AeZ-84-ZcU" secondAttribute="bottom" constant="6" id="QFV-mm-aQt"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Gf3-dz-tDU" secondAttribute="bottom" constant="5.5" id="UTK-Cx-Tk8"/>
                     <constraint firstItem="eh9-Sy-9xy" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="d31-rw-1Zs"/>
                     <constraint firstAttribute="trailingMargin" secondItem="eh9-Sy-9xy" secondAttribute="trailing" constant="10" id="huN-qt-Ecv"/>
@@ -83,6 +93,13 @@
                     <constraint firstItem="AeZ-84-ZcU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="nMs-iL-IcX"/>
                     <constraint firstAttribute="trailingMargin" secondItem="AeZ-84-ZcU" secondAttribute="trailing" constant="5" id="snP-kE-m8F"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="6IE-87-R68"/>
+                        <exclude reference="NtY-AZ-AMf"/>
+                        <exclude reference="UTK-Cx-Tk8"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="TITLELabel" destination="eh9-Sy-9xy" id="rfb-Ec-WsX"/>
@@ -91,7 +108,7 @@
                 <outlet property="summaryLabel" destination="AeZ-84-ZcU" id="YzV-CZ-7Sm"/>
                 <outlet property="timeLabel" destination="7ol-ab-W4E" id="Dkb-FJ-q6H"/>
             </connections>
-            <point key="canvasLocation" x="313.5" y="232.5"/>
+            <point key="canvasLocation" x="313.5" y="226"/>
         </tableViewCell>
     </objects>
 </document>

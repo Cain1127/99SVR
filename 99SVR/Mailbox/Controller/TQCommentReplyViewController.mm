@@ -28,6 +28,10 @@ static NSString *const commentCell = @"commentCell";
     _tableView.dataSource = self;
     _tableView.delegate = self;
     [self.view addSubview:_tableView];
+    // cell自动计算高度
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    // 估算高度
+    self.tableView.estimatedRowHeight = 44;
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQAllReplyCell class]) bundle:nil] forCellReuseIdentifier:commentCell];
 }
 

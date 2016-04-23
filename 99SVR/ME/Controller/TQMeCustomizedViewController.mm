@@ -10,7 +10,6 @@
 #import "TQMeCustomizedModel.h"
 #import "TQNoCustomView.h"
 #import "TQNoPurchaseViewController.h"
-#import "TQMailboxViewController.h"
 #import "UIBarButtonItem+Item.h"
 #import "HttpManagerSing.h"
 #import "TableViewFactory.h"
@@ -28,9 +27,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//        TQMecustomView *MeView = [[TQMecustomView alloc] initWithFrame:self.view.bounds];
-//        [self.view addSubview:MeView];
-    
 //        TQNoCustomView *NOView = [[TQNoCustomView alloc] initWithFrame:self.view.bounds];
 //        [self.view addSubview:NOView];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushIntroductController) name:MESSAGE_TQINTORDUCT_VC object:nil];
@@ -39,11 +35,13 @@
     [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
     _dataSource = [[XMeCustomDataSource alloc] init];
     _dataSource.delegate = self;
+
     
     [self initUi];
 }
 -(void)initUi{
     [self setTitleText:@"我的私人定制"];
+
 }
 
 - (void)noPurchase:(NSNotification *)notify

@@ -10,12 +10,6 @@
 #import "TQPersonalModel.h"
 
 @interface TQPersonalTailorCell ()
-//@property (weak, nonatomic) IBOutlet UILabel *TITLELabel;
-//@property (weak, nonatomic) IBOutlet UILabel *summaryLabel;
-//@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-//@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-//@property (weak, nonatomic) IBOutlet UIButton *seeBtn;
-
 
 
 @end
@@ -25,12 +19,7 @@
     
 }
 
-//-(void)setPersonalModel:(TQPersonalModel *)personalModel {
-//    _personalModel = personalModel;
-//    self.TITLELabel.text = personalModel.title;
-//    self.summaryLabel.text = personalModel.summary;
-//    self.timeLabel.text = personalModel.publishtime;
-//    self.nameLabel.text = personalModel.teamname;
-//}
+
+
 
 @end

@@ -38,7 +38,13 @@ static NSString *const messageCell = @"messageCell";
     _tableView.dataSource = self;
     _tableView.delegate = self;
     
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    // 估算高度
+    self.tableView.estimatedRowHeight = 44;
+    
+
     [self addTableHeaderView];
+
 }
 - (void)viewWillAppear:(BOOL)animated
 {
