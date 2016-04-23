@@ -10,8 +10,7 @@
 #include "HttpMessage.pb.h"
 
 @interface TQIdeaModel : NSObject
-/** 数据 */
-@property (nonatomic ,strong) NSMutableArray *ideaArry;
+
 /** authorID房间ID */
 @property (nonatomic ,copy) NSString *authorid;
 /** 头像 */
@@ -30,5 +29,15 @@
 @property (nonatomic)int giftcount;
 
 - (id)initWithViewpointSummary:(ViewpointSummary *)ViewPoint;
+
+//string	_imageurl;
+//string	_text;
+//string	_url;
+//uint64	_startime;
+//uint64	_endtime;
+
+
+- (id)initWithModel:(Splash*)spa;
+
 
 @end

@@ -33,11 +33,11 @@ void report_asyn(RequestParamter* param)
 	Thread::start(report_runnable, param);
 }
 
-RequestParamter& get_request_param()
-{
-	RequestParamter* param = new RequestParamter();
-	return *param;
-}
+//RequestParamter& get_request_param()
+//{
+//	RequestParamter* param = new RequestParamter();
+//	return *param;
+//}
 
 string get_client_type()
 {

@@ -8,6 +8,7 @@
 
 #import "NNSVRViewController.h"
 #import "AdaptiveWebView.h"
+
 @interface NNSVRViewController ()<UIWebViewDelegate>
 
 @property (nonatomic,strong) AdaptiveWebView *adaptiveWebView;

@@ -31,7 +31,8 @@ namespace protocol
     //战队信息
     typedef struct tag_CMDTeam
     {
-        char teamId[16];
+        uint32 roomId;
+        uint32 teamId;
         char teamName[32];
         char teamIcon[64];
         uint32 onlineUserCount;
@@ -101,7 +102,7 @@ namespace protocol
         float dataAll[2][60];  // 总收益曲线
         float data3Month[2][60]; // 最近三月曲线
         float dataMonth[2][60];  // 月曲线
-        float dataWeek[2][60];  // 周取消
+        float dataWeek[2][60];  // 周曲线
     }CMDOperateStockData_t;
     
     // 高手操盘交易记录
@@ -165,7 +166,7 @@ namespace protocol
         char title[64];  // 标题
         char summary[256];  // 简要
         char publishTime[32];  // 发布日期
-        char teamName[32];
+        char teamName[32];  // 战队名称
     }CMDPrivateServiceSummary_t;
     
     //私人定制详情
@@ -178,6 +179,8 @@ namespace protocol
         char videoName[64];  // 视频名称
         char attachmentUrl[64];  // 附件URL
         char attachmentName[64];  // 附件名称
+        uint32 operateStockId; // 操盘ID
+        char html5Url[64]; // HTML5 URL
     }CMDPrivateServiceDetail_t;
     
     
@@ -192,6 +195,7 @@ namespace protocol
     // 讲师简介-视频
     typedef struct tag_CMDVideoInfo
     {
+        int id;
         char name[64];  // 视频名称
         char picUrl[64];  // 视频缩略图
         char videoUrl[64];  // 视频地址
@@ -214,17 +218,18 @@ namespace protocol
         char publishTime[32];  // 发布时间
     }CMDSystemMessage_t;
     
-    // 信箱--问题
     typedef struct tag_CMDQuestionAnswer
     {
         uint32 id;
         char answerAuthorId[16];  // 回答者
         char answerAuthorName[32];  // 回答者名称
-        char answerAuthorIcon[64];  // 回答者ICON
+        char answerAuthorHead[64];  // 回答者ICON
+        uint32 answerAuthorRole; // 0：普通用户 1：讲师
         char answerTime[32];  // 回答时间
         char answerContent[256];  // 回答内容
         char askAuthorName[32];  // 提问者
-        uint32 askAuthorHeadId;  // 提问者头像
+        char askAuthorHead[64];  // 提问者头像
+        uint32 askAuthorRole; // 0：普通用户 1：讲师
         char askStock[32];  // 提问的股票
         char askContent[256];  // 提问内容
         char askTime[32];  // 提问时间
@@ -238,12 +243,14 @@ namespace protocol
         uint32 viewpointId;  // 观点ID
         char title[32];  // 观点标题
         char askAuthorName[32];  // 原评论
-        uint32 askAuthorHeadId;
+        char askAuthorHead[64];
+        uint32 askAuthorRole; // 0：普通用户 1：讲师
         char askContent[256];
         char askTime[32];
         char answerAuthorId[16];  //回复的评论
         char answerAuthorName[32];
-        char answerAuthorIcon[64];
+        char answerAuthorHead[64];
+        uint32 answerAuthorRole; // 0：普通用户 1：讲师
         char answerTime[32];
         char answerContent[256];
         uint32 fromClient;
@@ -259,6 +266,12 @@ namespace protocol
         uint32 privateService;  // 私人定制未读数
     }CMDUnread_t;
     
+    typedef struct tag_CMDTeamTopN
+    {
+        char teamName[32];  // 战队名称
+        char teamIcon[64];  // 战队ICON
+        float yieldRate;  // 收益率
+    }CMDTeamTopN_t;
     
 };
 

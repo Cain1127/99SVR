@@ -7,6 +7,7 @@
 //
 
 #import "NavigationViewController.h"
+#import "XMyViewController.h"
 
 @interface NavigationViewController ()<UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIPanGestureRecognizer *popPanGesture;

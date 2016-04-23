@@ -50,6 +50,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [_headView addSubview:_lblContent];
     title.text = @"专家观点";
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(mailboxClick) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
+
     [self.view addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
     
@@ -94,13 +95,17 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     _aryModel = aryModel;
     @WeakObj(_tableView)
     dispatch_async(dispatch_get_main_queue(), ^{
+        if ([_tableViewWeak.header isRefreshing]) {
+            [_tableViewWeak.header endRefreshing];
+        }else{
+            [_tableViewWeak.footer endRefreshing];
+        }
         [_tableViewWeak reloadData];
     });
 }
 
 -(void)updateRefresh {
-    [kHTTPSingle RequestViewpointSummary:10 start:0 count:1];
-    [self.tableView.gifHeader endRefreshing];
+    [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
 }
 
 -(void)setIdeaTableView {

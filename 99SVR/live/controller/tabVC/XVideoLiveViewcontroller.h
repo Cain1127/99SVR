@@ -14,4 +14,10 @@
 
 - (id)initWithModel:(RoomHttp *)room;
 
+- (void)reloadModel:(RoomHttp *)room;
+
+- (void)stopPlay;
+
+- (void)stopNewPlay;
+
 @end

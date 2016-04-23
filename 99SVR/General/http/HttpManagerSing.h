@@ -38,7 +38,7 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 /**
  *  回复观点
  */
-- (void)PostReply:(int)viewpointId replyId:(int)parentReplyId author:(int)authorId content:(char*)content;
+- (void)PostReply:(int)viewpointId replyId:(int)parentReplyId author:(int)authorId content:(char*)content fromId:(int)fromAuthorId;
 
 /**
  * 请求操盘列表
@@ -46,7 +46,6 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 - (void)RequestOperateStockProfitByDay:(int)teamId start:(int)startId count:(int)count;
 - (void)RequestOperateStockProfitByMonth:(int)teamId start:(int)startId count:(int)count;
 - (void)RequestOperateStockProfitByAll:(int)teamId start:(int)startId count:(int)count;
-
 
 /**
  *  请求操盘详情
@@ -56,7 +55,7 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 /**
  * 请求操盘详情--交易记录
  */
-- (void)RequestOperateStockTransaction:(int)operateId;
+- (void)RequestOperateStockTransaction:(int)operateId start:(int)startId cout:(int)count;
 
 /**
  *  请求操盘详情--持仓情况
@@ -73,7 +72,7 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 - (void) RequestBuyPrivateServicePage:(int)userId;//, BuyPrivateServiceListener* listener);
 
 // 请求战队的私人定制缩略信息
-- (void) RequestTeamPriviteServiceSummaryPack:(int)teamId;// TeamPriviteServiceSummaryPackListener* listener);
+- (void) RequestTeamPrivateServiceSummaryPack:(int)teamId;// TeamPriviteServiceSummaryPackListener* listener);
 
 // 请求私人定制详情
 - (void) RequestPrivateServiceDetail:(int)nId;// PrivateServiceDetailListener* listener);
@@ -117,15 +116,15 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 // 讲师团队回答提问（PC端接口）
 - (void)PostAnswer:(int)questionId content:(const char *) content;
 
-- (void)RequestHomePage:(const char *)devType;//首页列表数据
+- (void)RequestHomePage;//首页列表数据
 
-- (void)RequestFollowTeacher:(int)userId type:(const char *)devType;//关注的讲师
+- (void)RequestFollowTeacher;//关注的讲师
 
-- (void)RequestFootPrint:(int)userId type:(const char *)devType;//足迹url
+- (void)RequestFootPrint;//足迹url
 
-- (void)RequestCollection:(int)userId type:(const char *)devType;////收藏url
+- (void)RequestCollection;////收藏url
 
-- (void)RequestBanner:(const char *)url;////获取Banner
+- (void)RequestBanner;////获取Banner
 
 
 @end

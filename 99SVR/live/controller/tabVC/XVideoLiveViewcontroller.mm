@@ -27,6 +27,8 @@
 #import <DTCoreText/DTCoreText.h>
 #import "RoomNoticeDataSource.h"
 #import "ChatRightView.h"
+#import "ConsumeRankDataSource.h"
+#import "HttpManagerSing.h"
 
 @interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
                                 ChatRightDelegate,ChatViewDelegate>
@@ -58,10 +60,12 @@
 @property (nonatomic,copy) NSArray *aryPriChat;
 @property (nonatomic,copy) NSArray *aryNotice;
 @property (nonatomic,copy) NSArray *aryUser;
+@property (nonatomic,copy) NSArray *aryConsume;
 
 @property (nonatomic,strong) UITableView *chatView;
 @property (nonatomic,strong) UITableView *priChatView;
 @property (nonatomic,strong) UITableView *noticeView;
+@property (nonatomic,strong) UITableView *tableConsumeRank;
 
 @property (nonatomic,strong) UIButton *btnVideo;
 @property (nonatomic,strong) UIButton *btnFull;
@@ -70,10 +74,19 @@
 @property (nonatomic,strong) RoomChatDataSource *chatDataSource;
 @property (nonatomic,strong) RoomChatDataSource *prichatDataSource;
 @property (nonatomic,strong) RoomNoticeDataSource *noticeDataSource;
+@property (nonatomic,strong) ConsumeRankDataSource *consumeDataSource;
+
 
 @end
 
 @implementation XVideoLiveViewcontroller
+
+- (void)reloadModel:(RoomHttp *)room
+{
+    _room = room;
+}
+
+
 
 - (id)initWithModel:(RoomHttp *)room
 {
@@ -122,12 +135,10 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
-    
 }
 
 - (void)initTableView{
     CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-kVideoImageHeight);
-    
     _chatAllView = [[UIView alloc] initWithFrame:frame];
     
     _chatView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth-54,frame.size.height) withStyle:UITableViewStylePlain];
@@ -157,12 +168,18 @@
     [_noticeView setBackgroundColor:UIColorFromRGB(0xffffff)];
     
     _teachView = [[DTAttributedTextView alloc] initWithFrame:frame];
+    
+    _tableConsumeRank = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
+    _consumeDataSource = [[ConsumeRankDataSource alloc] init];
+    _tableConsumeRank.dataSource = _consumeDataSource;
+    _tableConsumeRank.delegate = _consumeDataSource;
+    [_tableConsumeRank setBackgroundColor:UIColorFromRGB(0xffffff)];
 }
 
 - (void)initSlideView{
     _menuView = [[SliderMenuView alloc] initWithFrame:Rect(0,kVideoImageHeight, kScreenWidth,self.view.height-kVideoImageHeight)
                                            withTitles:@[@"聊天",@"我的",@"公告",@"课程表",@"贡献榜"] withDefaultSelectIndex:0];
-    _menuView.viewArrays = @[_chatAllView,_priChatView,_noticeView,_teachView];
+    _menuView.viewArrays = @[_chatAllView,_priChatView,_noticeView,_teachView,_tableConsumeRank];
      
 }
 
@@ -231,15 +248,37 @@
 {
     [super viewWillAppear:animated];
     [self addNotification];
+    [kHTTPSingle RequestConsumeRank:[_room.nvcbid intValue]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_NETWORK_ERR_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_TRADE_GIFT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_TO_ME_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_CHAT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_NOTICE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_ALL_USER_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_KICKOUT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MEESAGE_ROOM_SEND_LIWU_RESP_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:nil];
+    
+}
+
+- (void)loadConsumeRank:(NSNotification *)notify
+{
+    NSArray *aryConsume = notify.object;
+    if ([aryConsume isKindOfClass:[NSArray class]] && aryConsume.count>0) {
+        [_consumeDataSource setAryModel:aryConsume];
+        [_tableConsumeRank reloadData];
+    }
 }
 
 - (void)addNotification
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadConsumeRank:) name:MESSAGE_CONSUMERANK_LIST_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_NETWORK_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(TradeGiftError:) name:MESSAGE_TRADE_GIFT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startPlayThread:) name:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
@@ -262,10 +301,23 @@
     {
         [_ffPlay stop];
     }
-    __weak LivePlayViewController *__ffPlay = _ffPlay;
+    @WeakObj(_ffPlay)
     dispatch_main_async_safe(
      ^{
-         [__ffPlay setNullMic];
+         [_ffPlayWeak setNullMic];
+     });
+}
+
+- (void)stopNewPlay
+{
+    if(_ffPlay)
+    {
+        [_ffPlay stop];
+    }
+    @WeakObj(_ffPlay)
+    dispatch_main_async_safe(
+     ^{
+         [_ffPlayWeak setDefaultImg];
      });
 }
 
@@ -294,7 +346,8 @@
 - (void)startPlayThread:(NSNotification *)notify
 {
     @WeakObj(self)
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0),
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)),
+    dispatch_get_global_queue(0, 0),
     ^{
        [selfWeak startNewPlay];
     });

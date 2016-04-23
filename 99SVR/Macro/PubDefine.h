@@ -164,5 +164,6 @@
 #define COLOR_STOCK_BackGroundColor UIColorFromRGB(0xf8f8f8)//股票的背景色
 #define COLOR_STOCK_Blue UIColorFromRGB(0x0078dd)//蓝色背景色
 #define COLOR_STOCK_Orange UIColorFromRGB(0xf8b551)//辅助色橙色
+#define COLOR_StyleLines UIColorFromRGB(0xcfcfcf) //分割线的颜色
 
 #endif

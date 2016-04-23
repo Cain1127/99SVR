@@ -48,17 +48,11 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
     {
-        [self setBackgroundColor:kLeftViewBgColor];
-        UIView *bgView = [[UIView alloc] init];
-        [bgView setBackgroundColor:UIColorFromRGB(0x0066bc)];
-        
-        [self setSelectedBackgroundView:bgView];
-        
         _imgView = [[UIImageView alloc] initWithFrame:Rect(15,22-kImageWidth/2, kImageWidth, kImageWidth)];
         _lblTitle = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+10,_imgView.y, 160, 16)];
         
         [_lblTitle setFont:XCFONT(14)];
-        [_lblTitle setTextColor:[UIColor whiteColor]];
+        [_lblTitle setTextColor:UIColorFromRGB(0x343434)];
         [self.contentView addSubview:_lblTitle];
         [self.contentView addSubview:_imgView];
     }

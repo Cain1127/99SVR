@@ -1,11 +1,10 @@
 
 
-#define headerView_h ValueWithTheIPhoneModelString(@"150,180,200,220") //表头的高度
 #define warningLab_h ValueWithTheIPhoneModelString(@"50,50,50,50") //提示信息的高度
 
 #import "StockDealViewController.h"
 #import "StockDealHeaderView.h"
-#import "MacroHeader.h"
+#import "StockMacro.h"
 #import "StockDealTableModel.h"
 #import "HttpMessage.pb.h"
 #import "StockDealModel.h"
@@ -63,6 +62,8 @@
 }
 - (void)printInfo:(NSNotification *)notify{
 
+    WeakSelf(self);
+    
     NSDictionary *dic = notify.object;
     //拿到头部视图的数据
     self.headerModel = dic[@"headerModel"];
@@ -75,8 +76,8 @@
     [self.tableViewDataArray addObject:dic[@"stocks"]];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.tableViewModel.dataArray = self.tableViewDataArray;
-        [self.tableView reloadData];
+        weakSelf.tableViewModel.dataArray = weakSelf.tableViewDataArray;
+        [weakSelf.tableView reloadData];
     });
     
     
@@ -87,7 +88,7 @@
 -(StockDealHeaderView *)headerView{
     
     if (!_headerView) {
-        _headerView = [[StockDealHeaderView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,headerView_h}];
+        _headerView = [[StockDealHeaderView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,STORCK_Deal_HeaderView_H}];
         
     }
     return _headerView;
@@ -126,6 +127,11 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+-(void)dealloc{
+
+    NSLog(@"释放");
 }
 
 

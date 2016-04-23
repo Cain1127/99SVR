@@ -3,17 +3,14 @@
 
 
 #include <string>
-#include <map>
-#include "Util.h"
-
-using std::string;
-using std::map;
-
-typedef  map<string, string> RequestParamter;
 
 
-string get_client_type();
+std::string get_client_type();
 
-RequestParamter& get_request_param();
+std::string get_user_id();
+
+std::string get_user_password();
 
 #endif
+
+

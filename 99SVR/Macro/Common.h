@@ -55,7 +55,8 @@
 
 #define LBS_HTTP_HOST @"http://lbs1.99ducaijing.cn:2222/"
 
-#define kPay_URL @"http://api.99ducaijing.com/mobile/wap_cz"
+//#define kPay_URL @"http://api.99ducaijing.com/mobile/wap_cz"
+#define kPay_URL @"http://testphp.99ducaijing.cn/mobile.php?s=/pay/index"
 #define kGift_URL @"http://admin.99ducaijing.com/index.php?m=Api&c=Gift"
 
 #define kGif_Image_URL "http://admin.99ducaijing.com/Uploads/Picture"

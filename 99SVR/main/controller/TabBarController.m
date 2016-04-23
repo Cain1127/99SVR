@@ -11,9 +11,11 @@
 #import "HomeViewController.h"
 #import "IndexViewController.h"
 #import "TextViewController.h"
-#import "TraderViewController.h"
+#import "StockHomeViewController.h"
 #import "TQIdeaViewController.h"
 #import "TQMeCustomizedViewController.h"
+#import "MyNavigationViewController.h"
+#import "XMyViewController.h"
 
 @interface TabBarController ()
 
@@ -62,11 +64,10 @@
 - (void)setUpAllChildViewControllers{
     
     [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
-    [self setUpOneViewController:[[IndexViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
     [self setUpOneViewController:[[TQIdeaViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
-    [self setUpOneViewController:[[TraderViewController alloc]init] title:@"高手操盘" image:@"text_live" selectImage:@"text_live_h"];
-    [self setUpOneViewController:[[TQMeCustomizedViewController alloc]init] title:@"我" image:@"text_live" selectImage:@"text_live_h"];
-
+    [self setUpOneViewController:[[IndexViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
+    [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"text_live" selectImage:@"text_live_h"];
+    [self setUpMyViewController:[[XMyViewController alloc]init] title:@"我" image:@"text_live" selectImage:@"text_live_h"];
 
 }
 
@@ -80,6 +81,15 @@
     vc.tabBarItem.image = [UIImage imageNamed:image];
     vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
     NavigationViewController *nav = [[NavigationViewController alloc]initWithRootViewController:vc];
+    [self addChildViewController:nav];
+}
+
+- (void)setUpMyViewController:(UIViewController *)vc title:(NSString *)title image:(NSString *)image selectImage:(NSString *)selectImage
+{
+    vc.title = title;
+    vc.tabBarItem.image = [UIImage imageNamed:image];
+    vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
+    MyNavigationViewController *nav = [[MyNavigationViewController alloc]initWithRootViewController:vc];
     [self addChildViewController:nav];
 }
 
