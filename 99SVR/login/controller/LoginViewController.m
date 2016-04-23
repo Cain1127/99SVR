@@ -19,7 +19,6 @@
 #import "Toast+UIView.h"
 #import "RegMobileViewController.h"
 #import "LSTcpSocket.h"
-#import "NewViewController.h"
 #import "LoginTextField.h"
 #import "NNSVRViewController.h"
 #import "ForgetPwdViewController.h"

@@ -59,9 +59,6 @@
 #define kPay_URL @"http://testphp.99ducaijing.cn/mobile.php?s=/pay/index"
 #define kGift_URL @"http://admin.99ducaijing.com/index.php?m=Api&c=Gift"
 
-#define WeakObj(o) try{}@finally{} __weak typeof(o) o##Weak = o;
-#define StrongObj(o) autoreleasepool{} __strong typeof(o) o = o##Weak;
-
 #define kGif_Image_URL "http://admin.99ducaijing.com/Uploads/Picture"
 
 #define kHome_Banner_URL "http://admin.99ducaijing.com/index.php?m=Api&c=Banner"
