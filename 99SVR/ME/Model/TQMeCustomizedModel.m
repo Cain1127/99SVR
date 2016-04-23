@@ -25,25 +25,7 @@
 #import "NSDate+convenience.h"
 
 @implementation TQMeCustomizedModel
--(id)initWithMyPrivateService:(MyPrivateService *)MyPrivateService {
-    
-    self = [super init];
-    
-    _teamid = [NSString stringWithUTF8String:MyPrivateService->teamid().c_str()];
-    
-    _teamname = [NSString stringWithUTF8String:MyPrivateService->teamname().c_str()];
-    
-    _teamicon = [NSString stringWithUTF8String:MyPrivateService->teamicon().c_str()];
-    
-    _levelname = [NSString stringWithUTF8String:MyPrivateService->levelname().c_str()];
-    _expirationdate = [NSString stringWithUTF8String:MyPrivateService->expirationdate().c_str()];
 
-    _levelid = MyPrivateService->levelid();
-    
-    [self settingTime:_expirationdate];
-
-    return self;
-}
 - (void)settingTime:(NSString *)_publishtime
 {
     UserInfo *userinfo = [UserInfo sharedUserInfo];

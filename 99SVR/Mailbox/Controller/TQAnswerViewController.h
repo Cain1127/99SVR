@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TQAnswerViewController : UITableViewController
+@interface TQAnswerViewController : CustomViewController
 /** 点击了那一行cell的row判断是问题回复和评论回复 */
 
 @property (nonatomic ,assign)NSInteger indexPathRow;

@@ -11,8 +11,6 @@
 
 @interface SlideBaseViewController : CustomViewController
 
-- (void)didPanEvent:(UIPanGestureRecognizer *)recognizer;
 
--(void)leftItemClick;
 
 @end

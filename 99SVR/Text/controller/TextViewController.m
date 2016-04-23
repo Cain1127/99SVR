@@ -134,7 +134,6 @@
 
 - (void)showLeftView
 {
-    [self leftItemClick];
 }
 
 - (void)initScrollView

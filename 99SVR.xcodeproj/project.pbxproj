@@ -54,7 +54,7 @@
 		1895B7801CCB56A300B86B0D /* TQMessageModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1895B77E1CCB56A300B86B0D /* TQMessageModel.mm */; };
 		1895B7841CCB603100B86B0D /* TQPersonalModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1895B7831CCB603100B86B0D /* TQPersonalModel.mm */; };
 		1895B7871CCB753200B86B0D /* TQNoPurchaseModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1895B7861CCB753200B86B0D /* TQNoPurchaseModel.mm */; };
-		1895B78A1CCB756900B86B0D /* TQMeCustomizedModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1895B7891CCB756900B86B0D /* TQMeCustomizedModel.mm */; };
+		1895B78A1CCB756900B86B0D /* TQMeCustomizedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895B7891CCB756900B86B0D /* TQMeCustomizedModel.m */; };
 		1895B78D1CCB7C8700B86B0D /* TQIntroductModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1895B78C1CCB7C8700B86B0D /* TQIntroductModel.mm */; };
 		18987FF01CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
 		18987FF11CAA17E6000E9F1C /* WonderfullView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18987FEF1CAA17E6000E9F1C /* WonderfullView.m */; };
@@ -103,9 +103,6 @@
 		18EA82261CC8A4C200BDB735 /* UIImage+Antialias.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82251CC8A4C200BDB735 /* UIImage+Antialias.m */; };
 		18EA82291CC8A5B200BDB735 /* UIImageView+Header.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82281CC8A5B200BDB735 /* UIImageView+Header.m */; };
 		18EA822C1CC8C41C00BDB735 /* TQideaViewModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA822B1CC8C41C00BDB735 /* TQideaViewModel.mm */; };
-		18EA82A21CCA148F00BDB735 /* TQIntroductionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82861CCA148F00BDB735 /* TQIntroductionViewController.m */; };
-		18EA82A31CCA148F00BDB735 /* TQMeCustomizedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.m */; };
-		18EA824F1CCA09F000BDB735 /* TQMailboxViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18EA824E1CCA09F000BDB735 /* TQMailboxViewController.storyboard */; };
 		18EA82A21CCA148F00BDB735 /* TQNoPurchaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82861CCA148F00BDB735 /* TQNoPurchaseViewController.mm */; };
 		18EA82A31CCA148F00BDB735 /* TQMeCustomizedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */; };
 		18EA82A41CCA148F00BDB735 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA828C1CCA148F00BDB735 /* TableViewCell.m */; };
@@ -114,9 +111,6 @@
 		18EA82A81CCA148F00BDB735 /* TQHeadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82921CCA148F00BDB735 /* TQHeadView.xib */; };
 		18EA82A91CCA148F00BDB735 /* TQIntroductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82941CCA148F00BDB735 /* TQIntroductCell.m */; };
 		18EA82AA1CCA148F00BDB735 /* TQIntroductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82951CCA148F00BDB735 /* TQIntroductCell.xib */; };
-		18EA82AB1CCA148F00BDB735 /* TQMeCustomizedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82971CCA148F00BDB735 /* TQMeCustomizedCell.m */; };
-		18EA82AC1CCA148F00BDB735 /* TQMeCustomizedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82981CCA148F00BDB735 /* TQMeCustomizedCell.xib */; };
-		18EA82AD1CCA148F00BDB735 /* TQMecustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA829A1CCA148F00BDB735 /* TQMecustomView.m */; };
 		18EA82AF1CCA148F00BDB735 /* TQNoCustomHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA829E1CCA148F00BDB735 /* TQNoCustomHeader.m */; };
 		18EA82B01CCA148F00BDB735 /* TQNoCustomHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA829F1CCA148F00BDB735 /* TQNoCustomHeader.xib */; };
 		18EA82B11CCA148F00BDB735 /* TQNoCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82A11CCA148F00BDB735 /* TQNoCustomView.m */; };
@@ -402,7 +396,7 @@
 		BB6F117F1CC676DF00F02064 /* TextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBCF9A0E1CACE4EF005B9DCE /* TextCell.m */; };
 		BB6F11801CC67E9700F02064 /* RoomInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5491C2CC7A300A042E8 /* RoomInfo.mm */; };
 		BB6F11821CC67EEC00F02064 /* MASConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4C51C2CC7A200A042E8 /* MASConstraint.m */; };
-		BB6F11831CC67F3A00F02064 /* TQCommentReplyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D3CB7D1CC0CF1600816BD0 /* TQCommentReplyViewController.m */; };
+		BB6F11831CC67F3A00F02064 /* TQCommentReplyViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18D3CB7D1CC0CF1600816BD0 /* TQCommentReplyViewController.mm */; };
 		BB6F11861CC68C3400F02064 /* TableViewFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6F11851CC68C3400F02064 /* TableViewFactory.m */; };
 		BB6F118A1CC6975500F02064 /* RoomChatDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6F11891CC6975500F02064 /* RoomChatDataSource.m */; };
 		BB6F118D1CC69C3900F02064 /* RoomNoticeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6F118C1CC69C3900F02064 /* RoomNoticeDataSource.m */; };
@@ -621,6 +615,10 @@
 		BBD58EDC1CCB6017009250DB /* video_profiles_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBD58EDA1CCB6017009250DB /* video_profiles_bg@3x.png */; };
 		BBD58EDF1CCB6D88009250DB /* MyNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EDE1CCB6D88009250DB /* MyNavigationViewController.m */; };
 		BBD58EE21CCB96FF009250DB /* MyPrivateView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EE11CCB96FF009250DB /* MyPrivateView.m */; };
+		BBD58EE81CCBD8A2009250DB /* XMeCustomDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EE71CCBD8A2009250DB /* XMeCustomDataSource.m */; };
+		BBD58EEB1CCBD96C009250DB /* XMeCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EEA1CCBD96C009250DB /* XMeCustomCell.m */; };
+		BBD58EEE1CCBE31B009250DB /* XPrivateDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EED1CCBE31B009250DB /* XPrivateDetail.m */; };
+		BBD58EF11CCBE6AC009250DB /* XPrivateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EF01CCBE6AC009250DB /* XPrivateDetailViewController.m */; };
 		BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB52B1C1E959500D7230F /* libxml2.tbd */; };
 		BBF22F771C80050400907AD9 /* RoomCoreTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */; };
 		BBFA851D1C30D216000466E4 /* 999.gif in Resources */ = {isa = PBXBuildFile; fileRef = BBFA851C1C30D216000466E4 /* 999.gif */; };
@@ -730,7 +728,7 @@
 		1895B7851CCB753200B86B0D /* TQNoPurchaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQNoPurchaseModel.h; sourceTree = "<group>"; };
 		1895B7861CCB753200B86B0D /* TQNoPurchaseModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQNoPurchaseModel.mm; sourceTree = "<group>"; };
 		1895B7881CCB756900B86B0D /* TQMeCustomizedModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMeCustomizedModel.h; sourceTree = "<group>"; };
-		1895B7891CCB756900B86B0D /* TQMeCustomizedModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQMeCustomizedModel.mm; sourceTree = "<group>"; };
+		1895B7891CCB756900B86B0D /* TQMeCustomizedModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQMeCustomizedModel.m; sourceTree = "<group>"; };
 		1895B78B1CCB7C8700B86B0D /* TQIntroductModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIntroductModel.h; sourceTree = "<group>"; };
 		1895B78C1CCB7C8700B86B0D /* TQIntroductModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQIntroductModel.mm; sourceTree = "<group>"; };
 		18987FEE1CAA17E6000E9F1C /* WonderfullView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonderfullView.h; sourceTree = "<group>"; };
@@ -789,7 +787,7 @@
 		18D3CB791CC0A41E00816BD0 /* TQMailboxCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMailboxCell.h; sourceTree = "<group>"; };
 		18D3CB7A1CC0A41E00816BD0 /* TQMailboxCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQMailboxCell.m; sourceTree = "<group>"; };
 		18D3CB7C1CC0CF1600816BD0 /* TQCommentReplyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQCommentReplyViewController.h; sourceTree = "<group>"; };
-		18D3CB7D1CC0CF1600816BD0 /* TQCommentReplyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQCommentReplyViewController.m; sourceTree = "<group>"; };
+		18D3CB7D1CC0CF1600816BD0 /* TQCommentReplyViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQCommentReplyViewController.mm; sourceTree = "<group>"; };
 		18D3CB7F1CC0CFB400816BD0 /* TQMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMessageViewController.h; sourceTree = "<group>"; };
 		18D3CB801CC0CFB400816BD0 /* TQMessageViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQMessageViewController.mm; sourceTree = "<group>"; };
 		18D3CB821CC0D01A00816BD0 /* TQAnswerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQAnswerViewController.h; sourceTree = "<group>"; };
@@ -813,13 +811,6 @@
 		18EA82281CC8A5B200BDB735 /* UIImageView+Header.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Header.m"; sourceTree = "<group>"; };
 		18EA822A1CC8C41C00BDB735 /* TQideaViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQideaViewModel.h; sourceTree = "<group>"; };
 		18EA822B1CC8C41C00BDB735 /* TQideaViewModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQideaViewModel.mm; sourceTree = "<group>"; };
-		18EA82481CC9D50E00BDB735 /* TQMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TQMessageModel.h; path = 99SVR/ME/View/TQMessageModel.h; sourceTree = SOURCE_ROOT; };
-		18EA82491CC9D50E00BDB735 /* TQMessageModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TQMessageModel.mm; path = 99SVR/ME/View/TQMessageModel.mm; sourceTree = SOURCE_ROOT; };
-		18EA824B1CC9FADC00BDB735 /* TQAnswerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TQAnswerModel.h; path = 99SVR/ME/View/TQAnswerModel.h; sourceTree = SOURCE_ROOT; };
-		18EA824C1CC9FADC00BDB735 /* TQAnswerModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TQAnswerModel.mm; path = 99SVR/ME/View/TQAnswerModel.mm; sourceTree = SOURCE_ROOT; };
-		18EA82851CCA148F00BDB735 /* TQIntroductionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIntroductionViewController.h; sourceTree = "<group>"; };
-		18EA82861CCA148F00BDB735 /* TQIntroductionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQIntroductionViewController.m; sourceTree = "<group>"; };
-		18EA824E1CCA09F000BDB735 /* TQMailboxViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TQMailboxViewController.storyboard; sourceTree = "<group>"; };
 		18EA82851CCA148F00BDB735 /* TQNoPurchaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQNoPurchaseViewController.h; sourceTree = "<group>"; };
 		18EA82861CCA148F00BDB735 /* TQNoPurchaseViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQNoPurchaseViewController.mm; sourceTree = "<group>"; };
 		18EA82871CCA148F00BDB735 /* TQMeCustomizedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMeCustomizedViewController.h; sourceTree = "<group>"; };
@@ -833,11 +824,6 @@
 		18EA82931CCA148F00BDB735 /* TQIntroductCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIntroductCell.h; sourceTree = "<group>"; };
 		18EA82941CCA148F00BDB735 /* TQIntroductCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQIntroductCell.m; sourceTree = "<group>"; };
 		18EA82951CCA148F00BDB735 /* TQIntroductCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQIntroductCell.xib; sourceTree = "<group>"; };
-		18EA82961CCA148F00BDB735 /* TQMeCustomizedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMeCustomizedCell.h; sourceTree = "<group>"; };
-		18EA82971CCA148F00BDB735 /* TQMeCustomizedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQMeCustomizedCell.m; sourceTree = "<group>"; };
-		18EA82981CCA148F00BDB735 /* TQMeCustomizedCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQMeCustomizedCell.xib; sourceTree = "<group>"; };
-		18EA82991CCA148F00BDB735 /* TQMecustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMecustomView.h; sourceTree = "<group>"; };
-		18EA829A1CCA148F00BDB735 /* TQMecustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQMecustomView.m; sourceTree = "<group>"; };
 		18EA829D1CCA148F00BDB735 /* TQNoCustomHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQNoCustomHeader.h; sourceTree = "<group>"; };
 		18EA829E1CCA148F00BDB735 /* TQNoCustomHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQNoCustomHeader.m; sourceTree = "<group>"; };
 		18EA829F1CCA148F00BDB735 /* TQNoCustomHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQNoCustomHeader.xib; sourceTree = "<group>"; };
@@ -1784,6 +1770,14 @@
 		BBD58EDE1CCB6D88009250DB /* MyNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyNavigationViewController.m; sourceTree = "<group>"; };
 		BBD58EE01CCB96FF009250DB /* MyPrivateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPrivateView.h; sourceTree = "<group>"; };
 		BBD58EE11CCB96FF009250DB /* MyPrivateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPrivateView.m; sourceTree = "<group>"; };
+		BBD58EE61CCBD8A2009250DB /* XMeCustomDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMeCustomDataSource.h; sourceTree = "<group>"; };
+		BBD58EE71CCBD8A2009250DB /* XMeCustomDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMeCustomDataSource.m; sourceTree = "<group>"; };
+		BBD58EE91CCBD96C009250DB /* XMeCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMeCustomCell.h; sourceTree = "<group>"; };
+		BBD58EEA1CCBD96C009250DB /* XMeCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMeCustomCell.m; sourceTree = "<group>"; };
+		BBD58EEC1CCBE31B009250DB /* XPrivateDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPrivateDetail.h; sourceTree = "<group>"; };
+		BBD58EED1CCBE31B009250DB /* XPrivateDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPrivateDetail.m; sourceTree = "<group>"; };
+		BBD58EEF1CCBE6AC009250DB /* XPrivateDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPrivateDetailViewController.h; sourceTree = "<group>"; };
+		BBD58EF01CCBE6AC009250DB /* XPrivateDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPrivateDetailViewController.m; sourceTree = "<group>"; };
 		BBECB52B1C1E959500D7230F /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		BBF22F751C80050400907AD9 /* RoomCoreTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCoreTextCell.h; sourceTree = "<group>"; };
 		BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCoreTextCell.m; sourceTree = "<group>"; };
@@ -2027,9 +2021,11 @@
 				1895B7851CCB753200B86B0D /* TQNoPurchaseModel.h */,
 				1895B7861CCB753200B86B0D /* TQNoPurchaseModel.mm */,
 				1895B7881CCB756900B86B0D /* TQMeCustomizedModel.h */,
-				1895B7891CCB756900B86B0D /* TQMeCustomizedModel.mm */,
+				1895B7891CCB756900B86B0D /* TQMeCustomizedModel.m */,
 				1895B78B1CCB7C8700B86B0D /* TQIntroductModel.h */,
 				1895B78C1CCB7C8700B86B0D /* TQIntroductModel.mm */,
+				BBD58EEC1CCBE31B009250DB /* XPrivateDetail.h */,
+				BBD58EED1CCBE31B009250DB /* XPrivateDetail.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2112,7 +2108,7 @@
 				18D3CB731CC0920300816BD0 /* TQMailboxViewController.h */,
 				18D3CB741CC0920300816BD0 /* TQMailboxViewController.m */,
 				18D3CB7C1CC0CF1600816BD0 /* TQCommentReplyViewController.h */,
-				18D3CB7D1CC0CF1600816BD0 /* TQCommentReplyViewController.m */,
+				18D3CB7D1CC0CF1600816BD0 /* TQCommentReplyViewController.mm */,
 				18D3CB7F1CC0CFB400816BD0 /* TQMessageViewController.h */,
 				18D3CB801CC0CFB400816BD0 /* TQMessageViewController.mm */,
 				18D3CB821CC0D01A00816BD0 /* TQAnswerViewController.h */,
@@ -2155,6 +2151,7 @@
 		18EA82831CCA148F00BDB735 /* ME */ = {
 			isa = PBXGroup;
 			children = (
+				BBD58EE51CCBD867009250DB /* datasource */,
 				1895B7811CCB56C000B86B0D /* Model */,
 				18EA82841CCA148F00BDB735 /* Controller */,
 				18EA828A1CCA148F00BDB735 /* View */,
@@ -2170,10 +2167,11 @@
 				18EA82851CCA148F00BDB735 /* TQNoPurchaseViewController.h */,
 				18EA82861CCA148F00BDB735 /* TQNoPurchaseViewController.mm */,
 				18EA82871CCA148F00BDB735 /* TQMeCustomizedViewController.h */,
-				18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.m */,
+				18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */,
 				BBD58EBB1CCA61EE009250DB /* XMyViewController.h */,
 				BBD58EBC1CCA61EE009250DB /* XMyViewController.m */,
-				18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */,
+				BBD58EEF1CCBE6AC009250DB /* XPrivateDetailViewController.h */,
+				BBD58EF01CCBE6AC009250DB /* XPrivateDetailViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2190,11 +2188,6 @@
 				18EA82931CCA148F00BDB735 /* TQIntroductCell.h */,
 				18EA82941CCA148F00BDB735 /* TQIntroductCell.m */,
 				18EA82951CCA148F00BDB735 /* TQIntroductCell.xib */,
-				18EA82961CCA148F00BDB735 /* TQMeCustomizedCell.h */,
-				18EA82971CCA148F00BDB735 /* TQMeCustomizedCell.m */,
-				18EA82981CCA148F00BDB735 /* TQMeCustomizedCell.xib */,
-				18EA82991CCA148F00BDB735 /* TQMecustomView.h */,
-				18EA829A1CCA148F00BDB735 /* TQMecustomView.m */,
 				18EA829D1CCA148F00BDB735 /* TQNoCustomHeader.h */,
 				18EA829E1CCA148F00BDB735 /* TQNoCustomHeader.m */,
 				18EA829F1CCA148F00BDB735 /* TQNoCustomHeader.xib */,
@@ -2203,6 +2196,8 @@
 				1895B7751CCB50E900B86B0D /* TQPurchaseView.h */,
 				1895B7761CCB50E900B86B0D /* TQPurchaseView.m */,
 				1895B7781CCB50F900B86B0D /* TQPurchaseView.xib */,
+				BBD58EE91CCBD96C009250DB /* XMeCustomCell.h */,
+				BBD58EEA1CCBD96C009250DB /* XMeCustomCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3762,6 +3757,15 @@
 			path = other/message;
 			sourceTree = "<group>";
 		};
+		BBD58EE51CCBD867009250DB /* datasource */ = {
+			isa = PBXGroup;
+			children = (
+				BBD58EE61CCBD8A2009250DB /* XMeCustomDataSource.h */,
+				BBD58EE71CCBD8A2009250DB /* XMeCustomDataSource.m */,
+			);
+			path = datasource;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -4060,7 +4064,6 @@
 				BBCE9D541CB3AD5600DA56D6 /* 408_1.png in Resources */,
 				BBCE9D191CB3AD5600DA56D6 /* 119_1.png in Resources */,
 				BBCE9D1A1CB3AD5600DA56D6 /* 120_1.png in Resources */,
-				18EA82AC1CCA148F00BDB735 /* TQMeCustomizedCell.xib in Resources */,
 				BBCE9D3A1CB3AD5600DA56D6 /* 152_1.png in Resources */,
 				1879B9061CC868C400E981A5 /* PhotoCell.xib in Resources */,
 				BB63F2C31C27FB2800A042E8 /* 27.gif in Resources */,
@@ -4184,7 +4187,7 @@
 				BB6F11921CC70ECE00F02064 /* HttpConnection.mm in Sources */,
 				BB6F11911CC70EB800F02064 /* MJPropertyKey.m in Sources */,
 				BB6F11901CC70EA500F02064 /* TQAllReplyCell.mm in Sources */,
-				BB6F11831CC67F3A00F02064 /* TQCommentReplyViewController.m in Sources */,
+				BB6F11831CC67F3A00F02064 /* TQCommentReplyViewController.mm in Sources */,
 				BB6F11821CC67EEC00F02064 /* MASConstraint.m in Sources */,
 				BB6F11801CC67E9700F02064 /* RoomInfo.mm in Sources */,
 				BB6F117F1CC676DF00F02064 /* TextCell.m in Sources */,
@@ -4210,8 +4213,10 @@
 				BB5E1C731CC082310076C416 /* RoomService.mm in Sources */,
 				BB5E4FA21CBF7D1B00F8C1D4 /* TeacherModel.m in Sources */,
 				BB1661A41C3E2F9A00D318BE /* HomeViewController.m in Sources */,
+				BBD58EE81CCBD8A2009250DB /* XMeCustomDataSource.m in Sources */,
 				B4EA09111CC757D500E8F933 /* StockChartView.m in Sources */,
 				BB6F11861CC68C3400F02064 /* TableViewFactory.m in Sources */,
+				BBD58EEE1CCBE31B009250DB /* XPrivateDetail.m in Sources */,
 				BB1769221C7B006F00CE947C /* NSData+ImageContentType.m in Sources */,
 				B44F77681CC39FF1008E3B26 /* StockDealHeaderView.mm in Sources */,
 				BB63F5F61C2CC7A300A042E8 /* ProgressHUD.m in Sources */,
@@ -4283,7 +4288,6 @@
 				BB5E4F931CBF7D1B00F8C1D4 /* TextChatViewController.m in Sources */,
 				B4A15E9F1CBFAA9E00587E3F /* StockDealViewController.mm in Sources */,
 				BB63F5B61C2CC7A300A042E8 /* GTMBase64.m in Sources */,
-				18EA82AD1CCA148F00BDB735 /* TQMecustomView.m in Sources */,
 				18F9710B1C92947F001B2575 /* Order.m in Sources */,
 				BB5E4F921CBF7D1B00F8C1D4 /* SecretViewController.m in Sources */,
 				B4EA09101CC757D500E8F933 /* DDLineChartView.m in Sources */,
@@ -4315,6 +4319,7 @@
 				185F596D1CC4CAD600F605F5 /* NSString+MJExtension.m in Sources */,
 				1898AC711C9BB77100F2681D /* VideoColletionViewController.m in Sources */,
 				BB5E4FB91CBF7D1B00F8C1D4 /* ViewPointCell.m in Sources */,
+				BBD58EEB1CCBD96C009250DB /* XMeCustomCell.m in Sources */,
 				BB17692D1C7B006F00CE947C /* UIImage+WebP.m in Sources */,
 				BB1769261C7B006F00CE947C /* SDWebImageDownloader.m in Sources */,
 				18EA82A91CCA148F00BDB735 /* TQIntroductCell.m in Sources */,
@@ -4324,6 +4329,7 @@
 				BB17692E1C7B006F00CE947C /* UIImageView+HighlightedWebCache.m in Sources */,
 				BB5E4F2D1CBF7B5800F8C1D4 /* LoginConnection.cpp in Sources */,
 				BB17694D1C7D9E7300CE947C /* InputPwdViewController.m in Sources */,
+				BBD58EF11CCBE6AC009250DB /* XPrivateDetailViewController.m in Sources */,
 				18BF06B81C9A86B00071E524 /* RechargeResultViewController.m in Sources */,
 				1898AC691C9BADE600F2681D /* MyDataController.m in Sources */,
 				BB5E4F311CBF7B5800F8C1D4 /* TextRoomConnection.cpp in Sources */,
@@ -4344,7 +4350,6 @@
 				BB5E4FAE1CBF7D1B00F8C1D4 /* HotTextView.m in Sources */,
 				BB63F5FE1C2CC7A300A042E8 /* Video.m in Sources */,
 				BBD58ED11CCB4A85009250DB /* ConsumeRankDataSource.mm in Sources */,
-				18EA82AB1CCA148F00BDB735 /* TQMeCustomizedCell.m in Sources */,
 				BB5E4FAF1CBF7D1B00F8C1D4 /* LiveCoreTextCell.m in Sources */,
 				BBD58EDF1CCB6D88009250DB /* MyNavigationViewController.m in Sources */,
 				BB63F6071C2CC7A300A042E8 /* RoomUserCell.m in Sources */,
@@ -4430,7 +4435,7 @@
 				BB5E4F301CBF7B5800F8C1D4 /* Test.cpp in Sources */,
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
 				BB5E4F9F1CBF7D1B00F8C1D4 /* IdeaDetails.m in Sources */,
-				1895B78A1CCB756900B86B0D /* TQMeCustomizedModel.mm in Sources */,
+				1895B78A1CCB756900B86B0D /* TQMeCustomizedModel.m in Sources */,
 				BB1769211C7B006F00CE947C /* MKAnnotationView+WebCache.m in Sources */,
 				185DABAB1CBFDC970019C5A3 /* ideaDetailTableViewCell.m in Sources */,
 				18D3CB7B1CC0A41E00816BD0 /* TQMailboxCell.m in Sources */,

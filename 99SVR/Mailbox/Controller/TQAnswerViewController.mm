@@ -8,11 +8,15 @@
 
 #import "TQAnswerViewController.h"
 #import "TQAllReplyCell.h"
+#import "UIImageView+Header.h"
 #import "MJRefresh.h"
 #import "TQAnswerModel.h"
+#import "TableViewFactory.h"
 
-@interface TQAnswerViewController ()
+@interface TQAnswerViewController ()<UITableViewDataSource,UITableViewDelegate>
+
 @property (nonatomic ,strong)NSArray *aryModel;
+@property (nonatomic,strong) UITableView *tableView;
 
 @end
 
@@ -20,7 +24,11 @@
 static NSString *const answerCell = @"answerCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self setTitleText:@"提问回复"];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+    [self.view addSubview:_tableView];
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQAllReplyCell class]) bundle:nil] forCellReuseIdentifier:answerCell];
 }
 
@@ -53,14 +61,38 @@ static NSString *const answerCell = @"answerCell";
 
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return _aryModel.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 9;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.5;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TQAllReplyCell *cell = [tableView dequeueReusableCellWithIdentifier:answerCell];
-    cell.model = _aryModel[indexPath.row];
-    
+    if(_aryModel.count>indexPath.section)
+    {
+        TQAnswerModel *model = _aryModel[indexPath.section];
+        [cell.iconImageView xmg_setHeader:model.answerauthorhead];
+        //    self.iconImageView.image = [UIImage imageNamed:model.answerauthorhead];
+        cell.ansNamelb.text = model.answerauthorname;
+        cell.ansTimelb.text = model.answertime;
+        cell.ansContentV.text = model.answercontent;
+        cell.askNamelb.text = model.askauthorname;
+        cell.askContentV.text = model.askcontent;
+    }
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

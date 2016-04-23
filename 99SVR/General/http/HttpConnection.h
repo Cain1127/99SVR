@@ -76,7 +76,7 @@ public:
 	void RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivateServiceSummaryPackListener* listener);
 
 	// 请求私人定制详情
-	void RequestPrivateServiceDetail(int id, PrivateServiceDetailListener* listener);
+	void RequestPrivateServiceDetail(int nId, PrivateServiceDetailListener* listener);
 
 
 	// 请求充值规则列表

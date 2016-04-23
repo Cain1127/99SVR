@@ -398,12 +398,20 @@ void HttpConnection::RequestWhatIsPrivateService(WhatIsPrivateServiceListener* l
 
 //请求已经购买的私人定制
 void HttpConnection::RequestMyPrivateService(int userId, MyPrivateServiceListener* listener){
-    MyPrivateService infos;
-    infos.set_teamid("123");
-    infos.set_teamname("三刀流");
-    infos.set_teamicon("personal_user_head");
-    infos.set_levelid(1);
-    infos.set_levelname("VIP3");
+    std::vector<MyPrivateService> infos;
+    for (int i=1; i<7; i++) {
+        MyPrivateService service;
+        service.set_teamid("123");
+        service.set_teamname("三刀流");
+        service.set_teamicon("personal_user_head");
+        service.set_levelid(i);
+        service.set_levelname("VIP3");
+        service.set_expirationdate("有效期:2018-01-01");
+        infos.push_back(service);
+    }
+    Team team;
+    TeamPrivateServiceSummaryPack teamPrivate;
+    listener->onResponse(infos,team, teamPrivate);
 }
 
 // 显示购买私人定制页
@@ -434,7 +442,7 @@ void HttpConnection::RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivat
 }
 
 // 请求私人定制详情
-void HttpConnection::RequestPrivateServiceDetail(int id, PrivateServiceDetailListener* listener){
+void HttpConnection::RequestPrivateServiceDetail(int nId, PrivateServiceDetailListener* listener){
     std::string url = "http://testphp.99ducaijing.cn/api.php";
     char tmp[32] = {0};
     
@@ -448,7 +456,7 @@ void HttpConnection::RequestPrivateServiceDetail(int id, PrivateServiceDetailLis
     
     request["s"] = "Personalsecrets/getPSDetail";
     
-    sprintf(tmp, "%d", id);
+    sprintf(tmp, "%d", nId);
     request["psid"] = tmp;
     
     Thread::start(http_request, param);

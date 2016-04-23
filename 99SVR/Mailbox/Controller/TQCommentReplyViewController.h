@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TQCommentReplyViewController : UITableViewController
+@interface TQCommentReplyViewController : CustomViewController
 
 @end

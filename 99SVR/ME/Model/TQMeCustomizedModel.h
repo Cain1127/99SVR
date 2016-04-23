@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "HttpMessage.pb.h"
+#import "MJExtension.h"
 
 @interface TQMeCustomizedModel : NSObject
-- (id)initWithMyPrivateService:(MyPrivateService *)MyPrivateService;
+
 /** 团队ID */
 @property(nonatomic,copy) NSString *teamid;
 /** 团队名称 */
@@ -24,13 +24,6 @@
 @property(nonatomic,copy) NSString *expirationdate;
 /** VIP等级名称 */
 @property(nonatomic,copy) NSString *levelname;
-
-
-
-
-
-
-
 
 
 @end

@@ -20,7 +20,7 @@
 #import "TQNoPurchaseModel.h"
 #import "TQIntroductModel.h"
 #import "MJExtension.h"
-
+#import "XPrivateDetail.h"
 
 /**
  *  闪屏响应
@@ -233,16 +233,23 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
         TQNoPurchaseModel *noPurModel = [[TQNoPurchaseModel alloc] initWithTeamSummaryPack:&teamSummaryPack];
         [noPurArray addObject:noPurModel];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_NOPURCHASE_VC object:noPurArray];
-
     }else {
         
         for (int i=0; i<infos.size(); i++) {
         //获取已经购买数据
             NSMutableArray *ary = [NSMutableArray array];
             for (int i=0; i<infos.size(); i++) {
-                TQMeCustomizedModel *cusModel = [[TQMeCustomizedModel alloc] initWithMyPrivateService:&infos[i]];
-                
-                [ary addObject:cusModel];
+                MyPrivateService service = infos[i];
+                NSString *teamid = [NSString stringWithUTF8String:service.teamid().c_str()];
+                NSString *teamname = [NSString stringWithUTF8String:service.teamname().c_str()];
+                NSString *teamicon = [NSString stringWithUTF8String:service.teamicon().c_str()];
+                NSString *levelname = [NSString stringWithUTF8String:service.levelname().c_str()];
+                NSString *expirationdate = [NSString stringWithUTF8String:service.expirationdate().c_str()];
+                int levelid = service.levelid();
+                NSDictionary *dict = @{@"teamid":teamid,@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
+                                       @"expirationdate":expirationdate,@"levelid":@(levelid)};
+                TQMeCustomizedModel *model = [TQMeCustomizedModel mj_objectWithKeyValues:dict];
+                [ary addObject:model];
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:ary];
     }
@@ -267,7 +274,21 @@ void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateService
 }
 
 void PrivateServiceDetailListener::onResponse(PrivateServiceDetail& info){
-    
+
+    NSString *title = [NSString stringWithUTF8String:info.title().c_str()];
+    NSString *content = [NSString stringWithUTF8String:info.content().c_str()];
+    NSString *publishtime = [NSString stringWithUTF8String:info.publishtime().c_str()];
+    NSString *videourl = [NSString stringWithUTF8String:info.videourl().c_str()];
+    NSString *videoname = [NSString stringWithUTF8String:info.videoname().c_str()];
+    NSString *attachmenturl = [NSString stringWithUTF8String:info.attachmenturl().c_str()];
+    NSString *attachmentname = [NSString stringWithUTF8String:info.attachmentname().c_str()];
+    int operatestockid = info.operatestockid();
+    NSString *html5url = [NSString stringWithUTF8String:info.html5url().c_str()];
+    NSDictionary *dict = @{@"title":title,@"content":content,@"publishtime":publishtime,@"videourl":videourl,
+    @"videoname":videoname,@"attachmenturl":attachmenturl,@"attachmentname":attachmentname,@"html5url":html5url,
+                           @"operatestockid":@(operatestockid)};
+    XPrivateDetail *detail = [XPrivateDetail mj_objectWithKeyValues:dict];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_DETAIL_VC object:detail];
 }
 
 void ChargeRuleListener::onResponse(vector<ChargeRule>& infos){

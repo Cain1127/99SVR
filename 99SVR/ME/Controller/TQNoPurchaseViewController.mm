@@ -35,7 +35,7 @@ static NSString *const IntroductCell = @"IntroductCell";
     [title setTextColor:UIColorFromRGB(0x0078DD)];
     [self.navigationItem setTitleView:title];
     [self setupHeaderView];
-    TQPurchaseView *purchaseView = [[NSBundle mainBundle] loadNibNamed:@"purchaseView" owner:nil options:nil] [0];
+    TQPurchaseView *purchaseView = [[NSBundle mainBundle] loadNibNamed:@"TQpurchaseView" owner:nil options:nil] [0];
     [purchaseView.purchaseBtn addTarget:self action:@selector(purchaseViewPage) forControlEvents:UIControlEventTouchUpInside];
     purchaseView.frame = CGRectMake(10, kScreenHeight - 64, kScreenWidth - 20, 44);
 //    purchaseView.hidden = YES;
