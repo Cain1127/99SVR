@@ -60,6 +60,7 @@ enum connectP2P
 
 #define XCFONT(x) [UIFont systemFontOfSize:x]
 
+/** 屏幕宽高*/
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 
@@ -69,5 +70,46 @@ enum connectP2P
 #define HEIGHT_MENU_VIEW(x,y) ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0 ? x : y)
 
 #define kFontSize(size) [UIFont systemFontOfSize:size]
+
+/** 适配*/
+#define kiOS_5_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0)
+#define kiOS_6_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0)
+#define kiOS_7_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+#define kiOS_8_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+#define kiOS_9_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0)
+
+#define kiPhone4_OR_4s    (kScreenWidth == 480)
+#define kiPhone5_OR_5c_OR_5s   (kScreenWidth == 568)
+#define kiPhone6_OR_6s   (kScreenWidth == 667)
+#define kiPhone6Plus_OR_6sPlus   (kScreenWidth == 736)
+#define kiPad (UI_USER_INTEkACE_IDIOM() == UIUserInterfaceIdiomPad)
+
+/** 加载本地文件*/
+#define kLoadImage(file,type) [UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:file ofType:type]]
+#define kLoadArray(file,type) [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle]pathForResource:file ofType:type]]
+#define kLoadDict(file,type) [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle]pathForResource:file ofType:type]]
+
+/** 资源路径 */
+#define kPNG_PATH(NAME) [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:NAME] ofType:@"png"]
+#define kJPG_PATH(NAME) [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:NAME] ofType:@"jpg"]
+#define kPATH(NAME,EXT) [[NSBundle mainBundle] pathForResource:(NAME) ofType:(EXT)]
+
+/** 加载图片 */
+#define kPNG_IMAGE_FILE(NAME)  [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:(NAME) ofType:@"png"]]
+#define kJPG_IMAGE_FILE(NAME)  [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:(NAME) ofType:@"jpg"]]
+#define kIMAGE_FILE(NAME,EXT)  [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:(NAME) ofType:(EXT)]]
+#define kIMAGE_NAMED(NAME)     [UIImage imageNamed:NAME]
+
+/** 弱指针
+ Example:
+    @WeakObj(self)
+    [self doSomething^{
+        @StrongObj(self)
+        if (!self) return;
+            ...
+    }];
+ */
+#define WeakObj(o) try{}@finally{} __weak typeof(o) o##Weak = o;
+#define StrongObj(o) autoreleasepool{} __strong typeof(o) o = o##Weak;
 
 #endif
