@@ -16,7 +16,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *conTentLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *TimeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *openBtn;
 @property (weak, nonatomic) IBOutlet UILabel *TITILELabel;
 @property (nonatomic,weak) IBOutlet UIButton *btnShow;
 @end
@@ -64,5 +63,7 @@
                                                       context:nil];
     return rect.size.height+49+65;
 }
+
+
 
 @end

@@ -10,10 +10,21 @@
 
 @implementation TQPurchaseView
 
+<<<<<<< HEAD
 +(instancetype)purchaseView
 {
     return [[NSBundle mainBundle]loadNibNamed:NSStringFromClass(self) owner:nil options:nil] [0];
 }
 
+=======
+- (IBAction)purchaseClick:(id)sender {
+    
+}
+
++(instancetype)purchaseView
+{
+    return [[NSBundle mainBundle] loadNibNamed:NSStringFromClass(self) owner:nil options:nil][0];
+}
+>>>>>>> 0cfd691cecefffeaf6a7bb1034f5793c3e34772b
 
 @end

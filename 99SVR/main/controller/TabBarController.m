@@ -16,6 +16,7 @@
 #import "TQMeCustomizedViewController.h"
 #import "MyNavigationViewController.h"
 #import "XMyViewController.h"
+#import "TQMyViewController.h"
 
 
 @interface TabBarController ()
@@ -69,6 +70,7 @@
     [self setUpOneViewController:[[IndexViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
     [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"text_live" selectImage:@"text_live_h"];
     [self setUpMyViewController:[[XMyViewController alloc]init] title:@"我" image:@"text_live" selectImage:@"text_live_h"];
+
 
 }
 

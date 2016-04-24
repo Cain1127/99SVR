@@ -34,20 +34,24 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     [_tableView setBackgroundColor:RGB(243, 243, 243)];
     [self.view addSubview:_tableView];
     [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:nil];
-    [kHTTPSingle RequestPrivateServiceSummary:0 count:10];
-    
+    // cell自动计算高度
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    // 估算高度
+    self.tableView.estimatedRowHeight = 44;
 }
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [kHTTPSingle RequestPrivateServiceSummary:0 count:10];
 }
 
 - (void)loadRplayView:(NSNotification *)notify
 {
     NSArray *aryModel = notify.object;
     _aryModel = aryModel;
-    DLog(@"+++++++++++++++++++++++++++++++++++++++++%@", _aryModel);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.tableView reloadData];
@@ -103,6 +107,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
         [self.navigationController pushViewController:detailView animated:YES];
     }
 }
+
 
 
 @end

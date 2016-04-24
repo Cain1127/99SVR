@@ -8,7 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol RoomHeadViewDelegate <NSObject>
+
+@optional
+- (void)selectIndexSegment:(NSInteger)nIndex;
+- (void)enterTeamIntroduce;
+@end
+
 @interface RoomHeaderView : UIView
+
+@property (nonatomic) id<RoomHeadViewDelegate> delegate;
 
 @property (nonatomic,strong) UILabel *lblTitle;
 @property (nonatomic,strong) UILabel *lblCount;

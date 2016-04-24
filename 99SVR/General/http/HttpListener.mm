@@ -21,6 +21,7 @@
 #import "TQIntroductModel.h"
 #import "MJExtension.h"
 #import "XPrivateDetail.h"
+#import "XVideoTeamInfo.h"
 
 /**
  *  闪屏响应
@@ -257,7 +258,8 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
 }
 
 void WhatIsPrivateServiceListener::onResponse(WhatIsPrivateService& infos){
-    
+    NSString *strInfo = [NSString stringWithUTF8String:infos.content().c_str()];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_WHAT_IS_PRIVATE_VC object:strInfo];
 }
 
 /**
@@ -299,8 +301,27 @@ void TeamListListener::onResponse(vector<Team>& infos){
     
 }
 
-void TeamIntroduceListener::onResponse(TeamIntroduce& info){
-    
+void TeamIntroduceListener::onResponse(TeamIntroduce& info)
+{
+    NSString *teamName = [NSString stringWithUTF8String:info.teamName().c_str()];
+    NSString *teamIcon = [NSString stringWithUTF8String:info.teamIcon().c_str()];
+    NSString *introduce = [NSString stringWithUTF8String:info.introduce().c_str()];
+    NSDictionary *dict = @{@"teamName":teamName,@"teamIcon":teamIcon,@"introduce":introduce};
+    XVideoTeamInfo *xVideo = [XVideoTeamInfo mj_objectWithKeyValues:dict];
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i=0; i<info.videoList().size(); i++)
+    {
+        VideoInfo video = info.videoList()[i];
+        int nId = video.id();
+        NSString *name = [NSString stringWithUTF8String:video.name().c_str()];
+        NSString *picurl = [NSString stringWithUTF8String:video.picurl().c_str()];
+        NSString *videourl = [NSString stringWithUTF8String:video.videourl().c_str()];
+        NSDictionary *parameter = @{@"name":name,@"picurl":picurl,@"videourl":videourl,@"nId":@(nId)};
+        VideoModel *model = [VideoModel mj_objectWithKeyValues:parameter];
+        [array addObject:model];
+    }
+    xVideo.videoList = array;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEAM_INTRODUCE_VC object:xVideo];
 }
 
 void ConsumeRankListener::onResponse(vector<ConsumeRank>& info){

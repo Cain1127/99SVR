@@ -33,4 +33,9 @@
  */
 + (BOOL)sendLocalInfo:(NSString *)strMsg toid:(int)toId roomInfo:(RoomInfo *)rInfo aryChat:(NSMutableArray *)aryChat;
 
+/**
+ *  课程表信息
+ */
++ (NSString *)getTeachInfo:(RoomNotice *)pInfo;
+
 @end

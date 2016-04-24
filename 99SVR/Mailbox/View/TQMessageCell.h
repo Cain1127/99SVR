@@ -21,4 +21,6 @@
 
 - (CGFloat)requiredRowHeightInTableView;
 
+@property (weak, nonatomic) IBOutlet UIButton *openBtn;
+
 @end

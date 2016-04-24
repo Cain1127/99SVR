@@ -65,12 +65,24 @@
     [self addSubview:_segmented];
     _segmented.tintColor = [UIColor whiteColor];
     
+    [_segmented addTarget:self action:@selector(selectChanged) forControlEvents:UIControlEventValueChanged];
+    
     return self;
+}
+
+- (void)selectChanged
+{
+    DLog(@"nIndex:%zi",_segmented.selectedSegmentIndex);
+    if (_delegate && [_delegate respondsToSelector:@selector(selectIndexSegment:)]) {
+        [_delegate selectIndexSegment:_segmented.selectedSegmentIndex];
+    }
 }
 
 - (void)rightEvent
 {
-    
+    if (_delegate && [_delegate respondsToSelector:@selector(enterTeamIntroduce)]) {
+        [_delegate enterTeamIntroduce];
+    }
 }
 
 - (void)navBack{

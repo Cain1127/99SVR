@@ -81,7 +81,7 @@
     [[MTAConfig getInstance] setSmartReporting:false];
     [[MTAConfig getInstance] setReportStrategy:MTA_STRATEGY_INSTANT];
     [MTA startWithAppkey:@"ILQ4T8A5X5JA"];
-//    [self createUpdateAlert];
+    
     [WeiboSDK enableDebugMode:YES];
     [WeiboSDK registerApp:kSinaKey];
     [WXApi registerApp:@"wxfbfe01336f468525" withDescription:@"weixin"];

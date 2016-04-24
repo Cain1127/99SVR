@@ -10,7 +10,6 @@
 #import "TQMeCustomizedModel.h"
 #import "TQNoCustomView.h"
 #import "TQNoPurchaseViewController.h"
-#import "TQMailboxViewController.h"
 #import "UIBarButtonItem+Item.h"
 #import "HttpManagerSing.h"
 #import "TableViewFactory.h"
@@ -28,9 +27,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//        TQMecustomView *MeView = [[TQMecustomView alloc] initWithFrame:self.view.bounds];
-//        [self.view addSubview:MeView];
-    
 //        TQNoCustomView *NOView = [[TQNoCustomView alloc] initWithFrame:self.view.bounds];
 //        [self.view addSubview:NOView];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushIntroductController) name:MESSAGE_TQINTORDUCT_VC object:nil];
@@ -39,6 +35,11 @@
     [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
     _dataSource = [[XMeCustomDataSource alloc] init];
     _dataSource.delegate = self;
+<<<<<<< HEAD
+=======
+
+    
+>>>>>>> 0cfd691cecefffeaf6a7bb1034f5793c3e34772b
     [self initUi];
 }
 -(void)nopurchaseVc {
@@ -48,10 +49,14 @@
 
 -(void)initUi{
     [self setTitleText:@"我的私人定制"];
+<<<<<<< HEAD
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setTitle:@"私人定制未购买页" forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(nopurchaseVc) forControlEvents:UIControlEventTouchUpInside];
     [self setRightBtn:rightBtn];
+=======
+
+>>>>>>> 0cfd691cecefffeaf6a7bb1034f5793c3e34772b
 }
 
 - (void)noPurchase:(NSNotification *)notify
