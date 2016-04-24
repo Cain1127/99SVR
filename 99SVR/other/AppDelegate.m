@@ -32,6 +32,7 @@
 #import "TabBarController.h"
 #import "MainViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "AdViewController.h"
 
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
 
@@ -80,7 +81,7 @@
     [[MTAConfig getInstance] setSmartReporting:false];
     [[MTAConfig getInstance] setReportStrategy:MTA_STRATEGY_INSTANT];
     [MTA startWithAppkey:@"ILQ4T8A5X5JA"];
-//    [self createUpdateAlert];
+    
     [WeiboSDK enableDebugMode:YES];
     [WeiboSDK registerApp:kSinaKey];
     [WXApi registerApp:@"wxfbfe01336f468525" withDescription:@"weixin"];
@@ -98,7 +99,7 @@
     }
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [[TabBarController alloc] init];
+    self.window.rootViewController = [[AdViewController alloc] init];
     [self.window makeKeyAndVisible];
     
     [SVRInitLBS loadAllInfo];

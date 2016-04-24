@@ -43,6 +43,16 @@ static NSString *const IntroductCell = @"IntroductCell";
     [title setTextAlignment:NSTextAlignmentCenter];
     [title setTextColor:UIColorFromRGB(0x0078DD)];
     [self.navigationItem setTitleView:title];
+<<<<<<< HEAD
+=======
+    [self setupHeaderView];
+    TQPurchaseView *purchaseView = [[NSBundle mainBundle] loadNibNamed:@"TQpurchaseView" owner:nil options:nil] [0];
+    [purchaseView.purchaseBtn addTarget:self action:@selector(purchaseViewPage) forControlEvents:UIControlEventTouchUpInside];
+    purchaseView.frame = CGRectMake(10, kScreenHeight - 64, kScreenWidth - 20, 44);
+//    purchaseView.hidden = YES;
+    _purchaseView = purchaseView;
+    [self.tableView addSubview:purchaseView];
+>>>>>>> 28295b90cd0edb89bfe377e8ead86b5c3fa796b9
     
 
 }

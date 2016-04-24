@@ -5,6 +5,6 @@
 
 #import "SlideBaseViewController.h"
 
-@interface StockHomeViewController : SlideBaseViewController
+@interface StockHomeViewController : UIViewController
 
 @end

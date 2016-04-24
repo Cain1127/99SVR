@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TQPersonalTailorViewController : UITableViewController
+@interface TQPersonalTailorViewController : CustomViewController
 
 @end

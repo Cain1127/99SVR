@@ -9,7 +9,15 @@
 #import <UIKit/UIKit.h>
 @class TQPersonalModel;
 @interface TQPersonalTailorCell : UITableViewCell
+
+@property (weak, nonatomic) IBOutlet UILabel *TITLELabel;
+@property (weak, nonatomic) IBOutlet UILabel *summaryLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UIButton *seeBtn;
+
 /** 模型 */
+//@property (nonatomic ,weak)TQPersonalModel *personalModel;
 @property (nonatomic ,weak)TQPersonalModel *personalModel;
 /** <#desc#> */
 @property (nonatomic ,assign)CGFloat cellHeight;

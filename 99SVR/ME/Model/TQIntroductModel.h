@@ -10,6 +10,7 @@
 #import "HttpMessage.pb.h"
 
 @interface TQIntroductModel : NSObject
+
 - (id)initWithTeamSummaryPack:(PrivateServiceSummary *)summaryList;
 
 @end

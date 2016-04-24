@@ -13,11 +13,18 @@
 #import "TQMessageViewController.h"
 #import "TQCommentReplyViewController.h"
 #import "TQPersonalTailorViewController.h"
+#import "TableViewFactory.h"
+#import "LeftCellModel.h"
+#import "UIImageView+WebCache.h"
+#import "UIImageFactory.h"
 #import "TQButton-RoundedRectBtn.h"
 #import "TQMeCustomizedViewController.h"
 
+@interface TQMailboxViewController ()<UITableViewDataSource,UITableViewDelegate>
 
-@interface TQMailboxViewController () 
+@property (nonatomic,strong) UITableView *tableView;
+@property (nonatomic,copy) NSArray *aryModel;
+
 @property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *redPromptBtn;
 @property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *systemBtn;
 @property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *commetnRedBtn;
@@ -27,51 +34,76 @@
 
 @implementation TQMailboxViewController
 
-- (void)viewDidLoad {
+
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    self.title = @"信息";
+    [self setTitleText:@"信息"];
+    _aryModel = [[NSArray alloc] initWithObjects:
+                 [[LeftCellModel alloc] initWithTitle:@"私人定制" icon:@"prv_vip_icon" goClassName:@"TQPersonalTailorViewController"],
+                 [[LeftCellModel alloc] initWithTitle:@"系统消息" icon:@"mes_sys_icon" goClassName:@"TQMessageViewController"],
+                 [[LeftCellModel alloc] initWithTitle:@"评论回复" icon:@"com_reply_icon" goClassName:@"TQCommentReplyViewController"],
+                 [[LeftCellModel alloc] initWithTitle:@"提问回复" icon:@"quiz_reply_icon" goClassName:@"TQAnswerViewController"],
+                 nil];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
+    [_tableView setBackgroundColor:RGB(243, 243, 243)];
+    [self.view addSubview:_tableView];
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+//    self.title = @"信息";
     /*死界面*/
 //    [self.tableView registerClass:[TQCustomizedCell class] forCellReuseIdentifier:CustomizedCell];
 //    [self.tableView registerClass:[TQMailboxCell class] forCellReuseIdentifier:MailboxCell];
     
-    [self.navigationController.navigationBar setHidden:NO];
-    [self.navigationController.navigationBar setBarTintColor:[UIColor blueColor]];
+//    [self.navigationController.navigationBar setHidden:NO];
+//    [self.navigationController.navigationBar setBarTintColor:[UIColor blueColor]];
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 4;
 }
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.navigationController.navigationBar setHidden:NO];
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 9;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.5;
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *TQMailBoxTableViewIdentifier = @"TQMailBoxTableViewCell";
+    UITableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:TQMailBoxTableViewIdentifier];
+    if (cell==nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TQMailBoxTableViewIdentifier];
+    }
+    LeftCellModel *model = [_aryModel objectAtIndex:indexPath.section];
+    cell.textLabel.text = model.title;
+    [cell.imageView setImage:[UIImage imageNamed:model.icon]];
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 77;
+}
+
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
-        //跳入私人定制
-        TQPersonalTailorViewController *personalTailVC = [[TQPersonalTailorViewController alloc] init];
-        [self.navigationController pushViewController:personalTailVC animated:YES];
-        self.redPromptBtn.backgroundColor  = [UIColor clearColor];
-        
-    }else if (indexPath.row == 1) {
-        //跳入系统信息
-        TQMessageViewController *messageVC = [[TQMessageViewController alloc] init];
-        [self.navigationController pushViewController:messageVC animated:YES];
-        self.systemBtn.backgroundColor  = [UIColor clearColor];
-
-    }else if (indexPath.row == 2) {
-        //跳入评论回复
-        TQCommentReplyViewController *commentVC = [[TQCommentReplyViewController alloc] init];
-        [self.navigationController pushViewController:commentVC animated:YES];
-        self.commetnRedBtn.backgroundColor  = [UIColor clearColor];
-
-        
-    }else if (indexPath.row == 3) {
-        //跳入问题回复
-        TQAnswerViewController *answerVC = [[TQAnswerViewController alloc] init];
-        [self.navigationController pushViewController:answerVC animated:YES];
-        self.askRedBtn.backgroundColor  = [UIColor clearColor];
-
-    }
-
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    LeftCellModel *model = _aryModel[indexPath.section];
+    UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 

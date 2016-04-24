@@ -7,7 +7,7 @@
 /**************************************** < 信箱首页 >**********************************/
 
 #import <UIKit/UIKit.h>
-
-@interface TQMailboxViewController : UITableViewController
+#import "CustomViewController.h"
+@interface TQMailboxViewController : CustomViewController
 
 @end

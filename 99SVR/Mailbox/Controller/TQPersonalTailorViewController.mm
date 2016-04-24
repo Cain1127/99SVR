@@ -8,25 +8,33 @@
 
 #import "TQPersonalTailorViewController.h"
 #import "TQPersonalTailorCell.h"
+#import "XPrivateDetailViewController.h"
+#import "TableViewFactory.h"
+#import "TQPersonalModel.h"
 
+@interface TQPersonalTailorViewController ()<UITableViewDataSource,UITableViewDelegate>
 
-@interface TQPersonalTailorViewController ()
 /** 模型数组 */
 @property (nonatomic ,strong)NSArray *aryModel;
+@property (nonatomic,strong) UITableView *tableView;
+
 @end
 
 @implementation TQPersonalTailorViewController
+
 static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self initUI];
-}
--(void)initUI {
-    self.title = @"私人定制";
+    [self setTitleText:@"私人定制"];
+    
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+    [_tableView setBackgroundColor:RGB(243, 243, 243)];
+    [self.view addSubview:_tableView];
+    [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
 
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
-    //    开始刷新,注册数据接受通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:nil];
     // cell自动计算高度
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -51,19 +59,54 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 }
 
 #pragma mark - Table view data source
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 9;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.5;
+}
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return _aryModel.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     TQPersonalTailorCell *cell = [tableView dequeueReusableCellWithIdentifier:PersonalTailorCell];
-    cell.personalModel = self.aryModel[indexPath.row];
-    
+    if (_aryModel.count>indexPath.section) {
+        TQPersonalModel *personalModel = _aryModel[indexPath.section];
+        cell.TITLELabel.text = personalModel.title;
+        cell.summaryLabel.text = personalModel.summary;
+        cell.timeLabel.text = personalModel.publishtime;
+        cell.nameLabel.text = personalModel.teamname;
+    }
     return cell;
     
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 164;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (_aryModel.count>indexPath.section) {
+        TQPersonalModel *model = _aryModel[indexPath.section];
+        XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithCustomId:model.ID];
+        [self.navigationController pushViewController:detailView animated:YES];
+    }
+}
 
 
 

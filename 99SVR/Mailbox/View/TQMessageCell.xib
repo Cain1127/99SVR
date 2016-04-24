@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" restorationIdentifier="messageCell" selectionStyle="default" indentationWidth="10" rowHeight="124" id="KGk-i7-Jjw" customClass="TQMessageCell">
-            <rect key="frame" x="0.0" y="0.0" width="483" height="124"/>
+        <tableViewCell contentMode="scaleToFill" restorationIdentifier="messageCell" selectionStyle="default" indentationWidth="10" rowHeight="136" id="KGk-i7-Jjw" customClass="TQMessageCell">
+            <rect key="frame" x="0.0" y="0.0" width="483" height="136"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="483" height="123.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="483" height="135.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2016-02-14 13：03" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WM8-Pv-13e">
-                        <rect key="frame" x="345" y="18" width="119.5" height="22.5"/>
+                        <rect key="frame" x="345" y="18" width="119.5" height="16"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.56862745098039214" green="0.56862745098039214" blue="0.56862745098039214" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="2月12日。系统维护。请注意" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lu1-NF-aDd">
-                        <rect key="frame" x="18" y="55" width="447" height="17"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2月12日。系统维护。请注意" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lu1-NF-aDd">
+                        <rect key="frame" x="10" y="49" width="447" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.20392156862745098" green="0.20392156862745098" blue="0.20392156862745098" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -34,41 +34,31 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sCc-OO-rQO">
-                        <rect key="frame" x="437" y="82" width="30" height="25"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="25" id="HIu-ik-KEI"/>
-                        </constraints>
+                        <rect key="frame" x="437" y="92" width="30" height="30"/>
                         <state key="normal" title="全文">
                             <color key="titleColor" red="0.49803921569999998" green="0.73333333329999995" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
                         </state>
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="sCc-OO-rQO" firstAttribute="top" secondItem="Lu1-NF-aDd" secondAttribute="bottom" constant="10" id="12H-Co-4wu"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="Lu1-NF-aDd" secondAttribute="trailing" constant="10" id="2EC-pI-ZCy"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Lu1-NF-aDd" secondAttribute="trailing" constant="18" id="2EC-pI-ZCy"/>
                     <constraint firstItem="Lu1-NF-aDd" firstAttribute="top" secondItem="WM8-Pv-13e" secondAttribute="bottom" constant="15" id="DHs-Ar-UAe"/>
                     <constraint firstAttribute="trailingMargin" secondItem="WM8-Pv-13e" secondAttribute="trailing" constant="10" id="E0w-rI-p8j"/>
                     <constraint firstAttribute="bottomMargin" secondItem="sCc-OO-rQO" secondAttribute="bottom" constant="5" id="E7i-cW-Xmf"/>
-                    <constraint firstItem="Lu1-NF-aDd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="10" id="aQB-vE-REL"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="sCc-OO-rQO" secondAttribute="bottom" constant="8" id="cZU-bS-oyU"/>
+                    <constraint firstItem="Lu1-NF-aDd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="2" id="aQB-vE-REL"/>
                     <constraint firstItem="Q3G-hl-P8l" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="10" id="qZg-mT-WGW"/>
                     <constraint firstItem="WM8-Pv-13e" firstAttribute="top" secondItem="Q3G-hl-P8l" secondAttribute="top" id="tRI-Uz-FIJ"/>
                     <constraint firstItem="Q3G-hl-P8l" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="10" id="vxS-hU-TDm"/>
                     <constraint firstAttribute="trailingMargin" secondItem="sCc-OO-rQO" secondAttribute="trailing" constant="8" id="yja-GJ-NUq"/>
                 </constraints>
-                <variation key="default">
-                    <mask key="constraints">
-                        <exclude reference="E7i-cW-Xmf"/>
-                    </mask>
-                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="TITILELabel" destination="Q3G-hl-P8l" id="Hnv-bh-7zO"/>
                 <outlet property="TimeLabel" destination="WM8-Pv-13e" id="sKv-PH-eIl"/>
+                <outlet property="btnShow" destination="sCc-OO-rQO" id="C1K-Vz-pWE"/>
                 <outlet property="conTentLabel" destination="Lu1-NF-aDd" id="v5v-Zg-jPv"/>
-                <outlet property="openBtn" destination="sCc-OO-rQO" id="hQW-Mj-A0k"/>
             </connections>
-            <point key="canvasLocation" x="326.5" y="296"/>
+            <point key="canvasLocation" x="-347.5" y="-137"/>
         </tableViewCell>
     </objects>
 </document>

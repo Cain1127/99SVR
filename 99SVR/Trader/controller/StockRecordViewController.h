@@ -15,4 +15,8 @@ typedef NS_ENUM(NSInteger,RecordType){
 /**类型*/
 @property (nonatomic , assign) RecordType recordType;
 
+/**operateId*/
+@property (nonatomic , assign) NSInteger operateId;
+
+
 @end

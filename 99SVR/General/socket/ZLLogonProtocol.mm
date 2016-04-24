@@ -571,7 +571,14 @@ void ZLRoomListener::OnRoomKickoutUserNoty(UserKickoutRoomInfo_ext& info){
 }
 
 void ZLRoomListener::OnRoomNoticeNotify(RoomNotice& info){
-    [RoomService getNoticeInfo:&info notice:aryRoomNotice];
+    if (info.index()==0) {
+        NSString *roomTeachInfo = [RoomService getTeachInfo:&info];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:roomTeachInfo];
+    }
+    else if(info.index()==2)
+    {
+        [RoomService getNoticeInfo:&info notice:aryRoomNotice];
+    }
 }
 
 /**

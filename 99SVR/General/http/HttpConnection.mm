@@ -13,6 +13,7 @@ void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener);
 void parse_PrivateServiceDetail(char* json, HttpListener* listener);
 void parse_TeamList(char* json, HttpListener* listener);
 void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener);
+void parse_consumerank(char* json, HttpListener* listener);
 
 static ThreadVoid http_request(void* _param)
 {
@@ -167,65 +168,114 @@ void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId,
 
 // 请求操盘列表-日收益排序
 void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId, int count, OperateStockProfitListenerDay* listener){
+    
+    NSLog(@"startId= %d",startId);
+
+    
     std::vector<OperateStockProfit> day;
-    for (int i=0; i<10; i++) {
+    static int initId = 10;
+    int i = startId;
+    if ( startId == 0 ) {
+        i = initId;
+        startId = initId;
+    }else if (startId ==2){
+        
+        listener->onResponse(day);
+        return;
+    }
+    
+    for (; i>startId - count; i--) {
         OperateStockProfit profit;
-        profit.set_operateid(i+1);
+        profit.set_operateid(1990);
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
+        profit.set_transid(i);
         profit.set_teamname("日收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("日收益");
+        profit.set_focus("日收益专注短线");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
         day.push_back(profit);
+        NSLog(@" -----  transid %d",i);
+    
     }
     listener->onResponse(day);
 }
 // 请求操盘列表-月收益排序
 void HttpConnection::RequestOperateStockProfitOrderByMonth(int teamId, int startId, int count, OperateStockProfitListenerMonth* listener)
 {
-    std::vector<OperateStockProfit> day;
-    for (int i=0; i<10; i++) {
+    std::vector<OperateStockProfit> mon;
+    static int initId = 15;
+    int i = startId;
+    if ( startId == 0 ) {
+        i = initId;
+        startId = initId;
+    }else if (startId ==3){
+        
+        listener->onResponse(mon);
+        return;
+    }
+    
+    NSLog(@"startId= %d",startId);
+    
+    for (; i>startId - count; i--) {
         OperateStockProfit profit;
         profit.set_operateid(i+1);
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
+        profit.set_transid(i);
         profit.set_teamname("月收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("月收益");
+        profit.set_focus("月专注长线");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
-        day.push_back(profit);
+        mon.push_back(profit);
+        
     }
-    listener->onResponse(day);
+    listener->onResponse(mon);
+
 }
 // 请求操盘列表-总收益排序
 void HttpConnection::RequestOperateStockProfitOrderByTotal(int teamId, int startId, int count, OperateStockProfitListenerAll* listener)
 {
-    std::vector<OperateStockProfit> day;
-    for (int i=0; i<10; i++) {
+    std::vector<OperateStockProfit> total;
+    
+    static int initId = 15;
+    int i = startId;
+    if ( startId == 0 ) {
+        i = initId;
+        startId = initId;
+    }else if (startId ==3){
+        
+        listener->onResponse(total);
+        return;
+    }
+
+    
+    for (; i>startId - count; i--) {
         OperateStockProfit profit;
         profit.set_operateid(i+1);
         char cBuf[10]={0};
         sprintf(cBuf,"%d",90000+i);
         profit.set_teamid(cBuf);
+        profit.set_transid(i);
         profit.set_teamname("总收益组合");
         profit.set_goalprofit(0.08);
         profit.set_monthprofit(0.2);
-        profit.set_focus("总收益");
+        profit.set_focus("总长期");
         profit.set_totalprofit(0.5);
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
-        day.push_back(profit);
+        total.push_back(profit);
+        
     }
-    listener->onResponse(day);
+    listener->onResponse(total);
 }
 
 // 请求操盘详情
@@ -247,7 +297,7 @@ void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAll
     std::vector<OperateStockTransaction> trans;
     std::vector<OperateStocks> stocks;
     int i=0;
-    for (i=0; i<2; i++) {
+    for (i=0; i<1; i++) {
         OperateStockTransaction saction;
         OperateStocks stock;
 
@@ -299,11 +349,22 @@ void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, 
     
     std::vector<OperateStockTransaction>trans;
     
-    for (int i=0; i!=5; i++) {
+    static int initId = 15;
+    int i = startId;
+    if ( startId == 0 ) {
+        i = initId;
+        startId = initId;
+    }else if (startId ==3){
+        
+        listener->onResponse(trans);
+        return;
+    }
+    for (; i>=startId - count; i--) {
         
         OperateStockTransaction stock;
         stock.set_stockname("交易记录");
-        stock.set_operateid(i+200);
+        stock.set_transid(i);
+        stock.set_operateid(100);
         stock.set_stockid("1008699");
         stock.set_count(i+220);
         stock.set_money(110000+1);
@@ -337,12 +398,20 @@ void HttpConnection::RequestWhatIsPrivateService(WhatIsPrivateServiceListener* l
 
 //请求已经购买的私人定制
 void HttpConnection::RequestMyPrivateService(int userId, MyPrivateServiceListener* listener){
-    MyPrivateService infos;
-    infos.set_teamid("123");
-    infos.set_teamname("三刀流");
-    infos.set_teamicon("personal_user_head");
-    infos.set_levelid(1);
-    infos.set_levelname("VIP3");
+    std::vector<MyPrivateService> infos;
+    for (int i=1; i<7; i++) {
+        MyPrivateService service;
+        service.set_teamid("123");
+        service.set_teamname("三刀流");
+        service.set_teamicon("personal_user_head");
+        service.set_levelid(i);
+        service.set_levelname("VIP3");
+        service.set_expirationdate("有效期:2018-01-01");
+        infos.push_back(service);
+    }
+    Team team;
+    TeamPrivateServiceSummaryPack teamPrivate;
+    listener->onResponse(infos,team, teamPrivate);
 }
 
 // 显示购买私人定制页
@@ -366,14 +435,14 @@ void HttpConnection::RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivat
     request["s"] = "Personalsecrets/getPSList";
     
     sprintf(tmp, "%d", teamId);
-    //request["teacherid"] = tmp;
+
     request["teamid"] = tmp;
     
     Thread::start(http_request, param);
 }
 
 // 请求私人定制详情
-void HttpConnection::RequestPrivateServiceDetail(int id, PrivateServiceDetailListener* listener){
+void HttpConnection::RequestPrivateServiceDetail(int nId, PrivateServiceDetailListener* listener){
     std::string url = "http://testphp.99ducaijing.cn/api.php";
     char tmp[32] = {0};
     
@@ -387,7 +456,7 @@ void HttpConnection::RequestPrivateServiceDetail(int id, PrivateServiceDetailLis
     
     request["s"] = "Personalsecrets/getPSDetail";
     
-    sprintf(tmp, "%d", id);
+    sprintf(tmp, "%d", nId);
     request["psid"] = tmp;
     
     Thread::start(http_request, param);
@@ -414,10 +483,41 @@ void HttpConnection::RequestTeamList(TeamListListener* listener){
 }
 
 // 请求战队简介
-void HttpConnection::RequestTeamIntroduce(int teamId, TeamIntroduceListener* listener){}
+void HttpConnection::RequestTeamIntroduce(int teamId, TeamIntroduceListener* listener){
+    TeamIntroduce introduce;
+    introduce.set_teamIcon("qq");
+    introduce.set_teamName("牛出没");
+    introduce.set_introduce("简介:fhjdksahjkfsdhakiouwerklwflksdajlkuiokljfkldsjaiouwlkjklfdsjaoiuwfkkljkl");
+    for (int i=0; i<5; i++) {
+        VideoInfo video;
+        video.set_id(i+1);
+        video.set_name("happy");
+        video.set_picurl("www.baidu.com");
+        video.set_videourl("www.baidu.com");
+        introduce.videoList().push_back(video);
+    }
+    listener->onResponse(introduce);
+}
 
 // 请求贡献榜
-void HttpConnection::RequestConsumeRankList(int teamId, ConsumeRankListener* listener){}
+void HttpConnection::RequestConsumeRankList(int teamId, ConsumeRankListener* listener){
+//    char curl[512];
+//    sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=rankinglist/getWeeklyChart&teacherid=%d",teamId);
+//    HttpThreadParam* param = new HttpThreadParam();
+//    strcpy(param->url, curl);
+//    param->parser = parse_consumerank;
+//    param->http_listener = listener;
+//    Thread::start(http_request, param);
+    std::vector<ConsumeRank> info;
+    for (int i=0; i<10; i++) {
+        ConsumeRank rank;
+        rank.set_username("大中大");
+        rank.set_headid(1);
+        rank.set_consume((i+1)*11);
+        info.push_back(rank);
+    }
+    listener->onResponse(info);
+}
 
 // 提问
 void HttpConnection::PostAskQuestion(int teamId, string stock, string question, AskQuestionListener* listener){
@@ -1278,4 +1378,61 @@ void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener)
         summary_listener->OnError(PERR_JSON_PARSE_ERROR);
     }
     
+}
+
+void parse_consumerank(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    std::vector<ConsumeRank> vec_consume;
+    
+    int size_ = 0;
+    int i = 0;
+    
+    ConsumeRankListener* consumerank_listener = (ConsumeRankListener*)listener;
+    
+    try
+    {
+        // Ω‚Œˆ¬ﬂº≠
+        //..
+        if (reader.parse(strJson, value))
+        {
+            JsonValue& consumes = value["data"];
+            
+            if(!consumes.isNull())
+            {
+                size_ = consumes.size();
+                vec_consume.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    ConsumeRank consume;
+                    //consume.set_username(ConvertUtf8ToGBK(consumes[i]["calias"].asCString()));
+                    consume.set_username(consumes[i]["username"].asString());
+                    consume.set_headid(atoi((consumes[i]["headid"].asString()).c_str()));
+                    consume.set_consume(atol((consumes[i]["consume"].asString()).c_str()));
+                    
+                    //consume.set_headid(consumes[i]["nuserid"].asInt());
+                    //consume.set_consume(consumes[i]["totalmoney"].asUInt64());
+                    vec_consume.push_back(consume);
+                }
+                
+                consumerank_listener->onResponse(vec_consume);
+            }
+            else
+            {
+                consumerank_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            consumerank_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex)
+    {
+        consumerank_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
 }

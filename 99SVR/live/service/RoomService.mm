@@ -142,34 +142,35 @@
     return YES;
 }
 
++ (NSString *)getTeachInfo:(RoomNotice *)pInfo
+{
+    char szTemp[(pInfo->textlen()+1)*2];
+    memset(szTemp, 0, (pInfo->textlen()+1)*2);
+    memcpy(szTemp, pInfo->content().c_str(), pInfo->textlen());
+    szTemp[pInfo->textlen()]='\0';
+    NSString *teachTable = [NSString stringWithCString:pInfo->content().c_str() encoding:GBK_ENCODING];
+    while ([teachTable rangeOfString:@"\r"].location!=NSNotFound) {
+        teachTable = [teachTable stringByReplacingOccurrencesOfString:@"\r" withString:@"<br/>"];
+    }
+    return teachTable;
+}
+
+
 + (BOOL)getNoticeInfo:(RoomNotice *)pInfo notice:(NSMutableArray *)aryBuffer{
-    if(pInfo->index() ==0)
-    {
-        char szTemp[(pInfo->textlen()+1)*2];
-        memset(szTemp, 0, (pInfo->textlen()+1)*2);
-        memcpy(szTemp, pInfo->content().c_str(), pInfo->textlen());
-        szTemp[pInfo->textlen()]='\0';
-        NSString *teachTable = [NSString stringWithCString:pInfo->content().c_str() encoding:GBK_ENCODING];
-        while ([teachTable rangeOfString:@"\r"].location!=NSNotFound) {
-            teachTable = [teachTable stringByReplacingOccurrencesOfString:@"\r" withString:@"<br/>"];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
-    }
-    else if(pInfo->index()==2)
-    {
-        char szTemp[4096]={0};
-        memcpy(szTemp, pInfo->content().c_str(), pInfo->textlen());
-        szTemp[pInfo->textlen()]='\0';
-        NSString *strInfo = [NSString stringWithCString:szTemp encoding:GBK_ENCODING];
-        NoticeModel *notice = [[NoticeModel alloc] init];
-        notice.strContent = [DecodeJson resoleNotice:strInfo index:1];
-        NSDate *date = [NSDate date];
-        NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-        [fmt setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        notice.strTime = [fmt stringFromDate:date];
-        [aryBuffer addObject:notice];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
-    }
+
+    char szTemp[4096]={0};
+    memcpy(szTemp, pInfo->content().c_str(), pInfo->textlen());
+    szTemp[pInfo->textlen()]='\0';
+    NSString *strInfo = [NSString stringWithCString:szTemp encoding:GBK_ENCODING];
+    NoticeModel *notice = [[NoticeModel alloc] init];
+    notice.strContent = [DecodeJson resoleNotice:strInfo index:1];
+    NSDate *date = [NSDate date];
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    [fmt setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    notice.strTime = [fmt stringFromDate:date];
+    [aryBuffer addObject:notice];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
+    
     return YES;
 }
 

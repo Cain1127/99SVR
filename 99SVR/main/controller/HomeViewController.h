@@ -7,8 +7,7 @@
 //
 
 #import "CustomViewController.h"
-#import "SlideBaseViewController.h"
 
-@interface HomeViewController : SlideBaseViewController
+@interface HomeViewController : UIViewController
 
 @end

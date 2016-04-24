@@ -14,13 +14,14 @@
 #import "TQIdeaDetailModel.h"
 #import "TQMessageModel.h"
 #import "TQAnswerModel.h"
+#import "XConsumeRankModel.h"
 #import "TQPersonalModel.h"
 #import "TQMeCustomizedModel.h"
 #import "TQNoPurchaseModel.h"
 #import "TQIntroductModel.h"
 #import "MJExtension.h"
-
-
+#import "XPrivateDetail.h"
+#import "XVideoTeamInfo.h"
 
 /**
  *  闪屏响应
@@ -73,9 +74,22 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
  */
 void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
     
-    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:muDic];
+    NSMutableArray *muArray = [NSMutableArray array];
+    
+    for (size_t i=0; i!=day.size(); i++) {
+        
+        OperateStockProfit *profit = &day[i];
+        StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
+        [muArray addObject:allModel];
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:muArray];
 
+    });
+    
+    
 }
 /**
  *  请求操盘列表月
@@ -83,19 +97,41 @@ void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
 
 void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& mon){
     
-    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:muDic];
-
+    NSMutableArray *muArray = [NSMutableArray array];
     
+    for (size_t i=0; i!=mon.size(); i++) {
+        
+        OperateStockProfit *profit = &mon[i];
+        StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
+        [muArray addObject:allModel];
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:muArray];
+
+    });
+    
+
 }
 /**
  *  请求操盘列表总的
  */
 void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total){
     
-    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:muDic];
-
+    NSMutableArray *muArray = [NSMutableArray array];
+    
+    for (size_t i=0; i!=total.size(); i++) {
+        
+        OperateStockProfit *profit = &total[i];
+        StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
+        [muArray addObject:allModel];
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:muArray];
+    });
+    
 }
 
 
@@ -104,7 +140,7 @@ void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks,uint32 currLevelId){
     
-    int vipLevel = 3;
+    int vipLevel = 1;
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     //股票头部数据
@@ -122,13 +158,11 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
             
             OperateStockTransaction *transaction = &trans[i];
             StockDealModel *transactionModel = [[StockDealModel alloc]initWithStockDealBusinessRecoreData:transaction];
-            transactionModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
             [transArray addObject:transactionModel];
         }
     }else{
      
         StockDealModel *model = [[StockDealModel alloc]init];
-        model.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
         [transArray addObject:model];
     }
     muDic[@"trans"] = transArray;
@@ -140,16 +174,15 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
             
             OperateStocks *operateStocks = &stocks[i];
             StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithStockDealWareHouseRecoreData:operateStocks];
-            operateStocksModel.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
             [stocksArray addObject:operateStocksModel];
         }
     }else{
         StockDealModel *model = [[StockDealModel alloc]init];
-        model.vipLevel = [NSString stringWithFormat:@"%d",vipLevel];
         [stocksArray addObject:model];
     }
     muDic[@"stocks"] = stocksArray;
-    
+    muDic[@"vipLevel"] = @(vipLevel);
+    muDic[@"operateId"] = @(profit.operateid());
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
 }
 
@@ -166,7 +199,15 @@ void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>
         [muArray addObject:model];
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:muArray];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:muArray];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
+        
+    });
+
+    
+
 }
 /**
  *  请求操盘详情--持仓情况
@@ -179,8 +220,8 @@ void OperateStocksListener::onResponse(vector<OperateStocks>& stocks){
         StockDealModel *model = [[StockDealModel alloc]initWithStockRecordWareHouseData:stocksModel];
         [muArray addObject:model];
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
+//    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
     
 }
 /**
@@ -193,16 +234,23 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
         TQNoPurchaseModel *noPurModel = [[TQNoPurchaseModel alloc] initWithTeamSummaryPack:&teamSummaryPack];
         [noPurArray addObject:noPurModel];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_NOPURCHASE_VC object:noPurArray];
-
     }else {
         
         for (int i=0; i<infos.size(); i++) {
         //获取已经购买数据
             NSMutableArray *ary = [NSMutableArray array];
             for (int i=0; i<infos.size(); i++) {
-                TQMeCustomizedModel *cusModel = [[TQMeCustomizedModel alloc] initWithMyPrivateService:&infos[i]];
-                
-                [ary addObject:cusModel];
+                MyPrivateService service = infos[i];
+                NSString *teamid = [NSString stringWithUTF8String:service.teamid().c_str()];
+                NSString *teamname = [NSString stringWithUTF8String:service.teamname().c_str()];
+                NSString *teamicon = [NSString stringWithUTF8String:service.teamicon().c_str()];
+                NSString *levelname = [NSString stringWithUTF8String:service.levelname().c_str()];
+                NSString *expirationdate = [NSString stringWithUTF8String:service.expirationdate().c_str()];
+                int levelid = service.levelid();
+                NSDictionary *dict = @{@"teamid":teamid,@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
+                                       @"expirationdate":expirationdate,@"levelid":@(levelid)};
+                TQMeCustomizedModel *model = [TQMeCustomizedModel mj_objectWithKeyValues:dict];
+                [ary addObject:model];
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:ary];
     }
@@ -210,7 +258,8 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
 }
 
 void WhatIsPrivateServiceListener::onResponse(WhatIsPrivateService& infos){
-    
+    NSString *strInfo = [NSString stringWithUTF8String:infos.content().c_str()];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_WHAT_IS_PRIVATE_VC object:strInfo];
 }
 
 /**
@@ -227,7 +276,21 @@ void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateService
 }
 
 void PrivateServiceDetailListener::onResponse(PrivateServiceDetail& info){
-    
+
+    NSString *title = [NSString stringWithUTF8String:info.title().c_str()];
+    NSString *content = [NSString stringWithUTF8String:info.content().c_str()];
+    NSString *publishtime = [NSString stringWithUTF8String:info.publishtime().c_str()];
+    NSString *videourl = [NSString stringWithUTF8String:info.videourl().c_str()];
+    NSString *videoname = [NSString stringWithUTF8String:info.videoname().c_str()];
+    NSString *attachmenturl = [NSString stringWithUTF8String:info.attachmenturl().c_str()];
+    NSString *attachmentname = [NSString stringWithUTF8String:info.attachmentname().c_str()];
+    int operatestockid = info.operatestockid();
+    NSString *html5url = [NSString stringWithUTF8String:info.html5url().c_str()];
+    NSDictionary *dict = @{@"title":title,@"content":content,@"publishtime":publishtime,@"videourl":videourl,
+    @"videoname":videoname,@"attachmenturl":attachmenturl,@"attachmentname":attachmentname,@"html5url":html5url,
+                           @"operatestockid":@(operatestockid)};
+    XPrivateDetail *detail = [XPrivateDetail mj_objectWithKeyValues:dict];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_DETAIL_VC object:detail];
 }
 
 void ChargeRuleListener::onResponse(vector<ChargeRule>& infos){
@@ -238,12 +301,41 @@ void TeamListListener::onResponse(vector<Team>& infos){
     
 }
 
-void TeamIntroduceListener::onResponse(TeamIntroduce& info){
-    
+void TeamIntroduceListener::onResponse(TeamIntroduce& info)
+{
+    NSString *teamName = [NSString stringWithUTF8String:info.teamName().c_str()];
+    NSString *teamIcon = [NSString stringWithUTF8String:info.teamIcon().c_str()];
+    NSString *introduce = [NSString stringWithUTF8String:info.introduce().c_str()];
+    NSDictionary *dict = @{@"teamName":teamName,@"teamIcon":teamIcon,@"introduce":introduce};
+    XVideoTeamInfo *xVideo = [XVideoTeamInfo mj_objectWithKeyValues:dict];
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i=0; i<info.videoList().size(); i++)
+    {
+        VideoInfo video = info.videoList()[i];
+        int nId = video.id();
+        NSString *name = [NSString stringWithUTF8String:video.name().c_str()];
+        NSString *picurl = [NSString stringWithUTF8String:video.picurl().c_str()];
+        NSString *videourl = [NSString stringWithUTF8String:video.videourl().c_str()];
+        NSDictionary *parameter = @{@"name":name,@"picurl":picurl,@"videourl":videourl,@"nId":@(nId)};
+        VideoModel *model = [VideoModel mj_objectWithKeyValues:parameter];
+        [array addObject:model];
+    }
+    xVideo.videoList = array;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEAM_INTRODUCE_VC object:xVideo];
 }
 
 void ConsumeRankListener::onResponse(vector<ConsumeRank>& info){
-    
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i= 0; i<info.size();i++) {
+        ConsumeRank rank = info[i];
+        NSString *strUserName = [NSString stringWithUTF8String:rank.username().c_str()];
+        int headid = rank.headid();
+        float consume = rank.consume();
+        NSDictionary *dict = @{@"username":strUserName,@"headid":@(headid),@"consume":@(consume)};
+        XConsumeRankModel *model = [XConsumeRankModel mj_objectWithKeyValues:dict];
+        [array addObject:model];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:array];
 }
 
 void AskQuestionListener::onResponse(int errCode, string errMsg){
