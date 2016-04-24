@@ -402,6 +402,7 @@ void ZLLogonProtocol::sendRose(){
     msg.set_content(cRose);
     uint32_t nLength = (int)strlen(cRose)+1;
     msg.set_textlen(nLength);
+    msg.set_toid(0);
     video_room->SendMsg_RoomChatReq(msg);
 }
 

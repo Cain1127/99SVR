@@ -8,13 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class DTAttributedLabel;
-@class DTAttributedTextContentView;
-@class DTAttributedTextView;
+#import <DTCoreText/DTCoreText.h>
+@interface ZLCoreTextCell : DTAttributedTextCell
 
-@interface ZLCoreTextCell : UITableViewCell
-
-@property (nonatomic, strong) DTAttributedTextView *lblInfo;
-//@property (nonatomic,strong) UILabel *lblInfo;
+@property (nonatomic,copy) NSString *strInfo;
+@property (nonatomic,assign) NSInteger section;
 
 @end

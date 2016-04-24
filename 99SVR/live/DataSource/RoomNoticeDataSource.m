@@ -13,7 +13,7 @@
 #import "Photo.h"
 #import "PhotoViewController.h"
 
-@interface RoomNoticeDataSource()
+@interface RoomNoticeDataSource()<DTAttributedTextContentViewDelegate>
 {
     NSCache *chatCache;
 }
@@ -27,6 +27,7 @@
 - (id)init{
     self = [super init];
     chatCache = [[NSCache alloc] init];
+    [chatCache setTotalCostLimit:10];
     return self;
 }
 
@@ -54,43 +55,46 @@
 
 - (ZLCoreTextCell *)tableView:(UITableView *)tableView preparedCellForZLIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *cacheKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
-    NSString *strInfo;
-    ZLCoreTextCell *cell = nil;
-    NSString *strIdentifier = @"kNoticeIdentifier";
-    cell = [chatCache objectForKey:cacheKey];
-    if (cell==nil)
-    {
-        cell = [[ZLCoreTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
-        [chatCache setObject:cell forKey:cacheKey];
-    }
-    if(_aryNotice.count > indexPath.section)
-    {
-        char cString[150] = {0};
-        sprintf(cString,"noticeView-%zi",indexPath.section);
-        cacheKey = [[NSString alloc] initWithUTF8String:cString];
-        NoticeModel *notice = [_aryNotice objectAtIndex:indexPath.section];
-        strInfo = notice.strContent;
-        strIdentifier = @"kNoticeIdentifier";
+    NSString *cacheKey = nil;
+    NSString *strInfo = nil;
+    ZLCoreTextCell *cell;
+    cacheKey =[NSString stringWithFormat:@"LiveText-%zi", indexPath.section];
+    if (_aryNotice.count>indexPath.section) {
+        NoticeModel *textModel = [_aryNotice objectAtIndex:indexPath.section];
+        strInfo = textModel.strContent;
+        cell = [chatCache objectForKey:cacheKey];
+        if (cell==nil)
+        {
+            cell = [[ZLCoreTextCell alloc] initWithReuseIdentifier:@"TextLiveIdentifier"];
+            UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
+            [selectView setBackgroundColor:[UIColor clearColor]];
+            cell.selectedBackgroundView = selectView;
+            [chatCache setObject:cell forKey:cacheKey];
+        }
+        if(![strInfo isEqualToString:cell.strInfo])
+        {
+            cell.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strInfo dataUsingEncoding:NSUTF8StringEncoding]
+                                                              documentAttributes:nil];
+            cell.section = indexPath.section;
+            cell.strInfo = strInfo;
+            cell.textDelegate = self;
+        }
     }
     else
     {
-        return cell;
+        cell = [tableView dequeueReusableCellWithIdentifier:@"TextLiveIdentifier"];
+        if (cell==nil) {
+            cell = [[ZLCoreTextCell alloc] initWithReuseIdentifier:@"TextLiveIdentifier"];
+        }
     }
-    cell.lblInfo.attributedTextContentView.shouldDrawImages = YES;
-    cell.lblInfo.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
-    NSData *data = [strInfo dataUsingEncoding:NSUTF8StringEncoding];
-    cell.lblInfo.attributedString = [[NSAttributedString alloc] initWithHTMLData:data options:nil documentAttributes:nil];
-    UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
-    [selectView setBackgroundColor:[UIColor clearColor]];
-    cell.selectedBackgroundView = selectView;
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ZLCoreTextCell *coreText = [self tableView:tableView preparedCellForZLIndexPath:indexPath];
-    return [coreText.lblInfo.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
+    CGFloat height = [coreText.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
+    return height;
 }
 
 #pragma mark DTCoreText Delegate
@@ -99,7 +103,14 @@
     if ([attachment isKindOfClass:[DTImageTextAttachment class]])
     {
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
-        [imageView sd_setImageWithURL:attachment.contentURL];
+
+        @WeakObj(self)
+        [imageView sd_setImageWithURL:attachment.contentURL
+                            completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL)
+         {
+             ZLCoreTextCell *cell = (ZLCoreTextCell*)attributedTextContentView.superview.superview;
+             [selfWeak updateTextView:cell url:imageURL changeSize:image.size];
+         }];
         imageView.userInteractionEnabled = YES;
         [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(showImageInfo:)]];
@@ -114,6 +125,43 @@
         return imageView;
     }
     return nil;
+}
+
+- (void)updateTextView:(ZLCoreTextCell*)text url:(NSURL*)url changeSize:(CGSize)size
+{
+    CGSize imageSize ;
+    if (size.width>kScreenWidth) {
+        imageSize.width = (kScreenWidth-20);
+        CGFloat width = imageSize.width;
+        imageSize.height = size.height/(size.width/width);
+    }
+    else
+    {
+        imageSize = size;
+    }
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"contentURL == %@", url];
+    BOOL didUpdate = NO;
+    for (DTTextAttachment *oneAttachment in [text.attributedTextContextView.layoutFrame textAttachmentsWithPredicate:pred])
+    {
+        if (CGSizeEqualToSize(oneAttachment.originalSize, CGSizeZero))
+        {
+            oneAttachment.originalSize = imageSize;
+            didUpdate = YES;
+        }
+    }
+    if (didUpdate)
+    {
+        if ([text.superview.superview isKindOfClass:[UITableView class]]) {
+            [text relayoutText];
+            UITableView *tableView = (UITableView *)text.superview.superview;
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:text.section];
+            NSArray *array = [[NSArray alloc] initWithObjects:indexPath, nil];
+            [tableView reloadRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
+//            [tableView reloadData];
+            
+        }
+        [text setNeedsLayout];
+    }
 }
 
 #pragma mark Custom Views on Text
@@ -137,13 +185,7 @@
     DLog(@"路径:%@",sender.URL.absoluteString);
     if([sender.URL.absoluteString rangeOfString:@"sqchatid://"].location != NSNotFound)
     {
-        //        NSString *strNumber = [sender.URL.absoluteString stringByReplacingOccurrencesOfString:@"sqchatid://" withString:@""];
-        //        toUser = [strNumber intValue];
-        //        if (_tcpSocket.getRoomInfo != nil)
-        //        {
-        //            RoomUser *rUser = [_tcpSocket.getRoomInfo findUser:toUser];
-        //            [_inputView setChatInfo:rUser];
-        //        }
+        
     }
 }
 

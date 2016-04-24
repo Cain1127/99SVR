@@ -31,7 +31,7 @@
 #import "HttpManagerSing.h"
 
 @interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
-                                ChatRightDelegate,ChatViewDelegate>
+                                ChatRightDelegate,ChatViewDelegate,RoomChatDelegate>
 {
     UserListView *_listView;
     RoomDownView *_infoView;
@@ -138,7 +138,7 @@
 }
 
 - (void)initTableView{
-    CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-kVideoImageHeight);
+    CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-44-kVideoImageHeight);
     _chatAllView = [[UIView alloc] initWithFrame:frame];
     
     _chatView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth-54,frame.size.height) withStyle:UITableViewStylePlain];
@@ -154,6 +154,7 @@
     _chatDataSource = [[RoomChatDataSource alloc] init];
     _chatView.dataSource = _chatDataSource;
     _chatView.delegate = _chatDataSource;
+    _chatDataSource.delegate = self;
     
     _priChatView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
     [_priChatView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
@@ -434,7 +435,6 @@
 - (void)roomListNotice:(NSNotification *)notify
 {
     @WeakObj(self)
-//    _aryNotice = aryRoomNotice;
     [_noticeDataSource setModel:aryRoomNotice];
     dispatch_async(dispatch_get_main_queue(),
        ^{
@@ -606,6 +606,10 @@
         }
         break;
         case 2:
+        {
+            [self sendRose];
+        }
+        break;
         case 1:
         {
             //暂不实现
@@ -871,6 +875,13 @@
     [_ffPlay stop];
 }
 
-
+- (void)showKeyboard:(int)nToUser
+{
+    if (currentRoom != nil)
+    {
+        RoomUser *rUser = [currentRoom findUser:nToUser];
+        [_inputView setChatInfo:rUser];
+    }
+}
 
 @end

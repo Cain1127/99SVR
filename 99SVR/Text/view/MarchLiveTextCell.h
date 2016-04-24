@@ -25,7 +25,6 @@
 @property (nonatomic) NSInteger section;
 @property (nonatomic) int64_t viewid;
 @property (nonatomic,copy) NSString *strInfo;
-//@property (nonatomic,strong) DTAttributedTextView *textView;
 @property (nonatomic,strong) TextLiveModel *model;
 
 - (void)setTextModel:(TextLiveModel *)model;

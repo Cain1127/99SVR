@@ -72,6 +72,7 @@
 - (void)startLoad
 {
     [_glView makeToastActivity_2:@"bottom"];
+//    [_glView makeToastActivity];
 }
 
 - (void)stopLoad
@@ -172,7 +173,7 @@
     {
         if (_media.audioBuf.count==0)
         {
-            [NSThread sleepForTimeInterval:0.01];
+            [NSThread sleepForTimeInterval:0.5f];
             continue ;
         }
         @autoreleasepool
@@ -307,17 +308,14 @@
     {
         videoQueue = dispatch_queue_create("video_tid", 0);
     }
-    dispatch_async(videoQueue,
-    ^{
-        [__self decodeVideo];
-    });
-    dispatch_async(audioQueue,
-    ^{
-        [__self decodeAudio];
-    });
-    
-//    [_aryVideo removeAllObjects];
-//    [_aryAudio removeAllObjects];
+//    dispatch_async(videoQueue,
+//    ^{
+//        [__self decodeVideo];
+//    });
+//    dispatch_async(audioQueue,
+//    ^{
+//        [__self decodeAudio];
+//    });
     
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
@@ -361,8 +359,17 @@
                  [__self.glView hideToastActivity];
                  __self.smallView.hidden = YES;
             });
+            dispatch_async(videoQueue,
+           ^{
+               [__self decodeVideo];
+           });
+            dispatch_async(audioQueue,
+           ^{
+               [__self decodeAudio];
+           });
             return;
         }
+        [NSThread sleepForTimeInterval:0.5f];
     }
 }
 
@@ -374,7 +381,7 @@
         __weak LivePlayViewController *__self = self;
         if (_media.videoBuf.count<=0)
         {
-            [NSThread sleepForTimeInterval:.03];
+            [NSThread sleepForTimeInterval:.5f];
         }
         else
         {
