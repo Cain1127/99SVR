@@ -9,6 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface TQNoCustomHeader : UIView
-@property (weak, nonatomic) IBOutlet UIButton *questionBtn;
 
 @end

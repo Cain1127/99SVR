@@ -27,4 +27,6 @@
     self.TITILELabel.text = messageModel.titile;
 }
 
+
+
 @end
