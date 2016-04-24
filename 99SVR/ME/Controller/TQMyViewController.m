@@ -35,7 +35,7 @@
 -(void)rightClick {
     
     int a = 3;
-    if (a == 2) {
+    if (a == 3) {
         TQNoPurchaseViewController *nopurVC = [[TQNoPurchaseViewController alloc] init];
         [self.navigationController pushViewController:nopurVC animated:YES];
     }else {

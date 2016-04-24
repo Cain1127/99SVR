@@ -4,6 +4,3 @@
 [submodule "99SVR/Externals/DTCoreText"]
 	path = 99SVR/Externals/DTCoreText
 	url = https://github.com/Cocoanetics/DTCoreText.git
-[submodule "Externals/DTCoreText"]
-	path = Externals/DTCoreText
-	url = https://github.com/Cocoanetics/DTCoreText.git

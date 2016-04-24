@@ -8,13 +8,14 @@
 
 #import "TQNoCustomView.h"
 #import "TQPersonalTailorCell.h"
+#import "TQIntroductCell.h"
 @interface TQNoCustomView () <UITableViewDelegate, UITableViewDataSource>
 
 
 @end
 
 @implementation TQNoCustomView
-static NSString *const NoCustomCell = @"NoCustomCell";
+static NSString *const IntroductCell = @"IntroductCell";
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -22,14 +23,11 @@ static NSString *const NoCustomCell = @"NoCustomCell";
     if (self) {
         self.delegate = self;
         self.dataSource = self;
-        [self registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:NoCustomCell];
+        [self registerNib:[UINib nibWithNibName:NSStringFromClass([TQIntroductCell class]) bundle:nil] forCellReuseIdentifier:IntroductCell];
         
     }
     return self;
 }
-
-
-
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 10;
@@ -37,17 +35,16 @@ static NSString *const NoCustomCell = @"NoCustomCell";
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TQPersonalTailorCell *cell = [tableView dequeueReusableCellWithIdentifier:NoCustomCell];
+    TQIntroductCell *cell = [tableView dequeueReusableCellWithIdentifier:IntroductCell];
     
     
     return cell;
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 200;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQINTORDUCT_VC object:Nil];
+}-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQINTORDUCT_VC object:Nil];
 }
 
 - (UIViewController *)viewController {
