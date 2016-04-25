@@ -27,13 +27,12 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.frame = self.view.bounds;
-    _tableView.backgroundColor = [UIColor redColor];
     [self.view addSubview:_tableView];
     
-    TQHeadView *headView = [TQHeadView headView];
-    headView.backgroundColor = [UIColor whiteColor];
-    headView.frame = CGRectMake(0, 0, self.view.frame.size.width, 110);
-    self.tableView.tableHeaderView = headView;
+//    TQHeadView *headView = [TQHeadView headView];
+//    headView.backgroundColor = [UIColor whiteColor];
+//    headView.frame = CGRectMake(0, 0, self.view.frame.size.width, 110);
+//    self.tableView.tableHeaderView = headView;
     
     [_tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
 }
@@ -55,12 +54,12 @@
 
 -(void)tableViewCellWithClickButton:(UIButton *)button row:(NSInteger)row
 {
-    NSLog(@"点击了查看的按钮%ld",row);
+    NSLog(@"点击了查看的按钮%zi",row);
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"点击了对应的cell%ld",indexPath.row);
+    NSLog(@"点击了对应的cell%zi",indexPath.row);
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

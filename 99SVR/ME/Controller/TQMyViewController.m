@@ -7,7 +7,7 @@
 //
 
 #import "TQMyViewController.h"
-#import "TQNoPurchaseViewController.h"
+//#import "TQNoPurchaseViewController.h"
 #import "TQMeCustomizedViewController.h"
 #import "TQMailboxViewController.h"
 
@@ -33,7 +33,7 @@
 }
 
 -(void)rightClick {
-    
+#if 0
     int a = 3;
     if (a == 3) {
         TQNoPurchaseViewController *nopurVC = [[TQNoPurchaseViewController alloc] init];
@@ -42,6 +42,7 @@
         TQMeCustomizedViewController *mecustVC = [[TQMeCustomizedViewController alloc] init];
         [self.navigationController pushViewController:mecustVC animated:YES];
     }
+#endif
 }
 
 

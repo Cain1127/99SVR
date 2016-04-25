@@ -8,6 +8,7 @@
 #import "StockDealTableModel.h"
 #import "HttpMessage.pb.h"
 #import "StockDealModel.h"
+#import "TQPurchaseViewController.h"
 
 @interface StockDealViewController ()
 @property (nonatomic , strong) UITableView *tableView;
