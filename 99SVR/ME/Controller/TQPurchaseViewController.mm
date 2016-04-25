@@ -28,9 +28,17 @@
     _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [_tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
+    //自适应高度
+    _tableView.rowHeight = UITableViewAutomaticDimension;
+    // 估算高度
+    _tableView.estimatedRowHeight = 44;
     [self.view addSubview:_tableView];
     
-    [_tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
+    TQHeadView *tqHeaderView = [TQHeadView headView];
+    _tableView.tableHeaderView = tqHeaderView;
+    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -57,11 +65,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"点击了对应的cell%zi",indexPath.row);
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 162;
 }
 
 - (void)didReceiveMemoryWarning {

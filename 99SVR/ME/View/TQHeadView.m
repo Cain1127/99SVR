@@ -12,7 +12,7 @@
 
 +(instancetype)headView
 {
-    return [[[NSBundle mainBundle] loadNibNamed:@"HeadView" owner:nil options:nil] lastObject];
+    return [[[NSBundle mainBundle] loadNibNamed:@"TQHeadView" owner:nil options:nil] lastObject];
 }
 
 @end
