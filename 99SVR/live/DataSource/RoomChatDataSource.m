@@ -130,8 +130,11 @@
     DLog(@"路径:%@",sender.URL.absoluteString);
     if([sender.URL.absoluteString rangeOfString:@"sqchatid://"].location != NSNotFound)
     {
-//        NSString *strNumber = [sender.URL.absoluteString stringByReplacingOccurrencesOfString:@"sqchatid://" withString:@""];
-//        toUser = [strNumber intValue];
+        NSString *strNumber = [sender.URL.absoluteString stringByReplacingOccurrencesOfString:@"sqchatid://" withString:@""];
+        int toUser = [strNumber intValue];
+        if (_delegate && [_delegate respondsToSelector:@selector(showKeyboard:)]) {
+            [_delegate showKeyboard:toUser];
+        }
 //        if (_tcpSocket.getRoomInfo != nil)
 //        {
 //            RoomUser *rUser = [_tcpSocket.getRoomInfo findUser:toUser];
@@ -140,19 +143,19 @@
     }
 }
 
-- (void)showImageInfo:(UITapGestureRecognizer *)tapGest
-{
-    UIImageView *imageView = (UIImageView *)tapGest.view;
-    if (imageView.image)
-    {
-        NSMutableArray *aryIndex = [NSMutableArray array];
-        Photo *_photo = [[Photo alloc] init];
-        _photo.nId = 0;
-        _photo.imgName = imageView.image;
-        [aryIndex addObject:_photo];
-        PhotoViewController *photoControl = [[PhotoViewController alloc] initWithArray:aryIndex current:0];
-        [photoControl show];
-    }
-}
+//- (void)showImageInfo:(UITapGestureRecognizer *)tapGest
+//{
+//    UIImageView *imageView = (UIImageView *)tapGest.view;
+//    if (imageView.image)
+//    {
+//        NSMutableArray *aryIndex = [NSMutableArray array];
+//        Photo *_photo = [[Photo alloc] init];
+//        _photo.nId = 0;
+//        _photo.imgName = imageView.image;
+//        [aryIndex addObject:_photo];
+//        PhotoViewController *photoControl = [[PhotoViewController alloc] initWithArray:aryIndex current:0];
+//        [photoControl show];
+//    }
+//}
 
 @end

@@ -13,20 +13,6 @@
 
 @implementation ZLCoreTextCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    _lblInfo = [DTAttributedTextView new];
-    [self.contentView addSubview:_lblInfo];
-    return self;
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    [_lblInfo setFrame:self.contentView.bounds];
-}
-
 - (void)dealloc
 {
     DLog(@"释放");

@@ -10,6 +10,7 @@
 #import "LivePlayViewController.h"
 #import "RoomChatDataSource.h"
 #import "TableViewFactory.h"
+#import "XLiveQuestionView.h"
 #import "AlertFactory.h"
 #import "RoomDownView.h"
 #import "RoomService.h"
@@ -31,11 +32,12 @@
 #import "HttpManagerSing.h"
 
 @interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
-                                ChatRightDelegate,ChatViewDelegate>
+                                ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
 {
     UserListView *_listView;
     RoomDownView *_infoView;
     GiftView *_giftView;
+    XLiveQuestionView *_questionView;
     ChatView *_inputView;
     
     NSMutableDictionary *dictGift;
@@ -138,7 +140,7 @@
 }
 
 - (void)initTableView{
-    CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-kVideoImageHeight);
+    CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-44-kVideoImageHeight);
     _chatAllView = [[UIView alloc] initWithFrame:frame];
     
     _chatView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth-54,frame.size.height) withStyle:UITableViewStylePlain];
@@ -154,6 +156,7 @@
     _chatDataSource = [[RoomChatDataSource alloc] init];
     _chatView.dataSource = _chatDataSource;
     _chatView.delegate = _chatDataSource;
+    _chatDataSource.delegate = self;
     
     _priChatView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
     [_priChatView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
@@ -242,6 +245,25 @@
     [self.view addSubview:_inputView];
     _inputView.hidden = YES;
     _inputView.delegate = self;
+    
+    _questionView = [[XLiveQuestionView alloc] initWithFrame:Rect(0,0,kScreenWidth,self.view.height)];
+    [self.view addSubview:_questionView];
+    _questionView.hidden = YES;
+    _questionView.delegate = self;
+}
+
+- (void)requestQuestion:(NSString *)strName content:(NSString *)strContent
+{
+    char cName[100]={0};
+    char cContent[400]={0};
+    strcpy(cName, [strName UTF8String]);
+    strcpy(cContent, [strContent UTF8String]);
+    [kHTTPSingle PostAskQuestion:[_room.nvcbid intValue] stock:cName question:cContent];
+    [_questionView.txtName resignFirstResponder];
+    [_questionView.txtContent resignFirstResponder];
+    [UIView animateWithDuration:0.25 animations:^{
+        _questionView.hidden = YES;
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -253,6 +275,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_QUESTION_VC object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_NETWORK_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_TRADE_GIFT_VC object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_TO_ME_VC object:nil];
@@ -286,9 +309,19 @@
     });
 }
 
+/**
+ *  提问后相应
+ */
+- (void)responseQuestion:(NSNotification *)notify
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [ProgressHUD showSuccess:@"提问成功"];
+    });
+}
+
 - (void)addNotification
 {
-   
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseQuestion:) name:MESSAGE_ROOM_QUESTION_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRoomTeachInfo:) name:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadConsumeRank:) name:MESSAGE_CONSUMERANK_LIST_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_NETWORK_ERR_VC object:nil];
@@ -434,7 +467,6 @@
 - (void)roomListNotice:(NSNotification *)notify
 {
     @WeakObj(self)
-//    _aryNotice = aryRoomNotice;
     [_noticeDataSource setModel:aryRoomNotice];
     dispatch_async(dispatch_get_main_queue(),
        ^{
@@ -606,9 +638,14 @@
         }
         break;
         case 2:
+        {
+            [self sendRose];
+        }
+        break;
         case 1:
         {
             //暂不实现
+            _questionView.hidden = NO;
         }
         break;
     }
@@ -871,6 +908,13 @@
     [_ffPlay stop];
 }
 
-
+- (void)showKeyboard:(int)nToUser
+{
+    if (currentRoom != nil)
+    {
+        RoomUser *rUser = [currentRoom findUser:nToUser];
+        [_inputView setChatInfo:rUser];
+    }
+}
 
 @end

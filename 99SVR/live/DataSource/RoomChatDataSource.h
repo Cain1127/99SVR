@@ -8,8 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol RoomChatDelegate <NSObject>
+
+- (void)showKeyboard:(int)nToUser;
+
+@end
+
 @interface RoomChatDataSource : NSObject<UITableViewDelegate,UITableViewDataSource>
 
+@property (nonatomic,assign) id<RoomChatDelegate> delegate;
 - (void)setModel:(NSArray *)aryChat;
     
 

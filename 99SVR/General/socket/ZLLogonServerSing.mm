@@ -94,7 +94,7 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
 
 - (void)sendMessage:(NSString *)strMsg toId:(int)toId{
     
-    char cBuffer[2048];
+    char cBuffer[2048]={0};
     NSData *data = [strMsg dataUsingEncoding:GBK_ENCODING];
     ::strncpy(cBuffer, (const char *)data.bytes,data.length);
     if (protocol)
