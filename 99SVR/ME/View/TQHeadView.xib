@@ -8,46 +8,70 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" userLabel="TQHeadView" customClass="TQHeadView">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
+            <rect key="frame" x="0.0" y="0.0" width="394" height="151"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pvX-CQ-fhU">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="10"/>
-                    <color key="backgroundColor" red="1" green="0.22188941700000001" blue="0.33069411929999998" alpha="1" colorSpace="calibratedRGB"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hSA-cE-HWu" userLabel="BackgroundView">
+                    <rect key="frame" x="0.0" y="10" width="394" height="141"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gPY-ax-hsf">
+                            <rect key="frame" x="10" y="31" width="80" height="80"/>
+                            <color key="backgroundColor" red="1" green="0.32627286738569594" blue="0.51219074928270802" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="80" id="tuu-nx-1IT"/>
+                                <constraint firstAttribute="height" constant="80" id="xkL-xP-Eli"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="开通团队：哈哈" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kbd-jn-SE3" userLabel="nameLab">
+                            <rect key="frame" x="100" y="30" width="284" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="有效日期：永久有效" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hSl-BD-X68" userLabel="timeLab">
+                            <rect key="frame" x="100" y="61.5" width="284" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="注：开通高等级VIP,自动获得低等级VIP权限" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uB-Gw-O1U" userLabel="attentionLab">
+                            <rect key="frame" x="100" y="96.5" width="284" height="14.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="10" id="Qhx-gK-hFd"/>
+                        <constraint firstItem="hSl-BD-X68" firstAttribute="leading" secondItem="gPY-ax-hsf" secondAttribute="trailing" constant="10" id="0ES-Yn-hlt"/>
+                        <constraint firstItem="6uB-Gw-O1U" firstAttribute="leading" secondItem="gPY-ax-hsf" secondAttribute="trailing" constant="10" id="7Xe-OL-Fpa"/>
+                        <constraint firstAttribute="trailing" secondItem="6uB-Gw-O1U" secondAttribute="trailing" constant="10" id="D2c-OW-zSK"/>
+                        <constraint firstItem="gPY-ax-hsf" firstAttribute="leading" secondItem="hSA-cE-HWu" secondAttribute="leading" constant="10" id="Ey9-Nb-WKt"/>
+                        <constraint firstItem="hSl-BD-X68" firstAttribute="centerY" secondItem="hSA-cE-HWu" secondAttribute="centerY" id="MUu-3U-h5t"/>
+                        <constraint firstItem="gPY-ax-hsf" firstAttribute="centerY" secondItem="hSA-cE-HWu" secondAttribute="centerY" id="Mts-V8-ZBC"/>
+                        <constraint firstAttribute="trailing" secondItem="hSl-BD-X68" secondAttribute="trailing" constant="10" id="RNe-eU-Bw4"/>
+                        <constraint firstItem="Kbd-jn-SE3" firstAttribute="leading" secondItem="gPY-ax-hsf" secondAttribute="trailing" constant="10" id="TjX-lz-Q7M"/>
+                        <constraint firstAttribute="trailing" secondItem="Kbd-jn-SE3" secondAttribute="trailing" constant="10" id="ajL-Ga-u6a"/>
+                        <constraint firstItem="6uB-Gw-O1U" firstAttribute="bottom" secondItem="gPY-ax-hsf" secondAttribute="bottom" id="ngM-qo-iF9"/>
+                        <constraint firstItem="Kbd-jn-SE3" firstAttribute="top" secondItem="gPY-ax-hsf" secondAttribute="top" id="qRE-lV-rMw"/>
                     </constraints>
                 </view>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M8c-gY-ubr">
-                    <rect key="frame" x="8" y="18" width="60" height="60"/>
-                </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="开通团队：趋势为王" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fpN-eO-N6c">
-                    <rect key="frame" x="84" y="18" width="228" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="注：开通高级VIP，自动获得低等级VIP权限" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vtW-w7-Rzu">
-                    <rect key="frame" x="84" y="76" width="222" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                    <color key="textColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="有效日期：2016.1.1 - 2017.1.1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PPb-uY-YT0">
-                    <rect key="frame" x="84" y="47" width="222" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="pvX-CQ-fhU" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="QHu-EC-7Ww"/>
-                <constraint firstAttribute="trailing" secondItem="pvX-CQ-fhU" secondAttribute="trailing" id="bRC-ma-iG1"/>
-                <constraint firstItem="pvX-CQ-fhU" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="uQF-zX-Coh"/>
+                <constraint firstAttribute="bottom" secondItem="hSA-cE-HWu" secondAttribute="bottom" id="6di-Xc-bUu"/>
+                <constraint firstItem="hSA-cE-HWu" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="74T-LI-zOh"/>
+                <constraint firstAttribute="trailing" secondItem="hSA-cE-HWu" secondAttribute="trailing" id="Ff5-70-gqf"/>
+                <constraint firstItem="hSA-cE-HWu" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ud9-nn-vgH"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-37" y="300"/>
+            <connections>
+                <outlet property="IconImageView" destination="gPY-ax-hsf" id="syd-UB-3Ll"/>
+                <outlet property="attentionLab" destination="6uB-Gw-O1U" id="h9d-Y3-KTn"/>
+                <outlet property="nameLab" destination="Kbd-jn-SE3" id="8qK-Gy-dXK"/>
+                <outlet property="timeLab" destination="hSl-BD-X68" id="RiT-1u-KfZ"/>
+            </connections>
+            <point key="canvasLocation" x="-109" y="22.5"/>
         </view>
     </objects>
 </document>

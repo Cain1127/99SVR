@@ -1,20 +1,18 @@
 
 
-//
-//  DemoViewController.m
-//  Demo
-//
-//  Created by 林柏参 on 16/4/22.
-//  Copyright © 2016年 XMG. All rights reserved.
-//
+#define headerView_H  ValueWithTheIPhoneModelString(@"120,120,120,120")//表头视图高度
+
 
 #import "TQPurchaseViewController.h"
 #import "Masonry.h"
 #import "TQHeadView.h"
 #import "TableViewCell.h"
+#import "StockMacro.h"
 
 @interface TQPurchaseViewController () <UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate>
 @property (nonatomic,strong)UITableView *tableView;
+@property (nonatomic , strong) TQHeadView *headerView;
+
 @end
 
 @implementation TQPurchaseViewController
@@ -36,10 +34,22 @@
     _tableView.estimatedRowHeight = 44;
     [self.view addSubview:_tableView];
     
-    TQHeadView *tqHeaderView = [TQHeadView headView];
-    _tableView.tableHeaderView = tqHeaderView;
+    _tableView.tableHeaderView = self.headerView;
     
 }
+
+
+-(TQHeadView *)headerView{
+    
+    if (!_headerView) {
+     
+        _headerView = [TQHeadView headView];
+        _headerView.backgroundColor = COLOR_STOCK_BackGroundColor;
+        _headerView.height = headerView_H;
+    }
+    return _headerView;
+}
+
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

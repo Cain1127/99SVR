@@ -12,7 +12,14 @@
 
 +(instancetype)headView
 {
+    
     return [[[NSBundle mainBundle] loadNibNamed:@"TQHeadView" owner:nil options:nil] lastObject];
+}
+
+-(void)awakeFromNib{
+    
+    self.IconImageView.layer.cornerRadius = 40;
+    self.IconImageView.layer.masksToBounds = YES;
 }
 
 @end
