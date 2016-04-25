@@ -33,8 +33,6 @@
 {
     if (self = [super initWithFrame:frame])
     {
-        [self setBackgroundColor:UIColorFromRGB(0x006dc9)];
-        
         UIImageView *imgView = [[UIImageView alloc] initWithFrame:self.bounds];
         [self addSubview:imgView];
         char cBuffer[100]={0};

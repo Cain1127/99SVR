@@ -55,19 +55,16 @@
     _leftMenuHeaderView = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 0,kScreenWidth, 185)];
     _leftMenuHeaderView.delegate = self;
     [self.view addSubview:_leftMenuHeaderView];
+    
     //添加一个tableView
     _listTableView = [[UITableView alloc] initWithFrame:Rect(0, _leftMenuHeaderView.height, kScreenWidth, kScreenHeight-44) style:UITableViewStyleGrouped];
     _listTableView.delegate = self;
     _listTableView.dataSource = self;
     _listTableView.bounces = NO;
-    
     [self.view addSubview:_listTableView];
-    
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadProfile:) name:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
-    
 }
 
 - (void)reloadProfile:(NSNotification *)notify

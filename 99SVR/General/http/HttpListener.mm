@@ -339,7 +339,8 @@ void ConsumeRankListener::onResponse(vector<ConsumeRank>& info){
 }
 
 void AskQuestionListener::onResponse(int errCode, string errMsg){
-    
+    NSDictionary *dict = @{@"errCode":@(errCode),@"errMsg":[NSString stringWithUTF8String:errMsg.c_str()]};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_QUESTION_VC object:dict];
 }
 /**
  *  请求信息--系统消息

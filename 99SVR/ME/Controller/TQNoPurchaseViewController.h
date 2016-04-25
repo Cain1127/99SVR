@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TQNoPurchaseViewController : UIViewController
+@interface TQNoPurchaseViewController :CustomViewController
 
 @end

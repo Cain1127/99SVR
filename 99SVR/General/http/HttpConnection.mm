@@ -521,7 +521,7 @@ void HttpConnection::RequestConsumeRankList(int teamId, ConsumeRankListener* lis
 
 // 提问
 void HttpConnection::PostAskQuestion(int teamId, string stock, string question, AskQuestionListener* listener){
-    
+    listener->onResponse(0, "OK");
 }
 
 

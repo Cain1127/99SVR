@@ -35,11 +35,6 @@
     [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
     _dataSource = [[XMeCustomDataSource alloc] init];
     _dataSource.delegate = self;
-<<<<<<< HEAD
-=======
-
-    
->>>>>>> 0cfd691cecefffeaf6a7bb1034f5793c3e34772b
     [self initUi];
 }
 -(void)nopurchaseVc {
@@ -49,14 +44,10 @@
 
 -(void)initUi{
     [self setTitleText:@"我的私人定制"];
-<<<<<<< HEAD
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setTitle:@"私人定制未购买页" forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(nopurchaseVc) forControlEvents:UIControlEventTouchUpInside];
     [self setRightBtn:rightBtn];
-=======
-
->>>>>>> 0cfd691cecefffeaf6a7bb1034f5793c3e34772b
 }
 
 - (void)noPurchase:(NSNotification *)notify

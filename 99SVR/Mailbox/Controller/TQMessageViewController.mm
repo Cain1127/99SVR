@@ -71,7 +71,7 @@ static NSString *const messageCell = @"messageCell";
 }
 
 -(void)addTableHeaderView {
-<<<<<<< HEAD
+    
     UIView *headerview = [[UIView alloc] init];
     headerview.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 150);
     self.tableView.tableHeaderView = headerview;
@@ -116,7 +116,6 @@ static NSString *const messageCell = @"messageCell";
         
     }];
 
-=======
 //    UIView *headerview = [[UIView alloc] init];
 //    headerview.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 150);
 //    self.tableView.tableHeaderView = headerview;
@@ -160,7 +159,6 @@ static NSString *const messageCell = @"messageCell";
 //        make.right.equalTo(headerview.mas_right).offset(-20);
 //        
 //    }];
->>>>>>> 28295b90cd0edb89bfe377e8ead86b5c3fa796b9
 }
 -(void)setUpheaderchildView {
     
@@ -182,16 +180,11 @@ static NSString *const messageCell = @"messageCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-<<<<<<< HEAD
-    TQMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:messageCell];
-    cell.messageModel = self.aryModel[indexPath.row];
-//    [cell.openBtn addTarget:self action:@selector(openCellReloadata:) forControlEvents:<#(UIControlEvents)#>]
-    return cell;
-}
-
-
-
-=======
+//    TQMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:messageCell];
+//    cell.messageModel = self.aryModel[indexPath.row];
+////    [cell.openBtn addTarget:self action:@selector(openCellReloadata:) forControlEvents:<#(UIControlEvents)#>]
+//    return cell;
+//}
     NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
     TQMessageCell *cell = [cellCache objectForKey:strKey];
     if (!cell) {
@@ -221,6 +214,5 @@ static NSString *const messageCell = @"messageCell";
 {
     return 0.5;
 }
->>>>>>> 28295b90cd0edb89bfe377e8ead86b5c3fa796b9
 
 @end

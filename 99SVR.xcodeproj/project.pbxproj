@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1827FF591C9959BF009D9C79 /* MyScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1827FF581C9959BF009D9C79 /* MyScrollView.m */; };
-		184FEB2C1CCBF3E7009FF6DB /* TQNoCustomHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184FEB2B1CCBF3E7009FF6DB /* TQNoCustomHeader.xib */; };
-		184FEB2F1CCBF9B3009FF6DB /* TQNoCustomHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 184FEB2E1CCBF9B3009FF6DB /* TQNoCustomHeader.m */; };
 		185DABA71CBFDC970019C5A3 /* TQDetailedTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 185DAB991CBFDC970019C5A3 /* TQDetailedTableViewController.mm */; };
 		185DABA81CBFDC970019C5A3 /* TQIdeaViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 185DAB9B1CBFDC970019C5A3 /* TQIdeaViewController.mm */; };
 		185DABA91CBFDC970019C5A3 /* DetaileHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 185DAB9F1CBFDC970019C5A3 /* DetaileHeaderView.m */; };
@@ -112,14 +110,6 @@
 		18EA82A81CCA148F00BDB735 /* TQHeadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82921CCA148F00BDB735 /* TQHeadView.xib */; };
 		18EA82A91CCA148F00BDB735 /* TQIntroductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82941CCA148F00BDB735 /* TQIntroductCell.m */; };
 		18EA82AA1CCA148F00BDB735 /* TQIntroductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82951CCA148F00BDB735 /* TQIntroductCell.xib */; };
-<<<<<<< HEAD
-		18EA82AB1CCA148F00BDB735 /* TQMeCustomizedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82971CCA148F00BDB735 /* TQMeCustomizedCell.m */; };
-		18EA82AC1CCA148F00BDB735 /* TQMeCustomizedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82981CCA148F00BDB735 /* TQMeCustomizedCell.xib */; };
-		18EA82AD1CCA148F00BDB735 /* TQMecustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA829A1CCA148F00BDB735 /* TQMecustomView.m */; };
-=======
-		18EA82AF1CCA148F00BDB735 /* TQNoCustomHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA829E1CCA148F00BDB735 /* TQNoCustomHeader.m */; };
-		18EA82B01CCA148F00BDB735 /* TQNoCustomHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA829F1CCA148F00BDB735 /* TQNoCustomHeader.xib */; };
->>>>>>> 28295b90cd0edb89bfe377e8ead86b5c3fa796b9
 		18EA82B11CCA148F00BDB735 /* TQNoCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82A11CCA148F00BDB735 /* TQNoCustomView.m */; };
 		18EA82B41CCA14E300BDB735 /* TQPurchaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82B31CCA14E300BDB735 /* TQPurchaseViewController.mm */; };
 		18EBF7301C964BEA0056261D /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EBF72E1C964BEA0056261D /* libWeChatSDK.a */; };
@@ -644,6 +634,7 @@
 		BBD58EF41CCC06F4009250DB /* XTraderViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EF31CCC06F4009250DB /* XTraderViewController.mm */; };
 		BBD58EF71CCC152A009250DB /* XTeamPrivateController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EF61CCC152A009250DB /* XTeamPrivateController.m */; };
 		BBD58EFA1CCC1B59009250DB /* XVideoTeamInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EF91CCC1B59009250DB /* XVideoTeamInfo.m */; };
+		BBD58EFD1CCD2287009250DB /* XLiveQuestionView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EFC1CCD2287009250DB /* XLiveQuestionView.m */; };
 		BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB52B1C1E959500D7230F /* libxml2.tbd */; };
 		BBF22F771C80050400907AD9 /* RoomCoreTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */; };
 		BBFA851D1C30D216000466E4 /* 999.gif in Resources */ = {isa = PBXBuildFile; fileRef = BBFA851C1C30D216000466E4 /* 999.gif */; };
@@ -669,9 +660,6 @@
 /* Begin PBXFileReference section */
 		1827FF571C9959BF009D9C79 /* MyScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyScrollView.h; sourceTree = "<group>"; };
 		1827FF581C9959BF009D9C79 /* MyScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyScrollView.m; sourceTree = "<group>"; };
-		184FEB2B1CCBF3E7009FF6DB /* TQNoCustomHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQNoCustomHeader.xib; sourceTree = "<group>"; };
-		184FEB2D1CCBF9B3009FF6DB /* TQNoCustomHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQNoCustomHeader.h; sourceTree = "<group>"; };
-		184FEB2E1CCBF9B3009FF6DB /* TQNoCustomHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQNoCustomHeader.m; sourceTree = "<group>"; };
 		185DAB981CBFDC970019C5A3 /* TQDetailedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQDetailedTableViewController.h; sourceTree = "<group>"; };
 		185DAB991CBFDC970019C5A3 /* TQDetailedTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQDetailedTableViewController.mm; sourceTree = "<group>"; };
 		185DAB9A1CBFDC970019C5A3 /* TQIdeaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIdeaViewController.h; sourceTree = "<group>"; };
@@ -854,17 +842,6 @@
 		18EA82931CCA148F00BDB735 /* TQIntroductCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIntroductCell.h; sourceTree = "<group>"; };
 		18EA82941CCA148F00BDB735 /* TQIntroductCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQIntroductCell.m; sourceTree = "<group>"; };
 		18EA82951CCA148F00BDB735 /* TQIntroductCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQIntroductCell.xib; sourceTree = "<group>"; };
-<<<<<<< HEAD
-		18EA82961CCA148F00BDB735 /* TQMeCustomizedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMeCustomizedCell.h; sourceTree = "<group>"; };
-		18EA82971CCA148F00BDB735 /* TQMeCustomizedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQMeCustomizedCell.m; sourceTree = "<group>"; };
-		18EA82981CCA148F00BDB735 /* TQMeCustomizedCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQMeCustomizedCell.xib; sourceTree = "<group>"; };
-		18EA82991CCA148F00BDB735 /* TQMecustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMecustomView.h; sourceTree = "<group>"; };
-		18EA829A1CCA148F00BDB735 /* TQMecustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQMecustomView.m; sourceTree = "<group>"; };
-=======
-		18EA829D1CCA148F00BDB735 /* TQNoCustomHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQNoCustomHeader.h; sourceTree = "<group>"; };
-		18EA829E1CCA148F00BDB735 /* TQNoCustomHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQNoCustomHeader.m; sourceTree = "<group>"; };
-		18EA829F1CCA148F00BDB735 /* TQNoCustomHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQNoCustomHeader.xib; sourceTree = "<group>"; };
->>>>>>> 28295b90cd0edb89bfe377e8ead86b5c3fa796b9
 		18EA82A01CCA148F00BDB735 /* TQNoCustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQNoCustomView.h; sourceTree = "<group>"; };
 		18EA82A11CCA148F00BDB735 /* TQNoCustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQNoCustomView.m; sourceTree = "<group>"; };
 		18EA82B21CCA14E300BDB735 /* TQPurchaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQPurchaseViewController.h; sourceTree = "<group>"; };
@@ -1836,6 +1813,8 @@
 		BBD58EF61CCC152A009250DB /* XTeamPrivateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTeamPrivateController.m; sourceTree = "<group>"; };
 		BBD58EF81CCC1B59009250DB /* XVideoTeamInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XVideoTeamInfo.h; sourceTree = "<group>"; };
 		BBD58EF91CCC1B59009250DB /* XVideoTeamInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XVideoTeamInfo.m; sourceTree = "<group>"; };
+		BBD58EFB1CCD2286009250DB /* XLiveQuestionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLiveQuestionView.h; sourceTree = "<group>"; };
+		BBD58EFC1CCD2287009250DB /* XLiveQuestionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLiveQuestionView.m; sourceTree = "<group>"; };
 		BBECB52B1C1E959500D7230F /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		BBF22F751C80050400907AD9 /* RoomCoreTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCoreTextCell.h; sourceTree = "<group>"; };
 		BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCoreTextCell.m; sourceTree = "<group>"; };
@@ -2249,32 +2228,13 @@
 				18EA82931CCA148F00BDB735 /* TQIntroductCell.h */,
 				18EA82941CCA148F00BDB735 /* TQIntroductCell.m */,
 				18EA82951CCA148F00BDB735 /* TQIntroductCell.xib */,
-<<<<<<< HEAD
-				18EA82961CCA148F00BDB735 /* TQMeCustomizedCell.h */,
-				18EA82971CCA148F00BDB735 /* TQMeCustomizedCell.m */,
-				18EA82981CCA148F00BDB735 /* TQMeCustomizedCell.xib */,
-				18EA82991CCA148F00BDB735 /* TQMecustomView.h */,
-				18EA829A1CCA148F00BDB735 /* TQMecustomView.m */,
-				184FEB2D1CCBF9B3009FF6DB /* TQNoCustomHeader.h */,
-				184FEB2E1CCBF9B3009FF6DB /* TQNoCustomHeader.m */,
-				184FEB2B1CCBF3E7009FF6DB /* TQNoCustomHeader.xib */,
-=======
-				18EA829D1CCA148F00BDB735 /* TQNoCustomHeader.h */,
-				18EA829E1CCA148F00BDB735 /* TQNoCustomHeader.m */,
-				18EA829F1CCA148F00BDB735 /* TQNoCustomHeader.xib */,
->>>>>>> 28295b90cd0edb89bfe377e8ead86b5c3fa796b9
 				18EA82A01CCA148F00BDB735 /* TQNoCustomView.h */,
 				18EA82A11CCA148F00BDB735 /* TQNoCustomView.m */,
 				1895B7751CCB50E900B86B0D /* TQPurchaseView.h */,
 				1895B7761CCB50E900B86B0D /* TQPurchaseView.m */,
 				1895B7781CCB50F900B86B0D /* TQPurchaseView.xib */,
-<<<<<<< HEAD
-=======
 				BBD58EE91CCBD96C009250DB /* XMeCustomCell.h */,
 				BBD58EEA1CCBD96C009250DB /* XMeCustomCell.m */,
-				1895B78E1CCBA8BB00B86B0D /* TQNoPurchaseTableview.h */,
-				1895B78F1CCBA8BB00B86B0D /* TQNoPurchaseTableview.m */,
->>>>>>> 28295b90cd0edb89bfe377e8ead86b5c3fa796b9
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3407,6 +3367,8 @@
 				BBD58ED31CCB4B5B009250DB /* ConsumeRankCell.m */,
 				BBD58EE01CCB96FF009250DB /* MyPrivateView.h */,
 				BBD58EE11CCB96FF009250DB /* MyPrivateView.m */,
+				BBD58EFB1CCD2286009250DB /* XLiveQuestionView.h */,
+				BBD58EFC1CCD2287009250DB /* XLiveQuestionView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -4118,7 +4080,6 @@
 				BBCE9D471CB3AD5600DA56D6 /* 165_1.png in Resources */,
 				BB51383A1C97F7D700E09EF5 /* gift.txt in Resources */,
 				BBCE9D3C1CB3AD5600DA56D6 /* 154_1.png in Resources */,
-				184FEB2C1CCBF3E7009FF6DB /* TQNoCustomHeader.xib in Resources */,
 				BB6F12041CC7C2E000F02064 /* video_share_qq_icon@2x.png in Resources */,
 				BBD58EDC1CCB6017009250DB /* video_profiles_bg@3x.png in Resources */,
 				BBCE9D1D1CB3AD5600DA56D6 /* 123_1.png in Resources */,
@@ -4383,6 +4344,7 @@
 				185F596A1CC4CAD600F605F5 /* NSObject+MJCoding.m in Sources */,
 				B4EA09201CC86A8100E8F933 /* StockNotVipView.m in Sources */,
 				BB1769251C7B006F00CE947C /* SDWebImageDecoder.m in Sources */,
+				BBD58EFD1CCD2287009250DB /* XLiveQuestionView.m in Sources */,
 				18D3CB901CC0E37700816BD0 /* TQMessageCell.mm in Sources */,
 				BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */,
 				BB63F5C71C2CC7A300A042E8 /* NSArray+MASAdditions.m in Sources */,
@@ -4683,7 +4645,6 @@
 				BB63F6261C2CC7A300A042E8 /* LeftViewCell.m in Sources */,
 				B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */,
 				18B0CECE1CC07CC700BA82DF /* UIColor+Hex.m in Sources */,
-				184FEB2F1CCBF9B3009FF6DB /* TQNoCustomHeader.m in Sources */,
 				BB1661881C3D029200D318BE /* MBProgressHUD.m in Sources */,
 				18F971101C92947F001B2575 /* NSDataEx.m in Sources */,
 				BB5F9BC41C5DDA6100285EA6 /* OpenAL.m in Sources */,
@@ -4907,11 +4868,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-<<<<<<< HEAD
-				PROVISIONING_PROFILE = "";
-=======
 				PROVISIONING_PROFILE = "29210d47-fd0f-4824-9529-30cfa3ce8cf9";
->>>>>>> 0cfd691cecefffeaf6a7bb1034f5793c3e34772b
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
