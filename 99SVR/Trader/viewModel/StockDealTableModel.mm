@@ -11,7 +11,7 @@
 #import "StockDealCellLabelView.h"
 #import "StockRecordViewController.h"
 #import "StockMacro.h"
-#import "ShareFunction.h"
+#import "UIAlertView+Block.h"
 @interface StockDealTableModel ()
 {
     NSCache *_cache;
@@ -258,13 +258,13 @@
 
         }else{
             
-            DLog(@"不是VIP 看输出");
-            
-            [ShareFunction createAlertViewWithTitle:@"温馨提示" withViewController:_vc withCancleBtnStr:@"取消" withOtherBtnStr:@"确定" withMessage:@"呵呵哈哈哈" completionCallback:^(NSInteger index) {
+            [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:_vc withCancleBtnStr:@"取消" withOtherBtnStr:@"去购买" withMessage:@"需要购买vip之后方可显示" completionCallback:^(NSInteger index) {
                
-                DLog(@"输出----%ld",index);
+                
+                
                 
             }];
+            
             
         }
         

@@ -50,18 +50,6 @@
  */
 +(void)setHeaderViewDropDownEnlargeImageView:(UIImageView *)imageView withHeaderView:(UIView *)headerView withImageViewHeight:(CGFloat)height withOffsetY:(CGFloat)offsetY withScrollView:(UIScrollView *)scrollView;
 
-/**
- *  名片详情弹出的UIAlertController视图 下标为0就是取消 1就是其他按钮
- *
- *  @param title              标题
- *  @param cancelStr          取消按钮
- *  @param otherBthStr        other按钮
- *  @param message            提示信息
- *  @param completionCallback （下标为0就是取消 1就是其他按钮）
- *
- *  @return UIAlertController
- */
-+(void)createAlertViewWithTitle:(NSString *)title withViewController:(UIViewController *)viewController withCancleBtnStr:(NSString *)cancelStr withOtherBtnStr:(NSString *)otherBthStr withMessage:(NSString *)message completionCallback:(void (^)(NSInteger index))completionCallback;
 
 
 /**
