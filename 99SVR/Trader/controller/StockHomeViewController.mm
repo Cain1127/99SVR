@@ -81,6 +81,9 @@
     self.sliderMenuView.DidSelectSliderIndex = ^(NSInteger index){
         NSLog(@"模块%ld",(long)index);
     };
+    
+
+    
 }
 
 #pragma mark initData

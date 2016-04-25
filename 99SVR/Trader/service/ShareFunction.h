@@ -61,7 +61,7 @@
  *
  *  @return UIAlertController
  */
-+(UIAlertController *)createAlertViewWithTitle:(NSString *)title withCancleBtnStr:(NSString *)cancelStr withOtherBtnStr:(NSString *)otherBthStr withOtherBtnColor:(UIColor *)otherBtnColor withMessage:(NSString *)message completionCallback:(void (^)(NSInteger index))completionCallback;
++(void)createAlertViewWithTitle:(NSString *)title withViewController:(UIViewController *)viewController withCancleBtnStr:(NSString *)cancelStr withOtherBtnStr:(NSString *)otherBthStr withMessage:(NSString *)message completionCallback:(void (^)(NSInteger index))completionCallback;
 
 
 /**

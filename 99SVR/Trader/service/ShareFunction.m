@@ -72,25 +72,40 @@
         imageView.frame = CGRectMake(0, f.origin.y, [[UIScreen mainScreen] bounds].size.width, imageHeight);
     }
 }
-+(UIAlertController *)createAlertViewWithTitle:(NSString *)title withCancleBtnStr:(NSString *)cancelStr withOtherBtnStr:(NSString *)otherBthStr withOtherBtnColor:(UIColor *)otherBtnColor withMessage:(NSString *)message completionCallback:(void (^)(NSInteger index))completionCallback{
++(void)createAlertViewWithTitle:(NSString *)title withViewController:(UIViewController *)viewController withCancleBtnStr:(NSString *)cancelStr withOtherBtnStr:(NSString *)otherBthStr withMessage:(NSString *)message completionCallback:(void (^)(NSInteger index))completionCallback{
     
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelStr style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        completionCallback(0);
-    }];
     
-    [cancelAction setValue:[UIColor grayColor] forKey:@"_titleTextColor"];
-
+    if ([[[UIDevice currentDevice] systemVersion] floatValue]<=8.0) {//8系统以上的
+        
+        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        //取消按钮
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelStr style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            completionCallback(0);
+        }];
+        
+        [cancelAction setValue:[UIColor grayColor] forKey:@"_titleTextColor"];
+        //其它按钮
+        UIAlertAction *otherAction = [UIAlertAction actionWithTitle:otherBthStr style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            completionCallback(1);
+        }];
+        [otherAction setValue:[UIColor grayColor] forKey:@"_titleTextColor"];
+        [alertVC addAction:cancelAction];
+        [alertVC addAction:otherAction];
+        
+        
+        [viewController presentViewController:alertVC animated:YES completion:nil];
+    }else{//8系统以下
+        
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"哈哈 测试 iOS8以下的" delegate:viewController cancelButtonTitle:@"取消" otherButtonTitles:@"取消", nil];
+        
+        
+        [alertView show];
+        
+        
+    }
     
-    UIAlertAction *otherAction = [UIAlertAction actionWithTitle:otherBthStr style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        completionCallback(1);
-    }];
-    [otherAction setValue:otherBtnColor forKey:@"_titleTextColor"];
-
-    [alertVC addAction:cancelAction];
-    [alertVC addAction:otherAction];
     
-    return alertVC;
+    
 }
 #pragma mark 传入当前控制器 获取同一个nav里面的控制器
 +(UIViewController *)getTargetViewController:(NSString *)viewControllerName withInTheCurrentController:(UIViewController *)viewController{
