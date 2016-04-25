@@ -12,13 +12,12 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    
+    self.BackgroundView.backgroundColor = [UIColor redColor];
+    
 }
-- (IBAction)clickButton:(UIButton *)sender {
-    if ([_delegate respondsToSelector:@selector(tableViewCellWithClickButton:row:)]) {
-        [_delegate tableViewCellWithClickButton:sender row:_row];
-    }
-}
+
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

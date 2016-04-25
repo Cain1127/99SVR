@@ -31,7 +31,7 @@
     //自适应高度
     _tableView.rowHeight = UITableViewAutomaticDimension;
     // 估算高度
-    _tableView.estimatedRowHeight = 44;
+    _tableView.estimatedRowHeight = 200;
     [self.view addSubview:_tableView];
     
     _tableView.tableHeaderView = self.headerView;
@@ -62,7 +62,6 @@
     TableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     cell.row = indexPath.row;
     cell.delegate = self;
-    cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }

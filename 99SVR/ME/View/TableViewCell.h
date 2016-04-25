@@ -15,6 +15,8 @@
 @end
 
 @interface TableViewCell : UITableViewCell
+/**背景图*/
+@property (weak, nonatomic) IBOutlet UIView *BackgroundView;
 
 @property (nonatomic,assign)NSInteger row;
 @property (nonatomic,weak)id <TableViewCellDelegate>delegate;
