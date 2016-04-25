@@ -12,8 +12,12 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+        
+    self.selectView.layer.borderColor = COLOR_STOCK_Line_Kuang.CGColor;
+    self.selectView.layer.borderWidth = 0.5f;
+//    self.selectView.layer.masksToBounds = YES;
     
-    self.BackgroundView.backgroundColor = [UIColor redColor];
+    
     
 }
 

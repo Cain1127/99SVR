@@ -16,41 +16,41 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="15n-Sp-ANN" userLabel="BackgroundView">
-                        <rect key="frame" x="8" y="18" width="404" height="234.5"/>
+                        <rect key="frame" x="8" y="8" width="407" height="248.5"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5h2-T7-pz6" userLabel="IconImageView">
-                                <rect key="frame" x="8" y="10" width="30" height="30"/>
+                                <rect key="frame" x="10" y="10" width="30" height="30"/>
                                 <color key="backgroundColor" red="0.2954354817" green="0.25128041899999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="ASt-Vh-jbp"/>
                                     <constraint firstAttribute="width" constant="30" id="ybO-Ja-4j0"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VIP1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="imf-lQ-yP0" userLabel="VIPlevel">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="VIP1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="imf-lQ-yP0" userLabel="VIPlevel">
                                 <rect key="frame" x="48" y="14" width="349" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="这是一个测试label这是一个测试label这是一个测试label这是一个测试label这是一个测试label这是一个测试label这是一个测试label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NEa-mK-2Ba">
-                                <rect key="frame" x="10" y="60" width="387" height="108.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="VIP VIP VIP VIP VIP VIP VIP VIP VIP" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NEa-mK-2Ba">
+                                <rect key="frame" x="10" y="59" width="387" height="108.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JQx-xg-zlL" userLabel="SelectView">
-                                <rect key="frame" x="0.0" y="188.5" width="407" height="60"/>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JQx-xg-zlL" userLabel="SelectView">
+                                <rect key="frame" x="0.0" y="188" width="407" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sHE-VW-tEx" userLabel="ClickBtn">
-                                        <rect key="frame" x="284" y="0.0" width="120" height="60"/>
-                                        <color key="backgroundColor" red="1" green="0.10020284814102454" blue="0.27041605260556878" alpha="1" colorSpace="calibratedRGB"/>
+                                        <rect key="frame" x="347" y="0.0" width="60" height="60"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="120" id="hmM-bH-ANq"/>
+                                            <constraint firstAttribute="width" constant="60" id="hmM-bH-ANq"/>
                                         </constraints>
-                                        <state key="normal" title="点击按钮"/>
+                                        <state key="normal" title="按钮"/>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="原价1000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tau-fv-IvR" userLabel="OldPriceLab">
-                                        <rect key="frame" x="0.0" y="33" width="274" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="原价1000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tau-fv-IvR" userLabel="OldPriceLab">
+                                        <rect key="frame" x="10" y="33" width="343" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="17" id="L4f-VP-aX7"/>
                                             <constraint firstAttribute="width" constant="100" id="sPw-bN-9w5"/>
@@ -64,8 +64,8 @@
                                             </mask>
                                         </variation>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="现价8999" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RYX-s1-SB2" userLabel="NewPriceLab">
-                                        <rect key="frame" x="0.0" y="10" width="274" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="现价8999" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RYX-s1-SB2" userLabel="NewPriceLab">
+                                        <rect key="frame" x="10" y="10" width="343" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="17" id="5Yk-uW-WIK"/>
                                             <constraint firstAttribute="width" constant="100" id="p22-eX-quC"/>
@@ -80,9 +80,9 @@
                                         </variation>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="RYX-s1-SB2" firstAttribute="leading" secondItem="JQx-xg-zlL" secondAttribute="leading" id="BvG-Bl-qcK"/>
+                                    <constraint firstItem="RYX-s1-SB2" firstAttribute="leading" secondItem="JQx-xg-zlL" secondAttribute="leading" constant="10" id="BvG-Bl-qcK"/>
                                     <constraint firstAttribute="bottom" secondItem="sHE-VW-tEx" secondAttribute="bottom" id="Gah-kX-rnA"/>
                                     <constraint firstAttribute="bottom" secondItem="tau-fv-IvR" secondAttribute="bottom" constant="10" id="Quq-Pn-ZVU"/>
                                     <constraint firstItem="RYX-s1-SB2" firstAttribute="top" secondItem="JQx-xg-zlL" secondAttribute="top" constant="10" id="apV-eN-cf8"/>
@@ -91,11 +91,11 @@
                                     <constraint firstAttribute="height" constant="60" id="mBt-3n-a3u"/>
                                     <constraint firstItem="sHE-VW-tEx" firstAttribute="top" secondItem="JQx-xg-zlL" secondAttribute="top" id="u8j-nV-pDV"/>
                                     <constraint firstItem="sHE-VW-tEx" firstAttribute="leading" secondItem="RYX-s1-SB2" secondAttribute="trailing" constant="10" id="wOC-Tb-Y3i"/>
-                                    <constraint firstItem="tau-fv-IvR" firstAttribute="leading" secondItem="JQx-xg-zlL" secondAttribute="leading" id="wXo-xC-Nuv"/>
+                                    <constraint firstItem="tau-fv-IvR" firstAttribute="leading" secondItem="JQx-xg-zlL" secondAttribute="leading" constant="10" id="wXo-xC-Nuv"/>
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="JQx-xg-zlL" secondAttribute="bottom" id="5e6-XH-Xr2"/>
                             <constraint firstAttribute="trailing" secondItem="JQx-xg-zlL" secondAttribute="trailing" id="HAC-Wq-AFi"/>
@@ -104,7 +104,7 @@
                             <constraint firstItem="JQx-xg-zlL" firstAttribute="leading" secondItem="15n-Sp-ANN" secondAttribute="leading" id="dyy-m9-zJR"/>
                             <constraint firstItem="NEa-mK-2Ba" firstAttribute="leading" secondItem="15n-Sp-ANN" secondAttribute="leading" constant="10" id="eeY-gZ-Bg9"/>
                             <constraint firstItem="5h2-T7-pz6" firstAttribute="top" secondItem="15n-Sp-ANN" secondAttribute="top" constant="10" id="g7y-uK-H7U"/>
-                            <constraint firstItem="5h2-T7-pz6" firstAttribute="leading" secondItem="15n-Sp-ANN" secondAttribute="leading" constant="8" id="jc7-b9-Jcd"/>
+                            <constraint firstItem="5h2-T7-pz6" firstAttribute="leading" secondItem="15n-Sp-ANN" secondAttribute="leading" constant="10" id="jc7-b9-Jcd"/>
                             <constraint firstAttribute="trailing" secondItem="imf-lQ-yP0" secondAttribute="trailing" constant="10" id="pDP-6W-S8Q"/>
                             <constraint firstItem="JQx-xg-zlL" firstAttribute="top" secondItem="NEa-mK-2Ba" secondAttribute="bottom" constant="20" id="svS-XT-bjz"/>
                             <constraint firstItem="imf-lQ-yP0" firstAttribute="leading" secondItem="5h2-T7-pz6" secondAttribute="trailing" constant="10" id="y1M-vy-f6T"/>
@@ -113,15 +113,34 @@
                     </view>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="bottom" secondItem="15n-Sp-ANN" secondAttribute="bottom" id="0GU-ea-m5U"/>
                     <constraint firstItem="15n-Sp-ANN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="205-ez-7rD"/>
+                    <constraint firstAttribute="trailing" secondItem="15n-Sp-ANN" secondAttribute="trailing" id="OCN-Xd-cHy"/>
+                    <constraint firstItem="15n-Sp-ANN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="bbJ-VY-l0O"/>
+                    <constraint firstItem="15n-Sp-ANN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="jGm-NC-f7f"/>
                     <constraint firstAttribute="trailingMargin" secondItem="15n-Sp-ANN" secondAttribute="trailing" id="l4O-52-Iwx"/>
                     <constraint firstItem="15n-Sp-ANN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="lGp-AC-6ag"/>
                     <constraint firstAttribute="bottomMargin" secondItem="15n-Sp-ANN" secondAttribute="bottom" id="tgu-Vg-vgh"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="205-ez-7rD"/>
+                        <exclude reference="l4O-52-Iwx"/>
+                        <exclude reference="lGp-AC-6ag"/>
+                        <exclude reference="tgu-Vg-vgh"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="BackgroundView" destination="15n-Sp-ANN" id="EDb-Zt-5xo"/>
+                <outlet property="clickBtn" destination="sHE-VW-tEx" id="Xvo-dU-KbB"/>
+                <outlet property="introduceLab" destination="NEa-mK-2Ba" id="h2y-0J-Fpn"/>
+                <outlet property="nowPriceLab" destination="RYX-s1-SB2" id="7qv-x3-dhf"/>
+                <outlet property="oldPriceLab" destination="tau-fv-IvR" id="dUq-7V-YdW"/>
+                <outlet property="selectView" destination="JQx-xg-zlL" id="Vjb-N4-5Gx"/>
+                <outlet property="vipIconImageView" destination="5h2-T7-pz6" id="9Kj-6j-J35"/>
+                <outlet property="vipNameLab" destination="imf-lQ-yP0" id="yoe-FP-Fu8"/>
             </connections>
             <point key="canvasLocation" x="349.5" y="370.5"/>
         </tableViewCell>

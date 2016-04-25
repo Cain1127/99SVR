@@ -17,6 +17,20 @@
 @interface TableViewCell : UITableViewCell
 /**背景图*/
 @property (weak, nonatomic) IBOutlet UIView *BackgroundView;
+/**介绍的lab*/
+@property (weak, nonatomic) IBOutlet UILabel *introduceLab;
+/**vip图片*/
+@property (weak, nonatomic) IBOutlet UIImageView *vipIconImageView;
+/**vip名字*/
+@property (weak, nonatomic) IBOutlet UILabel *vipNameLab;
+/**现价*/
+@property (weak, nonatomic) IBOutlet UILabel *nowPriceLab;
+/**原价*/
+@property (weak, nonatomic) IBOutlet UILabel *oldPriceLab;
+/**点击按钮*/
+@property (weak, nonatomic) IBOutlet UIButton *clickBtn;
+/**背景框*/
+@property (weak, nonatomic) IBOutlet UIView *selectView;
 
 @property (nonatomic,assign)NSInteger row;
 @property (nonatomic,weak)id <TableViewCellDelegate>delegate;
