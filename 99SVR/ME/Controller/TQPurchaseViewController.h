@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CustomViewController.h"
 
-@interface TQPurchaseViewController : UIViewController
+@interface TQPurchaseViewController : CustomViewController
 
 @end

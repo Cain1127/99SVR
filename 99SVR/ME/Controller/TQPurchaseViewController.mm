@@ -22,17 +22,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"购买私人定制";
-    _tableView = [[UITableView alloc]init];
+    self.txtTitle.text = @"购买私人定制";
+    self.view.backgroundColor = COLOR_STOCK_BackGroundColor;
+    CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
+    _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.frame = self.view.bounds;
     [self.view addSubview:_tableView];
-    
-//    TQHeadView *headView = [TQHeadView headView];
-//    headView.backgroundColor = [UIColor whiteColor];
-//    headView.frame = CGRectMake(0, 0, self.view.frame.size.width, 110);
-//    self.tableView.tableHeaderView = headView;
     
     [_tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
 }
@@ -48,7 +44,8 @@
     TableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     cell.row = indexPath.row;
     cell.delegate = self;
-    
+    cell.backgroundColor = [UIColor clearColor];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
 
@@ -69,17 +66,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

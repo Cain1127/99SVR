@@ -12,7 +12,9 @@
 #import "StockRecordViewController.h"
 #import "StockMacro.h"
 #import "UIAlertView+Block.h"
-@interface StockDealTableModel ()
+#import "TQPurchaseViewController.h"
+#import "StockNotVipView.h"
+@interface StockDealTableModel ()<StockNotVipViewDelegate>
 {
     NSCache *_cache;
     UIViewController *_vc;
@@ -222,6 +224,7 @@
     cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
+    cell.notVipView.delegate = self;
     [cell setCellDataWithModel:model withIsVip:_isVipBool withCellId:cellIdArray[indexPath.section]];
     return cell;
 }
@@ -260,8 +263,13 @@
             
             [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:_vc withCancleBtnStr:@"取消" withOtherBtnStr:@"去购买" withMessage:@"需要购买vip之后方可显示" completionCallback:^(NSInteger index) {
                
-                
-                
+                if (index==0) {//取消
+                    
+                    
+                }else{//去购买
+                    TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
+                    [_vc.navigationController pushViewController:tqVC animated:YES];
+                }
                 
             }];
             
@@ -278,6 +286,33 @@
     }else{
         _isVipBool = NO;
     }
+}
+
+#pragma mark StockNotVipViewDelegate
+-(void)stockNotVipViewDidSelectIndex:(NSInteger)index{
+    
+
+    switch (index) {
+        case 1://去购买
+        {
+        
+            TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
+            [_vc.navigationController pushViewController:tqVC animated:YES];
+            
+        }
+            break;
+        case 2://什么是私人订制
+        {
+            
+            DLog(@"什么是私人订制");
+        }
+            break;
+
+        default:
+            break;
+    }
+    
+
 }
 
 -(void)dealloc{

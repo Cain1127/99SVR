@@ -101,14 +101,17 @@
 /**购买*/
 -(void)buyLabelClick:(UITapGestureRecognizer *)tap{
     
-    NSLog(@"购买");
+    if ([self.delegate respondsToSelector:@selector(stockNotVipViewDidSelectIndex:)]) {
+        [self.delegate stockNotVipViewDidSelectIndex:1];
+    }
 }
 
 /**查看serviceLabelClick*/
 -(void)serviceLabelClick:(UITapGestureRecognizer *)tap{
 
-    NSLog(@"什么是私人服务");
-    
+    if ([self.delegate respondsToSelector:@selector(stockNotVipViewDidSelectIndex:)]) {
+        [self.delegate stockNotVipViewDidSelectIndex:2];
+    }
 }
 
 
