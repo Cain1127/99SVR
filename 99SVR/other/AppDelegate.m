@@ -99,7 +99,8 @@
     }
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [[AdViewController alloc] init];
+//    self.window.rootViewController = [[AdViewController alloc] init];
+    self.window.rootViewController = [[TabBarController alloc] init];
     [self.window makeKeyAndVisible];
     
     [SVRInitLBS loadAllInfo];

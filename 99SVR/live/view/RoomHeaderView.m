@@ -86,7 +86,10 @@
 }
 
 - (void)navBack{
-    
+    if(_delegate && [_delegate respondsToSelector:@selector(exitRoomHeader)])
+    {
+        [_delegate exitRoomHeader];
+    }
 }
 
 @end

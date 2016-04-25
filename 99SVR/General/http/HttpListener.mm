@@ -37,6 +37,7 @@ void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
     NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<infos.size(); i++) {
         TQIdeaModel *model = [[TQIdeaModel alloc] initWithViewpointSummary:&infos[i]];
+        model.content = [NSString stringWithFormat:@"附近的可拉伸机发了多少啊叫付款了的撒安居客福利的撒健康路放电视剧阿卡丽发十大健康了缴费的斯科拉交罚款了撒娇快乐飞机的撒垃圾快速打开了纪检委付款了为尽快了解分手快乐大脚付款了文件分开来叫我快乐飞机速度快辣椒粉看来我姐夫看来今晚看路附近付款了的撒家里开发的叫撒考虑福建师大路口就开了及刻录机离开极乐空间看林俊杰及刻录机考虑及刻录机离开就开了"];
         [ary addObject:model];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:ary];

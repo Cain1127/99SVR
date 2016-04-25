@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface DetaileHeaderView : UIView
+
 + (instancetype)DetaileHeaderViewForXib;
 
 @end

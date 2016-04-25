@@ -103,7 +103,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 */
 - (void)closeRoomInfo
 {
-    //TODD:关闭房间
     [[SDImageCache sharedImageCache] clearMemory];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
@@ -114,6 +113,11 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     _room = nil;
     [kProtocolSingle exitRoom];
     [[SDImageCache sharedImageCache] clearMemory];
+}
+
+- (void)exitRoomHeader
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)dealloc
@@ -339,7 +343,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 
 - (void)enterTeamIntroduce
 {
-    XTeamViewController *teamView = [[XTeamViewController alloc] init];
+    XTeamViewController *teamView = [[XTeamViewController alloc] initWithModel:_room];
     [self.navigationController pushViewController:teamView animated:YES];
 }
 

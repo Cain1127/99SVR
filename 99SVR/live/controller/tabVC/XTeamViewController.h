@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CustomViewController.h"
+#import "RoomHttp.h"
 
-@interface XTeamViewController :CustomViewController
+@interface XTeamViewController : CustomViewController
+
+- (id)initWithModel:(RoomHttp *)room;
 
 @end

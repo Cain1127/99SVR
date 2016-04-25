@@ -11,6 +11,9 @@
 @interface CustomViewController : UIViewController
 
 @property (nonatomic,strong) UILabel *txtTitle;
+@property (nonatomic,strong) UIView *headView;
+@property (nonatomic,strong) UIButton *btnLeft;
+@property (nonatomic,strong) UIButton *btnRight;
 
 - (void)setHeadViewHidden:(BOOL)bFlag;
 - (void)setViewBgColor:(UIColor *)bgColor;

@@ -57,9 +57,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)viewDidLoad{
     
     [super viewDidLoad];
-    //导航栏初始化
     [self initUi];
-    //tableview初始化
     [self setIdeaTableView];
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     title.text = @"专家观点";
@@ -125,6 +123,17 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 #pragma mark - TableView dataSource
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 9;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.5;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _aryModel.count;
 }
@@ -151,7 +160,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 {
     return 200;
 }
-
 
 @end
 

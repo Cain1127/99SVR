@@ -15,9 +15,6 @@
     UILabel *_lblContent;
 }
 
-@property (nonatomic,strong) UIView *headView;
-@property (nonatomic,strong) UIButton *btnLeft;
-@property (nonatomic,strong) UIButton *btnRight;
 
 @end
 

@@ -487,7 +487,7 @@ void HttpConnection::RequestTeamIntroduce(int teamId, TeamIntroduceListener* lis
     TeamIntroduce introduce;
     introduce.set_teamIcon("qq");
     introduce.set_teamName("牛出没");
-    introduce.set_introduce("简介:fhjdksahjkfsdhakiouwerklwflksdajlkuiokljfkldsjaiouwlkjklfdsjaoiuwfkkljkl");
+    introduce.set_introduce("fhjdksahjkfsdhakiouwerklwflksdajlkuiokljfkldsjaiouwlkjklfdsjaoiuwfkkljkl");
     for (int i=0; i<5; i++) {
         VideoInfo video;
         video.set_id(i+1);

@@ -30,8 +30,9 @@
 {
     NSMutableDictionary *_groupStatus;
 }
+
 @property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
-//@property(nonatomic, strong) UITableView *tableView;
+
 @end
 
 @implementation FinanceOnlineVedioController
@@ -55,13 +56,21 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     _tableView = [[UITableView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-108) style:UITableViewStyleGrouped];
+    
     _tableView.delegate = self;
+    
     _tableView.dataSource = self;
+    
     _tableView.backgroundColor = [UIColor whiteColor];
+    
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
     [self.tableView registerClass:[VideoCell class] forCellReuseIdentifier:@"cellId"];
+    
     [self.view addSubview:self.tableView];
+    
     _groupStatus = [NSMutableDictionary dictionary];
 }
 
