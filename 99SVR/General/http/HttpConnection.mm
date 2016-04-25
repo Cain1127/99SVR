@@ -169,8 +169,6 @@ void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId,
 // 请求操盘列表-日收益排序
 void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId, int count, OperateStockProfitListenerDay* listener){
     
-    NSLog(@"startId= %d",startId);
-
     
     std::vector<OperateStockProfit> day;
     static int initId = 10;
@@ -199,7 +197,6 @@ void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
         day.push_back(profit);
-        NSLog(@" -----  transid %d",i);
     
     }
     listener->onResponse(day);

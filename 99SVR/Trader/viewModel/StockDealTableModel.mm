@@ -272,5 +272,9 @@
     }
 }
 
+-(void)dealloc{
+    
+    DLog(@"释放");
+}
 
 @end

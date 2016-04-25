@@ -47,7 +47,7 @@
     self.warningLab.text = @"仅代表讲师个人操盘记录,不构成投资建议，风险自负";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
-    [kHTTPSingle RequestOperateStockAllDetail:self.operateId];
+    [kHTTPSingle RequestOperateStockAllDetail:(int)self.operateId];
 
 
 }
@@ -133,7 +133,8 @@
 
 -(void)dealloc{
 
-    NSLog(@"释放");
+    DLog(@"释放");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_DEAL_VC object:nil];
 }
 
 

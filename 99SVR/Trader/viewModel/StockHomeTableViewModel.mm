@@ -44,7 +44,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return ValueWithTheIPhoneModelString(@"100,120,140,160");
+    return STORCK_HOME_StockRecordCell_H;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

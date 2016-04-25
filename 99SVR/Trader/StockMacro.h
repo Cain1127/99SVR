@@ -33,6 +33,7 @@
 
 
 #pragma mark 股票详情视图高度宏
+#define STORCK_HOME_StockRecordCell_H ValueWithTheIPhoneModelString(@"120,120,120,120")//高手操盘首页cell的高度
 #define STORCK_Deal_HeaderView_H ValueWithTheIPhoneModelString(@"150,180,200,220")//股票交易详情headerView
 #define STORCK_Deal_StockCell_H ScreenWidth * 0.75 //股票交易详情股票走势图模块的
 #define STORCK_Deal_BusinessRecordCell_VIP_H ValueWithTheIPhoneModelString(@"50,50,50,50")//股票交易详情 交易纪录 VIP状态
