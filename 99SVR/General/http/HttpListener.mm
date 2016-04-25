@@ -22,12 +22,14 @@
 #import "MJExtension.h"
 #import "XPrivateDetail.h"
 #import "XVideoTeamInfo.h"
+#import "SplashModel.h"
 
 /**
  *  闪屏响应
  */
 void SplashImageListener::onResponse(Splash& info){
-    
+    SplashModel *model = [[SplashModel alloc] initWithSplash:&info];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_SPLASH_VC object:model];
 }
 
 /**

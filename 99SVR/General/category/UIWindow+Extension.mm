@@ -10,11 +10,30 @@
 #import "TabBarController.h"
 #import "NewfeatureViewController.h"
 #import "AppDelegate.h"
+#import "SplashModel.h"
+#import "SplashTool.h"
+#import "AdViewController.h"
 
 #define bundleVersionKey @"CFBundleVersion"
 
 @implementation UIWindow (Extension)
 
+// 首次启动切换
+- (void)switchRootAppDelegate
+{
+    SplashModel *splash = [SplashTool get];
+    if (!splash.imageUrl||[splash.imageUrl isEqualToString:@""]) {
+        [self switchRootViewController];
+    } else {
+         self.rootViewController = [[AdViewController alloc] init];
+    }
+    
+    // 请求下一次广告数据
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadSplash:) name:MESSAGE_HTTP_SPLASH_VC object:nil];
+    [kHTTPSingle requestSplashImage];
+}
+
+// 广告启动切换
 - (void)switchRootViewController
 {
     // 上一次的使用版本（存储在沙盒中的版本号）
@@ -36,5 +55,15 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+// 保存下一次广告数据
+- (void)loadSplash:(NSNotification *)notify{
+    SplashModel *splash = (SplashModel *)notify.object;
+    [SplashTool save:splash];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_HTTP_SPLASH_VC object:nil];
+}
 
 @end

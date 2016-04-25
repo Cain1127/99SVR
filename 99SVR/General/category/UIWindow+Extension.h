@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UIWindow (Extension)
+- (void)switchRootAppDelegate;
 - (void)switchRootViewController;
 - (void)saveCurrentVersion;
 @end
