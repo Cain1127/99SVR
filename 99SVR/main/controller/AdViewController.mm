@@ -9,9 +9,10 @@
 #import "AdViewController.h"
 #import "UIImageView+WebCache.h"
 #import "NewfeatureViewController.h"
-#import "UIWindow+Extension.h"
+//#import "UIWindow+Extension.h"
 #import "SplashModel.h"
 #import "SplashTool.h"
+#import "SwitchRootTool.h"
 
 @interface AdViewController ()
 /** 定时器 */
@@ -76,8 +77,9 @@ NSUInteger secondsCountDown = 5;//60秒倒计时
     }
     _timer=nil;
     
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [window switchRootViewController];
+    [SwitchRootTool switchRootForViewController];
+//    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+//    [window switchRootViewController];
 }
 
 @end
