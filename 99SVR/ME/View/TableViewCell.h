@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "PriceLabView.h"
 @protocol TableViewCellDelegate <NSObject>
+
 
 -(void)tableViewCellWithClickButton:(UIButton *)button row:(NSInteger)row;
 
@@ -23,15 +24,13 @@
 @property (weak, nonatomic) IBOutlet UIImageView *vipIconImageView;
 /**vip名字*/
 @property (weak, nonatomic) IBOutlet UILabel *vipNameLab;
-/**现价*/
-@property (weak, nonatomic) IBOutlet UILabel *nowPriceLab;
-/**原价*/
-@property (weak, nonatomic) IBOutlet UILabel *oldPriceLab;
 /**背景框*/
 @property (weak, nonatomic) IBOutlet UIView *selectView;
 
-/**<#type#>*/
+/**点击按钮*/
 @property (nonatomic , strong) UIButton *clickBtn;
+/**价格标签*/
+@property (nonatomic , strong) PriceLabView *priceLabView;
 
 @property (nonatomic,assign)NSInteger row;
 @property (nonatomic,weak)id <TableViewCellDelegate>delegate;

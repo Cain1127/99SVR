@@ -3,7 +3,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSInteger,PriceLabViewType){
+typedef NS_ENUM(NSInteger,PriceLabViewState){
     /**已经购买VIP*/
     PriceLabViewType_Vip,
     /**没有购买VIP*/
@@ -13,7 +13,7 @@ typedef NS_ENUM(NSInteger,PriceLabViewType){
 @interface PriceLabView : UIView
 
 /**类型*/
-@property (nonatomic , assign) PriceLabViewType type;
+@property (nonatomic , assign) PriceLabViewState state;
 
 /**原价格*/
 @property (nonatomic , copy) NSString *oldpriceStr;

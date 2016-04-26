@@ -34,47 +34,9 @@
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JQx-xg-zlL" userLabel="SelectView">
                                 <rect key="frame" x="0.0" y="194" width="423" height="60"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="原价1000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tau-fv-IvR" userLabel="OldPriceLab">
-                                        <rect key="frame" x="10" y="33" width="343" height="17"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="343" id="5Fe-3n-W5N"/>
-                                            <constraint firstAttribute="height" constant="17" id="L4f-VP-aX7"/>
-                                            <constraint firstAttribute="width" constant="100" id="sPw-bN-9w5"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="sPw-bN-9w5"/>
-                                            </mask>
-                                        </variation>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="现价8999" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RYX-s1-SB2" userLabel="NewPriceLab">
-                                        <rect key="frame" x="10" y="10" width="200" height="17"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="17" id="5Yk-uW-WIK"/>
-                                            <constraint firstAttribute="width" constant="200" id="HSe-qJ-lbF"/>
-                                            <constraint firstAttribute="width" constant="100" id="p22-eX-quC"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="p22-eX-quC"/>
-                                            </mask>
-                                        </variation>
-                                    </label>
-                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="RYX-s1-SB2" firstAttribute="leading" secondItem="JQx-xg-zlL" secondAttribute="leading" constant="10" id="BvG-Bl-qcK"/>
-                                    <constraint firstAttribute="bottom" secondItem="tau-fv-IvR" secondAttribute="bottom" constant="10" id="Quq-Pn-ZVU"/>
-                                    <constraint firstItem="RYX-s1-SB2" firstAttribute="top" secondItem="JQx-xg-zlL" secondAttribute="top" constant="10" id="apV-eN-cf8"/>
                                     <constraint firstAttribute="height" constant="60" id="mBt-3n-a3u"/>
-                                    <constraint firstItem="tau-fv-IvR" firstAttribute="leading" secondItem="JQx-xg-zlL" secondAttribute="leading" constant="10" id="wXo-xC-Nuv"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VIP VIP VIP VIP VIP VIP VIP VIP VIP" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NEa-mK-2Ba">
@@ -124,8 +86,6 @@
             <connections>
                 <outlet property="BackgroundView" destination="15n-Sp-ANN" id="EDb-Zt-5xo"/>
                 <outlet property="introduceLab" destination="NEa-mK-2Ba" id="h2y-0J-Fpn"/>
-                <outlet property="nowPriceLab" destination="RYX-s1-SB2" id="7qv-x3-dhf"/>
-                <outlet property="oldPriceLab" destination="tau-fv-IvR" id="dUq-7V-YdW"/>
                 <outlet property="selectView" destination="JQx-xg-zlL" id="Vjb-N4-5Gx"/>
                 <outlet property="vipIconImageView" destination="5h2-T7-pz6" id="9Kj-6j-J35"/>
                 <outlet property="vipNameLab" destination="imf-lQ-yP0" id="yoe-FP-Fu8"/>
