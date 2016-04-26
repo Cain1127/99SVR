@@ -19,6 +19,7 @@
 #define MAX_TCPPAYLOAD_LENGTH 4000
 #define MDM_GR_TCPVIDEO  301
 #define kConnectTimeOut    10
+#define kREAD_TIMEOUT   10
 
 typedef struct video_frame_data{
     unsigned int ssrc;
@@ -79,7 +80,6 @@ typedef struct _tag_MediaFrameBuffer
     long  nReadTime;
 }
 
-@property (nonatomic,assign) int nFall;
 @property (nonatomic,strong) NSMutableArray *aryVideo;
 @property (nonatomic,strong) GCDAsyncSocket *gcdSocket;
 @property (nonatomic) int roomid;
@@ -123,6 +123,7 @@ typedef struct _tag_MediaFrameBuffer
 
 - (void)connectRoomId:(int)roomid mic:(int)userid
 {
+    _nFall = 0;
     if(_gcdSocket)
     {
         [self closeSocket];
@@ -250,7 +251,7 @@ typedef struct _tag_MediaFrameBuffer
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TCP_SOCKET_SEND_MEDIA object:strInfo];
     m_jittertime = 2;
     
-    [_gcdSocket readDataToLength:4 withTimeout:10 tag:1];
+    [_gcdSocket readDataToLength:4 withTimeout:kREAD_TIMEOUT tag:1];
     [self sendHello];
     struct timeval result;
     gettimeofday(&result,NULL);
@@ -266,10 +267,10 @@ typedef struct _tag_MediaFrameBuffer
  */
 - (void)sendAllInfo
 {
-    int iTime = 1;
+    int iTime = 0;
     while (bFlag)
     {
-        if (iTime%8==7)
+        if (iTime%8==0)
         {
             [self send_keep_live_tcp];
             if (bVideo && !bBack)
@@ -386,11 +387,11 @@ typedef struct _tag_MediaFrameBuffer
             memcpy(cBuf, [data bytes], sizeof(int32));
             if(nSize == 0)
             {
-                [_gcdSocket readDataToLength:sizeof(int32) withTimeout:10 tag:SOCKET_READ_LENGTH];
+                [_gcdSocket readDataToLength:sizeof(int32) withTimeout:kREAD_TIMEOUT tag:SOCKET_READ_LENGTH];
             }
             else
             {
-                [_gcdSocket readDataToLength:nSize-sizeof(int32) withTimeout:10 tag:SOCKET_READ_DATA];
+                [_gcdSocket readDataToLength:nSize-sizeof(int32) withTimeout:kREAD_TIMEOUT tag:SOCKET_READ_DATA];
             }
         }
         break;
@@ -531,7 +532,7 @@ if(_block) \
 {
     COM_MSG_HEADER *inmsg = (COM_MSG_HEADER *)cBuffer;
     [self bufferOper:inmsg];
-    [_gcdSocket readDataToLength:4 withTimeout:10 tag:SOCKET_READ_LENGTH];
+    [_gcdSocket readDataToLength:4 withTimeout:kREAD_TIMEOUT tag:SOCKET_READ_LENGTH];
 }
 
 - (NSTimeInterval)socket:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
@@ -561,16 +562,18 @@ if(_block) \
         [DecodeJson postPHPServerMsg:strErrlog];
         _nFall = 0;
     }
-    else if ([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Connection refused"]){
-//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接流媒体失败"];
-        //直接进行重连
-    }
-    else if([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Socket closed byremote peer"]){
-//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MEDIA_DISCONNECT_VC object:@"连接中断"];
-        //直接进行重连
+    if(err)
+    {
+//    if ([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Connection refused"]){
+//        //直接进行重连
+//    }
+//    else if([[err.userInfo objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Socket closed byremote peer"]){
+//        //直接进行重连
+//    }
+        _nFall ++;
+        [self getMediaHost];
     }
     m_nLastRecvTS=0;
-    _nFall ++;
     DLog(@"fall:%d",_nFall);
 }
 

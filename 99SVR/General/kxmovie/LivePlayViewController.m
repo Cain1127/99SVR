@@ -39,6 +39,8 @@
     int _roomid;
     int _nuserid;
     int nReceiveMemory;
+    BOOL bFull;
+    UIView *sunView;
 }
 @property (nonatomic) BOOL backGroud;
 @property (nonatomic) BOOL bVideo;
@@ -210,6 +212,7 @@
 - (void)stop
 {
     DLog(@"视频停止");
+    _media.nFall = 0;
     _playing = NO;
     [_media closeSocket];
     [UIApplication sharedApplication].idleTimerDisabled = _playing;
@@ -252,6 +255,85 @@
     [lblText setFont:XCFONT(16)];
     [lblText setTextAlignment:NSTextAlignmentCenter];
     _media = [[MediaSocket alloc] init];
+    _glView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapFrom)];
+    singleRecogn.numberOfTapsRequired = 2;
+    [_glView addGestureRecognizer:singleRecogn];
+}
+
+- (void)handleDoubleTapFrom{
+//    if (!bFull) {
+//        [_glView removeFromSuperview];
+//        _glView.frame = Rect(0, 0, kScreenHeight,kScreenWidth);
+//        [[UIApplication sharedApplication].keyWindow addSubview:_glView];
+//        bFull = YES;
+//    }else
+//    {
+//        _glView.frame = Rect(0, 0, kScreenWidth, kVideoImageHeight);
+//        [self.view addSubview:_glView];
+//        bFull = NO;
+//    }
+    [self fullPlayMode];
+}
+
+-(void)fullPlayMode
+{
+    if (!bFull)//NO状态表示当前竖屏，需要转换成横屏
+    {
+        [_glView removeFromSuperview];
+        _glView.frame = Rect(0, 0, kScreenWidth,kScreenHeight);
+//        [[UIApplication sharedApplication].keyWindow addSubview:_glView];
+        [_glView removeFromSuperview];
+        
+        CGFloat _duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
+        [[UIDevice currentDevice] setValue: [NSNumber numberWithInteger:UIDeviceOrientationLandscapeRight] forKey:@"orientation"];
+        [UIViewController attemptRotationToDeviceOrientation];
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:_duration];
+        CGRect frame = [UIScreen mainScreen].bounds;
+        CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
+        _glView.center = center;
+        _glView.transform = [self transformView];
+        _glView.bounds = Rect(0, 0,kScreenHeight,kScreenWidth);
+        [[UIApplication sharedApplication].keyWindow addSubview:_glView];
+        [UIView commitAnimations];
+        bFull = YES;
+    }
+    else
+    {
+//        [_glView removeFromSuperview];
+//        _glView.frame = Rect(0, 0, kScreenWidth,kVideoImageHeight);
+        [self setHorizontal];
+        bFull = NO;
+    }
+}
+
+-(void)setHorizontal
+{
+    [[UIDevice currentDevice] setValue: [NSNumber numberWithInteger:UIDeviceOrientationPortrait] forKey:@"orientation"];
+    CGFloat _duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:_duration];
+    CGRect frame = [UIScreen mainScreen].bounds;
+    CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
+    _glView.center = center;
+    _glView.transform = [self transformView];
+    _glView.bounds = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+    [UIView commitAnimations];
+    [self.view addSubview:_glView];
+    _glView.frame = Rect(0, 0, kScreenWidth, kVideoImageHeight);
+}
+
+-(CGAffineTransform)transformView
+{
+    if (!bFull)
+    {
+        return CGAffineTransformMakeRotation(M_PI/2);
+    }
+    else
+    {
+        return CGAffineTransformIdentity;
+    }
 }
 
 - (void)setNullMic
@@ -501,11 +583,6 @@
         avpicture_free(&_picture);
         _pictureValid = NO;
     }
-}
-
-- (void)handleDoubleTapFrom
-{
-    
 }
 
 #pragma mark -

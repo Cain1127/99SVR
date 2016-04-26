@@ -84,23 +84,28 @@ class Team
     
 private:
     
-    uint32  _roomid;
+    uint32	_roomid;
     uint32	_teamid;
     string	_teamname;
     string	_teamicon;
     uint32	_onlineusercount;
     uint32	_locked;
-    
+    string  _alias;
+    string _introduce;
     
 public:
     
     inline uint32 roomid() { return _roomid; } const
     
-    inline void set_roomid(const uint32& value) { _roomid = value; }
+    inline void set_roomid(const uint32 value) { _roomid = value; }
     
-    inline uint32& teamid() { return _teamid; } const
+    inline uint32 teamid() { return _teamid; } const
     
-    inline void set_teamid(const uint32& value) { _teamid = value; }
+    inline void set_teamid(const uint32 value) { _teamid = value; }
+    
+    inline string& introduce() { return _introduce; } const
+    
+    inline void set_introduce(const string& value) { _introduce = value; }
     
     inline string& teamname() { return _teamname; } const
     
@@ -118,6 +123,10 @@ public:
     
     inline void set_locked(const uint32 value) { _locked = value; }
     
+    inline string& alias() { return _alias; } const
+    
+    inline void set_alias(const string& value) { _alias = value; }
+    
     
     int ByteSize() { return sizeof(protocol::tag_CMDTeam); }
     
@@ -130,6 +139,8 @@ public:
         strcpy(cmd->teamIcon, _teamicon.c_str());
         cmd->onlineUserCount = _onlineusercount;
         cmd->locked = _locked;
+        strcpy(cmd->alias, _alias.c_str());
+        strcpy(cmd->Introduce, _introduce.c_str());
     }
     
     void ParseFromArray(void* data, int size)
@@ -141,6 +152,8 @@ public:
         _teamicon = cmd->teamIcon;
         _onlineusercount = cmd->onlineUserCount;
         _locked = cmd->locked;
+        _alias = cmd->alias;
+        _introduce = cmd->Introduce;
     }
     
     void Log()
@@ -152,6 +165,7 @@ public:
         LOG("teamicon = %s", _teamicon.c_str());
         LOG("onlineusercount = %d", _onlineusercount);
         LOG("locked = %d", _locked);
+        LOG("alias = %s", _alias.c_str());
     }
     
 };
@@ -167,6 +181,7 @@ private:
     string	_authoricon;
     uint32	_viewpointid;
     string	_publishtime;
+    string	_title;
     string	_content;
     uint32	_replycount;
     uint32	_giftcount;
@@ -193,6 +208,10 @@ public:
     inline string& publishtime() { return _publishtime; } const
     
     inline void set_publishtime(const string& value) { _publishtime = value; }
+    
+    inline string& title() { return _title; } const
+    
+    inline void set_title(const string& value) { _title = value; }
     
     inline string& content() { return _content; } const
     
@@ -217,6 +236,7 @@ public:
         strcpy(cmd->authorIcon, _authoricon.c_str());
         cmd->viewpointId = _viewpointid;
         strcpy(cmd->publishTime, _publishtime.c_str());
+        strcpy(cmd->title, _title.c_str());
         strcpy(cmd->content, _content.c_str());
         cmd->replyCount = _replycount;
         cmd->giftCount = _giftcount;
@@ -230,6 +250,7 @@ public:
         _authoricon = cmd->authorIcon;
         _viewpointid = cmd->viewpointId;
         _publishtime = cmd->publishTime;
+        _title = cmd->title;
         _content = cmd->content;
         _replycount = cmd->replyCount;
         _giftcount = cmd->giftCount;
@@ -243,6 +264,7 @@ public:
         LOG("authoricon = %s", _authoricon.c_str());
         LOG("viewpointid = %d", _viewpointid);
         LOG("publishtime = %s", _publishtime.c_str());
+        LOG("title = %s", _title.c_str());
         LOG("content = %s", _content.c_str());
         LOG("replycount = %d", _replycount);
         LOG("giftcount = %d", _giftcount);
@@ -261,6 +283,7 @@ private:
     string	_authoricon;
     uint32	_viewpointid;
     string	_publishtime;
+    string	_title;
     string	_content;
     uint32	_replycount;
     uint32	_giftcount;
@@ -288,6 +311,10 @@ public:
     
     inline void set_publishtime(const string& value) { _publishtime = value; }
     
+    inline string& title() { return _title; } const
+    
+    inline void set_title(const string& value) { _title = value; }
+    
     inline string& content() { return _content; } const
     
     inline void set_content(const string& value) { _content = value; }
@@ -311,6 +338,7 @@ public:
         strcpy(cmd->authorIcon, _authoricon.c_str());
         cmd->viewpointId = _viewpointid;
         strcpy(cmd->publishTime, _publishtime.c_str());
+        strcpy(cmd->title, _title.c_str());
         strcpy(cmd->content, _content.c_str());
         cmd->replyCount = _replycount;
         cmd->giftCount = _giftcount;
@@ -324,6 +352,7 @@ public:
         _authoricon = cmd->authorIcon;
         _viewpointid = cmd->viewpointId;
         _publishtime = cmd->publishTime;
+        _title = cmd->title;
         _content = cmd->content;
         _replycount = cmd->replyCount;
         _giftcount = cmd->giftCount;
@@ -337,6 +366,7 @@ public:
         LOG("authoricon = %s", _authoricon.c_str());
         LOG("viewpointid = %d", _viewpointid);
         LOG("publishtime = %s", _publishtime.c_str());
+        LOG("title = %s", _title.c_str());
         LOG("content = %s", _content.c_str());
         LOG("replycount = %d", _replycount);
         LOG("giftcount = %d", _giftcount);
@@ -356,6 +386,7 @@ private:
     string	_authorid;
     string	_authorname;
     string	_authoricon;
+    string	_fromauthorid;
     string	_fromauthorname;
     string	_fromauthoricon;
     string	_publishtime;
@@ -388,6 +419,10 @@ public:
     
     inline void set_authoricon(const string& value) { _authoricon = value; }
     
+    inline string& fromauthorid() { return _fromauthorid; } const
+    
+    inline void set_fromauthorid(const string& value) { _fromauthorid = value; }
+    
     inline string& fromauthorname() { return _fromauthorname; } const
     
     inline void set_fromauthorname(const string& value) { _fromauthorname = value; }
@@ -416,6 +451,7 @@ public:
         strcpy(cmd->authorId, _authorid.c_str());
         strcpy(cmd->authorName, _authorname.c_str());
         strcpy(cmd->authorIcon, _authoricon.c_str());
+        strcpy(cmd->fromAuthorId, _fromauthorid.c_str());
         strcpy(cmd->fromAuthorName, _fromauthorname.c_str());
         strcpy(cmd->fromAuthorIcon, _fromauthoricon.c_str());
         strcpy(cmd->publishTime, _publishtime.c_str());
@@ -431,6 +467,7 @@ public:
         _authorid = cmd->authorId;
         _authorname = cmd->authorName;
         _authoricon = cmd->authorIcon;
+        _fromauthorid = cmd->fromAuthorId;
         _fromauthorname = cmd->fromAuthorName;
         _fromauthoricon = cmd->fromAuthorIcon;
         _publishtime = cmd->publishTime;
@@ -446,6 +483,7 @@ public:
         LOG("authorid = %s", _authorid.c_str());
         LOG("authorname = %s", _authorname.c_str());
         LOG("authoricon = %s", _authoricon.c_str());
+        LOG("fromauthorid = %s", _fromauthorid.c_str());
         LOG("fromauthorname = %s", _fromauthorname.c_str());
         LOG("fromauthoricon = %s", _fromauthoricon.c_str());
         LOG("publishtime = %s", _publishtime.c_str());
@@ -460,7 +498,6 @@ class OperateStockProfit
     
 private:
     
-    uint32  _transId;
     uint32	_operateid;
     string	_teamid;
     string	_teamname;
@@ -474,10 +511,6 @@ private:
     
     
 public:
-    
-    inline uint32 transid() { return _transId; } const
-    
-    inline void set_transid(const uint32 value) { _transId = value; }
     
     inline uint32 operateid() { return _operateid; } const
     
@@ -612,7 +645,8 @@ class OperateStockTransaction
 {
     
 private:
-    uint32  _transId;
+    
+    uint32	_transid;
     uint32	_operateid;
     string	_buytype;
     string	_stockid;
@@ -625,10 +659,9 @@ private:
     
 public:
     
-    inline uint32 transid() { return _transId; } const
+    inline uint32 transid() { return _transid; } const
     
-    inline void set_transid(const uint32 value) { _transId = value; }
-
+    inline void set_transid(const uint32 value) { _transid = value; }
     
     inline uint32 operateid() { return _operateid; } const
     
@@ -668,6 +701,7 @@ public:
     void SerializeToArray(void* data, int size)
     {
         protocol::tag_CMDOperateStockTransaction* cmd = (protocol::tag_CMDOperateStockTransaction*) data;
+        cmd->transId = _transid;
         cmd->operateId = _operateid;
         strcpy(cmd->buytype, _buytype.c_str());
         strcpy(cmd->stockId, _stockid.c_str());
@@ -681,6 +715,7 @@ public:
     void ParseFromArray(void* data, int size)
     {
         protocol::tag_CMDOperateStockTransaction* cmd = (protocol::tag_CMDOperateStockTransaction*) data;
+        _transid = cmd->transId;
         _operateid = cmd->operateId;
         _buytype = cmd->buytype;
         _stockid = cmd->stockId;
@@ -694,6 +729,7 @@ public:
     void Log()
     {
         LOG("--------Receive message: OperateStockTransaction---------");
+        LOG("transid = %d", _transid);
         LOG("operateid = %d", _operateid);
         LOG("buytype = %s", _buytype.c_str());
         LOG("stockid = %s", _stockid.c_str());
@@ -712,6 +748,7 @@ class OperateStocks
     
 private:
     
+    uint32	_transid;
     uint32	_operateid;
     string	_stockid;
     string	_stockname;
@@ -723,6 +760,10 @@ private:
     
     
 public:
+    
+    inline uint32 transid() { return _transid; } const
+    
+    inline void set_transid(const uint32 value) { _transid = value; }
     
     inline uint32 operateid() { return _operateid; } const
     
@@ -762,6 +803,7 @@ public:
     void SerializeToArray(void* data, int size)
     {
         protocol::tag_CMDOperateStocks* cmd = (protocol::tag_CMDOperateStocks*) data;
+        cmd->transId = _transid;
         cmd->operateId = _operateid;
         strcpy(cmd->stockId, _stockid.c_str());
         strcpy(cmd->stockName, _stockname.c_str());
@@ -775,6 +817,7 @@ public:
     void ParseFromArray(void* data, int size)
     {
         protocol::tag_CMDOperateStocks* cmd = (protocol::tag_CMDOperateStocks*) data;
+        _transid = cmd->transId;
         _operateid = cmd->operateId;
         _stockid = cmd->stockId;
         _stockname = cmd->stockName;
@@ -788,6 +831,7 @@ public:
     void Log()
     {
         LOG("--------Receive message: OperateStocks---------");
+        LOG("transid = %d", _transid);
         LOG("operateid = %d", _operateid);
         LOG("stockid = %s", _stockid.c_str());
         LOG("stockname = %s", _stockname.c_str());
@@ -925,8 +969,11 @@ private:
     uint32	_levelid;
     string	_levelname;
     string	_description;
+    string  _buytime;
+    string  _expirtiontime;
     float	_buyprice;
     float	_updateprice;
+    uint32  _isopen;
     
     
 public:
@@ -935,6 +982,10 @@ public:
     
     inline void set_levelid(const uint32 value) { _levelid = value; }
     
+    inline uint32 isopen() { return _isopen; } const
+    
+    inline void set_isopen(const uint32 value) { _isopen = value; }
+    
     inline string& levelname() { return _levelname; } const
     
     inline void set_levelname(const string& value) { _levelname = value; }
@@ -942,6 +993,14 @@ public:
     inline string& description() { return _description; } const
     
     inline void set_description(const string& value) { _description = value; }
+    
+    inline string& buytime() { return _buytime; } const
+    
+    inline void set_buytime(const string& value) { _buytime = value; }
+    
+    inline string& expirtiontime() { return _expirtiontime; } const
+    
+    inline void set_expirtiontime(const string& value) { _expirtiontime = value; }
     
     inline float buyprice() { return _buyprice; } const
     
@@ -958,10 +1017,13 @@ public:
     {
         protocol::tag_CMDPrivateServiceLevelDescription* cmd = (protocol::tag_CMDPrivateServiceLevelDescription*) data;
         cmd->levelId = _levelid;
+        cmd->isopen = _isopen;
         strcpy(cmd->levelName, _levelname.c_str());
         strcpy(cmd->description, _description.c_str());
         cmd->buyPrice = _buyprice;
         cmd->updatePrice = _updateprice;
+        strcpy(cmd->buytime, _buytime.c_str());
+        strcpy(cmd->expirtiontime, _expirtiontime.c_str());
     }
     
     void ParseFromArray(void* data, int size)
@@ -972,6 +1034,9 @@ public:
         _description = cmd->description;
         _buyprice = cmd->buyPrice;
         _updateprice = cmd->updatePrice;
+        _buytime = cmd->buytime;
+        _expirtiontime = cmd->expirtiontime;
+        _isopen = cmd->isopen;
     }
     
     void Log()
@@ -980,8 +1045,11 @@ public:
         LOG("levelid = %d", _levelid);
         LOG("levelname = %s", _levelname.c_str());
         LOG("description = %s", _description.c_str());
+        LOG("buytime = %s", _buytime.c_str());
+        LOG("expirtiontime = %s", _expirtiontime.c_str());
         LOG("buyprice = %f", _buyprice);
         LOG("updateprice = %f", _updateprice);
+        LOG("isopen = %d", _isopen);
     }
     
 };
@@ -1282,7 +1350,7 @@ private:
     
     string	_username;
     int32	_headid;
-    float	_consume;
+    uint64	_consume;
     
     
 public:
@@ -1295,9 +1363,9 @@ public:
     
     inline void set_headid(const int32 value) { _headid = value; }
     
-    inline float consume() { return _consume; } const
+    inline uint64 consume() { return _consume; } const
     
-    inline void set_consume(const float value) { _consume = value; }
+    inline void set_consume(const uint64 value) { _consume = value; }
     
     
     int ByteSize() { return sizeof(protocol::tag_CMDConsumeRank); }
@@ -1323,7 +1391,7 @@ public:
         LOG("--------Receive message: ConsumeRank---------");
         LOG("username = %s", _username.c_str());
         LOG("headid = %d", _headid);
-        LOG("consume = %lld", _consume);
+        //LOG("consume = %ll", _consume);
     }
     
 };
@@ -1403,6 +1471,7 @@ private:
     uint32	_answerauthorrole;
     string	_answertime;
     string	_answercontent;
+    string	_askauthorid;
     string	_askauthorname;
     string	_askauthorhead;
     uint32	_askauthorrole;
@@ -1441,6 +1510,10 @@ public:
     inline string& answercontent() { return _answercontent; } const
     
     inline void set_answercontent(const string& value) { _answercontent = value; }
+    
+    inline string& askauthorid() { return _askauthorid; } const
+    
+    inline void set_askauthorid(const string& value) { _askauthorid = value; }
     
     inline string& askauthorname() { return _askauthorname; } const
     
@@ -1483,6 +1556,7 @@ public:
         cmd->answerAuthorRole = _answerauthorrole;
         strcpy(cmd->answerTime, _answertime.c_str());
         strcpy(cmd->answerContent, _answercontent.c_str());
+        strcpy(cmd->askAuthorId, _askauthorid.c_str());
         strcpy(cmd->askAuthorName, _askauthorname.c_str());
         strcpy(cmd->askAuthorHead, _askauthorhead.c_str());
         cmd->askAuthorRole = _askauthorrole;
@@ -1502,6 +1576,7 @@ public:
         _answerauthorrole = cmd->answerAuthorRole;
         _answertime = cmd->answerTime;
         _answercontent = cmd->answerContent;
+        _askauthorid = cmd->askAuthorId;
         _askauthorname = cmd->askAuthorName;
         _askauthorhead = cmd->askAuthorHead;
         _askauthorrole = cmd->askAuthorRole;
@@ -1521,6 +1596,7 @@ public:
         LOG("answerauthorrole = %d", _answerauthorrole);
         LOG("answertime = %s", _answertime.c_str());
         LOG("answercontent = %s", _answercontent.c_str());
+        LOG("askauthorid = %s", _askauthorid.c_str());
         LOG("askauthorname = %s", _askauthorname.c_str());
         LOG("askauthorhead = %s", _askauthorhead.c_str());
         LOG("askauthorrole = %d", _askauthorrole);
@@ -1541,6 +1617,7 @@ private:
     uint32	_id;
     uint32	_viewpointid;
     string	_title;
+    string	_askauthorid;
     string	_askauthorname;
     string	_askauthorhead;
     uint32	_askauthorrole;
@@ -1549,7 +1626,6 @@ private:
     string	_answerauthorid;
     string	_answerauthorname;
     string	_answerauthorhead;
-    //性别
     uint32	_answerauthorrole;
     string	_answertime;
     string	_answercontent;
@@ -1569,6 +1645,10 @@ public:
     inline string& title() { return _title; } const
     
     inline void set_title(const string& value) { _title = value; }
+    
+    inline string& askauthorid() { return _askauthorid; } const
+    
+    inline void set_askauthorid(const string& value) { _askauthorid = value; }
     
     inline string& askauthorname() { return _askauthorname; } const
     
@@ -1602,15 +1682,15 @@ public:
     
     inline void set_answerauthorhead(const string& value) { _answerauthorhead = value; }
     
-    inline uint32 answerauthorrole() { return _answerauthorrole; } const 
+    inline uint32 answerauthorrole() { return _answerauthorrole; } const
     
     inline void set_answerauthorrole(const uint32 value) { _answerauthorrole = value; }
     
-    inline string& answertime() { return _answertime; } const 
+    inline string& answertime() { return _answertime; } const
     
     inline void set_answertime(const string& value) { _answertime = value; }
     
-    inline string& answercontent() { return _answercontent; } const 
+    inline string& answercontent() { return _answercontent; } const
     
     inline void set_answercontent(const string& value) { _answercontent = value; }
     
@@ -1627,6 +1707,7 @@ public:
         cmd->id = _id;
         cmd->viewpointId = _viewpointid;
         strcpy(cmd->title, _title.c_str());
+        strcpy(cmd->askAuthorId, _askauthorid.c_str());
         strcpy(cmd->askAuthorName, _askauthorname.c_str());
         strcpy(cmd->askAuthorHead, _askauthorhead.c_str());
         cmd->askAuthorRole = _askauthorrole;
@@ -1647,6 +1728,7 @@ public:
         _id = cmd->id;
         _viewpointid = cmd->viewpointId;
         _title = cmd->title;
+        _askauthorid = cmd->askAuthorId;
         _askauthorname = cmd->askAuthorName;
         _askauthorhead = cmd->askAuthorHead;
         _askauthorrole = cmd->askAuthorRole;
@@ -1667,6 +1749,7 @@ public:
         LOG("id = %d", _id);
         LOG("viewpointid = %d", _viewpointid);
         LOG("title = %s", _title.c_str());
+        LOG("askauthorid = %s", _askauthorid.c_str());
         LOG("askauthorname = %s", _askauthorname.c_str());
         LOG("askauthorhead = %s", _askauthorhead.c_str());
         LOG("askauthorrole = %d", _askauthorrole);
@@ -1679,6 +1762,44 @@ public:
         LOG("answertime = %s", _answertime.c_str());
         LOG("answercontent = %s", _answercontent.c_str());
         LOG("fromclient = %d", _fromclient);
+    }
+    
+};
+
+
+class TotalUnread
+{
+    
+private:
+    
+    uint32	_total;
+    
+    
+public:
+    
+    inline uint32 total() { return _total; } const 
+    
+    inline void set_total(const uint32 value) { _total = value; }
+    
+    
+    int ByteSize() { return sizeof(protocol::tag_CMDTotalUnread); }
+    
+    void SerializeToArray(void* data, int size)
+    {
+        protocol::tag_CMDTotalUnread* cmd = (protocol::tag_CMDTotalUnread*) data;
+        cmd->total = _total;
+    }
+    
+    void ParseFromArray(void* data, int size)
+    {
+        protocol::tag_CMDTotalUnread* cmd = (protocol::tag_CMDTotalUnread*) data;
+        _total = cmd->total;
+    }
+    
+    void Log()
+    {
+        LOG("--------Receive message: TotalUnread---------");
+        LOG("total = %d", _total);
     }
     
 };

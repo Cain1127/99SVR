@@ -7,7 +7,7 @@
 /**************************************** < 专家观点首页 >**********************************/
 
 #import <UIKit/UIKit.h>
-
-@interface TQIdeaViewController : UIViewController
+#import "HomeCustomViewController.h"
+@interface TQIdeaViewController : HomeCustomViewController
 
 @end

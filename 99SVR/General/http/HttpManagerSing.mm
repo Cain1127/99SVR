@@ -158,7 +158,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 // 请求我已经购买的私人定制
 - (void) RequestMyPrivateService:(int)userId{
     [self createHttpConnection];
-    hConnection->RequestMyPrivateService(userId,&myPrivateListener);
+    hConnection->RequestMyPrivateService(&myPrivateListener);
 }
 
 // 显示购买私人定制页
@@ -184,7 +184,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 // 请求充值规则列表
 - (void) RequestChargeRuleList{
     [self createHttpConnection];
-    hConnection->RequestChargeRuleList(&chargeListener);
+//    hConnection->RequestChargeRuleList(&chargeListener);
 }
 
 // 请求战队（财经直播）列表
@@ -277,21 +277,21 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void)RequestFollowTeacher
 {
     [self createHttpConnection];
-    hConnection->RequestFollowTeacher(&_followTeacherListener);
+//    hConnection->RequestFollowTeacher(&_followTeacherListener);
 }
 
 //足迹url
 - (void)RequestFootPrint
 {
     [self createHttpConnection];
-    hConnection->RequestFootPrint(&_footPrintListener);
+//    hConnection->RequestFootPrint(&_footPrintListener);
 }
 
 //收藏url
 - (void)RequestCollection
 {
     [self createHttpConnection];
-    hConnection->RequestCollection(&_collectionListener);
+//    hConnection->RequestCollection(&_collectionListener);
 }
 //获取Banner{
 - (void)RequestBanner

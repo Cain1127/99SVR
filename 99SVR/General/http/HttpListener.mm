@@ -228,13 +228,13 @@ void OperateStocksListener::onResponse(vector<OperateStocks>& stocks){
 /**
  *  请求信息--已购买的私人定制(购买或者未购买)
  */
-void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team recommendTeam, TeamPrivateServiceSummaryPack& teamSummaryPack){
+void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team recommendTeam, std::vector<TeamPrivateServiceSummaryPack>& teamSummaryPackList){
     if (infos.size() == 0) {
         //获取直播未购买页数据
-        NSMutableArray *noPurArray = [NSMutableArray array];
-        TQNoPurchaseModel *noPurModel = [[TQNoPurchaseModel alloc] initWithTeamSummaryPack:&teamSummaryPack];
-        [noPurArray addObject:noPurModel];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_NOPURCHASE_VC object:noPurArray];
+//        NSMutableArray *noPurArray = [NSMutableArray array];
+//        TQNoPurchaseModel *noPurModel = [[TQNoPurchaseModel alloc] initWithTeamSummaryPack:&teamSummaryPack];
+//        [noPurArray addObject:noPurModel];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_NOPURCHASE_VC object:noPurArray];
     }else {
         
         for (int i=0; i<infos.size(); i++) {
@@ -267,11 +267,11 @@ void WhatIsPrivateServiceListener::onResponse(WhatIsPrivateService& infos){
  *  请求信息--购买
  */
 
-void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription>& infos, string expirationDate, uint32 currLevelId){
+void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription>& infos){
     
 }
 
-void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateServiceSummaryPack>& infos, uint32 currLevelId){
+void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateServiceSummaryPack>& infos){
     
     
 }
@@ -302,26 +302,26 @@ void TeamListListener::onResponse(vector<Team>& infos){
     
 }
 
-void TeamIntroduceListener::onResponse(TeamIntroduce& info)
+void TeamIntroduceListener::onResponse(Team& info)
 {
-    NSString *teamName = [NSString stringWithUTF8String:info.teamName().c_str()];
-    NSString *teamIcon = [NSString stringWithUTF8String:info.teamIcon().c_str()];
+    NSString *teamName = [NSString stringWithUTF8String:info.teamname().c_str()];
+    NSString *teamIcon = [NSString stringWithUTF8String:info.teamicon().c_str()];
     NSString *introduce = [NSString stringWithUTF8String:info.introduce().c_str()];
     NSDictionary *dict = @{@"teamName":teamName,@"teamIcon":teamIcon,@"introduce":introduce};
     XVideoTeamInfo *xVideo = [XVideoTeamInfo mj_objectWithKeyValues:dict];
-    NSMutableArray *array = [NSMutableArray array];
-    for (int i=0; i<info.videoList().size(); i++)
-    {
-        VideoInfo video = info.videoList()[i];
-        int nId = video.id();
-        NSString *name = [NSString stringWithUTF8String:video.name().c_str()];
-        NSString *picurl = [NSString stringWithUTF8String:video.picurl().c_str()];
-        NSString *videourl = [NSString stringWithUTF8String:video.videourl().c_str()];
-        NSDictionary *parameter = @{@"name":name,@"picurl":picurl,@"videourl":videourl,@"nId":@(nId)};
-        VideoModel *model = [VideoModel mj_objectWithKeyValues:parameter];
-        [array addObject:model];
-    }
-    xVideo.videoList = array;
+//    NSMutableArray *array = [NSMutableArray array];
+//    for (int i=0; i<info.videoList().size(); i++)
+//    {
+//        VideoInfo video = info.videoList()[i];
+//        int nId = video.id();
+//        NSString *name = [NSString stringWithUTF8String:video.name().c_str()];
+//        NSString *picurl = [NSString stringWithUTF8String:video.picurl().c_str()];
+//        NSString *videourl = [NSString stringWithUTF8String:video.videourl().c_str()];
+//        NSDictionary *parameter = @{@"name":name,@"picurl":picurl,@"videourl":videourl,@"nId":@(nId)};
+//        VideoModel *model = [VideoModel mj_objectWithKeyValues:parameter];
+//        [array addObject:model];
+//    }
+//    xVideo.videoList = array;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEAM_INTRODUCE_VC object:xVideo];
 }
 
@@ -411,7 +411,7 @@ void UnreadListener::onResponse(Unread& info)
     
 }
 
-void HomePageListener::onResponse(std::vector<HomePageVideoroomItem> vedioroom_data, std::vector<HomePageTextroomItem> textroom_data, std::vector<HomePageViewpointItem> viewpoint_data)
+void HomePageListener::onResponse(std::vector<HomePageVideoroomItem> vedioroom_data, std::vector<HomePageViewpointItem> viewpoint_data, std::vector<OperateStockProfit> operate_data)
 {
     
 }

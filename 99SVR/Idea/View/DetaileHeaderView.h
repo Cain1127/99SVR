@@ -10,6 +10,6 @@
 
 @interface DetaileHeaderView : UIView
 
-+ (instancetype)DetaileHeaderViewForXib;
++ (instancetype) DetaileHeaderViewForXib;
 
 @end
