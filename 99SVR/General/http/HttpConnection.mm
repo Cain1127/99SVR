@@ -173,6 +173,49 @@ void HttpConnection::RequestOperateStockProfitOrderByTotal(int teamId, int start
 // 请求操盘详情
 void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener)
 {
+    
+    OperateStockProfit profit;
+    profit.set_operateid(operateId);
+    char cBuf[10]={0};
+    sprintf(cBuf,"%d",90000);
+    profit.set_teamid(cBuf);
+    profit.set_teamname("组合");
+    profit.set_goalprofit(0.08);
+    profit.set_monthprofit(0.2);
+    profit.set_focus("长线跟短线有关系吗");
+    profit.set_totalprofit(0.5);
+    profit.set_dayprofit(0.1);
+    profit.set_winrate(0.4);
+    OperateStockData data;
+    data.set_operateid(operateId);
+    std::vector<OperateStockTransaction> trans;
+    std::vector<OperateStocks> stocks;
+    int i=0;
+    for (i=0; i<1; i++) {
+        OperateStockTransaction saction;
+        OperateStocks stock;
+        
+        saction.set_operateid(i+1);
+        saction.set_stockid("12345");
+        saction.set_buytype("VIP");
+        saction.set_stockname("VIP");
+        saction.set_price(5555);
+        saction.set_count(123);
+        saction.set_money(9999);
+        
+        trans.push_back(saction);
+        
+        stock.set_operateid(i+1);
+        stock.set_stockid("321");
+        stock.set_stockname("shenme");
+        stock.set_count(12+i);
+        stock.set_cost(123);
+        stock.set_currprice(55);
+        stock.set_profitrate(0.5);
+        stock.set_profitmoney(888);
+        stocks.push_back(stock);
+    }
+    listener->onResponse(profit,data, trans,stocks,operateId);
 }
 
 // 请求操盘详情--交易记录

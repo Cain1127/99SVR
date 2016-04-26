@@ -82,7 +82,7 @@
         return 10;
     }else{
         
-        return 50;
+        return 44;
     }
 }
 
@@ -123,6 +123,7 @@
         
         //左边标题
         UILabel *leftLabel = [[UILabel alloc]init];
+        leftLabel.font = Font_15;
         leftLabel.textAlignment = NSTextAlignmentLeft;
         leftLabel.tag = 100;
         [backView addSubview:leftLabel];
@@ -130,6 +131,7 @@
         //右边标题
         UILabel *rightLab = [[UILabel alloc]init];
         rightLab.textAlignment = NSTextAlignmentRight;
+        rightLab.font = Font_15;
         rightLab.tag = 101;
         [backView addSubview:rightLab];
 

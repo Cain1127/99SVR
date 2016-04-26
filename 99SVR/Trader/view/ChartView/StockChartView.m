@@ -2,10 +2,10 @@
 
 #define leftLab_w   ValueWithTheIPhoneModelString(@"50,50,50,50") //左侧标题的宽度
 #define leftLab_h ValueWithTheIPhoneModelString(@"17,17,17,17") //左侧标题的高度
-#define topMenu_h ValueWithTheIPhoneModelString(@"50,50,50,50") //顶部控制栏的高度
-#define topMenuBtn_h (topMenu_h/2.0-3) //顶部控制栏按钮的高度
+#define topMenu_h ValueWithTheIPhoneModelString(@"80,80,80,80") //顶部控制栏的高度
+#define topMenuBtn_h (topMenu_h*(1/2.0) - 10) //顶部控制栏按钮的高度
 #define topMenuBtn_w ValueWithTheIPhoneModelString(@"50,50,50,50") //顶部按钮的宽度
-#define lowMenu_h ValueWithTheIPhoneModelString(@"50,50,50,50") //底部按钮的高度
+#define lowMenu_h ValueWithTheIPhoneModelString(@"40,40,40,40") //底部按钮的高度
 #define lowLab_w   ValueWithTheIPhoneModelString(@"60,60,60,60") //底部标题的宽度
 #define lowLab_h ValueWithTheIPhoneModelString(@"17,17,17,17") //底部标题的高度
 #import "StockChartView.h"
@@ -47,7 +47,7 @@
     //顶部控制View
     [self addSubview:self.topMenuView];
     //底部控制画图
-    self.lineChartView = [[DDLineChartView alloc]initWithFrame:(CGRect){leftLab_w,topMenu_h+20,(_width-leftLab_w - 10),(_height-topMenu_h - lowMenu_h-20)}];
+    self.lineChartView = [[DDLineChartView alloc]initWithFrame:(CGRect){leftLab_w,topMenu_h,(_width-leftLab_w - 10),(_height-topMenu_h - lowMenu_h)}];
     
     NSMutableArray *array_y =[NSMutableArray array];
     NSMutableArray *array_y1 =[NSMutableArray array];
@@ -70,10 +70,8 @@
     self.lineChartView.level_X = 2;
     [self addSubview:self.lineChartView];
     [self.lineChartView drawLine];
-
     //底部
     [self addSubview:self.lowMenuView];
-    
 }
 #pragma mark 左边
 -(void)setLeftTitArrays:(NSArray *)leftTitArrays{
@@ -135,17 +133,19 @@
         
         NSString *itemName = _topTitItems[i];
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = (CGRect){i*topMenuBtn_w + (i+1)*10,0,topMenuBtn_w,topMenuBtn_h};
-//        btn.backgroundColor = [UIColor whiteColor];
+        btn.frame = (CGRect){i*topMenuBtn_w + (i+1)*10,5,topMenuBtn_w,topMenuBtn_h};
         btn.titleLabel.font = [UIFont systemFontOfSize:13];
         [btn setTitle:itemName forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor redColor] forState:UIControlStateDisabled];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateDisabled];
+        btn.backgroundColor = [UIColor clearColor];
+        btn.layer.borderWidth = 0.5f;
+        btn.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
+        btn.layer.cornerRadius = 2.0;
+        btn.layer.masksToBounds = YES;
         if (i==0) {
             btn.enabled = NO;
-            self.topMenuLineView = [[UIView alloc]initWithFrame:(CGRect){CGRectGetMinX(btn.frame),topMenu_h/2.0-2,CGRectGetWidth(btn.frame),2}];
-            self.topMenuLineView.backgroundColor = UIColorFromRGB(0x0078dd);
-            [self.topMenuView addSubview:self.topMenuLineView];
+            btn.backgroundColor =  UIColorFromRGB(0x0078dd);
         }
         btn.tag = i+1;
         [btn addTarget:self action:@selector(clickBtnAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -161,9 +161,8 @@
         _topMenuView.userInteractionEnabled = YES;
         
         //中间的线
-        UIView *minView = [[UIView alloc]initWithFrame:(CGRect){10,topMenu_h/2.0,_width-20,1}];
-        minView.backgroundColor = COLOR_STOCK_Blue;
-;
+        UIView *minView = [[UIView alloc]initWithFrame:(CGRect){10,topMenu_h*(1/2.0),_width-20,1}];
+        minView.backgroundColor = COLOR_Line_Small_Gay;
         [_topMenuView addSubview:minView];
         
         //最右边的标签
@@ -174,7 +173,7 @@
         hsLabel.textColor = COLOR_STOCK_Text_Black;
         [hsLabel sizeToFit];
         CGFloat hsLabOriginX = CGRectGetMaxX(minView.frame) - hsLabel.frame.size.width;
-        CGFloat hsLabOriginY = topMenu_h/2.0 + (topMenu_h/2.0 - hsLabel.frame.size.height)/2.0;
+        CGFloat hsLabOriginY = topMenu_h/2.0 + (topMenu_h*(1/2.0) - hsLabel.frame.size.height)/2.0;
         hsLabel.frame = (CGRect){hsLabOriginX,hsLabOriginY,hsLabel.frame.size.width,hsLabel.frame.size.height};
         [_topMenuView addSubview:hsLabel];
         
@@ -220,23 +219,20 @@
     for (int i=0; i!=_topTitItems.count; i++) {
         UIButton *b = [self viewWithTag:i+1];
         b.enabled  = YES;
+        b.backgroundColor =  [UIColor clearColor];
     }
     btn.enabled = NO;
-    [UIView animateWithDuration:0.5 animations:^{
-        self.topMenuLineView.frame =(CGRect){CGRectGetMinX(btn.frame),topMenu_h/2.0-2,CGRectGetWidth(btn.frame),2};
-    }];
-
-
+    btn.backgroundColor =  UIColorFromRGB(0x0078dd);
     
     NSMutableArray *array_y =[NSMutableArray array];
     NSMutableArray *array_y1 =[NSMutableArray array];
 
     for (int i=0; i!=10; i++) {
-        [array_y addObject:[NSString stringWithFormat:@"%d",(int)arc4random()%500-500*(btn.tag)]];
+        [array_y addObject:[NSString stringWithFormat:@"%zi",(int)arc4random()%500-500*(btn.tag)]];
     }
     
     for (int i=0; i!=10; i++) {
-        [array_y1 addObject:[NSString stringWithFormat:@"%d",(int)arc4random()%500-500*(btn.tag)]];
+        [array_y1 addObject:[NSString stringWithFormat:@"%zi",(int)arc4random()%500-500*(btn.tag)]];
     }
     [self.lineChartView clearLine];
     self.lineChartView.valuePoints_Y = @[array_y,array_y1];
