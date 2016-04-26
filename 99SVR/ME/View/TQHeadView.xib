@@ -35,7 +35,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="注：开通高等级VIP,自动获得低等级VIP权限" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uB-Gw-O1U" userLabel="attentionLab">
-                            <rect key="frame" x="100" y="96.5" width="284" height="14.5"/>
+                            <rect key="frame" x="98" y="96.5" width="286" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -44,13 +44,13 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="hSl-BD-X68" firstAttribute="leading" secondItem="gPY-ax-hsf" secondAttribute="trailing" constant="10" id="0ES-Yn-hlt"/>
-                        <constraint firstItem="6uB-Gw-O1U" firstAttribute="leading" secondItem="gPY-ax-hsf" secondAttribute="trailing" constant="10" id="7Xe-OL-Fpa"/>
+                        <constraint firstItem="6uB-Gw-O1U" firstAttribute="leading" secondItem="gPY-ax-hsf" secondAttribute="trailing" constant="8" id="7Xe-OL-Fpa"/>
                         <constraint firstAttribute="trailing" secondItem="6uB-Gw-O1U" secondAttribute="trailing" constant="10" id="D2c-OW-zSK"/>
                         <constraint firstItem="gPY-ax-hsf" firstAttribute="leading" secondItem="hSA-cE-HWu" secondAttribute="leading" constant="10" id="Ey9-Nb-WKt"/>
                         <constraint firstItem="hSl-BD-X68" firstAttribute="centerY" secondItem="hSA-cE-HWu" secondAttribute="centerY" id="MUu-3U-h5t"/>
                         <constraint firstItem="gPY-ax-hsf" firstAttribute="centerY" secondItem="hSA-cE-HWu" secondAttribute="centerY" id="Mts-V8-ZBC"/>
                         <constraint firstAttribute="trailing" secondItem="hSl-BD-X68" secondAttribute="trailing" constant="10" id="RNe-eU-Bw4"/>
-                        <constraint firstItem="Kbd-jn-SE3" firstAttribute="leading" secondItem="gPY-ax-hsf" secondAttribute="trailing" constant="10" id="TjX-lz-Q7M"/>
+                        <constraint firstItem="Kbd-jn-SE3" firstAttribute="leading" secondItem="gPY-ax-hsf" secondAttribute="trailing" constant="8" id="TjX-lz-Q7M"/>
                         <constraint firstAttribute="trailing" secondItem="Kbd-jn-SE3" secondAttribute="trailing" constant="10" id="ajL-Ga-u6a"/>
                         <constraint firstItem="6uB-Gw-O1U" firstAttribute="bottom" secondItem="gPY-ax-hsf" secondAttribute="bottom" id="ngM-qo-iF9"/>
                         <constraint firstItem="Kbd-jn-SE3" firstAttribute="top" secondItem="gPY-ax-hsf" secondAttribute="top" id="qRE-lV-rMw"/>

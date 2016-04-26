@@ -27,10 +27,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *nowPriceLab;
 /**原价*/
 @property (weak, nonatomic) IBOutlet UILabel *oldPriceLab;
-/**点击按钮*/
-@property (weak, nonatomic) IBOutlet UIButton *clickBtn;
 /**背景框*/
 @property (weak, nonatomic) IBOutlet UIView *selectView;
+
+/**<#type#>*/
+@property (nonatomic , strong) UIButton *clickBtn;
 
 @property (nonatomic,assign)NSInteger row;
 @property (nonatomic,weak)id <TableViewCellDelegate>delegate;

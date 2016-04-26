@@ -43,7 +43,8 @@
     
     //中间的线
     self.midLineView = [[UIView alloc]init];
-    self.midLineView.backgroundColor = [UIColor whiteColor];
+    self.midLineView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2];
+;
     [self addSubview:self.midLineView];
     [self.midLineView mas_makeConstraints:^(MASConstraintMaker *make) {
        
@@ -167,7 +168,7 @@
     self.titLab = [[UILabel alloc]init];
     self.titLab.font = [UIFont systemFontOfSize:15];
     self.titLab.textAlignment = NSTextAlignmentCenter;
-    self.titLab.textColor = UIColorFromRGB(0xb2b2b2);
+    self.titLab.textColor = COLOR_Text_B2B2B2;
     [self addSubview:self.titLab];
     
     
