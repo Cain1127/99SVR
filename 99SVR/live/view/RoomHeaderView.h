@@ -13,6 +13,8 @@
 @optional
 - (void)selectIndexSegment:(NSInteger)nIndex;
 - (void)enterTeamIntroduce;
+- (void)exitRoomHeader;
+
 @end
 
 @interface RoomHeaderView : UIView

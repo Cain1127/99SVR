@@ -125,8 +125,6 @@
         [kHTTPSingle RequestOperateStockProfitByMonth:0 start:[model.transId intValue] count:5];
 
     }];
-    
-    
 
     [self.totalTab addGifHeaderWithRefreshingBlock:^{
         [weakSelf.totalDataArray removeAllObjects];
@@ -142,14 +140,11 @@
     [self.dayTab.gifHeader loadDefaultImg];
     [self.monTab.gifHeader loadDefaultImg];
     [self.totalTab.gifHeader loadDefaultImg];
-    
 
     [self.dayTab.gifHeader beginRefreshing];
     [self.monTab.gifHeader beginRefreshing];
     [self.totalTab.gifHeader beginRefreshing];
-    
 }
-
 
 #pragma mark 刷新数据
 -(void)refreshDayData:(NSNotification *)notfi{

@@ -99,6 +99,10 @@
     }
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+<<<<<<< HEAD
+=======
+//    self.window.rootViewController = [[AdViewController alloc] init];
+>>>>>>> 2e5074cde62922f6b83de3148058370d39be4c33
     self.window.rootViewController = [[TabBarController alloc] init];
     [self.window makeKeyAndVisible];
     

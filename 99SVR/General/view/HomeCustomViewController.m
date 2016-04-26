@@ -1,24 +1,23 @@
 //
-//  CustomViewController.m
-//  FreeCar
+//  HomeCustomViewController.m
+//  99SVR
 //
-//  Created by xiongchi on 15/8/1.
-//  Copyright (c) 2015年 xiongchi. All rights reserved.
+//  Created by xia zhonglin  on 4/26/16.
+//  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
-#import "CustomViewController.h"
-#import "UIView+Extension.h"
-#import "LoginViewController.h"
+#import "HomeCustomViewController.h"
+#import "TQMailboxViewController.h"
+#import "SearchController.h"
 
-@interface CustomViewController ()
+@interface HomeCustomViewController()
 {
     UILabel *_lblContent;
 }
 
-
 @end
 
-@implementation CustomViewController
+@implementation HomeCustomViewController
 
 + (UIButton *)itemWithTarget:(id)target action:(SEL)action title:(NSString*)title
 {
@@ -34,19 +33,38 @@
     
     _headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
-    _headView.backgroundColor = kNavColor;
+    _headView.backgroundColor = UIColorFromRGB(0xffffff);
     
     _txtTitle = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
     [_txtTitle setFont:XCFONT(16)];
     [_headView addSubview:_txtTitle];
     [_txtTitle setTextAlignment:NSTextAlignmentCenter];
-    [_txtTitle setTextColor:[UIColor whiteColor]];
+    [_txtTitle setTextColor:kNavColor];
     
-    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(MarchBackLeft) image:@"back" highImage:@"back"];
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(MailBoxEvent) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
     [_headView addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
+    _btnLeft = btnLeft;
+    
+    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchViewController) image:@"nav_search_icon_n" highImage:@"nav_search_icon_p"];
+    [_headView addSubview:btnRight];
+    [btnRight setFrame:Rect(kScreenWidth-44, 20, 44, 44)];
+    _btnRight = btnRight;
     
 }
+
+- (void)MailBoxEvent
+{
+    TQMailboxViewController *mailBox = [[TQMailboxViewController alloc] init];
+    [self.navigationController pushViewController:mailBox animated:YES];
+}
+
+- (void)searchViewController
+{
+    SearchController *mailBox = [[SearchController alloc] init];
+    [self.navigationController pushViewController:mailBox animated:YES];
+}
+
 /**
  *  3月写的后退效果
  */
@@ -129,11 +147,11 @@
     
     [self.headView addSubview:exitBtn];
     [exitBtn mas_makeConstraints:^(MASConstraintMaker *make)
-    {
-        make.size.mas_equalTo(CGSizeMake(50, 44));
-        make.left.equalTo(self.headView);
-        make.bottom.equalTo(self.headView);
-    }];
+     {
+         make.size.mas_equalTo(CGSizeMake(50, 44));
+         make.left.equalTo(self.headView);
+         make.bottom.equalTo(self.headView);
+     }];
 }
 
 - (void)setLineHidden:(BOOL)bHidden
@@ -144,6 +162,7 @@
 - (void)dealloc
 {
 }
+
 
 
 @end

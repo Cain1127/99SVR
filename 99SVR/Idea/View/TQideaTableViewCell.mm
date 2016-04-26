@@ -33,7 +33,11 @@
     [_DateLabel setText:ideaModel.publishtime];
     [_commentBtn setTitle:NSStringFromInt(ideaModel.replycount) forState:UIControlStateNormal];
     [_giftBtn setTitle:NSStringFromInt(ideaModel.giftcount) forState:UIControlStateNormal];
-    [_iconView setImage:[UIImage imageNamed:ideaModel.authoricon]];
+    if (ideaModel.authoricon) {
+        [_iconView setImage:[UIImage imageNamed:ideaModel.authoricon]];
+    }else{
+        [_iconView setImage:[UIImage imageNamed:@"default"]];
+    }
 }
 
 @end

@@ -33,54 +33,22 @@
 
 static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
--(void)initUi{
-    [self.navigationController.navigationBar setHidden:YES];
-    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
-    [self.view addSubview:_headView];
-    _headView.backgroundColor = UIColorFromRGB(0xffffff);
-    UILabel *title;
-    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [title setFont:XCFONT(20)];
-    [_headView addSubview:title];
-    [title setTextAlignment:NSTextAlignmentCenter];
-    [title setTextColor:UIColorFromRGB(0x0078DD)];
-    UILabel *_lblContent;
-    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
-    [_lblContent setBackgroundColor:[UIColor whiteColor]];
-    [_headView addSubview:_lblContent];
-    title.text = @"专家观点";
-    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(mailboxClick) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
-
-    [self.view addSubview:btnLeft];
-    [btnLeft setFrame:Rect(0,20,44,44)];
-    
-    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchClick) image:@"nav_search_icon_n" highImage:@"nav_search_icon_p"];
-    [_headView addSubview:btnRight];
-    [btnRight setFrame:Rect(kScreenWidth-44, 20, 44, 44)];
-    self.view.backgroundColor = [UIColor whiteColor];
-}
-
 - (void)viewDidLoad{
-    
     [super viewDidLoad];
-    //导航栏初始化
-    [self initUi];
-    //tableview初始化
+    [self.navigationController.navigationBar setHidden:YES];
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self setTitleText:@"99乐投"];
     [self setIdeaTableView];
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     title.text = @"专家观点";
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor colorWithHex:@"#0062D5"];
-    self.navigationItem.titleView = title;
-    
-
+    [self.navigationController.navigationBar setHidden:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController.navigationBar setHidden:YES];
-
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
@@ -112,7 +80,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 -(void)setIdeaTableView {
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-108) withStyle:UITableViewStylePlain];
-    [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -121,6 +89,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     self.tableView.estimatedRowHeight = 44;
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQideaTableViewCell class]) bundle:nil] forCellReuseIdentifier:ideaCell];
 }
+
 
 -(void)mailboxClick {
     TQMailboxViewController *mailbox = [[TQMailboxViewController alloc] init];
@@ -134,6 +103,17 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 #pragma mark - TableView dataSource
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 9;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.5;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _aryModel.count;
 }
@@ -158,7 +138,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 200;
+    return 130;
 }
 
 

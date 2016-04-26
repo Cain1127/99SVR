@@ -22,7 +22,7 @@
         _teamname = StrTransformCToUTF8(profit.teamname().c_str());
         _operateid = IntTransformIntToStr(profit.operateid());
         _goalprofit = FloatTransformFloatToStr(profit.goalprofit());
-        _transId = IntTransformIntToStr(profit.transid());
+//        _transId = IntTransformIntToStr(profit.);
         _totalprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.totalprofit()*100))];
         //日利率
         _dayprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.dayprofit()*100))];
@@ -137,7 +137,7 @@
         _monthprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->monthprofit()*100))];
         //超赢
         _winrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->winrate()*100))];
-        _transId = IntTransformIntToStr(profit->transid());
+//        _transId = IntTransformIntToStr(profit->transid());
         
     }
     

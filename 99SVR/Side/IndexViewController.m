@@ -172,39 +172,16 @@
     [_listReuqest requestRoomByUserId:[UserInfo sharedUserInfo].nUserId];
 }
 
-- (void)showLeftView
-{
-    TQMailboxViewController *mailbox = [[TQMailboxViewController alloc] init];
-    [self.navigationController pushViewController:mailbox animated:YES];
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
-    
-    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
-    [self.view addSubview:_headView];
-    _headView.backgroundColor = UIColorFromRGB(0xffffff);
-    UILabel *title;
-    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [title setFont:XCFONT(20)];
-    [_headView addSubview:title];
-    [title setTextAlignment:NSTextAlignmentCenter];
-    [title setTextColor:UIColorFromRGB(0x0078DD)];
-    title.text = @"99乐投";
-    
-    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(showLeftView) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
-    [_headView addSubview:btnLeft];
-    [btnLeft setFrame:Rect(0,20,44,44)];
+    [self setTitleText:@"99乐投"];
     
     updateCount = 0;
     _currentPage = 0;
     [self initUIHead];
-    
-    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchClick) image:@"nav_search_icon_n" highImage:@"nav_search_icon_p"];
-    [_headView addSubview:btnRight];
-    [btnRight setFrame:Rect(kScreenWidth-44, 20, 44, 44)];
     
     _grouRequest = [[GroupListRequest alloc] init];
     _listReuqest = [[RoomListRequest alloc] init];
@@ -237,12 +214,6 @@
 {
     [super viewWillDisappear:animated];
 }
-
-//- (void)switchToHistory
-//{
-//    UIButton *btnSender = [_group viewWithTag:3];
-//    [self btnEvent:btnSender];
-//}
 
 - (void)refreshUI
 {
@@ -291,20 +262,9 @@
     
     [_scrollView addSubview:hotController.view];
     [_scrollView addSubview:mainView.view];
-//    [_scrollView addSubview:historyView.view];
     _scrollView.contentSize = CGSizeMake(kScreenWidth * 2, _scrollView.height);
-    //[_scrollView.panGestureRecognizer addTarget:self action:@selector(scrollHandlePan:)];
     
     _tag = 1;
-//    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [rightBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
-//    __weak IndexViewController *__self = self;
-//    [rightBtn clickWithBlock:^(UIGestureRecognizer *gesture) {
-//        SearchController *searchVc = [[SearchController alloc] init];
-//        [__self presentViewController:searchVc animated:YES completion:nil];
-//    }];
-    
-    //[self setRightBtn:rightBtn];
 }
 
 - (void)clickIndex:(UIButton *)btn tag:(NSInteger)tag
@@ -324,16 +284,6 @@
     [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
     _tag = (int)btnSender.tag;
     
-//    if(tag+2 == _tag || tag-2==_tag)
-//    {
-//        _tag = (int)btnSender.tag;
-//        [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
-//    }
-//    else
-//    {
-//        [_scrollView setContentOffset:CGPointMake((tag-1)*kScreenWidth, 0)];
-//        _tag = (int)btnSender.tag;
-//    }
 }
 
 - (void)switchController:(int)tag
@@ -353,10 +303,6 @@
         {
             [_sonView addSubview:viewController.view];
         }
-//        if(tag==3 && [viewController class] == [HistoryViewController class])
-//        {
-//            [_sonView addSubview:viewController.view];
-//        }
     }
 }
 

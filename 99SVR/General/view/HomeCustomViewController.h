@@ -1,19 +1,20 @@
 //
-//  CustomViewController.h
-//  FreeCar
+//  HomeCustomViewController.h
+//  99SVR
 //
-//  Created by xiongchi on 15/8/1.
-//  Copyright (c) 2015年 xiongchi. All rights reserved.
+//  Created by xia zhonglin  on 4/26/16.
+//  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface CustomViewController : UIViewController
+@interface HomeCustomViewController : UIViewController
+
 
 @property (nonatomic,strong) UILabel *txtTitle;
 @property (nonatomic,strong) UIView *headView;
-@property (nonatomic,strong) UIButton *btnLeft;
-@property (nonatomic,strong) UIButton *btnRight;
+@property (nonatomic,weak) UIButton *btnLeft;
+@property (nonatomic,weak) UIButton *btnRight;
 
 - (void)setHeadViewHidden:(BOOL)bFlag;
 - (void)setViewBgColor:(UIColor *)bgColor;

@@ -3,6 +3,7 @@
 
 #include "Json.h"
 #include "Log.h"
+#include "http_cmd_vchat.h"
 
 #include <vector>
 #include <exception>
@@ -209,6 +210,7 @@ public:
 class CollectItem
 {
 private:
+    uint32 _teacherid;
     std::string _nvcbid;
     std::string _cname;
     std::string _password;
@@ -217,6 +219,7 @@ private:
     std::string _cgateaddr;
     std::string _ntype;
 public:
+    inline void set_teacherid(uint32 teacherid){this->_teacherid = teacherid;}
     inline void set_nvcbid(std::string nvcbid){this->_nvcbid = nvcbid;}
     inline void set_cname(std::string cname){this->_cname = cname;}
     inline void set_password(std::string password){this->_password = password;}
@@ -225,6 +228,7 @@ public:
     inline void set_cgateaddr(std::string cgateaddr){this->_cgateaddr = cgateaddr;}
     inline void set_ntype(std::string ntype){this->_ntype = ntype;}
     
+    inline uint32 get_teacherid() { return _teacherid; } const
     inline string& get_nvcbid() { return _nvcbid; } const
     inline string& get_cname() { return _cname; } const
     inline string& get_password() { return _password; } const
@@ -236,6 +240,7 @@ public:
     void Log()
     {
         LOG("--------Found Http message: CollectHttpResponseItem---------");
+        LOG("_teacherid = %d", _teacherid);
         LOG("nvcbid = %s", _nvcbid.c_str());
         LOG("cname = %s", _cname.c_str());
         LOG("password = %s", _password.c_str());
@@ -264,7 +269,6 @@ public:
         LOG("--------Found Http message: BannerHttpResponseItem---------");
         LOG("url = %s", _url.c_str());
         LOG("type = %s", _type.c_str());
-        
     }
 };
 
