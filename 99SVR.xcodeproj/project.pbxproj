@@ -640,6 +640,7 @@
 		BBD58EF71CCC152A009250DB /* XTeamPrivateController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EF61CCC152A009250DB /* XTeamPrivateController.m */; };
 		BBD58EFA1CCC1B59009250DB /* XVideoTeamInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EF91CCC1B59009250DB /* XVideoTeamInfo.m */; };
 		BBD58EFD1CCD2287009250DB /* XLiveQuestionView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EFC1CCD2287009250DB /* XLiveQuestionView.m */; };
+		BBD58F001CCE7C54009250DB /* HomeCustomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EFF1CCE7C54009250DB /* HomeCustomViewController.m */; };
 		BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB52B1C1E959500D7230F /* libxml2.tbd */; };
 		BBF22F771C80050400907AD9 /* RoomCoreTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */; };
 		BBFA851D1C30D216000466E4 /* 999.gif in Resources */ = {isa = PBXBuildFile; fileRef = BBFA851C1C30D216000466E4 /* 999.gif */; };
@@ -1830,6 +1831,8 @@
 		BBD58EF91CCC1B59009250DB /* XVideoTeamInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XVideoTeamInfo.m; sourceTree = "<group>"; };
 		BBD58EFB1CCD2286009250DB /* XLiveQuestionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLiveQuestionView.h; sourceTree = "<group>"; };
 		BBD58EFC1CCD2287009250DB /* XLiveQuestionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLiveQuestionView.m; sourceTree = "<group>"; };
+		BBD58EFE1CCE7C54009250DB /* HomeCustomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeCustomViewController.h; sourceTree = "<group>"; };
+		BBD58EFF1CCE7C54009250DB /* HomeCustomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeCustomViewController.m; sourceTree = "<group>"; };
 		BBECB52B1C1E959500D7230F /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		BBF22F751C80050400907AD9 /* RoomCoreTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCoreTextCell.h; sourceTree = "<group>"; };
 		BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCoreTextCell.m; sourceTree = "<group>"; };
@@ -3284,6 +3287,8 @@
 				BB63F5401C2CC7A300A042E8 /* UIView+Extension.m */,
 				B4C6B7B01CBE1B220072795B /* RegisterTextField.h */,
 				B4C6B7B11CBE1B220072795B /* RegisterTextField.m */,
+				BBD58EFE1CCE7C54009250DB /* HomeCustomViewController.h */,
+				BBD58EFF1CCE7C54009250DB /* HomeCustomViewController.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -4452,6 +4457,7 @@
 				B48591EF1CB4FBD500DAC61F /* AdaptiveWebView.m in Sources */,
 				BBAB82E41C7049FB00C6AC34 /* ThumButton.m in Sources */,
 				BB63F5DB1C2CC7A300A042E8 /* QCheckBox.m in Sources */,
+				BBD58F001CCE7C54009250DB /* HomeCustomViewController.m in Sources */,
 				BB6F3AD41C9F86270035EBBE /* TAAbstractDotView.m in Sources */,
 				BB63F5AD1C2CC7A300A042E8 /* UIView+Touch.m in Sources */,
 				BB6F3ADA1C9F86270035EBBE /* UIView+SDExtension.m in Sources */,

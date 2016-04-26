@@ -2,6 +2,7 @@
 #include "platform.h"
 #include "Http.h"
 #include "Thread.h"
+#include "http_common.h"
 
 #define REPORT_API "http://qs.99live.cn/AnalyticStatistics/"
 
@@ -39,16 +40,16 @@ void report_asyn(RequestParamter* param)
 //	return *param;
 //}
 
-string get_client_type()
-{
-#ifdef WIN
-	return "1";
-#elif defined ANDROID
-	return "2";
-#else
-	return "3";
-#endif
-}
+//string get_client_type()
+//{
+//#ifdef WIN
+//	return "1";
+//#elif defined ANDROID
+//	return "2";
+//#else
+//	return "3";
+//#endif
+//}
 
 void ReportLoginFailed(int login_type, rstring login_id, rstring server_ip, rstring client_ip)
 {

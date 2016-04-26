@@ -17,6 +17,7 @@ private:
     
     uint32 _vipLevelId;
     string _vipLevelName;
+    uint32 _isOpen;//0-false;1-true
     vector<PrivateServiceSummary> _summaryList;
     
 public:
@@ -28,6 +29,10 @@ public:
     inline string& vipLevelName() { return _vipLevelName; } const
     
     inline void set_vipLevelName(const string& value) { _vipLevelName = value; }
+    
+    inline uint32& isOpen() { return _isOpen; } const
+    
+    inline void set_isOpen(const uint32& value) { _isOpen = value; }
     
     inline vector<PrivateServiceSummary>& summaryList() { return _summaryList; } const
     

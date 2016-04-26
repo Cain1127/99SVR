@@ -25,3 +25,7 @@ std::string get_user_password()
     return login_password;
 }
 
+void set_user_id(uint32 user_id)
+{
+    login_userid = user_id;
+}

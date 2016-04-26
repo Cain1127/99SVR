@@ -54,7 +54,7 @@
     ChatRightView *_rightView;
 }
 
-@property (nonatomic,strong) LivePlayViewController *ffPlay;
+//@property (nonatomic,strong) LivePlayViewController *ffPlay;
 @property (nonatomic,assign) int nCurGift;
 
 @property (nonatomic,strong) RoomHttp *room;
@@ -115,9 +115,9 @@
     [_ffPlay.view addGestureRecognizer:singleRecogn];
     
     singleRecogn = nil;
-    singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapFrom)];
-    singleRecogn.numberOfTapsRequired = 2;
-    [_ffPlay.view addGestureRecognizer:singleRecogn];
+//    singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapFrom)];
+//    singleRecogn.numberOfTapsRequired = 2;
+//    [_ffPlay.view addGestureRecognizer:singleRecogn];
 }
 
 - (void)connectUnVideo:(UIButton *)sender
@@ -754,7 +754,13 @@
 #pragma mark 双击事件  切换屏幕
 - (void)handleDoubleTapFrom
 {
-    [self fullPlayMode];
+//    [self fullPlayMode];
+//    if (_delegate && [_delegate respondsToSelector:@selector(fullModel)]) {
+//        [_delegate fullModel];
+//    }
+//    [_ffPlay.view removeFromSuperview];
+//    [[UIApplication sharedApplication].keyWindow addSubview:_ffPlay.view];
+//    _ffPlay.glView.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
 }
 
 #pragma mark 切换
@@ -801,7 +807,6 @@
 
 -(CGAffineTransform)transformView
 {
-//    if (!_group.hidden)
     if (rand()%2)
     {
         return CGAffineTransformMakeRotation(M_PI/2);
@@ -818,7 +823,7 @@
     
     int nWidth = kScreenHeight > kScreenWidth ? kScreenHeight : kScreenWidth;
     int nHeight = kScreenHeight > kScreenWidth ? kScreenWidth : kScreenHeight;
-    
+    self.view.frame = Rect(0,0,nWidth,nHeight);
     _ffPlay.view.frame = Rect(0, 0, nWidth, nHeight);
     _ffPlay.glView.frame = Rect(0, 0, nWidth, nHeight);
     
@@ -850,9 +855,9 @@
 //    [_topHUD viewWithTag:2].frame = Rect(0, 20, 44, 44);
 //    _btnRight.frame = Rect(kScreenWidth-50, 20, 44, 44);
 //    _downHUD.frame = Rect(0, kVideoImageHeight-24, kScreenWidth, 44);
-//    _ffPlay.view.frame = Rect(0, 20, kScreenWidth, kScreenHeight);
-//    _ffPlay.glView.frame = Rect(0,1,kScreenWidth, kVideoImageHeight);
-//    
+    _ffPlay.view.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
+    _ffPlay.glView.frame = Rect(0,0,kScreenWidth, kVideoImageHeight);
+//
 //    _btnFull.frame = Rect(kScreenWidth-54, 0, 44, 44);
 //    
 //    _group.hidden = NO;
@@ -916,5 +921,6 @@
         [_inputView setChatInfo:rUser];
     }
 }
+
 
 @end

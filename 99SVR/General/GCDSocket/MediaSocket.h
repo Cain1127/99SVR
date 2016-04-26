@@ -12,6 +12,8 @@ typedef void(^ReciveMessage)(unsigned char *cBuf,int nLen,int pt);
 
 @interface MediaSocket : NSObject
 
+@property (nonatomic,assign) int nFall;
+
 @property (nonatomic,copy) ReciveMessage block;
 
 @property (nonatomic,strong) NSMutableArray *videoBuf;

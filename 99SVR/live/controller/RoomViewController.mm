@@ -52,7 +52,7 @@
 
 #define TABLEVIEW_ARRAY_PREDICATE(A) [NSPredicate predicateWithFormat:@"SELF CONTAINS %@",A];
 
-@interface RoomViewController ()<UIScrollViewDelegate,RoomHeadViewDelegate>
+@interface RoomViewController ()<UIScrollViewDelegate,RoomHeadViewDelegate,VideoLiveDelegate>
 {
     //聊天view
     NSInteger _nTag;
@@ -64,6 +64,7 @@
     RoomHeaderView *headView;
     int updateCount;
     int _currentPage;
+    BOOL bFull;
 }
 
 @property (nonatomic,strong) UIButton *btnRight;
@@ -204,6 +205,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     _liveControl = [[XVideoLiveViewcontroller alloc] initWithModel:_room];
     [self addChildViewController:_liveControl];
     _liveControl.view.frame = frame;
+    _liveControl.delegate = self;
     
     frame.origin.x += kScreenWidth;
     _ideaControl = [[XIdeaViewController alloc] initWihModel:_room];
@@ -345,6 +347,96 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 {
     XTeamViewController *teamView = [[XTeamViewController alloc] initWithModel:_room];
     [self.navigationController pushViewController:teamView animated:YES];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    if(bFull)
+    {
+        [self horizontalViewControl];
+    }
+    else
+    {
+        [self verticalViewControl];
+    }
+}
+
+- (void)fullModel
+{
+//    [self fullPlayMode];
+}
+
+#pragma mark 切换
+#pragma mark 全屏与四屏切换，设置frame与bounds
+-(void)fullPlayMode
+{
+    if (!bFull)//NO状态表示当前竖屏，需要转换成横屏
+    {
+        CGFloat _duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
+        [[UIDevice currentDevice] setValue: [NSNumber numberWithInteger:UIDeviceOrientationLandscapeRight] forKey:@"orientation"];
+        [UIViewController attemptRotationToDeviceOrientation];
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:_duration];
+        CGRect frame = [UIScreen mainScreen].bounds;
+        CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
+        self.view.center = center;
+        self.view.transform = [self transformView];
+        self.view.bounds = Rect(0, 0,kScreenHeight,kScreenWidth);
+        [UIView commitAnimations];
+        bFull = YES;
+    }
+    else
+    {
+        [self setHorizontal];
+        bFull = NO;
+    }
+}
+
+-(void)setHorizontal
+{
+    [[UIDevice currentDevice] setValue: [NSNumber numberWithInteger:UIDeviceOrientationPortrait] forKey:@"orientation"];
+    CGFloat _duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:_duration];
+    CGRect frame = [UIScreen mainScreen].bounds;
+    CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
+    self.view.center = center;
+    self.view.transform = [self transformView];
+    self.view.bounds = CGRectMake(0, 0, kScreenSourchWidth, kScreenSourchHeight);
+    [UIView commitAnimations];
+}
+
+-(CGAffineTransform)transformView
+{
+    if (rand()%2)
+    {
+        return CGAffineTransformMakeRotation(M_PI/2);
+    }
+    else
+    {
+        return CGAffineTransformIdentity;
+    }
+}
+
+#pragma mark 横屏
+- (void)horizontalViewControl
+{
+}
+
+#pragma mark 竖屏
+- (void)verticalViewControl
+{
+   [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (BOOL)prefersStatusBarHidden//for iOS7.0
+{
+    if (!bFull)
+    {
+        return NO;
+    }
+    return YES;
 }
 
 @end

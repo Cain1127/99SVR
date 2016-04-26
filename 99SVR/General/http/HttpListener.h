@@ -15,26 +15,28 @@ public:
     
     virtual void OnError(int errCode)=0;
     
+#ifdef WIN
+    void onResponseRawData(string data)=0;
+#endif
+    
 };
 
 class SplashImageListener : public HttpListener
 {
 public:
-    virtual void onResponse(Splash& info);
-    void OnError(int errCode){}
+    virtual void onResponse(Splash& info);void OnError(int errCode){};
 };
 
 class ViewpointSummaryListener : public HttpListener
 {
 public:
-    virtual void onResponse(vector<ViewpointSummary>& infos);
-    void OnError(int errCode){}
+    virtual void onResponse(vector<ViewpointSummary>& infos);void OnError(int errCode){};
 };
 
 class ViewpointDetailListener : public HttpListener
 {
 public:
-    virtual void onResponse(ViewpointDetail& infos);void OnError(int errCode){}
+    virtual void onResponse(ViewpointDetail& info);void OnError(int errCode){}
 };
 
 class ReplyListener : public HttpListener
@@ -49,25 +51,22 @@ public:
     virtual void onResponse(int errorCode, Reply& info);void OnError(int errCode){}
 };
 
-class OperateStockProfitListenerDay : public HttpListener
+class OperateStockProfitListenerAll : public HttpListener
 {
 public:
-    virtual void onResponse(vector<OperateStockProfit>& infos);
-    void OnError(int errCode){}
+    virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode){}
 };
 
 class OperateStockProfitListenerMonth : public HttpListener
 {
 public:
-    virtual void onResponse(vector<OperateStockProfit>& infos);
-    void OnError(int errCode){}
+    virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode){}
 };
 
-class OperateStockProfitListenerAll : public HttpListener
+class OperateStockProfitListenerDay : public HttpListener
 {
 public:
-    virtual void onResponse(vector<OperateStockProfit>& infos);
-    void OnError(int errCode){}
+    virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode){}
 };
 
 class OperateStockAllDetailListener : public HttpListener
@@ -79,8 +78,7 @@ public:
 class OperateStockTransactionListener : public HttpListener
 {
 public:
-    virtual void onResponse(vector<OperateStockTransaction>& trans);
-    void OnError(int errCode){}
+    virtual void onResponse(vector<OperateStockTransaction>& trans);void OnError(int errCode){}
 };
 
 class OperateStocksListener : public HttpListener
@@ -92,7 +90,7 @@ public:
 class MyPrivateServiceListener : public HttpListener
 {
 public:
-    virtual void onResponse(vector<MyPrivateService>& infos, Team recommendTeam, TeamPrivateServiceSummaryPack& teamSummaryPack);void OnError(int errCode){}
+    virtual void onResponse(vector<MyPrivateService>& infos, Team recommendTeam, std::vector<TeamPrivateServiceSummaryPack>& teamSummaryPackList);void OnError(int errCode){}
 };
 
 class WhatIsPrivateServiceListener : public HttpListener
@@ -104,13 +102,13 @@ public:
 class BuyPrivateServiceListener : public HttpListener
 {
     public :
-    virtual void onResponse(vector<PrivateServiceLevelDescription>& infos, string expirationDate, uint32 currLevelId);void OnError(int errCode){}
+    virtual void onResponse(vector<PrivateServiceLevelDescription>& infos);void OnError(int errCode){}
 };
 
 class TeamPrivateServiceSummaryPackListener : public HttpListener
 {
     public :
-    virtual void onResponse(vector<TeamPrivateServiceSummaryPack>& infos, uint32 currLevelId);void OnError(int errCode){}
+    virtual void onResponse(vector<TeamPrivateServiceSummaryPack>& infos);void OnError(int errCode){}
 };
 
 class PrivateServiceDetailListener : public HttpListener
@@ -134,7 +132,13 @@ public:
 class TeamIntroduceListener : public HttpListener
 {
 public:
-    virtual void onResponse(TeamIntroduce& info);void OnError(int errCode){}
+    virtual void onResponse(Team& info);void OnError(int errCode){}
+};
+
+class TeamVideoListener : public HttpListener
+{
+public:
+    virtual void onResponse(vector<VideoInfo> infos);void OnError(int errCode){}
 };
 
 class ConsumeRankListener : public HttpListener
@@ -152,49 +156,43 @@ public:
 class SystemMessageListener : public HttpListener
 {
 public:
-    virtual void onResponse(vector<SystemMessage>& info);
-    void OnError(int errCode){}
+    virtual void onResponse(vector<SystemMessage>& info);void OnError(int errCode){}
 };
 
 class QuestionAnswerListener : public HttpListener
 {
 public:
-    virtual void onResponse(vector<QuestionAnswer>& info);
-    void OnError(int errCode){}
+    virtual void onResponse(vector<QuestionAnswer>& info);void OnError(int errCode){}
 };
 
 class MailReplyListener : public HttpListener
 {
 public:
-    virtual void onResponse(vector<MailReply>& info);
-    void OnError(int errCode){}
+    virtual void onResponse(vector<MailReply>& info);void OnError(int errCode){}
 };
 
 class PrivateServiceSummaryListener : public HttpListener
 {
 public:
-    virtual void onResponse(vector<PrivateServiceSummary>& info);
-    void OnError(int errCode){}
+    virtual void onResponse(vector<PrivateServiceSummary>& info);void OnError(int errCode){}
 };
 
 class UnreadListener : public HttpListener
 {
 public:
-    virtual void onResponse(Unread& info);
-    void OnError(int errCode){}
+    virtual void onResponse(Unread& info);void OnError(int errCode){}
 };
 
 class TeamTopNListener : public HttpListener
 {
 public:
-    virtual void onResponse(vector<TeamTopN>& info);
-    void OnError(int errCode){}
+    virtual void onResponse(vector<TeamTopN>& info);void OnError(int errCode){}
 };
 
 class HomePageListener : public HttpListener
 {
 public:
-    virtual void onResponse(std::vector<HomePageVideoroomItem> vedioroom_data, std::vector<HomePageTextroomItem> textroom_data, std::vector<HomePageViewpointItem> viewpoint_data);void OnError(int errCode){}
+    virtual void onResponse(std::vector<HomePageVideoroomItem> vedioroom_data, std::vector<HomePageViewpointItem> viewpoint_data, std::vector<OperateStockProfit> operate_data);void OnError(int errCode){}
 };
 
 class FollowTeacherListener : public HttpListener

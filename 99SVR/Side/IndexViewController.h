@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface IndexViewController : UIViewController//CustomViewController
+#import "HomeCustomViewController.h"
+@interface IndexViewController : HomeCustomViewController
+//CustomViewController
 
 - (void)leftSwitch;
 

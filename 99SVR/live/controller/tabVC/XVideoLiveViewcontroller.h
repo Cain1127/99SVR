@@ -7,11 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LivePlayViewController.h"
 
 @class RoomHttp;
 
+@protocol VideoLiveDelegate <NSObject>
+- (void)fullModel;
+@end
+
 @interface XVideoLiveViewcontroller : UIViewController
 
+@property (nonatomic,assign) id<VideoLiveDelegate> delegate;
+
+@property (nonatomic,strong) LivePlayViewController *ffPlay;
 - (id)initWithModel:(RoomHttp *)room;
 
 - (void)reloadModel:(RoomHttp *)room;

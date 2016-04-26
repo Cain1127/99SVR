@@ -35,8 +35,10 @@ namespace protocol
         uint32 teamId;
         char teamName[32];
         char teamIcon[64];
+        char Introduce[1024];
         uint32 onlineUserCount;
         uint32 locked;
+        char alias[32];
     }CMDTeam_t;
     
     // 观点列表（摘要）
@@ -47,6 +49,7 @@ namespace protocol
         char authorIcon[256];  // 头像
         uint32 viewpointId;  // 观点ID
         char publishTime[32];  // 发表时间
+        char title[64];  // 标题
         char content[256];  // 观点简要
         uint32 replyCount;  // 回复数
         uint32 giftCount;  // 献花数
@@ -60,6 +63,7 @@ namespace protocol
         char authorIcon[256];
         uint32 viewpointId;
         char publishTime[32];
+        char title[64];  // 标题
         char content[4096];   // 观点正文
         uint32 replyCount;
         uint32 giftCount;
@@ -74,6 +78,7 @@ namespace protocol
         char authorId[16];  // 回复者ID
         char authorName[64];  // 回复者名称
         char authorIcon[256];  // 头像
+        char fromAuthorId[16];  // 回复者ID
         char fromAuthorName[64];  // 被回复者名称
         char fromAuthorIcon[256];  // 被头像
         char publishTime[32];  // 回复时间
@@ -108,6 +113,7 @@ namespace protocol
     // 高手操盘交易记录
     typedef struct tag_CMDOperateStockTransaction
     {
+        uint32 transId;  // 本记录ID
         uint32 operateId;  // 操盘ID
         char buytype[8];  // 交易类型 买入 卖出
         char stockId[8];  // 股票代码
@@ -121,6 +127,7 @@ namespace protocol
     // 高手操盘持仓
     typedef struct tag_CMDOperateStocks
     {
+        uint32 transId;  // 本记录ID
         uint32 operateId;  // 操盘ID
         char stockId[8];  // 股票代码
         char stockName[16];  // 股票名称
@@ -155,8 +162,11 @@ namespace protocol
         uint32 levelId;  // 序号
         char levelName[16];  // vip等级名称
         char description[128];  // 描述
+        char buytime[32];
+        char expirtiontime[32];
         float buyPrice;
         float updatePrice;
+        uint32 isopen;
     }CMDPrivateServiceLevelDescription_t;
     
     // 私人定制缩略信息
@@ -206,7 +216,7 @@ namespace protocol
     {
         char userName[32];  // 用户名
         int headId;  // 头像
-        float consume;  // 消费金币数
+        uint64 consume;  // 消费金币数
     }CMDConsumeRank_t;
     
     // 信箱--系统消息
@@ -227,6 +237,7 @@ namespace protocol
         uint32 answerAuthorRole; // 0：普通用户 1：讲师
         char answerTime[32];  // 回答时间
         char answerContent[256];  // 回答内容
+        char askAuthorId[16];  // 回答者
         char askAuthorName[32];  // 提问者
         char askAuthorHead[64];  // 提问者头像
         uint32 askAuthorRole; // 0：普通用户 1：讲师
@@ -242,6 +253,7 @@ namespace protocol
         uint32 id;
         uint32 viewpointId;  // 观点ID
         char title[32];  // 观点标题
+        char askAuthorId[16];  // 原评论者
         char askAuthorName[32];  // 原评论
         char askAuthorHead[64];
         uint32 askAuthorRole; // 0：普通用户 1：讲师
@@ -255,6 +267,12 @@ namespace protocol
         char answerContent[256];
         uint32 fromClient;
     }CMDMailReply_t;
+    
+    // 信箱--总未读数量
+    typedef struct tag_CMDTotalUnread
+    {
+        uint32 total;  // 总的未读数
+    }CMDTotalUnread_t;
     
     // 信箱--未读数量
     typedef struct tag_CMDUnread
