@@ -101,13 +101,10 @@
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"私人定制" icon:@"mydata.png" goClassName:@"TQMeCustomizedViewController"]];
 //        if(KUserSingleton.nStatus)
 //        {
-<<<<<<< HEAD
 //        ProfileViewController
         
             [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
-=======
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"AssetViewController"]];
->>>>>>> 2e5074cde62922f6b83de3148058370d39be4c33
 //        }
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"personal_collection_icon" goClassName:@"VideoColletionViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"关注讲师" icon:@"personal_follow_icon" goClassName:@"TextColletViewController"]];

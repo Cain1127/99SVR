@@ -61,13 +61,9 @@ void HttpConnection::RequestSplashImage(SplashImageListener* listener)
 
 
 // 请求操盘列表-日收益排序
-<<<<<<< HEAD
-void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId, int count, OperateStockProfitListenerDay* listener){
-=======
 void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId, int count, OperateStockProfitListenerDay* listener)
 {
     NSLog(@"startId= %d",startId);
->>>>>>> 2e5074cde62922f6b83de3148058370d39be4c33
     
     
     std::vector<OperateStockProfit> day;
@@ -96,12 +92,9 @@ void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
         day.push_back(profit);
-<<<<<<< HEAD
     
-=======
         NSLog(@" -----  transid %d",i);
         
->>>>>>> 2e5074cde62922f6b83de3148058370d39be4c33
     }
     listener->onResponse(day);
 }
