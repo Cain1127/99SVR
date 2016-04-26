@@ -97,7 +97,7 @@
     // 登录成功用户
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"私人定制" icon:@"mydata.png" goClassName:@"TQMeCustomizedViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"私人定制" icon:@"mydata.png" goClassName:@"CustomizedViewController"]];
 //        if(KUserSingleton.nStatus)
 //        {
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"AssetViewController"]];
