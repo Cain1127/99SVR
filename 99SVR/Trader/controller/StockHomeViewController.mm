@@ -17,19 +17,23 @@
 /**滑动控制器*/
 @property (nonatomic, strong) SliderMenuView *sliderMenuView;
 /**日*/
-@property (nonatomic, strong) UITableView *dayTab;
-@property (nonatomic ,strong) StockHomeTableViewModel *dayTableViewModel;
+@property (nonatomic , strong) UITableView *dayTab;
+@property (nonatomic , strong) StockHomeTableViewModel *dayTableViewModel;
 @property (nonatomic , strong) NSMutableArray *dayDataArray;
+@property (nonatomic , assign) __block NSInteger dayPagInteger;
 
 /**月*/
-@property (nonatomic, strong) UITableView *monTab;
-@property (nonatomic ,strong) StockHomeTableViewModel *monTableViewModel;
+@property (nonatomic , strong) UITableView *monTab;
+@property (nonatomic , strong) StockHomeTableViewModel *monTableViewModel;
 @property (nonatomic , strong) NSMutableArray *monDataArray;
+@property (nonatomic , assign) __block NSInteger monPagInteger;
+
 
 /**总的*/
-@property (nonatomic, strong) UITableView *totalTab;
-@property (nonatomic ,strong) StockHomeTableViewModel *totalTableViewModel;
+@property (nonatomic , strong) UITableView *totalTab;
+@property (nonatomic , strong) StockHomeTableViewModel *totalTableViewModel;
 @property (nonatomic , strong) NSMutableArray *totalDataArray;
+@property (nonatomic , assign) __block NSInteger totalPagInteger;
 
 
 
@@ -90,7 +94,6 @@
 -(void)initData{
     
     WeakSelf(self);
-
     //day
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_STOCK_HOME_DAY__VC object:nil];
     //mon
@@ -100,41 +103,39 @@
     [self.dayTab addGifHeaderWithRefreshingBlock:^{
         
         [weakSelf.dayDataArray removeAllObjects];
-        [kHTTPSingle RequestOperateStockProfitByDay:0 start:0 count:2];
+        weakSelf.dayPagInteger = 1;
+        [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:2];
     }];
     
     [self.dayTab addLegendFooterWithRefreshingBlock:^{
-        
-        StockDealModel *model = [weakSelf.dayDataArray lastObject];
-        [kHTTPSingle RequestOperateStockProfitByDay:0 start:[model.transId intValue] count:2];
-
-        
+        weakSelf.dayPagInteger ++;
+        [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:2];
     }];
-    
     
     
     [self.monTab addGifHeaderWithRefreshingBlock:^{
         [weakSelf.monDataArray removeAllObjects];
-        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:0 count:5];
+        weakSelf.monPagInteger = 1;
+        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:5];
         
     }];
     
     [self.monTab addLegendFooterWithRefreshingBlock:^{
-        
-        StockDealModel *model = [weakSelf.monDataArray lastObject];
-        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:[model.transId intValue] count:5];
+        weakSelf.monPagInteger ++;
+        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:5];
 
     }];
 
     [self.totalTab addGifHeaderWithRefreshingBlock:^{
         [weakSelf.totalDataArray removeAllObjects];
-        [kHTTPSingle RequestOperateStockProfitByAll:0 start:0 count:5];
+        weakSelf.totalPagInteger = 1;
+        [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:5];
     }];
     
     [self.totalTab addLegendFooterWithRefreshingBlock:^{
         
-        StockDealModel *model = [weakSelf.totalDataArray lastObject];
-        [kHTTPSingle RequestOperateStockProfitByAll:0 start:[model.transId intValue] count:5];
+        weakSelf.totalPagInteger ++;
+        [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:5];
     }];
 
     [self.dayTab.gifHeader loadDefaultImg];

@@ -72,11 +72,12 @@ void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId
     if ( startId == 0 ) {
         i = initId;
         startId = initId;
-    }else if (startId ==2){
+    }else if (startId ==5){
         
         listener->onResponse(day);
         return;
     }
+    
     
     for (; i>startId - count; i--) {
         OperateStockProfit profit;
@@ -92,8 +93,6 @@ void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId
         profit.set_dayprofit(0.1);
         profit.set_winrate(0.4);
         day.push_back(profit);
-    
-        NSLog(@" -----  transid %d",i);
         
     }
     listener->onResponse(day);

@@ -102,8 +102,8 @@
 //        if(KUserSingleton.nStatus)
 //        {
 //        ProfileViewController
-        
-            [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
+//        
+//            [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"AssetViewController"]];
 //        }
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"personal_collection_icon" goClassName:@"VideoColletionViewController"]];
