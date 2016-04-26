@@ -10,27 +10,27 @@
 #define PubColorAndFont_h
 
 #pragma mark 背景用色
-#define COLOR_Bg_FFFFFF UIColorFromRGB(0xffffff)//一级页面顶部栏目和底部栏目
-#define COLOR_Bg_F8F8F8 UIColorFromRGB(0xf8f8f8)//关于我们
-#define COLOR_Bg_0078DD UIColorFromRGB(0x0078dd)//二级和三级页面顶部的栏目
-#define COLOR_Bg_F6594E UIColorFromRGB(0xf6594e)//错误提示
-#define COLOR_Bg_0078DD UIColorFromRGB(0x0078dd)//正确提示
-#define COLOR_Bg_000000 UIColorFromRGB(0x000000)//正确
+#define COLOR_Bg_White UIColorFromRGB(0xffffff)//
+#define COLOR_Bg_Gay UIColorFromRGB(0xf8f8f8)//
+#define COLOR_Bg_Blue UIColorFromRGB(0x0078dd)//
+#define COLOR_Bg_Red UIColorFromRGB(0xf6594e)//
+#define COLOR_Bg_Green UIColorFromRGB(0x0078dd)//
+#define COLOR_Bg_Black UIColorFromRGB(0x000000)//
 
 #pragma mark 分割线
-#define COLOR_Line_F0F0F0 UIColorFromRGB(0xf0f0f0)//
+#define COLOR_Line_Blue UIColorFromRGB(0x0078dd)//
 #define COLOR_Line_Big_Gay UIColorFromRGB(0xcfcfcf)//
 #define COLOR_Line_Small_Gay UIColorFromRGB(0xe5e5e5)//
 
 #pragma mark 文字用色
-#define COLOR_Text_B2B2B2 UIColorFromRGB(0xb2b2b2)//
-#define COLOR_Text_555555 UIColorFromRGB(0x555555)//
 #define COLOR_Text_919191 UIColorFromRGB(0x919191)//
 #define COLOR_Text_4C4C4C UIColorFromRGB(0x4c4c4c)//
-#define COLOR_Text_E5E5E5 UIColorFromRGB(0xe5e5e5)//
 #define COLOR_Text_343434 UIColorFromRGB(0x343434)//
+#define COLOR_Text_E5E5E5 UIColorFromRGB(0xe5e5e5)//
 #define COLOR_Text_038CFF UIColorFromRGB(0x038cff)//
-#define COLOR_Text_0078DD UIColorFromRGB(0x00778dd)//
+#define COLOR_Text_0078DD UIColorFromRGB(0x0078dd)//
+#define COLOR_Text_B2B2B2 UIColorFromRGB(0xb2b2b2)//
+
 
 #pragma mark 文字大小
 #define Font_12 [UIFont systemFontOfSize:12]

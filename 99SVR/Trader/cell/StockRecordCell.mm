@@ -38,7 +38,24 @@
     
     if (tag==1) {//交易记录
         
-        self.dealView.titleLabV.leftLab.text = [NSString stringWithFormat:@"%@ %@",model.buytype,model.stockname];
+        NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%@ %@",model.buytype,model.stockname]];
+        
+        if ([model.buytype isEqualToString:@"买入"]) {
+            [attriStr addAttribute:NSForegroundColorAttributeName
+                             value:[UIColor redColor]
+                             range:NSMakeRange(0, 2)];
+        }else{
+            
+            [attriStr addAttribute:NSForegroundColorAttributeName
+                             value:[UIColor greenColor]
+                             range:NSMakeRange(0, 2)];
+        }
+        
+        [attriStr addAttribute:NSForegroundColorAttributeName
+                         value:COLOR_STOCK_Text_Black
+                         range:NSMakeRange(2, ([attriStr length]-2))];
+
+        self.dealView.titleLabV.leftLab.attributedText = attriStr;
         self.dealView.costRmbLabV.leftLab.text = [NSString stringWithFormat:@"成交价 %@",model.price];
         self.dealView.costRmbLabV.rightLab.text = [NSString stringWithFormat:@"成交数量 %@",model.count];
         self.dealView.nowRmbLabV.leftLab.text = [NSString stringWithFormat:@"成交额 %@",model.money];

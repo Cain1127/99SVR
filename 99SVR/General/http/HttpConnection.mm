@@ -221,6 +221,39 @@ void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAll
 // 请求操盘详情--交易记录
 void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, int count, OperateStockTransactionListener* listener)
 {
+    std::vector<OperateStockTransaction>trans;
+    
+    static int initId = 15;
+    int i = startId;
+    if ( startId == 0 ) {
+        i = initId;
+        startId = initId;
+    }else if (startId ==3){
+        
+        listener->onResponse(trans);
+        return;
+    }
+    for (; i>=startId - count; i--) {
+        
+        OperateStockTransaction stock;
+        stock.set_stockname("交易记录");
+        stock.set_transid(i);
+        stock.set_operateid(100);
+        stock.set_stockid("1008699");
+        stock.set_count(i+220);
+        stock.set_money(110000+1);
+        stock.set_price(9999);
+        stock.set_time("2015 15 15");
+        
+        if (i%2==0) {
+            
+            stock.set_buytype("买入");
+        }else{
+            stock.set_buytype("卖出");
+        }
+        trans.push_back(stock);
+    }
+    listener->onResponse(trans);
 }
 
 // 请求操盘详情--持仓情况
