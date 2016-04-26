@@ -16,8 +16,9 @@ typedef NS_ENUM(NSInteger,PriceLabViewType){
 @property (nonatomic , assign) PriceLabViewType type;
 
 /**原价格*/
-@property (nonatomic , copy) NSString *oldPriceStr;
+@property (nonatomic , copy) NSString *oldpriceStr;
 /**新价格*/
-@property (nonatomic , copy) NSString *newPriceStr;
+@property (nonatomic , copy) NSString *newpriceStr;
+
 
 @end
