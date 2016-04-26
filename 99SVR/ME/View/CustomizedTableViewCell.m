@@ -7,6 +7,7 @@
 //  私有定制Cell
 
 #import "CustomizedTableViewCell.h"
+#import "CustomizedModel.h"
 
 @interface CustomizedTableViewCell()
 
@@ -25,6 +26,7 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self==[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         _bgView = [[UIView alloc] init];
         [self addSubview:_bgView];
         
@@ -36,24 +38,44 @@
         
         /** 时间 */
         _timeLable = [[UILabel alloc] init];
-        _timeLable.font = XCFONT(13);
+        _timeLable.font = XCFONT(12);
         _timeLable.textColor = UIColorFromRGB(0x919191);
         [self addSubview:_timeLable];
         
         /** 内容 */
         _contentLable = [[UILabel alloc] init];
         _contentLable.font = XCFONT(13);
+        _contentLable.numberOfLines = 0;
         _contentLable.textColor = UIColorFromRGB(0x919191);
         [self addSubview:_contentLable];
     }
     return self;
 }
 
-//-(void)setHouseReservationModel:(RFHouseReservationModel *)houseReservationModel
-//{
-//
-//    self.bgView.frame = CGRectMake(0, 0, RFSCREEN_W, 150);
-//}
+- (void)setCustomizedModel:(CustomizedModel *)customizedModel
+{
+    _customizedModel = customizedModel;
+    CGFloat padding = 12;
+    
+    /** 标题 */
+    _titleLable.text = customizedModel.title;
+    _titleLable.frame = CGRectMake(padding, 10, kScreenWidth - 2*padding, 20);
+    
+    /** 时间 */
+    _timeLable.text = customizedModel.publishTime;
+    _timeLable.frame = CGRectMake(padding, CGRectGetMaxY(_titleLable.frame), kScreenWidth - 2*padding, 20);
+    
+    /** 内容 */
+    _contentLable.text = customizedModel.summary;
+    _contentLable.frame = CGRectMake(padding, CGRectGetMaxY(_timeLable.frame), kScreenWidth - 2*padding,20);
+    
+    if(!customizedModel.isOpen) // 设置不可点
+    {
+        self.userInteractionEnabled = NO;
+    } else {
+        self.userInteractionEnabled = YES;
+    }
+}
 
 + (instancetype)cellWithTableView:(UITableView *)tableView
 {

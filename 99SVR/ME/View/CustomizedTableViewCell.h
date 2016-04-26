@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class CustomizedModel;
 
 @interface CustomizedTableViewCell : UITableViewCell
-
+/** 私人定制模型 */
+@property (nonatomic, strong) CustomizedModel *customizedModel;
++ (instancetype)cellWithTableView:(UITableView *)tableView;
 @end

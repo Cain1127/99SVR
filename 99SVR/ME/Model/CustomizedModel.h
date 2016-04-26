@@ -17,6 +17,8 @@
 /** 内容 */
 @property (nonatomic, copy) NSString *summary;
 /** 时间 */
-@property (nonatomic, copy) NSString *publishtile;
+@property (nonatomic, copy) NSString *publishTime;
+/** 是否开通 */
+@property (nonatomic, assign) BOOL isOpen;
 
 @end
