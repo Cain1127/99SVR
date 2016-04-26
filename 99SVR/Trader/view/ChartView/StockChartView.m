@@ -63,7 +63,7 @@
     self.lineChartView.valuePoints_Y = @[array_y,array_y1];//第一是组合 第二是HS300
     self.lineChartView.drawLine_X = YES;
     self.lineChartView.drawLine_Y = NO;
-    self.lineChartView.lineColors = @[COLOR_STOCK_Line_ZuHe,COLOR_STOCK_Line_HS300];
+    self.lineChartView.lineColors = @[COLOR_Auxiliary_Orange,COLOR_Auxiliary_Blue];
     self.lineChartView.timeValue = 0.5;
     self.lineChartView.raneValue_Y = CGRangeMake(-2000, 2000);
     self.lineChartView.level_Y = 2;
@@ -81,7 +81,7 @@
         CGFloat labelOriginY = CGRectGetMinY(self.lineChartView.frame) - leftLab_h/2.0 + i*(CGRectGetHeight(self.lineChartView.frame)/(leftTitArrays.count-1));
         UILabel *label = [[UILabel alloc]initWithFrame:(CGRect){0,labelOriginY,leftLab_w,leftLab_h}];
         label.textAlignment = NSTextAlignmentCenter;
-        label.textColor = COLOR_STOCK_Text_Black;
+        label.textColor = COLOR_Text_4C4C4C;
         label.text = _leftTitArrays[i];
         label.font = [UIFont systemFontOfSize:13];
         [self addSubview:label];
@@ -94,7 +94,7 @@
     for (int i=0; i!=lowTitArrays.count; i++) {
         CGFloat labOriginX = CGRectGetMinX(self.lineChartView.frame) + i *(CGRectGetWidth(self.lineChartView.frame)-(lowLab_w * lowTitArrays.count))/(lowTitArrays.count-1) + i*lowLab_w;
         UILabel *label = [[UILabel alloc]initWithFrame:(CGRect){labOriginX,10,lowLab_w,lowLab_h}];
-        label.textColor = COLOR_STOCK_Text_Black;
+        label.textColor = COLOR_Text_4C4C4C;
         label.text = lowTitArrays[i];
         label.font = [UIFont systemFontOfSize:13];
         
@@ -170,7 +170,7 @@
         UILabel *hsLabel = [[UILabel alloc]init];
         hsLabel.font = [UIFont systemFontOfSize:13];
         hsLabel.text = @"沪深300";
-        hsLabel.textColor = COLOR_STOCK_Text_Black;
+        hsLabel.textColor = COLOR_Text_4C4C4C;
         [hsLabel sizeToFit];
         CGFloat hsLabOriginX = CGRectGetMaxX(minView.frame) - hsLabel.frame.size.width;
         CGFloat hsLabOriginY = topMenu_h/2.0 + (topMenu_h*(1/2.0) - hsLabel.frame.size.height)/2.0;
@@ -179,7 +179,7 @@
         
         //沪深三板蓝色的线
         UIView *hsLineView = [[UIView alloc]init];
-        hsLineView.backgroundColor = COLOR_STOCK_Line_HS300;
+        hsLineView.backgroundColor = COLOR_Auxiliary_Blue;
         CGFloat hsLVOriginX = hsLabOriginX - 5 -10;
         hsLineView.frame = (CGRect){hsLVOriginX,hsLabel.center.y,10,1};
         [_topMenuView addSubview:hsLineView];
@@ -188,7 +188,7 @@
         UILabel *zhLab = [[UILabel alloc]init];
         zhLab.font = [UIFont systemFontOfSize:13];
         zhLab.text = @"组合收益";
-        zhLab.textColor = COLOR_STOCK_Text_Black;
+        zhLab.textColor = COLOR_Text_4C4C4C;
         [zhLab sizeToFit];
         CGFloat zhLabeOriginX = hsLVOriginX -10 - zhLab.frame.size.width;
         zhLab.frame = (CGRect){zhLabeOriginX,CGRectGetMinY(hsLabel.frame),zhLab.frame.size.width,zhLab.frame.size.height};
@@ -196,7 +196,7 @@
         
         //组合收益橙色的线
         UIView *zhLineView = [[UIView alloc]init];
-        zhLineView.backgroundColor = COLOR_STOCK_Line_ZuHe;
+        zhLineView.backgroundColor = COLOR_Auxiliary_Orange;
         CGFloat zhLVOriginX = zhLabeOriginX - 5 -10;
         zhLineView.frame = (CGRect){zhLVOriginX,hsLabel.center.y,10,1};
         [_topMenuView addSubview:zhLineView];

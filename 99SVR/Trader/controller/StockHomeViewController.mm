@@ -304,7 +304,7 @@
 -(UITableView *)createTableViewWithFrame:(CGRect)frame withStyle:(UITableViewStyle)style{
     UITableView *tableView = [[UITableView alloc]initWithFrame:frame style:style];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    tableView.backgroundColor = COLOR_STOCK_BackGroundColor;
+    tableView.backgroundColor = COLOR_Bg_Gay;
     return tableView;
 }
 

@@ -21,7 +21,7 @@
     [super viewDidLoad];
     
     self.txtTitle.text = @"购买私人定制";
-    self.view.backgroundColor = COLOR_STOCK_BackGroundColor;
+    self.view.backgroundColor = COLOR_Bg_Gay;
     CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
     _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} style:UITableViewStylePlain];
     _tableView.delegate = self;
@@ -32,7 +32,7 @@
     _tableView.rowHeight = UITableViewAutomaticDimension;
     // 估算高度
     _tableView.estimatedRowHeight = 200;
-    _tableView.backgroundColor = COLOR_STOCK_BackGroundColor;
+    _tableView.backgroundColor = COLOR_Bg_Gay;
 
     [self.view addSubview:_tableView];
     
@@ -47,7 +47,7 @@
     if (!_headerView) {
      
         _headerView = [TQHeadView headView];
-        _headerView.backgroundColor = COLOR_STOCK_BackGroundColor;
+        _headerView.backgroundColor = COLOR_Bg_Gay;
         _headerView.height = headerView_H;
     }
     return _headerView;

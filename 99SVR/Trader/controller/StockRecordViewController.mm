@@ -34,7 +34,7 @@
     [super viewDidLoad];
 
     self.txtTitle.text = @"交易记录";
-    self.view.backgroundColor = COLOR_STOCK_BackGroundColor;
+    self.view.backgroundColor = COLOR_Bg_Gay;
     [self initData];
     [self initUI];
     
@@ -235,7 +235,7 @@
 -(UITableView *)createTableViewWithFrame:(CGRect)frame withStyle:(UITableViewStyle)style{
     UITableView *tableView = [[UITableView alloc]initWithFrame:frame style:style];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    tableView.backgroundColor = COLOR_STOCK_BackGroundColor;
+    tableView.backgroundColor = COLOR_Bg_Gay;
     return tableView;
 }
 

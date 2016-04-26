@@ -40,7 +40,7 @@
 
     self.targetLab = [[UILabel alloc]init];
     self.targetLab.font = [UIFont systemFontOfSize:targetLab_fot];
-    self.targetLab.textColor = COLOR_STOCK_Text_Gay;
+    self.targetLab.textColor = COLOR_Text_B2B2B2;
     [self.bakImageView addSubview:self.targetLab];
     
 
@@ -53,7 +53,7 @@
     self.totalTitLab = [[UILabel alloc]init];
     self.totalTitLab.textAlignment = NSTextAlignmentRight;
     self.totalTitLab.font = [UIFont systemFontOfSize:totalTitLab_fot];
-    self.totalTitLab.textColor = COLOR_STOCK_Text_Gay;
+    self.totalTitLab.textColor = COLOR_Text_B2B2B2;
     [self.bakImageView addSubview:self.totalTitLab];
 }
 
@@ -68,7 +68,7 @@
     }];
     
     self.bakImageView.layer.borderWidth = 1.0f;
-    self.bakImageView.layer.borderColor = [COLOR_StyleLines colorWithAlphaComponent:0.5].CGColor;
+    self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.5].CGColor;
     [self.bakImageView layoutIfNeeded];
     
     //头像

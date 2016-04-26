@@ -27,7 +27,7 @@
     [super viewDidLoad];
     
 
-    self.view.backgroundColor = COLOR_STOCK_BackGroundColor;
+    self.view.backgroundColor = COLOR_Bg_Gay;
     
     [self initData];
     [self initUI];
@@ -108,7 +108,7 @@
         _tableView.delegate = self.tableViewModel;
         _tableView.dataSource = self.tableViewModel;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = COLOR_STOCK_BackGroundColor;
+        _tableView.backgroundColor = COLOR_Bg_Gay;
         _tableView.tableHeaderView = self.headerView;
     }
     return _tableView;
@@ -119,7 +119,7 @@
     if (!_warningLab) {
      
         _warningLab = [[UILabel alloc]init];
-        _warningLab.backgroundColor = COLOR_STOCK_BackGroundColor;
+        _warningLab.backgroundColor = COLOR_Bg_Gay;
         _warningLab.font = [UIFont systemFontOfSize:12];
         _warningLab.textAlignment = NSTextAlignmentCenter;
         _warningLab.textColor = UIColorFromRGB(0xb2b2b2);

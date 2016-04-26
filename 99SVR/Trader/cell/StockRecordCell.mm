@@ -24,7 +24,7 @@
     }];
     
     self.bakImageView.layer.borderWidth = 1.0f;
-    self.bakImageView.layer.borderColor = [COLOR_StyleLines colorWithAlphaComponent:0.5].CGColor;
+    self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.5].CGColor;
     
     //交易记录或者持仓情况
     self.dealView = [[StockDealCellView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,STORCK_RecordCell_H}];
@@ -52,7 +52,7 @@
         }
         
         [attriStr addAttribute:NSForegroundColorAttributeName
-                         value:COLOR_STOCK_Text_Black
+                         value:COLOR_Text_4C4C4C
                          range:NSMakeRange(2, ([attriStr length]-2))];
 
         self.dealView.titleLabV.leftLab.attributedText = attriStr;
@@ -60,7 +60,7 @@
         self.dealView.costRmbLabV.rightLab.text = [NSString stringWithFormat:@"成交数量 %@",model.count];
         self.dealView.nowRmbLabV.leftLab.text = [NSString stringWithFormat:@"成交额 %@",model.money];
         self.dealView.nowRmbLabV.rightLab.text = [NSString stringWithFormat:@"成交时间 %@",model.time];
-        self.dealView.nowRmbLabV.rightLab.textColor = COLOR_STOCK_Text_Black;
+        self.dealView.nowRmbLabV.rightLab.textColor = COLOR_Text_4C4C4C;
 
     }else{//仓库详情
     
@@ -69,7 +69,7 @@
         self.dealView.costRmbLabV.rightLab.text = [NSString stringWithFormat:@"持有数量 %@",model.count];
         self.dealView.nowRmbLabV.leftLab.text = [NSString stringWithFormat:@"现价 %@",model.currprice];
         self.dealView.nowRmbLabV.rightLab.text = [NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate];
-        self.dealView.nowRmbLabV.rightLab.textColor = COLOR_STOCK_YingKui;
+        self.dealView.nowRmbLabV.rightLab.textColor = COLOR_Auxiliary_Red;
 
     }
 }

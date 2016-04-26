@@ -155,17 +155,4 @@
 //#define kLeftMenuBgColor RGB(61, 120, 201)
 #define kTableViewBgColor RGB(247, 247, 247) // tableView 背景颜色
 
-#pragma mark 股票详情颜色宏
-//#define COLOR_STOCK_Line_Kuang  UIColorFromRGB(0xe5e5e5)//股票线框的颜色
-#define COLOR_STOCK_Line_ZuHe UIColorFromRGB(0xf8b551)//组合收益线的颜色
-#define COLOR_STOCK_Line_HS300 UIColorFromRGB(0x038cff)//沪深三百收益线的颜色
-#define COLOR_STOCK_YingKui UIColorFromRGB(0xea544a)//持仓盈亏颜色
-#define COLOR_STOCK_Text_Black UIColorFromRGB(0x4c4c4c)//股票详情黑色字体
-#define COLOR_STOCK_BackGroundColor UIColorFromRGB(0xf8f8f8)//股票的背景色
-#define COLOR_STOCK_Blue UIColorFromRGB(0x0078dd)//蓝色背景色
-#define COLOR_STOCK_Orange UIColorFromRGB(0xf8b551)//辅助色橙色
-#define COLOR_StyleLines UIColorFromRGB(0xcfcfcf) //分割线的颜色
-#define COLOR_STOCK_Text_Gay UIColorFromRGB(0xb2b2b2)//字体灰色字体
-#define COLOR_STOCK_Warning UIColorFromRGB(0xea544a)//私人订制页面注意的字体颜色
-
 #endif

@@ -90,9 +90,9 @@
 
     if (scrollView.contentOffset.y<0) {
         [scrollView setContentOffset:(CGPoint){0,0} animated:NO];
-        scrollView.backgroundColor = COLOR_STOCK_Blue;
+        scrollView.backgroundColor = COLOR_Bg_Blue;
     }else{
-        scrollView.backgroundColor = COLOR_STOCK_BackGroundColor;
+        scrollView.backgroundColor = COLOR_Bg_Gay;
     }
 }
 
@@ -104,7 +104,7 @@
     if (!headerView) {
         
         headerView = [[UITableViewHeaderFooterView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,0}];
-        headerView.contentView.backgroundColor = COLOR_STOCK_BackGroundColor;
+        headerView.contentView.backgroundColor = COLOR_Bg_Gay;
         headerView.layer.borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.2].CGColor;
         headerView.layer.borderWidth = 1.0f;
         headerView.layer.masksToBounds = YES;
