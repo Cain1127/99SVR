@@ -166,5 +166,6 @@
 #define COLOR_STOCK_Orange UIColorFromRGB(0xf8b551)//辅助色橙色
 #define COLOR_StyleLines UIColorFromRGB(0xcfcfcf) //分割线的颜色
 #define COLOR_STOCK_Text_Gay UIColorFromRGB(0xb2b2b2)//字体灰色字体
+#define COLOR_STOCK_Warning UIColorFromRGB(0xea544a)//私人订制页面注意的字体颜色
 
 #endif

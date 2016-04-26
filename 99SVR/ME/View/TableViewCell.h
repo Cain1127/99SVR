@@ -35,4 +35,5 @@
 @property (nonatomic,assign)NSInteger row;
 @property (nonatomic,weak)id <TableViewCellDelegate>delegate;
 
+
 @end
