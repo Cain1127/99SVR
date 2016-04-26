@@ -269,6 +269,15 @@ void WhatIsPrivateServiceListener::onResponse(WhatIsPrivateService& infos){
 
 void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription>& infos){
     
+    NSMutableArray *muArray = [NSMutableArray array];
+    for (size_t i=0; i!=infos.size(); i++) {
+        
+    
+        
+    }
+
+    
+    
 }
 
 void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateServiceSummaryPack>& infos){

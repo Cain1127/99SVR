@@ -166,6 +166,7 @@
 		B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C6B7B11CBE1B220072795B /* RegisterTextField.m */; };
 		B4CC497F1CCDED9E00D0C2F7 /* UIAlertView+Block.m in Sources */ = {isa = PBXBuildFile; fileRef = B4CC497E1CCDED9E00D0C2F7 /* UIAlertView+Block.m */; };
 		B4CC49891CCF708400D0C2F7 /* PriceLabView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4CC49881CCF708400D0C2F7 /* PriceLabView.m */; };
+		B4CC49CB1CCF9AB200D0C2F7 /* TQPurchaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.m */; };
 		B4EA09051CC6048300E8F933 /* StockHomeTableViewModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.mm */; };
 		B4EA090A1CC754C500E8F933 /* StockDealTableModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09091CC754C500E8F933 /* StockDealTableModel.mm */; };
 		B4EA09101CC757D500E8F933 /* DDLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA090D1CC757D500E8F933 /* DDLineChartView.m */; };
@@ -1009,6 +1010,8 @@
 		B4CC49861CCF343900D0C2F7 /* PubColorAndFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PubColorAndFont.h; sourceTree = "<group>"; };
 		B4CC49871CCF708400D0C2F7 /* PriceLabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PriceLabView.h; sourceTree = "<group>"; };
 		B4CC49881CCF708400D0C2F7 /* PriceLabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PriceLabView.m; sourceTree = "<group>"; };
+		B4CC49C91CCF9AB200D0C2F7 /* TQPurchaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQPurchaseModel.h; sourceTree = "<group>"; };
+		B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQPurchaseModel.m; sourceTree = "<group>"; };
 		B4EA09031CC6048300E8F933 /* StockHomeTableViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeTableViewModel.h; sourceTree = "<group>"; };
 		B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockHomeTableViewModel.mm; sourceTree = "<group>"; };
 		B4EA09081CC754C500E8F933 /* StockDealTableModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealTableModel.h; sourceTree = "<group>"; };
@@ -2068,6 +2071,8 @@
 				1895B78C1CCB7C8700B86B0D /* TQIntroductModel.mm */,
 				BBD58EEC1CCBE31B009250DB /* XPrivateDetail.h */,
 				BBD58EED1CCBE31B009250DB /* XPrivateDetail.m */,
+				B4CC49C91CCF9AB200D0C2F7 /* TQPurchaseModel.h */,
+				B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -4331,6 +4336,7 @@
 				BB63F6211C2CC7A300A042E8 /* HtmlRoomViewCell.m in Sources */,
 				BB63F5AC1C2CC7A300A042E8 /* UIView+Frame.m in Sources */,
 				BB5E1C731CC082310076C416 /* RoomService.mm in Sources */,
+				B4CC49CB1CCF9AB200D0C2F7 /* TQPurchaseModel.m in Sources */,
 				BB5E4FA21CBF7D1B00F8C1D4 /* TeacherModel.m in Sources */,
 				BB1661A41C3E2F9A00D318BE /* HomeViewController.m in Sources */,
 				BBD58EE81CCBD8A2009250DB /* XMeCustomDataSource.m in Sources */,
