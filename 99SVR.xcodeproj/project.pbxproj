@@ -102,7 +102,7 @@
 		18EA822C1CC8C41C00BDB735 /* TQideaViewModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA822B1CC8C41C00BDB735 /* TQideaViewModel.mm */; };
 		18EA82A21CCA148F00BDB735 /* TQNoPurchaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82861CCA148F00BDB735 /* TQNoPurchaseViewController.mm */; };
 		18EA82A31CCA148F00BDB735 /* TQMeCustomizedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */; };
-		18EA82A41CCA148F00BDB735 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA828C1CCA148F00BDB735 /* TableViewCell.m */; };
+		18EA82A41CCA148F00BDB735 /* TableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA828C1CCA148F00BDB735 /* TableViewCell.mm */; };
 		18EA82A51CCA148F00BDB735 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA828D1CCA148F00BDB735 /* TableViewCell.xib */; };
 		18EA82A71CCA148F00BDB735 /* TQHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82911CCA148F00BDB735 /* TQHeadView.m */; };
 		18EA82A81CCA148F00BDB735 /* TQHeadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82921CCA148F00BDB735 /* TQHeadView.xib */; };
@@ -165,8 +165,8 @@
 		B4C4B3701CBAA5FF00B20A58 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */; };
 		B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C6B7B11CBE1B220072795B /* RegisterTextField.m */; };
 		B4CC497F1CCDED9E00D0C2F7 /* UIAlertView+Block.m in Sources */ = {isa = PBXBuildFile; fileRef = B4CC497E1CCDED9E00D0C2F7 /* UIAlertView+Block.m */; };
-		B4CC49891CCF708400D0C2F7 /* PriceLabView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4CC49881CCF708400D0C2F7 /* PriceLabView.m */; };
-		B4CC49CB1CCF9AB200D0C2F7 /* TQPurchaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.m */; };
+		B4CC49891CCF708400D0C2F7 /* PriceLabView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4CC49881CCF708400D0C2F7 /* PriceLabView.mm */; };
+		B4CC49CB1CCF9AB200D0C2F7 /* TQPurchaseModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.mm */; };
 		B4EA09051CC6048300E8F933 /* StockHomeTableViewModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.mm */; };
 		B4EA090A1CC754C500E8F933 /* StockDealTableModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09091CC754C500E8F933 /* StockDealTableModel.mm */; };
 		B4EA09101CC757D500E8F933 /* DDLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA090D1CC757D500E8F933 /* DDLineChartView.m */; };
@@ -833,7 +833,7 @@
 		18EA82871CCA148F00BDB735 /* TQMeCustomizedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMeCustomizedViewController.h; sourceTree = "<group>"; };
 		18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQMeCustomizedViewController.mm; sourceTree = "<group>"; };
 		18EA828B1CCA148F00BDB735 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
-		18EA828C1CCA148F00BDB735 /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCell.m; sourceTree = "<group>"; };
+		18EA828C1CCA148F00BDB735 /* TableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableViewCell.mm; sourceTree = "<group>"; };
 		18EA828D1CCA148F00BDB735 /* TableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewCell.xib; sourceTree = "<group>"; };
 		18EA82901CCA148F00BDB735 /* TQHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQHeadView.h; sourceTree = "<group>"; };
 		18EA82911CCA148F00BDB735 /* TQHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQHeadView.m; sourceTree = "<group>"; };
@@ -1009,9 +1009,9 @@
 		B4CC497E1CCDED9E00D0C2F7 /* UIAlertView+Block.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Block.m"; sourceTree = "<group>"; };
 		B4CC49861CCF343900D0C2F7 /* PubColorAndFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PubColorAndFont.h; sourceTree = "<group>"; };
 		B4CC49871CCF708400D0C2F7 /* PriceLabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PriceLabView.h; sourceTree = "<group>"; };
-		B4CC49881CCF708400D0C2F7 /* PriceLabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PriceLabView.m; sourceTree = "<group>"; };
+		B4CC49881CCF708400D0C2F7 /* PriceLabView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PriceLabView.mm; sourceTree = "<group>"; };
 		B4CC49C91CCF9AB200D0C2F7 /* TQPurchaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQPurchaseModel.h; sourceTree = "<group>"; };
-		B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQPurchaseModel.m; sourceTree = "<group>"; };
+		B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQPurchaseModel.mm; sourceTree = "<group>"; };
 		B4EA09031CC6048300E8F933 /* StockHomeTableViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeTableViewModel.h; sourceTree = "<group>"; };
 		B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockHomeTableViewModel.mm; sourceTree = "<group>"; };
 		B4EA09081CC754C500E8F933 /* StockDealTableModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealTableModel.h; sourceTree = "<group>"; };
@@ -2072,7 +2072,7 @@
 				BBD58EEC1CCBE31B009250DB /* XPrivateDetail.h */,
 				BBD58EED1CCBE31B009250DB /* XPrivateDetail.m */,
 				B4CC49C91CCF9AB200D0C2F7 /* TQPurchaseModel.h */,
-				B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.m */,
+				B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.mm */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2230,7 +2230,7 @@
 			isa = PBXGroup;
 			children = (
 				18EA828B1CCA148F00BDB735 /* TableViewCell.h */,
-				18EA828C1CCA148F00BDB735 /* TableViewCell.m */,
+				18EA828C1CCA148F00BDB735 /* TableViewCell.mm */,
 				18EA828D1CCA148F00BDB735 /* TableViewCell.xib */,
 				18EA82901CCA148F00BDB735 /* TQHeadView.h */,
 				18EA82911CCA148F00BDB735 /* TQHeadView.m */,
@@ -2243,7 +2243,7 @@
 				BBD58EE91CCBD96C009250DB /* XMeCustomCell.h */,
 				BBD58EEA1CCBD96C009250DB /* XMeCustomCell.m */,
 				B4CC49871CCF708400D0C2F7 /* PriceLabView.h */,
-				B4CC49881CCF708400D0C2F7 /* PriceLabView.m */,
+				B4CC49881CCF708400D0C2F7 /* PriceLabView.mm */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4336,7 +4336,7 @@
 				BB63F6211C2CC7A300A042E8 /* HtmlRoomViewCell.m in Sources */,
 				BB63F5AC1C2CC7A300A042E8 /* UIView+Frame.m in Sources */,
 				BB5E1C731CC082310076C416 /* RoomService.mm in Sources */,
-				B4CC49CB1CCF9AB200D0C2F7 /* TQPurchaseModel.m in Sources */,
+				B4CC49CB1CCF9AB200D0C2F7 /* TQPurchaseModel.mm in Sources */,
 				BB5E4FA21CBF7D1B00F8C1D4 /* TeacherModel.m in Sources */,
 				BB1661A41C3E2F9A00D318BE /* HomeViewController.m in Sources */,
 				BBD58EE81CCBD8A2009250DB /* XMeCustomDataSource.m in Sources */,
@@ -4357,7 +4357,7 @@
 				18AAD5641C993CD100438E18 /* AssetViewController.m in Sources */,
 				185F596A1CC4CAD600F605F5 /* NSObject+MJCoding.m in Sources */,
 				B4EA09201CC86A8100E8F933 /* StockNotVipView.m in Sources */,
-				B4CC49891CCF708400D0C2F7 /* PriceLabView.m in Sources */,
+				B4CC49891CCF708400D0C2F7 /* PriceLabView.mm in Sources */,
 				BB1769251C7B006F00CE947C /* SDWebImageDecoder.m in Sources */,
 				BBD58EFD1CCD2287009250DB /* XLiveQuestionView.m in Sources */,
 				18D3CB901CC0E37700816BD0 /* TQMessageCell.mm in Sources */,
@@ -4541,7 +4541,7 @@
 				18EA82291CC8A5B200BDB735 /* UIImageView+Header.m in Sources */,
 				BB6F3ABA1C9D6EC50035EBBE /* FloatingView.m in Sources */,
 				BB63F5C61C2CC7A300A042E8 /* MASViewConstraint.m in Sources */,
-				18EA82A41CCA148F00BDB735 /* TableViewCell.m in Sources */,
+				18EA82A41CCA148F00BDB735 /* TableViewCell.mm in Sources */,
 				18D3CB811CC0CFB400816BD0 /* TQMessageViewController.mm in Sources */,
 				BB25D8121C15729800314C1E /* main.m in Sources */,
 				BB9765F61C86831D00FAA5B7 /* TextChatModel.m in Sources */,

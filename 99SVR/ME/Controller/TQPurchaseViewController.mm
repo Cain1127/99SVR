@@ -21,6 +21,16 @@
     [super viewDidLoad];
     
     self.txtTitle.text = @"购买私人定制";
+    
+    //注册通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_TQPURCHASE_VC object:nil];
+
+    [kHTTPSingle RequestBuyPrivateServicePage:[UserInfo sharedUserInfo].nUserId];
+    
+//    UserInfo *userInfo = [UserInfo sharedUserInfo];
+    
+    
+    
     self.view.backgroundColor = COLOR_Bg_Gay;
     CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
     _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} style:UITableViewStylePlain];
@@ -35,8 +45,6 @@
     _tableView.backgroundColor = COLOR_Bg_Gay;
 
     [self.view addSubview:_tableView];
-    
-    
     _tableView.tableHeaderView = self.headerView;
     
 }
@@ -89,5 +97,13 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
+#pragma mark 刷新数据
+-(void)refreshDayData:(NSNotification *)notfi{
+
+    DLog(@"刷新数据---");
+
+}
+
 
 @end
