@@ -113,7 +113,7 @@
     
     UIView *lowLineView = [[UIView alloc]initWithFrame:(CGRect){CGRectGetMinX(self.lineChartView.frame),CGRectGetMaxY(self.lineChartView.frame),CGRectGetWidth(self.lineChartView.frame),1}];
     [self addSubview:lowLineView];
-    lowLineView.backgroundColor = COLOR_STOCK_Line_Kuang;
+    lowLineView.backgroundColor = COLOR_Line_Small_Gay;
     
     for (int i=0; i!=lowTitArrays.count; i++) {
         

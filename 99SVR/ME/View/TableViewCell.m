@@ -13,7 +13,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
         
-    self.selectView.layer.borderColor = COLOR_STOCK_Line_Kuang.CGColor;
+    self.selectView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
     self.selectView.layer.borderWidth = 0.5f;
     
     

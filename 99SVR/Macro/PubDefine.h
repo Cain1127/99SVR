@@ -156,7 +156,7 @@
 #define kTableViewBgColor RGB(247, 247, 247) // tableView 背景颜色
 
 #pragma mark 股票详情颜色宏
-#define COLOR_STOCK_Line_Kuang  UIColorFromRGB(0xe5e5e5)//股票线框的颜色
+//#define COLOR_STOCK_Line_Kuang  UIColorFromRGB(0xe5e5e5)//股票线框的颜色
 #define COLOR_STOCK_Line_ZuHe UIColorFromRGB(0xf8b551)//组合收益线的颜色
 #define COLOR_STOCK_Line_HS300 UIColorFromRGB(0x038cff)//沪深三百收益线的颜色
 #define COLOR_STOCK_YingKui UIColorFromRGB(0xea544a)//持仓盈亏颜色

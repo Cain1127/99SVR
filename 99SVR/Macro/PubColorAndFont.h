@@ -52,7 +52,7 @@
 
 #pragma mark 辅助色
 #define COLOR_Auxiliary_Orange UIColorFromRGB(0xf8b551)//辅助色橙色
-#define COLOR_Auxiliary_Red UIColorFromRGB(0xf8b551)//辅助色红色
+#define COLOR_Auxiliary_Red UIColorFromRGB(0xea544a)//辅助色红色
 
 
 #endif /* PubColorAndFont_h */
