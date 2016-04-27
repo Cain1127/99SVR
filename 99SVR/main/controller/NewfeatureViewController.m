@@ -8,8 +8,8 @@
 
 #import "NewfeatureViewController.h"
 #import "AppDelegate.h"
-#import "UIWindow+Extension.h"
 #import "TabBarController.h"
+#import "SwitchRootTool.h"
 
 
 // 新特性图片总数
@@ -146,9 +146,9 @@
 - (void)startClick
 {
     // 切换到TabBarController
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [window saveCurrentVersion];
-    window.rootViewController =  [[TabBarController alloc] init];
+    [SwitchRootTool saveCurrentVersion];
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    app.window.rootViewController =  [[TabBarController alloc] init];
 }
 
 #pragma ScrollView 代理

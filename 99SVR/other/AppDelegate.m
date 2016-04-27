@@ -33,6 +33,7 @@
 #import "MainViewController.h"
 #import <DTCoreText/DTCoreText.h>
 #import "AdViewController.h"
+#import "SwitchRootTool.h"
 
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
 
@@ -99,8 +100,8 @@
     }
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    self.window.rootViewController = [[AdViewController alloc] init];
-    self.window.rootViewController = [[TabBarController alloc] init];
+   // self.window.rootViewController = [[TabBarController alloc] init];
+     [SwitchRootTool switchRootForAppDelegate];
     [self.window makeKeyAndVisible];
     
     [SVRInitLBS loadAllInfo];
