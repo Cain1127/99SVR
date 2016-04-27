@@ -250,6 +250,9 @@ void parse_profitdetail(char* json, HttpListener* listener)
 // 请求操盘列表-日收益排序
 void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, int size, OperateStockProfitListener* listener)
 {
+    
+    DLog(@"type = %d team_id = %d page = %d size=%d",type,team_id,page,size);
+    
    	char tmp[1024] = {0};
     sprintf(tmp,"/operate/lists/type/%d/team_id/%d/page/%d/size/%d",type,team_id,page,size);
     
@@ -262,6 +265,11 @@ void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, 
 // 请求操盘详情
 void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener)
 {
+    
+    
+
+    DLog(@"operateId---高手操盘详情%d",operateId);
+    
     char tmp[1024] = {0};
     sprintf(tmp,"/operate/detail/id/%d/uid/%d",operateId,login_userid);
     

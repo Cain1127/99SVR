@@ -111,53 +111,65 @@
 -(void)setCellDataWithModel:(StockDealModel *)model{
 
     //计算字体
-    NSString *str =  model.focus;
-    CGSize textSize = [ShareFunction calculationOfTheText:str withFont:traderName_h withMaxSize:(CGSize){150,50}];
+    self.traderNameLab.text =  model.focus;
+    [self.traderNameLab sizeToFit];
+
     //操盘名称
     [self.traderNameLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.nameLab.mas_left);
-        make.width.equalTo(@(textSize.width -4));
+        make.width.equalTo(@(self.traderNameLab.width  + 4));
         make.height.equalTo(@(traderName_h));
         make.centerY.equalTo(self.iconImv.mas_centerY);
     }];
     
     //计算总收益字体
-    NSString *totalNum = model.totalprofit;
-    CGSize totalNumSize = [ShareFunction calculationOfTheText:totalNum withFont:totalNumLab_fot withMaxSize:(CGSize){200,50}];
-    
+    self.totalNumLab.text =  model.totalprofit;
+    [self.totalNumLab sizeToFit];
+
     //总收益数字
     [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.iconImv.mas_top);
         make.right.equalTo(@(ValueWithTheIPhoneModelString(@"-10,-10,-10,-10")));
-        make.width.equalTo(@(totalNumSize.width));
+        make.width.equalTo(@(self.totalNumLab.width));
         make.height.equalTo(@(totalNumLab_fot));
     }];
 
     [self.iconImv sd_setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/pic/item/e1fe9925bc315c6001e93f3388b1cb13485477e9.jpg"]];
     self.nameLab.text =  model.teamname;
-    self.traderNameLab.text =  model.focus;
     self.targetLab.text =  [NSString stringWithFormat:@"目标收益：%@",model.goalprofit];
-    self.totalNumLab.text =  model.totalprofit;
     self.totalTitLab.text = @"总收益";
 }
 
 - (void)setCellStockModel:(ZLOperateStock *)model
 {
-    NSString *str =  model.focus;
-    CGSize textSize = [ShareFunction calculationOfTheText:str withFont:traderName_h withMaxSize:(CGSize){150,50}];
+ 
+    
+    self.traderNameLab.text =  model.focus;
+    [self.traderNameLab sizeToFit];
+    
     //操盘名称
     [self.traderNameLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.nameLab.mas_left);
-        make.width.equalTo(@(textSize.width -4));
+        make.width.equalTo(@(self.traderNameLab.width +4));
         make.height.equalTo(@(traderName_h));
         make.centerY.equalTo(self.iconImv.mas_centerY);
     }];
     
+    //计算总收益字体
+    self.totalNumLab.text =  [NSString stringWithFormat:@"%.02f%%",model.totalprofit*100];
+    [self.totalNumLab sizeToFit];
+    
+    //总收益数字
+    [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.iconImv.mas_top);
+        make.right.equalTo(@(ValueWithTheIPhoneModelString(@"-10,-10,-10,-10")));
+        make.width.equalTo(@(self.totalNumLab.width));
+        make.height.equalTo(@(totalNumLab_fot));
+    }];
+    
     [self.iconImv sd_setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/pic/item/e1fe9925bc315c6001e93f3388b1cb13485477e9.jpg"]];
     self.nameLab.text =  model.teamname;
-    self.traderNameLab.text =  model.focus;
     self.targetLab.text =  [NSString stringWithFormat:@"目标收益：%.02f%%",model.goalprofit*100];
-    self.totalNumLab.text =  NSStringFromFloat(model.totalprofit);
     self.totalTitLab.text = @"总收益";
 }
 

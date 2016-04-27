@@ -63,25 +63,27 @@
 }
 - (void)printInfo:(NSNotification *)notify{
 
-    WeakSelf(self);
+    DLog(@"%@",notify);
     
-    NSDictionary *dic = notify.object;
-    
-    //拿到头部视图的数据
-    self.headerModel = dic[@"headerModel"];
-    [self.headerView setHeaderViewWithDataModel:self.headerModel];
-    //拿到股票视图的数据
-    [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
-    //交易详情
-    [self.tableViewDataArray addObject:dic[@"trans"]];
-    //持仓记录
-    [self.tableViewDataArray addObject:dic[@"stocks"]];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.tableViewModel setVipLevel:[dic[@"vipLevel"] integerValue] withOperateId:[dic[@"operateId"] integerValue]];
-        weakSelf.tableViewModel.dataArray = weakSelf.tableViewDataArray;
-        [weakSelf.tableView reloadData];
-    });
+//    WeakSelf(self);
+//    
+//    NSDictionary *dic = notify.object;
+//    
+//    //拿到头部视图的数据
+//    self.headerModel = dic[@"headerModel"];
+//    [self.headerView setHeaderViewWithDataModel:self.headerModel];
+//    //拿到股票视图的数据
+//    [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
+//    //交易详情
+//    [self.tableViewDataArray addObject:dic[@"trans"]];
+//    //持仓记录
+//    [self.tableViewDataArray addObject:dic[@"stocks"]];
+//    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [weakSelf.tableViewModel setVipLevel:[dic[@"vipLevel"] integerValue] withOperateId:[dic[@"operateId"] integerValue]];
+//        weakSelf.tableViewModel.dataArray = weakSelf.tableViewDataArray;
+//        [weakSelf.tableView reloadData];
+//    });
     
     
 }
