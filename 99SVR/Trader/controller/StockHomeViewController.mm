@@ -331,16 +331,16 @@
         if (dataArray.count ==0) {//不存在数据时候
             
             if (dataArray == self.dayDataArray) {
-                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"日收益为0"];
+                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"日收益为0"];
                 [self.monTab addSubview:self.monEmptyView];
                 
             }else if (dataArray == self.monDataArray){
                 
-                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"月收益为0"];
+                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"月收益为0"];
                 [self.monTab addSubview:self.monEmptyView];
                 
             }else{
-                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"总收益为0"];
+                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"总收益为0"];
                 [self.monTab addSubview:self.monEmptyView];
             }
         }else{//存在数据
@@ -364,16 +364,16 @@
         if (dataArray.count==0) {
          
             if (dataArray == self.dayDataArray) {
-                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x"] msg:@"日收益为请求失败"];
+                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"日收益为请求失败"];
                 [self.dayTab addSubview:self.dayEmptyView];
                 
             }else if (dataArray == self.monDataArray){
                 
-                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x"] msg:@"月收益为请求失败"];
+                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"月收益为请求失败"];
                 [self.monTab addSubview:self.monEmptyView];
                 
             }else{
-                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x"] msg:@"总收益为请求失败"];
+                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"总收益为请求失败"];
                 [self.totalTab addSubview:self.totalEmptyView];
             }
         }
