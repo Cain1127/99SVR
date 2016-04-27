@@ -133,7 +133,7 @@
     [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.iconImv.mas_top);
         make.right.equalTo(@(ValueWithTheIPhoneModelString(@"-10,-10,-10,-10")));
-        make.width.equalTo(@(totalNumLabSize.width + 20));
+        make.width.equalTo(@(totalNumLabSize.width + 10));
         make.height.equalTo(@(totalNumLab_fot));
     }];
 
@@ -153,20 +153,20 @@
     //操盘名称
     [self.traderNameLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.nameLab.mas_left);
-        make.width.equalTo(@(traderNameLabSize.width +4));
+        make.width.equalTo(@(traderNameLabSize.width +10));
         make.height.equalTo(@(traderName_h));
         make.centerY.equalTo(self.iconImv.mas_centerY);
     }];
     
     //计算总收益字体
     self.totalNumLab.text =  [NSString stringWithFormat:@"%.02f%%",model.totalprofit*100];
-    [self.totalNumLab sizeToFit];
+    CGSize totalNumLabSize = [ShareFunction calculationOfTheText:self.totalNumLab.text withFont:totalNumLab_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
     
     //总收益数字
     [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.iconImv.mas_top);
         make.right.equalTo(@(ValueWithTheIPhoneModelString(@"-10,-10,-10,-10")));
-        make.width.equalTo(@(self.totalNumLab.width));
+        make.width.equalTo(@(totalNumLabSize.width));
         make.height.equalTo(@(totalNumLab_fot));
     }];
     
