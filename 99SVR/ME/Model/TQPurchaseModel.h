@@ -8,6 +8,8 @@
 
 @interface TQPurchaseModel : NSObject
 
+/**teamName*/
+@property (nonatomic , copy) NSString *teamName;
 /**levelid*/
 @property (nonatomic , copy) NSString *levelid;
 /**levelname*/

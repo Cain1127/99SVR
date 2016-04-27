@@ -27,7 +27,7 @@
     self.dataArray = @[];
     //注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_TQPURCHASE_VC object:nil];
-    [kHTTPSingle RequestBuyPrivateServicePage:(int)self.teamId];
+    [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
     
     self.view.backgroundColor = COLOR_Bg_Gay;
     CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
@@ -99,6 +99,7 @@
     if ([code isEqualToString:@"1"]) {//请求成功
         
         self.headerModel = [notfi.object valueForKey:@"headerModel"];
+        self.headerModel.teamName = self.stockModel.teamname;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.headerView setHeaderViewWithModel:self.headerModel];
             self.dataArray = [[notfi.object valueForKey:@"data"] copy];

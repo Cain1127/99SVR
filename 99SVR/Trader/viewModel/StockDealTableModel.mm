@@ -19,9 +19,7 @@
     NSCache *_cache;
     UIViewController *_vc;
     BOOL _isVipBool;
-    NSInteger _operateId;
-    //战队id
-    NSInteger _teamId;
+    StockDealModel *_model;
 }
 @end
 
@@ -236,7 +234,7 @@
         if (indexPath.section==1 || indexPath.section==2) {
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = indexPath.section==1 ? RecordType_Business : RecordType_StoreHouse;
-            recordVC.operateId = _operateId;
+            recordVC.operateId = [_model.operateid integerValue];
             [_vc.navigationController pushViewController:recordVC animated:YES];
         }
     }
@@ -255,7 +253,7 @@
             
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = tag==1 ? RecordType_Business : RecordType_StoreHouse;
-            recordVC.operateId = _operateId;
+            recordVC.operateId = [_model.operateid integerValue];
             [_vc.navigationController pushViewController:recordVC animated:YES];
 
         }else{
@@ -267,7 +265,7 @@
                     
                 }else{//去购买
                     TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
-                    tqVC.teamId = _teamId;
+                    tqVC.stockModel = _model;
                     [_vc.navigationController pushViewController:tqVC animated:YES];
                 }
                 
@@ -279,9 +277,9 @@
     }
 }
 
--(void)setIsShowRecal:(NSString *)showRecal withOperateId:(NSInteger)operateId withTeamId:(NSInteger)teamId{
-    _operateId = operateId;
-    _teamId = teamId;
+-(void)setIsShowRecal:(NSString *)showRecal withDataModel:(StockDealModel *)model{
+
+    _model = model;
     if ([showRecal isEqualToString:@"show"]) {
         _isVipBool = YES;
     }else{
@@ -298,7 +296,7 @@
         {
         
             TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
-            tqVC.teamId = _teamId;
+            tqVC.stockModel = _model;
             [_vc.navigationController pushViewController:tqVC animated:YES];
             
         }

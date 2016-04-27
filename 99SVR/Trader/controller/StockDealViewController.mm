@@ -64,28 +64,38 @@
     
     
     WeakSelf(self);
-    
-    
     NSDictionary *dic = notify.object;
-//    
 
-//    
-    dispatch_async(dispatch_get_main_queue(), ^{
+    NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
+    
+    if ([code isEqualToString:@"1"]) {//请求成功
         
-        //    //拿到头部视图的数据
-        self.headerModel = dic[@"headerModel"];
-        [self.headerView setHeaderViewWithDataModel:self.headerModel];
-        //    //拿到股票视图的数据
-        [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
-        //交易详情
-        [self.tableViewDataArray addObject:dic[@"trans"]];
-        //持仓记录
-        [self.tableViewDataArray addObject:dic[@"stocks"]];
         
-        [weakSelf.tableViewModel setIsShowRecal:dic[@"recalState"] withOperateId:[dic[@"operateId"] integerValue] withTeamId:[dic[@"teamId"] integerValue]];
-        weakSelf.tableViewModel.dataArray = weakSelf.tableViewDataArray;
-        [weakSelf.tableView reloadData];
-    });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            //    //拿到头部视图的数据
+            self.headerModel = dic[@"headerModel"];
+            [self.headerView setHeaderViewWithDataModel:self.headerModel];
+            //    //拿到股票视图的数据
+            [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
+            //交易详情
+            [self.tableViewDataArray addObject:dic[@"trans"]];
+            //持仓记录
+            [self.tableViewDataArray addObject:dic[@"stocks"]];
+            
+            [weakSelf.tableViewModel setIsShowRecal:dic[@"recalState"] withDataModel:self.headerModel];
+            weakSelf.tableViewModel.dataArray = weakSelf.tableViewDataArray;
+            [weakSelf.tableView reloadData];
+        });
+
+        
+        
+    }else{//请求失败
+        
+        DLog(@"请求失败");
+        
+    }
+    
     
     
 }
