@@ -42,7 +42,7 @@
     
     self.textLab = [[UILabel alloc]init];
     self.textLab.textAlignment = NSTextAlignmentCenter;
-    self.textLab.textColor = COLOR_Text_4C4C4C;
+    self.textLab.textColor = COLOR_Text_Black;
     self.textLab.font = [UIFont systemFontOfSize:textLab_font];
     [self addSubview:self.textLab];
     

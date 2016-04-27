@@ -1,10 +1,10 @@
 
 
 #import "CustomViewController.h"
+#import "StockDealModel.h"
 
 @interface StockDealViewController : CustomViewController
 
-/**operateId*/
-@property (nonatomic , assign) NSInteger operateId;
+@property (nonatomic , strong) StockDealModel *stockModel;
 
 @end

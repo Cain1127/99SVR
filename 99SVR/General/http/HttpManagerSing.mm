@@ -127,6 +127,8 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
  *  请求操盘详情
  */
 - (void)RequestOperateStockAllDetail:(int)operateId{
+    
+    
     [self createHttpConnection];
     hConnection->RequestOperateStockAllDetail(operateId,&_stockAllListener);
 }

@@ -23,8 +23,8 @@
 #define COLOR_Line_Small_Gay UIColorFromRGB(0xe5e5e5)//
 
 #pragma mark 文字用色
-#define COLOR_Text_919191 UIColorFromRGB(0x919191)//
-#define COLOR_Text_4C4C4C UIColorFromRGB(0x4c4c4c)//
+#define COLOR_Text_Gay UIColorFromRGB(0x919191)//文字灰色
+#define COLOR_Text_Black UIColorFromRGB(0x4c4c4c)//文字黑色
 #define COLOR_Text_343434 UIColorFromRGB(0x343434)//
 #define COLOR_Text_E5E5E5 UIColorFromRGB(0xe5e5e5)//
 #define COLOR_Text_038CFF UIColorFromRGB(0x038cff)//

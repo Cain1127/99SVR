@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TQPurchaseModel.h"
 @interface TQHeadView : UIView
 
 /**头像*/
@@ -20,5 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *attentionLab;
 
 +(instancetype)headView;
+
+-(void)setHeaderViewWithModel:(TQPurchaseModel *)model;
 
 @end

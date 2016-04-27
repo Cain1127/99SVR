@@ -135,6 +135,7 @@ void parse_profitorder(char* json, HttpListener* listener)
     }
 }
 
+//请求操盘详情
 void parse_profitdetail(char* json, HttpListener* listener)
 {
     std::string strJson = json;
@@ -160,7 +161,7 @@ void parse_profitdetail(char* json, HttpListener* listener)
             if(!datas.isNull())
             {
                 OperateStockProfit osprofit;
-                osprofit.set_operateid(datas["profile"]["operateId"].asUInt());
+                osprofit.set_operateid(atoi((datas["profile"]["operateId"].asString()).c_str()));
                 osprofit.set_teamid(datas["profile"]["teamId"].asString());
                 osprofit.set_teamname(datas["profile"]["teamName"].asString());
                 osprofit.set_teamicon(datas["profile"]["teamIcon"].asString());
@@ -172,20 +173,20 @@ void parse_profitdetail(char* json, HttpListener* listener)
                 osprofit.set_winrate(atof((datas["profile"]["winRate"].asString()).c_str()));
                 
                 OperateStockData osdata;
-                osprofit.set_operateid(datas["curve"]["operateId"].asUInt());
+                osdata.set_operateid(datas["curve"]["operateId"].asUInt());
                 
                 size_ = datas["trans"].size();
                 vec_trans.clear();
                 for(i = 0; i < size_; i++)
                 {
                     OperateStockTransaction trans;
-                    trans.set_transid(datas["trans"][i]["transId"].asUInt());
                     trans.set_operateid(datas["trans"][i]["operateId"].asUInt());
+                    trans.set_transid(datas["trans"][i]["transId"].asUInt());
                     trans.set_buytype(datas["trans"][i]["buytype"].asString());
                     trans.set_stockid(datas["trans"][i]["stockId"].asString());
                     trans.set_stockname(datas["trans"][i]["stockName"].asString());
                     trans.set_price(atof((datas["trans"][i]["price"].asString()).c_str()));
-                    trans.set_count(datas["trans"][i]["count"].asUInt());
+                    trans.set_count(atoi((datas["trans"][i]["count"].asString()).c_str()));
                     trans.set_money(atof((datas["trans"][i]["money"].asString()).c_str()));
                     trans.set_time(datas["trans"][i]["time"].asString());
                     vec_trans.push_back(trans);
@@ -200,7 +201,7 @@ void parse_profitdetail(char* json, HttpListener* listener)
                     stocks.set_operateid(datas["stocks"][i]["operateId"].asUInt());
                     stocks.set_stockid(datas["stocks"][i]["stockId"].asString());
                     stocks.set_stockname(datas["stocks"][i]["stockName"].asString());
-                    stocks.set_count(datas["stocks"][i]["count"].asUInt());
+                    stocks.set_count(atoi((datas["stocks"][i]["count"].asString()).c_str()));
                     stocks.set_cost(atof((datas["stocks"][i]["cost"].asString()).c_str()));
                     stocks.set_currprice(atof((datas["stocks"][i]["currPrice"].asString()).c_str()));
                     stocks.set_profitrate(atof((datas["stocks"][i]["profitRate"].asString()).c_str()));
@@ -231,9 +232,13 @@ void parse_profitdetail(char* json, HttpListener* listener)
     }
 }
 
+
 // 请求操盘列表-日收益排序
 void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, int size, OperateStockProfitListener* listener)
 {
+    
+    DLog(@"type = %d team_id = %d page = %d size=%d",type,team_id,page,size);
+    
    	char tmp[1024] = {0};
     sprintf(tmp,"/operate/lists/type/%d/team_id/%d/page/%d/size/%d",type,team_id,page,size);
     
@@ -248,8 +253,13 @@ void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, 
 // 请求操盘详情
 void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener)
 {
+    
+    
+
+    DLog(@"operateId = %d, userid=%d",operateId,[UserInfo sharedUserInfo].nUserId);
+    
     char tmp[1024] = {0};
-    sprintf(tmp,"/operate/detail/id/%d/uid/%d",operateId,login_userid);
+    sprintf(tmp,"/operate/detail/id/%d/uid/%d",operateId,[UserInfo sharedUserInfo].nUserId);
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
@@ -1567,6 +1577,8 @@ void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requ
 void HttpConnection::RequestBuyPrivateServicePage(int teacher_id, BuyPrivateServiceListener* listener)
 {
     char tmp[128] = {0};
+    
+    DLog(@"teacher_id %d",teacher_id);
     
     RequestParamter& request = get_request_param();
     

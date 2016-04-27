@@ -30,6 +30,7 @@
 #import "RoomHttp.h"
 #import "SplashModel.h"
 #import "TQPurchaseModel.h"
+#import "RoomHttp.h"
 
 /**
  *  闪屏响应
@@ -152,7 +153,6 @@ void PostReplyListener::OnError(int errCode)
 void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
     
     NSMutableArray *muArray = [NSMutableArray array];
-    
     for (size_t i=0; i!=day.size(); i++) {
         
         OperateStockProfit *profit = &day[i];
@@ -160,18 +160,14 @@ void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
         [muArray addObject:allModel];
     }
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:muArray];
-
-    });
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:@{@"data":muArray,@"code":@(1)}];
     
 }
 
 void OperateStockProfitListenerDay::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:@{@"code":@(errCode)}];
+
 }
 /**
  *  请求操盘列表月
@@ -187,17 +183,13 @@ void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& mon
         StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
         [muArray addObject:allModel];
     }
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:muArray];
-
-    });
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:@{@"data":muArray,@"code":@(1)}];
 }
 
 void OperateStockProfitListenerMonth::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:@{@"code":@(errCode)}];
+
 }
 
 
@@ -215,43 +207,51 @@ void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total
         StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
         [muArray addObject:allModel];
     }
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:muArray];
-    });
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:@{@"data":muArray,@"code":@(1)}];
 }
 
 void OperateStockProfitListenerAll::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:@{@"code":@(errCode)}];
 }
+
+/**
+ *  请求操盘详情 错误
+ */
 
 void OperateStockAllDetailListener::OnError(int errCode)
 {
-    
+ 
+    NSDictionary *dict = @{@"code":@(errCode)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:dict];
 }
 /**
  *  请求操盘详情
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks, uint32 currLevelId, uint32 minVipLevel){
     
-    int vipLevel = 0;
+    //判断是否显示记录
+    BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
+    
+    
     //股票头部数据
-    StockDealModel *headerModel = [[StockDealModel alloc]initWithStockDealHeaderData:profit];
+    StockDealModel *headerModel = [[StockDealModel alloc] initWithStockDealHeaderData:&profit];
+    
     //头部数据
     muDic[@"headerModel"] = headerModel;
+    
+    
     //股票数据
-    StockDealModel *stockDataModel = [[StockDealModel alloc]initWithStockDealStockData:data];
+    StockDealModel *stockDataModel = [[StockDealModel alloc] initWithStockDealStockData:&data];
     muDic[@"stockModel"] = stockDataModel;
+    
+    
     //交易详情
     NSMutableArray *transArray = [NSMutableArray array];
-    if (vipLevel!=0) {
-
+    if (isShowRecal) {
         for (size_t i =0; i < trans.size(); i ++) {
-            
             OperateStockTransaction *transaction = &trans[i];
             StockDealModel *transactionModel = [[StockDealModel alloc]initWithStockDealBusinessRecoreData:transaction];
             [transArray addObject:transactionModel];
@@ -265,9 +265,8 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     
     //持仓详情
     NSMutableArray *stocksArray = [NSMutableArray array];
-    if (vipLevel!=0) {
+    if (isShowRecal) {
         for (size_t i =0; i < stocks.size(); i ++) {
-            
             OperateStocks *operateStocks = &stocks[i];
             StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithStockDealWareHouseRecoreData:operateStocks];
             [stocksArray addObject:operateStocksModel];
@@ -276,9 +275,15 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
         StockDealModel *model = [[StockDealModel alloc]init];
         [stocksArray addObject:model];
     }
+    
+    muDic[@"currLevelId"] = [NSString stringWithFormat:@"%d",currLevelId];
+    muDic[@"minVipLevel"] = [NSString stringWithFormat:@"%d",minVipLevel];
     muDic[@"stocks"] = stocksArray;
-    muDic[@"vipLevel"] = @(vipLevel);
-    muDic[@"operateId"] = @(profit.operateid());
+    muDic[@"recalState"] = isShowRecal ? @"show" : @"hide";
+    muDic[@"operateId"] = [NSString stringWithFormat:@"%d",profit.operateid()];
+    //战队ID
+    muDic[@"teamId"] = [NSString stringWithCString:profit.teamid().c_str() encoding:NSUTF8StringEncoding];
+    muDic[@"code"] = @(1);
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
 }
 
@@ -368,7 +373,8 @@ void WhatIsPrivateServiceListener::onResponse(WhatIsPrivateService& infos){
 
 void WhatIsPrivateServiceListener::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:@{@"code":@(errCode)}];
+
 }
 
 /**
@@ -377,6 +383,7 @@ void WhatIsPrivateServiceListener::OnError(int errCode)
 
 void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription>& infos){
     
+    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     NSMutableArray *muArray = [NSMutableArray array];
     for (size_t i=0; i!=infos.size(); i++) {
         PrivateServiceLevelDescription *profit = &infos[i];
@@ -391,15 +398,20 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
         model.updateprice = [NSString stringWithFormat:@"%f",profit->updateprice()];
         [muArray addObject:model];
     }
-    NSDictionary *parameters = @{@"code":@(1),@"model":muArray};
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:parameters];
+    if (infos.size()>=1) {
+        
+//        TQPurchaseModel *headerModel =[[TQPurchaseModel alloc] initWithPrivateServiceLevelData:&infos[0]];
+        muDic[@"headerModel"] = muArray[0];
+    }
+    
+    muDic[@"data"] = muArray;
+    muDic[@"code"] = @(1);
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:muDic];
 }
 
 void BuyPrivateServiceListener::OnError(int errCode)
 {
-    DLog(@"err:%d",errCode);
-    NSDictionary *parameters = @{@"code":@(errCode)};
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:parameters];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:@{@"code":@(errCode)}];
 }
 
 void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateServiceSummaryPack>& infos){

@@ -12,6 +12,15 @@
 #import "MJRefreshComponent.h"
 #import "StockDealModel.h"
 #import "TQMailboxViewController.h"
+#import "ViewNullFactory.h"
+
+#pragma mark 定义刷新状态
+typedef NS_ENUM(NSInteger,MJRefreshState){
+    /**头部刷新*/
+    MJRefreshState_Header,
+    /**尾部刷新*/
+    MJRefreshState_Footer,
+};
 
 @interface StockHomeViewController ()
 /**滑动控制器*/
@@ -19,22 +28,25 @@
 /**日*/
 @property (nonatomic , strong) UITableView *dayTab;
 @property (nonatomic , strong) StockHomeTableViewModel *dayTableViewModel;
-@property (nonatomic , strong) NSMutableArray *dayDataArray;
+@property (nonatomic , strong) __block NSMutableArray *dayDataArray;
 @property (nonatomic , assign) __block NSInteger dayPagInteger;
-
+@property (nonatomic , strong) UIView *dayEmptyView;
 /**月*/
 @property (nonatomic , strong) UITableView *monTab;
 @property (nonatomic , strong) StockHomeTableViewModel *monTableViewModel;
-@property (nonatomic , strong) NSMutableArray *monDataArray;
+@property (nonatomic , strong) __block NSMutableArray *monDataArray;
 @property (nonatomic , assign) __block NSInteger monPagInteger;
-
+@property (nonatomic , strong) UIView *monEmptyView;
 
 /**总的*/
 @property (nonatomic , strong) UITableView *totalTab;
 @property (nonatomic , strong) StockHomeTableViewModel *totalTableViewModel;
-@property (nonatomic , strong) NSMutableArray *totalDataArray;
+@property (nonatomic , strong) __block NSMutableArray *totalDataArray;
 @property (nonatomic , assign) __block NSInteger totalPagInteger;
+@property (nonatomic , strong) UIView *totalEmptyView;
 
+/**下拉刷新需要清空数据！上啦不需要*/
+@property (nonatomic , assign) __block MJRefreshState refreshState;
 
 
 @end
@@ -102,40 +114,47 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
     [self.dayTab addGifHeaderWithRefreshingBlock:^{
         
-        [weakSelf.dayDataArray removeAllObjects];
+//        [weakSelf.dayDataArray removeAllObjects];
+        weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.dayPagInteger = 1;
-        [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:2];
+        [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:10];
     }];
     
     [self.dayTab addLegendFooterWithRefreshingBlock:^{
+
+        weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.dayPagInteger ++;
-        [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:2];
+        [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:10];
+        
     }];
     
     
     [self.monTab addGifHeaderWithRefreshingBlock:^{
-        [weakSelf.monDataArray removeAllObjects];
+//        [weakSelf.monDataArray removeAllObjects];
+        weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.monPagInteger = 1;
-        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:5];
+        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:10];
         
     }];
     
     [self.monTab addLegendFooterWithRefreshingBlock:^{
+        weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.monPagInteger ++;
-        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:5];
+        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:10];
 
     }];
 
     [self.totalTab addGifHeaderWithRefreshingBlock:^{
-        [weakSelf.totalDataArray removeAllObjects];
+//        [weakSelf.totalDataArray removeAllObjects];
+        weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.totalPagInteger = 1;
-        [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:5];
+        [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:10];
     }];
     
     [self.totalTab addLegendFooterWithRefreshingBlock:^{
-        
+        weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.totalPagInteger ++;
-        [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:5];
+        [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:10];
     }];
 
     [self.dayTab.gifHeader loadDefaultImg];
@@ -149,16 +168,16 @@
 
 #pragma mark 刷新数据
 -(void)refreshDayData:(NSNotification *)notfi{
-    [self refreshTableDataWithTable:self.dayTab WithTableViewModel:self.dayTableViewModel fromDataArray:(NSArray *)notfi.object toDataArray:self.dayDataArray];
+    [self refreshTableDataWithTable:self.dayTab WithTableViewModel:self.dayTableViewModel fromDataDic:(NSDictionary *)notfi.object toDataArray:self.dayDataArray];
 }
 -(void)refreshMonData:(NSNotification *)notfi{
 
-    [self refreshTableDataWithTable:self.monTab WithTableViewModel:self.monTableViewModel fromDataArray:(NSArray *)notfi.object toDataArray:self.monDataArray];
+    [self refreshTableDataWithTable:self.monTab WithTableViewModel:self.monTableViewModel fromDataDic:(NSDictionary *)notfi.object toDataArray:self.monDataArray];
 
 }
 -(void)refreshTotalData:(NSNotification *)notfi{
 
-    [self refreshTableDataWithTable:self.totalTab WithTableViewModel:self.totalTableViewModel fromDataArray:(NSArray *)notfi.object toDataArray:self.totalDataArray];
+    [self refreshTableDataWithTable:self.totalTab WithTableViewModel:self.totalTableViewModel fromDataDic:(NSDictionary *)notfi.object toDataArray:self.totalDataArray];
 }
 /**
  *  刷新数据
@@ -168,29 +187,54 @@
  *  @param fromDataArray 原始数据
  *  @param toDataArray   实际的数据
  */
--(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockHomeTableViewModel *)tableModel fromDataArray:(NSArray *)fromDataArray toDataArray:(NSMutableArray *)toDataArray{
+-(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockHomeTableViewModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray{
     
-    if ([fromDataArray  count]==0) {
-        [table.footer noticeNoMoreData];
-        [UIView animateWithDuration:1 animations:^{
-            table.footer.hidden = YES;
-        }];
-    }else{
-        table.footer.hidden = NO;
-        [table.footer resetNoMoreData];
+    DLog(@"%@",fromDataDic);
+    NSString *code = [NSString stringWithFormat:@"%@",fromDataDic[@"code"]];
+    
+    if ([code isEqualToString:@"1"]) {//请求成功
+        
+        if (self.refreshState == MJRefreshState_Header) {//头部刷新需要清空数据
+            [toDataArray removeAllObjects];
+        }
+        
+        
+        NSArray *fromDataArray = fromDataDic[@"data"];
+        
+        if ([fromDataArray  count]==0) {
+            [table.footer noticeNoMoreData];
+            [UIView animateWithDuration:1 animations:^{
+                table.footer.hidden = YES;
+            }];
+        }else{
+            table.footer.hidden = NO;
+            [table.footer resetNoMoreData];
+        }
+        
+        [table.gifHeader endRefreshing];
+        [table.footer endRefreshing];
+        
+        for (int i=0; i!=[fromDataArray  count]; i++) {
+            [toDataArray addObject:fromDataArray[i]];
+        }
+        
+        
+        
+    }else{//请求失败
+        
+        table.footer.hidden = YES;
+        [table.gifHeader endRefreshing];
+        [table.footer endRefreshing];
+        
     }
-    
-    [table.gifHeader endRefreshing];
-    [table.footer endRefreshing];
-    
-    for (int i=0; i!=[fromDataArray  count]; i++) {
-        [toDataArray addObject:fromDataArray[i]];
-    }
-    [tableModel setDataArray:toDataArray];
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        [tableModel setDataArray:toDataArray];
         [table reloadData];
     });
+
+
+    [self chickEmptyViewShow:toDataArray withCode:code];
 }
 
 
@@ -298,6 +342,85 @@
         _totalTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:self];
     }
     return _totalTableViewModel;
+}
+
+#pragma mark 请求成功时候-检测是否出现提示图
+-(void)chickEmptyViewShow:(NSMutableArray *)dataArray withCode:(NSString *)code{
+    
+    BOOL requestBool = [code isEqualToString:@"1"] ? YES : NO;
+    
+    if (requestBool) {//请求成功
+        
+        if (dataArray.count ==0) {//不存在数据时候
+            
+            if (dataArray == self.dayDataArray) {
+                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"日收益为0"];
+                [self.dayTab addSubview:self.dayEmptyView];
+                
+            }else if (dataArray == self.monDataArray){
+                
+                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"月收益为0"];
+                [self.monTab addSubview:self.monEmptyView];
+                
+            }else{
+                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"总收益为0"];
+                [self.totalTab addSubview:self.totalEmptyView];
+            }
+        }else{//存在数据
+            
+            if (dataArray == self.dayDataArray) {
+                if (self.dayEmptyView) {
+                    [self.dayEmptyView removeFromSuperview];
+                }
+            }else if (dataArray == self.monDataArray){
+                if (self.monEmptyView) {
+                    [self.monEmptyView removeFromSuperview];
+                }
+            }else{
+                if (self.totalEmptyView) {
+                    [self.totalEmptyView removeFromSuperview];
+                }
+            }
+            
+        }
+    }else{//请求失败
+        
+        
+        if (dataArray == self.dayDataArray) {
+            if (self.dayEmptyView) {
+                [self.dayEmptyView removeFromSuperview];
+            }
+        }else if (dataArray == self.monDataArray){
+            if (self.monEmptyView) {
+                [self.monEmptyView removeFromSuperview];
+            }
+        }else{
+            if (self.totalEmptyView) {
+                [self.totalEmptyView removeFromSuperview];
+            }
+        }
+        
+        if (dataArray.count==0) {
+         
+            if (dataArray == self.dayDataArray) {
+                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"日收益为请求失败"];
+                [self.dayTab addSubview:self.dayEmptyView];
+                
+            }else if (dataArray == self.monDataArray){
+                
+                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"月收益为请求失败"];
+                [self.monTab addSubview:self.monEmptyView];
+                
+            }else{
+                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"总收益为请求失败"];
+                [self.totalTab addSubview:self.totalEmptyView];
+            }
+        }else{
+        
+            
+
+        }
+    }
 }
 
 

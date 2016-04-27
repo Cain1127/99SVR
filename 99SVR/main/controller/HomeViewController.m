@@ -46,6 +46,7 @@
 #import "MJRefresh.h"
 #import "PlayIconView.h"
 #import "StockDealViewController.h"
+#import "StockDealModel.h"
 
 #define kPictureHeight 0.3 * kScreenHeight
 
@@ -815,7 +816,10 @@ typedef enum : NSUInteger
         {
             ZLOperateStock *stockModel = tempArray[indexPath.row];
             StockDealViewController *Stock = [[StockDealViewController alloc]init];
-            Stock.operateId = stockModel.operateid;
+            StockDealModel *stockDelModel = [[StockDealModel alloc]init];
+            stockDelModel.operateid = [NSString stringWithFormat:@"%d",stockModel.operateid];
+            stockDelModel.teamname = stockModel.teamname;
+            Stock.stockModel = stockDelModel;
             [self.navigationController pushViewController:Stock animated:YES];
         }
     }

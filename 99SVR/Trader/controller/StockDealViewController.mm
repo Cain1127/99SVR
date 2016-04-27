@@ -7,8 +7,8 @@
 #import "StockMacro.h"
 #import "StockDealTableModel.h"
 #import "HttpMessage.pb.h"
-#import "StockDealModel.h"
 #import "TQPurchaseViewController.h"
+#import "ViewNullFactory.h"
 
 @interface StockDealViewController ()
 @property (nonatomic , strong) UITableView *tableView;
@@ -19,6 +19,8 @@
 @property (nonatomic , strong) StockDealModel *headerModel;
 /**数据源*/
 @property (nonatomic , strong) NSMutableArray *tableViewDataArray;
+/**数据加载view*/
+@property (nonatomic , strong) UIView *emptyView;
 @end
 
 @implementation StockDealViewController
@@ -44,11 +46,11 @@
 
 -(void)initData{
 
-    self.txtTitle.text = @"金山";
+    self.txtTitle.text = self.stockModel.teamname;
     self.warningLab.text = @"仅代表讲师个人操盘记录,不构成投资建议，风险自负";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
-    [kHTTPSingle RequestOperateStockAllDetail:(int)self.operateId];
+    [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
 
 
 }
@@ -62,30 +64,76 @@
     return _tableViewDataArray;
 }
 - (void)printInfo:(NSNotification *)notify{
-
+    
+    
     WeakSelf(self);
-    
     NSDictionary *dic = notify.object;
+
+    NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
     
-    //拿到头部视图的数据
-    self.headerModel = dic[@"headerModel"];
-    [self.headerView setHeaderViewWithDataModel:self.headerModel];
-    //拿到股票视图的数据
-    [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
-    //交易详情
-    [self.tableViewDataArray addObject:dic[@"trans"]];
-    //持仓记录
-    [self.tableViewDataArray addObject:dic[@"stocks"]];
+    if ([code isEqualToString:@"1"]) {//请求成功
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            //    //拿到头部视图的数据
+            self.headerModel = dic[@"headerModel"];
+            [self.headerView setHeaderViewWithDataModel:self.headerModel];
+            //    //拿到股票视图的数据
+            [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
+            //交易详情
+            [self.tableViewDataArray addObject:dic[@"trans"]];
+            //持仓记录
+            [self.tableViewDataArray addObject:dic[@"stocks"]];
+            
+            [weakSelf.tableViewModel setIsShowRecal:dic[@"recalState"] withDataModel:self.headerModel];
+            weakSelf.tableViewModel.dataArray = weakSelf.tableViewDataArray;
+            [weakSelf.tableView reloadData];
+        });
+
+        
+    }else{//请求失败
+        
+        DLog(@"请求失败");
+        
+    }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.tableViewModel setVipLevel:[dic[@"vipLevel"] integerValue] withOperateId:[dic[@"operateId"] integerValue]];
-        weakSelf.tableViewModel.dataArray = weakSelf.tableViewDataArray;
-        [weakSelf.tableView reloadData];
-    });
-    
+    [self chickEmptyViewShow:self.tableViewDataArray withCode:code];
     
 }
 
+#pragma mark
+-(void)chickEmptyViewShow:(NSMutableArray *)dataArray withCode:(NSString *)code{
+
+    
+    if ([code isEqualToString:@"1"]) {//网络OK
+        
+        if (dataArray.count==0) {//不存在数据
+            
+            self.emptyView = [ViewNullFactory createViewBg:self.emptyView.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"数据为空"];
+            [self.tableView addSubview:self.emptyView];
+
+            
+        }else{
+            
+            if (self.emptyView) {
+                [self.emptyView removeFromSuperview];
+            }
+        }
+        
+        
+    }else{//网络错误
+       
+        if (dataArray.count==0) {
+            
+                self.emptyView = [ViewNullFactory createViewBg:self.tableView.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"网络发生错误"];
+                [self.tableView addSubview:self.emptyView];
+        }
+    }
+    
+    
+    
+}
 
 #pragma mark lazyUI
 -(StockDealHeaderView *)headerView{

@@ -19,7 +19,7 @@
     NSCache *_cache;
     UIViewController *_vc;
     BOOL _isVipBool;
-    NSInteger _operateId;
+    StockDealModel *_model;
 }
 @end
 
@@ -82,7 +82,7 @@
         return 10;
     }else{
         
-        return 44;
+        return 50;
     }
 }
 
@@ -105,9 +105,6 @@
         
         headerView = [[UITableViewHeaderFooterView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,0}];
         headerView.contentView.backgroundColor = COLOR_Bg_Gay;
-        headerView.layer.borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.2].CGColor;
-        headerView.layer.borderWidth = 1.0f;
-        headerView.layer.masksToBounds = YES;
         headerView.userInteractionEnabled = YES;
         headerView.tag = section;
         UITapGestureRecognizer *headerViewTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(headerViewClick:)];
@@ -211,8 +208,6 @@
     return CGFLOAT_MIN;
 }
 
-
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     NSArray *cellIdArray = @[@"section0",@"section1",@"section2"];
@@ -239,7 +234,7 @@
         if (indexPath.section==1 || indexPath.section==2) {
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = indexPath.section==1 ? RecordType_Business : RecordType_StoreHouse;
-            recordVC.operateId = _operateId;
+            recordVC.operateId = [_model.operateid integerValue];
             [_vc.navigationController pushViewController:recordVC animated:YES];
         }
     }
@@ -258,7 +253,7 @@
             
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = tag==1 ? RecordType_Business : RecordType_StoreHouse;
-            recordVC.operateId = _operateId;
+            recordVC.operateId = [_model.operateid integerValue];
             [_vc.navigationController pushViewController:recordVC animated:YES];
 
         }else{
@@ -270,6 +265,7 @@
                     
                 }else{//去购买
                     TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
+                    tqVC.stockModel = _model;
                     [_vc.navigationController pushViewController:tqVC animated:YES];
                 }
                 
@@ -281,9 +277,10 @@
     }
 }
 
--(void)setVipLevel:(NSInteger)vipLevel withOperateId:(NSInteger)operateId{
-    _operateId = operateId;
-    if (vipLevel!=0) {
+-(void)setIsShowRecal:(NSString *)showRecal withDataModel:(StockDealModel *)model{
+
+    _model = model;
+    if ([showRecal isEqualToString:@"show"]) {
         _isVipBool = YES;
     }else{
         _isVipBool = NO;
@@ -299,6 +296,7 @@
         {
         
             TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
+            tqVC.stockModel = _model;
             [_vc.navigationController pushViewController:tqVC animated:YES];
             
         }

@@ -20,9 +20,15 @@
     
     self.IconImageView.layer.cornerRadius = 40;
     self.IconImageView.layer.masksToBounds = YES;
-    self.nameLab.textColor = COLOR_Text_4C4C4C;
+    self.nameLab.textColor = COLOR_Text_Black;
     self.timeLab.textColor = COLOR_Text_B2B2B2;
     self.attentionLab.textColor = COLOR_Auxiliary_Red;
+}
+
+-(void)setHeaderViewWithModel:(TQPurchaseModel *)model{
+
+    self.timeLab.text = model.expirtiontime;
+    self.nameLab.text = [NSString stringWithFormat:@"团队名称：%@",model.teamName];
 }
 
 @end

@@ -104,7 +104,7 @@
 		18EA82A31CCA148F00BDB735 /* TQMeCustomizedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */; };
 		18EA82A41CCA148F00BDB735 /* TableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA828C1CCA148F00BDB735 /* TableViewCell.mm */; };
 		18EA82A51CCA148F00BDB735 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA828D1CCA148F00BDB735 /* TableViewCell.xib */; };
-		18EA82A71CCA148F00BDB735 /* TQHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82911CCA148F00BDB735 /* TQHeadView.m */; };
+		18EA82A71CCA148F00BDB735 /* TQHeadView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82911CCA148F00BDB735 /* TQHeadView.mm */; };
 		18EA82A81CCA148F00BDB735 /* TQHeadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82921CCA148F00BDB735 /* TQHeadView.xib */; };
 		18EA82A91CCA148F00BDB735 /* TQIntroductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82941CCA148F00BDB735 /* TQIntroductCell.m */; };
 		18EA82AA1CCA148F00BDB735 /* TQIntroductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82951CCA148F00BDB735 /* TQIntroductCell.xib */; };
@@ -155,6 +155,11 @@
 		5AE9A3CF1CCE6A4B00831606 /* CustomizedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AE9A3CE1CCE6A4B00831606 /* CustomizedTableViewCell.m */; };
 		5AE9A3D21CCE6D1900831606 /* CustomizedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AE9A3D11CCE6D1900831606 /* CustomizedModel.m */; };
 		87D9EE0FC59214DC02EE2C95 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A43875FF97FDC1CA789AE15 /* libPods.a */; };
+		B43FF2FA1CD0EAC700CC8B5E /* customized_no_opened@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B43FF2F51CD0EAC700CC8B5E /* customized_no_opened@3x.png */; };
+		B43FF2FB1CD0EAC700CC8B5E /* nav_search_no_result@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B43FF2F61CD0EAC700CC8B5E /* nav_search_no_result@3x.png */; };
+		B43FF2FC1CD0EAC700CC8B5E /* network_anomaly_fail@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B43FF2F71CD0EAC700CC8B5E /* network_anomaly_fail@3x.png */; };
+		B43FF2FD1CD0EAC700CC8B5E /* text_blank_page@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B43FF2F81CD0EAC700CC8B5E /* text_blank_page@3x.png */; };
+		B43FF2FE1CD0EAC700CC8B5E /* text_viewpoint_not_omment@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B43FF2F91CD0EAC700CC8B5E /* text_viewpoint_not_omment@3x.png */; };
 		B44F77681CC39FF1008E3B26 /* StockDealHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */; };
 		B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.mm */; };
 		B47DD59D1CBF345300C47EF7 /* SliderMenuTopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD59A1CBF345300C47EF7 /* SliderMenuTopScrollView.m */; };
@@ -630,7 +635,7 @@
 		BBD58EB81CCA2026009250DB /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EB01CCA2026009250DB /* json_value.cpp */; };
 		BBD58EB91CCA2026009250DB /* json_valueiterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = BBD58EB11CCA2026009250DB /* json_valueiterator.inl */; };
 		BBD58EBA1CCA2026009250DB /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EB21CCA2026009250DB /* json_writer.cpp */; };
-		BBD58EBD1CCA61EE009250DB /* XMyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EBC1CCA61EE009250DB /* XMyViewController.m */; };
+		BBD58EBD1CCA61EE009250DB /* XMyViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EBC1CCA61EE009250DB /* XMyViewController.mm */; };
 		BBD58ED11CCB4A85009250DB /* ConsumeRankDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBD58ED01CCB4A85009250DB /* ConsumeRankDataSource.mm */; };
 		BBD58ED41CCB4B5B009250DB /* ConsumeRankCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58ED31CCB4B5B009250DB /* ConsumeRankCell.m */; };
 		BBD58ED71CCB4E29009250DB /* XConsumeRankModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58ED61CCB4E29009250DB /* XConsumeRankModel.m */; };
@@ -851,7 +856,7 @@
 		18EA828C1CCA148F00BDB735 /* TableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableViewCell.mm; sourceTree = "<group>"; };
 		18EA828D1CCA148F00BDB735 /* TableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewCell.xib; sourceTree = "<group>"; };
 		18EA82901CCA148F00BDB735 /* TQHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQHeadView.h; sourceTree = "<group>"; };
-		18EA82911CCA148F00BDB735 /* TQHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQHeadView.m; sourceTree = "<group>"; };
+		18EA82911CCA148F00BDB735 /* TQHeadView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQHeadView.mm; sourceTree = "<group>"; };
 		18EA82921CCA148F00BDB735 /* TQHeadView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQHeadView.xib; sourceTree = "<group>"; };
 		18EA82931CCA148F00BDB735 /* TQIntroductCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIntroductCell.h; sourceTree = "<group>"; };
 		18EA82941CCA148F00BDB735 /* TQIntroductCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQIntroductCell.m; sourceTree = "<group>"; };
@@ -1001,6 +1006,11 @@
 		5AE9A3D11CCE6D1900831606 /* CustomizedModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomizedModel.m; sourceTree = "<group>"; };
 		852CCF5B274ED41B4EE71D75 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		8D4A66C414F8E52B12645457 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B43FF2F51CD0EAC700CC8B5E /* customized_no_opened@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "customized_no_opened@3x.png"; sourceTree = "<group>"; };
+		B43FF2F61CD0EAC700CC8B5E /* nav_search_no_result@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_search_no_result@3x.png"; sourceTree = "<group>"; };
+		B43FF2F71CD0EAC700CC8B5E /* network_anomaly_fail@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "network_anomaly_fail@3x.png"; sourceTree = "<group>"; };
+		B43FF2F81CD0EAC700CC8B5E /* text_blank_page@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "text_blank_page@3x.png"; sourceTree = "<group>"; };
+		B43FF2F91CD0EAC700CC8B5E /* text_viewpoint_not_omment@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "text_viewpoint_not_omment@3x.png"; sourceTree = "<group>"; };
 		B44F77661CC39FF1008E3B26 /* StockDealHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealHeaderView.h; sourceTree = "<group>"; };
 		B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealHeaderView.mm; sourceTree = "<group>"; };
 		B47DD5961CBF2D9400C47EF7 /* StockHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeViewController.h; sourceTree = "<group>"; };
@@ -1821,7 +1831,7 @@
 		BBD58EB51CCA2026009250DB /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
 		BBD58EB61CCA2026009250DB /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
 		BBD58EBB1CCA61EE009250DB /* XMyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMyViewController.h; sourceTree = "<group>"; };
-		BBD58EBC1CCA61EE009250DB /* XMyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMyViewController.m; sourceTree = "<group>"; };
+		BBD58EBC1CCA61EE009250DB /* XMyViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMyViewController.mm; sourceTree = "<group>"; };
 		BBD58ECF1CCB4A85009250DB /* ConsumeRankDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsumeRankDataSource.h; sourceTree = "<group>"; };
 		BBD58ED01CCB4A85009250DB /* ConsumeRankDataSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ConsumeRankDataSource.mm; sourceTree = "<group>"; };
 		BBD58ED21CCB4B5B009250DB /* ConsumeRankCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsumeRankCell.h; sourceTree = "<group>"; };
@@ -2262,7 +2272,7 @@
 				18EA82871CCA148F00BDB735 /* TQMeCustomizedViewController.h */,
 				18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */,
 				BBD58EBB1CCA61EE009250DB /* XMyViewController.h */,
-				BBD58EBC1CCA61EE009250DB /* XMyViewController.m */,
+				BBD58EBC1CCA61EE009250DB /* XMyViewController.mm */,
 				BBD58EEF1CCBE6AC009250DB /* XPrivateDetailViewController.h */,
 				BBD58EF01CCBE6AC009250DB /* XPrivateDetailViewController.m */,
 				1895B7911CCBAA8700B86B0D /* TQMyViewController.h */,
@@ -2280,7 +2290,7 @@
 				18EA828C1CCA148F00BDB735 /* TableViewCell.mm */,
 				18EA828D1CCA148F00BDB735 /* TableViewCell.xib */,
 				18EA82901CCA148F00BDB735 /* TQHeadView.h */,
-				18EA82911CCA148F00BDB735 /* TQHeadView.m */,
+				18EA82911CCA148F00BDB735 /* TQHeadView.mm */,
 				18EA82921CCA148F00BDB735 /* TQHeadView.xib */,
 				18EA82931CCA148F00BDB735 /* TQIntroductCell.h */,
 				18EA82941CCA148F00BDB735 /* TQIntroductCell.m */,
@@ -4076,6 +4086,7 @@
 				BB6F11EE1CC7C2E000F02064 /* video_list_1_icon@2x.png in Resources */,
 				BBCE9D121CB3AD5600DA56D6 /* 112_1.png in Resources */,
 				BB63F2B61C27FB2800A042E8 /* 15.gif in Resources */,
+				B43FF2FD1CD0EAC700CC8B5E /* text_blank_page@3x.png in Resources */,
 				BBFA851D1C30D216000466E4 /* 999.gif in Resources */,
 				BBCE9D311CB3AD5600DA56D6 /* 143_1.png in Resources */,
 				BBCE9D5C1CB3AD5700DA56D6 /* 416_1.png in Resources */,
@@ -4131,6 +4142,7 @@
 				BBCE9D591CB3AD5700DA56D6 /* 413_1.png in Resources */,
 				5AA6D8401CCBD90800841960 /* guide-4-xl.png in Resources */,
 				BB63F2BB1C27FB2800A042E8 /* 2.gif in Resources */,
+				B43FF2FA1CD0EAC700CC8B5E /* customized_no_opened@3x.png in Resources */,
 				1879B9111CC883BD00E981A5 /* TQGiftButtomView.xib in Resources */,
 				185DABAC1CBFDC970019C5A3 /* ideaDetailTableViewCell.xib in Resources */,
 				BBCE9D571CB3AD5700DA56D6 /* 411_1.png in Resources */,
@@ -4142,6 +4154,7 @@
 				5AA6D8431CCBD90800841960 /* guide-3-m.png in Resources */,
 				5AA6D8391CCBD90800841960 /* guide-1-md.png in Resources */,
 				BB63F5DA1C2CC7A300A042E8 /* checkbox1_unchecked@2x.png in Resources */,
+				B43FF2FB1CD0EAC700CC8B5E /* nav_search_no_result@3x.png in Resources */,
 				BBCE9D081CB3AD5600DA56D6 /* 102_1.png in Resources */,
 				BBCE9D341CB3AD5600DA56D6 /* 146_1.png in Resources */,
 				18D7A9131CC4E6A8006D9B74 /* TQAllReplyCell.xib in Resources */,
@@ -4152,6 +4165,7 @@
 				BBCE9D291CB3AD5600DA56D6 /* 135_1.png in Resources */,
 				BB6F11DE1CC7C2E000F02064 /* nav_menu_icon_n@2x.png in Resources */,
 				BBCE9D091CB3AD5600DA56D6 /* 103_1.png in Resources */,
+				B43FF2FE1CD0EAC700CC8B5E /* text_viewpoint_not_omment@3x.png in Resources */,
 				BBD58EB91CCA2026009250DB /* json_valueiterator.inl in Resources */,
 				BB6F12031CC7C2E000F02064 /* video_share_pengyouquan_icon@3x.png in Resources */,
 				BBCE9D331CB3AD5600DA56D6 /* 145_1.png in Resources */,
@@ -4265,6 +4279,7 @@
 				BBCE9D0C1CB3AD5600DA56D6 /* 106_1.png in Resources */,
 				BB6F11DF1CC7C2E000F02064 /* nav_menu_icon_n@3x.png in Resources */,
 				BBCE9D4E1CB3AD5600DA56D6 /* 402_1.png in Resources */,
+				B43FF2FC1CD0EAC700CC8B5E /* network_anomaly_fail@3x.png in Resources */,
 				BB5E1C7A1CC3C99A0076C416 /* video_shangmai_bg@2x.png in Resources */,
 				185DABAE1CBFDC970019C5A3 /* TQideaTableViewCell.xib in Resources */,
 				18D3CB8C1CC0D31800816BD0 /* TQPersonalTailorCell.xib in Resources */,
@@ -4739,7 +4754,7 @@
 				18EA82A31CCA148F00BDB735 /* TQMeCustomizedViewController.mm in Sources */,
 				B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */,
 				18D3CB751CC0920300816BD0 /* TQMailboxViewController.m in Sources */,
-				BBD58EBD1CCA61EE009250DB /* XMyViewController.m in Sources */,
+				BBD58EBD1CCA61EE009250DB /* XMyViewController.mm in Sources */,
 				BB63F6261C2CC7A300A042E8 /* LeftViewCell.m in Sources */,
 				B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */,
 				18B0CECE1CC07CC700BA82DF /* UIColor+Hex.m in Sources */,
@@ -4756,7 +4771,7 @@
 				BB63F61E1C2CC7A300A042E8 /* GroupListRequest.m in Sources */,
 				BB6F3ADD1CA117BE0035EBBE /* BandNewMobileViewController.m in Sources */,
 				BB16618F1C3D500D00D318BE /* PhotoViewController.m in Sources */,
-				18EA82A71CCA148F00BDB735 /* TQHeadView.m in Sources */,
+				18EA82A71CCA148F00BDB735 /* TQHeadView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

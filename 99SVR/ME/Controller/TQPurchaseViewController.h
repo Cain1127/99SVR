@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomViewController.h"
-
+#import "StockDealModel.h"
 @interface TQPurchaseViewController : CustomViewController
-
+@property (nonatomic , strong) StockDealModel *stockModel;
 @end

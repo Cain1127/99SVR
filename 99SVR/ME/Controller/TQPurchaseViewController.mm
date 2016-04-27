@@ -8,10 +8,13 @@
 #import "TQHeadView.h"
 #import "TableViewCell.h"
 #import "StockMacro.h"
+#import "TQPurchaseModel.h"
 
 @interface TQPurchaseViewController () <UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate>
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic , strong) TQHeadView *headerView;
+@property (nonatomic , copy) NSArray *dataArray;
+@property (nonatomic , strong) TQPurchaseModel *headerModel;
 
 @end
 
@@ -21,15 +24,10 @@
     [super viewDidLoad];
     
     self.txtTitle.text = @"购买私人定制";
-    
+    self.dataArray = @[];
     //注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_TQPURCHASE_VC object:nil];
-
-    [kHTTPSingle RequestBuyPrivateServicePage:[UserInfo sharedUserInfo].nUserId];
-    
-//    UserInfo *userInfo = [UserInfo sharedUserInfo];
-    
-    
+    [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
     
     self.view.backgroundColor = COLOR_Bg_Gay;
     CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
@@ -64,27 +62,22 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 6;
+    return self.dataArray.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *ID = @"cell";
     TableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
-    cell.row = indexPath.row;
-    cell.delegate = self;
     
-    if (indexPath.row%2==0) {
+    if (self.dataArray.count==0) {
         
-        cell.introduceLab.text = [NSString stringWithFormat:@"我是一个测试VIP。就是一个简单地测试VIP！"];
-
-        
-    }else{
-        
-        cell.introduceLab.text = [NSString stringWithFormat:@"皇冠灯是Bigbang队长GD亲自设计的，打破了应援色或一般应援棒的样式，设计成皇冠，有预示着王者的意义，又与“Vip”的名字相呼应。"];
-
+        return cell;
     }
     
+    cell.row = indexPath.row;
+    cell.delegate = self;
+    [cell setCellDataWithModel:(TQPurchaseModel *)self.dataArray[indexPath.row] withIndexRow:indexPath.row];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -100,9 +93,24 @@
 
 #pragma mark 刷新数据
 -(void)refreshDayData:(NSNotification *)notfi{
-
-    DLog(@"刷新数据---");
-
+    
+    NSString *code = [NSString stringWithFormat:@"%@",[notfi.object valueForKey:@"code"]];
+    
+    if ([code isEqualToString:@"1"]) {//请求成功
+        
+        self.headerModel = [notfi.object valueForKey:@"headerModel"];
+        self.headerModel.teamName = self.stockModel.teamname;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.headerView setHeaderViewWithModel:self.headerModel];
+            self.dataArray = [[notfi.object valueForKey:@"data"] copy];
+            [self.tableView reloadData];
+        });
+    }else{//请求失败
+    
+        
+        
+        
+    }
 }
 
 

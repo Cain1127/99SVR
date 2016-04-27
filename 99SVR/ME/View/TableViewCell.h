@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PriceLabView.h"
+#import "TQPurchaseModel.h"
 @protocol TableViewCellDelegate <NSObject>
 
 
@@ -34,6 +35,8 @@
 
 @property (nonatomic,assign)NSInteger row;
 @property (nonatomic,weak)id <TableViewCellDelegate>delegate;
+
+-(void)setCellDataWithModel:(TQPurchaseModel *)model withIndexRow:(NSInteger)row;
 
 
 @end
