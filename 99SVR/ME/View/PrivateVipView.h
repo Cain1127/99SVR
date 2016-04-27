@@ -11,6 +11,21 @@
 
 @interface PrivateVipView : UIView
 
+/**
+ *    格式要求
+ *   @[
+        @{
+            @"vipLevelId" : @"1",
+            @"vipLevelName" : @"VIP1",
+            @"isOpen" : @"0"
+        },
+        @{
+            @"vipLevelId" : @"2",
+            @"vipLevelName" : @"VIP2",
+            @"isOpen" : @"0"
+        }
+ ];
+ */
 @property (nonatomic, strong) NSArray *privateVipArray;
 @property(nonatomic, copy) void (^ selectVipBlock)(NSUInteger vipLevelId);
 
