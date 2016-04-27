@@ -76,7 +76,7 @@
     
     StockDealModel *model = self.tabDataArray[indexPath.row];
     StockDealViewController *stockVC = [[StockDealViewController alloc]init];
-    stockVC.operateId = [model.operateid integerValue];
+    stockVC.stockModel = model;
     [self.viewController.navigationController pushViewController:stockVC animated:YES];
 }
 

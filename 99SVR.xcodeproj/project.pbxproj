@@ -104,7 +104,7 @@
 		18EA82A31CCA148F00BDB735 /* TQMeCustomizedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */; };
 		18EA82A41CCA148F00BDB735 /* TableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA828C1CCA148F00BDB735 /* TableViewCell.mm */; };
 		18EA82A51CCA148F00BDB735 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA828D1CCA148F00BDB735 /* TableViewCell.xib */; };
-		18EA82A71CCA148F00BDB735 /* TQHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82911CCA148F00BDB735 /* TQHeadView.m */; };
+		18EA82A71CCA148F00BDB735 /* TQHeadView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82911CCA148F00BDB735 /* TQHeadView.mm */; };
 		18EA82A81CCA148F00BDB735 /* TQHeadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82921CCA148F00BDB735 /* TQHeadView.xib */; };
 		18EA82A91CCA148F00BDB735 /* TQIntroductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82941CCA148F00BDB735 /* TQIntroductCell.m */; };
 		18EA82AA1CCA148F00BDB735 /* TQIntroductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82951CCA148F00BDB735 /* TQIntroductCell.xib */; };
@@ -190,7 +190,7 @@
 		BB16618F1C3D500D00D318BE /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16618E1C3D500D00D318BE /* PhotoViewController.m */; };
 		BB16619D1C3E2DC700D318BE /* ZLButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16619A1C3E2DC700D318BE /* ZLButton.m */; };
 		BB16619E1C3E2DC700D318BE /* ZLTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16619C1C3E2DC700D318BE /* ZLTabBar.m */; };
-		BB1661A41C3E2F9A00D318BE /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1661A31C3E2F9A00D318BE /* HomeViewController.m */; };
+		BB1661A41C3E2F9A00D318BE /* HomeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB1661A31C3E2F9A00D318BE /* HomeViewController.mm */; };
 		BB17688D1C75A97E00CE947C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB17688C1C75A97E00CE947C /* libc++.tbd */; };
 		BB17688F1C75A9C200CE947C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB17688E1C75A9C200CE947C /* SystemConfiguration.framework */; };
 		BB17689F1C77052000CE947C /* GitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BB17689E1C77052000CE947C /* GitInfo.m */; };
@@ -620,7 +620,7 @@
 		BBD58EB81CCA2026009250DB /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EB01CCA2026009250DB /* json_value.cpp */; };
 		BBD58EB91CCA2026009250DB /* json_valueiterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = BBD58EB11CCA2026009250DB /* json_valueiterator.inl */; };
 		BBD58EBA1CCA2026009250DB /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EB21CCA2026009250DB /* json_writer.cpp */; };
-		BBD58EBD1CCA61EE009250DB /* XMyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EBC1CCA61EE009250DB /* XMyViewController.m */; };
+		BBD58EBD1CCA61EE009250DB /* XMyViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EBC1CCA61EE009250DB /* XMyViewController.mm */; };
 		BBD58ED11CCB4A85009250DB /* ConsumeRankDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBD58ED01CCB4A85009250DB /* ConsumeRankDataSource.mm */; };
 		BBD58ED41CCB4B5B009250DB /* ConsumeRankCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58ED31CCB4B5B009250DB /* ConsumeRankCell.m */; };
 		BBD58ED71CCB4E29009250DB /* XConsumeRankModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58ED61CCB4E29009250DB /* XConsumeRankModel.m */; };
@@ -841,7 +841,7 @@
 		18EA828C1CCA148F00BDB735 /* TableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableViewCell.mm; sourceTree = "<group>"; };
 		18EA828D1CCA148F00BDB735 /* TableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewCell.xib; sourceTree = "<group>"; };
 		18EA82901CCA148F00BDB735 /* TQHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQHeadView.h; sourceTree = "<group>"; };
-		18EA82911CCA148F00BDB735 /* TQHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQHeadView.m; sourceTree = "<group>"; };
+		18EA82911CCA148F00BDB735 /* TQHeadView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQHeadView.mm; sourceTree = "<group>"; };
 		18EA82921CCA148F00BDB735 /* TQHeadView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQHeadView.xib; sourceTree = "<group>"; };
 		18EA82931CCA148F00BDB735 /* TQIntroductCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQIntroductCell.h; sourceTree = "<group>"; };
 		18EA82941CCA148F00BDB735 /* TQIntroductCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQIntroductCell.m; sourceTree = "<group>"; };
@@ -1066,7 +1066,7 @@
 		BB16619B1C3E2DC700D318BE /* ZLTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLTabBar.h; sourceTree = "<group>"; };
 		BB16619C1C3E2DC700D318BE /* ZLTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLTabBar.m; sourceTree = "<group>"; };
 		BB1661A21C3E2F9A00D318BE /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
-		BB1661A31C3E2F9A00D318BE /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		BB1661A31C3E2F9A00D318BE /* HomeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HomeViewController.mm; sourceTree = "<group>"; };
 		BB17688C1C75A97E00CE947C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		BB17688E1C75A9C200CE947C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		BB17689D1C77052000CE947C /* GitInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitInfo.h; sourceTree = "<group>"; };
@@ -1797,7 +1797,7 @@
 		BBD58EB51CCA2026009250DB /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
 		BBD58EB61CCA2026009250DB /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
 		BBD58EBB1CCA61EE009250DB /* XMyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMyViewController.h; sourceTree = "<group>"; };
-		BBD58EBC1CCA61EE009250DB /* XMyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMyViewController.m; sourceTree = "<group>"; };
+		BBD58EBC1CCA61EE009250DB /* XMyViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMyViewController.mm; sourceTree = "<group>"; };
 		BBD58ECF1CCB4A85009250DB /* ConsumeRankDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsumeRankDataSource.h; sourceTree = "<group>"; };
 		BBD58ED01CCB4A85009250DB /* ConsumeRankDataSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ConsumeRankDataSource.mm; sourceTree = "<group>"; };
 		BBD58ED21CCB4B5B009250DB /* ConsumeRankCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsumeRankCell.h; sourceTree = "<group>"; };
@@ -2230,7 +2230,7 @@
 				18EA82871CCA148F00BDB735 /* TQMeCustomizedViewController.h */,
 				18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */,
 				BBD58EBB1CCA61EE009250DB /* XMyViewController.h */,
-				BBD58EBC1CCA61EE009250DB /* XMyViewController.m */,
+				BBD58EBC1CCA61EE009250DB /* XMyViewController.mm */,
 				BBD58EEF1CCBE6AC009250DB /* XPrivateDetailViewController.h */,
 				BBD58EF01CCBE6AC009250DB /* XPrivateDetailViewController.m */,
 				1895B7911CCBAA8700B86B0D /* TQMyViewController.h */,
@@ -2246,7 +2246,7 @@
 				18EA828C1CCA148F00BDB735 /* TableViewCell.mm */,
 				18EA828D1CCA148F00BDB735 /* TableViewCell.xib */,
 				18EA82901CCA148F00BDB735 /* TQHeadView.h */,
-				18EA82911CCA148F00BDB735 /* TQHeadView.m */,
+				18EA82911CCA148F00BDB735 /* TQHeadView.mm */,
 				18EA82921CCA148F00BDB735 /* TQHeadView.xib */,
 				18EA82931CCA148F00BDB735 /* TQIntroductCell.h */,
 				18EA82941CCA148F00BDB735 /* TQIntroductCell.m */,
@@ -3478,7 +3478,7 @@
 				189D8A8C1C97982100E7D16D /* SlideBaseViewController.h */,
 				189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */,
 				BB1661A21C3E2F9A00D318BE /* HomeViewController.h */,
-				BB1661A31C3E2F9A00D318BE /* HomeViewController.m */,
+				BB1661A31C3E2F9A00D318BE /* HomeViewController.mm */,
 				BB63F5771C2CC7A300A042E8 /* HotViewController.h */,
 				BB63F5781C2CC7A300A042E8 /* HotViewController.m */,
 				BB63F57B1C2CC7A300A042E8 /* MainViewController.h */,
@@ -4361,7 +4361,7 @@
 				BB5E1C731CC082310076C416 /* RoomService.mm in Sources */,
 				B4CC49CB1CCF9AB200D0C2F7 /* TQPurchaseModel.mm in Sources */,
 				BB5E4FA21CBF7D1B00F8C1D4 /* TeacherModel.m in Sources */,
-				BB1661A41C3E2F9A00D318BE /* HomeViewController.m in Sources */,
+				BB1661A41C3E2F9A00D318BE /* HomeViewController.mm in Sources */,
 				BBD58EE81CCBD8A2009250DB /* XMeCustomDataSource.m in Sources */,
 				B4EA09111CC757D500E8F933 /* StockChartView.m in Sources */,
 				BB6F11861CC68C3400F02064 /* TableViewFactory.m in Sources */,
@@ -4683,7 +4683,7 @@
 				18EA82A31CCA148F00BDB735 /* TQMeCustomizedViewController.mm in Sources */,
 				B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */,
 				18D3CB751CC0920300816BD0 /* TQMailboxViewController.m in Sources */,
-				BBD58EBD1CCA61EE009250DB /* XMyViewController.m in Sources */,
+				BBD58EBD1CCA61EE009250DB /* XMyViewController.mm in Sources */,
 				BB63F6261C2CC7A300A042E8 /* LeftViewCell.m in Sources */,
 				B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */,
 				18B0CECE1CC07CC700BA82DF /* UIColor+Hex.m in Sources */,
@@ -4700,7 +4700,7 @@
 				BB63F61E1C2CC7A300A042E8 /* GroupListRequest.m in Sources */,
 				BB6F3ADD1CA117BE0035EBBE /* BandNewMobileViewController.m in Sources */,
 				BB16618F1C3D500D00D318BE /* PhotoViewController.m in Sources */,
-				18EA82A71CCA148F00BDB735 /* TQHeadView.m in Sources */,
+				18EA82A71CCA148F00BDB735 /* TQHeadView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

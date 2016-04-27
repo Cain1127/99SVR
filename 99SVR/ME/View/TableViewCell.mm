@@ -28,28 +28,11 @@
 }
 
 
--(void)setRow:(NSInteger)row{
-    
-    _row = row;
-    //设置VIP的图标
-    self.vipIconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%d_icon",((int)row+1)]];
-    self.vipNameLab.text = [NSString stringWithFormat:@"VIP%d",(int)(row+1)];
-#warning 默认vip3 就是已经购买VIP的
-    
-    BOOL isVipValue = NO;
-    
-    if (isVipValue) {
-        
-        [self vipSettingWithRow:row];
-    }else{
-        [self notVipSettingWithRow:row];
-    }
-}
-
 #pragma mark vip的设置
--(void)vipSettingWithRow:(NSInteger)row{
+-(void)vipSettingWithRow:(NSInteger)row withModel:(TQPurchaseModel *)model{
 
-    if (row<=3) {//vip = 4
+    
+    if ((row+1)<=[model.levelid intValue]) {//已经购买的VIP
         self.vipNameLab.textColor = COLOR_Auxiliary_Blue;
         self.clickBtn.enabled = NO;
         [self.clickBtn setTitle:@"已购买" forState:UIControlStateDisabled];
@@ -61,7 +44,7 @@
             make.width.equalTo(@46);
         }];
         
-        self.priceLabView.oldpriceStr = @"玖玖币:8999";
+        self.priceLabView.oldpriceStr = model.buyprice;
         self.priceLabView.state = PriceLabViewType_Vip;
         
     }else{
@@ -77,15 +60,15 @@
             make.width.equalTo(@100);
         }];
         
-        self.priceLabView.newpriceStr = @"玖玖币:8999";
-        self.priceLabView.oldpriceStr = @"玖玖币:12999";
+        self.priceLabView.newpriceStr = model.updateprice;
+        self.priceLabView.oldpriceStr = model.buyprice;
         self.priceLabView.state = PriceLabViewType_NotVip;
     }
 
 }
 
 #pragma mark 不是vip的设置
--(void)notVipSettingWithRow:(NSInteger)row{
+-(void)notVipSettingWithRow:(NSInteger)row withModel:(TQPurchaseModel *)model{
     
     
     self.vipNameLab.textColor = COLOR_Auxiliary_Orange;
@@ -99,7 +82,7 @@
         make.width.equalTo(@100);
     }];
     
-    self.priceLabView.oldpriceStr = @"玖玖币:12999";
+    self.priceLabView.oldpriceStr = model.buyprice;
     self.priceLabView.state = PriceLabViewType_Vip;
 }
 
@@ -117,7 +100,20 @@
     }
 }
 
+-(void)setCellDataWithModel:(TQPurchaseModel *)model withIndexRow:(NSInteger)row{
 
+    //设置VIP的图标
+    self.vipIconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%d_icon",((int)row+1)]];
+    self.vipNameLab.text = model.levelname;
+    
+    BOOL isVipValue = [model.isopen isEqualToString:@"0"] ? NO : YES;
+    if (isVipValue) {
+        
+        [self vipSettingWithRow:row withModel:model];
+    }else{
+        [self notVipSettingWithRow:row withModel:model];
+    }
+}
 
 
 @end

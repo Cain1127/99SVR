@@ -7,7 +7,6 @@
 #import "StockMacro.h"
 #import "StockDealTableModel.h"
 #import "HttpMessage.pb.h"
-#import "StockDealModel.h"
 #import "TQPurchaseViewController.h"
 
 @interface StockDealViewController ()
@@ -44,11 +43,11 @@
 
 -(void)initData{
 
-    self.txtTitle.text = @"金山";
+    self.txtTitle.text = self.stockModel.teamname;
     self.warningLab.text = @"仅代表讲师个人操盘记录,不构成投资建议，风险自负";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
-    [kHTTPSingle RequestOperateStockAllDetail:(int)self.operateId];
+    [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
 
 
 }
@@ -62,9 +61,6 @@
     return _tableViewDataArray;
 }
 - (void)printInfo:(NSNotification *)notify{
-
-    DLog(@"股票详情---%@",notify);
-    
     
     
     WeakSelf(self);

@@ -18,11 +18,11 @@
 @property (nonatomic , copy) NSString *buytime;
 /**expirtiontime*/
 @property (nonatomic , copy) NSString *expirtiontime;
-/**buyprice*/
+/**buyprice 买的价格*/
 @property (nonatomic , copy) NSString *buyprice;
-/**updateprice*/
+/**updateprice 更新的价格*/
 @property (nonatomic , copy) NSString *updateprice;
-/**isopen*/
+/**isopen 0表示没有购买vip 1表示已购买*/
 @property (nonatomic , copy) NSString *isopen;
 
 #pragma mark 购买私人订制的

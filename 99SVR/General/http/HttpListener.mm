@@ -356,21 +356,27 @@ void WhatIsPrivateServiceListener::OnError(int errCode)
 
 void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription>& infos){
     
+    NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     NSMutableArray *muArray = [NSMutableArray array];
     for (size_t i=0; i!=infos.size(); i++) {
-        
         PrivateServiceLevelDescription *levelModel = &infos[i];
         TQPurchaseModel *model = [[TQPurchaseModel alloc]initWithPrivateServiceLevelData:levelModel];
         [muArray addObject:model];
     }
-    DLog(@"购买私人订制----成功回调");
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:@{@"data":muArray,@"code":@(1)}];
+    
+    if (infos.size()>=1) {
+        
+        TQPurchaseModel *headerModel =[[TQPurchaseModel alloc]initWithPrivateServiceLevelData:&infos[0]];
+        muDic[@"headerModel"] = headerModel;
+    }
+    
+    muDic[@"data"] = muArray;
+    muDic[@"code"] = @(1);
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:muDic];
 }
 
 void BuyPrivateServiceListener::OnError(int errCode)
 {
-    DLog(@"购买私人订制----错误回调 %@",@(errCode));
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:@{@"code":@(errCode)}];
 
 }

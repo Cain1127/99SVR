@@ -25,4 +25,9 @@
     self.attentionLab.textColor = COLOR_Auxiliary_Red;
 }
 
+-(void)setHeaderViewWithModel:(TQPurchaseModel *)model{
+
+    self.timeLab.text = model.expirtiontime;
+}
+
 @end
