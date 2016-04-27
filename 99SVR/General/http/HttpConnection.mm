@@ -151,6 +151,104 @@ void parse_profitorder(char* json, HttpListener* listener)
     }
 }
 
+//void parse_profitdetail(char* json, HttpListener* listener)
+//{
+//    std::string strJson = json;
+//    
+//    JsonValue value;
+//    JsonReader reader;
+//    
+//    std::vector<OperateStockTransaction> vec_trans;
+//    std::vector<OperateStocks> vec_stocks;
+//    
+//    int size_ = 0;
+//    int i = 0;
+//    
+//    OperateStockAllDetailListener* detail_listener = (OperateStockAllDetailListener*)listener;
+//    
+//    try
+//    {
+//        // 解析逻辑
+//        //..
+//        if (reader.parse(strJson, value))
+//        {
+//            JsonValue& datas = value["data"];
+//            if(!datas.isNull())
+//            {
+//                OperateStockProfit osprofit;
+//                osprofit.set_operateid(datas["profile"]["operateId"].asUInt());
+//                osprofit.set_teamid(datas["profile"]["teamId"].asString());
+//                osprofit.set_teamname(datas["profile"]["teamName"].asString());
+//                osprofit.set_teamicon(datas["profile"]["teamIcon"].asString());
+//                osprofit.set_focus(datas["profile"]["focus"].asString());
+//                osprofit.set_goalprofit(atof((datas["profile"]["goalProfit"].asString()).c_str()));
+//                osprofit.set_totalprofit(atof((datas["profile"]["totalProfit"].asString()).c_str()));
+//                osprofit.set_dayprofit(atof((datas["profile"]["dayProfit"].asString()).c_str()));
+//                osprofit.set_monthprofit(atof((datas["profile"]["monthProfit"].asString()).c_str()));
+//                osprofit.set_winrate(atof((datas["profile"]["winRate"].asString()).c_str()));
+//                
+//                OperateStockData osdata;
+//                osprofit.set_operateid(datas["curve"]["operateId"].asUInt());
+//                
+//                size_ = datas["trans"].size();
+//                vec_trans.clear();
+//                for(i = 0; i < size_; i++)
+//                {
+//                    OperateStockTransaction trans;
+//                    trans.set_transid(datas["trans"][i]["transId"].asUInt());
+//                    trans.set_operateid(datas["trans"][i]["operateId"].asUInt());
+//                    trans.set_buytype(datas["trans"][i]["buytype"].asString());
+//                    trans.set_stockid(datas["trans"][i]["stockId"].asString());
+//                    trans.set_stockname(datas["trans"][i]["stockName"].asString());
+//                    trans.set_price(atof((datas["trans"][i]["price"].asString()).c_str()));
+//                    //TODD:try catch
+//                    trans.set_count(atoi(datas["trans"][i]["count"].asString().c_str()));
+//                    trans.set_money(atof((datas["trans"][i]["money"].asString()).c_str()));
+//                    trans.set_time(datas["trans"][i]["time"].asString());
+//                    vec_trans.push_back(trans);
+//                }
+//                
+//                size_ = datas["stocks"].size();
+//                vec_stocks.clear();
+//                for(i = 0; i < size_; i++)
+//                {
+//                    OperateStocks stocks;
+//                    stocks.set_transid(datas["stocks"][i]["transId"].asUInt());
+//                    stocks.set_operateid(datas["stocks"][i]["operateId"].asUInt());
+//                    stocks.set_stockid(datas["stocks"][i]["stockId"].asString());
+//                    stocks.set_stockname(datas["stocks"][i]["stockName"].asString());
+//                    stocks.set_count(datas["stocks"][i]["count"].asUInt());
+//                    stocks.set_cost(atof((datas["stocks"][i]["cost"].asString()).c_str()));
+//                    stocks.set_currprice(atof((datas["stocks"][i]["currPrice"].asString()).c_str()));
+//                    stocks.set_profitrate(atof((datas["stocks"][i]["profitRate"].asString()).c_str()));
+//                    stocks.set_profitmoney(atof((datas["stocks"][i]["ProfitMoney"].asString()).c_str()));
+//                    
+//                    vec_stocks.push_back(stocks);
+//                }
+//                
+//                uint32 currLevelId=datas["currLevelId"].asUInt();
+//                uint32 minVipLevel=datas["minVipLevel"].asUInt();
+//                
+//                
+//                detail_listener->onResponse(osprofit,osdata,vec_trans,vec_stocks,currLevelId,minVipLevel);
+//            }
+//            else
+//            {
+//                detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+//            }
+//        }
+//        else
+//        {
+//            detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+//        }
+//    }
+//    catch ( std::exception& ex)
+//    {
+//        detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+//    }
+//}
+
+//请求操盘详情
 void parse_profitdetail(char* json, HttpListener* listener)
 {
     std::string strJson = json;
@@ -176,7 +274,7 @@ void parse_profitdetail(char* json, HttpListener* listener)
             if(!datas.isNull())
             {
                 OperateStockProfit osprofit;
-                osprofit.set_operateid(datas["profile"]["operateId"].asUInt());
+                osprofit.set_operateid(atoi((datas["profile"]["operateId"].asString()).c_str()));
                 osprofit.set_teamid(datas["profile"]["teamId"].asString());
                 osprofit.set_teamname(datas["profile"]["teamName"].asString());
                 osprofit.set_teamicon(datas["profile"]["teamIcon"].asString());
@@ -188,20 +286,20 @@ void parse_profitdetail(char* json, HttpListener* listener)
                 osprofit.set_winrate(atof((datas["profile"]["winRate"].asString()).c_str()));
                 
                 OperateStockData osdata;
-                osprofit.set_operateid(datas["curve"]["operateId"].asUInt());
+                osdata.set_operateid(datas["curve"]["operateId"].asUInt());
                 
                 size_ = datas["trans"].size();
                 vec_trans.clear();
                 for(i = 0; i < size_; i++)
                 {
                     OperateStockTransaction trans;
-                    trans.set_transid(datas["trans"][i]["transId"].asUInt());
                     trans.set_operateid(datas["trans"][i]["operateId"].asUInt());
+                    trans.set_transid(datas["trans"][i]["transId"].asUInt());
                     trans.set_buytype(datas["trans"][i]["buytype"].asString());
                     trans.set_stockid(datas["trans"][i]["stockId"].asString());
                     trans.set_stockname(datas["trans"][i]["stockName"].asString());
                     trans.set_price(atof((datas["trans"][i]["price"].asString()).c_str()));
-                    trans.set_count(datas["trans"][i]["count"].asUInt());
+                    trans.set_count(atoi((datas["trans"][i]["count"].asString()).c_str()));
                     trans.set_money(atof((datas["trans"][i]["money"].asString()).c_str()));
                     trans.set_time(datas["trans"][i]["time"].asString());
                     vec_trans.push_back(trans);
@@ -216,7 +314,7 @@ void parse_profitdetail(char* json, HttpListener* listener)
                     stocks.set_operateid(datas["stocks"][i]["operateId"].asUInt());
                     stocks.set_stockid(datas["stocks"][i]["stockId"].asString());
                     stocks.set_stockname(datas["stocks"][i]["stockName"].asString());
-                    stocks.set_count(datas["stocks"][i]["count"].asUInt());
+                    stocks.set_count(atoi((datas["stocks"][i]["count"].asString()).c_str()));
                     stocks.set_cost(atof((datas["stocks"][i]["cost"].asString()).c_str()));
                     stocks.set_currprice(atof((datas["stocks"][i]["currPrice"].asString()).c_str()));
                     stocks.set_profitrate(atof((datas["stocks"][i]["profitRate"].asString()).c_str()));
@@ -247,6 +345,7 @@ void parse_profitdetail(char* json, HttpListener* listener)
     }
 }
 
+
 // 请求操盘列表-日收益排序
 void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, int size, OperateStockProfitListener* listener)
 {
@@ -268,10 +367,10 @@ void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAll
     
     
 
-    DLog(@"operateId---高手操盘详情%d",operateId);
+    DLog(@"operateId = %d, userid=%d",operateId,[UserInfo sharedUserInfo].nUserId);
     
     char tmp[1024] = {0};
-    sprintf(tmp,"/operate/detail/id/%d/uid/%d",operateId,login_userid);
+    sprintf(tmp,"/operate/detail/id/%d/uid/%d",operateId,[UserInfo sharedUserInfo].nUserId);
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;

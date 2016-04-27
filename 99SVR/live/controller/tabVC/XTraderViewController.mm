@@ -92,6 +92,7 @@
  *  @param toDataArray   实际的数据
  */
 -(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockHomeTableViewModel *)tableModel fromDataArray:(NSArray *)fromDataArray toDataArray:(NSMutableArray *)toDataArray{
+    /*
     if ([fromDataArray  count]==0) {
         [table.footer noticeNoMoreData];
         [UIView animateWithDuration:1 animations:^{
@@ -112,6 +113,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [table reloadData];
     });
+    */
 }
 
 -(NSMutableArray *)totalDataArray{

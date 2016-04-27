@@ -23,7 +23,7 @@
 #import "ProfileViewController.h"
 #import "TQMeCustomizedViewController.h"
 #import "PaySelectViewController.h"
-
+#import "TQPurchaseViewController.h"
 #define kLogin @"登录"
 #define kRegist @"注册"
 #define kHistory @"历史记录"
@@ -98,7 +98,8 @@
     // 登录成功用户
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"私人定制" icon:@"mydata.png" goClassName:@"TQMeCustomizedViewController"]];
+//        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"私人定制" icon:@"mydata.png" goClassName:@"TQMeCustomizedViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"私人订制" icon:@"personal_recharge_icon" goClassName:@"TQPurchaseViewController"]];
 //        if(KUserSingleton.nStatus)
 //        {
 //        ProfileViewController

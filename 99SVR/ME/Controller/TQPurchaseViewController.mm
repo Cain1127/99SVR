@@ -101,7 +101,7 @@
 #pragma mark 刷新数据
 -(void)refreshDayData:(NSNotification *)notfi{
 
-    DLog(@"刷新数据---");
+    DLog(@"刷新数据--- %@",notfi.object);
 
 }
 

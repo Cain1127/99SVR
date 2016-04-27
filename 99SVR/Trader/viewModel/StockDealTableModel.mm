@@ -276,9 +276,9 @@
     }
 }
 
--(void)setVipLevel:(NSInteger)vipLevel withOperateId:(NSInteger)operateId{
+-(void)setIsShowRecal:(NSString *)showRecal withOperateId:(NSInteger)operateId{
     _operateId = operateId;
-    if (vipLevel!=0) {
+    if ([showRecal isEqualToString:@"show"]) {
         _isVipBool = YES;
     }else{
         _isVipBool = NO;

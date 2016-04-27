@@ -57,6 +57,11 @@
 /**profitmoney 盈利的钱*/
 @property (nonatomic , copy) NSString *profitmoney;
 
+/**当前vip等级*/
+@property (nonatomic , copy) NSString *currLevelId;
+/**最小vip等级*/
+@property (nonatomic , copy) NSString *minVipLevel;
+
 #pragma mark 股票详情--股票头部详情数据
 /**股票头部详情数据*/
 - (instancetype)initWithStockDealHeaderData:(OperateStockProfit &)profit;
