@@ -89,11 +89,10 @@
     _room = room;
 }
 
-
-
 - (id)initWithModel:(RoomHttp *)room
 {
     self = [super init];
+    _nSelectIndex = 1;
     _room = room;
     return self;
 }
@@ -107,7 +106,7 @@
     dictGift = [NSMutableDictionary dictionary];
     nColor = 10000;
     [self initUIHead];
-    
+//    _nSelectIndex = 1;
     UITapGestureRecognizer* singleRecogn;
     
     singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTopHUD)];
@@ -180,7 +179,7 @@
     _menuView = [[SliderMenuView alloc] initWithFrame:Rect(0,kVideoImageHeight, kScreenWidth,self.view.height-kVideoImageHeight)
                                            withTitles:@[@"聊天",@"我的",@"公告",@"课程表",@"贡献榜"] withDefaultSelectIndex:0];
     _menuView.viewArrays = @[_chatAllView,_priChatView,_noticeView,_teachView,_tableConsumeRank];
-    _nSelectIndex = 1;
+    
     _menuView.DidSelectSliderIndex = ^(NSInteger index)
     {
         _nSelectIndex = index;

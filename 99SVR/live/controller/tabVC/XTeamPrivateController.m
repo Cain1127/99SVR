@@ -26,7 +26,7 @@
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) UIImageView *selectIconImageView;
 @property (nonatomic,strong) UILabel *selectVipLable;
-
+@property (nonatomic) NSInteger selectIndex;
 
 @end
 
@@ -105,9 +105,11 @@
     _privateView.frame = CGRectMake(0, CGRectGetMaxY(recommendView.frame)+10, kScreenWidth, 100);
     _privateView.selectVipBlock = ^(NSUInteger vipLevelId){
         @StrongObj(self)
+        self.selectIndex = vipLevelId;
         // 设置组头部Vip值
         self.selectIconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%ld_icon",(unsigned long)vipLevelId]];
         self.selectVipLable.text = [NSString stringWithFormat:@"VIP%ld的服务内容",(unsigned long)vipLevelId];
+        [self.tableView reloadData];
     };
     [headerView addSubview:_privateView];
     
@@ -129,11 +131,8 @@
                                              @"vipLevelName" : model.vipLevelName,@"isOpen" :NSStringFromInt(model.isOpen)};
                 [muAryTemp addObject:parameters];
             }
-            _aryVIP = muAryTemp;
-            _privateView.privateVipArray = _aryVIP;
-            _privateView.hidden = NO;
-            
-            
+            _aryVIP = aryTemp;
+            self.privateView.privateVipArray = muAryTemp;
             return;
         }
     }
@@ -169,23 +168,29 @@
 
 // 返回每组行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    if (_aryVIP.count>_selectIndex) {
+        XPrivateService *service = _aryVIP[_selectIndex];
+        return service.summaryList.count;
+    }
+    return 0;
 }
 
 // 返回每行的单元格
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
- 
-    
-    CustomizedModel *customizedModel = [[CustomizedModel alloc] init];
-    customizedModel.title = @"测试的拉拉拉";
-    customizedModel.summary = @"内容拉拼接拉拉拉的";
-    customizedModel.publishTime = @"2015-05-30 12:40";
-    customizedModel.isOpen = NO;
-    
     CustomizedTableViewCell *cell = [CustomizedTableViewCell cellWithTableView:tableView];
-    cell.customizedModel = customizedModel;
-    
+    if (_aryVIP.count>_selectIndex) {
+        XPrivateService *service = _aryVIP[_selectIndex];
+        if (service.summaryList.count>indexPath.row) {
+            XPrivateSummary *summary = service.summaryList[indexPath.row];
+            CustomizedModel *customizedModel = [[CustomizedModel alloc] init];
+            customizedModel.title = summary.title;
+            customizedModel.summary = summary.summary;
+            customizedModel.publishTime = summary.publishtime;
+            customizedModel.isOpen = service.isOpen;
+            cell.customizedModel = customizedModel;
+        }
+    }
     UIView *lineBottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 80 - 0.5,kScreenWidth, 0.5)];
     lineBottomView.backgroundColor = UIColorFromRGB(0xe5e5e5);
     [cell addSubview:lineBottomView];
@@ -197,16 +202,17 @@
 {
     UIView *headerSectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 40)];
     headerSectionView.backgroundColor = [UIColor whiteColor];
-    
     // 图标
     _selectIconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 5, 25, 25)];
-    _selectIconImageView.image = [UIImage imageNamed:@"customized_vip1_icon"];
+    NSString *imgSrc = [NSString stringWithFormat:@"customized_vip%zi_icon",_selectIndex];
+    _selectIconImageView.image = [UIImage imageNamed:imgSrc];
     [headerSectionView addSubview:_selectIconImageView];
     
     // 标题
     _selectVipLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_selectIconImageView.frame)+8, 0, 150, 40)];
     _selectVipLable.textColor = UIColorFromRGB(0x919191);
-    _selectVipLable.text = @"VIP1的服务内容";
+    NSString *strName = [NSString stringWithFormat:@"VIP%zi的服务内容",_selectIndex];
+    _selectVipLable.text = strName;
     _selectVipLable.font = [UIFont boldSystemFontOfSize:15];
     [headerSectionView addSubview:_selectVipLable];
     

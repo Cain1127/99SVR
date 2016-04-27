@@ -26,7 +26,7 @@
         }
  ];
  */
-@property (nonatomic, strong) NSArray *privateVipArray;
+@property (nonatomic, copy) NSArray *privateVipArray;
 @property(nonatomic, copy) void (^ selectVipBlock)(NSUInteger vipLevelId);
 
 @end

@@ -26,10 +26,19 @@
 
 -(void)setPrivateVipArray:(NSArray *)privateVipArray
 {
-    [privateVipArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        BOOL isOpen = [obj[@"isOpen"] isEqualToString:@"1"]?true:false;
-        [self addSubview:[self createAttrViewWithVipLevelId:obj[@"vipLevelId"] isOpen:isOpen viewCount:idx + 1]];
-    }];
+//    [privateVipArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    @WeakObj(self)
+    _privateVipArray = privateVipArray;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @StrongObj(self)
+        int i = 1;
+        for (NSDictionary *obj in self.privateVipArray) {
+            BOOL isOpen = [obj[@"isOpen"] isEqualToString:@"1"]?true:false;
+            [self addSubview:[self createAttrViewWithVipLevelId:obj[@"vipLevelId"] isOpen:isOpen viewCount:i]];
+            i++;
+        }
+   });
+//    }];
 }
 
 /**
@@ -55,13 +64,15 @@
     
     // 图票
     UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 8, 30, 30)];
-    iconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%@_icon",vipLevelId]];
+//    iconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%@_icon",vipLevelId]];
+    iconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%zi_icon",viewCount]];
     [attrDescButton addSubview:iconImageView];
     
     // VIP
     UILabel *attrValueLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+8, 5, 80, 25)];
     attrValueLable.textColor = UIColorFromRGB(0x919191);
-    attrValueLable.text = [NSString stringWithFormat:@"VIP%@",vipLevelId];
+//    attrValueLable.text = [NSString stringWithFormat:@"VIP%@",vipLevelId];
+    attrValueLable.text = [NSString stringWithFormat:@"VIP%zi",viewCount];
     attrValueLable.font = XCFONT(14);
     [attrDescButton addSubview:attrValueLable];
     
