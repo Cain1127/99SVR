@@ -33,7 +33,7 @@
     self.buyLab.textAlignment = NSTextAlignmentCenter;
     self.buyLab.font = [UIFont systemFontOfSize:buyLab_font];
     self.buyLab.text = @"去购买";
-    self.buyLab.textColor = COLOR_STOCK_Orange;
+    self.buyLab.textColor = COLOR_Auxiliary_Orange;
     self.buyLab.userInteractionEnabled = YES;
     UITapGestureRecognizer *buyTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(buyLabelClick:)];
     buyTap.numberOfTapsRequired = 1;
@@ -42,7 +42,7 @@
     
     self.textLab = [[UILabel alloc]init];
     self.textLab.textAlignment = NSTextAlignmentCenter;
-    self.textLab.textColor = COLOR_STOCK_Text_Black;
+    self.textLab.textColor = COLOR_Text_4C4C4C;
     self.textLab.font = [UIFont systemFontOfSize:textLab_font];
     [self addSubview:self.textLab];
     
@@ -50,7 +50,7 @@
     self.serviceLab.textAlignment = NSTextAlignmentCenter;
     self.serviceLab.font = [UIFont systemFontOfSize:serviceLab_font];
     self.serviceLab.text = @"什么是私人订制服务";
-    self.serviceLab.textColor = COLOR_STOCK_Blue;
+    self.serviceLab.textColor = COLOR_Bg_Blue;
     self.serviceLab.userInteractionEnabled = YES;
     UITapGestureRecognizer *serviceTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(serviceLabelClick:)];
     serviceTap.numberOfTapsRequired = 1;
@@ -101,14 +101,17 @@
 /**购买*/
 -(void)buyLabelClick:(UITapGestureRecognizer *)tap{
     
-    NSLog(@"购买");
+    if ([self.delegate respondsToSelector:@selector(stockNotVipViewDidSelectIndex:)]) {
+        [self.delegate stockNotVipViewDidSelectIndex:1];
+    }
 }
 
 /**查看serviceLabelClick*/
 -(void)serviceLabelClick:(UITapGestureRecognizer *)tap{
 
-    NSLog(@"什么是私人服务");
-    
+    if ([self.delegate respondsToSelector:@selector(stockNotVipViewDidSelectIndex:)]) {
+        [self.delegate stockNotVipViewDidSelectIndex:2];
+    }
 }
 
 

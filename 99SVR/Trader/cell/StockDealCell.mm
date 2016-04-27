@@ -37,7 +37,7 @@
     
     //仓库 VIP
     self.wareHouseViw = [[StockDealCellView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,STORCK_Deal_WareHouseRecordCell_VIP_H}];
-    self.wareHouseViw.nowRmbLabV.rightLab.textColor = COLOR_STOCK_YingKui;
+    self.wareHouseViw.nowRmbLabV.rightLab.textColor = COLOR_Auxiliary_Red;
     [self.bakImageView addSubview:self.wareHouseViw];
     
     //不是vip的view

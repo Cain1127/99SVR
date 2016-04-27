@@ -5,7 +5,7 @@
  */
 
 #import "ShareFunction.h"
-
+#import "UIAlertView+Block.h"
 @implementation ShareFunction
 #pragma mark 计算出字体的长度已经高度。这里不包括行距
 +(CGSize)calculationOfTheText:(NSString *)string withFont:(CGFloat)font withMaxSize:(CGSize)maxSize{
@@ -72,26 +72,8 @@
         imageView.frame = CGRectMake(0, f.origin.y, [[UIScreen mainScreen] bounds].size.width, imageHeight);
     }
 }
-+(UIAlertController *)createAlertViewWithTitle:(NSString *)title withCancleBtnStr:(NSString *)cancelStr withOtherBtnStr:(NSString *)otherBthStr withOtherBtnColor:(UIColor *)otherBtnColor withMessage:(NSString *)message completionCallback:(void (^)(NSInteger index))completionCallback{
-    
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelStr style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        completionCallback(0);
-    }];
-    
-    [cancelAction setValue:[UIColor grayColor] forKey:@"_titleTextColor"];
 
-    
-    UIAlertAction *otherAction = [UIAlertAction actionWithTitle:otherBthStr style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        completionCallback(1);
-    }];
-    [otherAction setValue:otherBtnColor forKey:@"_titleTextColor"];
 
-    [alertVC addAction:cancelAction];
-    [alertVC addAction:otherAction];
-    
-    return alertVC;
-}
 #pragma mark 传入当前控制器 获取同一个nav里面的控制器
 +(UIViewController *)getTargetViewController:(NSString *)viewControllerName withInTheCurrentController:(UIViewController *)viewController{
     NSArray *viewControllers = viewController.navigationController.viewControllers;

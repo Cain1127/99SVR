@@ -4,9 +4,9 @@
 #define traderName_h ValueWithTheIPhoneModelString(@"20,20,20,20") //操盘的名称大小
 #define traderName_fot ValueWithTheIPhoneModelString(@"15,15,15,15") //操盘的大小
 #define targetLab_fot ValueWithTheIPhoneModelString(@"15,15,15,15") //目标收益大小
-#define totalNumLab_fot ValueWithTheIPhoneModelString(@"21,21,21,21") //总收益数额大小
+#define totalNumLab_fot ValueWithTheIPhoneModelString(@"25,30,30,30") //总收益数额大小
 #define totalTitLab_fot ValueWithTheIPhoneModelString(@"15,15,15,15") //总收益文字大小
-#define icon_w (ValueWithTheIPhoneModelString(@"120,120,120,120")-30-10) //头像的大小
+#define icon_w (STORCK_HOME_StockRecordCell_H-30-10) //头像的大小
 
 #import "StockMacro.h"
 #import "StockHomeCell.h"
@@ -42,7 +42,7 @@
 
     self.targetLab = [[UILabel alloc]init];
     self.targetLab.font = [UIFont systemFontOfSize:targetLab_fot];
-    self.targetLab.textColor = COLOR_STOCK_Text_Black;
+    self.targetLab.textColor = COLOR_Text_B2B2B2;
     [self.bakImageView addSubview:self.targetLab];
     
 
@@ -55,17 +55,8 @@
     self.totalTitLab = [[UILabel alloc]init];
     self.totalTitLab.textAlignment = NSTextAlignmentRight;
     self.totalTitLab.font = [UIFont systemFontOfSize:totalTitLab_fot];
-    self.totalTitLab.textColor = COLOR_STOCK_Text_Black;
+    self.totalTitLab.textColor = COLOR_Text_B2B2B2;
     [self.bakImageView addSubview:self.totalTitLab];
-
-//    
-//    
-//    
-//    self.iconImv.backgroundColor = [UIColor grayColor];
-//    self.nameLab.backgroundColor = [UIColor grayColor];
-//    self.targetLab.backgroundColor = [UIColor grayColor];
-//    self.totalNumLab.backgroundColor = [UIColor grayColor];
-//    self.totalTitLab.backgroundColor = [UIColor grayColor];
 }
 
 -(void)setAutoLayout{
@@ -79,7 +70,7 @@
     }];
     
     self.bakImageView.layer.borderWidth = 1.0f;
-    self.bakImageView.layer.borderColor = [COLOR_StyleLines colorWithAlphaComponent:0.5].CGColor;
+    self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.5].CGColor;
     [self.bakImageView layoutIfNeeded];
     
     //头像
@@ -114,13 +105,7 @@
         make.height.equalTo(@(totalTitLab_fot));
     }];
 
-    //总收益数字
-    [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.iconImv.mas_top);
-        make.right.equalTo(@(ValueWithTheIPhoneModelString(@"-10,-10,-10,-10")));
-        make.width.equalTo(@(ValueWithTheIPhoneModelString(@"80,80,80,80")));
-        make.height.equalTo(@(totalNumLab_fot));
-    }];
+    
 }
 
 -(void)setCellDataWithModel:(StockDealModel *)model{
@@ -134,6 +119,18 @@
         make.width.equalTo(@(textSize.width -4));
         make.height.equalTo(@(traderName_h));
         make.centerY.equalTo(self.iconImv.mas_centerY);
+    }];
+    
+    //计算总收益字体
+    NSString *totalNum = model.totalprofit;
+    CGSize totalNumSize = [ShareFunction calculationOfTheText:totalNum withFont:totalNumLab_fot withMaxSize:(CGSize){200,50}];
+    
+    //总收益数字
+    [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.iconImv.mas_top);
+        make.right.equalTo(@(ValueWithTheIPhoneModelString(@"-10,-10,-10,-10")));
+        make.width.equalTo(@(totalNumSize.width));
+        make.height.equalTo(@(totalNumLab_fot));
     }];
 
     [self.iconImv sd_setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/pic/item/e1fe9925bc315c6001e93f3388b1cb13485477e9.jpg"]];

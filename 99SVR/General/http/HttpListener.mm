@@ -26,6 +26,7 @@
 #import "XVideoTeamInfo.h"
 #import "RoomHttp.h"
 #import "SplashModel.h"
+#import "TQPurchaseModel.h"
 
 /**
  *  闪屏响应
@@ -210,7 +211,7 @@ void OperateStockAllDetailListener::OnError(int errCode)
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks, uint32 currLevelId, uint32 minVipLevel){
     
-    int vipLevel = 1;
+    int vipLevel = 0;
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     //股票头部数据
@@ -346,11 +347,20 @@ void WhatIsPrivateServiceListener::OnError(int errCode)
 }
 
 /**
- *  请求信息--购买
+ *  请求信息--购买 私人订制的详情列表。
  */
 
 void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription>& infos){
     
+    NSMutableArray *muArray = [NSMutableArray array];
+    for (size_t i=0; i!=infos.size(); i++) {
+        
+        PrivateServiceLevelDescription *levelModel = &infos[i];
+        TQPurchaseModel *model = [[TQPurchaseModel alloc]initWithPrivateServiceLevelData:levelModel];
+        [muArray addObject:model];
+    }
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:muArray];
 }
 
 void BuyPrivateServiceListener::OnError(int errCode)

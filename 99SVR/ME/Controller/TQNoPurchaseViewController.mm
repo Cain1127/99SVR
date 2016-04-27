@@ -7,10 +7,10 @@
 //未购买的私人定制页面
 
 #import "TQNoPurchaseViewController.h"
-#import "TQIntroductCell.h"
-#import "TQPurchaseView.h"
-#import "TQPurchaseViewController.h"
-#import "TQNoCustomView.h"
+//#import "TQIntroductCell.h"
+//#import "TQPurchaseView.h"
+//#import "TQPurchaseViewController.h"
+//#import "TQNoCustomView.h"
 
 
 @interface TQNoPurchaseViewController ()
@@ -18,7 +18,7 @@
 @property (nonatomic ,weak)UIView *headerView;
 /** 购买框 */
 @property (weak, nonatomic) IBOutlet UIButton *questionBtn;
-@property (nonatomic ,weak) TQPurchaseView *purchaseView;
+//@property (nonatomic ,weak) TQPurchaseView *purchaseView;
 /*tablevie列表*/
 //@property (nonatomic ,weak) TQNoCustomView *nocustomView;
 
@@ -50,13 +50,13 @@ static NSString *const IntroductCell = @"IntroductCell";
 }
 
 -(void)setupHeaderView {
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQIntroductCell class]) bundle:nil] forCellReuseIdentifier:IntroductCell];
+//    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQIntroductCell class]) bundle:nil] forCellReuseIdentifier:IntroductCell];
 }
 -(void)addPurchase {
-    TQPurchaseView *purchaseView = [TQPurchaseView purchaseView];
-    purchaseView.frame = CGRectMake(10, kScreenHeight, kScreenWidth - 20, 44);
-    _purchaseView = purchaseView;
-    [self.tableView addSubview:purchaseView];
+//    TQPurchaseView *purchaseView = [TQPurchaseView purchaseView];
+//    purchaseView.frame = CGRectMake(10, kScreenHeight, kScreenWidth - 20, 44);
+//    _purchaseView = purchaseView;
+//    [self.tableView addSubview:purchaseView];
 }
 
 #pragma mark - Table view data source
@@ -66,10 +66,14 @@ static NSString *const IntroductCell = @"IntroductCell";
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TQIntroductCell *cell = [tableView dequeueReusableCellWithIdentifier:IntroductCell];
-    
-    
+//    TQIntroductCell *cell = [tableView dequeueReusableCellWithIdentifier:IntroductCell];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"tes"];
+    if(!cell)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"tes"];
+    }
     return cell;
+//    return nil;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

@@ -8,6 +8,7 @@
 #import "StockDealTableModel.h"
 #import "HttpMessage.pb.h"
 #import "StockDealModel.h"
+#import "TQPurchaseViewController.h"
 
 @interface StockDealViewController ()
 @property (nonatomic , strong) UITableView *tableView;
@@ -26,7 +27,7 @@
     [super viewDidLoad];
     
 
-    self.view.backgroundColor = COLOR_STOCK_BackGroundColor;
+    self.view.backgroundColor = COLOR_Bg_Gay;
     
     [self initData];
     [self initUI];
@@ -47,7 +48,7 @@
     self.warningLab.text = @"仅代表讲师个人操盘记录,不构成投资建议，风险自负";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
-    [kHTTPSingle RequestOperateStockAllDetail:self.operateId];
+    [kHTTPSingle RequestOperateStockAllDetail:(int)self.operateId];
 
 
 }
@@ -107,7 +108,7 @@
         _tableView.delegate = self.tableViewModel;
         _tableView.dataSource = self.tableViewModel;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = COLOR_STOCK_BackGroundColor;
+        _tableView.backgroundColor = COLOR_Bg_Gay;
         _tableView.tableHeaderView = self.headerView;
     }
     return _tableView;
@@ -118,7 +119,7 @@
     if (!_warningLab) {
      
         _warningLab = [[UILabel alloc]init];
-        _warningLab.backgroundColor = COLOR_STOCK_BackGroundColor;
+        _warningLab.backgroundColor = COLOR_Bg_Gay;
         _warningLab.font = [UIFont systemFontOfSize:12];
         _warningLab.textAlignment = NSTextAlignmentCenter;
         _warningLab.textColor = UIColorFromRGB(0xb2b2b2);
@@ -133,7 +134,8 @@
 
 -(void)dealloc{
 
-    NSLog(@"释放");
+    DLog(@"释放");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_DEAL_VC object:nil];
 }
 
 

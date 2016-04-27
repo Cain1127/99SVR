@@ -243,6 +243,8 @@ void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, 
     http_request_asyn(listener, parse_profitorder, &request);
 }
 
+
+
 // 请求操盘详情
 void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener)
 {
