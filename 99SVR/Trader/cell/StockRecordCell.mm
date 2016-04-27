@@ -52,7 +52,7 @@
         }
         
         [attriStr addAttribute:NSForegroundColorAttributeName
-                         value:COLOR_Text_4C4C4C
+                         value:COLOR_Text_Black
                          range:NSMakeRange(2, ([attriStr length]-2))];
 
         self.dealView.titleLabV.leftLab.attributedText = attriStr;
@@ -60,7 +60,7 @@
         self.dealView.costRmbLabV.rightLab.text = [NSString stringWithFormat:@"成交数量 %@",model.count];
         self.dealView.nowRmbLabV.leftLab.text = [NSString stringWithFormat:@"成交额 %@",model.money];
         self.dealView.nowRmbLabV.rightLab.text = [NSString stringWithFormat:@"成交时间 %@",model.time];
-        self.dealView.nowRmbLabV.rightLab.textColor = COLOR_Text_4C4C4C;
+        self.dealView.nowRmbLabV.rightLab.textColor = COLOR_Text_Black;
 
     }else{//仓库详情
     

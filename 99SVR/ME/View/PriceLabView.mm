@@ -27,7 +27,7 @@
         [self addSubview:self.newpriceLab];
         
         self.oleLabLineView = [[UIView alloc]init];
-        self.oleLabLineView.backgroundColor = COLOR_Text_919191;
+        self.oleLabLineView.backgroundColor = COLOR_Text_Gay;
         [self addSubview:self.oleLabLineView];
     }
     return self;
@@ -42,7 +42,7 @@
         self.newpriceLab.hidden = YES;
         self.oleLabLineView.hidden = YES;
         self.oldpriceLab.font = Font_15;
-        self.oldpriceLab.textColor = COLOR_Text_919191;
+        self.oldpriceLab.textColor = COLOR_Text_Gay;
         self.oldpriceLab.text = _oldpriceStr;
         [self.oldpriceLab sizeToFit];
         self.oldpriceLab.frame = (CGRect){10,0,self.oldpriceLab.width,self.height};
@@ -66,7 +66,7 @@
         self.oldpriceLab.text = _oldpriceStr;
         self.oldpriceLab.font = Font_12;
         self.newpriceLab.textColor = COLOR_Auxiliary_Orange;
-        self.oldpriceLab.textColor = COLOR_Text_919191;
+        self.oldpriceLab.textColor = COLOR_Text_Gay;
         self.width = self.newpriceLab.width;
     }
 

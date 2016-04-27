@@ -81,7 +81,7 @@
         CGFloat labelOriginY = CGRectGetMinY(self.lineChartView.frame) - leftLab_h/2.0 + i*(CGRectGetHeight(self.lineChartView.frame)/(leftTitArrays.count-1));
         UILabel *label = [[UILabel alloc]initWithFrame:(CGRect){0,labelOriginY,leftLab_w,leftLab_h}];
         label.textAlignment = NSTextAlignmentCenter;
-        label.textColor = COLOR_Text_4C4C4C;
+        label.textColor = COLOR_Text_Black;
         label.text = _leftTitArrays[i];
         label.font = [UIFont systemFontOfSize:13];
         [self addSubview:label];
@@ -94,7 +94,7 @@
     for (int i=0; i!=lowTitArrays.count; i++) {
         CGFloat labOriginX = CGRectGetMinX(self.lineChartView.frame) + i *(CGRectGetWidth(self.lineChartView.frame)-(lowLab_w * lowTitArrays.count))/(lowTitArrays.count-1) + i*lowLab_w;
         UILabel *label = [[UILabel alloc]initWithFrame:(CGRect){labOriginX,10,lowLab_w,lowLab_h}];
-        label.textColor = COLOR_Text_4C4C4C;
+        label.textColor = COLOR_Text_Black;
         label.text = lowTitArrays[i];
         label.font = [UIFont systemFontOfSize:13];
         
@@ -170,7 +170,7 @@
         UILabel *hsLabel = [[UILabel alloc]init];
         hsLabel.font = [UIFont systemFontOfSize:13];
         hsLabel.text = @"沪深300";
-        hsLabel.textColor = COLOR_Text_4C4C4C;
+        hsLabel.textColor = COLOR_Text_Black;
         [hsLabel sizeToFit];
         CGFloat hsLabOriginX = CGRectGetMaxX(minView.frame) - hsLabel.frame.size.width;
         CGFloat hsLabOriginY = topMenu_h/2.0 + (topMenu_h*(1/2.0) - hsLabel.frame.size.height)/2.0;
@@ -188,7 +188,7 @@
         UILabel *zhLab = [[UILabel alloc]init];
         zhLab.font = [UIFont systemFontOfSize:13];
         zhLab.text = @"组合收益";
-        zhLab.textColor = COLOR_Text_4C4C4C;
+        zhLab.textColor = COLOR_Text_Black;
         [zhLab sizeToFit];
         CGFloat zhLabeOriginX = hsLVOriginX -10 - zhLab.frame.size.width;
         zhLab.frame = (CGRect){zhLabeOriginX,CGRectGetMinY(hsLabel.frame),zhLab.frame.size.width,zhLab.frame.size.height};

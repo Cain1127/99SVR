@@ -15,12 +15,12 @@
         
     self.selectView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
     self.selectView.layer.borderWidth = 0.5f;
-    self.introduceLab.textColor = COLOR_Text_919191;
+    self.introduceLab.textColor = COLOR_Text_Gay;
     
     self.clickBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.clickBtn addTarget:self action:@selector(clickBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     self.clickBtn.titleLabel.font = Font_15;
-    [self.clickBtn setTitleColor:COLOR_Text_919191 forState:UIControlStateDisabled];
+    [self.clickBtn setTitleColor:COLOR_Text_Gay forState:UIControlStateDisabled];
     [self.selectView addSubview:self.clickBtn];
     
     self.priceLabView = [[PriceLabView alloc]initWithFrame:(CGRect){0,0,100,60}];
