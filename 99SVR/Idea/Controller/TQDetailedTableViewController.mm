@@ -24,6 +24,7 @@
 #import "RoomUser.h"
 #import "NSAttributedString+EmojiExtension.h"
 #import "TQIdeaDetailModel.h"
+#import "ViewNullFactory.h"
 
 @interface TQDetailedTableViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,CommentDelegate,UIWebViewDelegate>
 {
@@ -38,6 +39,7 @@
     int _fall;
     ChatView *_chatView;
     int nCurrent;
+    UIView *noView;
 }
 @property (nonatomic,strong) DTAttributedTextView *textView;
 @property (nonatomic,strong) UIView *downContentView;
@@ -464,13 +466,45 @@
 
 - (void)loadBodyView:(NSNotification *)notify
 {
-    TQIdeaDetailModel *model = notify.object;
-    if (model!=nil) {
-        _ideaDetail = model;
+    NSDictionary *parameters = notify.object;
+    DLog(@"dict:%@",parameters);
+    if ([[parameters objectForKey:@"code"] intValue]==1) {
+        TQIdeaDetailModel *model =[parameters objectForKey:@"model"];
+        if (model!=nil) {
+            _ideaDetail = model;
+            @WeakObj(self)
+            @WeakObj(noView)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (noViewWeak) {
+                    [noViewWeak removeFromSuperview];
+                }
+                [selfWeak createContentView];
+            });
+        }
+    }else
+    {
         @WeakObj(self)
         dispatch_async(dispatch_get_main_queue(), ^{
-            [selfWeak createContentView];
+            [selfWeak.view hideToastActivity];
+            [selfWeak loadNullView];
         });
+    }
+}
+
+- (void)loadNullView
+{
+    [self.tableView.header endRefreshing];
+    if (!noView) {
+        char cString[255];
+        const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+        sprintf(cString, "%s/customized_no_opened.png",path);
+        NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+        UIImage *image = [UIImage imageWithContentsOfFile:objCString];
+        if(image)
+        {
+            noView = [ViewNullFactory createViewBg:_tableView.bounds imgView:image msg:@"获取观点详情失败"];
+            [_tableView addSubview:noView];
+        }
     }
 }
 

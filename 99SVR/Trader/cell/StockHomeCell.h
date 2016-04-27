@@ -4,7 +4,9 @@
 /**高手操盘的首页的cell*/
 
 #import "BaseCell.h"
-#import "StockDealModel.h"
+//#import "StockDealModel.h"
+@class ZLOperateStock;
+@class StockDealModel;
 
 @interface StockHomeCell : BaseCell
 
@@ -22,5 +24,7 @@
 @property (nonatomic, strong) UILabel *totalTitLab;
 
 -(void)setCellDataWithModel:(StockDealModel *)model;
+
+- (void)setCellStockModel:(ZLOperateStock *)model;
 
 @end

@@ -21,8 +21,13 @@
 #import "TQDetailedTableViewController.h"
 #import "TQIdeaModel.h"
 #import "RoomHttp.h"
+#import "ViewNullFactory.h"
 
 @interface XIdeaViewController ()<UITableViewDataSource,UITableViewDelegate>
+{
+    UIView *noView;
+    NSCache *viewCache;
+}
 /** 数据数租 */
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryModel;
@@ -64,6 +69,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor colorWithHex:@"#0062D5"];
     self.navigationItem.titleView = title;
+    viewCache = [[NSCache alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -80,13 +86,53 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [super viewWillDisappear:animated];
 }
 
+- (void)createView
+{
+    if (nil==noView) {
+        char cString[255];
+        const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+        sprintf(cString, "%s/customized_no_opened.png",path);
+        NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+        UIImage *image = [UIImage imageWithContentsOfFile:objCString];
+        if(image)
+        {
+            noView = [ViewNullFactory createViewBg:_tableView.frame imgView:image msg:@"没有专家发布观点"];
+            [_tableView setBackgroundColor:[UIColor clearColor]];
+            [self.view insertSubview:noView atIndex:0];
+        }
+    }
+}
+
 - (void)loadViewPoint:(NSNotification *)notify{
-    NSArray *aryModel = notify.object;
-    _aryModel = aryModel;
-    @WeakObj(_tableView)
+    NSDictionary *dict = notify.object;
+    if([[dict objectForKey:@"code"] intValue]==1)
+    {
+        _aryModel = [dict objectForKey:@"model"];
+        if(_aryModel.count==0)
+        {
+            @WeakObj(self)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                @StrongObj(self)
+                [self createView];
+            });
+        }else
+        {
+            @WeakObj(self)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                @StrongObj(self)
+                [self.tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
+            });
+        }
+    }
+    @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_tableViewWeak reloadData];
-        [_tableViewWeak.gifHeader endRefreshing];
+        @StrongObj(self)
+        if ([self.tableView.header isRefreshing]) {
+            [self.tableView.header endRefreshing];
+        }else{
+            [self.tableView.footer endRefreshing];
+        }
+        [self.tableView reloadData];
     });
 }
 
@@ -107,8 +153,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQideaTableViewCell class]) bundle:nil] forCellReuseIdentifier:ideaCell];
 }
 
 -(void)mailboxClick {
@@ -139,17 +183,22 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TQideaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ideaCell];
-    
+    static NSString *viewPointCellName = @"TQIdeaTableViewIdentifier";
+    NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
+    TQIdeaTableViewCell *cell = [viewCache objectForKey:strKey];
+    if (!cell) {
+        cell = [[TQIdeaTableViewCell alloc] initWithReuseIdentifier:viewPointCellName];
+        [viewCache setObject:cell forKey:viewCache];
+    }
     if (_aryModel.count>indexPath.row) {
         [cell setIdeaModel:[_aryModel objectAtIndex:indexPath.row]];
     }
-    
     return cell;
 }
 #pragma mark - TableViewDelegete
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (_aryModel.count>indexPath.row) {
         TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] init];
         [self.navigationController pushViewController:detaileVc animated:YES];

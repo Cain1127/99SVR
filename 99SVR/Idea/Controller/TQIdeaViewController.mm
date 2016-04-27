@@ -21,9 +21,15 @@
 #import "UIBarButtonItem+Item.h"
 #import "TQDetailedTableViewController.h"
 #import "TQIdeaModel.h"
-
+#import "ViewNullFactory.h"
+#import "UIImage+MultiFormat.h"
 @interface TQIdeaViewController ()<UITableViewDataSource,UITableViewDelegate>
+{
+    UIView *noView;
+    NSCache *viewCache;
+}
 /** 数据数租 */
+@property (nonatomic,assign) NSInteger nCurrent;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryModel;
 
@@ -35,47 +41,111 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
     [self.navigationController.navigationBar setHidden:YES];
     self.view.backgroundColor = [UIColor whiteColor];
     [self setTitleText:@"99乐投"];
+    viewCache = [[NSCache alloc] init];
     [self setIdeaTableView];
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     title.text = @"专家观点";
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor colorWithHex:@"#0062D5"];
     [self.navigationController.navigationBar setHidden:YES];
+    [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
+    [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
+    [self.tableView.gifHeader loadDefaultImg];
+    [self.tableView.gifHeader beginRefreshing];
+    _nCurrent = 0;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
-    [self.tableView.gifHeader loadDefaultImg];
-    [self.tableView.gifHeader beginRefreshing];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)loadViewPoint:(NSNotification *)notify{
-    NSArray *aryModel = notify.object;
-    _aryModel = aryModel;
-    @WeakObj(_tableView)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_tableViewWeak.header isRefreshing]) {
-            [_tableViewWeak.header endRefreshing];
+    NSDictionary *dict = notify.object;
+    if([[dict objectForKey:@"code"] intValue]==1)
+    {
+        NSArray *aryIndex = [dict objectForKey:@"model"];
+        if (_aryModel.count>0) {
+            NSMutableArray *aryAll = [NSMutableArray array];
+            [aryAll addObjectsFromArray:_aryModel];
+            [aryAll addObject:aryIndex];
+            _aryModel = aryAll;
+            DLog(@"count:%zi",_aryModel.count);
         }else{
-            [_tableViewWeak.footer endRefreshing];
+            _aryModel = aryIndex;
         }
-        [_tableViewWeak reloadData];
+        if(_aryModel.count==0)
+        {
+            @WeakObj(self)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                @StrongObj(self)
+                [self createView];
+            });
+        }else
+        {
+            @WeakObj(noView)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (noViewWeak) {
+                    [noViewWeak removeFromSuperview];
+                }
+            });
+        }
+    }
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @StrongObj(self)
+        if ([self.tableView.header isRefreshing]) {
+            [self.tableView.header endRefreshing];
+        }else{
+            [self.tableView.footer endRefreshing];
+        }
+        if (self.nCurrent != self.aryModel.count)
+        {
+            [self.tableView.footer noticeNoMoreData];
+        }
+        [self.tableView reloadData];
     });
 }
 
+- (void)createView
+{
+    if (nil==noView) {
+        char cString[255];
+        const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+        sprintf(cString, "%s/customized_no_opened.png",path);
+        NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+        UIImage *image = [UIImage imageWithContentsOfFile:objCString];
+        if(image)
+        {
+            noView = [ViewNullFactory createViewBg:_tableView.bounds imgView:image msg:@"没有专家发布观点"];
+            [_tableView addSubview:noView];
+        }
+    }
+}
+
 -(void)updateRefresh {
+    _nCurrent = 20;
+    _aryModel = nil;
     [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
+}
+
+- (void)uploadMore
+{
+    if (_aryModel.count>0) {
+        TQIdeaModel *model = _aryModel[_aryModel.count-1];
+        [kHTTPSingle RequestViewpointSummary:0 start:model.viewpointid count:20];
+    }
 }
 
 -(void)setIdeaTableView {
@@ -87,19 +157,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     // cell自动计算高度
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 44;
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQideaTableViewCell class]) bundle:nil] forCellReuseIdentifier:ideaCell];
-}
 
-
--(void)mailboxClick {
-    TQMailboxViewController *mailbox = [[TQMailboxViewController alloc] init];
-    [self.navigationController pushViewController:mailbox animated:YES];
-}
-
-- (void)searchClick
-{
-    SearchController *search = [[SearchController alloc] init];
-    [self.navigationController pushViewController:search animated:YES];
 }
 
 #pragma mark - TableView dataSource
@@ -115,23 +173,34 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return _aryModel.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TQideaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ideaCell];
-    
+    static NSString *viewPointCellName = @"TQIdeaTableViewIdentifier";
+    NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
+    TQIdeaTableViewCell *cell = [viewCache objectForKey:strKey];
+    if (!cell) {
+        cell = [[TQIdeaTableViewCell alloc] initWithReuseIdentifier:viewPointCellName];
+        [viewCache setObject:cell forKey:viewCache];
+    }
     if (_aryModel.count>indexPath.row) {
         [cell setIdeaModel:[_aryModel objectAtIndex:indexPath.row]];
     }
-    
     return cell;
 }
 #pragma mark - TableViewDelegete
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (_aryModel.count>indexPath.row) {
-        TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] init];
+        TQIdeaModel *model = _aryModel[indexPath.row];
+        TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
         [self.navigationController pushViewController:detaileVc animated:YES];
     }
     

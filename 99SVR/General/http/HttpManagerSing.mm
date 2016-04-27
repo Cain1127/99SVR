@@ -31,17 +31,17 @@ TeamListListener _teamListListener;
 TeamIntroduceListener _teamIntroduceListener;
 ConsumeRankListener _consumeRankListener;
 HomePageListener _homePageListener;
-AskQuestionListener _askQuestionListener;
+//AskQuestionListener _askQuestionListener;
 SystemMessageListener _systemMessageListener;
 QuestionAnswerListener _questionAnswerListener;
 MailReplyListener _mailReplyListener;
 PrivateServiceSummaryListener _privateServiceSummaryListener;
 UnreadListener _unreadListener;
 //HttpListener _httpListener;
-FollowTeacherListener _followTeacherListener;
-FootPrintListener _footPrintListener;
+//FollowTeacherListener _followTeacherListener;
+//FootPrintListener _footPrintListener;
 CollectionListener _collectionListener;
-BannerListener _bannerListener;
+//BannerListener _bannerListener;
 TeamPrivateServiceSummaryPackListener _teamPrivateListener;
 
 @interface HttpProtocolManager()
@@ -108,19 +108,19 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void)RequestOperateStockProfitByDay:(int)teamId start:(int)startId count:(int)count
 {
     [self createHttpConnection];
-    hConnection->RequestOperateStockProfitOrderByDay(teamId, startId, count, &_operProfitListenerDay);
+    hConnection->RequestOperateStockProfit(1,teamId, startId, count, &_operProfitListenerDay);
 }
 
 - (void)RequestOperateStockProfitByMonth:(int)teamId start:(int)startId count:(int)count
 {
     [self createHttpConnection];
-    hConnection->RequestOperateStockProfitOrderByMonth(teamId, startId, count, &_operProfitListenerMonth);
+    hConnection->RequestOperateStockProfit(2,teamId, startId, count, &_operProfitListenerMonth);
 }
 
 - (void)RequestOperateStockProfitByAll:(int)teamId start:(int)startId count:(int)count
 {
     [self createHttpConnection];
-    hConnection->RequestOperateStockProfitOrderByTotal(teamId,startId, count, &_operProfitListenerAll);
+    hConnection->RequestOperateStockProfit(0,teamId,startId, count, &_operProfitListenerAll);
 }
 
 /**
@@ -208,7 +208,6 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 // 提问
 - (void) PostAskQuestion:(int)teamId stock:(const char*)stock question:(const char *)question{
     [self createHttpConnection];
-    hConnection->PostAskQuestion(teamId,stock,question, &_askQuestionListener);
 }
 
 // 请求系统消息
@@ -264,7 +263,6 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void)PostAnswer:(int)questionId content:(const char *) content
 {
     [self createHttpConnection];
-    hConnection->PostAnswer(questionId, content, &_mailReplyListener);
 }
 //首页列表数据
 - (void)RequestHomePage//首页列表数据
@@ -277,14 +275,12 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void)RequestFollowTeacher
 {
     [self createHttpConnection];
-//    hConnection->RequestFollowTeacher(&_followTeacherListener);
 }
 
 //足迹url
 - (void)RequestFootPrint
 {
     [self createHttpConnection];
-//    hConnection->RequestFootPrint(&_footPrintListener);
 }
 
 //收藏url
@@ -297,7 +293,6 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void)RequestBanner
 {
     [self createHttpConnection];
-    hConnection->RequestBanner(&_bannerListener);
 }
 
 

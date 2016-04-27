@@ -123,7 +123,7 @@ typedef struct _tag_MediaFrameBuffer
 
 - (void)connectRoomId:(int)roomid mic:(int)userid
 {
-    _nFall = 0;
+    _nFall = 1;
     if(_gcdSocket)
     {
         [self closeSocket];

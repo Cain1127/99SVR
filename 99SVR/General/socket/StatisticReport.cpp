@@ -34,22 +34,6 @@ void report_asyn(RequestParamter* param)
 	Thread::start(report_runnable, param);
 }
 
-//RequestParamter& get_request_param()
-//{
-//	RequestParamter* param = new RequestParamter();
-//	return *param;
-//}
-
-//string get_client_type()
-//{
-//#ifdef WIN
-//	return "1";
-//#elif defined ANDROID
-//	return "2";
-//#else
-//	return "3";
-//#endif
-//}
 
 void ReportLoginFailed(int login_type, rstring login_id, rstring server_ip, rstring client_ip)
 {
@@ -80,7 +64,7 @@ void ReportRegisterFailed(int reg_type, rstring server_ip, rstring client_ip)
 	report_asyn(&param);
 }
 
-//»ñÈ¡´óÌü·¿¼äÁĞ±íÊ§°Ü
+//è·å–å¤§å…æˆ¿é—´åˆ—è¡¨å¤±è´¥
 void ReportGetRoomListFailed(int userid, int room_type, rstring server_ip, rstring client_ip)
 {
 	RequestParamter& param = get_request_param();
@@ -95,7 +79,7 @@ void ReportGetRoomListFailed(int userid, int room_type, rstring server_ip, rstri
 	report_asyn(&param);
 }
 
-//½ø·¿¼äÊ§°Ü
+//è¿›æˆ¿é—´å¤±è´¥
 void ReportJoinRoomFailed(int userid, int room_type, int roomid, rstring server_ip, rstring client_ip, rstring err)
 {
 	RequestParamter& param = get_request_param();
@@ -111,7 +95,7 @@ void ReportJoinRoomFailed(int userid, int room_type, int roomid, rstring server_
 	report_asyn(&param);
 }
 
-//»ñÈ¡·¿¼ä³ÉÔ±ÁĞ±íÊ§°Ü
+//è·å–æˆ¿é—´æˆå‘˜åˆ—è¡¨å¤±è´¥
 void ReportGetRoomUserListFailed(int userid, int room_type, int roomid, rstring server_ip, rstring client_ip, rstring err)
 {
 	RequestParamter& param = get_request_param();
@@ -127,7 +111,7 @@ void ReportGetRoomUserListFailed(int userid, int room_type, int roomid, rstring 
 	report_asyn(&param);
 }
 
-//Ö±²¥ÖÊÁ¿Êı¾İ
+//ç›´æ’­è´¨é‡æ•°æ®
 void ReportVideoWarn(int userid, int roomid, int warn_type, rstring server_ip, rstring client_ip)
 {
 	RequestParamter& param = get_request_param();
@@ -143,7 +127,7 @@ void ReportVideoWarn(int userid, int roomid, int warn_type, rstring server_ip, r
 	report_asyn(&param);
 }
 
-//±ÀÀ£Êı¾İ
+//å´©æºƒæ•°æ®
 void ReportCrash(rstring os, rstring version_name, rstring client_ip, rstring err)
 {
 	RequestParamter& param = get_request_param();
@@ -159,7 +143,7 @@ void ReportCrash(rstring os, rstring version_name, rstring client_ip, rstring er
 }
 
 
-//´ò¿ª´óÌüÊ×Ò³Ê§°Ü
+//æ‰“å¼€å¤§å…é¦–é¡µå¤±è´¥
 void ReportOpenHomepageFailed(int userid, rstring server_ip, rstring client_ip)
 {
 	RequestParamter& param = get_request_param();

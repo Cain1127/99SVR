@@ -154,10 +154,10 @@
         if ([text.superview.superview isKindOfClass:[UITableView class]]) {
             [text relayoutText];
             UITableView *tableView = (UITableView *)text.superview.superview;
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:text.section];
-            NSArray *array = [[NSArray alloc] initWithObjects:indexPath, nil];
-            [tableView reloadRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
-//            [tableView reloadData];
+//            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:text.section];
+//            NSArray *array = [[NSArray alloc] initWithObjects:indexPath, nil];
+//            [tableView reloadRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationAutomatic];
+            [tableView reloadData];
             
         }
         [text setNeedsLayout];
