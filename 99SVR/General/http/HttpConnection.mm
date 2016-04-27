@@ -67,7 +67,6 @@ static void http_request_asyn(HttpListener* uiListener, ParseJson jsonPaser, Req
 //请求闪屏图片
 void HttpConnection::RequestSplashImage(SplashImageListener* listener)
 {
-<<<<<<< HEAD
     Splash info;
     info.set_imageurl("http://xx.x.x/x.png");
     listener->onResponse(info);
@@ -75,114 +74,21 @@ void HttpConnection::RequestSplashImage(SplashImageListener* listener)
 
 
 
-// 请求操盘详情
-void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener)
-{
-    
-    OperateStockProfit profit;
-    profit.set_operateid(operateId);
-    char cBuf[10]={0};
-    sprintf(cBuf,"%d",90000);
-    profit.set_teamid(cBuf);
-    profit.set_teamname("组合");
-    profit.set_goalprofit(0.08);
-    profit.set_monthprofit(0.2);
-    profit.set_focus("长线跟短线有关系吗");
-    profit.set_totalprofit(0.5);
-    profit.set_dayprofit(0.1);
-    profit.set_winrate(0.4);
-    OperateStockData data;
-    data.set_operateid(operateId);
-    std::vector<OperateStockTransaction> trans;
-    std::vector<OperateStocks> stocks;
-    int i=0;
-    for (i=0; i<1; i++) {
-        OperateStockTransaction saction;
-        OperateStocks stock;
-        
-        saction.set_operateid(i+1);
-        saction.set_stockid("12345");
-        saction.set_buytype("VIP");
-        saction.set_stockname("VIP");
-        saction.set_price(5555);
-        saction.set_count(123);
-        saction.set_money(9999);
-        
-        trans.push_back(saction);
-        
-        stock.set_operateid(i+1);
-        stock.set_stockid("321");
-        stock.set_stockname("shenme");
-        stock.set_count(12+i);
-        stock.set_cost(123);
-        stock.set_currprice(55);
-        stock.set_profitrate(0.5);
-        stock.set_profitmoney(888);
-        stocks.push_back(stock);
-    }
-    listener->onResponse(profit,data, trans,stocks,operateId);
-}
-
-// 请求操盘详情--交易记录
-void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, int count, OperateStockTransactionListener* listener)
-{
-    std::vector<OperateStockTransaction>trans;
-    
-    static int initId = 15;
-    int i = startId;
-    if ( startId == 0 ) {
-        i = initId;
-        startId = initId;
-    }else if (startId ==3){
-        
-        listener->onResponse(trans);
-        return;
-    }
-    for (; i>=startId - count; i--) {
-        
-        OperateStockTransaction stock;
-        stock.set_stockname("交易记录");
-        stock.set_transid(i);
-        stock.set_operateid(100);
-        stock.set_stockid("1008699");
-        stock.set_count(i+220);
-        stock.set_money(110000+1);
-        stock.set_price(9999);
-        stock.set_time("2015 15 15");
-        
-        if (i%2==0) {
-            
-            stock.set_buytype("买入");
-        }else{
-            stock.set_buytype("卖出");
-        }
-        trans.push_back(stock);
-    }
-    listener->onResponse(trans);
-}
-
-// 请求操盘详情--持仓情况
-void HttpConnection::RequestOperateStocks(int operateId, OperateStocksListener* listener)
-{
-}
-
-// 请求问题回复--未回回答的（PC端接口）
-void HttpConnection::RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer)
-{
-    
-}
-
-// 请求评论回复--发出的评论（PC端接口）
-void HttpConnection::RequestMailSendReply(int startId, int count, MailReplyListener* listener,bool isTeamer)
-{
-=======
-    RequestParamter& request = get_request_param();
->>>>>>> 422602f61852b419090bfaac1ca723c8a9751110
-    
-    request["s"] = "Index/getSplashScreen";
-    
-    http_request_asyn(listener, parse_splashimage, &request);
-}
+//// 请求问题回复--未回回答的（PC端接口）
+//void HttpConnection::RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer)
+//{
+//    
+//}
+//
+//// 请求评论回复--发出的评论（PC端接口）
+//void HttpConnection::RequestMailSendReply(int startId, int count, MailReplyListener* listener,bool isTeamer)
+//{
+//    RequestParamter& request = get_request_param();
+//    
+//    request["s"] = "Index/getSplashScreen";
+//    
+//    http_request_asyn(listener, parse_splashimage, &request);
+//}
 
 void parse_profitorder(char* json, HttpListener* listener)
 {

@@ -24,12 +24,8 @@
 #import "MJExtension.h"
 #import "XPrivateDetail.h"
 #import "XVideoTeamInfo.h"
-<<<<<<< HEAD
 #import "TQPurchaseModel.h"
-
-=======
 #import "RoomHttp.h"
->>>>>>> 422602f61852b419090bfaac1ca723c8a9751110
 /**
  *  闪屏响应
  */
