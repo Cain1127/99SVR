@@ -57,9 +57,6 @@
     self.totalTitLab.font = [UIFont systemFontOfSize:totalTitLab_fot];
     self.totalTitLab.textColor = COLOR_Text_B2B2B2;
     [self.bakImageView addSubview:self.totalTitLab];
-    
-    self.totalNumLab.backgroundColor = [UIColor grayColor];
-    self.nameLab.backgroundColor = [UIColor grayColor];
 }
 
 -(void)setAutoLayout{
