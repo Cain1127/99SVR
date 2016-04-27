@@ -15,7 +15,7 @@
 
 @interface StockHomeTableViewModel ()
 /**仓库记录的数据*/
-@property (nonatomic , copy) NSArray *tabDataArray;
+@property (nonatomic , strong) NSArray *tabDataArray;
 @property (nonatomic , assign) NSInteger tableTag;
 @property (nonatomic , strong) UIViewController *viewController;
 @end

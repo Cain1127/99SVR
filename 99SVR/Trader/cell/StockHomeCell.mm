@@ -57,6 +57,9 @@
     self.totalTitLab.font = [UIFont systemFontOfSize:totalTitLab_fot];
     self.totalTitLab.textColor = COLOR_Text_B2B2B2;
     [self.bakImageView addSubview:self.totalTitLab];
+    
+    self.totalNumLab.backgroundColor = [UIColor grayColor];
+    self.nameLab.backgroundColor = [UIColor grayColor];
 }
 
 -(void)setAutoLayout{
@@ -112,25 +115,25 @@
 
     //计算字体
     self.traderNameLab.text =  model.focus;
-    [self.traderNameLab sizeToFit];
+    CGSize traderNameLabSize = [ShareFunction calculationOfTheText:self.traderNameLab.text withFont:traderName_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
 
     //操盘名称
     [self.traderNameLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.nameLab.mas_left);
-        make.width.equalTo(@(self.traderNameLab.width  + 4));
+        make.width.equalTo(@(traderNameLabSize.width  + 4));
         make.height.equalTo(@(traderName_h));
         make.centerY.equalTo(self.iconImv.mas_centerY);
     }];
     
     //计算总收益字体
     self.totalNumLab.text =  model.totalprofit;
-    [self.totalNumLab sizeToFit];
+    CGSize totalNumLabSize = [ShareFunction calculationOfTheText:self.totalNumLab.text withFont:totalNumLab_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
 
     //总收益数字
     [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.iconImv.mas_top);
         make.right.equalTo(@(ValueWithTheIPhoneModelString(@"-10,-10,-10,-10")));
-        make.width.equalTo(@(self.totalNumLab.width));
+        make.width.equalTo(@(totalNumLabSize.width + 20));
         make.height.equalTo(@(totalNumLab_fot));
     }];
 
@@ -145,12 +148,12 @@
  
     
     self.traderNameLab.text =  model.focus;
-    [self.traderNameLab sizeToFit];
+    CGSize traderNameLabSize = [ShareFunction calculationOfTheText:self.traderNameLab.text withFont:traderName_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
     
     //操盘名称
     [self.traderNameLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.nameLab.mas_left);
-        make.width.equalTo(@(self.traderNameLab.width +4));
+        make.width.equalTo(@(traderNameLabSize.width +4));
         make.height.equalTo(@(traderName_h));
         make.centerY.equalTo(self.iconImv.mas_centerY);
     }];

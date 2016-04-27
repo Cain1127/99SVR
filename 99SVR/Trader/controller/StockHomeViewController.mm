@@ -20,13 +20,13 @@
 /**日*/
 @property (nonatomic , strong) UITableView *dayTab;
 @property (nonatomic , strong) StockHomeTableViewModel *dayTableViewModel;
-@property (nonatomic , strong) NSMutableArray *dayDataArray;
+@property (nonatomic , strong) __block NSMutableArray *dayDataArray;
 @property (nonatomic , assign) __block NSInteger dayPagInteger;
 @property (nonatomic , strong) UIView *dayEmptyView;
 /**月*/
 @property (nonatomic , strong) UITableView *monTab;
 @property (nonatomic , strong) StockHomeTableViewModel *monTableViewModel;
-@property (nonatomic , strong) NSMutableArray *monDataArray;
+@property (nonatomic , strong) __block NSMutableArray *monDataArray;
 @property (nonatomic , assign) __block NSInteger monPagInteger;
 @property (nonatomic , strong) UIView *monEmptyView;
 
@@ -34,7 +34,7 @@
 /**总的*/
 @property (nonatomic , strong) UITableView *totalTab;
 @property (nonatomic , strong) StockHomeTableViewModel *totalTableViewModel;
-@property (nonatomic , strong) NSMutableArray *totalDataArray;
+@property (nonatomic , strong) __block NSMutableArray *totalDataArray;
 @property (nonatomic , assign) __block NSInteger totalPagInteger;
 @property (nonatomic , strong) UIView *totalEmptyView;
 
@@ -196,11 +196,7 @@
         for (int i=0; i!=[fromDataArray  count]; i++) {
             [toDataArray addObject:fromDataArray[i]];
         }
-        [tableModel setDataArray:toDataArray];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [table reloadData];
-        });
         
         
     }else{//请求失败
@@ -210,6 +206,12 @@
         [table.footer endRefreshing];
         
     }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [tableModel setDataArray:toDataArray];
+        [table reloadData];
+    });
+
 
     [self chickEmptyViewShow:toDataArray withCode:code];
 }
@@ -331,17 +333,17 @@
         if (dataArray.count ==0) {//不存在数据时候
             
             if (dataArray == self.dayDataArray) {
-                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"日收益为0"];
-                [self.monTab addSubview:self.monEmptyView];
+                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"日收益为0"];
+                [self.dayTab addSubview:self.dayEmptyView];
                 
             }else if (dataArray == self.monDataArray){
                 
-                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"月收益为0"];
+                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"月收益为0"];
                 [self.monTab addSubview:self.monEmptyView];
                 
             }else{
-                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"总收益为0"];
-                [self.monTab addSubview:self.monEmptyView];
+                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"总收益为0"];
+                [self.totalTab addSubview:self.totalEmptyView];
             }
         }else{//存在数据
             
@@ -358,24 +360,44 @@
                     [self.totalEmptyView removeFromSuperview];
                 }
             }
+            
         }
     }else{//请求失败
+        
+        
+        if (dataArray == self.dayDataArray) {
+            if (self.dayEmptyView) {
+                [self.dayEmptyView removeFromSuperview];
+            }
+        }else if (dataArray == self.monDataArray){
+            if (self.monEmptyView) {
+                [self.monEmptyView removeFromSuperview];
+            }
+        }else{
+            if (self.totalEmptyView) {
+                [self.totalEmptyView removeFromSuperview];
+            }
+        }
         
         if (dataArray.count==0) {
          
             if (dataArray == self.dayDataArray) {
-                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"日收益为请求失败"];
+                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"日收益为请求失败"];
                 [self.dayTab addSubview:self.dayEmptyView];
                 
             }else if (dataArray == self.monDataArray){
                 
-                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"月收益为请求失败"];
+                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"月收益为请求失败"];
                 [self.monTab addSubview:self.monEmptyView];
                 
             }else{
-                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"putong"] msg:@"总收益为请求失败"];
+                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"总收益为请求失败"];
                 [self.totalTab addSubview:self.totalEmptyView];
             }
+        }else{
+        
+            
+
         }
     }
 }

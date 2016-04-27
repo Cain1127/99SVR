@@ -8,6 +8,7 @@
 #import "StockDealTableModel.h"
 #import "HttpMessage.pb.h"
 #import "TQPurchaseViewController.h"
+#import "ViewNullFactory.h"
 
 @interface StockDealViewController ()
 @property (nonatomic , strong) UITableView *tableView;
@@ -18,6 +19,8 @@
 @property (nonatomic , strong) StockDealModel *headerModel;
 /**数据源*/
 @property (nonatomic , strong) NSMutableArray *tableViewDataArray;
+/**数据加载view*/
+@property (nonatomic , strong) UIView *emptyView;
 @end
 
 @implementation StockDealViewController
@@ -89,17 +92,48 @@
         });
 
         
-        
     }else{//请求失败
         
         DLog(@"请求失败");
         
     }
     
-    
+    [self chickEmptyViewShow:self.tableViewDataArray withCode:code];
     
 }
 
+#pragma mark
+-(void)chickEmptyViewShow:(NSMutableArray *)dataArray withCode:(NSString *)code{
+
+    
+    if ([code isEqualToString:@"1"]) {//网络OK
+        
+        if (dataArray.count==0) {//不存在数据
+            
+            self.emptyView = [ViewNullFactory createViewBg:self.emptyView.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"数据为空"];
+            [self.tableView addSubview:self.emptyView];
+
+            
+        }else{
+            
+            if (self.emptyView) {
+                [self.emptyView removeFromSuperview];
+            }
+        }
+        
+        
+    }else{//网络错误
+       
+        if (dataArray.count==0) {
+            
+                self.emptyView = [ViewNullFactory createViewBg:self.tableView.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"网络发生错误"];
+                [self.tableView addSubview:self.emptyView];
+        }
+    }
+    
+    
+    
+}
 
 #pragma mark lazyUI
 -(StockDealHeaderView *)headerView{
