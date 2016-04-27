@@ -46,8 +46,6 @@
 		188E4A131CC600DD00D97254 /* TQSuspensionBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E4A121CC600DD00D97254 /* TQSuspensionBtn.m */; };
 		188E4A161CC60D0C00D97254 /* TQSuspension.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E4A151CC60D0C00D97254 /* TQSuspension.m */; };
 		1895B76F1CCB3B5800B86B0D /* TQButton-RoundedRectBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895B76E1CCB3B5800B86B0D /* TQButton-RoundedRectBtn.m */; };
-		1895B7771CCB50E900B86B0D /* TQPurchaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895B7761CCB50E900B86B0D /* TQPurchaseView.m */; };
-		1895B7791CCB50F900B86B0D /* TQPurchaseView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1895B7781CCB50F900B86B0D /* TQPurchaseView.xib */; };
 		1895B77F1CCB56A300B86B0D /* TQAnswerModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1895B77C1CCB56A300B86B0D /* TQAnswerModel.mm */; };
 		1895B7801CCB56A300B86B0D /* TQMessageModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1895B77E1CCB56A300B86B0D /* TQMessageModel.mm */; };
 		1895B7841CCB603100B86B0D /* TQPersonalModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1895B7831CCB603100B86B0D /* TQPersonalModel.mm */; };
@@ -104,7 +102,7 @@
 		18EA822C1CC8C41C00BDB735 /* TQideaViewModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA822B1CC8C41C00BDB735 /* TQideaViewModel.mm */; };
 		18EA82A21CCA148F00BDB735 /* TQNoPurchaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82861CCA148F00BDB735 /* TQNoPurchaseViewController.mm */; };
 		18EA82A31CCA148F00BDB735 /* TQMeCustomizedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */; };
-		18EA82A41CCA148F00BDB735 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA828C1CCA148F00BDB735 /* TableViewCell.m */; };
+		18EA82A41CCA148F00BDB735 /* TableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA828C1CCA148F00BDB735 /* TableViewCell.mm */; };
 		18EA82A51CCA148F00BDB735 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA828D1CCA148F00BDB735 /* TableViewCell.xib */; };
 		18EA82A71CCA148F00BDB735 /* TQHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82911CCA148F00BDB735 /* TQHeadView.m */; };
 		18EA82A81CCA148F00BDB735 /* TQHeadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82921CCA148F00BDB735 /* TQHeadView.xib */; };
@@ -173,6 +171,9 @@
 		B4C4B36F1CBAA5FF00B20A58 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36A1CBAA5FF00B20A58 /* NSString+Base64.m */; };
 		B4C4B3701CBAA5FF00B20A58 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */; };
 		B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B4C6B7B11CBE1B220072795B /* RegisterTextField.m */; };
+		B4CC497F1CCDED9E00D0C2F7 /* UIAlertView+Block.m in Sources */ = {isa = PBXBuildFile; fileRef = B4CC497E1CCDED9E00D0C2F7 /* UIAlertView+Block.m */; };
+		B4CC49891CCF708400D0C2F7 /* PriceLabView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4CC49881CCF708400D0C2F7 /* PriceLabView.mm */; };
+		B4CC49CB1CCF9AB200D0C2F7 /* TQPurchaseModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.mm */; };
 		B4EA09051CC6048300E8F933 /* StockHomeTableViewModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.mm */; };
 		B4EA090A1CC754C500E8F933 /* StockDealTableModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09091CC754C500E8F933 /* StockDealTableModel.mm */; };
 		B4EA09101CC757D500E8F933 /* DDLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EA090D1CC757D500E8F933 /* DDLineChartView.m */; };
@@ -184,6 +185,10 @@
 		B4EA09291CC8DF8400E8F933 /* StockRecordTabModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09281CC8DF8400E8F933 /* StockRecordTabModel.mm */; };
 		B4EA092C1CC8E12600E8F933 /* StockRecordCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA092B1CC8E12600E8F933 /* StockRecordCell.mm */; };
 		BB06311C1C61C827008AD41D /* NoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB06311B1C61C827008AD41D /* NoticeModel.m */; };
+		BB0D3CFD1CD08CA100A57E77 /* ZLReply.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0D3CFC1CD08CA100A57E77 /* ZLReply.m */; };
+		BB0D3D001CD0985000A57E77 /* ReplyNullInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0D3CFF1CD0985000A57E77 /* ReplyNullInfoCell.m */; };
+		BB0D3D031CD0AA3200A57E77 /* XIdeaDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0D3D021CD0AA3200A57E77 /* XIdeaDataSource.m */; };
+		BB0D3D061CD0BF6100A57E77 /* XPrivateService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0D3D051CD0BF6100A57E77 /* XPrivateService.m */; };
 		BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B481CB112FC00C573E0 /* BaseService.m */; };
 		BB125B4C1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B4A1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m */; };
 		BB16616C1C3CA0B800D318BE /* UITableView+reloadComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */; };
@@ -745,9 +750,6 @@
 		188E4A151CC60D0C00D97254 /* TQSuspension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQSuspension.m; sourceTree = "<group>"; };
 		1895B76D1CCB3B5800B86B0D /* TQButton-RoundedRectBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TQButton-RoundedRectBtn.h"; sourceTree = "<group>"; };
 		1895B76E1CCB3B5800B86B0D /* TQButton-RoundedRectBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TQButton-RoundedRectBtn.m"; sourceTree = "<group>"; };
-		1895B7751CCB50E900B86B0D /* TQPurchaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQPurchaseView.h; sourceTree = "<group>"; };
-		1895B7761CCB50E900B86B0D /* TQPurchaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQPurchaseView.m; sourceTree = "<group>"; };
-		1895B7781CCB50F900B86B0D /* TQPurchaseView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQPurchaseView.xib; sourceTree = "<group>"; };
 		1895B77B1CCB56A300B86B0D /* TQAnswerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQAnswerModel.h; sourceTree = "<group>"; };
 		1895B77C1CCB56A300B86B0D /* TQAnswerModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQAnswerModel.mm; sourceTree = "<group>"; };
 		1895B77D1CCB56A300B86B0D /* TQMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMessageModel.h; sourceTree = "<group>"; };
@@ -847,7 +849,7 @@
 		18EA82871CCA148F00BDB735 /* TQMeCustomizedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMeCustomizedViewController.h; sourceTree = "<group>"; };
 		18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQMeCustomizedViewController.mm; sourceTree = "<group>"; };
 		18EA828B1CCA148F00BDB735 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
-		18EA828C1CCA148F00BDB735 /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCell.m; sourceTree = "<group>"; };
+		18EA828C1CCA148F00BDB735 /* TableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableViewCell.mm; sourceTree = "<group>"; };
 		18EA828D1CCA148F00BDB735 /* TableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewCell.xib; sourceTree = "<group>"; };
 		18EA82901CCA148F00BDB735 /* TQHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQHeadView.h; sourceTree = "<group>"; };
 		18EA82911CCA148F00BDB735 /* TQHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TQHeadView.m; sourceTree = "<group>"; };
@@ -1032,6 +1034,13 @@
 		B4C4B36C1CBAA5FF00B20A58 /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		B4C6B7B01CBE1B220072795B /* RegisterTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTextField.h; sourceTree = "<group>"; };
 		B4C6B7B11CBE1B220072795B /* RegisterTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTextField.m; sourceTree = "<group>"; };
+		B4CC497D1CCDED9E00D0C2F7 /* UIAlertView+Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Block.h"; sourceTree = "<group>"; };
+		B4CC497E1CCDED9E00D0C2F7 /* UIAlertView+Block.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Block.m"; sourceTree = "<group>"; };
+		B4CC49861CCF343900D0C2F7 /* PubColorAndFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PubColorAndFont.h; sourceTree = "<group>"; };
+		B4CC49871CCF708400D0C2F7 /* PriceLabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PriceLabView.h; sourceTree = "<group>"; };
+		B4CC49881CCF708400D0C2F7 /* PriceLabView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PriceLabView.mm; sourceTree = "<group>"; };
+		B4CC49C91CCF9AB200D0C2F7 /* TQPurchaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQPurchaseModel.h; sourceTree = "<group>"; };
+		B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQPurchaseModel.mm; sourceTree = "<group>"; };
 		B4EA09031CC6048300E8F933 /* StockHomeTableViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeTableViewModel.h; sourceTree = "<group>"; };
 		B4EA09041CC6048300E8F933 /* StockHomeTableViewModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockHomeTableViewModel.mm; sourceTree = "<group>"; };
 		B4EA09081CC754C500E8F933 /* StockDealTableModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealTableModel.h; sourceTree = "<group>"; };
@@ -1057,6 +1066,14 @@
 		B4EA092D1CC8E8B800E8F933 /* StockMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockMacro.h; sourceTree = "<group>"; };
 		BB06311A1C61C827008AD41D /* NoticeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeModel.h; sourceTree = "<group>"; };
 		BB06311B1C61C827008AD41D /* NoticeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeModel.m; sourceTree = "<group>"; };
+		BB0D3CFB1CD08CA100A57E77 /* ZLReply.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLReply.h; sourceTree = "<group>"; };
+		BB0D3CFC1CD08CA100A57E77 /* ZLReply.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLReply.m; sourceTree = "<group>"; };
+		BB0D3CFE1CD0985000A57E77 /* ReplyNullInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReplyNullInfoCell.h; sourceTree = "<group>"; };
+		BB0D3CFF1CD0985000A57E77 /* ReplyNullInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReplyNullInfoCell.m; sourceTree = "<group>"; };
+		BB0D3D011CD0AA3200A57E77 /* XIdeaDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XIdeaDataSource.h; sourceTree = "<group>"; };
+		BB0D3D021CD0AA3200A57E77 /* XIdeaDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XIdeaDataSource.m; sourceTree = "<group>"; };
+		BB0D3D041CD0BF6100A57E77 /* XPrivateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPrivateService.h; sourceTree = "<group>"; };
+		BB0D3D051CD0BF6100A57E77 /* XPrivateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPrivateService.m; sourceTree = "<group>"; };
 		BB125B471CB112FC00C573E0 /* BaseService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseService.h; path = blocks/BaseService.h; sourceTree = "<group>"; };
 		BB125B481CB112FC00C573E0 /* BaseService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseService.m; path = blocks/BaseService.m; sourceTree = "<group>"; };
 		BB125B491CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSJSONSerialization+RemovingNulls.h"; path = "blocks/NSJSONSerialization+RemovingNulls.h"; sourceTree = "<group>"; };
@@ -1150,15 +1167,12 @@
 		BB25D9DA1C167AE000314C1E /* PubDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PubDefine.h; sourceTree = "<group>"; };
 		BB25D9DB1C167AE000314C1E /* PubNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PubNotification.h; sourceTree = "<group>"; };
 		BB25D9DC1C167AE000314C1E /* UtilsMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilsMacro.h; sourceTree = "<group>"; };
-		BB2E24B51CB048B700E0B549 /* libDTCoreText.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDTCoreText.a; path = "Pods/../build/Debug-iphoneos/libDTCoreText.a"; sourceTree = SOURCE_ROOT; };
-		BB2E24B71CB04AEC00E0B549 /* libDTFoundation.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDTFoundation.a; path = "Pods/../build/Debug-iphoneos/libDTFoundation.a"; sourceTree = SOURCE_ROOT; };
 		BB2E24B91CB04C1400E0B549 /* libmtasdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmtasdk.a; sourceTree = "<group>"; };
 		BB3659EF1C227E7A009E2867 /* ImportHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImportHeader.h; sourceTree = "<group>"; };
 		BB3659F01C227E7A009E2867 /* StringsMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringsMacro.h; sourceTree = "<group>"; };
 		BB365A401C23A6AF009E2867 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = other/Info.plist; sourceTree = "<group>"; };
 		BB3EE99B1C1AA95A00CF5621 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		BB3EE99D1C1AA96000CF5621 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
-		BB46C5E51CB05316002421F7 /* libDTFoundation.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDTFoundation.a; path = "Pods/../build/Debug-iphoneos/libDTFoundation.a"; sourceTree = SOURCE_ROOT; };
 		BB4E76C91CAFCE420060427D /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bugly.framework; sourceTree = "<group>"; };
 		BB51382F1C97A21A00E09EF5 /* GiftView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GiftView.h; sourceTree = "<group>"; };
 		BB5138301C97A21A00E09EF5 /* GiftView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GiftView.m; sourceTree = "<group>"; };
@@ -1656,8 +1670,6 @@
 		BB9765F51C86831D00FAA5B7 /* TextChatModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextChatModel.m; sourceTree = "<group>"; };
 		BB98EE481CB4D2B00028AAEF /* UIControl+UIControl_XY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+UIControl_XY.h"; sourceTree = "<group>"; };
 		BB98EE491CB4D2B00028AAEF /* UIControl+UIControl_XY.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+UIControl_XY.m"; sourceTree = "<group>"; };
-		BB98EE4B1CB573380028AAEF /* libDTCoreText.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDTCoreText.a; path = "Pods/../build/Debug-iphoneos/libDTCoreText.a"; sourceTree = SOURCE_ROOT; };
-		BB98EE4C1CB573380028AAEF /* libDTFoundation.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDTFoundation.a; path = "Pods/../build/Debug-iphoneos/libDTFoundation.a"; sourceTree = SOURCE_ROOT; };
 		BB98EE501CB588C60028AAEF /* SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJSON.h; sourceTree = "<group>"; };
 		BB98EE511CB588C60028AAEF /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		BB98EE521CB588C60028AAEF /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
@@ -1782,7 +1794,6 @@
 		BBCF9A4C1CAD4F81005B9DCE /* SexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SexViewController.m; sourceTree = "<group>"; };
 		BBCF9A661CADAB60005B9DCE /* TextColletViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextColletViewController.h; path = controller/TextColletViewController.h; sourceTree = "<group>"; };
 		BBCF9A671CADAB60005B9DCE /* TextColletViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextColletViewController.m; path = controller/TextColletViewController.m; sourceTree = "<group>"; };
-		BBCF9A8E1CAE6D5D005B9DCE /* libDTFoundation.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDTFoundation.a; path = "Externals/DTCoreText/Externals/DTFoundation/build/Debug-iphoneos/libDTFoundation.a"; sourceTree = SOURCE_ROOT; };
 		BBD449111CA2CD7C00727070 /* video_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = video_list.txt; sourceTree = "<group>"; };
 		BBD449131CA2D83B00727070 /* UserListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserListView.h; sourceTree = "<group>"; };
 		BBD449141CA2D83B00727070 /* UserListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserListView.m; sourceTree = "<group>"; };
@@ -1940,6 +1951,8 @@
 				185F59721CC4CCA700F605F5 /* TQIdeaDetailModel.mm */,
 				18EA822A1CC8C41C00BDB735 /* TQideaViewModel.h */,
 				18EA822B1CC8C41C00BDB735 /* TQideaViewModel.mm */,
+				BB0D3CFB1CD08CA100A57E77 /* ZLReply.h */,
+				BB0D3CFC1CD08CA100A57E77 /* ZLReply.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1973,6 +1986,8 @@
 				1879B90D1CC87DB200E981A5 /* TQGifView.h */,
 				1879B90E1CC87DB200E981A5 /* TQGifView.m */,
 				1879B9101CC883BD00E981A5 /* TQGiftButtomView.xib */,
+				BB0D3CFE1CD0985000A57E77 /* ReplyNullInfoCell.h */,
+				BB0D3CFF1CD0985000A57E77 /* ReplyNullInfoCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2101,6 +2116,10 @@
 				BBD58EED1CCBE31B009250DB /* XPrivateDetail.m */,
 				5AE9A3D01CCE6D1900831606 /* CustomizedModel.h */,
 				5AE9A3D11CCE6D1900831606 /* CustomizedModel.m */,
+				B4CC49C91CCF9AB200D0C2F7 /* TQPurchaseModel.h */,
+				B4CC49CA1CCF9AB200D0C2F7 /* TQPurchaseModel.mm */,
+				BB0D3D041CD0BF6100A57E77 /* XPrivateService.h */,
+				BB0D3D051CD0BF6100A57E77 /* XPrivateService.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2261,7 +2280,7 @@
 			isa = PBXGroup;
 			children = (
 				18EA828B1CCA148F00BDB735 /* TableViewCell.h */,
-				18EA828C1CCA148F00BDB735 /* TableViewCell.m */,
+				18EA828C1CCA148F00BDB735 /* TableViewCell.mm */,
 				18EA828D1CCA148F00BDB735 /* TableViewCell.xib */,
 				18EA82901CCA148F00BDB735 /* TQHeadView.h */,
 				18EA82911CCA148F00BDB735 /* TQHeadView.m */,
@@ -2271,15 +2290,14 @@
 				18EA82951CCA148F00BDB735 /* TQIntroductCell.xib */,
 				18EA82A01CCA148F00BDB735 /* TQNoCustomView.h */,
 				18EA82A11CCA148F00BDB735 /* TQNoCustomView.m */,
-				1895B7751CCB50E900B86B0D /* TQPurchaseView.h */,
-				1895B7761CCB50E900B86B0D /* TQPurchaseView.m */,
-				1895B7781CCB50F900B86B0D /* TQPurchaseView.xib */,
 				BBD58EE91CCBD96C009250DB /* XMeCustomCell.h */,
 				BBD58EEA1CCBD96C009250DB /* XMeCustomCell.m */,
 				5AE9A3CD1CCE6A4B00831606 /* CustomizedTableViewCell.h */,
 				5AE9A3CE1CCE6A4B00831606 /* CustomizedTableViewCell.m */,
 				5AB43D891CCFD7AE00693494 /* PrivateVipView.h */,
 				5AB43D8A1CCFD7AE00693494 /* PrivateVipView.m */,
+				B4CC49871CCF708400D0C2F7 /* PriceLabView.h */,
+				B4CC49881CCF708400D0C2F7 /* PriceLabView.mm */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2736,6 +2754,7 @@
 				BB25D9DA1C167AE000314C1E /* PubDefine.h */,
 				BB25D9DB1C167AE000314C1E /* PubNotification.h */,
 				BB25D9DC1C167AE000314C1E /* UtilsMacro.h */,
+				B4CC49861CCF343900D0C2F7 /* PubColorAndFont.h */,
 			);
 			path = Macro;
 			sourceTree = "<group>";
@@ -3141,6 +3160,8 @@
 				1887417C1C9702DA002EF25A /* NSString+Regex.m */,
 				1887417D1C9702DA002EF25A /* UIBarButtonItem+Extension.h */,
 				1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */,
+				B4CC497D1CCDED9E00D0C2F7 /* UIAlertView+Block.h */,
+				B4CC497E1CCDED9E00D0C2F7 /* UIAlertView+Block.m */,
 			);
 			path = category;
 			sourceTree = "<group>";
@@ -3522,6 +3543,8 @@
 				BBD58F1E1CCF4F37009250DB /* ZLViewPoint.m */,
 				BBD58F201CCF52F6009250DB /* ZLOperateStock.h */,
 				BBD58F211CCF52F6009250DB /* ZLOperateStock.m */,
+				5AD25E4B1CCE225A005C5BE6 /* SplashModel.h */,
+				5AD25E4C1CCE225A005C5BE6 /* SplashModel.mm */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -3616,6 +3639,8 @@
 				BB6F118C1CC69C3900F02064 /* RoomNoticeDataSource.m */,
 				BBD58ECF1CCB4A85009250DB /* ConsumeRankDataSource.h */,
 				BBD58ED01CCB4A85009250DB /* ConsumeRankDataSource.mm */,
+				BB0D3D011CD0AA3200A57E77 /* XIdeaDataSource.h */,
+				BB0D3D021CD0AA3200A57E77 /* XIdeaDataSource.m */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";
@@ -3690,12 +3715,6 @@
 			isa = PBXGroup;
 			children = (
 				B48591F01CB4FC1E00DAC61F /* WebKit.framework */,
-				BB98EE4B1CB573380028AAEF /* libDTCoreText.a */,
-				BB98EE4C1CB573380028AAEF /* libDTFoundation.a */,
-				BB46C5E51CB05316002421F7 /* libDTFoundation.a */,
-				BB2E24B71CB04AEC00E0B549 /* libDTFoundation.a */,
-				BB2E24B51CB048B700E0B549 /* libDTCoreText.a */,
-				BBCF9A8E1CAE6D5D005B9DCE /* libDTFoundation.a */,
 				188969071CAD828600C7E04E /* StoreKit.framework */,
 				18F971161C92A40A001B2575 /* JavaScriptCore.framework */,
 				18F971141C92971B001B2575 /* CoreMotion.framework */,
@@ -4237,7 +4256,6 @@
 				BBCE9D0E1CB3AD5600DA56D6 /* 108_1.png in Resources */,
 				BB63F5CB1C2CC7A300A042E8 /* MJRefresh.bundle in Resources */,
 				BBCE9D421CB3AD5600DA56D6 /* 160_1.png in Resources */,
-				1895B7791CCB50F900B86B0D /* TQPurchaseView.xib in Resources */,
 				BBCE9D4D1CB3AD5600DA56D6 /* 401_1.png in Resources */,
 				BB6F11DC1CC7C2E000F02064 /* home_point_icon@2x.png in Resources */,
 				BBCE9D251CB3AD5600DA56D6 /* 131_1.png in Resources */,
@@ -4369,6 +4387,7 @@
 				BB63F6211C2CC7A300A042E8 /* HtmlRoomViewCell.m in Sources */,
 				BB63F5AC1C2CC7A300A042E8 /* UIView+Frame.m in Sources */,
 				BB5E1C731CC082310076C416 /* RoomService.mm in Sources */,
+				B4CC49CB1CCF9AB200D0C2F7 /* TQPurchaseModel.mm in Sources */,
 				BB5E4FA21CBF7D1B00F8C1D4 /* TeacherModel.m in Sources */,
 				BB1661A41C3E2F9A00D318BE /* HomeViewController.m in Sources */,
 				BBD58EE81CCBD8A2009250DB /* XMeCustomDataSource.m in Sources */,
@@ -4389,6 +4408,7 @@
 				18AAD5641C993CD100438E18 /* AssetViewController.m in Sources */,
 				185F596A1CC4CAD600F605F5 /* NSObject+MJCoding.m in Sources */,
 				B4EA09201CC86A8100E8F933 /* StockNotVipView.m in Sources */,
+				B4CC49891CCF708400D0C2F7 /* PriceLabView.mm in Sources */,
 				BB1769251C7B006F00CE947C /* SDWebImageDecoder.m in Sources */,
 				BBD58EFD1CCD2287009250DB /* XLiveQuestionView.m in Sources */,
 				18D3CB901CC0E37700816BD0 /* TQMessageCell.mm in Sources */,
@@ -4402,6 +4422,7 @@
 				BB63F5D61C2CC7A300A042E8 /* UIView+MJExtension.m in Sources */,
 				BBD46D2B1CB01B4B00E2B767 /* TextCoreViewController.m in Sources */,
 				BB63F6011C2CC7A300A042E8 /* GroupHeaderView.m in Sources */,
+				BB0D3D031CD0AA3200A57E77 /* XIdeaDataSource.m in Sources */,
 				BB6F121C1CC8B31400F02064 /* http_common.cpp in Sources */,
 				B4EA092C1CC8E12600E8F933 /* StockRecordCell.mm in Sources */,
 				BB5E4FA81CBF7D1B00F8C1D4 /* TodayVIPModel.m in Sources */,
@@ -4471,7 +4492,6 @@
 				BBCF9A681CADAB60005B9DCE /* TextColletViewController.m in Sources */,
 				18B0CECD1CC07CC700BA82DF /* NSDate+TQInterval.m in Sources */,
 				18EA82231CC8A46600BDB735 /* UIImage+Image.m in Sources */,
-				1895B7771CCB50E900B86B0D /* TQPurchaseView.m in Sources */,
 				BB16619E1C3E2DC700D318BE /* ZLTabBar.m in Sources */,
 				BB5E4F961CBF7D1B00F8C1D4 /* TextHomeViewController.m in Sources */,
 				18BF06B51C9A7DC70071E524 /* SignatureViewController.m in Sources */,
@@ -4482,6 +4502,7 @@
 				BB5E4FB91CBF7D1B00F8C1D4 /* ViewPointCell.m in Sources */,
 				BBD58EEB1CCBD96C009250DB /* XMeCustomCell.m in Sources */,
 				BB17692D1C7B006F00CE947C /* UIImage+WebP.m in Sources */,
+				BB0D3D061CD0BF6100A57E77 /* XPrivateService.m in Sources */,
 				BB1769261C7B006F00CE947C /* SDWebImageDownloader.m in Sources */,
 				18EA82A91CCA148F00BDB735 /* TQIntroductCell.m in Sources */,
 				1895B78D1CCB7C8700B86B0D /* TQIntroductModel.mm in Sources */,
@@ -4564,6 +4585,7 @@
 				18EA82B11CCA148F00BDB735 /* TQNoCustomView.m in Sources */,
 				185DABAD1CBFDC970019C5A3 /* TQideaTableViewCell.mm in Sources */,
 				18D3CB781CC0A3FA00816BD0 /* TQCustomizedCell.m in Sources */,
+				B4CC497F1CCDED9E00D0C2F7 /* UIAlertView+Block.m in Sources */,
 				18D3CB871CC0D13600816BD0 /* TQPersonalTailorViewController.mm in Sources */,
 				BB1769391C7B045D00CE947C /* RegMobileViewController.m in Sources */,
 				BB63F5B41C2CC7A300A042E8 /* LSTcpSocket.m in Sources */,
@@ -4576,7 +4598,7 @@
 				18EA82291CC8A5B200BDB735 /* UIImageView+Header.m in Sources */,
 				BB6F3ABA1C9D6EC50035EBBE /* FloatingView.m in Sources */,
 				BB63F5C61C2CC7A300A042E8 /* MASViewConstraint.m in Sources */,
-				18EA82A41CCA148F00BDB735 /* TableViewCell.m in Sources */,
+				18EA82A41CCA148F00BDB735 /* TableViewCell.mm in Sources */,
 				18D3CB811CC0CFB400816BD0 /* TQMessageViewController.mm in Sources */,
 				BB25D8121C15729800314C1E /* main.m in Sources */,
 				BB9765F61C86831D00FAA5B7 /* TextChatModel.m in Sources */,
@@ -4609,6 +4631,7 @@
 				185DABAB1CBFDC970019C5A3 /* ideaDetailTableViewCell.m in Sources */,
 				18D3CB7B1CC0A41E00816BD0 /* TQMailboxCell.m in Sources */,
 				BB63F60D1C2CC7A300A042E8 /* RoomListInfo.m in Sources */,
+				BB0D3CFD1CD08CA100A57E77 /* ZLReply.m in Sources */,
 				5AE9A3CF1CCE6A4B00831606 /* CustomizedTableViewCell.m in Sources */,
 				18F9710C1C92947F001B2575 /* base64.m in Sources */,
 				BB17689F1C77052000CE947C /* GitInfo.m in Sources */,
@@ -4642,6 +4665,7 @@
 				188968F81CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */,
 				18EA82261CC8A4C200BDB735 /* UIImage+Antialias.m in Sources */,
 				BB63F60E1C2CC7A300A042E8 /* LoginTextField.m in Sources */,
+				BB0D3D001CD0985000A57E77 /* ReplyNullInfoCell.m in Sources */,
 				BB1769271C7B006F00CE947C /* SDWebImageDownloaderOperation.m in Sources */,
 				BB6F3AD61C9F86270035EBBE /* TADotView.m in Sources */,
 				18D3CB8B1CC0D31800816BD0 /* TQPersonalTailorCell.mm in Sources */,

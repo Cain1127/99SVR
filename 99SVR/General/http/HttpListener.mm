@@ -8,6 +8,8 @@
 
 #include <stdio.h>
 #include "HttpListener.h"
+#import  "XPrivateService.h"
+#import "ZLReply.h"
 #import "ZLOperateStock.h"
 #import "ZLViewPoint.h"
 #include "StockDealModel.h"
@@ -16,6 +18,7 @@
 #import "TQIdeaDetailModel.h"
 #import "TQMessageModel.h"
 #import "TQAnswerModel.h"
+#import "StockMacro.h"
 #import "XConsumeRankModel.h"
 #import "TQPersonalModel.h"
 #import "TQMeCustomizedModel.h"
@@ -26,6 +29,7 @@
 #import "XVideoTeamInfo.h"
 #import "SplashModel.h"
 #import "RoomHttp.h"
+#import "TQPurchaseModel.h"
 
 /**
  *  闪屏响应
@@ -68,8 +72,8 @@ void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
 }
 
 /**
- *  请求观点详情
- */
+*  请求观点详情
+*/
 void ViewpointDetailListener::onResponse(ViewpointDetail& infos){
     TQIdeaDetailModel *model = [[TQIdeaDetailModel alloc] initWithViewpointDetail:&infos];
     NSDictionary *dict = @{@"code":@(1),@"model":model};
@@ -86,38 +90,60 @@ void ViewpointDetailListener::OnError(int errCode)
  *  请求观点列表
  */
 void ReplyListener::onResponse(vector<Reply>& infos){
+    NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<infos.size(); i++) {
-        NSMutableArray *ary = [NSMutableArray array];
-        for (int i=0; i<infos.size(); i++) {
-//            TQIdeaModel *model = [[TQIdeaModel alloc] init];
-//            ViewpointSummary summary = infos[i];
-//            model.authorid = [NSString stringWithUTF8String:summary.authorid().c_str()];
-//            model.authoricon = [NSString stringWithUTF8String:summary.authoricon().c_str()];
-//            model.authorname = [NSString stringWithUTF8String:summary.authorname().c_str()];
-//            model.publishtime = [NSString stringWithUTF8String:summary.publishtime().c_str()];
-//            model.content = [NSString stringWithUTF8String:summary.content().c_str()];
-//            model.replycount = summary.replycount();
-//            model.giftcount = summary.giftcount();
-//            model.viewpointid = summary.viewpointid();
-//            [ary addObject:model];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:ary];
+        ZLReply *reply = [[ZLReply alloc] init];
+        Reply info = infos[i];
+        reply.replytid = info.replytid();
+        reply.viewpointid = info.viewpointid();
+        reply.parentreplyid = info.parentreplyid();
+        
+        reply.authorid = [NSString stringWithUTF8String:info.authorid().c_str()];
+        reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
+        reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];
+        reply.fromauthorid = [NSString stringWithUTF8String:info.fromauthorid().c_str()];
+        reply.fromauthorname = [NSString stringWithUTF8String:info.fromauthorname().c_str()];
+        reply.fromauthoricon = [NSString stringWithUTF8String:info.fromauthoricon().c_str()];
+        reply.publishtime = [NSString stringWithUTF8String:info.publishtime().c_str()];
+        reply.content = [NSString stringWithUTF8String:info.content().c_str()];
+        [ary addObject:reply];
     }
+    NSDictionary *dict = @{@"code":@(1),@"model":ary};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_REQUEST_REPLY_VC object:dict];
 }
 
 void ReplyListener::OnError(int errCode)
 {
-    
+    NSDictionary *dict = @{@"code":@(1)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_REQUEST_REPLY_VC object:dict];
 }
 /**
  *  回复观点
  */
 void PostReplyListener::onResponse(int errorCode, Reply& info){
+    DLog(@"回复成功!");
+    ZLReply *reply = [[ZLReply alloc] init];
+    reply.replytid = info.replytid();
+    reply.viewpointid = info.viewpointid();
+    reply.parentreplyid = info.parentreplyid();
+    
+    reply.authorid = [NSString stringWithUTF8String:info.authorid().c_str()];
+    reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
+    reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];
+    reply.fromauthorid = [NSString stringWithUTF8String:info.fromauthorid().c_str()];
+    reply.fromauthorname = [NSString stringWithUTF8String:info.fromauthorname().c_str()];
+    reply.fromauthoricon = [NSString stringWithUTF8String:info.fromauthoricon().c_str()];
+    reply.publishtime = [NSString stringWithUTF8String:info.publishtime().c_str()];
+    reply.content = [NSString stringWithUTF8String:info.content().c_str()];
+    
+    NSDictionary *dict = @{@"code":@(1),@"model":reply};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_IDEA_REPLY_RESPONSE_VC object:dict];
     
 }
 void PostReplyListener::OnError(int errCode)
 {
-    
+    NSDictionary *dict = @{@"code":@(errCode)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_IDEA_REPLY_RESPONSE_VC object:dict];
 }
 
 /**
@@ -210,7 +236,7 @@ void OperateStockAllDetailListener::OnError(int errCode)
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks, uint32 currLevelId, uint32 minVipLevel){
     
-    int vipLevel = 1;
+    int vipLevel = 0;
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     //股票头部数据
@@ -346,25 +372,68 @@ void WhatIsPrivateServiceListener::OnError(int errCode)
 }
 
 /**
- *  请求信息--购买
+ *  请求信息--购买 私人订制的详情列表。
  */
 
 void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription>& infos){
     
+    NSMutableArray *muArray = [NSMutableArray array];
+    for (size_t i=0; i!=infos.size(); i++) {
+        PrivateServiceLevelDescription *profit = &infos[i];
+        TQPurchaseModel *model = [[TQPurchaseModel alloc] init];
+        model.levelname = StrTransformCToUTF8(profit->levelname().c_str());
+        model.descriptionStr = StrTransformCToUTF8(profit->description().c_str());
+        model.buytime = StrTransformCToUTF8(profit->buytime().c_str());
+        model.expirtiontime = StrTransformCToUTF8(profit->expirtiontime().c_str());
+        model.levelid = IntTransformIntToStr(profit->levelid());
+        model.isopen = IntTransformIntToStr(profit->isopen());
+        model.buyprice = [NSString stringWithFormat:@"%f",profit->buyprice()];
+        model.updateprice = [NSString stringWithFormat:@"%f",profit->updateprice()];
+        [muArray addObject:model];
+    }
+    NSDictionary *parameters = @{@"code":@(1),@"model":muArray};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:parameters];
 }
 
 void BuyPrivateServiceListener::OnError(int errCode)
 {
-    
+    DLog(@"err:%d",errCode);
+    NSDictionary *parameters = @{@"code":@(errCode)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:parameters];
 }
 
 void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateServiceSummaryPack>& infos){
-    
+    NSMutableArray *aryDict = [NSMutableArray array];
+    for(int i=0;i<infos.size();i++)
+    {
+        TeamPrivateServiceSummaryPack pack = infos[i];
+        XPrivateService *service = [[XPrivateService alloc] init];
+        service.vipLevelId = pack.vipLevelId();
+        service.vipLevelName = [NSString stringWithUTF8String:pack.vipLevelName().c_str()];
+        service.isOpen = pack.isOpen();
+        NSMutableArray *array = [NSMutableArray array];
+        for (int j = 0 ; j < pack.summaryList().size(); j++) {
+            PrivateServiceSummary sumary = pack.summaryList()[j];
+            XPrivateSummary *priSummary = [[XPrivateSummary alloc] init];
+            
+            priSummary.nId = sumary.id();
+            priSummary.title = [NSString stringWithUTF8String:sumary.title().c_str()];
+            priSummary.summary = [NSString stringWithUTF8String:sumary.summary().c_str()];
+            priSummary.publishtime = [NSString stringWithUTF8String:sumary.publishtime().c_str()];
+            priSummary.teamname = [NSString stringWithUTF8String:sumary.teamname().c_str()];
+            [array addObject:priSummary];
+        }
+        service.summaryList = array;
+        [aryDict addObject:service];
+    }
+    NSDictionary *dict = @{@"code":@(1),@"model":aryDict};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:dict];
 }
 
 void TeamPrivateServiceSummaryPackListener::OnError(int errCode)
 {
-    
+    NSDictionary *dict = @{@"code":@(errCode)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:dict];
 }
 
 void PrivateServiceDetailListener::onResponse(PrivateServiceDetail& info){

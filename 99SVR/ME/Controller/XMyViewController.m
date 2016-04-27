@@ -22,6 +22,7 @@
 #import "KefuCenterController.h"
 #import "ProfileViewController.h"
 #import "TQMeCustomizedViewController.h"
+#import "PaySelectViewController.h"
 
 #define kLogin @"登录"
 #define kRegist @"注册"
@@ -100,6 +101,9 @@
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"私人定制" icon:@"mydata.png" goClassName:@"CustomizedViewController"]];
 //        if(KUserSingleton.nStatus)
 //        {
+//        ProfileViewController
+//        
+//            [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"AssetViewController"]];
 //        }
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"personal_collection_icon" goClassName:@"VideoColletionViewController"]];

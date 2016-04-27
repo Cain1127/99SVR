@@ -65,6 +65,7 @@
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadTeamContent:) name:MESSAGE_TEAM_INTRODUCE_VC object:nil];
     [kHTTPSingle RequestTeamIntroduce:0];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated

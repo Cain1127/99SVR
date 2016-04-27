@@ -26,14 +26,14 @@
     self.leftLab = [[UILabel alloc]initWithFrame:(CGRect){10,0,self.width/2.0-10,self.height}];
     self.leftLab.font = [UIFont systemFontOfSize:15];
     self.leftLab.textAlignment = NSTextAlignmentLeft;
-    self.leftLab.textColor = COLOR_STOCK_Text_Black;
+    self.leftLab.textColor = COLOR_Text_4C4C4C;
     [self addSubview:self.leftLab];
     
     
     self.rightLab = [[UILabel alloc]initWithFrame:(CGRect){self.width/2.0,0,self.width/2.0-10,self.height}];
     self.rightLab.font = [UIFont systemFontOfSize:15];
     self.rightLab.textAlignment = NSTextAlignmentRight;
-    self.rightLab.textColor = COLOR_STOCK_Text_Black;
+    self.rightLab.textColor = COLOR_Text_4C4C4C;
     [self addSubview:self.rightLab];
 
 }

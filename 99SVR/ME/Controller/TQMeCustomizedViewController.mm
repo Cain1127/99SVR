@@ -9,12 +9,13 @@
 #import "TQMeCustomizedViewController.h"
 #import "TQMeCustomizedModel.h"
 #import "TQNoCustomView.h"
-#import "TQNoPurchaseViewController.h"
+//#import "TQNoPurchaseViewController.h"
 #import "UIBarButtonItem+Item.h"
 #import "HttpManagerSing.h"
 #import "TableViewFactory.h"
 #import "XMeCustomDataSource.h"
 #import "XPrivateDetailViewController.h"
+#import "TQPurchaseViewController.h"
 
 @interface TQMeCustomizedViewController ()<MeCustomDelegate>
 
@@ -38,7 +39,7 @@
     [self initUi];
 }
 -(void)nopurchaseVc {
-    TQNoPurchaseViewController *vc = [[TQNoPurchaseViewController alloc] init];
+    TQPurchaseViewController *vc = [[TQPurchaseViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

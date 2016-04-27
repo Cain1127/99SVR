@@ -243,6 +243,8 @@ void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, 
     http_request_asyn(listener, parse_profitorder, &request);
 }
 
+
+
 // 请求操盘详情
 void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener)
 {
@@ -971,14 +973,14 @@ void parse_viewpointdetail(char* json, HttpListener* listener)
             if(!details.isNull())
             {
                 ViewpointDetail detail;
-                detail.set_viewpointid(atoi((details["viewpointid"].asString()).c_str()));
-                detail.set_authorid(details["authorid"].asString());
-                detail.set_authorname(details["authorname"].asString());
-                detail.set_authoricon(details["authoricon"].asString());
-                detail.set_publishtime(details["publishtime"].asString());
+                detail.set_viewpointid(atoi((details["viewpointId"].asString()).c_str()));
+                detail.set_authorid(details["authorId"].asString());
+                detail.set_authorname(details["authorName"].asString());
+                detail.set_authoricon(details["authorIcon"].asString());
+                detail.set_publishtime(details["publishTime"].asString());
                 detail.set_title(details["title"].asString());
                 detail.set_content(details["content"].asString());
-                detail.set_replycount(atoi((details["replycount"].asString()).c_str()));
+                detail.set_replycount(atoi((details["replyCount"].asString()).c_str()));
                 detail.set_giftcount(atoi((details["giftcount"].asString()).c_str()));
                 detail_listener->onResponse(detail);
             }
@@ -1595,7 +1597,7 @@ void HttpConnection::RequestViewpointDetail(int viewpointId, ViewpointDetailList
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
-    
+
     http_request_asyn(listener, parse_viewpointdetail, &request);
 
 }
