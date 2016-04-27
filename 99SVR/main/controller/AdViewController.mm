@@ -28,24 +28,36 @@
     
     // 1.背景图片
     UIImageView *bg = [[UIImageView alloc] init];
-    // TODO : 当前只是适配iphone6，图片过来再做修改
-    bg.image = [UIImage imageNamed:@"start_page_640x1136"];
+    // 显示图片
+    NSString *name=@"start_page_750x1334";
+    if (kiPhone4_OR_4s) {
+        name = @"start_page_640x960";
+    } else if(kiPhone5_OR_5c_OR_5s){
+        name = @"start_page_640x1136";
+    } else if(kiPhone6_OR_6s){
+        name = @"start_page_750x1334";
+    } else if(kiPhone6Plus_OR_6sPlus){
+        name = @"start_page_1242x2208";
+    }
+    // 为了释放图片内存，imageWithContentsOfFile 代替 [UIImage imageNamed:name];
+    bg.image = kPNG_IMAGE_FILE(name);
     bg.frame = self.view.bounds;
     [self.view addSubview:bg];
     
     // 2.广告图片
-    NSString *str = @"http://pic.nipic.com/2008-04-01/20084113367207_2.jpg";
+    SplashModel *splash = [SplashTool get];
+    NSString *str = splash.imageUrl;//@"http://pic.nipic.com/2008-04-01/20084113367207_2.jpg";
     UIImageView *ad = [[UIImageView alloc] init];
-    ad.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.85);
+    ad.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.80);
     [ad sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage new]];
     [self.view addSubview:ad];
     
     // 3.多少秒后跳过，广告倒计时
     _adButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _adButton.titleLabel.font = [UIFont systemFontOfSize:20];
-    [_adButton setTitle:@"5秒跳过" forState:UIControlStateNormal];
-    _adButton.backgroundColor = [UIColor redColor];
-    [_adButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_adButton setTitle:[NSString stringWithFormat:@"%@跳过",@"5"] forState:UIControlStateNormal];
+    _adButton.backgroundColor = [UIColor whiteColor];
+    [_adButton setTitleColor:UIColorFromRGB(0x4c4c4c) forState:UIControlStateNormal];
     [_adButton addTarget:self action:@selector(adSkipClick) forControlEvents:UIControlEventTouchUpInside];
     _adButton.frame = CGRectMake(kScreenWidth - 120, 50 , 100, 40);
     [self.view addSubview:_adButton];
@@ -78,8 +90,6 @@ NSUInteger secondsCountDown = 5;//60秒倒计时
     _timer=nil;
     
     [SwitchRootTool switchRootForViewController];
-//    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-//    [window switchRootViewController];
 }
 
 @end
