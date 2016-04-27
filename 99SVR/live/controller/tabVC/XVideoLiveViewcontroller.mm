@@ -73,6 +73,7 @@
 @property (nonatomic,strong) UIButton *btnFull;
 
 @property (nonatomic,strong) SliderMenuView *menuView;
+@property (nonatomic,assign) NSInteger nSelectIndex;
 @property (nonatomic,strong) RoomChatDataSource *chatDataSource;
 @property (nonatomic,strong) RoomChatDataSource *prichatDataSource;
 @property (nonatomic,strong) RoomNoticeDataSource *noticeDataSource;
@@ -113,11 +114,6 @@
     singleRecogn.numberOfTapsRequired = 1; // 双击
     [_ffPlay.view setUserInteractionEnabled:YES];
     [_ffPlay.view addGestureRecognizer:singleRecogn];
-    
-    singleRecogn = nil;
-//    singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapFrom)];
-//    singleRecogn.numberOfTapsRequired = 2;
-//    [_ffPlay.view addGestureRecognizer:singleRecogn];
 }
 
 - (void)connectUnVideo:(UIButton *)sender
@@ -137,6 +133,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
+    [self hiddenTopHud];
 }
 
 - (void)initTableView{
@@ -183,17 +180,21 @@
     _menuView = [[SliderMenuView alloc] initWithFrame:Rect(0,kVideoImageHeight, kScreenWidth,self.view.height-kVideoImageHeight)
                                            withTitles:@[@"聊天",@"我的",@"公告",@"课程表",@"贡献榜"] withDefaultSelectIndex:0];
     _menuView.viewArrays = @[_chatAllView,_priChatView,_noticeView,_teachView,_tableConsumeRank];
-     
+    _nSelectIndex = 1;
+    _menuView.DidSelectSliderIndex = ^(NSInteger index)
+    {
+        _nSelectIndex = index;
+    };
 }
 
 - (void)initUIHead{
     
     _ffPlay = [[LivePlayViewController alloc] init];
-    [self.view insertSubview:_ffPlay.view atIndex:1];
+    [self.view addSubview:_ffPlay.view];
     _ffPlay.view.frame = Rect(0,0, kScreenWidth, kScreenHeight);
     
     _downHUD = [[UIView alloc] initWithFrame:Rect(0, kVideoImageHeight-44, kScreenWidth, 44)];
-    _downHUD.alpha = 0;
+    _downHUD.alpha = 1;
     UIImageView *downImg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
     [downImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
     [_downHUD addSubview:downImg];
@@ -423,10 +424,18 @@
  */
 - (void)roomChatPriMsg:(NSNotification *)notify
 {
-//    _aryPriChat = aryRoomPrichat;
-    [_prichatDataSource setModel:aryRoomPrichat];
     @WeakObj(self)
+    [_prichatDataSource setModel:aryRoomPrichat];
+    if (aryRoomPrichat.count>0) {
+        dispatch_async(dispatch_get_main_queue(),
+       ^{
+           if (selfWeak.nSelectIndex != 2) {
+               selfWeak.menuView.showBadgeIndex = 2;
+           }
+       });
+    }
     dispatch_async(dispatch_get_main_queue(),^{
+
         [selfWeak.priChatView reloadDataWithCompletion:
          ^{
              NSInteger numberOfRows = [selfWeak.priChatView numberOfRowsInSection:0];
@@ -444,12 +453,19 @@
  */
 - (void)roomChatMSg:(NSNotification *)notify
 {
-//    _aryChat = aryRoomChat;
     [_chatDataSource setModel:aryRoomChat];
     @WeakObj(self)
+    if (aryRoomChat.count>0) {
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+            if (selfWeak.nSelectIndex != 1) {
+                selfWeak.menuView.showBadgeIndex = 1;
+            }
+        });
+    }
     dispatch_async(dispatch_get_main_queue(),
     ^{
-       [selfWeak.chatView reloadDataWithCompletion:
+        [selfWeak.chatView reloadDataWithCompletion:
         ^{
             NSInteger numberOfRows = [selfWeak.chatView numberOfRowsInSection:0];
             if (numberOfRows > 0)
@@ -468,17 +484,25 @@
 {
     @WeakObj(self)
     [_noticeDataSource setModel:aryRoomNotice];
+    if (aryRoomNotice.count>0) {
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+            if (selfWeak.nSelectIndex != 3) {
+                selfWeak.menuView.showBadgeIndex = 3;
+            }
+        });
+    }
     dispatch_async(dispatch_get_main_queue(),
-       ^{
-           [selfWeak.noticeView reloadDataWithCompletion:
-            ^{
-                if (selfWeak.aryNotice.count > 0)
-                {
-                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:selfWeak.aryNotice.count-1];
-                    [selfWeak.noticeView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-                }
-            }];
-       });
+    ^{
+       [selfWeak.noticeView reloadDataWithCompletion:
+        ^{
+            if (selfWeak.aryNotice.count > 0)
+            {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:selfWeak.aryNotice.count-1];
+                [selfWeak.noticeView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+            }
+        }];
+    });
 }
 
 /**
@@ -739,111 +763,30 @@
 - (void)showTopHUD
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-//    if(_topHUD.alpha==0)
-//    {
-//        _topHUD.alpha = 1;
-//        _downHUD.alpha = 1;
-//        [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:2.0];
-//    }
-//    else
-//    {
-//        _topHUD.alpha = 0;
-//        _downHUD.alpha = 0;
-//    }
-}
-#pragma mark 双击事件  切换屏幕
-- (void)handleDoubleTapFrom
-{
-//    [self fullPlayMode];
-//    if (_delegate && [_delegate respondsToSelector:@selector(fullModel)]) {
-//        [_delegate fullModel];
-//    }
-//    [_ffPlay.view removeFromSuperview];
-//    [[UIApplication sharedApplication].keyWindow addSubview:_ffPlay.view];
-//    _ffPlay.glView.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
+    if(_downHUD.alpha==0)
+    {
+        _downHUD.alpha = 1;
+        [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:2.0];
+    }
+    else
+    {
+        _downHUD.alpha = 0;
+    }
 }
 
 #pragma mark 切换
 #pragma mark 全屏与四屏切换，设置frame与bounds
 -(void)fullPlayMode
 {
-    if (!bFull)//NO状态表示当前竖屏，需要转换成横屏
-    {
-        CGFloat _duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-        [[UIDevice currentDevice] setValue: [NSNumber numberWithInteger:UIDeviceOrientationLandscapeRight] forKey:@"orientation"];
-        [UIViewController attemptRotationToDeviceOrientation];
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:_duration];
-        CGRect frame = [UIScreen mainScreen].bounds;
-        CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
-        self.view.center = center;
-        self.view.transform = [self transformView];
-        self.view.bounds = Rect(0, 0,kScreenHeight,kScreenWidth);
-        [UIView commitAnimations];
-        bFull = YES;
-        _btnFull.selected = YES;
-    }
-    else
-    {
-        [self setHorizontal];
-        bFull = NO;
-        _btnFull.selected = NO;
-    }
+    [_ffPlay fullPlayMode];
 }
 
--(void)setHorizontal
-{
-    [[UIDevice currentDevice] setValue: [NSNumber numberWithInteger:UIDeviceOrientationPortrait] forKey:@"orientation"];
-    CGFloat _duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:_duration];
-    CGRect frame = [UIScreen mainScreen].bounds;
-    CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
-    self.view.center = center;
-    self.view.transform = [self transformView];
-    self.view.bounds = CGRectMake(0, 0, kScreenSourchWidth, kScreenSourchHeight);
-    [UIView commitAnimations];
-}
 
--(CGAffineTransform)transformView
-{
-    if (rand()%2)
-    {
-        return CGAffineTransformMakeRotation(M_PI/2);
-    }
-    else
-    {
-        return CGAffineTransformIdentity;
-    }
-}
 
 #pragma mark 横屏
 - (void)horizontalViewControl
 {
-    
-    int nWidth = kScreenHeight > kScreenWidth ? kScreenHeight : kScreenWidth;
-    int nHeight = kScreenHeight > kScreenWidth ? kScreenWidth : kScreenHeight;
-    self.view.frame = Rect(0,0,nWidth,nHeight);
-    _ffPlay.view.frame = Rect(0, 0, nWidth, nHeight);
-    _ffPlay.glView.frame = Rect(0, 0, nWidth, nHeight);
-    
-//    _topHUD.frame = Rect(0, 0, nWidth, 44);
-//    [_topHUD viewWithTag:1].frame = Rect(0, 0, nWidth, 44);
-//    [_topHUD viewWithTag:2].frame = Rect(0, 0, 44, 44);
-//    
-//    _lblName.frame = Rect(50, 12, nWidth-100, 15);
-//    _btnRight.frame = Rect(nWidth-50, 0, 44, 44);
-    
-//    _downHUD.frame = Rect(0, nHeight-44, nWidth, 44);
-//    [[_downHUD viewWithTag:1] setFrame:_downHUD.bounds];
-//    _btnFull.frame = Rect(nWidth-54, 0, 44, 44);
-//    
-//    _group.hidden = YES;
-//    downView.hidden = YES;
-//    _scrollView.hidden = YES;
-//    _lblBlue.hidden = YES;
-    
-    [self setNeedsStatusBarAppearanceUpdate];
+
 }
 
 #pragma mark 竖屏
@@ -855,8 +798,8 @@
 //    [_topHUD viewWithTag:2].frame = Rect(0, 20, 44, 44);
 //    _btnRight.frame = Rect(kScreenWidth-50, 20, 44, 44);
 //    _downHUD.frame = Rect(0, kVideoImageHeight-24, kScreenWidth, 44);
-    _ffPlay.view.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
-    _ffPlay.glView.frame = Rect(0,0,kScreenWidth, kVideoImageHeight);
+//    _ffPlay.view.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
+//    _ffPlay.glView.frame = Rect(0,0,kScreenWidth, kVideoImageHeight);
 //
 //    _btnFull.frame = Rect(kScreenWidth-54, 0, 44, 44);
 //    
@@ -864,7 +807,7 @@
 //    downView.hidden = NO;
 //    _lblBlue.hidden = NO;
 //    _scrollView.hidden = NO;
-    [self setNeedsStatusBarAppearanceUpdate];
+//    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (BOOL)prefersStatusBarHidden//for iOS7.0
@@ -892,21 +835,11 @@
 
 - (void)hiddenTopHud
 {
-    if ([NSThread isMainThread])
-    {
-        _topHUD.alpha = 0;
-        _downHUD.alpha = 0;
-    }
-    else
-    {
-        __weak UIView *__topHud = _topHUD;
-        __weak UIView *__downHUD = _downHUD;
-        dispatch_main_async_safe(
-         ^{
-             __topHud.alpha = 0;
-             __downHUD.alpha = 0;
-         });
-    }
+    __weak UIView *__downHUD = _downHUD;
+    dispatch_main_async_safe(
+     ^{
+         __downHUD.alpha = 0;
+     });
 }
 
 - (void)dealloc{

@@ -4,7 +4,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import "HttpMessage.pb.h"
+//#import "HttpMessage.pb.h"
 
 @interface TQPurchaseModel : NSObject
 
@@ -27,6 +27,5 @@
 
 #pragma mark 购买私人订制的
 /**股票首页*/
-- (instancetype)initWithPrivateServiceLevelData:(PrivateServiceLevelDescription *)profit;
 
 @end

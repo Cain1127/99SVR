@@ -110,14 +110,15 @@
 - (int)getUserLevel:(RoomUser *)user
 {
     int nLevel = 0;
-    if(user.m_nInRoomState&(FT_ROOMUSER_STATUS_PUBLIC_MIC |
-                               FT_ROOMUSER_STATUS_PRIVE_MIC  |
-                               FT_ROOMUSER_STATUS_SECRET_MIC |
-                               FT_ROOMUSER_STATUS_CHARGE_MIC))
-    {
-        nLevel = 200;
-    }
-    else if(user.m_nUserType == 1)
+//    if(user.m_nInRoomState&(FT_ROOMUSER_STATUS_PUBLIC_MIC |
+//                               FT_ROOMUSER_STATUS_PRIVE_MIC  |
+//                               FT_ROOMUSER_STATUS_SECRET_MIC |
+//                               FT_ROOMUSER_STATUS_CHARGE_MIC))
+//    {
+//        nLevel = 200;
+//    }
+//    else
+    if(user.m_nUserType == 1)
     {
         nLevel = 190;
     }

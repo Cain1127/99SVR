@@ -153,6 +153,18 @@
         make.centerY.equalTo(self.iconImv.mas_centerY);
     }];
     
+    //计算总收益字体
+    NSString *totalNum = NSStringFromFloat(model.totalprofit);
+    CGSize totalNumSize = [ShareFunction calculationOfTheText:totalNum withFont:totalNumLab_fot withMaxSize:(CGSize){200,50}];
+    
+    //总收益数字
+    [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.iconImv.mas_top);
+        make.right.equalTo(@(ValueWithTheIPhoneModelString(@"-10,-10,-10,-10")));
+        make.width.equalTo(@(totalNumSize.width));
+        make.height.equalTo(@(totalNumLab_fot));
+    }];
+    
     [self.iconImv sd_setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/pic/item/e1fe9925bc315c6001e93f3388b1cb13485477e9.jpg"]];
     self.nameLab.text =  model.teamname;
     self.traderNameLab.text =  model.focus;

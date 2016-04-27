@@ -14,7 +14,7 @@
 
 /** 模型 */
 //@property (nonatomic ,weak) TQIdeaModel *ideaModel;
-
-- (void)setIdeaModel:(ZLViewPoint *)ideaModel;
+@property (nonatomic,copy) NSString *content;
+- (void)setIdeaModel:(TQIdeaModel *)ideaModel;
 
 @end

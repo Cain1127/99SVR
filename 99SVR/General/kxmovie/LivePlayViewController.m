@@ -41,6 +41,7 @@
     int nReceiveMemory;
     BOOL bFull;
     UIView *sunView;
+    UIView *_downHUD;
 }
 @property (nonatomic) BOOL backGroud;
 @property (nonatomic) BOOL bVideo;
@@ -49,9 +50,6 @@
 @property (nonatomic,copy) UIImage *currentImage;
 @property (nonatomic,strong) UIImageView *smallView;
 @property (nonatomic,copy) NSString *strPath;
-
-//@property (nonatomic,strong) NSMutableArray *aryVideo;
-//@property (nonatomic,strong) NSMutableArray *aryAudio;
 
 @end
 
@@ -74,7 +72,6 @@
 - (void)startLoad
 {
     [_glView makeToastActivity_2:@"bottom"];
-//    [_glView makeToastActivity];
 }
 
 - (void)stopLoad
@@ -259,6 +256,8 @@
     UITapGestureRecognizer *singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapFrom)];
     singleRecogn.numberOfTapsRequired = 2;
     [_glView addGestureRecognizer:singleRecogn];
+    
+    
 }
 
 - (void)handleDoubleTapFrom{

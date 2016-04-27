@@ -63,7 +63,6 @@
             _viewuserid,[_strName UTF8String],_commentid,[_strName UTF8String]);
     NSString *strFrom = [NSString stringWithUTF8String:cFrom];
     if (_srcinteractid!=0) {
-//        _strContent = [NSString stringWithFormat:@"<p style=\"line-height:10px\">%@ 回复 <a href=\"sqchatid://%lld,%@\" style=\"color:#0078DD\">%@</a><p>%@</p></p>",strFrom,_srcinteractid,_strSrcName,_strSrcName,_strContent];
         _strContent = [NSString stringWithFormat:@"<p style=\"line-height:10px\">%@ 回复 <span style=\"color:#919191\">%@</span><p>%@</p></p>",
                        strFrom,_strSrcName,_strContent];
     }else{
