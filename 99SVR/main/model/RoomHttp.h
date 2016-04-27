@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "MJExtension.h"
 @interface RoomHttp : NSObject
 
 @property (nonatomic, copy) NSString *nvcbid;           //!<直播记录ID

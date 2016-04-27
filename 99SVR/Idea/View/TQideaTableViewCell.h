@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <DTCoreText/DTCoreText.h>
 @class TQIdeaModel;
-
-@interface TQideaTableViewCell : UITableViewCell
+@class ZLViewPoint;
+@interface TQIdeaTableViewCell : DTAttributedTextCell
 
 /** 模型 */
-@property (nonatomic ,weak)TQIdeaModel *ideaModel;
+//@property (nonatomic ,weak) TQIdeaModel *ideaModel;
 
+- (void)setIdeaModel:(ZLViewPoint *)ideaModel;
 
 @end

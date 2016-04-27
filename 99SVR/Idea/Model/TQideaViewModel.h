@@ -9,5 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface TQideaViewModel : NSObject
+
 -(NSArray *)getArrayRturnRrray:(NSMutableArray *)array;
+
 @end

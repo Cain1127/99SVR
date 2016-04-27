@@ -108,8 +108,15 @@
     }];
     
     [self.dayTab addLegendFooterWithRefreshingBlock:^{
+<<<<<<< HEAD
         weakSelf.dayPagInteger ++;
         [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:2];
+=======
+        
+        StockDealModel *model = [weakSelf.dayDataArray lastObject];
+        [kHTTPSingle RequestOperateStockProfitByDay:0 start:[model.transId intValue] count:2];
+        
+>>>>>>> 422602f61852b419090bfaac1ca723c8a9751110
     }];
     
     

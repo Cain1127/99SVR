@@ -224,20 +224,18 @@ NSDictionary *_classesForNames = nil;
 		}
 	}
 	
-	if (_backgroundColor)
-	{
-#if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
-		if (___useiOS6Attributes)
-		{
-			[tmpDict setObject:_backgroundColor forKey:NSBackgroundColorAttributeName];
-		}
-		else
-#endif
-		{
-			[tmpDict setObject:(id)[_backgroundColor CGColor] forKey:DTBackgroundColorAttribute];
-		}
-	}
-	
+//	if (_backgroundColor)
+//	{
+//		if (___useiOS6Attributes)
+//		{
+//			[tmpDict setObject:_backgroundColor forKey:NSBackgroundColorAttributeName];
+//		}
+//		else
+//		{
+//			[tmpDict setObject:(id)[_backgroundColor CGColor] forKey:DTBackgroundColorAttribute];
+//		}
+//	}
+//	
 	if (_superscriptStyle)
 	{
 		[tmpDict setObject:(id)[NSNumber numberWithInteger:_superscriptStyle] forKey:(id)kCTSuperscriptAttributeName];
@@ -792,11 +790,11 @@ NSDictionary *_classesForNames = nil;
 		self.textColor = DTColorCreateWithHTMLName(color);
 	}
 	
-	NSString *bgColor = [styles objectForKey:@"background-color"];
-	if (bgColor)
-	{
-		self.backgroundColor = DTColorCreateWithHTMLName(bgColor);
-	}
+//	NSString *bgColor = [styles objectForKey:@"background-color"];
+//	if (bgColor)
+//	{
+//		self.backgroundColor = DTColorCreateWithHTMLName(bgColor);
+//	}
 	
 	NSString *floatString = [styles objectForKey:@"float"];
 	

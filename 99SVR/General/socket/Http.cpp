@@ -5,7 +5,7 @@
 #include "Util.h"
 #include "Log.h"
 
-Http::Http(int get_post) : method(get_post), size(4096), recv_buf(NULL), parser(NULL), http_listener(NULL)
+Http::Http(int get_post) : method(get_post), size(1024), recv_buf(NULL), parser(NULL), http_listener(NULL)
 {
 }
 
@@ -120,7 +120,7 @@ void Http::build_request(string& req, const char* host, const char* url_tail, Re
 	{
 		build_param(req, param);
 	}
-	req += " HTTP/1.1\r\n";
+	req += " HTTP/1.0\r\n";
 	req += string("Host: ") + host + "\r\n";
 	req += "Accept: */*\r\n";
 	req += "Connection: Close\r\n";
@@ -148,6 +148,8 @@ char* Http::request(const char* host, short port, const char* url_tail, RequestP
 	int ret;
 	Socket socket;
 	string req;
+	char buf[1024];
+
 	build_request(req, host, url_tail, param);
 
 	ret = socket.connect(host, port, 5);
@@ -168,16 +170,13 @@ char* Http::request(const char* host, short port, const char* url_tail, RequestP
 		return NULL;
 	}
 
-	if (recv_buf == NULL)
+	string recvbytes;
+	while ((ret = socket.recv(buf, 1024)) > 0)
 	{
-		recv_buf = new char[size];
+		recvbytes.append(buf, ret);
 	}
 
-	if ((ret = socket.recv(recv_buf, size - 1)) > 0)
-	{
-		recv_buf[ret] = 0;
-	}
-	else
+	if (recvbytes.empty())
 	{
 		if (http_listener)
 			http_listener->OnError(PERR_IO_ERROR);
@@ -185,15 +184,25 @@ char* Http::request(const char* host, short port, const char* url_tail, RequestP
 
 	socket.close_();
 
-	if (ret > 0)
+	int recvsize = recvbytes.size();
+	if (recvsize > 0)
 	{
-		char* content = parse_response(recv_buf);
+		char* content = new char[recvsize + 1];
+		memcpy(content, recvbytes.data(), recvsize);
+		content[recvsize] = 0;
+
+		content = parse_response(content);
 		if (content)
 		{
 			if (this->parser)
 			{
 				this->parser(content, http_listener);
 			}
+
+#ifdef WIN
+			if (http_listener)
+				http_listener->onResponseRawData(string(content));
+#endif
 
 			return content;
 		}
@@ -204,7 +213,8 @@ char* Http::request(const char* host, short port, const char* url_tail, RequestP
 
 Http::~Http()
 {
-	delete[] recv_buf;
+	if ( recv_buf )
+		delete[] recv_buf;
 }
 
 
