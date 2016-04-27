@@ -365,7 +365,7 @@
          
             if (dataArray == self.dayDataArray) {
                 self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"video_live_h"] msg:@"日收益为请求失败"];
-                [self.monTab addSubview:self.monEmptyView];
+                [self.dayTab addSubview:self.dayEmptyView];
                 
             }else if (dataArray == self.monDataArray){
                 
@@ -374,7 +374,7 @@
                 
             }else{
                 self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"video_live_h"] msg:@"总收益为请求失败"];
-                [self.monTab addSubview:self.monEmptyView];
+                [self.totalTab addSubview:self.totalEmptyView];
             }
         }
     }
