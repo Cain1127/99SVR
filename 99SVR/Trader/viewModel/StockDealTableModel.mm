@@ -82,7 +82,7 @@
         return 10;
     }else{
         
-        return 44;
+        return 50;
     }
 }
 
@@ -105,9 +105,6 @@
         
         headerView = [[UITableViewHeaderFooterView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,0}];
         headerView.contentView.backgroundColor = COLOR_Bg_Gay;
-        headerView.layer.borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.2].CGColor;
-        headerView.layer.borderWidth = 1.0f;
-        headerView.layer.masksToBounds = YES;
         headerView.userInteractionEnabled = YES;
         headerView.tag = section;
         UITapGestureRecognizer *headerViewTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(headerViewClick:)];
@@ -210,8 +207,6 @@
 
     return CGFLOAT_MIN;
 }
-
-
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
