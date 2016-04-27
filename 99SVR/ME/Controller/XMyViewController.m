@@ -168,7 +168,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSInteger nRow = indexPath.row + indexPath.section * (_itemsArray.count-2);
     if (_itemsArray.count>nRow) {
-        LeftCellModel *model = _itemsArray[indexPath.row];
+        LeftCellModel *model = _itemsArray[nRow];
         UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
         [self.navigationController pushViewController:viewController animated:YES];
     }

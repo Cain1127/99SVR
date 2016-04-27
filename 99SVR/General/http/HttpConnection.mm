@@ -18,6 +18,19 @@
 
 #define HTTP_API "http://testphp.99ducaijing.cn/api.php"
 
+void parse_totalunreadcount(char* json, HttpListener* listener);
+void parse_collectionlist(char* json, HttpListener* listener);
+void parse_homepage(char* json, HttpListener* listener);
+void parse_teamvideo(char* json, HttpListener* listener);
+void parse_profitdetail(char* json, HttpListener* listener);
+void parse_MyPrivateService(char* json, HttpListener* listener);
+void parse_operatestocks(char* json, HttpListener* listener);
+void parse_operatestocktransaction(char* json, HttpListener* listener);
+void parse_splashimage(char* json, HttpListener* listener);
+void parse_teamintroduce(char* json, HttpListener* listener);
+void parse_postaskquestion(char* json, HttpListener* listener);
+
+
 static ThreadVoid http_request(void* _param)
 {
     HttpThreadParam* param = (HttpThreadParam*)_param;
@@ -54,286 +67,240 @@ static void http_request_asyn(HttpListener* uiListener, ParseJson jsonPaser, Req
 //请求闪屏图片
 void HttpConnection::RequestSplashImage(SplashImageListener* listener)
 {
-    Splash info;
-    info.set_imageurl("http://xx.x.x/x.png");
-    listener->onResponse(info);
+    RequestParamter& request = get_request_param();
+    
+    request["s"] = "Index/getSplashScreen";
+    
+    http_request_asyn(listener, parse_splashimage, &request);
 }
 
-
-// 请求操盘列表-日收益排序
-void HttpConnection::RequestOperateStockProfitOrderByDay(int teamId, int startId, int count, OperateStockProfitListenerDay* listener)
+void parse_profitorder(char* json, HttpListener* listener)
 {
-    NSLog(@"startId= %d",startId);
-    
-    
-    std::vector<OperateStockProfit> day;
-    static int initId = 10;
-    int i = startId;
-    if ( startId == 0 ) {
-        i = initId;
-        startId = initId;
-    }else if (startId ==2){
-        
-        listener->onResponse(day);
-        return;
-    }
-    
-    for (; i>startId - count; i--) {
-        OperateStockProfit profit;
-        profit.set_operateid(1990);
-        char cBuf[10]={0};
-        sprintf(cBuf,"%d",90000+i);
-        profit.set_teamid(cBuf);
-        profit.set_teamname("日收益组合");
-        profit.set_goalprofit(0.08);
-        profit.set_monthprofit(0.2);
-        profit.set_focus("日收益专注短线");
-        profit.set_totalprofit(0.5);
-        profit.set_dayprofit(0.1);
-        profit.set_winrate(0.4);
-        day.push_back(profit);
-        NSLog(@" -----  transid %d",i);
-        
-    }
-    listener->onResponse(day);
-}
-
-// 请求操盘列表-月收益排序
-void HttpConnection::RequestOperateStockProfitOrderByMonth(int teamId, int startId, int count, OperateStockProfitListenerMonth* listener)
-{
-    std::vector<OperateStockProfit> mon;
-    static int initId = 15;
-    int i = startId;
-    if ( startId == 0 ) {
-        i = initId;
-        startId = initId;
-    }else if (startId ==3){
-        
-        listener->onResponse(mon);
-        return;
-    }
-    
-    NSLog(@"startId= %d",startId);
-    
-    for (; i>startId - count; i--) {
-        OperateStockProfit profit;
-        profit.set_operateid(i+1);
-        char cBuf[10]={0};
-        sprintf(cBuf,"%d",90000+i);
-        profit.set_teamid(cBuf);
-        profit.set_teamname("月收益组合");
-        profit.set_goalprofit(0.08);
-        profit.set_monthprofit(0.2);
-        profit.set_focus("月专注长线");
-        profit.set_totalprofit(0.5);
-        profit.set_dayprofit(0.1);
-        profit.set_winrate(0.4);
-        mon.push_back(profit);
-        
-    }
-    listener->onResponse(mon);
-}
-
-// 请求操盘列表-总收益排序
-void HttpConnection::RequestOperateStockProfitOrderByTotal(int teamId, int startId, int count, OperateStockProfitListenerAll* listener)
-{
-    std::vector<OperateStockProfit> total;
-    
-    static int initId = 15;
-    int i = startId;
-    if ( startId == 0 ) {
-        i = initId;
-        startId = initId;
-    }else if (startId ==3){
-        
-        listener->onResponse(total);
-        return;
-    }
-    
-    
-    for (; i>startId - count; i--) {
-        OperateStockProfit profit;
-        profit.set_operateid(i+1);
-        char cBuf[10]={0};
-        sprintf(cBuf,"%d",90000+i);
-        profit.set_teamid(cBuf);
-        profit.set_teamname("总收益组合");
-        profit.set_goalprofit(0.08);
-        profit.set_monthprofit(0.2);
-        profit.set_focus("总长期");
-        profit.set_totalprofit(0.5);
-        profit.set_dayprofit(0.1);
-        profit.set_winrate(0.4);
-        total.push_back(profit);
-        
-    }
-    listener->onResponse(total);
-}
-
-// 请求操盘详情
-void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener)
-{
-}
-
-// 请求操盘详情--交易记录
-void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, int count, OperateStockTransactionListener* listener)
-{
-}
-
-// 请求操盘详情--持仓情况
-void HttpConnection::RequestOperateStocks(int operateId, OperateStocksListener* listener)
-{
-}
-
-// 请求问题回复--未回回答的（PC端接口）
-void HttpConnection::RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer)
-{
-    
-}
-
-// 请求评论回复--发出的评论（PC端接口）
-void HttpConnection::RequestMailSendReply(int startId, int count, MailReplyListener* listener,bool isTeamer)
-{
-    
-}
-
-// 讲师团队回答提问（PC端接口）
-void HttpConnection::PostAnswer(int questionId, const char* content, HttpListener* listener)
-{
-    
-}
-
-/******************************解析json******************************/
-
-void parse_homepage(char* json, HttpListener* listener)
-{
-    HomePageListener* homepage_listener = (HomePageListener*)listener;
-    
     std::string strJson = json;
     
     JsonValue value;
     JsonReader reader;
     
+    std::vector<OperateStockProfit> vec_profitorder;
+    
     int size_ = 0;
     int i = 0;
     
-    std::vector<HomePageVideoroomItem> vec_videoroom;
-    std::vector<HomePageViewpointItem> vec_viewpoint;
-    std::vector<OperateStockProfit> vec_operate;
+    OperateStockProfitListener* profitorder_listener = (OperateStockProfitListener*)listener;
     
     try
     {
         // 解析逻辑
+        //..
         if (reader.parse(strJson, value))
         {
-            if(!value["status"].isNull())
+            JsonValue& datas = value["data"];
+            if(!datas.isNull())
             {
-                int status = value["status"].asInt();
+                size_ = datas["list"].size();
+                vec_profitorder.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    OperateStockProfit profitorder;
+                    
+                    profitorder.set_operateid(datas["list"][i]["operateId"].asUInt());
+                    profitorder.set_teamid(datas["list"][i]["teamId"].asString());
+                    profitorder.set_teamname(datas["list"][i]["teamName"].asString());
+                    profitorder.set_teamicon(datas["list"][i]["teamIcon"].asString());
+                    profitorder.set_focus(datas["list"][i]["focus"].asString());
+                    profitorder.set_goalprofit(atof((datas["list"][i]["goalProfit"].asString()).c_str()));
+                    profitorder.set_totalprofit(atof((datas["list"][i]["totalProfit"].asString()).c_str()));
+                    profitorder.set_dayprofit(atof((datas["list"][i]["dayProfit"].asString()).c_str()));
+                    profitorder.set_monthprofit(atof((datas["list"][i]["monthProfit"].asString()).c_str()));
+                    profitorder.set_winrate(atof((datas["list"][i]["winRate"].asString()).c_str()));
+                    
+                    vec_profitorder.push_back(profitorder);
+                }
                 
-                if(0 == status)
-                {
-                    JsonValue& videoroom = value["data"]["videoroom"];
-                    if(!videoroom.isNull())
-                    {
-                        size_ = videoroom.size();
-                        vec_videoroom.clear();
-                        for(i = 0; i < size_; i++)
-                        {
-                            HomePageVideoroomItem videoroomItem;
-                            videoroomItem.set_nvcbid(videoroom[i]["nvcbid"].asString());
-                            videoroomItem.set_croompic(videoroom[i]["croompic"].asString());
-                            videoroomItem.set_livetype(videoroom[i]["livetype"].asString());
-                            videoroomItem.set_ncount(videoroom[i]["ncount"].asString());
-                            videoroomItem.set_cname(videoroom[i]["cname"].asString());
-                            
-                            vec_videoroom.push_back(videoroomItem);
-                        }
-                    }
-                    
-                    /*
-                     JsonValue& textroom = value["data"]["textroom"];
-                     if(!textroom.isNull())
-                     {
-                     size_ = textroom.size();
-                     vec_textroom.clear();
-                     for(i = 0; i < size_; i++)
-                     {
-                     HomePageTextroomItem textroomItem;
-                     
-                     textroomItem.set_nvcbid(textroom[i]["nvcbid"].asString());
-                     textroomItem.set_roomname(textroom[i]["roomname"].asString());
-                     textroomItem.set_croompic(textroom[i]["croompic"].asString());
-                     textroomItem.set_livetype(textroom[i]["livetype"].asString());
-                     textroomItem.set_ncount(textroom[i]["ncount"].asString());
-                     textroomItem.set_clabel(textroom[i]["clabel"].asString());
-                     textroomItem.set_teacherid(textroom[i]["teacherid"].asString());
-                     
-                     vec_textroom.push_back(textroomItem);
-                     }
-                     }
-                     */
-                    
-                    JsonValue& viewpoint = value["data"]["viewpoint"];
-                    if(!viewpoint.isNull())
-                    {
-                        size_ = viewpoint.size();
-                        vec_viewpoint.clear();
-                        for(i = 0; i < size_; i++)
-                        {
-                            HomePageViewpointItem viewpointItem;
-                            viewpointItem.set_viewid(viewpoint[i]["viewid"].asString());
-                            viewpointItem.set_teacherid(viewpoint[i]["teacherid"].asString());
-                            viewpointItem.set_dtime(viewpoint[i]["dtime"].asString());
-                            viewpointItem.set_czans(viewpoint[i]["czans"].asString());
-                            viewpointItem.set_title(viewpoint[i]["title"].asString());
-                            viewpointItem.set_roomid(viewpoint[i]["roomid"].asString());
-                            viewpointItem.set_calias(viewpoint[i]["calias"].asString());
-                            
-                            vec_viewpoint.push_back(viewpointItem);
-                        }
-                    }
-                    
-                    JsonValue& operate = value["data"]["operate"];
-                    
-                    if(!operate.isNull())
-                    {
-                        size_ = operate.size();
-                        vec_operate.clear();
-                        for(i = 0; i < size_; i++)
-                        {
-                            OperateStockProfit operateItem;
-                            operateItem.set_totalprofit(atof(operate[i]["rate"].asString().c_str()));
-                            operateItem.set_focus(operate[i]["name"].asString());
-                            operateItem.set_goalprofit(atof(operate[i]["target"].asString().c_str()));
-                            operateItem.set_teamname(operate[i]["nickname"].asString());
-                            
-                            vec_operate.push_back(operateItem);
-                        }
-                    }
-                    
-                    homepage_listener->onResponse(vec_videoroom, vec_viewpoint, vec_operate);
-                }
-                else
-                {
-                    homepage_listener->OnError(status);
-                }
+                profitorder_listener->onResponse(vec_profitorder);
             }
             else
             {
-                homepage_listener->OnError(PERR_JSON_PARSE_ERROR);
+                profitorder_listener->OnError(PERR_JSON_PARSE_ERROR);
             }
         }
         else
         {
-            homepage_listener->OnError(PERR_JSON_PARSE_ERROR);
+            profitorder_listener->OnError(PERR_JSON_PARSE_ERROR);
         }
-        
     }
     catch ( std::exception& ex)
     {
-        homepage_listener->OnError(PERR_JSON_PARSE_ERROR);
+        profitorder_listener->OnError(PERR_JSON_PARSE_ERROR);
     }
 }
+
+void parse_profitdetail(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    std::vector<OperateStockTransaction> vec_trans;
+    std::vector<OperateStocks> vec_stocks;
+    
+    int size_ = 0;
+    int i = 0;
+    
+    OperateStockAllDetailListener* detail_listener = (OperateStockAllDetailListener*)listener;
+    
+    try
+    {
+        // 解析逻辑
+        //..
+        if (reader.parse(strJson, value))
+        {
+            JsonValue& datas = value["data"];
+            if(!datas.isNull())
+            {
+                OperateStockProfit osprofit;
+                osprofit.set_operateid(datas["profile"]["operateId"].asUInt());
+                osprofit.set_teamid(datas["profile"]["teamId"].asString());
+                osprofit.set_teamname(datas["profile"]["teamName"].asString());
+                osprofit.set_teamicon(datas["profile"]["teamIcon"].asString());
+                osprofit.set_focus(datas["profile"]["focus"].asString());
+                osprofit.set_goalprofit(atof((datas["profile"]["goalProfit"].asString()).c_str()));
+                osprofit.set_totalprofit(atof((datas["profile"]["totalProfit"].asString()).c_str()));
+                osprofit.set_dayprofit(atof((datas["profile"]["dayProfit"].asString()).c_str()));
+                osprofit.set_monthprofit(atof((datas["profile"]["monthProfit"].asString()).c_str()));
+                osprofit.set_winrate(atof((datas["profile"]["winRate"].asString()).c_str()));
+                
+                OperateStockData osdata;
+                osprofit.set_operateid(datas["curve"]["operateId"].asUInt());
+                
+                size_ = datas["trans"].size();
+                vec_trans.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    OperateStockTransaction trans;
+                    trans.set_transid(datas["trans"][i]["transId"].asUInt());
+                    trans.set_operateid(datas["trans"][i]["operateId"].asUInt());
+                    trans.set_buytype(datas["trans"][i]["buytype"].asString());
+                    trans.set_stockid(datas["trans"][i]["stockId"].asString());
+                    trans.set_stockname(datas["trans"][i]["stockName"].asString());
+                    trans.set_price(atof((datas["trans"][i]["price"].asString()).c_str()));
+                    trans.set_count(datas["trans"][i]["count"].asUInt());
+                    trans.set_money(atof((datas["trans"][i]["money"].asString()).c_str()));
+                    trans.set_time(datas["trans"][i]["time"].asString());
+                    vec_trans.push_back(trans);
+                }
+                
+                size_ = datas["stocks"].size();
+                vec_stocks.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    OperateStocks stocks;
+                    stocks.set_transid(datas["stocks"][i]["transId"].asUInt());
+                    stocks.set_operateid(datas["stocks"][i]["operateId"].asUInt());
+                    stocks.set_stockid(datas["stocks"][i]["stockId"].asString());
+                    stocks.set_stockname(datas["stocks"][i]["stockName"].asString());
+                    stocks.set_count(datas["stocks"][i]["count"].asUInt());
+                    stocks.set_cost(atof((datas["stocks"][i]["cost"].asString()).c_str()));
+                    stocks.set_currprice(atof((datas["stocks"][i]["currPrice"].asString()).c_str()));
+                    stocks.set_profitrate(atof((datas["stocks"][i]["profitRate"].asString()).c_str()));
+                    stocks.set_profitmoney(atof((datas["stocks"][i]["ProfitMoney"].asString()).c_str()));
+                    
+                    vec_stocks.push_back(stocks);
+                }
+                
+                uint32 currLevelId=datas["currLevelId"].asUInt();
+                uint32 minVipLevel=datas["minVipLevel"].asUInt();
+                
+                
+                detail_listener->onResponse(osprofit,osdata,vec_trans,vec_stocks,currLevelId,minVipLevel);
+            }
+            else
+            {
+                detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex)
+    {
+        detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
+// 请求操盘列表-日收益排序
+void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, int size, OperateStockProfitListener* listener)
+{
+   	char tmp[1024] = {0};
+    sprintf(tmp,"/operate/lists/type/%d/team_id/%d/page/%d/size/%d",type,team_id,page,size);
+    
+    RequestParamter& request = get_request_param();
+    request["s"] = tmp;
+
+    http_request_asyn(listener, parse_profitorder, &request);
+}
+
+// 请求操盘详情
+void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener)
+{
+    char tmp[1024] = {0};
+    sprintf(tmp,"/operate/detail/id/%d/uid/%d",operateId,login_userid);
+    
+    RequestParamter& request = get_request_param();
+    request["s"] = tmp;
+    
+    
+    http_request_asyn(listener, parse_profitdetail, &request);
+}
+
+// 请求操盘详情--交易记录
+void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, int count, OperateStockTransactionListener* listener)
+{
+    char tmp[128] = {0};
+    
+    RequestParamter& request = get_request_param();
+    
+    sprintf(tmp, "operate/stockTransaction/operateId/%d/startId/%d/count/%d", operateId, startId, count);
+    request["s"] = tmp;
+    
+    http_request_asyn(listener, parse_operatestocktransaction, &request);
+}
+
+// 请求操盘详情--持仓情况
+void HttpConnection::RequestOperateStocks(int operateId, OperateStocksListener* listener)
+{
+    char tmp[128] = {0};
+    
+    RequestParamter& request = get_request_param();
+    
+    sprintf(tmp, "operate/stockPool/operateId/%d/startId/%d/count/%d", operateId, 0, 100);
+    request["s"] = tmp;
+    
+    http_request_asyn(listener, parse_operatestocks, &request);
+}
+
+// 请求问题回复--未回回答的（PC端接口）
+//void HttpConnection::RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer)
+//{
+//    
+//}
+
+// 请求评论回复--发出的评论（PC端接口）
+//void HttpConnection::RequestMailSendReply(int startId, int count, MailReplyListener* listener,bool isTeamer)
+//{
+//    
+//}
+
+// 讲师团队回答提问（PC端接口）
+//void HttpConnection::PostAnswer(int questionId, const char* content, HttpListener* listener)
+//{
+//    
+//}
+
+/******************************解析json******************************/
 
 void parse_followteacherlist(char* json, HttpListener* listener)
 {
@@ -341,239 +308,8 @@ void parse_followteacherlist(char* json, HttpListener* listener)
     
     JsonValue value;
     JsonReader reader;
-    
-    std::vector<FollowTeacherRoomItem> vec_room;
-    
-    int size_ = 0;
-    int i = 0;
-    
-    FollowTeacherListener* followteacher_listener = (FollowTeacherListener*)listener;
-    
-    try
-    {
-        // 解析逻辑
-        //..
-        if (reader.parse(strJson, value))
-        {
-            JsonValue& rooms = value["rooms"];
-            
-            if(!rooms.isNull())
-            {
-                size_ = rooms.size();
-                vec_room.clear();
-                for(i = 0; i < size_; i++)
-                {
-                    FollowTeacherRoomItem room;
-                    room.set_nvcbid(rooms[i]["nvcbid"].asString());
-                    room.set_roomname(rooms[i]["roomname"].asString());
-                    room.set_teacherid(rooms[i]["teacherid"].asString());
-                    room.set_croompic(rooms[i]["croompic"].asString());
-                    room.set_clabel(rooms[i]["clabel"].asString());
-                    room.set_ncount(rooms[i]["ncount"].asString());
-                    
-                    vec_room.push_back(room);
-                }
-                
-                followteacher_listener->onResponse(vec_room);
-            }
-            else
-            {
-                followteacher_listener->OnError(PERR_JSON_PARSE_ERROR);
-            }
-        }
-        else
-        {
-            followteacher_listener->OnError(PERR_JSON_PARSE_ERROR);
-        }
-    }
-    catch ( std::exception& ex)
-    {
-        followteacher_listener->OnError(PERR_JSON_PARSE_ERROR);
-    }
-}
-
-void parse_footprintlist(char* json, HttpListener* listener)
-{
-    std::string strJson = json;
-    
-    JsonValue value;
-    JsonReader reader;
-    
-    std::vector<FootPrintItem> vec_room;
-    
-    FootPrintListener* footprint_listener = (FootPrintListener*)listener;
-    
-    int size_ = 0;
-    int i = 0;
-    
-    try
-    {
-        // 解析逻辑
-        //..
-        if (reader.parse(strJson, value))
-        {
-            JsonValue& arr = value["arr"];
-            JsonValue& rooms = arr["FootPrint"];
-            
-            if(!rooms.isNull())
-            {
-                size_ = rooms.size();
-                vec_room.clear();
-                for(i = 0; i < size_; i++)
-                {
-                    FootPrintItem room;
-                    room.set_nvcbid(rooms[i]["nvcbid"].asString());
-                    room.set_cname(rooms[i]["cname"].asString());
-                    room.set_password(rooms[i]["password"].asString());
-                    room.set_croompic(rooms[i]["croompic"].asString());
-                    room.set_ncount(rooms[i]["ncount"].asString());
-                    room.set_cgateaddr(rooms[i]["cgateaddr"].asString());
-                    room.set_livetype(rooms[i]["livetype"].asString());
-                    room.set_ntype(rooms[i]["ntype"].asString());
-                    
-                    vec_room.push_back(room);
-                }
-            }
-            
-            footprint_listener->onResponse(vec_room);
-        }
-        else
-        {
-            footprint_listener->OnError(PERR_JSON_PARSE_ERROR);
-        }
-    }
-    catch ( std::exception& ex)
-    {
-        footprint_listener->OnError(PERR_JSON_PARSE_ERROR);
-    }
-}
-
-void parse_collectionlist(char* json, HttpListener* listener)
-{
-    std::string strJson = json;
-    
-    JsonValue value;
-    JsonReader reader;
-    
-    std::vector<CollectItem> vec_collect;
-    
-    CollectionListener* collection_listener = (CollectionListener*)listener;
-    
-    int size_ = 0;
-    int i = 0;
-    
-    try
-    {
-        // 解析逻辑
-        //..
-        if (reader.parse(strJson, value))
-        {
-            if(!value["status"].isNull())
-            {
-                int status = value["status"].asInt();
-                if(0 == status)
-                {
-                    if(!value["data"].isNull())
-                    {
-                        JsonValue& data = value["data"];
-                        
-                        int size_ = data.size();
-                        
-                        vec_collect.clear();
-                        for(i = 0; i < size_; i++)
-                        {
-                            CollectItem collect;
-//                            data[i]["teacherid"].asCString()
-                            collect.set_teacherid(::atoi(data[i]["teacherid"].asString().c_str()));
-                            collect.set_nvcbid(data[i]["nvcbid"].asString());
-                            collect.set_cname(data[i]["cname"].asString());
-                            collect.set_password(data[i]["password"].asString());
-                            collect.set_croompic(data[i]["croompic"].asString());
-                            collect.set_ncount(data[i]["ncount"].asString());
-                            //collect.set_cgateaddr(data[i]["cgateaddr"].asString());
-                            collect.set_ntype(data[i]["ntype"].asString());
-                            
-                            vec_collect.push_back(collect);
-                        }
-                        
-                        collection_listener->onResponse(vec_collect);
-                    }
-                    else
-                    {
-                        collection_listener->OnError(PERR_JSON_PARSE_ERROR);
-                    }
-                }
-                else
-                {
-                    collection_listener->OnError(status);
-                }
-            }
-            
-            collection_listener->onResponse(vec_collect);
-        }
-        else
-        {
-            collection_listener->OnError(PERR_JSON_PARSE_ERROR);
-        }
-        
-        
-    }
-    catch ( std::exception& ex)
-    {
-        collection_listener->OnError(PERR_JSON_PARSE_ERROR);
-    }
-}
-
-void parse_bannerlist(char* json, HttpListener* listener)
-{
-    std::string strJson = json;
-    
-    JsonValue value;
-    JsonReader reader;
-    
-    std::vector<BannerItem> vec_banner;
-    
-    BannerListener* banner_listener = (BannerListener*)listener;
-    
-    try
-    {
-        // 解析逻辑
-        //..
-        vec_banner.clear();
-        if (reader.parse(strJson, value))
-        {
-            if(!value["banner"].isNull())
-            {
-                JsonValue& bannerArray = value["banner"];
-                
-                int banner_size = bannerArray.size();
-                
-                for(int i = 0; i < banner_size; i++)
-                {
-                    BannerItem banner;
-                    banner.set_url(bannerArray[i]["url"].asString());
-                    banner.set_type(bannerArray[i]["type"].asString());
-                    
-                    vec_banner.push_back( banner );
-                }
-                
-                banner_listener->onResponse(vec_banner);
-            }
-            else
-            {
-                //banner_listener->OnError(PERR_JSON_PARSE_ERROR);
-            }
-        }
-        else
-        {
-            banner_listener->OnError(PERR_JSON_PARSE_ERROR);
-        }
-        
-    }
-    catch ( std::exception& ex )
-    {
-        banner_listener->OnError(PERR_JSON_PARSE_ERROR);
-    }
+   
+   
 }
 
 void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener)
@@ -1713,28 +1449,6 @@ void HttpConnection::RequestHomePage(HomePageListener* listener)
     http_request_asyn(listener, parse_homepage, &param);	
 }
 
-//获取Banner
-void HttpConnection::RequestBanner(BannerListener* listener)
-{
-    std::string url = "http://admin.99ducaijing.com/index.php";
-    //url += devType;
-    
-    HttpThreadParam* param = new HttpThreadParam();
-    strcpy(param->url, url.c_str());
-    param->parser = parse_bannerlist;
-    param->http_listener = listener;
-    
-    RequestParamter& request = get_request_param();
-    param->request = &request;
-    
-    request["m"] = "Api";
-    request["c"] = "Banner";
-    request["client"] = get_client_type();
-    
-    Thread::start(http_request, param);
-}
-
-
 // 请求战队的私人定制缩略信息
 void HttpConnection::RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivateServiceSummaryPackListener* listener)
 {
@@ -1794,27 +1508,13 @@ void HttpConnection::RequestWhatIsPrivateService(WhatIsPrivateServiceListener* l
 // 请求我已经购买的私人定制
 void HttpConnection::RequestMyPrivateService(MyPrivateServiceListener* listener)
 {
-//    RequestParamter& request = get_request_param();
-//    
-//    request["s"] = "Personalsecrets/getMyPrivateService";
-//    
-//    request["userid"] = get_user_id();
-//    
-//    http_request_asyn(listener, parse_MyPrivateService, &request);
-    std::vector<MyPrivateService> infos;
-    for (int i=1; i<7; i++) {
-        MyPrivateService service;
-        service.set_teamid("123");
-        service.set_teamname("三刀流");
-        service.set_teamicon("personal_user_head");
-        service.set_levelid(i);
-        service.set_levelname("VIP3");
-        service.set_expirationdate("有效期:2018-01-01");
-        infos.push_back(service);
-    }
-    Team team;
-    std::vector<TeamPrivateServiceSummaryPack> teamPrivate;
-    listener->onResponse(infos,team,teamPrivate);
+    RequestParamter& request = get_request_param();
+    
+    request["s"] = "Personalsecrets/getMyPrivateService";
+    
+    request["userid"] = get_user_id();
+    
+    http_request_asyn(listener, parse_MyPrivateService, &request);
 }
 
 
@@ -1849,26 +1549,17 @@ void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requ
     
     RequestParamter& request = get_request_param();
     request["s"] = "Viewpoint/viewpointList";
-    
+
     sprintf(tmp, "%d", authorId);
     request["authorid"] = tmp;
     sprintf(tmp, "%d", startId);
     request["startid"] = tmp;
     sprintf(tmp, "%d", requestCount);
-    request["pagecount"] = tmp;
+    request["count"] = tmp;
     
     http_request_asyn(listener, parse_viewpoint, &request);
-    //char curl[512];
-    //sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=Viewpoint/viewpointList&authorid=%d&startid=%d&pagecount=%d",authorId,startId,requestCount);
     
-    //HttpThreadParam* param = new HttpThreadParam();
-    //strcpy(param->url, curl);
-    //param->parser = parse_viewpoint;
-    //param->http_listener = listener;
-    
-    //Thread::start(http_request, param);
 }
-
 
 // 显示购买私人定制页
 void HttpConnection::RequestBuyPrivateServicePage(int teacher_id, BuyPrivateServiceListener* listener)
@@ -1884,13 +1575,13 @@ void HttpConnection::RequestBuyPrivateServicePage(int teacher_id, BuyPrivateServ
 }
 
 //收藏url(改名为我的关注)
-void HttpConnection::RequestCollection(std::string token, CollectionListener* listener)
+void HttpConnection::RequestCollection(CollectionListener* listener)
 {
     char tmp[128] = {0};
     
     RequestParamter& request = get_request_param();
     
-    sprintf(tmp, "/user/getMyAttention/uid/%s/token/%s.html", get_user_id().c_str(), token.c_str());
+    sprintf(tmp, "/user/getMyAttention/uid/%s/token/%s.html", get_user_id().c_str(), get_user_token().c_str());
     request["s"] = tmp;
     
     http_request_asyn(listener, parse_collectionlist, &request);
@@ -1906,15 +1597,7 @@ void HttpConnection::RequestViewpointDetail(int viewpointId, ViewpointDetailList
     request["s"] = tmp;
     
     http_request_asyn(listener, parse_viewpointdetail, &request);
-    //char curl[512];
-    //sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=viewpoint/detail/vid/%d",viewpointId);
-    
-    //HttpThreadParam* param = new HttpThreadParam();
-    //strcpy(param->url, curl);
-    //param->parser = parse_viewpointdetail;
-    //param->http_listener = listener;
-    
-    //Thread::start(http_request, param);
+
 }
 
 // 请求观点回复
@@ -1927,59 +1610,37 @@ void HttpConnection::RequestReply(int viewpointId, int startId, int requestCount
     request["s"] = tmp;
     
     http_request_asyn(listener, parse_viewpointreply, &request);
-    //char curl[512];
-    //sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=viewpoint/getCommentsList/viewpointId/%d/startId/%d/requestCount/%d",viewpointId,startId,requestCount);
-    
-    //HttpThreadParam* param = new HttpThreadParam();
-    //strcpy(param->url, curl);
-    //param->parser = parse_viewpointreply;
-    //param->http_listener = listener;
-    
-    //Thread::start(http_request, param);
 }
 
 // 回复观点
 void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId, int fromAuthorId, char* content, PostReplyListener* listener)
 {
-    char tmp[512] = {0};
-    sprintf(tmp,"viewpoint/replycomments/viewpointId/%d/parentReplyId/%d/authorId/%d/fromAuthorId/%d/content/%s",viewpointId,parentReplyId,authorId,fromAuthorId,content);
+    RequestParamter& request = get_request_param();
+    request["s"] = "viewpoint/replycomments";
+    request["viewpointId"] = int2string(viewpointId);
+    request["parentReplyId"] = int2string(parentReplyId);
+    request["authorId"] = int2string(authorId);
+    request["fromAuthorId"] = int2string(fromAuthorId);
+    request["content"] = content;
+    
+    http_request_asyn(listener, parse_postreply, &request, HTTP_POST);
+}
+
+// 请求总的未读数
+void HttpConnection::RequestTotalUnreadCount(TotalUnreadListener* listener)
+{
+    char tmp[512];
+    sprintf(tmp,"/mail/unread/uid/%d",login_userid);
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
     
-    http_request_asyn(listener, parse_postreply, &request, HTTP_POST);
-    //char curl[512];
-    //sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=viewpoint/replycomments/viewpointId/%d/parentReplyId/%d/authorId/%d/fromAuthorId/%d/content/%s",viewpointId,parentReplyId,authorId,fromAuthorId,content);
-    
-    //HttpThreadParam* param = new HttpThreadParam();
-    //strcpy(param->url, curl);
-    //param->parser = parse_postreply;
-    //param->http_listener = listener;
-    
-    //Thread::start(http_request, param);
+    http_request_asyn(listener, parse_totalunreadcount, &request);
 }
 
 // 请求未读数
 void HttpConnection::RequestUnreadCount(UnreadListener* listener)
 {
-    //Unread info;
-    //info.set_total(12);
-    //info.set_system(2);
-    //info.set_answer(2);
-    //info.set_reply(7);
-    //info.set_privateservice(1);
-    //listener->onResponse(info);
-    
-    //char curl[512];
-    //sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=/mail/main/uid/%d",userId);
-    
-    //HttpThreadParam* param = new HttpThreadParam();
-    //strcpy(param->url, curl);
-    //param->parser = parse_unreadcount;
-    //param->http_listener = listener;
-    
-    //Thread::start(http_request, param);
-    
     char tmp[512];
     sprintf(tmp,"/mail/main/uid/%d",login_userid);
     
@@ -1992,28 +1653,6 @@ void HttpConnection::RequestUnreadCount(UnreadListener* listener)
 // 请求私人定制
 void HttpConnection::RequestPrivateServiceSummary(int startId, int count,PrivateServiceSummaryListener* listener)
 {
-    //vector<PrivateServiceSummary> list;
-    //for ( int i = startId; i < startId + count; i++ )
-    //{
-    //	PrivateServiceSummary info;
-    //	info.set_id(i);
-    //	info.set_publishtime("2016.4.19 12:20");
-    //	info.set_title("互联网+股票池");
-    //	info.set_summary("今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌今日净值下跌");
-    //	info.set_teamname("三刀流");
-    //	list.push_back(info);
-    //}
-    //listener->onResponse(list);
-    
-    //char curl[512];
-    //sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=/mail/secret_index/uid/%d/size/%d/id/%d/type/%d",userId,count,startId,type);
-    
-    //HttpThreadParam* param = new HttpThreadParam();
-    //strcpy(param->url, curl);
-    //param->parser = parse_privateservicesummary;
-    //param->http_listener = listener;
-    
-    //Thread::start(http_request, param);
     char tmp[512];
     sprintf(tmp,"/mail/secret_index/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
     
@@ -2027,28 +1666,6 @@ void HttpConnection::RequestPrivateServiceSummary(int startId, int count,Private
 // 请求系统消息
 void HttpConnection::RequestSystemMessage(int startId, int count, SystemMessageListener* listener)
 {
-    //vector<SystemMessage> list;
-    //for ( int i = startId; i < startId + count; i++ )
-    //{
-    //	SystemMessage info;
-    //	info.set_id(i);
-    //	info.set_publishtime("2016.4.19 12:20");
-    //	info.set_title("系统消息：");
-    //	info.set_content("系统维护，请注意。");
-    //	list.push_back(info);
-    //}
-    //listener->onResponse(list);
-    
-    //char curl[512];
-    //sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=/mail/system/uid/%d/size/%d/id/%d/type/%d",userId,count,startId,type);
-    
-    //HttpThreadParam* param = new HttpThreadParam();
-    //strcpy(param->url, curl);
-    //param->parser = parse_systemmessage;
-    //param->http_listener = listener;
-    
-    //Thread::start(http_request, param);
-    
     char tmp[512];
     sprintf(tmp,"/mail/system/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
     
@@ -2061,32 +1678,6 @@ void HttpConnection::RequestSystemMessage(int startId, int count, SystemMessageL
 // 请求问题回复
 void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer)
 {
-    //vector<QuestionAnswer> list;
-    //for ( int i = startId; i < startId + count; i++ )
-    //{
-    //	QuestionAnswer info;
-    //	info.set_id(i);
-    //	info.set_answerauthoricon("");
-    //	info.set_answerauthorid("80060");
-    //	info.set_answerauthorname("牛出没");
-    //	info.set_answercontent("这里是回答内容这里是回答内容这里是回答内容这里是回答内容");
-    //	info.set_answertime("2016.4.19 12:20");
-    //	info.set_askauthorname("张三");
-    //	info.set_askcontent("老师，这个票怎么样");
-    //	list.push_back(info);
-    //}
-    //listener->onResponse(list);
-    
-    //char curl[512];
-    //sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=/mail/question/uid/%d/size/%d/id/%d/type/%d",userId,count,startId,type);
-    
-    //HttpThreadParam* param = new HttpThreadParam();
-    //strcpy(param->url, curl);
-    //param->parser = parse_questionanswer;
-    //param->http_listener = listener;
-    
-    //Thread::start(http_request, param);
-    
     char tmp[512];
     sprintf(tmp,"/mail/question/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
     
@@ -2099,33 +1690,6 @@ void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswe
 // 请求评论回复
 void HttpConnection::RequestMailReply(int startId, int count, MailReplyListener* listener, bool isTeam)
 {
-    //vector<MailReply> list;
-    //for ( int i = startId; i < startId + count; i++ )
-    //{
-    //	MailReply info;
-    //	info.set_id(i);
-    //	info.set_viewpointid(1);
-    //	info.set_answerauthoricon("");
-    //	info.set_answerauthorid("80060");
-    //	info.set_answerauthorname("牛出没");
-    //	info.set_answercontent("是啊，真不错。这里是回答内容这里是回答内容这里是回答内容这里是回答内容");
-    //	info.set_answertime("2016.4.19 12:20");
-    //	info.set_askauthorname("李四");
-    //	info.set_askcontent("很好的观点，我觉得不错");
-    //	list.push_back(info);
-    //}
-    //listener->onResponse(list);
-    
-    //char curl[512];
-    //sprintf(curl,"http://testphp.99ducaijing.cn/api.php?s=/mail/comment/uid/%d/size/%d/id/%d/type/%d",userId,count,startId,type);
-    
-    //HttpThreadParam* param = new HttpThreadParam();
-    //strcpy(param->url, curl);
-    //param->parser = parse_comment;
-    //param->http_listener = listener;
-    
-    //Thread::start(http_request, param);
-    
     char tmp[512];
     sprintf(tmp,"/mail/comment/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
     
@@ -2135,18 +1699,656 @@ void HttpConnection::RequestMailReply(int startId, int count, MailReplyListener*
     http_request_asyn(listener, parse_comment, &request);
 }
 
-// 请求战队简介（X未提供）
+// 请求战队简介
 void HttpConnection::RequestTeamIntroduce(int teamId, TeamIntroduceListener* listener)
 {
+    char tmp[512];
+    sprintf(tmp,"personalsecrets/getTeacherIntroduce/teamid/%d",teamId);
+    
+    RequestParamter& request = get_request_param();
+    request["s"] = tmp;
+    
+    http_request_asyn(listener, parse_teamintroduce, &request);
 }
 
-// 请求战队视频列表（X未提供）
+// 请求战队视频列表
 void HttpConnection::RequestTeamVideo(int teamId, TeamVideoListener* listener)
 {
+    char tmp[512];
+    sprintf(tmp,"personalsecrets/getTeacherVideo/teamid/%d",teamId);
+    
+    RequestParamter& request = get_request_param();
+    request["s"] = tmp;
+    
+    http_request_asyn(listener, parse_teamvideo, &request);
 }
 
-void HttpConnection::PostAskQuestion(int teamId,const char* stock, const char* question, HttpListener* listener)
+void HttpConnection::PostAskQuestion(int teamId,const char* stock,const char* question, HttpListener* listener)
 {
+    RequestParamter& request = get_request_param();
+    request["s"] = "questions/postaskquestion";
+    request["userId"] = int2string(188609);
+    request["teamId"] = int2string(teamId);
+    request["stock"] = stock;
+    request["question"] = question;
+    request["clienttype"] = get_client_type();
     
+    char tmp[1024] = { 0 };
+    sprintf(tmp, "viewpoint/replycomments/userId/%d/teamId/%d/stock/%s/question/%s/clienttype/%s", login_userid, teamId, stock, question, get_client_type().c_str());
+    request["s"] = tmp;
+    
+    http_request_asyn(listener, parse_postaskquestion, &request, HTTP_POST);
+}
+
+void parse_splashimage(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    SplashImageListener* splash_listener = (SplashImageListener*)listener;
+    
+    Splash info;
+    
+    try
+    {
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                JsonValue& data = value["data"];
+                
+                if(0 == status)
+                {
+                    info.set_imageurl(data["imageUrl"].asString());
+                    info.set_text(data["text"].asString());
+                    info.set_url(data["url"].asString());
+                    info.set_startime(data["starTime"].asInt64());
+                    info.set_endtime(data["endTime"].asInt64());
+                    
+                    splash_listener->onResponse(info);
+                }
+                else
+                {
+                    splash_listener->OnError(status);
+                }
+            }
+        }
+        else
+        {
+            splash_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex )
+    {
+        splash_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
+void parse_teamvideo(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    std::vector<VideoInfo> vec_video;
+    
+    int size_ = 0;
+    int i = 0;
+    
+    TeamVideoListener* video_listener = (TeamVideoListener*)listener;
+    
+    try
+    {
+        // 解析逻辑
+        //..
+        if (reader.parse(strJson, value))
+        {
+            JsonValue& datas = value["data"];
+            if(!datas.isNull())
+            {
+                size_ = datas.size();
+                vec_video.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    VideoInfo video;
+                    video.set_id(atoi((datas[i]["id"].asString()).c_str()));
+                    video.set_name(datas[i]["title"].asString());
+                    video.set_picurl(datas[i]["pic"].asString());
+                    video.set_videourl(datas[i]["video"].asString());
+                    vec_video.push_back(video);
+                }
+                
+                video_listener->onResponse(vec_video);
+            }
+            else
+            {
+                video_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            video_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex)
+    {
+        video_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
+void parse_teamintroduce(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    TeamIntroduceListener* introduce_listener = (TeamIntroduceListener*)listener;
+    
+    try
+    {
+        // 解析逻辑
+        //..
+        if (reader.parse(strJson, value))
+        {
+            JsonValue& datas = value["data"];
+            if(!datas.isNull())
+            {
+                Team introduce;
+                introduce.set_teamname(datas["cname"].asString());
+                introduce.set_teamicon(datas["headid"].asString());
+                introduce.set_introduce(datas["introduce"].asString());
+                
+                introduce.set_roomid(0);
+                introduce.set_teamid(0);
+                introduce.set_onlineusercount(0);
+                introduce.set_locked(0);
+                introduce.set_alias("");
+                
+                introduce_listener->onResponse(introduce);
+            }
+            else
+            {
+                introduce_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            introduce_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex)
+    {
+        introduce_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+void parse_operatestocktransaction(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    std::vector<OperateStockTransaction> operatestockstrans_list;
+    
+    int size_ = 0;
+    int i = 0;
+    
+    OperateStockTransactionListener* operatestockstranlistener = (OperateStockTransactionListener*)listener;
+    
+    try
+    {
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                if(0 == status)
+                {
+                    if(!value["data"].isNull())
+                    {
+                        JsonValue& data = value["data"];
+                        
+                        size_ = data.size();
+                        
+                        operatestockstrans_list.clear();
+                        
+                        for(i = 0; i < size_; i++)
+                        {
+                            OperateStockTransaction stockstrans;
+                            
+                            stockstrans.set_operateid(data[i]["operateId"].asInt());
+                            stockstrans.set_transid(atoi(data[i]["transId"].asString().c_str()));
+                            stockstrans.set_buytype(data[i]["buytype"].asString());
+                            stockstrans.set_stockid(data[i]["stockId"].asString());
+                            stockstrans.set_stockname(data[i]["stockName"].asString());
+                            stockstrans.set_price(atof(data[i]["price"].asString().c_str()));
+                            stockstrans.set_count(atoi(data[i]["count"].asString().c_str()));
+                            stockstrans.set_money(data[i]["money"].asFloat());
+                            
+                            std::string strOut;
+                            string2timestamp(data[i]["time"].asString(), strOut);
+                            stockstrans.set_time(strOut);
+                            
+                            operatestockstrans_list.push_back(stockstrans);
+                        }
+                        
+                        operatestockstranlistener->onResponse(operatestockstrans_list);
+                    }
+                    else
+                    {
+                        operatestockstranlistener->OnError(PERR_JSON_PARSE_ERROR);
+                    }
+                }
+                else
+                {
+                    operatestockstranlistener->OnError(status);
+                }
+            }
+        }
+        else
+        {
+            operatestockstranlistener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch( std::exception& ex )
+    {
+        operatestockstranlistener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
+
+
+void parse_operatestocks(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    vector<OperateStocks> operatestocks_list;
+    
+    int size_ = 0;
+    int i = 0;
+    
+    OperateStocksListener* operatestockslistener = (OperateStocksListener*)listener;
+    
+    try
+    {
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                if(0 == status)
+                {
+                    if(!value["data"].isNull())
+                    {
+                        JsonValue& data = value["data"];
+                        
+                        size_ = data.size();
+                        
+                        operatestocks_list.clear();
+                        
+                        for(i = 0; i < size_; i++)
+                        {
+                            OperateStocks stocks;
+                            
+                            stocks.set_operateid(data[i]["operateId"].asInt());
+                            stocks.set_stockid(data[i]["stockId"].asString());
+                            stocks.set_stockname(data[i]["stockName"].asString());
+                            stocks.set_count(atoi(data[i]["count"].asString().c_str()));
+                            stocks.set_cost(atof(data[i]["cost"].asString().c_str()));
+                            stocks.set_currprice(atof(data[i]["currPrice"].asString().c_str()));
+                            stocks.set_profitmoney(atof(data[i]["ProfitMoney"].asString().c_str()));
+                            stocks.set_profitrate(atof(data[i]["profitRate"].asString().c_str()));
+                            
+                            operatestocks_list.push_back(stocks);
+                        }
+                        
+                        operatestockslistener->onResponse(operatestocks_list);
+                    }
+                    else
+                    {
+                        operatestockslistener->OnError(PERR_JSON_PARSE_ERROR);
+                    }
+                }
+                else
+                {
+                    operatestockslistener->OnError(status);
+                }
+            }
+        }
+        else
+        {
+            operatestockslistener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch( std::exception& ex )
+    {
+        operatestockslistener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
+
+
+void parse_homepage(char* json, HttpListener* listener)
+{
+    HomePageListener* homepage_listener = (HomePageListener*)listener;
+    
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    int size_ = 0;
+    int i = 0;
+    
+    std::vector<BannerItem> vec_banner;
+    std::vector<HomePageVideoroomItem> vec_videoroom;
+    std::vector<ViewpointSummary> vec_viewpoint;
+    std::vector<OperateStockProfit> vec_operate;
+    
+    try
+    {
+        // 解析逻辑
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                
+                if(0 == status)
+                {
+                    JsonValue& banner = value["data"]["banner"];
+                    
+                    vec_banner.clear();
+                    if(!banner.isNull())
+                    {
+                        size_ = banner.size();
+                        for(i = 0; i < size_; i++)
+                        {
+                            BannerItem bannerItem;
+                            bannerItem.set_url(banner[i]["url"].asString());
+                            bannerItem.set_type(banner[i]["type"].asString());
+                            bannerItem.set_croompic(banner[i]["croompic"].asString());
+                            
+                            vec_banner.push_back( bannerItem );
+                        }
+                    }
+                    
+                    JsonValue& videoroom = value["data"]["videoroom"];
+                    
+                    vec_videoroom.clear();
+                    if(!videoroom.isNull())
+                    {
+                        size_ = videoroom.size();
+                        for(i = 0; i < size_; i++)
+                        {
+                            HomePageVideoroomItem videoroomItem;
+                            videoroomItem.set_nvcbid(videoroom[i]["nvcbid"].asString());
+                            videoroomItem.set_croompic(videoroom[i]["croompic"].asString());
+                            videoroomItem.set_livetype(videoroom[i]["livetype"].asString());
+                            videoroomItem.set_ncount(videoroom[i]["ncount"].asString());
+                            videoroomItem.set_cname(videoroom[i]["cname"].asString());
+                            
+                            vec_videoroom.push_back(videoroomItem);
+                        }
+                    }
+                    
+                    /*
+                     JsonValue& textroom = value["data"]["textroom"];
+                     if(!textroom.isNull())
+                     {
+                     size_ = textroom.size();
+                     vec_textroom.clear();
+                     for(i = 0; i < size_; i++)
+                     {
+                     HomePageTextroomItem textroomItem;
+                     
+                     textroomItem.set_nvcbid(textroom[i]["nvcbid"].asString());
+                     textroomItem.set_roomname(textroom[i]["roomname"].asString());
+                     textroomItem.set_croompic(textroom[i]["croompic"].asString());
+                     textroomItem.set_livetype(textroom[i]["livetype"].asString());
+                     textroomItem.set_ncount(textroom[i]["ncount"].asString());
+                     textroomItem.set_clabel(textroom[i]["clabel"].asString());
+                     textroomItem.set_teacherid(textroom[i]["teacherid"].asString());
+                     
+                     vec_textroom.push_back(textroomItem);
+                     }
+                     }
+                     */
+                    
+                    JsonValue& viewpoint = value["data"]["viewpoint"];
+                    
+                    vec_viewpoint.clear();
+                    if(!viewpoint.isNull())
+                    {
+                        size_ = viewpoint.size();
+                        for(i = 0; i < size_; i++)
+                        {
+                            ViewpointSummary viewpointItem;
+                            
+                            viewpointItem.set_viewpointid(atoi(viewpoint[i]["viewpointId"].asString().c_str()));
+                            viewpointItem.set_authorid(viewpoint[i]["authorId"].asString());
+                            //viewpointItem.set_publishtime(viewpoint[i]["publishTime"].asString());
+                            viewpointItem.set_title(viewpoint[i]["title"].asString());
+                            
+                            viewpointItem.set_replycount(atoi(viewpoint[i]["replyCount"].asString().c_str()));
+                            viewpointItem.set_content(viewpoint[i]["contents"].asString());
+                            //viewpointItem.set_roomid(atoi(viewpoint[i]["roomid"].asString().c_str()));
+                            viewpointItem.set_authoricon(viewpoint[i]["authorIcon"].asString());
+                            viewpointItem.set_authorname(viewpoint[i]["authorName"].asString());
+                            
+                            std::string strOut;
+                            string2timestamp(viewpoint[i]["publishTime"].asString(), strOut);
+                            viewpointItem.set_publishtime(strOut);
+                            
+                            vec_viewpoint.push_back(viewpointItem);
+                        }
+                    }
+                    
+                    JsonValue& operate = value["data"]["operate"];
+                    
+                    vec_operate.clear();
+                    if(!operate.isNull())
+                    {
+                        size_ = operate.size();
+                        for(i = 0; i < size_; i++)
+                        {
+                            OperateStockProfit operateItem;
+                            operateItem.set_totalprofit(atof(operate[i]["rate"].asString().c_str()));
+                            operateItem.set_focus(operate[i]["name"].asString());
+                            operateItem.set_goalprofit(atof(operate[i]["target"].asString().c_str()));
+                            operateItem.set_teamname(operate[i]["nickname"].asString());
+                            
+                            vec_operate.push_back(operateItem);
+                        }
+                    }
+                    
+                    homepage_listener->onResponse(vec_banner, vec_videoroom, vec_viewpoint, vec_operate);
+                }
+                else
+                {
+                    homepage_listener->OnError(status);
+                }
+            }
+            else
+            {
+                homepage_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            homepage_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+        
+    }
+    catch ( std::exception& ex)
+    {
+        homepage_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
+void parse_collectionlist(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    std::vector<CollectItem> vec_collect;
+    
+    CollectionListener* collection_listener = (CollectionListener*)listener;
+    
+    int size_ = 0;
+    int i = 0;
+    
+    try
+    {
+        // 解析逻辑
+        //..
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                if(0 == status)
+                {
+                    if(!value["data"].isNull())
+                    {
+                        JsonValue& data = value["data"];
+                        
+                        size_ = data.size();
+                        
+                        vec_collect.clear();
+                        for(i = 0; i < size_; i++)
+                        {
+                            CollectItem collect;
+                            
+                            collect.set_teacherid(atoi(data[i]["teacherid"].asString().c_str()));
+                            collect.set_nvcbid(data[i]["nvcbid"].asString());
+                            collect.set_cname(data[i]["cname"].asString());
+                            collect.set_password(data[i]["password"].asString());
+                            collect.set_croompic(data[i]["croompic"].asString());
+                            collect.set_ncount(data[i]["ncount"].asString());
+                            //collect.set_cgateaddr(data[i]["cgateaddr"].asString());
+                            collect.set_ntype(data[i]["ntype"].asString());
+                            
+                            vec_collect.push_back(collect);
+                        }
+                        
+                        collection_listener->onResponse(vec_collect);
+                    }
+                    else
+                    {
+                        collection_listener->OnError(PERR_JSON_PARSE_ERROR);
+                    }
+                }
+                else
+                {
+                    collection_listener->OnError(status);
+                }
+            }
+            
+            collection_listener->onResponse(vec_collect);
+        }
+        else
+        {
+            collection_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+        
+        
+    }
+    catch ( std::exception& ex )
+    {
+        collection_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
+void parse_totalunreadcount(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    TotalUnreadListener* unread_listener = (TotalUnreadListener*)listener;
+    
+    try
+    {
+        // 解析逻辑
+        //..
+        if (reader.parse(strJson, value))
+        {
+            JsonValue& datas = value["data"];
+            if(!datas.isNull())
+            {
+                TotalUnread unread;
+                unread.set_total(atoi((datas["tips"]["total"].asString()).c_str()));
+                
+                unread_listener->onResponse(unread);
+            }
+            else
+            {
+                unread_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            unread_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex)
+    {
+        unread_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
+void parse_postaskquestion(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    //AskQuestionListener* ask_listener = (AskQuestionListener*)listener;
+    HttpListener* ask_listener = listener;
+    
+    try
+    {
+        // 解析逻辑
+        //..
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                string info="";
+                if(!value["info"].isNull())
+                {
+                    info=value["info"].asString();
+                }
+                
+                ask_listener->OnError(status);
+            }
+            else
+            {
+                ask_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            ask_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex)
+    {
+        ask_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
 }
 

@@ -104,7 +104,6 @@
         
         StockDealModel *model = [weakSelf.dayDataArray lastObject];
         [kHTTPSingle RequestOperateStockProfitByDay:0 start:[model.transId intValue] count:2];
-
         
     }];
     

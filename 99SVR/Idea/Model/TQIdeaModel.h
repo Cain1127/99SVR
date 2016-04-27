@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#include "HttpMessage.pb.h"
+//#include "HttpMessage.pb.h"
 
 @interface TQIdeaModel : NSObject
 
@@ -28,16 +28,6 @@
 /** 礼物数 */
 @property (nonatomic)int giftcount;
 
-- (id)initWithViewpointSummary:(ViewpointSummary *)ViewPoint;
-
-//string	_imageurl;
-//string	_text;
-//string	_url;
-//uint64	_startime;
-//uint64	_endtime;
-
-
-- (id)initWithModel:(Splash*)spa;
-
+//- (id)initWithViewpointSummary:(ViewpointSummary *)ViewPoint;
 
 @end

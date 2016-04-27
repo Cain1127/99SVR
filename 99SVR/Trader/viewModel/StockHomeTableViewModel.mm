@@ -10,6 +10,8 @@
 #import "StockHomeCell.h"
 #import "StockMacro.h"
 #import "StockDealViewController.h"
+#import "StockDealTableModel.h"
+#import "StockDealModel.h"
 
 @interface StockHomeTableViewModel ()
 /**仓库记录的数据*/
@@ -24,7 +26,6 @@
 {
     self = [super init];
     if (self) {
-        
         self.tabDataArray = @[];
         self.viewController = viewController;
     }

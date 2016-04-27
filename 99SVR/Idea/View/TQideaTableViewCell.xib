@@ -12,7 +12,7 @@
             <rect key="frame" x="0.0" y="0.0" width="526" height="130"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="526" height="130"/>
+                <rect key="frame" x="0.0" y="0.0" width="526" height="129.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5N9-l4-bCF">
@@ -45,7 +45,7 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A4T-3y-VkF">
+                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A4T-3y-VkF">
                         <rect key="frame" x="445" y="16" width="78" height="44"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="78" id="gSV-Bk-3iR"/>
@@ -66,7 +66,7 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="80T-2y-Hr9">
+                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="80T-2y-Hr9">
                         <rect key="frame" x="364" y="16" width="78" height="44"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="78" id="hwE-vT-reN"/>
@@ -107,7 +107,7 @@
                 <outlet property="iconView" destination="5N9-l4-bCF" id="CRZ-c8-L1t"/>
                 <outlet property="nameLabel" destination="H2p-sc-9uM" id="mjM-Yz-T8Q"/>
             </connections>
-            <point key="canvasLocation" x="-150" y="148.5"/>
+            <point key="canvasLocation" x="-301" y="15"/>
         </tableViewCell>
     </objects>
     <resources>

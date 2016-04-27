@@ -9,35 +9,78 @@
 #import "TQideaTableViewCell.h"
 #import "UIImageView+WebCache.h"
 #import "TQIdeaModel.h"
+#import "ZLViewPoint.h"
+#import "UIImageView+WebCache.h"
 
-@interface TQideaTableViewCell ()
+@interface TQIdeaTableViewCell ()
 
-@property (weak, nonatomic) IBOutlet UIImageView *iconView;
-@property (weak, nonatomic) IBOutlet UIView *nameLabel;
+@property (strong, nonatomic) UIImageView *iconView;
+@property (strong, nonatomic) UILabel *nameLabel;
 
-@property (weak, nonatomic) IBOutlet UILabel *authorLabel;
-@property (weak, nonatomic) IBOutlet UILabel *DateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *conTentLabel;
-@property (weak, nonatomic) IBOutlet UIButton *commentBtn;
-@property (weak, nonatomic) IBOutlet UIButton *giftBtn;
+@property (strong, nonatomic) UILabel *authorLabel;
+@property (strong, nonatomic) UILabel *dateLabel;
+//@property (strong, nonatomic) UILabel *conTentLabel;
+@property (strong, nonatomic) UIButton *commentBtn;
+@property (strong, nonatomic) UIButton *giftBtn;
 
 @end
-@implementation TQideaTableViewCell
 
+@implementation TQIdeaTableViewCell
 
+- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithReuseIdentifier:reuseIdentifier];
+    _iconView = [[UIImageView alloc] initWithFrame:Rect(8,8,70,70)];
+    [self.contentView addSubview:_iconView];
+    _iconView.layer.masksToBounds = YES;
+    _iconView.layer.cornerRadius = 35;
+    
+    _authorLabel = [[UILabel alloc] initWithFrame:Rect(_iconView.x+_iconView.width+8,8,150,20)];
+    [self.contentView addSubview:_authorLabel];
+    _authorLabel.font = XCFONT(15);
+    [_authorLabel setTextColor:UIColorFromRGB(0x4c4c4c)];
+    
+    _dateLabel = [[UILabel alloc] initWithFrame:Rect(_authorLabel.x,32,150,16)];
+    [self.contentView addSubview:_dateLabel];
+    _dateLabel.font = XCFONT(13);
+    [_dateLabel setTextColor:UIColorFromRGB(0x919191)];
+    
+    _giftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_giftBtn setImage:[UIImage imageNamed:@"text_viewpoint_present_icon"] forState:UIControlStateDisabled];
+    [_giftBtn setTitleColor:UIColorFromRGB(0x919191) forState:UIControlStateNormal];
+    [_giftBtn setEnabled:NO];
+    UIEdgeInsets inset = _giftBtn.imageEdgeInsets;
+    inset.left -= 10;
+    _giftBtn.imageEdgeInsets = inset;
+    [self.contentView addSubview:_giftBtn];
+    _giftBtn.frame = Rect(kScreenWidth-78,8,70,40);
+    
+    _commentBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_commentBtn setImage:[UIImage imageNamed:@"tab_operate_icon_n"] forState:UIControlStateDisabled];
+    [_commentBtn setTitleColor:UIColorFromRGB(0x919191) forState:UIControlStateNormal];
+    [_commentBtn setEnabled:NO];
+    UIEdgeInsets comset = _commentBtn.imageEdgeInsets;
+    comset.left -= 10;
+    _commentBtn.imageEdgeInsets = comset;
+    [self.contentView addSubview:_commentBtn];
+    _commentBtn.frame = Rect(kScreenWidth-_giftBtn.width*2-16,8,70,40);
+    return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.attributedTextContextView.frame = Rect(8, 80, kScreenWidth-16, 40);
+}
 
 - (void)setIdeaModel:(TQIdeaModel *)ideaModel
 {
-    [_conTentLabel setText:ideaModel.content];
+    [self setHTMLString:ideaModel.content];
     [_authorLabel setText:ideaModel.authorname];
-    [_DateLabel setText:ideaModel.publishtime];
+    [_dateLabel setText:ideaModel.publishtime];
     [_commentBtn setTitle:NSStringFromInt(ideaModel.replycount) forState:UIControlStateNormal];
     [_giftBtn setTitle:NSStringFromInt(ideaModel.giftcount) forState:UIControlStateNormal];
-    if (ideaModel.authoricon) {
-        [_iconView setImage:[UIImage imageNamed:ideaModel.authoricon]];
-    }else{
-        [_iconView setImage:[UIImage imageNamed:@"default"]];
-    }
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/pic/item/e1fe9925bc315c6001e93f3388b1cb13485477e9.jpg"]];
 }
 
 @end
