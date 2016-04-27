@@ -14,6 +14,14 @@
 #import "TQMailboxViewController.h"
 #import "ViewNullFactory.h"
 
+#pragma mark 定义刷新状态
+typedef NS_ENUM(NSInteger,MJRefreshState){
+    /**头部刷新*/
+    MJRefreshState_Header,
+    /**尾部刷新*/
+    MJRefreshState_Footer,
+};
+
 @interface StockHomeViewController ()
 /**滑动控制器*/
 @property (nonatomic, strong) SliderMenuView *sliderMenuView;
@@ -30,13 +38,15 @@
 @property (nonatomic , assign) __block NSInteger monPagInteger;
 @property (nonatomic , strong) UIView *monEmptyView;
 
-
 /**总的*/
 @property (nonatomic , strong) UITableView *totalTab;
 @property (nonatomic , strong) StockHomeTableViewModel *totalTableViewModel;
 @property (nonatomic , strong) __block NSMutableArray *totalDataArray;
 @property (nonatomic , assign) __block NSInteger totalPagInteger;
 @property (nonatomic , strong) UIView *totalEmptyView;
+
+/**下拉刷新需要清空数据！上啦不需要*/
+@property (nonatomic , assign) __block MJRefreshState refreshState;
 
 
 @end
@@ -104,12 +114,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
     [self.dayTab addGifHeaderWithRefreshingBlock:^{
         
-        [weakSelf.dayDataArray removeAllObjects];
+//        [weakSelf.dayDataArray removeAllObjects];
+        weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.dayPagInteger = 1;
         [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:10];
     }];
     
     [self.dayTab addLegendFooterWithRefreshingBlock:^{
+        weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.dayPagInteger ++;
         [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:10];
         
@@ -117,26 +129,29 @@
     
     
     [self.monTab addGifHeaderWithRefreshingBlock:^{
-        [weakSelf.monDataArray removeAllObjects];
+//        [weakSelf.monDataArray removeAllObjects];
+        weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.monPagInteger = 1;
         [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:10];
         
     }];
     
     [self.monTab addLegendFooterWithRefreshingBlock:^{
+        weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.monPagInteger ++;
         [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:10];
 
     }];
 
     [self.totalTab addGifHeaderWithRefreshingBlock:^{
-        [weakSelf.totalDataArray removeAllObjects];
+//        [weakSelf.totalDataArray removeAllObjects];
+        weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.totalPagInteger = 1;
         [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:10];
     }];
     
     [self.totalTab addLegendFooterWithRefreshingBlock:^{
-        
+        weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.totalPagInteger ++;
         [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:10];
     }];
@@ -177,6 +192,11 @@
     NSString *code = [NSString stringWithFormat:@"%@",fromDataDic[@"code"]];
     
     if ([code isEqualToString:@"1"]) {//请求成功
+        
+        if (self.refreshState == MJRefreshState_Header) {//头部刷新需要清空数据
+            [toDataArray removeAllObjects];
+        }
+        
         
         NSArray *fromDataArray = fromDataDic[@"data"];
         
