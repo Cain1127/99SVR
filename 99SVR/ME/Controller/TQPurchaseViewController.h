@@ -11,4 +11,6 @@
 
 @interface TQPurchaseViewController : CustomViewController
 
+
+@property (nonatomic , assign) NSInteger teamId;
 @end

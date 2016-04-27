@@ -10,6 +10,6 @@
 @property (nonatomic , strong) NSArray *dataArray;
 @property (nonatomic , weak) UIViewController *viewController;
 
--(void)setIsShowRecal:(NSString *)showRecal withOperateId:(NSInteger)operateId;
+-(void)setIsShowRecal:(NSString *)showRecal withOperateId:(NSInteger)operateId withTeamId:(NSInteger)teamId;
 
 @end

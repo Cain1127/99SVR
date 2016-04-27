@@ -17,7 +17,8 @@ std::string get_client_type()
 
 std::string get_user_id()
 {
-	return int2string(login_userid);
+//	return int2string(login_userid);
+    return "1817954";
 }
 
 std::string get_user_password()

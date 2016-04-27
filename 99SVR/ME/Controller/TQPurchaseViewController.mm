@@ -24,12 +24,7 @@
     
     //注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_TQPURCHASE_VC object:nil];
-
-    [kHTTPSingle RequestBuyPrivateServicePage:[UserInfo sharedUserInfo].nUserId];
-    
-//    UserInfo *userInfo = [UserInfo sharedUserInfo];
-    
-    
+    [kHTTPSingle RequestBuyPrivateServicePage:(int)self.teamId];
     
     self.view.backgroundColor = COLOR_Bg_Gay;
     CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);

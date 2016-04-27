@@ -253,7 +253,9 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     muDic[@"minVipLevel"] = [NSString stringWithFormat:@"%d",minVipLevel];
     muDic[@"stocks"] = stocksArray;
     muDic[@"recalState"] = isShowRecal ? @"show" : @"hide";
-    muDic[@"operateId"] = @(profit.operateid());
+    muDic[@"operateId"] = [NSString stringWithFormat:@"%d",profit.operateid()];
+    //战队ID
+    muDic[@"teamId"] = [NSString stringWithCString:profit.teamid().c_str() encoding:NSUTF8StringEncoding];
     muDic[@"code"] = @(1);
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
 }

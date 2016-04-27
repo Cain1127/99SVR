@@ -20,6 +20,8 @@
     UIViewController *_vc;
     BOOL _isVipBool;
     NSInteger _operateId;
+    //战队id
+    NSInteger _teamId;
 }
 @end
 
@@ -265,6 +267,7 @@
                     
                 }else{//去购买
                     TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
+                    tqVC.teamId = _teamId;
                     [_vc.navigationController pushViewController:tqVC animated:YES];
                 }
                 
@@ -276,8 +279,9 @@
     }
 }
 
--(void)setIsShowRecal:(NSString *)showRecal withOperateId:(NSInteger)operateId{
+-(void)setIsShowRecal:(NSString *)showRecal withOperateId:(NSInteger)operateId withTeamId:(NSInteger)teamId{
     _operateId = operateId;
+    _teamId = teamId;
     if ([showRecal isEqualToString:@"show"]) {
         _isVipBool = YES;
     }else{
@@ -294,6 +298,7 @@
         {
         
             TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
+            tqVC.teamId = _teamId;
             [_vc.navigationController pushViewController:tqVC animated:YES];
             
         }

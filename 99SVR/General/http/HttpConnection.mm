@@ -151,103 +151,6 @@ void parse_profitorder(char* json, HttpListener* listener)
     }
 }
 
-//void parse_profitdetail(char* json, HttpListener* listener)
-//{
-//    std::string strJson = json;
-//    
-//    JsonValue value;
-//    JsonReader reader;
-//    
-//    std::vector<OperateStockTransaction> vec_trans;
-//    std::vector<OperateStocks> vec_stocks;
-//    
-//    int size_ = 0;
-//    int i = 0;
-//    
-//    OperateStockAllDetailListener* detail_listener = (OperateStockAllDetailListener*)listener;
-//    
-//    try
-//    {
-//        // 解析逻辑
-//        //..
-//        if (reader.parse(strJson, value))
-//        {
-//            JsonValue& datas = value["data"];
-//            if(!datas.isNull())
-//            {
-//                OperateStockProfit osprofit;
-//                osprofit.set_operateid(datas["profile"]["operateId"].asUInt());
-//                osprofit.set_teamid(datas["profile"]["teamId"].asString());
-//                osprofit.set_teamname(datas["profile"]["teamName"].asString());
-//                osprofit.set_teamicon(datas["profile"]["teamIcon"].asString());
-//                osprofit.set_focus(datas["profile"]["focus"].asString());
-//                osprofit.set_goalprofit(atof((datas["profile"]["goalProfit"].asString()).c_str()));
-//                osprofit.set_totalprofit(atof((datas["profile"]["totalProfit"].asString()).c_str()));
-//                osprofit.set_dayprofit(atof((datas["profile"]["dayProfit"].asString()).c_str()));
-//                osprofit.set_monthprofit(atof((datas["profile"]["monthProfit"].asString()).c_str()));
-//                osprofit.set_winrate(atof((datas["profile"]["winRate"].asString()).c_str()));
-//                
-//                OperateStockData osdata;
-//                osprofit.set_operateid(datas["curve"]["operateId"].asUInt());
-//                
-//                size_ = datas["trans"].size();
-//                vec_trans.clear();
-//                for(i = 0; i < size_; i++)
-//                {
-//                    OperateStockTransaction trans;
-//                    trans.set_transid(datas["trans"][i]["transId"].asUInt());
-//                    trans.set_operateid(datas["trans"][i]["operateId"].asUInt());
-//                    trans.set_buytype(datas["trans"][i]["buytype"].asString());
-//                    trans.set_stockid(datas["trans"][i]["stockId"].asString());
-//                    trans.set_stockname(datas["trans"][i]["stockName"].asString());
-//                    trans.set_price(atof((datas["trans"][i]["price"].asString()).c_str()));
-//                    //TODD:try catch
-//                    trans.set_count(atoi(datas["trans"][i]["count"].asString().c_str()));
-//                    trans.set_money(atof((datas["trans"][i]["money"].asString()).c_str()));
-//                    trans.set_time(datas["trans"][i]["time"].asString());
-//                    vec_trans.push_back(trans);
-//                }
-//                
-//                size_ = datas["stocks"].size();
-//                vec_stocks.clear();
-//                for(i = 0; i < size_; i++)
-//                {
-//                    OperateStocks stocks;
-//                    stocks.set_transid(datas["stocks"][i]["transId"].asUInt());
-//                    stocks.set_operateid(datas["stocks"][i]["operateId"].asUInt());
-//                    stocks.set_stockid(datas["stocks"][i]["stockId"].asString());
-//                    stocks.set_stockname(datas["stocks"][i]["stockName"].asString());
-//                    stocks.set_count(datas["stocks"][i]["count"].asUInt());
-//                    stocks.set_cost(atof((datas["stocks"][i]["cost"].asString()).c_str()));
-//                    stocks.set_currprice(atof((datas["stocks"][i]["currPrice"].asString()).c_str()));
-//                    stocks.set_profitrate(atof((datas["stocks"][i]["profitRate"].asString()).c_str()));
-//                    stocks.set_profitmoney(atof((datas["stocks"][i]["ProfitMoney"].asString()).c_str()));
-//                    
-//                    vec_stocks.push_back(stocks);
-//                }
-//                
-//                uint32 currLevelId=datas["currLevelId"].asUInt();
-//                uint32 minVipLevel=datas["minVipLevel"].asUInt();
-//                
-//                
-//                detail_listener->onResponse(osprofit,osdata,vec_trans,vec_stocks,currLevelId,minVipLevel);
-//            }
-//            else
-//            {
-//                detail_listener->OnError(PERR_JSON_PARSE_ERROR);
-//            }
-//        }
-//        else
-//        {
-//            detail_listener->OnError(PERR_JSON_PARSE_ERROR);
-//        }
-//    }
-//    catch ( std::exception& ex)
-//    {
-//        detail_listener->OnError(PERR_JSON_PARSE_ERROR);
-//    }
-//}
-
 //请求操盘详情
 void parse_profitdetail(char* json, HttpListener* listener)
 {
@@ -1688,6 +1591,8 @@ void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requ
 void HttpConnection::RequestBuyPrivateServicePage(int teacher_id, BuyPrivateServiceListener* listener)
 {
     char tmp[128] = {0};
+    
+    DLog(@"teacher_id %d",teacher_id);
     
     RequestParamter& request = get_request_param();
     
