@@ -223,7 +223,7 @@ void OperateStockAllDetailListener::OnError(int errCode)
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks, uint32 currLevelId, uint32 minVipLevel){
     
-    //判断是否显示记录
+    //判断是否显示记录 
     BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
