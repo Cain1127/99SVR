@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HomeCustomViewController.h"
+
 @interface TQIdeaViewController : HomeCustomViewController
 
 @end

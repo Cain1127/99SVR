@@ -1,19 +1,20 @@
-
+#include "stdafx.h"
 #include "platform.h"
 #include "Http.h"
 #include "LoginConnection.h"
 #include "Thread.h"
 #include "login_cmd_vchat.h"
 
- UserLogonSuccess2 loginuser;
-  UserLogonReq4 login_req4;
-  UserLogonReq5  login_req5;
+UserLogonSuccess2 loginuser;
+UserLogonReq4 login_req4;
+UserLogonReq5  login_req5;
 
-  uint32 login_reqv;
-  uint32 login_nmobile;
-  uint32 login_version;
-  uint32 login_userid;
-  string login_password;
+uint32 login_reqv;
+uint32 login_nmobile;
+uint32 login_version;
+uint32 login_userid;
+string login_password;
+SessionTokenResp login_token;
 
 LoginConnection::LoginConnection() :
 login_listener(NULL), hall_listener(NULL), push_listener(NULL)
@@ -22,7 +23,7 @@ login_listener(NULL), hall_listener(NULL), push_listener(NULL)
 	strcpy(lbs_type, "/tygetlogon");
 }
 
-void LoginConnection::RegisterMessageListener(LoginListener* message_listener)
+void LoginConnection::RegisterLoginListener(LoginListener* message_listener)
 {
 	login_listener = message_listener;
 }
@@ -87,6 +88,7 @@ void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 	login_reqv = 4;
 	
 	connect_from_lbs_asyn();
+	//connect("172.16.41.137", 7301);
 
 	/*
 	SendMsg_Hello();
@@ -118,7 +120,7 @@ void LoginConnection::SendMsg_SessionTokenReq(uint32 userid)
 void LoginConnection::SendMsg_SetUserInfoReq(SetUserProfileReq& req)
 {
 	req.set_userid(loginuser.userid());
-	req.set_introducelen(strlen(req.introduce().c_str()));
+	req.set_introducelen((int32_t)strlen(req.introduce().c_str()));
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_SetUserProfileReq, req, req.introducelen());
 }
 
@@ -168,54 +170,25 @@ void LoginConnection::SendMsg_ExitAlertReq()
 	SEND_MESSAGE(protocol::Sub_Vchat_UserExitMessage_Req, req);
 }
 
-
-void LoginConnection::SendMsg_MessageUnreadReq()
-{
-	MessageNoty noty;
-	noty.set_userid(loginuser.userid());
-
-	SEND_MESSAGE(protocol::Sub_Vchat_HallMessageUnreadReq, noty);
-}
-
-void LoginConnection::SendMsg_HallMessageReq(HallMessageReq& req)
-{
-	SEND_MESSAGE(protocol::Sub_Vchat_HallMessageReq, req);
-}
-
-void LoginConnection::SendMsg_HallMessageReq2(TextRoomList_mobile& head,HallMessageReq& req)
-{
-	SEND_MESSAGE(protocol::Sub_Vchat_HallMessageReq_Mobile, req);
-}
-
-void LoginConnection::SendMsg_ViewAnswerReq(ViewAnswerReq& req)
-{
-	SEND_MESSAGE(protocol::Sub_Vchat_HallViewAnswerReq, req);
-}
-
 void LoginConnection::SendMsg_InterestForReq(InterestForReq& req)
 {
 	SEND_MESSAGE(protocol::Sub_Vchat_HallInterestForReq, req);
 }
 
-void LoginConnection::SendMsg_FansCountReq(uint32 teacherid)
+
+void LoginConnection::SendMsg_BuyPrivateVipReq(uint32 teacherid,uint32 viptype)
 {
-	FansCountReq req;
+	BuyPrivateVipReq req;
+	req.set_userid(login_userid);
 	req.set_teacherid(teacherid);
+	req.set_viptype(viptype);
 
-	SEND_MESSAGE(protocol::Sub_Vchat_HallGetFansCountReq, req);
-}
-
-void LoginConnection::on_dispatch_message(void* msg)
-{
-	if (login_listener != NULL)
-	{
-		login_listener->OnMessageComming(msg);
-	}
+	SEND_MESSAGE(protocol::Sub_Vchat_BuyPrivateVipReq, req);
 }
 
 void LoginConnection::close(void)
 {
-	SendMsg_ExitAlertReq();
+	//SendMsg_ExitAlertReq();
 	Connection::close();
 }
 
@@ -231,13 +204,16 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 	static int qx_actions_count = 0;
 
 	//列表vector
-	static std::vector<InteractResp> g_vec_InteractResp;
-	static std::vector<AnswerResp> g_vec_AnswerResp;
-	static std::vector<ViewShowResp> g_vec_ViewShowResp;
-	static std::vector<TeacherFansResp> g_vec_TeacherFansResp;
-	static std::vector<InterestResp> g_vec_InterestResp;
-	static std::vector<UnInterestResp> g_vec_UnInterestResp;
-	static std::vector<TextLivePointListResp> g_vec_TextLivePointListResp;
+	static std::vector<InteractResp> g_vec_InteractResp;//互动回复列表
+	static std::vector<AnswerResp> g_vec_AnswerResp;//问答回复列表
+	static std::vector<ViewShowResp> g_vec_ViewShowResp;//观点回复列表
+	static std::vector<TeacherFansResp> g_vec_TeacherFansResp;//我的粉丝列表
+	static std::vector<InterestResp> g_vec_InterestResp;//我的关注（已关注讲师）列表
+	static std::vector<UnInterestResp> g_vec_UnInterestResp;//我的关注（无关注讲师）列表
+	static std::vector<TextLivePointListResp> g_vec_TextLivePointListResp;//明日预测（已关注的讲师）列表
+
+	static std::vector<HallSecretsListResp> g_vec_SecretsListResp;//已购买的个人秘籍列表
+	static std::vector<HallSystemInfoListResp> g_vec_SystemInfoResp;//系统消息列表
 
 	protocol::COM_MSG_HEADER*head = (protocol::COM_MSG_HEADER*)msg;
 	uint8* body = (uint8*) (head->content);
@@ -250,22 +226,27 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 	switch (sub_cmd)
 	{
 
+	//登陆失败
 	case protocol::Sub_Vchat_logonErr2:
 		ON_MESSAGE(login_listener, UserLogonErr2, OnLogonErr)
 		close();
 		break;
 
+	//登陆成功
 	case protocol::Sub_Vchat_logonSuccess2:
 		loginuser.ParseFromArray(body, loginuser.ByteSize());
+		login_userid = loginuser.userid();
 		if (login_listener != NULL)
 			login_listener->OnLogonSuccess(loginuser);
 		break;
 
+	//房间组列表开始
 	case protocol::Sub_Vchat_RoomGroupListBegin:
 		room_groups_count = 0;
 		room_groups = new RoomGroupItem[20];
 		break;
 
+	//房间组列表
 	case protocol::Sub_Vchat_RoomGroupListResp:
 		body += sizeof(uint32);
 		room_groups[room_groups_count].ParseFromArray(body,
@@ -273,13 +254,15 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		room_groups_count++;
 		break;
 
+	//房间组结束
 	case protocol::Sub_Vchat_RoomGroupListFinished:
 		if (login_listener != NULL)
 			login_listener->OnRoomGroupList(room_groups, room_groups_count);
 		delete[] room_groups;
 		break;
 
-	case protocol::Sub_Vchat_QuanxianId2ListResp:
+	//权限id数据
+	case protocol::Sub_VChat_QuanxianId2ListResp:
 		qx_ids_count = body_len / sizeof(protocol::CMDQuanxianId2Item_t);
 		qx_ids = new QuanxianId2Item[qx_ids_count];
 		for (int i = 0; i < qx_ids_count; i++)
@@ -292,12 +275,14 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		delete[] qx_ids;
 		break;
 
-	case protocol::Sub_Vchat_QuanxianAction2ListBegin:
+	//权限操作数据开始
+	case protocol::Sub_VChat_QuanxianAction2ListBegin:
 		qx_actions_count = 0;
 		qx_actions = new QuanxianAction2Item[4000];
 		break;
 
-	case protocol::Sub_Vchat_QuanxianAction2ListResp:
+	//权限操作数据
+	case protocol::Sub_VChat_QuanxianAction2ListResp:
 		int action_num;
 		action_num = body_len / sizeof(protocol::CMDQuanxianAction2Item_t);
 		LOG("action:%d:%d:%d", body_len,
@@ -312,21 +297,28 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		}
 		break;
 
-	case protocol::Sub_Vchat_QuanxianAction2ListFinished:
+	//权限操作数据结束
+	case protocol::Sub_VChat_QuanxianAction2ListFinished:
 		if (login_listener != NULL)
 			login_listener->OnQuanxianAction2List(qx_actions, qx_actions_count);
 		delete[] qx_actions;
 		break;
 
+	//token通知
 	case protocol::Sub_Vchat_logonTokenNotify:
-		ON_MESSAGE(login_listener, SessionTokenResp, OnLogonTokenNotify)
+		//ON_MESSAGE(login_listener, SessionTokenResp, OnLogonTokenNotify)
+		login_token.ParseFromArray(body, login_token.ByteSize());
+		if (login_listener)
+			login_listener->OnLogonTokenNotify(login_token);
 		break;
 
+	//登录完成
 	case protocol::Sub_Vchat_logonFinished:
 		if (login_listener != NULL)
 			login_listener->OnLogonFinished();
 		break;
 
+	//设置用户资料响应
 	case protocol::Sub_Vchat_SetUserProfileResp:
 	{
 		SetUserProfileResp _SetUserProfileResp;
@@ -340,304 +332,43 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 	}
 		break;
 
+	//设置用户密码响应
 	case protocol::Sub_Vchat_SetUserPwdResp:
 		ON_MESSAGE(hall_listener, SetUserPwdResp, OnSetUserPwdResp)
 		break;
 
+	//获取房间网关地址响应
 	case protocol::Sub_Vchat_QueryRoomGateAddrResp:
 		ON_MESSAGE(hall_listener, QueryRoomGateAddrResp, OnQueryRoomGateAddrResp)
 		break;
 
+	//获取用户更多信息应答（手机，个性签名等）
 	case protocol::Sub_Vchat_GetUserMoreInfResp:
 		ON_MESSAGE(hall_listener, GetUserMoreInfResp, OnGetUserMoreInfResp)
 		break;
 
+	//用户退出软件的响应
 	case protocol::Sub_Vchat_UserExitMessage_Resp:
 		ON_MESSAGE(hall_listener, ExitAlertResp, OnUserExitMessageResp)
 		break;
 
-	case protocol::Sub_Vchat_HallMessageNotify:
-		ON_MESSAGE(hall_listener, MessageNoty, OnHallMessageNotify)
-		break;
-	case protocol::Sub_Vchat_HallMessageUnreadResp:
-		ON_MESSAGE(hall_listener, MessageUnreadResp, OnMessageUnreadResp)
-		break;
-
-		//这里下面七个回应全是列表
-	case protocol::Sub_Vchat_HallInteractBegin:
-		g_vec_InteractResp.clear();
-		break;
-	case protocol::Sub_Vchat_HallInteractResp:
-	{
-		InteractResp objInteractResp;
-		objInteractResp.ParseFromArray(body, objInteractResp.ByteSize());
-		g_vec_InteractResp.push_back(objInteractResp);
-	}
-		break;
-	case protocol::Sub_Vchat_HallInteractEnd:
-		hall_listener->OnInteractResp(g_vec_InteractResp);
-		break;
-
-	case protocol::Sub_Vchat_HallAnswerBegin:
-		g_vec_AnswerResp.clear();
-		break;
-	case protocol::Sub_Vchat_HallAnswerResp:
-	{
-		AnswerResp objAnswerResp;
-		objAnswerResp.ParseFromArray(body, objAnswerResp.ByteSize());
-		g_vec_AnswerResp.push_back(objAnswerResp);
-	}
-		break;
-	case protocol::Sub_Vchat_HallAnswerEnd:
-		hall_listener->OnHallAnswerResp(g_vec_AnswerResp);
-		break;
-
-	case protocol::Sub_Vchat_HallViewShowBegin:
-		g_vec_ViewShowResp.clear();
-		break;
-	case protocol::Sub_Vchat_HallViewShowResp:
-	{
-		ViewShowResp objViewShowResp;
-		objViewShowResp.ParseFromArray(body, objViewShowResp.ByteSize());
-		g_vec_ViewShowResp.push_back(objViewShowResp);
-	}
-		break;
-	case protocol::Sub_Vchat_HallViewShowEnd:
-		hall_listener->OnViewShowResp(g_vec_ViewShowResp);
-		break;
-
-	case protocol::Sub_Vchat_HallTeacherFansBegin:
-		g_vec_TeacherFansResp.clear();
-		break;
-	case protocol::Sub_Vchat_HallTeacherFansResp:
-	{
-		TeacherFansResp objTeacherFansResp;
-		objTeacherFansResp.ParseFromArray(body, objTeacherFansResp.ByteSize());
-		g_vec_TeacherFansResp.push_back(objTeacherFansResp);
-	}
-		break;
-	case protocol::Sub_Vchat_HallTeacherFansEnd:
-		hall_listener->OnTeacherFansResp(g_vec_TeacherFansResp);
-		break;
-
-	case protocol::Sub_Vchat_HallInterestBegin:
-		g_vec_InterestResp.clear();
-		break;
-	case protocol::Sub_Vchat_HallInterestResp:
-	{
-		InterestResp objInterestResp;
-		objInterestResp.ParseFromArray(body, objInterestResp.ByteSize());
-		g_vec_InterestResp.push_back(objInterestResp);
-	}
-		break;
-	case protocol::Sub_Vchat_HallInterestEnd:
-		hall_listener->OnInterestResp(g_vec_InterestResp);
-		break;
-
-	case protocol::Sub_Vchat_HallUnInterestBegin:
-		g_vec_UnInterestResp.clear();
-		break;
-	case protocol::Sub_Vchat_HallUnInterestResp:
-	{
-		UnInterestResp objUnInterestResp;
-		objUnInterestResp.ParseFromArray(body, objUnInterestResp.ByteSize());
-		g_vec_UnInterestResp.push_back(objUnInterestResp);
-	}
-		break;
-	case protocol::Sub_Vchat_HallUnInterestEnd:
-		hall_listener->OnUnInterestResp(g_vec_UnInterestResp);
-		break;
-
-	case protocol::Sub_Vchat_TextLivePointListBegin:
-		g_vec_TextLivePointListResp.clear();
-		break;
-	case protocol::Sub_Vchat_TextLivePointListResp:
-	{
-		TextLivePointListResp objTextLivePointListResp;
-		objTextLivePointListResp.ParseFromArray(body, objTextLivePointListResp.ByteSize());
-		g_vec_TextLivePointListResp.push_back(objTextLivePointListResp);
-	}
-		break;
-	case protocol::Sub_Vchat_TextLivePointListEnd:
-		hall_listener->OnTextLivePointListResp(g_vec_TextLivePointListResp);
-		break;
-
-
-
-
-	case protocol::Sub_Vchat_HallInteractResp_Mobile:
-	{
-		g_vec_InteractResp.clear();
-
-		int msglen=body_len;
-		TextRoomList_mobile headmsg;
-		headmsg.ParseFromArray(body, headmsg.ByteSize());
-		body += headmsg.ByteSize();
-		msglen -= headmsg.ByteSize();
-		while(msglen>0)
-		{
-			InteractResp objInteractResp;
-			objInteractResp.ParseFromArray(body, objInteractResp.ByteSize());
-			g_vec_InteractResp.push_back(objInteractResp);
-			body += objInteractResp.ByteSize() + objInteractResp.sortextlen() + objInteractResp.destextlen();
-			msglen -= objInteractResp.ByteSize() + objInteractResp.sortextlen() + objInteractResp.destextlen();
-		}
-
-		hall_listener->OnInteractResp(g_vec_InteractResp);
-	}
-	break;
-	case protocol::Sub_Vchat_HallAnswerResp_Mobile:
-	{
-		g_vec_AnswerResp.clear();
-
-		int msglen=body_len;
-		TextRoomList_mobile headmsg;
-		headmsg.ParseFromArray(body, headmsg.ByteSize());
-		body += headmsg.ByteSize();
-		msglen -= headmsg.ByteSize();
-		while(msglen>0)
-		{
-			AnswerResp objAnswerResp;
-			objAnswerResp.ParseFromArray(body, objAnswerResp.ByteSize());
-			g_vec_AnswerResp.push_back(objAnswerResp);
-			body += objAnswerResp.ByteSize() + objAnswerResp.answerlen() + objAnswerResp.stokeidlen() + objAnswerResp.questionlen();
-			msglen -= objAnswerResp.ByteSize() + objAnswerResp.answerlen() + objAnswerResp.stokeidlen() + objAnswerResp.questionlen();
-		}
-
-		hall_listener->OnHallAnswerResp(g_vec_AnswerResp);
-	}
-	break;
-	case protocol::Sub_Vchat_HallViewShowResp_Mobile:
-	{
-		g_vec_ViewShowResp.clear();
-
-		int msglen=body_len;
-		TextRoomList_mobile headmsg;
-		headmsg.ParseFromArray(body, headmsg.ByteSize());
-		body += headmsg.ByteSize();
-		msglen -= headmsg.ByteSize();
-		while(msglen>0)
-		{
-			ViewShowResp objViewShowResp;
-			objViewShowResp.ParseFromArray(body, objViewShowResp.ByteSize());
-			g_vec_ViewShowResp.push_back(objViewShowResp);
-			body += objViewShowResp.ByteSize() + objViewShowResp.viewtitlelen() + objViewShowResp.viewtextlen() + objViewShowResp.srctextlen() + objViewShowResp.replytextlen();
-			msglen -= objViewShowResp.ByteSize() + objViewShowResp.viewtitlelen() + objViewShowResp.viewtextlen() + objViewShowResp.srctextlen() + objViewShowResp.replytextlen();
-		}
-
-		hall_listener->OnViewShowResp(g_vec_ViewShowResp);
-	}
-	break;
-	case protocol::Sub_Vchat_HallTeacherFansResp_Mobile:
-	{
-		g_vec_TeacherFansResp.clear();
-
-		int msglen=body_len;
-		TextRoomList_mobile headmsg;
-		headmsg.ParseFromArray(body, headmsg.ByteSize());
-		body += headmsg.ByteSize();
-		msglen -= headmsg.ByteSize();
-		while(msglen>0)
-		{
-			TeacherFansResp objTeacherFansResp;
-			objTeacherFansResp.ParseFromArray(body, objTeacherFansResp.ByteSize());
-			g_vec_TeacherFansResp.push_back(objTeacherFansResp);
-			body += objTeacherFansResp.ByteSize();
-			msglen -= objTeacherFansResp.ByteSize();
-		}
-
-		hall_listener->OnTeacherFansResp(g_vec_TeacherFansResp);
-	}
-	break;
-	case protocol::Sub_Vchat_HallInterestResp_Mobile:
-	{
-		g_vec_InterestResp.clear();
-
-		int msglen=body_len;
-		TextRoomList_mobile headmsg;
-		headmsg.ParseFromArray(body, headmsg.ByteSize());
-		body += headmsg.ByteSize();
-		msglen -= headmsg.ByteSize();
-		while(msglen>0)
-		{
-			InterestResp objInterestResp;
-			objInterestResp.ParseFromArray(body, objInterestResp.ByteSize());
-			g_vec_InterestResp.push_back(objInterestResp);
-			body += objInterestResp.ByteSize();
-			msglen -= objInterestResp.ByteSize();
-		}
-
-		hall_listener->OnInterestResp(g_vec_InterestResp);
-	}
-	break;
-	case protocol::Sub_Vchat_HallUnInterestResp_Mobile:
-	{
-		g_vec_UnInterestResp.clear();
-
-		int msglen=body_len;
-		TextRoomList_mobile headmsg;
-		headmsg.ParseFromArray(body, headmsg.ByteSize());
-		body += headmsg.ByteSize();
-		msglen -= headmsg.ByteSize();
-		while(msglen>0)
-		{
-			UnInterestResp objUnInterestResp;
-			objUnInterestResp.ParseFromArray(body, objUnInterestResp.ByteSize());
-			g_vec_UnInterestResp.push_back(objUnInterestResp);
-			body += objUnInterestResp.ByteSize() + objUnInterestResp.levellen() + objUnInterestResp.labellen() + objUnInterestResp.goodatlen();
-			msglen -= objUnInterestResp.ByteSize() + objUnInterestResp.levellen() + objUnInterestResp.labellen() + objUnInterestResp.goodatlen();
-		}
-
-		hall_listener->OnUnInterestResp(g_vec_UnInterestResp);
-	}
-	break;
-	case protocol::Sub_Vchat_TextLivePointListResp_Mobile:
-	{
-		g_vec_TextLivePointListResp.clear();
-
-		int msglen=body_len;
-		TextRoomList_mobile headmsg;
-		headmsg.ParseFromArray(body, headmsg.ByteSize());
-		body += headmsg.ByteSize();
-		msglen -= headmsg.ByteSize();
-		while(msglen>0)
-		{
-			TextLivePointListResp objTextLivePointListResp;
-			objTextLivePointListResp.ParseFromArray(body, objTextLivePointListResp.ByteSize());
-			g_vec_TextLivePointListResp.push_back(objTextLivePointListResp);
-			body += objTextLivePointListResp.ByteSize() + objTextLivePointListResp.textlen();
-			msglen -= objTextLivePointListResp.ByteSize() + objTextLivePointListResp.textlen();
-		}
-
-		hall_listener->OnTextLivePointListResp(g_vec_TextLivePointListResp);
-	}
-	break;
-
-
-
-	case protocol::Sub_Vchat_HallPERSECResp:
-		//ON_MESSAGE(hall_listener, HallSecretsListResp, OnSecretsListResp)
-		break;
-	case protocol::Sub_Vchat_HallSystemInfoResp:
-		//ON_MESSAGE(hall_listener, HallSystemInfoListResp, OnSystemInfoResp)
-		break;
-		//end of 这里下面七个回应全是列表
-
-	case protocol::Sub_Vchat_HallViewAnswerResp:
-		ON_MESSAGE(hall_listener, ViewAnswerResp, OnViewAnswerResp)
-		break;
+	//关注（无关注讲师时返回所有讲师列表，点击关注）响应
 	case protocol::Sub_Vchat_HallInterestForResp:
 		ON_MESSAGE(hall_listener, InterestForResp, OnInterestForResp)
 		break;
-	case protocol::Sub_Vchat_HallGetFansCountResp:
-		ON_MESSAGE(hall_listener, FansCountResp, OnFansCountResp)
-		break;
 
+	//推送命令
 	case protocol::Sub_Vchat_ClientNotify:
+	//砸金蛋通知
 	case protocol::Sub_Vchat_HitGoldEgg_ToClient_Noty:
 		LOG("protocol::Sub_Vchat_ClientNotify");
 		dispatch_push_message(body);
 		break;
+	//购买私人订制响应
+	case protocol::Sub_Vchat_BuyPrivateVipResp:
+		ON_MESSAGE(hall_listener, BuyPrivateVipResp, OnBuyPrivateVipResp)
+		break;
+
 	default:
 		LOG("+++++++unimplenment message+++++++:%d", sub_cmd);
 		break;
@@ -741,7 +472,12 @@ void LoginConnection::dispatch_push_message(void* body)
 	case 7:
 		body = push->content;
 		ON_MESSAGE(push_listener, RoomTeacherOnMicResp, OnRoomTeacherOnMicResp)
+		break;
 
+	case 9:
+		body = push->content;
+		ON_MESSAGE(push_listener, EmailNewMsgNoty, OnEmailNewMsgNoty)
+		break;
 	}
 }
 

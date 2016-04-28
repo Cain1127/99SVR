@@ -289,14 +289,6 @@ namespace protocol
 		int32  errorid;    //错误代码
 	}CMDSetUserMoreInfoResp_t;
 
-	typedef struct tag_CMDQueryUserMoreInfo
-	{
-		uint32 srcid;
-		uint32 vcbid;
-		uint32 toid;
-		int32  errorid;    //错误代码
-	}CMDQueryUserMoreInfo_t;
-
 	typedef struct tag_CMDQuanxianId2Item
 	{
 		int16 levelid;  //可(-)
@@ -604,7 +596,7 @@ namespace protocol
 	{
 		uint32 userid;      //用户ID，广播用户填0
 		byte termtype;     //登陆类型（0：PC，1：Android，2：IOS，3：Web，4：所有类型）
-		byte type;         //业务类型：1. 配置服务器推送;2. 通知客户端打印日志;3. 客户端升级推送;4. 砸金蛋;5. 飘窗提示
+		byte type;         //业务类型：1. 配置服务器推送;2. 通知客户端打印日志;3. 客户端升级推送;4. 砸金蛋;5. 飘窗提示;9.信箱消息推送
 		byte needresp;      //是否需要确认
 		uint16 validtime;    //有效时长
 		byte versionflag;    //0：所有，1：等于，2：大于等于，3：小于等于
@@ -651,6 +643,29 @@ namespace protocol
 		uint64 money;
 	}CMDHitGoldEggClientNoty_t;
 
+	//私人订制购买请求
+	typedef struct tag_CMDBuyPrivateVipReq
+	{
+		uint32 userid;          //用户ID
+		uint32 teacherid;     	//讲师ID
+		uint32 viptype;     	//vip等级ID
+	}CMDBuyPrivateVipReq_t;
+
+	//私人订制购买响应
+	typedef struct tag_CMDBuyPrivateVipResp
+	{
+		uint32 userid;          //用户ID
+		uint32 teacherid;     	//讲师ID
+		uint32 viptype;     		//vip等级ID
+		uint64 nk;        	    //账户余额
+	}CMDBuyPrivateVipResp_t;
+
+	//邮箱新消息提示
+	typedef struct tag_CMDEmailNewMsgNoty
+	{
+	  byte bEmailType;        //1 私人定制 2系统消息 3评论回复 4提问回复
+	  uint32 messageid;       //消息ID
+	}CMDEmailNewMsgNoty_t;
 
 };
 

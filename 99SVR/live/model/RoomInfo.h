@@ -7,10 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "cmd_vchat.h"
 #import "yc_datatypes.h"
-#import "CommonMessage.pb.h"
-
+#import "CommonroomMessage.pb.h"
 @class RoomUser;
 
 @interface RoomInfo : NSObject
@@ -20,7 +18,7 @@
     char cRoomName[NAMELEN];
 }
 
-- (id)initWithRoom:(CMDJoinRoomResp_t *)pResp;
+- (id)initWithRoom:(JoinRoomResp *)pResp;
 
 - (void)setRoomInfo:(JoinRoomResp *)pResp;
 - (BOOL)IsRoomFangzhu:(int) userid;   //是不是房主
@@ -29,7 +27,7 @@
 - (BOOL)removeUser:(int)userId;
 - (BOOL)addUser:(RoomUser *)user;
 - (RoomUser *)findUser:(int)nUserId;
-- (SiegeInfo_t *)siegeInfo;
+
 - (char *)getRoomName;
 - (void)insertRUser:(RoomUser *)user;
 - (int)getUserLevel:(RoomUser *)user;

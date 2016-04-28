@@ -56,10 +56,11 @@ public:
 	virtual void onResponse(int errorCode, Reply& info);void OnError(int errCode);
 };
 
+
 class OperateStockProfitListenerDay : public OperateStockProfitListener
 {
 public:
-	virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode);
+    virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode);
 };
 class OperateStockProfitListenerMonth : public OperateStockProfitListener
 {
@@ -148,6 +149,12 @@ class ConsumeRankListener : public HttpListener
 {
 public:
 	virtual void onResponse(vector<ConsumeRank>& info);void OnError(int errCode);
+};
+
+class AskQuestionListener : public HttpListener
+{
+public:
+	virtual void onResponse(int retCode);void OnError(int errCode);
 };
 
 class SystemMessageListener : public HttpListener

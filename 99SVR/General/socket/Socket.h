@@ -63,6 +63,8 @@ class Socket
 
 private:
 
+	int recv_timeout;
+
 	SOCKET socket;
 
 public:
@@ -75,6 +77,8 @@ public:
 	int get_address();
 	int get_error();
 	int get_error2();
+
+	void set_recv_timeout(int timeout);
 
 	static int startup();
 	static int cleanup();

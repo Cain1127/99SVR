@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include "HttpListener.h"
+#import "RoomHttp.h"
 #import  "XPrivateService.h"
 #import "ZLReply.h"
 #import "ZLOperateStock.h"
@@ -471,12 +472,18 @@ void ChargeRuleListener::OnError(int errCode)
 }
 
 void TeamListListener::onResponse(vector<Team>& infos){
-    
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i = 0; i<infos.size(); i++) {
+        RoomHttp *room = [[RoomHttp alloc] initWithData:&infos[i]];
+        [array addObject:room];
+    }
+    NSDictionary *result = @{@"code":@(1),@"data":array};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HOME_VIDEO_LIST_VC object:result];
 }
 
 void TeamListListener::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HOME_VIDEO_LIST_VC object:@{@"code":@(errCode)}];
 }
 
 void TeamIntroduceListener::onResponse(Team& info)
@@ -529,6 +536,16 @@ void ConsumeRankListener::onResponse(vector<ConsumeRank>& info){
         [array addObject:model];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:array];
+}
+
+
+void AskQuestionListener::onResponse(int retCode){
+    
+}
+
+void AskQuestionListener::OnError(int errCode)
+{
+    
 }
 
 /**

@@ -13,7 +13,6 @@
 #import "GCDAsyncSocket.h"
 #import "DecodeJson.h"
 #import "MediaBuffer.h"
-#import "cmd_vchat.h"
 #import "message_vchat.h"
 
 #define MAX_TCPPAYLOAD_LENGTH 4000

@@ -261,17 +261,6 @@
 }
 
 - (void)handleDoubleTapFrom{
-//    if (!bFull) {
-//        [_glView removeFromSuperview];
-//        _glView.frame = Rect(0, 0, kScreenHeight,kScreenWidth);
-//        [[UIApplication sharedApplication].keyWindow addSubview:_glView];
-//        bFull = YES;
-//    }else
-//    {
-//        _glView.frame = Rect(0, 0, kScreenWidth, kVideoImageHeight);
-//        [self.view addSubview:_glView];
-//        bFull = NO;
-//    }
     [self fullPlayMode];
 }
 

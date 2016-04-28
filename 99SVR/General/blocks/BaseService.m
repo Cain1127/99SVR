@@ -23,7 +23,7 @@
     // 设置返回格式
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
-    [manager POST:url parameters:parameters success:^(NSURLSessionDataTask *operation, id responseObject) {
+    [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask *operation, id responseObject) {
         if (success) {
             success(responseObject);
         }
@@ -47,7 +47,7 @@
     [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [manager.requestSerializer setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     // 设置返回格式
-    [manager GET:urlStr parameters:parameters success:^(NSURLSessionDataTask *operation, id responseObject)
+    [manager GET:urlStr parameters:parameters progress:nil success:^(NSURLSessionDataTask *operation, id responseObject)
     {
          if (success)
          {
@@ -71,7 +71,7 @@
     manager.requestSerializer.stringEncoding = NSUTF8StringEncoding;
     manager.requestSerializer.timeoutInterval = time;
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager GET:url parameters:dict success:^(NSURLSessionDataTask *operation, id responseObject)
+    [manager GET:url parameters:dict progress:nil success:^(NSURLSessionDataTask *operation, id responseObject)
      {
          if (success)
          {
@@ -96,7 +96,7 @@
     manager.requestSerializer.timeoutInterval = 10;
     // 设置返回格式
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *operation, id responseObject)
+    [manager POST:urlStr parameters:parameters progress:nil success:^(NSURLSessionDataTask *operation, id responseObject)
     {
         if (success)
         {
@@ -123,7 +123,7 @@
     manager.requestSerializer.timeoutInterval = time;
     // 设置返回格式
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:dict success:^(NSURLSessionDataTask *operation, id responseObject)
+    [manager POST:url parameters:dict progress:nil success:^(NSURLSessionDataTask *operation, id responseObject)
      {
          if (success)
          {
@@ -152,7 +152,7 @@
          [formData appendPartWithFileData:uploadData name:@"file"
                                 fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
         
-    } success:^(NSURLSessionDataTask *operation, id responseObject) {
+    } progress:nil success:^(NSURLSessionDataTask *operation, id responseObject) {
         if (success) {
             success(responseObject);
         }
@@ -180,7 +180,7 @@
         //        NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"头像1.png" withExtension:nil];
         
         [formData appendPartWithFileURL:fileURL name:@"uploadFile" error:NULL];
-    } success:^(NSURLSessionDataTask *operation, id responseObject) {
+    } progress:nil success:^(NSURLSessionDataTask *operation, id responseObject) {
         //        NSString *result = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         //
         //        NSLog(@"完成 %@", result);
@@ -212,7 +212,7 @@
         //        NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"头像1.png" withExtension:nil];
         
         [formData appendPartWithFileURL:fileURL name:@"uploadFile" error:NULL];
-    } success:^(NSURLSessionDataTask *operation, id responseObject) {
+    } progress:nil success:^(NSURLSessionDataTask *operation, id responseObject) {
         //        NSString *result = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         //
         //        NSLog(@"完成 %@", result);

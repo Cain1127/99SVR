@@ -82,4 +82,36 @@
     }
 }
 
+- (void)setRowDatas:(NSArray *)datas isNew:(int)nInfo
+{
+    _rowDatas = datas;
+    for (int i=0; i<2; i++)
+    {
+        VideoCellView *cellView = (VideoCellView *)[self.contentView viewWithTag:i + kStartTag];
+        if (i > datas.count - 1)
+        {
+            cellView.hidden = YES;
+        }
+        else
+        {
+            cellView.hidden = NO;
+            if(!datas && datas.count<i)
+            {
+                break;
+            }
+            RoomHttp *room = datas[i];
+            [cellView setNewRoom:room];
+            __weak RoomHttp *__room = room;
+            __weak VideoCell *__self = self;
+            [cellView clickWithBlock:^(UIGestureRecognizer *gesture)
+             {
+                 if (__self.itemOnClick)
+                 {
+                     __self.itemOnClick(__room);
+                 }
+             }];
+        }
+    }
+}
+
 @end

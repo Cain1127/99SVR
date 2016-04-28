@@ -9,9 +9,12 @@
 #import "RoomInfo.h"
 #import "RoomUser.h"
 
+
+
 @implementation RoomInfo
 
-- (void)setRoomInfo:(JoinRoomResp *)pResp{
+- (void)setRoomInfo:(JoinRoomResp *)pResp
+{
     _m_nRoomId = pResp->vcbid();
     _m_nVipLevel =0;
     _m_nGroupId = pResp->groupid();
@@ -28,58 +31,31 @@
     memset(cRoomName, 0, NAMELEN);
     sprintf(cRoomName,"%s",pResp->cname().c_str());
     _strRoomName = [NSString stringWithCString:cRoomName encoding:GBK_ENCODING];
-    
-//    _strPwd = [NSString stringWithCString:pResp->cpwd() encoding:GBK_ENCODING];
-    
-    _m_bCollectRoom=pResp->bColletRoom();
-    
-//    memset(cCarName, 0, NAMELEN);
-//    sprintf(cCarName, "%s",pResp->carname);
-//    _ncarid = pResp->ncarid;
 }
 
-- (id)initWithRoom:(CMDJoinRoomResp_t *)pResp
+- (id)initWithRoom:(JoinRoomResp *)pResp
 {
     self = [super init];
-    //清除房间信息
-    _m_nRoomId = pResp->vcbid;
+    _m_nRoomId = pResp->vcbid();
     _m_nVipLevel =0;
-    _m_nGroupId = pResp->groupid;
-    _m_nAttributeId =pResp->roomtype;
-    _m_nSeats=pResp->seats;
+    _m_nGroupId = pResp->groupid();
+    _m_nAttributeId =pResp->roomtype();
+    _m_nSeats=pResp->seats();
     _m_nCurUserCount =0;
-    _m_nCreatorId =pResp->creatorid;
-    _m_nOp[0] = pResp->op1id;
-    _m_nOp[1] = pResp->op2id;
-    _m_nOp[2] = pResp->op3id;
-    _m_nOp[3] = pResp->op4id;
-    _m_nOpState =pResp->runstate;
-    
+    _m_nCreatorId =pResp->creatorid();
+    _m_nOp[0] = pResp->op1id();
+    _m_nOp[1] = pResp->op2id();
+    _m_nOp[2] = pResp->op3id();
+    _m_nOp[3] = pResp->op4id();
+    _m_nOpState =pResp->runstate();
     memset(cRoomName, 0, NAMELEN);
-    
-    sprintf(cRoomName,"%s",pResp->cname);
-    _strRoomName = [NSString stringWithCString:pResp->cname encoding:GBK_ENCODING];
-    
-    _strPwd = [NSString stringWithCString:pResp->cpwd encoding:GBK_ENCODING];
-    
-    _m_bCollectRoom=pResp->bIsCollectRoom;
+    sprintf(cRoomName,"%s",pResp->cname().c_str());
+    _strRoomName = [NSString stringWithCString:pResp->cname().c_str() encoding:GBK_ENCODING];
+    _strPwd = [NSString stringWithCString:pResp->cpwd().c_str() encoding:GBK_ENCODING];
     memset(cCarName, 0, NAMELEN);
-    sprintf(cCarName, "%s",pResp->carname);
-    _ncarid = pResp->ncarid;
-    
-//    int nSize = sizeof(SiegeInfo_t);
-//    _m_tSiegeInfo = malloc(nSize);
-//    memcpy(_m_tSiegeInfo,&pResp->siege_info,sizeof(SiegeInfo_t));
-    
-    //关闭房间等待窗口
-    //重置自己的全局对象房间状态
-    
+    sprintf(cCarName, "%s",pResp->carname().c_str());
+    _ncarid = pResp->ncarid();
     return self;
-}
-
-- (BOOL)IsRoomFangzhu:(int) userid   //是不是房主
-{
-    return _m_nCreatorId == userid;
 }
 
 - (BOOL)IsRoomFuFangzhu:(int)userid  //是不是副房主
@@ -88,9 +64,16 @@
     for(int i=0;i<4;i++)
     {
         if(_m_nOp[i] == userid)
-            return YES;
+        {
+           return YES;
+        }
     }
     return NO;
+}
+
+- (BOOL)IsRoomFangzhu:(int) userid   //是不是房主
+{
+    return _m_nCreatorId == userid;
 }
 
 - (int)getUserCount
@@ -162,12 +145,6 @@
     {
         return nil;
     }
-}
-
-- (SiegeInfo_t *)siegeInfo
-{
-//    return _m_tSiegeInfo;
-    return nil;
 }
 
 - (char *)getRoomName

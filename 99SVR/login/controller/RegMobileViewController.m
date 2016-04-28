@@ -7,20 +7,15 @@
 //
 
 #import "RegMobileViewController.h"
-#import "IdeaDetailRePly.h"
-#import "TextTodayVPViewController.h"
-#import "NewDetailsViewController.h"
 #import "RoomViewController.h"
 #import "ZLLogonServerSing.h"
 #import "ProgressHUD.h"
 #import "Toast+UIView.h"
 #import "NNSVRViewController.h"
-#import "LSTcpSocket.h"
 #import "BaseService.h"
 #import "QCheckBox.h"
 #import "DecodeJson.h"
 #import "RegNameViewController.h"
-#import "TextHomeViewController.h"
 
 @interface RegMobileViewController ()<UITextFieldDelegate>
 {
@@ -233,24 +228,6 @@
     NSArray *aryIndex = self.navigationController.viewControllers;
     for (UIViewController *control in aryIndex) {
         if ([control isKindOfClass:[RoomViewController class]]) {
-            [self.navigationController popToViewController:control animated:YES];
-            return ;
-        }
-    }
-    for (UIViewController *control in aryIndex) {
-        if ([control isKindOfClass:[TextTodayVPViewController class]]) {
-            [self.navigationController popToViewController:control animated:YES];
-            return ;
-        }
-    }
-    for (UIViewController *control in aryIndex) {
-        if ([control isKindOfClass:[NewDetailsViewController class]]) {
-            [self.navigationController popToViewController:control animated:YES];
-            return ;
-        }
-    }
-    for (UIViewController *control in aryIndex) {
-        if ([control isKindOfClass:[TextHomeViewController class]]) {
             [self.navigationController popToViewController:control animated:YES];
             return ;
         }

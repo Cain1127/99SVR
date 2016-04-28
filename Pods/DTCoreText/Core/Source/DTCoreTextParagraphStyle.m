@@ -347,14 +347,14 @@
 	// Spacing at the bottom
 	if (_paragraphSpacing!=0.0f)
 	{
-		NSNumber *number = DTNSNumberFromCGFloat(_paragraphSpacing);
+//		NSNumber *number = DTNSNumberFromCGFloat(_paragraphSpacing);
 //		[retString appendFormat:@"margin-bottom:%@px;", number];
 	}
 
 	// Spacing at the top
 	if (_paragraphSpacingBefore!=0.0f)
 	{
-		NSNumber *number = DTNSNumberFromCGFloat(_paragraphSpacingBefore);
+//		NSNumber *number = DTNSNumberFromCGFloat(_paragraphSpacingBefore);
 //		[retString appendFormat:@"margin-top:%@px;", number];
 //		[retString appendFormat:@"margin-top:%@px;", @(1)];
 	}

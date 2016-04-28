@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "Socket.h"
 
 unsigned long get_inet_addr(const char* host)
@@ -133,7 +133,7 @@ int Socket::connect(const char* host, short port, int connect_timeout)
 
 	set_no_sigpipe(socket);
 	set_block(socket, true);
-	set_timeout(socket, 3, 3);
+	set_timeout(socket, recv_timeout, 3);
 
 	//get_address();
 
@@ -142,12 +142,12 @@ int Socket::connect(const char* host, short port, int connect_timeout)
 
 int Socket::send(const char *buf, int len)
 {
-	return ::send(socket, buf, len, SOCKET_SEND_FLAG);
+	return (int)::send(socket, buf, len, SOCKET_SEND_FLAG);
 }
 
 int Socket::recv(char* buf, int len)
 {
-	return ::recv(socket, buf, len, 0);
+	return (int)::recv(socket, buf, len, 0);
 }
 
 int Socket::close_(void)
@@ -190,7 +190,10 @@ int Socket::get_address()
 	return 0;
 }
 
-
+void Socket::set_recv_timeout(int timeout)
+{
+	recv_timeout = timeout;
+}
 
 int Socket::get_error()
 {
@@ -232,7 +235,7 @@ int Socket::cleanup(void)
 }
 
 Socket::Socket(void) :
-		socket(SOCKET_INVALID)
+		socket(SOCKET_INVALID), recv_timeout(3)
 {
 }
 

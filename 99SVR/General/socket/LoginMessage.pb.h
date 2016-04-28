@@ -1983,68 +1983,6 @@ public:
 };
 
 
-class QueryUserMoreInfo
-{
-
-private:
-
-	uint32	_srcid;
-	uint32	_vcbid;
-	uint32	_toid;
-	int32	_errorid;
-
-
-public:
-
-	 inline uint32 srcid() { return _srcid; } const 
-
-	 inline void set_srcid(const uint32 value) { _srcid = value; }
-
-	 inline uint32 vcbid() { return _vcbid; } const 
-
-	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
-
-	 inline uint32 toid() { return _toid; } const 
-
-	 inline void set_toid(const uint32 value) { _toid = value; }
-
-	 inline int32 errorid() { return _errorid; } const 
-
-	 inline void set_errorid(const int32 value) { _errorid = value; }
-
-
-	int ByteSize() { return sizeof(protocol::tag_CMDQueryUserMoreInfo); }
-
-	void SerializeToArray(void* data, int size)
-	{
-		protocol::tag_CMDQueryUserMoreInfo* cmd = (protocol::tag_CMDQueryUserMoreInfo*) data;
-		cmd->srcid = _srcid;
-		cmd->vcbid = _vcbid;
-		cmd->toid = _toid;
-		cmd->errorid = _errorid;
-	}
-
-	void ParseFromArray(void* data, int size)
-	{
-		protocol::tag_CMDQueryUserMoreInfo* cmd = (protocol::tag_CMDQueryUserMoreInfo*) data;
-		_srcid = cmd->srcid;
-		_vcbid = cmd->vcbid;
-		_toid = cmd->toid;
-		_errorid = cmd->errorid;
-	}
-
-	void Log()
-	{
-		LOG("--------Receive message: QueryUserMoreInfo---------");
-		LOG("srcid = %d", _srcid);
-		LOG("vcbid = %d", _vcbid);
-		LOG("toid = %d", _toid);
-		LOG("errorid = %d", _errorid);
-	}
-
-};
-
-
 class QuanxianId2Item
 {
 
@@ -4513,7 +4451,6 @@ public:
 };
 
 
-
 class HitGoldEggClientNoty
 {
 
@@ -4566,6 +4503,169 @@ public:
 	}
 
 };
+
+
+class BuyPrivateVipReq
+{
+
+private:
+
+	uint32	_userid;
+	uint32	_teacherid;
+	uint32	_viptype;
+
+
+public:
+
+	 inline uint32 userid() { return _userid; } const 
+
+	 inline void set_userid(const uint32 value) { _userid = value; }
+
+	 inline uint32 teacherid() { return _teacherid; } const 
+
+	 inline void set_teacherid(const uint32 value) { _teacherid = value; }
+
+	 inline uint32 viptype() { return _viptype; } const 
+
+	 inline void set_viptype(const uint32 value) { _viptype = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDBuyPrivateVipReq); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDBuyPrivateVipReq* cmd = (protocol::tag_CMDBuyPrivateVipReq*) data;
+		cmd->userid = _userid;
+		cmd->teacherid = _teacherid;
+		cmd->viptype = _viptype;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDBuyPrivateVipReq* cmd = (protocol::tag_CMDBuyPrivateVipReq*) data;
+		_userid = cmd->userid;
+		_teacherid = cmd->teacherid;
+		_viptype = cmd->viptype;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: BuyPrivateVipReq---------");
+		LOG("userid = %d", _userid);
+		LOG("teacherid = %d", _teacherid);
+		LOG("viptype = %d", _viptype);
+	}
+
+};
+
+
+class BuyPrivateVipResp
+{
+
+private:
+
+	uint32	_userid;
+	uint32	_teacherid;
+	uint32	_viptype;
+	uint64	_nk;
+
+
+public:
+
+	 inline uint32 userid() { return _userid; } const 
+
+	 inline void set_userid(const uint32 value) { _userid = value; }
+
+	 inline uint32 teacherid() { return _teacherid; } const 
+
+	 inline void set_teacherid(const uint32 value) { _teacherid = value; }
+
+	 inline uint32 viptype() { return _viptype; } const 
+
+	 inline void set_viptype(const uint32 value) { _viptype = value; }
+
+	 inline uint64 nk() { return _nk; } const 
+
+	 inline void set_nk(const uint64 value) { _nk = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDBuyPrivateVipResp); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDBuyPrivateVipResp* cmd = (protocol::tag_CMDBuyPrivateVipResp*) data;
+		cmd->userid = _userid;
+		cmd->teacherid = _teacherid;
+		cmd->viptype = _viptype;
+		cmd->nk = _nk;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDBuyPrivateVipResp* cmd = (protocol::tag_CMDBuyPrivateVipResp*) data;
+		_userid = cmd->userid;
+		_teacherid = cmd->teacherid;
+		_viptype = cmd->viptype;
+		_nk = cmd->nk;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: BuyPrivateVipResp---------");
+		LOG("userid = %d", _userid);
+		LOG("teacherid = %d", _teacherid);
+		LOG("viptype = %d", _viptype);
+		LOG("nk = %lld", _nk);
+	}
+
+};
+
+
+class EmailNewMsgNoty
+{
+
+private:
+
+	uint32	_bemailtype;
+	uint32	_messageid;
+
+
+public:
+
+	 inline uint32 bemailtype() { return _bemailtype; } const 
+
+	 inline void set_bemailtype(const uint32 value) { _bemailtype = value; }
+
+	 inline uint32 messageid() { return _messageid; } const 
+
+	 inline void set_messageid(const uint32 value) { _messageid = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDEmailNewMsgNoty); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDEmailNewMsgNoty* cmd = (protocol::tag_CMDEmailNewMsgNoty*) data;
+		cmd->bEmailType = _bemailtype;
+		cmd->messageid = _messageid;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDEmailNewMsgNoty* cmd = (protocol::tag_CMDEmailNewMsgNoty*) data;
+		_bemailtype = cmd->bEmailType;
+		_messageid = cmd->messageid;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: EmailNewMsgNoty---------");
+		LOG("bemailtype = %d", _bemailtype);
+		LOG("messageid = %d", _messageid);
+	}
+
+};
+
 
 
 

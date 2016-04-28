@@ -21,6 +21,7 @@ public:
 	virtual void OnBayWindow(BayWindow& info) = 0;
 	virtual void OnRoomGroupChanged() = 0;
 	virtual void OnRoomTeacherOnMicResp(RoomTeacherOnMicResp& info) = 0;
+	virtual void OnEmailNewMsgNoty(EmailNewMsgNoty& info) = 0;
 };
 
 #endif

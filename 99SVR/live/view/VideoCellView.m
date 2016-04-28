@@ -81,6 +81,24 @@
     _lookCountLabel.frame = Rect(_lookCountBtn.x+_lookCountBtn.width+1, _nameLabel.y, 33, 15);
 }
 
+- (void)setNewRoom:(RoomHttp *)room
+{
+    _room = room;
+    NSString *strUrl=nil;
+    if([room.croompic length]==0)
+    {
+        strUrl = @"";
+    }
+    else
+    {
+        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.teamicon];
+    }
+    [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
+    _nameLabel.text = room.teamname;
+    _lookCountLabel.text = room.locked;
+    [_roomIdLabel setText:room.roomid];
+}
+
 - (void)setRoom:(RoomHttp *)room
 {
     _room = room;

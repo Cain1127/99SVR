@@ -8,6 +8,7 @@
 
 #import "ReplyNullInfoCell.h"
 #import "ViewNullFactory.h"
+
 @implementation ReplyNullInfoCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier

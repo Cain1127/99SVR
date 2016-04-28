@@ -16,7 +16,6 @@
 #import "GiftModel.h"
 #import <AVFoundation/AVAudioSession.h>
 #import "NSJSONSerialization+RemovingNulls.h"
-#import "LSTcpSocket.h"
 #import "WeiboSDK.h"
 #import "UserInfo.h"
 #import "DecodeJson.h"

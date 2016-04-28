@@ -23,5 +23,6 @@
 @property (nonatomic,assign) id<VideoViewDelegate> delegate;
 
 @property (nonatomic,strong) RoomHttp *room;
+- (void)setNewRoom:(RoomHttp *)room;
 
 @end

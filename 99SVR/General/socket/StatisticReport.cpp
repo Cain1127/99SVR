@@ -21,7 +21,6 @@ ThreadVoid report_runnable(void* vparam)
 	RequestParamter* param = (RequestParamter*)vparam;
 
 	Http http(HTTP_POST);
-	http.SetRecvBufSize(1024);
 	http.request(REPORT_API, param);
 
 	delete param;
@@ -35,7 +34,7 @@ void report_asyn(RequestParamter* param)
 }
 
 
-void ReportLoginFailed(int login_type, rstring login_id, rstring server_ip, rstring client_ip)
+void ReportLoginFailed(int login_type, rstring login_id, rstring server_ip)
 {
 	RequestParamter& param = get_request_param();
 	param["ReportItem"] = "Login";
@@ -45,27 +44,27 @@ void ReportLoginFailed(int login_type, rstring login_id, rstring server_ip, rstr
 	param["UserName"] = login_id;
 	param["MobilePhone"] = "";
 	param["ServerIP"] = server_ip;
-	param["ClientIP"] = client_ip;
+	param["ClientIP"] = "";
 	param["Error"] = "";
 
 	report_asyn(&param);
 }
 
-void ReportRegisterFailed(int reg_type, rstring server_ip, rstring client_ip)
+void ReportRegisterFailed(int reg_type, rstring server_ip)
 {
 	RequestParamter& param = get_request_param();
 	param["ReportItem"] = "Register";
 	param["ClientType"] = get_client_type();
 	param["RegType"] = int2string(reg_type);
 	param["ServerIP"] = server_ip;
-	param["ClientIP"] = client_ip;
+	param["ClientIP"] = "";
 	param["Error"] = "";
 
 	report_asyn(&param);
 }
 
-//è·å–å¤§å…æˆ¿é—´åˆ—è¡¨å¤±è´¥
-void ReportGetRoomListFailed(int userid, int room_type, rstring server_ip, rstring client_ip)
+//»ñÈ¡´óÌü·¿¼äÁĞ±íÊ§°Ü
+void ReportGetRoomListFailed(int userid, int room_type, rstring server_ip)
 {
 	RequestParamter& param = get_request_param();
 	param["ReportItem"] = "GetRoomList";
@@ -73,14 +72,14 @@ void ReportGetRoomListFailed(int userid, int room_type, rstring server_ip, rstri
 	param["UserId"] = int2string(userid);
 	param["RoomType"] = int2string(room_type);
 	param["ServerIP"] = server_ip;
-	param["ClientIP"] = client_ip;
+	param["ClientIP"] = "";
 	param["Error"] = "";
 
 	report_asyn(&param);
 }
 
-//è¿›æˆ¿é—´å¤±è´¥
-void ReportJoinRoomFailed(int userid, int room_type, int roomid, rstring server_ip, rstring client_ip, rstring err)
+//½ø·¿¼äÊ§°Ü
+void ReportJoinRoomFailed(int userid, int room_type, int roomid, rstring server_ip, rstring err)
 {
 	RequestParamter& param = get_request_param();
 	param["ReportItem"] = "IntoRoom";
@@ -89,14 +88,14 @@ void ReportJoinRoomFailed(int userid, int room_type, int roomid, rstring server_
 	param["RoomType"] = int2string(room_type);
 	param["RoomId"] = int2string(roomid);
 	param["ServerIP"] = server_ip;
-	param["ClientIP"] = client_ip;
+	param["ClientIP"] = "";
 	param["Error"] = err;
 
 	report_asyn(&param);
 }
 
-//è·å–æˆ¿é—´æˆå‘˜åˆ—è¡¨å¤±è´¥
-void ReportGetRoomUserListFailed(int userid, int room_type, int roomid, rstring server_ip, rstring client_ip, rstring err)
+//»ñÈ¡·¿¼ä³ÉÔ±ÁĞ±íÊ§°Ü
+void ReportGetRoomUserListFailed(int userid, int room_type, int roomid, rstring server_ip, rstring err)
 {
 	RequestParamter& param = get_request_param();
 	param["ReportItem"] = "GetRoomUserList";
@@ -105,14 +104,14 @@ void ReportGetRoomUserListFailed(int userid, int room_type, int roomid, rstring 
 	param["RoomType"] = int2string(room_type);
 	param["RoomId"] = int2string(roomid);
 	param["ServerIP"] = server_ip;
-	param["ClientIP"] = client_ip;
+	param["ClientIP"] = "";
 	param["Error"] = err;
 
 	report_asyn(&param);
 }
 
-//ç›´æ’­è´¨é‡æ•°æ®
-void ReportVideoWarn(int userid, int roomid, int warn_type, rstring server_ip, rstring client_ip)
+//Ö±²¥ÖÊÁ¿Êı¾İ
+void ReportVideoWarn(int userid, int roomid, int warn_type, rstring server_ip)
 {
 	RequestParamter& param = get_request_param();
 	param["ReportItem"] = "DirectSeedingQuality";
@@ -121,14 +120,14 @@ void ReportVideoWarn(int userid, int roomid, int warn_type, rstring server_ip, r
 	param["RoomId"] = int2string(roomid);
 	param["ErrorType"] = int2string(warn_type);
 	param["ServerIP"] = server_ip;
-	param["ClientIP"] = client_ip;
+	param["ClientIP"] = "";
 	param["Error"] = "";
 
 	report_asyn(&param);
 }
 
-//å´©æºƒæ•°æ®
-void ReportCrash(rstring os, rstring version_name, rstring client_ip, rstring err)
+//±ÀÀ£Êı¾İ
+void ReportCrash(rstring os, rstring version_name, rstring err)
 {
 	RequestParamter& param = get_request_param();
 	param["ReportItem"] = "CrashData";
@@ -136,22 +135,22 @@ void ReportCrash(rstring os, rstring version_name, rstring client_ip, rstring er
 	param["Os"] = os;
 	param["VersionNumber"] = "";
 	param["VersionName"] = version_name;
-	param["ClientIP"] = client_ip;
+	param["ClientIP"] = "";
 	param["Error"] = err;
 
 	report_asyn(&param);
 }
 
 
-//æ‰“å¼€å¤§å…é¦–é¡µå¤±è´¥
-void ReportOpenHomepageFailed(int userid, rstring server_ip, rstring client_ip)
+//´ò¿ª´óÌüÊ×Ò³Ê§°Ü
+void ReportOpenHomepageFailed(int userid, rstring server_ip)
 {
 	RequestParamter& param = get_request_param();
 	param["ReportItem"] = "OpenFrontPageHall";
 	param["ClientType"] = get_client_type();
 	param["UserId"] = int2string(userid);
 	param["ServerIP"] = server_ip;
-	param["ClientIP"] = client_ip;
+	param["ClientIP"] = "";
 	param["Error"] = "";
 
 	report_asyn(&param);

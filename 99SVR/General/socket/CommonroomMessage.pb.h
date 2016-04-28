@@ -1,5 +1,7 @@
-#ifndef _TEXTROOM_MESSAGE_H_
-#define _TEXTROOM_MESSAGE_H_
+#ifndef __COMMONROOM_MESSAGE_H__
+#define __COMMONROOM_MESSAGE_H__
+
+
 
 #include <string>
 #include "Log.h"
@@ -19,9 +21,11 @@ private:
 public:
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 roomid() { return _roomid; } const 
+
 	 inline void set_roomid(const uint32 value) { _roomid = value; }
 
 
@@ -51,7 +55,107 @@ public:
 };
 
 
-class JoinRoomReq2
+class PreJoinRoomReq
+{
+
+private:
+
+	uint32	_userid;
+	uint32	_vcbid;
+
+
+public:
+
+	 inline uint32 userid() { return _userid; } const 
+
+	 inline void set_userid(const uint32 value) { _userid = value; }
+
+	 inline uint32 vcbid() { return _vcbid; } const 
+
+	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDPreJoinRoomReq); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDPreJoinRoomReq* cmd = (protocol::tag_CMDPreJoinRoomReq*) data;
+		cmd->userid = _userid;
+		cmd->vcbid = _vcbid;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDPreJoinRoomReq* cmd = (protocol::tag_CMDPreJoinRoomReq*) data;
+		_userid = cmd->userid;
+		_vcbid = cmd->vcbid;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: PreJoinRoomReq---------");
+		LOG("userid = %d", _userid);
+		LOG("vcbid = %d", _vcbid);
+	}
+
+};
+
+
+class PreJoinRoomResp
+{
+
+private:
+
+	uint32	_userid;
+	uint32	_vcbid;
+	uint32	_result;
+
+
+public:
+
+	 inline uint32 userid() { return _userid; } const 
+
+	 inline void set_userid(const uint32 value) { _userid = value; }
+
+	 inline uint32 vcbid() { return _vcbid; } const 
+
+	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
+
+	 inline uint32 result() { return _result; } const 
+
+	 inline void set_result(const uint32 value) { _result = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDPreJoinRoomResp); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDPreJoinRoomResp* cmd = (protocol::tag_CMDPreJoinRoomResp*) data;
+		cmd->userid = _userid;
+		cmd->vcbid = _vcbid;
+		cmd->result = _result;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDPreJoinRoomResp* cmd = (protocol::tag_CMDPreJoinRoomResp*) data;
+		_userid = cmd->userid;
+		_vcbid = cmd->vcbid;
+		_result = cmd->result;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: PreJoinRoomResp---------");
+		LOG("userid = %d", _userid);
+		LOG("vcbid = %d", _vcbid);
+		LOG("result = %d", _result);
+	}
+
+};
+
+
+class JoinRoomReq
 {
 
 private:
@@ -75,53 +179,67 @@ private:
 public:
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 devtype() { return _devtype; } const 
+
 	 inline void set_devtype(const uint32 value) { _devtype = value; }
 
 	 inline uint32 time() { return _time; } const 
+
 	 inline void set_time(const uint32 value) { _time = value; }
 
 	 inline uint32 crc32() { return _crc32; } const 
+
 	 inline void set_crc32(const uint32 value) { _crc32 = value; }
 
 	 inline uint32 coremessagever() { return _coremessagever; } const 
+
 	 inline void set_coremessagever(const uint32 value) { _coremessagever = value; }
 
 	 inline string& cuserpwd() { return _cuserpwd; } const 
+
 	 inline void set_cuserpwd(const string& value) { _cuserpwd = value; }
 
 	 inline string& croompwd() { return _croompwd; } const 
+
 	 inline void set_croompwd(const string& value) { _croompwd = value; }
 
 	 inline string& cserial() { return _cserial; } const 
+
 	 inline void set_cserial(const string& value) { _cserial = value; }
 
 	 inline string& cmacaddr() { return _cmacaddr; } const 
+
 	 inline void set_cmacaddr(const string& value) { _cmacaddr = value; }
 
 	 inline string& cipaddr() { return _cipaddr; } const 
+
 	 inline void set_cipaddr(const string& value) { _cipaddr = value; }
 
 	 inline uint32 bloginsource() { return _bloginsource; } const 
+
 	 inline void set_bloginsource(const uint32 value) { _bloginsource = value; }
 
 	 inline uint32 reserve1() { return _reserve1; } const 
+
 	 inline void set_reserve1(const uint32 value) { _reserve1 = value; }
 
 	 inline uint32 reserve2() { return _reserve2; } const 
+
 	 inline void set_reserve2(const uint32 value) { _reserve2 = value; }
 
 
-	int ByteSize() { return sizeof(protocol::tag_CMDJoinRoomReq2); }
+	int ByteSize() { return sizeof(protocol::tag_CMDJoinRoomReq); }
 
 	void SerializeToArray(void* data, int size)
 	{
-		protocol::tag_CMDJoinRoomReq2* cmd = (protocol::tag_CMDJoinRoomReq2*) data;
+		protocol::tag_CMDJoinRoomReq* cmd = (protocol::tag_CMDJoinRoomReq*) data;
 		cmd->userid = _userid;
 		cmd->vcbid = _vcbid;
 		cmd->devtype = _devtype;
@@ -140,7 +258,7 @@ public:
 
 	void ParseFromArray(void* data, int size)
 	{
-		protocol::tag_CMDJoinRoomReq2* cmd = (protocol::tag_CMDJoinRoomReq2*) data;
+		protocol::tag_CMDJoinRoomReq* cmd = (protocol::tag_CMDJoinRoomReq*) data;
 		_userid = cmd->userid;
 		_vcbid = cmd->vcbid;
 		_devtype = cmd->devtype;
@@ -159,7 +277,7 @@ public:
 
 	void Log()
 	{
-		LOG("--------Receive message: JoinRoomReq2---------");
+		LOG("--------Receive message: JoinRoomReq---------");
 		LOG("userid = %d", _userid);
 		LOG("vcbid = %d", _vcbid);
 		LOG("devtype = %d", _devtype);
@@ -187,6 +305,7 @@ private:
 	uint32	_userid;
 	uint32	_vcbid;
 	uint32	_roomtype;
+	uint32	_flags;
 	uint32	_seats;
 	uint32	_groupid;
 	uint32	_runstate;
@@ -205,74 +324,96 @@ private:
 	string	_cname;
 	string	_cmediaaddr;
 	string	_cpwd;
-    byte _collotRoom;
+
 
 public:
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 roomtype() { return _roomtype; } const 
+
 	 inline void set_roomtype(const uint32 value) { _roomtype = value; }
 
+	 inline uint32 flags() { return _flags; } const 
+
+	 inline void set_flags(const uint32 value) { _flags = value; }
+
 	 inline uint32 seats() { return _seats; } const 
+
 	 inline void set_seats(const uint32 value) { _seats = value; }
 
 	 inline uint32 groupid() { return _groupid; } const 
+
 	 inline void set_groupid(const uint32 value) { _groupid = value; }
 
 	 inline uint32 runstate() { return _runstate; } const 
+
 	 inline void set_runstate(const uint32 value) { _runstate = value; }
 
 	 inline uint32 creatorid() { return _creatorid; } const 
+
 	 inline void set_creatorid(const uint32 value) { _creatorid = value; }
 
 	 inline uint32 op1id() { return _op1id; } const 
+
 	 inline void set_op1id(const uint32 value) { _op1id = value; }
 
 	 inline uint32 op2id() { return _op2id; } const 
+
 	 inline void set_op2id(const uint32 value) { _op2id = value; }
 
 	 inline uint32 op3id() { return _op3id; } const 
+
 	 inline void set_op3id(const uint32 value) { _op3id = value; }
 
 	 inline uint32 op4id() { return _op4id; } const 
+
 	 inline void set_op4id(const uint32 value) { _op4id = value; }
 
 	 inline uint32 inroomstate() { return _inroomstate; } const 
+
 	 inline void set_inroomstate(const uint32 value) { _inroomstate = value; }
 
 	 inline int64 nk() { return _nk; } const 
+
 	 inline void set_nk(const int64 value) { _nk = value; }
 
 	 inline int64 nb() { return _nb; } const 
+
 	 inline void set_nb(const int64 value) { _nb = value; }
 
 	 inline int64 nlotterypool() { return _nlotterypool; } const 
+
 	 inline void set_nlotterypool(const int64 value) { _nlotterypool = value; }
 
 	 inline int32 nchestnum() { return _nchestnum; } const 
+
 	 inline void set_nchestnum(const int32 value) { _nchestnum = value; }
 
 	 inline int32 ncarid() { return _ncarid; } const 
+
 	 inline void set_ncarid(const int32 value) { _ncarid = value; }
-    
-     inline byte bColletRoom() { return _collotRoom; } const
-     inline void set_bColletRoom(byte value) { _collotRoom = value; }
 
 	 inline string& carname() { return _carname; } const 
+
 	 inline void set_carname(const string& value) { _carname = value; }
 
 	 inline string& cname() { return _cname; } const 
+
 	 inline void set_cname(const string& value) { _cname = value; }
 
 	 inline string& cmediaaddr() { return _cmediaaddr; } const 
+
 	 inline void set_cmediaaddr(const string& value) { _cmediaaddr = value; }
 
 	 inline string& cpwd() { return _cpwd; } const 
+
 	 inline void set_cpwd(const string& value) { _cpwd = value; }
 
 
@@ -284,6 +425,7 @@ public:
 		cmd->userid = _userid;
 		cmd->vcbid = _vcbid;
 		cmd->roomtype = _roomtype;
+		cmd->flags = _flags;
 		cmd->seats = _seats;
 		cmd->groupid = _groupid;
 		cmd->runstate = _runstate;
@@ -298,7 +440,6 @@ public:
 		cmd->nlotterypool = _nlotterypool;
 		cmd->nchestnum = _nchestnum;
 		cmd->ncarid = _ncarid;
-        cmd->bIsCollectRoom = _collotRoom;
 		strcpy(cmd->carname, _carname.c_str());
 		strcpy(cmd->cname, _cname.c_str());
 		strcpy(cmd->cmediaaddr, _cmediaaddr.c_str());
@@ -311,6 +452,7 @@ public:
 		_userid = cmd->userid;
 		_vcbid = cmd->vcbid;
 		_roomtype = cmd->roomtype;
+		_flags = cmd->flags;
 		_seats = cmd->seats;
 		_groupid = cmd->groupid;
 		_runstate = cmd->runstate;
@@ -329,7 +471,6 @@ public:
 		_cname = cmd->cname;
 		_cmediaaddr = cmd->cmediaaddr;
 		_cpwd = cmd->cpwd;
-        _collotRoom = cmd->bIsCollectRoom;
 	}
 
 	void Log()
@@ -338,6 +479,7 @@ public:
 		LOG("userid = %d", _userid);
 		LOG("vcbid = %d", _vcbid);
 		LOG("roomtype = %d", _roomtype);
+		LOG("flags = %d", _flags);
 		LOG("seats = %d", _seats);
 		LOG("groupid = %d", _groupid);
 		LOG("runstate = %d", _runstate);
@@ -376,18 +518,23 @@ private:
 public:
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 errid() { return _errid; } const 
+
 	 inline void set_errid(const uint32 value) { _errid = value; }
 
 	 inline uint32 data1() { return _data1; } const 
+
 	 inline void set_data1(const uint32 value) { _data1 = value; }
 
 	 inline uint32 data2() { return _data2; } const 
+
 	 inline void set_data2(const uint32 value) { _data2 = value; }
 
 
@@ -434,12 +581,15 @@ private:
 	uint32	_userid;
 	uint32	_vcbid;
 
+
 public:
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 
@@ -484,18 +634,23 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 srcid() { return _srcid; } const 
+
 	 inline void set_srcid(const uint32 value) { _srcid = value; }
 
 	 inline uint32 toid() { return _toid; } const 
+
 	 inline void set_toid(const uint32 value) { _toid = value; }
 
 	 inline int32 resonid() { return _resonid; } const 
+
 	 inline void set_resonid(const int32 value) { _resonid = value; }
 
 	 inline uint32 mins() { return _mins; } const 
+
 	 inline void set_mins(const uint32 value) { _mins = value; }
 
 
@@ -538,6 +693,7 @@ class RoomUserInfo
 {
 
 private:
+
 	uint32	_userid;
 	uint32	_vcbid;
 	uint32	_viplevel;
@@ -548,6 +704,7 @@ private:
 	uint32	_lastmonthcostlevel;
 	uint32	_thismonthcostlevel;
 	uint32	_thismonthcostgrade;
+	uint32	_flags;
 	uint32	_pubmicindex;
 	uint32	_roomlevel;
 	uint32	_usertype;
@@ -570,99 +727,135 @@ private:
 	string	_useralias;
 	string	_carname;
 
+
 public:
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 viplevel() { return _viplevel; } const 
+
 	 inline void set_viplevel(const uint32 value) { _viplevel = value; }
 
 	 inline uint32 yiyuanlevel() { return _yiyuanlevel; } const 
+
 	 inline void set_yiyuanlevel(const uint32 value) { _yiyuanlevel = value; }
 
 	 inline uint32 shoufulevel() { return _shoufulevel; } const 
+
 	 inline void set_shoufulevel(const uint32 value) { _shoufulevel = value; }
 
 	 inline uint32 zhonglevel() { return _zhonglevel; } const 
+
 	 inline void set_zhonglevel(const uint32 value) { _zhonglevel = value; }
 
 	 inline uint32 caifulevel() { return _caifulevel; } const 
+
 	 inline void set_caifulevel(const uint32 value) { _caifulevel = value; }
 
 	 inline uint32 lastmonthcostlevel() { return _lastmonthcostlevel; } const 
+
 	 inline void set_lastmonthcostlevel(const uint32 value) { _lastmonthcostlevel = value; }
 
 	 inline uint32 thismonthcostlevel() { return _thismonthcostlevel; } const 
+
 	 inline void set_thismonthcostlevel(const uint32 value) { _thismonthcostlevel = value; }
 
 	 inline uint32 thismonthcostgrade() { return _thismonthcostgrade; } const 
+
 	 inline void set_thismonthcostgrade(const uint32 value) { _thismonthcostgrade = value; }
 
+	 inline uint32 flags() { return _flags; } const 
+
+	 inline void set_flags(const uint32 value) { _flags = value; }
+
 	 inline uint32 pubmicindex() { return _pubmicindex; } const 
+
 	 inline void set_pubmicindex(const uint32 value) { _pubmicindex = value; }
 
 	 inline uint32 roomlevel() { return _roomlevel; } const 
+
 	 inline void set_roomlevel(const uint32 value) { _roomlevel = value; }
 
 	 inline uint32 usertype() { return _usertype; } const 
+
 	 inline void set_usertype(const uint32 value) { _usertype = value; }
 
 	 inline uint32 sealid() { return _sealid; } const 
+
 	 inline void set_sealid(const uint32 value) { _sealid = value; }
 
 	 inline uint32 cometime() { return _cometime; } const 
+
 	 inline void set_cometime(const uint32 value) { _cometime = value; }
 
 	 inline uint32 headicon() { return _headicon; } const 
+
 	 inline void set_headicon(const uint32 value) { _headicon = value; }
 
 	 inline uint32 micgiftid() { return _micgiftid; } const 
+
 	 inline void set_micgiftid(const uint32 value) { _micgiftid = value; }
 
 	 inline uint32 micgiftnum() { return _micgiftnum; } const 
+
 	 inline void set_micgiftnum(const uint32 value) { _micgiftnum = value; }
 
 	 inline uint32 sealexpiretime() { return _sealexpiretime; } const 
+
 	 inline void set_sealexpiretime(const uint32 value) { _sealexpiretime = value; }
 
 	 inline uint32 userstate() { return _userstate; } const 
+
 	 inline void set_userstate(const uint32 value) { _userstate = value; }
 
 	 inline uint32 starflag() { return _starflag; } const 
+
 	 inline void set_starflag(const uint32 value) { _starflag = value; }
 
 	 inline uint32 activityflag() { return _activityflag; } const 
+
 	 inline void set_activityflag(const uint32 value) { _activityflag = value; }
 
 	 inline uint32 flowernum() { return _flowernum; } const 
+
 	 inline void set_flowernum(const uint32 value) { _flowernum = value; }
 
 	 inline uint32 ticket1num() { return _ticket1num; } const 
+
 	 inline void set_ticket1num(const uint32 value) { _ticket1num = value; }
 
 	 inline uint32 ticket2num() { return _ticket2num; } const 
+
 	 inline void set_ticket2num(const uint32 value) { _ticket2num = value; }
 
 	 inline uint32 ticket3num() { return _ticket3num; } const 
+
 	 inline void set_ticket3num(const uint32 value) { _ticket3num = value; }
 
 	 inline int32 bforbidinviteupmic() { return _bforbidinviteupmic; } const 
+
 	 inline void set_bforbidinviteupmic(const int32 value) { _bforbidinviteupmic = value; }
 
 	 inline int32 bforbidchat() { return _bforbidchat; } const 
+
 	 inline void set_bforbidchat(const int32 value) { _bforbidchat = value; }
 
 	 inline int32 ncarid() { return _ncarid; } const 
+
 	 inline void set_ncarid(const int32 value) { _ncarid = value; }
 
 	 inline string& useralias() { return _useralias; } const 
+
 	 inline void set_useralias(const string& value) { _useralias = value; }
 
 	 inline string& carname() { return _carname; } const 
+
 	 inline void set_carname(const string& value) { _carname = value; }
 
 
@@ -681,6 +874,7 @@ public:
 		cmd->lastmonthcostlevel = _lastmonthcostlevel;
 		cmd->thismonthcostlevel = _thismonthcostlevel;
 		cmd->thismonthcostgrade = _thismonthcostgrade;
+		cmd->flags = _flags;
 		cmd->pubmicindex = _pubmicindex;
 		cmd->roomlevel = _roomlevel;
 		cmd->usertype = _usertype;
@@ -717,6 +911,7 @@ public:
 		_lastmonthcostlevel = cmd->lastmonthcostlevel;
 		_thismonthcostlevel = cmd->thismonthcostlevel;
 		_thismonthcostgrade = cmd->thismonthcostgrade;
+		_flags = cmd->flags;
 		_pubmicindex = cmd->pubmicindex;
 		_roomlevel = cmd->roomlevel;
 		_usertype = cmd->usertype;
@@ -753,6 +948,7 @@ public:
 		LOG("lastmonthcostlevel = %d", _lastmonthcostlevel);
 		LOG("thismonthcostlevel = %d", _thismonthcostlevel);
 		LOG("thismonthcostgrade = %d", _thismonthcostgrade);
+		LOG("flags = %d", _flags);
 		LOG("pubmicindex = %d", _pubmicindex);
 		LOG("roomlevel = %d", _roomlevel);
 		LOG("usertype = %d", _usertype);
@@ -795,21 +991,27 @@ private:
 public:
 
 	 inline int32 num() { return _num; } const 
+
 	 inline void set_num(const int32 value) { _num = value; }
 
 	 inline int32 naction() { return _naction; } const 
+
 	 inline void set_naction(const int32 value) { _naction = value; }
 
 	 inline int32 ntype() { return _ntype; } const 
+
 	 inline void set_ntype(const int32 value) { _ntype = value; }
 
 	 inline int32 nrunerid() { return _nrunerid; } const 
+
 	 inline void set_nrunerid(const int32 value) { _nrunerid = value; }
 
 	 inline string& createtime() { return _createtime; } const 
+
 	 inline void set_createtime(const string& value) { _createtime = value; }
 
 	 inline string& keyword() { return _keyword; } const 
+
 	 inline void set_keyword(const string& value) { _keyword = value; }
 
 
@@ -863,9 +1065,11 @@ private:
 public:
 
 	 inline int32 num() { return _num; } const 
+
 	 inline void set_num(const int32 value) { _num = value; }
 
 	 inline string& keywod() { return _keywod; } const 
+
 	 inline void set_keywod(const string& value) { _keywod = value; }
 
 
@@ -907,9 +1111,11 @@ private:
 public:
 
 	 inline int32 errid() { return _errid; } const 
+
 	 inline void set_errid(const int32 value) { _errid = value; }
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 
@@ -960,36 +1166,47 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 runnerid() { return _runnerid; } const 
+
 	 inline void set_runnerid(const uint32 value) { _runnerid = value; }
 
 	 inline uint32 nallowjoinmode() { return _nallowjoinmode; } const 
+
 	 inline void set_nallowjoinmode(const uint32 value) { _nallowjoinmode = value; }
 
 	 inline uint32 ncloseroom() { return _ncloseroom; } const 
+
 	 inline void set_ncloseroom(const uint32 value) { _ncloseroom = value; }
 
 	 inline uint32 nclosepubchat() { return _nclosepubchat; } const 
+
 	 inline void set_nclosepubchat(const uint32 value) { _nclosepubchat = value; }
 
 	 inline uint32 nclosecolorbar() { return _nclosecolorbar; } const 
+
 	 inline void set_nclosecolorbar(const uint32 value) { _nclosecolorbar = value; }
 
 	 inline uint32 nclosefreemic() { return _nclosefreemic; } const 
+
 	 inline void set_nclosefreemic(const uint32 value) { _nclosefreemic = value; }
 
 	 inline uint32 ncloseinoutmsg() { return _ncloseinoutmsg; } const 
+
 	 inline void set_ncloseinoutmsg(const uint32 value) { _ncloseinoutmsg = value; }
 
 	 inline uint32 ncloseprvchat() { return _ncloseprvchat; } const 
+
 	 inline void set_ncloseprvchat(const uint32 value) { _ncloseprvchat = value; }
 
 	 inline string& cname() { return _cname; } const 
+
 	 inline void set_cname(const string& value) { _cname = value; }
 
 	 inline string& cpwd() { return _cpwd; } const 
+
 	 inline void set_cpwd(const string& value) { _cpwd = value; }
 
 
@@ -1058,9 +1275,11 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline int32 errorid() { return _errorid; } const 
+
 	 inline void set_errorid(const int32 value) { _errorid = value; }
 
 
@@ -1113,42 +1332,55 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 groupid() { return _groupid; } const 
+
 	 inline void set_groupid(const uint32 value) { _groupid = value; }
 
 	 inline uint32 level() { return _level; } const 
+
 	 inline void set_level(const uint32 value) { _level = value; }
 
 	 inline uint32 busepwd() { return _busepwd; } const 
+
 	 inline void set_busepwd(const uint32 value) { _busepwd = value; }
 
 	 inline uint32 seats() { return _seats; } const 
+
 	 inline void set_seats(const uint32 value) { _seats = value; }
 
 	 inline uint32 creatorid() { return _creatorid; } const 
+
 	 inline void set_creatorid(const uint32 value) { _creatorid = value; }
 
 	 inline uint32 op1id() { return _op1id; } const 
+
 	 inline void set_op1id(const uint32 value) { _op1id = value; }
 
 	 inline uint32 op2id() { return _op2id; } const 
+
 	 inline void set_op2id(const uint32 value) { _op2id = value; }
 
 	 inline uint32 op3id() { return _op3id; } const 
+
 	 inline void set_op3id(const uint32 value) { _op3id = value; }
 
 	 inline uint32 op4id() { return _op4id; } const 
+
 	 inline void set_op4id(const uint32 value) { _op4id = value; }
 
 	 inline uint32 opstate() { return _opstate; } const 
+
 	 inline void set_opstate(const uint32 value) { _opstate = value; }
 
 	 inline string& cname() { return _cname; } const 
+
 	 inline void set_cname(const string& value) { _cname = value; }
 
 	 inline string& cpwd() { return _cpwd; } const 
+
 	 inline void set_cpwd(const string& value) { _cpwd = value; }
 
 
@@ -1223,9 +1455,11 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 opstate() { return _opstate; } const 
+
 	 inline void set_opstate(const uint32 value) { _opstate = value; }
 
 
@@ -1270,18 +1504,23 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 srcid() { return _srcid; } const 
+
 	 inline void set_srcid(const uint32 value) { _srcid = value; }
 
 	 inline uint32 toid() { return _toid; } const 
+
 	 inline void set_toid(const uint32 value) { _toid = value; }
 
 	 inline uint32 ttime() { return _ttime; } const 
+
 	 inline void set_ttime(const uint32 value) { _ttime = value; }
 
 	 inline uint32 action() { return _action; } const 
+
 	 inline void set_action(const uint32 value) { _action = value; }
 
 
@@ -1332,9 +1571,11 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline int32 errorid() { return _errorid; } const 
+
 	 inline void set_errorid(const int32 value) { _errorid = value; }
 
 
@@ -1383,30 +1624,39 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 runnerid() { return _runnerid; } const 
+
 	 inline void set_runnerid(const uint32 value) { _runnerid = value; }
 
 	 inline uint32 toid() { return _toid; } const 
+
 	 inline void set_toid(const uint32 value) { _toid = value; }
 
 	 inline uint32 viplevel() { return _viplevel; } const 
+
 	 inline void set_viplevel(const uint32 value) { _viplevel = value; }
 
 	 inline uint32 nscopeid() { return _nscopeid; } const 
+
 	 inline void set_nscopeid(const uint32 value) { _nscopeid = value; }
 
 	 inline uint32 ntimeid() { return _ntimeid; } const 
+
 	 inline void set_ntimeid(const uint32 value) { _ntimeid = value; }
 
 	 inline uint32 nreasionid() { return _nreasionid; } const 
+
 	 inline void set_nreasionid(const uint32 value) { _nreasionid = value; }
 
 	 inline string& szip() { return _szip; } const 
+
 	 inline void set_szip(const string& value) { _szip = value; }
 
 	 inline string& szserial() { return _szserial; } const 
+
 	 inline void set_szserial(const string& value) { _szserial = value; }
 
 
@@ -1457,6 +1707,76 @@ public:
 };
 
 
+class UserPriority
+{
+
+private:
+
+	uint32	_vcbid;
+	uint32	_runnerid;
+	uint32	_userid;
+	uint32	_action;
+	uint32	_priority;
+
+
+public:
+
+	 inline uint32 vcbid() { return _vcbid; } const 
+
+	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
+
+	 inline uint32 runnerid() { return _runnerid; } const 
+
+	 inline void set_runnerid(const uint32 value) { _runnerid = value; }
+
+	 inline uint32 userid() { return _userid; } const 
+
+	 inline void set_userid(const uint32 value) { _userid = value; }
+
+	 inline uint32 action() { return _action; } const 
+
+	 inline void set_action(const uint32 value) { _action = value; }
+
+	 inline uint32 priority() { return _priority; } const 
+
+	 inline void set_priority(const uint32 value) { _priority = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDUserPriority); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDUserPriority* cmd = (protocol::tag_CMDUserPriority*) data;
+		cmd->vcbid = _vcbid;
+		cmd->runnerid = _runnerid;
+		cmd->userid = _userid;
+		cmd->action = _action;
+		cmd->priority = _priority;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDUserPriority* cmd = (protocol::tag_CMDUserPriority*) data;
+		_vcbid = cmd->vcbid;
+		_runnerid = cmd->runnerid;
+		_userid = cmd->userid;
+		_action = cmd->action;
+		_priority = cmd->priority;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: UserPriority---------");
+		LOG("vcbid = %d", _vcbid);
+		LOG("runnerid = %d", _runnerid);
+		LOG("userid = %d", _userid);
+		LOG("action = %d", _action);
+		LOG("priority = %d", _priority);
+	}
+
+};
+
+
 class SetUserPriorityResp
 {
 
@@ -1469,9 +1789,11 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline int32 errorid() { return _errorid; } const 
+
 	 inline void set_errorid(const int32 value) { _errorid = value; }
 
 
@@ -1514,12 +1836,15 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 runid() { return _runid; } const 
+
 	 inline void set_runid(const uint32 value) { _runid = value; }
 
 	 inline uint32 toid() { return _toid; } const 
+
 	 inline void set_toid(const uint32 value) { _toid = value; }
 
 
@@ -1568,21 +1893,27 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 runid() { return _runid; } const 
+
 	 inline void set_runid(const uint32 value) { _runid = value; }
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 textlen() { return _textlen; } const 
+
 	 inline void set_textlen(const uint32 value) { _textlen = value; }
 
 	 inline uint32 reserve() { return _reserve; } const 
+
 	 inline void set_reserve(const uint32 value) { _reserve = value; }
 
 	 inline string& content() { return _content; } const 
+
 	 inline void set_content(const string& value) { _content = value; }
 
 
@@ -1623,6 +1954,7 @@ public:
 
 };
 
+
 class ReportMediaGateReq
 {
 
@@ -1637,15 +1969,19 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 textlen() { return _textlen; } const 
+
 	 inline void set_textlen(const uint32 value) { _textlen = value; }
 
 	 inline string& content() { return _content; } const 
+
 	 inline void set_content(const string& value) { _content = value; }
 
 
@@ -1694,12 +2030,15 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline int32 errid() { return _errid; } const 
+
 	 inline void set_errid(const int32 value) { _errid = value; }
 
 
@@ -1744,9 +2083,11 @@ private:
 public:
 
 	 inline uint32 srcuserid() { return _srcuserid; } const 
+
 	 inline void set_srcuserid(const uint32 value) { _srcuserid = value; }
 
 	 inline uint32 dstuserid() { return _dstuserid; } const 
+
 	 inline void set_dstuserid(const uint32 value) { _dstuserid = value; }
 
 
@@ -1799,42 +2140,55 @@ private:
 public:
 
 	 inline uint32 teacherid() { return _teacherid; } const 
+
 	 inline void set_teacherid(const uint32 value) { _teacherid = value; }
 
 	 inline uint32 headid() { return _headid; } const 
+
 	 inline void set_headid(const uint32 value) { _headid = value; }
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline int32 introducelen() { return _introducelen; } const 
+
 	 inline void set_introducelen(const int32 value) { _introducelen = value; }
 
 	 inline int32 lablelen() { return _lablelen; } const 
+
 	 inline void set_lablelen(const int32 value) { _lablelen = value; }
 
 	 inline int32 levellen() { return _levellen; } const 
+
 	 inline void set_levellen(const int32 value) { _levellen = value; }
 
 	 inline int32 type() { return _type; } const 
+
 	 inline void set_type(const int32 value) { _type = value; }
 
 	 inline uint64 czans() { return _czans; } const 
+
 	 inline void set_czans(const uint64 value) { _czans = value; }
 
 	 inline uint64 moods() { return _moods; } const 
+
 	 inline void set_moods(const uint64 value) { _moods = value; }
 
 	 inline uint64 fans() { return _fans; } const 
+
 	 inline void set_fans(const uint64 value) { _fans = value; }
 
 	 inline uint32 fansflag() { return _fansflag; } const 
+
 	 inline void set_fansflag(const uint32 value) { _fansflag = value; }
 
 	 inline uint32 subflag() { return _subflag; } const 
+
 	 inline void set_subflag(const uint32 value) { _subflag = value; }
 
 	 inline string& content() { return _content; } const 
+
 	 inline void set_content(const string& value) { _content = value; }
 
 
@@ -1914,24 +2268,31 @@ private:
 public:
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 headid() { return _headid; } const 
+
 	 inline void set_headid(const uint32 value) { _headid = value; }
 
 	 inline uint32 birthday() { return _birthday; } const 
+
 	 inline void set_birthday(const uint32 value) { _birthday = value; }
 
 	 inline int32 introducelen() { return _introducelen; } const 
+
 	 inline void set_introducelen(const int32 value) { _introducelen = value; }
 
 	 inline int32 provincelen() { return _provincelen; } const 
+
 	 inline void set_provincelen(const int32 value) { _provincelen = value; }
 
 	 inline int32 citylen() { return _citylen; } const 
+
 	 inline void set_citylen(const int32 value) { _citylen = value; }
 
 	 inline string& content() { return _content; } const 
+
 	 inline void set_content(const string& value) { _content = value; }
 
 
@@ -1988,9 +2349,11 @@ private:
 public:
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 errid() { return _errid; } const 
+
 	 inline void set_errid(const uint32 value) { _errid = value; }
 
 
@@ -2033,12 +2396,15 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline int32 actionid() { return _actionid; } const 
+
 	 inline void set_actionid(const int32 value) { _actionid = value; }
 
 
@@ -2084,12 +2450,15 @@ private:
 public:
 
 	 inline int32 errorid() { return _errorid; } const 
+
 	 inline void set_errorid(const int32 value) { _errorid = value; }
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline int32 actionid() { return _actionid; } const 
+
 	 inline void set_actionid(const int32 value) { _actionid = value; }
 
 
@@ -2160,71 +2529,6 @@ public:
 };
 
 
-class UserPriority
-{
-
-private:
-
-	uint32	_vcbid;
-	uint32	_runnerid;
-	uint32	_userid;
-	uint32	_action;
-	uint32	_priority;
-
-
-public:
-
-	 inline uint32 vcbid() { return _vcbid; } const 
-	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
-
-	 inline uint32 runnerid() { return _runnerid; } const 
-	 inline void set_runnerid(const uint32 value) { _runnerid = value; }
-
-	 inline uint32 userid() { return _userid; } const 
-	 inline void set_userid(const uint32 value) { _userid = value; }
-
-	 inline uint32 action() { return _action; } const 
-	 inline void set_action(const uint32 value) { _action = value; }
-
-	 inline uint32 priority() { return _priority; } const 
-	 inline void set_priority(const uint32 value) { _priority = value; }
-
-
-	int ByteSize() { return sizeof(protocol::tag_CMDUserPriority); }
-
-	void SerializeToArray(void* data, int size)
-	{
-		protocol::tag_CMDUserPriority* cmd = (protocol::tag_CMDUserPriority*) data;
-		cmd->vcbid = _vcbid;
-		cmd->runnerid = _runnerid;
-		cmd->userid = _userid;
-		cmd->action = _action;
-		cmd->priority = _priority;
-	}
-
-	void ParseFromArray(void* data, int size)
-	{
-		protocol::tag_CMDUserPriority* cmd = (protocol::tag_CMDUserPriority*) data;
-		_vcbid = cmd->vcbid;
-		_runnerid = cmd->runnerid;
-		_userid = cmd->userid;
-		_action = cmd->action;
-		_priority = cmd->priority;
-	}
-
-	void Log()
-	{
-		LOG("--------Receive message: UserPriority---------");
-		LOG("vcbid = %d", _vcbid);
-		LOG("runnerid = %d", _runnerid);
-		LOG("userid = %d", _userid);
-		LOG("action = %d", _action);
-		LOG("priority = %d", _priority);
-	}
-
-};
-
-
 class TradeGiftRecord
 {
 
@@ -2254,60 +2558,79 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 srcid() { return _srcid; } const 
+
 	 inline void set_srcid(const uint32 value) { _srcid = value; }
 
 	 inline uint32 toid() { return _toid; } const 
+
 	 inline void set_toid(const uint32 value) { _toid = value; }
 
 	 inline uint32 tovcbid() { return _tovcbid; } const 
+
 	 inline void set_tovcbid(const uint32 value) { _tovcbid = value; }
 
 	 inline uint32 totype() { return _totype; } const 
+
 	 inline void set_totype(const uint32 value) { _totype = value; }
 
 	 inline uint32 giftid() { return _giftid; } const 
+
 	 inline void set_giftid(const uint32 value) { _giftid = value; }
 
 	 inline uint32 giftnum() { return _giftnum; } const 
+
 	 inline void set_giftnum(const uint32 value) { _giftnum = value; }
 
 	 inline uint32 action() { return _action; } const 
+
 	 inline void set_action(const uint32 value) { _action = value; }
 
 	 inline uint32 servertype() { return _servertype; } const 
+
 	 inline void set_servertype(const uint32 value) { _servertype = value; }
 
 	 inline uint32 banonymous() { return _banonymous; } const 
+
 	 inline void set_banonymous(const uint32 value) { _banonymous = value; }
 
 	 inline uint32 casttype() { return _casttype; } const 
+
 	 inline void set_casttype(const uint32 value) { _casttype = value; }
 
 	 inline uint32 dtime() { return _dtime; } const 
+
 	 inline void set_dtime(const uint32 value) { _dtime = value; }
 
 	 inline uint32 oldnum() { return _oldnum; } const 
+
 	 inline void set_oldnum(const uint32 value) { _oldnum = value; }
 
 	 inline uint32 flyid() { return _flyid; } const 
+
 	 inline void set_flyid(const uint32 value) { _flyid = value; }
 
 	 inline string& srcvcbname() { return _srcvcbname; } const 
+
 	 inline void set_srcvcbname(const string& value) { _srcvcbname = value; }
 
 	 inline string& tovcbname() { return _tovcbname; } const 
+
 	 inline void set_tovcbname(const string& value) { _tovcbname = value; }
 
 	 inline string& srcalias() { return _srcalias; } const 
+
 	 inline void set_srcalias(const string& value) { _srcalias = value; }
 
 	 inline string& toalias() { return _toalias; } const 
+
 	 inline void set_toalias(const string& value) { _toalias = value; }
 
 	 inline string& sztext() { return _sztext; } const 
+
 	 inline void set_sztext(const string& value) { _sztext = value; }
 
 
@@ -2402,12 +2725,12 @@ public:
 
 	void SerializeToArray(void* data, int size)
 	{
-		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
+//		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
 	}
 
 	void ParseFromArray(void* data, int size)
 	{
-		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
+//		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
 	}
 
 	void Log()
@@ -2429,6 +2752,7 @@ private:
 public:
 
 	 inline int32 nerrid() { return _nerrid; } const 
+
 	 inline void set_nerrid(const int32 value) { _nerrid = value; }
 
 
@@ -2472,24 +2796,31 @@ private:
 public:
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 srcid() { return _srcid; } const 
+
 	 inline void set_srcid(const uint32 value) { _srcid = value; }
 
 	 inline uint32 toid() { return _toid; } const 
+
 	 inline void set_toid(const uint32 value) { _toid = value; }
 
 	 inline int32 resonid() { return _resonid; } const 
+
 	 inline void set_resonid(const int32 value) { _resonid = value; }
 
 	 inline uint32 mins() { return _mins; } const 
+
 	 inline void set_mins(const uint32 value) { _mins = value; }
 
 	 inline uint32 textlen() { return _textlen; } const 
+
 	 inline void set_textlen(const uint32 value) { _textlen = value; }
 
 	 inline string& content() { return _content; } const 
+
 	 inline void set_content(const string& value) { _content = value; }
 
 
@@ -2548,15 +2879,19 @@ private:
 public:
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 vcbid() { return _vcbid; } const 
+
 	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
 
 	 inline uint32 textlen() { return _textlen; } const 
+
 	 inline void set_textlen(const uint32 value) { _textlen = value; }
 
 	 inline string& content() { return _content; } const 
+
 	 inline void set_content(const string& value) { _content = value; }
 
 
@@ -2606,15 +2941,19 @@ private:
 public:
 
 	 inline uint32 nmask() { return _nmask; } const 
+
 	 inline void set_nmask(const uint32 value) { _nmask = value; }
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 teacherid() { return _teacherid; } const 
+
 	 inline void set_teacherid(const uint32 value) { _teacherid = value; }
 
 	 inline uint32 bsub() { return _bsub; } const 
+
 	 inline void set_bsub(const uint32 value) { _bsub = value; }
 
 
@@ -2663,12 +3002,15 @@ private:
 public:
 
 	 inline uint32 nmask() { return _nmask; } const 
+
 	 inline void set_nmask(const uint32 value) { _nmask = value; }
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 errcode() { return _errcode; } const 
+
 	 inline void set_errcode(const uint32 value) { _errcode = value; }
 
 

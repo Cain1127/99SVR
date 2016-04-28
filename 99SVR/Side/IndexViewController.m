@@ -11,17 +11,14 @@
 #import "TQMailboxViewController.h"
 #import "MJRefresh.h"
 #import "Toast+UIView.h"
-#import "LSTcpSocket.h"
 #import "UserInfo.h"
 #import "RoomListRequest.h"
 #import "RoomGroup.h"
 #import "HotViewController.h"
 #import "MainViewController.h"
-//#import "HistoryViewController.h"
 #import "GiftRequest.h"
 #import "GroupView.h"
 #import "SearchController.h"
-
 #import "MyScrollView.h"
 
 @interface IndexViewController ()<UIScrollViewDelegate,GroupDelegate>

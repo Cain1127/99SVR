@@ -7,10 +7,10 @@
 //
 
 #import "TabBarController.h"
+#import "ZLVideoListViewController.h"
 #import "NavigationViewController.h"
 #import "HomeViewController.h"
 #import "IndexViewController.h"
-#import "TextViewController.h"
 #import "StockHomeViewController.h"
 #import "TQIdeaViewController.h"
 #import "TQMeCustomizedViewController.h"
@@ -66,7 +66,8 @@
 - (void)setUpAllChildViewControllers{
     
     [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
-    [self setUpOneViewController:[[IndexViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
+    
+    [self setUpOneViewController:[[ZLVideoListViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
     [self setUpOneViewController:[[TQIdeaViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
     [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"text_live" selectImage:@"text_live_h"];
     [self setUpMyViewController:[[XMyViewController alloc]init] title:@"我" image:@"text_live" selectImage:@"text_live_h"];

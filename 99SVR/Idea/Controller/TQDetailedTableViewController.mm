@@ -7,10 +7,12 @@
 /**************************************** < 专家观点详情>**********************************/
 
 #import "TQDetailedTableViewController.h"
+#import <DTCoreText/DTCoreText.h>
 #import "MJRefresh.h"
+#import "CommentCell.h"
+#import "ZLReply.h"
 #import "ReplyNullInfoCell.h"
 #import "EmojiTextAttachment.h"
-#import "ZLReply.h"
 #import "AlertFactory.h"
 #import "Photo.h"
 #import "PhotoViewController.h"
@@ -18,17 +20,13 @@
 #import "MBProgressHUD.h"
 #import "ProgressHUD.h"
 #import "UIImageView+WebCache.h"
-#import <DTCoreText/DTCoreText.h>
-#import "NewDetailsModel.h"
 #import "ChatView.h"
-#import "CommentCell.h"
-#import "IdeaDetailRePly.h"
 #import "RoomUser.h"
 #import "NSAttributedString+EmojiExtension.h"
 #import "TQIdeaDetailModel.h"
 #import "ViewNullFactory.h"
 
-@interface TQDetailedTableViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,CommentDelegate,UIWebViewDelegate>
+@interface TQDetailedTableViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,UIWebViewDelegate,CommentDelegate>
 {
     UIView *contentView;
     UILabel *lblPlace;

@@ -7,9 +7,26 @@
 //
 
 #import "RoomHttp.h"
+#include "HttpMessage.pb.h"
 #import <objc/runtime.h>
 
 @implementation RoomHttp
+
+- (id)initWithData:(void *)data
+{
+    self = [super init];
+    Team *_team = (Team *)data;
+    _roomid = NSStringFromInt(_team->roomid());
+    _teamid = NSStringFromInt(_team->teamid());
+    _teamname = [NSString stringWithUTF8String:_team->teamname().c_str()];
+    _teamicon = [NSString stringWithUTF8String:_team->teamicon().c_str()];
+    _introduce = [NSString stringWithUTF8String:_team->introduce().c_str()];
+    _onlineusercount = NSStringFromInt(_team->onlineusercount());
+    _locked = NSStringFromInt(_team->locked());
+    _alias = [NSString stringWithUTF8String:_team->alias().c_str()];
+    
+    return self;
+}
 
 NSArray * getPropertyNameList(id object)
 {

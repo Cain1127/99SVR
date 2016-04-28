@@ -2196,7 +2196,7 @@ private:
 
 	string	_url;
 	string	_type;
-	string  _croompic;
+	string	_croompic;
 
 
 public:
@@ -2238,6 +2238,92 @@ public:
 		LOG("url = %s", _url.c_str());
 		LOG("type = %s", _type.c_str());
 		LOG("croompic = %s", _croompic.c_str());
+	}
+
+};
+
+
+class Navigation
+{
+
+private:
+
+	uint32	_groupid;
+	uint32	_parentid;
+	uint32	_sortid;
+	uint32	_textcolor;
+	string	_groupname;
+	string	_url;
+	uint32	_roomid;
+
+
+public:
+
+	 inline uint32 groupid() { return _groupid; } const 
+
+	 inline void set_groupid(const uint32 value) { _groupid = value; }
+
+	 inline uint32 parentid() { return _parentid; } const 
+
+	 inline void set_parentid(const uint32 value) { _parentid = value; }
+
+	 inline uint32 sortid() { return _sortid; } const 
+
+	 inline void set_sortid(const uint32 value) { _sortid = value; }
+
+	 inline uint32 textcolor() { return _textcolor; } const 
+
+	 inline void set_textcolor(const uint32 value) { _textcolor = value; }
+
+	 inline string& groupname() { return _groupname; } const 
+
+	 inline void set_groupname(const string& value) { _groupname = value; }
+
+	 inline string& url() { return _url; } const 
+
+	 inline void set_url(const string& value) { _url = value; }
+
+	 inline uint32 roomid() { return _roomid; } const 
+
+	 inline void set_roomid(const uint32 value) { _roomid = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDNavigation); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDNavigation* cmd = (protocol::tag_CMDNavigation*) data;
+		cmd->groupid = _groupid;
+		cmd->parentid = _parentid;
+		cmd->sortid = _sortid;
+		cmd->textcolor = _textcolor;
+		strcpy(cmd->groupname, _groupname.c_str());
+		strcpy(cmd->url, _url.c_str());
+		cmd->roomid = _roomid;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDNavigation* cmd = (protocol::tag_CMDNavigation*) data;
+		_groupid = cmd->groupid;
+		_parentid = cmd->parentid;
+		_sortid = cmd->sortid;
+		_textcolor = cmd->textcolor;
+		_groupname = cmd->groupname;
+		_url = cmd->url;
+		_roomid = cmd->roomid;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: Navigation---------");
+		LOG("groupid = %d", _groupid);
+		LOG("parentid = %d", _parentid);
+		LOG("sortid = %d", _sortid);
+		LOG("textcolor = %d", _textcolor);
+		LOG("groupname = %s", _groupname.c_str());
+		LOG("url = %s", _url.c_str());
+		LOG("roomid = %d", _roomid);
 	}
 
 };

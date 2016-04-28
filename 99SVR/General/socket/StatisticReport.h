@@ -2,29 +2,29 @@
 
 void get_out_ip();
 
-//ç™»é™†å¤±è´¥
-void ReportLoginFailed(int login_type, rstring login_id, rstring server_ip, rstring client_ip);
+//µÇÂ½Ê§°Ü
+void ReportLoginFailed(int login_type, rstring login_id, rstring server_ip);
 
-//æ³¨å†Œå¤±è´¥
-void ReportRegisterFailed(int reg_type, rstring server_ip, rstring client_ip);
+//×¢²áÊ§°Ü
+void ReportRegisterFailed(int reg_type, rstring server_ip);
 
-//è·å–å¤§å…æˆ¿é—´åˆ—è¡¨å¤±è´¥
-void ReportGetRoomListFailed(int userid, int room_type, rstring server_ip, rstring client_ip);
+//»ñÈ¡´óÌü·¿¼äÁĞ±íÊ§°Ü
+void ReportGetRoomListFailed(int userid, int room_type, rstring server_ip);
 
-//è¿›æˆ¿é—´å¤±è´¥
-void ReportJoinRoomFailed(int userid, int room_type, int roomid, rstring server_ip, rstring client_ip, rstring err);
+//½ø·¿¼äÊ§°Ü
+void ReportJoinRoomFailed(int userid, int room_type, int roomid, rstring server_ip, rstring err);
 
-//è·å–æˆ¿é—´æˆå‘˜åˆ—è¡¨å¤±è´¥
-void ReportGetRoomUserListFailed(int userid, int room_type, int roomid, rstring server_ip, rstring client_ip, rstring err);
+//»ñÈ¡·¿¼ä³ÉÔ±ÁĞ±íÊ§°Ü
+void ReportGetRoomUserListFailed(int userid, int room_type, int roomid, rstring server_ip, rstring err);
 
-//ç›´æ’­è´¨é‡æ•°æ®
-void ReportVideoWarn(int userid, int roomid, int warn_type, rstring server_ip, rstring client_ip);
+//Ö±²¥ÖÊÁ¿Êı¾İ
+void ReportVideoWarn(int userid, int roomid, int warn_type, rstring server_ip);
 
-//å´©æºƒæ•°æ®
-void ReportCrash(rstring os, rstring version_name, rstring client_ip, rstring err);
+//±ÀÀ£Êı¾İ
+void ReportCrash(rstring os, rstring version_name, rstring err);
 
-//æ‰“å¼€å¤§å…é¦–é¡µå¤±è´¥
-void ReportOpenHomepageFailed(int userid, rstring server_ip, rstring client_ip);
+//´ò¿ª´óÌüÊ×Ò³Ê§°Ü
+void ReportOpenHomepageFailed(int userid, rstring server_ip);
 
-//ä¸ŠæŠ¥æœ¬æœºå®‰è£…äº†å“ªäº›è½¯ä»¶
+//ÉÏ±¨±¾»ú°²×°ÁËÄÄĞ©Èí¼ş
 void ReportLocalAppData(rstring os, rstring serial_number, rstring version_name, rstring app_list);

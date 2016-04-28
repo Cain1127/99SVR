@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "RoomInfo.h"
 #import "VideoRoomMessage.pb.h"
-#import "CommonMessage.pb.h"
 
 @interface RoomService : NSObject
 /**
