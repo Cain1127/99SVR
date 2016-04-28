@@ -32,6 +32,7 @@
     self.dataArray = @[];
     self.automaticallyAdjustsScrollViewInsets = NO;
 
+    [self.view makeToastActivity];
     //注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_TQPURCHASE_VC object:nil];
     [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
@@ -160,6 +161,9 @@
     
     NSString *code = [NSString stringWithFormat:@"%@",[notfi.object valueForKey:@"code"]];
     
+    [self.view hideToastActivity];
+
+    
     if ([code isEqualToString:@"1"]) {//请求成功
         
         DLog(@"请求成功");
@@ -217,6 +221,9 @@
             [self.tableView addSubview:self.emptyView];
         }
     }
+    
+    
+    
 }
 
 @end

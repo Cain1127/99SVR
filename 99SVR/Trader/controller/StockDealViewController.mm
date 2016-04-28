@@ -9,6 +9,7 @@
 #import "HttpMessage.pb.h"
 #import "TQPurchaseViewController.h"
 #import "ViewNullFactory.h"
+#import "Toast+UIView.h"
 
 @interface StockDealViewController ()
 @property (nonatomic , strong) UITableView *tableView;
@@ -44,6 +45,8 @@
     self.txtTitle.text = self.stockModel.teamname;
     self.warningLab.text = @"仅代表讲师个人操盘记录,不构成投资建议，风险自负";
 
+    [self.view makeToastActivity];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
     [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
 
@@ -64,10 +67,11 @@
     NSDictionary *dic = notify.object;
     NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
     
-    
+    [self.view hideToastActivity];
     
     if ([code isEqualToString:@"1"]) {//请求成功
         
+
         
         //    //拿到头部视图的数据
         self.headerModel = dic[@"headerModel"];
