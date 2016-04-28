@@ -27,6 +27,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.navigationController.navigationBar setHidden:YES];
+    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [self setTitleText:@"专家观点"];
     
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-108) withStyle:UITableViewStylePlain];
     [self.view addSubview:_tableView];

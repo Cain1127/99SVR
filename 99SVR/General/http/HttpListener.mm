@@ -57,16 +57,8 @@ void ViewpointSummaryListener::OnError(int errCode)
 void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
     NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<infos.size(); i++) {
-        TQIdeaModel *model = [[TQIdeaModel alloc] init];
         ViewpointSummary summary = infos[i];
-        model.authorid = [NSString stringWithUTF8String:summary.authorid().c_str()];
-        model.authoricon = [NSString stringWithUTF8String:summary.authoricon().c_str()];
-        model.authorname = [NSString stringWithUTF8String:summary.authorname().c_str()];
-        model.publishtime = [NSString stringWithUTF8String:summary.publishtime().c_str()];
-        model.content = [NSString stringWithUTF8String:summary.content().c_str()];
-        model.replycount = summary.replycount();
-        model.giftcount = summary.giftcount();
-        model.viewpointid = summary.viewpointid();
+        TQIdeaModel *model = [[TQIdeaModel alloc] initWithViewpointSummary:&summary];
         [ary addObject:model];
     }
     NSDictionary *dict = @{@"code":@(1),@"model":ary};
@@ -657,16 +649,8 @@ void HomePageListener::onResponse(std::vector<BannerItem> banner_data, std::vect
     }
     NSMutableArray *aryViewPoint = [NSMutableArray array];
     for (i=0; i<viewpoint_data.size(); i++) {
-        TQIdeaModel *model = [[TQIdeaModel alloc] init];
         ViewpointSummary summary = viewpoint_data[i];
-        model.authorid = [NSString stringWithUTF8String:summary.authorid().c_str()];
-        model.authoricon = [NSString stringWithUTF8String:summary.authoricon().c_str()];
-        model.authorname = [NSString stringWithUTF8String:summary.authorname().c_str()];
-        model.publishtime = [NSString stringWithUTF8String:summary.publishtime().c_str()];
-        model.content = [NSString stringWithUTF8String:summary.content().c_str()];
-        model.replycount = summary.replycount();
-        model.giftcount = summary.giftcount();
-        model.viewpointid = summary.viewpointid();
+        TQIdeaModel *model = [[TQIdeaModel alloc] initWithViewpointSummary:&summary];
         [aryViewPoint addObject:model];
     }
     NSMutableArray *aryOperate = [NSMutableArray array];

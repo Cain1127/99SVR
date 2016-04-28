@@ -175,9 +175,10 @@ typedef enum : NSUInteger
         strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,roomView.room.croompic];
     }
     [_iConView.imgView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
-    [_iConView.lblName setText:roomView.room.cname];
-    [_iConView.lblNumber setText:roomView.room.nvcbid];
-    [_iConView.btnQuery setTitle:roomView.room.ncount forState:UIControlStateNormal];
+    [_iConView.lblName setText:roomView.room.teamname];
+    [_iConView.lblNumber setText:roomView.room.teamid];
+    [_iConView.btnQuery setTitle:roomView.room.onlineusercount forState:UIControlStateNormal];
+    
     _iConView.hidden = NO;
 }
 
@@ -231,11 +232,6 @@ typedef enum : NSUInteger
 
 - (void)updateBannerInfo:(NSDictionary *)dict
 {
-//    NSDictionary *dict = notify.object;
-//    if ([dict objectForKey:@"code"])
-//    {
-//        
-//    }
     NSArray *array = [dict objectForKey:@"banner"];
     if (0 < array.count)
     {
@@ -256,7 +252,6 @@ typedef enum : NSUInteger
 #pragma mark - home date init request and analyze
 - (void)initData
 {
-//    [kHTTPSingle RequestHomePage];
     NSString *strUrl = [[NSString alloc] initWithUTF8String:kHome_Banner_URL];
     @WeakObj(self);
     [BaseService postJSONWithUrl:strUrl parameters:nil success:^(id responseObject) {
@@ -684,23 +679,13 @@ typedef enum : NSUInteger
             lblHot.textAlignment = NSTextAlignmentLeft;
             [tempHeaderView addSubview:lblHot];
             
-            ///see all button
-            @WeakObj(self);
-            RightImageButton *seeAllButton = [[RightImageButton alloc] initWithFrame:Rect(CGRectGetWidth(tempHeaderView.frame) - 15.0f - rightButtonWidth, 0.0f, rightButtonWidth, tempHeight) rightImageWidth:30.0f tapActionBlock:^(UIButton *button) {
-                UITabBarController *rootTabbarVC = selfWeak.tabBarController;
-                if (rootTabbarVC)
-                {
-                    rootTabbarVC.selectedIndex = 1;
-                }
-            }];
-            [seeAllButton setTitle:@"查看全部" forState:UIControlStateNormal];
-            [seeAllButton setTitleColor:UIColorFromRGB(0x0078DD) forState:UIControlStateNormal];
-            seeAllButton.titleLabel.font = XCFONT(12);
-            [seeAllButton setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
-            [tempHeaderView addSubview:seeAllButton];
-            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
+            [button setFrame:Rect(kScreenWidth-50, 0, 44, 44)];
+            button.tag = 1;
+            [button addTarget:self action:@selector(enterEvent:) forControlEvents:UIControlEventTouchUpInside];
+            [tempHeaderView addSubview:button];
         }
-        
         return tempHeaderView;
         
     }
@@ -717,21 +702,13 @@ typedef enum : NSUInteger
             [lblHot setFont:XCFONT(15)];
             [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
             [tempHeaderView addSubview:lblHot];
-            ///see all button
-            @WeakObj(self);
-            RightImageButton *seeAllButton = [[RightImageButton alloc] initWithFrame:Rect(CGRectGetWidth(tempHeaderView.frame) - 15.0f - rightButtonWidth, 0.0f, rightButtonWidth, tempHeight) rightImageWidth:30.0f tapActionBlock:^(UIButton *button) {
-                
-                UITabBarController *rootTabbarVC = selfWeak.tabBarController;
-                if (rootTabbarVC)
-                {
-                    rootTabbarVC.selectedIndex = 3;
-                }
-            }];
-            [seeAllButton setTitle:@"查看全部" forState:UIControlStateNormal];
-            [seeAllButton setTitleColor:UIColorFromRGB(0x0078DD) forState:UIControlStateNormal];
-            seeAllButton.titleLabel.font = XCFONT(12);
-            [seeAllButton setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
-            [tempHeaderView addSubview:seeAllButton];
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
+            [button setFrame:Rect(kScreenWidth-50, 0, 44, 44)];
+            button.tag = 3;
+            [button addTarget:self action:@selector(enterEvent:) forControlEvents:UIControlEventTouchUpInside];
+            [tempHeaderView addSubview:button];
         }
         return tempHeaderView;
         
@@ -750,20 +727,12 @@ typedef enum : NSUInteger
             [lblHot setFont:XCFONT(15)];
             [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
             [tempHeaderView addSubview:lblHot];
-            @WeakObj(self);
-            RightImageButton *seeAllButton = [[RightImageButton alloc] initWithFrame:Rect(CGRectGetWidth(tempHeaderView.frame) - 15.0f - rightButtonWidth, 0.0f, rightButtonWidth, tempHeight) rightImageWidth:30.0f tapActionBlock:^(UIButton *button) {
-                
-                UITabBarController *rootTabbarVC = selfWeak.tabBarController;
-                if (rootTabbarVC)
-                {
-                    rootTabbarVC.selectedIndex = 2;
-                }
-            }];
-            [seeAllButton setTitle:@"查看全部" forState:UIControlStateNormal];
-            [seeAllButton setTitleColor:UIColorFromRGB(0x0078DD) forState:UIControlStateNormal];
-            seeAllButton.titleLabel.font = XCFONT(12);
-            [seeAllButton setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
-            [tempHeaderView addSubview:seeAllButton];
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
+            [button setFrame:Rect(kScreenWidth-50, 0, 44, 44)];
+            button.tag = 2;
+            [button addTarget:self action:@selector(enterEvent:) forControlEvents:UIControlEventTouchUpInside];
+            [tempHeaderView addSubview:button];
             
         }
         return tempHeaderView;
@@ -876,6 +845,15 @@ typedef enum : NSUInteger
         _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
     }
     [_roomViewModel connectViewModel:room];
+}
+
+- (void)enterEvent:(UIButton *)sender
+{
+    UITabBarController *rootTabbarVC = self.tabBarController;
+    if (rootTabbarVC)
+    {
+        rootTabbarVC.selectedIndex = sender.tag;
+    }
 }
 
 @end

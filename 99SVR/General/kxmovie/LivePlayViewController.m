@@ -270,7 +270,6 @@
     {
         [_glView removeFromSuperview];
         _glView.frame = Rect(0, 0, kScreenWidth,kScreenHeight);
-//        [[UIApplication sharedApplication].keyWindow addSubview:_glView];
         [_glView removeFromSuperview];
         
         CGFloat _duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
@@ -289,8 +288,6 @@
     }
     else
     {
-//        [_glView removeFromSuperview];
-//        _glView.frame = Rect(0, 0, kScreenWidth,kVideoImageHeight);
         [self setHorizontal];
         bFull = NO;
     }

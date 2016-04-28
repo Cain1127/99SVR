@@ -16,6 +16,8 @@
 
 @interface ChatRightView : UIView
 
++ (UIButton *)createButton:(CGRect)frame;
+
 @property (nonatomic,strong) UIScrollView *scrollView;
 @property (nonatomic,assign) id<ChatRightDelegate> delegate;
 
