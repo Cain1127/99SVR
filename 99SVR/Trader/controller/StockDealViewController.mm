@@ -64,17 +64,20 @@
     NSDictionary *dic = notify.object;
     NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
     
-    //    //拿到头部视图的数据
-    self.headerModel = dic[@"headerModel"];
-    //    //拿到股票视图的数据
-    [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
-    //交易详情
-    [self.tableViewDataArray addObject:dic[@"trans"]];
-    //持仓记录
-    [self.tableViewDataArray addObject:dic[@"stocks"]];
     
     
     if ([code isEqualToString:@"1"]) {//请求成功
+        
+        
+        //    //拿到头部视图的数据
+        self.headerModel = dic[@"headerModel"];
+        //    //拿到股票视图的数据
+        [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
+        //交易详情
+        [self.tableViewDataArray addObject:dic[@"trans"]];
+        //持仓记录
+        [self.tableViewDataArray addObject:dic[@"stocks"]];
+
         dispatch_async(dispatch_get_main_queue(), ^{
             
             self.tableView.tableFooterView = self.warningLab;

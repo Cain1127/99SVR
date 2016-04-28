@@ -62,6 +62,7 @@
         
         self.priceLabView.newpriceStr = model.updateprice;
         self.priceLabView.oldpriceStr = model.buyprice;
+        model.actualPrice = model.updateprice;
         self.priceLabView.state = PriceLabViewType_NotVip;
     }
 
@@ -72,7 +73,7 @@
     
     
     self.vipNameLab.textColor = COLOR_Auxiliary_Orange;
-    [self.clickBtn setTitle:@"购买" forState:UIControlStateNormal];
+    [self.clickBtn setTitle:@"兑换" forState:UIControlStateNormal];
     self.clickBtn.backgroundColor = COLOR_Btn_Buy_Normal;
     
     [self.clickBtn mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -83,6 +84,7 @@
     }];
     
     self.priceLabView.oldpriceStr = model.buyprice;
+    model.actualPrice = model.buyprice;
     self.priceLabView.state = PriceLabViewType_Vip;
 }
 

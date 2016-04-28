@@ -295,9 +295,29 @@
         case 1://去购买
         {
         
-            TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
-            tqVC.stockModel = _model;
-            [_vc.navigationController pushViewController:tqVC animated:YES];
+            
+            
+            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {//已登陆 //注册 
+                
+                TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
+                tqVC.stockModel = _model;
+                [_vc.navigationController pushViewController:tqVC animated:YES];
+            
+            }else{//未登录
+                
+                [UIAlertView createAlertViewWithTitle:@"提示" withViewController:_vc withCancleBtnStr:@"取消" withOtherBtnStr:@"确定" withMessage:@"未登陆，请登陆后操作" completionCallback:^(NSInteger index) {
+                    
+                    if (index==1) {
+                        
+                        DLog(@"跳去登陆页面");
+                        
+                    }
+                    
+                }];
+                
+                
+            }
+            
             
         }
             break;

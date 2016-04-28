@@ -15,8 +15,9 @@
         _expirtiontime = StrTransformCToUTF8(profit->expirtiontime().c_str());
         _levelid = IntTransformIntToStr(profit->levelid());
         _isopen = IntTransformIntToStr(profit->isopen());
-        _buyprice = [NSString stringWithFormat:@"%f",profit->buyprice()];
-        _updateprice = [NSString stringWithFormat:@"%f",profit->updateprice()];
+        _buyprice = [NSString stringWithFormat:@"%.2f",profit->buyprice()];
+        _updateprice = [NSString stringWithFormat:@"%.2f",profit->updateprice()];
+        _actualPrice = @"";
     }
     return self;
 }

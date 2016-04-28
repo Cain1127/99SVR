@@ -9,6 +9,7 @@
 #import "TableViewCell.h"
 #import "StockMacro.h"
 #import "TQPurchaseModel.h"
+#import "UIAlertView+Block.h"
 
 @interface TQPurchaseViewController () <UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate>
 @property (nonatomic,strong)UITableView *tableView;
@@ -84,7 +85,55 @@
 
 -(void)tableViewCellWithClickButton:(UIButton *)button row:(NSInteger)row
 {
-    NSLog(@"点击了查看的按钮%zi",row);
+    TQPurchaseModel *model = self.dataArray[row];
+    
+    if ([UserInfo sharedUserInfo].goldCoin >= [model.actualPrice floatValue]) {//账户余额大于购买的余额
+        
+        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"兑换" withMessage:@"是否确定兑换！" completionCallback:^(NSInteger index) {
+            
+            if (index==0) {//取消
+                
+                DLog(@"取消兑换");
+                
+            }else{
+                
+                DLog(@"去购买");
+
+                
+                
+            }
+            
+            
+        }];
+
+        
+        
+    }else{//需要充值
+        
+        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"充值" withMessage:@"账户余额不足，需要充值！" completionCallback:^(NSInteger index) {
+            
+            if (index==0) {//取消
+                
+                DLog(@"取消充值");
+
+                
+            }else{
+                
+                DLog(@"去充值");
+
+                
+                
+            }
+            
+            
+        }];
+        
+        
+        
+        
+    }
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -98,6 +147,8 @@
     
     if ([code isEqualToString:@"1"]) {//请求成功
         
+        DLog(@"请求成功");
+        
         self.headerModel = [notfi.object valueForKey:@"headerModel"];
         self.headerModel.teamName = self.stockModel.teamname;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -108,7 +159,10 @@
     }else{//请求失败
     
         
+        DLog(@"请求失败");
         
+
+
         
     }
 }
