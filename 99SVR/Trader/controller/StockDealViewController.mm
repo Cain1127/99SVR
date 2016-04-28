@@ -36,12 +36,7 @@
 }
 
 -(void)initUI{
-    
     //表格
-    [self.view addSubview:self.tableView];
-    
-    self.tableView.tableHeaderView = self.headerView;
-    self.tableView.tableFooterView = self.warningLab;
 }
 
 -(void)initData{
@@ -66,39 +61,37 @@
 - (void)printInfo:(NSNotification *)notify{
     
     
-    WeakSelf(self);
     NSDictionary *dic = notify.object;
-
     NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
     
+    //    //拿到头部视图的数据
+    self.headerModel = dic[@"headerModel"];
+    //    //拿到股票视图的数据
+    [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
+    //交易详情
+    [self.tableViewDataArray addObject:dic[@"trans"]];
+    //持仓记录
+    [self.tableViewDataArray addObject:dic[@"stocks"]];
+    
+    
     if ([code isEqualToString:@"1"]) {//请求成功
-        
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            //    //拿到头部视图的数据
-            self.headerModel = dic[@"headerModel"];
+            self.tableView.tableFooterView = self.warningLab;
             [self.headerView setHeaderViewWithDataModel:self.headerModel];
-            //    //拿到股票视图的数据
-            [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
-            //交易详情
-            [self.tableViewDataArray addObject:dic[@"trans"]];
-            //持仓记录
-            [self.tableViewDataArray addObject:dic[@"stocks"]];
-            
-            [weakSelf.tableViewModel setIsShowRecal:dic[@"recalState"] withDataModel:self.headerModel];
-            weakSelf.tableViewModel.dataArray = weakSelf.tableViewDataArray;
-            [weakSelf.tableView reloadData];
+            [self.tableViewModel setIsShowRecal:dic[@"recalState"] withDataModel:self.headerModel];
+            self.tableViewModel.dataArray = self.tableViewDataArray;
+            [self.tableView reloadData];
         });
-
         
     }else{//请求失败
         
-        DLog(@"请求失败");
         
     }
     
+    
     [self chickEmptyViewShow:self.tableViewDataArray withCode:code];
+
     
 }
 
@@ -126,13 +119,10 @@
        
         if (dataArray.count==0) {
             
-                self.emptyView = [ViewNullFactory createViewBg:self.tableView.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"网络发生错误"];
-                [self.tableView addSubview:self.emptyView];
+            self.emptyView = [ViewNullFactory createViewBg:self.tableView.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"网络发生错误"];
+            [self.tableView addSubview:self.emptyView];
         }
     }
-    
-    
-    
 }
 
 #pragma mark lazyUI
@@ -158,6 +148,8 @@
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.backgroundColor = COLOR_Bg_Gay;
         _tableView.tableHeaderView = self.headerView;
+        [self.view addSubview:_tableView];
+
     }
     return _tableView;
 }

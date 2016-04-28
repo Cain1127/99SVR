@@ -106,6 +106,9 @@ typedef NS_ENUM(NSInteger,MJRefreshState){
 -(void)initData{
     
     WeakSelf(self);
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+
     //day
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_STOCK_HOME_DAY__VC object:nil];
     //mon
@@ -114,7 +117,6 @@ typedef NS_ENUM(NSInteger,MJRefreshState){
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
     [self.dayTab addGifHeaderWithRefreshingBlock:^{
         
-//        [weakSelf.dayDataArray removeAllObjects];
         weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.dayPagInteger = 1;
         [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:10];
