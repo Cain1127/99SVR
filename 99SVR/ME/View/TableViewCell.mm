@@ -32,7 +32,7 @@
 -(void)vipSettingWithRow:(NSInteger)row withModel:(TQPurchaseModel *)model{
 
     
-    if ((row+1)<=[model.levelid intValue]) {//已经购买的VIP
+    if ([model.isopen isEqualToString:@"1"]) {//已经购买当前的VIP
         self.vipNameLab.textColor = COLOR_Auxiliary_Blue;
         self.clickBtn.enabled = NO;
         [self.clickBtn setTitle:@"已购买" forState:UIControlStateDisabled];
@@ -105,10 +105,13 @@
 -(void)setCellDataWithModel:(TQPurchaseModel *)model withIndexRow:(NSInteger)row{
 
     //设置VIP的图标
-    self.vipIconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%d_icon",((int)row+1)]];
+    self.vipIconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%d_icon",[model.levelid intValue]]];
     self.vipNameLab.text = model.levelname;
     
-    BOOL isVipValue = [model.isopen isEqualToString:@"0"] ? NO : YES;
+    DLog(@"buyprice = %@ updateprice=%@  isopen =%@",model.buyprice,model.updateprice,model.isopen);
+    
+    BOOL isVipValue = [model.vipValue isEqualToString:@"0"] ? NO : YES;
+    
     if (isVipValue) {
         
         [self vipSettingWithRow:row withModel:model];

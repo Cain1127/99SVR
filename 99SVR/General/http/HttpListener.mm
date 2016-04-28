@@ -226,6 +226,8 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     //判断是否显示记录 
     BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
     
+    DLog(@"currLevelId=%d   minVipLevel=%d",currLevelId,minVipLevel);
+    
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
     
@@ -383,6 +385,21 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
         TQPurchaseModel *headerModel =[[TQPurchaseModel alloc] initWithPrivateServiceLevelData:profit];
         [muArray addObject:headerModel];
     }
+    
+    NSString *vipValue = @"0";
+    /**
+     *  判断是不是vip 只要有购买过vip 就是vip。根据 model里面的isopen来判断
+     */
+    for (TQPurchaseModel *model in muArray) {
+        if ([model.isopen isEqualToString:@"1"]) {
+            vipValue = @"1";
+            break;
+        }
+    }
+    for (TQPurchaseModel *model in muArray) {
+        model.vipValue = vipValue;
+    }
+    
     if (infos.size()>=1) {
         muDic[@"headerModel"] = muArray[0];
     }
