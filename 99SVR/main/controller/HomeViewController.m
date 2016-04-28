@@ -232,11 +232,6 @@ typedef enum : NSUInteger
 
 - (void)updateBannerInfo:(NSDictionary *)dict
 {
-//    NSDictionary *dict = notify.object;
-//    if ([dict objectForKey:@"code"])
-//    {
-//        
-//    }
     NSArray *array = [dict objectForKey:@"banner"];
     if (0 < array.count)
     {
@@ -257,7 +252,6 @@ typedef enum : NSUInteger
 #pragma mark - home date init request and analyze
 - (void)initData
 {
-//    [kHTTPSingle RequestHomePage];
     NSString *strUrl = [[NSString alloc] initWithUTF8String:kHome_Banner_URL];
     @WeakObj(self);
     [BaseService postJSONWithUrl:strUrl parameters:nil success:^(id responseObject) {

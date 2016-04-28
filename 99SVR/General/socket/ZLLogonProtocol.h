@@ -319,7 +319,7 @@ class ZLRoomListener : public VideoRoomListener
     virtual void OnTeacherScoreRecordResp(TeacherScoreRecordResp& info){}
     
     //…œ¬Ûª˙∆˜»À∂‘”¶Ω≤ ¶IDÕ®÷™
-    virtual void OnRobotTeacherIdNoty(RobotTeacherIdNoty& info){}
+    virtual void OnRobotTeacherIdNoty(RobotTeacherIdNoty& info);//{}
     
     //Ω≤ ¶÷“ µ∂»÷‹∞ÊœÏ”¶
     virtual void OnTeacherGiftListResp(std::vector<TeacherGiftListResp>& infos){}
