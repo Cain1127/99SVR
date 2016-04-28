@@ -8,6 +8,7 @@
 
 #import "TQDetailedTableViewController.h"
 #import "MJRefresh.h"
+#import "ReplyNullInfoCell.h"
 #import "EmojiTextAttachment.h"
 #import "ZLReply.h"
 #import "AlertFactory.h"
@@ -222,14 +223,8 @@
     
     CGFloat height = [_textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-16].height;
     
-    contentView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, height+97)];
+    contentView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, height+102)];
     [contentView addSubview:_textView];
-#if 0
-    UILabel *lblTitle = [[UILabel alloc] initWithFrame:Rect(8, 30, kScreenWidth-16, frame.size.height)];
-    [lblTitle setFont:XCFONT(17)];
-    [lblTitle setText:_ideaDetail.authorname];
-    [contentView addSubview:lblTitle];
-#endif
     
     UILabel *lblAuthor = [[UILabel alloc] initWithFrame:Rect(8, 10,100, 20)];
     [lblAuthor setFont:XCFONT(13)];
@@ -253,7 +248,8 @@
     [kHTTPSingle RequestReply:_viewId start:0 count:20];
     nCurrent = 20;
     [_tableView reloadData];
-    
+//    [_tableView.footer noticeNoMoreData];
+//    [_tableView.footer ];
     
 }
 
@@ -306,7 +302,7 @@
 {
     if (_aryCommont.count==0)
     {
-        
+        return 1;
     }
     return _aryCommont.count;
 }
@@ -317,8 +313,11 @@
     
     if(_aryCommont.count==0)
     {
-        
-//        return ;
+        ReplyNullInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ReplyNullInfocell"];
+        if (!cell) {
+            cell = [[ReplyNullInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ReplyNullInfocell"];
+        }
+        return cell;
     }
     
     CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
@@ -442,6 +441,10 @@
  */
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (_aryCommont.count==0) {
+        return 200;
+    }
+    
     if (_aryCommont.count>indexPath.row)
     {
         ZLReply *comment = [_aryCommont objectAtIndex:indexPath.row];

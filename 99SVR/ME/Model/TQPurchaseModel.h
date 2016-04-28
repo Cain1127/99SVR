@@ -29,5 +29,6 @@
 
 #pragma mark 购买私人订制的
 /**股票首页*/
+- (id)initWithPrivateServiceLevelData:(void *)pData;
 
 @end

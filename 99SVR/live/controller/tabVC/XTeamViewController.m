@@ -35,17 +35,19 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
+    [self setTitleText:@"讲师团队简介"];
+    [self.headView setBackgroundColor:[UIColor clearColor]];
+    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
+    [self.view insertSubview:imgView atIndex:0];
+
     char cBuffer[100]={0};
     sprintf(cBuffer,"video_profiles_bg@2x");
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [imgView sd_setImageWithURL:url1];
-    [self.view addSubview:imgView];
-    [super viewDidLoad];
-    [self setTitleText:@"讲师团队简介"];
-    [self.headView setBackgroundColor:[UIColor clearColor]];
-    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     
     UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-50,64,100,100)];
     [self.view addSubview:imgHead];
@@ -89,7 +91,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    if (section==0) {
+        return 1;
+    }
+    NSInteger count = (NSInteger)ceilf((1.0f * _aryVideo.count) / 2.0f);
+    return count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -120,10 +126,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        DTAttributedTextCell *cell =[cache objectForKey:@"RoomTeamCell"];
-        
-        if (cell) {
+    if (indexPath.section == 0)
+    {
+        DTAttributedTextCell *cell = [cache objectForKey:@"RoomTeamCell"];
+        if (!cell) {
             cell = [[DTAttributedTextCell alloc] initWithReuseIdentifier:@"RoomTeamCell"];
             [cache setObject:cell forKey:@"RoomTeamCell"];
         }
@@ -135,12 +141,12 @@
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TeamVideoCell"];;
     }
+    
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if()
     return 60;
 }
 

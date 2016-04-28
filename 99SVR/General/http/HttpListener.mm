@@ -387,20 +387,10 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
     NSMutableArray *muArray = [NSMutableArray array];
     for (size_t i=0; i!=infos.size(); i++) {
         PrivateServiceLevelDescription *profit = &infos[i];
-        TQPurchaseModel *model = [[TQPurchaseModel alloc] init];
-        model.levelname = StrTransformCToUTF8(profit->levelname().c_str());
-        model.descriptionStr = StrTransformCToUTF8(profit->description().c_str());
-        model.buytime = StrTransformCToUTF8(profit->buytime().c_str());
-        model.expirtiontime = StrTransformCToUTF8(profit->expirtiontime().c_str());
-        model.levelid = IntTransformIntToStr(profit->levelid());
-        model.isopen = IntTransformIntToStr(profit->isopen());
-        model.buyprice = [NSString stringWithFormat:@"%f",profit->buyprice()];
-        model.updateprice = [NSString stringWithFormat:@"%f",profit->updateprice()];
-        [muArray addObject:model];
+        TQPurchaseModel *headerModel =[[TQPurchaseModel alloc] initWithPrivateServiceLevelData:profit];
+        [muArray addObject:headerModel];
     }
     if (infos.size()>=1) {
-        
-//        TQPurchaseModel *headerModel =[[TQPurchaseModel alloc] initWithPrivateServiceLevelData:&infos[0]];
         muDic[@"headerModel"] = muArray[0];
     }
     

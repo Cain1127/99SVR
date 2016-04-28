@@ -14,7 +14,16 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
-//    _view = [];
+    char cString[255];
+    const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+    sprintf(cString, "%s/text_viewpoint_not_omment.png",path);
+    NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+    UIImage *image = [UIImage imageWithContentsOfFile:objCString];
+    if (image)
+    {
+        _view = [ViewNullFactory createViewBg:Rect(0, 0, kScreenWidth, 200) imgView:image msg:@"来抢个沙发吧!"];
+        [self.contentView addSubview:_view];
+    }
     
     return self;
 }
