@@ -4,8 +4,6 @@
 
 
 #import <Foundation/Foundation.h>
-#import "HttpMessage.pb.h"
-
 
 @interface StockDealModel : NSObject
 
@@ -64,31 +62,31 @@
 
 #pragma mark 股票详情--股票头部详情数据
 /**股票头部详情数据*/
-- (instancetype)initWithStockDealHeaderData:(OperateStockProfit &)profit;
+- (instancetype)initWithStockDealHeaderData:(void *)profit;
 
 
 #pragma mark 股票详情--股票走势图
 /**股票走势图*/
-- (instancetype)initWithStockDealStockData:(OperateStockData &)stockData;
+- (instancetype)initWithStockDealStockData:(void *)stockData;
 
 #pragma mark 股票详情--交易动态记录
 /**交易动态*/
-- (instancetype)initWithStockDealBusinessRecoreData:(OperateStockTransaction *)trans;
+- (instancetype)initWithStockDealBusinessRecoreData:(void *)trans;
 
 #pragma mark 股票详情--持仓记录
 /**持仓情况*/
-- (instancetype)initWithStockDealWareHouseRecoreData:(OperateStocks *)stocks;
+- (instancetype)initWithStockDealWareHouseRecoreData:(void *)stocks;
 
 #pragma mark 交易记录详情--交易记录的模型
 /**初始化交易记录详情--交易记录的模型*/
-- (instancetype)initWithStockRecordBusinessData:(OperateStockTransaction *)data;
+- (instancetype)initWithStockRecordBusinessData:(void *)pData;
 
 #pragma mark 交易记录详情--持仓情况的模型
 /**初始化交易记录详情--持仓情况的模型*/
-- (instancetype)initWithStockRecordWareHouseData:(OperateStocks *)data;
+- (instancetype)initWithStockRecordWareHouseData:(void *)pdata;
 #pragma mark 股票首页
 /**股票首页*/
-- (instancetype)initWithHomeRecordData:(OperateStockProfit *)profit;
+- (instancetype)initWithHomeRecordData:(void *)pData;
 
 
 

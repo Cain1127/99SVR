@@ -156,6 +156,7 @@
     }];
     
     //计算总收益字体
+
     self.totalNumLab.text =  [NSString stringWithFormat:@"%.02f%%",model.totalprofit*100];
     CGSize totalNumLabSize = [ShareFunction calculationOfTheText:self.totalNumLab.text withFont:totalNumLab_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
     
@@ -163,6 +164,7 @@
     [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.iconImv.mas_top);
         make.right.equalTo(@(ValueWithTheIPhoneModelString(@"-10,-10,-10,-10")));
+
         make.width.equalTo(@(totalNumLabSize.width));
         make.height.equalTo(@(totalNumLab_fot));
     }];

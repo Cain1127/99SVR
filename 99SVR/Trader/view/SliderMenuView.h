@@ -38,4 +38,6 @@
 /**点击顶部按钮 或者滑动切换对应页面时候的回调*/
 @property (nonatomic, copy) void (^DidSelectSliderIndex)(NSInteger index);
 
+-(void)hanleBlockWith:(NSInteger)index;
+
 @end

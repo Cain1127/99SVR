@@ -597,12 +597,16 @@ typedef enum : NSUInteger
         static NSString *viewPointCellName = @"TQIdeaTableViewIdentifier";
         NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
         TQIdeaTableViewCell *cell = [viewCache objectForKey:strKey];
+        NSString *strInfo = cell.content;
         if (!cell) {
             cell = [[TQIdeaTableViewCell alloc] initWithReuseIdentifier:viewPointCellName];
             [viewCache setObject:cell forKey:viewCache];
         }
         if (tempArray.count>indexPath.row) {
-            [cell setIdeaModel:[tempArray objectAtIndex:indexPath.row]];
+            TQIdeaModel *model = tempArray[indexPath.row];
+            if (![strInfo isEqualToString:model.content]) {
+                [cell setIdeaModel:model];
+            }
         }
         return cell;
     }
@@ -729,7 +733,7 @@ typedef enum : NSUInteger
                 UITabBarController *rootTabbarVC = selfWeak.tabBarController;
                 if (rootTabbarVC)
                 {
-                    rootTabbarVC.selectedIndex = 2;
+                    rootTabbarVC.selectedIndex = 3;
                 }
             }];
             [seeAllButton setTitle:@"查看全部" forState:UIControlStateNormal];
@@ -755,9 +759,21 @@ typedef enum : NSUInteger
             [lblHot setFont:XCFONT(15)];
             [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
             [tempHeaderView addSubview:lblHot];
-            UILabel *line = [[UILabel alloc] initWithFrame:Rect(0.0f, CGRectGetHeight(tempHeaderView.frame) - 0.5f, kScreenWidth, 0.5f)];
-            [line setBackgroundColor:UIColorFromRGB(0xF0F0F0)];
-            [tempHeaderView addSubview:line];
+            @WeakObj(self);
+            RightImageButton *seeAllButton = [[RightImageButton alloc] initWithFrame:Rect(CGRectGetWidth(tempHeaderView.frame) - 15.0f - rightButtonWidth, 0.0f, rightButtonWidth, tempHeight) rightImageWidth:30.0f tapActionBlock:^(UIButton *button) {
+                
+                UITabBarController *rootTabbarVC = selfWeak.tabBarController;
+                if (rootTabbarVC)
+                {
+                    rootTabbarVC.selectedIndex = 2;
+                }
+            }];
+            [seeAllButton setTitle:@"查看全部" forState:UIControlStateNormal];
+            [seeAllButton setTitleColor:UIColorFromRGB(0x0078DD) forState:UIControlStateNormal];
+            seeAllButton.titleLabel.font = XCFONT(12);
+            [seeAllButton setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
+            [tempHeaderView addSubview:seeAllButton];
+            
         }
         return tempHeaderView;
     }
@@ -812,7 +828,6 @@ typedef enum : NSUInteger
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     //banner height
     if (0 == indexPath.section)
     {
@@ -846,11 +861,6 @@ typedef enum : NSUInteger
     }
     return 130.0f;
     
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 5;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

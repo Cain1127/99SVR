@@ -53,8 +53,8 @@
         self.oleLabLineView.hidden = NO;
         self.newpriceLab.text = _newpriceStr;
         [self.newpriceLab sizeToFit];
-        self.newpriceLab.frame = (CGRect){10,5,self.newpriceLab.width,self.height/2.0};
-        self.oldpriceLab.frame = (CGRect){10,self.height/2.0-5,self.newpriceLab.width,self.height/2.0};
+        self.newpriceLab.frame = Rect(10,5,self.newpriceLab.width,self.height/2.0f);
+        self.oldpriceLab.frame = Rect(10,self.height/2.0-5,self.newpriceLab.width,self.height/2.0f);
 
         [self.oleLabLineView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.oldpriceLab.mas_centerY);

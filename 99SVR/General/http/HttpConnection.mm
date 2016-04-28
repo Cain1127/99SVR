@@ -67,28 +67,12 @@ static void http_request_asyn(HttpListener* uiListener, ParseJson jsonPaser, Req
 //请求闪屏图片
 void HttpConnection::RequestSplashImage(SplashImageListener* listener)
 {
-    Splash info;
-    info.set_imageurl("http://xx.x.x/x.png");
-    listener->onResponse(info);
+    RequestParamter& request = get_request_param();
+    
+    request["s"] = "Index/getSplashScreen";
+    
+    http_request_asyn(listener, parse_splashimage, &request);
 }
-
-
-
-//// 请求问题回复--未回回答的（PC端接口）
-//void HttpConnection::RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer)
-//{
-//    
-//}
-//
-//// 请求评论回复--发出的评论（PC端接口）
-//void HttpConnection::RequestMailSendReply(int startId, int count, MailReplyListener* listener,bool isTeamer)
-//{
-//    RequestParamter& request = get_request_param();
-//    
-//    request["s"] = "Index/getSplashScreen";
-//    
-//    http_request_asyn(listener, parse_splashimage, &request);
-//}
 
 void parse_profitorder(char* json, HttpListener* listener)
 {
@@ -263,6 +247,8 @@ void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, 
 
     http_request_asyn(listener, parse_profitorder, &request);
 }
+
+
 
 // 请求操盘详情
 void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener)
@@ -997,14 +983,14 @@ void parse_viewpointdetail(char* json, HttpListener* listener)
             if(!details.isNull())
             {
                 ViewpointDetail detail;
-                detail.set_viewpointid(atoi((details["viewpointid"].asString()).c_str()));
-                detail.set_authorid(details["authorid"].asString());
-                detail.set_authorname(details["authorname"].asString());
-                detail.set_authoricon(details["authoricon"].asString());
-                detail.set_publishtime(details["publishtime"].asString());
+                detail.set_viewpointid(atoi((details["viewpointId"].asString()).c_str()));
+                detail.set_authorid(details["authorId"].asString());
+                detail.set_authorname(details["authorName"].asString());
+                detail.set_authoricon(details["authorIcon"].asString());
+                detail.set_publishtime(details["publishTime"].asString());
                 detail.set_title(details["title"].asString());
                 detail.set_content(details["content"].asString());
-                detail.set_replycount(atoi((details["replycount"].asString()).c_str()));
+                detail.set_replycount(atoi((details["replyCount"].asString()).c_str()));
                 detail.set_giftcount(atoi((details["giftcount"].asString()).c_str()));
                 detail_listener->onResponse(detail);
             }
@@ -1623,7 +1609,7 @@ void HttpConnection::RequestViewpointDetail(int viewpointId, ViewpointDetailList
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
-    
+
     http_request_asyn(listener, parse_viewpointdetail, &request);
 
 }

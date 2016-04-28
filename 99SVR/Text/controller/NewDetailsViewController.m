@@ -677,12 +677,12 @@
 /**
  *  cell设置
  */
-- (void)commentCell:(IdeaDetailRePly *)Reply
-{
-    if (Reply) {
-        [self showChatView:Reply.viewuserid name:Reply.strName commentId:Reply.commentid];
-    }
-}
+//- (void)commentCell:(IdeaDetailRePly *)Reply
+//{
+//    if (Reply) {
+//        [self showChatView:Reply.viewuserid name:Reply.strName commentId:Reply.commentid];
+//    }
+//}
 /**
  *  根据评论记录，显示回复信息
  */

@@ -123,6 +123,7 @@ typedef NS_ENUM(NSInteger,MJRefreshState){
     }];
     
     [self.dayTab addLegendFooterWithRefreshingBlock:^{
+
         weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.dayPagInteger ++;
         [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:10];

@@ -9,10 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <DTCoreText/DTCoreText.h>
 @class IdeaDetailRePly;
-
+@class ZLReply;
 @protocol CommentDelegate <NSObject>
 
-- (void)commentCell:(IdeaDetailRePly *)Reply;
+- (void)commentCell:(ZLReply *)Reply;
 
 @end
 
@@ -25,8 +25,9 @@
 @property (nonatomic,strong) UIButton *btnReply;
 @property (nonatomic,strong) UILabel *lblLine;
 @property (nonatomic,assign) id<CommentDelegate> delegate;
-@property (nonatomic,strong) IdeaDetailRePly *reply;
+@property (nonatomic,strong) ZLReply *reply;
 
 - (void)setModel:(IdeaDetailRePly *)details;
+- (void)setReplyModel:(ZLReply *)reply;
 
 @end

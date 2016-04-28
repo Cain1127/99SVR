@@ -17,7 +17,7 @@ private:
 
 	uint32 _vipLevelId;
 	string _vipLevelName;
-	uint32 _isOpen;//0-false;1-true
+	uint32 _isOpen;
 	vector<PrivateServiceSummary> _summaryList;
 
 public:

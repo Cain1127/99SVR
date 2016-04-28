@@ -74,7 +74,7 @@
         _bottomoScroV_F = (CGRect){0,CGRectGetMaxY(_topScroV_F),_self_W,(_self_H-CGRectGetMaxY(_topScroV_F))};
         _lastSelectIndex = selectIndex;
         //顶部控制menu
-        self.topScroView = [[SliderMenuTopScrollView alloc]initWithFrame:_topScroV_F withTitles:titles withDefaultSelectIndex:(selectIndex-1)];
+        self.topScroView = [[SliderMenuTopScrollView alloc] initWithFrame:_topScroV_F withTitles:titles withDefaultSelectIndex:(selectIndex-1)];
         [self addSubview:self.topScroView];
         weakSelf(self);
         self.topScroView.DidSelectSliderIndex = ^(NSInteger index){
@@ -95,7 +95,8 @@
     return self;
 }
 
--(void)hanleBlockWith:(NSInteger)index{
+-(void)hanleBlockWith:(NSInteger)index
+{
     
     if (_lastSelectIndex!=index) {
         self.DidSelectSliderIndex(index);

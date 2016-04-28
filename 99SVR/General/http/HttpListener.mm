@@ -8,6 +8,8 @@
 
 #include <stdio.h>
 #include "HttpListener.h"
+#import  "XPrivateService.h"
+#import "ZLReply.h"
 #import "ZLOperateStock.h"
 #import "ZLViewPoint.h"
 #include "StockDealModel.h"
@@ -16,6 +18,7 @@
 #import "TQIdeaDetailModel.h"
 #import "TQMessageModel.h"
 #import "TQAnswerModel.h"
+#import "StockMacro.h"
 #import "XConsumeRankModel.h"
 #import "TQPersonalModel.h"
 #import "TQMeCustomizedModel.h"
@@ -24,13 +27,17 @@
 #import "MJExtension.h"
 #import "XPrivateDetail.h"
 #import "XVideoTeamInfo.h"
+#import "RoomHttp.h"
+#import "SplashModel.h"
 #import "TQPurchaseModel.h"
 #import "RoomHttp.h"
+
 /**
  *  闪屏响应
  */
 void SplashImageListener::onResponse(Splash& info){
-    
+    SplashModel *model = [[SplashModel alloc] initWithSplash:&info];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_SPLASH_VC object:model];
 }
 
 void SplashImageListener::OnError(int errCode)
@@ -66,8 +73,8 @@ void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
 }
 
 /**
- *  请求观点详情
- */
+*  请求观点详情
+*/
 void ViewpointDetailListener::onResponse(ViewpointDetail& infos){
     TQIdeaDetailModel *model = [[TQIdeaDetailModel alloc] initWithViewpointDetail:&infos];
     NSDictionary *dict = @{@"code":@(1),@"model":model};
@@ -84,38 +91,60 @@ void ViewpointDetailListener::OnError(int errCode)
  *  请求观点列表
  */
 void ReplyListener::onResponse(vector<Reply>& infos){
+    NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<infos.size(); i++) {
-        NSMutableArray *ary = [NSMutableArray array];
-        for (int i=0; i<infos.size(); i++) {
-//            TQIdeaModel *model = [[TQIdeaModel alloc] init];
-//            ViewpointSummary summary = infos[i];
-//            model.authorid = [NSString stringWithUTF8String:summary.authorid().c_str()];
-//            model.authoricon = [NSString stringWithUTF8String:summary.authoricon().c_str()];
-//            model.authorname = [NSString stringWithUTF8String:summary.authorname().c_str()];
-//            model.publishtime = [NSString stringWithUTF8String:summary.publishtime().c_str()];
-//            model.content = [NSString stringWithUTF8String:summary.content().c_str()];
-//            model.replycount = summary.replycount();
-//            model.giftcount = summary.giftcount();
-//            model.viewpointid = summary.viewpointid();
-//            [ary addObject:model];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:ary];
+        ZLReply *reply = [[ZLReply alloc] init];
+        Reply info = infos[i];
+        reply.replytid = info.replytid();
+        reply.viewpointid = info.viewpointid();
+        reply.parentreplyid = info.parentreplyid();
+        
+        reply.authorid = [NSString stringWithUTF8String:info.authorid().c_str()];
+        reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
+        reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];
+        reply.fromauthorid = [NSString stringWithUTF8String:info.fromauthorid().c_str()];
+        reply.fromauthorname = [NSString stringWithUTF8String:info.fromauthorname().c_str()];
+        reply.fromauthoricon = [NSString stringWithUTF8String:info.fromauthoricon().c_str()];
+        reply.publishtime = [NSString stringWithUTF8String:info.publishtime().c_str()];
+        reply.content = [NSString stringWithUTF8String:info.content().c_str()];
+        [ary addObject:reply];
     }
+    NSDictionary *dict = @{@"code":@(1),@"model":ary};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_REQUEST_REPLY_VC object:dict];
 }
 
 void ReplyListener::OnError(int errCode)
 {
-    
+    NSDictionary *dict = @{@"code":@(1)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_REQUEST_REPLY_VC object:dict];
 }
 /**
  *  回复观点
  */
 void PostReplyListener::onResponse(int errorCode, Reply& info){
+    DLog(@"回复成功!");
+    ZLReply *reply = [[ZLReply alloc] init];
+    reply.replytid = info.replytid();
+    reply.viewpointid = info.viewpointid();
+    reply.parentreplyid = info.parentreplyid();
+    
+    reply.authorid = [NSString stringWithUTF8String:info.authorid().c_str()];
+    reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
+    reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];
+    reply.fromauthorid = [NSString stringWithUTF8String:info.fromauthorid().c_str()];
+    reply.fromauthorname = [NSString stringWithUTF8String:info.fromauthorname().c_str()];
+    reply.fromauthoricon = [NSString stringWithUTF8String:info.fromauthoricon().c_str()];
+    reply.publishtime = [NSString stringWithUTF8String:info.publishtime().c_str()];
+    reply.content = [NSString stringWithUTF8String:info.content().c_str()];
+    
+    NSDictionary *dict = @{@"code":@(1),@"model":reply};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_IDEA_REPLY_RESPONSE_VC object:dict];
     
 }
 void PostReplyListener::OnError(int errCode)
 {
-    
+    NSDictionary *dict = @{@"code":@(errCode)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_IDEA_REPLY_RESPONSE_VC object:dict];
 }
 
 /**
@@ -208,23 +237,21 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     
     
     //股票头部数据
-    StockDealModel *headerModel = [[StockDealModel alloc]initWithStockDealHeaderData:profit];
+    StockDealModel *headerModel = [[StockDealModel alloc] initWithStockDealHeaderData:&profit];
     
     //头部数据
     muDic[@"headerModel"] = headerModel;
     
     
     //股票数据
-    StockDealModel *stockDataModel = [[StockDealModel alloc]initWithStockDealStockData:data];
+    StockDealModel *stockDataModel = [[StockDealModel alloc] initWithStockDealStockData:&data];
     muDic[@"stockModel"] = stockDataModel;
     
     
     //交易详情
     NSMutableArray *transArray = [NSMutableArray array];
     if (isShowRecal) {
-
         for (size_t i =0; i < trans.size(); i ++) {
-            
             OperateStockTransaction *transaction = &trans[i];
             StockDealModel *transactionModel = [[StockDealModel alloc]initWithStockDealBusinessRecoreData:transaction];
             [transArray addObject:transactionModel];
@@ -359,15 +386,12 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     NSMutableArray *muArray = [NSMutableArray array];
     for (size_t i=0; i!=infos.size(); i++) {
-        PrivateServiceLevelDescription *levelModel = &infos[i];
-        TQPurchaseModel *model = [[TQPurchaseModel alloc]initWithPrivateServiceLevelData:levelModel];
-        [muArray addObject:model];
+        PrivateServiceLevelDescription *profit = &infos[i];
+        TQPurchaseModel *headerModel =[[TQPurchaseModel alloc] initWithPrivateServiceLevelData:profit];
+        [muArray addObject:headerModel];
     }
-    
     if (infos.size()>=1) {
-        
-        TQPurchaseModel *headerModel =[[TQPurchaseModel alloc]initWithPrivateServiceLevelData:&infos[0]];
-        muDic[@"headerModel"] = headerModel;
+        muDic[@"headerModel"] = muArray[0];
     }
     
     muDic[@"data"] = muArray;
@@ -378,16 +402,40 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
 void BuyPrivateServiceListener::OnError(int errCode)
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:@{@"code":@(errCode)}];
-
 }
 
 void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateServiceSummaryPack>& infos){
-    
+    NSMutableArray *aryDict = [NSMutableArray array];
+    for(int i=0;i<infos.size();i++)
+    {
+        TeamPrivateServiceSummaryPack pack = infos[i];
+        XPrivateService *service = [[XPrivateService alloc] init];
+        service.vipLevelId = pack.vipLevelId();
+        service.vipLevelName = [NSString stringWithUTF8String:pack.vipLevelName().c_str()];
+        service.isOpen = pack.isOpen();
+        NSMutableArray *array = [NSMutableArray array];
+        for (int j = 0 ; j < pack.summaryList().size(); j++) {
+            PrivateServiceSummary sumary = pack.summaryList()[j];
+            XPrivateSummary *priSummary = [[XPrivateSummary alloc] init];
+            
+            priSummary.nId = sumary.id();
+            priSummary.title = [NSString stringWithUTF8String:sumary.title().c_str()];
+            priSummary.summary = [NSString stringWithUTF8String:sumary.summary().c_str()];
+            priSummary.publishtime = [NSString stringWithUTF8String:sumary.publishtime().c_str()];
+            priSummary.teamname = [NSString stringWithUTF8String:sumary.teamname().c_str()];
+            [array addObject:priSummary];
+        }
+        service.summaryList = array;
+        [aryDict addObject:service];
+    }
+    NSDictionary *dict = @{@"code":@(1),@"model":aryDict};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:dict];
 }
 
 void TeamPrivateServiceSummaryPackListener::OnError(int errCode)
 {
-    
+    NSDictionary *dict = @{@"code":@(errCode)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:dict];
 }
 
 void PrivateServiceDetailListener::onResponse(PrivateServiceDetail& info){

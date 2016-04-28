@@ -8,7 +8,9 @@
 
 #import "TQDetailedTableViewController.h"
 #import "MJRefresh.h"
+#import "ReplyNullInfoCell.h"
 #import "EmojiTextAttachment.h"
+#import "ZLReply.h"
 #import "AlertFactory.h"
 #import "Photo.h"
 #import "PhotoViewController.h"
@@ -49,8 +51,6 @@
 @property (nonatomic,strong) UIButton *btnSend;
 @property (nonatomic,copy) NSArray *aryCommont;
 
-//@property (nonatomic,strong) NewDetailsModel *jsonModel;
-
 @property (nonatomic,strong) TQIdeaDetailModel *ideaDetail;
 
 @property (nonatomic,strong) UITableView *tableView;
@@ -81,6 +81,8 @@
 {
     [super viewDidLoad];
     [self setTitleText:@"观点正文"];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyRepson:) name:MESSAGE_IDEA_REPLY_RESPONSE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView:) name:MESSAGE_HTTP_REQUEST_REPLY_VC object:nil];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _tableView = [[UITableView alloc] initWithFrame:Rect(0,64, kScreenWidth,kScreenHeight-114)];
     [self.view addSubview:_tableView];
@@ -221,17 +223,10 @@
     
     CGFloat height = [_textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-16].height;
     
-    CGRect frame = [_ideaDetail.authorname boundingRectWithSize:CGSizeMake(kScreenWidth-16, 100) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(17)} context:nil];
-    
-    contentView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, height+250+frame.size.height)];
+    contentView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, height+102)];
     [contentView addSubview:_textView];
     
-    UILabel *lblTitle = [[UILabel alloc] initWithFrame:Rect(8, 30, kScreenWidth-16, frame.size.height)];
-    [lblTitle setFont:XCFONT(17)];
-    [lblTitle setText:_ideaDetail.authorname];
-    [contentView addSubview:lblTitle];
-    
-    UILabel *lblAuthor = [[UILabel alloc] initWithFrame:Rect(8, lblTitle.y+lblTitle.height+20,100, 20)];
+    UILabel *lblAuthor = [[UILabel alloc] initWithFrame:Rect(8, 10,100, 20)];
     [lblAuthor setFont:XCFONT(13)];
     [lblAuthor setText:[NSString stringWithFormat:@"作者:%@",_ideaDetail.authorname]];
     [lblAuthor setTextColor:UIColorFromRGB(0x919191)];
@@ -249,12 +244,13 @@
     
     [_tableView setTableHeaderView:contentView];
     //TODD:请求评论信息
-    if (_ideaDetail.replycount==0) {
-        [_tableView.footer noticeNoMoreData];
-    } else {
-        [kHTTPSingle RequestReply:_viewId start:0 count:20];
-        nCurrent = 20;
-    }
+
+    [kHTTPSingle RequestReply:_viewId start:0 count:20];
+    nCurrent = 20;
+    [_tableView reloadData];
+//    [_tableView.footer noticeNoMoreData];
+//    [_tableView.footer ];
+    
 }
 
 - (void)updateContentView
@@ -282,8 +278,10 @@
         lblTalk.layer.masksToBounds= YES;
         lblTalk.layer.cornerRadius = 10;
         [downContentView addSubview:lblTalk];
+    }else
+    {
+        downContentView.frame = Rect(0, _textView.y+_textView.height+10, kScreenWidth,67);
     }
-    downContentView.frame = Rect(0, _textView.y+_textView.height+10, kScreenWidth,67);
 }
 
 /**
@@ -302,12 +300,26 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (_aryCommont.count==0)
+    {
+        return 1;
+    }
     return _aryCommont.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *identifier = @"commentIdentifier";
+    
+    if(_aryCommont.count==0)
+    {
+        ReplyNullInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ReplyNullInfocell"];
+        if (!cell) {
+            cell = [[ReplyNullInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ReplyNullInfocell"];
+        }
+        return cell;
+    }
+    
     CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if(cell==nil)
     {
@@ -315,11 +327,12 @@
     }
     if(_aryCommont.count > indexPath.row)
     {
-        IdeaDetailRePly *comment = [_aryCommont objectAtIndex:indexPath.row];
+        ZLReply *reply = [_aryCommont objectAtIndex:indexPath.row];
         cell.textView.shouldDrawImages = YES;
         cell.textView.delegate = self;
-        cell.textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[comment.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
-        [cell setModel:comment];
+        
+        cell.textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[reply.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
+        [cell setReplyModel:reply];
     }
     return cell;
 }
@@ -428,9 +441,13 @@
  */
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (_aryCommont.count==0) {
+        return 200;
+    }
+    
     if (_aryCommont.count>indexPath.row)
     {
-        IdeaDetailRePly *comment = [_aryCommont objectAtIndex:indexPath.row];
+        ZLReply *comment = [_aryCommont objectAtIndex:indexPath.row];
         DTAttributedTextContentView *content = [DTAttributedTextContentView new];
         content.attributedString = [[NSAttributedString alloc] initWithHTMLData:[comment.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
         CGFloat height = [content suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-80].height;
@@ -442,18 +459,39 @@
 /**
  *  加载评论信息,执行刷新操作
  */
-- (void)loadCommentView
+- (void)loadCommentView:(NSNotification  *)notify
 {
-    __weak UITableView *__tableView = _tableView;
-    __block int __nCount = nCurrent;
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-       [__tableView.footer endRefreshing];
-       if (__nCount!=_aryCommont.count) {
-           [__tableView.footer noticeNoMoreData];
-       }
-       [__tableView reloadData];
-    });
+    NSDictionary *parameters = [notify object];
+    if ([[parameters objectForKey:@"code"] intValue]==1) {
+        _aryCommont = parameters[@"model"];
+        __weak UITableView *__tableView = _tableView;
+        __block int __ncurrent = nCurrent;
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+           [__tableView.footer endRefreshing];
+           if (__ncurrent!=_aryCommont.count) {
+               [__tableView.footer noticeNoMoreData];
+           }
+           [__tableView reloadData];
+        });
+    }
+}
+
+- (void)replyRepson:(NSNotification *)notify
+{
+    NSDictionary *parameters = [notify object];
+    if ([[parameters objectForKey:@"code"] intValue]==1) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ProgressHUD showSuccess:@"评论成功!"];
+        });
+        [kHTTPSingle RequestReply:_viewId start:0 count:20];
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ProgressHUD showError:@"评论失败!"];
+        });
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -502,7 +540,7 @@
         UIImage *image = [UIImage imageWithContentsOfFile:objCString];
         if(image)
         {
-            noView = [ViewNullFactory createViewBg:_tableView.bounds imgView:image msg:@"获取观点详情失败"];
+            noView = [ViewNullFactory createViewBg:Rect(0,10,kScreenWidth,_tableView.height-10) imgView:image msg:@"获取观点详情失败"];
             [_tableView addSubview:noView];
         }
     }
@@ -536,8 +574,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (_aryCommont.count > indexPath.row) {
-        IdeaDetailRePly *reply = [_aryCommont objectAtIndex:indexPath.row];
-        [self showChatView:reply.viewuserid name:reply.strName commentId:reply.commentid];
+        ZLReply *reply = [_aryCommont objectAtIndex:indexPath.row];
+        [self showChatView:reply.parentreplyid name:reply.authorname commentId:[reply.fromauthorid intValue]];
     }
 }
 
@@ -575,45 +613,47 @@
  *  发送评论
  *
  */
-- (void)sendMessage:(UITextView *)textView userid:(int)nUser reply:(int64_t)nDetails
+- (void)sendMessage:(UITextView *)textView userid:(int)nUser reply:(int32_t)nDetails
 {
-//    UserInfo *info = KUserSingleton;
-//    if (info.nType != 1 && info.bIsLogin) {
-//        @WeakObj(self)
-//        [AlertFactory createLoginAlert:self block:^{
-//            [selfWeak.tcpSocket exitRoomInfo];
-//        }];
-//        return ;
-//    }
-//    if ([textView.textStorage getPlainString].length == 0)
-//    {
-//        [ProgressHUD showError:@"不能发送空信息"];
-//        return ;
-//    }
-//    
-//    NSString *strComment = [textView.textStorage getPlainString];
-//    int toId = !nUser?[_jsonModel.teacherid intValue]:nUser;
-//    [_tcpSocket replyCommentReq:strComment msgid:[_jsonModel.viewid integerValue]
-//                           toid:toId srccom:nDetails];
-//    textView.text = @"";
-//    [_chatView setHidden:YES];
-//    _chatView.nUserId = 0;
+    UserInfo *info = KUserSingleton;
+    if (info.nType != 1 && info.bIsLogin) {
+        [AlertFactory createLoginAlert:self block:^{
+        }];
+        return ;
+    }
+    if ([textView.textStorage getPlainString].length == 0)
+    {
+        [ProgressHUD showError:@"不能发送空信息"];
+        return ;
+    }
+    
+    NSString *strComment = [textView.textStorage getPlainString];
+    int toId = !nUser?[_ideaDetail.authorId intValue]:nUser;
+
+    char cBuf[1024]={0};
+    ::strcpy(cBuf,[strComment UTF8String]);
+    [kHTTPSingle PostReply:_viewId replyId:nDetails author:KUserSingleton.nUserId content:cBuf fromId:toId];
+    
+    textView.text = @"";
+    [_chatView setHidden:YES];
+    _chatView.nUserId = 0;
 }
 
 /**
  *  cell设置
  */
-- (void)commentCell:(IdeaDetailRePly *)Reply
+- (void)commentCell:(ZLReply *)reply
 {
-    if (Reply) {
-        [self showChatView:Reply.viewuserid name:Reply.strName commentId:Reply.commentid];
+    if (reply)
+    {
+        [self showChatView:reply.parentreplyid name:reply.authorname commentId:[reply.fromauthorid intValue]];
     }
 }
 /**
  *  根据评论记录，显示回复信息
  */
 
-- (void)showChatView:(int)viewuserid name:(NSString *)strName commentId:(int64_t)commentId
+- (void)showChatView:(int)viewuserid name:(NSString *)strName commentId:(int)commentId
 {
     UserInfo *__userInfo = [UserInfo sharedUserInfo];
     if (viewuserid != __userInfo.nUserId) {
@@ -656,5 +696,6 @@
         [photoControl show];
     }
 }
+
 
 @end

@@ -8,6 +8,7 @@
 
 #import "CommentCell.h"
 #import "IdeaDetailRePly.h"
+#import "ZLReply.h"
 
 @implementation CommentCell
 
@@ -45,18 +46,26 @@
     }
 }
 
+- (void)setReplyModel:(ZLReply *)reply
+{
+    _reply = reply;
+    [_lblTitle setText:_reply.authorname];
+    [_lblTime setText:_reply.publishtime];
+    [_imgView setImage:[UIImage imageNamed:@"personal_user_head"]];
+}
+
 - (void)setModel:(IdeaDetailRePly *)details
 {
-    _reply = details;
-    [_lblTitle setText:details.strName];
-    [_lblTime setText:details.time];
-    [_imgView setImage:[UIImage imageNamed:@"personal_user_head"]];
+//    _reply = details;
+//    [_lblTitle setText:details.strName];
+//    [_lblTime setText:details.time];
+//    [_imgView setImage:[UIImage imageNamed:@"personal_user_head"]];
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    _textView.frame = Rect(56,17,kScreenWidth-80,self.contentView.height-34);
+    _textView.frame = Rect(56,20,kScreenWidth-80,self.contentView.height-34);
     _lblLine.frame = Rect(8, self.contentView.height-1, kScreenWidth-16, 0.5);
 }
 

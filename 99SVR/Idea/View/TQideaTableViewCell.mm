@@ -76,6 +76,7 @@
 - (void)setIdeaModel:(TQIdeaModel *)ideaModel
 {
     [self setHTMLString:ideaModel.content];
+    _content = ideaModel.content;
     [_authorLabel setText:ideaModel.authorname];
     [_dateLabel setText:ideaModel.publishtime];
     [_commentBtn setTitle:NSStringFromInt(ideaModel.replycount) forState:UIControlStateNormal];

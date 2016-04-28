@@ -8,48 +8,50 @@
 
 #import "StockDealModel.h"
 #import "StockMacro.h"
+#import "HttpMessage.pb.h"
 
 @implementation StockDealModel
 
-- (instancetype)initWithStockDealHeaderData:(OperateStockProfit &)profit
+- (instancetype)initWithStockDealHeaderData:(void *)pData
+{
+    self = [super init];
+    OperateStockProfit *profit = (OperateStockProfit *)pData;
+    if (self) {
+        
+        _teamid = StrTransformCToUTF8(profit->teamid().c_str());
+        _teamicon = StrTransformCToUTF8(profit->teamicon().c_str());
+        _focus = StrTransformCToUTF8(profit->focus().c_str());
+        _teamname = StrTransformCToUTF8(profit->teamname().c_str());
+        _operateid = IntTransformIntToStr(profit->operateid());
+        _goalprofit = FloatTransformFloatToStr(profit->goalprofit());
+        _totalprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->totalprofit()*100))];
+        //日利率
+        _dayprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->dayprofit()*100))];
+        //月收益
+        _monthprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->monthprofit()*100))];
+        //超赢
+        _winrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->winrate()*100))];
+    }
+    return self;
+}
+
+
+
+- (instancetype)initWithStockDealStockData:(void *)pData
 {
     self = [super init];
     if (self) {
-        
-        _teamid = StrTransformCToUTF8(profit.teamid().c_str());
-        _teamicon = StrTransformCToUTF8(profit.teamicon().c_str());
-        _focus = StrTransformCToUTF8(profit.focus().c_str());
-        _teamname = StrTransformCToUTF8(profit.teamname().c_str());
-        _operateid = IntTransformIntToStr(profit.operateid());
-        _goalprofit = FloatTransformFloatToStr(profit.goalprofit());
-//        _transId = IntTransformIntToStr(profit.);
-        _totalprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.totalprofit()*100))];
-        //日利率
-        _dayprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.dayprofit()*100))];
-        //月收益
-        _monthprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.monthprofit()*100))];
-        //超赢
-        _winrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit.winrate()*100))];
+        OperateStockData *stockData = (OperateStockData*)pData;
+        _operateid = IntTransformIntToStr(stockData->operateid());
     }
     return self;
 }
 
-
-
-- (instancetype)initWithStockDealStockData:(OperateStockData &)stockData{
-    
-    self = [super init];
-    if (self) {
-        _operateid = IntTransformIntToStr(stockData.operateid());
-    }
-    return self;
-}
-
-- (instancetype)initWithStockDealBusinessRecoreData:(OperateStockTransaction *)trans{
+- (instancetype)initWithStockDealBusinessRecoreData:(void *)pData{
 
     self = [super init];
     if (self) {
-        
+        OperateStockTransaction *trans = (OperateStockTransaction *)pData;
         _operateid = IntTransformIntToStr(trans->operateid());
         _buytype = StrTransformCToUTF8(trans->buytype().c_str());
         _stockid = StrTransformCToUTF8(trans->stockid().c_str());
@@ -64,10 +66,11 @@
 
 }
 
-- (instancetype)initWithStockDealWareHouseRecoreData:(OperateStocks *)stocks{
+- (instancetype)initWithStockDealWareHouseRecoreData:(void *)pData{
 
     self = [super init];
-    if (self) {        
+    if (self) {
+        OperateStocks *stocks = (OperateStocks *)pData;
         _operateid = IntTransformIntToStr(stocks->operateid());
         _stockid = StrTransformCToUTF8(stocks->stockid().c_str());
         _stockname = StrTransformCToUTF8(stocks->stockname().c_str());
@@ -81,11 +84,11 @@
     
 }
 #pragma mark 初始化交易记录详情--交易记录的模型
-- (instancetype)initWithStockRecordBusinessData:(OperateStockTransaction *)data
+- (instancetype)initWithStockRecordBusinessData:(void *)pData
 {
     self = [super init];
     if (self) {
-        
+        OperateStockTransaction *data = (OperateStockTransaction *)pData;
         _operateid = IntTransformIntToStr(data->operateid());
         _buytype = StrTransformCToUTF8(data->buytype().c_str());
         _stockid = StrTransformCToUTF8(data->stockid().c_str());
@@ -101,10 +104,11 @@
 }
 
 #pragma mark 初始化持仓情况的模型
-- (instancetype)initWithStockRecordWareHouseData:(OperateStocks *)data
+- (instancetype)initWithStockRecordWareHouseData:(void *)pData
 {
     self = [super init];
     if (self) {
+        OperateStocks *data = (OperateStocks*)pData;
         _operateid = IntTransformIntToStr(data->operateid());
         _stockid = StrTransformCToUTF8(data->stockid().c_str());
         _stockname = StrTransformCToUTF8(data->stockname().c_str());
@@ -117,13 +121,13 @@
     return self;
 }
 #pragma mark 股票首页
-- (instancetype)initWithHomeRecordData:(OperateStockProfit *)profit{
+- (instancetype)initWithHomeRecordData:(void *)pData{
     
     
     self = [super init];
     
     if (self) {
-
+        OperateStockProfit *profit = (OperateStockProfit *)pData;
         _teamid = StrTransformCToUTF8(profit->teamid().c_str());
         _teamicon = StrTransformCToUTF8(profit->teamicon().c_str());
         _focus = StrTransformCToUTF8(profit->focus().c_str());

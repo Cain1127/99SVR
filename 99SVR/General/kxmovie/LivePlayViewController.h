@@ -28,10 +28,6 @@
 
 //开始播放
 
-//- (void)seekWithTime:(int)time;
-
-//- (void)playWithUrl:(NSString *)strUrl;
-
 - (void)setDefaultImg;
 
 - (void)setNullMic;
@@ -41,5 +37,7 @@
 - (void)stop;
 
 - (void)setOnlyAudio:(BOOL)enable;
+
+- (void)fullPlayMode;
 
 @end

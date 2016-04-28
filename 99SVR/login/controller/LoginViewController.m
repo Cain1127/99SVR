@@ -196,7 +196,6 @@
     
     hidenView = [[UIView alloc] initWithFrame:Rect(0, _btnLogin.y+_btnLogin.height, kScreenWidth,100)];
     [self.view addSubview:hidenView];
-    hidenView.hidden = YES;
     if ([UserInfo sharedUserInfo].nStatus) {
         hidenView.hidden = NO;
     }

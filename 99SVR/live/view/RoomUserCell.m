@@ -17,6 +17,7 @@
     UILabel *lblName;
     UILabel *lblContent;
     UILabel *lblLine;
+    UIImageView *imgMicView;
 }
 
 @end
@@ -45,6 +46,9 @@
     [self.contentView addSubview:lblName];
     [self.contentView addSubview:imgViewPic];
     [self.contentView addSubview:imgView];
+    
+    imgMicView = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth-44, 10, 17, 17)];
+//    [self.contentView addSubview:imgMicView];
     
     lblLine = [[UILabel alloc] initWithFrame:Rect(10, 59, kScreenWidth-10, 0.5)];
     [self.contentView addSubview:lblLine];
@@ -83,6 +87,14 @@
             break;
     }
     [imgView setImage:[UIImage imageNamed:strMsg]];
+    
+    [imgMicView removeFromSuperview];
+    
+    if ([user isOnMic]) {
+        [imgMicView setImage:[UIImage imageNamed:@"mic"]];
+        [self.contentView addSubview:imgMicView];
+    }
+    
     char cBuffer[100]={0};
     sprintf(cBuffer,"%d_1",user.m_nHeadId);
     NSString *strName = [NSString stringWithUTF8String:cBuffer];

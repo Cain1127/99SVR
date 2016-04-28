@@ -164,7 +164,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 }
 
 // 显示购买私人定制页
-- (void) RequestBuyPrivateServicePage:(int)userId{//, BuyPrivateServiceListener* listener);
+- (void) RequestBuyPrivateServicePage:(int)userId{
     [self createHttpConnection];
     hConnection->RequestBuyPrivateServicePage(userId,&buyPrivateListener);
     
