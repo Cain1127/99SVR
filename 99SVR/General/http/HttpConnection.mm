@@ -15,8 +15,10 @@
 #include <cstring>
 #include <stdlib.h>
 
-
 #define HTTP_API "http://testphp.99ducaijing.cn/api.php"
+#define HTTP_IMG_SVR "http://testphp.99ducaijing.cn:8081"
+#define HTTP_ICON_SVR "http://testphp.99ducaijing.cn:8081"
+#define HTTP_ICON_FOLDER "icon"
 
 void parse_totalunreadcount(char* json, HttpListener* listener);
 void parse_collectionlist(char* json, HttpListener* listener);
@@ -30,7 +32,44 @@ void parse_splashimage(char* json, HttpListener* listener);
 void parse_teamintroduce(char* json, HttpListener* listener);
 void parse_postaskquestion(char* json, HttpListener* listener);
 
+static void get_full_img_url(const std::string& relative_path, std::string& absolute_path)
+{
+    if(relative_path.size() == 0)
+    {
+        return;
+    }
+    
+    if( relative_path.substr(0, 7) == "http://" || relative_path.substr(0, 8) == "https://" )
+    {
+        absolute_path = relative_path;
+        return;
+    }
+    
+    absolute_path = HTTP_IMG_SVR;
+    
+    if(relative_path.at(0) != '/')
+    {
+        absolute_path += "/";
+    }
+    
+    absolute_path += relative_path;
+}
 
+static void get_full_head_icon(const std::string& headid, std::string& absolute_path)
+{
+    if(headid.size() == 0)
+    {
+        return;
+    }
+    
+    absolute_path = HTTP_ICON_SVR;
+    absolute_path += "/";
+    absolute_path += HTTP_ICON_FOLDER;
+    absolute_path += "/";
+    absolute_path += headid;
+    absolute_path += ".png";
+    
+}
 static ThreadVoid http_request(void* _param)
 {
     HttpThreadParam* param = (HttpThreadParam*)_param;
@@ -2061,13 +2100,13 @@ void parse_homepage(char* json, HttpListener* listener)
     int i = 0;
     
     std::vector<BannerItem> vec_banner;
-    std::vector<HomePageVideoroomItem> vec_videoroom;
+    std::vector<Team> vec_team;
     std::vector<ViewpointSummary> vec_viewpoint;
     std::vector<OperateStockProfit> vec_operate;
     
     try
     {
-        // 解析逻辑
+        // Ω‚Œˆ¬ﬂº≠
         if (reader.parse(strJson, value))
         {
             if(!value["status"].isNull())
@@ -2087,28 +2126,40 @@ void parse_homepage(char* json, HttpListener* listener)
                             BannerItem bannerItem;
                             bannerItem.set_url(banner[i]["url"].asString());
                             bannerItem.set_type(banner[i]["type"].asString());
-                            bannerItem.set_croompic(banner[i]["croompic"].asString());
+                            
+                            std::string out;
+                            get_full_img_url(banner[i]["croompic"].asString(), out);
+                            bannerItem.set_croompic(out);
                             
                             vec_banner.push_back( bannerItem );
                         }
                     }
                     
-                    JsonValue& videoroom = value["data"]["videoroom"];
+                    JsonValue& team = value["data"]["videoroom"];
                     
-                    vec_videoroom.clear();
-                    if(!videoroom.isNull())
+                    vec_team.clear();
+                    if(!team.isNull())
                     {
-                        size_ = videoroom.size();
+                        size_ = team.size();
                         for(i = 0; i < size_; i++)
                         {
-                            HomePageVideoroomItem videoroomItem;
-                            videoroomItem.set_nvcbid(videoroom[i]["nvcbid"].asString());
-                            videoroomItem.set_croompic(videoroom[i]["croompic"].asString());
-                            videoroomItem.set_livetype(videoroom[i]["livetype"].asString());
-                            videoroomItem.set_ncount(videoroom[i]["ncount"].asString());
-                            videoroomItem.set_cname(videoroom[i]["cname"].asString());
+                            Team teamItem;
+                            teamItem.set_roomid(atoi(team[i]["nvcbid"].asString().c_str()));
                             
-                            vec_videoroom.push_back(videoroomItem);
+                            std::string out;
+                            get_full_img_url(team[i]["croompic"].asString(), out);
+                            teamItem.set_teamicon(out);
+                            
+                            //videoroomItem.set_livetype(videoroom[i]["livetype"].asString());
+                            //????
+                            
+                            //videoroomItem.set_ncount(videoroom[i]["ncount"].asString());
+                            teamItem.set_onlineusercount(atoi(team[i]["ncount"].asString().c_str()));
+                            
+                            //videoroomItem.set_cname(videoroom[i]["cname"].asString());
+                            teamItem.set_teamname(team[i]["cname"].asString());
+                            
+                            vec_team.push_back(teamItem);
                         }
                     }
                     
@@ -2153,7 +2204,11 @@ void parse_homepage(char* json, HttpListener* listener)
                             viewpointItem.set_replycount(atoi(viewpoint[i]["replyCount"].asString().c_str()));
                             viewpointItem.set_content(viewpoint[i]["contents"].asString());
                             //viewpointItem.set_roomid(atoi(viewpoint[i]["roomid"].asString().c_str()));
-                            viewpointItem.set_authoricon(viewpoint[i]["authorIcon"].asString());
+                            
+                            //viewpointItem.set_authoricon(viewpoint[i]["authorIcon"].asString());
+                            std::string icon;
+                            get_full_head_icon(viewpoint[i]["authorId"].asString(), icon);
+                            viewpointItem.set_authoricon(icon);
                             viewpointItem.set_authorname(viewpoint[i]["authorName"].asString());
                             
                             std::string strOut;
@@ -2182,7 +2237,9 @@ void parse_homepage(char* json, HttpListener* listener)
                         }
                     }
                     
-                    homepage_listener->onResponse(vec_banner, vec_videoroom, vec_viewpoint, vec_operate);
+                    homepage_listener->onResponse(vec_banner, vec_team, vec_viewpoint, vec_operate);
+                    
+                    WriteProtocolCache("homepage_cache.txt", strJson);
                 }
                 else
                 {
@@ -2204,6 +2261,7 @@ void parse_homepage(char* json, HttpListener* listener)
     {
         homepage_listener->OnError(PERR_JSON_PARSE_ERROR);
     }
+    
 }
 
 void parse_collectionlist(char* json, HttpListener* listener)
