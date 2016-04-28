@@ -184,13 +184,13 @@ class ZLRoomListener : public VideoRoomListener
     virtual void OnRoomPubMicStateNoty(std::vector<RoomPubMicState>& infos);//{}
     
     //∑øº‰”√ªßÕÀ≥ˆœÏ”¶
-    virtual void OnRoomUserExitResp();//{}
+    virtual void OnRoomUserExitResp(){}
     
     //∑øº‰”√ªßÕÀ≥ˆÕ®÷™
-    virtual void OnRoomUserExceptExitNoty(UserExceptExitRoomInfo_ext& info);//{}
+    virtual void OnRoomUserExceptExitNoty(UserExceptExitRoomInfo_ext& info);
     
     //∑øº‰”√ªßÃﬂ≥ˆœÏ”¶
-    virtual void OnRoomKickoutUserResp();//{}
+    virtual void OnRoomKickoutUserResp(){}
     
     //∑øº‰”√ªßÃﬂ≥ˆÕ®÷™
     virtual void OnRoomKickoutUserNoty(UserKickoutRoomInfo_ext& info);//{}

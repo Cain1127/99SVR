@@ -12,7 +12,8 @@
 
 @implementation ChatRightView
 
-- (UIButton *)createButton:(CGRect)frame{
++ (UIButton *)createButton:(CGRect)frame
+{
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.layer.borderWidth = 1;
     btn.layer.borderColor = UIColorFromRGB(0xffffff).CGColor;
@@ -42,7 +43,7 @@
     [self addSubview:_scrollView];
     CGRect buttonFrame = Rect(5, 6, 44, 44);
     for (int i=0; i<5; i++) {
-        UIButton *btnQuestion = [self createButton:buttonFrame];
+        UIButton *btnQuestion = [ChatRightView createButton:buttonFrame];
         NSString *strName = [NSString stringWithFormat:@"chatRightView%d",i+1];
         [UIImageFactory createBtnImage:strName btn:btnQuestion state:UIControlStateNormal];
         [_scrollView addSubview:btnQuestion];

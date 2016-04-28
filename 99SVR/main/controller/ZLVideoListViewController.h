@@ -6,6 +6,8 @@
 //  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+
 #import "HomeCustomViewController.h"
 
 @interface ZLVideoListViewController : HomeCustomViewController

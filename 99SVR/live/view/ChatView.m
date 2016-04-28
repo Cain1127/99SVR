@@ -111,7 +111,7 @@
     _textView.delegate = self;
     
     lblPlace = [[UILabel alloc] initWithFrame:Rect(_textView.x+5,_textView.y,_textView.width,_textView.height)];
-    lblPlace.text = @"点此和大家说点什么吧";
+    lblPlace.text = @"和大家说点什么吧";
     lblPlace.font = XCFONT(14);
     lblPlace.enabled = NO;
     lblPlace.backgroundColor = [UIColor clearColor];

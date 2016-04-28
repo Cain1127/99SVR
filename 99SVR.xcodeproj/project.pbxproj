@@ -239,7 +239,6 @@
 		BB51383D1C980F9700E09EF5 /* RoomDownView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB51383C1C980F9700E09EF5 /* RoomDownView.m */; };
 		BB5E1C731CC082310076C416 /* RoomService.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB5E1C721CC082310076C416 /* RoomService.mm */; };
 		BB5E1C761CC3C1B10076C416 /* video_logo_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB5E1C751CC3C1B10076C416 /* video_logo_bg@2x.png */; };
-		BB5E1C791CC3C99A0076C416 /* noMic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB5E1C771CC3C99A0076C416 /* noMic@2x.png */; };
 		BB5E1C7A1CC3C99A0076C416 /* video_shangmai_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB5E1C781CC3C99A0076C416 /* video_shangmai_bg@2x.png */; };
 		BB5E1C801CC4B0880076C416 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5E1C7F1CC4B0880076C416 /* AudioController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BB5E1C8C1CC4B86E0076C416 /* HttpListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB5E1C8B1CC4B86E0076C416 /* HttpListener.mm */; };
@@ -486,6 +485,7 @@
 		BBAD0E791CD1D234002C0FD6 /* json_valueiterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = BBAD0E701CD1D234002C0FD6 /* json_valueiterator.inl */; };
 		BBAD0E7A1CD1D234002C0FD6 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBAD0E711CD1D234002C0FD6 /* json_writer.cpp */; };
 		BBAD0E7D1CD1DC73002C0FD6 /* ZLVideoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD0E7C1CD1DC73002C0FD6 /* ZLVideoListViewController.m */; };
+		BBAD0E7F1CD201F2002C0FD6 /* noMic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAD0E7E1CD201F2002C0FD6 /* noMic@2x.png */; };
 		BBAF96CF1CA5052300C16305 /* login_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAF96CD1CA5052300C16305 /* login_bg@2x.png */; };
 		BBAF9A181CAA709000C16305 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBAF9A171CAA709000C16305 /* Assets.xcassets */; };
 		BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F31C4CD515008F2CEC /* SVRInitLBS.m */; };
@@ -1141,7 +1141,6 @@
 		BB5E1C711CC082310076C416 /* RoomService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomService.h; sourceTree = "<group>"; };
 		BB5E1C721CC082310076C416 /* RoomService.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RoomService.mm; sourceTree = "<group>"; };
 		BB5E1C751CC3C1B10076C416 /* video_logo_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_logo_bg@2x.png"; sourceTree = "<group>"; };
-		BB5E1C771CC3C99A0076C416 /* noMic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noMic@2x.png"; sourceTree = "<group>"; };
 		BB5E1C781CC3C99A0076C416 /* video_shangmai_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_shangmai_bg@2x.png"; sourceTree = "<group>"; };
 		BB5E1C7E1CC4B0880076C416 /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
 		BB5E1C7F1CC4B0880076C416 /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
@@ -1582,6 +1581,7 @@
 		BBAD0E761CD1D234002C0FD6 /* Json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Json.h; sourceTree = "<group>"; };
 		BBAD0E7B1CD1DC73002C0FD6 /* ZLVideoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLVideoListViewController.h; sourceTree = "<group>"; };
 		BBAD0E7C1CD1DC73002C0FD6 /* ZLVideoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLVideoListViewController.m; sourceTree = "<group>"; };
+		BBAD0E7E1CD201F2002C0FD6 /* noMic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "noMic@2x.png"; path = "99SVR/other/noMic@2x.png"; sourceTree = SOURCE_ROOT; };
 		BBAF96CD1CA5052300C16305 /* login_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@2x.png"; sourceTree = "<group>"; };
 		BBAF9A171CAA709000C16305 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBB515F21C4CD515008F2CEC /* SVRInitLBS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRInitLBS.h; sourceTree = "<group>"; };
@@ -2649,6 +2649,7 @@
 		BB5E1C741CC3C1B10076C416 /* live */ = {
 			isa = PBXGroup;
 			children = (
+				BBAD0E7E1CD201F2002C0FD6 /* noMic@2x.png */,
 				BB6F120D1CC7D5BA00F02064 /* chatRightView5@2x.png */,
 				BB6F120E1CC7D5BA00F02064 /* chatRightView5@3x.png */,
 				BB6F120F1CC7D5BA00F02064 /* chatRightView3@2x.png */,
@@ -2703,7 +2704,6 @@
 				BB6F11D71CC7C2E000F02064 /* video_share_weibo_icon@3x.png */,
 				BB6F11D81CC7C2E000F02064 /* video_share_weixi_icon@2x.png */,
 				BB6F11D91CC7C2E000F02064 /* video_share_weixi_icon@3x.png */,
-				BB5E1C771CC3C99A0076C416 /* noMic@2x.png */,
 				BB5E1C781CC3C99A0076C416 /* video_shangmai_bg@2x.png */,
 				BB5E1C751CC3C1B10076C416 /* video_logo_bg@2x.png */,
 			);
@@ -3870,6 +3870,7 @@
 				BBD58F061CCF0EB4009250DB /* customized_no_opened@2x.png in Resources */,
 				BBCE9D531CB3AD5600DA56D6 /* 407_1.png in Resources */,
 				BBCE9D591CB3AD5700DA56D6 /* 413_1.png in Resources */,
+				BBAD0E7F1CD201F2002C0FD6 /* noMic@2x.png in Resources */,
 				5AD667621CD0957C00DA2C6D /* iPhone6_1@2x.png in Resources */,
 				BB63F2BB1C27FB2800A042E8 /* 2.gif in Resources */,
 				1879B9111CC883BD00E981A5 /* TQGiftButtomView.xib in Resources */,
@@ -3955,7 +3956,6 @@
 				BB6F11E21CC7C2E000F02064 /* personal_customized_play_icon@2x.png in Resources */,
 				BBAF9A181CAA709000C16305 /* Assets.xcassets in Resources */,
 				BBCE9D0D1CB3AD5600DA56D6 /* 107_1.png in Resources */,
-				BB5E1C791CC3C99A0076C416 /* noMic@2x.png in Resources */,
 				BB6F11F71CC7C2E000F02064 /* video_room_follow_icon_n@3x.png in Resources */,
 				BB63F2C41C27FB2800A042E8 /* 28.gif in Resources */,
 				BBCE9D351CB3AD5600DA56D6 /* 147_1.png in Resources */,

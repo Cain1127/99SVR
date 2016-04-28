@@ -382,14 +382,14 @@ ZLLogonProtocol::ZLLogonProtocol()
     conn = new LoginConnection();
 
     conn->RegisterMessageListener(&message_listener);
+    conn->RegisterLoginListener(&login_listener);
     conn->RegisterConnectionListener(&conn_listener);
     conn->RegisterPushListener(&push_listener);
     conn->RegisterHallListener(&hall_listener);
     
     video_room = new VideoRoomConnection();
     video_room->RegisterRoomJoinListener(&join_listener);
-    video_room->RegisterMessageListener(&message_listener);
-    video_room->RegisterConnectionListener(&conn_listener);
+    video_room->RegisterRoomListener(&room_listener);
     
 }
 
