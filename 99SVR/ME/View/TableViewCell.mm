@@ -7,6 +7,7 @@
 //
 
 #import "TableViewCell.h"
+
 @implementation TableViewCell
 
 - (void)awakeFromNib {
@@ -61,7 +62,6 @@
         
         self.priceLabView.newpriceStr = model.updateprice;
         self.priceLabView.oldpriceStr = model.buyprice;
-        model.actualPrice = model.updateprice;
         self.priceLabView.state = PriceLabViewType_NotVip;
     }
 
@@ -72,21 +72,18 @@
     
     
     self.vipNameLab.textColor = COLOR_Auxiliary_Orange;
-    [self.clickBtn setTitle:@"兑换" forState:UIControlStateNormal];
+    [self.clickBtn setTitle:@"购买" forState:UIControlStateNormal];
     self.clickBtn.backgroundColor = COLOR_Btn_Buy_Normal;
     
+    [self.clickBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@0);
+        make.right.equalTo(@0);
+        make.bottom.equalTo(@0);
+        make.width.equalTo(@100);
+    }];
     
-    
-//    [self.clickBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(@0);
-//        make.right.equalTo(@0);
-//        make.bottom.equalTo(@0);
-//        make.width.equalTo(@100);
-//    }];
-//    
-//    self.priceLabView.oldpriceStr = model.buyprice;
-//    model.actualPrice = model.buyprice;
-//    self.priceLabView.state = PriceLabViewType_Vip;
+    self.priceLabView.oldpriceStr = model.buyprice;
+    self.priceLabView.state = PriceLabViewType_Vip;
 }
 
 
@@ -104,11 +101,11 @@
 }
 
 -(void)setCellDataWithModel:(TQPurchaseModel *)model withIndexRow:(NSInteger)row{
-    
+
     //设置VIP的图标
     self.vipIconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%d_icon",((int)row+1)]];
     self.vipNameLab.text = model.levelname;
-
+    
     BOOL isVipValue = [model.isopen isEqualToString:@"0"] ? NO : YES;
     if (isVipValue) {
         

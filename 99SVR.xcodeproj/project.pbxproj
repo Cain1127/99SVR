@@ -102,8 +102,6 @@
 		18EA822C1CC8C41C00BDB735 /* TQideaViewModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA822B1CC8C41C00BDB735 /* TQideaViewModel.mm */; };
 		18EA82A21CCA148F00BDB735 /* TQNoPurchaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82861CCA148F00BDB735 /* TQNoPurchaseViewController.mm */; };
 		18EA82A31CCA148F00BDB735 /* TQMeCustomizedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */; };
-		18EA82A41CCA148F00BDB735 /* TableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA828C1CCA148F00BDB735 /* TableViewCell.mm */; };
-		18EA82A51CCA148F00BDB735 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA828D1CCA148F00BDB735 /* TableViewCell.xib */; };
 		18EA82A71CCA148F00BDB735 /* TQHeadView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82911CCA148F00BDB735 /* TQHeadView.mm */; };
 		18EA82A81CCA148F00BDB735 /* TQHeadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EA82921CCA148F00BDB735 /* TQHeadView.xib */; };
 		18EA82A91CCA148F00BDB735 /* TQIntroductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA82941CCA148F00BDB735 /* TQIntroductCell.m */; };
@@ -184,6 +182,8 @@
 		B4EA09231CC8B9E000E8F933 /* StockRecordViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09221CC8B9E000E8F933 /* StockRecordViewController.mm */; };
 		B4EA09291CC8DF8400E8F933 /* StockRecordTabModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09281CC8DF8400E8F933 /* StockRecordTabModel.mm */; };
 		B4EA092C1CC8E12600E8F933 /* StockRecordCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA092B1CC8E12600E8F933 /* StockRecordCell.mm */; };
+		B4FEC65B1CD1B2580090DD50 /* TableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4FEC6591CD1B2580090DD50 /* TableViewCell.mm */; };
+		B4FEC65C1CD1B2580090DD50 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4FEC65A1CD1B2580090DD50 /* TableViewCell.xib */; };
 		BB06311C1C61C827008AD41D /* NoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB06311B1C61C827008AD41D /* NoticeModel.m */; };
 		BB0D3CFD1CD08CA100A57E77 /* ZLReply.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0D3CFC1CD08CA100A57E77 /* ZLReply.m */; };
 		BB0D3D001CD0985000A57E77 /* ReplyNullInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0D3CFF1CD0985000A57E77 /* ReplyNullInfoCell.m */; };
@@ -849,9 +849,6 @@
 		18EA82861CCA148F00BDB735 /* TQNoPurchaseViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQNoPurchaseViewController.mm; sourceTree = "<group>"; };
 		18EA82871CCA148F00BDB735 /* TQMeCustomizedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMeCustomizedViewController.h; sourceTree = "<group>"; };
 		18EA82881CCA148F00BDB735 /* TQMeCustomizedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQMeCustomizedViewController.mm; sourceTree = "<group>"; };
-		18EA828B1CCA148F00BDB735 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
-		18EA828C1CCA148F00BDB735 /* TableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableViewCell.mm; sourceTree = "<group>"; };
-		18EA828D1CCA148F00BDB735 /* TableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewCell.xib; sourceTree = "<group>"; };
 		18EA82901CCA148F00BDB735 /* TQHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQHeadView.h; sourceTree = "<group>"; };
 		18EA82911CCA148F00BDB735 /* TQHeadView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQHeadView.mm; sourceTree = "<group>"; };
 		18EA82921CCA148F00BDB735 /* TQHeadView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TQHeadView.xib; sourceTree = "<group>"; };
@@ -1065,6 +1062,9 @@
 		B4EA092A1CC8E12600E8F933 /* StockRecordCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockRecordCell.h; sourceTree = "<group>"; };
 		B4EA092B1CC8E12600E8F933 /* StockRecordCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockRecordCell.mm; sourceTree = "<group>"; };
 		B4EA092D1CC8E8B800E8F933 /* StockMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockMacro.h; sourceTree = "<group>"; };
+		B4FEC6581CD1B2580090DD50 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
+		B4FEC6591CD1B2580090DD50 /* TableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableViewCell.mm; sourceTree = "<group>"; };
+		B4FEC65A1CD1B2580090DD50 /* TableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewCell.xib; sourceTree = "<group>"; };
 		BB06311A1C61C827008AD41D /* NoticeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeModel.h; sourceTree = "<group>"; };
 		BB06311B1C61C827008AD41D /* NoticeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeModel.m; sourceTree = "<group>"; };
 		BB0D3CFB1CD08CA100A57E77 /* ZLReply.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLReply.h; sourceTree = "<group>"; };
@@ -2281,9 +2281,9 @@
 		18EA828A1CCA148F00BDB735 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				18EA828B1CCA148F00BDB735 /* TableViewCell.h */,
-				18EA828C1CCA148F00BDB735 /* TableViewCell.mm */,
-				18EA828D1CCA148F00BDB735 /* TableViewCell.xib */,
+				B4FEC6581CD1B2580090DD50 /* TableViewCell.h */,
+				B4FEC6591CD1B2580090DD50 /* TableViewCell.mm */,
+				B4FEC65A1CD1B2580090DD50 /* TableViewCell.xib */,
 				18EA82901CCA148F00BDB735 /* TQHeadView.h */,
 				18EA82911CCA148F00BDB735 /* TQHeadView.mm */,
 				18EA82921CCA148F00BDB735 /* TQHeadView.xib */,
@@ -4217,6 +4217,7 @@
 				BBCE9D411CB3AD5600DA56D6 /* 159_1.png in Resources */,
 				18AC14171C8FB8E100FDFF40 /* JSPatch.js in Resources */,
 				BB365A411C23A6AF009E2867 /* Info.plist in Resources */,
+				B4FEC65C1CD1B2580090DD50 /* TableViewCell.xib in Resources */,
 				BB63F2D01C27FB2800A042E8 /* 8.gif in Resources */,
 				5AD667601CD0957C00DA2C6D /* iPhone4_3@2x.png in Resources */,
 				BB6F11E71CC7C2E000F02064 /* tab_me_icon_p@3x.png in Resources */,
@@ -4262,7 +4263,6 @@
 				BBCE9D4D1CB3AD5600DA56D6 /* 401_1.png in Resources */,
 				BB6F11DC1CC7C2E000F02064 /* home_point_icon@2x.png in Resources */,
 				BBCE9D251CB3AD5600DA56D6 /* 131_1.png in Resources */,
-				18EA82A51CCA148F00BDB735 /* TableViewCell.xib in Resources */,
 				BB6F11EA1CC7C2E000F02064 /* tab_operate_icon_p@2x.png in Resources */,
 				BB6F12171CC7D5BA00F02064 /* chatRightView4@2x.png in Resources */,
 				5AD6675F1CD0957C00DA2C6D /* iPhone4_2@2x.png in Resources */,
@@ -4601,7 +4601,6 @@
 				18EA82291CC8A5B200BDB735 /* UIImageView+Header.m in Sources */,
 				BB6F3ABA1C9D6EC50035EBBE /* FloatingView.m in Sources */,
 				BB63F5C61C2CC7A300A042E8 /* MASViewConstraint.m in Sources */,
-				18EA82A41CCA148F00BDB735 /* TableViewCell.mm in Sources */,
 				18D3CB811CC0CFB400816BD0 /* TQMessageViewController.mm in Sources */,
 				BB25D8121C15729800314C1E /* main.m in Sources */,
 				BB9765F61C86831D00FAA5B7 /* TextChatModel.m in Sources */,
@@ -4737,6 +4736,7 @@
 				BB63F60C1C2CC7A300A042E8 /* LoginViewController.m in Sources */,
 				188741791C96FE25002EF25A /* NavigationViewController.m in Sources */,
 				BB98EE4A1CB4D2B00028AAEF /* UIControl+UIControl_XY.m in Sources */,
+				B4FEC65B1CD1B2580090DD50 /* TableViewCell.mm in Sources */,
 				BB63F61E1C2CC7A300A042E8 /* GroupListRequest.m in Sources */,
 				BB6F3ADD1CA117BE0035EBBE /* BandNewMobileViewController.m in Sources */,
 				BB16618F1C3D500D00D318BE /* PhotoViewController.m in Sources */,

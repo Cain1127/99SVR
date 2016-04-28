@@ -76,14 +76,15 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     viewCache = [[NSCache alloc] init];
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
-    [self.tableView.gifHeader loadDefaultImg];
-    [self.tableView.gifHeader beginRefreshing];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
+    [self.tableView.gifHeader loadDefaultImg];
+    [self.tableView.gifHeader beginRefreshing];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -159,7 +160,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 -(void)updateRefresh {
     _nCurrent = 20;
     _dataSource.aryModel = nil;
-    [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
+    [kHTTPSingle RequestViewpointSummary:[_room.nvcbid intValue] start:0 count:20];
 }
 
 - (void)uploadMore
