@@ -111,7 +111,6 @@
             }else{
                 
                 DLog(@"去购买");
-
                 
                 
             }
@@ -138,7 +137,6 @@
                 PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
                 [self.navigationController pushViewController:paySelectVC animated:YES];
 
-                
                 
             }
             
