@@ -643,7 +643,8 @@ void HomePageListener::onResponse(std::vector<BannerItem> banner_data, std::vect
         NSString *livetype = [NSString stringWithUTF8String:item.livetype().c_str()];
         NSString *ncount = [NSString stringWithUTF8String:item.ncount().c_str()];
         NSString *cname = [NSString stringWithUTF8String:item.cname().c_str()];
-        NSDictionary *parameters = @{@"nvcbid":nvcbid,@"croompic":croompic,@"livetype":livetype,@"ncount":ncount,@"cname":cname};
+        
+        NSDictionary *parameters = @{@"roomid":nvcbid,@"teamicon":croompic,@"livetype":livetype,@"onlineusercount":ncount,@"teamname":cname};
         RoomHttp *room = [RoomHttp mj_objectWithKeyValues:parameters];
         [videoRoom addObject:room];
     }

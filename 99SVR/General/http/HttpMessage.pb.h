@@ -93,7 +93,6 @@ private:
 	uint32	_locked;
 	string	_alias;
 
-
 public:
 
 	 inline uint32 roomid() { return _roomid; } const 

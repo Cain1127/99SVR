@@ -252,6 +252,7 @@ typedef enum : NSUInteger
 #pragma mark - home date init request and analyze
 - (void)initData
 {
+//    [kHTTPSingle RequestHomePage];
     NSString *strUrl = [[NSString alloc] initWithUTF8String:kHome_Banner_URL];
     @WeakObj(self);
     [BaseService postJSONWithUrl:strUrl parameters:nil success:^(id responseObject) {
@@ -557,7 +558,7 @@ typedef enum : NSUInteger
         }
         NSRange range = NSMakeRange(loc, length);
         NSArray *aryIndex = [tempArray subarrayWithRange:range];
-        [tempCell setRowDatas:aryIndex];
+        [tempCell setRowDatas:aryIndex isNew:1];
         return tempCell;
     }
     if([tempObject isKindOfClass:[ZLOperateStock class]])

@@ -112,9 +112,10 @@ UIImage *DTAnimatedGIFFromFile(NSString *path)
 {
 	NSURL *URL = [NSURL fileURLWithPath:path];
 	CGImageSourceRef source = CGImageSourceCreateWithURL((__bridge CFURLRef)(URL), NULL);
-	UIImage *image = DTAnimatedGIFFromImageSource(source);
-	CFRelease(source);
-	
+    UIImage *image = DTAnimatedGIFFromImageSource(source);
+    if (image) {
+        CFRelease(source);
+    }
 	return image;
 }
 
@@ -122,7 +123,8 @@ UIImage *DTAnimatedGIFFromData(NSData *data)
 {
 	CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)(data), NULL);
 	UIImage *image = DTAnimatedGIFFromImageSource(source);
-	CFRelease(source);
-	
+    if (image) {
+        CFRelease(source);
+    }
 	return image;
 }

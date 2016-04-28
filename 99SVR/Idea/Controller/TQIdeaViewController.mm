@@ -83,9 +83,10 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         if (_dataSource.aryModel.count>0) {
             NSMutableArray *aryAll = [NSMutableArray array];
             [aryAll addObjectsFromArray:_dataSource.aryModel];
-            [aryAll addObject:aryIndex];
+            for (TQIdeaModel *model in aryIndex) {
+                [aryAll addObject:model];
+            }
             _dataSource.aryModel = aryAll;
-            DLog(@"count:%zi",_dataSource.aryModel.count);
         }
         else
         {
