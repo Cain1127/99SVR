@@ -27,8 +27,8 @@
 #import "MJExtension.h"
 #import "XPrivateDetail.h"
 #import "XVideoTeamInfo.h"
-#import "RoomHttp.h"
 #import "SplashModel.h"
+#import "RoomHttp.h"
 #import "TQPurchaseModel.h"
 #import "RoomHttp.h"
 

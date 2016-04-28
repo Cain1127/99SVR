@@ -68,17 +68,13 @@
         imageView.x=i*scrollW;
         
         // 显示图片
-        NSString *name=[NSString stringWithFormat:@"guide-%d",i+1];
+        NSString *name=[NSString stringWithFormat:@"iPhone6_%d@2x",i+1];
         if (kiPhone4_OR_4s) {
-            name = [name stringByAppendingString:@"-m"];
-        } else if(kiPhone5_OR_5c_OR_5s){
-            name = [name stringByAppendingString:@"-xl"];
-        } else if(kiPhone6_OR_6s){
-            name = [name stringByAppendingString:@"-md"];
+            name = [NSString stringWithFormat:@"iPhone4_%d@2x",i+1];
+        } else if(kiPhone5_OR_5c_OR_5s||kiPhone6_OR_6s){
+            name = [NSString stringWithFormat:@"iPhone6_%d@2x",i+1];
         } else if(kiPhone6Plus_OR_6sPlus){
-            name = [name stringByAppendingString:@"-xxl"];
-        } else{
-            name = [name stringByAppendingString:@"-xxl"];
+            name = [NSString stringWithFormat:@"iPhone6P_%d@3x",i+1];
         }
         // 为了释放图片内存，imageWithContentsOfFile 代替 [UIImage imageNamed:name];
         imageView.image = kPNG_IMAGE_FILE(name);
@@ -103,11 +99,10 @@
 {
     UIPageControl *pageControl=[[UIPageControl alloc] init];
     pageControl.numberOfPages=NewfeatureCount;
-    //pageControl.currentPageIndicatorTintColor=Color_F24979;
+    pageControl.pageIndicatorTintColor = UIColorFromRGB(0x777777);
+    pageControl.currentPageIndicatorTintColor = UIColorFromRGB(0xe9542f);
     pageControl.centerX=self.view.width * 0.5;
     pageControl.centerY=self.view.height * 0.96;
-//    [pageControl setValue:[UIImage imageNamed:@"line-not-click"] forKeyPath:@"_pageImage"];
-//    [pageControl setValue:[UIImage imageNamed:@"line-click"] forKeyPath:@"_currentPageImage"];
     [self.view addSubview:pageControl];
     self.pageControl=pageControl;
 }
@@ -126,16 +121,15 @@
     UIButton *startBtn=[[UIButton alloc] init];
     startBtn.backgroundColor = [UIColor clearColor];
     startBtn.size = CGSizeMake(94, 32);
-    startBtn.layer.borderWidth = 0.5;
-    startBtn.layer.borderColor = [UIColor redColor].CGColor;//Color_FFFFFF.CGColor;
-    startBtn.alpha = 0.8;
-    [startBtn setTitle:@"立马启动" forState:UIControlStateNormal];
-    startBtn.titleLabel.textColor = [UIColor blackColor];
-    startBtn.titleLabel.font = [UIFont systemFontOfSize:14];
-    startBtn.titleLabel.alpha = 0.9;
+    startBtn.clipsToBounds = YES;
+    startBtn.layer.cornerRadius = 3;
+    [startBtn setTitle:@"马上体验" forState:UIControlStateNormal];
+    startBtn.titleLabel.textColor = [UIColor whiteColor];
+    startBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+    startBtn.backgroundColor = UIColorFromRGB(0xe8524f);
     
     startBtn.centerX=imageView.width*0.5;
-    startBtn.centerY=imageView.height*0.76;
+    startBtn.centerY=imageView.height*0.88;
     [startBtn addTarget:self action:@selector(startClick) forControlEvents:UIControlEventTouchUpInside];
     [imageView addSubview:startBtn];
 }

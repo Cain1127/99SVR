@@ -21,7 +21,13 @@
 + (void)switchRootForAppDelegate
 {
     SplashModel *splash = [SplashTool get];
-    if (!splash.imageUrl||[splash.imageUrl isEqualToString:@""]) {
+    double date = (double)[[NSDate  date] timeIntervalSince1970];//当前时间戳
+    
+    if (!splash.imageUrl    // 图片为空
+        ||[splash.imageUrl isEqualToString:@""]
+        || date < splash.startTime
+        || date > splash.endtime)
+    {
         [self switchRootForViewController];
     } else {
         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];

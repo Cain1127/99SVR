@@ -16,6 +16,8 @@
     _imageUrl = [NSString stringWithUTF8String:splash->imageurl().c_str()];
     _url = [NSString stringWithUTF8String:splash->url().c_str()];
     _text = [NSString stringWithUTF8String:splash->text().c_str()];
+    _startTime = splash->startime();
+    _endtime = splash->endtime();
     return self;
 }
 
@@ -27,6 +29,8 @@
     [encoder encodeObject:self.imageUrl forKey:@"imageUrl"];
     [encoder encodeObject:self.text forKey:@"text"];
     [encoder encodeObject:self.url forKey:@"url"];
+    [encoder encodeInteger:self.startTime forKey:@"startTime"];
+    [encoder encodeInteger:self.endtime forKey:@"endtime"];
 }
 
 /**
@@ -38,6 +42,8 @@
         self.imageUrl = [decoder decodeObjectForKey:@"imageUrl"];
         self.text = [decoder decodeObjectForKey:@"text"];
         self.url = [decoder decodeObjectForKey:@"url"];
+        self.startTime = [decoder decodeIntegerForKey:@"startTime"];
+        self.endtime = [decoder decodeIntegerForKey:@"endtime"];
     }
     return self;
 }
