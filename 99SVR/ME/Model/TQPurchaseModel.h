@@ -27,6 +27,9 @@
 /**isopen 0表示没有购买vip 1表示已购买*/
 @property (nonatomic , copy) NSString *isopen;
 
+/**实际要购买的vip的价格*/
+@property (nonatomic , copy) NSString *actualPrice;
+
 #pragma mark 购买私人订制的
 /**股票首页*/
 - (id)initWithPrivateServiceLevelData:(void *)pData;

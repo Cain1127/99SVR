@@ -155,4 +155,9 @@
 //#define kLeftMenuBgColor RGB(61, 120, 201)
 #define kTableViewBgColor RGB(247, 247, 247) // tableView 背景颜色
 
+
+#pragma mark 状态提示语
+#define RequestState_NetworkErrorStr(str)  [NSString stringWithFormat:@"网络异常,请重试%@",str]
+#define RequestState_EmptyStr(str)  [NSString stringWithFormat:@"没有%@数据",str]
+
 #endif
