@@ -29,6 +29,7 @@ PrivateServiceDetailListener privateDetailListener;
 ChargeRuleListener chargeListener;
 TeamListListener _teamListListener;
 TeamIntroduceListener _teamIntroduceListener;
+TeamVideoListener _teamVideoListener;
 ConsumeRankListener _consumeRankListener;
 HomePageListener _homePageListener;
 //AskQuestionListener _askQuestionListener;
@@ -199,6 +200,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void) RequestTeamIntroduce:(int)teamId{
     [self createHttpConnection];
     hConnection->RequestTeamIntroduce(teamId,&_teamIntroduceListener);
+    hConnection->RequestTeamVideo(teamId, &_teamVideoListener);
 }
 
 // 请求贡献榜

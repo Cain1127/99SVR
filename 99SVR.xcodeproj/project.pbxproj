@@ -516,6 +516,8 @@
 		BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE5C1CB588C70028AAEF /* SBJsonWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA16DA41C8C75B000D84E80 /* NSDate+convenience.m */; };
 		BBAB82E41C7049FB00C6AC34 /* ThumButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAB82E31C7049FB00C6AC34 /* ThumButton.m */; };
+		BBAD0DFF1CD19E36002C0FD6 /* ZLRoomVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD0DFE1CD19E36002C0FD6 /* ZLRoomVideoCell.m */; };
+		BBAD0E021CD19E8D002C0FD6 /* ZLRoomVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD0E011CD19E8D002C0FD6 /* ZLRoomVideoView.m */; };
 		BBAF96CF1CA5052300C16305 /* login_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAF96CD1CA5052300C16305 /* login_bg@2x.png */; };
 		BBAF9A181CAA709000C16305 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBAF9A171CAA709000C16305 /* Assets.xcassets */; };
 		BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB515F31C4CD515008F2CEC /* SVRInitLBS.m */; };
@@ -639,7 +641,7 @@
 		BBD58EF11CCBE6AC009250DB /* XPrivateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EF01CCBE6AC009250DB /* XPrivateDetailViewController.m */; };
 		BBD58EF41CCC06F4009250DB /* XTraderViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EF31CCC06F4009250DB /* XTraderViewController.mm */; };
 		BBD58EF71CCC152A009250DB /* XTeamPrivateController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EF61CCC152A009250DB /* XTeamPrivateController.m */; };
-		BBD58EFA1CCC1B59009250DB /* XVideoTeamInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EF91CCC1B59009250DB /* XVideoTeamInfo.m */; };
+		BBD58EFA1CCC1B59009250DB /* XVideoTeamInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EF91CCC1B59009250DB /* XVideoTeamInfo.mm */; };
 		BBD58EFD1CCD2287009250DB /* XLiveQuestionView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EFC1CCD2287009250DB /* XLiveQuestionView.m */; };
 		BBD58F001CCE7C54009250DB /* HomeCustomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58EFF1CCE7C54009250DB /* HomeCustomViewController.m */; };
 		BBD58F031CCF0C1F009250DB /* ViewNullFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58F021CCF0C1F009250DB /* ViewNullFactory.m */; };
@@ -1670,6 +1672,10 @@
 		BBA16DA41C8C75B000D84E80 /* NSDate+convenience.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+convenience.m"; sourceTree = "<group>"; };
 		BBAB82E21C7049FB00C6AC34 /* ThumButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumButton.h; sourceTree = "<group>"; };
 		BBAB82E31C7049FB00C6AC34 /* ThumButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumButton.m; sourceTree = "<group>"; };
+		BBAD0DFD1CD19E36002C0FD6 /* ZLRoomVideoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLRoomVideoCell.h; sourceTree = "<group>"; };
+		BBAD0DFE1CD19E36002C0FD6 /* ZLRoomVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLRoomVideoCell.m; sourceTree = "<group>"; };
+		BBAD0E001CD19E8D002C0FD6 /* ZLRoomVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLRoomVideoView.h; sourceTree = "<group>"; };
+		BBAD0E011CD19E8D002C0FD6 /* ZLRoomVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLRoomVideoView.m; sourceTree = "<group>"; };
 		BBAF96CD1CA5052300C16305 /* login_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@2x.png"; sourceTree = "<group>"; };
 		BBAF9A171CAA709000C16305 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBB515F21C4CD515008F2CEC /* SVRInitLBS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRInitLBS.h; sourceTree = "<group>"; };
@@ -1833,7 +1839,7 @@
 		BBD58EF51CCC152A009250DB /* XTeamPrivateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTeamPrivateController.h; sourceTree = "<group>"; };
 		BBD58EF61CCC152A009250DB /* XTeamPrivateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTeamPrivateController.m; sourceTree = "<group>"; };
 		BBD58EF81CCC1B59009250DB /* XVideoTeamInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XVideoTeamInfo.h; sourceTree = "<group>"; };
-		BBD58EF91CCC1B59009250DB /* XVideoTeamInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XVideoTeamInfo.m; sourceTree = "<group>"; };
+		BBD58EF91CCC1B59009250DB /* XVideoTeamInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XVideoTeamInfo.mm; sourceTree = "<group>"; };
 		BBD58EFB1CCD2286009250DB /* XLiveQuestionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLiveQuestionView.h; sourceTree = "<group>"; };
 		BBD58EFC1CCD2287009250DB /* XLiveQuestionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLiveQuestionView.m; sourceTree = "<group>"; };
 		BBD58EFE1CCE7C54009250DB /* HomeCustomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeCustomViewController.h; sourceTree = "<group>"; };
@@ -3357,7 +3363,7 @@
 				BBD58ED51CCB4E29009250DB /* XConsumeRankModel.h */,
 				BBD58ED61CCB4E29009250DB /* XConsumeRankModel.m */,
 				BBD58EF81CCC1B59009250DB /* XVideoTeamInfo.h */,
-				BBD58EF91CCC1B59009250DB /* XVideoTeamInfo.m */,
+				BBD58EF91CCC1B59009250DB /* XVideoTeamInfo.mm */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -3421,6 +3427,10 @@
 				BBD58EE11CCB96FF009250DB /* MyPrivateView.m */,
 				BBD58EFB1CCD2286009250DB /* XLiveQuestionView.h */,
 				BBD58EFC1CCD2287009250DB /* XLiveQuestionView.m */,
+				BBAD0DFD1CD19E36002C0FD6 /* ZLRoomVideoCell.h */,
+				BBAD0DFE1CD19E36002C0FD6 /* ZLRoomVideoCell.m */,
+				BBAD0E001CD19E8D002C0FD6 /* ZLRoomVideoView.h */,
+				BBAD0E011CD19E8D002C0FD6 /* ZLRoomVideoView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -4492,6 +4502,7 @@
 				18EA82231CC8A46600BDB735 /* UIImage+Image.m in Sources */,
 				BB16619E1C3E2DC700D318BE /* ZLTabBar.m in Sources */,
 				BB5E4F961CBF7D1B00F8C1D4 /* TextHomeViewController.m in Sources */,
+				BBAD0E021CD19E8D002C0FD6 /* ZLRoomVideoView.m in Sources */,
 				18BF06B51C9A7DC70071E524 /* SignatureViewController.m in Sources */,
 				BB17692B1C7B006F00CE947C /* UIImage+GIF.m in Sources */,
 				BB6F3ABD1C9ECB3C0035EBBE /* BannerModel.m in Sources */,
@@ -4565,7 +4576,7 @@
 				BB5E4F341CBF7B5800F8C1D4 /* VideoRoomConnection.cpp in Sources */,
 				BB5E1C8F1CC4BB920076C416 /* HttpManagerSing.mm in Sources */,
 				BB5E4FAB1CBF7D1B00F8C1D4 /* CommentCell.m in Sources */,
-				BBD58EFA1CCC1B59009250DB /* XVideoTeamInfo.m in Sources */,
+				BBD58EFA1CCC1B59009250DB /* XVideoTeamInfo.mm in Sources */,
 				B47DD59D1CBF345300C47EF7 /* SliderMenuTopScrollView.m in Sources */,
 				BB6F120C1CC7C4DD00F02064 /* UIImageFactory.m in Sources */,
 				18F971111C92947F001B2575 /* openssl_wrapper.m in Sources */,
@@ -4669,6 +4680,7 @@
 				BB5E4FB31CBF7D1B00F8C1D4 /* TextChatView.m in Sources */,
 				BB63F60A1C2CC7A300A042E8 /* VideoCell.m in Sources */,
 				BB5E4F9C1CBF7D1B00F8C1D4 /* ChatReplyModel.m in Sources */,
+				BBAD0DFF1CD19E36002C0FD6 /* ZLRoomVideoCell.m in Sources */,
 				5AA6D81F1CCBD14200841960 /* UIWindow+Extension.m in Sources */,
 				BB17692C1C7B006F00CE947C /* UIImage+MultiFormat.m in Sources */,
 				18F971121C92947F001B2575 /* RSADataSigner.m in Sources */,

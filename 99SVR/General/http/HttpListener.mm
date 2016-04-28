@@ -254,7 +254,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     muDic[@"stocks"] = stocksArray;
     muDic[@"recalState"] = isShowRecal ? @"show" : @"hide";
     muDic[@"operateId"] = [NSString stringWithFormat:@"%d",profit.operateid()];
-    //战队ID
+    //ID
     muDic[@"teamId"] = [NSString stringWithCString:profit.teamid().c_str() encoding:NSUTF8StringEncoding];
     muDic[@"code"] = @(1);
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
@@ -438,12 +438,30 @@ void TeamIntroduceListener::onResponse(Team& info)
     NSString *introduce = [NSString stringWithUTF8String:info.introduce().c_str()];
     NSDictionary *dict = @{@"teamName":teamName,@"teamIcon":teamIcon,@"introduce":introduce};
     XVideoTeamInfo *xVideo = [XVideoTeamInfo mj_objectWithKeyValues:dict];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEAM_INTRODUCE_VC object:xVideo];
+    NSDictionary *result = @{@"code":@(1),@"data":xVideo};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEAM_INTRODUCE_VC object:result];
 }
 
 void TeamIntroduceListener::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEAM_INTRODUCE_VC object:@{@"dict":@(errCode)}];
+}
+
+void TeamVideoListener::onResponse(vector<VideoInfo> infos)
+{
+    NSMutableArray *aryIndex = [NSMutableArray array];
+    for(int i=0;i<infos.size();i++)
+    {
+        XVideoModel *model = [[XVideoModel alloc] initWithInfo:&infos[i]];
+        [aryIndex addObject:model];
+    }
+    NSDictionary *dict = @{@"code":@(1),@"data":aryIndex};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_VIDEO_LIST_VC object:dict];
+}
+
+void TeamVideoListener::OnError(int errCode)
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_VIDEO_LIST_VC object:@{@"code":@(errCode)}];
 }
 
 void ConsumeRankListener::OnError(int errCode)

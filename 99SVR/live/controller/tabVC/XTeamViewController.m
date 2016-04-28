@@ -8,9 +8,9 @@
 
 #import "XTeamViewController.h"
 #import <DTCoreText/DTCoreText.h>
-#import "RoomHttp.h"
-#import "XVideoTeamInfo.h"
+#import "ZLRoomVideoCell.h"
 #import "TableViewFactory.h"
+#import "XVideoTeamInfo.h"
 
 @interface XTeamViewController()<DTAttributedTextContentViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
@@ -60,10 +60,28 @@
     [self.view addSubview:_tableView];
 }
 
+- (void)loadVideoInfo:(NSNotification *)notify
+{
+    NSDictionary *parametesrs = notify.object;
+    if ([parametesrs isKindOfClass:[NSDictionary class]])
+    {
+        int nStatus = [parametesrs[@"code"] intValue];
+        NSArray *aryTemp = parametesrs[@"data"];
+        if (nStatus==1) {
+            _aryVideo = aryTemp;
+        }
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [selfWeak.tableView reloadData];
+        });
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadTeamContent:) name:MESSAGE_TEAM_INTRODUCE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoInfo:) name:MESSAGE_ROOM_VIDEO_LIST_VC object:nil];
     [kHTTPSingle RequestTeamIntroduce:0];
 }
 
@@ -75,25 +93,34 @@
 
 - (void)loadTeamContent:(NSNotification *)notify
 {
-    XVideoTeamInfo *teamInfo = notify.object;
-    if(teamInfo){
-        _introduce = [NSString stringWithFormat:@"<span stype=\"line-height:6px;\">%@</span>",teamInfo.introduce];
-        @WeakObj(self)
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
-            [selfWeak.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        });
+    NSDictionary *parametesrs = notify.object;
+    if ([parametesrs isKindOfClass:[NSDictionary class]])
+    {
+        int nStatus = [parametesrs[@"code"] intValue];
+        if (nStatus==1) {
+            XVideoTeamInfo *teamInfo = parametesrs[@"data"];
+            _introduce = [NSString stringWithFormat:@"<span stype=\"line-height:6px;\">%@</span>",teamInfo.introduce];
+            @WeakObj(self)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
+                [selfWeak.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            });
+        }
     }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    if (section==0) {
+        return 1;
+    }
+    NSInteger count = (NSInteger)ceilf((1.0f * _aryVideo.count) / 2.0f);
+    return count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1+_aryVideo.count/2;
+    return 1+(_aryVideo.count ? 1 : 0);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -121,26 +148,45 @@
 {
     if (indexPath.section == 0) {
         DTAttributedTextCell *cell =[cache objectForKey:@"RoomTeamCell"];
-        
-        if (cell) {
+        if (!cell) {
             cell = [[DTAttributedTextCell alloc] initWithReuseIdentifier:@"RoomTeamCell"];
             [cache setObject:cell forKey:@"RoomTeamCell"];
         }
         [cell setHTMLString:_introduce];
         return cell;
     }
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TeamVideoCell"];
+//    @WeakObj(self);
+    ZLRoomVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TeamVideoCell"];
     if (!cell)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TeamVideoCell"];;
+        cell = [[ZLRoomVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TeamVideoCell"];;
     }
+    cell.itemOnClick = ^(XVideoModel *room)
+    {
+//        [selfWeak connectRoom:room];
+    };
+    int length = 2;
+    int loc = (int)indexPath.row * length;
+    if (loc + length > _aryVideo.count)
+    {
+        length = (int)_aryVideo.count - loc;
+    }
+    NSRange range = NSMakeRange(loc, length);
+    NSArray *aryIndex = [_aryVideo subarrayWithRange:range];
+    [cell setRowDatas:aryIndex];
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if()
-    return 60;
+    if (indexPath.section==0) {
+        return 60;
+    }
+    else
+    {
+        CGFloat height = ((kScreenWidth - 36.0f) / 2.0f) * 10 / 16 + 8;
+        return height;
+    }
 }
 
 - (void)dealloc
