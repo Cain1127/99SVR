@@ -73,7 +73,7 @@
     
     
     self.vipNameLab.textColor = COLOR_Auxiliary_Orange;
-    [self.clickBtn setTitle:@"购买" forState:UIControlStateNormal];
+    [self.clickBtn setTitle:@"兑换" forState:UIControlStateNormal];
     self.clickBtn.backgroundColor = COLOR_Btn_Buy_Normal;
     
     [self.clickBtn mas_updateConstraints:^(MASConstraintMaker *make) {

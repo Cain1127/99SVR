@@ -10,13 +10,17 @@
 #import "StockMacro.h"
 #import "TQPurchaseModel.h"
 #import "UIAlertView+Block.h"
+#import "PaySelectViewController.h"
+#import "ViewNullFactory.h"
+
 
 @interface TQPurchaseViewController () <UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate>
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic , strong) TQHeadView *headerView;
 @property (nonatomic , copy) NSArray *dataArray;
 @property (nonatomic , strong) TQPurchaseModel *headerModel;
-
+/**数据加载view*/
+@property (nonatomic , strong) UIView *emptyView;
 @end
 
 @implementation TQPurchaseViewController
@@ -26,6 +30,8 @@
     
     self.txtTitle.text = @"购买私人定制";
     self.dataArray = @[];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+
     //注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_TQPURCHASE_VC object:nil];
     [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
@@ -61,7 +67,6 @@
         _tableView.estimatedRowHeight = 200;
         _tableView.backgroundColor = COLOR_Bg_Gay;
         [self.view addSubview:_tableView];
-        _tableView.tableHeaderView = self.headerView;
     }
     
     return _tableView;
@@ -123,11 +128,15 @@
             if (index==0) {//取消
                 
                 DLog(@"取消充值");
+                
 
                 
             }else{
                 
                 DLog(@"去充值");
+
+                PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+                [self.navigationController pushViewController:paySelectVC animated:YES];
 
                 
                 
@@ -159,21 +168,57 @@
         
         self.headerModel = [notfi.object valueForKey:@"headerModel"];
         self.headerModel.teamName = self.stockModel.teamname;
-        [self.headerView setHeaderViewWithModel:self.headerModel];
 
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.headerView setHeaderViewWithModel:self.headerModel];
+            self.tableView.tableHeaderView = self.headerView;
+            [self.tableView reloadData];
+        });
+
+        
     }else{//请求失败
     
         
-        DLog(@"请求失败");
+        DLog(@"请求失败 %@",code);
         
     }
+    self.dataArray = [[notfi.object valueForKey:@"data"] copy];
+
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.dataArray = [[notfi.object valueForKey:@"data"] copy];
-        [self.tableView reloadData];
-    });
+    [self chickEmptyViewShow:self.dataArray withCode:code];
+
     
 }
 
+
+-(void)chickEmptyViewShow:(NSArray *)dataArray withCode:(NSString *)code{
+    
+    
+    if ([code isEqualToString:@"1"]) {//网络OK
+        
+        if (dataArray.count==0) {//不存在数据
+            
+            self.emptyView = [ViewNullFactory createViewBg:self.emptyView.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"数据为空"];
+            [self.tableView addSubview:self.emptyView];
+            
+            
+        }else{
+            
+            if (self.emptyView) {
+                [self.emptyView removeFromSuperview];
+            }
+        }
+        
+        
+    }else{//网络错误
+        
+        if (dataArray.count==0) {
+            
+            self.emptyView = [ViewNullFactory createViewBg:self.tableView.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:[NSString stringWithFormat:@"网络错误代码%@",code]];
+            [self.tableView addSubview:self.emptyView];
+        }
+    }
+}
 
 @end

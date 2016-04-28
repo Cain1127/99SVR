@@ -122,7 +122,7 @@
        
         if (dataArray.count==0) {
             
-            self.emptyView = [ViewNullFactory createViewBg:self.tableView.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"网络发生错误"];
+            self.emptyView = [ViewNullFactory createViewBg:self.tableView.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:[NSString stringWithFormat:@"网络错误代码%@",code]];
             [self.tableView addSubview:self.emptyView];
         }
     }

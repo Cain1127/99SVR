@@ -10,6 +10,7 @@
 #import "AssetViewController.h"
 #import "ProfileViewController.h"
 #import "RoomViewController.h"
+#import "TQPurchaseViewController.h"
 @interface RechargeResultViewController ()
 
 @end
@@ -101,6 +102,17 @@
             return ;
         }
     }
+    
+    //回到购买私人订制
+    for (UIViewController *control in aryIndex) {
+        if ([control isKindOfClass:[TQPurchaseViewController class]]) {
+            [self.navigationController popToViewController:control animated:YES];
+            return ;
+        }
+    }
+
+    
+    
 }
 
 /**
