@@ -113,6 +113,53 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
 
 #pragma mark - Toast Activity Methods
 
+#pragma mark 鸟的加载图
+- (void)makeToastActivity_bird{
+    
+    UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);
+    if (existingActivityView != nil) return;
+    
+    UIView *activityView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 120, 140)];
+    activityView.center = [self centerPointForPosition:CSToastActivityDefaultPosition withToast:activityView];
+    activityView.backgroundColor = [UIColor clearColor];
+    activityView.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);
+    activityView.layer.cornerRadius = CSToastCornerRadius;
+    
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(0,0, 120, 120)];
+    NSMutableArray *images = [NSMutableArray array];
+    [activityView addSubview:imgView];
+    for (int i=1; i<=7; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading_jixiangwu000%d.png",i]];
+        [images addObject:image];
+    }
+    imgView.animationImages = images;
+    imgView.animationDuration= 1;
+    [imgView startAnimating];
+    
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0,CGRectGetMaxY(imgView.frame), activityView.width, 20)];
+    [lblName setText:@"正在加载，请稍后"];
+    [lblName setTextColor:COLOR_Text_Gay];
+    [lblName setTextAlignment:NSTextAlignmentCenter];
+    [activityView addSubview:lblName];
+    [lblName setFont:XCFONT(12)];
+    
+    objc_setAssociatedObject (self, &CSToastActivityViewKey, activityView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    [self addSubview:activityView];
+    
+    [UIView animateWithDuration:CSToastFadeDuration
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:
+     ^{
+         activityView.alpha = 1.0;
+     } completion:nil];
+    
+}
+
+
+
+
 - (void)makeToastActivity
 {
     [self makeToastActivity:CSToastActivityDefaultPosition msg:@"正在加载，请稍后"];

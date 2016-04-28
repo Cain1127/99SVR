@@ -44,6 +44,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 - (void)makeToastActivity:(id)position;
 - (void)makeToastActivity_2:(id)position;
 - (void)hideToastActivity;
+/**加载鸟的视图*/
+- (void)makeToastActivity_bird;
+
 
 // the showToast methods display any view as toast
 - (void)showToast:(UIView *)toast;

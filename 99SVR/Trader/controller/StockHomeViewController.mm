@@ -13,6 +13,10 @@
 #import "StockDealModel.h"
 #import "TQMailboxViewController.h"
 #import "ViewNullFactory.h"
+#import "Toast+UIView.h"
+
+
+
 
 #pragma mark 定义刷新状态
 typedef NS_ENUM(NSInteger,MJRefreshState){
@@ -55,6 +59,13 @@ typedef NS_ENUM(NSInteger,MJRefreshState){
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    
+    /**显示鸟的加载图*/
+    Loading_Bird_Show
+    
+//    [self.view makeToastActivity_ShowBird];
     
     [self initData];
     [self initUi];
@@ -191,7 +202,8 @@ typedef NS_ENUM(NSInteger,MJRefreshState){
  */
 -(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockHomeTableViewModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray{
     
-    DLog(@"%@",fromDataDic);
+    Loading_Bird_Hide
+    
     NSString *code = [NSString stringWithFormat:@"%@",fromDataDic[@"code"]];
     
     if ([code isEqualToString:@"1"]) {//请求成功

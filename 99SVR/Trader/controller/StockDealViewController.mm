@@ -44,9 +44,9 @@
 
     self.txtTitle.text = self.stockModel.teamname;
     self.warningLab.text = @"仅代表讲师个人操盘记录,不构成投资建议，风险自负";
-
-    [self.view makeToastActivity];
-
+    
+    Loading_Bird_Show
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
     [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
 
@@ -63,6 +63,8 @@
 }
 - (void)printInfo:(NSNotification *)notify{
     
+
+    Loading_Bird_Hide
     
     NSDictionary *dic = notify.object;
     NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];

@@ -28,6 +28,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    Loading_Bird_Show
+    
     self.txtTitle.text = @"购买私人定制";
     self.dataArray = @[];
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -158,6 +160,8 @@
 
 #pragma mark 刷新数据
 -(void)refreshDayData:(NSNotification *)notfi{
+    
+    Loading_Bird_Hide
     
     NSString *code = [NSString stringWithFormat:@"%@",[notfi.object valueForKey:@"code"]];
     
