@@ -46,7 +46,7 @@
     
     // 2.广告图片
     SplashModel *splash = [SplashTool get];
-    NSString *str = splash.imageUrl;//@"http://pic.nipic.com/2008-04-01/20084113367207_2.jpg";
+    NSString *str = splash.imageUrl;
     UIImageView *ad = [[UIImageView alloc] init];
     ad.contentMode = UIViewContentModeScaleAspectFit;
     ad.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.80);
@@ -56,7 +56,7 @@
     // 3.多少秒后跳过，广告倒计时
     _adButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _adButton.titleLabel.font = [UIFont systemFontOfSize:16];
-    [_adButton setTitle:[NSString stringWithFormat:@"%@ 跳过",@"15"] forState:UIControlStateNormal];
+    [_adButton setTitle:[NSString stringWithFormat:@"%@ 跳过",@"3"] forState:UIControlStateNormal];
     _adButton.backgroundColor = [UIColor whiteColor];
     [_adButton setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [_adButton addTarget:self action:@selector(adSkipClick) forControlEvents:UIControlEventTouchUpInside];
@@ -70,7 +70,7 @@
 /**
  *  广告倒计时
  */
-NSUInteger secondsCountDown = 15;//60秒倒计时
+NSUInteger secondsCountDown = 3;//60秒倒计时
 - (void)timerCountDown
 {
     secondsCountDown--;
