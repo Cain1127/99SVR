@@ -12,6 +12,8 @@
 #include <string>
 #include <cstring>
 
+
+
 struct HttpThreadParam
 {
 	char url[512];
@@ -25,9 +27,28 @@ class HttpConnection
 {
 
 private:
+	bool needHomePageCache;
+	bool needViewPointCache;
+	bool needOperateStocksCache[3];
+	bool needRoomListCache;
+
 	string GBKToUTF8(const std::string& strGBK);
 
 public:
+
+	HttpConnection()
+	{
+		needHomePageCache = true;
+		needViewPointCache = true;
+		needOperateStocksCache[0] = true;
+		needOperateStocksCache[1] = true;
+		needOperateStocksCache[2] = true;
+		needRoomListCache = true;
+	}
+
+	~HttpConnection()
+	{
+	}
 
 	//请求闪屏图片（X已提供）
 	void RequestSplashImage(SplashImageListener* listener);
@@ -116,13 +137,13 @@ public:
 	void PostAskQuestion(int teamId,const char* stock,const char* question, AskQuestionListener* listener);
 
 	// 请求问题回复--未回回答的（PC端接口）（X未提供）
-//	void RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeam = false);
+	void RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeam = false);
 
 	// 请求评论回复--发出的评论（PC端接口）（X未提供）
-//	void RequestMailSendReply(int startId, int count, MailReplyListener* listener, bool isTeam = false);
+	void RequestMailSendReply(int startId, int count, MailReplyListener* listener, bool isTeam = false);
 
 	// 讲师团队回答提问（PC端接口）（X未提供）
-//	void PostAnswer(int questionId, char* content, HttpListener* listener);
+	void PostAnswer(int questionId, char* content, HttpListener* listener);
 
 
 };

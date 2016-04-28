@@ -349,8 +349,7 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     JoinRoomReq req;
     const char *uId = [[DeviceUID uid] UTF8String];
     req.set_cserial(uId);
-//    req.set_vcbid(nRoomId);
-    req.set_vcbid(40000);
+    req.set_vcbid(nRoomId);
     req.set_croompwd("");
     req.set_devtype(2);
     req.set_bloginsource(platform);

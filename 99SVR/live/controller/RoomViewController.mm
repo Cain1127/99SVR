@@ -96,6 +96,10 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
         [self loadHeadModel];
         [_liveControl stopNewPlay];
         [_liveControl reloadModel:_room];
+        [_ideaControl setModel:_room];
+        [_tradeView reloadModel:_room];
+        [_ideaControl setModel:_room];
+        [_privateView setModel:_room];
     }
 }
 
@@ -184,9 +188,9 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 
 - (void)loadHeadModel
 {
-    headView.lblTitle.text = _room.cname;
-    headView.lblCount.text = _room.ncount;
-    headView.lblFans.text = _room.ncount;
+    headView.lblTitle.text = _room.teamname;
+    headView.lblCount.text = _room.onlineusercount;
+    headView.lblFans.text = _room.onlineusercount;
 }
 
 /**

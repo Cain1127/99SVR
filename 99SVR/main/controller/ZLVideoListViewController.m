@@ -62,6 +62,7 @@
         if(nStatus==1)
         {
             _aryVideo = dict[@"data"];
+            [UserInfo sharedUserInfo].aryRoom = _aryVideo;
             @WeakObj(self)
             dispatch_async(dispatch_get_main_queue(), ^{
                 [selfWeak.tableView reloadData];

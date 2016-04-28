@@ -632,19 +632,12 @@ void UnreadListener::OnError(int errCode)
     
 }
 
-void HomePageListener::onResponse(std::vector<BannerItem> banner_data, std::vector<HomePageVideoroomItem> vedioroom_data, std::vector<ViewpointSummary> viewpoint_data, std::vector<OperateStockProfit> operate_data)
+void HomePageListener::onResponse(std::vector<BannerItem> banner_data, std::vector<Team> team_data, std::vector<ViewpointSummary> viewpoint_data, std::vector<OperateStockProfit> operate_data)
 {
     NSMutableArray *videoRoom = [NSMutableArray array];
     int i;
-    for (i=0; i<vedioroom_data.size(); i++) {
-        HomePageVideoroomItem item = vedioroom_data[i];
-        NSString *nvcbid = [NSString stringWithUTF8String:item.nvcbid().c_str()];
-        NSString *croompic = [NSString stringWithUTF8String:item.croompic().c_str()];
-        NSString *livetype = [NSString stringWithUTF8String:item.livetype().c_str()];
-        NSString *ncount = [NSString stringWithUTF8String:item.ncount().c_str()];
-        NSString *cname = [NSString stringWithUTF8String:item.cname().c_str()];
-        NSDictionary *parameters = @{@"nvcbid":nvcbid,@"croompic":croompic,@"livetype":livetype,@"ncount":ncount,@"cname":cname};
-        RoomHttp *room = [RoomHttp mj_objectWithKeyValues:parameters];
+    for (i=0; i<team_data.size(); i++) {
+        RoomHttp *room = [[RoomHttp alloc] initWithData:&team_data[i]];
         [videoRoom addObject:room];
     }
     NSMutableArray *aryViewPoint = [NSMutableArray array];

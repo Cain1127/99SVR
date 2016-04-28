@@ -331,16 +331,22 @@ namespace protocol
 		char croompic[32];
 	}CMDBannerItem_t;
 
-	typedef struct tag_CMDNavigation
+	typedef struct tag_RoomGroupData
 	{
-		uint32 groupid;
+		uint32 groupid;   
 		uint32 parentid;
 		uint32 sortid;
-		uint32 textcolor;
-		char groupname[32];
-		char url[128];
-		uint32 roomid;
-	}CMDNavigation_t;
+		uint32 usernum;             //用户数目
+		uint32 textcolor;          //文字颜色
+		uint32 type;        
+		uint32 bhaschild;           //是否有子?    
+		uint32 bshowusernum;        //是否显示房间人数?
+		uint32 bfontbold;           //是否是粗体
+		char   groupname[NAMELEN];  //名字
+		char   iconname[NAMELEN];
+		char   url[URLLEN4];         //内容
+	}RoomGroupData_t;
+
 };
 
 #pragma pack()
