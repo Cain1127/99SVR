@@ -63,6 +63,7 @@
         self.priceLabView.newpriceStr = model.updateprice;
         self.priceLabView.oldpriceStr = model.buyprice;
         self.priceLabView.state = PriceLabViewType_NotVip;
+        model.actualPrice = model.updateprice;
     }
 
 }
@@ -84,6 +85,7 @@
     
     self.priceLabView.oldpriceStr = model.buyprice;
     self.priceLabView.state = PriceLabViewType_Vip;
+    model.actualPrice = model.buyprice;
 }
 
 
