@@ -10,15 +10,27 @@
 #import "MJExtension.h"
 @interface RoomHttp : NSObject
 
-@property (nonatomic, copy) NSString *nvcbid;           //!<直播记录ID
-@property (nonatomic, copy) NSString *cname;            //!<直播房间名
-@property (nonatomic, copy) NSString *roomname;         //!<房间名
-@property (nonatomic, copy) NSString *croompic;         //!<直播列表图片
+@property (nonatomic, copy) NSString *nvcbid;
+@property (nonatomic, copy) NSString *cname;
+@property (nonatomic, copy) NSString *roomname;
+@property (nonatomic, copy) NSString *croompic;
 @property (nonatomic, copy) NSString *cdescription;
 @property (nonatomic, copy) NSString *ncount;
-@property (nonatomic, copy) NSString *cgateaddr;        //!<直播地址
+@property (nonatomic, copy) NSString *cgateaddr;
 @property (nonatomic, copy) NSString *password;
 
+
+@property (nonatomic, copy) NSString *roomid;
+@property (nonatomic, copy) NSString *teamid;
+@property (nonatomic, copy) NSString *teamname;
+@property (nonatomic, copy) NSString *teamicon;
+@property (nonatomic, copy) NSString *introduce;
+@property (nonatomic, copy) NSString *onlineusercount;
+@property (nonatomic, copy) NSString *locked;
+@property (nonatomic, copy) NSString *alias;
+
 + (RoomHttp*)resultWithDict:(NSDictionary* )dict;
+
+- (id)initWithData:(void *)data;
 
 @end

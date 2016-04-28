@@ -3,8 +3,7 @@
 
 #include "LoginMessage.pb.h"
 #include "VideoRoomMessage.pb.h"
-#include "TextRoomMessage.pb.h"
-#include "CommonMessage.pb.h"
+#include "CommonroomMessage.pb.h"
 
 class ConnectionListener
 {

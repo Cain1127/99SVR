@@ -1,7 +1,4 @@
 #import "RoomUser.h"
-#import "message_vchat.h"
-#import "LSTcpSocket.h"
-#import "cmd_vchat.h"
 
 @implementation RoomUser
 

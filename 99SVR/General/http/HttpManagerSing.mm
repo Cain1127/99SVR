@@ -29,9 +29,10 @@ PrivateServiceDetailListener privateDetailListener;
 ChargeRuleListener chargeListener;
 TeamListListener _teamListListener;
 TeamIntroduceListener _teamIntroduceListener;
+TeamVideoListener _teamVideoListener;
 ConsumeRankListener _consumeRankListener;
 HomePageListener _homePageListener;
-//AskQuestionListener _askQuestionListener;
+AskQuestionListener _askQuestionListener;
 SystemMessageListener _systemMessageListener;
 QuestionAnswerListener _questionAnswerListener;
 MailReplyListener _mailReplyListener;
@@ -199,6 +200,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void) RequestTeamIntroduce:(int)teamId{
     [self createHttpConnection];
     hConnection->RequestTeamIntroduce(teamId,&_teamIntroduceListener);
+    hConnection->RequestTeamVideo(teamId, &_teamVideoListener);
 }
 
 // 请求贡献榜
@@ -210,6 +212,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 // 提问
 - (void) PostAskQuestion:(int)teamId stock:(const char*)stock question:(const char *)question{
     [self createHttpConnection];
+    hConnection->PostAskQuestion(teamId, stock, question, &_askQuestionListener);
 }
 
 // 请求系统消息
@@ -258,7 +261,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void)RequestMailSendReply:(int)startId count:(int)count
 {
     [self createHttpConnection];
-    hConnection->RequestMailSendReply(startId, count, &_mailReplyListener);
+//    hConnection->RequestMailSendReply(startId, count, &_mailReplyListener);
 }
 
 // 讲师团队回答提问（PC端接口）

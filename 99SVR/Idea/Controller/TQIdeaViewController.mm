@@ -24,6 +24,7 @@
 #import "TQIdeaModel.h"
 #import "ViewNullFactory.h"
 #import "UIImage+MultiFormat.h"
+
 @interface TQIdeaViewController ()<XIdeaDelegate>
 {
     UIView *noView;
@@ -124,7 +125,8 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 - (void)createView
 {
-    if (nil==noView) {
+    if (nil==noView)
+    {
         char cString[255];
         const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
         sprintf(cString, "%s/customized_no_opened.png",path);

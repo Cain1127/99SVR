@@ -13,9 +13,24 @@ namespace protocol
 		uint32 roomid;        //房间id
 	}CMDClientPingResp_t;
 
+	//加入房间预处理请求
+	typedef struct tag_CMDPreJoinRoomReq
+	{
+		uint32 userid;              //用户id,可能是靓号id,可能是游客号码
+		uint32 vcbid;               //房间id
+	}CMDPreJoinRoomReq_t;
+
+	//加入房间预处理响应
+	typedef struct tag_CMDPreJoinRoomResp
+	{
+		uint32 userid;          //用户id,可能是靓号id,可能是游客号码
+		uint32 vcbid;           //房间id
+		uint8 result;           //右起1位 1房间存在 0房间不存在，2位 1在黑名单 0不在黑名单，3位 1房间人数是否已满 0房间人数未满，4位 1房间有密码 0房间无密码
+	}CMDPreJoinRoomResp_t;
+
 	//加入房间请求
 	//281 bytes
-	typedef struct tag_CMDJoinRoomReq2
+	typedef struct tag_CMDJoinRoomReq
 	{
 		uint32 userid;         //用户id,可能是靓号id,可能是游客号码
 		uint32 vcbid;          //房间id
@@ -31,7 +46,7 @@ namespace protocol
 		byte   bloginSource;         //local 99 login or other platform login:0-local;1-other platform
 		byte   reserve1;
 		byte   reserve2;
-	}CMDJoinRoomReq2_t;
+	}CMDJoinRoomReq_t;
 
 	//加入房间响应 332 + 88bytes (420byte)
 	typedef struct tag_CMDJoinRoomResp
@@ -39,9 +54,10 @@ namespace protocol
 		uint32 userid;       //用户id
 		uint32 vcbid;        //房间id
 		byte   roomtype;     //房间类型
-		byte   busepwd:1;      //
-		byte   bIsCollectRoom:1;  //
-		byte   reserve1:6;    //
+		//byte   busepwd:1;      //
+		//byte   bIsCollectRoom:1;  //
+		//byte   reserve1:6;    //
+		byte flags;
 		uint16 seats;        //总人数
 		uint32 groupid;        //组id, 可以用来做区长判断?
 		uint32 runstate;       //房间 管理状态
@@ -60,7 +76,6 @@ namespace protocol
 		char   cname[NAMELEN];         //房间名字
 		char   cmediaaddr[MEDIAADDRLEN];   //媒体服务器地址
 		char   cpwd[PWDLEN];     
-		//SiegeInfo_t	siege_info;	       //城主信息
 	}CMDJoinRoomResp_t;
 
 	//加入房间错误
@@ -106,9 +121,10 @@ namespace protocol
 		byte   thismonthcostlevel;     //本月消费排行
 		byte   thismonthcostgrade;    //本月累计消费等级
 
-		byte   isxiaoshou:1;          //是不是销售
-		byte   gender:1;              //性别,
-		byte   reserve1:6;            //临时作为设备类型（2016-01-22 by shuisheng)
+		//byte   isxiaoshou:1;          //是不是销售
+		//byte   gender:1;              //性别,
+		//byte   reserve1:6;            //临时作为设备类型（2016-01-22 by shuisheng)
+		byte flags;
 		char   pubmicindex;           //公麦位置
 		byte   roomlevel;             //房间等级
 		byte   usertype;              //用户类型: 普通 机器人
@@ -296,7 +312,7 @@ namespace protocol
 	typedef struct tag_CMDGetUserInfoReq
 	{
 		uint32 srcuserid;    //用户ID
-		uint32 dstuserid;		 //被查看的用户ID	
+		uint32 dstuserid;		 //被查看的用户ID
 	}CMDGetUserInfoReq_t;
 	
 	//讲师个人资料
@@ -332,7 +348,7 @@ namespace protocol
 	typedef struct tag_CMDUserInfoErr
 	{
 		uint32 userid;  //用户ID
-		uint32 errid;   //0 成功（成功不发这个包，1.用户不存在 2.DB error 3.teacherflag 错误 
+		uint32 errid;   //0 成功（成功不发这个包，1.用户不存在 2.DB error 3.teacherflag 错误
 	}CMDUserInfoErr_t;
 
 		//把房间加入Favorite

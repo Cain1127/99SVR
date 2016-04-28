@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "platform.h"
 #include "Thread.h"
 
@@ -20,7 +20,11 @@ void Thread::start(Runnable func, void* param)
 #ifdef WIN
 	thread_handle[thread_index] = _beginthread(func, 0, param);
 #else
-	pthread_create(&(thread_handle[thread_index]), NULL, func, param);
+	pthread_attr_t a;
+	pthread_attr_init(&a);  
+	pthread_attr_setdetachstate(&a, PTHREAD_CREATE_DETACHED);    
+	pthread_create(&(thread_handle[thread_index]), &a, func, param);
+	pthread_attr_destroy(&a);
 #endif
 
 }

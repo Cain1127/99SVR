@@ -4,20 +4,25 @@
 #include "login_cmd_vchat.h"
 #include "videoroom_cmd_vchat.h"
 #include "proto_message_vchat.h"
-#include "textroom_cmd_vchat.h"
 #include "commonroom_cmd_vchat.h"
 
 #include "Socket.h"
 #include "Thread.h"
 
 #include "ConnectionListener.h"
-
+#include "MessageListener.h"
 
 #define MAX_MESSAGE_SIZE 8192
 #define STYPE_COUNT  3
 
+extern Socket g_socket;
+extern char cache_path[256];
 
 void SetProtocolCachePath(const char* path);
+
+void ReadProtocolCache(const char *suffix_path, std::string& cache_content);
+
+void WriteProtocolCache(const char *suffix_path, std::string& cache_content);
 
 
 class Connection
@@ -60,9 +65,9 @@ protected:
 	time_t last_ping_time;
 
 	bool closed;
-	Socket socket;
 	
 	ConnectionListener* conn_listener;
+	MessageListener* message_listener;
 
 
 	
@@ -85,7 +90,7 @@ protected:
 	int read_message(void);
 
 	virtual void on_do_connected() = 0;
-	virtual void on_dispatch_message(void* msg) = 0;
+	void on_dispatch_message(void* msg);
 
 	void on_connected();
 	void on_connect_error(int err_code);
@@ -99,6 +104,7 @@ public:
 
 	void SetLBS(char* lbs);
 	void RegisterConnectionListener(ConnectionListener* connection_listener);
+	void RegisterMessageListener(MessageListener* message_listener);
 	virtual void DispatchSocketMessage(void* msg) = 0;
 
 	void connect_from_lbs_asyn();

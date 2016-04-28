@@ -103,6 +103,7 @@
         }
     }
     
+<<<<<<< HEAD
     //回到购买私人订制
     for (UIViewController *control in aryIndex) {
         if ([control isKindOfClass:[TQPurchaseViewController class]]) {
@@ -112,6 +113,8 @@
     }
 
     
+=======
+>>>>>>> master
     
 }
 

@@ -17,38 +17,38 @@ namespace protocol
 {
 	//加入房间请求
 	//248 bytes
-	typedef struct tag_CMDJoinRoomReq1
-	{
-		uint32 userid;         //用户id,可能是靓号id,可能是游客号码
-		uint32 vcbid;          //房间id
-		uint32 devtype;      //0:PC端 1:安卓 2:IOS 3:WEB
-		uint32 time;
-		uint32 crc32;
-		uint32 coremessagever;     //客户端内核版本
-		char   cuserpwd[PWDLEN];   //用户密码,没有就是游客
-		char   croompwd[PWDLEN];   //房间密码,可能有
-		char   cSerial[32];    //
-		char   cMacAddr[IPADDRLEN];   //客户端mac地址
-		char   cIpAddr[IPADDRLEN];	  //客户端ip地址
+	//typedef struct tag_CMDJoinRoomReq1
+	//{
+	//	uint32 userid;         //用户id,可能是靓号id,可能是游客号码
+	//	uint32 vcbid;          //房间id
+	//	uint32 devtype;      //0:PC端 1:安卓 2:IOS 3:WEB
+	//	uint32 time;
+	//	uint32 crc32;
+	//	uint32 coremessagever;     //客户端内核版本
+	//	char   cuserpwd[PWDLEN];   //用户密码,没有就是游客
+	//	char   croompwd[PWDLEN];   //房间密码,可能有
+	//	char   cSerial[32];    //
+	//	char   cMacAddr[IPADDRLEN];   //客户端mac地址
+	//	char   cIpAddr[IPADDRLEN];	  //客户端ip地址
 
-	}CMDJoinRoomReq1_t;
+	//}CMDJoinRoomReq1_t;
 
 	//加入房间请求
 	//280 bytes
-	typedef struct tag_CMDJoinRoomReq
-	{
-		uint32 userid;         //用户id,可能是靓号id,可能是游客号码
-		uint32 vcbid;          //房间id
-		uint32 devtype;       //0:PC端 1:安卓 2:IOS 3:WEB
-		uint32 time;
-		uint32 crc32;
-		uint32 coremessagever;     //客户端内核版本
-		char   cuserpwd[PWDLEN];   //用户密码,没有就是游客
-		char   croompwd[PWDLEN];   //房间密码,可能有
-		char   cSerial[64];    //uuid
-		char   cMacAddr[IPADDRLEN];   //客户端mac地址
-		char   cIpAddr[IPADDRLEN];	  //客户端ip地址
-	}CMDJoinRoomReq_t;
+	//typedef struct tag_CMDJoinRoomReq
+	//{
+	//	uint32 userid;         //用户id,可能是靓号id,可能是游客号码
+	//	uint32 vcbid;          //房间id
+	//	uint32 devtype;       //0:PC端 1:安卓 2:IOS 3:WEB
+	//	uint32 time;
+	//	uint32 crc32;
+	//	uint32 coremessagever;     //客户端内核版本
+	//	char   cuserpwd[PWDLEN];   //用户密码,没有就是游客
+	//	char   croompwd[PWDLEN];   //房间密码,可能有
+	//	char   cSerial[64];    //uuid
+	//	char   cMacAddr[IPADDRLEN];   //客户端mac地址
+	//	char   cIpAddr[IPADDRLEN];	  //客户端ip地址
+	//}CMDJoinRoomReq_t;
 
 	//gate自动切换到房间请求
 	typedef struct tag_CMDGateJoinRoomReq
@@ -56,19 +56,6 @@ namespace protocol
 		uint32 userid;         //用户id
 		uint32 vcbid;          //房间id
 	}CMDGateJoinRoomReq_t;
-
-	//攻城消息内容
-	typedef struct tag_CMDSiegeInfo
-	{
-		uint32	vcbid;
-		uint32	srcid;				//发送者id
-		uint32	toid;				//接收者id
-		uint32	giftid;				//礼物id
-		uint32	count;				//礼物数目
-		uint32	time;				//发起时间
-		char	srcalias[NAMELEN];	    //发送者昵称
-		char	toalias[NAMELEN];	    //接收者昵称
-	}CMDSiegeInfo_t;
 
 	//房间公麦状态
 	typedef struct tag_CMDRoomPubMicState
@@ -130,20 +117,6 @@ namespace protocol
 		uint16 num;        //管理员(正管)数目
 		uint32 members[0];
 	}CMDRoomManagerInfo_t;
-
-	//鲜花赠送消息
-	//见消息定义说明,一种特殊的应用 (同平台,同房间内应用),不可用在月票上
-	typedef struct tag_CMDTradeFlowerRecord
-	{
-		uint32 vcbid;
-		uint32 srcid;
-		uint32 toid;
-		uint32 giftid;    //鲜花礼物id
-		uint32 sendnum;   //数目,默认为1
-		uint32 allnum;    //总数,收到后更新客户端
-		char   srcalias[NAMELEN];
-		char   toalias[NAMELEN];
-	}CMDTradeFlowerRecord_t;
 
 	typedef struct tag_CMDUserExitRoomInfo_ext
 	{
@@ -215,15 +188,6 @@ namespace protocol
 		uint32 userinroomstate;  //最新合集状态(客户端根据需要采用)
 	}CMDUserDevState_t;
 
-	//用户昵称更新 (req,resp,noty都使用该结构)
-	typedef struct tag_CMDUserAliasState
-	{
-		uint32 vcbid;
-		uint32 userid;
-		uint32 headid;
-		char   alias[NAMELEN];
-	}CMDUserAliasState_t;
-
 	// 音视频请求消息
 	typedef struct tag_CMDTransMediaInfo
 	{
@@ -241,23 +205,6 @@ namespace protocol
 		uint32 userid;
 		char caddr[MEDIAADDRLEN];  //媒体服务器URL
 	}CMDRoomMediaInfo_t;
-
-	//设置公麦状态的请求消息
-	typedef struct tag_CMDChangePubMicStateReq
-	{
-		uint32 vcbid;
-		uint32 runnerid;   //操作人员id
-		byte   micid;      //公麦id
-		byte   optype;     //操作类型:1-延迟当前用户麦时间,2-设置麦属性
-		int16  param1;     //麦时类型 或延迟时间(分)
-	}CMDChangePubMicStateReq_t;
-
-	//设置公麦状态的响应/错误消息
-	typedef struct tag_CMDChangePubMicStateResp
-	{
-		uint32  vcbid;
-		int32   errorid;    //错误代码
-	}CMDChangePubMicStateResp_t;
 
 	//设置公麦状态的通知消息
 	typedef struct tag_CMDChangePubMicStateNoty
@@ -289,13 +236,6 @@ namespace protocol
 		int16   micid;      //该用户的第几个麦序
 		int     optype;     //操作类型: -3,清除所有麦序?,-2 删除该用户的所有麦序,-1,删除该麦序,1-up,2-down,3-top,4-button
 	}CMDOperateWaitMic_t;
-
-	//设置排序用户index的响应/错误消息
-	typedef struct tag_CMDChangeWaitMicIndexResp
-	{
-		uint32  vcbid;
-		int32   errorid;     //错误代码
-	}CMDChangeWaitMicIndexResp_t;
 
 	//设置排序用户index的通知消息
 	typedef struct tag_CMDChangeWaitMicIndexNoty
@@ -379,106 +319,6 @@ namespace protocol
 		int32  errorid;    //错误代码
 	}CMDSetRoomNoticeResp_t;
 
-	//盖章请求和被盖章通知/广播的数据体
-	typedef struct tag_CMDSendUserSeal
-	{
-		uint32 userid;
-		uint32 vcbid;
-		uint32 toid;
-		uint16 sealid;   
-		uint16 sealtime; 
-	}CMDSendUserSeal_t;
-
-	typedef struct tag_CMDSendUserSealErr
-	{
-		uint32 userid;
-		uint32 vcbid;
-		int32  errid;
-	}CMDSendUserSealErr_t;
-
-	//中奖礼物通知消息
-	//该消息只限制同房间内广播,因此不需要srcalias,由于最多可能20次中奖,因此有重复的中奖率(如10倍中了2次),
-	//因此使用下面的内容结构,最后是变长的中奖数据。
-	typedef struct tag_CMDLotteryGiftNotice
-	{
-		uint32 vcbid;   //房间id
-		uint32 srcid;   //userid
-		uint16 giftid;  //礼物id
-		uint16 noddsnum;   //后续的中奖记录数目
-		char content[0];   //中奖内容:[int16|int16]... 奖率|次数
-	}CMDLotteryGiftNotice_t;
-
-	//中奖爆炸礼物通知消息
-	typedef struct tag_CMDBoomGiftNotice
-	{
-		uint32 vcbid;
-		uint32 srcid;
-		uint32 giftid; //礼物id
-		int    beishu; //倍数
-		uint64 winmoney;  //爆炸中奖总额
-	}CMDBoomGiftNotice_t;
-
-	//幸运奖池通知消息
-	typedef struct tag_CMDLotteryPoolInfo
-	{
-		uint64 nlotterypool;
-	}CMDLotteryPoolInfo_t;
-
-	//捡烟花加钱请求消息
-	typedef struct tag_CMDTradeFireworksReq
-	{
-		uint32 vcbid;
-		uint32 srcid;
-		uint16 giftid;   
-		uint16 giftnum;
-		uint16 sendtype;   //1.大烟花,2.小烟花
-		char   srcalias[NAMELEN]; 
-	}CMDTradeFireworksReq_t;
-
-	//捡烟的通知消息
-	typedef struct tag_CMDTradeFireworksNotify
-	{ 
-		uint32 vcbid;
-		uint32 srcid;
-		uint16 giftid;   
-		uint16 giftnum;
-		uint16 sendtype;   //1.大烟花,2.小烟花
-		char   srcalias[NAMELEN]; 
-	}CMDTradeFireworksNotify_t;
-
-	typedef struct tag_CMDTradeFireworksErr
-	{ 
-		uint32 vcbid;
-		uint32 userid;
-		uint32 giftid;
-		int32  errid;
-	}CMDTradeFireworksErr_t;
-
-	//银行存取款
-	typedef struct tag_CMDMoneyAndPointOp
-	{
-		uint32 vcbid;
-		uint32 srcid; 
-		uint32 touserid;   //3-用到
-		int64 data;        //金额/积分数目
-		uint8 optype;      //1 银行存款 2 银行取款   3 转账  4 积分兑换金币
-	}CMDMoneyAndPointOp_t;
-
-	typedef struct tag_CMDSetRoomWaitMicMaxNumLimit
-	{
-		uint32 vcbid;
-		uint32 runnerid; 
-		uint32 maxwaitmicuser; //最大排麦人数
-		uint32 maxuserwaitmic; //每人最多排麦次数
-	}CMDSetRoomWaitMicMaxNumLimit_t;
-
-	typedef struct tag_CMDSetForbidInviteUpMic
-	{
-		uint32 vcbid;
-		uint32 userid;
-		int32  reserve;
-	}CMDSetForbidInviteUpMic_t;
-
 	typedef struct tag_CMDPropsFlashPlayTaskItem
 	{
 		short nTaskType;
@@ -530,20 +370,6 @@ namespace protocol
 		int32  openresult_type;   //开奖类型, 0-单开, 1-全开
 	}CMDOpenChestReq_t;
 
-	typedef struct tag_CMDOpenChestResp
-	{
-		int32 errorid;   //错误 !=0
-		uint32 vcbid;
-		uint32 userid;
-		int32 usedchestnum;   //使用掉的宝箱
-		int32 remainchestnum;  //剩余的宝箱
-		int32 openresult_type;   //开奖类型 - 对应请求中数据
-		int32 openresult_0;      //单次奖项的数据idx
-		int32 openresult_1[7];   //7个奖项的次数,注意,特等奖只会产生一次
-		int64 poolvalue;         //剩余奖池数目
-		int64 tedengvalue;       //特等奖结果
-	}CMDOpenChestResp_t;
-
 	typedef struct tag_CMDMobZhuboInfo
 	{
 		uint32 vcbid;
@@ -581,40 +407,6 @@ namespace protocol
 		uint32 vcbid;
 		int32  hidestate;    //1-toHide, 2-tounHide 
 	}CMDSetUserHideStateReq_t;
-
-	typedef struct tag_CMDSetUserHideStateResp
-	{
-		uint32 errorid;   //错误id
-	}CMDSetUserHideStateResp_t;
-
-	typedef struct tag_CMDSetUserHideStateNoty
-	{
-		uint32 userid;
-		uint32 vcbid;
-		uint32 inroomstate;  //最终状态
-	}CMDSetUserHideStateNoty_t;
-
-	typedef struct tag_CMDUserAddChestNumNoty
-	{
-		uint32 userid;
-		uint32 vcbid;
-		uint32 addchestnum; //新增宝箱数目
-		uint32 totalchestnum; //共有宝箱
-	}CMDUserAddChestNumNoty_t;
-
-	//中奖倍数次数
-	typedef struct tag_CMDJiangCiShu
-	{
-		int beishu;
-		int count;
-	}CMDJiangCiShu_t;
-
-	//增加密友通知
-	typedef struct tag_CMDAddClosedFriendNotify
-	{
-		uint32 userid;
-		uint32 vcbid;
-	}CMDAddClosedFriendNotify_t;
 
 	// 关键字屏蔽
 	typedef struct tag_CMDAdKeywordInfo
@@ -677,6 +469,7 @@ namespace protocol
 		uint32 vcbid;	//房间id
 		uint32 roborid;//机器人id
 		uint32 teacherid;             //讲师ID
+		char   teacheralias[NAMELEN];
 	}CMDRobotTeacherIdNoty_t;
 
 	//讲师忠实度周版请求
@@ -828,6 +621,34 @@ namespace protocol
 		uint32 userid;
 		uint8  state;//订阅状态 0:未订阅 1:已订阅
 	}CMDTeacherSubscriptionStateQueryResp_t;
+
+	//专家观点消息推送（房间内部广播）
+	typedef struct tag_CMDExpertNewViewNoty
+	{
+		uint32 nmessageid;      //观点ID
+		uint32 nvcbid;          //房间ID
+		char  sName[48];        //专家名称
+		char  sIcon[256];       //头像信息
+		char  sPublicTime[32];  //发表时间
+		uint32 nCommentCnt;     //评论次数
+		uint32 nLikeCnt;        //点赞次数
+		uint32 nFlowerCnt;      //鲜花数量
+		uint16 contlen;         //内容长度
+		char   content[0];      //内容
+	}CMDExpertNewViewNoty_t;
+
+	typedef struct tag_CMDTeamTopNReq
+	{
+	  uint32 userid;         //用户id,
+	  uint32 vcbid;          //房间id
+	}CMDTeamTopNReq_t;
+
+	typedef struct tag_CMDTeamTopNResp
+	{
+	  uint32 vcbid;          //房间id
+	  char teamname[32];     //战队名称
+	  uint64 giftmoney;      //礼物金币
+	}CMDTeamTopNResp_t;
 
 	//0:Both,1:Email,2:SMS
 	typedef enum

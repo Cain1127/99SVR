@@ -59,7 +59,7 @@
     [_lblFans setTextColor:UIColorFromRGB(0xffffff)];
     [_lblFans setTextAlignment:NSTextAlignmentLeft];
     
-    _segmented = [[UISegmentedControl alloc] initWithItems:@[@"直播",@"专家观点",@"高手直播",@"私人订制"]];
+    _segmented = [[UISegmentedControl alloc] initWithItems:@[@"直播",@"专家观点",@"高手操盘",@"私人订制"]];
     _segmented.frame = CGRectMake(30,_lblFans.y+_lblFans.height+10,kScreenWidth-60, 35.0);
     _segmented.selectedSegmentIndex = 0;//设置默认选择项索引
     [self addSubview:_segmented];

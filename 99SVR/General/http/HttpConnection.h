@@ -25,101 +25,104 @@ class HttpConnection
 {
 
 private:
+	string GBKToUTF8(const std::string& strGBK);
 
 public:
 
-	//è¯·æ±‚é—ªå±å›¾ç‰‡ï¼ˆXå·²æä¾›ï¼‰
+	//ÇëÇóÉÁÆÁÍ¼Æ¬£¨XÒÑÌá¹©£©
 	void RequestSplashImage(SplashImageListener* listener);
-	// è¯·æ±‚æ“ç›˜åˆ—è¡¨(æ—¥æ”¶ç›Šæ’åº/æœˆæ”¶ç›Šæ’åº/æ€»æ”¶ç›Šæ’åº type:0-å…¨éƒ¨æ”¶ç›Š;1-æ—¥æ”¶ç›Š;2-æœˆæ”¶ç›Š;é»˜è®¤ä¸º0 )ï¼ˆå·²æä¾›ï¼‰
-	void RequestOperateStockProfit(int type ,int team_id, int page, int size, OperateStockProfitListener* listener);
 
-	// è¯·æ±‚æ“ç›˜è¯¦æƒ…ï¼ˆå·²æä¾›ï¼‰
+
+	// ÇëÇó²ÙÅÌÁĞ±í(ÈÕÊÕÒæÅÅĞò/ÔÂÊÕÒæÅÅĞò/×ÜÊÕÒæÅÅĞò type:0-È«²¿ÊÕÒæ;1-ÈÕÊÕÒæ;2-ÔÂÊÕÒæ;Ä¬ÈÏÎª0 )£¨ÒÑÌá¹©£©
+	void RequestOperateStockProfit(int type ,int team_id, int page, int size, OperateStockProfitListener* listener);
+	
+	// ÇëÇó²ÙÅÌÏêÇé£¨ÒÑÌá¹©£©
 	void RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener);
 
-	// è¯·æ±‚æ“ç›˜è¯¦æƒ…--äº¤æ˜“è®°å½•ï¼ˆXå·²æä¾›ï¼‰
+	// ÇëÇó²ÙÅÌÏêÇé--½»Ò×¼ÇÂ¼£¨XÒÑÌá¹©£©
 	void RequestOperateStockTransaction(int operateId, int startId, int count, OperateStockTransactionListener* listener);
 
-	// è¯·æ±‚æ“ç›˜è¯¦æƒ…--æŒä»“æƒ…å†µï¼ˆXå·²æä¾›ï¼‰
+	// ÇëÇó²ÙÅÌÏêÇé--³Ö²ÖÇé¿ö£¨XÒÑÌá¹©£©
 	void RequestOperateStocks(int operateId, OperateStocksListener* listener);
 
 
-	// ä»€ä¹ˆæ˜¯æˆ‘çš„ç§äººå®šåˆ¶ï¼ˆå·²æä¾›ï¼‰
+	// Ê²Ã´ÊÇÎÒµÄË½ÈË¶¨ÖÆ£¨ÒÑÌá¹©£©
 	void RequestWhatIsPrivateService(WhatIsPrivateServiceListener* listener);
 
-	// è¯·æ±‚æˆ‘å·²ç»è´­ä¹°çš„ç§äººå®šåˆ¶ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇóÎÒÒÑ¾­¹ºÂòµÄË½ÈË¶¨ÖÆ£¨ÒÑÌá¹©£©
 	void RequestMyPrivateService(MyPrivateServiceListener* listener);
 
-	// æ˜¾ç¤ºè´­ä¹°ç§äººå®šåˆ¶é¡µï¼ˆå·²æä¾›ï¼‰
+	// ÏÔÊ¾¹ºÂòË½ÈË¶¨ÖÆÒ³£¨ÒÑÌá¹©£©
 	void RequestBuyPrivateServicePage(int teacher_id, BuyPrivateServiceListener* listener);
 
-	// è¯·æ±‚æˆ˜é˜Ÿçš„ç§äººå®šåˆ¶ç¼©ç•¥ä¿¡æ¯ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇóÕ½¶ÓµÄË½ÈË¶¨ÖÆËõÂÔĞÅÏ¢£¨ÒÑÌá¹©£©
 	void RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivateServiceSummaryPackListener* listener);
 
-	// è¯·æ±‚ç§äººå®šåˆ¶è¯¦æƒ…ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇóË½ÈË¶¨ÖÆÏêÇé£¨ÒÑÌá¹©£©
 	void RequestPrivateServiceDetail(int privateServerceId, PrivateServiceDetailListener* listener);
 
 
-	// è¯·æ±‚æˆ˜é˜Ÿï¼ˆè´¢ç»ç›´æ’­ï¼‰åˆ—è¡¨ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇóÕ½¶Ó£¨²Æ¾­Ö±²¥£©ÁĞ±í£¨ÒÑÌá¹©£©
 	void RequestTeamList(TeamListListener* listener);
 
-	// è¯·æ±‚æˆ˜é˜Ÿç®€ä»‹ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇóÕ½¶Ó¼ò½é£¨ÒÑÌá¹©£©
 	void RequestTeamIntroduce(int teamId, TeamIntroduceListener* listener);
 
-	// è¯·æ±‚æˆ˜é˜Ÿè§†é¢‘åˆ—è¡¨ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇóÕ½¶ÓÊÓÆµÁĞ±í£¨ÒÑÌá¹©£©
 	void RequestTeamVideo(int teamId, TeamVideoListener* listener);
 
-	// è¯·æ±‚è´¡çŒ®æ¦œï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇó¹±Ï×°ñ£¨ÒÑÌá¹©£©
 	void RequestConsumeRankList(int teamId, ConsumeRankListener* listener);
 
-	//é¦–é¡µåˆ—è¡¨æ•°æ®ï¼ˆå·²æä¾›ï¼‰
+	//Ê×Ò³ÁĞ±íÊı¾İ£¨ÒÑÌá¹©£©
 	void RequestHomePage(HomePageListener* listener);
 
-	// æˆ‘çš„å…³æ³¨ï¼ˆå·²æä¾›ï¼‰
-	void RequestCollection(CollectionListener* listener);////æ”¶è—url
+	// ÎÒµÄ¹Ø×¢£¨ÒÑÌá¹©£©
+	void RequestCollection(CollectionListener* listener);////ÊÕ²Øurl
 
 
-	// è¯·æ±‚è§‚ç‚¹åˆ—è¡¨ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇó¹ÛµãÁĞ±í£¨ÒÑÌá¹©£©
 	void RequestViewpointSummary(int authorId, int startId, int requestCount, ViewpointSummaryListener* listener);
 
-	// è¯·æ±‚è§‚ç‚¹è¯¦æƒ…ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇó¹ÛµãÏêÇé£¨ÒÑÌá¹©£©
 	void RequestViewpointDetail(int viewpointId, ViewpointDetailListener* listener);
 
-	// è¯·æ±‚è§‚ç‚¹å›å¤ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇó¹Ûµã»Ø¸´£¨ÒÑÌá¹©£©
 	void RequestReply(int viewpointId, int startId, int requestCount, ReplyListener* listener);
 
-	// å›å¤è§‚ç‚¹ï¼ˆå·²æä¾›ï¼‰
+	// »Ø¸´¹Ûµã£¨ÒÑÌá¹©£©
 	void PostReply(int viewpointId, int parentReplyId, int authorId, int fromAuthorId, char* content, PostReplyListener* listener);
 
 
-	// è¯·æ±‚æ¯ä¸ªåˆ†ç±»çš„æœªè¯»æ•°ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇóÃ¿¸ö·ÖÀàµÄÎ´¶ÁÊı£¨ÒÑÌá¹©£©
 	void RequestUnreadCount(UnreadListener* listener);
 
-	// è¯·æ±‚æ€»çš„æœªè¯»æ•°ï¼ˆå·²æœªæä¾›ï¼‰
+	// ÇëÇó×ÜµÄÎ´¶ÁÊı£¨ÒÑÎ´Ìá¹©£©
 	void RequestTotalUnreadCount(TotalUnreadListener* listener);
 
-	// è¯·æ±‚ç³»ç»Ÿæ¶ˆæ¯ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇóÏµÍ³ÏûÏ¢£¨ÒÑÌá¹©£©
 	void RequestSystemMessage(int startId, int count, SystemMessageListener* listener);
 
-	// è¯·æ±‚é—®é¢˜å›å¤--å·²å›ç­”çš„ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇóÎÊÌâ»Ø¸´--ÒÑ»Ø´ğµÄ£¨ÒÑÌá¹©£©
 	void RequestQuestionAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeam = false);
 
-	// è¯·æ±‚è¯„è®ºå›å¤--æ”¶åˆ°çš„è¯„è®ºï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇóÆÀÂÛ»Ø¸´--ÊÕµ½µÄÆÀÂÛ£¨ÒÑÌá¹©£©
 	void RequestMailReply(int startId, int count, MailReplyListener* listener, bool isTeam = false);
 
-	// è¯·æ±‚ç§äººå®šåˆ¶ï¼ˆå·²æä¾›ï¼‰
+	// ÇëÇóË½ÈË¶¨ÖÆ£¨ÒÑÌá¹©£©
 	void RequestPrivateServiceSummary(int startId, int count, PrivateServiceSummaryListener* listener);
 
-	// æé—®ï¼ˆå·²æä¾›ï¼‰
-	void PostAskQuestion(int teamId,const char* stock,const char* question, HttpListener* listener);
+	// ÌáÎÊ£¨ÒÑÌá¹©£©
+	void PostAskQuestion(int teamId,const char* stock,const char* question, AskQuestionListener* listener);
 
-	// è¯·æ±‚é—®é¢˜å›å¤--æœªå›å›ç­”çš„ï¼ˆPCç«¯æ¥å£ï¼‰ï¼ˆXæœªæä¾›ï¼‰
-    void RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeam = false){}
+	// ÇëÇóÎÊÌâ»Ø¸´--Î´»Ø»Ø´ğµÄ£¨PC¶Ë½Ó¿Ú£©£¨XÎ´Ìá¹©£©
+//	void RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeam = false);
 
-	// è¯·æ±‚è¯„è®ºå›å¤--å‘å‡ºçš„è¯„è®ºï¼ˆPCç«¯æ¥å£ï¼‰ï¼ˆXæœªæä¾›ï¼‰
-    void RequestMailSendReply(int startId, int count, MailReplyListener* listener, bool isTeam = false){}
+	// ÇëÇóÆÀÂÛ»Ø¸´--·¢³öµÄÆÀÂÛ£¨PC¶Ë½Ó¿Ú£©£¨XÎ´Ìá¹©£©
+//	void RequestMailSendReply(int startId, int count, MailReplyListener* listener, bool isTeam = false);
 
-	// è®²å¸ˆå›¢é˜Ÿå›ç­”æé—®ï¼ˆPCç«¯æ¥å£ï¼‰ï¼ˆXæœªæä¾›ï¼‰
-    void PostAnswer(int questionId, char* content, HttpListener* listener){}
+	// ½²Ê¦ÍÅ¶Ó»Ø´ğÌáÎÊ£¨PC¶Ë½Ó¿Ú£©£¨XÎ´Ìá¹©£©
+//	void PostAnswer(int questionId, char* content, HttpListener* listener);
 
 
 };

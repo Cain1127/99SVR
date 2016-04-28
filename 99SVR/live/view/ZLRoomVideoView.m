@@ -1,17 +1,15 @@
 //
-//  VedioCellView.m
-//  StrechableTableView
+//  ZLRoomVideoView.m
+//  99SVR
 //
-//  Created by 邹宇彬 on 15/12/16.
-//  Copyright © 2015年 邹宇彬. All rights reserved.
+//  Created by xia zhonglin  on 4/28/16.
+//  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
-#import "VideoCellView.h"
-#import "RoomHttp.h"
-#import "UIControl+BlocksKit.h"
-#import "UIImageView+WebCache.h"
+#import "ZLRoomVideoView.h"
+#import "XVideoTeamInfo.h"
 
-@interface VideoCellView()
+@interface ZLRoomVideoView()
 {
     UIImageView *_imageView;        //!<图片
     UILabel *_nameLabel;            //!<名称
@@ -24,7 +22,7 @@
 
 @end
 
-@implementation VideoCellView
+@implementation ZLRoomVideoView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -77,44 +75,25 @@
     _roomIdLabel.frame = Rect(_nameLabel.x+_nameLabel.width+2,_nameLabel.y,60,15);
     
     [_lookCountBtn setFrame:Rect(_imageView.x+_imageView.width-55,
-                            _nameLabel.y,20, 15)];
+                                 _nameLabel.y,20, 15)];
     _lookCountLabel.frame = Rect(_lookCountBtn.x+_lookCountBtn.width+1, _nameLabel.y, 33, 15);
 }
 
-- (void)setNewRoom:(RoomHttp *)room
+- (void)setVideoModel:(XVideoModel *)videoModel
 {
-    _room = room;
+    _videoModel = videoModel;
     NSString *strUrl=nil;
-    if([room.croompic length]==0)
+    if([_videoModel.picurl length]==0)
     {
         strUrl = @"";
     }
     else
     {
-        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.teamicon];
+        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,_videoModel.picurl];
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
-    _nameLabel.text = room.teamname;
-    _lookCountLabel.text = room.locked;
-    [_roomIdLabel setText:room.roomid];
-}
-
-- (void)setRoom:(RoomHttp *)room
-{
-    _room = room;
-    NSString *strUrl=nil;
-    if([room.croompic length]==0)
-    {
-        strUrl = @"";
-    }
-    else
-    {
-       strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.croompic];
-    }
-    [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
-    _nameLabel.text = room.cname;
-    _lookCountLabel.text = room.ncount;
-    [_roomIdLabel setText:room.nvcbid];
+    _nameLabel.text = _videoModel.name;
+    
 }
 
 

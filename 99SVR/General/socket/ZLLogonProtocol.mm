@@ -1,4 +1,4 @@
-#import "cmd_vchat.h"
+
 #import "Socket.h"
 #import "ZLLogonProtocol.h"
 #import "UserInfo.h"
@@ -21,7 +21,9 @@ ZLPushListener push_listener;
 ZLHallListener hall_listener;
 ZLConnectionListerner conn_listener;
 ZLLoginListener login_listener;
-RoomConnection *video_room;
+ZLMessageListener message_listener;
+ZLJoinRoomListener join_listener;
+VideoRoomConnection *video_room;
 ZLRoomListener room_listener;
 
 NSMutableArray *aryRoomChat;
@@ -344,15 +346,15 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     }
     [aryRoomNotice removeAllObjects];
     
-    JoinRoomReq2 req;
+    JoinRoomReq req;
     const char *uId = [[DeviceUID uid] UTF8String];
     req.set_cserial(uId);
-    req.set_vcbid(nRoomId);
+//    req.set_vcbid(nRoomId);
+    req.set_vcbid(40000);
     req.set_croompwd("");
     req.set_devtype(2);
     req.set_bloginsource(platform);
-    video_room->SendMsg_JoinRoomReq2(req);
-    
+    video_room->SendMsg_JoinRoomReq(req);
 }
 
 /**
@@ -379,13 +381,14 @@ ZLLogonProtocol::ZLLogonProtocol()
 {
     conn = new LoginConnection();
 
-    conn->RegisterMessageListener(&login_listener);
+    conn->RegisterMessageListener(&message_listener);
     conn->RegisterConnectionListener(&conn_listener);
     conn->RegisterPushListener(&push_listener);
     conn->RegisterHallListener(&hall_listener);
     
-    video_room = new RoomConnection();
-    video_room->RegisterMessageListener(&room_listener);
+    video_room = new VideoRoomConnection();
+    video_room->RegisterRoomJoinListener(&join_listener);
+    video_room->RegisterMessageListener(&message_listener);
     video_room->RegisterConnectionListener(&conn_listener);
     
 }
@@ -482,30 +485,28 @@ void ZLHallListener::OnGetUserMoreInfResp(GetUserMoreInfResp& info)
     user.strBirth = [NSString stringWithCString:info.birth().c_str() encoding:GBK_ENCODING];
 }
 
-void ZLRoomListener::OnMessageComming(void* msg){
-    video_room->DispatchSocketMessage(msg);
-}
+
 
 /**
  *  加入房间成功
  */
-void ZLRoomListener::OnJoinRoomResp(JoinRoomResp& info){
-    DLog(@"加入房间成功");
-    if(currentRoom==nil){
-        currentRoom = [[RoomInfo alloc] init];
-    }
-    [currentRoom setRoomInfo:&info];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
-}
+//void ZLRoomListener::OnJoinRoomResp(JoinRoomResp& info){
+//    DLog(@"加入房间成功");
+//    if(currentRoom==nil){
+//        currentRoom = [[RoomInfo alloc] init];
+//    }
+//    [currentRoom setRoomInfo:&info];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
+//}
 
 /**
  *   加入房间失败
  */
-void ZLRoomListener::OnJoinRoomErr(JoinRoomErr& info){
-    DLog(@"加入房间失败");
-    NSDictionary *parameters = @{@"err":@(info.errid()),@"msg":@"test"};
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:parameters];
-}
+//void ZLRoomListener::OnJoinRoomErr(JoinRoomErr& info){
+//    DLog(@"加入房间失败");
+//    NSDictionary *parameters = @{@"err":@(info.errid()),@"msg":@"test"};
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:parameters];
+//}
 
 /**
  *  用户列表
@@ -643,9 +644,41 @@ void ZLRoomListener::OnTradeGiftNotify(TradeGiftRecord& info){
 
 
 
+void ZLMessageListener::OnLoginMessageComming(void* msg)
+{
+    conn->DispatchSocketMessage(msg);
+}
+
+void ZLMessageListener::OnVideoRoomMessageComming(void* msg)
+{
+    video_room->DispatchSocketMessage(msg);
+}
 
 
 
+
+
+void ZLJoinRoomListener::OnPreJoinRoomResp(PreJoinRoomResp& info)
+{
+    
+}
+
+void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
+{
+    DLog(@"加入房间成功");
+    if(currentRoom==nil){
+        currentRoom = [[RoomInfo alloc] init];
+    }
+    [currentRoom setRoomInfo:&info];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
+}
+
+void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
+{
+    DLog(@"加入房间失败");
+    NSDictionary *parameters = @{@"err":@(info.errid()),@"msg":@"test"};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:parameters];
+}
 
 
 

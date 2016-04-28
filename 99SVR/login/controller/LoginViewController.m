@@ -9,7 +9,6 @@
 
 #import "LoginViewController.h"
 #import "DecodeJson.h"
-#import "LSTcpSocket.h"
 #import "ZLLogonServerSing.h"
 #import "ProgressHUD.h"
 #import "UserInfo.h"
@@ -18,7 +17,6 @@
 #import "QCheckBox.h"
 #import "Toast+UIView.h"
 #import "RegMobileViewController.h"
-#import "LSTcpSocket.h"
 #import "LoginTextField.h"
 #import "NNSVRViewController.h"
 #import "ForgetPwdViewController.h"

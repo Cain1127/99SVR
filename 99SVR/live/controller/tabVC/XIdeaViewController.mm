@@ -160,7 +160,11 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 -(void)updateRefresh {
     _nCurrent = 20;
     _dataSource.aryModel = nil;
+<<<<<<< HEAD
     [kHTTPSingle RequestViewpointSummary:[_room.nvcbid intValue] start:0 count:20];
+=======
+    [kHTTPSingle RequestViewpointSummary:90002 start:0 count:20];
+>>>>>>> master
 }
 
 - (void)uploadMore

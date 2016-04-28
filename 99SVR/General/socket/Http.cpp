@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "platform.h"
 #include "proto_err.h"
 #include "Http.h"
@@ -152,6 +152,7 @@ char* Http::request(const char* host, short port, const char* url_tail, RequestP
 
 	build_request(req, host, url_tail, param);
 
+	socket.set_recv_timeout(5);
 	ret = socket.connect(host, port, 5);
 	if (ret != 0) 
 	{

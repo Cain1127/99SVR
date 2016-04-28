@@ -16,7 +16,6 @@
 {
     
 }
-@property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) RoomListRequest *listReuqest;
 
 @end

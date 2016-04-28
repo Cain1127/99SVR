@@ -601,7 +601,7 @@ void parse_WhatIsPrivateService(char* json, HttpListener* listener)
     
     JsonValue value;
     JsonReader reader;
-    int i;
+
     
     WhatIsPrivateService wips;
     
@@ -901,7 +901,7 @@ void parse_BuyPrivateService(char* json, HttpListener* listener)
     
     std::vector<PrivateServiceLevelDescription> psld_list;
     
-    int size_ = 0;
+
     int i = 0;
     
     BuyPrivateServiceListener* buy_listener = (BuyPrivateServiceListener*)listener;
@@ -1497,7 +1497,6 @@ void HttpConnection::RequestPrivateServiceDetail(int id, PrivateServiceDetailLis
 // 请求战队（财经直播）列表
 void HttpConnection::RequestTeamList(TeamListListener* listener)
 {
-    char tmp[32] = {0};
     
     RequestParamter& request = get_request_param();
     
@@ -1561,7 +1560,6 @@ void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requ
     
     RequestParamter& request = get_request_param();
     request["s"] = "Viewpoint/viewpointList";
-
     sprintf(tmp, "%d", authorId);
     request["authorid"] = tmp;
     sprintf(tmp, "%d", startId);
@@ -1737,7 +1735,7 @@ void HttpConnection::RequestTeamVideo(int teamId, TeamVideoListener* listener)
     http_request_asyn(listener, parse_teamvideo, &request);
 }
 
-void HttpConnection::PostAskQuestion(int teamId,const char* stock,const char* question, HttpListener* listener)
+void HttpConnection::PostAskQuestion(int teamId,const char* stock,const char* question, AskQuestionListener* listener)
 {
     RequestParamter& request = get_request_param();
     request["s"] = "questions/postaskquestion";

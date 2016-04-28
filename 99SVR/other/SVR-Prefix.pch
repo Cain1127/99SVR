@@ -46,6 +46,51 @@
 
 #define gcd_main_safe(block) dispatch_async(dispatch_get_main_queue(), block);
 
+typedef enum
+{
+    //mask:0xFF(mic state)
+    FT_ROOMUSER_STATUS_PUBLIC_MIC     = 0x00000001,   //公麦状态(任何人可以连接)
+    FT_ROOMUSER_STATUS_PRIVE_MIC      = 0x00000002,   //私麦状态(任何人可以连接)
+    FT_ROOMUSER_STATUS_SECRET_MIC     = 0x00000004,   //密麦状态(连接时只有好友自动通过连接,其他拒绝,这里现在都要要求验证同意)
+    FT_ROOMUSER_STATUS_CHARGE_MIC     = 0x00000010,    //收费状态 (上了收费麦)
+    
+    
+    //mask:0xF0
+    FT_ROOMUSER_STATUS_IS_TEMPOP      = 0x00000020,    //临时管理 标识
+    FT_ROOMUSER_STATUS_IS_PIG         = 0x00000040,    //是否是猪头? 标识
+    FT_ROOMUSER_STATUS_IS_FORBID      = 0x00000080,    //被禁言(用户被禁言,假死,不能说话,不能发送小喇叭) 标识,可以被解禁
+    
+    //mask:0x0F00(device), 增加新的mic状态:收费密麦 (2012.04.05 by guchengzhi)
+    FT_ROOMUSER_STATUS_VIDEOON        = 0x00000100,    //视频打开 (有视频设备,可以发出数据)
+    FT_ROOMUSER_STATUS_MICOFF         = 0x00000200,    //麦克关闭 (在麦，但不出声音)
+    FT_ROOMUSER_STATUS_VIDEOOFF       = 0x00000400,    //视频关闭 (有视频设备，不允许连接)
+    FT_ROOMUSER_STATUS_IS_HIDE        = 0x00000800,    //隐身(在登录时使用名字冗余字段进行初次隐身进入房间操作或默认隐身进场)
+    
+    
+    //mask: 盟主(0xF000)
+    FT_ROOMUSER_STATUS_IS_SIEGE1      = 0x00002000,    //标识
+    FT_ROOMUSER_STATUS_IS_SIEGE2      = 0x00004000,
+    
+    //mask: 区长(0xF0000)
+    FT_ROOMUSER_STATUS_IS_QUZHUANG    = 0x00010000,    //区长
+    
+}e_userinroomstate;
+
+typedef enum
+{
+    FT_ROOMOPSTATUS_CLOSE_PUBCHAT     = 0x00000001,   //关闭公聊/禁止聊天回复
+    FT_ROOMOPSTATUS_CLOSE_PRIVATECHAT = 0x00000002,   //关闭私聊/禁止问股
+    FT_ROOMOPSTATUS_CLOSE_SAIZI       = 0x00000004,   //关闭塞子
+    FT_ROOMOPSTATUS_CLOSE_PUBMIC      = 0x00000010,   //关闭公麦 (不允许上)
+    FT_ROOMOPSTATUS_CLOSE_PRIVATEMIC  = 0x00000020,   //关闭私麦 (不允许上)
+    FT_ROOMOPSTATUS_OPEN_AUTOPUBMIC   = 0x00000040,   //打开排麦自动上公麦
+    FT_ROOMOPSTATUS_OPEN_WAITMIC      = 0x00000080,   //打开排麦功能
+    FT_ROOMOPSTATUS_CLOSE_COLORBAR    = 0x00000100,   //屏蔽彩条
+    FT_ROOMOPSTATUS_CLOSE_FREEMIC     = 0x00000200,   //自由排麦/禁止点赞
+    FT_ROOMOPSTATUS_CLOSE_INOUTMSG    = 0x00000400,   //屏蔽用户进出信息
+    FT_ROOMOPSTATUS_CLOSE_ROOM        = 0x00000800,   //关闭聊天室/屏蔽互动聊天
+    
+}e_roomopstate;
 
 /**
  *  文字直播信息cell内部使用view类型

@@ -2,186 +2,198 @@
 #define __ROOM_LISTENER_H__
 
 #include <vector>
-#include "LoginMessage.pb.h"
 #include "VideoRoomMessage.pb.h"
-#include "CommonMessage.pb.h"
+#include "CommonroomMessage.pb.h"
 
-class RoomListener
+class VideoRoomListener
 {
 public:
-    virtual void OnMessageComming(void* msg) = 0;
-    
-    virtual void OnJoinRoomResp(JoinRoomResp& info) = 0;//åŠ å…¥æˆ¿é—´æˆåŠŸ
-    virtual void OnJoinRoomErr(JoinRoomErr& info) = 0;//åŠ å…¥æˆ¿é—´å¤±è´¥
-    virtual void OnRoomUserList(std::vector<RoomUserInfo>& infos) = 0;//æˆ¿é—´ç”¨æˆ·åˆ—è¡¨æ•°æ®
-    virtual void OnRoomUserNoty(RoomUserInfo& info) = 0;//æ–°å¢ç”¨æˆ·é€šçŸ¥
-    
-    virtual void OnRoomPubMicStateNoty(std::vector<RoomPubMicState>& infos) = 0;//å…¬éº¦çŠ¶æ€æ•°æ®
-    virtual void OnRoomUserExitResp() = 0;//
-    virtual void OnRoomUserExceptExitNoty(UserExceptExitRoomInfo_ext& info) = 0;//æˆ¿é—´ç”¨æˆ·é€€å‡ºé€šçŸ¥
-    
-    virtual void OnRoomKickoutUserResp() = 0;//
-    virtual void OnRoomKickoutUserNoty(UserKickoutRoomInfo_ext& info) = 0;//æˆ¿é—´ç”¨æˆ·è¸¢å‡ºé€šçŸ¥
-    
-    // æš‚æ—¶å·²è’åºŸ
-    //virtual void OnFlyGiftListInfoReq(TradeGiftRecord& info) = 0;//å¤§ç¤¼ç‰©ä¿¡æ¯
-    
-    virtual void OnWaitiMicListInfo(std::vector<int > &infos) = 0;//æ’éº¦åˆ—è¡¨
-    
-    
-    virtual void OnChatErr() = 0;//
-    virtual void OnChatNotify(RoomChatMsg& info) = 0;//èŠå¤©é€šçŸ¥æ•°æ®
-    
-    //é€ç¤¼ç‰©
-    virtual void OnTradeGiftRecordResp(TradeGiftRecord& info) = 0;
-    virtual void OnTradeGiftErr(TradeGiftErr& info) = 0;
-    virtual void OnTradeGiftNotify(TradeGiftRecord& info) = 0;
-    
-    //é€èŠ±
-    virtual void OnTradeFlowerResp(TradeFlowerRecord& info) = 0;
-    virtual void OnTradeFlowerErr(TradeFlowerRecord& info) = 0;
-    virtual void OnTradeFlowerNotify(TradeFlowerRecord& info) = 0;
-    
-    //çƒŸç«
-//    virtual void OnTradeFireworksErr(TradeFireworksErr& info) = 0;
-    virtual void OnTradeFireworksNotify(TradeFireworksNotify& info) = 0;
-    
-    virtual void OnLotteryGiftNotify(LotteryGiftNotice& info) = 0;//ç¤¼ç‰©ä¸­å¥–é€šçŸ¥æ•°æ®
-    
-    virtual void OnBoomGiftNotify(BoomGiftNotice& info) = 0;//çˆ†ç‚¸ä¸­å¥–é€šçŸ¥æ•°æ®
-    
-    virtual void OnSysNoticeInfo(SysCastNotice& info) = 0;//ç³»ç»Ÿæ¶ˆæ¯é€šçŸ¥æ•°æ®
-    
-    virtual void OnUserAccountInfo(UserAccountInfo& info) = 0;//ç”¨æˆ·å¸æˆ·æ•°æ®
-    
-    virtual void OnRoomManagerNotify() = 0;//æˆ¿é—´ç®¡ç†é€šçŸ¥æ•°æ®
-    
-    virtual void OnRoomMediaInfo(RoomMediaInfo& info) = 0;//æˆ¿é—´åª’ä½“æ•°æ®é€šçŸ¥
-    
-    virtual void OnRoomNoticeNotify(RoomNotice& info) = 0;//æˆ¿é—´å…¬å‘Šæ•°æ®é€šçŸ¥
-    
-    virtual void OnRoomOpState(RoomOpState& info) = 0;//æˆ¿é—´çŠ¶æ€æ•°æ®é€šçŸ¥
-    
-    virtual void OnRoomInfoNotify(RoomBaseInfo& info) = 0;//æˆ¿é—´ä¿¡æ¯æ•°æ®é€šçŸ¥
-    
-    virtual void OnThrowUserNotify(ThrowUserInfo& info) = 0;//æˆ¿é—´å°æ€ç”¨æˆ·é€šçŸ¥
-    
-    virtual void OnUpWaitMicResp(UpWaitMic& info) = 0;//ä¸Šæ’éº¦å“åº”
-    virtual void OnUpWaitMicErr(UpWaitMic& info) = 0;//ä¸Šæ’éº¦é”™è¯¯
-    
-    virtual void OnChangePubMicStateNotify(ChangePubMicStateNoty& info) = 0;//å…¬éº¦çŠ¶æ€é€šçŸ¥
-    
-    //ä¼ è¾“åª’ä½“
-    virtual void OnTransMediaReq() = 0;//ä¼ è¾“åª’ä½“è¯·æ±‚
-    virtual void OnTransMediaResp() = 0;//ä¼ è¾“åª’ä½“å“åº”
-    virtual void OnTransMediaErr() = 0;//ä¼ è¾“åª’ä½“é”™è¯¯
-    
-    //è®¾ç½®éº¦çŠ¶æ€
-    virtual void OnSetMicStateResp() = 0;//è®¾ç½®éº¦çŠ¶æ€å“åº”
-    virtual void OnSetMicStateErr(UserMicState& info) = 0;//è®¾ç½®éº¦çŠ¶æ€é”™è¯¯
-    virtual void OnSetMicStateNotify(UserMicState& info) = 0;//è®¾ç½®éº¦çŠ¶æ€é€šçŸ¥
-    
-    //è®¾ç½®è®¾å¤‡çŠ¶æ€
-    virtual void OnSetDevStateResp(UserDevState& info) = 0;//è®¾ç½®è®¾å¤‡çŠ¶æ€å“åº”
-    virtual void OnSetDevStateErr(UserDevState& info) = 0;//è®¾ç½®è®¾å¤‡çŠ¶æ€é”™è¯¯
-    virtual void OnSetDevStateNotify(UserDevState& info) = 0;//è®¾ç½®è®¾å¤‡çŠ¶æ€é€šçŸ¥
-    
-    //è®¾ç½®ç”¨æˆ·å‘¢ç§°
-    virtual void OnSetUserAliasResp(UserAliasState& info) = 0;//è®¾ç½®ç”¨æˆ·å‘¢ç§°å“åº”
-    virtual void OnSetUserAliasErr(UserAliasState& info) = 0;//è®¾ç½®ç”¨æˆ·å‘¢ç§°é”™è¯¯
-    virtual void OnSetUserAliasNotify(UserAliasState& info) = 0;//è®¾ç½®ç”¨æˆ·å‘¢ç§°é€šçŸ¥
-    
-    //è®¾ç½®ç”¨æˆ·æƒé™(ç®¡ç†)
-    virtual void OnSetUserPriorityResp(SetUserPriorityResp& info) = 0;//è®¾ç½®ç”¨æˆ·æƒé™(ç®¡ç†)å“åº”
-    virtual void OnSetUserPriorityNotify(SetUserPriorityResp& info) = 0;//è®¾ç½®ç”¨æˆ·æƒé™(ç®¡ç†)å“åº”
-    
-    //å¯Ÿçœ‹ç”¨æˆ·IP
-    virtual void OnSeeUserIpResp(SeeUserIpResp& info) = 0;//å¯Ÿçœ‹ç”¨æˆ·IPå“åº”
-    virtual void OnSeeUserIpErr(SeeUserIpResp& info) = 0;//å¯Ÿçœ‹ç”¨æˆ·IPé”™è¯¯
-    
-    virtual void OnThrowUserResp(ThrowUserInfoResp& info) = 0;//å°æ€æˆ¿é—´ç”¨æˆ·å“åº”
-    
-    virtual void OnForbidUserChatNotify(ForbidUserChat& info) = 0;//ç¦è¨€é€šçŸ¥
-    
-    //virtual void OnFavoriteVcbResp() = 0;//æ”¶è—æˆ¿é—´å“åº”ï¼Œè¿™ä¸ªæœåŠ¡å™¨å…¶å®æ˜¯æ²¡æœ‰å“åº”çš„
-    
-    virtual void OnSetRoomNoticeResp(SetRoomNoticeResp& info) = 0;//è®¾ç½®æˆ¿é—´å…¬å‘Šå“åº”
-    
-    virtual void OnSetRoomInfoResp(SetRoomInfoResp& info) = 0;//è®¾ç½®æˆ¿é—´ä¿¡æ¯å“åº”
-    
-    virtual void OnSetRoomOPStatusResp(SetRoomOPStatusResp& info) = 0;//è®¾ç½®æˆ¿é—´çŠ¶æ€ä¿¡æ¯å“åº”
-    
-    virtual void OnQueryUserAccountResp(QueryUserAccountResp& info) = 0;//æŸ¥è¯¢ç”¨æˆ·å¸æˆ·å“åº”
-    
-    virtual void OnSetWatMicMaxNumLimitNotify(SetRoomWaitMicMaxNumLimit& info) = 0;//è®¾ç½®æˆ¿é—´æœ€å¤§æ’éº¦æ•°ï¼Œæ¯äººæœ€å¤šæ’éº¦æ¬¡æ•° é€šçŸ¥
-    
-    virtual void OnChangeWaitMicIndexResp(ChangeWaitMicIndexResp& info) = 0;//ä¿®æ”¹æ’éº¦éº¦åºå“åº”
-    
-    virtual void OnSetForbidInviteUpMicNotify(SetForbidInviteUpMic& info) = 0;//è®¾ç½®ç¦æ­¢æŠ±éº¦é€šçŸ¥
-    
-    virtual void OnSiegeInfoNotify(SiegeInfo& info) = 0;//åŸä¸»ä¿¡æ¯é€šçŸ¥
-    
-    virtual void OnOpenChestResp(OpenChestResp& info) = 0;//å¼€å®ç®±å“åº”
-    
-    virtual void OnQueryUserMoreInfoResp(UserMoreInfo& info) = 0;//
-    
-    virtual void OnSetUserProfileResp(SetUserProfileResp& info) = 0;//è®¾ç½®ç”¨æˆ·é…ç½®ä¿¡æ¯å“åº”
-    
-    virtual void OnClientPingResp(ClientPingResp& info) = 0;//æ”¶åˆ°æœåŠ¡å™¨pingæ¶ˆæ¯çš„è¿”å›,è¡¨ç¤ºæˆ¿é—´æ´»ç€
-    
-    virtual void OnCloseRoomNotify(CloseRoomNoty& info) = 0;//æˆ¿é—´è¢«å…³é—­æ¶ˆæ¯,ç›´æ¥é€€å‡ºå½“å‰æˆ¿é—´
-    
-    virtual void OnDoNotReachRoomServer() = 0;//æ”¶åˆ°æˆ¿é—´ä¸å¯åˆ°è¾¾æ¶ˆæ¯
-    
-    virtual void OnLotteryPoolNotify(LotteryPoolInfo& info) = 0;//æ”¶åˆ°å¹¸è¿å®ç®±å¥–æ± æ¶ˆæ¯
-    
-    virtual void OnSetUserHideStateResp(SetUserHideStateResp& info) = 0;//
-    
-    virtual void OnSetUserHideStateNoty(SetUserHideStateNoty& info) = 0;//
-    
-    virtual void OnUserAddChestNumNoty(UserAddChestNumNoty& info) = 0;//æ”¶åˆ°ç”¨æˆ·å¢åŠ æ–°å®ç®±é€šçŸ¥
-    
-    virtual void OnAddClosedFriendNoty(AddClosedFriendNotify& info) = 0;//æ”¶åˆ°èµ é€ç¤¼ç‰©å¢åŠ å¯†å‹é€šçŸ¥
-    
-    virtual void OnAdKeyWordOperateNoty(AdKeywordsNotify& info) = 0;//æ”¶åˆ°ç¦è¨€å…³é”®è¯åˆ·æ–°é€šçŸ¥
-    
-    virtual void OnAdKeyWordOperateResp(AdKeywordsResp& info) = 0;//æ”¶åˆ°ç¦è¨€å…³é”®è¯æ›´æ–°é€šçŸ¥
-    
-    virtual void OnTeacherScoreResp(TeacherScoreResp& info) = 0;//æ”¶åˆ°è®²å¸ˆè¯„åˆ†å“åº”
-    
-    virtual void OnTeacherScoreRecordResp(TeacherScoreRecordResp& info) = 0;//æ”¶åˆ°ç”¨æˆ·è¯„åˆ†å“åº”
-    
-    virtual void OnRobotTeacherIdNoty(RobotTeacherIdNoty& info) = 0;//ä¸Šéº¦æœºå™¨äººå¯¹åº”è®²å¸ˆIDé€šçŸ¥
-    
-    virtual void OnTeacherGiftListResp(std::vector<TeacherGiftListResp>& infos) = 0;//è®²å¸ˆå¿ å®åº¦å‘¨ç‰ˆå“åº”
-    
-    //virtual void OnHitGoldEggToClientNoty(HitGoldEggClientNoty& info) = 0;//ç ¸é‡‘è›‹æ›´æ–°99å¸æœ€æ–°å€¼
-    
-    virtual void OnUserScoreNotify(UserScoreNoty& info) = 0;//ç”¨æˆ·å¯¹è®²å¸ˆçš„è¯„åˆ†
-    
-    virtual void OnUserScoreListNotify(std::vector<UserScoreNoty>& infos) = 0;//ç”¨æˆ·å¯¹è®²å¸ˆçš„è¯„åˆ†åˆ—è¡¨
-    
-    virtual void OnTeacherAvarageScoreNoty(TeacherAvarageScoreNoty& info) = 0;//ç”¨æˆ·å¯¹è®²å¸ˆçš„å¹³å‡åˆ†
-    
-    virtual void OnRoomAndSubRoomId_Noty(RoomAndSubRoomIdNoty& info) = 0;//ä¸»æˆ¿é—´å’Œå­æˆ¿é—´idï¼Œç›®å‰åªæœ‰ç§»åŠ¨ç«¯æœ‰ï¼ŒPCç«¯æ²¡æœ‰
-    
-    virtual void OnSysCastResp(Syscast& info) = 0;//
-    
-    //æ™®é€šç”¨æˆ·ä¸ªäººèµ„æ–™
-    virtual void OnRoomUserInfoResp(RoomUserInfoResp& info) = 0;
-    
-    //æ–‡å­—è®²å¸ˆä¸ªäººèµ„æ–™
-    virtual void OnTeacherInfoResp(TeacherInfoResp& info) = 0;
-    
-    //è·å–ç”¨æˆ·ä¸ªäººèµ„æ–™å¤±è´¥
-    virtual void OnUserInfoErr(UserInfoErr& info) = 0;
-    
-    //è¯¾ç¨‹è®¢é˜…è¿”å›
-    virtual void OnTeacherSubscriptionResp(TeacherSubscriptionResp& info) = 0;
-    
-    //æŸ¥è¯¢è®¢é˜…çŠ¶æ€å“åº”
-    virtual void OnTeacherSubscriptionStateQueryResp(TeacherSubscriptionStateQueryResp& info) = 0;
-    
+
+	//·¿¼äÓÃ»§ÁĞ±íÊı¾İ
+	virtual void OnRoomUserList(std::vector<RoomUserInfo>& infos) = 0;
+
+	//ĞÂÔöÓÃ»§Í¨Öª
+	virtual void OnRoomUserNoty(RoomUserInfo& info) = 0;
+
+	//¹«Âó×´Ì¬Êı¾İ
+	virtual void OnRoomPubMicStateNoty(std::vector<RoomPubMicState>& infos) = 0;
+
+	//·¿¼äÓÃ»§ÍË³öÏìÓ¦
+	virtual void OnRoomUserExitResp() = 0;
+
+	//·¿¼äÓÃ»§ÍË³öÍ¨Öª
+	virtual void OnRoomUserExceptExitNoty(UserExceptExitRoomInfo_ext& info) = 0;
+
+	//·¿¼äÓÃ»§Ìß³öÏìÓ¦
+	virtual void OnRoomKickoutUserResp() = 0;
+
+	//·¿¼äÓÃ»§Ìß³öÍ¨Öª
+	virtual void OnRoomKickoutUserNoty(UserKickoutRoomInfo_ext& info) = 0;
+	
+	//ÅÅÂóÁĞ±í
+	virtual void OnWaitiMicListInfo(std::vector<int > &infos) = 0;
+	
+	//ÁÄÌì·¢ËÍÊ§°ÜÏìÓ¦
+	virtual void OnChatErr() = 0;
+
+	//ÁÄÌìÍ¨ÖªÊı¾İ
+	virtual void OnChatNotify(RoomChatMsg& info) = 0;
+
+	//ÔùËÍÀñÎï³É¹¦ÏìÓ¦
+	virtual void OnTradeGiftRecordResp(TradeGiftRecord& info) = 0;
+
+	//ÔùËÍÀñÎïÊ§°ÜÏìÓ¦
+	virtual void OnTradeGiftErr(TradeGiftErr& info) = 0;
+
+	//ÔùËÍÀñÎïÍ¨Öª
+	virtual void OnTradeGiftNotify(TradeGiftRecord& info) = 0;
+
+	//ÏµÍ³ÏûÏ¢Í¨ÖªÊı¾İ
+	virtual void OnSysNoticeInfo(SysCastNotice& info) = 0;
+
+	//ÓÃ»§ÕÊ»§Êı¾İ
+	virtual void OnUserAccountInfo(UserAccountInfo& info) = 0;
+
+	//·¿¼ä¹ÜÀíÍ¨ÖªÊı¾İ
+	virtual void OnRoomManagerNotify() = 0;
+
+	//·¿¼äÃ½ÌåÊı¾İÍ¨Öª
+	virtual void OnRoomMediaInfo(RoomMediaInfo& info) = 0;
+
+	//·¿¼ä¹«¸æÊı¾İÍ¨Öª
+	virtual void OnRoomNoticeNotify(RoomNotice& info) = 0;
+
+	//·¿¼ä×´Ì¬Êı¾İÍ¨Öª
+	virtual void OnRoomOpState(RoomOpState& info) = 0;
+
+	//·¿¼äĞÅÏ¢Êı¾İÍ¨Öª
+	virtual void OnRoomInfoNotify(RoomBaseInfo& info) = 0;
+
+	//·¿¼ä·âÉ±ÓÃ»§Í¨Öª
+	virtual void OnThrowUserNotify(ThrowUserInfo& info) = 0;
+
+	//ÉÏÅÅÂóÏìÓ¦
+	virtual void OnUpWaitMicResp(UpWaitMic& info) = 0;
+
+	//ÉÏÅÅÂó´íÎó
+	virtual void OnUpWaitMicErr(UpWaitMic& info) = 0;
+
+	//¹«Âó×´Ì¬Í¨Öª
+	virtual void OnChangePubMicStateNotify(ChangePubMicStateNoty& info) = 0;
+
+	//ÉèÖÃÂó×´Ì¬ÏìÓ¦
+	virtual void OnSetMicStateResp() = 0;
+
+	//ÉèÖÃÂó×´Ì¬´íÎó
+	virtual void OnSetMicStateErr(UserMicState& info) = 0;
+
+	//ÉèÖÃÂó×´Ì¬Í¨Öª
+	virtual void OnSetMicStateNotify(UserMicState& info) = 0;
+
+	//ÉèÖÃÉè±¸×´Ì¬ÏìÓ¦
+	virtual void OnSetDevStateResp(UserDevState& info) = 0;
+
+	//ÉèÖÃÉè±¸×´Ì¬´íÎó
+	virtual void OnSetDevStateErr(UserDevState& info) = 0;
+
+	//ÉèÖÃÉè±¸×´Ì¬Í¨Öª
+	virtual void OnSetDevStateNotify(UserDevState& info) = 0;
+
+	//ÉèÖÃÓÃ»§È¨ÏŞ(¹ÜÀí)ÏìÓ¦
+	virtual void OnSetUserPriorityResp(SetUserPriorityResp& info) = 0;
+
+	//ÉèÖÃÓÃ»§È¨ÏŞ(¹ÜÀí)Í¨Öª
+	virtual void OnSetUserPriorityNotify(UserPriority& info) = 0;
+
+	//²é¿´ÓÃ»§IPÏìÓ¦
+	virtual void OnSeeUserIpResp(SeeUserIpResp& info) = 0;
+
+	//²é¿´ÓÃ»§IP´íÎó
+	virtual void OnSeeUserIpErr(SeeUserIpResp& info) = 0;
+
+	//·âÉ±·¿¼äÓÃ»§ÏìÓ¦
+	virtual void OnThrowUserResp(ThrowUserInfoResp& info) = 0;
+
+	//½ûÑÔÍ¨Öª
+	virtual void OnForbidUserChatNotify(ForbidUserChat& info) = 0;
+
+	//ÉèÖÃ·¿¼ä¹«¸æÏìÓ¦
+	virtual void OnSetRoomNoticeResp(SetRoomNoticeResp& info) = 0;
+
+	//ÉèÖÃ·¿¼ä×´Ì¬ĞÅÏ¢ÏìÓ¦
+	virtual void OnSetRoomOPStatusResp(SetRoomOPStatusResp& info) = 0;
+
+	//²éÑ¯ÓÃ»§ÕÊ»§ÏìÓ¦
+	virtual void OnQueryUserAccountResp(QueryUserAccountResp& info) = 0;
+
+	//ÊÕµ½·şÎñÆ÷pingÏûÏ¢µÄ·µ»Ø,±íÊ¾·¿¼ä»î×Å
+	virtual void OnClientPingResp(ClientPingResp& info) = 0;
+
+	//·¿¼ä±»¹Ø±ÕÏûÏ¢,Ö±½ÓÍË³öµ±Ç°·¿¼ä
+	virtual void OnCloseRoomNotify(CloseRoomNoty& info) = 0;
+	
+	//ÊÕµ½·¿¼ä²»¿Éµ½´ïÏûÏ¢
+	virtual void OnDoNotReachRoomServer() = 0;
+
+	//ÉèÖÃ·¿¼äĞÅÏ¢·É²æ°æÏìÓ¦
+	virtual void OnSetRoomInfoResp(SetRoomInfoResp& info) = 0;
+
+	//ÉèÖÃ·¿¼äĞÅÏ¢·É²æ°æÍ¨Öª
+	virtual void OnSetRoomInfoReq_v2(SetRoomInfoReq_v2& info) = 0;
+
+	//ÊÕµ½½ûÑÔ¹Ø¼ü´ÊË¢ĞÂÍ¨Öª
+	virtual void OnAdKeyWordOperateNoty(std::vector<AdKeywordInfo>& info) = 0;
+
+	//ÊÕµ½½ûÑÔ¹Ø¼ü´Ê¸üĞÂÍ¨Öª
+	virtual void OnAdKeyWordOperateResp(AdKeywordsResp& info) = 0;
+
+	//ÊÕµ½½²Ê¦ÆÀ·ÖÏìÓ¦
+	virtual void OnTeacherScoreResp(TeacherScoreResp& info) = 0;
+
+	//ÊÕµ½ÓÃ»§ÆÀ·ÖÏìÓ¦
+	virtual void OnTeacherScoreRecordResp(TeacherScoreRecordResp& info) = 0;
+
+	//ÉÏÂó»úÆ÷ÈË¶ÔÓ¦½²Ê¦IDÍ¨Öª
+	virtual void OnRobotTeacherIdNoty(RobotTeacherIdNoty& info) = 0;
+
+	//½²Ê¦ÖÒÊµ¶ÈÖÜ°æÏìÓ¦
+	virtual void OnTeacherGiftListResp(std::vector<TeacherGiftListResp>& infos) = 0;
+
+	//ÓÃ»§¶Ô½²Ê¦µÄÆÀ·Ö
+	virtual void OnUserScoreNotify(UserScoreNoty& info) = 0;
+
+	//ÓÃ»§¶Ô½²Ê¦µÄÆÀ·ÖÁĞ±í
+	virtual void OnUserScoreListNotify(std::vector<UserScoreNoty>& infos) = 0;
+
+	//ÓÃ»§¶Ô½²Ê¦µÄÆ½¾ù·Ö
+	virtual void OnTeacherAvarageScoreNoty(TeacherAvarageScoreNoty& info) = 0;
+
+	//Ö÷·¿¼äºÍ×Ó·¿¼äid£¬Ä¿Ç°Ö»ÓĞÒÆ¶¯¶ËÓĞ£¬PC¶ËÃ»ÓĞ
+	virtual void OnRoomAndSubRoomId_Noty(RoomAndSubRoomIdNoty& info) = 0;
+
+	//·¿¼ä·¢ËÍÏµÍ³¹«¸æ
+	virtual void OnSysCastResp(Syscast& info) = 0;
+
+	//ÆÕÍ¨ÓÃ»§¸öÈË×ÊÁÏ
+	virtual void OnRoomUserInfoResp(RoomUserInfoResp& info) = 0;
+
+	//ÎÄ×Ö½²Ê¦¸öÈË×ÊÁÏ
+	virtual void OnTeacherInfoResp(TeacherInfoResp& info) = 0;
+
+	//»ñÈ¡ÓÃ»§¸öÈË×ÊÁÏÊ§°Ü
+	virtual void OnUserInfoErr(UserInfoErr& info) = 0;
+
+	//¿Î³Ì¶©ÔÄ·µ»Ø
+	virtual void OnTeacherSubscriptionResp(TeacherSubscriptionResp& info) = 0;
+
+	//²éÑ¯¶©ÔÄ×´Ì¬ÏìÓ¦
+	virtual void OnTeacherSubscriptionStateQueryResp(TeacherSubscriptionStateQueryResp& info) = 0;
+
+	//×¨¼Ò¹ÛµãÏûÏ¢ÍÆËÍ£¨·¿¼äÄÚ²¿¹ã²¥£©
+	virtual void OnExpertNewViewNoty(ExpertNewViewNoty& info) = 0;
+
+	//×îÇ¿Õ½¶ÓÖÜ°ñ»ØÓ¦
+	virtual void OnTeamTopNResp(std::vector<TeamTopNResp>& infos) = 0;
 };
 
 

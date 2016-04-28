@@ -18,6 +18,7 @@
 
 #pragma warning(disable:4996)
 #pragma warning(disable:4200)
+#pragma warning(disable:4244)
 
 #define FILE_SEPARATOR "\\"
 #define CLIENT_TYPE 0

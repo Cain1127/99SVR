@@ -2,6 +2,7 @@
  * todo
  * ≤‚ ‘∂‡¥Œ close
  */
+#include "stdafx.h"
 #include <stdio.h>
 #include "platform.h"
 #include "Connection.h"
@@ -9,10 +10,11 @@
 #include "Json.h"
 #include "StatisticReport.h"
 
-static char cache_path[256] = { 0 };
+Socket g_socket;
 
-static const char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,lbs3.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";//,112.25.230.249:2222
-//static const char* lbs0 = "testlbs.99ducaijing.cn:1999";
+char cache_path[256] = { 0 };
+//static const char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,lbs3.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";//,112.25.230.249:2222
+static const char* lbs0 = "testlbs.99ducaijing.cn:2222";
 static char lbs_from_file[256] = {0};
 static char lbs_from_http[256] = {0};
 static char lbs_from_set[256] = {0};
@@ -23,6 +25,78 @@ static int lbs_count;
 void SetProtocolCachePath(const char* path)
 {
 	strcpy(cache_path, path);
+}
+
+void ReadProtocolCache(const char *suffix_path, std::string& cache_content)
+{
+	if(!cache_path || !suffix_path)
+	{
+		return;
+	}
+
+	std::string full_path;
+
+	full_path = cache_path;
+	full_path += suffix_path;
+
+	char contentBuf[256] = {0};
+
+	FILE *fp;
+	fp = fopen(full_path.c_str(), "r");
+	
+	if(!fp)
+	{
+		fclose(fp);
+		return;
+	}
+
+	size_t n_read;
+	while( (n_read = fread( contentBuf, 1, 255, fp)) > 0 )
+	{
+		contentBuf[n_read] = '\0';
+		cache_content += contentBuf;
+	}
+
+	fclose(fp);
+}
+
+void WriteProtocolCache(const char *suffix_path, std::string& cache_content)
+{
+	if(!cache_path || !suffix_path)
+	{
+		return;
+	}
+
+	std::string full_path;
+
+	full_path = cache_path;
+	full_path += suffix_path;
+
+	FILE *fp;
+	fp = fopen(full_path.c_str(), "w");
+
+	if(!fp)
+	{
+		fclose(fp);
+		return;
+	}
+
+	const char* pContent = cache_content.c_str();
+	const char* pStart = pContent;
+
+	int idx = 0;
+	int length = cache_content.size();
+
+	while(idx < length)
+	{
+		size_t cnt = fwrite(pStart, 1, 255, fp);
+
+		pStart += cnt;
+
+		idx += cnt;
+	}
+
+	fclose(fp);
 }
 
 void Connection::SetLBS(char* lbs)
@@ -71,7 +145,7 @@ int save_lbs_to_file(const char* lbs)
 
 	return ret;
 }
-#if 0
+
 ThreadVoid get_lbs_from_http(void* param)
 {
 	Http http;
@@ -100,7 +174,6 @@ ThreadVoid get_lbs_from_http(void* param)
 
 	ThreadReturn;
 }
-#endif
 
 typedef struct LbsThreadParam
 {
@@ -118,8 +191,10 @@ typedef struct ConnectThreadParam
 ThreadVoid get_host_form_lbs_runnable(void* param)
 {
 	LbsThreadParam* p = (LbsThreadParam*)param;
-    p->conn->get_host_form_lbs(p->lbs);
+	 p->conn->get_host_form_lbs(p->lbs);
+
 	delete p;
+	
 	ThreadReturn;
 }
 
@@ -131,7 +206,7 @@ void parse_ip_port(char* s, char* ip, short& port)
 	char* e = strchr(s, ':');
 	if ( e )
 	{
-		int len = e - s;
+		int len = (int)(e - s);
 		memcpy(ip, s, len);
 		ip[len] = 0;
 
@@ -144,7 +219,6 @@ void Connection::get_host_form_lbs(char* lbs)
 
 	char ip[64];
 	short port;
-    //121.12.118.32
 	parse_ip_port(lbs, ip, port);
 
 	char url[384];
@@ -168,6 +242,7 @@ void Connection::get_host_form_lbs(char* lbs)
 		strcpy(host_from_lbs[get_host_index], content);
 		LOG("index:%d time:%ld lbs:%s host:%s", get_host_index, clock(), ip, host_from_lbs[get_host_index]);
 		get_host_index++;
+
 		if (!islogining)
 		{
 			const char *d = ",;";
@@ -188,7 +263,7 @@ void Connection::get_host_form_lbs(char* lbs)
 					if ( *ip && port )
 					{
 						LOG("****DO CONNECT***");
-						LOG("first login server: %s:%d", ip, port);
+						LOG("first connect server: %s:%d", ip, port);
 						strcpy(first_login_server, p);
 						connect_stype_index = stype;
 						islogining = true;
@@ -239,29 +314,29 @@ void Connection::connect_from_lbs_asyn()
 	if (!is_set_lbs)
 	{
 		const char* lbs = lbs0;
-//		if (*cache_path)
-//		{
-//			lbs = get_lbs_from_file();
-//			if (lbs == NULL)
-//			{
-//				get_lbs_from_http(NULL);
-//				if (*lbs_from_http)
-//				{
-//					lbs = lbs_from_http;
-//					LOG("use lbs from http:%s", lbs);
-//				}
-//				else
-//				{
-//					lbs = lbs0;
-//					LOG("use lbs from default:%s", lbs);
-//				}
-//			}
-//			else
-//			{
-//				LOG("use lbs from file:%s", lbs);
-//				Thread::start(get_lbs_from_http, NULL);
-//			}
-//		}
+		if (*cache_path)
+		{
+			lbs = get_lbs_from_file();
+			if (lbs == NULL)
+			{
+				get_lbs_from_http(NULL);
+				if (*lbs_from_http)
+				{
+					lbs = lbs_from_http;
+					LOG("use lbs from http:%s", lbs);
+				}
+				else
+				{
+					lbs = lbs0;
+					LOG("use lbs from default:%s", lbs);
+				}
+			}
+			else
+			{
+				LOG("use lbs from file:%s", lbs);
+				Thread::start(get_lbs_from_http, NULL);
+			}
+		}
 		
 		strcpy(lbs_curr, lbs);
 	}
@@ -416,7 +491,13 @@ void Connection::do_error()
 void Connection::RegisterConnectionListener(
 		ConnectionListener* connection_listener)
 {
-	conn_listener = connection_listener;
+	this->conn_listener = connection_listener;
+}
+
+void Connection::RegisterMessageListener(
+		MessageListener* message_listener)
+{
+	this->message_listener = message_listener;
 }
 
 ThreadVoid connect_runnable(void * vparam)
@@ -430,7 +511,7 @@ ThreadVoid connect_runnable(void * vparam)
 
 int Connection::connect(const char* host, short port)
 {
-	int ret = socket.connect(host, port);
+	int ret = g_socket.connect(host, port);
 	isfirst_read = true;
 	read_counter = 0;
 	if (ret == 0)
@@ -454,8 +535,6 @@ void Connection::connect_asyn(const char* host, short port)
 	param->conn = this;
 	param->port = port;
 	strcpy(param->ip, host);
-//    param->port = 7401;
-//    strcpy(param->ip, "121.12.118.32");
 	Thread::start(connect_runnable, param);
 }
 
@@ -475,7 +554,7 @@ int Connection::recv(char* buf, int offset, int len)
 	if (is_closed())
 		return -1;
 
-	int ret = socket.recv(buf + offset, len);
+	int ret = g_socket.recv(buf + offset, len);
 
 	if (ret <= 0)
 	{
@@ -508,7 +587,7 @@ int Connection::send(const char* buf, int len)
 	if (is_closed())
 		return -1;
 
-	int ret = socket.send(buf, len);
+	int ret = g_socket.send(buf, len);
 
 	if (ret <= 0)
 	{
@@ -536,7 +615,7 @@ int Connection::send(const char* buf, int len)
 int Connection::close()
 {
 	closed = true;
-	int ret = socket.close_();
+	int ret = g_socket.close_();
 	return ret;
 }
 
@@ -545,7 +624,7 @@ int Connection::get_error()
 	if (is_closed())
 		return -1;
 
-	return socket.get_error();
+	return g_socket.get_error();
 }
 
 void Connection::send_message(int sub_cmd, void* req, int req_len)
@@ -559,7 +638,7 @@ void Connection::send_message(int sub_cmd, void* req, int req_len)
 
 	memcpy(pHead->content, req, req_len);
 
-	socket.send((const char*) pHead, pHead->length);
+	g_socket.send((const char*) pHead, pHead->length);
 }
 
 int Connection::read_message(void)
@@ -587,7 +666,7 @@ int Connection::read_message(void)
 	do
 	{
 		int len = recv(recv_buf, recvLen, msgLen - recvLen);
-		if (len < 0)
+		if (len < 0)                                                                                                                                                                                               
 		{
 			LOG("read message content error: %d", recvLen);
 			return -1;
@@ -602,6 +681,46 @@ int Connection::read_message(void)
 	on_dispatch_message(new_msg);
 
 	return recvLen;
+}
+
+void Connection::on_dispatch_message(void* msg)
+{
+	if (message_listener != NULL)
+	{
+		protocol::COM_MSG_HEADER* head = (protocol::COM_MSG_HEADER*)msg;
+		switch ( head->maincmd )
+		{
+		case protocol::MDM_Vchat_Login:
+		case protocol::MDM_Vchat_Hall:
+			message_listener->OnLoginMessageComming(msg);
+			break;
+		case protocol::MDM_Vchat_Room:
+			message_listener->OnVideoRoomMessageComming(msg);
+			break;
+		case protocol::MDM_Vchat_Usermgr:
+			{
+				protocol::COM_MSG_HEADER* head = (protocol::COM_MSG_HEADER*)msg;
+				int sub_cmd = head->subcmd;
+				if(sub_cmd==protocol::Sub_Vchat_HitGoldEgg_ToClient_Noty || sub_cmd==protocol::Sub_Vchat_ClientNotify)
+				{
+					protocol::tag_CMDPushGateMask* push = (protocol::tag_CMDPushGateMask*) (head->content);
+					if(push->type==8)
+					{
+						message_listener->OnVideoRoomMessageComming(msg);
+					}
+					else
+					{
+						message_listener->OnLoginMessageComming(msg);
+					}
+				}
+				else if(sub_cmd==protocol::Sub_Vchat_ClientNotify)
+				{
+					message_listener->OnLoginMessageComming(msg);
+				}
+			}
+			break;
+		}
+	}
 }
 
 void Connection::read_loop(void)

@@ -13,8 +13,8 @@
   reference:http://en.wikipedia.org/wiki/64-bit
 */
 
-#ifndef _YC_DATAYPTES_H_
-#define _YC_DATAYPTES_H_
+#ifndef __YC_DATAYPTES_H__
+#define __YC_DATAYPTES_H__
 
 ////////////////////////////////////////////////////////
 
