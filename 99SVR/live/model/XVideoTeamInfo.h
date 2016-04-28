@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "MJExtension.h"
 
-@interface VideoModel : NSObject
+@interface XVideoModel : NSObject
 
 @property (nonatomic,assign) int nId;
 @property (nonatomic,copy) NSString *name;
 @property (nonatomic,copy) NSString *picurl;
 @property (nonatomic,copy) NSString *videourl;
+
+- (id)initWithInfo:(void*)pData;
 
 @end
 
