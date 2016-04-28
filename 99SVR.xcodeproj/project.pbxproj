@@ -3539,8 +3539,6 @@
 				BB6F3ABC1C9ECB3C0035EBBE /* BannerModel.m */,
 				18987FEE1CAA17E6000E9F1C /* WonderfullView.h */,
 				18987FEF1CAA17E6000E9F1C /* WonderfullView.m */,
-				5AD25E4B1CCE225A005C5BE6 /* SplashModel.h */,
-				5AD25E4C1CCE225A005C5BE6 /* SplashModel.mm */,
 				BBD58F1D1CCF4F37009250DB /* ZLViewPoint.h */,
 				BBD58F1E1CCF4F37009250DB /* ZLViewPoint.m */,
 				BBD58F201CCF52F6009250DB /* ZLOperateStock.h */,
@@ -4000,6 +3998,7 @@
 				TargetAttributes = {
 					BB25D7D31C1571B400314C1E = {
 						CreatedOnToolsVersion = 7.1.1;
+						DevelopmentTeam = FMNJX2N6V6;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -4877,6 +4876,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -4923,6 +4923,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;

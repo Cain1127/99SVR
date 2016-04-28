@@ -88,6 +88,9 @@
                     <constraint firstAttribute="trailing" secondItem="psB-eu-msB" secondAttribute="trailing" id="xe7-lL-qNe"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="introduceLab" destination="WXv-Rg-alr" id="MRO-dr-LDB"/>
+            </connections>
             <point key="canvasLocation" x="252" y="429"/>
         </tableViewCell>
     </objects>

@@ -373,7 +373,7 @@ void WhatIsPrivateServiceListener::onResponse(WhatIsPrivateService& infos){
 
 void WhatIsPrivateServiceListener::OnError(int errCode)
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:@{@"code":@(errCode)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_WHAT_IS_PRIVATE_VC object:@{@"code":@(errCode)}];
 
 }
 

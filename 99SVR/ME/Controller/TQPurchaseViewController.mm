@@ -31,21 +31,6 @@
     [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
     
     self.view.backgroundColor = COLOR_Bg_Gay;
-    CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
-    _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} style:UITableViewStylePlain];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [_tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
-    //自适应高度
-    _tableView.rowHeight = UITableViewAutomaticDimension;
-    // 估算高度
-    _tableView.estimatedRowHeight = 200;
-    _tableView.backgroundColor = COLOR_Bg_Gay;
-
-    [self.view addSubview:_tableView];
-    _tableView.tableHeaderView = self.headerView;
-    
 }
 
 
@@ -59,6 +44,29 @@
     }
     return _headerView;
 }
+
+-(UITableView *)tableView{
+    
+    if (!_tableView) {
+        
+        CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
+        _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} style:UITableViewStylePlain];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        [_tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
+        //自适应高度
+        _tableView.rowHeight = UITableViewAutomaticDimension;
+        // 估算高度
+        _tableView.estimatedRowHeight = 200;
+        _tableView.backgroundColor = COLOR_Bg_Gay;
+        [self.view addSubview:_tableView];
+        _tableView.tableHeaderView = self.headerView;
+    }
+    
+    return _tableView;
+}
+
 
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -151,20 +159,20 @@
         
         self.headerModel = [notfi.object valueForKey:@"headerModel"];
         self.headerModel.teamName = self.stockModel.teamname;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.headerView setHeaderViewWithModel:self.headerModel];
-            self.dataArray = [[notfi.object valueForKey:@"data"] copy];
-            [self.tableView reloadData];
-        });
+        [self.headerView setHeaderViewWithModel:self.headerModel];
+
     }else{//请求失败
     
         
         DLog(@"请求失败");
         
-
-
-        
     }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.dataArray = [[notfi.object valueForKey:@"data"] copy];
+        [self.tableView reloadData];
+    });
+    
 }
 
 
