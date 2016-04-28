@@ -129,6 +129,7 @@
 		18F971131C92947F001B2575 /* RSADataVerifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F9710A1C92947F001B2575 /* RSADataVerifier.m */; };
 		18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971141C92971B001B2575 /* CoreMotion.framework */; };
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
+		5A6AE1301CD1DEE8002FBD02 /* start-mascot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */; };
 		5AA6D8191CCBC01300841960 /* AdViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D8181CCBC01300841960 /* AdViewController.mm */; };
 		5AA6D81C1CCBD00A00841960 /* NewfeatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D81B1CCBD00A00841960 /* NewfeatureViewController.m */; };
 		5AB43D8B1CCFD7AE00693494 /* PrivateVipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AB43D8A1CCFD7AE00693494 /* PrivateVipView.m */; };
@@ -138,7 +139,6 @@
 		5AD6673D1CD044EB00DA2C6D /* start_page_640x1136.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD667391CD044EB00DA2C6D /* start_page_640x1136.png */; };
 		5AD6673E1CD044EB00DA2C6D /* start_page_640x960.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD6673A1CD044EB00DA2C6D /* start_page_640x960.png */; };
 		5AD6673F1CD044EB00DA2C6D /* start_page_750x1334.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD6673B1CD044EB00DA2C6D /* start_page_750x1334.png */; };
-		5AD667411CD046B800DA2C6D /* start-mascot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD667401CD046B800DA2C6D /* start-mascot.png */; };
 		5AD6675E1CD0957C00DA2C6D /* iPhone4_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD667521CD0957C00DA2C6D /* iPhone4_1@2x.png */; };
 		5AD6675F1CD0957C00DA2C6D /* iPhone4_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD667531CD0957C00DA2C6D /* iPhone4_2@2x.png */; };
 		5AD667601CD0957C00DA2C6D /* iPhone4_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD667541CD0957C00DA2C6D /* iPhone4_3@2x.png */; };
@@ -967,6 +967,7 @@
 		18F971141C92971B001B2575 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		18F971161C92A40A001B2575 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		5A43875FF97FDC1CA789AE15 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-mascot.png"; sourceTree = "<group>"; };
 		5AA6D8171CCBC01300841960 /* AdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdViewController.h; sourceTree = "<group>"; };
 		5AA6D8181CCBC01300841960 /* AdViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdViewController.mm; sourceTree = "<group>"; };
 		5AA6D81A1CCBD00A00841960 /* NewfeatureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewfeatureViewController.h; sourceTree = "<group>"; };
@@ -981,7 +982,6 @@
 		5AD667391CD044EB00DA2C6D /* start_page_640x1136.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_page_640x1136.png; sourceTree = "<group>"; };
 		5AD6673A1CD044EB00DA2C6D /* start_page_640x960.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_page_640x960.png; sourceTree = "<group>"; };
 		5AD6673B1CD044EB00DA2C6D /* start_page_750x1334.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_page_750x1334.png; sourceTree = "<group>"; };
-		5AD667401CD046B800DA2C6D /* start-mascot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-mascot.png"; sourceTree = "<group>"; };
 		5AD667521CD0957C00DA2C6D /* iPhone4_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4_1@2x.png"; sourceTree = "<group>"; };
 		5AD667531CD0957C00DA2C6D /* iPhone4_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4_2@2x.png"; sourceTree = "<group>"; };
 		5AD667541CD0957C00DA2C6D /* iPhone4_3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4_3@2x.png"; sourceTree = "<group>"; };
@@ -2467,7 +2467,7 @@
 		5AD667371CD044EB00DA2C6D /* LaunchImage */ = {
 			isa = PBXGroup;
 			children = (
-				5AD667401CD046B800DA2C6D /* start-mascot.png */,
+				5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */,
 				5AD667381CD044EB00DA2C6D /* start_page_1242x2208.png */,
 				5AD667391CD044EB00DA2C6D /* start_page_640x1136.png */,
 				5AD6673A1CD044EB00DA2C6D /* start_page_640x960.png */,
@@ -3539,8 +3539,6 @@
 				BB6F3ABC1C9ECB3C0035EBBE /* BannerModel.m */,
 				18987FEE1CAA17E6000E9F1C /* WonderfullView.h */,
 				18987FEF1CAA17E6000E9F1C /* WonderfullView.m */,
-				5AD25E4B1CCE225A005C5BE6 /* SplashModel.h */,
-				5AD25E4C1CCE225A005C5BE6 /* SplashModel.mm */,
 				BBD58F1D1CCF4F37009250DB /* ZLViewPoint.h */,
 				BBD58F1E1CCF4F37009250DB /* ZLViewPoint.m */,
 				BBD58F201CCF52F6009250DB /* ZLOperateStock.h */,
@@ -4087,7 +4085,6 @@
 				BB63F2CF1C27FB2800A042E8 /* 7.gif in Resources */,
 				BB6F11F41CC7C2E000F02064 /* chatRightView1@2x.png in Resources */,
 				BBCE9D2B1CB3AD5600DA56D6 /* 137_1.png in Resources */,
-				5AD667411CD046B800DA2C6D /* start-mascot.png in Resources */,
 				5AD667681CD0957C00DA2C6D /* iPhone6P_3@3x.png in Resources */,
 				BBCE9D271CB3AD5600DA56D6 /* 133_1.png in Resources */,
 				BB6F12001CC7C2E000F02064 /* video_share_lin_icon@2x.png in Resources */,
@@ -4187,6 +4184,7 @@
 				BB6F11EC1CC7C2E000F02064 /* chatRightView2@2x.png in Resources */,
 				BBCE9D2C1CB3AD5600DA56D6 /* 138_1.png in Resources */,
 				BBCE9D1E1CB3AD5600DA56D6 /* 124_1.png in Resources */,
+				5A6AE1301CD1DEE8002FBD02 /* start-mascot.png in Resources */,
 				BB63F2D11C27FB2800A042E8 /* 9.gif in Resources */,
 				BB6F11F91CC7C2E000F02064 /* video_room_follow_icon_p@3x.png in Resources */,
 				5AD6673F1CD044EB00DA2C6D /* start_page_750x1334.png in Resources */,

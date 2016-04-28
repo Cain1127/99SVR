@@ -78,10 +78,10 @@ enum connectP2P
 #define kiOS_8_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 #define kiOS_9_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0)
 
-#define kiPhone4_OR_4s    (kScreenWidth == 480)
-#define kiPhone5_OR_5c_OR_5s   (kScreenWidth == 568)
-#define kiPhone6_OR_6s   (kScreenWidth == 667)
-#define kiPhone6Plus_OR_6sPlus   (kScreenWidth == 736)
+#define kiPhone4_OR_4s    (kScreenHeight == 480)
+#define kiPhone5_OR_5c_OR_5s   (kScreenHeight == 568)
+#define kiPhone6_OR_6s   (kScreenHeight == 667)
+#define kiPhone6Plus_OR_6sPlus   (kScreenHeight == 736)
 #define kiPad (UI_USER_INTEkACE_IDIOM() == UIUserInterfaceIdiomPad)
 
 /** 加载本地文件*/
