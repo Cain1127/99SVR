@@ -48,18 +48,19 @@
     SplashModel *splash = [SplashTool get];
     NSString *str = splash.imageUrl;//@"http://pic.nipic.com/2008-04-01/20084113367207_2.jpg";
     UIImageView *ad = [[UIImageView alloc] init];
+    ad.contentMode = UIViewContentModeScaleAspectFit;
     ad.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.80);
-    [ad sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage new]];
+    [ad sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"start-mascot"]];
     [self.view addSubview:ad];
     
     // 3.多少秒后跳过，广告倒计时
     _adButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _adButton.titleLabel.font = [UIFont systemFontOfSize:20];
-    [_adButton setTitle:[NSString stringWithFormat:@"%@ 跳过",@"5"] forState:UIControlStateNormal];
+    _adButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    [_adButton setTitle:[NSString stringWithFormat:@"%@ 跳过",@"15"] forState:UIControlStateNormal];
     _adButton.backgroundColor = [UIColor whiteColor];
-    [_adButton setTitleColor:UIColorFromRGB(0x4c4c4c) forState:UIControlStateNormal];
+    [_adButton setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [_adButton addTarget:self action:@selector(adSkipClick) forControlEvents:UIControlEventTouchUpInside];
-    _adButton.frame = CGRectMake(kScreenWidth - 120, 50 , 100, 40);
+    _adButton.frame = CGRectMake(kScreenWidth - 85, 25 , 75, 40);
     [self.view addSubview:_adButton];
     
     _timer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(timerCountDown) userInfo:nil repeats:YES];
@@ -69,7 +70,7 @@
 /**
  *  广告倒计时
  */
-NSUInteger secondsCountDown = 5;//60秒倒计时
+NSUInteger secondsCountDown = 15;//60秒倒计时
 - (void)timerCountDown
 {
     secondsCountDown--;
