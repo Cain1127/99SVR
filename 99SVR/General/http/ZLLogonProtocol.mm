@@ -170,7 +170,7 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
     user.nUserId = info.userid();
     user.headid = info.headid();
     user.sex = info.ngender();
-    if (user.nUserId>900000000 || user.nUserId <=0 )
+    if (user.nUserId>900000000 || user.nUserId < 1 )
     {
         user.strName = [NSString stringWithCString:info.cuseralias().c_str() encoding:GBK_ENCODING];
         [UserInfo sharedUserInfo].bIsLogin = YES;
@@ -451,6 +451,10 @@ void ZLLogonProtocol::sendGift(int giftId,int num){
     }
     video_room->SendMsg_TradeGiftReq(req);
 }
+void ZLLogonProtocol::buyPrivateVip(int teacherId,int type)
+{
+    conn->SendMsg_BuyPrivateVipReq(teacherId, type);
+}
 
 //**********************************************************************************
 //**********************************************************************************
@@ -484,7 +488,22 @@ void ZLHallListener::OnGetUserMoreInfResp(GetUserMoreInfResp& info)
     user.strBirth = [NSString stringWithCString:info.birth().c_str() encoding:GBK_ENCODING];
 }
 
+void ZLHallListener::OnBuyPrivateVipResp(BuyPrivateVipResp& info)
+{
+    /*
+    uint32	_userid;
+    uint32	_teacherid;
+    uint32	_viptype;
+    uint64	_nk;  */
+    NSDictionary *didct = @{@"userid":@(info.userid()),@"teacherid":@(info.teacherid()),@"viptype":@(info.viptype()),@"goid":@(info.nk()),@"code":@"1"};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_BUY_PRIVATE_VIP_VC object:didct];
+}
 
+void ZLHallListener::OnBuyPrivateVipErr(ErrCodeResp& info)
+{
+    NSDictionary *dict = @{@"code":@(info.errcode())};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_BUY_PRIVATE_VIP_VC object:dict];
+}
 
 /**
  *  加入房间成功

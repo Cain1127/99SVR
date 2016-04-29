@@ -1,5 +1,5 @@
-#ifndef __VIDEO_ROOMJOIN_LISTENER_H__
-#define __VIDEO_ROOMJOIN_LISTENER_H__
+#ifndef __ROOMJOIN_LISTENER_H__
+#define __ROOMJoin_LISTENER_H__
 
 #include <vector>
 #include "VideoRoomMessage.pb.h"

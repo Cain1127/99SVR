@@ -58,6 +58,9 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
  *  退出房间
  */
 - (void)exitRoom;
-
+/**
+ *  购买私人定制
+ */
+- (void)requestBuyPrivateVip:(int)teacherId vipType:(int)vip;
 
 @end

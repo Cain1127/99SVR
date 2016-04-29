@@ -87,8 +87,11 @@ void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 	login_req4 = req;
 	login_reqv = 4;
 	
-	connect_from_lbs_asyn();
+	//connect_from_lbs_asyn();
+	connect("122.13.81.62", 7301);
 	//connect("172.16.41.137", 7301);
+	//connect("172.16.41.215", 7301);
+	//connect("172.16.41.114", 7301);
 
 	/*
 	SendMsg_Hello();
@@ -120,7 +123,7 @@ void LoginConnection::SendMsg_SessionTokenReq(uint32 userid)
 void LoginConnection::SendMsg_SetUserInfoReq(SetUserProfileReq& req)
 {
 	req.set_userid(loginuser.userid());
-	req.set_introducelen((int32_t)strlen(req.introduce().c_str()));
+	req.set_introducelen(strlen(req.introduce().c_str()));
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_SetUserProfileReq, req, req.introducelen());
 }
 
@@ -179,7 +182,7 @@ void LoginConnection::SendMsg_InterestForReq(InterestForReq& req)
 void LoginConnection::SendMsg_BuyPrivateVipReq(uint32 teacherid,uint32 viptype)
 {
 	BuyPrivateVipReq req;
-	req.set_userid(login_userid);
+	req.set_userid(1763584);
 	req.set_teacherid(teacherid);
 	req.set_viptype(viptype);
 
@@ -369,6 +372,11 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		ON_MESSAGE(hall_listener, BuyPrivateVipResp, OnBuyPrivateVipResp)
 		break;
 
+	case protocol::Sub_Vchat_Resp_ErrCode:
+		LOG("protocol::Sub_Vchat_Resp_ErrCode");
+		dispatch_error_message(body);
+		break;
+
 	default:
 		LOG("+++++++unimplenment message+++++++:%d", sub_cmd);
 		break;
@@ -380,6 +388,18 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 #endif
 
 }
+
+void LoginConnection::dispatch_error_message(void* body)
+{
+	protocol::CMDErrCodeResp_t* errorinfo = (protocol::CMDErrCodeResp_t*) body;
+	switch (errorinfo->errsubcmd)
+	{
+	case protocol::Sub_Vchat_BuyPrivateVipReq:
+		ON_MESSAGE(hall_listener, ErrCodeResp, OnBuyPrivateVipErr)
+		break;
+	}
+}
+
 
 void LoginConnection::dispatch_push_message(void* body)
 {

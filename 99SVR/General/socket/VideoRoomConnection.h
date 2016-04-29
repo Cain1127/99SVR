@@ -43,6 +43,9 @@ public:
 	//加入房间请求版本
 	void SendMsg_JoinRoomReq(JoinRoomReq& req);
 
+	//加入房间成功后请求推送信息
+	void SendMsg_AfterJoinRoomReq();
+
 	//用户自己退出房间
 	void SendMsg_ExitRoomReq();
 

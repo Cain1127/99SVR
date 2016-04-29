@@ -49,7 +49,8 @@
     _room = room;
     NSString *strName = [NSString stringWithFormat:@"开通团队:%@",_room.teamname];
     _titleLable.text = strName;
-    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+//    DLog(@"请求私人定制:%@",_room.teamid);
+//    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
 
 - (void)viewDidLoad
@@ -167,6 +168,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:) name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
     DLog(@"请求私人定制:%d",[_room.teamid intValue]);
     [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)loadWhatsPrivate:(NSNotification *)notify

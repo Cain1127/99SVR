@@ -17,6 +17,7 @@ room_listener(NULL)
 {
 	main_cmd = protocol::MDM_Vchat_Room;
 	strcpy(lbs_type, "/tygetgate");
+	closed = false;
 }
 
 
@@ -65,14 +66,16 @@ void VideoRoomConnection::on_do_connected()
 	join_req.set_crc32(crcval);
 	join_req.set_cipaddr(ip);
 	
+	LOG("SEND  join...");
+	join_req.Log();
 
+	LOG("XXXXXXXXXXXJOIN ROOM");
 	SEND_MESSAGE(protocol::Sub_Vchat_JoinRoomReq, join_req);
 
 }
 
 void VideoRoomConnection::SendMsg_RreJoinRoomReq(PreJoinRoomReq& req)
 {
-	closed = false;
 	SEND_MESSAGE(protocol::Sub_Vchat_PreJoinRoomReq, req);
 }
 
@@ -84,7 +87,7 @@ void VideoRoomConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 	//connect_from_lbs_asyn();
 	
 
-	/*
+/*	
 	int ret;
 	
 	ret = connect("172.16.41.215", 22706);
@@ -103,8 +106,17 @@ void VideoRoomConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 	//Sleep(3000);
 
 	start_read_thread();
-	*/
+*/	
 	
+}
+
+void VideoRoomConnection::SendMsg_AfterJoinRoomReq()
+{
+	AfterJoinRoomReq req;
+	req.set_userid(join_req.userid());
+	req.set_vcbid(join_req.vcbid());
+
+	SEND_MESSAGE(protocol::Sub_Vchat_AfterJoinRoomReq, req);
 }
 
 void VideoRoomConnection::SendMsg_ExitRoomReq()
@@ -156,7 +168,7 @@ void VideoRoomConnection::SendMsg_RoomChatReq(RoomChatMsg& req)
 	req.set_tocbid(join_req.vcbid());
 	req.set_vcbname(room_info.cname());
 	req.set_tocbname(room_info.cname());
-	req.set_textlen((int)req.content().size());
+	req.set_textlen(req.content().size());
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_ChatReq, req, req.textlen());
 }
 
@@ -246,7 +258,7 @@ void VideoRoomConnection::SendMsg_ReportMediaGate(int RoomId, int UserId, char* 
 	char content[128];
 	sprintf(content, "%s:%d|%s:%hu", connect_ip, connect_port, mediasvr, mediaport);
 	req.set_content(content);
-	req.set_textlen((int)strlen(content));
+	req.set_textlen(strlen(content));
 
 	SEND_MESSAGE(protocol::Sub_Vchat_ReportMediaGateReq, req);
 }
@@ -309,7 +321,7 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 	int sub_cmd = head->subcmd;
 	int body_len = head->length - sizeof(protocol::COM_MSG_HEADER);
 
-	LOG("on message:%d", sub_cmd);
+	LOG("on video message:%d", sub_cmd);
 
 	switch ( sub_cmd ) {
 		//加入房间预处理响应
@@ -359,6 +371,8 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 		case protocol::Sub_Vchat_RoomUserNoty:
 			ON_MESSAGE(room_listener,RoomUserInfo, OnRoomUserNoty);
 			break;
+
+		//公麦状态数据
 		case protocol::Sub_Vchat_RoomPubMicState:
 			{
 				g_vec_RoomPubMicStateNoty.clear();
@@ -726,7 +740,7 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 			ON_MESSAGE(room_listener,TeacherSubscriptionStateQueryResp, OnTeacherSubscriptionStateQueryResp);
 			break;
 	
-		//砸金蛋更新99币最新值(改由推送服务器做)
+		//砸金蛋更新99币最新值
 		case protocol::Sub_Vchat_ClientNotify:
 		case protocol::Sub_Vchat_HitGoldEgg_ToClient_Noty:
 			LOG("protocol::Sub_Vchat_ClientNotify");

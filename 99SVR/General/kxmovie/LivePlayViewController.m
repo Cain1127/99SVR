@@ -77,6 +77,50 @@
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self hiddenTopHud];
+}
+
+- (void)hiddenTopHud
+{
+    __weak UIView *__downHUD = _downHUD;
+    __weak UIView *__topHUD = _TopHUD;
+    @WeakObj(self)
+    dispatch_main_async_safe(
+    ^{
+        if (selfWeak.bFull)
+        {
+            __topHUD.hidden = YES;
+        }
+         __downHUD.alpha = 0;
+    });
+}
+
+- (void)showTopHUD
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    if(_downHUD.alpha==0)
+    {
+        _downHUD.alpha = 1;
+        if (bFull)
+        {
+            _TopHUD.hidden = YES;
+        }
+        [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:2.0];
+    }
+    else
+    {
+        if (bFull)
+        {
+            _TopHUD.hidden = NO;
+        }
+        _downHUD.alpha = 0;
+    }
+}
+
+
 #pragma mark - View lifecycle
 - (void)startLoad
 {

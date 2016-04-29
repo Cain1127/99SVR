@@ -46,7 +46,7 @@ void ReadProtocolCache(const char *suffix_path, std::string& cache_content)
 	
 	if(!fp)
 	{
-		fclose(fp);
+		//fclose(fp);
 		return;
 	}
 
@@ -77,7 +77,7 @@ void WriteProtocolCache(const char *suffix_path, std::string& cache_content)
 
 	if(!fp)
 	{
-		fclose(fp);
+		//fclose(fp);
 		return;
 	}
 
@@ -87,14 +87,16 @@ void WriteProtocolCache(const char *suffix_path, std::string& cache_content)
 	int idx = 0;
 	int length = cache_content.size();
 
-	while(idx < length)
+	/*while(idx < length)
 	{
 		size_t cnt = fwrite(pStart, 1, 255, fp);
 
 		pStart += cnt;
 
 		idx += cnt;
-	}
+	}*/
+
+	fwrite(pStart, 1, length, fp);
 
 	fclose(fp);
 }
@@ -206,7 +208,7 @@ void parse_ip_port(char* s, char* ip, short& port)
 	char* e = strchr(s, ':');
 	if ( e )
 	{
-		int len = (int)(e - s);
+		int len = e - s;
 		memcpy(ip, s, len);
 		ip[len] = 0;
 
@@ -688,6 +690,7 @@ void Connection::on_dispatch_message(void* msg)
 	if (message_listener != NULL)
 	{
 		protocol::COM_MSG_HEADER* head = (protocol::COM_MSG_HEADER*)msg;
+		LOG("MDM_Vchat_Room:%d:%d", head->maincmd, head->subcmd);
 		switch ( head->maincmd )
 		{
 		case protocol::MDM_Vchat_Login:
@@ -695,6 +698,7 @@ void Connection::on_dispatch_message(void* msg)
 			message_listener->OnLoginMessageComming(msg);
 			break;
 		case protocol::MDM_Vchat_Room:
+
 			message_listener->OnVideoRoomMessageComming(msg);
 			break;
 		case protocol::MDM_Vchat_Usermgr:
