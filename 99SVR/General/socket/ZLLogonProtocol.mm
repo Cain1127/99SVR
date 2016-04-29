@@ -170,7 +170,7 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
     user.nUserId = info.userid();
     user.headid = info.headid();
     user.sex = info.ngender();
-    if ((user.nUserId>900000000 && user.nUserId < 1000000000) || user.nUserId <= 0)
+    if (user.nUserId>900000000)
     {
         user.strName = [NSString stringWithCString:info.cuseralias().c_str() encoding:GBK_ENCODING];
         [UserInfo sharedUserInfo].bIsLogin = YES;
@@ -349,8 +349,7 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     JoinRoomReq req;
     const char *uId = [[DeviceUID uid] UTF8String];
     req.set_cserial(uId);
-//    req.set_vcbid(nRoomId);
-    req.set_vcbid(40000);
+    req.set_vcbid(nRoomId);
     req.set_croompwd("");
     req.set_devtype(2);
     req.set_bloginsource(platform);
@@ -382,14 +381,14 @@ ZLLogonProtocol::ZLLogonProtocol()
     conn = new LoginConnection();
 
     conn->RegisterMessageListener(&message_listener);
+    conn->RegisterLoginListener(&login_listener);
     conn->RegisterConnectionListener(&conn_listener);
     conn->RegisterPushListener(&push_listener);
     conn->RegisterHallListener(&hall_listener);
     
     video_room = new VideoRoomConnection();
     video_room->RegisterRoomJoinListener(&join_listener);
-    video_room->RegisterMessageListener(&message_listener);
-    video_room->RegisterConnectionListener(&conn_listener);
+    video_room->RegisterRoomListener(&room_listener);
     
 }
 
@@ -580,6 +579,23 @@ void ZLRoomListener::OnRoomNoticeNotify(RoomNotice& info){
     else if(info.index()==2)
     {
         [RoomService getNoticeInfo:&info notice:aryRoomNotice];
+    }
+}
+
+void ZLRoomListener::OnRobotTeacherIdNoty(RobotTeacherIdNoty& info)
+{
+    RoomUser *_roomUser = [currentRoom.dictUser objectForKey:NSStringFromInt(info.vcbid())];
+    _roomUser.m_strUserAlias = [NSString stringWithUTF8String:info.teacheralias().c_str()];
+    
+    for (int i=0; i<currentRoom.aryUser.count;i++)
+    {
+        RoomUser *rUser = [currentRoom.aryUser objectAtIndex:i];
+        if (rUser.m_nUserId == info.vcbid())
+        {
+            rUser.m_strUserAlias = [NSString stringWithUTF8String:info.teacheralias().c_str()];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+            break;
+        }
     }
 }
 

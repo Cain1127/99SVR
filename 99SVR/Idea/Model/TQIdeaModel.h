@@ -28,6 +28,6 @@
 /** 礼物数 */
 @property (nonatomic)int giftcount;
 
-//- (id)initWithViewpointSummary:(ViewpointSummary *)ViewPoint;
+- (id)initWithViewpointSummary:(void *)pData;
 
 @end

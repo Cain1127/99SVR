@@ -68,59 +68,7 @@
 {
     if ([UserInfo sharedUserInfo].aryRoom.count>0)
     {
-        NSMutableArray *aryDatas = [NSMutableArray array];
-        RoomGroup *group = [[RoomGroup alloc] init];
-        group.groupId = @"1";
-        group.groupName = @"搜索";
-        NSMutableDictionary *array = [NSMutableDictionary dictionary];
-        for (RoomGroup *rGroup in [UserInfo sharedUserInfo].aryRoom)
-        {
-            for (RoomHttp *item in rGroup.roomList)
-            {
-                [array setObject:item forKey:item.nvcbid];
-            }
-            for (RoomGroup *sonGroup in rGroup.groupList)
-            {
-                for (RoomHttp *item in sonGroup.roomList) {
-                    [array setObject:item forKey:item.nvcbid];
-                }
-            }
-        }
-        group.roomList = [array allValues];
-        [aryDatas addObject:group];
-        _allDatas = aryDatas;
-    }
-    else
-    {
-        __weak SearchController *__self = self;
-        __block NSMutableArray *__aryDatas = [NSMutableArray array];
-        _grouRequest.groupBlock = ^(int status,NSArray *aryIndex)
-        {
-            if (status==1)
-            {
-                RoomGroup *group = [[RoomGroup alloc] init];
-                group.groupId = @"1";
-                group.groupName = @"搜索";
-                NSMutableDictionary *array = [NSMutableDictionary dictionary];
-                for (RoomGroup *rGroup in [UserInfo sharedUserInfo].aryRoom)
-                {
-                    for (RoomHttp *item in rGroup.roomList)
-                    {
-                        [array setObject:item forKey:item.nvcbid];
-                    }
-                    for (RoomGroup *sonGroup in rGroup.groupList)
-                    {
-                        for (RoomHttp *item in sonGroup.roomList) {
-                            [array setObject:item forKey:item.nvcbid];
-                        }
-                    }
-                }
-                group.roomList = [array allValues];
-                [__aryDatas addObject:group];
-                __self.allDatas = __aryDatas;
-            }
-        };
-        [_grouRequest requestListRequest];
+        _allDatas = [UserInfo sharedUserInfo].aryRoom;
     }
 }
 
@@ -233,10 +181,9 @@
         if(_allDatas.count>0)
         {
             _defaultView.hidden = YES;
-            RoomGroup *group = [_allDatas objectAtIndex:0];
-            NSString *searchWords = [NSString stringWithFormat:@"cname like '*%@*' or nvcbid like '*%@*'" , keywords, keywords];
+            NSString *searchWords = [NSString stringWithFormat:@"teamname like '*%@*' or roomid like '*%@*'" , keywords, keywords];
             NSPredicate *pre = [NSPredicate predicateWithFormat:searchWords];
-            _aryResult = [group.roomList filteredArrayUsingPredicate:pre];
+            _aryResult = [_allDatas filteredArrayUsingPredicate:pre];
             _historyTable.hidden = _aryResult.count ? YES : NO;
             [_searchResultsTable reloadData];
         }
@@ -281,7 +228,7 @@
     {
         [self connectRoom:room];
     };
-    [cell setRowDatas:rowDatas];
+    [cell setRowDatas:rowDatas isNew:1];
     return cell;
 }
 

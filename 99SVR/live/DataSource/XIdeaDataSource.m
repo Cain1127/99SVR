@@ -19,8 +19,11 @@
 
 @implementation XIdeaDataSource
 
-- (void)setModelInfo:(NSArray *)aryModel
+- (void)setAryModel:(NSArray *)aryModel
 {
+//    for (TQIdeaModel *model in aryModel) {
+//        DLog(@"model:%@",model.authorname);
+//    }
     _aryModel = aryModel;
 }
 
@@ -57,7 +60,7 @@
         [viewCache setObject:cell forKey:viewCache];
     }
     if (_aryModel.count>indexPath.row) {
-        [cell setIdeaModel:[_aryModel objectAtIndex:indexPath.row]];
+        [cell setIdeaModel:[_aryModel objectAtIndex:indexPath.section]];
     }
     return cell;
 }
@@ -66,7 +69,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (_aryModel.count>indexPath.row) {
-        TQIdeaModel *model = _aryModel[indexPath.row];
+        TQIdeaModel *model = _aryModel[indexPath.section];
         if (_delegate && [_delegate respondsToSelector:@selector(selectIdea:)]) {
             [_delegate selectIdea:model];
         }

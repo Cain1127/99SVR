@@ -112,4 +112,11 @@ enum connectP2P
 #define WeakObj(o) try{}@finally{} __weak typeof(o) o##Weak = o;
 #define StrongObj(o) autoreleasepool{} __strong typeof(o) o = o##Weak;
 
+
+#pragma mark 小鸟加载图像
+/**显示小鸟加载*/
+#define Loading_Bird_Show [[UIApplication sharedApplication].keyWindow makeToastActivity_bird];
+/**隐藏小鸟加载*/
+#define Loading_Bird_Hide [[UIApplication sharedApplication].keyWindow hideToastActivity];
+
 #endif

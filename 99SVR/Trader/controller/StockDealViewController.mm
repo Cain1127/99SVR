@@ -9,6 +9,7 @@
 #import "HttpMessage.pb.h"
 #import "TQPurchaseViewController.h"
 #import "ViewNullFactory.h"
+#import "Toast+UIView.h"
 
 @interface StockDealViewController ()
 @property (nonatomic , strong) UITableView *tableView;
@@ -43,7 +44,9 @@
 
     self.txtTitle.text = self.stockModel.teamname;
     self.warningLab.text = @"仅代表讲师个人操盘记录,不构成投资建议，风险自负";
-
+    
+    Loading_Bird_Show
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
     [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
 
@@ -60,21 +63,27 @@
 }
 - (void)printInfo:(NSNotification *)notify{
     
+
+    Loading_Bird_Hide
     
     NSDictionary *dic = notify.object;
     NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
     
-    //    //拿到头部视图的数据
-    self.headerModel = dic[@"headerModel"];
-    //    //拿到股票视图的数据
-    [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
-    //交易详情
-    [self.tableViewDataArray addObject:dic[@"trans"]];
-    //持仓记录
-    [self.tableViewDataArray addObject:dic[@"stocks"]];
-    
+    [self.view hideToastActivity];
     
     if ([code isEqualToString:@"1"]) {//请求成功
+        
+
+        
+        //    //拿到头部视图的数据
+        self.headerModel = dic[@"headerModel"];
+        //    //拿到股票视图的数据
+        [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
+        //交易详情
+        [self.tableViewDataArray addObject:dic[@"trans"]];
+        //持仓记录
+        [self.tableViewDataArray addObject:dic[@"stocks"]];
+
         dispatch_async(dispatch_get_main_queue(), ^{
             
             self.tableView.tableFooterView = self.warningLab;
@@ -103,7 +112,7 @@
         
         if (dataArray.count==0) {//不存在数据
             
-            self.emptyView = [ViewNullFactory createViewBg:self.emptyView.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"数据为空"];
+            self.emptyView = [ViewNullFactory createViewBg:self.emptyView.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:RequestState_EmptyStr(@"")];
             [self.tableView addSubview:self.emptyView];
 
             
@@ -119,7 +128,7 @@
        
         if (dataArray.count==0) {
             
-            self.emptyView = [ViewNullFactory createViewBg:self.tableView.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:@"网络发生错误"];
+            self.emptyView = [ViewNullFactory createViewBg:self.tableView.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:RequestState_NetworkErrorStr(code)];
             [self.tableView addSubview:self.emptyView];
         }
     }

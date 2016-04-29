@@ -2243,7 +2243,7 @@ public:
 };
 
 
-class Navigation
+class RoomGroupData
 {
 
 private:
@@ -2251,10 +2251,15 @@ private:
 	uint32	_groupid;
 	uint32	_parentid;
 	uint32	_sortid;
+	uint32	_usernum;
 	uint32	_textcolor;
+	uint32	_type;
+	uint32	_bhaschild;
+	uint32	_bshowusernum;
+	uint32	_bfontbold;
 	string	_groupname;
+	string	_iconname;
 	string	_url;
-	uint32	_roomid;
 
 
 public:
@@ -2271,59 +2276,94 @@ public:
 
 	 inline void set_sortid(const uint32 value) { _sortid = value; }
 
+	 inline uint32 usernum() { return _usernum; } const 
+
+	 inline void set_usernum(const uint32 value) { _usernum = value; }
+
 	 inline uint32 textcolor() { return _textcolor; } const 
 
 	 inline void set_textcolor(const uint32 value) { _textcolor = value; }
+
+	 inline uint32 type() { return _type; } const 
+
+	 inline void set_type(const uint32 value) { _type = value; }
+
+	 inline uint32 bhaschild() { return _bhaschild; } const 
+
+	 inline void set_bhaschild(const uint32 value) { _bhaschild = value; }
+
+	 inline uint32 bshowusernum() { return _bshowusernum; } const 
+
+	 inline void set_bshowusernum(const uint32 value) { _bshowusernum = value; }
+
+	 inline uint32 bfontbold() { return _bfontbold; } const 
+
+	 inline void set_bfontbold(const uint32 value) { _bfontbold = value; }
 
 	 inline string& groupname() { return _groupname; } const 
 
 	 inline void set_groupname(const string& value) { _groupname = value; }
 
+	 inline string& iconname() { return _iconname; } const 
+
+	 inline void set_iconname(const string& value) { _iconname = value; }
+
 	 inline string& url() { return _url; } const 
 
 	 inline void set_url(const string& value) { _url = value; }
 
-	 inline uint32 roomid() { return _roomid; } const 
 
-	 inline void set_roomid(const uint32 value) { _roomid = value; }
-
-
-	int ByteSize() { return sizeof(protocol::tag_CMDNavigation); }
+	int ByteSize() { return sizeof(protocol::tag_RoomGroupData); }
 
 	void SerializeToArray(void* data, int size)
 	{
-		protocol::tag_CMDNavigation* cmd = (protocol::tag_CMDNavigation*) data;
+		protocol::tag_RoomGroupData* cmd = (protocol::tag_RoomGroupData*) data;
 		cmd->groupid = _groupid;
 		cmd->parentid = _parentid;
 		cmd->sortid = _sortid;
+		cmd->usernum = _usernum;
 		cmd->textcolor = _textcolor;
+		cmd->type = _type;
+		cmd->bhaschild = _bhaschild;
+		cmd->bshowusernum = _bshowusernum;
+		cmd->bfontbold = _bfontbold;
 		strcpy(cmd->groupname, _groupname.c_str());
+		strcpy(cmd->iconname, _iconname.c_str());
 		strcpy(cmd->url, _url.c_str());
-		cmd->roomid = _roomid;
 	}
 
 	void ParseFromArray(void* data, int size)
 	{
-		protocol::tag_CMDNavigation* cmd = (protocol::tag_CMDNavigation*) data;
+		protocol::tag_RoomGroupData* cmd = (protocol::tag_RoomGroupData*) data;
 		_groupid = cmd->groupid;
 		_parentid = cmd->parentid;
 		_sortid = cmd->sortid;
+		_usernum = cmd->usernum;
 		_textcolor = cmd->textcolor;
+		_type = cmd->type;
+		_bhaschild = cmd->bhaschild;
+		_bshowusernum = cmd->bshowusernum;
+		_bfontbold = cmd->bfontbold;
 		_groupname = cmd->groupname;
+		_iconname = cmd->iconname;
 		_url = cmd->url;
-		_roomid = cmd->roomid;
 	}
 
 	void Log()
 	{
-		LOG("--------Receive message: Navigation---------");
+		LOG("--------Receive message: RoomGroupData---------");
 		LOG("groupid = %d", _groupid);
 		LOG("parentid = %d", _parentid);
 		LOG("sortid = %d", _sortid);
+		LOG("usernum = %d", _usernum);
 		LOG("textcolor = %d", _textcolor);
+		LOG("type = %d", _type);
+		LOG("bhaschild = %d", _bhaschild);
+		LOG("bshowusernum = %d", _bshowusernum);
+		LOG("bfontbold = %d", _bfontbold);
 		LOG("groupname = %s", _groupname.c_str());
+		LOG("iconname = %s", _iconname.c_str());
 		LOG("url = %s", _url.c_str());
-		LOG("roomid = %d", _roomid);
 	}
 
 };
