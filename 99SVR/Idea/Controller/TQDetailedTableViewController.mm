@@ -8,6 +8,8 @@
 
 #import "TQDetailedTableViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "ChatRightView.h"
+#import "UIImageFactory.h"
 #import "MJRefresh.h"
 #import "CommentCell.h"
 #import "ZLReply.h"
@@ -25,8 +27,9 @@
 #import "NSAttributedString+EmojiExtension.h"
 #import "TQIdeaDetailModel.h"
 #import "ViewNullFactory.h"
+#import "GiftView.h"
 
-@interface TQDetailedTableViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,UIWebViewDelegate,CommentDelegate>
+@interface TQDetailedTableViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,UIWebViewDelegate,CommentDelegate,GiftDelegate>
 {
     UIView *contentView;
     UILabel *lblPlace;
@@ -40,6 +43,7 @@
     ChatView *_chatView;
     int nCurrent;
     UIView *noView;
+    GiftView *_giftView;
 }
 @property (nonatomic,strong) DTAttributedTextView *textView;
 @property (nonatomic,strong) UIView *downContentView;
@@ -81,72 +85,55 @@
     [self setTitleText:@"观点正文"];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyRepson:) name:MESSAGE_IDEA_REPLY_RESPONSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView:) name:MESSAGE_HTTP_REQUEST_REPLY_VC object:nil];
-    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    _tableView = [[UITableView alloc] initWithFrame:Rect(0,64, kScreenWidth,kScreenHeight-114)];
+    [self.view setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0,64, kScreenWidth,kScreenHeight-64)];
+    [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view makeToastActivity];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(requestMoreReply)];
     
-    UIView *bodyView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50, kScreenWidth,50)];
-    [bodyView setBackgroundColor:UIColorFromRGB(0xf0f0f0)];
-    [self.view addSubview:bodyView];
-    [bodyView setUserInteractionEnabled:YES];
+    UIButton *btnGift = [ChatRightView createButton:Rect(kScreenWidth-50, kScreenHeight-150, 44, 44)];
+    NSString *strName = [NSString stringWithFormat:@"chatRightView3"];
+    [UIImageFactory createBtnImage:strName btn:btnGift state:UIControlStateNormal];
     
-    UILabel *lblLine = [UILabel new];
-    [lblLine setBackgroundColor:UIColorFromRGB(0xCFCFCF)];
-    [bodyView addSubview:lblLine];
-    lblLine.frame = Rect(0, 0.1, kScreenWidth, 0.5);
+    UIButton *btnComment = [ChatRightView createButton:Rect(kScreenWidth-50, kScreenHeight-100, 44, 44)];
+    NSString *strComment = [NSString stringWithFormat:@"chatRightView4"];
+    [UIImageFactory createBtnImage:strComment btn:btnComment state:UIControlStateNormal];
+    [btnGift addTarget:self action:@selector(showGiftView) forControlEvents:UIControlEventTouchUpInside];
+    [btnComment addTarget:self action:@selector(showChatInfo) forControlEvents:UIControlEventTouchUpInside];
     
-    UIView *whiteView = [[UIView alloc] initWithFrame:Rect(8,8,kScreenWidth-76,36)];
-    [bodyView addSubview:whiteView];
-    [whiteView setBackgroundColor:UIColorFromRGB(0xffffff)];
-    whiteView.layer.masksToBounds = YES;
-    whiteView.layer.cornerRadius = 3;
-    whiteView.layer.borderColor = UIColorFromRGB(0xE3E3E3).CGColor;
-    whiteView.layer.borderWidth = 0.5;
+    [self.view addSubview:btnGift];
+    [self.view addSubview:btnComment];
     
-    UITextField *textField = [[UITextField alloc] initWithFrame:Rect(10,5, kScreenWidth-20, 40)];
-    [bodyView addSubview:textField];
-    [textField setFont:XCFONT(15)];
-    [textField setTextColor:UIColorFromRGB(0x343434)];
-    [textField setPlaceholder:@"点此和大家说点什么吧"];
-    textField.enabled = NO;
-    textField.userInteractionEnabled = NO;
-    
-    UIButton *btnEmoji = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnEmoji setImage:[UIImage imageNamed:@"Expression"] forState:UIControlStateNormal];
-    [btnEmoji setImage:[UIImage imageNamed:@"Expression_t"] forState:UIControlStateHighlighted];
-    [whiteView addSubview:btnEmoji];
-    btnEmoji.frame = Rect(whiteView.width-40, 0, 40, 40);
-    btnEmoji.userInteractionEnabled = NO;
-    
-    UIButton *btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnSend setTitle:@"发送" forState:UIControlStateNormal];
-    [btnSend setTitleColor:UIColorFromRGB(0x4c4c4c) forState:UIControlStateNormal];
-    btnSend.titleLabel.font = XCFONT(15);
-    [bodyView addSubview:btnSend];
-    btnSend.frame = Rect(kScreenWidth-60,whiteView.y, 50, 36);
-    btnSend.layer.masksToBounds = YES;
-    btnSend.layer.cornerRadius = 3;
-    btnSend.layer.borderWidth = 0.5;
-    [btnSend setBackgroundColor:UIColorFromRGB(0xffffff)];
-    btnSend.layer.borderColor = UIColorFromRGB(0xf0f0f0).CGColor;
-    [btnSend setBackgroundImage:[UIImage imageNamed:@"video_present_number_bg"] forState:UIControlStateHighlighted];
-    btnSend.userInteractionEnabled = NO;
+    _giftView = [[GiftView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth, kScreenHeight)];
+    [self.view addSubview:_giftView];
+    _giftView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
+    _giftView.delegate = self;
     
     _chatView = [[ChatView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kScreenHeight)];
     [self.view addSubview:_chatView];
     _chatView.hidden = YES;
     _chatView.delegate = self;
-    
-    @WeakObj(self)
-    [bodyView clickWithBlock:^(UIGestureRecognizer *gesture) {
-        [selfWeak showChatInfo];
-    }];
-    
-    [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(requestMoreReply)];
+}
+
+- (void)showGiftView
+{
+//    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+        [_giftView updateGoid];
+        [UIView animateWithDuration:0.5 animations:^{
+            [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+        } completion:^(BOOL finished) {}];
+//    }
+//    else
+//    {
+//        @WeakObj(self)
+//        [AlertFactory createLoginAlert:self block:^{
+//            [selfWeak closeRoomInfo];
+//        }];
+//    }
 }
 
 /**
@@ -167,10 +154,9 @@
     {
         _chatView.hidden = NO;
     }else{
-//        @WeakObj(self)
-        [AlertFactory createLoginAlert:self block:^{
-            
-        }];
+//        [AlertFactory createLoginAlert:self block:^{
+//            
+//        }];
     }
 }
 /**
@@ -298,7 +284,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_aryCommont.count==0)
+    if (_aryCommont.count==0 && _ideaDetail)
     {
         return 1;
     }

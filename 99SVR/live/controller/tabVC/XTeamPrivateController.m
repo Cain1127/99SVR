@@ -43,6 +43,11 @@
     self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
 }
 
+- (void)setModel:(RoomHttp *)room
+{
+    _room = room;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -147,7 +152,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:) name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
 //    [kHTTPSingle RequestWhatIsPrivateService];
 //    [kHTTPSingle RequestBuyPrivateServicePage:198610];
-    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:198610];
+    DLog(@"请求私人定制:%d",[_room.teamid intValue]);
+    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
 
 - (void)loadWhatsPrivate:(NSNotification *)notify

@@ -12,7 +12,7 @@
 #import "DecodeJson.h"
 #import "AlertFactory.h"
 #import "Toast+UIView.h"
-
+#import "ZLLogonServerSing.h"
 @implementation ConnectRoomViewModel
 
 - (id)initWithViewController:(UIViewController *)control{
@@ -25,7 +25,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     _room = room;
-    [kProtocolSingle connectVideoRoom:[room.nvcbid intValue] roomPwd:@""];
+    [[ZLLogonServerSing sharedZLLogonServerSing] exitRoom];
+    [kProtocolSingle connectVideoRoom:[room.roomid intValue] roomPwd:@""];
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
 }
 

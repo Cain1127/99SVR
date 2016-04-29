@@ -359,8 +359,6 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 		case protocol::Sub_Vchat_RoomUserNoty:
 			ON_MESSAGE(room_listener,RoomUserInfo, OnRoomUserNoty);
 			break;
-
-		//¹«Âó×´Ì¬Êý¾Ý
 		case protocol::Sub_Vchat_RoomPubMicState:
 			{
 				g_vec_RoomPubMicStateNoty.clear();

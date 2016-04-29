@@ -14,6 +14,7 @@
 #import "UIAlertView+Block.h"
 #import "TQPurchaseViewController.h"
 #import "StockNotVipView.h"
+#import "LoginViewController.h"
 @interface StockDealTableModel ()<StockNotVipViewDelegate>
 {
     NSCache *_cache;
@@ -264,9 +265,9 @@
                     
                     
                 }else{//去购买
-                    TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
-                    tqVC.stockModel = _model;
-                    [_vc.navigationController pushViewController:tqVC animated:YES];
+                    
+                    [self goBuyVip];
+
                 }
                 
             }];
@@ -294,11 +295,7 @@
     switch (index) {
         case 1://去购买
         {
-        
-            TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
-            tqVC.stockModel = _model;
-            [_vc.navigationController pushViewController:tqVC animated:YES];
-            
+            [self goBuyVip];
         }
             break;
         case 2://什么是私人订制
@@ -314,6 +311,34 @@
     
 
 }
+/**
+ *  去购买VIP
+ */
+#pragma mark 去购买VIP
+-(void)goBuyVip{
+
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {//已登陆 //1：注册账户
+        
+        TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
+        tqVC.stockModel = _model;
+        [_vc.navigationController pushViewController:tqVC animated:YES];
+        
+    }else{//未登录
+        
+        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:_vc withCancleBtnStr:@"取消" withOtherBtnStr:@"确定" withMessage:@"未登陆，请登陆后操作" completionCallback:^(NSInteger index) {
+            
+            if (index==1) {
+                LoginViewController *loginVC = [[LoginViewController alloc]init];
+                [_vc.navigationController pushViewController:loginVC animated:YES];
+                
+            }
+            
+        }];        
+    }
+    
+    
+}
+
 
 -(void)dealloc{
     

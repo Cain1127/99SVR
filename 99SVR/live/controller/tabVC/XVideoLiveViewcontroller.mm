@@ -79,7 +79,6 @@
 @property (nonatomic,strong) RoomNoticeDataSource *noticeDataSource;
 @property (nonatomic,strong) ConsumeRankDataSource *consumeDataSource;
 
-
 @end
 
 @implementation XVideoLiveViewcontroller
@@ -124,8 +123,11 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated
+{
+    
     [super viewDidAppear:animated];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
@@ -434,7 +436,6 @@
        });
     }
     dispatch_async(dispatch_get_main_queue(),^{
-
         [selfWeak.priChatView reloadDataWithCompletion:
          ^{
              NSInteger numberOfRows = [selfWeak.priChatView numberOfRowsInSection:0];

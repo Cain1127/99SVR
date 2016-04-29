@@ -57,16 +57,8 @@ void ViewpointSummaryListener::OnError(int errCode)
 void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
     NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<infos.size(); i++) {
-        TQIdeaModel *model = [[TQIdeaModel alloc] init];
         ViewpointSummary summary = infos[i];
-        model.authorid = [NSString stringWithUTF8String:summary.authorid().c_str()];
-        model.authoricon = [NSString stringWithUTF8String:summary.authoricon().c_str()];
-        model.authorname = [NSString stringWithUTF8String:summary.authorname().c_str()];
-        model.publishtime = [NSString stringWithUTF8String:summary.publishtime().c_str()];
-        model.content = [NSString stringWithUTF8String:summary.content().c_str()];
-        model.replycount = summary.replycount();
-        model.giftcount = summary.giftcount();
-        model.viewpointid = summary.viewpointid();
+        TQIdeaModel *model = [[TQIdeaModel alloc] initWithViewpointSummary:&summary];
         [ary addObject:model];
     }
     NSDictionary *dict = @{@"code":@(1),@"model":ary};
@@ -374,7 +366,7 @@ void WhatIsPrivateServiceListener::onResponse(WhatIsPrivateService& infos){
 
 void WhatIsPrivateServiceListener::OnError(int errCode)
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:@{@"code":@(errCode)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_WHAT_IS_PRIVATE_VC object:@{@"code":@(errCode)}];
 
 }
 
@@ -640,33 +632,18 @@ void UnreadListener::OnError(int errCode)
     
 }
 
-void HomePageListener::onResponse(std::vector<BannerItem> banner_data, std::vector<HomePageVideoroomItem> vedioroom_data, std::vector<ViewpointSummary> viewpoint_data, std::vector<OperateStockProfit> operate_data)
+void HomePageListener::onResponse(std::vector<BannerItem> banner_data, std::vector<Team> team_data, std::vector<ViewpointSummary> viewpoint_data, std::vector<OperateStockProfit> operate_data)
 {
     NSMutableArray *videoRoom = [NSMutableArray array];
     int i;
-    for (i=0; i<vedioroom_data.size(); i++) {
-        HomePageVideoroomItem item = vedioroom_data[i];
-        NSString *nvcbid = [NSString stringWithUTF8String:item.nvcbid().c_str()];
-        NSString *croompic = [NSString stringWithUTF8String:item.croompic().c_str()];
-        NSString *livetype = [NSString stringWithUTF8String:item.livetype().c_str()];
-        NSString *ncount = [NSString stringWithUTF8String:item.ncount().c_str()];
-        NSString *cname = [NSString stringWithUTF8String:item.cname().c_str()];
-        NSDictionary *parameters = @{@"nvcbid":nvcbid,@"croompic":croompic,@"livetype":livetype,@"ncount":ncount,@"cname":cname};
-        RoomHttp *room = [RoomHttp mj_objectWithKeyValues:parameters];
+    for (i=0; i<team_data.size(); i++) {
+        RoomHttp *room = [[RoomHttp alloc] initWithData:&team_data[i]];
         [videoRoom addObject:room];
     }
     NSMutableArray *aryViewPoint = [NSMutableArray array];
     for (i=0; i<viewpoint_data.size(); i++) {
-        TQIdeaModel *model = [[TQIdeaModel alloc] init];
         ViewpointSummary summary = viewpoint_data[i];
-        model.authorid = [NSString stringWithUTF8String:summary.authorid().c_str()];
-        model.authoricon = [NSString stringWithUTF8String:summary.authoricon().c_str()];
-        model.authorname = [NSString stringWithUTF8String:summary.authorname().c_str()];
-        model.publishtime = [NSString stringWithUTF8String:summary.publishtime().c_str()];
-        model.content = [NSString stringWithUTF8String:summary.content().c_str()];
-        model.replycount = summary.replycount();
-        model.giftcount = summary.giftcount();
-        model.viewpointid = summary.viewpointid();
+        TQIdeaModel *model = [[TQIdeaModel alloc] initWithViewpointSummary:&summary];
         [aryViewPoint addObject:model];
     }
     NSMutableArray *aryOperate = [NSMutableArray array];

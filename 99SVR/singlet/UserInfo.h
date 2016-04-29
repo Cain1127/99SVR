@@ -14,9 +14,14 @@
 @interface UserInfo : NSObject
 
 DEFINE_SINGLETON_FOR_HEADER(UserInfo)
-
+/**
+ *  服务器配置参数
+ */
 @property (nonatomic) int nStatus;
 
+/**
+ *  头像id
+ */
 @property (nonatomic) int headid;
 
 @property (nonatomic) int sex;
@@ -24,13 +29,17 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 @property (nonatomic,copy) NSString *strEmail;
 
 @property (nonatomic,copy) NSString *strMobile;
-
+/**
+ *  第三方登录请求下的openid
+ */
 @property (nonatomic,copy) NSString *strOpenId;
 
 @property (nonatomic,copy) NSString *strBirth;
 
 @property (nonatomic,copy) NSString *strToken;
-
+/**
+ *  第三方登录标识，1:qq 2:weibo 3.wechat
+ */
 @property (nonatomic,assign) int otherLogin;
 
 @property (nonatomic,copy) NSString *strWebAddr;
@@ -44,25 +53,39 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 @property (nonatomic,strong) NSMutableDictionary *dictRoomText;
 
 @property (nonatomic,copy) NSString *strTextRoom;
-
+/**
+ *  是否登录
+ */
 @property (nonatomic,assign) BOOL bIsLogin;
 
 @property (nonatomic,copy) NSArray *aryRoom;
-
+/**
+ *  用户id
+ */
 @property (nonatomic,assign) int nUserId;
-
+/**
+ *  用户名
+ */
 @property (nonatomic,copy) NSString *strUser;
-
+/**
+ *  密码
+ */
 @property (nonatomic,copy) NSString *strPwd;
-
+/**
+ *  md5密码
+ */
 @property (nonatomic,copy) NSString *strMd5Pwd;
 
 @property (nonatomic,copy) NSString *strName;
 
 @property (nonatomic,copy) NSString *strIntro;
-
+/**
+ *  登录类型  1:账号    2:游客
+ */
 @property (nonatomic,assign) int nType;
-
+/**
+ *  vip
+ */
 @property (nonatomic,assign) unsigned char m_nVipLevel;
 
 @property(nonatomic, assign) CGFloat goldCoin; // 金币
@@ -70,13 +93,19 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 @property(nonatomic, assign) long long score; // 积分
 
 @property (nonatomic,strong) NSMutableArray *aryCollet;
-
+/**
+ *  手机号是否绑定
+ */
 @property (nonatomic,assign) int banding;
 
 @property (nonatomic,copy) NSArray *aryHelp;
-
+/**
+ *  日期格式化格式  :yyyyMMddHHmmss
+ */
 @property (nonatomic,strong) NSDateFormatter *fmt;
-
+/**
+ *  礼物图标
+ */
 @property (nonatomic,copy) NSArray *aryGift;
 
 @property (nonatomic) int giftVer;

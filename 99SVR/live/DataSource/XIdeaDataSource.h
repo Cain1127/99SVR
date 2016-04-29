@@ -18,7 +18,6 @@
 
 @property (nonatomic,assign) id<XIdeaDelegate> delegate;
 
-- (void)setModelInfo:(NSArray *)aryModel;
 @property (nonatomic,copy) NSArray *aryModel;
 
 @end

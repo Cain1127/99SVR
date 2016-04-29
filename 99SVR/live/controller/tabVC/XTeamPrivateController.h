@@ -13,4 +13,6 @@
 
 - (id)initWithModel:(RoomHttp*)room;
 
+- (void)setModel:(RoomHttp *)room;
+
 @end
