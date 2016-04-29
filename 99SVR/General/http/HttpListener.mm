@@ -52,8 +52,8 @@ void ViewpointSummaryListener::OnError(int errCode)
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:dict];
 }
 /**
-*  请求观点列表
-*/
+ *  请求观点列表
+ */
 void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
     NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<infos.size(); i++) {
@@ -66,8 +66,8 @@ void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
 }
 
 /**
-*  请求观点详情
-*/
+ *  请求观点详情
+ */
 void ViewpointDetailListener::onResponse(ViewpointDetail& infos){
     TQIdeaDetailModel *model = [[TQIdeaDetailModel alloc] initWithViewpointDetail:&infos];
     NSDictionary *dict = @{@"code":@(1),@"model":model};
@@ -160,7 +160,7 @@ void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
 void OperateStockProfitListenerDay::OnError(int errCode)
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:@{@"code":@(errCode)}];
-
+    
 }
 /**
  *  请求操盘列表月
@@ -182,7 +182,7 @@ void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& mon
 void OperateStockProfitListenerMonth::OnError(int errCode)
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:@{@"code":@(errCode)}];
-
+    
 }
 
 
@@ -214,7 +214,7 @@ void OperateStockProfitListenerAll::OnError(int errCode)
 
 void OperateStockAllDetailListener::OnError(int errCode)
 {
- 
+    
     NSDictionary *dict = @{@"code":@(errCode)};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:dict];
 }
@@ -250,7 +250,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
             [transArray addObject:transactionModel];
         }
     }else{
-     
+        
         StockDealModel *model = [[StockDealModel alloc]init];
         [transArray addObject:model];
     }
@@ -313,8 +313,8 @@ void OperateStocksListener::onResponse(vector<OperateStocks>& stocks){
         StockDealModel *model = [[StockDealModel alloc]initWithStockRecordWareHouseData:stocksModel];
         [muArray addObject:model];
     }
-//    
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
+    //
+    //    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
 }
 
 void OperateStocksListener::OnError(int errCode)
@@ -327,14 +327,14 @@ void OperateStocksListener::OnError(int errCode)
 void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team recommendTeam, std::vector<TeamPrivateServiceSummaryPack>& teamSummaryPackList){
     if (infos.size() == 0) {
         //获取直播未购买页数据
-//        NSMutableArray *noPurArray = [NSMutableArray array];
-//        TQNoPurchaseModel *noPurModel = [[TQNoPurchaseModel alloc] initWithTeamSummaryPack:&teamSummaryPack];
-//        [noPurArray addObject:noPurModel];
-//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_NOPURCHASE_VC object:noPurArray];
+        //        NSMutableArray *noPurArray = [NSMutableArray array];
+        //        TQNoPurchaseModel *noPurModel = [[TQNoPurchaseModel alloc] initWithTeamSummaryPack:&teamSummaryPack];
+        //        [noPurArray addObject:noPurModel];
+        //        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_NOPURCHASE_VC object:noPurArray];
     }else {
         
         for (int i=0; i<infos.size(); i++) {
-        //获取已经购买数据
+            //获取已经购买数据
             NSMutableArray *ary = [NSMutableArray array];
             for (int i=0; i<infos.size(); i++) {
                 MyPrivateService service = infos[i];
@@ -350,8 +350,8 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
                 [ary addObject:model];
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:ary];
+        }
     }
- }
 }
 
 void MyPrivateServiceListener::OnError(int errCode)
@@ -367,7 +367,7 @@ void WhatIsPrivateServiceListener::onResponse(WhatIsPrivateService& infos){
 void WhatIsPrivateServiceListener::OnError(int errCode)
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_WHAT_IS_PRIVATE_VC object:@{@"code":@(errCode)}];
-
+    
 }
 
 /**
@@ -432,7 +432,7 @@ void TeamPrivateServiceSummaryPackListener::OnError(int errCode)
 }
 
 void PrivateServiceDetailListener::onResponse(PrivateServiceDetail& info){
-
+    
     NSString *title = [NSString stringWithUTF8String:info.title().c_str()];
     NSString *content = [NSString stringWithUTF8String:info.content().c_str()];
     NSString *publishtime = [NSString stringWithUTF8String:info.publishtime().c_str()];
@@ -443,7 +443,7 @@ void PrivateServiceDetailListener::onResponse(PrivateServiceDetail& info){
     int operatestockid = info.operatestockid();
     NSString *html5url = [NSString stringWithUTF8String:info.html5url().c_str()];
     NSDictionary *dict = @{@"title":title,@"content":content,@"publishtime":publishtime,@"videourl":videourl,
-    @"videoname":videoname,@"attachmenturl":attachmenturl,@"attachmentname":attachmentname,@"html5url":html5url,
+                           @"videoname":videoname,@"attachmenturl":attachmenturl,@"attachmentname":attachmentname,@"html5url":html5url,
                            @"operatestockid":@(operatestockid)};
     XPrivateDetail *detail = [XPrivateDetail mj_objectWithKeyValues:dict];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_DETAIL_VC object:detail];
@@ -565,14 +565,12 @@ void SystemMessageListener::OnError(int errCode)
 
 void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info)
 {
+    NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<info.size(); i++) {
-        NSMutableArray *ary = [NSMutableArray array];
-        for (int i=0; i<info.size(); i++) {
-            TQAnswerModel *model = [[TQAnswerModel alloc] initWithAnswer:&info[i]];
-            [ary addObject:model];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ANSWERREPLY_VC object:ary];
+        TQAnswerModel *model = [[TQAnswerModel alloc] initWithAnswer:&info[i]];
+        [ary addObject:model];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ANSWERREPLY_VC object:ary];
 }
 
 void QuestionAnswerListener::OnError(int errCode)
@@ -609,7 +607,7 @@ void PrivateServiceSummaryListener::onResponse(vector<PrivateServiceSummary>& in
         [ary addObject:model];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:ary];
-
+    
 }
 
 void PrivateServiceSummaryListener::OnError(int errCode)
