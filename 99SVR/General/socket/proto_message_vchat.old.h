@@ -364,8 +364,6 @@ namespace protocol
 		Sub_Vchat_TeamTopNReq = 410,	//最强战队周榜请求
 		Sub_Vchat_TeamTopNResp = 411,	//最强战队周榜回应
 
-		Sub_Vchat_Resp_ErrCode                              =504    ,       //  返回错误应答
-
 		Sub_Vchat_HitGoldEgg_FROMWEB_Noty = 1000, //砸金蛋通知（来自web端）
 		Sub_Vchat_HitGoldEgg_ToClient_Noty = 1001, //砸金蛋通知客户端
 
@@ -636,14 +634,11 @@ namespace protocol
 
 		Sub_Vchat_PreJoinRoomReq = 2124,            //加入房间预处理请求
 		Sub_Vchat_PreJoinRoomResp = 2125,           //加入房间预处理响应
-		Sub_Vchat_AfterJoinRoomReq =2136,	      //加入房间成功后请求推送信息
 
 		Sub_Vchat_SendRoomGroupList = 22001, //登录触发hallsvr发送房间分组列表
 
 		Sub_Vchat_BuyPrivateVipReq =    22004, //购买私人订制请求
 		Sub_Vchat_BuyPrivateVipResp =   22005  //购买私人订制响应
-
-		 
 
 	};
 

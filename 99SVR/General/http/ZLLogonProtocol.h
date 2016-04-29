@@ -55,6 +55,7 @@ class ZLHallListener: public HallListener
     virtual void OnInterestForResp(InterestForResp& info){}
     virtual void OnBuyPrivateVipResp(BuyPrivateVipResp& info);
     
+    virtual void OnBuyPrivateVipErr(ErrCodeResp& info);
 };
 
 class ZLPushListener: public PushListener

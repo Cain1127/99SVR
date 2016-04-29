@@ -142,12 +142,12 @@ int Socket::connect(const char* host, short port, int connect_timeout)
 
 int Socket::send(const char *buf, int len)
 {
-	return (int)::send(socket, buf, len, SOCKET_SEND_FLAG);
+	return ::send(socket, buf, len, SOCKET_SEND_FLAG);
 }
 
 int Socket::recv(char* buf, int len)
 {
-	return (int)::recv(socket, buf, len, 0);
+	return ::recv(socket, buf, len, 0);
 }
 
 int Socket::close_(void)
@@ -235,7 +235,7 @@ int Socket::cleanup(void)
 }
 
 Socket::Socket(void) :
-		socket(SOCKET_INVALID), recv_timeout(3)
+		socket(SOCKET_INVALID), recv_timeout(6)
 {
 }
 

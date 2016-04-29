@@ -12,7 +12,7 @@ class HttpListener
 {
 public:
 
-	virtual void OnError(int errCode)=0;
+	virtual void OnError(int errCode)= 0;
 
 #ifdef WIN
 	void onResponseRawData(string data){}
@@ -53,7 +53,7 @@ public:
 class OperateStockProfitListener : public HttpListener
 {
 public:
-	virtual void onResponse(vector<OperateStockProfit>& infos)=0;
+	virtual void onResponse(vector<OperateStockProfit>& infos)=0;void OnError(int errCode)=0;
 };
 class OperateStockProfitListenerDay : public OperateStockProfitListener
 {
@@ -182,37 +182,37 @@ public:
 class UnreadListener : public HttpListener
 {
 public:
-    virtual void onResponse(Unread& info);void OnError(int errCode);
+	virtual void onResponse(Unread& info);void OnError(int errCode);
 };
 
 class TotalUnreadListener : public HttpListener
 {
 public:
-    virtual void onResponse(TotalUnread& info);void OnError(int errCode);
+	virtual void onResponse(TotalUnread& info);void OnError(int errCode);
 };
 
 class TeamTopNListener : public HttpListener
 {
 public:
-    virtual void onResponse(vector<TeamTopN>& info);void OnError(int errCode);
+	virtual void onResponse(vector<TeamTopN>& info);void OnError(int errCode);
 };
 
 class HomePageListener : public HttpListener
 {
 public:
-    virtual void onResponse(std::vector<BannerItem> banner_data, std::vector<Team> team_data, std::vector<ViewpointSummary> viewpoint_data, std::vector<OperateStockProfit> operate_data);void OnError(int errCode);
+	virtual void onResponse(std::vector<BannerItem> banner_data, std::vector<Team> team_data, std::vector<ViewpointSummary> viewpoint_data, std::vector<OperateStockProfit> operate_data);void OnError(int errCode);
 };
 
 class CollectionListener : public HttpListener
 {
 public:
-    virtual void onResponse(std::vector<CollectItem> room_data);void OnError(int errCode);
+	virtual void onResponse(std::vector<CollectItem> room_data);void OnError(int errCode);
 };
 
-/*class GroupsPageListener : public HttpListener
+class GroupsPageListener : public HttpListener
 {
 public:
-	virtual void onResponse(std::vector<Team> hotlive_data, std::vector<ViewpointSummary> viewpoint_data, std::vector<OperateStocks> stocks_data, std::vector<RoomGroupData> roomgroup_data) = 0;
-};*/
+	virtual void onResponse(std::vector<Team> hotlive_data, std::vector<ViewpointSummary> viewpoint_data, std::vector<OperateStocks> stocks_data, std::vector<RoomGroupData> roomgroup_data);void OnError(int errCode);
+};
 
 #endif

@@ -666,6 +666,13 @@ namespace protocol
 	  byte bEmailType;        //1 私人定制 2系统消息 3评论回复 4提问回复
 	  uint32 messageid;       //消息ID
 	}CMDEmailNewMsgNoty_t;
+	
+	typedef struct tag_CMDErrCodeResp_t
+	{
+		 uint16 errmaincmd;
+		 uint16 errsubcmd;
+		 uint16 errcode;
+	}CMDErrCodeResp_t;
 
 };
 
