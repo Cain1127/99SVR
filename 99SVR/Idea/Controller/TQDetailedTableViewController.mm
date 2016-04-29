@@ -153,9 +153,9 @@
     {
         _chatView.hidden = NO;
     }else{
-//        [AlertFactory createLoginAlert:self block:^{
-//            
-//        }];
+        [AlertFactory createLoginAlert:self block:^{
+            
+        }];
     }
 }
 /**
@@ -524,7 +524,7 @@
         if(image)
         {
             noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height-0) imgView:image msg:@"获取观点详情失败"];
-            [noView setUserInteractionEnabled:noView];
+            [noView setUserInteractionEnabled:NO];
             [_tableView addSubview:noView];
         }
     }
@@ -612,12 +612,10 @@
     }
     
     NSString *strComment = [textView.textStorage getPlainString];
-    int toId = !nUser?[_ideaDetail.authorId intValue]:nUser;
 
     char cBuf[1024]={0};
     ::strcpy(cBuf,[strComment UTF8String]);
-    [kHTTPSingle PostReply:_viewId replyId:nDetails author:KUserSingleton.nUserId content:cBuf fromId:toId];
-    
+    [kHTTPSingle PostReply:_viewId replyId:nDetails author:KUserSingleton.nUserId content:cBuf fromId:[_ideaDetail.authorId intValue]];
     textView.text = @"";
     [_chatView setHidden:YES];
     _chatView.nUserId = 0;

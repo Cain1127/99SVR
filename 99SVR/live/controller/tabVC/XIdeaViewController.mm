@@ -52,39 +52,32 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)setModel:(RoomHttp *)room
 {
     _room = room;
-    [self updateRefresh];
 }
 
 - (void)loadView{
     self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
 }
 
--(void)initUi{
-    self.view.backgroundColor = [UIColor whiteColor];
-}
-
 - (void)viewDidLoad{
-    
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
-    [self initUi];
-    [self setIdeaTableView];
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-    title.text = @"专家观点";
-    title.textAlignment = NSTextAlignmentCenter;
-    title.textColor = [UIColor colorWithHex:@"#0062D5"];
-    self.navigationItem.titleView = title;
+    self.view.backgroundColor = [UIColor whiteColor];
     viewCache = [[NSCache alloc] init];
+    [viewCache setTotalCostLimit:10];
+    [self setIdeaTableView];
+    [self.navigationController.navigationBar setHidden:YES];
+    
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
-
+    [self.tableView.gifHeader loadDefaultImg];
+    
+    
+    _nCurrent = 0;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
-    [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
 }
 
@@ -102,9 +95,10 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         if (_dataSource.aryModel.count>0) {
             NSMutableArray *aryAll = [NSMutableArray array];
             [aryAll addObjectsFromArray:_dataSource.aryModel];
-            [aryAll addObject:aryIndex];
+            for (TQIdeaModel *model in aryIndex) {
+                [aryAll addObject:model];
+            }
             _dataSource.aryModel = aryAll;
-            DLog(@"count:%zi",_dataSource.aryModel.count);
         }
         else
         {
@@ -137,6 +131,9 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         if (self.nCurrent != self.dataSource.aryModel.count && self.dataSource.aryModel.count!=0)
         {
             [self.tableView.footer noticeNoMoreData];
+        }else
+        {
+            [self.tableView.footer resetNoMoreData];
         }
         [self.tableView reloadData];
     });
@@ -144,15 +141,17 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 - (void)createView
 {
-    if (nil==noView) {
+    if (nil==noView)
+    {
         char cString[255];
         const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
-        sprintf(cString, "%s/customized_no_opened.png",path);
+        sprintf(cString, "%s/network_anomaly_fail.png",path);
         NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
         UIImage *image = [UIImage imageWithContentsOfFile:objCString];
         if(image)
         {
-            noView = [ViewNullFactory createViewBg:Rect(0,10,kScreenWidth,_tableView.height-10) imgView:image msg:@"没有专家发布观点"];
+            noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height) imgView:image msg:@"没有专家发布观点"];
+            [noView setUserInteractionEnabled:NO];
             [_tableView addSubview:noView];
         }
     }
@@ -161,21 +160,20 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 -(void)updateRefresh {
     _nCurrent = 20;
     _dataSource.aryModel = nil;
-    DLog(@"teamid:%@",_room.teamid);
     [kHTTPSingle RequestViewpointSummary:[_room.teamid intValue] start:0 count:20];
-//    [kHTTPSingle RequestViewpointSummary:90002 start:0 count:20];
 }
 
 - (void)uploadMore
 {
     if (_dataSource.aryModel.count>0) {
         TQIdeaModel *model = _dataSource.aryModel[_dataSource.aryModel.count-1];
-        [kHTTPSingle RequestViewpointSummary:0 start:model.viewpointid count:20];
+        _nCurrent += 20;
+        [kHTTPSingle RequestViewpointSummary:[_room.teamid intValue] start:model.viewpointid count:20];
     }
 }
 
 -(void)setIdeaTableView {
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth,kScreenHeight-108) withStyle:UITableViewStylePlain];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth,self.view.height) withStyle:UITableViewStylePlain];
     [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     [self.view addSubview:_tableView];
     _dataSource = [[XIdeaDataSource alloc] init];
@@ -188,6 +186,8 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     
 }
 
+#pragma mark - TableView dataSource
+
 - (void)selectIdea:(TQIdeaModel *)model
 {
     TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
@@ -195,4 +195,3 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 @end
-

@@ -49,7 +49,7 @@
     NSString *str = splash.imageUrl;
     UIImageView *ad = [[UIImageView alloc] init];
     ad.contentMode = UIViewContentModeScaleAspectFit;
-    ad.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.80);
+    ad.frame = CGRectMake(0, 100, kScreenWidth, kScreenHeight * 0.80-100);
     [ad sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"start-mascot"]];
     [self.view addSubview:ad];
     
@@ -61,6 +61,9 @@
     [_adButton setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [_adButton addTarget:self action:@selector(adSkipClick) forControlEvents:UIControlEventTouchUpInside];
     _adButton.frame = CGRectMake(kScreenWidth - 85, 25 , 75, 40);
+    _adButton.layer.cornerRadius = 2.5f;
+    _adButton.layer.masksToBounds = YES;
+    
     [self.view addSubview:_adButton];
     
     _timer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(timerCountDown) userInfo:nil repeats:YES];

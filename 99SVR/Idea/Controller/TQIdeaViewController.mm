@@ -43,7 +43,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
     [self.navigationController.navigationBar setHidden:YES];
     self.view.backgroundColor = [UIColor whiteColor];
     [self setTitleText:@"专家观点"];
@@ -55,7 +54,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
-    [self.tableView.gifHeader beginRefreshing];
+    
     
     _nCurrent = 0;
 }
@@ -64,6 +63,11 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
+    if(_dataSource.aryModel.count==0)
+    {
+        [self.tableView.gifHeader beginRefreshing];
+    }
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -116,6 +120,9 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         if (self.nCurrent != self.dataSource.aryModel.count && self.dataSource.aryModel.count!=0)
         {
             [self.tableView.footer noticeNoMoreData];
+        }else
+        {
+            [self.tableView.footer resetNoMoreData];
         }
         [self.tableView reloadData];
     });
@@ -149,6 +156,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 {
     if (_dataSource.aryModel.count>0) {
         TQIdeaModel *model = _dataSource.aryModel[_dataSource.aryModel.count-1];
+        _nCurrent += 20;
         [kHTTPSingle RequestViewpointSummary:0 start:model.viewpointid count:20];
     }
 }

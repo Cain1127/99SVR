@@ -108,7 +108,7 @@ void ReplyListener::onResponse(vector<Reply>& infos){
 
 void ReplyListener::OnError(int errCode)
 {
-    NSDictionary *dict = @{@"code":@(1)};
+    NSDictionary *dict = @{@"code":@(errCode)};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_REQUEST_REPLY_VC object:dict];
 }
 /**
@@ -120,7 +120,6 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
     reply.replytid = info.replytid();
     reply.viewpointid = info.viewpointid();
     reply.parentreplyid = info.parentreplyid();
-    
     reply.authorid = [NSString stringWithUTF8String:info.authorid().c_str()];
     reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
     reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];

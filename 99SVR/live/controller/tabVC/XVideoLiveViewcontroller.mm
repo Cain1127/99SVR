@@ -55,7 +55,6 @@
     
 }
 
-//@property (nonatomic,strong) LivePlayViewController *ffPlay;
 @property (nonatomic,assign) int nCurGift;
 
 @property (nonatomic,strong) RoomHttp *room;
@@ -194,29 +193,7 @@
     _ffPlay = [[LivePlayViewController alloc] init];
     [self.view addSubview:_ffPlay.view];
     _ffPlay.view.frame = Rect(0,0, kScreenWidth, kScreenHeight);
-    
-//    _downHUD = [[UIView alloc] initWithFrame:Rect(0, kVideoImageHeight-44, kScreenWidth, 44)];
-//    _downHUD.alpha = 1;
-//    UIImageView *downImg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
-//    [downImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
-//    [_downHUD addSubview:downImg];
-//    [downImg setTag:1];
-//    [self.view addSubview:_downHUD];
-//    
-//    _btnVideo = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [_downHUD addSubview:_btnVideo];
-//    _btnVideo.frame = Rect(10, 0, 44, 44);
-//    [_btnVideo setImage:[UIImage imageNamed:@"video_h"] forState:UIControlStateNormal];
-//    [_btnVideo setImage:[UIImage imageNamed:@"video"] forState:UIControlStateSelected];
-//    [_btnVideo addTarget:self action:@selector(connectUnVideo:) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    _btnFull = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [_downHUD addSubview:_btnFull];
-//    _btnFull.frame = Rect(kScreenWidth-54, 0, 44, 44);
-//    [_btnFull setImage:[UIImage imageNamed:@"full"] forState:UIControlStateNormal];
-//    [_btnFull setImage:[UIImage imageNamed:@"full_h"] forState:UIControlStateSelected];
-//    [_btnFull addTarget:self action:@selector(fullPlayMode) forControlEvents:UIControlEventTouchUpInside];
-    
+    [self addChildViewController:_ffPlay];
     
     [self initTableView];
     [self initSlideView];
@@ -355,6 +332,7 @@
          [_ffPlayWeak setNullMic];
      });
 }
+
 
 - (void)stopNewPlay
 {

@@ -88,6 +88,13 @@ namespace protocol
 		uint32 data2;
 	}CMDJoinRoomErr_t;
 
+	//加入房间成功后请求推送信息
+	typedef struct tag_CMDAfterJoinRoomReq
+	{
+		uint32 userid;
+		uint32 vcbid;
+	}CMDAfterJoinRoomReq_t;
+
 	//用户退出房间请求和通知的数据体
 	typedef struct tag_CMDUserExitRoomInfo
 	{
