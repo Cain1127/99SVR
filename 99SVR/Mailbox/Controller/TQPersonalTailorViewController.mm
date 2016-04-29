@@ -12,7 +12,7 @@
 #import "TableViewFactory.h"
 #import "TQPersonalModel.h"
 
-@interface TQPersonalTailorViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface TQPersonalTailorViewController ()<UITableViewDataSource,UITableViewDelegate,TQPersonalTailorCellDelegate>
 
 /** 模型数组 */
 @property (nonatomic ,strong)NSArray *aryModel;
@@ -82,12 +82,14 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     TQPersonalTailorCell *cell = [tableView dequeueReusableCellWithIdentifier:PersonalTailorCell];
+    cell.delegate = self;
     if (_aryModel.count>indexPath.section) {
         TQPersonalModel *personalModel = _aryModel[indexPath.section];
         cell.TITLELabel.text = personalModel.title;
         cell.summaryLabel.text = personalModel.summary;
         cell.timeLabel.text = personalModel.publishtime;
         cell.nameLabel.text = personalModel.teamname;
+        cell.personalModel = personalModel;
     }
     return cell;
     
@@ -108,6 +110,12 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     }
 }
 
+# pragma mark -- personalTailorCell点击代理。点击查看
 
+-(void)personalTailorCell:(TQPersonalTailorCell *)personalTailorCell seeButtonClickAtPersonalModel:(TQPersonalModel *)personalModel
+{
+    XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithCustomId:personalModel.ID];
+    [self.navigationController pushViewController:detailView animated:YES];
+}
 
 @end
