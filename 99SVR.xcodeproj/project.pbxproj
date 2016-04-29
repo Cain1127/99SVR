@@ -125,6 +125,7 @@
 		18F971131C92947F001B2575 /* RSADataVerifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F9710A1C92947F001B2575 /* RSADataVerifier.m */; };
 		18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971141C92971B001B2575 /* CoreMotion.framework */; };
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
+		5A5784101CD2FE28002E120A /* CommentReplyViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */; };
 		5A6AE1301CD1DEE8002FBD02 /* start-mascot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */; };
 		5AA6D8191CCBC01300841960 /* AdViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D8181CCBC01300841960 /* AdViewController.mm */; };
 		5AA6D81C1CCBD00A00841960 /* NewfeatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D81B1CCBD00A00841960 /* NewfeatureViewController.m */; };
@@ -937,6 +938,8 @@
 		18F971141C92971B001B2575 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		18F971161C92A40A001B2575 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		5A43875FF97FDC1CA789AE15 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A57840E1CD2FE28002E120A /* CommentReplyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentReplyViewController.h; sourceTree = "<group>"; };
+		5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CommentReplyViewController.mm; sourceTree = "<group>"; };
 		5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-mascot.png"; sourceTree = "<group>"; };
 		5AA6D8171CCBC01300841960 /* AdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdViewController.h; sourceTree = "<group>"; };
 		5AA6D8181CCBC01300841960 /* AdViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdViewController.mm; sourceTree = "<group>"; };
@@ -2123,6 +2126,8 @@
 				18D3CB861CC0D13600816BD0 /* TQPersonalTailorViewController.mm */,
 				5ADDD24C1CD274A1008B2961 /* AnswerViewController.h */,
 				5ADDD24D1CD274A1008B2961 /* AnswerViewController.mm */,
+				5A57840E1CD2FE28002E120A /* CommentReplyViewController.h */,
+				5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -4209,6 +4214,7 @@
 				BB63F61B1C2CC7A300A042E8 /* HtmlRoom.m in Sources */,
 				BB63F62C1C2D0DDF00A042E8 /* ChatButton.m in Sources */,
 				BB63F5CC1C2CC7A300A042E8 /* MJRefreshComponent.m in Sources */,
+				5A5784101CD2FE28002E120A /* CommentReplyViewController.mm in Sources */,
 				BB63F6191C2CC7A300A042E8 /* SearchController.m in Sources */,
 				5AD25E511CCE2265005C5BE6 /* SplashTool.mm in Sources */,
 				BB63F6131C2CC7A300A042E8 /* MainViewController.m in Sources */,
@@ -4406,7 +4412,6 @@
 				BB6F3ABA1C9D6EC50035EBBE /* FloatingView.m in Sources */,
 				BB63F5C61C2CC7A300A042E8 /* MASViewConstraint.m in Sources */,
 				5AF635471CD1FB6100DFE89C /* TQMessageTableViewCell.mm in Sources */,
-				18EA82A41CCA148F00BDB735 /* TableViewCell.mm in Sources */,
 				18D3CB811CC0CFB400816BD0 /* TQMessageViewController.mm in Sources */,
 				BB25D8121C15729800314C1E /* main.m in Sources */,
 				BB9765F61C86831D00FAA5B7 /* TextChatModel.m in Sources */,
@@ -4695,7 +4700,7 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.SVR;
+				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
@@ -4742,7 +4747,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.SVR;
+				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;

@@ -19,6 +19,7 @@
 #import "UIImageFactory.h"
 #import "TQButton-RoundedRectBtn.h"
 #import "TQMeCustomizedViewController.h"
+#import "CommentReplyViewController.h"
 
 @interface TQMailboxViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -42,7 +43,7 @@
     _aryModel = [[NSArray alloc] initWithObjects:
                  [[LeftCellModel alloc] initWithTitle:@"私人定制" icon:@"prv_vip_icon" goClassName:@"TQPersonalTailorViewController"],
                  [[LeftCellModel alloc] initWithTitle:@"系统消息" icon:@"mes_sys_icon" goClassName:@"TQMessageViewController"],
-                 [[LeftCellModel alloc] initWithTitle:@"评论回复" icon:@"com_reply_icon" goClassName:@"TQCommentReplyViewController"],
+                 [[LeftCellModel alloc] initWithTitle:@"评论回复" icon:@"com_reply_icon" goClassName:@"CommentReplyViewController"],
                  [[LeftCellModel alloc] initWithTitle:@"提问回复" icon:@"quiz_reply_icon" goClassName:@"AnswerViewController"],
                  nil];
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
