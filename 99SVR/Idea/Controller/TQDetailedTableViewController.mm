@@ -206,7 +206,7 @@
     
     CGFloat height = [_textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-16].height;
     
-    contentView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, height+102)];
+    contentView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, height+122)];
     [contentView addSubview:_textView];
     
     UILabel *lblAuthor = [[UILabel alloc] initWithFrame:Rect(8, 10,100, 20)];
@@ -231,9 +231,6 @@
     [kHTTPSingle RequestReply:_viewId start:0 count:20];
     nCurrent = 20;
     [_tableView reloadData];
-//    [_tableView.footer noticeNoMoreData];
-//    [_tableView.footer ];
-    
 }
 
 - (void)updateContentView
@@ -296,6 +293,7 @@
     
     if(_aryCommont.count==0)
     {
+        [_tableView.footer setHidden:YES];
         ReplyNullInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ReplyNullInfocell"];
         if (!cell) {
             cell = [[ReplyNullInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ReplyNullInfocell"];
