@@ -35,6 +35,7 @@
     
     [self setupTableView];
     self.view.backgroundColor = COLOR_Bg_Gay;
+    [self setTitleText:@"提问回复"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_ANSWERREPLY_VC object:nil];
     [self.tableView.gifHeader beginRefreshing];
@@ -67,10 +68,6 @@
     for (int i = 0; i < aryModel.count; i++) {
         TQAnswerModel *model = aryModel[i];
         model.autoId = i;
-        if(i==2)
-        {
-        model.answercontent = @"测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣";
-        }
         [self.modelArray addObject:model];
     }
     
@@ -104,7 +101,7 @@
 
 #pragma mark - UITableViewDelegate 代理方法
 
-// 设置每行高度（每行高度可以不一样）
+// 设置每行高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     CGFloat LR = 12;
@@ -123,13 +120,13 @@
     if (answercontentSize.height < 18) {
         H = H + 18;
     } else if (answercontentSize.height > 18 && !model.isAllText) {
-        H = H + 35;
+        H = H + 40;
     } else if(model.isAllText){
-        H = H + answercontentSize.height;
+        H = H + answercontentSize.height + 20;
     }
     
     if (askcontentSize.height > 18) {
-         H = H + askcontentSize.height - 18;
+         H = H + askcontentSize.height;
     }
     return H;
 }
@@ -139,7 +136,7 @@
 - (void)answerTableViewCell:(AnswerTableViewCell *)answerTableViewCell allTextClick:(NSUInteger)btnId
 {
     TQAnswerModel *model = self.modelArray[btnId];
-    model.isAllText = YES;
+    model.isAllText = !model.isAllText;
     [self.modelArray replaceObjectAtIndex:btnId withObject:model];
     [self.tableView reloadData];
 }

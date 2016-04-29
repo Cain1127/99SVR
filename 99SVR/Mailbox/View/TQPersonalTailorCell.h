@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 @class TQPersonalModel;
+@class TQPersonalTailorCell;
+
+// 定义一个协议
+@protocol TQPersonalTailorCellDelegate <NSObject>
+@optional
+-(void)personalTailorCell:(TQPersonalTailorCell *)personalTailorCell seeButtonClickAtPersonalModel:(TQPersonalModel *)personalModel;
+@end
+
 @interface TQPersonalTailorCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *TITLELabel;
@@ -21,4 +29,6 @@
 @property (nonatomic ,weak)TQPersonalModel *personalModel;
 /** <#desc#> */
 @property (nonatomic ,assign)CGFloat cellHeight;
+
+@property(nonatomic,weak) id<TQPersonalTailorCellDelegate> delegate;
 @end
