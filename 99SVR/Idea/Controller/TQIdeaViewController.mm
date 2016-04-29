@@ -33,8 +33,8 @@
 /** 数据数租 */
 @property (nonatomic,assign) NSInteger nCurrent;
 @property (nonatomic,strong) UITableView *tableView;
-//@property (nonatomic,copy) NSArray *aryModel;
 @property (nonatomic,strong) XIdeaDataSource *dataSource;
+
 @end
 
 @implementation TQIdeaViewController
@@ -46,20 +46,17 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
     [self.navigationController.navigationBar setHidden:YES];
     self.view.backgroundColor = [UIColor whiteColor];
-    [self setTitleText:@"99乐投"];
+    [self setTitleText:@"专家观点"];
     viewCache = [[NSCache alloc] init];
     [viewCache setTotalCostLimit:10];
     [self setIdeaTableView];
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-    title.text = @"专家观点";
-    title.textAlignment = NSTextAlignmentCenter;
-    title.textColor = [UIColor colorWithHex:@"#0062D5"];
     [self.navigationController.navigationBar setHidden:YES];
     
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
+    
     _nCurrent = 0;
 }
 
@@ -130,12 +127,13 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     {
         char cString[255];
         const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
-        sprintf(cString, "%s/customized_no_opened.png",path);
+        sprintf(cString, "%s/network_anomaly_fail.png",path);
         NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
         UIImage *image = [UIImage imageWithContentsOfFile:objCString];
         if(image)
         {
-            noView = [ViewNullFactory createViewBg:Rect(0,10,kScreenWidth,_tableView.height-10) imgView:image msg:@"没有专家发布观点"];
+            noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height) imgView:image msg:@"没有专家发布观点"];
+            [noView setUserInteractionEnabled:NO];
             [_tableView addSubview:noView];
         }
     }

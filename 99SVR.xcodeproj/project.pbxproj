@@ -60,7 +60,6 @@
 		189880051CAA52F8000E9F1C /* RightImageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 189880031CAA52F8000E9F1C /* RightImageButton.m */; };
 		189880061CAA52F8000E9F1C /* RightImageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 189880031CAA52F8000E9F1C /* RightImageButton.m */; };
 		1898AC661C9BADE600F2681D /* AboutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC5D1C9BADE600F2681D /* AboutController.m */; };
-		1898AC671C9BADE600F2681D /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC5F1C9BADE600F2681D /* HistoryViewController.m */; };
 		1898AC681C9BADE600F2681D /* KefuCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC611C9BADE600F2681D /* KefuCenterController.m */; };
 		1898AC691C9BADE600F2681D /* MyDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC631C9BADE600F2681D /* MyDataController.m */; };
 		1898AC6A1C9BADE600F2681D /* SettingCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1898AC651C9BADE600F2681D /* SettingCenterController.m */; };
@@ -384,7 +383,6 @@
 		BB63F6221C2CC7A300A042E8 /* MySearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F59A1C2CC7A300A042E8 /* MySearchBar.m */; };
 		BB63F6231C2CC7A300A042E8 /* IndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F59D1C2CC7A300A042E8 /* IndexViewController.m */; };
 		BB63F6241C2CC7A300A042E8 /* LeftCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F59F1C2CC7A300A042E8 /* LeftCellModel.m */; };
-		BB63F6251C2CC7A300A042E8 /* LeftHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5A11C2CC7A300A042E8 /* LeftHeaderView.m */; };
 		BB63F6261C2CC7A300A042E8 /* LeftViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F5A31C2CC7A300A042E8 /* LeftViewCell.m */; };
 		BB63F62C1C2D0DDF00A042E8 /* ChatButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F62B1C2D0DDF00A042E8 /* ChatButton.m */; };
 		BB6F116A1CC519FF00F02064 /* ConnectRoomViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB6F11691CC519FF00F02064 /* ConnectRoomViewModel.m */; };
@@ -1419,8 +1417,6 @@
 		BB63F59D1C2CC7A300A042E8 /* IndexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndexViewController.m; sourceTree = "<group>"; };
 		BB63F59E1C2CC7A300A042E8 /* LeftCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftCellModel.h; sourceTree = "<group>"; };
 		BB63F59F1C2CC7A300A042E8 /* LeftCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftCellModel.m; sourceTree = "<group>"; };
-		BB63F5A01C2CC7A300A042E8 /* LeftHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftHeaderView.h; sourceTree = "<group>"; };
-		BB63F5A11C2CC7A300A042E8 /* LeftHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftHeaderView.m; sourceTree = "<group>"; };
 		BB63F5A21C2CC7A300A042E8 /* LeftViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftViewCell.h; sourceTree = "<group>"; };
 		BB63F5A31C2CC7A300A042E8 /* LeftViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewCell.m; sourceTree = "<group>"; };
 		BB63F62A1C2D0DDF00A042E8 /* ChatButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatButton.h; sourceTree = "<group>"; };
@@ -3396,8 +3392,6 @@
 				BB63F59D1C2CC7A300A042E8 /* IndexViewController.m */,
 				BB63F59E1C2CC7A300A042E8 /* LeftCellModel.h */,
 				BB63F59F1C2CC7A300A042E8 /* LeftCellModel.m */,
-				BB63F5A01C2CC7A300A042E8 /* LeftHeaderView.h */,
-				BB63F5A11C2CC7A300A042E8 /* LeftHeaderView.m */,
 				BB63F5A21C2CC7A300A042E8 /* LeftViewCell.h */,
 				BB63F5A31C2CC7A300A042E8 /* LeftViewCell.m */,
 			);
@@ -4252,7 +4246,6 @@
 				BB63F5FA1C2CC7A300A042E8 /* FinanceOnlineVedioController.m in Sources */,
 				18B0CED41CC0804100BA82DF /* UIView+TQFram.m in Sources */,
 				185F59661CC4CAD600F605F5 /* MJProperty.m in Sources */,
-				1898AC671C9BADE600F2681D /* HistoryViewController.m in Sources */,
 				BB63F5F81C2CC7A300A042E8 /* CustomViewController.m in Sources */,
 				18D3CB841CC0D01A00816BD0 /* TQAnswerViewController.mm in Sources */,
 				BB6F121F1CC8C10300F02064 /* XTeamViewController.m in Sources */,
@@ -4349,7 +4342,6 @@
 				BB6F3AD91C9F86270035EBBE /* SDCycleScrollView.m in Sources */,
 				BB7B6FFC1C33D7070018FEC1 /* CircleImageView.m in Sources */,
 				BB63F61F1C2CC7A300A042E8 /* RoomListRequest.m in Sources */,
-				BB63F6251C2CC7A300A042E8 /* LeftHeaderView.m in Sources */,
 				BB88F36D1C4772B100C1F8D9 /* NNSVRViewController.m in Sources */,
 				BB6F11A51CC78B0F00F02064 /* XHistoryCell.m in Sources */,
 				188741821C9702DA002EF25A /* NSString+Regex.m in Sources */,

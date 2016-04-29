@@ -84,8 +84,7 @@
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadTeamContent:) name:MESSAGE_TEAM_INTRODUCE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoInfo:) name:MESSAGE_ROOM_VIDEO_LIST_VC object:nil];
-    [kHTTPSingle RequestTeamIntroduce:0];
-    
+    [kHTTPSingle RequestTeamIntroduce:[_room.teamid intValue]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -105,8 +104,9 @@
             _introduce = [NSString stringWithFormat:@"<span stype=\"line-height:6px;\">%@</span>",teamInfo.introduce];
             @WeakObj(self)
             dispatch_async(dispatch_get_main_queue(), ^{
-                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
-                [selfWeak.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+//                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
+//                [selfWeak.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [selfWeak.tableView reloadData];
             });
         }
     }
@@ -154,6 +154,7 @@
         DTAttributedTextCell *cell =[cache objectForKey:@"RoomTeamCell"];
         if (!cell) {
             cell = [[DTAttributedTextCell alloc] initWithReuseIdentifier:@"RoomTeamCell"];
+           
             [cache setObject:cell forKey:@"RoomTeamCell"];
         }
         [cell setHTMLString:_introduce];
@@ -185,7 +186,8 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section==0) {
-        return 60;
+        DTAttributedTextCell *cell = (DTAttributedTextCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+        return [cell requiredRowHeightInTableView:tableView];
     }
     else
     {

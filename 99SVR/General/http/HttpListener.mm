@@ -546,14 +546,12 @@ void AskQuestionListener::OnError(int errCode)
 
 void SystemMessageListener::onResponse(vector<SystemMessage>& info)
 {
-        for (int i=0; i<info.size(); i++) {
-        NSMutableArray *ary = [NSMutableArray array];
-        for (int i=0; i<info.size(); i++) {
-            TQMessageModel *model = [[TQMessageModel alloc] initWithSystemMessage:&info[i]];
-            [ary addObject:model];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SYSTEMMESSAGE_VC object:ary];
+    NSMutableArray *ary = [NSMutableArray array];
+    for (int i=0; i<info.size(); i++) {
+        TQMessageModel *model = [[TQMessageModel alloc] initWithSystemMessage:&info[i]];
+        [ary addObject:model];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SYSTEMMESSAGE_VC object:ary];
 }
 
 void SystemMessageListener::OnError(int errCode)
@@ -588,14 +586,12 @@ void QuestionAnswerListener::OnError(int errCode)
 
 void MailReplyListener::onResponse(vector<MailReply>& info)
 {
+    NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<info.size(); i++) {
-        NSMutableArray *ary = [NSMutableArray array];
-        for (int i=0; i<info.size(); i++) {
-            TQAnswerModel *model = [[TQAnswerModel alloc] initWithRplay:&info[i]];
-            [ary addObject:model];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:ary];
+        TQAnswerModel *model = [[TQAnswerModel alloc] initWithRplay:&info[i]];
+        [ary addObject:model];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:ary];
 }
 
 void MailReplyListener::OnError(int errCode)
@@ -607,14 +603,13 @@ void MailReplyListener::OnError(int errCode)
 void PrivateServiceSummaryListener::onResponse(vector<PrivateServiceSummary>& info)
 {
     
+    NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<info.size(); i++) {
-        NSMutableArray *ary = [NSMutableArray array];
-        for (int i=0; i<info.size(); i++) {
-            TQPersonalModel *model = [[TQPersonalModel alloc] initWithMyPrivateService:&info[i]];
-            [ary addObject:model];
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:ary];
+        TQPersonalModel *model = [[TQPersonalModel alloc] initWithMyPrivateService:&info[i]];
+        [ary addObject:model];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:ary];
+
 }
 
 void PrivateServiceSummaryListener::OnError(int errCode)

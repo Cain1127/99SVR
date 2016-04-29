@@ -170,7 +170,7 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
     user.nUserId = info.userid();
     user.headid = info.headid();
     user.sex = info.ngender();
-    if (user.nUserId>900000000)
+    if (user.nUserId>900000000 || user.nUserId <=0 )
     {
         user.strName = [NSString stringWithCString:info.cuseralias().c_str() encoding:GBK_ENCODING];
         [UserInfo sharedUserInfo].bIsLogin = YES;

@@ -19,6 +19,7 @@
 {
     
 }
+@property (nonatomic,strong) UILabel *titleLable;
 @property (nonatomic,copy) NSArray *aryVIP;
 @property (nonatomic,strong) DTAttributedTextView *textView;
 @property (nonatomic,strong) PrivateVipView *privateView;
@@ -46,6 +47,9 @@
 - (void)setModel:(RoomHttp *)room
 {
     _room = room;
+    NSString *strName = [NSString stringWithFormat:@"开通团队:%@",_room.teamname];
+    _titleLable.text = strName;
+    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
 
 - (void)viewDidLoad
@@ -58,7 +62,7 @@
 
 - (void)setupTableView
 {
-    _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - 64) style:UITableViewStyleGrouped];;
+    _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth,self.view.height) style:UITableViewStyleGrouped];;
     _tableView.dataSource = self;
     _tableView.delegate= self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -83,15 +87,15 @@
     [recommendView addSubview:iconImageView];
     
     // 标题：开通团队
-    UILabel *titleLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+10,10, kScreenWidth - 90, 30)];
-    titleLable.font = XCFONT(16);
-    titleLable.textColor = UIColorFromRGB(0x4c4c4c);
-    NSString *strName = [NSString stringWithFormat:@"开通团队:%@",_room.cname];
-    titleLable.text = strName;
-    [recommendView addSubview:titleLable];
+    _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+10,10, kScreenWidth - 90, 30)];
+    _titleLable.font = XCFONT(16);
+    _titleLable.textColor = UIColorFromRGB(0x4c4c4c);
+    NSString *strName = [NSString stringWithFormat:@"开通团队:%@",_room.teamname];
+    _titleLable.text = strName;
+    [recommendView addSubview:_titleLable];
     
     // 有效期
-    UILabel *expiryLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+10,titleLable.y+30, kScreenWidth - 90, 30)];
+    UILabel *expiryLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+10,_titleLable.y+30, kScreenWidth - 90, 30)];
     expiryLable.font = XCFONT(16);
     expiryLable.textColor = UIColorFromRGB(0x4c4c4c);
     expiryLable.text = @"有效期:永远";
@@ -137,11 +141,22 @@
                 [muAryTemp addObject:parameters];
             }
             _aryVIP = aryTemp;
-            self.privateView.privateVipArray = muAryTemp;
+            if (muAryTemp.count>0)
+            {
+                self.privateView.privateVipArray = muAryTemp;
+            }else
+            {
+                int i=1;
+                for (;i<=6;i++) {
+                    NSDictionary *parameters = @{@"vipLevelId" : NSStringFromInt(i),
+                                                 @"vipLevelName" : @"VIP",@"isOpen" :NSStringFromInt(0)};
+                    [muAryTemp addObject:parameters];
+                }
+                self.privateView.privateVipArray = muAryTemp;
+            }
             return;
         }
     }
-    
     DLog(@"request fail");
 }
 
@@ -150,8 +165,6 @@
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:) name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
-//    [kHTTPSingle RequestWhatIsPrivateService];
-//    [kHTTPSingle RequestBuyPrivateServicePage:198610];
     DLog(@"请求私人定制:%d",[_room.teamid intValue]);
     [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
@@ -174,8 +187,8 @@
 
 // 返回每组行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (_aryVIP.count>_selectIndex) {
-        XPrivateService *service = _aryVIP[_selectIndex];
+    if (_aryVIP.count>_selectIndex-1) {
+        XPrivateService *service = _aryVIP[_selectIndex-1];
         return service.summaryList.count;
     }
     return 0;
@@ -186,7 +199,7 @@
 {
     CustomizedTableViewCell *cell = [CustomizedTableViewCell cellWithTableView:tableView];
     if (_aryVIP.count>_selectIndex) {
-        XPrivateService *service = _aryVIP[_selectIndex];
+        XPrivateService *service = _aryVIP[_selectIndex-1];
         if (service.summaryList.count>indexPath.row) {
             XPrivateSummary *summary = service.summaryList[indexPath.row];
             CustomizedModel *customizedModel = [[CustomizedModel alloc] init];

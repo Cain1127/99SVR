@@ -7,7 +7,6 @@
 //
 
 #import "MyDataController.h"
-#import "LeftHeaderView.h"
 #import "UserInfo.h"
 
 #define kImageWidth 107

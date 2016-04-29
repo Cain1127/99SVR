@@ -25,6 +25,9 @@
 
 @property (nonatomic) BOOL playing;
 @property (nonatomic,strong) UIImageView *glView;
+@property (nonatomic) BOOL bFull;
+
+@property (nonatomic,copy) void (^statusBarHidden)(BOOL bInfo);
 
 //开始播放
 
