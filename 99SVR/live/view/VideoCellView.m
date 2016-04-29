@@ -91,7 +91,7 @@
     }
     else
     {
-        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.teamicon];
+        strUrl = [NSString stringWithFormat:@"%@",room.teamicon];
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     _nameLabel.text = room.teamname;

@@ -64,7 +64,6 @@
     RoomHeaderView *headView;
     int updateCount;
     int _currentPage;
-    BOOL bFull;
 }
 
 @property (nonatomic,strong) UIButton *btnRight;
@@ -211,6 +210,12 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     _liveControl.view.frame = frame;
     _liveControl.delegate = self;
     
+    @WeakObj(self)
+    _liveControl.ffPlay.statusBarHidden=^(BOOL bFull)
+    {
+         [selfWeak setNeedsStatusBarAppearanceUpdate];
+    };
+    
     frame.origin.x += kScreenWidth;
     _ideaControl = [[XIdeaViewController alloc] initWihModel:_room];
     [self addChildViewController:_ideaControl];
@@ -356,60 +361,11 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    if(bFull)
-    {
-        [self horizontalViewControl];
-    }
-    else
-    {
-        [self verticalViewControl];
-    }
-}
-
-- (void)fullModel
-{
-//    [self fullPlayMode];
+    [self horizontalViewControl];
 }
 
 #pragma mark 切换
 #pragma mark 全屏与四屏切换，设置frame与bounds
--(void)fullPlayMode
-{
-    if (!bFull)//NO状态表示当前竖屏，需要转换成横屏
-    {
-        CGFloat _duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-        [[UIDevice currentDevice] setValue: [NSNumber numberWithInteger:UIDeviceOrientationLandscapeRight] forKey:@"orientation"];
-        [UIViewController attemptRotationToDeviceOrientation];
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:_duration];
-        CGRect frame = [UIScreen mainScreen].bounds;
-        CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
-        self.view.center = center;
-        self.view.transform = [self transformView];
-        self.view.bounds = Rect(0, 0,kScreenHeight,kScreenWidth);
-        [UIView commitAnimations];
-        bFull = YES;
-    }
-    else
-    {
-        [self setHorizontal];
-        bFull = NO;
-    }
-}
-
--(void)setHorizontal
-{
-    [[UIDevice currentDevice] setValue: [NSNumber numberWithInteger:UIDeviceOrientationPortrait] forKey:@"orientation"];
-    CGFloat _duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:_duration];
-    CGRect frame = [UIScreen mainScreen].bounds;
-    CGPoint center = CGPointMake(frame.origin.x + ceil(frame.size.width/2), frame.origin.y + ceil(frame.size.height/2));
-    self.view.center = center;
-    self.view.transform = [self transformView];
-    self.view.bounds = CGRectMake(0, 0, kScreenSourchWidth, kScreenSourchHeight);
-    [UIView commitAnimations];
-}
 
 -(CGAffineTransform)transformView
 {
@@ -426,6 +382,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 #pragma mark 横屏
 - (void)horizontalViewControl
 {
+   [self setNeedsStatusBarAppearanceUpdate];
 }
 
 #pragma mark 竖屏
@@ -436,7 +393,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 
 - (BOOL)prefersStatusBarHidden//for iOS7.0
 {
-    if (!bFull)
+    if (!_liveControl.ffPlay.bFull)
     {
         return NO;
     }

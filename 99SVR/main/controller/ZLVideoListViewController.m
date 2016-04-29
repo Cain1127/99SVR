@@ -12,11 +12,12 @@
 #import "TableViewFactory.h"
 #import "VideoCell.h"
 #import "ConnectRoomViewModel.h"
-
+#import "MJRefresh.h"
+#import "ViewNullFactory.h"
 @interface ZLVideoListViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
-    
 }
+@property (nonatomic,strong) UIView *noView;
 @property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
 @property (nonatomic,copy) NSArray *aryVideo;
 @property (nonatomic,strong) UITableView *tableView;
@@ -29,13 +30,21 @@
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    [self setTitleText:@"专家观点"];
+    [self setTitleText:@"财经直播"];
     
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-108) withStyle:UITableViewStylePlain];
     [self.view addSubview:_tableView];
     _tableView.dataSource = self;
     _tableView.delegate = self;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideo:) name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
+    [kHTTPSingle RequestTeamList];
+    [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
+    [self.tableView.gifHeader loadDefaultImg];
+    [self.tableView.gifHeader beginRefreshing];
+}
+
+- (void)updateRefresh
+{
     [kHTTPSingle RequestTeamList];
 }
 
@@ -62,13 +71,34 @@
         if(nStatus==1)
         {
             _aryVideo = dict[@"data"];
-            [UserInfo sharedUserInfo].aryRoom = _aryVideo;
-            @WeakObj(self)
+        }
+    }
+    [UserInfo sharedUserInfo].aryRoom = _aryVideo;
+    @WeakObj(self)
+    if (_aryVideo.count==0) {
+        if (nil==_noView)
+        {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [selfWeak.tableView reloadData];
+                char cString[255];
+                const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+                sprintf(cString, "%s/network_anomaly_fail.png",path);
+                NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+                UIImage *image = [UIImage imageWithContentsOfFile:objCString];
+                if(image)
+                {
+                    selfWeak.noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height)
+                                                   imgView:image msg:@"获取财经直播列表失败"];
+                    selfWeak.noView.userInteractionEnabled = NO;
+                    [selfWeak.tableView addSubview:selfWeak.noView];
+                }
             });
         }
     }
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+         [selfWeak.tableView.header endRefreshing];
+         [selfWeak.tableView reloadData];
+    });
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

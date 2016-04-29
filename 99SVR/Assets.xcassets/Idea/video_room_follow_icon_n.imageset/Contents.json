@@ -6,11 +6,12 @@
     },
     {
       "idiom" : "universal",
-      "filename" : "LOGO-@2X.png",
+      "filename" : "video_room_follow_icon_n@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "video_room_follow_icon_n@3x.png",
       "scale" : "3x"
     }
   ],

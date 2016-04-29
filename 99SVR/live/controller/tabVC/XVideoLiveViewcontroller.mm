@@ -52,6 +52,7 @@
     DTAttributedTextView *_teachView;
     UIView *_chatAllView;
     ChatRightView *_rightView;
+    
 }
 
 //@property (nonatomic,strong) LivePlayViewController *ffPlay;
@@ -71,9 +72,9 @@
 
 @property (nonatomic,strong) UIButton *btnVideo;
 @property (nonatomic,strong) UIButton *btnFull;
-
 @property (nonatomic,strong) SliderMenuView *menuView;
 @property (nonatomic,assign) NSInteger nSelectIndex;
+
 @property (nonatomic,strong) RoomChatDataSource *chatDataSource;
 @property (nonatomic,strong) RoomChatDataSource *prichatDataSource;
 @property (nonatomic,strong) RoomNoticeDataSource *noticeDataSource;
@@ -194,27 +195,27 @@
     [self.view addSubview:_ffPlay.view];
     _ffPlay.view.frame = Rect(0,0, kScreenWidth, kScreenHeight);
     
-    _downHUD = [[UIView alloc] initWithFrame:Rect(0, kVideoImageHeight-44, kScreenWidth, 44)];
-    _downHUD.alpha = 1;
-    UIImageView *downImg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
-    [downImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
-    [_downHUD addSubview:downImg];
-    [downImg setTag:1];
-    [self.view addSubview:_downHUD];
-    
-    _btnVideo = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_downHUD addSubview:_btnVideo];
-    _btnVideo.frame = Rect(10, 0, 44, 44);
-    [_btnVideo setImage:[UIImage imageNamed:@"video_h"] forState:UIControlStateNormal];
-    [_btnVideo setImage:[UIImage imageNamed:@"video"] forState:UIControlStateSelected];
-    [_btnVideo addTarget:self action:@selector(connectUnVideo:) forControlEvents:UIControlEventTouchUpInside];
-    
-    _btnFull = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_downHUD addSubview:_btnFull];
-    _btnFull.frame = Rect(kScreenWidth-54, 0, 44, 44);
-    [_btnFull setImage:[UIImage imageNamed:@"full"] forState:UIControlStateNormal];
-    [_btnFull setImage:[UIImage imageNamed:@"full_h"] forState:UIControlStateSelected];
-    [_btnFull addTarget:self action:@selector(fullPlayMode) forControlEvents:UIControlEventTouchUpInside];
+//    _downHUD = [[UIView alloc] initWithFrame:Rect(0, kVideoImageHeight-44, kScreenWidth, 44)];
+//    _downHUD.alpha = 1;
+//    UIImageView *downImg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
+//    [downImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
+//    [_downHUD addSubview:downImg];
+//    [downImg setTag:1];
+//    [self.view addSubview:_downHUD];
+//    
+//    _btnVideo = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [_downHUD addSubview:_btnVideo];
+//    _btnVideo.frame = Rect(10, 0, 44, 44);
+//    [_btnVideo setImage:[UIImage imageNamed:@"video_h"] forState:UIControlStateNormal];
+//    [_btnVideo setImage:[UIImage imageNamed:@"video"] forState:UIControlStateSelected];
+//    [_btnVideo addTarget:self action:@selector(connectUnVideo:) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    _btnFull = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [_downHUD addSubview:_btnFull];
+//    _btnFull.frame = Rect(kScreenWidth-54, 0, 44, 44);
+//    [_btnFull setImage:[UIImage imageNamed:@"full"] forState:UIControlStateNormal];
+//    [_btnFull setImage:[UIImage imageNamed:@"full_h"] forState:UIControlStateSelected];
+//    [_btnFull addTarget:self action:@selector(fullPlayMode) forControlEvents:UIControlEventTouchUpInside];
     
     
     [self initTableView];
@@ -773,15 +774,6 @@
         _downHUD.alpha = 0;
     }
 }
-
-#pragma mark 切换
-#pragma mark 全屏与四屏切换，设置frame与bounds
--(void)fullPlayMode
-{
-    [_ffPlay fullPlayMode];
-}
-
-
 
 #pragma mark 横屏
 - (void)horizontalViewControl
