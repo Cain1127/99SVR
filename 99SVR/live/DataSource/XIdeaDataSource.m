@@ -73,7 +73,6 @@
         if (_delegate && [_delegate respondsToSelector:@selector(selectIdea:)]) {
             [_delegate selectIdea:model];
         }
-//        TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
     }
     
 }
