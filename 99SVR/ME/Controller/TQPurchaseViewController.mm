@@ -12,7 +12,7 @@
 #import "UIAlertView+Block.h"
 #import "PaySelectViewController.h"
 #import "ViewNullFactory.h"
-
+#import "ProgressHUD.h"
 
 @interface TQPurchaseViewController () <UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate>
 @property (nonatomic,strong)UITableView *tableView;
@@ -107,53 +107,23 @@
 {
     TQPurchaseModel *model = self.dataArray[row];
     
+    
     if ([UserInfo sharedUserInfo].goldCoin >= [model.actualPrice floatValue]) {//账户余额大于购买的余额
         
         [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"兑换" withMessage:@"是否确定兑换！" completionCallback:^(NSInteger index) {
             
-            if (index==0) {//取消
-                
-                DLog(@"取消兑换");
-                
-            }else{
-                
-                DLog(@"去购买或者升级VIP");
+            if (index==1) {//购买                
+                DLog(@"购买的vip等级%@   的战队ID = %@",model.levelid,self.stockModel.teamid);
                 ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
-                [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[self.headerModel.levelid intValue]];
+                [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[model.levelid intValue]];
                 
             }
             
             
         }];
-
-        
-        
     }else{//需要充值
         
-        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"充值" withMessage:@"账户余额不足，需要充值！" completionCallback:^(NSInteger index) {
-            
-            if (index==0) {//取消
-                
-                DLog(@"取消充值");
-                
-
-                
-            }else{
-                
-                DLog(@"去充值");
-
-                PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
-                [self.navigationController pushViewController:paySelectVC animated:YES];
-
-                
-            }
-            
-            
-        }];
-        
-        
-        
-        
+        [self rechargeGold];
     }
     
     
@@ -234,8 +204,6 @@
 -(void)buyVipData:(NSNotification *)notfi{
 
     
-    DLog(@"购买VIP成功");
-    
     NSDictionary *dic = (NSDictionary *)notfi.object;
     NSString *code = dic[@"code"];
     
@@ -245,22 +213,52 @@
             
             DLog(@"兑换或者升级成功");
             
+            
+            
+            if (self.handle) {
+                self.handle();//回调刷新上一界面的股票详情视图
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            
+            
         }else{
         
-            DLog(@"兑换或者升级失败");
+            if ([code isEqualToString:@"1014"]) {//金币不足请充值
+                
+                [self rechargeGold];
+                
+            }else if ([code isEqualToString:@"1015"]){//已经购买
+                
+                [ProgressHUD showError:@"已经购买"];
+                
+            }else if ([code isEqualToString:@"1016"]){//没有该私人定制
+            
+                [ProgressHUD showError:@"没有该私人定制"];
+            }else{
+            
+                [ProgressHUD showError:code];
+
+            }
+            
             
             
         }
         
         
-        
-        
-        
-        
-        
-        
-        
     });
+}
+
+#pragma mark 充值
+-(void)rechargeGold{
+
+    [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"充值" withMessage:@"账户余额不足，需要充值！" completionCallback:^(NSInteger index) {
+        if (index==1) {//取消
+            DLog(@"去充值");
+            PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+            [self.navigationController pushViewController:paySelectVC animated:YES];
+        }
+    }];
+
 }
 
 -(void)dealloc{

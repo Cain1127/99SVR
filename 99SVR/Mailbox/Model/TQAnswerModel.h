@@ -25,7 +25,7 @@
 
 @interface TQAnswerModel : NSObject
 /** 头像 */
-@property (nonatomic ,weak)NSString *answerauthorhead;
+@property (nonatomic,copy)NSString *answerauthorhead;
 /** 回答ID */
 @property(nonatomic,copy) NSString *answerauthorid;
 /** 回答名称 */
@@ -39,7 +39,7 @@
 /** 提问哪只股票 */
 @property(nonatomic,copy) NSString *askstock;
 /** 提问者姓名 */
-@property (nonatomic ,weak)NSString *askauthorname;
+@property (nonatomic,copy)NSString *askauthorname;
 /** 提问内容 */
 @property(nonatomic,copy) NSString *askcontent;
 /** 提问ID */

@@ -95,7 +95,7 @@
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     _nameLabel.text = room.teamname;
-    _lookCountLabel.text = room.locked;
+    _lookCountLabel.text = room.onlineusercount;
     [_roomIdLabel setText:room.roomid];
 }
 

@@ -1,23 +1,23 @@
 //
-//  AnswerViewController.m
-//  99SVR_UI
+//  CommentReplyViewController.m
+//  99SVR
 //
-//  Created by jiangys on 16/4/28.
-//  Copyright © 2016年 Jiangys. All rights reserved.
+//  Created by jiangys on 16/4/29.
+//  Copyright © 2016年 xia zhonglin . All rights reserved.
 //
 
-#import "AnswerViewController.h"
+#import "CommentReplyViewController.h"
 #import "AnswerTableViewCell.h"
 #import "TQAnswerModel.h"
 #import "MJRefresh.h"
 
-@interface AnswerViewController()<UITableViewDelegate,UITableViewDataSource,AnswerTableViewCellDelegate>
+@interface CommentReplyViewController()<UITableViewDelegate,UITableViewDataSource,AnswerTableViewCellDelegate>
 /** tableView */
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *modelArray;
 @end
 
-@implementation AnswerViewController
+@implementation CommentReplyViewController
 
 - (NSMutableArray *)modelArray
 {
@@ -35,13 +35,13 @@
     
     [self setupTableView];
     self.view.backgroundColor = COLOR_Bg_Gay;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_ANSWERREPLY_VC object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_MAILREPLY_VC object:nil];
     [self.tableView.gifHeader beginRefreshing];
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ANSWERREPLY_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_MAILREPLY_VC object:nil];
 }
 
 - (void)setupTableView
@@ -53,7 +53,7 @@
     _tableView.tableFooterView = [UIView new];
     _tableView.backgroundColor = COLOR_Bg_Gay;
     [self.view addSubview:_tableView];
-
+    
     [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [_tableView.gifHeader loadDefaultImg];
     
@@ -67,9 +67,9 @@
     for (int i = 0; i < aryModel.count; i++) {
         TQAnswerModel *model = aryModel[i];
         model.autoId = i;
-        if(i==2)
+        if(i==1)
         {
-        model.answercontent = @"测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣";
+            model.answercontent = @"测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣测试拉的瓣";
         }
         [self.modelArray addObject:model];
     }
@@ -83,7 +83,7 @@
 //开始请求.结束下拉刷新
 -(void)updateRefresh
 {
-    [kHTTPSingle RequestQuestionAnswer:0 count:10 teamer:YES];
+    [kHTTPSingle RequestMailReply:0 count:10];
     [self.tableView.gifHeader endRefreshing];
 }
 
@@ -129,7 +129,7 @@
     }
     
     if (askcontentSize.height > 18) {
-         H = H + askcontentSize.height - 18;
+        H = H + askcontentSize.height - 18;
     }
     return H;
 }

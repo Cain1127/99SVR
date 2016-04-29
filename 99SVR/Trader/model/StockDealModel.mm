@@ -97,8 +97,7 @@
         _price = FloatTransformFloatToStr(data->price());
         _money = FloatTransformFloatToStr(data->money());
         _time = StrTransformCToUTF8(data->time().c_str());
-        
-        
+        _transId = IntTransformIntToStr(data->transid());
     }
     return self;
 }

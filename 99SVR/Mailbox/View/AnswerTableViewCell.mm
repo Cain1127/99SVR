@@ -57,7 +57,7 @@
         _answercontentLable = [[UILabel alloc] init];
         _answercontentLable.font = Font_14;
         _answercontentLable.textColor = COLOR_Text_Black;
-        _answercontentLable.numberOfLines = 2;
+        _answercontentLable.numberOfLines = 0;
         [_bgView addSubview:_answercontentLable];
         
         /** 回答时间 */
@@ -112,17 +112,12 @@
     
     /** 回答者 */
     _answerauthornameLable.text = answerModel.answerauthorname;
-    [_answerauthornameLable mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_bgView.mas_top).offset(top);
-        make.left.mas_equalTo(_bgView.mas_left).offset(LR);
-    }];
+    _answerauthornameLable.frame = CGRectMake(LR, top, kScreenWidth - 2*LR, 25);
     
     /** 回答时间 */
     _answertimeLable.text = answerModel.answertime;
-    [_answertimeLable mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_bgView.mas_top).offset(top);
-        make.right.mas_equalTo(_bgView.mas_right).offset(-LR);
-    }];
+    CGSize answerSize = [_answertimeLable.text sizeMakeWithFont:_answertimeLable.font maxW:kScreenWidth - 2*LR];
+    _answertimeLable.frame = CGRectMake(kScreenWidth - answerSize.width - LR, top, answerSize.width, 25);
     
     // 全文按钮
     _allButton.tag = answerModel.autoId;
@@ -153,7 +148,7 @@
     _askcontentLabel.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), askcontentSize.width, askcontentSize.height);
     
     /** 提问者Bg */
-    CGFloat askBgViewH = CGRectGetMaxY(_askcontentLabel.frame) - CGRectGetMaxY(_askauthornameLabel.frame) + 20;
+    CGFloat askBgViewH = CGRectGetMaxY(_askcontentLabel.frame) - CGRectGetMaxY(_askauthornameLabel.frame) + 30;
     _askBgView.frame = CGRectMake(LR, CGRectGetMaxY(_answercontentLable.frame)+15, kScreenWidth - 2 *LR, askBgViewH);
 }
 

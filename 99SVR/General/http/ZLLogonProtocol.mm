@@ -501,8 +501,8 @@ void ZLHallListener::OnBuyPrivateVipResp(BuyPrivateVipResp& info)
 
 void ZLHallListener::OnBuyPrivateVipErr(ErrCodeResp& info)
 {
-    NSDictionary *dict = @{@"code":@(info.errcode())};
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_BUY_PRIVATE_VIP_VC object:dict];
+    NSString *code = [NSString stringWithFormat:@"%d",info.errcode()];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_BUY_PRIVATE_VIP_VC object:@{@"code":code}];
 }
 
 /**
