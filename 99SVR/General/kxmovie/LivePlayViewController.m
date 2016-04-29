@@ -39,9 +39,9 @@
     int _roomid;
     int _nuserid;
     int nReceiveMemory;
-    BOOL bFull;
     UIView *sunView;
     UIView *_downHUD;
+    UIView *_TopHUD;
 }
 @property (nonatomic) BOOL backGroud;
 @property (nonatomic) BOOL bVideo;
@@ -51,9 +51,18 @@
 @property (nonatomic,strong) UIImageView *smallView;
 @property (nonatomic,copy) NSString *strPath;
 
+@property (nonatomic,strong) UIButton *btnVideo;
+@property (nonatomic,strong) UIButton *btnFull;
+
+@property (nonatomic,strong) UIButton *btnShare;
+@property (nonatomic,strong) UIButton *btnCollet;
+
+
 @end
 
 @implementation LivePlayViewController
+
+@synthesize bFull;
 
 - (void)didReceiveMemoryWarning
 {
@@ -257,8 +266,113 @@
     singleRecogn.numberOfTapsRequired = 2;
     [_glView addGestureRecognizer:singleRecogn];
     
+    _TopHUD = [[UIView alloc] init];
+    [_glView addSubview:_TopHUD];
+    UIImageView *topImg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
+    [topImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
+    [_TopHUD addSubview:topImg];
+    [topImg setTag:1];
+    _TopHUD.hidden = YES;
+    
+    UIButton *btnBack = [self createPlayBtn:@"back" high:@"back"];
+    btnBack.frame = Rect(0, 0, 44, 44);
+    [_TopHUD addSubview:btnBack];
+    [btnBack addTarget:self action:@selector(fullPlayMode) forControlEvents:UIControlEventTouchUpInside];
+    
+    _downHUD = [[UIView alloc] initWithFrame:Rect(0, kVideoImageHeight-44, kScreenWidth, 44)];
+    _downHUD.alpha = 1;
+    UIImageView *downImg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
+    [downImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
+    [_downHUD addSubview:downImg];
+    [downImg setTag:1];
+    [_glView addSubview:_downHUD];
+    _btnVideo = [self createPlayBtn:@"video_h" high:@"video"];
+    [_btnVideo addTarget:self action:@selector(connectUnVideo:) forControlEvents:UIControlEventTouchUpInside];
+    _btnFull = [self createPlayBtn:@"full" high:@"full_h"];
+    [_btnFull addTarget:self action:@selector(fullPlayMode) forControlEvents:UIControlEventTouchUpInside];
+    _btnShare = [self createPlayBtn:@"video_room_share_icon_n" high:@"video_room_share_icon_p"];
+    [_btnShare addTarget:self action:@selector(shareInfo) forControlEvents:UIControlEventTouchUpInside];
+    
+    _btnCollet = [self createPlayBtn:@"video_room_follow_icon_n" high:@"video_room_follow_icon_p"];
+    [_btnCollet addTarget:self action:@selector(colletInfo) forControlEvents:UIControlEventTouchUpInside];
+    
+//    DLog(@"%@",self.view.superview.superview.superclass);
+//    DLog(@"%@",self.view.superview.superview.superclass);
+//    DLog(@"%@",self.view.superview.superview.superclass);
+    
+    [self updateDownHUD];
     
 }
+
+- (void)updateDownHUD
+{
+    CGFloat fWidth;
+    CGFloat fHeight;
+    if(bFull)
+    {
+        fWidth = kScreenWidth>kScreenHeight ? kScreenWidth : kScreenHeight;
+        fHeight = kScreenWidth>kScreenHeight ? kScreenHeight : kScreenWidth;
+        _TopHUD.frame = Rect(0, 0, fWidth, 44);
+        UIImageView *topHud = (UIImageView *)[_TopHUD viewWithTag:1];
+        topHud.frame = _TopHUD.bounds;
+        _TopHUD.hidden = NO;
+        _downHUD.frame = Rect(0,fHeight-44, fWidth, 44);
+        UIImageView *downImg = (UIImageView *)[_downHUD viewWithTag:1];
+        downImg.frame = _downHUD.bounds;
+
+   }
+   else
+   {
+       fWidth = kScreenWidth;
+       fHeight = kVideoImageHeight;
+       _TopHUD.hidden = YES;
+       _downHUD.frame = Rect(0,fHeight-44, fWidth, 44);
+   }
+    CGFloat fWith = fWidth/4;
+    _btnFull.frame = Rect(fWith/2-22, 0,44, 44);
+    _btnVideo.frame = Rect(fWith+fWith/2-22, 0,44, 44);
+    _btnShare.frame = Rect(fWith*2+fWith/2-22, 0,44, 44);
+    _btnCollet.frame = Rect(fWith*3+fWith/2-22, 0,44, 44);
+    if (_statusBarHidden) {
+        _statusBarHidden(YES);
+    }
+    
+}
+
+- (void)shareInfo
+{
+    
+}
+
+- (void)colletInfo
+{
+    
+}
+
+- (UIButton *)createPlayBtn:(NSString *)strImg high:(NSString *)strHigh
+{
+    UIButton *btnVideo = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_downHUD addSubview:btnVideo];
+    [btnVideo setImage:[UIImage imageNamed:strImg] forState:UIControlStateNormal];
+    [btnVideo setImage:[UIImage imageNamed:strHigh] forState:UIControlStateSelected];
+    return btnVideo;
+}
+
+- (void)updateHUDView
+{
+    
+}
+
+- (void)connectUnVideo:(UIButton *)sender
+{
+    if (self.playing)
+    {
+        [self setOnlyAudio:sender.selected];
+        sender.selected = !sender.selected;
+    }
+}
+
+
 
 - (void)handleDoubleTapFrom{
     [self fullPlayMode];
@@ -285,11 +399,13 @@
         [[UIApplication sharedApplication].keyWindow addSubview:_glView];
         [UIView commitAnimations];
         bFull = YES;
+        [self updateDownHUD];
     }
     else
     {
         [self setHorizontal];
         bFull = NO;
+        [self updateDownHUD];
     }
 }
 

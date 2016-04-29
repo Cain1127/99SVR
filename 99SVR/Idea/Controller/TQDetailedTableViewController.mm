@@ -85,9 +85,8 @@
     [self setTitleText:@"观点正文"];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyRepson:) name:MESSAGE_IDEA_REPLY_RESPONSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView:) name:MESSAGE_HTTP_REQUEST_REPLY_VC object:nil];
-    [self.view setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _tableView = [[UITableView alloc] initWithFrame:Rect(0,64, kScreenWidth,kScreenHeight-64)];
-    [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -519,12 +518,13 @@
     if (!noView) {
         char cString[255];
         const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
-        sprintf(cString, "%s/customized_no_opened.png",path);
+        sprintf(cString, "%s/network_anomaly_fail.png",path);
         NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
         UIImage *image = [UIImage imageWithContentsOfFile:objCString];
         if(image)
         {
-            noView = [ViewNullFactory createViewBg:Rect(0,10,kScreenWidth,_tableView.height-10) imgView:image msg:@"获取观点详情失败"];
+            noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height-0) imgView:image msg:@"获取观点详情失败"];
+            [noView setUserInteractionEnabled:noView];
             [_tableView addSubview:noView];
         }
     }
