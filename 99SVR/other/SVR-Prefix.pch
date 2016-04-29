@@ -46,6 +46,14 @@
 
 #define gcd_main_safe(block) dispatch_async(dispatch_get_main_queue(), block);
 
+#pragma mark 定义刷新状态
+typedef NS_ENUM(NSInteger,MJRefreshState){
+    /**头部刷新*/
+    MJRefreshState_Header,
+    /**尾部刷新*/
+    MJRefreshState_Footer,
+};
+
 typedef enum
 {
     //mask:0xFF(mic state)

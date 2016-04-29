@@ -52,6 +52,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)setModel:(RoomHttp *)room
 {
     _room = room;
+    [self updateRefresh];
 }
 
 - (void)loadView{

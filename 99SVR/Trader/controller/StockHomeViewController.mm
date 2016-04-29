@@ -16,16 +16,6 @@
 #import "Toast+UIView.h"
 
 
-
-
-#pragma mark 定义刷新状态
-typedef NS_ENUM(NSInteger,MJRefreshState){
-    /**头部刷新*/
-    MJRefreshState_Header,
-    /**尾部刷新*/
-    MJRefreshState_Footer,
-};
-
 @interface StockHomeViewController ()
 /**滑动控制器*/
 @property (nonatomic, strong) SliderMenuView *sliderMenuView;
@@ -59,7 +49,6 @@ typedef NS_ENUM(NSInteger,MJRefreshState){
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     
     
     /**显示鸟的加载图*/
@@ -108,8 +97,6 @@ typedef NS_ENUM(NSInteger,MJRefreshState){
     self.sliderMenuView.DidSelectSliderIndex = ^(NSInteger index){
         NSLog(@"模块%ld",(long)index);
     };
-    
-
     
 }
 
