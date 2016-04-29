@@ -43,8 +43,9 @@
         
         /** 头像 */
         _answerauthoriconImageView = [[UIImageView alloc] init];
-        _answerauthoriconImageView.layer.cornerRadius = 30;
+        _answerauthoriconImageView.layer.cornerRadius = 15;
         _answerauthoriconImageView.clipsToBounds = YES;
+        _answerauthoriconImageView.contentMode = UIViewContentModeScaleAspectFill;
         [_bgView addSubview:_answerauthoriconImageView];
         
         /** 回答名称 */
@@ -63,7 +64,7 @@
         /** 回答时间 */
         _answertimeLable = [[UILabel alloc] init];
         _answertimeLable.font = Font_14;
-        _answertimeLable.textColor = COLOR_Text_Black;
+        _answertimeLable.textColor = COLOR_Text_Gay;
         [_bgView addSubview:_answertimeLable];
         
         /** 提问者Bg */
@@ -76,13 +77,13 @@
         /** 提问者姓名 */
         _askauthornameLabel = [[UILabel alloc] init];
         _askauthornameLabel.font = Font_16;
-        _askauthornameLabel.textColor = COLOR_Text_Black;
+        _askauthornameLabel.textColor = COLOR_Text_Gay;
         [_bgView addSubview:_askauthornameLabel];
         
         /** 提问内容 */
         _askcontentLabel = [[UILabel alloc] init];
         _askcontentLabel.font = Font_14;
-        _askcontentLabel.textColor = COLOR_Text_Black;
+        _askcontentLabel.textColor = COLOR_Text_Gay;
         _askcontentLabel.numberOfLines = 0;
         [_bgView addSubview:_askcontentLabel];
         
@@ -106,41 +107,57 @@
     lineView.backgroundColor = COLOR_Bg_Gay;
     [self addSubview:lineView];
     
-    /** 头像 */
+    /** 背景 */
     //_answerauthoriconImageView.image = answerModel.answerauthoricon;
     _bgView.frame = CGRectMake(0, 10, kScreenWidth, 150);
     
+    /** 头像 */
+    CGFloat iconH = 30;
+    _answerauthoriconImageView.frame = CGRectMake(LR, 5, iconH, iconH);
+    [_answerauthoriconImageView sd_setImageWithURL:[NSURL URLWithString:answerModel.answerauthorhead] placeholderImage:[UIImage imageNamed:@"personal_user_head"]];
+    
     /** 回答者 */
-    _answerauthornameLable.text = answerModel.answerauthorname;
-    _answerauthornameLable.frame = CGRectMake(LR, top, kScreenWidth - 2*LR, 25);
+    _answerauthornameLable.text = [NSString stringWithFormat:@"%@:",answerModel.answerauthorname];
+    _answerauthornameLable.frame = CGRectMake(2*LR + iconH, top, kScreenWidth - 2*LR, 25);
     
     /** 回答时间 */
     _answertimeLable.text = answerModel.answertime;
     CGSize answerSize = [_answertimeLable.text sizeMakeWithFont:_answertimeLable.font maxW:kScreenWidth - 2*LR];
     _answertimeLable.frame = CGRectMake(kScreenWidth - answerSize.width - LR, top, answerSize.width, 25);
     
-    // 全文按钮
-    _allButton.tag = answerModel.autoId;
-    
     /** 回答内容 */
     _answercontentLable.text = answerModel.answercontent;
-    
     CGSize answercontentSize = [_answercontentLable.text sizeMakeWithFont:_answercontentLable.font maxW:kScreenWidth - 2* LR];
     if (answerModel.isAllText||answercontentSize.height < 35) {
-         _allButton.hidden = YES;
         _answercontentLable.frame = CGRectMake(LR, CGRectGetMaxY(_answerauthornameLable.frame), answercontentSize.width, answercontentSize.height + 10);
     } else if(answercontentSize.height > 35) {
-        _allButton.hidden = NO;
         _answercontentLable.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), answercontentSize.width, 35);
     }
     
-     // 全文按钮
-    _allButton.frame = CGRectMake(kScreenWidth - 60, CGRectGetMaxY(_answercontentLable.frame) - 7, 50, 25);
-
+    // 全文按钮
+    _allButton.tag = answerModel.autoId;
+    _allButton.frame = CGRectMake(kScreenWidth - 60, CGRectGetMaxY(_answercontentLable.frame), 50, 25);
+    if(answercontentSize.height > 35 && answerModel.isAllText)
+    {
+        _allButton.hidden = NO;
+        [_allButton setTitle:@"收起" forState:UIControlStateNormal];
+    } else if(answercontentSize.height > 35 && !answerModel.isAllText)
+    {
+        _allButton.hidden = NO;
+        [_allButton setTitle:@"全文" forState:UIControlStateNormal];
+    } else {
+        _allButton.hidden = YES;
+    }
+    
+    /** 提问者Bg Y值 */
+    CGFloat askBgViewY = CGRectGetMaxY(_answercontentLable.frame) + 10;
+    if (!_allButton.hidden) {
+        askBgViewY = askBgViewY + 15;
+    }
     /** 提问者姓名 */
-    _askauthornameLabel.text = answerModel.askauthorname;
+    _askauthornameLabel.text = [NSString stringWithFormat:@"%@:",answerModel.askauthorname];
     CGSize askauthorSize = [_askauthornameLabel.text sizeMakeWithFont:_askauthornameLabel.font maxW:kScreenWidth - 4 * LR];
-    _askauthornameLabel.frame = CGRectMake(2*LR, CGRectGetMaxY(_answercontentLable.frame)+20, askauthorSize.width, askauthorSize.height);
+    _askauthornameLabel.frame = CGRectMake(2*LR, askBgViewY+10, askauthorSize.width, askauthorSize.height);
     
     /** 提问内容 */
     _askcontentLabel.text = answerModel.askcontent;
@@ -148,8 +165,8 @@
     _askcontentLabel.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), askcontentSize.width, askcontentSize.height);
     
     /** 提问者Bg */
-    CGFloat askBgViewH = CGRectGetMaxY(_askcontentLabel.frame) - CGRectGetMaxY(_askauthornameLabel.frame) + 30;
-    _askBgView.frame = CGRectMake(LR, CGRectGetMaxY(_answercontentLable.frame)+15, kScreenWidth - 2 *LR, askBgViewH);
+    CGFloat askBgViewH = CGRectGetMaxY(_askcontentLabel.frame) - CGRectGetMaxY(_askauthornameLabel.frame) + 35;
+    _askBgView.frame = CGRectMake(LR, askBgViewY, kScreenWidth - 2 *LR, askBgViewH);
 }
 
 - (void)allTextClick:(UIButton *)btn
