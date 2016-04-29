@@ -61,7 +61,7 @@
     _adButton.backgroundColor = [UIColor whiteColor];
     [_adButton setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [_adButton addTarget:self action:@selector(adSkipClick) forControlEvents:UIControlEventTouchUpInside];
-    _adButton.frame = CGRectMake(kScreenWidth - 85, 25 , 75, 40);
+    _adButton.frame = CGRectMake(kScreenWidth - 85, 25 , 60, 35);
     _adButton.layer.cornerRadius = 2.5f;
     _adButton.layer.masksToBounds = YES;
     
@@ -74,7 +74,7 @@
 /**
  *  广告倒计时
  */
-NSUInteger secondsCountDown = 13;//60秒倒计时
+NSUInteger secondsCountDown = 3;//60秒倒计时
 - (void)timerCountDown
 {
     secondsCountDown--;
