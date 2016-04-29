@@ -74,7 +74,7 @@
     _headView.backgroundColor = UIColorFromRGB(0xffffff);
     UILabel *title;
     title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [title setFont:XCFONT(20)];
+    [title setFont:XCFONT(15)];
     [_headView addSubview:title];
     [title setTextAlignment:NSTextAlignmentCenter];
     [title setTextColor:UIColorFromRGB(0x0078DD)];

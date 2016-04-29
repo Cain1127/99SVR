@@ -683,7 +683,6 @@ void HomePageListener::onResponse(std::vector<BannerItem> banner_data, std::vect
 
 void HomePageListener::OnError(int errCode)
 {
-    
     NSDictionary *dict = @{@"code":@(errCode)};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HOME_BANNER_VC object:dict];
 }
