@@ -12,7 +12,7 @@
 #import "UIAlertView+Block.h"
 #import "PaySelectViewController.h"
 #import "ViewNullFactory.h"
-
+#import "ProgressHUD.h"
 
 @interface TQPurchaseViewController () <UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate>
 @property (nonatomic,strong)UITableView *tableView;
@@ -126,35 +126,9 @@
             
             
         }];
-
-        
-        
     }else{//需要充值
         
-        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"充值" withMessage:@"账户余额不足，需要充值！" completionCallback:^(NSInteger index) {
-            
-            if (index==0) {//取消
-                
-                DLog(@"取消充值");
-                
-
-                
-            }else{
-                
-                DLog(@"去充值");
-
-                PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
-                [self.navigationController pushViewController:paySelectVC animated:YES];
-
-                
-            }
-            
-            
-        }];
-        
-        
-        
-        
+        [self rechargeGold];
     }
     
     
@@ -254,13 +228,42 @@
             
         }else{
         
-            DLog(@"兑换或者升级失败 %@",code);
+            if ([code isEqualToString:@"1014"]) {//金币不足请充值
+                
+                [self rechargeGold];
+                
+            }else if ([code isEqualToString:@"1015"]){//已经购买
+                
+                [ProgressHUD showError:@"已经购买"];
+                
+            }else if ([code isEqualToString:@"1016"]){//没有该私人定制
+            
+                [ProgressHUD showError:@"没有该私人定制"];
+            }else{
+            
+                [ProgressHUD showError:code];
+
+            }
+            
             
             
         }
         
         
     });
+}
+
+#pragma mark 充值
+-(void)rechargeGold{
+
+    [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"充值" withMessage:@"账户余额不足，需要充值！" completionCallback:^(NSInteger index) {
+        if (index==1) {//取消
+            DLog(@"去充值");
+            PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+            [self.navigationController pushViewController:paySelectVC animated:YES];
+        }
+    }];
+
 }
 
 -(void)dealloc{
