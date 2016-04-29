@@ -817,8 +817,6 @@
 		189880031CAA52F8000E9F1C /* RightImageButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightImageButton.m; sourceTree = "<group>"; };
 		1898AC5C1C9BADE600F2681D /* AboutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutController.h; path = controller/AboutController.h; sourceTree = "<group>"; };
 		1898AC5D1C9BADE600F2681D /* AboutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutController.m; path = controller/AboutController.m; sourceTree = "<group>"; };
-		1898AC5E1C9BADE600F2681D /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HistoryViewController.h; path = controller/HistoryViewController.h; sourceTree = "<group>"; };
-		1898AC5F1C9BADE600F2681D /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HistoryViewController.m; path = controller/HistoryViewController.m; sourceTree = "<group>"; };
 		1898AC601C9BADE600F2681D /* KefuCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KefuCenterController.h; path = controller/KefuCenterController.h; sourceTree = "<group>"; };
 		1898AC611C9BADE600F2681D /* KefuCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KefuCenterController.m; path = controller/KefuCenterController.m; sourceTree = "<group>"; };
 		1898AC621C9BADE600F2681D /* MyDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyDataController.h; path = controller/MyDataController.h; sourceTree = "<group>"; };
@@ -2108,8 +2106,6 @@
 				1898AC701C9BB77100F2681D /* VideoColletionViewController.m */,
 				BB6F3ABE1C9EFADC0035EBBE /* BandingMobileViewController.h */,
 				BB6F3ABF1C9EFADC0035EBBE /* BandingMobileViewController.m */,
-				1898AC5E1C9BADE600F2681D /* HistoryViewController.h */,
-				1898AC5F1C9BADE600F2681D /* HistoryViewController.m */,
 				1898AC601C9BADE600F2681D /* KefuCenterController.h */,
 				1898AC611C9BADE600F2681D /* KefuCenterController.m */,
 				1898AC621C9BADE600F2681D /* MyDataController.h */,
