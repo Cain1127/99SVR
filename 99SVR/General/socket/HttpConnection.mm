@@ -2782,6 +2782,8 @@ void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, 
 {
     char tmp[128] = {0};
     
+    DLog(@"operateId =%d startId=%d count=%d",operateId,startId,count);
+    
     RequestParamter& request = get_request_param();
     
     sprintf(tmp, "operate/stockTransaction/operateId/%d/startId/%d/count/%d", operateId, startId, count);

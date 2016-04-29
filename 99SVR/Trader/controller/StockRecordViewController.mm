@@ -26,6 +26,10 @@
 /**仓库记录的数据*/
 @property (nonatomic , strong) NSMutableArray *houseTabArray;
 
+
+/**下拉刷新需要清空数据！上啦不需要*/
+@property (nonatomic , assign) __block MJRefreshState refreshState;
+
 @end
 
 @implementation StockRecordViewController
@@ -59,6 +63,10 @@
 -(void)initData{
     
     WeakSelf(self);
+
+    /**显示鸟的加载图*/
+    Loading_Bird_Show
+
     
     //交易记录通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBusinessData:) name:MESSAGE_STOCK_RECORD_BUSINESS_VC object:nil];
@@ -68,45 +76,31 @@
     //交易记录
     [self.businessTab addGifHeaderWithRefreshingBlock:^{
         
-        [weakSelf.busTabArray removeAllObjects];
+        weakSelf.refreshState = MJRefreshState_Header;
         [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
     }];
     
     [self.businessTab addLegendFooterWithRefreshingBlock:^{
         
+        weakSelf.refreshState = MJRefreshState_Footer;
         StockDealModel *model = [weakSelf.busTabArray lastObject];
+        DLog(@"transId ==%@",model.transId);
         [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:[model.transId intValue] cout:10];
         
     }];
     
-#warning 暂时缺接口。用交易记录模拟。
-    //持仓详情
-    [self.houseTab addGifHeaderWithRefreshingBlock:^{
-        [weakSelf.houseTabArray removeAllObjects];
-        [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
-    }];
+    //持仓详情请求
+    [kHTTPSingle RequestOperateStocks:(int)weakSelf.operateId];
     
-    [self.houseTab addLegendFooterWithRefreshingBlock:^{
-        StockDealModel *model = [weakSelf.houseTabArray lastObject];
-        [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:[model.transId intValue] cout:10];
-        
-    }];
-
+    
     
     [self.businessTab.gifHeader loadDefaultImg];
-    [self.houseTab.gifHeader loadDefaultImg];
-    
-    
     [self.businessTab.gifHeader beginRefreshing];
-    [self.houseTab.gifHeader beginRefreshing];
-
-    
-
 }
 #pragma mark 刷新交易记录数据
 -(void)refreshBusinessData:(NSNotification *)notfi{
 
-    [self refreshTableDataWithTable:self.businessTab WithTableViewModel:self.businessdTabModel fromDataArray:(NSArray *)notfi.object toDataArray:self.busTabArray withTabTag:1];
+    [self refreshTableDataWithTable:self.businessTab WithTableViewModel:self.businessdTabModel fromDataDic:(NSDictionary *)notfi.object toDataArray:self.busTabArray withTabTag:1];
 
 
 }
@@ -114,7 +108,7 @@
 #pragma mark 刷新持仓记录数据
 -(void)refreshWareHouseData:(NSNotification *)notfi{
     
-    [self refreshTableDataWithTable:self.houseTab WithTableViewModel:self.houseTabModel fromDataArray:(NSArray *)notfi.object toDataArray:self.houseTabArray withTabTag:2];
+    [self refreshTableDataWithTable:self.houseTab WithTableViewModel:self.houseTabModel fromDataDic:(NSDictionary *)notfi.object toDataArray:self.houseTabArray withTabTag:2];
 }
 
 /**
@@ -126,28 +120,52 @@
  *  @param toDataArray   实际的数据
  *  @param tag           tableView的tag
  */
--(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockRecordTabModel *)tableModel fromDataArray:(NSArray *)fromDataArray toDataArray:(NSMutableArray *)toDataArray withTabTag:(NSInteger )tag{
+-(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockRecordTabModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray withTabTag:(NSInteger )tag{
     
-    if ([fromDataArray  count]==0) {
-        [table.footer noticeNoMoreData];
-        [UIView animateWithDuration:1 animations:^{
-            table.footer.hidden = YES;
-        }];
-    }else{
-        table.footer.hidden = NO;
-        [table.footer resetNoMoreData];
-    }
+    /**显示鸟的加载图*/
+    Loading_Bird_Hide
+
     
-    [table.gifHeader endRefreshing];
-    [table.footer endRefreshing];
-    
-    for (int i=0; i!=[fromDataArray  count]; i++) {
-        [toDataArray addObject:fromDataArray[i]];
-    }
-    [tableModel setDataArray:toDataArray WithRecordTableTag:tag];
+    NSString *code = fromDataDic[@"code"];
+    NSArray *fromDataArray = fromDataDic[@"data"];
     
     dispatch_async(dispatch_get_main_queue(), ^{
+       
+        if ([code isEqualToString:@"1"]) {//数据加载成功
+            
+            if (table == self.businessTab) {//交易记录
+                
+                if (self.refreshState == MJRefreshState_Header) {
+                    [toDataArray removeAllObjects];
+                }
+            }
+            
+            if ([fromDataArray  count]==0) {
+                [table.footer noticeNoMoreData];
+                [UIView animateWithDuration:1 animations:^{
+                    table.footer.hidden = YES;
+                }];
+            }else{
+                table.footer.hidden = NO;
+                [table.footer resetNoMoreData];
+            }
+        }else{//数据加载失败
+        
+            DLog(@"数据加载失败 %@",code);
+        
+        }
+        
+        for (int i=0; i!=[fromDataArray  count]; i++) {
+            [toDataArray addObject:fromDataArray[i]];
+        }
+
+        [table.gifHeader endRefreshing];
+        [table.footer endRefreshing];
+
+        [tableModel setDataArray:toDataArray WithRecordTableTag:tag];
+
         [table reloadData];
+        
     });
 }
 

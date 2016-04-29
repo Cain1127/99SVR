@@ -45,7 +45,7 @@
         _circleLine.layer.masksToBounds = YES;
         _circleLine.layer.cornerRadius = (kCircle) / 2;
         _circleLine.layer.borderWidth = 0.5;
-        _circleLine.layer.borderColor = UIColorFromRGB(0x2180d0).CGColor;
+        _circleLine.layer.borderColor = UIColorFromRGB(0xffffff).CGColor;
         [self addSubview:_circleLine];
         
         _avatarImageView = [[UIImageView alloc] init];
@@ -105,7 +105,7 @@
 
 - (void)layoutViews
 {
-    _circleLine.frame = Rect(self.width/2-kCircle/2, 40, kCircle, kCircle);
+    _circleLine.frame = Rect(self.width/2-kCircle/2, 10, kCircle, kCircle);
     _avatarImageView.frame = Rect(6, 6, _circleLine.width-12, _circleLine.height-12);
     _nameLabel.frame = Rect(30,self.height-25, self.width-60, 20);
 }

@@ -245,11 +245,13 @@
         [tableAry addObjectsFromArray:array];
     }
     NSString *strText = _mySearchBar.text;
-    for (NSString *strInfo in tableAry) {
-        if ([strInfo isEqualToString:strText]) {
-            [tableAry removeObject:strInfo];
+    for (int i=0; i<tableAry.count; i++) {
+        if ([tableAry[i] isEqualToString:strText]) {
+            [tableAry removeObjectAtIndex:i];
+            break ;
         }
     }
+    
     [tableAry addObject:strText];
     if (tableAry.count>5) {
         [tableAry removeObjectAtIndex:0];
@@ -300,6 +302,7 @@
         [tableAry addObjectsFromArray:array];
     }
     [tableAry removeObject:strInfo];
+    
     [UserDefaults setObject:tableAry forKey:kHistoryList];
     [UserDefaults synchronize];
     

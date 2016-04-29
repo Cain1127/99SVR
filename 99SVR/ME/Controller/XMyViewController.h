@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HomeCustomViewController.h"
 
-@interface XMyViewController : UIViewController
+@interface XMyViewController : HomeCustomViewController
 
 @end

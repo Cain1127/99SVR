@@ -21,9 +21,6 @@
 
 - (void)setAryModel:(NSArray *)aryModel
 {
-//    for (TQIdeaModel *model in aryModel) {
-//        DLog(@"model:%@",model.authorname);
-//    }
     _aryModel = aryModel;
 }
 
