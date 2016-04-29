@@ -103,12 +103,23 @@
 #pragma mark
 -(void)chickEmptyViewShow:(NSMutableArray *)dataArray withCode:(NSString *)code{
 
+    WeakSelf(self);
     
     if ([code isEqualToString:@"1"]) {//网络OK
         
         if (dataArray.count==0) {//不存在数据
             
             self.emptyView = [ViewNullFactory createViewBg:self.emptyView.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:RequestState_EmptyStr(@"")];
+            
+            
+            [self.emptyView clickWithBlock:^(UIGestureRecognizer *gesture) {
+               
+                Loading_Bird_Show
+                [kHTTPSingle RequestOperateStockAllDetail:[weakSelf.stockModel.operateid intValue]];
+                weakSelf.emptyView.hidden = NO;
+                
+            }];
+            
             [self.tableView addSubview:self.emptyView];
 
             

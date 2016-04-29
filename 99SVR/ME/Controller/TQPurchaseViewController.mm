@@ -112,12 +112,7 @@
         
         [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"兑换" withMessage:@"是否确定兑换！" completionCallback:^(NSInteger index) {
             
-            if (index==0) {//取消
-                
-                DLog(@"取消兑换");
-                
-            }else{
-                
+            if (index==1) {//购买                
                 DLog(@"购买的vip等级%@   的战队ID = %@",model.levelid,self.stockModel.teamid);
                 ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
                 [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[model.levelid intValue]];
