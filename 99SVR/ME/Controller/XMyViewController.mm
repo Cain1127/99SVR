@@ -51,15 +51,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _itemsArray = [NSMutableArray array];
     [self.navigationController.navigationBar setHidden:YES];
+    [self setTitleText:@"我"];
+    
+    _itemsArray = [NSMutableArray array];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    _leftMenuHeaderView = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 0,kScreenWidth, 185)];
+    _leftMenuHeaderView = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 64,kScreenWidth, 185)];
     _leftMenuHeaderView.delegate = self;
     [self.view addSubview:_leftMenuHeaderView];
     
     //添加一个tableView
-    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, _leftMenuHeaderView.height, kScreenWidth, kScreenHeight-44) style:UITableViewStyleGrouped];
+    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, _leftMenuHeaderView.height+_leftMenuHeaderView.y, kScreenWidth, kScreenHeight-44) style:UITableViewStyleGrouped];
     _listTableView.delegate = self;
     _listTableView.dataSource = self;
     _listTableView.bounces = NO;
@@ -96,30 +98,15 @@
 {
     [_itemsArray removeAllObjects];
     _leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
-    // 登录成功用户
-    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
-    {
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"私人定制" icon:@"mydata.png" goClassName:@"CustomizedViewController"]];
-//        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"私人定制" icon:@"mydata.png" goClassName:@"TQMeCustomizedViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"私人订制" icon:@"personal_recharge_icon" goClassName:@"TQPurchaseViewController"]];
-//        if(KUserSingleton.nStatus)
-//        {
-//        ProfileViewController
-//        
-//            [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyAsset icon:@"personal_recharge_icon" goClassName:@"AssetViewController"]];
-//        }
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kMyCollection icon:@"personal_collection_icon" goClassName:@"VideoColletionViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"关注讲师" icon:@"personal_follow_icon" goClassName:@"TextColletViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的足迹" icon:@"personal_record_icon" goClassName:@"HistoryViewController"]];
-    }
-    else  // 没登录
-    {
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kLogin icon:@"mydata.png" goClassName:@"LoginViewController"]];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kRegist icon:@"regist.png" goClassName:@"RegMobileViewController"]];
-    }
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"kefu.png" goClassName:@"KefuCenterController"]];
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"setting" goClassName:@"SettingCenterController"]];
+    
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"CustomizedViewController"]];
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的九九币" icon:@"personal_recharge_icon" goClassName:@"CustomizedViewController"]];
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的消费记录" icon:@"personal_consumption_icon" goClassName:@"CustomizedViewController"]];
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的关注" icon:@"personal_follow_icon" goClassName:@"CustomizedViewController"]];
+
+    
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"personal_services_icon" goClassName:@"KefuCenterController"]];
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"personal_ste_icon" goClassName:@"SettingCenterController"]];
     
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(),

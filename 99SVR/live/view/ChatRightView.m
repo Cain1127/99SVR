@@ -15,6 +15,7 @@
 + (UIButton *)createButton:(CGRect)frame
 {
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     btn.layer.borderWidth = 1;
     btn.layer.borderColor = UIColorFromRGB(0xffffff).CGColor;
     btn.layer.masksToBounds = YES;

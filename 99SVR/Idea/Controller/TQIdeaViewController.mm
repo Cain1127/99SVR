@@ -44,7 +44,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)viewDidLoad{
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = UIColorFromRGB(0xf8f8f8);
     [self setTitleText:@"专家观点"];
     viewCache = [[NSCache alloc] init];
     [viewCache setTotalCostLimit:10];
@@ -160,6 +160,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 -(void)setIdeaTableView {
+    
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-108) withStyle:UITableViewStylePlain];
     [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     [self.view addSubview:_tableView];
@@ -167,10 +168,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     _dataSource.delegate = self;
     _tableView.dataSource = _dataSource;
     _tableView.delegate = _dataSource;
-    // cell自动计算高度
-//    self.tableView.rowHeight = UITableViewAutomaticDimension;
-//    self.tableView.estimatedRowHeight = 44;
-
 }
 
 #pragma mark - TableView dataSource
