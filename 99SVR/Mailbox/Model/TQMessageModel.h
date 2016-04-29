@@ -16,7 +16,7 @@
 /** 时间 */
 @property(nonatomic,copy) NSString *publishtime;
 /** 标题 */
-@property(nonatomic,copy) NSString *titile;
+@property(nonatomic,copy) NSString *title;
 /**/
 /** 用户ID */
 @property(nonatomic,assign) int userID;

@@ -10,6 +10,8 @@
 @class TQMessageModel;
 @class TQMessageCell;
 @protocol TQMessageDelegate <NSObject>
+
+
 - (void)clickCell:(TQMessageCell *)cell show:(BOOL)bAll;
 
 @end
@@ -18,9 +20,12 @@
 
 @property (nonatomic ,strong) TQMessageModel *messageModel;
 @property (nonatomic) BOOL bShow;
+@property (nonatomic) NSInteger section;
 
+
+@property (nonnull,assign) id<TQMessageDelegate> delegate;
 - (CGFloat)requiredRowHeightInTableView;
-
+- (IBAction)showInfo:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *openBtn;
 
 @end
