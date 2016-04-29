@@ -182,7 +182,7 @@ void LoginConnection::SendMsg_InterestForReq(InterestForReq& req)
 void LoginConnection::SendMsg_BuyPrivateVipReq(uint32 teacherid,uint32 viptype)
 {
 	BuyPrivateVipReq req;
-	req.set_userid(1763584);
+	req.set_userid(login_userid);
 	req.set_teacherid(teacherid);
 	req.set_viptype(viptype);
 

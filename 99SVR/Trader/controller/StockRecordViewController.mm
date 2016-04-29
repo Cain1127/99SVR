@@ -63,6 +63,10 @@
 -(void)initData{
     
     WeakSelf(self);
+
+    /**显示鸟的加载图*/
+    Loading_Bird_Show
+
     
     //交易记录通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBusinessData:) name:MESSAGE_STOCK_RECORD_BUSINESS_VC object:nil];
@@ -72,40 +76,26 @@
     //交易记录
     [self.businessTab addGifHeaderWithRefreshingBlock:^{
         
-        [weakSelf.busTabArray removeAllObjects];
+        weakSelf.refreshState = MJRefreshState_Header;
         [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
     }];
     
     [self.businessTab addLegendFooterWithRefreshingBlock:^{
         
+        weakSelf.refreshState = MJRefreshState_Footer;
         StockDealModel *model = [weakSelf.busTabArray lastObject];
+        DLog(@"transId ==%@",model.transId);
         [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:[model.transId intValue] cout:10];
         
     }];
     
-#warning 暂时缺接口。用交易记录模拟。
-    //持仓详情
-    [self.houseTab addGifHeaderWithRefreshingBlock:^{
-        [weakSelf.houseTabArray removeAllObjects];
-        [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
-    }];
+    //持仓详情请求
+    [kHTTPSingle RequestOperateStocks:(int)weakSelf.operateId];
     
-    [self.houseTab addLegendFooterWithRefreshingBlock:^{
-        StockDealModel *model = [weakSelf.houseTabArray lastObject];
-        [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:[model.transId intValue] cout:10];
-        
-    }];
-
+    
     
     [self.businessTab.gifHeader loadDefaultImg];
-    [self.houseTab.gifHeader loadDefaultImg];
-    
-    
     [self.businessTab.gifHeader beginRefreshing];
-    [self.houseTab.gifHeader beginRefreshing];
-
-    
-
 }
 #pragma mark 刷新交易记录数据
 -(void)refreshBusinessData:(NSNotification *)notfi{
@@ -132,34 +122,51 @@
  */
 -(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockRecordTabModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray withTabTag:(NSInteger )tag{
     
+    /**显示鸟的加载图*/
+    Loading_Bird_Hide
+
     
+    NSString *code = fromDataDic[@"code"];
+    NSArray *fromDataArray = fromDataDic[@"data"];
     
-    
-    
-    
-    
-    
-//    if ([fromDataArray  count]==0) {
-//        [table.footer noticeNoMoreData];
-//        [UIView animateWithDuration:1 animations:^{
-//            table.footer.hidden = YES;
-//        }];
-//    }else{
-//        table.footer.hidden = NO;
-//        [table.footer resetNoMoreData];
-//    }
-//    
-//    [table.gifHeader endRefreshing];
-//    [table.footer endRefreshing];
-//    
-//    for (int i=0; i!=[fromDataArray  count]; i++) {
-//        [toDataArray addObject:fromDataArray[i]];
-//    }
-//    [tableModel setDataArray:toDataArray WithRecordTableTag:tag];
-//    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [table reloadData];
-//    });
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        if ([code isEqualToString:@"1"]) {//数据加载成功
+            
+            if (table == self.businessTab) {//交易记录
+                
+                if (self.refreshState == MJRefreshState_Header) {
+                    [toDataArray removeAllObjects];
+                }
+            }
+            
+            if ([fromDataArray  count]==0) {
+                [table.footer noticeNoMoreData];
+                [UIView animateWithDuration:1 animations:^{
+                    table.footer.hidden = YES;
+                }];
+            }else{
+                table.footer.hidden = NO;
+                [table.footer resetNoMoreData];
+            }
+        }else{//数据加载失败
+        
+            DLog(@"数据加载失败 %@",code);
+        
+        }
+        
+        for (int i=0; i!=[fromDataArray  count]; i++) {
+            [toDataArray addObject:fromDataArray[i]];
+        }
+
+        [table.gifHeader endRefreshing];
+        [table.footer endRefreshing];
+
+        [tableModel setDataArray:toDataArray WithRecordTableTag:tag];
+
+        [table reloadData];
+        
+    });
 }
 
 

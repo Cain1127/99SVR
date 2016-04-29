@@ -235,8 +235,6 @@
 -(void)buyVipData:(NSNotification *)notfi{
 
     
-    DLog(@"购买VIP成功");
-    
     NSDictionary *dic = (NSDictionary *)notfi.object;
     NSString *code = dic[@"code"];
     
@@ -256,7 +254,7 @@
             
         }else{
         
-            DLog(@"兑换或者升级失败");
+            DLog(@"兑换或者升级失败 %@",code);
             
             
         }

@@ -152,13 +152,16 @@ void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
         [muArray addObject:allModel];
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:@{@"data":muArray,@"code":@(1)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:@{@"data":muArray,@"code":@"1"}];
     
 }
 
 void OperateStockProfitListenerDay::OnError(int errCode)
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:@{@"code":@(errCode)}];
+    
+    NSString *code = [NSString stringWithFormat:@"%d",errCode];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:@{@"code":code}];
+
     
 }
 /**
@@ -175,13 +178,13 @@ void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& mon
         StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
         [muArray addObject:allModel];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:@{@"data":muArray,@"code":@(1)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:@{@"data":muArray,@"code":@"1"}];
 }
 
 void OperateStockProfitListenerMonth::OnError(int errCode)
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:@{@"code":@(errCode)}];
-    
+    NSString *code = [NSString stringWithFormat:@"%d",errCode];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:@{@"code":code}];
 }
 
 
@@ -204,7 +207,9 @@ void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total
 
 void OperateStockProfitListenerAll::OnError(int errCode)
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:@{@"code":@(errCode)}];
+    
+    NSString *code = [NSString stringWithFormat:@"%d",errCode];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:@{@"code":code}];
 }
 
 /**
@@ -213,9 +218,8 @@ void OperateStockProfitListenerAll::OnError(int errCode)
 
 void OperateStockAllDetailListener::OnError(int errCode)
 {
-    
-    NSDictionary *dict = @{@"code":@(errCode)};
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:dict];
+    NSString *code = [NSString stringWithFormat:@"%d",errCode];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:@{@"code":code}];
 }
 /**
  *  请求操盘详情
@@ -309,7 +313,7 @@ void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>
 void OperateStockTransactionListener::OnError(int errCode)
 {
     NSString *code = [NSString stringWithFormat:@"%d",errCode];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:@{@"code":code}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:@{@"code":code,@"data":@[]}];
 
 }
 
@@ -335,7 +339,7 @@ void OperateStocksListener::OnError(int errCode)
 {
  
     NSString *code = [NSString stringWithFormat:@"%d",errCode];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:@{@"code":code}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:@{@"code":code,@"data":@[]}];
 
 }
 /**
