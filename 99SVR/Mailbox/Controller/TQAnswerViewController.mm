@@ -36,16 +36,17 @@ static NSString *const answerCell = @"answerCell";
     self.tableView.estimatedRowHeight = 44;
 
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQAllReplyCell class]) bundle:nil] forCellReuseIdentifier:answerCell];
+    [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
+    [self.tableView.gifHeader loadDefaultImg];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     //开始刷新,注册数据接受通知
-    [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
-    [self.tableView.gifHeader loadDefaultImg];
-    [self.tableView.gifHeader beginRefreshing];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_ANSWERREPLY_VC object:nil];
+    [self.tableView.gifHeader beginRefreshing];
 
 }
 
@@ -60,7 +61,8 @@ static NSString *const answerCell = @"answerCell";
 }
 
 //开始请求.结束下拉刷新
--(void)updateRefresh {
+-(void)updateRefresh
+{
     [kHTTPSingle RequestQuestionAnswer:0 count:10 teamer:YES];
     [self.tableView.gifHeader endRefreshing];
 }
