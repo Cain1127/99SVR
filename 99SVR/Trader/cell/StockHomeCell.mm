@@ -134,6 +134,8 @@
         make.height.equalTo(@(totalNumLab_fot));
     }];
 
+    DLog(@"%@",model.teamicon);
+    
     [self.iconImv sd_setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/pic/item/e1fe9925bc315c6001e93f3388b1cb13485477e9.jpg"]];
     self.nameLab.text =  model.teamname;
     self.targetLab.text =  [NSString stringWithFormat:@"目标收益：%@",model.goalprofit];
