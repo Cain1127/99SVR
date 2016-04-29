@@ -292,6 +292,8 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
  */
 void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>& trans){
     
+    NSMutableDictionary *mudic = [NSMutableDictionary dictionary];
+    
     NSMutableArray *muArray = [NSMutableArray array];
     for (size_t i=0; i!=trans.size(); i++) {
         OperateStockTransaction *operateStockTransaction = &trans[i];
@@ -299,18 +301,25 @@ void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>
         [muArray addObject:model];
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:muArray];
+    
+    mudic[@"code"] = @"1";
+    mudic[@"data"] = muArray;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:mudic];
 }
 
 void OperateStockTransactionListener::OnError(int errCode)
 {
-    
+    NSString *code = [NSString stringWithFormat:@"%d",errCode];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:@{@"code":code}];
+
 }
 
 /**
  *  请求操盘详情--持仓情况
  */
 void OperateStocksListener::onResponse(vector<OperateStocks>& stocks){
+    
+    NSMutableDictionary *mudic = [NSMutableDictionary dictionary];
     NSMutableArray *muArray = [NSMutableArray array];
     for (size_t i=0; i!=stocks.size(); i++) {
         
@@ -318,13 +327,17 @@ void OperateStocksListener::onResponse(vector<OperateStocks>& stocks){
         StockDealModel *model = [[StockDealModel alloc]initWithStockRecordWareHouseData:stocksModel];
         [muArray addObject:model];
     }
-    //
-    //    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
+    mudic[@"code"] = @"1";
+    mudic[@"data"] = muArray;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:mudic];
 }
 
 void OperateStocksListener::OnError(int errCode)
 {
-    
+ 
+    NSString *code = [NSString stringWithFormat:@"%d",errCode];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:@{@"code":code}];
+
 }
 /**
  *  请求信息--已购买的私人定制(购买或者未购买)
