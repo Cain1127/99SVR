@@ -57,7 +57,7 @@
         _answercontentLable = [[UILabel alloc] init];
         _answercontentLable.font = Font_14;
         _answercontentLable.textColor = COLOR_Text_Black;
-        _answercontentLable.numberOfLines = 2;
+        _answercontentLable.numberOfLines = 0;
         [_bgView addSubview:_answercontentLable];
         
         /** 回答时间 */
