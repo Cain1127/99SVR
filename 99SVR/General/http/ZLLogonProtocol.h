@@ -53,7 +53,9 @@ class ZLHallListener: public HallListener
     virtual void OnHallAnswerResp(std::vector<AnswerResp>& infos){}
     virtual void OnSystemInfoResp(std::vector<HallSystemInfoListResp>& infos){}
     virtual void OnInterestForResp(InterestForResp& info){}
-    virtual void OnBuyPrivateVipResp(BuyPrivateVipResp& info){}
+    virtual void OnBuyPrivateVipResp(BuyPrivateVipResp& info);
+    
+    virtual void OnBuyPrivateVipErr(ErrCodeResp& info);
 };
 
 class ZLPushListener: public PushListener
@@ -169,7 +171,10 @@ public :
      *  赠送礼物
      */
     void sendGift(int giftId,int num);
-    
+    /**
+     *   购买VIP
+     */
+    void buyPrivateVip(int teacherId,int type);
     ~ZLLogonProtocol();
 };
 

@@ -134,7 +134,7 @@ public:
 	void RequestPrivateServiceSummary(int startId, int count, PrivateServiceSummaryListener* listener);
 
 	// 提问（已提供）
-	void PostAskQuestion(int teamId,const char* stock,const char* question, AskQuestionListener* listener);
+    void PostAskQuestion(int teamId,const char* stock,const char* question, AskQuestionListener* listener);
 
 	// 请求问题回复--未回回答的（PC端接口）（X未提供）
 	void RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeam = false);
@@ -145,6 +145,8 @@ public:
 	// 讲师团队回答提问（PC端接口）（X未提供）
 	void PostAnswer(int questionId, char* content, HttpListener* listener);
 
+	// PC左侧菜单
+	void RequestPcGroupsPage(GroupsPageListener* listener);
 
 };
 

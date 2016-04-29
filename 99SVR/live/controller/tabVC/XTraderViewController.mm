@@ -53,6 +53,19 @@
     [self initUi];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+    [self.totalTab.gifHeader beginRefreshing];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -70,7 +83,7 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     //total
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+
     @WeakObj(self)
     [self.totalTab addGifHeaderWithRefreshingBlock:^{
         selfWeak.refreshState = MJRefreshState_Header;
@@ -84,12 +97,24 @@
         [kHTTPSingle RequestOperateStockProfitByAll:[selfWeak.room.teamid intValue] start:(int)selfWeak.totalPagInteger count:10];
     }];
     [self.totalTab.gifHeader loadDefaultImg];
-    [self.totalTab.gifHeader beginRefreshing];
 }
 
 -(void)refreshTotalData:(NSNotification *)notfi{
-    
-    [self refreshTableDataWithTable:self.totalTab WithTableViewModel:self.totalTableViewModel fromDataDic:(NSDictionary *)notfi.object toDataArray:self.totalDataArray];
+    @WeakObj(self)
+    NSDictionary *dict = notfi.object;
+    if ([dict isKindOfClass:[NSDictionary class]]) {
+        @WeakObj(dict)
+        dispatch_async(dispatch_get_main_queue(),^{
+            @StrongObj(self)
+            [self refreshTableDataWithTable:self.totalTab WithTableViewModel:self.totalTableViewModel fromDataDic:dictWeak toDataArray:self.totalDataArray];
+        });
+    }else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [selfWeak.totalTab.header endRefreshing];
+            [selfWeak.totalTab.footer endRefreshing];
+        });
+    }
 }
 /**
  *  刷新数据
@@ -141,7 +166,6 @@
         [tableModel setDataArray:toDataArray];
         [table reloadData];
     });
-    
     
     [self chickEmptyViewShow:toDataArray withCode:code];
 }
@@ -217,9 +241,7 @@
 -(void)dealloc{
     
     DLog(@"释放");
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_DAY__VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_MON__VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+    
     
 }
 

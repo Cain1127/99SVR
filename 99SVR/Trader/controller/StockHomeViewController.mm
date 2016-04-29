@@ -191,51 +191,51 @@
     
     Loading_Bird_Hide
     
-    NSString *code = [NSString stringWithFormat:@"%@",fromDataDic[@"code"]];
-    
-    if ([code isEqualToString:@"1"]) {//请求成功
-        
-        if (self.refreshState == MJRefreshState_Header) {//头部刷新需要清空数据
-            [toDataArray removeAllObjects];
-        }
-        
-        
-        NSArray *fromDataArray = fromDataDic[@"data"];
-        
-        if ([fromDataArray  count]==0) {
-            [table.footer noticeNoMoreData];
-            [UIView animateWithDuration:1 animations:^{
-                table.footer.hidden = YES;
-            }];
-        }else{
-            table.footer.hidden = NO;
-            [table.footer resetNoMoreData];
-        }
-        
-        [table.gifHeader endRefreshing];
-        [table.footer endRefreshing];
-        
-        for (int i=0; i!=[fromDataArray  count]; i++) {
-            [toDataArray addObject:fromDataArray[i]];
-        }
-        
-        
-        
-    }else{//请求失败
-        
-        table.footer.hidden = YES;
-        [table.gifHeader endRefreshing];
-        [table.footer endRefreshing];
-        
-    }
-    
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSString *code = [NSString stringWithFormat:@"%@",fromDataDic[@"code"]];
+        if ([code isEqualToString:@"1"]) {//请求成功
+            
+            if (self.refreshState == MJRefreshState_Header) {//头部刷新需要清空数据
+                [toDataArray removeAllObjects];
+            }
+            
+            
+            NSArray *fromDataArray = fromDataDic[@"data"];
+            
+            if ([fromDataArray  count]==0) {
+                [table.footer noticeNoMoreData];
+                [UIView animateWithDuration:1 animations:^{
+                    table.footer.hidden = YES;
+                }];
+            }else{
+                table.footer.hidden = NO;
+                [table.footer resetNoMoreData];
+            }
+            
+            [table.gifHeader endRefreshing];
+            [table.footer endRefreshing];
+            
+            for (int i=0; i!=[fromDataArray  count]; i++) {
+                [toDataArray addObject:fromDataArray[i]];
+            }
+            
+            
+            
+        }else{//请求失败
+            
+            table.footer.hidden = YES;
+            [table.gifHeader endRefreshing];
+            [table.footer endRefreshing];
+            
+        }
+        
         [tableModel setDataArray:toDataArray];
         [table reloadData];
+        [self chickEmptyViewShow:toDataArray withCode:code];
     });
 
 
-    [self chickEmptyViewShow:toDataArray withCode:code];
 }
 
 

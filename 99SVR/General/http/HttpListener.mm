@@ -108,7 +108,7 @@ void ReplyListener::onResponse(vector<Reply>& infos){
 
 void ReplyListener::OnError(int errCode)
 {
-    NSDictionary *dict = @{@"code":@(1)};
+    NSDictionary *dict = @{@"code":@(errCode)};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_REQUEST_REPLY_VC object:dict];
 }
 /**
@@ -120,7 +120,6 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
     reply.replytid = info.replytid();
     reply.viewpointid = info.viewpointid();
     reply.parentreplyid = info.parentreplyid();
-    
     reply.authorid = [NSString stringWithUTF8String:info.authorid().c_str()];
     reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
     reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];
@@ -223,8 +222,10 @@ void OperateStockAllDetailListener::OnError(int errCode)
  */
 void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks, uint32 currLevelId, uint32 minVipLevel){
     
-    //判断是否显示记录
+    //判断是否显示记录 
     BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
+    
+    DLog(@"currLevelId=%d   minVipLevel=%d",currLevelId,minVipLevel);
     
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
@@ -383,6 +384,21 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
         TQPurchaseModel *headerModel =[[TQPurchaseModel alloc] initWithPrivateServiceLevelData:profit];
         [muArray addObject:headerModel];
     }
+    
+    NSString *vipValue = @"0";
+    /**
+     *  判断是不是vip 只要有购买过vip 就是vip。根据 model里面的isopen来判断
+     */
+    for (TQPurchaseModel *model in muArray) {
+        if ([model.isopen isEqualToString:@"1"]) {
+            vipValue = @"1";
+            break;
+        }
+    }
+    for (TQPurchaseModel *model in muArray) {
+        model.vipValue = vipValue;
+    }
+    
     if (infos.size()>=1) {
         muDic[@"headerModel"] = muArray[0];
     }

@@ -86,12 +86,8 @@
     [_giftBtn setTitle:NSStringFromInt(ideaModel.giftcount) forState:UIControlStateNormal];
     CGRect rect = [NSStringFromInt(ideaModel.giftcount) boundingRectWithSize:CGSizeMake(kScreenWidth-20,50) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
     _giftBtn.frame = Rect(kScreenWidth-rect.size.width-25,8,rect.size.width+20,20);
-//    
     CGRect commentFrame = [NSStringFromInt(ideaModel.replycount) boundingRectWithSize:CGSizeMake(kScreenWidth-20,50) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
     _commentBtn.frame = Rect(kScreenWidth-_giftBtn.width-commentFrame.size.width-30,8,commentFrame.size.width+20,20);
-    
-    
-    
     [_iconView sd_setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/pic/item/e1fe9925bc315c6001e93f3388b1cb13485477e9.jpg"]];
 }
 

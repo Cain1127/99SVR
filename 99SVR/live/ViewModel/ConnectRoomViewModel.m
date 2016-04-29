@@ -32,6 +32,7 @@
 
 - (void)joinRoomErr:(NSNotification *)notify{
     [DecodeJson cancelPerfor:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     if ([notify.object isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dict = [notify object];
         int errid = [[dict objectForKey:@"err"] intValue];
@@ -66,7 +67,6 @@
 - (void)joinRoomTimeOut
 {
     [DecodeJson cancelPerfor:self];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     @WeakObj(_control)
     dispatch_async(dispatch_get_main_queue(), ^{
         [_controlWeak.view hideToastActivity];

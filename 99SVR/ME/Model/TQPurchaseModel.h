@@ -24,9 +24,10 @@
 @property (nonatomic , copy) NSString *buyprice;
 /**updateprice 更新的价格*/
 @property (nonatomic , copy) NSString *updateprice;
-/**isopen 0表示没有购买vip 1表示已购买*/
+/**isopen 0 对应的等级 表示没有购买vip 1表示已购买*/
 @property (nonatomic , copy) NSString *isopen;
-
+/**是否是vip 只要是有购买过就是vip*/
+@property (nonatomic , copy) NSString *vipValue;
 /**实际要购买的vip的价格*/
 @property (nonatomic , copy) NSString *actualPrice;
 

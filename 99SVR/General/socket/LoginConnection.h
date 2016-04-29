@@ -31,6 +31,7 @@ private:
 
 
 	void dispatch_push_message(void* body);
+	void dispatch_error_message(void* body);
 
 
 protected:

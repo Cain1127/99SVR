@@ -114,4 +114,12 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     }
 }
 
+- (void)requestBuyPrivateVip:(int)teacherId vipType:(int)vip
+{
+    if (protocol) {
+        protocol->buyPrivateVip(teacherId,vip);
+    }
+}
+
+
 @end

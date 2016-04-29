@@ -12,8 +12,9 @@
 #import "Masonry.h"
 #import "TableViewFactory.h"
 #import "MJRefresh.h"
+#import "TQMessageTableViewCell.h"
 
-@interface TQMessageViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface TQMessageViewController ()<UITableViewDataSource,UITableViewDelegate,TQMessageDelegate>
 {
     NSCache *cellCache;
 }
@@ -34,17 +35,14 @@ static NSString *const messageCell = @"messageCell";
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64) withStyle:UITableViewStylePlain];
     [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self.view addSubview:_tableView];
-//    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQMessageCell class]) bundle:nil] forCellReuseIdentifier:messageCell];
     _tableView.dataSource = self;
     _tableView.delegate = self;
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    // 估算高度
+     // 估算高度
     self.tableView.estimatedRowHeight = 44;
-    
 
-    [self addTableHeaderView];
-
+    //[self addTableHeaderView];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -113,52 +111,7 @@ static NSString *const messageCell = @"messageCell";
         make.left.equalTo(headerview.mas_left).offset(20);
         make.top.equalTo(contentLabel.mas_bottom).offset(10);
         make.right.equalTo(headerview.mas_right).offset(-20);
-        
     }];
-
-//    UIView *headerview = [[UIView alloc] init];
-//    headerview.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 150);
-//    self.tableView.tableHeaderView = headerview;
-//    /*添加子控件*/
-//    UILabel *titileLabel = [[UILabel alloc] init];
-//    titileLabel.text = @"尊敬的用户:";
-//    titileLabel.textColor = [UIColor colorWithHex:@"#262626"];
-//    titileLabel.font = [UIFont fontWithName:@"Helvetica-BoldOblique" size:20];
-//    
-//    
-//    UILabel *contentLabel = [[UILabel alloc] init];
-//    contentLabel.font = [UIFont systemFontOfSize:15];
-//    contentLabel.numberOfLines = 0;
-//    contentLabel.text = @"恭喜您开通“一夜岛”的VIP6，服务周期为2016.1.1至2017.1.1。您可以享受以下服务:";
-//    contentLabel.textColor = [UIColor colorWithHex:@"#878787"];
-//
-//    UILabel *vipLabel = [[UILabel alloc] init];
-//    vipLabel.font = [UIFont systemFontOfSize:15];
-//    vipLabel.text = @"VIP6：一对一私人定制";
-//    vipLabel.textColor = [UIColor colorWithHex:@"#878787"];
-//
-//    [headerview addSubview:titileLabel];
-//    [headerview addSubview:contentLabel];
-//    [headerview addSubview:vipLabel];
-//    
-//    //添加头部子控件布局
-//    [titileLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(headerview.mas_left).offset(20);
-//        make.top.equalTo(headerview.mas_top).offset(20);
-//        make.right.equalTo(headerview.mas_right).offset(-20);
-//    }];
-//    [contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(headerview.mas_left).offset(20);
-//        make.top.equalTo(titileLabel.mas_bottom).offset(10);
-//        make.right.equalTo(headerview.mas_right).offset(-20);
-//        
-//    }];
-//    [vipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(headerview.mas_left).offset(20);
-//        make.top.equalTo(contentLabel.mas_bottom).offset(10);
-//        make.right.equalTo(headerview.mas_right).offset(-20);
-//        
-//    }];
 }
 -(void)setUpheaderchildView {
     
@@ -180,20 +133,21 @@ static NSString *const messageCell = @"messageCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-//    TQMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:messageCell];
-//    cell.messageModel = self.aryModel[indexPath.row];
-////    [cell.openBtn addTarget:self action:@selector(openCellReloadata:) forControlEvents:<#(UIControlEvents)#>]
-//    return cell;
-//}
     NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
     TQMessageCell *cell = [cellCache objectForKey:strKey];
     if (!cell) {
         [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQMessageCell class]) bundle:nil] forCellReuseIdentifier:messageCell];
-//        TQMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:messageCell];
         cell = [tableView dequeueReusableCellWithIdentifier:messageCell];
         [cellCache setObject:cell forKey:strKey];
     }
-    cell.messageModel = _aryMessage[indexPath.section];
+    if(_aryMessage.count>indexPath.section)
+    {
+        cell.section = indexPath.section;
+        cell.messageModel = _aryMessage[indexPath.section];
+        cell.delegate = self;
+    }
+//    TQMessageTableViewCell *cell = [TQMessageTableViewCell cellWithTableView:tableView];
+//    cell.messageModel = _aryMessage[indexPath.section];
     return cell;
 }
 
@@ -202,7 +156,6 @@ static NSString *const messageCell = @"messageCell";
     NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
     TQMessageCell *cell = [cellCache objectForKey:strKey];
     return [cell requiredRowHeightInTableView];
-//    return 150;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -213,6 +166,13 @@ static NSString *const messageCell = @"messageCell";
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0.5;
+}
+
+- (void)clickCell:(TQMessageCell *)cell show:(BOOL)bAll
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:cell.section];
+    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 @end

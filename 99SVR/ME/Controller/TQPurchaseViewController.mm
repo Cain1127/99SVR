@@ -34,10 +34,14 @@
     self.dataArray = @[];
     self.automaticallyAdjustsScrollViewInsets = NO;
 
-    [self.view makeToastActivity];
     //注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_TQPURCHASE_VC object:nil];
+    //购买VIP
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buyVipData:) name:MESSAGE_BUY_PRIVATE_VIP_VC object:nil];
+
     [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
+    
+    DLog(@"讲师ID %d",[self.stockModel.teamid intValue]);
     
     self.view.backgroundColor = COLOR_Bg_Gay;
 }
@@ -113,8 +117,9 @@
                 
             }else{
                 
-                DLog(@"去购买");
-                
+                DLog(@"去购买或者升级VIP");
+                ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
+                [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[self.headerModel.levelid intValue]];
                 
             }
             
@@ -166,36 +171,33 @@
     NSString *code = [NSString stringWithFormat:@"%@",[notfi.object valueForKey:@"code"]];
     
     [self.view hideToastActivity];
-
     
-    if ([code isEqualToString:@"1"]) {//请求成功
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        DLog(@"请求成功");
-        
-        self.headerModel = [notfi.object valueForKey:@"headerModel"];
-        self.headerModel.teamName = self.stockModel.teamname;
-
-
-        dispatch_async(dispatch_get_main_queue(), ^{
+        if ([code isEqualToString:@"1"]) {//请求成功
+            
+            DLog(@"请求成功");
+            
+            self.headerModel = [notfi.object valueForKey:@"headerModel"];
+            self.headerModel.teamName = self.stockModel.teamname;
+            
             [self.headerView setHeaderViewWithModel:self.headerModel];
             self.tableView.tableHeaderView = self.headerView;
-            [self.tableView reloadData];
-        });
-
-        
-    }else{//请求失败
-    
-        
-        DLog(@"请求失败 %@",code);
-        
-    }
-    self.dataArray = [[notfi.object valueForKey:@"data"] copy];
-
-    
-    [self chickEmptyViewShow:self.dataArray withCode:code];
-
+            self.dataArray = [[notfi.object valueForKey:@"data"] copy];
+            
+            
+        }else{//请求失败
+            DLog(@"请求失败 %@",code);
+            self.dataArray = @[];
+        }
+        [self.tableView reloadData];
+        [self chickEmptyViewShow:self.dataArray withCode:code];
+    });
     
 }
+
+
 
 
 -(void)chickEmptyViewShow:(NSArray *)dataArray withCode:(NSString *)code{
@@ -225,9 +227,49 @@
             [self.tableView addSubview:self.emptyView];
         }
     }
-    
-    
-    
 }
+
+
+#pragma mark vip购买通知
+-(void)buyVipData:(NSNotification *)notfi{
+
+    
+    DLog(@"购买VIP成功");
+    
+    NSDictionary *dic = (NSDictionary *)notfi.object;
+    NSString *code = dic[@"code"];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        if ([code isEqualToString:@"1"]) {//
+            
+            DLog(@"兑换或者升级成功");
+            
+        }else{
+        
+            DLog(@"兑换或者升级失败");
+            
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    });
+}
+
+-(void)dealloc{
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_TQPURCHASE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_BUY_PRIVATE_VIP_VC object:nil];
+}
+
+
+
 
 @end

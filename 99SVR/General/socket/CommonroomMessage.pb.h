@@ -573,6 +573,52 @@ public:
 };
 
 
+class AfterJoinRoomReq
+{
+
+private:
+
+	uint32	_userid;
+	uint32	_vcbid;
+
+
+public:
+
+	 inline uint32 userid() { return _userid; } const 
+
+	 inline void set_userid(const uint32 value) { _userid = value; }
+
+	 inline uint32 vcbid() { return _vcbid; } const 
+
+	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDAfterJoinRoomReq); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDAfterJoinRoomReq* cmd = (protocol::tag_CMDAfterJoinRoomReq*) data;
+		cmd->userid = _userid;
+		cmd->vcbid = _vcbid;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDAfterJoinRoomReq* cmd = (protocol::tag_CMDAfterJoinRoomReq*) data;
+		_userid = cmd->userid;
+		_vcbid = cmd->vcbid;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: AfterJoinRoomReq---------");
+		LOG("userid = %d", _userid);
+		LOG("vcbid = %d", _vcbid);
+	}
+
+};
+
+
 class UserExitRoomInfo
 {
 
@@ -2725,12 +2771,12 @@ public:
 
 	void SerializeToArray(void* data, int size)
 	{
-//		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
+		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
 	}
 
 	void ParseFromArray(void* data, int size)
 	{
-//		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
+		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
 	}
 
 	void Log()

@@ -51,6 +51,9 @@
 /** 客户端 */
 @property(nonatomic,assign)int fromclient;
 
+/** 是否展开 */
+@property (nonatomic, assign) BOOL isAllText;
+@property(nonatomic,assign) NSUInteger autoId;
 
 
 - (id)initWithAnswer:(QuestionAnswer *)QuestionAnswer;

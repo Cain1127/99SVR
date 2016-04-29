@@ -4669,6 +4669,60 @@ public:
 
 
 
+class ErrCodeResp
+{
+
+private:
+
+	uint32	_errmaincmd;
+	uint32	_errsubcmd;
+	uint32	_errcode;
+
+
+public:
+
+	 inline uint32 errmaincmd() { return _errmaincmd; } const 
+	 inline void set_errmaincmd(const uint32 value) { _errmaincmd = value; }
+
+	 inline uint32 errsubcmd() { return _errsubcmd; } const 
+	 inline void set_errsubcmd(const uint32 value) { _errsubcmd = value; }
+
+	 inline uint32 errcode() { return _errcode; } const 
+	 inline void set_errcode(const uint32 value) { _errcode = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDErrCodeResp_t); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDErrCodeResp_t* cmd = (protocol::tag_CMDErrCodeResp_t*) data;
+		cmd->errmaincmd = _errmaincmd;
+		cmd->errsubcmd = _errsubcmd;
+		cmd->errcode = _errcode;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDErrCodeResp_t* cmd = (protocol::tag_CMDErrCodeResp_t*) data;
+		_errmaincmd = cmd->errmaincmd;
+		_errsubcmd = cmd->errsubcmd;
+		_errcode = cmd->errcode;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: ErrCodeResp---------");
+		LOG("errmaincmd = %d", _errmaincmd);
+		LOG("errsubcmd = %d", _errsubcmd);
+		LOG("errcode = %d", _errcode);
+	}
+
+};
+
+
+
+
+
 
 
 

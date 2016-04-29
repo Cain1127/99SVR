@@ -79,6 +79,7 @@ uint32	_fromclient;
 
     return self;
 }
+
 - (id)initWithRplay:(MailReply *)MailReply;
 {
     self = [super init];
@@ -112,15 +113,15 @@ uint32	_fromclient;
     int result = [DecodeJson compareDate:date];
     if (result == 1)
     {
-        _publishtime = [NSString stringWithFormat:@"今天 %02d:%02d",date.hour,date.minute];
+        _answertime = [NSString stringWithFormat:@"今天 %02d:%02d",date.hour,date.minute];
     }
     else if(result == 0)
     {
-        _publishtime = [NSString stringWithFormat:@"昨天 %02d:%02d",date.hour,date.minute];
+        _answertime = [NSString stringWithFormat:@"昨天 %02d:%02d",date.hour,date.minute];
     }
     else
     {
-        _publishtime = [NSString stringWithFormat:@"%04d年%02d月%02d日 %02d:%02d",date.year,date.month,date.day,date.hour,date.minute];
+        _answertime = [NSString stringWithFormat:@"%04d年%02d月%02d日 %02d:%02d",date.year,date.month,date.day,date.hour,date.minute];
     }
     
 }
