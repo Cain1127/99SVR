@@ -399,7 +399,7 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
         PrivateServiceLevelDescription *profit = &infos[i];
         TQPurchaseModel *headerModel =[[TQPurchaseModel alloc] initWithPrivateServiceLevelData:profit];
         
-        NSLog(@"%zi === 是否开通%@",i,headerModel.isopen);
+        DLog(@"%zi === 是否开通%@",i,headerModel.isopen);
         [muArray addObject:headerModel];
     }
     

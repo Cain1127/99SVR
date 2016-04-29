@@ -110,7 +110,7 @@
 #pragma mark 刷新交易记录数据
 -(void)refreshBusinessData:(NSNotification *)notfi{
 
-    [self refreshTableDataWithTable:self.businessTab WithTableViewModel:self.businessdTabModel fromDataArray:(NSArray *)notfi.object toDataArray:self.busTabArray withTabTag:1];
+    [self refreshTableDataWithTable:self.businessTab WithTableViewModel:self.businessdTabModel fromDataDic:(NSDictionary *)notfi.object toDataArray:self.busTabArray withTabTag:1];
 
 
 }
@@ -118,7 +118,7 @@
 #pragma mark 刷新持仓记录数据
 -(void)refreshWareHouseData:(NSNotification *)notfi{
     
-    [self refreshTableDataWithTable:self.houseTab WithTableViewModel:self.houseTabModel fromDataArray:(NSArray *)notfi.object toDataArray:self.houseTabArray withTabTag:2];
+    [self refreshTableDataWithTable:self.houseTab WithTableViewModel:self.houseTabModel fromDataDic:(NSDictionary *)notfi.object toDataArray:self.houseTabArray withTabTag:2];
 }
 
 /**
@@ -130,29 +130,36 @@
  *  @param toDataArray   实际的数据
  *  @param tag           tableView的tag
  */
--(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockRecordTabModel *)tableModel fromDataArray:(NSArray *)fromDataArray toDataArray:(NSMutableArray *)toDataArray withTabTag:(NSInteger )tag{
+-(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockRecordTabModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray withTabTag:(NSInteger )tag{
     
-    if ([fromDataArray  count]==0) {
-        [table.footer noticeNoMoreData];
-        [UIView animateWithDuration:1 animations:^{
-            table.footer.hidden = YES;
-        }];
-    }else{
-        table.footer.hidden = NO;
-        [table.footer resetNoMoreData];
-    }
     
-    [table.gifHeader endRefreshing];
-    [table.footer endRefreshing];
     
-    for (int i=0; i!=[fromDataArray  count]; i++) {
-        [toDataArray addObject:fromDataArray[i]];
-    }
-    [tableModel setDataArray:toDataArray WithRecordTableTag:tag];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [table reloadData];
-    });
+    
+    
+    
+    
+//    if ([fromDataArray  count]==0) {
+//        [table.footer noticeNoMoreData];
+//        [UIView animateWithDuration:1 animations:^{
+//            table.footer.hidden = YES;
+//        }];
+//    }else{
+//        table.footer.hidden = NO;
+//        [table.footer resetNoMoreData];
+//    }
+//    
+//    [table.gifHeader endRefreshing];
+//    [table.footer endRefreshing];
+//    
+//    for (int i=0; i!=[fromDataArray  count]; i++) {
+//        [toDataArray addObject:fromDataArray[i]];
+//    }
+//    [tableModel setDataArray:toDataArray WithRecordTableTag:tag];
+//    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [table reloadData];
+//    });
 }
 
 
