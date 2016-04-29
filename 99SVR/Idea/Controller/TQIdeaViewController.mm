@@ -48,13 +48,12 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self setTitleText:@"专家观点"];
     viewCache = [[NSCache alloc] init];
     [viewCache setTotalCostLimit:10];
+    
     [self setIdeaTableView];
-    [self.navigationController.navigationBar setHidden:YES];
     
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
-    
     
     _nCurrent = 0;
 }
@@ -67,7 +66,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     {
         [self.tableView.gifHeader beginRefreshing];
     }
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -170,61 +168,12 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     _tableView.dataSource = _dataSource;
     _tableView.delegate = _dataSource;
     // cell自动计算高度
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 44;
+//    self.tableView.rowHeight = UITableViewAutomaticDimension;
+//    self.tableView.estimatedRowHeight = 44;
 
 }
 
 #pragma mark - TableView dataSource
-/*
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 9;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0.5;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _aryModel.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *viewPointCellName = @"TQIdeaTableViewIdentifier";
-    NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
-    TQIdeaTableViewCell *cell = [viewCache objectForKey:strKey];
-    if (!cell) {
-        cell = [[TQIdeaTableViewCell alloc] initWithReuseIdentifier:viewPointCellName];
-        [viewCache setObject:cell forKey:viewCache];
-    }
-    if (_aryModel.count>indexPath.row) {
-        [cell setIdeaModel:[_aryModel objectAtIndex:indexPath.row]];
-    }
-    return cell;
-}
-#pragma mark - TableViewDelegete
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (_aryModel.count>indexPath.row) {
-        TQIdeaModel *model = _aryModel[indexPath.row];
-        TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
-        [self.navigationController pushViewController:detaileVc animated:YES];
-    }
-    
-}
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 130;
-}
-*/
 
 - (void)selectIdea:(TQIdeaModel *)model
 {
