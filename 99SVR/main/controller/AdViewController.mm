@@ -48,8 +48,9 @@
     SplashModel *splash = [SplashTool get];
     NSString *str = splash.imageUrl;
     UIImageView *ad = [[UIImageView alloc] init];
-    ad.contentMode = UIViewContentModeScaleAspectFit;
-    ad.frame = CGRectMake(0, 100, kScreenWidth, kScreenHeight * 0.80-100);
+    ad.contentMode = UIViewContentModeScaleAspectFill;
+    ad.clipsToBounds = YES;
+    ad.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.80);
     [ad sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"start-mascot"]];
     [self.view addSubview:ad];
     
@@ -73,7 +74,7 @@
 /**
  *  广告倒计时
  */
-NSUInteger secondsCountDown = 3;//60秒倒计时
+NSUInteger secondsCountDown = 13;//60秒倒计时
 - (void)timerCountDown
 {
     secondsCountDown--;

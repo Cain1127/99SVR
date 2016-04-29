@@ -2354,8 +2354,8 @@ void parse_splashimage(char* json, HttpListener* listener)
                     info.set_imageurl(out);
                     info.set_text(data["text"].asString());
                     info.set_url(data["url"].asString());
-                    info.set_startime(data["starTime"].asInt64());
-                    info.set_endtime(data["endTime"].asInt64());
+                    info.set_startime(atoll(data["starTime"].asString().c_str()));
+                    info.set_endtime(atoll(data["endTime"].asString().c_str()));
                     
                     splash_listener->onResponse(info);
                 }
