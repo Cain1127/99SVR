@@ -226,8 +226,10 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     //判断是否显示记录 
     BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
     
-    DLog(@"currLevelId=%d   minVipLevel=%d",currLevelId,minVipLevel);
-    
+    DLog(@"---------------------------------------------------");
+    DLog(@"currLevelId=%d   minVipLevel=%d _teamid = %s",currLevelId,minVipLevel,profit.teamid().c_str());
+    DLog(@"---------------------------------------------------");
+
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
     
@@ -266,6 +268,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
             StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithStockDealWareHouseRecoreData:operateStocks];
             [stocksArray addObject:operateStocksModel];
         }
+        
     }else{
         StockDealModel *model = [[StockDealModel alloc]init];
         [stocksArray addObject:model];
@@ -274,6 +277,8 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     muDic[@"currLevelId"] = [NSString stringWithFormat:@"%d",currLevelId];
     muDic[@"minVipLevel"] = [NSString stringWithFormat:@"%d",minVipLevel];
     muDic[@"stocks"] = stocksArray;
+    
+    
     muDic[@"recalState"] = isShowRecal ? @"show" : @"hide";
     muDic[@"operateId"] = [NSString stringWithFormat:@"%d",profit.operateid()];
     //ID
@@ -293,10 +298,8 @@ void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>
         StockDealModel *model = [[StockDealModel alloc]initWithStockRecordBusinessData:operateStockTransaction];
         [muArray addObject:model];
     }
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:muArray];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_WAREHOUSE__VC object:muArray];
-    });
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:muArray];
 }
 
 void OperateStockTransactionListener::OnError(int errCode)
@@ -383,6 +386,8 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
     for (size_t i=0; i!=infos.size(); i++) {
         PrivateServiceLevelDescription *profit = &infos[i];
         TQPurchaseModel *headerModel =[[TQPurchaseModel alloc] initWithPrivateServiceLevelData:profit];
+        
+        NSLog(@"%zi === 是否开通%@",i,headerModel.isopen);
         [muArray addObject:headerModel];
     }
     

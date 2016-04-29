@@ -107,6 +107,7 @@
 {
     TQPurchaseModel *model = self.dataArray[row];
     
+    
     if ([UserInfo sharedUserInfo].goldCoin >= [model.actualPrice floatValue]) {//账户余额大于购买的余额
         
         [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"兑换" withMessage:@"是否确定兑换！" completionCallback:^(NSInteger index) {
@@ -117,9 +118,9 @@
                 
             }else{
                 
-                DLog(@"去购买或者升级VIP");
+                DLog(@"购买的vip等级%@   的战队ID = %@",model.levelid,self.stockModel.teamid);
                 ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
-                [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[self.headerModel.levelid intValue]];
+                [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[model.levelid intValue]];
                 
             }
             
@@ -245,19 +246,20 @@
             
             DLog(@"兑换或者升级成功");
             
+            
+            
+            if (self.handle) {
+                self.handle();//回调刷新上一界面的股票详情视图
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            
+            
         }else{
         
             DLog(@"兑换或者升级失败");
             
             
         }
-        
-        
-        
-        
-        
-        
-        
         
         
     });

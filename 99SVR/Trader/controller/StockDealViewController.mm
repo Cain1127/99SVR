@@ -11,7 +11,7 @@
 #import "ViewNullFactory.h"
 #import "Toast+UIView.h"
 
-@interface StockDealViewController ()
+@interface StockDealViewController ()<StockDealTableModelDelegate>
 @property (nonatomic , strong) UITableView *tableView;
 @property (nonatomic , strong) StockDealHeaderView *headerView;
 @property (nonatomic , strong) StockDealTableModel *tableViewModel;
@@ -73,8 +73,7 @@
     
     if ([code isEqualToString:@"1"]) {//请求成功
         
-
-        
+        [self.tableViewDataArray removeAllObjects];
         //    //拿到头部视图的数据
         self.headerModel = dic[@"headerModel"];
         //    //拿到股票视图的数据
@@ -97,10 +96,7 @@
         
         
     }
-    
-    
     [self chickEmptyViewShow:self.tableViewDataArray withCode:code];
-
     
 }
 
@@ -152,6 +148,7 @@
         _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} style:UITableViewStyleGrouped];
         self.tableViewModel = [[StockDealTableModel alloc]init];
         self.tableViewModel.viewController = self;
+        self.tableViewModel.delegate = self;
         _tableView.delegate = self.tableViewModel;
         _tableView.dataSource = self.tableViewModel;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -185,6 +182,15 @@
 
     DLog(@"释放");
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_DEAL_VC object:nil];
+}
+
+
+#pragma mark StockDealTableModelDelegate
+-(void)stockDealTableModelRefreshData{
+    
+    //再次刷新
+    [self.view makeToastActivity];
+    [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
 }
 
 

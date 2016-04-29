@@ -26,6 +26,10 @@
 /**仓库记录的数据*/
 @property (nonatomic , strong) NSMutableArray *houseTabArray;
 
+
+/**下拉刷新需要清空数据！上啦不需要*/
+@property (nonatomic , assign) __block MJRefreshState refreshState;
+
 @end
 
 @implementation StockRecordViewController
