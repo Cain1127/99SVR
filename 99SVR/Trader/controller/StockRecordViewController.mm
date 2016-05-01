@@ -12,6 +12,7 @@
 #import "StockRecordTabModel.h"
 #import "StockDealModel.h"
 #import "MJRefresh.h"
+#import "UIViewController+EmpetViewTips.h"
 
 @interface StockRecordViewController ()
 @property (nonatomic , strong) SliderMenuView *sliderMenuView;
@@ -25,10 +26,9 @@
 @property (nonatomic , strong) NSMutableArray *busTabArray;
 /**仓库记录的数据*/
 @property (nonatomic , strong) NSMutableArray *houseTabArray;
-
-
 /**下拉刷新需要清空数据！上啦不需要*/
 @property (nonatomic , assign) __block MJRefreshState refreshState;
+@property (nonatomic , assign) __block NSInteger tabViewTag;
 
 @end
 
@@ -50,12 +50,7 @@
     
     WeakSelf(self);
     self.sliderMenuView.DidSelectSliderIndex = ^(NSInteger index){
-        if (index==1) {
-            
-            [weakSelf.businessdTabModel setDataArray:weakSelf.busTabArray WithRecordTableTag:index];
-        }else{
-            [weakSelf.houseTabModel setDataArray:weakSelf.houseTabArray WithRecordTableTag:index];
-        }
+        weakSelf.tabViewTag = index;
     };
 }
 
@@ -92,8 +87,6 @@
     //持仓详情请求
     [kHTTPSingle RequestOperateStocks:(int)weakSelf.operateId];
     
-    
-    
     [self.businessTab.gifHeader loadDefaultImg];
     [self.businessTab.gifHeader beginRefreshing];
 }
@@ -124,7 +117,8 @@
     
     /**显示鸟的加载图*/
     Loading_Bird_Hide
-
+    
+    WeakSelf(self);
     
     NSString *code = fromDataDic[@"code"];
     NSArray *fromDataArray = fromDataDic[@"data"];
@@ -150,9 +144,7 @@
                 [table.footer resetNoMoreData];
             }
         }else{//数据加载失败
-        
-            DLog(@"数据加载失败 %@",code);
-        
+            
         }
         
         for (int i=0; i!=[fromDataArray  count]; i++) {
@@ -163,7 +155,40 @@
         [table.footer endRefreshing];
 
         [tableModel setDataArray:toDataArray WithRecordTableTag:tag];
+        
+        
+        if (toDataArray.count==0&&[code intValue]!=1) {
+            
+            [self showErrorViewInView:table withMsg:[NSString stringWithFormat:@"网络加载错误代码%@",code] touchHanleBlock:^{
+                Loading_Bird_Show
+                if (weakSelf.tabViewTag==1) {//交易记录
+                    [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
 
+                }else{//持仓详情
+                    [kHTTPSingle RequestOperateStocks:(int)weakSelf.operateId];
+                }
+                
+            }];
+        }else if (toDataArray.count==0&&[code intValue]==1){
+        
+            [self showEmptyViewInView:table withMsg:[NSString stringWithFormat:@"空数据%@",code] touchHanleBlock:^{
+                
+                Loading_Bird_Show
+                
+                if (weakSelf.tabViewTag==1) {//交易记录
+                    [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
+
+                }else{//持仓详情
+                    
+                    [kHTTPSingle RequestOperateStocks:(int)weakSelf.operateId];
+                }
+
+            }];
+        }else{
+            [self hideEmptyViewInView:table];
+        }
+        
+        
         [table reloadData];
         
     });

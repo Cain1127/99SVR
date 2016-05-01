@@ -189,6 +189,13 @@
     [super didReceiveMemoryWarning];
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [super viewWillDisappear:animated];
+    
+    Loading_Bird_Hide
+}
+
 -(void)dealloc{
 
     DLog(@"释放");

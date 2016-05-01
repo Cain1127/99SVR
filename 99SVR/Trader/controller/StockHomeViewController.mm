@@ -355,16 +355,16 @@
         if (dataArray.count ==0) {//不存在数据时候
             
             if (dataArray == self.dayDataArray) {
-                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:RequestState_EmptyStr(@"日收益")];
+                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"text_blank_page"] msg:RequestState_EmptyStr(@"日收益")];
                 [self.dayTab addSubview:self.dayEmptyView];
                 
             }else if (dataArray == self.monDataArray){
                 
-                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:RequestState_EmptyStr(@"月收益")];
+                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"text_blank_page"] msg:RequestState_EmptyStr(@"月收益")];
                 [self.monTab addSubview:self.monEmptyView];
                 
             }else{
-                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:RequestState_EmptyStr(@"总收益")];
+                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"text_blank_page"] msg:RequestState_EmptyStr(@"总收益")];
                 [self.totalTab addSubview:self.totalEmptyView];
             }
         }else{//存在数据
