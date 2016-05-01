@@ -241,7 +241,7 @@ typedef enum
  * 在白名单里的应用调用该接口后，即打开sdk内置webview的二级白名单开关（相对与sdk后台的白名单），
  * 那么在sdk后台白名单校验请求失败的情况下，会继续先尝试采用内置webview进行分享。
  */
-- (void)openSDKWebViewQQShareEnable;
+- (void)openSDKWebViewShareEnable;
 
 
 /**

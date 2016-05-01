@@ -50,12 +50,15 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 
 - (void)loadRplayView:(NSNotification *)notify
 {
-    NSArray *aryModel = notify.object;
-    _aryModel = aryModel;
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.tableView reloadData];
-    });
+    NSDictionary *dict = notify.object;
+    if ([dict[@"code"] intValue]==1) {
+        NSArray *aryModel = dict[@"data"];
+        _aryModel = aryModel;
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+        });
+    }
 }
 
 #pragma mark - Table view data source
@@ -116,6 +119,11 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 {
     XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithCustomId:personalModel.ID];
     [self.navigationController pushViewController:detailView animated:YES];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

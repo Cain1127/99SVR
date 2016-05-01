@@ -24,7 +24,7 @@
 #import "WeiboSDK.h"
 #import "LoginViewController.h"
 
-@interface LoginViewController ()<UITextFieldDelegate,TencentLoginDelegate,TencentSessionDelegate>
+@interface LoginViewController ()<UITextFieldDelegate,TencentSessionDelegate>
 {
     UIView  *headView;
     BOOL _bLogin;

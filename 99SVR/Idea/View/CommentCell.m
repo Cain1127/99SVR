@@ -23,6 +23,7 @@
     //    [_lblTitle setFont:XCFONT(17)];
     
     _textView = [DTAttributedTextContentView new];
+    _textView.edgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     [self.contentView addSubview:_textView];
     
     _lblTime = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-120,17, 115, 20)];
@@ -56,7 +57,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    _textView.frame = Rect(56,10,kScreenWidth-80,self.contentView.height-34);
+    _textView.frame = Rect(56,17,kScreenWidth-80,self.contentView.height-34);
     _lblLine.frame = Rect(8, self.contentView.height-1, kScreenWidth-16, 0.5);
 }
 

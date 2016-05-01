@@ -74,7 +74,7 @@
     {
         [_btnPar addSubview:btnTenc];
     }
-    if ([TencentOAuth iphoneQZoneInstalled]) {
+    if ([TencentOAuth iphoneQQInstalled]) {
         [_btnPar addSubview:btnSpace];
     }
     if ([WeiboSDK isWeiboAppInstalled]) {

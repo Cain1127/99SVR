@@ -314,28 +314,59 @@
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
 {
     if ([[url absoluteString] rangeOfString:@"svrAlipay"].location != NSNotFound) {
-        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic)
+        {
             NSLog(@"result = %@",resultDic);
         }];
         return YES;
     }
-    return [TencentOAuth HandleOpenURL:url] ||
-    [WeiboSDK handleOpenURL:url delegate:self] ||
-    [WXApi handleOpenURL:url delegate:self];
+    if([url.absoluteString rangeOfString:@"tencent"].location !=NSNotFound)
+    {
+        return [TencentOAuth HandleOpenURL:url];
+    }
+    else if([url.absoluteString rangeOfString:@"wx"].location != NSNotFound)
+    {
+        [WXApi handleOpenURL:url delegate:self];
+    }
+    else if([url.absoluteString rangeOfString:@"weibo"].location != NSNotFound)
+    {
+        [WeiboSDK handleOpenURL:url delegate:self] ;
+    }
+    return YES;
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    return [TencentOAuth HandleOpenURL:url] ||
-    [WeiboSDK handleOpenURL:url delegate:self] ||
-    [WXApi handleOpenURL:url delegate:self];
+    if([url.absoluteString rangeOfString:@"tencent"].location !=NSNotFound)
+    {
+        return [TencentOAuth HandleOpenURL:url];
+    }
+    else if([url.absoluteString rangeOfString:@"wx"].location != NSNotFound)
+    {
+        [WXApi handleOpenURL:url delegate:self];
+    }
+    else if([url.absoluteString rangeOfString:@"weibo"].location != NSNotFound)
+    {
+        [WeiboSDK handleOpenURL:url delegate:self] ;
+    }
+    return YES;
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
-    return [TencentOAuth HandleOpenURL:url] ||
-    [WeiboSDK handleOpenURL:url delegate:self] ||
-    [WXApi handleOpenURL:url delegate:self];;
+    if([url.absoluteString rangeOfString:@"tencent"].location !=NSNotFound)
+    {
+        return [TencentOAuth HandleOpenURL:url];
+    }
+    else if([url.absoluteString rangeOfString:@"wx"].location != NSNotFound)
+    {
+        [WXApi handleOpenURL:url delegate:self];
+    }
+    else if([url.absoluteString rangeOfString:@"weibo"].location != NSNotFound)
+    {
+        [WeiboSDK handleOpenURL:url delegate:self] ;
+    }
+    return YES;
 }
 
 -(void)didReceiveWeiboRequest:(WBBaseRequest *)request
@@ -390,17 +421,20 @@
                 break;
         }
     } else{//微信授权登录回调
-        SendAuthResp *aresp = (SendAuthResp *)resp;
-        if (aresp.errCode== 0) {
-            NSString *code = aresp.code;
-            NSDictionary *dic = @{@"code":code};
-            DLog(@"dic:%@",dic);
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_WEICHAT_VC object:dic];
-        }
-        else
+        if([resp isKindOfClass:[SendAuthResp class]])
         {
-            NSDictionary *dict = @{@"errcode":@"取消"};
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_WEICHAT_VC object:dict];
+            SendAuthResp *aresp = (SendAuthResp *)resp;
+            if (aresp.errCode== 0) {
+                NSString *code = aresp.code;
+                NSDictionary *dic = @{@"code":code};
+                DLog(@"dic:%@",dic);
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_WEICHAT_VC object:dic];
+            }
+            else
+            {
+                NSDictionary *dict = @{@"errcode":@"取消"};
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_WEICHAT_VC object:dict];
+            }
         }
     }
 }

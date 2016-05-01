@@ -57,13 +57,6 @@
 {
     return 1;
 }
-//    self.title = @"信息";
-    /*死界面*/
-//    [self.tableView registerClass:[TQCustomizedCell class] forCellReuseIdentifier:CustomizedCell];
-//    [self.tableView registerClass:[TQMailboxCell class] forCellReuseIdentifier:MailboxCell];
-    
-//    [self.navigationController.navigationBar setHidden:NO];
-//    [self.navigationController.navigationBar setBarTintColor:[UIColor blueColor]];
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -84,7 +77,8 @@
 {
     static NSString *TQMailBoxTableViewIdentifier = @"TQMailBoxTableViewCell";
     UITableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:TQMailBoxTableViewIdentifier];
-    if (cell==nil) {
+    if (cell==nil)
+    {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TQMailBoxTableViewIdentifier];
     }
     LeftCellModel *model = [_aryModel objectAtIndex:indexPath.section];

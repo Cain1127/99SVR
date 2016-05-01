@@ -23,6 +23,4 @@
 @property (nonatomic,copy) NSArray *aryVIP;
 @property (nonatomic) NSInteger selectIndex;
 
-
-
 @end

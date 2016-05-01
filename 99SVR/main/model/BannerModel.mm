@@ -8,8 +8,19 @@
 
 #import "BannerModel.h"
 #import <objc/runtime.h>
+#include "HttpMessage.pb.h"
 
 @implementation BannerModel
+
+- (id)initWithData:(void *)pData
+{
+    self = [super init];
+    BannerItem *item = (BannerItem *)pData;
+    _url = [[NSString alloc] initWithUTF8String:item->croompic().c_str()];
+    _type = [[NSString alloc] initWithUTF8String:item->type().c_str()];
+    _webUrl = [[NSString alloc] initWithUTF8String:item->url().c_str()];
+    return self;
+}
 
 - (NSMutableArray*)getPropetName
 {

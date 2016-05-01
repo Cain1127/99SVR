@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include "HttpListener.h"
+#import "BannerModel.h"
 #import "RoomHttp.h"
 #import  "XPrivateService.h"
 #import "ZLReply.h"
@@ -69,6 +70,7 @@ void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
  *  请求观点详情
  */
 void ViewpointDetailListener::onResponse(ViewpointDetail& info, vector<ImageInfo>& images){
+    DLog(@"images:%ld",images.size());
     TQIdeaDetailModel *model = [[TQIdeaDetailModel alloc] initWithViewpointDetail:&info];
     NSDictionary *dict = @{@"code":@(1),@"model":model};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTDETAIL_VC object:dict];
@@ -629,12 +631,13 @@ void SystemMessageListener::onResponse(vector<SystemMessage>& info)
         TQMessageModel *model = [[TQMessageModel alloc] initWithSystemMessage:&info[i]];
         [ary addObject:model];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SYSTEMMESSAGE_VC object:ary];
+    NSDictionary *dict = @{@"code":@(1),@"data":ary};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SYSTEMMESSAGE_VC object:dict];
 }
 
 void SystemMessageListener::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_SYSTEMMESSAGE_VC object:@{@"code":@(errCode)}];
 }
 
 /**
@@ -648,12 +651,13 @@ void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info)
         TQAnswerModel *model = [[TQAnswerModel alloc] initWithAnswer:&info[i]];
         [ary addObject:model];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ANSWERREPLY_VC object:ary];
+    NSDictionary *dict = @{@"code":@(1),@"data":ary};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ANSWERREPLY_VC object:dict];
 }
 
 void QuestionAnswerListener::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ANSWERREPLY_VC object:@{@"code":@(errCode)}];
 }
 
 /**
@@ -667,12 +671,13 @@ void MailReplyListener::onResponse(vector<MailReply>& info)
         TQAnswerModel *model = [[TQAnswerModel alloc] initWithRplay:&info[i]];
         [ary addObject:model];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:ary];
+    NSDictionary *dict = @{@"code":@(1),@"data":ary};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:dict];
 }
 
 void MailReplyListener::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_MAILREPLY_VC object:@{@"code":@(errCode)}];
 }
 
 //信息请求私人定制
@@ -684,13 +689,14 @@ void PrivateServiceSummaryListener::onResponse(vector<PrivateServiceSummary>& in
         TQPersonalModel *model = [[TQPersonalModel alloc] initWithMyPrivateService:&info[i]];
         [ary addObject:model];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:ary];
+    NSDictionary *dict = @{@"code":@(1),@"data":ary};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:dict];
     
 }
 
 void PrivateServiceSummaryListener::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:@{@"code":@(errCode)}];
 }
 
 void UnreadListener::onResponse(Unread& info)
@@ -705,9 +711,14 @@ void UnreadListener::OnError(int errCode)
 
 void HomePageListener::onResponse(std::vector<BannerItem>& banner_data, std::vector<Team>& team_data, std::vector<ViewpointSummary>& viewpoint_data, std::vector<OperateStockProfit>& operate_data)
 {
-
-    NSMutableArray *videoRoom = [NSMutableArray array];
+    NSMutableArray *banner = [NSMutableArray array];
     int i;
+    for (i=0; i<banner_data.size(); i++) {
+        BannerModel *model = [[BannerModel alloc] initWithData:&banner_data[i]];
+        [banner addObject:model];
+    }
+    
+    NSMutableArray *videoRoom = [NSMutableArray array];
     for (i=0; i<team_data.size(); i++) {
         RoomHttp *room = [[RoomHttp alloc] initWithData:&team_data[i]];
         [videoRoom addObject:room];
@@ -735,8 +746,7 @@ void HomePageListener::onResponse(std::vector<BannerItem>& banner_data, std::vec
         
         [aryOperate addObject:operStock];
     }
-    NSDictionary *dict = @{@"code":@(1),@"video":videoRoom,@"viewpoint":aryViewPoint,@"operate":aryOperate};
-    DLog(@"dict:%@",dict);
+    NSDictionary *dict = @{@"code":@(1),@"video":videoRoom,@"viewpoint":aryViewPoint,@"operate":aryOperate,@"banner":banner};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HOME_BANNER_VC object:dict];
 }
 

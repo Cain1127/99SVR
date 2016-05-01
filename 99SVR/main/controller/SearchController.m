@@ -224,7 +224,13 @@
             _defaultView.hidden = YES;
             NSString *searchWords = [NSString stringWithFormat:@"teamname like '*%@*' or roomid like '*%@*'" , keywords, keywords];
             NSPredicate *pre = [NSPredicate predicateWithFormat:searchWords];
+            
             _aryResult = [_allDatas filteredArrayUsingPredicate:pre];
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+            for (RoomHttp *room in _aryResult) {
+                [dictionary setObject:room forKey:room.teamid];
+            }
+            _aryResult = [dictionary allValues];
             _historyTable.hidden = _aryResult.count ? YES : NO;
             [_searchResultsTable reloadData];
         }

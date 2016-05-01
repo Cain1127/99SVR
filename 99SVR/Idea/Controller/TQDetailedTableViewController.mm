@@ -306,7 +306,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *identifier = @"commentIdentifier";
-    
     if(_aryCommont.count==0)
     {
         [_tableView.footer setHidden:YES];
@@ -327,7 +326,6 @@
         ZLReply *reply = [_aryCommont objectAtIndex:indexPath.row];
         cell.textView.shouldDrawImages = YES;
         cell.textView.delegate = self;
-        
         cell.textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[reply.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
         [cell setReplyModel:reply];
     }

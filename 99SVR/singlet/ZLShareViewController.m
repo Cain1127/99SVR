@@ -8,15 +8,27 @@
 
 #import "ZLShareViewController.h"
 #import "ZLShareView.h"
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterfaceObject.h>
+#import <TencentOpenAPI/QQApiInterface.h>
 #import "WXApi.h"
-@interface ZLShareViewController ()<ShareDelegate>
+#import "WeiboSDK.h"
+
+@interface ZLShareViewController ()<ShareDelegate,TencentSessionDelegate>
 
 @property (nonatomic,strong) ZLShareView *shareView;
 @property (nonatomic,copy) NSString *strTitle;
 @property (nonatomic,copy) NSString *strUrl;
+@property (nonatomic,strong) TencentOAuth *tencentOAuth;
 @end
 
 @implementation ZLShareViewController
+
+
+- (void)responseDidReceived:(APIResponse*)response forMessage:(NSString *)message
+{
+    DLog(@"message:%@",message);
+}
 
 - (id)initWithTitle:(NSString*)title url:(NSString *)url
 {
@@ -24,7 +36,7 @@
     
     _strTitle = title;
     _strUrl = url;
-    
+    _tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1105199260" andDelegate:self];
     return self;
 }
 -(void)show
@@ -71,6 +83,55 @@
     [WXApi sendReq:sendReq];
 }
 
+- (void)shareQQChat
+{
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"bigest_logo@2x" ofType:@"png"];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    QQApiURLObject *urlObj = [[QQApiURLObject alloc] initWithURL:[NSURL URLWithString:_strUrl] title:@"99乐投" description:_strTitle previewImageData:data targetContentType:QQApiURLTargetTypeNews];
+    SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:urlObj];
+    //将内容分享到qq
+    [QQApiInterface sendReq:req];
+
+}
+
+- (void)shareFriend{
+    
+    WBAuthorizeRequest *authRequest = [WBAuthorizeRequest request];
+    authRequest.redirectURI =kRedirectURI;
+    authRequest.scope =@"all";
+    
+    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:[self messageToShare] authInfo:authRequest access_token:kSinaKey];
+    request.userInfo =@{@"ShareMessageFrom":@"ZLShareViewController",
+                        @"Other_Info_1": [NSNumber numberWithInt:123],
+                        @"Other_Info_2": @[@"obj1",@"obj2"],
+                        @"Other_Info_3":@{@"key1": @"obj1", @"key2": @"obj2"}};
+    [WeiboSDK sendRequest:request];
+}
+
+- (WBMessageObject *)messageToShare
+{
+    WBMessageObject *message = [WBMessageObject message];
+    WBWebpageObject *webpage = [WBWebpageObject object];
+    webpage.objectID = @"identifier1";
+    webpage.title = @"99乐投";
+    webpage.description = [NSString stringWithFormat:_strTitle, [[NSDate date] timeIntervalSince1970]];
+    webpage.thumbnailData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"bigest_logo@2x" ofType:@"png"]];
+    webpage.webpageUrl =_strUrl;
+    message.mediaObject = webpage;
+    return message;
+}
+
+- (void)shareQQZone
+{
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"bigest_logo@2x" ofType:@"png"];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    QQApiURLObject *urlObj = [[QQApiURLObject alloc] initWithURL:[NSURL URLWithString:_strUrl] title:@"99乐投" description:_strTitle previewImageData:data targetContentType:QQApiURLTargetTypeNews];
+    SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:urlObj];
+    //将内容分享到qq
+    [QQApiInterface SendReqToQZone:req];
+}
+
+
 - (void)shareIndex:(NSInteger)index
 {
     switch (index) {
@@ -83,12 +144,16 @@
             [self shareWeChat:1];
             break;
         case 3:
+            [self shareQQChat];
             break;
         case 4:
+            [self shareQQZone];
             break;
         case 5:
+            [self shareFriend];
             break;
         case 6:
+            [self shareFriend];
             break;
             
     }
