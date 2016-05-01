@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Util.h"
 #include "platform.h"
 #include "http_common.h"
@@ -18,7 +19,7 @@ std::string get_client_type()
 std::string get_user_id()
 {
 	return int2string(login_userid);
-	//return "1817954";
+	//return "1680008";
 }
 
 std::string get_user_password()

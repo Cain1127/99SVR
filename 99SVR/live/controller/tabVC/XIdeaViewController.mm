@@ -25,7 +25,7 @@
 
 #import "XIdeaDataSource.h"
 
-@interface XIdeaViewController ()<UITableViewDataSource,UITableViewDelegate,XIdeaDelegate>
+@interface XIdeaViewController ()<XIdeaDelegate>
 {
     UIView *noView;
     NSCache *viewCache;
@@ -173,16 +173,15 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 -(void)setIdeaTableView {
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth,self.view.height) withStyle:UITableViewStylePlain];
-    [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth,self.view.height) withStyle:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
     _dataSource = [[XIdeaDataSource alloc] init];
     _dataSource.delegate = self;
     _tableView.dataSource = _dataSource;
     _tableView.delegate = _dataSource;
     // cell自动计算高度
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 44;
+//    self.tableView.rowHeight = UITableViewAutomaticDimension;
+//    self.tableView.estimatedRowHeight = 44;
     
 }
 

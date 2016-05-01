@@ -24,6 +24,7 @@
 #import "TQIdeaModel.h"
 #import "ViewNullFactory.h"
 #import "UIImage+MultiFormat.h"
+#import "Toast+UIView.h"
 
 @interface TQIdeaViewController ()<XIdeaDelegate>
 {
@@ -44,8 +45,10 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)viewDidLoad{
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
-    self.view.backgroundColor = UIColorFromRGB(0xf8f8f8);
+    self.view.backgroundColor = UIColorFromRGB(0xffffff);
+    
     [self setTitleText:@"专家观点"];
+    
     viewCache = [[NSCache alloc] init];
     [viewCache setTotalCostLimit:10];
     
@@ -54,7 +57,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
-    
+    [self.view makeToastActivity_bird];
     _nCurrent = 0;
 }
 
@@ -75,6 +78,10 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 - (void)loadViewPoint:(NSNotification *)notify{
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+    });
     NSDictionary *dict = notify.object;
     if([[dict objectForKey:@"code"] intValue]==1)
     {
@@ -92,7 +99,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
             _dataSource.aryModel = aryIndex;
         }
     }
-    @WeakObj(self)
     if(_dataSource.aryModel.count==0)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -117,10 +123,11 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         }
         if (self.nCurrent != self.dataSource.aryModel.count && self.dataSource.aryModel.count!=0)
         {
-            [self.tableView.footer noticeNoMoreData];
-        }else
+            [self.tableView.footer setHidden:YES];
+        }
+        else
         {
-            [self.tableView.footer resetNoMoreData];
+            [self.tableView.footer setHidden:NO];
         }
         [self.tableView reloadData];
     });
@@ -145,6 +152,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 -(void)updateRefresh {
+    
     _nCurrent = 20;
     _dataSource.aryModel = nil;
     [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
@@ -160,9 +168,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 -(void)setIdeaTableView {
-    
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-108) withStyle:UITableViewStylePlain];
-    [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-108) withStyle:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
     _dataSource = [[XIdeaDataSource alloc] init];
     _dataSource.delegate = self;

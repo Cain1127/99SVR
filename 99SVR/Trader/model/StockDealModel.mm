@@ -17,8 +17,6 @@
     self = [super init];
     OperateStockProfit *profit = (OperateStockProfit *)pData;
     if (self) {
-        
-        _teamid = StrTransformCToUTF8(profit->teamid().c_str());
         _teamicon = StrTransformCToUTF8(profit->teamicon().c_str());
         _focus = StrTransformCToUTF8(profit->focus().c_str());
         _teamname = StrTransformCToUTF8(profit->teamname().c_str());
@@ -127,7 +125,6 @@
     
     if (self) {
         OperateStockProfit *profit = (OperateStockProfit *)pData;
-        _teamid = StrTransformCToUTF8(profit->teamid().c_str());
         _teamicon = StrTransformCToUTF8(profit->teamicon().c_str());
         _focus = StrTransformCToUTF8(profit->focus().c_str());
         _teamname = StrTransformCToUTF8(profit->teamname().c_str());

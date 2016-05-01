@@ -178,7 +178,8 @@ class ViewpointSummary
 
 private:
 
-	string	_authorid;
+	uint32	_authorid;
+	uint32	_roomid;
 	string	_authorname;
 	string	_authoricon;
 	uint32	_viewpointid;
@@ -191,9 +192,13 @@ private:
 
 public:
 
-	 inline string& authorid() { return _authorid; } const 
+	 inline uint32 authorid() { return _authorid; } const 
 
-	 inline void set_authorid(const string& value) { _authorid = value; }
+	 inline void set_authorid(const uint32 value) { _authorid = value; }
+
+	 inline uint32 roomid() { return _roomid; } const 
+
+	 inline void set_roomid(const uint32 value) { _roomid = value; }
 
 	 inline string& authorname() { return _authorname; } const 
 
@@ -233,7 +238,8 @@ public:
 	void SerializeToArray(void* data, int size)
 	{
 		protocol::tag_CMDViewpointSummary* cmd = (protocol::tag_CMDViewpointSummary*) data;
-		strcpy(cmd->authorId, _authorid.c_str());
+		cmd->authorId = _authorid;
+		cmd->roomId = _roomid;
 		strcpy(cmd->authorName, _authorname.c_str());
 		strcpy(cmd->authorIcon, _authoricon.c_str());
 		cmd->viewpointId = _viewpointid;
@@ -248,6 +254,7 @@ public:
 	{
 		protocol::tag_CMDViewpointSummary* cmd = (protocol::tag_CMDViewpointSummary*) data;
 		_authorid = cmd->authorId;
+		_roomid = cmd->roomId;
 		_authorname = cmd->authorName;
 		_authoricon = cmd->authorIcon;
 		_viewpointid = cmd->viewpointId;
@@ -261,7 +268,8 @@ public:
 	void Log()
 	{
 		LOG("--------Receive message: ViewpointSummary---------");
-		LOG("authorid = %s", _authorid.c_str());
+		LOG("authorid = %d", _authorid);
+		LOG("roomid = %d", _roomid);
 		LOG("authorname = %s", _authorname.c_str());
 		LOG("authoricon = %s", _authoricon.c_str());
 		LOG("viewpointid = %d", _viewpointid);
@@ -280,7 +288,8 @@ class ViewpointDetail
 
 private:
 
-	string	_authorid;
+	uint32	_authorid;
+	uint32	_roomid;
 	string	_authorname;
 	string	_authoricon;
 	uint32	_viewpointid;
@@ -289,13 +298,18 @@ private:
 	string	_content;
 	uint32	_replycount;
 	uint32	_giftcount;
+	string	_html5url;
 
 
 public:
 
-	 inline string& authorid() { return _authorid; } const 
+	 inline uint32 authorid() { return _authorid; } const 
 
-	 inline void set_authorid(const string& value) { _authorid = value; }
+	 inline void set_authorid(const uint32 value) { _authorid = value; }
+
+	 inline uint32 roomid() { return _roomid; } const 
+
+	 inline void set_roomid(const uint32 value) { _roomid = value; }
 
 	 inline string& authorname() { return _authorname; } const 
 
@@ -329,13 +343,18 @@ public:
 
 	 inline void set_giftcount(const uint32 value) { _giftcount = value; }
 
+	 inline string& html5url() { return _html5url; } const 
+
+	 inline void set_html5url(const string& value) { _html5url = value; }
+
 
 	int ByteSize() { return sizeof(protocol::tag_CMDViewpointDetail); }
 
 	void SerializeToArray(void* data, int size)
 	{
 		protocol::tag_CMDViewpointDetail* cmd = (protocol::tag_CMDViewpointDetail*) data;
-		strcpy(cmd->authorId, _authorid.c_str());
+		cmd->authorId = _authorid;
+		cmd->roomId = _roomid;
 		strcpy(cmd->authorName, _authorname.c_str());
 		strcpy(cmd->authorIcon, _authoricon.c_str());
 		cmd->viewpointId = _viewpointid;
@@ -344,12 +363,14 @@ public:
 		strcpy(cmd->content, _content.c_str());
 		cmd->replyCount = _replycount;
 		cmd->giftCount = _giftcount;
+		strcpy(cmd->html5url, _html5url.c_str());
 	}
 
 	void ParseFromArray(void* data, int size)
 	{
 		protocol::tag_CMDViewpointDetail* cmd = (protocol::tag_CMDViewpointDetail*) data;
 		_authorid = cmd->authorId;
+		_roomid = cmd->roomId;
 		_authorname = cmd->authorName;
 		_authoricon = cmd->authorIcon;
 		_viewpointid = cmd->viewpointId;
@@ -358,12 +379,14 @@ public:
 		_content = cmd->content;
 		_replycount = cmd->replyCount;
 		_giftcount = cmd->giftCount;
+		_html5url = cmd->html5url;
 	}
 
 	void Log()
 	{
 		LOG("--------Receive message: ViewpointDetail---------");
-		LOG("authorid = %s", _authorid.c_str());
+		LOG("authorid = %d", _authorid);
+		LOG("roomid = %d", _roomid);
 		LOG("authorname = %s", _authorname.c_str());
 		LOG("authoricon = %s", _authoricon.c_str());
 		LOG("viewpointid = %d", _viewpointid);
@@ -372,6 +395,7 @@ public:
 		LOG("content = %s", _content.c_str());
 		LOG("replycount = %d", _replycount);
 		LOG("giftcount = %d", _giftcount);
+		LOG("html5url = %s", _html5url.c_str());
 	}
 
 };
@@ -385,12 +409,14 @@ private:
 	uint32	_replytid;
 	uint32	_viewpointid;
 	uint32	_parentreplyid;
-	string	_authorid;
+	uint32	_authorid;
 	string	_authorname;
 	string	_authoricon;
-	string	_fromauthorid;
+	uint32	_authorrole;
+	uint32	_fromauthorid;
 	string	_fromauthorname;
 	string	_fromauthoricon;
+	uint32	_fromauthorrole;
 	string	_publishtime;
 	string	_content;
 
@@ -409,9 +435,9 @@ public:
 
 	 inline void set_parentreplyid(const uint32 value) { _parentreplyid = value; }
 
-	 inline string& authorid() { return _authorid; } const 
+	 inline uint32 authorid() { return _authorid; } const 
 
-	 inline void set_authorid(const string& value) { _authorid = value; }
+	 inline void set_authorid(const uint32 value) { _authorid = value; }
 
 	 inline string& authorname() { return _authorname; } const 
 
@@ -421,9 +447,13 @@ public:
 
 	 inline void set_authoricon(const string& value) { _authoricon = value; }
 
-	 inline string& fromauthorid() { return _fromauthorid; } const 
+	 inline uint32 authorrole() { return _authorrole; } const 
 
-	 inline void set_fromauthorid(const string& value) { _fromauthorid = value; }
+	 inline void set_authorrole(const uint32 value) { _authorrole = value; }
+
+	 inline uint32 fromauthorid() { return _fromauthorid; } const 
+
+	 inline void set_fromauthorid(const uint32 value) { _fromauthorid = value; }
 
 	 inline string& fromauthorname() { return _fromauthorname; } const 
 
@@ -432,6 +462,10 @@ public:
 	 inline string& fromauthoricon() { return _fromauthoricon; } const 
 
 	 inline void set_fromauthoricon(const string& value) { _fromauthoricon = value; }
+
+	 inline uint32 fromauthorrole() { return _fromauthorrole; } const 
+
+	 inline void set_fromauthorrole(const uint32 value) { _fromauthorrole = value; }
 
 	 inline string& publishtime() { return _publishtime; } const 
 
@@ -450,12 +484,14 @@ public:
 		cmd->replytId = _replytid;
 		cmd->viewpointId = _viewpointid;
 		cmd->parentReplyId = _parentreplyid;
-		strcpy(cmd->authorId, _authorid.c_str());
+		cmd->authorId = _authorid;
 		strcpy(cmd->authorName, _authorname.c_str());
 		strcpy(cmd->authorIcon, _authoricon.c_str());
-		strcpy(cmd->fromAuthorId, _fromauthorid.c_str());
+		cmd->authorRole = _authorrole;
+		cmd->fromAuthorId = _fromauthorid;
 		strcpy(cmd->fromAuthorName, _fromauthorname.c_str());
 		strcpy(cmd->fromAuthorIcon, _fromauthoricon.c_str());
+		cmd->fromAuthorRole = _fromauthorrole;
 		strcpy(cmd->publishTime, _publishtime.c_str());
 		strcpy(cmd->content, _content.c_str());
 	}
@@ -469,9 +505,11 @@ public:
 		_authorid = cmd->authorId;
 		_authorname = cmd->authorName;
 		_authoricon = cmd->authorIcon;
+		_authorrole = cmd->authorRole;
 		_fromauthorid = cmd->fromAuthorId;
 		_fromauthorname = cmd->fromAuthorName;
 		_fromauthoricon = cmd->fromAuthorIcon;
+		_fromauthorrole = cmd->fromAuthorRole;
 		_publishtime = cmd->publishTime;
 		_content = cmd->content;
 	}
@@ -482,12 +520,14 @@ public:
 		LOG("replytid = %d", _replytid);
 		LOG("viewpointid = %d", _viewpointid);
 		LOG("parentreplyid = %d", _parentreplyid);
-		LOG("authorid = %s", _authorid.c_str());
+		LOG("authorid = %d", _authorid);
 		LOG("authorname = %s", _authorname.c_str());
 		LOG("authoricon = %s", _authoricon.c_str());
-		LOG("fromauthorid = %s", _fromauthorid.c_str());
+		LOG("authorrole = %d", _authorrole);
+		LOG("fromauthorid = %d", _fromauthorid);
 		LOG("fromauthorname = %s", _fromauthorname.c_str());
 		LOG("fromauthoricon = %s", _fromauthoricon.c_str());
+		LOG("fromauthorrole = %d", _fromauthorrole);
 		LOG("publishtime = %s", _publishtime.c_str());
 		LOG("content = %s", _content.c_str());
 	}
@@ -501,7 +541,7 @@ class OperateStockProfit
 private:
 
 	uint32	_operateid;
-	string	_teamid;
+	uint32	_teamid;
 	string	_teamname;
 	string	_teamicon;
 	string	_focus;
@@ -518,9 +558,9 @@ public:
 
 	 inline void set_operateid(const uint32 value) { _operateid = value; }
 
-	 inline string& teamid() { return _teamid; } const 
+	 inline uint32 teamid() { return _teamid; } const 
 
-	 inline void set_teamid(const string& value) { _teamid = value; }
+	 inline void set_teamid(const uint32 value) { _teamid = value; }
 
 	 inline string& teamname() { return _teamname; } const 
 
@@ -561,7 +601,7 @@ public:
 	{
 		protocol::tag_CMDOperateStockProfit* cmd = (protocol::tag_CMDOperateStockProfit*) data;
 		cmd->operateId = _operateid;
-		strcpy(cmd->teamId, _teamid.c_str());
+		cmd->teamId = _teamid;
 		strcpy(cmd->teamName, _teamname.c_str());
 		strcpy(cmd->teamIcon, _teamicon.c_str());
 		strcpy(cmd->focus, _focus.c_str());
@@ -591,7 +631,7 @@ public:
 	{
 		LOG("--------Receive message: OperateStockProfit---------");
 		LOG("operateid = %d", _operateid);
-		LOG("teamid = %s", _teamid.c_str());
+		LOG("teamid = %d", _teamid);
 		LOG("teamname = %s", _teamname.c_str());
 		LOG("teamicon = %s", _teamicon.c_str());
 		LOG("focus = %s", _focus.c_str());
@@ -852,7 +892,7 @@ class MyPrivateService
 
 private:
 
-	string	_teamid;
+	uint32	_teamid;
 	string	_teamname;
 	string	_teamicon;
 	uint32	_levelid;
@@ -862,9 +902,9 @@ private:
 
 public:
 
-	 inline string& teamid() { return _teamid; } const 
+	 inline uint32 teamid() { return _teamid; } const 
 
-	 inline void set_teamid(const string& value) { _teamid = value; }
+	 inline void set_teamid(const uint32 value) { _teamid = value; }
 
 	 inline string& teamname() { return _teamname; } const 
 
@@ -892,7 +932,7 @@ public:
 	void SerializeToArray(void* data, int size)
 	{
 		protocol::tag_CMDMyPrivateService* cmd = (protocol::tag_CMDMyPrivateService*) data;
-		strcpy(cmd->teamId, _teamid.c_str());
+		cmd->teamId = _teamid;
 		strcpy(cmd->teamName, _teamname.c_str());
 		strcpy(cmd->teamIcon, _teamicon.c_str());
 		cmd->levelId = _levelid;
@@ -914,7 +954,7 @@ public:
 	void Log()
 	{
 		LOG("--------Receive message: MyPrivateService---------");
-		LOG("teamid = %s", _teamid.c_str());
+		LOG("teamid = %d", _teamid);
 		LOG("teamname = %s", _teamname.c_str());
 		LOG("teamicon = %s", _teamicon.c_str());
 		LOG("levelid = %d", _levelid);
@@ -1468,13 +1508,13 @@ private:
 
 	uint32	_id;
 	uint32	_roomid;
-	string	_answerauthorid;
+	uint32	_answerauthorid;
 	string	_answerauthorname;
 	string	_answerauthorhead;
 	uint32	_answerauthorrole;
 	string	_answertime;
 	string	_answercontent;
-	string	_askauthorid;
+	uint32	_askauthorid;
 	string	_askauthorname;
 	string	_askauthorhead;
 	uint32	_askauthorrole;
@@ -1494,9 +1534,9 @@ public:
 
 	 inline void set_roomid(const uint32 value) { _roomid = value; }
 
-	 inline string& answerauthorid() { return _answerauthorid; } const 
+	 inline uint32 answerauthorid() { return _answerauthorid; } const 
 
-	 inline void set_answerauthorid(const string& value) { _answerauthorid = value; }
+	 inline void set_answerauthorid(const uint32 value) { _answerauthorid = value; }
 
 	 inline string& answerauthorname() { return _answerauthorname; } const 
 
@@ -1518,9 +1558,9 @@ public:
 
 	 inline void set_answercontent(const string& value) { _answercontent = value; }
 
-	 inline string& askauthorid() { return _askauthorid; } const 
+	 inline uint32 askauthorid() { return _askauthorid; } const 
 
-	 inline void set_askauthorid(const string& value) { _askauthorid = value; }
+	 inline void set_askauthorid(const uint32 value) { _askauthorid = value; }
 
 	 inline string& askauthorname() { return _askauthorname; } const 
 
@@ -1558,13 +1598,13 @@ public:
 		protocol::tag_CMDQuestionAnswer* cmd = (protocol::tag_CMDQuestionAnswer*) data;
 		cmd->id = _id;
 		cmd->roomId = _roomid;
-		strcpy(cmd->answerAuthorId, _answerauthorid.c_str());
+		cmd->answerAuthorId = _answerauthorid;
 		strcpy(cmd->answerAuthorName, _answerauthorname.c_str());
 		strcpy(cmd->answerAuthorHead, _answerauthorhead.c_str());
 		cmd->answerAuthorRole = _answerauthorrole;
 		strcpy(cmd->answerTime, _answertime.c_str());
 		strcpy(cmd->answerContent, _answercontent.c_str());
-		strcpy(cmd->askAuthorId, _askauthorid.c_str());
+		cmd->askAuthorId = _askauthorid;
 		strcpy(cmd->askAuthorName, _askauthorname.c_str());
 		strcpy(cmd->askAuthorHead, _askauthorhead.c_str());
 		cmd->askAuthorRole = _askauthorrole;
@@ -1600,13 +1640,13 @@ public:
 		LOG("--------Receive message: QuestionAnswer---------");
 		LOG("id = %d", _id);
 		LOG("roomid = %d", _roomid);
-		LOG("answerauthorid = %s", _answerauthorid.c_str());
+		LOG("answerauthorid = %d", _answerauthorid);
 		LOG("answerauthorname = %s", _answerauthorname.c_str());
 		LOG("answerauthorhead = %s", _answerauthorhead.c_str());
 		LOG("answerauthorrole = %d", _answerauthorrole);
 		LOG("answertime = %s", _answertime.c_str());
 		LOG("answercontent = %s", _answercontent.c_str());
-		LOG("askauthorid = %s", _askauthorid.c_str());
+		LOG("askauthorid = %d", _askauthorid);
 		LOG("askauthorname = %s", _askauthorname.c_str());
 		LOG("askauthorhead = %s", _askauthorhead.c_str());
 		LOG("askauthorrole = %d", _askauthorrole);
@@ -1628,7 +1668,7 @@ private:
 	uint32	_roomid;
 	uint32	_viewpointid;
 	string	_title;
-	string	_askauthorid;
+	uint32	_askauthorid;
 	string	_askauthorname;
 	string	_askauthorhead;
 	uint32	_askauthorrole;
@@ -1661,9 +1701,9 @@ public:
 
 	 inline void set_title(const string& value) { _title = value; }
 
-	 inline string& askauthorid() { return _askauthorid; } const 
+	 inline uint32 askauthorid() { return _askauthorid; } const 
 
-	 inline void set_askauthorid(const string& value) { _askauthorid = value; }
+	 inline void set_askauthorid(const uint32 value) { _askauthorid = value; }
 
 	 inline string& askauthorname() { return _askauthorname; } const 
 
@@ -1723,7 +1763,7 @@ public:
 		cmd->roomId = _roomid;
 		cmd->viewpointId = _viewpointid;
 		strcpy(cmd->title, _title.c_str());
-		strcpy(cmd->askAuthorId, _askauthorid.c_str());
+		cmd->askAuthorId = _askauthorid;
 		strcpy(cmd->askAuthorName, _askauthorname.c_str());
 		strcpy(cmd->askAuthorHead, _askauthorhead.c_str());
 		cmd->askAuthorRole = _askauthorrole;
@@ -1767,7 +1807,7 @@ public:
 		LOG("roomid = %d", _roomid);
 		LOG("viewpointid = %d", _viewpointid);
 		LOG("title = %s", _title.c_str());
-		LOG("askauthorid = %s", _askauthorid.c_str());
+		LOG("askauthorid = %d", _askauthorid);
 		LOG("askauthorname = %s", _askauthorname.c_str());
 		LOG("askauthorhead = %s", _askauthorhead.c_str());
 		LOG("askauthorrole = %d", _askauthorrole);
@@ -1939,256 +1979,6 @@ public:
 };
 
 
-class HomePageVideoroomItem
-{
-
-private:
-
-	string	_nvcbid;
-	string	_croompic;
-	string	_livetype;
-	string	_ncount;
-	string	_cname;
-
-
-public:
-
-	 inline string& nvcbid() { return _nvcbid; } const 
-
-	 inline void set_nvcbid(const string& value) { _nvcbid = value; }
-
-	 inline string& croompic() { return _croompic; } const 
-
-	 inline void set_croompic(const string& value) { _croompic = value; }
-
-	 inline string& livetype() { return _livetype; } const 
-
-	 inline void set_livetype(const string& value) { _livetype = value; }
-
-	 inline string& ncount() { return _ncount; } const 
-
-	 inline void set_ncount(const string& value) { _ncount = value; }
-
-	 inline string& cname() { return _cname; } const 
-
-	 inline void set_cname(const string& value) { _cname = value; }
-
-
-	int ByteSize() { return sizeof(protocol::tag_CMDHomePageVideoroomItem); }
-
-	void SerializeToArray(void* data, int size)
-	{
-		protocol::tag_CMDHomePageVideoroomItem* cmd = (protocol::tag_CMDHomePageVideoroomItem*) data;
-		strcpy(cmd->nvcbid, _nvcbid.c_str());
-		strcpy(cmd->croompic, _croompic.c_str());
-		strcpy(cmd->livetype, _livetype.c_str());
-		strcpy(cmd->ncount, _ncount.c_str());
-		strcpy(cmd->cname, _cname.c_str());
-	}
-
-	void ParseFromArray(void* data, int size)
-	{
-		protocol::tag_CMDHomePageVideoroomItem* cmd = (protocol::tag_CMDHomePageVideoroomItem*) data;
-		_nvcbid = cmd->nvcbid;
-		_croompic = cmd->croompic;
-		_livetype = cmd->livetype;
-		_ncount = cmd->ncount;
-		_cname = cmd->cname;
-	}
-
-	void Log()
-	{
-		LOG("--------Receive message: HomePageVideoroomItem---------");
-		LOG("nvcbid = %s", _nvcbid.c_str());
-		LOG("croompic = %s", _croompic.c_str());
-		LOG("livetype = %s", _livetype.c_str());
-		LOG("ncount = %s", _ncount.c_str());
-		LOG("cname = %s", _cname.c_str());
-	}
-
-};
-
-
-class HomePageViewpointItem
-{
-
-private:
-
-	uint32	_viewid;
-	string	_teacherid;
-	string	_dtime;
-	string	_czans;
-	string	_title;
-	string	_roomid;
-	string	_calias;
-
-
-public:
-
-	 inline uint32 viewid() { return _viewid; } const 
-
-	 inline void set_viewid(const uint32 value) { _viewid = value; }
-
-	 inline string& teacherid() { return _teacherid; } const 
-
-	 inline void set_teacherid(const string& value) { _teacherid = value; }
-
-	 inline string& dtime() { return _dtime; } const 
-
-	 inline void set_dtime(const string& value) { _dtime = value; }
-
-	 inline string& czans() { return _czans; } const 
-
-	 inline void set_czans(const string& value) { _czans = value; }
-
-	 inline string& title() { return _title; } const 
-
-	 inline void set_title(const string& value) { _title = value; }
-
-	 inline string& roomid() { return _roomid; } const 
-
-	 inline void set_roomid(const string& value) { _roomid = value; }
-
-	 inline string& calias() { return _calias; } const 
-
-	 inline void set_calias(const string& value) { _calias = value; }
-
-
-	int ByteSize() { return sizeof(protocol::tag_CMDHomePageViewpointItem); }
-
-	void SerializeToArray(void* data, int size)
-	{
-		protocol::tag_CMDHomePageViewpointItem* cmd = (protocol::tag_CMDHomePageViewpointItem*) data;
-		cmd->viewid = _viewid;
-		strcpy(cmd->teacherid, _teacherid.c_str());
-		strcpy(cmd->dtime, _dtime.c_str());
-		strcpy(cmd->czans, _czans.c_str());
-		strcpy(cmd->title, _title.c_str());
-		strcpy(cmd->roomid, _roomid.c_str());
-		strcpy(cmd->calias, _calias.c_str());
-	}
-
-	void ParseFromArray(void* data, int size)
-	{
-		protocol::tag_CMDHomePageViewpointItem* cmd = (protocol::tag_CMDHomePageViewpointItem*) data;
-		_viewid = cmd->viewid;
-		_teacherid = cmd->teacherid;
-		_dtime = cmd->dtime;
-		_czans = cmd->czans;
-		_title = cmd->title;
-		_roomid = cmd->roomid;
-		_calias = cmd->calias;
-	}
-
-	void Log()
-	{
-		LOG("--------Receive message: HomePageViewpointItem---------");
-		LOG("viewid = %d", _viewid);
-		LOG("teacherid = %s", _teacherid.c_str());
-		LOG("dtime = %s", _dtime.c_str());
-		LOG("czans = %s", _czans.c_str());
-		LOG("title = %s", _title.c_str());
-		LOG("roomid = %s", _roomid.c_str());
-		LOG("calias = %s", _calias.c_str());
-	}
-
-};
-
-
-class CollectItem
-{
-
-private:
-
-	uint32	_teacherid;
-	string	_nvcbid;
-	string	_cname;
-	string	_password;
-	string	_croompic;
-	string	_ncount;
-	string	_cgateaddr;
-	string	_ntype;
-
-
-public:
-
-	 inline uint32 teacherid() { return _teacherid; } const 
-
-	 inline void set_teacherid(const uint32 value) { _teacherid = value; }
-
-	 inline string& nvcbid() { return _nvcbid; } const 
-
-	 inline void set_nvcbid(const string& value) { _nvcbid = value; }
-
-	 inline string& cname() { return _cname; } const 
-
-	 inline void set_cname(const string& value) { _cname = value; }
-
-	 inline string& password() { return _password; } const 
-
-	 inline void set_password(const string& value) { _password = value; }
-
-	 inline string& croompic() { return _croompic; } const 
-
-	 inline void set_croompic(const string& value) { _croompic = value; }
-
-	 inline string& ncount() { return _ncount; } const 
-
-	 inline void set_ncount(const string& value) { _ncount = value; }
-
-	 inline string& cgateaddr() { return _cgateaddr; } const 
-
-	 inline void set_cgateaddr(const string& value) { _cgateaddr = value; }
-
-	 inline string& ntype() { return _ntype; } const 
-
-	 inline void set_ntype(const string& value) { _ntype = value; }
-
-
-	int ByteSize() { return sizeof(protocol::tag_CMDCollectItem); }
-
-	void SerializeToArray(void* data, int size)
-	{
-		protocol::tag_CMDCollectItem* cmd = (protocol::tag_CMDCollectItem*) data;
-		cmd->teacherid = _teacherid;
-		strcpy(cmd->nvcbid, _nvcbid.c_str());
-		strcpy(cmd->cname, _cname.c_str());
-		strcpy(cmd->password, _password.c_str());
-		strcpy(cmd->croompic, _croompic.c_str());
-		strcpy(cmd->ncount, _ncount.c_str());
-		strcpy(cmd->cgateaddr, _cgateaddr.c_str());
-		strcpy(cmd->ntype, _ntype.c_str());
-	}
-
-	void ParseFromArray(void* data, int size)
-	{
-		protocol::tag_CMDCollectItem* cmd = (protocol::tag_CMDCollectItem*) data;
-		_teacherid = cmd->teacherid;
-		_nvcbid = cmd->nvcbid;
-		_cname = cmd->cname;
-		_password = cmd->password;
-		_croompic = cmd->croompic;
-		_ncount = cmd->ncount;
-		_cgateaddr = cmd->cgateaddr;
-		_ntype = cmd->ntype;
-	}
-
-	void Log()
-	{
-		LOG("--------Receive message: CollectItem---------");
-		LOG("teacherid = %d", _teacherid);
-		LOG("nvcbid = %s", _nvcbid.c_str());
-		LOG("cname = %s", _cname.c_str());
-		LOG("password = %s", _password.c_str());
-		LOG("croompic = %s", _croompic.c_str());
-		LOG("ncount = %s", _ncount.c_str());
-		LOG("cgateaddr = %s", _cgateaddr.c_str());
-		LOG("ntype = %s", _ntype.c_str());
-	}
-
-};
-
-
 class BannerItem
 {
 
@@ -2243,127 +2033,219 @@ public:
 };
 
 
-class RoomGroupData
+class NavigationItem
 {
 
 private:
 
-	uint32	_groupid;
+	uint32	_nid;
+	uint32	_level;
+	uint32	_grouptype;
 	uint32	_parentid;
+	uint32	_showflag;
 	uint32	_sortid;
-	uint32	_usernum;
-	uint32	_textcolor;
+	string	_name;
+	string	_fontcolor;
+	string	_curl;
+	string	_gateurl;
+	uint32	_roomid;
 	uint32	_type;
-	uint32	_bhaschild;
-	uint32	_bshowusernum;
-	uint32	_bfontbold;
-	string	_groupname;
-	string	_iconname;
-	string	_url;
 
 
 public:
 
-	 inline uint32 groupid() { return _groupid; } const 
+	 inline uint32 nid() { return _nid; } const 
 
-	 inline void set_groupid(const uint32 value) { _groupid = value; }
+	 inline void set_nid(const uint32 value) { _nid = value; }
+
+	 inline uint32 level() { return _level; } const 
+
+	 inline void set_level(const uint32 value) { _level = value; }
+
+	 inline uint32 grouptype() { return _grouptype; } const 
+
+	 inline void set_grouptype(const uint32 value) { _grouptype = value; }
 
 	 inline uint32 parentid() { return _parentid; } const 
 
 	 inline void set_parentid(const uint32 value) { _parentid = value; }
 
+	 inline uint32 showflag() { return _showflag; } const 
+
+	 inline void set_showflag(const uint32 value) { _showflag = value; }
+
 	 inline uint32 sortid() { return _sortid; } const 
 
 	 inline void set_sortid(const uint32 value) { _sortid = value; }
 
-	 inline uint32 usernum() { return _usernum; } const 
+	 inline string& name() { return _name; } const 
 
-	 inline void set_usernum(const uint32 value) { _usernum = value; }
+	 inline void set_name(const string& value) { _name = value; }
 
-	 inline uint32 textcolor() { return _textcolor; } const 
+	 inline string& fontcolor() { return _fontcolor; } const 
 
-	 inline void set_textcolor(const uint32 value) { _textcolor = value; }
+	 inline void set_fontcolor(const string& value) { _fontcolor = value; }
+
+	 inline string& curl() { return _curl; } const 
+
+	 inline void set_curl(const string& value) { _curl = value; }
+
+	 inline string& gateurl() { return _gateurl; } const 
+
+	 inline void set_gateurl(const string& value) { _gateurl = value; }
+
+	 inline uint32 roomid() { return _roomid; } const 
+
+	 inline void set_roomid(const uint32 value) { _roomid = value; }
 
 	 inline uint32 type() { return _type; } const 
 
 	 inline void set_type(const uint32 value) { _type = value; }
 
-	 inline uint32 bhaschild() { return _bhaschild; } const 
 
-	 inline void set_bhaschild(const uint32 value) { _bhaschild = value; }
-
-	 inline uint32 bshowusernum() { return _bshowusernum; } const 
-
-	 inline void set_bshowusernum(const uint32 value) { _bshowusernum = value; }
-
-	 inline uint32 bfontbold() { return _bfontbold; } const 
-
-	 inline void set_bfontbold(const uint32 value) { _bfontbold = value; }
-
-	 inline string& groupname() { return _groupname; } const 
-
-	 inline void set_groupname(const string& value) { _groupname = value; }
-
-	 inline string& iconname() { return _iconname; } const 
-
-	 inline void set_iconname(const string& value) { _iconname = value; }
-
-	 inline string& url() { return _url; } const 
-
-	 inline void set_url(const string& value) { _url = value; }
-
-
-	int ByteSize() { return sizeof(protocol::tag_RoomGroupData); }
+	int ByteSize() { return sizeof(protocol::tag_NavigationItem); }
 
 	void SerializeToArray(void* data, int size)
 	{
-		protocol::tag_RoomGroupData* cmd = (protocol::tag_RoomGroupData*) data;
-		cmd->groupid = _groupid;
+		protocol::tag_NavigationItem* cmd = (protocol::tag_NavigationItem*) data;
+		cmd->nid = _nid;
+		cmd->level = _level;
+		cmd->grouptype = _grouptype;
 		cmd->parentid = _parentid;
+		cmd->showflag = _showflag;
 		cmd->sortid = _sortid;
-		cmd->usernum = _usernum;
-		cmd->textcolor = _textcolor;
+		strcpy(cmd->name, _name.c_str());
+		strcpy(cmd->fontcolor, _fontcolor.c_str());
+		strcpy(cmd->curl, _curl.c_str());
+		strcpy(cmd->gateurl, _gateurl.c_str());
+		cmd->roomid = _roomid;
 		cmd->type = _type;
-		cmd->bhaschild = _bhaschild;
-		cmd->bshowusernum = _bshowusernum;
-		cmd->bfontbold = _bfontbold;
-		strcpy(cmd->groupname, _groupname.c_str());
-		strcpy(cmd->iconname, _iconname.c_str());
-		strcpy(cmd->url, _url.c_str());
 	}
 
 	void ParseFromArray(void* data, int size)
 	{
-		protocol::tag_RoomGroupData* cmd = (protocol::tag_RoomGroupData*) data;
-		_groupid = cmd->groupid;
+		protocol::tag_NavigationItem* cmd = (protocol::tag_NavigationItem*) data;
+		_nid = cmd->nid;
+		_level = cmd->level;
+		_grouptype = cmd->grouptype;
 		_parentid = cmd->parentid;
+		_showflag = cmd->showflag;
 		_sortid = cmd->sortid;
-		_usernum = cmd->usernum;
-		_textcolor = cmd->textcolor;
+		_name = cmd->name;
+		_fontcolor = cmd->fontcolor;
+		_curl = cmd->curl;
+		_gateurl = cmd->gateurl;
+		_roomid = cmd->roomid;
 		_type = cmd->type;
-		_bhaschild = cmd->bhaschild;
-		_bshowusernum = cmd->bshowusernum;
-		_bfontbold = cmd->bfontbold;
-		_groupname = cmd->groupname;
-		_iconname = cmd->iconname;
-		_url = cmd->url;
 	}
 
 	void Log()
 	{
-		LOG("--------Receive message: RoomGroupData---------");
-		LOG("groupid = %d", _groupid);
+		LOG("--------Receive message: NavigationItem---------");
+		LOG("nid = %d", _nid);
+		LOG("level = %d", _level);
+		LOG("grouptype = %d", _grouptype);
 		LOG("parentid = %d", _parentid);
+		LOG("showflag = %d", _showflag);
 		LOG("sortid = %d", _sortid);
-		LOG("usernum = %d", _usernum);
-		LOG("textcolor = %d", _textcolor);
+		LOG("name = %s", _name.c_str());
+		LOG("fontcolor = %s", _fontcolor.c_str());
+		LOG("curl = %s", _curl.c_str());
+		LOG("gateurl = %s", _gateurl.c_str());
+		LOG("roomid = %d", _roomid);
 		LOG("type = %d", _type);
-		LOG("bhaschild = %d", _bhaschild);
-		LOG("bshowusernum = %d", _bshowusernum);
-		LOG("bfontbold = %d", _bfontbold);
-		LOG("groupname = %s", _groupname.c_str());
-		LOG("iconname = %s", _iconname.c_str());
-		LOG("url = %s", _url.c_str());
+	}
+
+};
+
+
+class ImageInfo
+{
+
+private:
+
+	uint32	_width;
+	uint32	_height;
+
+
+public:
+
+	 inline uint32 width() { return _width; } const 
+
+	 inline void set_width(const uint32 value) { _width = value; }
+
+	 inline uint32 height() { return _height; } const 
+
+	 inline void set_height(const uint32 value) { _height = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDImageInfo); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDImageInfo* cmd = (protocol::tag_CMDImageInfo*) data;
+		cmd->width = _width;
+		cmd->height = _height;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDImageInfo* cmd = (protocol::tag_CMDImageInfo*) data;
+		_width = cmd->width;
+		_height = cmd->height;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: ImageInfo---------");
+		LOG("width = %d", _width);
+		LOG("height = %d", _height);
+	}
+
+};
+
+
+class UserTeamRelatedInfo
+{
+
+private:
+
+	uint32	_askremain;
+	uint32	_viplevel;
+
+
+public:
+
+	 inline uint32 askremain() { return _askremain; } const 
+
+	 inline void set_askremain(const uint32 value) { _askremain = value; }
+
+	 inline uint32 viplevel() { return _viplevel; } const 
+
+	 inline void set_viplevel(const uint32 value) { _viplevel = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDUserTeamRelatedInfo); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDUserTeamRelatedInfo* cmd = (protocol::tag_CMDUserTeamRelatedInfo*) data;
+		cmd->askremain = _askremain;
+		cmd->viplevel = _viplevel;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDUserTeamRelatedInfo* cmd = (protocol::tag_CMDUserTeamRelatedInfo*) data;
+		_askremain = cmd->askremain;
+		_viplevel = cmd->viplevel;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: UserTeamRelatedInfo---------");
+		LOG("askremain = %d", _askremain);
+		LOG("viplevel = %d", _viplevel);
 	}
 
 };

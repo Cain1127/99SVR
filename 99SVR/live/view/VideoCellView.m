@@ -31,7 +31,7 @@
     if (self = [super initWithFrame:frame])
     {
         self.userInteractionEnabled = YES;
-        self.backgroundColor = [UIColor clearColor];
+//        self.backgroundColor = [UIColor clearColor];
         _imageView = [[UIImageView alloc] init];
         _imageView.frame = CGRectMake(0,4, frame.size.width,frame.size.height-8);
         [self addSubview:_imageView];

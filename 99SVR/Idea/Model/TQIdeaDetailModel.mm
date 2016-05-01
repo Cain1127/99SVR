@@ -16,8 +16,6 @@
 {
     self = [super init];
     
-    _authorId = [NSString stringWithUTF8String:details->authorid().c_str()];
-    
     _authoricon = [NSString stringWithUTF8String:details->authoricon().c_str()];
     
     _authorname = [NSString stringWithUTF8String:details->authorname().c_str()];

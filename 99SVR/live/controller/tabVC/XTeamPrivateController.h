@@ -9,7 +9,15 @@
 #import "CustomViewController.h"
 #import "RoomHttp.h"
 
+@protocol WhatIsDelegate  <NSObject>
+
+- (void)showQuestion;
+
+@end
+
 @interface XTeamPrivateController : UIViewController
+
+@property (nonatomic,assign) id<WhatIsDelegate> delegate;
 
 - (id)initWithModel:(RoomHttp*)room;
 

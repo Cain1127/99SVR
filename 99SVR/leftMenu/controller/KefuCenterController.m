@@ -8,15 +8,19 @@
 
 #import "KefuCenterController.h"
 #import "RoomGroup.h"
+#import "VideoCell.h"
 #import "UserInfo.h"
 #import "GroupListRequest.h"
 #import "RoomHttp.h"
+#import "ConnectRoomViewModel.h"
+#import "TableViewFactory.h"
 
-@interface KefuCenterController()
+@interface KefuCenterController()<UITableViewDataSource,UITableViewDelegate>
 
-@property (nonatomic,strong) NSMutableArray *datas;
+@property (nonatomic,copy) NSArray *aryVideo;
 @property (nonatomic,strong) GroupListRequest *listReuqest;
-
+@property (nonatomic,strong) UITableView *tableView;
+@property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
 @end
 
 @implementation KefuCenterController
@@ -24,28 +28,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
-    [self.view addSubview:_headView];
-    _headView.backgroundColor = kNavColor;
-    UILabel *title;
-    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [title setFont:XCFONT(16)];
-    [_headView addSubview:title];
-    [title setTextAlignment:NSTextAlignmentCenter];
-    [title setTextColor:[UIColor whiteColor]];
-    UILabel *_lblContent;
-    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
-    [_lblContent setBackgroundColor:[UIColor whiteColor]];
-    [_headView addSubview:_lblContent];
-    title.text = @"客服中心";
-    
-    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(navBack) image:@"back" highImage:@"back"];
-    [self.view addSubview:btnLeft];
-    [btnLeft setFrame:Rect(0,20,44,44)];
-    self.navigationController.navigationBar.barTintColor = kNavColor;
-    self.tableView.frame = Rect(0, 0+kNavigationHeight, kScreenWidth, kScreenHeight);
-    _datas = [NSMutableArray array];
-    _listReuqest = [[GroupListRequest alloc] init];
+    [self setTitleText:@"客服中心"];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
+    [self.view addSubview:_tableView];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -62,48 +49,112 @@
 #pragma mark get history
 - (void)loadData
 {
-    NSDictionary *parameter = [UserDefaults objectForKey:kVideoList];
-    NSArray *aryRoom = [self resolveDict:parameter];
-    if(_datas.count>0){[_datas removeAllObjects];}
-    for(RoomGroup *group in aryRoom)
+    if ([UserInfo sharedUserInfo].aryHelp)
     {
-        if ([group.groupId isEqualToString:@"16"]) {
-            [_datas addObject:group];
-            break;
-        }
+        _aryVideo = [UserInfo sharedUserInfo].aryHelp;
+        [self.tableView reloadData];
     }
-    [self setVideos:_datas];
+    else
+    {
+        [self.view makeToastActivity_bird];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoList:) name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
+        [kHTTPSingle RequestTeamList];
+    }
+}
+
+- (void)loadVideoList:(NSNotification *)notify
+{
+    NSDictionary *dict = notify.object;
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak reloadData];
+        [selfWeak.view hideToastActivity];
+    });
+    if([dict isKindOfClass:[NSDictionary class]])
+    {
+        int nStatus = [dict[@"code"] intValue];
+        if(nStatus==1)
+        {
+            NSArray *aryVideo = dict[@"show"];
+            NSMutableArray *aryAll = [NSMutableArray array];
+            [aryAll addObjectsFromArray:aryVideo];
+            NSArray *aryHidden = dict[@"hidden"];
+            for (RoomHttp *room in aryHidden)
+            {
+                [aryAll addObject:room];
+            }
+            
+            NSArray *aryHelp = dict[@"help"];
+            [UserInfo sharedUserInfo].aryHelp = aryHelp;
+            _aryVideo = aryHelp;
+            for (RoomHttp *room in aryHelp)
+            {
+                [aryAll addObject:room];
+            }
+            [UserInfo sharedUserInfo].aryRoom = aryAll;
+            
+            @WeakObj(self)
+            dispatch_async(dispatch_get_main_queue(), ^{
+               [selfWeak.tableView reloadData];
+            });
+            return ;
+        }
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [ProgressHUD showError:@"获取财经直播团队列表失败，无法搜索"];
     });
 }
 
-- (NSArray *)resolveDict:(NSDictionary *)dict
+- (void)dealloc
 {
-    NSArray *firstArray = [dict objectForKey:@"groups"];
-    NSMutableArray *aryRoom = [NSMutableArray array];
-    if ([firstArray isKindOfClass:[NSArray class]] && firstArray.count>0)
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    DLog(@"dealloc");
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *videoCellName = @"videoCellName";
+    VideoCell *tempCell = [_tableView dequeueReusableCellWithIdentifier:videoCellName];
+    
+    if(!tempCell)
     {
-        for (NSDictionary *group in firstArray)
-        {
-            RoomGroup *_roomgroup = [RoomGroup resultWithDict:group];
-            [aryRoom addObject:_roomgroup];
-        }
+        tempCell = [[VideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:videoCellName];
     }
-    NSDictionary *dictService = [dict objectForKey:@"service"];
-    if ([dictService objectForKey:@"groupId"] && [dictService objectForKey:@"groupName"] && [dictService objectForKey:@"roomList"])
+    @WeakObj(self);
+    tempCell.itemOnClick = ^(RoomHttp *room)
     {
-        RoomGroup *_roomgroup = [RoomGroup resultWithDict:dictService];
-        [aryRoom addObject:_roomgroup];
-    }
-    NSDictionary *dictOther = [dict objectForKey:@"other"];
-    if ([dictOther objectForKey:@"groupId"] && [dictOther objectForKey:@"groupName"] && [dictOther objectForKey:@"roomList"])
+        [selfWeak connectRoom:room];
+    };
+    int length = 2;
+    int loc = (int)indexPath.row * length;
+    if (loc + length > _aryVideo.count)
     {
-        RoomGroup *_roomgroup = [RoomGroup resultWithDict:dictOther];
-        [aryRoom addObject:_roomgroup];
+        length = (int)_aryVideo.count - loc;
     }
-    return aryRoom;
+    NSRange range = NSMakeRange(loc, length);
+    NSArray *aryIndex = [_aryVideo subarrayWithRange:range];
+    [tempCell setRowDatas:aryIndex isNew:1];
+    return tempCell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSInteger count = (NSInteger)ceilf((1.0f * _aryVideo.count) / 2.0f);
+    return count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
+    CGFloat height = ((kScreenWidth - 36.0f) / 2.0f) * 10 / 16 + 8;
+    return height;
+}
+
+- (void)connectRoom:(RoomHttp *)room{
+    [self.view makeToastActivity];
+    if (_roomViewModel==nil)
+    {
+        _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
+    }
+    [_roomViewModel connectViewModel:room];
 }
 
 @end

@@ -44,7 +44,8 @@ namespace protocol
 	// 观点列表（摘要）
 	typedef struct tag_CMDViewpointSummary
 	{
-		char authorId[16];  // 发表者：战队ID/Team ID/房间ID
+		uint32 authorId;  // 发表者：战队ID/Team ID
+		uint32 roomId;
 		char authorName[32];  // 战队名称
 		char authorIcon[256];  // 头像
 		uint32 viewpointId;  // 观点ID
@@ -58,7 +59,8 @@ namespace protocol
 	//观点详情
 	typedef struct tag_CMDViewpointDetail
 	{
-		char authorId[16];
+		uint32 authorId;
+		uint32 roomId;
 		char authorName[64];
 		char authorIcon[256];
 		uint32 viewpointId;
@@ -67,6 +69,7 @@ namespace protocol
 		char content[4096];   // 观点正文
 		uint32 replyCount;
 		uint32 giftCount;
+		char html5url[128];
 	}CMDViewpointDetail_t;
 
 	// 观点回复
@@ -75,12 +78,14 @@ namespace protocol
 		uint32 replytId;  // 本回复ID
 		uint32 viewpointId;  // 所属观点
 		uint32 parentReplyId;  // 所属回复
-		char authorId[16];  // 回复者ID
+		uint32 authorId;  // 回复者ID
 		char authorName[64];  // 回复者名称
 		char authorIcon[256];  // 头像
-		char fromAuthorId[16];  // 回复者ID
+		uint32 authorRole; // 0：普通用户 1：讲师
+		uint32 fromAuthorId;  // 回复者ID
 		char fromAuthorName[64];  // 被回复者名称
 		char fromAuthorIcon[256];  // 被头像
+		uint32 fromAuthorRole; // 0：普通用户 1：讲师
 		char publishTime[32];  // 回复时间
 		char content[256];  // 回复内容
 	}CMDReply_t;
@@ -89,7 +94,7 @@ namespace protocol
 	typedef struct tag_CMDOperateStockProfit
 	{
 		uint32 operateId;  // 操盘ID
-		char teamId[16];  // 战队ID
+		uint32 teamId;  // 战队ID
 		char teamName[32];  // 战队名称
 		char teamIcon[64];  //战队头像
 		char focus[64];  // 操盘名称
@@ -142,7 +147,7 @@ namespace protocol
 	//我的私人定制
 	typedef struct tag_CMDMyPrivateService
 	{
-		char teamId[16];  // 战队
+		uint32 teamId;  // 战队
 		char teamName[32];
 		char teamIcon[32];
 		uint32 levelId;  // 开通的等级序号1 ~ 6
@@ -232,13 +237,13 @@ namespace protocol
 	  {
 	    uint32 id;
 	    uint32 roomId;
-	    char answerAuthorId[16];  // 回答者
+	    uint32 answerAuthorId;  // 回答者
 	    char answerAuthorName[32];  // 回答者名称
 	    char answerAuthorHead[64];  // 回答者ICON
 	    uint32 answerAuthorRole; // 0：普通用户 1：讲师
 	    char answerTime[32];  // 回答时间
 	    char answerContent[256];  // 回答内容
-		char askAuthorId[16];  // 回答者
+		uint32 askAuthorId;  // 回答者
 	    char askAuthorName[32];  // 提问者
 	    char askAuthorHead[64];  // 提问者头像
 	    uint32 askAuthorRole; // 0：普通用户 1：讲师
@@ -255,7 +260,7 @@ namespace protocol
 	    uint32 roomId;
 	    uint32 viewpointId;  // 观点ID
 	    char title[32];  // 观点标题
-		char askAuthorId[16];  // 原评论者
+		uint32 askAuthorId;  // 原评论者
 	    char askAuthorName[32];  // 原评论
 	    char askAuthorHead[64];
 	    uint32 askAuthorRole; // 0：普通用户 1：讲师
@@ -292,38 +297,6 @@ namespace protocol
 		float yieldRate;  // 收益率
 	}CMDTeamTopN_t;
 
-	typedef struct tag_CMDHomePageVideoroomItem
-	{
-		char nvcbid[32];
-		char croompic[32];
-		char livetype[32];
-		char ncount[32];
-		char cname[32];
-	}CMDHomePageVideoroomItem_t;
-
-	typedef struct tag_CMDHomePageViewpointItem
-	{
-		uint32 viewid;
-		char teacherid[32];
-		char dtime[32];
-		char czans[32];
-		char title[32];
-		char roomid[32];
-		char calias[32];
-	}CMDHomePageViewpointItem_t;
-
-	typedef struct tag_CMDCollectItem
-	{
-		uint32 teacherid;
-		char nvcbid[32];
-		char cname[32];
-		char password[32];
-		char croompic[32];
-		char ncount[32];
-		char cgateaddr[32];
-		char ntype[32];
-	}CMDCollectItem_t;
-
 	typedef struct tag_CMDBannerItem
 	{
 		char url[32];
@@ -331,21 +304,34 @@ namespace protocol
 		char croompic[32];
 	}CMDBannerItem_t;
 
-	typedef struct tag_RoomGroupData
+	typedef struct tag_NavigationItem
 	{
-		uint32 groupid;   
+		uint32 nid;
+		uint32 level;
+		uint32 grouptype;
 		uint32 parentid;
+		uint32 showflag;
 		uint32 sortid;
-		uint32 usernum;             //用户数目
-		uint32 textcolor;          //文字颜色
-		uint32 type;        
-		uint32 bhaschild;           //是否有子?    
-		uint32 bshowusernum;        //是否显示房间人数?
-		uint32 bfontbold;           //是否是粗体
-		char   groupname[NAMELEN];  //名字
-		char   iconname[NAMELEN];
-		char   url[URLLEN4];         //内容
-	}RoomGroupData_t;
+		char name[NAMELEN];
+		char fontcolor[NAMELEN];
+		char curl[URLLEN4];
+		char gateurl[URLLEN4];
+		uint32 roomid;
+		uint32 type;
+	}NavigationItem_t;
+
+	typedef struct tag_CMDImageInfo
+	{
+		char path[128];  // 图片路径
+		uint32 width; // 宽度
+		uint32 height;  // 高度
+	}CMDImageInfo_t;
+
+	typedef struct tag_CMDUserTeamRelatedInfo
+	{
+		uint32 askremain; // 剩余提问次数
+		uint32 viplevel; // 开通的vip等级
+	}CMDUserTeamRelatedInfo_t;
 
 };
 

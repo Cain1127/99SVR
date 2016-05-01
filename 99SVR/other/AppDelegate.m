@@ -33,7 +33,7 @@
 #import <DTCoreText/DTCoreText.h>
 #import "AdViewController.h"
 #import "SwitchRootTool.h"
-
+#import "IQKeyboardManager.h"
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
 
 @interface AppDelegate ()<UIAlertViewDelegate,WeiboSDKDelegate,WXApiDelegate>
@@ -84,6 +84,7 @@
     
     [WeiboSDK enableDebugMode:YES];
     [WeiboSDK registerApp:kSinaKey];
+    
     [WXApi registerApp:@"wxfbfe01336f468525" withDescription:@"weixin"];
     
     [self onCheckVersion];
@@ -97,7 +98,7 @@
         NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
         [UserDefaults setObject:parameters forKey:kVideoList];
     }
-    
+    [IQKeyboardManager sharedManager].shouldShowTextFieldPlaceholder = NO;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
    // self.window.rootViewController = [[TabBarController alloc] init];
      [SwitchRootTool switchRootForAppDelegate];

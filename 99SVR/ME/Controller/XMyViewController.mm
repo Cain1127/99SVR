@@ -98,13 +98,10 @@
 {
     [_itemsArray removeAllObjects];
     _leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
-    
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"CustomizedViewController"]];
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"TQMeCustomizedViewController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的九九币" icon:@"personal_recharge_icon" goClassName:@"CustomizedViewController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的消费记录" icon:@"personal_consumption_icon" goClassName:@"CustomizedViewController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的关注" icon:@"personal_follow_icon" goClassName:@"CustomizedViewController"]];
-
-    
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"personal_services_icon" goClassName:@"KefuCenterController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"personal_ste_icon" goClassName:@"SettingCenterController"]];
     
@@ -182,6 +179,12 @@
     LoginViewController *loginVC = [[LoginViewController alloc] init];
     [self.navigationController pushViewController:loginVC animated:YES];
     
+}
+
+- (void)enterRegister
+{
+    RegMobileViewController *regView = [[RegMobileViewController alloc] init];
+    [self.navigationController pushViewController:regView animated:YES];
 }
 
 @end

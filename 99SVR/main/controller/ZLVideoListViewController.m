@@ -14,6 +14,7 @@
 #import "ConnectRoomViewModel.h"
 #import "MJRefresh.h"
 #import "ViewNullFactory.h"
+
 @interface ZLVideoListViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
 }
@@ -31,7 +32,6 @@
     [self.navigationController.navigationBar setHidden:YES];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self setTitleText:@"财经直播"];
-    
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-108) withStyle:UITableViewStylePlain];
     [self.view addSubview:_tableView];
     _tableView.dataSource = self;
@@ -72,10 +72,24 @@
         int nStatus = [dict[@"code"] intValue];
         if(nStatus==1)
         {
-            _aryVideo = dict[@"data"];
+            _aryVideo = dict[@"show"];
+            NSMutableArray *aryAll = [NSMutableArray array];
+            [aryAll addObjectsFromArray:_aryVideo];
+            NSArray *aryHidden = dict[@"hidden"];
+            for (RoomHttp *room in aryHidden)
+            {
+                [aryAll addObject:room];
+            }
+            
+            NSArray *aryHelp = dict[@"help"];
+            [UserInfo sharedUserInfo].aryHelp = aryHelp;
+            for (RoomHttp *room in aryHelp)
+            {
+                [aryAll addObject:room];
+            }
+            [UserInfo sharedUserInfo].aryRoom = aryAll;
         }
     }
-    [UserInfo sharedUserInfo].aryRoom = _aryVideo;
     @WeakObj(self)
     if (_aryVideo.count==0) {
         if (nil==_noView)
@@ -125,7 +139,6 @@
     NSRange range = NSMakeRange(loc, length);
     NSArray *aryIndex = [_aryVideo subarrayWithRange:range];
     [tempCell setRowDatas:aryIndex isNew:1];
-    
     return tempCell;
 }
 

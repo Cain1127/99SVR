@@ -12,6 +12,8 @@
 
 - (void)enterLogin;
 
+- (void)enterRegister;
+
 @end
 
 @interface LeftMenuHeaderView : UIView
