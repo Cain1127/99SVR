@@ -20,5 +20,12 @@
  *  @param msg        提示信息
  */
 -(void)showErrorViewInView:(UIView *)targetView withMsg:(NSString *)msg;
+/**
+ *  隐藏提示的view
+ *
+ *  @param targetView 在哪个view
+ */
+-(void)hideEmptyViewInView:(UIView *)targetView;
+
 
 @end
