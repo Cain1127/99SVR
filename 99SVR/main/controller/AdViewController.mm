@@ -48,8 +48,9 @@
     SplashModel *splash = [SplashTool get];
     NSString *str = splash.imageUrl;
     UIImageView *ad = [[UIImageView alloc] init];
-    ad.contentMode = UIViewContentModeScaleAspectFit;
-    ad.frame = CGRectMake(0, 100, kScreenWidth, kScreenHeight * 0.80-100);
+    ad.contentMode = UIViewContentModeScaleAspectFill;
+    ad.clipsToBounds = YES;
+    ad.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.80);
     [ad sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"start-mascot"]];
     [self.view addSubview:ad];
     
@@ -60,7 +61,7 @@
     _adButton.backgroundColor = [UIColor whiteColor];
     [_adButton setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [_adButton addTarget:self action:@selector(adSkipClick) forControlEvents:UIControlEventTouchUpInside];
-    _adButton.frame = CGRectMake(kScreenWidth - 85, 25 , 75, 40);
+    _adButton.frame = CGRectMake(kScreenWidth - 85, 25 , 60, 35);
     _adButton.layer.cornerRadius = 2.5f;
     _adButton.layer.masksToBounds = YES;
     
