@@ -163,6 +163,16 @@
 {
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TABBAR_DISAPPER_VC object:nil];
+}
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TABBAR_APPER_VC object:nil];
+}
 
 @end

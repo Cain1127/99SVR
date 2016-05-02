@@ -80,7 +80,7 @@ public:
     virtual void OnRoomGroupChanged();
     
     void OnRoomTeacherOnMicResp(RoomTeacherOnMicResp& info);
-    void OnEmailNewMsgNoty(EmailNewMsgNoty& info){}
+    void OnEmailNewMsgNoty(EmailNewMsgNoty& info);
 };
 
 

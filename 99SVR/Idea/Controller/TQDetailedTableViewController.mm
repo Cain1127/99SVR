@@ -568,7 +568,14 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (_aryCommont.count > indexPath.row) {
         ZLReply *reply = [_aryCommont objectAtIndex:indexPath.row];
-        [self showChatView:reply.parentreplyid name:reply.authorname commentId:[reply.fromauthorid intValue]];
+        if([reply.fromauthorid intValue]== KUserSingleton.nUserId)
+        {
+            [ProgressHUD showSuccess:@"不能回复自己的信息"];
+        }
+        else
+        {
+            [self showChatView:reply.parentreplyid name:reply.authorname commentId:[reply.fromauthorid intValue]];
+        }
     }
 }
 

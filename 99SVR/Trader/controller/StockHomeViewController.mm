@@ -69,27 +69,9 @@
 -(void)initUi{
     
     [self.navigationController.navigationBar setHidden:YES];
-    UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
-    [self.view addSubview:_headView];
-    _headView.backgroundColor = UIColorFromRGB(0xffffff);
-    UILabel *title;
-    title = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
-    [title setFont:XCFONT(15)];
-    [_headView addSubview:title];
-    [title setTextAlignment:NSTextAlignmentCenter];
-    [title setTextColor:UIColorFromRGB(0x0078DD)];
-    UILabel *_lblContent;
-    _lblContent = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
-    [_lblContent setBackgroundColor:[UIColor whiteColor]];
-    [_headView addSubview:_lblContent];
-    title.text = @"高手操盘";
-    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(showLeftView) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
-    [self.view addSubview:btnLeft];
-    [btnLeft setFrame:Rect(0,20,44,44)];
-    
-    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchClick) image:@"nav_search_icon_n" highImage:@"nav_search_icon_p"];
-    [_headView addSubview:btnRight];
-    [btnRight setFrame:Rect(kScreenWidth-44, 20, 44, 44)];
+
+    [self setTitleText:@"高手操盘"];
+
     
     self.view.backgroundColor = [UIColor whiteColor];
     

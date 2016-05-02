@@ -13,6 +13,9 @@ typedef void(^BuyVipSucessHandle)(void);
 #import "CustomViewController.h"
 #import "StockDealModel.h"
 @interface TQPurchaseViewController : CustomViewController
+
+- (id)initWithTeamId:(int)nId;
+
 @property (nonatomic , strong) StockDealModel *stockModel;
 @property (nonatomic , copy) BuyVipSucessHandle handle;
 

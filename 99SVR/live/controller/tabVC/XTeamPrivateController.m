@@ -67,7 +67,7 @@
     _btnBuy = [UIButton buttonWithType:UIButtonTypeCustom];
     _btnBuy.frame = Rect(10,8, kScreenWidth-20, 44);
     [_buyView addSubview:_btnBuy];
-    [_btnBuy setTitle:@"购  买" forState:UIControlStateNormal];
+    [_btnBuy setTitle:@"兑    换" forState:UIControlStateNormal];
     [_btnBuy setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
     [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
@@ -76,7 +76,6 @@
     _btnBuy.layer.masksToBounds = YES;
     _btnBuy.layer.cornerRadius = 2.5;
     [_btnBuy addTarget:self action:@selector(buyprivate) forControlEvents:UIControlEventTouchUpInside];
-    _btnBuy.hidden = YES;
     
     whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 0, kScreenWidth, self.view.height)];
     [self.view addSubview:whatPrivate];

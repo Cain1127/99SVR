@@ -94,10 +94,10 @@ void ReplyListener::onResponse(vector<Reply>& infos){
         reply.viewpointid = info.viewpointid();
         reply.parentreplyid = info.parentreplyid();
         
-//        reply.authorid = [NSString stringWithUTF8String:info.authorid().c_str()];
+        reply.authorid = NSStringFromInt(info.authorid());
         reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
         reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];
-//        reply.fromauthorid = [NSString stringWithUTF8String:info.fromauthorid().c_str()];
+        reply.fromauthorid = NSStringFromInt(info.fromauthorid());
         reply.fromauthorname = [NSString stringWithUTF8String:info.fromauthorname().c_str()];
         reply.fromauthoricon = [NSString stringWithUTF8String:info.fromauthoricon().c_str()];
         reply.publishtime = [NSString stringWithUTF8String:info.publishtime().c_str()];
@@ -347,7 +347,7 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
     if (infos.size() == 0) {
         RoomHttp *room = [[RoomHttp alloc] initWithData:&recommendTeam];
         NSMutableArray *aryDict = [NSMutableArray array];
-        for(int i=0;i<infos.size();i++)
+        for(int i=0;i<teamSummaryPackList.size();i++)
         {
             TeamPrivateServiceSummaryPack pack = teamSummaryPackList[i];
             XPrivateService *service = [[XPrivateService alloc] init];
@@ -358,7 +358,6 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
             for (int j = 0 ; j < pack.summaryList().size(); j++) {
                 PrivateServiceSummary sumary = pack.summaryList()[j];
                 XPrivateSummary *priSummary = [[XPrivateSummary alloc] init];
-                
                 priSummary.nId = sumary.id();
                 priSummary.title = [NSString stringWithUTF8String:sumary.title().c_str()];
                 priSummary.summary = [NSString stringWithUTF8String:sumary.summary().c_str()];
@@ -380,17 +379,16 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
             NSMutableArray *ary = [NSMutableArray array];
             for (int i=0; i<infos.size(); i++) {
                 MyPrivateService service = infos[i];
-//                NSString *teamid = [NSString stringWithUTF8String:service.teamid().c_str()];
+                NSString *teamid = NSStringFromInt(service.teamid());
                 NSString *teamname = [NSString stringWithUTF8String:service.teamname().c_str()];
                 NSString *teamicon = [NSString stringWithUTF8String:service.teamicon().c_str()];
                 NSString *levelname = [NSString stringWithUTF8String:service.levelname().c_str()];
                 NSString *expirationdate = [NSString stringWithUTF8String:service.expirationdate().c_str()];
                 int levelid = service.levelid();
-//                NSDictionary *dict = @{@"teamid":teamid,@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
-//                                       @"expirationdate":expirationdate,@"levelid":@(levelid)};
-                NSDictionary *dict = @{@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
+                NSDictionary *dict = @{@"teamid":teamid,@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
                                        @"expirationdate":expirationdate,@"levelid":@(levelid)};
-                
+//                NSDictionary *dict = @{@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
+//                                       @"expirationdate":expirationdate,@"levelid":@(levelid)};
                 TQMeCustomizedModel *model = [TQMeCustomizedModel mj_objectWithKeyValues:dict];
                 [ary addObject:model];
             }
@@ -534,24 +532,21 @@ void TeamListListener::onResponse(vector<Team>& team_infos, vector<Team>& hiden_
     for (; i<team_infos.size(); i++)
     {
         Team _team = team_infos[i];
-        DLog(@"team:%d",_team.roomid());
-        RoomHttp *room = [[RoomHttp alloc] initWithData:&team_infos[i]];
+        RoomHttp *room = [[RoomHttp alloc] initWithData:&_team];
         [array addObject:room];
     }
     
     for (i=0;i<hiden_infos.size(); i++)
     {
         Team _team = hiden_infos[i];
-        DLog(@"team:%d",_team.roomid());
-        RoomHttp *room = [[RoomHttp alloc] initWithData:&team_infos[i]];
+        RoomHttp *room = [[RoomHttp alloc] initWithData:&_team];
         [aryHiden addObject:room];
     }
     
     for(i=0; i<custom_service_infos.size(); i++)
     {
         Team _team = custom_service_infos[i];
-        DLog(@"team:%d",_team.roomid());
-        RoomHttp *room = [[RoomHttp alloc] initWithData:&custom_service_infos];
+        RoomHttp *room = [[RoomHttp alloc] initWithData:&_team];
         [aryHelp addObject:room];
     }
     
@@ -720,13 +715,15 @@ void HomePageListener::onResponse(std::vector<BannerItem>& banner_data, std::vec
     NSMutableArray *banner = [NSMutableArray array];
     int i;
     for (i=0; i<banner_data.size(); i++) {
-        BannerModel *model = [[BannerModel alloc] initWithData:&banner_data[i]];
+        BannerItem _banner = banner_data[i];
+        BannerModel *model = [[BannerModel alloc] initWithData:&_banner];
         [banner addObject:model];
     }
     
     NSMutableArray *videoRoom = [NSMutableArray array];
     for (i=0; i<team_data.size(); i++) {
-        RoomHttp *room = [[RoomHttp alloc] initWithData:&team_data[i]];
+        Team _team = team_data[i];
+        RoomHttp *room = [[RoomHttp alloc] initWithData:&_team];
         [videoRoom addObject:room];
     }
     NSMutableArray *aryViewPoint = [NSMutableArray array];

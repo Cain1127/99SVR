@@ -80,7 +80,6 @@
             {
                 [aryAll addObject:room];
             }
-            
             NSArray *aryHelp = dict[@"help"];
             [UserInfo sharedUserInfo].aryHelp = aryHelp;
             for (RoomHttp *room in aryHelp)
@@ -109,6 +108,12 @@
                 }
             });
         }
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [selfWeak.noView removeFromSuperview];
+        });
     }
     dispatch_async(dispatch_get_main_queue(),
     ^{

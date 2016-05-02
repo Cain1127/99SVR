@@ -105,7 +105,7 @@
     {
         nLevel = 190;
     }
-    else if([self IsRoomFangzhu:user.m_nUserId])
+    else if([self IsRoomFangzhu:user.m_nUserId])//creatorid
     {
         nLevel = 180;
     }
@@ -117,7 +117,7 @@
     {
         nLevel = 104;
     }
-    else if(user.m_nVipLevel!=1 && user.m_nVipLevel != 2)
+    else if(user.m_nVipLevel!=1 && user.m_nVipLevel != 2)//3-6
     {
         nLevel = user.m_nVipLevel;
     }

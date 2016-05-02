@@ -9,6 +9,7 @@
 #import "ChatRightView.h"
 #import "UIImageFactory.h"
 #import "UIButton+WebCache.h"
+#import "UIControl+UIControl_XY.h"
 
 @implementation ChatRightView
 
@@ -45,6 +46,13 @@
     CGRect buttonFrame = Rect(5, 6, 44, 44);
     for (int i=0; i<5; i++) {
         UIButton *btnQuestion = [ChatRightView createButton:buttonFrame];
+        if (i==1) {
+            btnQuestion.cjr_acceptEventInterval = 3;
+        }
+        else
+        {
+            btnQuestion.cjr_acceptEventInterval = 0.5;
+        }
         NSString *strName = [NSString stringWithFormat:@"chatRightView%d",i+1];
         [UIImageFactory createBtnImage:strName btn:btnQuestion state:UIControlStateNormal];
         [_scrollView addSubview:btnQuestion];
