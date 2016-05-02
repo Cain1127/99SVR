@@ -71,6 +71,8 @@
     
     [self.view hideToastActivity];
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+
     if ([code isEqualToString:@"1"]) {//请求成功
         
         [self.tableViewDataArray removeAllObjects];
@@ -83,14 +85,12 @@
         //持仓记录
         [self.tableViewDataArray addObject:dic[@"stocks"]];
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            self.tableView.tableFooterView = self.warningLab;
-            [self.headerView setHeaderViewWithDataModel:self.headerModel];
-            [self.tableViewModel setIsShowRecal:dic[@"recalState"] withDataModel:self.headerModel];
-            self.tableViewModel.dataArray = self.tableViewDataArray;
-            [self.tableView reloadData];
-        });
+        
+        self.tableView.tableFooterView = self.warningLab;
+        [self.headerView setHeaderViewWithDataModel:self.headerModel];
+        [self.tableViewModel setIsShowRecal:dic[@"recalState"] withDataModel:self.headerModel];
+        self.tableViewModel.dataArray = self.tableViewDataArray;
+        [self.tableView reloadData];
         
     }else{//请求失败
         
@@ -98,6 +98,8 @@
     }
     [self chickEmptyViewShow:self.tableViewDataArray withCode:code];
     
+    });
+
 }
 
 #pragma mark

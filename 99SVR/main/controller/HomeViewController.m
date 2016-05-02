@@ -802,7 +802,7 @@ typedef enum : NSUInteger
         return height;
     }else if([tempObject isKindOfClass:[ZLOperateStock class]])
     {
-        return ValueWithTheIPhoneModelString(@"100,120,140,160");
+        return ValueWithTheIPhoneModelString(@"110,110,110,110");
     }
     return 130.0f;
     

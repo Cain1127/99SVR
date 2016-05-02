@@ -25,6 +25,12 @@ static char  * TapRecognizerBlockKey;
 
 -(void)showEmptyViewInView:(UIView *)targetView withMsg:(NSString *)msg  withImageName:(NSString *)imageName touchHanleBlock:(TouchHanleBlock)hanleBlock{
 
+    
+    UIView *emptyView = [targetView viewWithTag:EmptyViewTag];
+    if (emptyView) {
+        [emptyView removeFromSuperview];
+    }
+    
     CGFloat width = targetView.frame.size.width;
     CGFloat height = targetView.frame.size.height;
     
