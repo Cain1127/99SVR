@@ -533,18 +533,24 @@ void TeamListListener::onResponse(vector<Team>& team_infos, vector<Team>& hiden_
     NSMutableArray *aryHelp = [NSMutableArray array];
     for (; i<team_infos.size(); i++)
     {
+        Team _team = team_infos[i];
+        DLog(@"team:%d",_team.roomid());
         RoomHttp *room = [[RoomHttp alloc] initWithData:&team_infos[i]];
         [array addObject:room];
     }
     
     for (i=0;i<hiden_infos.size(); i++)
     {
+        Team _team = hiden_infos[i];
+        DLog(@"team:%d",_team.roomid());
         RoomHttp *room = [[RoomHttp alloc] initWithData:&team_infos[i]];
         [aryHiden addObject:room];
     }
     
     for(i=0; i<custom_service_infos.size(); i++)
     {
+        Team _team = custom_service_infos[i];
+        DLog(@"team:%d",_team.roomid());
         RoomHttp *room = [[RoomHttp alloc] initWithData:&custom_service_infos];
         [aryHelp addObject:room];
     }

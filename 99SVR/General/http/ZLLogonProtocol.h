@@ -175,6 +175,10 @@ public :
      *   购买VIP
      */
     void buyPrivateVip(int teacherId,int type);
+    /**
+     *   加入房间成功后，请求信息
+     */
+    void requestRoomMsg();
     ~ZLLogonProtocol();
 };
 

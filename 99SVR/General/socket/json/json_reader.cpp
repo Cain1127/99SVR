@@ -691,6 +691,34 @@ bool Reader::decodeString(Token& token, JSONCPP_STRING& decoded) {
   return true;
 }
 
+//static inline void appendUnicodeToUtf8(unsigned int c, std::string &utf8) {
+//  if (c < 0x00080) {
+//          utf8 += static_cast<char>(c & 0xFF);
+//        } else if (c < 0x00800) {
+//         utf8 += static_cast<char>(0xC0 + ((c >> 6) & 0x1F));
+//        utf8 += static_cast<char>(0x80 + (c & 0x3F));
+//        } else if (c < 0x10000) {
+//        utf8 += static_cast<char>(0xE0 + ((c >> 12) & 0x0F));
+//        utf8 += static_cast<char>(0x80 + ((c >> 6) & 0x3F));
+//         utf8 += static_cast<char>(0x80 + (c & 0x3F));
+//                } else {
+//                                utf8 += static_cast<char>(0xF0 + ((c >> 18) & 0x07));
+//                                        utf8 += static_cast<char>(0x80 + ((c >> 12) & 0x3F));
+//                                         utf8 += static_cast<char>(0x80 + ((c >> 6) & 0x3F));
+//                                         utf8 += static_cast<char>(0x80 + (c & 0x3F));
+//                 }
+//}
+//
+//bool Reader::decodeString(Token& token, JSONCPP_STRING& decoded) {
+//  decoded.reserve(static_cast<size_t>(token.end_ - token.start_ - 2));
+//  Location current = token.start_ + 1; // skip '"'
+//  Location end = token.end_ - 1;       // do not include '"'
+//  unsigned int unicode;
+//  if (!decodeUnicodeEscapeSequence(token, current, end, unicode))
+//    return false;
+//  appendUnicodeToUtf8(unicode, decoded);//¿ªÊ¼×ªÂë
+//}
+
 bool Reader::decodeUnicodeCodePoint(Token& token,
                                     Location& current,
                                     Location end,

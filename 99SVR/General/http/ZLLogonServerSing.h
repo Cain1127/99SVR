@@ -63,4 +63,6 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
  */
 - (void)requestBuyPrivateVip:(int)teacherId vipType:(int)vip;
 
+- (void)requestRoomInfo;
+
 @end

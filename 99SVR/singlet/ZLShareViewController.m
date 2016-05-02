@@ -14,7 +14,7 @@
 #import "WXApi.h"
 #import "WeiboSDK.h"
 
-@interface ZLShareViewController ()<ShareDelegate,TencentSessionDelegate>
+@interface ZLShareViewController ()<ShareDelegate>
 
 @property (nonatomic,strong) ZLShareView *shareView;
 @property (nonatomic,copy) NSString *strTitle;
@@ -36,7 +36,7 @@
     
     _strTitle = title;
     _strUrl = url;
-    _tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1105199260" andDelegate:self];
+    _tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1105298719" andDelegate:self];
     return self;
 }
 -(void)show
