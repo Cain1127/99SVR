@@ -54,6 +54,7 @@
     TQIdeaTableViewCell *cell = [viewCache objectForKey:strKey];
     if (!cell) {
         cell = [[TQIdeaTableViewCell alloc] initWithReuseIdentifier:viewPointCellName];
+//        cell = [[TQIdeaTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:viewPointCellName];
         [viewCache setObject:cell forKey:viewCache];
     }
     if (_aryModel.count>indexPath.row) {
@@ -75,7 +76,7 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 130;
+    return 120;
 }
 
 @end

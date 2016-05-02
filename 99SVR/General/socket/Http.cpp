@@ -177,12 +177,6 @@ char* Http::request(const char* host, short port, const char* url_tail, RequestP
 		recvbytes.append(buf, ret);
 	}
 
-	if (recvbytes.empty())
-	{
-		if (http_listener)
-			http_listener->OnError(PERR_IO_ERROR);
-	}
-
 	socket.close_();
 
 	int recvsize = recvbytes.size();
@@ -200,14 +194,12 @@ char* Http::request(const char* host, short port, const char* url_tail, RequestP
 				this->parser(content, http_listener);
 			}
 
-#ifdef WIN
-			if (http_listener)
-				http_listener->onResponseRawData(string(content));
-#endif
-
 			return content;
 		}
 	}
+
+	if (http_listener)
+		http_listener->OnError(PERR_IO_ERROR);
 
 	return NULL;
 }

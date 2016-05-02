@@ -8,8 +8,8 @@
 
 #import "LivePlayViewController.h"
 #import "UIImageView+WebCache.h"
+#import "AudioPlayer.h"
 #import "Toast+UIView.h"
-#import "OpenAL.h"
 #import "KxMovieDecoder.h"
 #import "MediaSocket.h"
 #include <sys/time.h>
@@ -45,7 +45,7 @@
 }
 @property (nonatomic) BOOL backGroud;
 @property (nonatomic) BOOL bVideo;
-@property (nonatomic,strong) OpenAL *openAL;
+@property (nonatomic,strong) AudioPlayer *playAudio;
 @property (nonatomic) opus_int16 *out_buffer;
 @property (nonatomic,copy) UIImage *currentImage;
 @property (nonatomic,strong) UIImageView *smallView;
@@ -87,13 +87,9 @@
 {
     __weak UIView *__downHUD = _downHUD;
     __weak UIView *__topHUD = _TopHUD;
-    @WeakObj(self)
     dispatch_main_async_safe(
     ^{
-        if (selfWeak.bFull)
-        {
-            __topHUD.hidden = YES;
-        }
+         __topHUD.hidden = YES;
          __downHUD.alpha = 0;
     });
 }
@@ -106,16 +102,13 @@
         _downHUD.alpha = 1;
         if (bFull)
         {
-            _TopHUD.hidden = YES;
+            _TopHUD.hidden = NO;
         }
         [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:2.0];
     }
     else
     {
-        if (bFull)
-        {
-            _TopHUD.hidden = NO;
-        }
+        _TopHUD.hidden = YES;
         _downHUD.alpha = 0;
     }
 }
@@ -172,7 +165,6 @@
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
-    
     lblText.hidden = YES;
 }
 
@@ -183,7 +175,6 @@
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
-    
     lblText.hidden = NO;
     [lblText setText:@"音频模式"];
 }
@@ -212,14 +203,15 @@
         DLog(@"打开失败");
     }
     _pFrame = av_frame_alloc();
-    _openAL = [[OpenAL alloc]  init];
+    _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
     _decoder = opus_decoder_create(48000,2,0);
     _out_buffer = (opus_int16 *)malloc(1920*2*sizeof(opus_int16));
 }
 
 - (void)decodeAudio
 {
-    [_openAL initOpenAL];
+//    [_openAL initOpenAL];
+    [_playAudio startPlayWithBufferByteSize:7680];
     int returnValue = 0;
     while (_playing)
     {
@@ -242,8 +234,7 @@
                 {
                     continue;
                 }
-                int32_t length = returnValue * sizeof(opus_int16) * 2;
-                [_openAL openAudioFromQueue:(uint8_t*)_out_buffer dataSize:length];
+                [_playAudio putAudioData:_out_buffer];
             }
             @synchronized(_media.audioBuf)
             {
@@ -255,7 +246,8 @@
             [NSThread sleepForTimeInterval:0.01];
         }
     }
-    [_openAL stopSound];
+//    [_openAL stopSound];
+    [_playAudio stopPlay];
     [_media.audioBuf removeAllObjects];
 }
 
@@ -265,6 +257,11 @@
     _media.nFall = 0;
     _playing = NO;
     [_media closeSocket];
+    @WeakObj(self)
+    gcd_main_safe(^{
+         [selfWeak setDefaultImg];
+    });
+    
     [UIApplication sharedApplication].idleTimerDisabled = _playing;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -306,9 +303,14 @@
     [lblText setTextAlignment:NSTextAlignmentCenter];
     _media = [[MediaSocket alloc] init];
     _glView.userInteractionEnabled = YES;
-    UITapGestureRecognizer *singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapFrom)];
-    singleRecogn.numberOfTapsRequired = 2;
+    
+    UITapGestureRecognizer *singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTopHUD)];
+    singleRecogn.numberOfTapsRequired = 1;
     [_glView addGestureRecognizer:singleRecogn];
+    
+    UITapGestureRecognizer *doubleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTapFrom)];
+    doubleRecogn.numberOfTapsRequired = 2;
+    [_glView addGestureRecognizer:doubleRecogn];
     
     _TopHUD = [[UIView alloc] init];
     [_glView addSubview:_TopHUD];
@@ -339,10 +341,6 @@
     
     _btnCollet = [self createPlayBtn:@"video_room_follow_icon_n" high:@"video_room_follow_icon_p"];
     [_btnCollet addTarget:self action:@selector(colletInfo) forControlEvents:UIControlEventTouchUpInside];
-    
-//    DLog(@"%@",self.view.superview.superview.superclass);
-//    DLog(@"%@",self.view.superview.superview.superclass);
-//    DLog(@"%@",self.view.superview.superview.superclass);
     
     [self updateDownHUD];
     
@@ -535,14 +533,6 @@
     {
         videoQueue = dispatch_queue_create("video_tid", 0);
     }
-//    dispatch_async(videoQueue,
-//    ^{
-//        [__self decodeVideo];
-//    });
-//    dispatch_async(audioQueue,
-//    ^{
-//        [__self decodeAudio];
-//    });
     
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
@@ -576,6 +566,7 @@
 
 - (void)checkMedia
 {
+    return ;
     while (_playing)
     {
         if (_media.audioBuf.count+_media.videoBuf.count>0)
@@ -584,7 +575,6 @@
             dispatch_main_async_safe(
             ^{
                  [__self.glView hideToastActivity];
-                 __self.smallView.hidden = YES;
             });
             dispatch_async(videoQueue,
            ^{
@@ -594,7 +584,7 @@
            ^{
                [__self decodeAudio];
            });
-            return;
+           return;
         }
         [NSThread sleepForTimeInterval:0.5f];
     }
@@ -780,30 +770,11 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    _smallView.frame = Rect(_glView.width/2-44,_glView.height/2-35, 88, 71);
-    CGFloat originY = _glView.height == kVideoImageHeight ? _glView.height/2+30 : _glView.height/2+40;
-    lblText.frame = Rect(_glView.width/2-100,originY+10, 200, 20);
+//    _smallView.frame = Rect(_glView.width/2-44,_glView.height/2-35, 88, 71);
+//    CGFloat originY = _glView.height == kVideoImageHeight ? _glView.height/2+30 : _glView.height/2+40;
+//    lblText.frame = Rect(_glView.width/2-100,originY+10, 200, 20);
 }
 
 #pragma mark AVAudioSession
-/*
-- (void)handleInterruption:(NSNotification *)notification
-{
-    UInt8 theInterruptionType = [[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] intValue];
-    if (theInterruptionType == AVAudioSessionInterruptionTypeBegan)
-    {
-        DLog(@"input:%@",[[AVAudioSession sharedInstance] availableInputs]);
-        [[AVAudioSession sharedInstance] setActive:NO error:nil];
-    }
-    else if (theInterruptionType == AVAudioSessionInterruptionTypeEnded)
-    {
-        NSError *error;
-        BOOL bSucess = [[AVAudioSession sharedInstance] setActive:YES error:&error];
-        if (!bSucess)
-        {
-            DLog(@"error:%@",error);
-        }
-    }
-}
-*/
+
 @end

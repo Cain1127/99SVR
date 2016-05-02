@@ -160,7 +160,6 @@
         [cell setHTMLString:_introduce];
         return cell;
     }
-//    @WeakObj(self);
     ZLRoomVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TeamVideoCell"];
     if (!cell)
     {
@@ -169,7 +168,7 @@
 
     cell.itemOnClick = ^(XVideoModel *room)
     {
-//        [selfWeak connectRoom:room];
+        
     };
     int length = 2;
     int loc = (int)indexPath.row * length;

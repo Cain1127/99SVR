@@ -26,4 +26,6 @@
 
 + (BannerModel*)resultWithDict:(NSDictionary* )dict;
 
+- (id)initWithData:(void *)pData;
+
 @end

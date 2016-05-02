@@ -41,8 +41,11 @@
     [self.tableView.gifHeader beginRefreshing];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ANSWERREPLY_VC object:nil];
+    
 }
 
 - (void)setupTableView
@@ -54,27 +57,30 @@
     _tableView.tableFooterView = [UIView new];
     _tableView.backgroundColor = COLOR_Bg_Gay;
     [self.view addSubview:_tableView];
-
+    
     [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [_tableView.gifHeader loadDefaultImg];
-    
 }
 
 - (void)loadRplayView:(NSNotification *)notify
 {
-    NSArray *aryModel = notify.object;
-    [self.modelArray removeAllObjects];
-    
-    for (int i = 0; i < aryModel.count; i++) {
-        TQAnswerModel *model = aryModel[i];
-        model.autoId = i;
-        [self.modelArray addObject:model];
+    NSDictionary *dict = notify.object;
+    if ([dict[@"code"] intValue]==1)
+    {
+        NSArray *aryModel = dict[@"data"];
+        [self.modelArray removeAllObjects];
+        
+        for (int i = 0; i < aryModel.count; i++) {
+            TQAnswerModel *model = aryModel[i];
+            model.autoId = i;
+            [self.modelArray addObject:model];
+        }
+        
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+        });
     }
-    
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.tableView reloadData];
-    });
 }
 
 //开始请求.结束下拉刷新

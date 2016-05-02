@@ -230,9 +230,8 @@ typedef enum : NSUInteger
     [self.navigationController pushViewController:mailbox animated:YES];
 }
 
-- (void)updateBannerInfo:(NSDictionary *)dict
+- (void)updateBannerInfo:(NSArray *)array
 {
-    NSArray *array = [dict objectForKey:@"banner"];
     if (0 < array.count)
     {
         [_aryBanner removeAllObjects];
@@ -252,21 +251,6 @@ typedef enum : NSUInteger
 #pragma mark - home date init request and analyze
 - (void)initData
 {
-//    [kHTTPSingle RequestHomePage];
-    NSString *strUrl = [[NSString alloc] initWithUTF8String:kHome_Banner_URL];
-    @WeakObj(self);
-    [BaseService postJSONWithUrl:strUrl parameters:nil success:^(id responseObject) {
-        
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-        if ([dict objectForKey:@"banner"])
-        {
-            [UserDefaults setObject:dict forKey:kBannerInfo];
-            [selfWeak updateBannerInfo:dict];
-        }
-    } fail:^(NSError *error) {
-        NSDictionary *dict = [UserDefaults objectForKey:kBannerInfo];
-        [self updateBannerInfo:dict];
-    }];
 }
 
 - (void)updateLiveInfo:(NSNotification *)notify
@@ -292,11 +276,11 @@ typedef enum : NSUInteger
     {
         self.aryLiving = [NSMutableArray array];
     }
-    
     ///清空原数据
     [self.aryLiving removeAllObjects];
     NSDictionary *dict = notify.object;
-    ///check videoroom data
+    NSArray *bannerList = dict[@"banner"];
+    [self updateBannerInfo:bannerList];
     if ([dict objectForKey:@"video"])
     {
         ///初始化数据模型

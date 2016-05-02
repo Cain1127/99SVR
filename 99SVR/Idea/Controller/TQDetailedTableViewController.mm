@@ -8,11 +8,13 @@
 
 #import "TQDetailedTableViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "ZLShareView.h"
 #import "ChatRightView.h"
 #import "UIImageFactory.h"
 #import "MJRefresh.h"
 #import "CommentCell.h"
 #import "ZLReply.h"
+#import "ZLShareViewController.h"
 #import "ReplyNullInfoCell.h"
 #import "EmojiTextAttachment.h"
 #import "AlertFactory.h"
@@ -28,6 +30,7 @@
 #import "TQIdeaDetailModel.h"
 #import "ViewNullFactory.h"
 #import "GiftView.h"
+#import "WXApi.h"
 
 @interface TQDetailedTableViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,UIWebViewDelegate,CommentDelegate,GiftDelegate>
 {
@@ -79,10 +82,21 @@
     return self;
 }
 
+- (void)showShareView
+{
+    NSString *strInfo = [NSString stringWithFormat:@"我在99乐投看到了一篇非常好的分析文章，分享给你，赶快过来看看吧!"];
+    ZLShareViewController *viewControl = [[ZLShareViewController alloc] initWithTitle:strInfo url:@"www.99ducaijing.com"];
+    [viewControl show];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setTitleText:@"观点正文"];
+    
+    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(showShareView) image:@"video_room_share_icon_n" highImage:@"video_room_share_icon_p"];
+    [self setRightBtn:btnRight];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyRepson:) name:MESSAGE_IDEA_REPLY_RESPONSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView:) name:MESSAGE_HTTP_REQUEST_REPLY_VC object:nil];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
@@ -116,23 +130,25 @@
     [self.view addSubview:_chatView];
     _chatView.hidden = YES;
     _chatView.delegate = self;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadBodyView:) name:MESSAGE_HTTP_VIEWPOINTDETAIL_VC object:nil];
+    [self requestView];
 }
 
 - (void)showGiftView
 {
-//    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
         [_giftView updateGoid];
         [UIView animateWithDuration:0.5 animations:^{
             [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
         } completion:^(BOOL finished) {}];
-//    }
-//    else
-//    {
-//        @WeakObj(self)
-//        [AlertFactory createLoginAlert:self block:^{
-//            [selfWeak closeRoomInfo];
-//        }];
-//    }
+    }
+    else
+    {
+        [AlertFactory createLoginAlert:self block:^{
+            
+        }];
+    }
 }
 
 /**
@@ -290,7 +306,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *identifier = @"commentIdentifier";
-    
     if(_aryCommont.count==0)
     {
         [_tableView.footer setHidden:YES];
@@ -311,7 +326,6 @@
         ZLReply *reply = [_aryCommont objectAtIndex:indexPath.row];
         cell.textView.shouldDrawImages = YES;
         cell.textView.delegate = self;
-        
         cell.textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[reply.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
         [cell setReplyModel:reply];
     }
@@ -479,8 +493,6 @@
 {
    [super viewWillAppear:animated];
    //可能需要重连
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadBodyView:) name:MESSAGE_HTTP_VIEWPOINTDETAIL_VC object:nil];
-    [self requestView];
 }
 
 - (void)loadBodyView:(NSNotification *)notify
@@ -531,7 +543,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 /**
@@ -654,6 +665,7 @@
 - (void)dealloc
 {
     DLog(@"dealloc");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     if(_bHome){
         
     }

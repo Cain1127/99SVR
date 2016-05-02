@@ -10,8 +10,8 @@
 #import "UserInfo.h"
 #import "UIImageView+WebCache.h"
 
-#define kImageWidth 107
-#define kCircle (kImageWidth + 12)
+#define kImageWidth 85
+#define kCircle 95
 
 @interface LeftMenuHeaderView()
 {
@@ -22,12 +22,81 @@
     UILabel *_lineView;
     UIImageView *imageB;
     UILabel *lblBContent;
-    
 }
+
+@property (nonatomic,strong) UIView *loginView;
+@property (nonatomic,strong) UIView *unLoginView;
 
 @end
 
 @implementation LeftMenuHeaderView
+
+- (UIView *)loginView
+{
+    if (_loginView==nil)
+    {
+        _loginView = [[UIView alloc] initWithFrame:Rect(0, _circleLine.y+_circleLine.height+10,kScreenWidth,40)];
+        UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 20)];
+        [lblName setFont:XCFONT(15)];
+        [_loginView addSubview:lblName];
+        [lblName setTextColor:UIColorFromRGB(0xffffff)];
+        lblName.tag = 1;
+        [lblName setTextAlignment:NSTextAlignmentCenter];
+        
+        UILabel *lblUserId = [[UILabel alloc] initWithFrame:Rect(0, 20, kScreenWidth, 20)];
+        [_loginView addSubview:lblUserId];
+        [lblUserId setFont:XCFONT(13)];
+        [lblUserId setTextColor:UIColorFromRGB(0xffffff)];
+        lblUserId.tag = 2;
+        [lblUserId setTextAlignment:NSTextAlignmentCenter];
+    }
+    return _loginView;
+}
+
+- (UIView *)unLoginView
+{
+    if (_unLoginView==nil) {
+        _unLoginView = [[UIView alloc] initWithFrame:Rect(0, _circleLine.y+_circleLine.height+10,kScreenWidth,40)];
+        UIButton *btnLogin = [UIButton buttonWithType:UIButtonTypeCustom];
+        btnLogin.frame = Rect(kScreenWidth/2-80, 5, 70, 35);
+        [_unLoginView addSubview:btnLogin];
+        btnLogin.titleLabel.font = XCFONT(15);
+        [btnLogin setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+        btnLogin.tag = 2;
+        [btnLogin setTitle:@"登录" forState:UIControlStateNormal];
+        
+        UILabel *line = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-0.25, 10, 0.5, 20)];
+        [_unLoginView addSubview:line];
+        [line setBackgroundColor:UIColorFromRGB(0xcfcfcf)];
+        
+        UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
+        btnRight.frame = Rect(kScreenWidth/2+10, 5, 70, 35);
+        [_unLoginView addSubview:btnRight];
+        btnRight.titleLabel.font = XCFONT(15);
+        [btnRight setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+        btnRight.tag = 2;
+        [btnRight setTitle:@"注册" forState:UIControlStateNormal];
+        
+        [btnLogin addTarget:self action:@selector(loginEvent) forControlEvents:UIControlEventTouchUpInside];
+        [btnRight addTarget:self action:@selector(regEvent) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _unLoginView;
+}
+
+- (void)loginEvent
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(enterLogin)]) {
+        [_delegate enterLogin];
+    }
+}
+
+- (void)regEvent
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(enterRegister)]) {
+        [_delegate enterRegister];
+    }
+}
+
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -45,8 +114,10 @@
         _circleLine.layer.masksToBounds = YES;
         _circleLine.layer.cornerRadius = (kCircle) / 2;
         _circleLine.layer.borderWidth = 0.5;
-        _circleLine.layer.borderColor = UIColorFromRGB(0xffffff).CGColor;
+        _circleLine.layer.borderColor = UIColorFromRGB(0xe5e5e5).CGColor;
         [self addSubview:_circleLine];
+        
+        _circleLine.frame = Rect(self.width/2-kCircle/2, 10, kCircle, kCircle);
         
         _avatarImageView = [[UIImageView alloc] init];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -56,18 +127,8 @@
         [_circleLine addSubview:_avatarImageView];
         _avatarImageView.userInteractionEnabled = YES;
         [_avatarImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loginDelegate)]];
+        _avatarImageView.frame = Rect(6, 6, _circleLine.width-12, _circleLine.height-12);
         
-        _nameLabel = [[UILabel alloc] init];
-        _nameLabel.textColor = [UIColor whiteColor];
-        _nameLabel.font = kFontSize(15);
-        [_nameLabel setTextAlignment:NSTextAlignmentCenter];
-        [self addSubview:_nameLabel];
-        
-        _lineView = [UILabel new];
-        _lineView.backgroundColor = UIColorFromRGB(0x6EACE0);
-        [self addSubview:_lineView];
-
-        [self layoutViews];
     }
     return self;
 }
@@ -83,31 +144,24 @@
 - (void)setLogin:(BOOL)login
 {
     _login = login;
-    if (!login)
+    UserInfo *userInfo = [UserInfo sharedUserInfo];
+    if (login && userInfo.nType == 1)
     {
-        _nameLabel.text = @"";
+        self.unLoginView.hidden = YES;
+        [self addSubview:self.loginView];
+        self.loginView.hidden = NO;
+        UILabel *lblName = (UILabel *)[_loginView viewWithTag:1];
+        UILabel *lblUserId = (UILabel *)[_loginView viewWithTag:2];
+        NSString *strInfo = [[NSString alloc] initWithFormat:@"ID:%d",userInfo.nUserId];
+        [lblName setText:userInfo.strName];
+        [lblUserId setText:strInfo];
     }
     else
     {
-        UserInfo *userInfo = [UserInfo sharedUserInfo];
-        _vipLevel.text = NSStringFromInt(userInfo.nUserId);
-        if (userInfo.nType == 1)
-        {
-            NSString *strInfo = [[NSString alloc] initWithFormat:@"%@ ID:%d",userInfo.strName,userInfo.nUserId];
-            _nameLabel.text = strInfo;
-        }
-        else
-        {
-            _nameLabel.text = @"";
-        }
+        self.loginView.hidden = YES;
+        [self addSubview:self.unLoginView];
+        self.unLoginView.hidden = NO;
     }
-}
-
-- (void)layoutViews
-{
-    _circleLine.frame = Rect(self.width/2-kCircle/2, 10, kCircle, kCircle);
-    _avatarImageView.frame = Rect(6, 6, _circleLine.width-12, _circleLine.height-12);
-    _nameLabel.frame = Rect(30,self.height-25, self.width-60, 20);
 }
 
 @end

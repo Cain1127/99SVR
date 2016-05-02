@@ -8,6 +8,7 @@
 
 #import "ChatView.h"
 #import "EmojiView.h"
+#import "IQKeyboardManager.h"
 #import "UIControl+UIControl_XY.h"
 #import "RoomUser.h"
 #import "UIView+Touch.h"
@@ -159,11 +160,16 @@
 - (void)setHidden:(BOOL)hidden
 {
     [super setHidden:hidden];
-    if (!hidden){
+    if (!hidden)
+    {
+        [IQKeyboardManager sharedManager].enable = NO;
+        [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
         [_textView becomeFirstResponder];
     }
     else
     {
+        [IQKeyboardManager sharedManager].enable = YES;
+        [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
         if ([_textView isFirstResponder]) {
             [_textView resignFirstResponder];
         }

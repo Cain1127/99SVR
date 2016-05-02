@@ -4,7 +4,7 @@
 *战队简介
 *缓存
 */
-
+#include "stdafx.h"
 #include "HttpConnection.h"
 #include "LoginConnection.h"
 #include "Http.h"
@@ -26,6 +26,8 @@ static int g_startId;
 static int g_type;
 static int g_team_id;
 static int g_page;
+
+static char http_api[64] = {0};
 
 static void get_full_img_url(const std::string& relative_path, std::string& absolute_path)
 {
@@ -62,9 +64,12 @@ static void get_full_head_icon(const std::string& headid, std::string& absolute_
 	absolute_path += HTTP_ICON_FOLDER;
 	absolute_path += "/";
 	absolute_path += headid;
-	absolute_path += ".png";
-
+	if ( headid.find('.') == string::npos)
+	{
+		absolute_path += ".png";
+	}
 }
+
 /*
 string UTF8ToGBK(const std::string& strUTF8)  
 {  
@@ -109,6 +114,8 @@ static ThreadVoid http_request(void* _param)
 	http.register_http_listener(param->http_listener);
 	http.register_parser(param->parser);
 
+	param->request->insert(make_pair("client", get_client_type()));
+
 	if (param->request_method == HTTP_GET)
 	{
 		http.request(param->url, param->request);
@@ -116,7 +123,6 @@ static ThreadVoid http_request(void* _param)
 	else
 	{
 		strcat(param->url, "?s=");
-		//strcat(param->url, param->request->at("s").c_str());
 
 		std::map<string, string>::iterator it;
 
@@ -243,6 +249,7 @@ void parse_homepage(char* json, HttpListener* listener)
 
 							//videoroomItem.set_ncount(videoroom[i]["ncount"].asString());
 							teamItem.set_onlineusercount(atoi(team[i]["ncount"].asString().c_str()));
+							teamItem.set_locked(0);
 
 							//videoroomItem.set_cname(videoroom[i]["cname"].asString());
 							teamItem.set_teamname(team[i]["cname"].asString());
@@ -286,7 +293,7 @@ void parse_homepage(char* json, HttpListener* listener)
 							ViewpointSummary viewpointItem;
 							
 							viewpointItem.set_viewpointid(atoi(viewpoint[i]["viewpointId"].asString().c_str()));
-							viewpointItem.set_authorid(viewpoint[i]["authorId"].asString());
+							viewpointItem.set_authorid(atoi(viewpoint[i]["authorId"].asString().c_str()));
 							//viewpointItem.set_publishtime(viewpoint[i]["publishTime"].asString());
 							viewpointItem.set_title(viewpoint[i]["title"].asString());
 							
@@ -360,7 +367,7 @@ void parse_collectionlist(char* json, HttpListener* listener)
 	JsonValue value;
 	JsonReader reader;
 
-	std::vector<CollectItem> vec_collect;
+	std::vector<Team> vec_collect;
 
 	CollectionListener* collection_listener = (CollectionListener*)listener;
 
@@ -387,19 +394,31 @@ void parse_collectionlist(char* json, HttpListener* listener)
 						vec_collect.clear();
 						for(i = 0; i < size_; i++)
 						{
-							CollectItem collect;
+							Team collect;
 
-							collect.set_teacherid(atoi(data[i]["teacherid"].asString().c_str()));
-							collect.set_nvcbid(data[i]["nvcbid"].asString());
-							collect.set_cname(data[i]["cname"].asString());
-							collect.set_password(data[i]["password"].asString());
+							//collect.set_teacherid(atoi(data[i]["teacherid"].asString().c_str()));
+							collect.set_teamid(atoi(data[i]["teacherid"].asString().c_str()));
+
+							//collect.set_nvcbid(data[i]["nvcbid"].asString());
+							collect.set_roomid(atoi(data[i]["nvcbid"].asString().c_str()));
+
+							//collect.set_cname(data[i]["cname"].asString());
+							collect.set_teamname(data[i]["cname"].asString());
+
+							//collect.set_password(data[i]["password"].asString());
+							collect.set_locked(atoi(data[i]["password"].asString().c_str()));
 
 							std::string out;
 							get_full_img_url(data[i]["croompic"].asString(), out);
-							collect.set_croompic(out);
-							collect.set_ncount(data[i]["ncount"].asString());
+							//collect.set_croompic(out);
+							collect.set_teamicon(out);
+
+							//collect.set_ncount(data[i]["ncount"].asString());
+							collect.set_onlineusercount(atoi(data[i]["ncount"].asString().c_str()));
+
 							//collect.set_cgateaddr(data[i]["cgateaddr"].asString());
-							collect.set_ntype(data[i]["ntype"].asString());
+
+							//collect.set_ntype(data[i]["ntype"].asString());
 
 							vec_collect.push_back(collect);
 						}
@@ -417,7 +436,6 @@ void parse_collectionlist(char* json, HttpListener* listener)
 				}
 			}
 
-			collection_listener->onResponse(vec_collect);
 		}
 		else
 		{
@@ -754,7 +772,7 @@ void parse_ViewpointSummary(char* json, HttpListener* listener)
 
 							JsonValue& data_item = data[i];
 							viewpoint.set_viewpointid(atoi(data_item["viewpointid"].asString().c_str()));
-							viewpoint.set_authorid(data_item["authorid"].asString());
+							viewpoint.set_authorid(atoi(data_item["authorid"].asString().c_str()));
 							viewpoint.set_authorname(data_item["authorname"].asString());
 
 							std::string icon;
@@ -806,6 +824,8 @@ void parse_TeamList(char* json, HttpListener* listener)
 	int i;
 
 	std::vector<Team> team_list;
+	std::vector<Team> hiden_list;
+	std::vector<Team> custom_service_list;
 
 	TeamListListener* team_listener = (TeamListListener*)listener;
 
@@ -825,6 +845,8 @@ void parse_TeamList(char* json, HttpListener* listener)
 						int size_ = data.size();
 
 						team_list.clear();
+						hiden_list.clear();
+						custom_service_list.clear();
 						for(i = 0; i < size_; i++)
 						{
 							Team team;
@@ -839,11 +861,24 @@ void parse_TeamList(char* json, HttpListener* listener)
 							team.set_onlineusercount(data_item["ncount"].asInt());
 							team.set_teamid(data_item["ncreateid"].asInt());
 							team.set_alias(data_item["calias"].asString());
-							
-							team_list.push_back(team);
+							team.set_locked(data_item["nusepwd"].asInt());
+
+							if(0 == data_item["roomtype"].asInt())
+							{
+								hiden_list.push_back(team);
+							}
+							else if(1 == data_item["roomtype"].asInt())
+							{
+								team_list.push_back(team);
+							}
+							else if(2 == data_item["roomtype"].asInt())
+							{
+								custom_service_list.push_back(team);
+							}
+
 						}
 
-						team_listener->onResponse(team_list);
+						team_listener->onResponse(team_list, hiden_list, custom_service_list);
 
 						WriteProtocolCache("teamlist_cache.txt", strJson);
 					}
@@ -948,9 +983,7 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
 
 								JsonValue& data_item = data[i];
 
-								sprintf(tmp, "%d", data_item["teacherid"].asInt());
-								sTmp = tmp;
-								mps.set_teamid(sTmp);
+								mps.set_teamid(data_item["teacherid"].asInt());
 								mps.set_teamname(data_item["teacherid"].asString());
 								mps.set_teamicon(data_item["nheadid"].asString());
 								mps.set_levelid(data_item["viplevel"].asInt());
@@ -1072,8 +1105,8 @@ void parse_BuyPrivateService(char* json, HttpListener* listener)
 							psld.set_levelid(atoi(data_item["viplevel"].asString().c_str()));
 							psld.set_levelname(data_item["vipinfoname"].asString());
 							psld.set_description(data_item["contents"].asString());
-							psld.set_buyprice(atof(data_item["price"].asString().c_str()));
-							//psld.set_updateprice();
+							psld.set_buyprice(data_item["price"].asFloat());
+							psld.set_updateprice(data_item["upgrade_price"].asFloat());
 
 							psld.set_isopen(data_item["flag"].asInt());
 							psld.set_buytime(data_item["buytime"].asString());
@@ -1213,7 +1246,7 @@ void parse_viewpoint(char* json, HttpListener* listener)
 				for(i = 0; i < size_; i++)
 				{
 					ViewpointSummary viewpoint;
-					viewpoint.set_authorid(viewpoints[i]["authorid"].asString());
+					viewpoint.set_authorid(atoi(viewpoints[i]["authorid"].asString().c_str()));
 					viewpoint.set_authorname(viewpoints[i]["authorname"].asString());
 
 					std::string icon;
@@ -1284,7 +1317,8 @@ void parse_viewpointdetail(char* json, HttpListener* listener)
 			{
 				ViewpointDetail detail;	
 				detail.set_viewpointid(atoi((details["viewpointId"].asString()).c_str()));
-				detail.set_authorid(details["authorId"].asString());
+				detail.set_authorid(atoi(details["teacherid"].asString().c_str()));
+				detail.set_roomid(atoi(details["authorId"].asString().c_str()));
 				detail.set_authorname(details["authorName"].asString());
 
 				std::string icon;
@@ -1296,7 +1330,9 @@ void parse_viewpointdetail(char* json, HttpListener* listener)
 				detail.set_content(details["content"].asString());			
 				detail.set_replycount(atoi((details["replyCount"].asString()).c_str()));
 				detail.set_giftcount(atoi((details["giftcount"].asString()).c_str()));
-				detail_listener->onResponse(detail);
+
+				vector<ImageInfo> images;
+				detail_listener->onResponse(detail, images);
 			}
 			else
 			{
@@ -1358,14 +1394,14 @@ void parse_viewpointreply(char* json, HttpListener* listener)
 					reply.set_replytid(atoi((replys[i]["replytId"].asString()).c_str()));
 					reply.set_viewpointid(atoi((replys[i]["viewpointId"].asString()).c_str()));
 					reply.set_parentreplyid(atoi((replys[i]["parentReplyId"].asString()).c_str()));
-					reply.set_authorid(replys[i]["authorId"].asString());
+					reply.set_authorid(atoi(replys[i]["authorId"].asString().c_str()));
 					reply.set_authorname(replys[i]["authorName"].asString());
 
 					std::string icon;
 					get_full_head_icon(replys[i]["authorId"].asString(), icon);
 					reply.set_authoricon(icon);
 
-					reply.set_fromauthorid(replys[i]["fromAuthorId"].asString());
+					reply.set_fromauthorid(atoi(replys[i]["fromAuthorId"].asString().c_str()));
 					reply.set_fromauthorname(replys[i]["fromAuthorName"].asString());		
 					reply.set_fromauthoricon(replys[i]["fromAuthorIcon"].asString());			
 					reply.set_publishtime(replys[i]["publishTime"].asString());			
@@ -1427,14 +1463,14 @@ void parse_postreply(char* json, HttpListener* listener)
 				reply.set_replytid(atoi((replys["replytId"].asString()).c_str()));
 				reply.set_viewpointid(atoi((replys["viewpointId"].asString()).c_str()));
 				reply.set_parentreplyid(atoi((replys["parentReplyId"].asString()).c_str()));
-				reply.set_authorid(replys["authorId"].asString());
+				reply.set_authorid(atoi(replys["authorId"].asString().c_str()));
 				reply.set_authorname(replys["authorName"].asString());
 
 				std::string icon;
 				get_full_head_icon(replys["authorId"].asString(), icon);
 				reply.set_authoricon(icon);
 				
-				reply.set_fromauthorid(replys["fromAuthorId"].asString());
+				reply.set_fromauthorid(atoi(replys["fromAuthorId"].asString().c_str()));
 				reply.set_fromauthorname(replys["fromAuthorName"].asString());		
 				reply.set_fromauthoricon(replys["fromAuthorIcon"].asString());			
 				reply.set_publishtime(replys["publishTime"].asString());			
@@ -1804,13 +1840,13 @@ void parse_questionanswer(char* json, HttpListener* listener)
 				{
 					QuestionAnswer questionanswer;
 					questionanswer.set_id(atoi((datas["list"][i]["id"].asString()).c_str()));
-					questionanswer.set_answerauthorid(datas["list"][i]["answerAuthorId"].asString());
+					questionanswer.set_answerauthorid(atoi(datas["list"][i]["answerAuthorId"].asString().c_str()));
 					questionanswer.set_answerauthorname(datas["list"][i]["answerAuthorName"].asString());
 					questionanswer.set_answerauthorhead(datas["list"][i]["answerAuthorHead"].asString());	
 					questionanswer.set_answerauthorrole(atoi((datas["list"][i]["answerAuthorRole"].asString()).c_str()));
 					questionanswer.set_answertime(datas["list"][i]["answerTime"].asString());
 					questionanswer.set_answercontent(datas["list"][i]["answerContent"].asString());
-					questionanswer.set_askauthorid(datas["list"][i]["askAuthorId"].asString());
+					questionanswer.set_askauthorid(atoi(datas["list"][i]["askAuthorId"].asString().c_str()));
 					questionanswer.set_askauthorname(datas["list"][i]["askAuthorName"].asString());
 					
 					std::string icon;
@@ -1887,7 +1923,7 @@ void parse_comment(char* json, HttpListener* listener)
 					comment.set_id(atoi((datas["list"][i]["id"].asString()).c_str()));
 					comment.set_viewpointid(atoi((datas["list"][i]["viewpointid"].asString()).c_str()));
 					comment.set_title(datas["list"][i]["title"].asString());
-					comment.set_askauthorid(datas["list"][i]["askAuthorId"].asString());
+					comment.set_askauthorid(atoi(datas["list"][i]["askAuthorId"].asString().c_str()));
 					comment.set_askauthorname(datas["list"][i]["askAuthorName"].asString());
 
 					std::string icon;
@@ -1976,8 +2012,10 @@ void parse_groupspage(char* json, HttpListener* listener)
 	JsonValue value;
 	JsonReader reader;
 
-	
-	std::vector<RoomGroupData> roomgroup_list;
+	int size_ = 0;
+	int i = 0;
+
+	std::vector<NavigationItem> roomgroup_list;
 
 	GroupsPageListener* page_listener = (GroupsPageListener*)listener;
 
@@ -1994,6 +2032,40 @@ void parse_groupspage(char* json, HttpListener* listener)
 
 				if(0 == status)
 				{
+					JsonValue& groupspage = value["data"];
+
+					size_ = groupspage.size();
+
+					roomgroup_list.clear();
+					if(0 != size_)
+					{
+						for( i = 0; i < size_; i++ )
+						{
+							NavigationItem roomgroup;
+
+							roomgroup.set_nid(atoi(groupspage[i]["nid"].asString().c_str()));
+							roomgroup.set_level(atoi(groupspage[i]["nglevel"].asString().c_str()));
+							roomgroup.set_grouptype(atoi(groupspage[i]["ngrouptype"].asString().c_str()));
+							roomgroup.set_parentid(atoi(groupspage[i]["nparentid"].asString().c_str()));
+							roomgroup.set_showflag(atoi(groupspage[i]["nshowflag"].asString().c_str()));
+							roomgroup.set_sortid(atoi(groupspage[i]["nsortid"].asString().c_str()));
+							roomgroup.set_name(groupspage[i]["cname"].asString());
+							roomgroup.set_fontcolor(groupspage[i]["cfontcolor"].asString());
+							roomgroup.set_curl(groupspage[i]["curl"].asString());
+							roomgroup.set_gateurl(groupspage[i]["gateurl"].asString());
+							roomgroup.set_roomid(atoi(groupspage[i]["roomid"].asString().c_str()));
+							roomgroup.set_type(groupspage[i]["type"].asInt());
+
+							roomgroup_list.push_back(roomgroup);
+						}
+					}
+
+					page_listener->onResponse(roomgroup_list);
+
+				}
+				else
+				{
+					page_listener->OnError(status);
 				}
 			}
 		}
@@ -2176,10 +2248,14 @@ void parse_profitorder(char* json, HttpListener* listener)
 					OperateStockProfit profitorder;
 
 					profitorder.set_operateid(datas["list"][i]["operateId"].asUInt());
-					profitorder.set_teamid(datas["list"][i]["teamId"].asString());
+					profitorder.set_teamid(atoi(datas["list"][i]["teamId"].asString().c_str()));
 					//profitorder.set_teamname(UTF8ToGBK(datas["list"][i]["teamName"].asString()));
 					profitorder.set_teamname(datas["list"][i]["teamName"].asString());
-					profitorder.set_teamicon(datas["list"][i]["teamIcon"].asString());
+
+					std::string icon;
+					get_full_head_icon(datas["list"][i]["teamIcon"].asString(), icon);
+					profitorder.set_teamicon(icon);
+
 					//profitorder.set_focus(UTF8ToGBK(datas["list"][i]["focus"].asString()));
 					profitorder.set_focus(datas["list"][i]["focus"].asString());
 					profitorder.set_goalprofit(atof((datas["list"][i]["goalProfit"].asString()).c_str()));
@@ -2256,7 +2332,7 @@ void parse_profitdetail(char* json, HttpListener* listener)
 			{
 				OperateStockProfit osprofit;
 				osprofit.set_operateid(atoi((datas["profile"]["operateId"].asString()).c_str()));
-				osprofit.set_teamid(datas["profile"]["teamId"].asString());
+				osprofit.set_teamid(atoi(datas["profile"]["teamId"].asString().c_str()));
 				osprofit.set_teamname(datas["profile"]["teamName"].asString());
 				osprofit.set_teamicon(datas["profile"]["teamIcon"].asString());
 				osprofit.set_focus(datas["profile"]["focus"].asString());
@@ -2354,9 +2430,8 @@ void parse_splashimage(char* json, HttpListener* listener)
 					info.set_imageurl(out);
 					info.set_text(data["text"].asString());
 					info.set_url(data["url"].asString());
-					info.set_startime(data["starTime"].asInt64());
-					info.set_endtime(data["endTime"].asInt64());
-
+					info.set_startime(atoll(data["starTime"].asString().c_str()));
+					info.set_endtime(atoll(data["endTime"].asString().c_str()));
 					splash_listener->onResponse(info);
 				}
 				else
@@ -2801,7 +2876,7 @@ void HttpConnection::RequestSplashImage(SplashImageListener* listener)
 	http_request_asyn(listener, parse_splashimage, &request);
 }
 
-/*
+//请求PC首页导航
 void HttpConnection::RequestPcGroupsPage(GroupsPageListener* listener)
 {
 	RequestParamter& request = get_request_param();
@@ -2809,4 +2884,6 @@ void HttpConnection::RequestPcGroupsPage(GroupsPageListener* listener)
 	request["s"] = "index/pcgroupspage";
 
 	http_request_asyn(listener, parse_groupspage, &request);
-}*/
+}
+
+

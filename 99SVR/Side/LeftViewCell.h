@@ -18,7 +18,8 @@
 
 @interface LeftViewCell : UITableViewCell
 
-//@property(nonatomic, strong) LeftCellModel *cellModel;
+@property (nonatomic,strong) UILabel *lblRight;
+
 - (void)setModel:(LeftCellModel *)cellModel;
 
 @end

@@ -226,8 +226,9 @@
     _inputView.hidden = YES;
     _inputView.delegate = self;
     
-    _questionView = [[XLiveQuestionView alloc] initWithFrame:Rect(0,0,kScreenWidth,self.view.height)];
+    _questionView = [[XLiveQuestionView alloc] initWithFrame:Rect(0,-kRoom_head_view_height,kScreenWidth,self.view.height)];
     [self.view addSubview:_questionView];
+    _questionView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
     _questionView.hidden = YES;
     _questionView.delegate = self;
 }
@@ -238,12 +239,7 @@
     char cContent[400]={0};
     strcpy(cName, [strName UTF8String]);
     strcpy(cContent, [strContent UTF8String]);
-    [kHTTPSingle PostAskQuestion:[_room.nvcbid intValue] stock:cName question:cContent];
-    [_questionView.txtName resignFirstResponder];
-    [_questionView.txtContent resignFirstResponder];
-    [UIView animateWithDuration:0.25 animations:^{
-        _questionView.hidden = YES;
-    }];
+    [kHTTPSingle PostAskQuestion:[_room.teamid intValue] stock:cName question:cContent];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -287,6 +283,16 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strTeachWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
     });
+    [_questionView.txtName resignFirstResponder];
+    [_questionView.txtContent resignFirstResponder];
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+        [UIView animateWithDuration:0.5 animations:^{
+            [_questionView setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
+        } completion:^(BOOL finished)
+        {
+            _questionView.hidden = NO;
+        }];
+    }
 }
 
 /**
@@ -294,9 +300,21 @@
  */
 - (void)responseQuestion:(NSNotification *)notify
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [ProgressHUD showSuccess:@"提问成功"];
-    });
+    NSDictionary *dict = notify.object;
+    if ([dict[@"code"] intValue]==0)
+    {
+        @WeakObj(_questionView)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ProgressHUD showSuccess:@"提问成功"];
+            _questionViewWeak.txtName.text = @"";
+            _questionViewWeak.txtContent.text = @"";
+        });
+    }
+    else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ProgressHUD showError:@"提问请求失败"];
+        });
+    }
 }
 
 - (void)addNotification
@@ -647,8 +665,20 @@
         break;
         case 1:
         {
-            //暂不实现
-            _questionView.hidden = NO;
+            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+                [_giftView updateGoid];
+                [UIView animateWithDuration:0.5 animations:^{
+                    _questionView.hidden = NO;
+                    [_questionView setFrame:Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight)];
+                } completion:^(BOOL finished) {}];
+            }
+            else
+            {
+                @WeakObj(self)
+                [AlertFactory createLoginAlert:self block:^{
+                    [selfWeak closeRoomInfo];
+                }];
+            }
         }
         break;
     }

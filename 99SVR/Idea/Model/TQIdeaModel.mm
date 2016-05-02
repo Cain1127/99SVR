@@ -19,7 +19,7 @@
     
     ViewpointSummary *viewPoint = (ViewpointSummary *)pData;
     
-    _authorid = [NSString stringWithUTF8String:viewPoint->authorid().c_str()];
+//    _authorid = [NSString stringWithUTF8String:viewPoint->authorid().c_str()];
     
     _authoricon = [NSString stringWithUTF8String:viewPoint->authoricon().c_str()];
     

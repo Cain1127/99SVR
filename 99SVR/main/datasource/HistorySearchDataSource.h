@@ -16,6 +16,8 @@
 
 - (void)delSelectIndex:(NSString *)strInfo;
 
+- (void)deleteAll;
+
 @end
 
 @interface HistorySearchDataSource : NSObject<UITableViewDelegate,UITableViewDataSource>

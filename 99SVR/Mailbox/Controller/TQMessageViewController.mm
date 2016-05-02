@@ -53,14 +53,25 @@ static NSString *const messageCell = @"messageCell";
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
 }
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 //获取模型,刷新列表
-- (void)SystemMessage:(NSNotification *)notify{
-    NSArray *aryModel = notify.object;
-    _aryMessage = aryModel;
-    @WeakObj(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak.tableView reloadData];
-    });
+- (void)SystemMessage:(NSNotification *)notify
+{
+    NSDictionary *dict = notify.object;
+    if ([dict[@"code"] intValue]==1) {
+        NSArray *aryModel = dict[@"data"];
+        _aryMessage = aryModel;
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [selfWeak.tableView reloadData];
+        });
+    }
 }
 //开始请求.结束下拉刷新
 -(void)updateRefresh {

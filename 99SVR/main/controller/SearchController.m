@@ -64,11 +64,52 @@
     [_mySearchBar resignFirstResponder];
 }
 
+- (void)loadVideoList:(NSNotification *)notify
+{
+    NSDictionary *dict = notify.object;
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+    });
+    if([dict isKindOfClass:[NSDictionary class]])
+    {
+        int nStatus = [dict[@"code"] intValue];
+        if(nStatus==1)
+        {
+            NSArray *aryVideo = dict[@"show"];
+            NSMutableArray *aryAll = [NSMutableArray array];
+            [aryAll addObjectsFromArray:aryVideo];
+            NSArray *aryHidden = dict[@"hidden"];
+            for (RoomHttp *room in aryHidden)
+            {
+                [aryAll addObject:room];
+            }
+            
+            NSArray *aryHelp = dict[@"help"];
+            [UserInfo sharedUserInfo].aryHelp = aryHelp;
+            for (RoomHttp *room in aryHelp)
+            {
+                [aryAll addObject:room];
+            }
+            [UserInfo sharedUserInfo].aryRoom = aryAll;
+            return ;
+        }
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [ProgressHUD showError:@"获取财经直播团队列表失败，无法搜索"];
+    });
+}
+
 - (void)loadData
 {
     if ([UserInfo sharedUserInfo].aryRoom.count>0)
     {
         _allDatas = [UserInfo sharedUserInfo].aryRoom;
+    }else
+    {
+        [self.view makeToastActivity_bird];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoList:) name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
+        [kHTTPSingle RequestTeamList];
     }
 }
 
@@ -183,7 +224,13 @@
             _defaultView.hidden = YES;
             NSString *searchWords = [NSString stringWithFormat:@"teamname like '*%@*' or roomid like '*%@*'" , keywords, keywords];
             NSPredicate *pre = [NSPredicate predicateWithFormat:searchWords];
+            
             _aryResult = [_allDatas filteredArrayUsingPredicate:pre];
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+            for (RoomHttp *room in _aryResult) {
+                [dictionary setObject:room forKey:room.teamid];
+            }
+            _aryResult = [dictionary allValues];
             _historyTable.hidden = _aryResult.count ? YES : NO;
             [_searchResultsTable reloadData];
         }
@@ -192,7 +239,8 @@
             _defaultView.hidden = NO;
             _historyTable.hidden =  NO;
             NSArray *array = [UserDefaults objectForKey:kHistoryList];
-            if (array.count) {
+            if (array.count)
+            {
                 [_dataSource setModel:array];
                 [_historyTable reloadData];
             }
@@ -301,8 +349,14 @@
     if (array!=nil) {
         [tableAry addObjectsFromArray:array];
     }
-    [tableAry removeObject:strInfo];
     
+    for (int i=0; i<tableAry.count; i++) {
+        if([strInfo isEqualToString:tableAry[i]])
+        {
+            [tableAry removeObjectAtIndex:i];
+            break;
+        }
+    }
     [UserDefaults setObject:tableAry forKey:kHistoryList];
     [UserDefaults synchronize];
     
@@ -313,6 +367,22 @@
 - (void)selectIndex:(NSString *)strInfo{
     _mySearchBar.text = strInfo;
     [self startSearch:strInfo];
+}
+
+- (void)deleteAll
+{
+    NSArray *array = [UserDefaults objectForKey:kHistoryList];
+    NSMutableArray *tableAry = [NSMutableArray array];
+    if (array!=nil) {
+        [tableAry addObjectsFromArray:array];
+    }
+    [tableAry removeAllObjects];
+    
+    [UserDefaults setObject:tableAry forKey:kHistoryList];
+    [UserDefaults synchronize];
+    
+    [_dataSource setModel:tableAry];
+    [_historyTable reloadData];
 }
 
 @end

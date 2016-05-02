@@ -10,11 +10,13 @@
 #import <DTCoreText/DTCoreText.h>
 @class TQIdeaModel;
 @class ZLViewPoint;
+
 @interface TQIdeaTableViewCell : DTAttributedTextCell
 
 /** 模型 */
 //@property (nonatomic ,weak) TQIdeaModel *ideaModel;
 @property (nonatomic,copy) NSString *content;
+
 - (void)setIdeaModel:(TQIdeaModel *)ideaModel;
 
 @end

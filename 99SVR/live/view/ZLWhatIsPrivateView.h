@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <DTCoreText/DTCoreText.h>
 
-@interface MyPrivateView : UIView
+@interface ZLWhatIsPrivateView : UIView
 
 @property (nonatomic,strong) DTAttributedTextView *textView;
+
+- (void)setContent:(NSString *)strInfo;
 
 @end

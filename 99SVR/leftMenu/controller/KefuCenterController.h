@@ -8,6 +8,6 @@
 
 #import "FinanceOnlineVedioController.h"
 #import "CustomViewController.h"
-@interface KefuCenterController : FinanceOnlineVedioController
+@interface KefuCenterController :CustomViewController
 
 @end
