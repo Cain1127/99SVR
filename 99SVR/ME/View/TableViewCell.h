@@ -32,6 +32,8 @@
 @property (nonatomic , strong) UIButton *clickBtn;
 /**价格标签*/
 @property (nonatomic , strong) PriceLabView *priceLabView;
+/**可购买数量*/
+@property (nonatomic , strong) UILabel *buyLabel;
 
 @property (nonatomic,assign)NSInteger row;
 @property (nonatomic,weak)id <TableViewCellDelegate>delegate;

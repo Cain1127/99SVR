@@ -61,18 +61,6 @@
 
 -(void)setAutoLayout{
     
-    self.lineView.hidden = YES;
-    [self.bakImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(@10);
-        make.right.equalTo(@0);
-        make.bottom.equalTo(@0);
-        make.left.equalTo(@0);
-    }];
-    
-    self.bakImageView.layer.borderWidth = 1.0f;
-    self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.5].CGColor;
-    [self.bakImageView layoutIfNeeded];
-    
     //头像
     [self.iconImv mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@(ValueWithTheIPhoneModelString(@"15,15,15,15")));
@@ -109,6 +97,19 @@
 }
 
 -(void)setCellDataWithModel:(StockDealModel *)model{
+    
+    
+    self.lineView.hidden = YES;
+    [self.bakImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@10);
+        make.right.equalTo(@0);
+        make.bottom.equalTo(@0);
+        make.left.equalTo(@0);
+    }];
+    
+    self.bakImageView.layer.borderWidth = 1.0f;
+    self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.5].CGColor;
+    [self.bakImageView layoutIfNeeded];
 
     //计算字体
     self.traderNameLab.text =  model.focus;
@@ -133,10 +134,7 @@
         make.width.equalTo(@(totalNumLabSize.width + 10));
         make.height.equalTo(@(totalNumLab_fot));
     }];
-
-    DLog(@"%@",model.teamicon);
-    
-    [self.iconImv sd_setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/pic/item/e1fe9925bc315c6001e93f3388b1cb13485477e9.jpg"]];
+    [self.iconImv sd_setImageWithURL:[NSURL URLWithString:model.teamicon]];
     self.nameLab.text =  model.teamname;
     self.targetLab.text =  [NSString stringWithFormat:@"目标收益：%@",model.goalprofit];
     self.totalTitLab.text = @"总收益";
@@ -145,6 +143,18 @@
 - (void)setCellStockModel:(ZLOperateStock *)model
 {
  
+    
+    self.lineView.hidden = YES;
+    [self.bakImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@0);
+        make.right.equalTo(@0);
+        make.bottom.equalTo(@0);
+        make.left.equalTo(@0);
+    }];
+    
+    self.bakImageView.layer.borderWidth = 0.5f;
+    self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.2].CGColor;
+    [self.bakImageView layoutIfNeeded];
     
     self.traderNameLab.text =  model.focus;
     CGSize traderNameLabSize = [ShareFunction calculationOfTheText:self.traderNameLab.text withFont:traderName_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
@@ -171,7 +181,7 @@
         make.height.equalTo(@(totalNumLab_fot));
     }];
     
-    [self.iconImv sd_setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/pic/item/e1fe9925bc315c6001e93f3388b1cb13485477e9.jpg"]];
+    [self.iconImv sd_setImageWithURL:[NSURL URLWithString:model.teamicon]];
     self.nameLab.text =  model.teamname;
     self.targetLab.text =  [NSString stringWithFormat:@"目标收益：%.02f%%",model.goalprofit*100];
     self.totalTitLab.text = @"总收益";

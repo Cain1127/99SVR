@@ -27,7 +27,7 @@
 
 -(void)setHeaderViewWithModel:(TQPurchaseModel *)model{
 
-    self.timeLab.text = model.expirtiontime;
+    self.timeLab.text = [NSString stringWithFormat:@"有效日期：%@",model.expirtiontime];
     self.nameLab.text = [NSString stringWithFormat:@"团队名称：%@",model.teamName];
 }
 

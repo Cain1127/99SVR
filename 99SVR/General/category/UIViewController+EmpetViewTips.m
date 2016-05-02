@@ -1,48 +1,93 @@
 
-#define EmptyViewTag 10086
+#define EmptyViewTag 99999
 
 
 #import "UIViewController+EmpetViewTips.h"
+#import <objc/runtime.h>
+
+
+static char  * TapRecognizerBlockKey;
 
 @implementation UIViewController (EmpetViewTips)
 
--(void)showEmptyViewInView:(UIView *)targetView withMsg:(NSString *)msg{
+-(void)showEmptyViewInView:(UIView *)targetView withMsg:(NSString *)msg touchHanleBlock:(TouchHanleBlock)hanleBlock{
+    
+    [self showEmptyViewInView:targetView withMsg:msg withImageName:@"text_blank_page" touchHanleBlock:hanleBlock];
+}
+
+
+-(void)showErrorViewInView:(UIView *)targetView withMsg:(NSString *)msg touchHanleBlock:(TouchHanleBlock)hanleBlock{
+
+    [self showEmptyViewInView:targetView withMsg:msg withImageName:@"network_anomaly_fail" touchHanleBlock:hanleBlock];
+
+}
+
+
+-(void)showEmptyViewInView:(UIView *)targetView withMsg:(NSString *)msg  withImageName:(NSString *)imageName touchHanleBlock:(TouchHanleBlock)hanleBlock{
 
     
-    [self showEmptyViewInView:targetView withMsg:msg withImageName:@""];
-}
-
-
--(void)showErrorViewInView:(UIView *)targetView withMsg:(NSString *)msg{
-
-    [self showEmptyViewInView:targetView withMsg:msg withImageName:@""];
-}
-
-
-
-
--(void)showEmptyViewInView:(UIView *)targetView withMsg:(NSString *)msg withImageName:(NSString *)imageName{
-
+    UIView *emptyView = [targetView viewWithTag:EmptyViewTag];
+    if (emptyView) {
+        [emptyView removeFromSuperview];
+    }
     
     CGFloat width = targetView.frame.size.width;
     CGFloat height = targetView.frame.size.height;
     
     UIView *view = [[UIView alloc] initWithFrame:(CGRect){0,0,width,height}];
-//    [view setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
-//    UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(frame.size.width/2-image.size.width/2, frame.size.height/2-image.size.height/2, image.size.width, image.size.height)];
-//    [view addSubview:imgView];
-//    
-//    [imgView setImage:image];
-//    
-//    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, imgView.y+imgView.height+10, kScreenWidth, 20)];
-//    [lblName setTextColor:UIColorFromRGB(0x4c4c4c)];
-//    [view addSubview:lblName];
-//    [lblName setText:strMsg];
-//    [lblName setTextAlignment:NSTextAlignmentCenter];
+    view.userInteractionEnabled = YES;
+    [view setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    view.tag = EmptyViewTag;
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]init];
+    tapRecognizer.numberOfTapsRequired = 1;
+    [tapRecognizer addTarget:self action:@selector(tapRecognizerAction:)];
+    [view addGestureRecognizer:tapRecognizer];
+    objc_setAssociatedObject(self, &TapRecognizerBlockKey, hanleBlock, OBJC_ASSOCIATION_COPY);
+    [targetView addSubview:view];
     
+    UIImageView *imageView = [[UIImageView alloc]init];
+    imageView.frame = (CGRect){0,0,120,120};
+    imageView.center = CGPointMake(view.center.x, view.center.y-60);
+    imageView.image = [UIImage imageNamed:imageName];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [view addSubview:imageView];
     
-    
+    UILabel *titLab = [[UILabel alloc]init];
+    titLab.textAlignment = NSTextAlignmentCenter;
+    titLab.numberOfLines = 0;
+    titLab.textColor = UIColorFromRGB(0x4c4c4c);
+    titLab.text = msg;
+    [titLab sizeToFit];
+    titLab.frame = (CGRect){0,CGRectGetMaxY(imageView.frame),width,titLab.frame.size.height};
+    [view addSubview:titLab];
 }
+
+
+
+-(void)tapRecognizerAction:(UITapGestureRecognizer *)tap{
+    
+    
+    TouchHanleBlock block = objc_getAssociatedObject(self, &TapRecognizerBlockKey);
+    if (block)
+    {
+        block();
+    }
+    
+    UIView *tapView = tap.view;
+    if (tapView) {
+        [tapView removeFromSuperview];
+    }
+}
+
+
+-(void)hideEmptyViewInView:(UIView *)targetView{
+
+    UIView *view = [targetView viewWithTag:EmptyViewTag];
+    if (view) {
+        [view removeFromSuperview];
+    }    
+}
+
 
 
 
