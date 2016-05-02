@@ -451,13 +451,15 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
     }
     
     muDic[@"data"] = muArray;
-    muDic[@"code"] = @(1);
+    muDic[@"code"] = @"1";
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:muDic];
 }
 
 void BuyPrivateServiceListener::OnError(int errCode)
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:@{@"code":@(errCode)}];
+    
+    NSString *code = [NSString stringWithFormat:@"%d",errCode];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:@{@"code":code}];
 }
 
 void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateServiceSummaryPack>& infos){

@@ -11,8 +11,9 @@
 #import "TQPurchaseModel.h"
 #import "UIAlertView+Block.h"
 #import "PaySelectViewController.h"
-#import "ViewNullFactory.h"
 #import "UIViewController+EmpetViewTips.h"
+#import "MBProgressHUD.h"
+#import "BandingMobileViewController.h"
 
 @interface TQPurchaseViewController () <UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate>
 @property (nonatomic,strong)UITableView *tableView;
@@ -193,6 +194,7 @@
 #pragma mark vip购买通知
 -(void)buyVipData:(NSNotification *)notfi{
 
+    WeakSelf(self);
     
     NSDictionary *dic = (NSDictionary *)notfi.object;
     NSString *code = dic[@"code"];
@@ -201,15 +203,28 @@
        
         if ([code isEqualToString:@"1"]) {//
             
-            DLog(@"兑换或者升级成功");
-            
-            
-            
-            if (self.handle) {
-                self.handle();//回调刷新上一界面的股票详情视图
-                [self.navigationController popViewControllerAnimated:YES];
+            if ([UserInfo sharedUserInfo].banding) {//已绑定
+                [MBProgressHUD showMessage:@"兑换成功"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    
+                    [MBProgressHUD hideHUD];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+                    [self.navigationController popViewControllerAnimated:YES];
+                });
+                
+            }else{//未绑定
+                
+                [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"绑定" withMessage:@"Vip兑换成功！请绑定您的手机号，才能享受完整的Vip服务" completionCallback:^(NSInteger index) {
+                    if (index==1) {//绑定手机
+                        BandingMobileViewController *bangdingVC = [[BandingMobileViewController alloc]init];
+                        [weakSelf.navigationController pushViewController:bangdingVC animated:YES];
+                    }else{
+                        
+                        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                    }
+                }];
             }
-            
             
         }else{
         

@@ -83,7 +83,7 @@
         make.width.equalTo(@100);
     }];
     
-    self.priceLabView.oldpriceStr = model.buyprice;
+    self.priceLabView.oldpriceStr = [NSString stringWithFormat:@"%@玖玖币",model.buyprice];
     self.priceLabView.state = PriceLabViewType_Vip;
     model.actualPrice = model.buyprice;
 }
@@ -112,6 +112,7 @@
     
     BOOL isVipValue = [model.vipValue isEqualToString:@"0"] ? NO : YES;
     
+    self.introduceLab.text = model.descriptionStr;
     if (isVipValue) {
         
         [self vipSettingWithRow:row withModel:model];
