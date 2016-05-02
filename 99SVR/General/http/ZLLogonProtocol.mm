@@ -86,6 +86,11 @@ void ZLPushListener::OnRoomTeacherOnMicResp(RoomTeacherOnMicResp &info)
     
 }
 
+void ZLPushListener::OnEmailNewMsgNoty(EmailNewMsgNoty& info)
+{
+    
+}
+
 //*********************************************************
 
 void ZLHallListener::OnSetUserPwdResp(SetUserPwdResp& info)

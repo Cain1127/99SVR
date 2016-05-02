@@ -20,9 +20,21 @@
 @property (nonatomic , strong) TQHeadView *headerView;
 @property (nonatomic , copy) NSArray *dataArray;
 @property (nonatomic , strong) TQPurchaseModel *headerModel;
+/**数据加载view*/
+@property (nonatomic , strong) UIView *emptyView;
+@property (nonatomic,assign) int nId;
+
 @end
 
 @implementation TQPurchaseViewController
+
+- (id)initWithTeamId:(int)nId
+{
+    self = [super init];
+    _nId = nId;
+    
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -38,7 +50,13 @@
     //购买VIP
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buyVipData:) name:MESSAGE_BUY_PRIVATE_VIP_VC object:nil];
 
-    [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
+    if (_nId) {
+        [kHTTPSingle RequestBuyPrivateServicePage:_nId];
+    }
+    else
+    {
+        [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
+    }
     
     DLog(@"讲师ID %d",[self.stockModel.teamid intValue]);
     

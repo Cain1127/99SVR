@@ -414,11 +414,12 @@ if(_block) \
 {
     int nMsgLen=inmsg->length-sizeof(COM_MSG_HEADER);
     char* pNewMsg=0;
-    if(nMsgLen>0)
+    if(nMsgLen<=0)
     {
-        pNewMsg= (char*) malloc(nMsgLen);
-        memcpy(pNewMsg,inmsg->content,nMsgLen);
+        return ;
     }
+    pNewMsg= (char*) malloc(nMsgLen);
+    memcpy(pNewMsg,inmsg->content,nMsgLen);
     cmd_video_frame_data_t *frame = (cmd_video_frame_data_t *)pNewMsg;
     unsigned char pub[4096]={0};
     //长度超标

@@ -106,7 +106,6 @@
     dictGift = [NSMutableDictionary dictionary];
     nColor = 10000;
     [self initUIHead];
-//    _nSelectIndex = 1;
     UITapGestureRecognizer* singleRecogn;
     
     singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTopHUD)];
@@ -129,12 +128,7 @@
     
     [super viewDidAppear:animated];
     [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [self hiddenTopHud];
 }
 
@@ -242,6 +236,16 @@
     strcpy(cName, [strName UTF8String]);
     strcpy(cContent, [strContent UTF8String]);
     [kHTTPSingle PostAskQuestion:[_room.teamid intValue] stock:cName question:cContent];
+    [_questionView.txtName resignFirstResponder];
+    [_questionView.txtContent resignFirstResponder];
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+        [UIView animateWithDuration:0.5 animations:^{
+            [_questionView setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
+        } completion:^(BOOL finished)
+         {
+             _questionView.hidden = YES;
+         }];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -93,9 +93,6 @@
                 [aryAll addObject:room];
             }
             [UserInfo sharedUserInfo].aryRoom = aryAll;
-            for (RoomHttp *room in aryAll) {
-                DLog(@"teamId:%@",room.teamid);
-            }
             _allDatas = aryAll;
             return ;
         }

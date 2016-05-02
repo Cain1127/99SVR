@@ -22,21 +22,27 @@
 #import "PrivateVipView.h"
 
 @interface TQMeCustomizedViewController ()<MeCustomDelegate>
+{
+    
+}
 
+@property (nonatomic,strong) UIView *noView;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryPurchase;;
 @property (nonatomic,strong) XMeCustomDataSource *buyDataSource;
 @property (nonatomic,strong) ZLPrivateDataSource *noBuyDataSource;
 @property (nonatomic,strong) RoomHttp *room;
 @property (nonatomic,strong) PrivateVipView *privateView;
+@property (nonatomic,strong) UIView *buyView;
+
 @end
 
 @implementation TQMeCustomizedViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64) withStyle:UITableViewStylePlain];
+    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-124) withStyle:UITableViewStylePlain];
     [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
     _buyDataSource = [[XMeCustomDataSource alloc] init];
     _noBuyDataSource = [[ZLPrivateDataSource alloc] init];
@@ -50,7 +56,37 @@
         self.noBuyDataSource.selectIndex = vipLevelId;
         [self.tableView reloadData];
     };
+    
+    _buyView = [[UIView alloc] initWithFrame:Rect(0, self.view.height-60, kScreenWidth, 60)];
+    [self.view addSubview:_buyView];
+    [_buyView setBackgroundColor:COLOR_Bg_Gay];
+    _buyView.hidden = YES;
+    
+    UIButton *_btnBuy = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnBuy.frame = Rect(10,8, kScreenWidth-20, 44);
+    [_buyView addSubview:_btnBuy];
+    [_btnBuy setTitle:@"兑    换" forState:UIControlStateNormal];
+    [_btnBuy setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
+    [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
+    [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
+    [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
+    _btnBuy.titleLabel.font = XCFONT(15);
+    _btnBuy.layer.masksToBounds = YES;
+    _btnBuy.layer.cornerRadius = 2.5;
+    [_btnBuy addTarget:self action:@selector(buyprivate) forControlEvents:UIControlEventTouchUpInside];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(noPurchase:) name:MESSAGE_HTTP_NOPURCHASE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(havePurchase:) name:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:nil];
+    [self.view makeToastActivity_bird];
+    [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
 }
+
+- (void)buyprivate
+{
+    TQPurchaseViewController *vc = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue]];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 -(void)nopurchaseVc {
     TQPurchaseViewController *vc = [[TQPurchaseViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
@@ -64,6 +100,12 @@
 - (void)noPurchase:(NSNotification *)notify
 {
     NSDictionary *dict = notify.object;
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+        [selfWeak.noView removeFromSuperview];
+    });
+    
     if ([dict isKindOfClass:[NSDictionary class]]) {
         int code = [dict[@"code"] intValue];
         if (code==1)
@@ -83,7 +125,8 @@
             if (muAryTemp.count>0)
             {
                 self.privateView.privateVipArray = muAryTemp;
-            }else
+            }
+            else
             {
                 int i=1;
                 for (;i<=6;i++) {
@@ -97,14 +140,40 @@
                 @WeakObj(self)
                 dispatch_async(dispatch_get_main_queue(), ^{
                     selfWeak.tableView.tableHeaderView = [selfWeak tableHeaderView];
-                    selfWeak.tableView.delegate = selfWeak.buyDataSource;
-                    selfWeak.tableView.dataSource = selfWeak.buyDataSource;
+                    selfWeak.tableView.delegate = selfWeak.noBuyDataSource;
+                    selfWeak.tableView.dataSource = selfWeak.noBuyDataSource;
                     [selfWeak.tableView reloadData];
+                    selfWeak.buyView.hidden = NO;
                 });
             });
             return;
         }
     }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak createNoView];
+    });
+}
+
+- (void)createNoView
+{
+    if (!_noView) {
+        char cString[255];
+        const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+        sprintf(cString, "%s/network_anomaly_fail.png",path);
+        NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+        UIImage *image = [UIImage imageWithContentsOfFile:objCString];
+        if(image)
+        {
+            _noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height) imgView:image msg:@"请求私人定制失败"];
+            [_noView setUserInteractionEnabled:YES];
+            [_tableView addSubview:_noView];
+        }
+    }
+    @WeakObj(self)
+    [_noView clickWithBlock:^(UIGestureRecognizer *gesture) {
+        [selfWeak.view makeToastActivity_bird];
+        [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
+    }];
 }
 
 - (void)havePurchase:(NSNotification *)notify
@@ -122,9 +191,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(noPurchase:) name:MESSAGE_HTTP_NOPURCHASE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(havePurchase:) name:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:nil];
-    [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -144,13 +211,13 @@
     XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithModel:model];
     [self.navigationController pushViewController:detailView animated:YES];
 }
-
+#define kNetWork_anomaly_image_height  170
 /**
 *  创建table HeadView
 */
 - (UIView *)tableHeaderView
 {
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 274+kScreenWidth*0.7)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 274+kNetWork_anomaly_image_height)];
     [headerView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     char cString[255];
     const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
@@ -159,12 +226,13 @@
     UIImage *image = [UIImage imageWithContentsOfFile:objCString];
     if(image)
     {
-        UIView *noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,kScreenWidth*0.7) imgView:image msg:@"您没有购买私人定制"];
+        UIView *noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,kNetWork_anomaly_image_height) imgView:image msg:@"您没有购买私人定制"];
+        
         noView.userInteractionEnabled = NO;
         [headerView addSubview:noView];
     }
     // 向您推荐
-    UIView *recommendView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenWidth*0.7, kScreenWidth, 154)];
+    UIView *recommendView = [[UIView alloc] initWithFrame:CGRectMake(0,kNetWork_anomaly_image_height, kScreenWidth, 154)];
     recommendView.backgroundColor = [UIColor whiteColor];
     
     UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(10,0,kScreenWidth-20,30)];

@@ -16,6 +16,10 @@
 {
     self = [super init];
     
+    _authorId = NSStringFromInt(details->authorid());
+    
+    _roomid = NSStringFromInt(details->roomid());
+    
     _authoricon = [NSString stringWithUTF8String:details->authoricon().c_str()];
     
     _authorname = [NSString stringWithUTF8String:details->authorname().c_str()];
