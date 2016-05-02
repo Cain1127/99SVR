@@ -7,7 +7,7 @@
 //
 
 #import "TableViewCell.h"
-
+#import "ShareFunction.h"
 @implementation TableViewCell
 
 - (void)awakeFromNib {
@@ -41,6 +41,7 @@
     if ([model.isopen isEqualToString:@"1"]) {//已经购买当前的VIP
         self.vipNameLab.textColor = COLOR_Auxiliary_Blue;
         self.clickBtn.enabled = NO;
+        self.buyLabel.hidden = YES;
         [self.clickBtn setTitle:@"已购买" forState:UIControlStateDisabled];
         self.clickBtn.backgroundColor = [UIColor clearColor];
         [self.clickBtn mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -49,11 +50,11 @@
             make.bottom.equalTo(@0);
             make.width.equalTo(@46);
         }];
-        
         self.priceLabView.oldpriceStr = model.buyprice;
         self.priceLabView.state = PriceLabViewType_Vip;
         
     }else{
+        self.buyLabel.hidden = NO;
         self.vipNameLab.textColor = COLOR_Auxiliary_Orange;
         self.clickBtn.enabled = YES;
         [self.clickBtn setTitle:@"升级" forState:UIControlStateNormal];
@@ -66,6 +67,14 @@
             make.width.equalTo(@100);
         }];
         
+        CGSize buyLabelSize = [ShareFunction calculationOfTheText:self.buyLabel.text withFont:15 withMaxSize:(CGSize){200,CGFLOAT_MAX}];
+        [self.buyLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(@0);
+            make.right.equalTo(self.clickBtn.mas_left).offset(-5);
+            make.bottom.equalTo(@0);
+            make.width.equalTo(@(buyLabelSize.width+10));
+        }];
+
         self.priceLabView.newpriceStr = model.updateprice;
         self.priceLabView.oldpriceStr = model.buyprice;
         self.priceLabView.state = PriceLabViewType_NotVip;
@@ -90,17 +99,20 @@
     }];
     
     
+    self.buyLabel.text = [NSString stringWithFormat:@"限10086个名额"];
+    
+    CGSize buyLabelSize = [ShareFunction calculationOfTheText:self.buyLabel.text withFont:15 withMaxSize:(CGSize){200,CGFLOAT_MAX}];
+
     [self.buyLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@0);
         make.right.equalTo(self.clickBtn.mas_left).offset(-5);
         make.bottom.equalTo(@0);
-        make.width.equalTo(@100);
+        make.width.equalTo(@(buyLabelSize.width+10));
     }];
     
     self.priceLabView.oldpriceStr = [NSString stringWithFormat:@"%@玖玖币",model.buyprice];
     self.priceLabView.state = PriceLabViewType_Vip;
     model.actualPrice = model.buyprice;
-    self.buyLabel.text = @"测试可购买个数";
 }
 
 
