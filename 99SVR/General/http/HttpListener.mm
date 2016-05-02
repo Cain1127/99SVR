@@ -284,7 +284,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     muDic[@"recalState"] = isShowRecal ? @"show" : @"hide";
     muDic[@"operateId"] = [NSString stringWithFormat:@"%d",profit.operateid()];
     //ID
-    muDic[@"code"] = @(1);
+    muDic[@"code"] = @"1";
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
 }
 

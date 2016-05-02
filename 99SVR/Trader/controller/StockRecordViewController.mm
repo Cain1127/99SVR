@@ -89,6 +89,7 @@
     
     [self.businessTab.gifHeader loadDefaultImg];
     [self.businessTab.gifHeader beginRefreshing];
+    self.businessTab.footer.hidden = YES;
 }
 #pragma mark 刷新交易记录数据
 -(void)refreshBusinessData:(NSNotification *)notfi{
@@ -157,6 +158,8 @@
         [tableModel setDataArray:toDataArray WithRecordTableTag:tag];
         
         
+        DLog(@"%ld 网络代码%@",toDataArray.count,code);
+        
         if (toDataArray.count==0&&[code intValue]!=1) {
             
             [self showErrorViewInView:table withMsg:[NSString stringWithFormat:@"网络加载错误代码%@",code] touchHanleBlock:^{
@@ -170,7 +173,7 @@
                 
             }];
         }else if (toDataArray.count==0&&[code intValue]==1){
-        
+    
             [self showEmptyViewInView:table withMsg:[NSString stringWithFormat:@"空数据%@",code] touchHanleBlock:^{
                 
                 Loading_Bird_Show
@@ -179,15 +182,14 @@
                     [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
 
                 }else{//持仓详情
-                    
                     [kHTTPSingle RequestOperateStocks:(int)weakSelf.operateId];
                 }
 
             }];
+            
         }else{
             [self hideEmptyViewInView:table];
         }
-        
         
         [table reloadData];
         
@@ -222,6 +224,11 @@
         
         CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
         _sliderMenuView = [[SliderMenuView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} withTitles:@[@"交易记录",@"持仓情况"] withDefaultSelectIndex:self.recordType];
+        if (self.recordType==RecordType_Business) {
+            self.tabViewTag = 1;
+        }else{
+            self.tabViewTag = 2;
+        }
         _sliderMenuView.topBagColor = [UIColor whiteColor];
         _sliderMenuView.titleBagColor = [UIColor whiteColor];
         _sliderMenuView.viewArrays = @[self.businessTab,self.houseTab];

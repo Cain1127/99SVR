@@ -65,10 +65,8 @@
     
 
     Loading_Bird_Hide
-    
     NSDictionary *dic = notify.object;
     NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
-    
     [self.view hideToastActivity];
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -76,7 +74,9 @@
     if ([code isEqualToString:@"1"]) {//请求成功
         
         [self.tableViewDataArray removeAllObjects];
+        
         //    //拿到头部视图的数据
+        self.headerView.backgroundColor = COLOR_Bg_Blue;
         self.headerModel = dic[@"headerModel"];
         //    //拿到股票视图的数据
         [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
@@ -94,7 +94,8 @@
         
     }else{//请求失败
         
-        
+        self.headerView.backgroundColor = COLOR_Bg_Gay;
+        self.tableView.backgroundColor = COLOR_Bg_Gay;
     }
     [self chickEmptyViewShow:self.tableViewDataArray withCode:code];
     
@@ -113,13 +114,11 @@
             
             Loading_Bird_Show
             [kHTTPSingle RequestOperateStockAllDetail:[weakSelf.stockModel.operateid intValue]];
-            
         }];
         
     }else if (dataArray.count==0&&[code intValue]==1){
         
         [self showEmptyViewInView:self.tableView withMsg:[NSString stringWithFormat:@"暂无数据%@",code] touchHanleBlock:^{
-            
             
         }];
         
