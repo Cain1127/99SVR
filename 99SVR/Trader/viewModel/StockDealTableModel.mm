@@ -325,12 +325,9 @@
         tqVC.handle = ^(){
             
             if ([weakSelf.delegate respondsToSelector:@selector(stockDealTableModelRefreshData)]) {
-                
                 [weakSelf.delegate stockDealTableModelRefreshData];
             }
-            
         };
-        
         [_vc.navigationController pushViewController:tqVC animated:YES];
         
     }else{//未登录
@@ -340,19 +337,12 @@
             if (index==1) {
                 LoginViewController *loginVC = [[LoginViewController alloc]init];
                 [_vc.navigationController pushViewController:loginVC animated:YES];
-                
             }
             
         }];        
     }
     
     
-}
-
-
--(void)dealloc{
-    
-    DLog(@"释放");
 }
 
 @end
