@@ -321,10 +321,7 @@
         
         TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
         tqVC.stockModel = _model;
-        
-
         WeakSelf(self);
-        
         tqVC.handle = ^(){
             
             if ([weakSelf.delegate respondsToSelector:@selector(stockDealTableModelRefreshData)]) {

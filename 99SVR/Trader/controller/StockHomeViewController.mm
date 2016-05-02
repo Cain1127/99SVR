@@ -12,9 +12,7 @@
 #import "MJRefreshComponent.h"
 #import "StockDealModel.h"
 #import "TQMailboxViewController.h"
-#import "ViewNullFactory.h"
-#import "Toast+UIView.h"
-
+#import "UIViewController+EmpetViewTips.h"
 
 @interface StockHomeViewController ()
 /**滑动控制器*/
@@ -24,23 +22,22 @@
 @property (nonatomic , strong) StockHomeTableViewModel *dayTableViewModel;
 @property (nonatomic , strong) __block NSMutableArray *dayDataArray;
 @property (nonatomic , assign) __block NSInteger dayPagInteger;
-@property (nonatomic , strong) UIView *dayEmptyView;
 /**月*/
 @property (nonatomic , strong) UITableView *monTab;
 @property (nonatomic , strong) StockHomeTableViewModel *monTableViewModel;
 @property (nonatomic , strong) __block NSMutableArray *monDataArray;
 @property (nonatomic , assign) __block NSInteger monPagInteger;
-@property (nonatomic , strong) UIView *monEmptyView;
 
 /**总的*/
 @property (nonatomic , strong) UITableView *totalTab;
 @property (nonatomic , strong) StockHomeTableViewModel *totalTableViewModel;
 @property (nonatomic , strong) __block NSMutableArray *totalDataArray;
 @property (nonatomic , assign) __block NSInteger totalPagInteger;
-@property (nonatomic , strong) UIView *totalEmptyView;
 
 /**下拉刷新需要清空数据！上啦不需要*/
 @property (nonatomic , assign) __block MJRefreshState refreshState;
+@property (nonatomic , assign) __block NSInteger tabViewTag;
+
 
 
 @end
@@ -54,8 +51,6 @@
     /**显示鸟的加载图*/
     Loading_Bird_Show
     
-//    [self.view makeToastActivity_ShowBird];
-    
     [self initData];
     [self initUi];
     
@@ -67,6 +62,8 @@
 
 #pragma mark initUi
 -(void)initUi{
+    
+    WeakSelf(self);
     
     [self.navigationController.navigationBar setHidden:YES];
     UIView *_headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
@@ -95,7 +92,7 @@
     
     [self.view addSubview:self.sliderMenuView];
     self.sliderMenuView.DidSelectSliderIndex = ^(NSInteger index){
-        NSLog(@"模块%ld",(long)index);
+        weakSelf.tabViewTag = index;
     };
     
 }
@@ -130,7 +127,6 @@
     
     
     [self.monTab addGifHeaderWithRefreshingBlock:^{
-//        [weakSelf.monDataArray removeAllObjects];
         weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.monPagInteger = 1;
         [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:10];
@@ -145,7 +141,6 @@
     }];
 
     [self.totalTab addGifHeaderWithRefreshingBlock:^{
-//        [weakSelf.totalDataArray removeAllObjects];
         weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.totalPagInteger = 1;
         [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:10];
@@ -164,6 +159,12 @@
     [self.dayTab.gifHeader beginRefreshing];
     [self.monTab.gifHeader beginRefreshing];
     [self.totalTab.gifHeader beginRefreshing];
+    
+    self.dayTab.footer.hidden = YES;
+    self.monTab.footer.hidden = YES;
+    self.totalTab.footer.hidden = YES;
+
+    
 }
 
 #pragma mark 刷新数据
@@ -232,7 +233,9 @@
         
         [tableModel setDataArray:toDataArray];
         [table reloadData];
-        [self chickEmptyViewShow:toDataArray withCode:code];
+
+        [self chickEmptyViewShowWithTab:table withData:toDataArray withCode:code];
+    
     });
 
 
@@ -346,85 +349,44 @@
 }
 
 #pragma mark 请求成功时候-检测是否出现提示图
--(void)chickEmptyViewShow:(NSMutableArray *)dataArray withCode:(NSString *)code{
-    
-    BOOL requestBool = [code isEqualToString:@"1"] ? YES : NO;
-    
-    if (requestBool) {//请求成功
-        
-        if (dataArray.count ==0) {//不存在数据时候
-            
-            if (dataArray == self.dayDataArray) {
-                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"text_blank_page"] msg:RequestState_EmptyStr(@"日收益")];
-                [self.dayTab addSubview:self.dayEmptyView];
-                
-            }else if (dataArray == self.monDataArray){
-                
-                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"text_blank_page"] msg:RequestState_EmptyStr(@"月收益")];
-                [self.monTab addSubview:self.monEmptyView];
-                
-            }else{
-                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"text_blank_page"] msg:RequestState_EmptyStr(@"总收益")];
-                [self.totalTab addSubview:self.totalEmptyView];
-            }
-        }else{//存在数据
-            
-            if (dataArray == self.dayDataArray) {
-                if (self.dayEmptyView) {
-                    [self.dayEmptyView removeFromSuperview];
-                }
-            }else if (dataArray == self.monDataArray){
-                if (self.monEmptyView) {
-                    [self.monEmptyView removeFromSuperview];
-                }
-            }else{
-                if (self.totalEmptyView) {
-                    [self.totalEmptyView removeFromSuperview];
-                }
-            }
-            
-        }
-    }else{//请求失败
-        
-        
-        if (dataArray == self.dayDataArray) {
-            if (self.dayEmptyView) {
-                [self.dayEmptyView removeFromSuperview];
-            }
-        }else if (dataArray == self.monDataArray){
-            if (self.monEmptyView) {
-                [self.monEmptyView removeFromSuperview];
-            }
-        }else{
-            if (self.totalEmptyView) {
-                [self.totalEmptyView removeFromSuperview];
-            }
-        }
-        
-        if (dataArray.count==0) {
-         
-            if (dataArray == self.dayDataArray) {
-                self.dayEmptyView = [ViewNullFactory createViewBg:self.dayTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail"] msg:RequestState_NetworkErrorStr(code)];
-                [self.dayTab addSubview:self.dayEmptyView];
-                
-            }else if (dataArray == self.monDataArray){
-                
-                self.monEmptyView = [ViewNullFactory createViewBg:self.monTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail"] msg:RequestState_NetworkErrorStr(code)];
-                [self.monTab addSubview:self.monEmptyView];
-                
-            }else{
-                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail"] msg:RequestState_NetworkErrorStr(code)];
-                [self.totalTab addSubview:self.totalEmptyView];
-                
-            }
-        }else{
-        
-            
+-(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSString *)code{
 
-        }
+    WeakSelf(self);
+    
+    if (dataArray.count==0&&[code intValue]!=1) {//数据为0 请求失败
+        
+        [self showErrorViewInView:tab withMsg:[NSString stringWithFormat:@"网络请求失败%@,点击重新请求",code] touchHanleBlock:^{
+           
+            Loading_Bird_Show
+            if (weakSelf.tabViewTag==1) {//日收益
+                [self.dayTab.gifHeader beginRefreshing];
+            }else if (weakSelf.tabViewTag==2){//月收益
+                [self.monTab.gifHeader beginRefreshing];
+            }else if (weakSelf.tabViewTag==3){//总收益
+                [self.totalTab.gifHeader beginRefreshing];
+            }
+        }];
+    }else if (dataArray.count==0&&[code intValue]==1){//数据为0 请求成功
+        
+        [self showEmptyViewInView:tab withMsg:[NSString stringWithFormat:@"暂无数据"] touchHanleBlock:^{
+            
+            Loading_Bird_Show
+            if (weakSelf.tabViewTag==1) {//日收益
+                [self.dayTab.gifHeader beginRefreshing];
+            }else if (weakSelf.tabViewTag==2){//月收益
+                [self.monTab.gifHeader beginRefreshing];
+            }else if (weakSelf.tabViewTag==3){//总收益
+                [self.totalTab.gifHeader beginRefreshing];
+            }
+        }];
+        
+    }else{//请求成功
+        
+        [self hideEmptyViewInView:tab];
+        
     }
+    
 }
-
 
 -(UITableView *)createTableViewWithFrame:(CGRect)frame withStyle:(UITableViewStyle)style{
     UITableView *tableView = [[UITableView alloc]initWithFrame:frame style:style];
