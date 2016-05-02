@@ -112,9 +112,9 @@
        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.croompic];
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
-    _nameLabel.text = room.cname;
-    _lookCountLabel.text = room.ncount;
-    [_roomIdLabel setText:room.nvcbid];
+    _nameLabel.text = room.teamname;
+    _lookCountLabel.text = room.onlineusercount;
+    [_roomIdLabel setText:room.roomid];
 }
 
 

@@ -35,12 +35,14 @@
 
 - (void)setNullMic;
 
-- (void)startPlayRoomId:(int)roomid user:(int)userid;
+- (void)startPlayRoomId:(int)roomid user:(int)userid name:(NSString *)name;
 
 - (void)stop;
 
 - (void)setOnlyAudio:(BOOL)enable;
 
 - (void)fullPlayMode;
+
+- (void)setRoomName:(NSString *)name;
 
 @end

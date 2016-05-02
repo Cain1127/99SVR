@@ -16,6 +16,7 @@
 #import "opus.h"
 #import "SDWebImageCompat.h"
 #import <AVFoundation/AVAudioSession.h>
+#import "ZLShareViewController.h"
 
 @interface LivePlayViewController()
 {
@@ -55,8 +56,10 @@
 @property (nonatomic,strong) UIButton *btnFull;
 
 @property (nonatomic,strong) UIButton *btnShare;
+
 @property (nonatomic,strong) UIButton *btnCollet;
 
+@property (nonatomic,copy) NSString *roomName;
 
 @end
 
@@ -113,6 +116,10 @@
     }
 }
 
+- (void)setRoomName:(NSString *)name
+{
+    _roomName = name;
+}
 
 #pragma mark - View lifecycle
 - (void)startLoad
@@ -210,7 +217,6 @@
 
 - (void)decodeAudio
 {
-//    [_openAL initOpenAL];
     [_playAudio startPlayWithBufferByteSize:7680];
     int returnValue = 0;
     while (_playing)
@@ -246,7 +252,6 @@
             [NSThread sleepForTimeInterval:0.01];
         }
     }
-//    [_openAL stopSound];
     [_playAudio stopPlay];
     [_media.audioBuf removeAllObjects];
 }
@@ -261,7 +266,6 @@
     gcd_main_safe(^{
          [selfWeak setDefaultImg];
     });
-    
     [UIApplication sharedApplication].idleTimerDisabled = _playing;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -338,12 +342,9 @@
     [_btnFull addTarget:self action:@selector(fullPlayMode) forControlEvents:UIControlEventTouchUpInside];
     _btnShare = [self createPlayBtn:@"video_room_share_icon_n" high:@"video_room_share_icon_p"];
     [_btnShare addTarget:self action:@selector(shareInfo) forControlEvents:UIControlEventTouchUpInside];
-    
     _btnCollet = [self createPlayBtn:@"video_room_follow_icon_n" high:@"video_room_follow_icon_p"];
     [_btnCollet addTarget:self action:@selector(colletInfo) forControlEvents:UIControlEventTouchUpInside];
-    
     [self updateDownHUD];
-    
 }
 
 - (void)updateDownHUD
@@ -383,7 +384,9 @@
 
 - (void)shareInfo
 {
-    
+    NSString *strInfo = [[NSString alloc] initWithFormat:@"正在看%@的视频直播，内容很不错，评论分析切中重点，你也快来看看吧",_roomName];
+    ZLShareViewController *control = [[ZLShareViewController alloc] initWithTitle:strInfo url:@"www.99ducaijing.com"];
+    [control show];
 }
 
 - (void)colletInfo
@@ -501,15 +504,17 @@
     return YES;
 }
 
-- (void)startPlayRoomId:(int)roomid user:(int)userid
+- (void)startPlayRoomId:(int)roomid user:(int)userid name:(NSString *)name
 {
+    _roomName = name;
     if (_playing)
     {
-        if (roomid!=_roomid) {
+        if (roomid!=_roomid)
+        {
             [self stop];
             _nuserid = userid;
             _roomid = roomid;
-            [self startPlayRoomId:_roomid user:_nuserid];
+            [self startPlayRoomId:_roomid user:_nuserid name:_roomName];
         }
         return ;
     }

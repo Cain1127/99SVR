@@ -3,7 +3,9 @@
 // recognized in your jurisdiction.
 // See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
 
+
 #if !defined(JSON_IS_AMALGAMATION)
+
 #include "assertions.h"
 #include "value.h"
 #include "writer.h"
@@ -708,6 +710,22 @@ Value::Int Value::asInt() const {
     return 0;
   case booleanValue:
     return value_.bool_ ? 1 : 0;
+  case stringValue:
+	  if (value_.string_ == 0) return 0;
+	  unsigned this_len;
+	  char const* this_str;
+	  decodePrefixedString(this->allocated_, this->value_.string_, &this_len, &this_str);
+	  if (this_len < 16)
+	  {
+		  char tmpbuf[16];
+		  memcpy(tmpbuf, this_str, this_len);
+		  tmpbuf[this_len] = 0;
+		  return atoi(tmpbuf);
+	  } 
+	  else
+	  {
+		  return 0;
+	  }
   default:
     break;
   }
@@ -730,6 +748,22 @@ Value::UInt Value::asUInt() const {
     return 0;
   case booleanValue:
     return value_.bool_ ? 1 : 0;
+  case stringValue:
+	  if (value_.string_ == 0) return 0;
+	  unsigned this_len;
+	  char const* this_str;
+	  decodePrefixedString(this->allocated_, this->value_.string_, &this_len, &this_str);
+	  if (this_len < 16)
+	  {
+		  char tmpbuf[16];
+		  memcpy(tmpbuf, this_str, this_len);
+		  tmpbuf[this_len] = 0;
+		  return atoi(tmpbuf);
+	  }
+	  else
+	  {
+		  return 0;
+	  }
   default:
     break;
   }
@@ -753,6 +787,22 @@ Value::Int64 Value::asInt64() const {
     return 0;
   case booleanValue:
     return value_.bool_ ? 1 : 0;
+  case stringValue:
+	  if (value_.string_ == 0) return 0;
+	  unsigned this_len;
+	  char const* this_str;
+	  decodePrefixedString(this->allocated_, this->value_.string_, &this_len, &this_str);
+	  if (this_len < 16)
+	  {
+		  char tmpbuf[16];
+		  memcpy(tmpbuf, this_str, this_len);
+		  tmpbuf[this_len] = 0;
+		  return atol(tmpbuf);
+	  }
+	  else
+	  {
+		  return 0;
+	  }
   default:
     break;
   }
@@ -774,6 +824,22 @@ Value::UInt64 Value::asUInt64() const {
     return 0;
   case booleanValue:
     return value_.bool_ ? 1 : 0;
+  case stringValue:
+	  if (value_.string_ == 0) return 0;
+	  unsigned this_len;
+	  char const* this_str;
+	  decodePrefixedString(this->allocated_, this->value_.string_, &this_len, &this_str);
+	  if (this_len < 16)
+	  {
+		  char tmpbuf[16];
+		  memcpy(tmpbuf, this_str, this_len);
+		  tmpbuf[this_len] = 0;
+		  return atol(tmpbuf);
+	  }
+	  else
+	  {
+		  return 0;
+	  }
   default:
     break;
   }
@@ -813,6 +879,22 @@ double Value::asDouble() const {
     return 0.0;
   case booleanValue:
     return value_.bool_ ? 1.0 : 0.0;
+  case stringValue:
+	  if (value_.string_ == 0) return 0;
+	  unsigned this_len;
+	  char const* this_str;
+	  decodePrefixedString(this->allocated_, this->value_.string_, &this_len, &this_str);
+	  if (this_len < 16)
+	  {
+		  char tmpbuf[16];
+		  memcpy(tmpbuf, this_str, this_len);
+		  tmpbuf[this_len] = 0;
+		  return atof(tmpbuf);
+	  }
+	  else
+	  {
+		  return 0;
+	  }
   default:
     break;
   }
@@ -836,6 +918,22 @@ float Value::asFloat() const {
     return 0.0;
   case booleanValue:
     return value_.bool_ ? 1.0f : 0.0f;
+  case stringValue:
+	  if (value_.string_ == 0) return 0;
+	  unsigned this_len;
+	  char const* this_str;
+	  decodePrefixedString(this->allocated_, this->value_.string_, &this_len, &this_str);
+	  if (this_len < 16)
+	  {
+		  char tmpbuf[16];
+		  memcpy(tmpbuf, this_str, this_len);
+		  tmpbuf[this_len] = 0;
+		  return atof(tmpbuf);
+	  }
+	  else
+	  {
+		  return 0;
+	  }
   default:
     break;
   }

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>99乐投(new)</string>
+	<string>99乐投</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -31,7 +31,7 @@
 			<string>tencent</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>tencent1105199260</string>
+				<string>tencent1105298719</string>
 			</array>
 		</dict>
 		<dict>

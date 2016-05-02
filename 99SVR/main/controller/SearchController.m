@@ -11,6 +11,7 @@
 #import "ConnectRoomViewModel.h"
 #import "AlertFactory.h"
 #import "DecodeJson.h"
+#import "IQKeyboardManager.h"
 #import "GroupListRequest.h"
 #import "RoomGroup.h"
 #import "RoomHttp.h"
@@ -27,7 +28,6 @@
     NSArray *_keywordsArr;
     UIView *_accessoryView; // 遮盖层
     UIView *headView;
-    GroupListRequest *_grouRequest;
     UIView *_defaultView;
     UITextField *_mySearchBar;
     HistorySearchDataSource *_dataSource;
@@ -53,7 +53,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _grouRequest = [[GroupListRequest alloc] init];
+    [IQKeyboardManager sharedManager].enable = NO;
+    [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
     [self addSubviews];
     [self loadData];
     [_mySearchBar becomeFirstResponder];
@@ -92,6 +93,10 @@
                 [aryAll addObject:room];
             }
             [UserInfo sharedUserInfo].aryRoom = aryAll;
+            for (RoomHttp *room in aryAll) {
+                DLog(@"teamId:%@",room.teamid);
+            }
+            _allDatas = aryAll;
             return ;
         }
     }
@@ -105,7 +110,8 @@
     if ([UserInfo sharedUserInfo].aryRoom.count>0)
     {
         _allDatas = [UserInfo sharedUserInfo].aryRoom;
-    }else
+    }
+    else
     {
         [self.view makeToastActivity_bird];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoList:) name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
@@ -364,7 +370,8 @@
     [_historyTable reloadData];
 }
 
-- (void)selectIndex:(NSString *)strInfo{
+- (void)selectIndex:(NSString *)strInfo
+{
     _mySearchBar.text = strInfo;
     [self startSearch:strInfo];
 }
@@ -383,6 +390,12 @@
     
     [_dataSource setModel:tableAry];
     [_historyTable reloadData];
+}
+
+- (void)dealloc
+{
+    [IQKeyboardManager sharedManager].enable = YES;
+    [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
 }
 
 @end

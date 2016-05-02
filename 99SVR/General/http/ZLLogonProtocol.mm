@@ -456,6 +456,11 @@ void ZLLogonProtocol::buyPrivateVip(int teacherId,int type)
     conn->SendMsg_BuyPrivateVipReq(teacherId, type);
 }
 
+void ZLLogonProtocol::requestRoomMsg()
+{
+    video_room->SendMsg_AfterJoinRoomReq();
+}
+
 //**********************************************************************************
 //**********************************************************************************
 #pragma mark ZLHallListener
