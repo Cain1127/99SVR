@@ -65,10 +65,17 @@ static char  * TapRecognizerBlockKey;
 
 
 -(void)tapRecognizerAction:(UITapGestureRecognizer *)tap{
+    
+    
     TouchHanleBlock block = objc_getAssociatedObject(self, &TapRecognizerBlockKey);
     if (block)
     {
         block();
+    }
+    
+    UIView *tapView = tap.view;
+    if (tapView) {
+        [tapView removeFromSuperview];
     }
 }
 

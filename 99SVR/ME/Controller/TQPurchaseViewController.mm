@@ -12,15 +12,13 @@
 #import "UIAlertView+Block.h"
 #import "PaySelectViewController.h"
 #import "ViewNullFactory.h"
-#import "ProgressHUD.h"
+#import "UIViewController+EmpetViewTips.h"
 
 @interface TQPurchaseViewController () <UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate>
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic , strong) TQHeadView *headerView;
 @property (nonatomic , copy) NSArray *dataArray;
 @property (nonatomic , strong) TQPurchaseModel *headerModel;
-/**数据加载view*/
-@property (nonatomic , strong) UIView *emptyView;
 @end
 
 @implementation TQPurchaseViewController
@@ -146,9 +144,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if ([code isEqualToString:@"1"]) {//请求成功
-            
-            DLog(@"请求成功");
-            
             self.headerModel = [notfi.object valueForKey:@"headerModel"];
             self.headerModel.teamName = self.stockModel.teamname;
             
@@ -158,7 +153,6 @@
             
             
         }else{//请求失败
-            DLog(@"请求失败 %@",code);
             self.dataArray = @[];
         }
         [self.tableView reloadData];
@@ -172,30 +166,26 @@
 
 -(void)chickEmptyViewShow:(NSArray *)dataArray withCode:(NSString *)code{
     
+    WeakSelf(self);
     
-    if ([code isEqualToString:@"1"]) {//网络OK
+    if (dataArray.count==0&&[code intValue]!=1) {//数据为0 错误代码不为1
         
-        if (dataArray.count==0) {//不存在数据
+        [self showErrorViewInView:self.tableView withMsg:[NSString stringWithFormat:@"网络链接错误%@,点击重新链接",code] touchHanleBlock:^{
             
-            self.emptyView = [ViewNullFactory createViewBg:self.emptyView.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:@"数据为空"];
-            [self.tableView addSubview:self.emptyView];
+            Loading_Bird_Show
+            [kHTTPSingle RequestBuyPrivateServicePage:[weakSelf.stockModel.teamid intValue]];
+            
+        }];
+
+    }else if (dataArray.count==0&&[code intValue]==1){
+    
+        [self showEmptyViewInView:self.tableView withMsg:[NSString stringWithFormat:@"暂无数据%@",code] touchHanleBlock:^{
             
             
-        }else{
-            
-            if (self.emptyView) {
-                [self.emptyView removeFromSuperview];
-            }
-        }
-        
-        
-    }else{//网络错误
-        
-        if (dataArray.count==0) {
-            
-            self.emptyView = [ViewNullFactory createViewBg:self.tableView.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:[NSString stringWithFormat:@"网络错误代码%@",code]];
-            [self.tableView addSubview:self.emptyView];
-        }
+        }];
+    
+    }else{
+        [self hideEmptyViewInView:self.tableView];
     }
 }
 
@@ -239,12 +229,7 @@
                 [ProgressHUD showError:code];
 
             }
-            
-            
-            
         }
-        
-        
     });
 }
 
