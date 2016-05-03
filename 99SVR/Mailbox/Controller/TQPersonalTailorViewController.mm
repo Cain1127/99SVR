@@ -11,6 +11,8 @@
 #import "XPrivateDetailViewController.h"
 #import "TableViewFactory.h"
 #import "TQPersonalModel.h"
+#import "MJRefresh.h"
+#import "UIViewController+EmpetViewTips.h"
 
 @interface TQPersonalTailorViewController ()<UITableViewDataSource,UITableViewDelegate,TQPersonalTailorCellDelegate>
 
@@ -24,6 +26,8 @@
 
 static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 
+#pragma mark - 生命周期
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setTitleText:@"私人定制"];
@@ -34,18 +38,35 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     [_tableView setBackgroundColor:RGB(243, 243, 243)];
     [self.view addSubview:_tableView];
     [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:nil];
     // cell自动计算高度
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     // 估算高度
     self.tableView.estimatedRowHeight = 44;
+    
+    //开始刷新,注册数据接受通知
+    [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
+    [self.tableView.gifHeader loadDefaultImg];
+    [self.tableView.gifHeader beginRefreshing];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:nil];
     [super viewWillAppear:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_HTTP_TQPERSONAlTAILOR_VC object:nil];
+    [super viewWillDisappear:animated];
+}
+
+#pragma mark - 加载数据
+
+//开始请求.结束下拉刷新
+-(void)updateRefresh {
     [kHTTPSingle RequestPrivateServiceSummary:0 count:10];
+    [self.tableView.gifHeader endRefreshing];
 }
 
 - (void)loadRplayView:(NSNotification *)notify
@@ -54,14 +75,39 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     if ([dict[@"code"] intValue]==1) {
         NSArray *aryModel = dict[@"data"];
         _aryModel = aryModel;
-        __weak typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableView reloadData];
-        });
+//        __weak typeof(self) weakSelf = self;
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [weakSelf.tableView reloadData];
+//        });
+    }
+    
+    @WeakObj(self);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @StrongObj(self);
+        [self chickEmptyViewShowWithTab:_tableView withData:(NSMutableArray *)_aryModel withCode:[dict[@"code"] intValue]];
+    });
+}
+
+-(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSInteger)code{
+    @WeakObj(self);
+    if(code!=1) {
+        [self showErrorViewInView:tab withMsg:@"网络请求失败" touchHanleBlock:^{
+            @StrongObj(self);
+            [self.tableView.gifHeader beginRefreshing];
+        }];
+    } else if (dataArray.count==0 && code==1){//数据为0 请求成功
+        [self showEmptyViewInView:tab withMsg:[NSString stringWithFormat:@"暂无数据"] touchHanleBlock:^{
+            @StrongObj(self);
+            [self.tableView.gifHeader beginRefreshing];
+        }];
+    } else{//请求成功
+        [self hideEmptyViewInView:tab];
+        [self.tableView reloadData];
     }
 }
 
 #pragma mark - Table view data source
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 9;
@@ -119,11 +165,6 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 {
     XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithCustomId:personalModel.ID];
     [self.navigationController pushViewController:detailView animated:YES];
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

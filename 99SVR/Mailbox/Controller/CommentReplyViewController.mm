@@ -10,6 +10,7 @@
 #import "AnswerTableViewCell.h"
 #import "TQAnswerModel.h"
 #import "MJRefresh.h"
+#import "UIViewController+EmpetViewTips.h"
 
 @interface CommentReplyViewController()<UITableViewDelegate,UITableViewDataSource,AnswerTableViewCellDelegate>
 /** tableView */
@@ -27,7 +28,7 @@
     return _modelArray;
 }
 
-#pragma mark - 初始化界面
+#pragma mark - 生命周期
 
 - (void)viewDidLoad
 {
@@ -36,14 +37,22 @@
     [self setupTableView];
     self.view.backgroundColor = COLOR_Bg_Gay;
     [self setTitleText:@"评论回复"];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_MAILREPLY_VC object:nil];
     [self.tableView.gifHeader beginRefreshing];
 }
 
-- (void)dealloc
+-(void)viewWillAppear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_MAILREPLY_VC object:nil];
+    [super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_MAILREPLY_VC object:nil];
+    [super viewWillDisappear:animated];
 }
+
+#pragma mark - 初始化界面
 
 - (void)setupTableView
 {
@@ -60,6 +69,26 @@
     
 }
 
+-(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSInteger)code{
+    
+    @WeakObj(self);
+    if(code!=1) {
+        [self showErrorViewInView:tab withMsg:@"网络请求失败" touchHanleBlock:^{
+            @StrongObj(self);
+            [self.tableView.gifHeader beginRefreshing];
+            
+        }];
+    } else if (dataArray.count==0 && code==1){//数据为0 请求成功
+        [self showEmptyViewInView:tab withMsg:[NSString stringWithFormat:@"暂无数据"] touchHanleBlock:^{
+            @StrongObj(self);
+            [self.tableView.gifHeader beginRefreshing];
+        }];
+    } else{//请求成功
+        [self hideEmptyViewInView:tab];
+        [self.tableView reloadData];
+    }
+}
+
 - (void)loadRplayView:(NSNotification *)notify
 {
     NSDictionary *dict = notify.object;
@@ -73,11 +102,13 @@
             model.autoId = i;
             [self.modelArray addObject:model];
         }
-        __weak typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableView reloadData];
-        });
     }
+    
+    @WeakObj(self);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @StrongObj(self);
+        [self chickEmptyViewShowWithTab:_tableView withData:self.modelArray withCode:[dict[@"code"] intValue]];
+    });
 }
 
 //开始请求.结束下拉刷新
