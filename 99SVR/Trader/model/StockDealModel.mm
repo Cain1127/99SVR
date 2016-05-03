@@ -38,7 +38,7 @@
 }
 
 
-
+#pragma mark 股票详情--股票走势图
 - (instancetype)initWithStockDealStockData:(void *)pData
 {
     self = [super init];
@@ -48,7 +48,7 @@
     }
     return self;
 }
-
+#pragma mark 股票详情--交易动态记录
 - (instancetype)initWithStockDealBusinessRecoreData:(void *)pData{
 
     self = [super init];
@@ -67,7 +67,7 @@
     return self;
 
 }
-
+#pragma mark 股票详情--持仓记录
 - (instancetype)initWithStockDealWareHouseRecoreData:(void *)pData{
 
     self = [super init];
@@ -79,7 +79,7 @@
         _count = IntTransformIntToStr(stocks->count());
         _cost = FloatTransformFloatToStr(stocks->cost());
         _currprice = FloatTransformFloatToStr(stocks->currprice());
-        _profitrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((stocks->profitrate()*100))];
+        _profitrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((stocks->profitrate()))];
         _profitmoney = FloatTransformFloatToStr(stocks->profitmoney());
     }
     return self;

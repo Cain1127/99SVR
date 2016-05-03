@@ -280,6 +280,14 @@
 
 }
 
+
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [super viewWillDisappear:animated];
+    
+    Loading_Bird_Hide
+}
+
 -(void)dealloc{
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_TQPURCHASE_VC object:nil];
