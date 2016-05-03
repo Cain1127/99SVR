@@ -63,15 +63,45 @@
  *  跳转到下一个界面
  */
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
-    if (self.childViewControllers.count > 0) {
-        /* 自动显示和隐藏tabbar */
+    if (self.childViewControllers.count > 0)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TABBAR_DISAPPER_VC object:nil];
         viewController.hidesBottomBarWhenPushed = YES;
-        
-        // 设置左边的返回按钮
         viewController.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithTarget:self action:@selector(blackBtnClick) image:@"back" highImage:@"back"];
     }
     [super pushViewController:viewController animated:animated];
 }
+
+- (UIViewController *)popViewControllerAnimated:(BOOL)animated
+{
+    UIViewController *viewController = [super popViewControllerAnimated:animated];
+    DLog(@"class:%@",NSStringFromClass([viewController class]));
+    if(self.childViewControllers.count==1)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TABBAR_APPER_VC object:nil];
+    }
+    return viewController;
+}
+
+- (nullable NSArray<__kindof UIViewController *> *)popToRootViewControllerAnimated:(BOOL)animated
+{
+    NSArray<UIViewController *> *array = [super popToRootViewControllerAnimated:animated];
+    return array;
+}
+
+/**
+ *  - (void)viewWillDisappear:(BOOL)animated
+ {
+ [super viewWillDisappear:animated];
+ [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TABBAR_DISAPPER_VC object:nil];
+ }
+ 
+ - (void)viewWillAppear:(BOOL)animated
+ {
+ [super viewWillAppear:animated];
+ [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TABBAR_APPER_VC object:nil];
+ }
+ */
 
 /**
  *  返回关闭窗口
@@ -106,4 +136,13 @@
     
     return self.viewControllers.count > 1;
 }
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [viewController viewWillAppear:animated];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [viewController viewDidAppear:animated];
+}
+
 @end

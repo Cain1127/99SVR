@@ -98,7 +98,14 @@
 
 // 点击行
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    DLog(@"didSelectRowAtIndexPath");
+    if (_aryVIP.count>_selectIndex-1)
+    {
+        XPrivateService *service = _aryVIP[_selectIndex-1];
+        if (service.summaryList.count>indexPath.row)
+        {
+             
+        }
+    }
 }
 
 - (void)questionClick
@@ -107,5 +114,13 @@
         [_delegate showWhatIsPrivate];
     }
 }
+
+- (void)showPrivateDetail:(XPrivateSummary *)summary
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(showPrivateDetail:)]) {
+        [_delegate showPrivateDetail:summary];
+    }
+}
+
 
 @end

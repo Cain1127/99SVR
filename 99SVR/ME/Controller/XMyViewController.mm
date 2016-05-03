@@ -99,9 +99,17 @@
     [_itemsArray removeAllObjects];
     _leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"TQMeCustomizedViewController"]];
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的九九币" icon:@"personal_recharge_icon" goClassName:@"CustomizedViewController"]];
+    
+    if (KUserSingleton.bIsLogin && KUserSingleton.nType ==1) {
+        NSString *strName= [NSString stringWithFormat:@"我的九九币:  %.01f",KUserSingleton.goldCoin];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:strName icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
+    }
+    else
+    {
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的九九币" icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
+    }
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的消费记录" icon:@"personal_consumption_icon" goClassName:@"CustomizedViewController"]];
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的关注" icon:@"personal_follow_icon" goClassName:@"CustomizedViewController"]];
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的关注" icon:@"personal_follow_icon" goClassName:@"VideoColletionViewController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"personal_services_icon" goClassName:@"KefuCenterController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"personal_ste_icon" goClassName:@"SettingCenterController"]];
     
@@ -145,11 +153,30 @@
     }
     cell.textLabel.textColor = [UIColor whiteColor];
     NSInteger nRow = indexPath.row + indexPath.section * (_itemsArray.count-2);
-    if (_itemsArray.count>nRow) {
+    if (_itemsArray.count>nRow)
+    {
         LeftCellModel *model = _itemsArray[nRow];
         [cell setModel:model];
+        if ([model.goClassName isEqualToString:@"PaySelectViewController"])
+        {
+            [cell setrightInfo:@"充值"];
+        }
+        else if([model.goClassName isEqualToString:@"TQMeCustomizedViewController"])
+        {
+            if (KUserSingleton.bIsLogin && KUserSingleton.nType ==1)
+            {
+                [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+            }
+            else
+            {
+                [cell setrightInfo:@"请登录后查看"];
+            }
+        }
+        else
+        {
+            [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+        }
     }
-    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     
     return cell;
 }
@@ -158,10 +185,29 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSInteger nRow = indexPath.row + indexPath.section * (_itemsArray.count-2);
-    if (_itemsArray.count>nRow) {
-        LeftCellModel *model = _itemsArray[nRow];
-        UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
-        [self.navigationController pushViewController:viewController animated:YES];
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
+    {
+        if (_itemsArray.count>nRow)
+        {
+            
+            LeftCellModel *model = _itemsArray[nRow];
+            UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
+            [self.navigationController pushViewController:viewController animated:YES];
+        }
+    }
+    else
+    {
+        if (_itemsArray.count>nRow && nRow+2>=_itemsArray.count)
+        {
+            LeftCellModel *model = _itemsArray[nRow];
+            UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
+            [self.navigationController pushViewController:viewController animated:YES];
+        }
+        else
+        {
+            LoginViewController *loginView = [[LoginViewController alloc] init];
+            [self.navigationController pushViewController:loginView animated:YES];
+        }
     }
 }
 
@@ -170,7 +216,6 @@
 {
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
-        
         ProfileViewController *profileVC = [[ProfileViewController alloc] init];
         [self.navigationController pushViewController:profileVC animated:YES];
         return;

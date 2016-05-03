@@ -50,9 +50,9 @@
     {
         _imgView = [[UIImageView alloc] initWithFrame:Rect(15,22-kImageWidth/2, kImageWidth, kImageWidth)];
         _lblTitle = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+10,_imgView.y, 160, 16)];
-        
         [_lblTitle setFont:XCFONT(14)];
         [_lblTitle setTextColor:UIColorFromRGB(0x343434)];
+        
         [self.contentView addSubview:_lblTitle];
         [self.contentView addSubview:_imgView];
     }
@@ -63,6 +63,24 @@
 {
     [_imgView setImage:[UIImage imageNamed:cellModel.icon]];
     [_lblTitle setText:cellModel.title];
+    if (!_lblRight.hidden)
+    {
+        _lblRight.hidden = YES;
+    }
+}
+
+- (void)setrightInfo:(NSString *)strInfo
+{
+    if (!_lblRight)
+    {
+        _lblRight = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-100, _imgView.y, 92, 16)];
+        [self.contentView addSubview:_lblRight];
+        [_lblRight setFont:XCFONT(14)];
+        [_lblRight setTextColor:UIColorFromRGB(0x343434)];
+        [_lblRight setTextAlignment:NSTextAlignmentRight];
+    }
+    _lblRight.hidden = NO;
+    [_lblRight setText:strInfo];
 }
 
 @end

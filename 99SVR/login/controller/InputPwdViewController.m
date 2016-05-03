@@ -167,6 +167,7 @@
     [_txtCode setDelegate:self];
     [_txtName becomeFirstResponder];
     [self setTitleText:@"设置新密码"];
+    [_txtName becomeFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -301,8 +301,6 @@ void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>
         StockDealModel *model = [[StockDealModel alloc]initWithStockRecordBusinessData:operateStockTransaction];
         [muArray addObject:model];
     }
-    
-    
     mudic[@"code"] = @"1";
     mudic[@"data"] = muArray;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:mudic];
@@ -387,8 +385,6 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
                 int levelid = service.levelid();
                 NSDictionary *dict = @{@"teamid":teamid,@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
                                        @"expirationdate":expirationdate,@"levelid":@(levelid)};
-//                NSDictionary *dict = @{@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
-//                                       @"expirationdate":expirationdate,@"levelid":@(levelid)};
                 TQMeCustomizedModel *model = [TQMeCustomizedModel mj_objectWithKeyValues:dict];
                 [ary addObject:model];
             }
@@ -704,12 +700,19 @@ void PrivateServiceSummaryListener::OnError(int errCode)
 
 void UnreadListener::onResponse(Unread& info)
 {
-    
+    /*
+    uint32	_system;
+    uint32	_answer;
+    uint32	_reply;
+    uint32	_privateservice;
+     */
+    NSDictionary *dict = @{@"code":@(1),@"system":@(info.system()),@"answer":@(info.answer()),@"reply":@(info.reply()),@"privateservice":@(info.privateservice())};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UNREAD_INFO_VC object:dict];
 }
 
 void UnreadListener::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UNREAD_INFO_VC object:@{@"code":@(1)}];
 }
 
 void HomePageListener::onResponse(std::vector<BannerItem>& banner_data, std::vector<Team>& team_data, std::vector<ViewpointSummary>& viewpoint_data, std::vector<OperateStockProfit>& operate_data)

@@ -30,7 +30,7 @@
     _lblNumber = [[UILabel alloc] initWithFrame:Rect(_lblName.x+_lblName.width+8, _lblName.y, 80, 20)];
     [_lblNumber setTextColor:UIColorFromRGB(0xffffff)];
     [_lblNumber setFont:XCFONT(15)];
-    [self addSubview:_lblName];
+    [self addSubview:_lblNumber];
     
     _btnQuery = [UIButton buttonWithType:UIButtonTypeCustom];
     _btnQuery.frame = Rect(_lblName.x, 30, 90,30);

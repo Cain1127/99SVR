@@ -44,7 +44,6 @@
     self.txtTitle.text = @"购买私人定制";
     self.dataArray = @[];
     self.automaticallyAdjustsScrollViewInsets = NO;
-
     //注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_TQPURCHASE_VC object:nil];
     //购买VIP

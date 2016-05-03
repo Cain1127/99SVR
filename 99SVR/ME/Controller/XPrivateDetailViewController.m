@@ -89,7 +89,7 @@
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setInfo:) name:MESSAGE_PRIVATE_DETAIL_VC object:nil];
-    [kHTTPSingle RequestPrivateServiceDetail:1];
+    [kHTTPSingle RequestPrivateServiceDetail:_customId];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
