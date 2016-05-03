@@ -25,6 +25,12 @@
     
     self.priceLabView = [[PriceLabView alloc]initWithFrame:(CGRect){0,0,100,60}];
     [self.selectView addSubview:self.priceLabView];
+    
+    self.buyLabel = [[UILabel alloc]init];
+    self.buyLabel.textAlignment = NSTextAlignmentRight;
+    self.buyLabel.font = Font_15;
+    self.buyLabel.textColor = COLOR_Text_Gay;
+    [self.selectView addSubview:self.buyLabel];
 }
 
 
@@ -83,9 +89,18 @@
         make.width.equalTo(@100);
     }];
     
-    self.priceLabView.oldpriceStr = model.buyprice;
+    
+    [self.buyLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@0);
+        make.right.equalTo(self.clickBtn.mas_left).offset(-5);
+        make.bottom.equalTo(@0);
+        make.width.equalTo(@100);
+    }];
+    
+    self.priceLabView.oldpriceStr = [NSString stringWithFormat:@"%@玖玖币",model.buyprice];
     self.priceLabView.state = PriceLabViewType_Vip;
     model.actualPrice = model.buyprice;
+    self.buyLabel.text = @"测试可购买个数";
 }
 
 
@@ -112,6 +127,7 @@
     
     BOOL isVipValue = [model.vipValue isEqualToString:@"0"] ? NO : YES;
     
+    self.introduceLab.text = model.descriptionStr;
     if (isVipValue) {
         
         [self vipSettingWithRow:row withModel:model];

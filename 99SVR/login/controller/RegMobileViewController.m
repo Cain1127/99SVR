@@ -31,8 +31,11 @@
 @property (nonatomic,strong) RegisterTextField *txtPwd;
 /**验证码*/
 @property (nonatomic,strong) RegisterTextField *txtCode;
+
 @property (nonatomic,copy) NSString *strCode;
+
 @property (nonatomic,strong) QCheckBox *checkAgree;
+
 @property (nonatomic,strong) UIButton *btnCode;
 /**注册*/
 @property (nonatomic, strong) UIButton *btnDetermine;

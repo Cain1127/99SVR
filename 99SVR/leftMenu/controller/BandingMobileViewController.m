@@ -13,6 +13,8 @@
 #import "BaseService.h"
 #import "DecodeJson.h"
 #import "UserInfo.h"
+#import "SettingCenterController.h"
+#import "StockDealViewController.h"
 @interface BandingMobileViewController ()<UITextFieldDelegate>
 {
     int nSecond;
@@ -49,6 +51,7 @@
     strDate = [fmt stringFromDate:date];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self createText];
+    [_txtName becomeFirstResponder];
 }
 
 - (void)createText
@@ -326,5 +329,31 @@
          });
      }];
 }
+
+#pragma mark 重写父类返回方法
+-(void)MarchBackLeft{
+    
+
+    //判断有没有高手操盘详情
+
+    BOOL backStockDealVCBool = NO;
+    UIViewController *stockDealVC = nil;
+    
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:[StockDealViewController class]]) {//高手操盘详情
+            backStockDealVCBool =  YES;
+            stockDealVC = viewController;
+            break;
+        }
+    }
+    if (backStockDealVCBool) {//跳转到到股票详情视图
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+        [self.navigationController popToViewController:stockDealVC animated:YES];
+    }else{//正常返回
+    
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
 
 @end

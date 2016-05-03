@@ -1,10 +1,10 @@
-// ĞŞ¸ÄÏî£º
-//1. Î»Óò
-//2. ³ÇÖ÷ĞÅÏ¢ Ô¤±àÒëÈ¥µôµÄ×Ö¶Î
-//3. typedef struct ¿Õ
+// â€“ï¬âˆÆ’Å“Ã“Â£âˆ«
+//1. Å’Âªâ€Ãš
+//2. â‰¥Â«Ã·Ëœâ€“â‰ˆÅ“Â¢ â€˜Â§Â±â€¡â€œÃÂ»â€¢ÂµÃ™ÂµÆ’â—ŠÃ·âˆ‚Å’
+//3. typedef struct Ã¸â€™
 //4. unsigned char/ long long
-//5. Ã¶¾ÙÀàĞÍ
-//6. intÊı×é openresult_1 members
+//5. âˆšâˆ‚Ã¦Å¸Â¿â€¡â€“Ã•
+//6. intÂ Ëâ—ŠÃˆ openresult_1 members
 
 #ifndef __CMD_HTTP_VCHAT_H__
 #define __CMD_HTTP_VCHAT_H__
@@ -18,17 +18,17 @@
 namespace protocol
 {
 
-	//ÉÁÆÁ
+	//â€¦Â¡âˆ†Â¡
 	typedef struct tag_CMDSplash
 	{
-		char imageUrl[256];  // Í¼Æ¬µØÖ·
-		char text[256];  // ÎÄ×ÖËµÃ÷£¨Ó¦¸ÃÓÃ²»µ½£©
+		char imageUrl[256];  // Ã•Âºâˆ†Â¨ÂµÃ¿Ã·âˆ‘
+		char text[256];  // Å’Æ’â—ŠÃ·Ã€ÂµâˆšËœÂ£Â®â€Â¶âˆâˆšâ€âˆšâ‰¤ÂªÂµÎ©Â£Â©
 		char url[256];
-		uint64 starTime;  // ÉúĞ§Ê±¼ä
-		uint64 endTime;  // Ê§Ğ§Ê±¼ä
+		uint64 starTime;  // â€¦Ë™â€“ÃŸÂ Â±Âºâ€°
+		uint64 endTime;  // Â ÃŸâ€“ÃŸÂ Â±Âºâ€°
 	}CMDSplash_t;
 
-	//Õ½¶ÓĞÅÏ¢
+	//â€™Î©âˆ‚â€â€“â‰ˆÅ“Â¢
 	typedef struct tag_CMDTeam
 	{
 		uint32 roomId;
@@ -41,22 +41,22 @@ namespace protocol
 		char alias[32];
 	}CMDTeam_t;
 
-	// ¹ÛµãÁĞ±í£¨ÕªÒª£©
+	// Ï€â‚¬Âµâ€Â¡â€“Â±ÃŒÂ£Â®â€™â„¢â€œâ„¢Â£Â©
 	typedef struct tag_CMDViewpointSummary
 	{
-		uint32 authorId;  // ·¢±íÕß£ºÕ½¶ÓID/Team ID
+		uint32 authorId;  // âˆ‘Â¢Â±ÃŒâ€™ï¬‚Â£âˆ«â€™Î©âˆ‚â€ID/Team ID
 		uint32 roomId;
-		char authorName[32];  // Õ½¶ÓÃû³Æ
-		char authorIcon[256];  // Í·Ïñ
-		uint32 viewpointId;  // ¹ÛµãID
-		char publishTime[32];  // ·¢±íÊ±¼ä
-		char title[64];  // ±êÌâ
-		char content[256];  // ¹Ûµã¼òÒª
-		uint32 replyCount;  // »Ø¸´Êı
-		uint32 giftCount;  // ÀñÎïÊı
+		char authorName[32];  // â€™Î©âˆ‚â€âˆšËšâ‰¥âˆ†
+		char authorIcon[256];  // Ã•âˆ‘Å“Ã’
+		uint32 viewpointId;  // Ï€â‚¬Âµâ€ID
+		char publishTime[32];  // âˆ‘Â¢Â±ÃŒÂ Â±Âºâ€°
+		char title[64];  // Â±ÃÃƒâ€š
+		char content[256];  // Ï€â‚¬Âµâ€ÂºÃšâ€œâ„¢
+		uint32 replyCount;  // ÂªÃ¿âˆÂ¥Â Ë
+		uint32 giftCount;  // Â¿Ã’Å’Ã”Â Ë
 	}CMDViewpointSummary_t;
 
-	//¹ÛµãÏêÇé
+	//Ï€â‚¬Âµâ€Å“ÃÂ«Ãˆ
 	typedef struct tag_CMDViewpointDetail
 	{
 		uint32 authorId;
@@ -65,108 +65,108 @@ namespace protocol
 		char authorIcon[256];
 		uint32 viewpointId;
 		char publishTime[32];
-		char title[64];  // ±êÌâ
-		char content[4096];   // ¹ÛµãÕıÎÄ
+		char title[64];  // Â±ÃÃƒâ€š
+		char content[4096];   // Ï€â‚¬Âµâ€â€™ËÅ’Æ’
 		uint32 replyCount;
 		uint32 giftCount;
 		char html5url[128];
 	}CMDViewpointDetail_t;
 
-	// ¹Ûµã»Ø¸´
+	// Ï€â‚¬Âµâ€ÂªÃ¿âˆÂ¥
 	typedef struct tag_CMDReply
 	{
-		uint32 replytId;  // ±¾»Ø¸´ID
-		uint32 viewpointId;  // ËùÊô¹Ûµã
-		uint32 parentReplyId;  // ËùÊô»Ø¸´
-		uint32 authorId;  // »Ø¸´ÕßID
-		char authorName[64];  // »Ø¸´ÕßÃû³Æ
-		char authorIcon[256];  // Í·Ïñ
-		uint32 authorRole; // 0£ºÆÕÍ¨ÓÃ»§ 1£º½²Ê¦
-		uint32 fromAuthorId;  // »Ø¸´ÕßID
-		char fromAuthorName[64];  // ±»»Ø¸´ÕßÃû³Æ
-		char fromAuthorIcon[256];  // ±»Í·Ïñ
-		uint32 fromAuthorRole; // 0£ºÆÕÍ¨ÓÃ»§ 1£º½²Ê¦
-		char publishTime[32];  // »Ø¸´Ê±¼ä
-		char content[256];  // »Ø¸´ÄÚÈİ
+		uint32 replytId;  // Â±Ã¦ÂªÃ¿âˆÂ¥ID
+		uint32 viewpointId;  // Ã€Ë˜Â Ã™Ï€â‚¬Âµâ€
+		uint32 parentReplyId;  // Ã€Ë˜Â Ã™ÂªÃ¿âˆÂ¥
+		uint32 authorId;  // ÂªÃ¿âˆÂ¥â€™ï¬‚ID
+		char authorName[64];  // ÂªÃ¿âˆÂ¥â€™ï¬‚âˆšËšâ‰¥âˆ†
+		char authorIcon[256];  // Ã•âˆ‘Å“Ã’
+		uint32 authorRole; // 0Â£âˆ«âˆ†â€™Ã•Â®â€âˆšÂªÃŸ 1Â£âˆ«Î©â‰¤Â Â¶
+		uint32 fromAuthorId;  // ÂªÃ¿âˆÂ¥â€™ï¬‚ID
+		char fromAuthorName[64];  // Â±ÂªÂªÃ¿âˆÂ¥â€™ï¬‚âˆšËšâ‰¥âˆ†
+		char fromAuthorIcon[256];  // Â±ÂªÃ•âˆ‘Å“Ã’
+		uint32 fromAuthorRole; // 0Â£âˆ«âˆ†â€™Ã•Â®â€âˆšÂªÃŸ 1Â£âˆ«Î©â‰¤Â Â¶
+		char publishTime[32];  // ÂªÃ¿âˆÂ¥Â Â±Âºâ€°
+		char content[256];  // ÂªÃ¿âˆÂ¥Æ’â„Â»â€º
 	}CMDReply_t;
 
-	// ¸ßÊÖ²ÙÅÌ£¨Ê×Ò³£©
+	// âˆï¬‚Â Ã·â‰¤Å¸â‰ˆÃƒÂ£Â®Â â—Šâ€œâ‰¥Â£Â©
 	typedef struct tag_CMDOperateStockProfit
 	{
-		uint32 operateId;  // ²ÙÅÌID
-		uint32 teamId;  // Õ½¶ÓID
-		char teamName[32];  // Õ½¶ÓÃû³Æ
-		char teamIcon[64];  //Õ½¶ÓÍ·Ïñ
-		char focus[64];  // ²ÙÅÌÃû³Æ
-		float goalProfit;  // Ä¿±êÊÕÒæ
-		float totalProfit;  // ×ÜÊÕÒæ
-		float dayProfit;  // ÈÕÊÕÒæ
-		float monthProfit;  // ÔÂÊÕÒæ
+		uint32 operateId;  // â‰¤Å¸â‰ˆÃƒID
+		uint32 teamId;  // â€™Î©âˆ‚â€ID
+		char teamName[32];  // â€™Î©âˆ‚â€âˆšËšâ‰¥âˆ†
+		char teamIcon[64];  //â€™Î©âˆ‚â€Ã•âˆ‘Å“Ã’
+		char focus[64];  // â‰¤Å¸â‰ˆÃƒâˆšËšâ‰¥âˆ†
+		float goalProfit;  // Æ’Ã¸Â±ÃÂ â€™â€œÃŠ
+		float totalProfit;  // â—Šâ€¹Â â€™â€œÃŠ
+		float dayProfit;  // Â»â€™Â â€™â€œÃŠ
+		float monthProfit;  // â€˜Â¬Â â€™â€œÃŠ
 		float winRate;
 	}CMDOperateStockProfit_t;
 
-	// ¸ßÊÖ²ÙÅÌÇúÏßÊı¾İ
+	// âˆï¬‚Â Ã·â‰¤Å¸â‰ˆÃƒÂ«Ë™Å“ï¬‚Â ËÃ¦â€º
 	typedef struct tag_CMDOperateStockData
 	{
-		uint32 operateId;  // ²ÙÅÌID
-		float dataAll[2][60];  // ×ÜÊÕÒæÇúÏß
-		float data3Month[2][60]; // ×î½üÈıÔÂÇúÏß
-		float dataMonth[2][60];  // ÔÂÇúÏß
-		float dataWeek[2][60];  // ÖÜÇúÏß
+		uint32 operateId;  // â‰¤Å¸â‰ˆÃƒID
+		float dataAll[2][60];  // â—Šâ€¹Â â€™â€œÃŠÂ«Ë™Å“ï¬‚
+		float data3Month[2][60]; // â—ŠÃ“Î©Â¸Â»Ëâ€˜Â¬Â«Ë™Å“ï¬‚
+		float dataMonth[2][60];  // â€˜Â¬Â«Ë™Å“ï¬‚
+		float dataWeek[2][60];  // Ã·â€¹Â«Ë™Å“ï¬‚
 	}CMDOperateStockData_t;
 
-	// ¸ßÊÖ²ÙÅÌ½»Ò×¼ÇÂ¼
+	// âˆï¬‚Â Ã·â‰¤Å¸â‰ˆÃƒÎ©Âªâ€œâ—ŠÂºÂ«Â¬Âº
 	typedef struct tag_CMDOperateStockTransaction
 	{
-		uint32 transId;  // ±¾¼ÇÂ¼ID
-		uint32 operateId;  // ²ÙÅÌID
-		char buytype[8];  // ½»Ò×ÀàĞÍ ÂòÈë Âô³ö
-		char stockId[8];  // ¹ÉÆ±´úÂë
-		char stockName[16];  // ¹ÉÆ±Ãû³Æ
-		float price;  // ³É½»¼Û
-		uint32 count;  // ³É½»Á¿
-		float money;  // ³É½»¶î
-		char time[32];  // ³É½»Ê±¼ä
+		uint32 transId;  // Â±Ã¦ÂºÂ«Â¬ÂºID
+		uint32 operateId;  // â‰¤Å¸â‰ˆÃƒID
+		char buytype[8];  // Î©Âªâ€œâ—ŠÂ¿â€¡â€“Ã• Â¬ÃšÂ»Ã Â¬Ã™â‰¥Ë†
+		char stockId[8];  // Ï€â€¦âˆ†Â±Â¥Ë™Â¬Ã
+		char stockName[16];  // Ï€â€¦âˆ†Â±âˆšËšâ‰¥âˆ†
+		float price;  // â‰¥â€¦Î©ÂªÂºâ‚¬
+		uint32 count;  // â‰¥â€¦Î©ÂªÂ¡Ã¸
+		float money;  // â‰¥â€¦Î©Âªâˆ‚Ã“
+		char time[32];  // â‰¥â€¦Î©ÂªÂ Â±Âºâ€°
 	}CMDOperateStockTransaction_t;
 
-	// ¸ßÊÖ²ÙÅÌ³Ö²Ö
+	// âˆï¬‚Â Ã·â‰¤Å¸â‰ˆÃƒâ‰¥Ã·â‰¤Ã·
 	typedef struct tag_CMDOperateStocks
 	{
-		uint32 transId;  // ±¾¼ÇÂ¼ID
-		uint32 operateId;  // ²ÙÅÌID
-		char stockId[8];  // ¹ÉÆ±´úÂë
-		char stockName[16];  // ¹ÉÆ±Ãû³Æ
-		uint32 count;  // ³ÖÓĞÊıÁ¿
-		float cost;  // ³É±¾;
-		float currPrice;  // µ±Ç°¼Û;
-		float profitRate; // ÊÕÒæÂÊ;
-		float ProfitMoney;  // ÊÕÒæ¶î;
+		uint32 transId;  // Â±Ã¦ÂºÂ«Â¬ÂºID
+		uint32 operateId;  // â‰¤Å¸â‰ˆÃƒID
+		char stockId[8];  // Ï€â€¦âˆ†Â±Â¥Ë™Â¬Ã
+		char stockName[16];  // Ï€â€¦âˆ†Â±âˆšËšâ‰¥âˆ†
+		uint32 count;  // â‰¥Ã·â€â€“Â ËÂ¡Ã¸
+		float cost;  // â‰¥â€¦Â±Ã¦;
+		float currPrice;  // ÂµÂ±Â«âˆÂºâ‚¬;
+		float profitRate; // Â â€™â€œÃŠÂ¬Â ;
+		float ProfitMoney;  // Â â€™â€œÃŠâˆ‚Ã“;
 	}tCMDOperateStocks_t;
 
 
-	//ÎÒµÄË½ÈË¶¨ÖÆ
+	//Å’â€œÂµÆ’Ã€Î©Â»Ã€âˆ‚Â®Ã·âˆ†
 	typedef struct tag_CMDMyPrivateService
 	{
-		uint32 teamId;  // Õ½¶Ó
+		uint32 teamId;  // â€™Î©âˆ‚â€
 		char teamName[32];
 		char teamIcon[32];
-		uint32 levelId;  // ¿ªÍ¨µÄµÈ¼¶ĞòºÅ1 ~ 6
-		char levelName[16];  // µÈ¼¶Ãû³Æ VIP1...
-		char expirationDate[32];  // ÓĞĞ§ÆÚ
+		uint32 levelId;  // Ã¸â„¢Ã•Â®ÂµÆ’ÂµÂ»Âºâˆ‚â€“Ãšâˆ«â‰ˆ1 ~ 6
+		char levelName[16];  // ÂµÂ»Âºâˆ‚âˆšËšâ‰¥âˆ† VIP1...
+		char expirationDate[32];  // â€â€“â€“ÃŸâˆ†â„
 	}CMDMyPrivateService_t;
 
-	// Ê²Ã´ÊÇË½ÈË¶¨ÖÆ
+	// Â â‰¤âˆšÂ¥Â Â«Ã€Î©Â»Ã€âˆ‚Â®Ã·âˆ†
 	typedef struct tag_CMDWhatIsPrivateService
 	{
-		char content[1024]; // Html¸ñÊ½
+		char content[1024]; // HtmlâˆÃ’Â Î©
 	}CMDWhatIsPrivateService_t;
 
-	//¹ºÂòË½ÈË¶¨ÖÆ
+	//Ï€âˆ«Â¬ÃšÃ€Î©Â»Ã€âˆ‚Â®Ã·âˆ†
 	typedef struct tag_CMDPrivateServiceLevelDescription
 	{
-		uint32 levelId;  // ĞòºÅ
-		char levelName[16];  // vipµÈ¼¶Ãû³Æ
-		char description[128];  // ÃèÊö
+		uint32 levelId;  // â€“Ãšâˆ«â‰ˆ
+		char levelName[16];  // vipÂµÂ»Âºâˆ‚âˆšËšâ‰¥âˆ†
+		char description[128];  // âˆšÃ‹Â Ë†
 		char buytime[32];
 		char expirtiontime[32];
 		float buyPrice;
@@ -174,127 +174,127 @@ namespace protocol
 		uint32 isopen;
 	}CMDPrivateServiceLevelDescription_t;
 
-	// Ë½ÈË¶¨ÖÆËõÂÔĞÅÏ¢
+	// Ã€Î©Â»Ã€âˆ‚Â®Ã·âˆ†Ã€Ä±Â¬â€˜â€“â‰ˆÅ“Â¢
 	typedef struct tag_CMDPrivateServiceSummary
 	{
 		uint32 id;
-		char title[64];  // ±êÌâ
-		char summary[256];  // ¼òÒª
-		char publishTime[32];  // ·¢²¼ÈÕÆÚ
-		char teamName[32];  // Õ½¶ÓÃû³Æ
+		char title[64];  // Â±ÃÃƒâ€š
+		char summary[256];  // ÂºÃšâ€œâ„¢
+		char publishTime[32];  // âˆ‘Â¢â‰¤ÂºÂ»â€™âˆ†â„
+		char teamName[32];  // â€™Î©âˆ‚â€âˆšËšâ‰¥âˆ†
 	}CMDPrivateServiceSummary_t;
 
-	//Ë½ÈË¶¨ÖÆÏêÇé
+	//Ã€Î©Â»Ã€âˆ‚Â®Ã·âˆ†Å“ÃÂ«Ãˆ
 	typedef struct tag_CMDPrivateServiceDetail
 	{
-		char title[64];  // ±êÌâ
-		char content[1024];  // ÄÚÈİ HTML¸ñÊ½
-		char publishTime[32];  // ·¢²¼ÈÕÆÚ
-		char videoUrl[64];  // ÊÓÆµµØÖ·
-		char videoName[64];  // ÊÓÆµÃû³Æ
-		char attachmentUrl[64];  // ¸½¼şURL
-		char attachmentName[64];  // ¸½¼şÃû³Æ
-		uint32 operateStockId; // ²ÙÅÌID
+		char title[64];  // Â±ÃÃƒâ€š
+		char content[1024];  // Æ’â„Â»â€º HTMLâˆÃ’Â Î©
+		char publishTime[32];  // âˆ‘Â¢â‰¤ÂºÂ»â€™âˆ†â„
+		char videoUrl[64];  // Â â€âˆ†ÂµÂµÃ¿Ã·âˆ‘
+		char videoName[64];  // Â â€âˆ†ÂµâˆšËšâ‰¥âˆ†
+		char attachmentUrl[64];  // âˆÎ©ÂºË›URL
+		char attachmentName[64];  // âˆÎ©ÂºË›âˆšËšâ‰¥âˆ†
+		uint32 operateStockId; // â‰¤Å¸â‰ˆÃƒID
 		char html5Url[64]; // HTML5 URL
 	}CMDPrivateServiceDetail_t;
 
 
-	// ³äÖµ¹æÔò
+	// â‰¥â€°Ã·ÂµÏ€ÃŠâ€˜Ãš
 	typedef struct tag_CMDChargeRule
 	{
-		float originalPrice;   // Ô­¼Û
-		float discountPrice;  // ÓÅ»İ¼Û
-		int coinCount;  // ½ğ±ÒÊı
+		float originalPrice;   // â€˜â‰ Âºâ‚¬
+		float discountPrice;  // â€â‰ˆÂªâ€ºÂºâ‚¬
+		int coinCount;  // Î©ï£¿Â±â€œÂ Ë
 	}CMDChargeRule_t;
 
-	// ½²Ê¦¼ò½é-ÊÓÆµ
+	// Î©â‰¤Â Â¶ÂºÃšÎ©Ãˆ-Â â€âˆ†Âµ
 	typedef struct tag_CMDVideoInfo
 	{
 		int id;
-		char name[64];  // ÊÓÆµÃû³Æ
-		char picUrl[64];  // ÊÓÆµËõÂÔÍ¼
-		char videoUrl[64];  // ÊÓÆµµØÖ·
+		char name[64];  // Â â€âˆ†ÂµâˆšËšâ‰¥âˆ†
+		char picUrl[64];  // Â â€âˆ†ÂµÃ€Ä±Â¬â€˜Ã•Âº
+		char videoUrl[64];  // Â â€âˆ†ÂµÂµÃ¿Ã·âˆ‘
 	}CMDVideoInfo_t;
 
-	// ¹±Ï×°ñ
+	// Ï€Â±Å“â—ŠâˆÃ’
 	typedef struct tag_CMDConsumeRank
 	{
-		char userName[32];  // ÓÃ»§Ãû
-		int headId;  // Í·Ïñ
-		uint64 consume;  // Ïû·Ñ½ğ±ÒÊı
+		char userName[32];  // â€âˆšÂªÃŸâˆšËš
+		int headId;  // Ã•âˆ‘Å“Ã’
+		uint64 consume;  // Å“Ëšâˆ‘â€”Î©ï£¿Â±â€œÂ Ë
 	}CMDConsumeRank_t;
 
-	// ĞÅÏä--ÏµÍ³ÏûÏ¢
+	// â€“â‰ˆÅ“â€°--Å“ÂµÃ•â‰¥Å“ËšÅ“Â¢
 	typedef struct tag_CMDSystemMessage
 	{
-		uint32 id;  // ÏûÏ¢ID
-		char title[64];  // ±êÌâ
-		char content[256];  // ÄÚÈİ
-		char publishTime[32];  // ·¢²¼Ê±¼ä
+		uint32 id;  // Å“ËšÅ“Â¢ID
+		char title[64];  // Â±ÃÃƒâ€š
+		char content[256];  // Æ’â„Â»â€º
+		char publishTime[32];  // âˆ‘Â¢â‰¤ÂºÂ Â±Âºâ€°
 	}CMDSystemMessage_t;
 
 	typedef struct tag_CMDQuestionAnswer
 	  {
 	    uint32 id;
 	    uint32 roomId;
-	    uint32 answerAuthorId;  // »Ø´ğÕß
-	    char answerAuthorName[32];  // »Ø´ğÕßÃû³Æ
-	    char answerAuthorHead[64];  // »Ø´ğÕßICON
-	    uint32 answerAuthorRole; // 0£ºÆÕÍ¨ÓÃ»§ 1£º½²Ê¦
-	    char answerTime[32];  // »Ø´ğÊ±¼ä
-	    char answerContent[256];  // »Ø´ğÄÚÈİ
-		uint32 askAuthorId;  // »Ø´ğÕß
-	    char askAuthorName[32];  // ÌáÎÊÕß
-	    char askAuthorHead[64];  // ÌáÎÊÕßÍ·Ïñ
-	    uint32 askAuthorRole; // 0£ºÆÕÍ¨ÓÃ»§ 1£º½²Ê¦
-	    char askStock[32];  // ÌáÎÊµÄ¹ÉÆ±
-	    char askContent[256];  // ÌáÎÊÄÚÈİ
-	    char askTime[32];  // ÌáÎÊÊ±¼ä
+	    uint32 answerAuthorId;  // ÂªÃ¿Â¥ï£¿â€™ï¬‚
+	    char answerAuthorName[32];  // ÂªÃ¿Â¥ï£¿â€™ï¬‚âˆšËšâ‰¥âˆ†
+	    char answerAuthorHead[64];  // ÂªÃ¿Â¥ï£¿â€™ï¬‚ICON
+	    uint32 answerAuthorRole; // 0Â£âˆ«âˆ†â€™Ã•Â®â€âˆšÂªÃŸ 1Â£âˆ«Î©â‰¤Â Â¶
+	    char answerTime[32];  // ÂªÃ¿Â¥ï£¿Â Â±Âºâ€°
+	    char answerContent[256];  // ÂªÃ¿Â¥ï£¿Æ’â„Â»â€º
+		uint32 askAuthorId;  // ÂªÃ¿Â¥ï£¿â€™ï¬‚
+	    char askAuthorName[32];  // ÃƒÂ·Å’Â â€™ï¬‚
+	    char askAuthorHead[64];  // ÃƒÂ·Å’Â â€™ï¬‚Ã•âˆ‘Å“Ã’
+	    uint32 askAuthorRole; // 0Â£âˆ«âˆ†â€™Ã•Â®â€âˆšÂªÃŸ 1Â£âˆ«Î©â‰¤Â Â¶
+	    char askStock[32];  // ÃƒÂ·Å’Â ÂµÆ’Ï€â€¦âˆ†Â±
+	    char askContent[256];  // ÃƒÂ·Å’Â Æ’â„Â»â€º
+	    char askTime[32];  // ÃƒÂ·Å’Â Â Â±Âºâ€°
 	    uint32 fromClient;
 	  }CMDQuestionAnswer_t;
 
-	  // ĞÅÏä--ÆÀÂÛ
+	  // â€“â‰ˆÅ“â€°--âˆ†Â¿Â¬â‚¬
 	  typedef struct tag_CMDMailReply
 	  {
 	    uint32 id;
 	    uint32 roomId;
-	    uint32 viewpointId;  // ¹ÛµãID
-	    char title[32];  // ¹Ûµã±êÌâ
-		uint32 askAuthorId;  // Ô­ÆÀÂÛÕß
-	    char askAuthorName[32];  // Ô­ÆÀÂÛ
+	    uint32 viewpointId;  // Ï€â‚¬Âµâ€ID
+	    char title[32];  // Ï€â‚¬Âµâ€Â±ÃÃƒâ€š
+		uint32 askAuthorId;  // â€˜â‰ âˆ†Â¿Â¬â‚¬â€™ï¬‚
+	    char askAuthorName[32];  // â€˜â‰ âˆ†Â¿Â¬â‚¬
 	    char askAuthorHead[64];
-	    uint32 askAuthorRole; // 0£ºÆÕÍ¨ÓÃ»§ 1£º½²Ê¦
+	    uint32 askAuthorRole; // 0Â£âˆ«âˆ†â€™Ã•Â®â€âˆšÂªÃŸ 1Â£âˆ«Î©â‰¤Â Â¶
 	    char askContent[256];
 	    char askTime[32];
-	    char answerAuthorId[16];  //»Ø¸´µÄÆÀÂÛ
+	    char answerAuthorId[16];  //ÂªÃ¿âˆÂ¥ÂµÆ’âˆ†Â¿Â¬â‚¬
 	    char answerAuthorName[32];
 	    char answerAuthorHead[64];
-	    uint32 answerAuthorRole; // 0£ºÆÕÍ¨ÓÃ»§ 1£º½²Ê¦
+	    uint32 answerAuthorRole; // 0Â£âˆ«âˆ†â€™Ã•Â®â€âˆšÂªÃŸ 1Â£âˆ«Î©â‰¤Â Â¶
 	    char answerTime[32];
 	    char answerContent[256];
 	    uint32 fromClient;
 	  }CMDMailReply_t;
 
-	// ĞÅÏä--×ÜÎ´¶ÁÊıÁ¿
+	// â€“â‰ˆÅ“â€°--â—Šâ€¹Å’Â¥âˆ‚Â¡Â ËÂ¡Ã¸
 	typedef struct tag_CMDTotalUnread
 	{
-		uint32 total;  // ×ÜµÄÎ´¶ÁÊı
+		uint32 total;  // â—Šâ€¹ÂµÆ’Å’Â¥âˆ‚Â¡Â Ë
 	}CMDTotalUnread_t;
 
-	// ĞÅÏä--Î´¶ÁÊıÁ¿
+	// â€“â‰ˆÅ“â€°--Å’Â¥âˆ‚Â¡Â ËÂ¡Ã¸
 	typedef struct tag_CMDUnread
 	{
-		uint32 system;  // ÏµÍ³ÏûÏ¢Î´¶ÁÊı
-		uint32 answer;  // ÎÊÌâ»Ø¸´Î´¶ÁÊı
-		uint32 reply;  // ÆÀÂÛ»Ø¸´Î´¶ÁÊı
-		uint32 privateService;  // Ë½ÈË¶¨ÖÆÎ´¶ÁÊı
+		uint32 system;  // Å“ÂµÃ•â‰¥Å“ËšÅ“Â¢Å’Â¥âˆ‚Â¡Â Ë
+		uint32 answer;  // Å’Â Ãƒâ€šÂªÃ¿âˆÂ¥Å’Â¥âˆ‚Â¡Â Ë
+		uint32 reply;  // âˆ†Â¿Â¬â‚¬ÂªÃ¿âˆÂ¥Å’Â¥âˆ‚Â¡Â Ë
+		uint32 privateService;  // Ã€Î©Â»Ã€âˆ‚Â®Ã·âˆ†Å’Â¥âˆ‚Â¡Â Ë
 	}CMDUnread_t;
 
 	typedef struct tag_CMDTeamTopN
 	{
-		char teamName[32];  // Õ½¶ÓÃû³Æ
-		char teamIcon[64];  // Õ½¶ÓICON
-		float yieldRate;  // ÊÕÒæÂÊ
+		char teamName[32];  // â€™Î©âˆ‚â€âˆšËšâ‰¥âˆ†
+		char teamIcon[64];  // â€™Î©âˆ‚â€ICON
+		float yieldRate;  // Â â€™â€œÃŠÂ¬Â 
 	}CMDTeamTopN_t;
 
 	typedef struct tag_CMDBannerItem
@@ -322,17 +322,18 @@ namespace protocol
 
 	typedef struct tag_CMDImageInfo
 	{
-		char path[128];  // Í¼Æ¬Â·¾¶
-		uint32 width; // ¿í¶È
-		uint32 height;  // ¸ß¶È
+		char path[128];  // Ã•Âºâˆ†Â¨Â¬âˆ‘Ã¦âˆ‚
+		uint32 width; // Ã¸ÃŒâˆ‚Â»
+		uint32 height;  // âˆï¬‚âˆ‚Â»
 	}CMDImageInfo_t;
 
 	typedef struct tag_CMDUserTeamRelatedInfo
 	{
-		uint32 askremain; // Ê£ÓàÌáÎÊ´ÎÊı
-		uint32 viplevel; // ¿ªÍ¨µÄvipµÈ¼¶
+		uint32 askremain; // Â Â£â€â€¡ÃƒÂ·Å’Â Â¥Å’Â Ë
+		uint32 viplevel; // Ã¸â„¢Ã•Â®ÂµÆ’vipÂµÂ»Âºâˆ‚
 	}CMDUserTeamRelatedInfo_t;
 
+    
 };
 
 #pragma pack()

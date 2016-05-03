@@ -347,7 +347,7 @@
 {
 //    [ProgressHUD show:@"QQ授权中..." viewInfo:self.view];
     [self.view makeToastActivity];
-    _tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1105199260" andDelegate:self];
+    _tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1105298719" andDelegate:self];
     NSArray* permissions = [NSArray arrayWithObjects:
                             kOPEN_PERMISSION_GET_USER_INFO,
                             kOPEN_PERMISSION_GET_SIMPLE_USER_INFO,
@@ -388,6 +388,7 @@
     
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
+    [_txtUser becomeFirstResponder];
 }
 
 - (void)closeKeyBoard

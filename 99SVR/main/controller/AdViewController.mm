@@ -50,7 +50,7 @@
     UIImageView *ad = [[UIImageView alloc] init];
     ad.contentMode = UIViewContentModeScaleAspectFill;
     ad.clipsToBounds = YES;
-    ad.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.80);
+    ad.frame = CGRectMake(0, 100, kScreenWidth, kScreenHeight * 0.80-100);
     [ad sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"start-mascot"]];
     [self.view addSubview:ad];
     

@@ -8,10 +8,9 @@
 #import "StockDealTableModel.h"
 #import "HttpMessage.pb.h"
 #import "TQPurchaseViewController.h"
-#import "ViewNullFactory.h"
-#import "Toast+UIView.h"
+#import "UIViewController+EmpetViewTips.h"
 
-@interface StockDealViewController ()<StockDealTableModelDelegate>
+@interface StockDealViewController ()
 @property (nonatomic , strong) UITableView *tableView;
 @property (nonatomic , strong) StockDealHeaderView *headerView;
 @property (nonatomic , strong) StockDealTableModel *tableViewModel;
@@ -29,9 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-
     self.view.backgroundColor = COLOR_Bg_Gay;
-    
     [self initData];
     [self initUI];
 }
@@ -49,6 +46,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
     [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+
 
 
 }
@@ -65,16 +65,18 @@
     
 
     Loading_Bird_Hide
-    
     NSDictionary *dic = notify.object;
     NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
-    
     [self.view hideToastActivity];
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+
     if ([code isEqualToString:@"1"]) {//请求成功
         
         [self.tableViewDataArray removeAllObjects];
+        
         //    //拿到头部视图的数据
+        self.headerView.backgroundColor = COLOR_Bg_Blue;
         self.headerModel = dic[@"headerModel"];
         //    //拿到股票视图的数据
         [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
@@ -83,61 +85,45 @@
         //持仓记录
         [self.tableViewDataArray addObject:dic[@"stocks"]];
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            self.tableView.tableFooterView = self.warningLab;
-            [self.headerView setHeaderViewWithDataModel:self.headerModel];
-            [self.tableViewModel setIsShowRecal:dic[@"recalState"] withDataModel:self.headerModel];
-            self.tableViewModel.dataArray = self.tableViewDataArray;
-            [self.tableView reloadData];
-        });
+        
+        self.tableView.tableFooterView = self.warningLab;
+        [self.headerView setHeaderViewWithDataModel:self.headerModel];
+        [self.tableViewModel setIsShowRecal:dic[@"recalState"] withDataModel:self.headerModel];
+        self.tableViewModel.dataArray = self.tableViewDataArray;
+        [self.tableView reloadData];
         
     }else{//请求失败
         
-        
+        self.headerView.backgroundColor = COLOR_Bg_Gay;
+        self.tableView.backgroundColor = COLOR_Bg_Gay;
     }
     [self chickEmptyViewShow:self.tableViewDataArray withCode:code];
     
+    });
+
 }
 
 #pragma mark
--(void)chickEmptyViewShow:(NSMutableArray *)dataArray withCode:(NSString *)code{
-
+-(void)chickEmptyViewShow:(NSArray *)dataArray withCode:(NSString *)code{
+    
     WeakSelf(self);
     
-    if ([code isEqualToString:@"1"]) {//网络OK
+    if (dataArray.count==0&&[code intValue]!=1) {//数据为0 错误代码不为1
         
-        if (dataArray.count==0) {//不存在数据
+        [self showErrorViewInView:self.tableView withMsg:[NSString stringWithFormat:@"网络链接错误%@,点击重新链接",code] touchHanleBlock:^{
             
-            self.emptyView = [ViewNullFactory createViewBg:self.emptyView.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:RequestState_EmptyStr(@"")];
-            
-            
-            [self.emptyView clickWithBlock:^(UIGestureRecognizer *gesture) {
-               
-                Loading_Bird_Show
-                [kHTTPSingle RequestOperateStockAllDetail:[weakSelf.stockModel.operateid intValue]];
-                weakSelf.emptyView.hidden = NO;
-                
-            }];
-            
-            [self.tableView addSubview:self.emptyView];
-
-            
-        }else{
-            
-            if (self.emptyView) {
-                [self.emptyView removeFromSuperview];
-            }
-        }
+            Loading_Bird_Show
+            [kHTTPSingle RequestOperateStockAllDetail:[weakSelf.stockModel.operateid intValue]];
+        }];
         
+    }else if (dataArray.count==0&&[code intValue]==1){
         
-    }else{//网络错误
-       
-        if (dataArray.count==0) {
+        [self showEmptyViewInView:self.tableView withMsg:[NSString stringWithFormat:@"暂无数据%@",code] touchHanleBlock:^{
             
-            self.emptyView = [ViewNullFactory createViewBg:self.tableView.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail@3x.png"] msg:RequestState_NetworkErrorStr(code)];
-            [self.tableView addSubview:self.emptyView];
-        }
+        }];
+        
+    }else{
+        [self hideEmptyViewInView:self.tableView];
     }
 }
 
@@ -159,7 +145,6 @@
         _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} style:UITableViewStyleGrouped];
         self.tableViewModel = [[StockDealTableModel alloc]init];
         self.tableViewModel.viewController = self;
-        self.tableViewModel.delegate = self;
         _tableView.delegate = self.tableViewModel;
         _tableView.dataSource = self.tableViewModel;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -189,19 +174,29 @@
     [super didReceiveMemoryWarning];
 }
 
--(void)dealloc{
-
-    DLog(@"释放");
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_DEAL_VC object:nil];
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [super viewWillDisappear:animated];
+    
+    Loading_Bird_Hide
 }
 
 
-#pragma mark StockDealTableModelDelegate
--(void)stockDealTableModelRefreshData{
-    
-    //再次刷新
-    [self.view makeToastActivity];
-    [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
+-(void)dealloc{
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_DEAL_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+}
+
+#pragma mark refreshData 再次刷新页面数据
+-(void)refreshData:(NSNotification *)notify{
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //再次刷新
+        [self.view makeToastActivity];
+        [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
+        
+    });
 }
 
 

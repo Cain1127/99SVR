@@ -8,6 +8,8 @@
 
 #import "XTeamPrivateController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "TQPurchaseViewController.h"
+#import "XPrivateDetailViewController.h"
 #import "PrivateVipView.h"
 #import "TQPurchaseModel.h"
 #import "CustomizedTableViewCell.h"
@@ -16,10 +18,12 @@
 #import "XPrivateService.h"
 #import "ZLPrivateDataSource.h"
 #import "ZLWhatIsPrivateView.h"
-@interface XTeamPrivateController()<DTAttributedTextContentViewDelegate,UITableViewDataSource,UITableViewDelegate,PrivateDelegate>
+@interface XTeamPrivateController()<DTAttributedTextContentViewDelegate,PrivateDelegate>
 {
     ZLWhatIsPrivateView *whatPrivate;
 }
+
+@property (nonatomic,strong) UIButton *btnBuy;
 @property (nonatomic,strong) UILabel *titleLable;
 @property (nonatomic,copy) NSArray *aryVIP;
 @property (nonatomic,strong) DTAttributedTextView *textView;
@@ -30,6 +34,7 @@
 @property (nonatomic,strong) UILabel *selectVipLable;
 @property (nonatomic) NSInteger selectIndex;
 @property (nonatomic,strong) ZLPrivateDataSource *dataSource;
+@property (nonatomic,strong) UIView *buyView;
 
 @end
 
@@ -59,11 +64,33 @@
     [self setupTableView];
     [self.view addSubview:_textView];
     
+    _buyView = [[UIView alloc] initWithFrame:Rect(0, self.view.height-60, kScreenWidth, 60)];
+    [self.view addSubview:_buyView];
+    [_buyView setBackgroundColor:COLOR_Bg_Gay];
+    
+    _btnBuy = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnBuy.frame = Rect(10,8, kScreenWidth-20, 44);
+    [_buyView addSubview:_btnBuy];
+    [_btnBuy setTitle:@"兑    换" forState:UIControlStateNormal];
+    [_btnBuy setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
+    [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
+    [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
+    [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
+    _btnBuy.titleLabel.font = XCFONT(15);
+    _btnBuy.layer.masksToBounds = YES;
+    _btnBuy.layer.cornerRadius = 2.5;
+    [_btnBuy addTarget:self action:@selector(buyprivate) forControlEvents:UIControlEventTouchUpInside];
+    
     whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 0, kScreenWidth, self.view.height)];
     [self.view addSubview:whatPrivate];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
     [kHTTPSingle RequestWhatIsPrivateService];
-    
+}
+
+- (void)buyprivate
+{
+    TQPurchaseViewController *control = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue]];
+    [self.navigationController pushViewController:control animated:YES];
 }
 
 - (void)setupTableView
@@ -89,6 +116,13 @@
     {
         @StrongObj(self)
         self.dataSource.selectIndex = vipLevelId;
+        XPrivateService *model = [self.dataSource.aryVIP objectAtIndex:vipLevelId-1];
+        if (model.isOpen) {
+            self.buyView.hidden = YES;
+        }else
+        {
+            self.buyView.hidden = NO;
+        }
         [self.tableView reloadData];
     };
     [headerView addSubview:_privateView];
@@ -175,5 +209,10 @@
 {
     whatPrivate.hidden = NO;
 }
-
+- (void)showPrivateDetail:(XPrivateSummary *)summary
+{
+    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
+    
+    [self.navigationController pushViewController:control animated:YES];
+}
 @end

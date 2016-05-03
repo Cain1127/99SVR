@@ -63,30 +63,30 @@
     }
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if(_aryModel.count>0)
-    {
-        UIView *clearView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44)];
-        UIButton *btnClear = [UIButton buttonWithType: UIButtonTypeCustom];
-        [clearView addSubview:btnClear];
-        [btnClear setTitle:@"清楚历史记录" forState:UIControlStateNormal];
-        [btnClear setTitleColor:COLOR_Btn_Select forState:UIControlStateNormal];
-        btnClear.frame = Rect(0, 0, kScreenWidth, 44);
-        [btnClear addTarget:self action:@selector(addClearAll) forControlEvents:UIControlEventTouchUpInside];
-        return clearView;
-    }
-    return nil;
-}
+//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    if(_aryModel.count>0)
+//    {
+//        UIView *clearView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44)];
+//        UIButton *btnClear = [UIButton buttonWithType: UIButtonTypeCustom];
+//        [clearView addSubview:btnClear];
+//        [btnClear setTitle:@"清楚历史记录" forState:UIControlStateNormal];
+//        [btnClear setTitleColor:COLOR_Btn_Select forState:UIControlStateNormal];
+//        btnClear.frame = Rect(0, 0, kScreenWidth, 44);
+//        [btnClear addTarget:self action:@selector(addClearAll) forControlEvents:UIControlEventTouchUpInside];
+//        return clearView;
+//    }
+//    return nil;
+//}
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    if(_aryModel.count>0)
-    {
-        return 44;
-    }
-    return 0.1;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    if(_aryModel.count>0)
+//    {
+//        return 44;
+//    }
+//    return 0.1;
+//}
 
 - (void)addClearAll
 {

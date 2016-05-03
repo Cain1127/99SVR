@@ -60,6 +60,10 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
+    
+    
+    
+    
 }
 
 - (void)loadVideoInfo:(NSNotification *)notify
@@ -69,7 +73,8 @@
     {
         int nStatus = [parametesrs[@"code"] intValue];
         NSArray *aryTemp = parametesrs[@"data"];
-        if (nStatus==1) {
+        if (nStatus==1)
+        {
             _aryVideo = aryTemp;
         }
         @WeakObj(self)

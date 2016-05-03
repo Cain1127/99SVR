@@ -436,6 +436,7 @@
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"yyyyMMdd"];
     strDate = [fmt stringFromDate:date];
+    [_txtOld becomeFirstResponder];
 }
 
 - (void)dealloc

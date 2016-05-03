@@ -29,6 +29,11 @@
         _monthprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->monthprofit()*100))];
         //超赢
         _winrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->winrate()*100))];
+        
+        _teamid = IntTransformIntToStr(profit->teamid());
+
+//        NSLog(@"总收益%f 超赢收益%f 日利率%f 月收益%f",profit->totalprofit(),profit->winrate(),profit->dayprofit(),profit->monthprofit());
+
     }
     return self;
 }
@@ -129,16 +134,17 @@
         _focus = StrTransformCToUTF8(profit->focus().c_str());
         _teamname = StrTransformCToUTF8(profit->teamname().c_str());
         _operateid = IntTransformIntToStr(profit->operateid());
-        _goalprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->goalprofit()*100))];
+        /**目标收益*/
+        _goalprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->goalprofit()))];
+        /**总收益*/
         _totalprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->totalprofit()*100))];
         //日利率
-        _dayprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->dayprofit()*100))];
+        _dayprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->dayprofit()))];
         //月收益
-        _monthprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->monthprofit()*100))];
+        _monthprofit = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->monthprofit()))];
         //超赢
         _winrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->winrate()*100))];
-//        _transId = IntTransformIntToStr(profit->transid());
-        
+        _teamid = IntTransformIntToStr(profit->teamid());
     }
     
     return self;

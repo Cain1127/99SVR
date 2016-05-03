@@ -19,7 +19,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        self.backgroundColor = COLOR_Bg_Blue;
         [self initUI];
     }
     return self;

@@ -86,6 +86,11 @@ void ZLPushListener::OnRoomTeacherOnMicResp(RoomTeacherOnMicResp &info)
     
 }
 
+void ZLPushListener::OnEmailNewMsgNoty(EmailNewMsgNoty& info)
+{
+    
+}
+
 //*********************************************************
 
 void ZLHallListener::OnSetUserPwdResp(SetUserPwdResp& info)
@@ -454,6 +459,11 @@ void ZLLogonProtocol::sendGift(int giftId,int num){
 void ZLLogonProtocol::buyPrivateVip(int teacherId,int type)
 {
     conn->SendMsg_BuyPrivateVipReq(teacherId, type);
+}
+
+void ZLLogonProtocol::requestRoomMsg()
+{
+    video_room->SendMsg_AfterJoinRoomReq();
 }
 
 //**********************************************************************************

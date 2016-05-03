@@ -107,7 +107,7 @@
     
     btnClose.frame = Rect(10,140, kScreenWidth-20, 44);
     
-    [btnClose addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
+    [btnClose addTarget:self action:@selector(setGestureHidden) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)closeView

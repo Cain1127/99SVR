@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class XPrivateSummary;
+
 @protocol PrivateDelegate <NSObject>
-
+@optional
 - (void)showWhatIsPrivate;
-
+- (void)showPrivateDetail:(XPrivateSummary *)summary;
 @end
 
 

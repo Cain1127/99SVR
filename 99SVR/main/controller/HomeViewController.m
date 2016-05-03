@@ -68,7 +68,7 @@ typedef enum : NSUInteger
 @property (nonatomic, assign) CJHomeRequestType refreshStatus;
 @property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
 
-@property (nonatomic,strong) PlayIconView *iConView;
+
 @property (nonatomic,strong) UIButton *btnPlay;
 
 @end
@@ -102,7 +102,7 @@ typedef enum : NSUInteger
 
 - (void)initTableView
 {
-    _tableView = [[UITableView alloc] initWithFrame:Rect(0.0f, kNavigationHeight, kScreenWidth, kScreenHeight - (10.0f + kNavigationHeight + 5.0f + 50.0f)) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0.0f, kNavigationHeight, kScreenWidth, kScreenHeight-kNavigationHeight) style:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -143,68 +143,10 @@ typedef enum : NSUInteger
     [_tableView.gifHeader loadDefaultImg];
     [_tableView.gifHeader beginRefreshing];
     
-    _iConView = [[PlayIconView alloc] initWithFrame:Rect(0, kScreenHeight-108, kScreenWidth, 64)];
-    [self.view addSubview:_iConView];
-    _iConView.hidden = YES;
-    _iConView.delegate = self;
-    
-    _btnPlay = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.view addSubview:_btnPlay];
-    _btnPlay.frame = Rect(kScreenWidth-55, kScreenHeight-98, 44, 44);
-    [UIImageFactory createBtnImage:@"home_play_icon" btn:_btnPlay state:UIControlStateNormal];
-    _btnPlay.hidden=YES;
-    [_btnPlay addTarget:self action:@selector(showPlayInfo) forControlEvents:UIControlEventTouchUpInside];
 }
-
-- (void)showPlayInfo
-{
-    _btnPlay.hidden = YES;
-    _iConView.hidden = NO;
-}
-
-- (void)showIconView
-{
-    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    NSString *strUrl=nil;
-    if([roomView.room.croompic length]==0)
-    {
-        strUrl = @"";
-    }
-    else
-    {
-        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,roomView.room.croompic];
-    }
-    [_iConView.imgView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
-    [_iConView.lblName setText:roomView.room.teamname];
-    [_iConView.lblNumber setText:roomView.room.teamid];
-    [_iConView.btnQuery setTitle:roomView.room.onlineusercount forState:UIControlStateNormal];
-    
-    _iConView.hidden = NO;
-}
-
-- (void)exitPlay{
-    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    [roomView exitRoom];
-    _iConView.hidden = YES;
-}
-
-- (void)gotoPlay{
-    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    [self.navigationController pushViewController:roomView animated:YES];
-}
-
-- (void)hidenPlay{
-    _btnPlay.hidden = NO;
-    _iConView.hidden = YES;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    if (roomView.room!=nil) {
-        [self showIconView];
-    }
 }
 
 - (void)updateRefresh
@@ -802,7 +744,7 @@ typedef enum : NSUInteger
         return height;
     }else if([tempObject isKindOfClass:[ZLOperateStock class]])
     {
-        return ValueWithTheIPhoneModelString(@"100,120,140,160");
+        return ValueWithTheIPhoneModelString(@"110,110,110,110");
     }
     return 130.0f;
     

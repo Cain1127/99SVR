@@ -121,5 +121,11 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     }
 }
 
+- (void)requestRoomInfo
+{
+    if (protocol) {
+        protocol->requestRoomMsg();
+    }
+}
 
 @end

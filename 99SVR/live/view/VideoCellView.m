@@ -31,7 +31,6 @@
     if (self = [super initWithFrame:frame])
     {
         self.userInteractionEnabled = YES;
-//        self.backgroundColor = [UIColor clearColor];
         _imageView = [[UIImageView alloc] init];
         _imageView.frame = CGRectMake(0,4, frame.size.width,frame.size.height-8);
         [self addSubview:_imageView];
@@ -59,11 +58,11 @@
         [self addSubview:_roomIdLabel];
         
         ///观看次数
-        _lookCountLabel = [[UILabel alloc] init];
-        _lookCountLabel.font = [UIFont systemFontOfSize:12];
-        _lookCountLabel.textColor = smallFontColor;
-        [_lookCountLabel setTextAlignment:NSTextAlignmentLeft];
-        [self addSubview:_lookCountLabel];
+//        _lookCountLabel = [[UILabel alloc] init];
+//        _lookCountLabel.font = [UIFont systemFontOfSize:12];
+//        _lookCountLabel.textColor = smallFontColor;
+//        [_lookCountLabel setTextAlignment:NSTextAlignmentLeft];
+//        [self addSubview:_lookCountLabel];
         
         [self layoutViews];
     }
@@ -72,13 +71,12 @@
 
 - (void)layoutViews
 {
-    _nameLabel.frame = Rect(_imageView.x+5,_imageView.height+_imageView.y-20,self.width*0.35,15);
+    _nameLabel.frame = Rect(_imageView.x+5,_imageView.height+_imageView.y-40,120,15);
     
-    _roomIdLabel.frame = Rect(_nameLabel.x+_nameLabel.width+2,_nameLabel.y,60,15);
+    _roomIdLabel.frame = Rect(_nameLabel.x,_imageView.y-20,80,15);
     
     [_lookCountBtn setFrame:Rect(_imageView.x+_imageView.width-55,
-                            _nameLabel.y,20, 15)];
-    _lookCountLabel.frame = Rect(_lookCountBtn.x+_lookCountBtn.width+1, _nameLabel.y, 33, 15);
+                            _nameLabel.y,80, 15)];
 }
 
 - (void)setNewRoom:(RoomHttp *)room
@@ -94,8 +92,10 @@
         strUrl = [NSString stringWithFormat:@"%@",room.teamicon];
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
+    [_lookCountBtn setTitle:room.onlineusercount forState:UIControlStateNormal];
     _nameLabel.text = room.teamname;
-    _lookCountLabel.text = room.onlineusercount;
+    CGRect frame = [room.onlineusercount boundingRectWithSize:CGSizeMake(kScreenWidth, 20) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
+    _lookCountLabel.frame = Rect(kScreenWidth-frame.size.width-20, _nameLabel.y, frame.size.width+20, 15);
     [_roomIdLabel setText:room.roomid];
 }
 
@@ -112,9 +112,9 @@
        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.croompic];
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
-    _nameLabel.text = room.cname;
-    _lookCountLabel.text = room.ncount;
-    [_roomIdLabel setText:room.nvcbid];
+    _nameLabel.text = room.teamname;
+    _lookCountLabel.text = room.onlineusercount;
+    [_roomIdLabel setText:room.roomid];
 }
 
 

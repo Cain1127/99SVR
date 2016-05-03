@@ -20,6 +20,8 @@
 @property (nonatomic,assign) id<VideoLiveDelegate> delegate;
 
 @property (nonatomic,strong) LivePlayViewController *ffPlay;
+
+
 - (id)initWithModel:(RoomHttp *)room;
 
 - (void)reloadModel:(RoomHttp *)room;

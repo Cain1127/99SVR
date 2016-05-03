@@ -43,6 +43,7 @@
 
 - (void)updateRefresh
 {
+    [self.view makeToastActivity_bird];
     [kHTTPSingle RequestTeamList];
 }
 
@@ -67,6 +68,11 @@
 - (void)loadVideo:(NSNotification *)notify
 {
     NSDictionary *dict = notify.object;
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.view hideToastActivity];
+        [selfWeak.noView removeFromSuperview];
+    });
     if([dict isKindOfClass:[NSDictionary class]])
     {
         int nStatus = [dict[@"code"] intValue];
@@ -80,7 +86,6 @@
             {
                 [aryAll addObject:room];
             }
-            
             NSArray *aryHelp = dict[@"help"];
             [UserInfo sharedUserInfo].aryHelp = aryHelp;
             for (RoomHttp *room in aryHelp)
@@ -90,7 +95,6 @@
             [UserInfo sharedUserInfo].aryRoom = aryAll;
         }
     }
-    @WeakObj(self)
     if (_aryVideo.count==0) {
         if (nil==_noView)
         {
@@ -109,6 +113,12 @@
                 }
             });
         }
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [selfWeak.noView removeFromSuperview];
+        });
     }
     dispatch_async(dispatch_get_main_queue(),
     ^{

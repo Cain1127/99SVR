@@ -9,7 +9,7 @@
 
 @protocol StockDealTableModelDelegate <NSObject>
 
--(void)stockDealTableModelRefreshData;
+//-(void)stockDealTableModelRefreshData;
 
 @end
 
@@ -17,7 +17,7 @@
 /**vip等级*/
 @property (nonatomic , strong) NSArray *dataArray;
 @property (nonatomic , weak) UIViewController *viewController;
-@property (nonatomic , weak) id <StockDealTableModelDelegate> delegate;
+//@property (nonatomic , weak) id <StockDealTableModelDelegate> delegate;
 
 -(void)setIsShowRecal:(NSString *)showRecal withDataModel:(StockDealModel *)model;
 

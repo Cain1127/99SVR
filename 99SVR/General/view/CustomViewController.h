@@ -25,6 +25,8 @@
 - (void)addDefaultHeader:(NSString *)title;
 - (void)setLineHidden:(BOOL)bHidden;
 
+- (void)MarchBackLeft;
+
 + (UIButton *)itemWithTarget:(id)target action:(SEL)action image:(NSString *)image highImage:(NSString *)highImage;
 + (UIButton *)itemWithTarget:(id)target action:(SEL)action title:(NSString*)title;
 

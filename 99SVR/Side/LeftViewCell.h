@@ -22,4 +22,6 @@
 
 - (void)setModel:(LeftCellModel *)cellModel;
 
+- (void)setrightInfo:(NSString *)strInfo;
+
 @end

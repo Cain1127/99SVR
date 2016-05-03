@@ -4,7 +4,8 @@
 
 
 #import "SlideBaseViewController.h"
+#import "HomeCustomViewController.h"
 
-@interface StockHomeViewController : UIViewController
+@interface StockHomeViewController : HomeCustomViewController
 
 @end
