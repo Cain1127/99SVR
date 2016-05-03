@@ -47,6 +47,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
+    [self.view makeToastActivity_bird];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -65,9 +66,9 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 
 //开始请求.结束下拉刷新
 -(void)updateRefresh {
-    [self.view makeToastActivity_bird];
+    //[self.view makeToastActivity_bird];
     [kHTTPSingle RequestPrivateServiceSummary:0 count:10];
-    [self.tableView.gifHeader endRefreshing];
+    //[self.tableView.gifHeader endRefreshing];
 }
 
 - (void)loadRplayView:(NSNotification *)notify
@@ -86,11 +87,13 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     dispatch_async(dispatch_get_main_queue(), ^{
         @StrongObj(self);
         [self.view hideToastActivity];
+        [self.tableView.gifHeader endRefreshing];
         [self chickEmptyViewShowWithTab:_tableView withData:(NSMutableArray *)_aryModel withCode:[dict[@"code"] intValue]];
     });
 }
 
 -(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSInteger)code{
+    [self hideEmptyViewInView:tab];
     @WeakObj(self);
     if(code!=1) {
         [self showErrorViewInView:tab withMsg:@"网络请求失败" touchHanleBlock:^{
@@ -103,7 +106,6 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
             [self.tableView.gifHeader beginRefreshing];
         }];
     } else{//请求成功
-        [self hideEmptyViewInView:tab];
         [self.tableView reloadData];
     }
 }

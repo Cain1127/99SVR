@@ -51,6 +51,7 @@ static NSString *const messageCell = @"messageCell";
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
+    [self.view makeToastActivity_bird];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -67,21 +68,19 @@ static NSString *const messageCell = @"messageCell";
     if ([dict[@"code"] intValue]==1) {
         NSArray *aryModel = dict[@"data"];
         _aryMessage = aryModel;
-//        @WeakObj(self)
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [selfWeak.tableView reloadData];
-//        });
     }
     
     @WeakObj(self);
     dispatch_async(dispatch_get_main_queue(), ^{
         @StrongObj(self);
         [self.view hideToastActivity];
+        [self.tableView.gifHeader endRefreshing];
         [self chickEmptyViewShowWithTab:_tableView withData:(NSMutableArray *)_aryMessage withCode:[dict[@"code"] intValue]];
     });
 }
 
 -(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSInteger)code{
+   [self hideEmptyViewInView:tab];
     @WeakObj(self);
     if(code!=1) {
         [self showErrorViewInView:tab withMsg:@"网络请求失败" touchHanleBlock:^{
@@ -95,16 +94,13 @@ static NSString *const messageCell = @"messageCell";
             [self.tableView.gifHeader beginRefreshing];
         }];
     } else{//请求成功
-        [self hideEmptyViewInView:tab];
         [self.tableView reloadData];
     }
 }
 
 //开始请求.结束下拉刷新
 -(void)updateRefresh {
-    [self.view makeToastActivity_bird];
-    [kHTTPSingle RequestSystemMessage:0 count:8];
-    [self.tableView.gifHeader endRefreshing];
+    [kHTTPSingle RequestSystemMessage:0 count:10];
 }
 
 -(void)addTableHeaderView {

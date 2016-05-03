@@ -37,14 +37,15 @@
     [self setupTableView];
     self.view.backgroundColor = COLOR_Bg_Gay;
     [self setTitleText:@"提问回复"];
-    
-    [self.tableView.gifHeader beginRefreshing];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_ANSWERREPLY_VC object:nil];
-  [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_ANSWERREPLY_VC object:nil];
+    [super viewWillAppear:animated];
+    
+    [self.view makeToastActivity_bird];
+    [self.tableView.gifHeader beginRefreshing];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -70,12 +71,12 @@
 }
 
 -(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSInteger)code{
+    [self hideEmptyViewInView:tab];
     @WeakObj(self);
     if(code!=1) {
         [self showErrorViewInView:tab withMsg:@"网络请求失败" touchHanleBlock:^{
             @StrongObj(self);
             [self.tableView.gifHeader beginRefreshing];
-            
         }];
     } else if (dataArray.count==0 && code==1){//数据为0 请求成功
         [self showEmptyViewInView:tab withMsg:[NSString stringWithFormat:@"暂无数据"] touchHanleBlock:^{
@@ -83,7 +84,6 @@
             [self.tableView.gifHeader beginRefreshing];
         }];
     } else{//请求成功
-        [self hideEmptyViewInView:tab];
         [self.tableView reloadData];
     }
 }
@@ -107,6 +107,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         @StrongObj(self);
         [self.view hideToastActivity];
+        [self.tableView.gifHeader endRefreshing];
         [self chickEmptyViewShowWithTab:_tableView withData:self.modelArray withCode:[dict[@"code"] intValue]];
     });
 }
@@ -114,9 +115,8 @@
 //开始请求.结束下拉刷新
 -(void)updateRefresh
 {
-    [self.view makeToastActivity_bird];
     [kHTTPSingle RequestQuestionAnswer:0 count:10 teamer:YES];
-    [self.tableView.gifHeader endRefreshing];
+    //[self.tableView.gifHeader endRefreshing];
 }
 
 
@@ -161,7 +161,7 @@
     }
     
     if (askcontentSize.height > 18) {
-         H = H + askcontentSize.height;
+        H = H + askcontentSize.height;
     }
     return H;
 }
