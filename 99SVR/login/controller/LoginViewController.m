@@ -388,6 +388,7 @@
     
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
+    [_txtUser becomeFirstResponder];
 }
 
 - (void)closeKeyBoard

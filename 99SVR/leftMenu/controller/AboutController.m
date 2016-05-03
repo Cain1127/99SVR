@@ -33,7 +33,7 @@
 
 - (void)initSubviews
 {
-    self.view.backgroundColor = RGB(243, 243, 243);
+    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _logoImageView = [[UIImageView alloc] init];
     [self.view addSubview:_logoImageView];
     

@@ -51,6 +51,7 @@
     strDate = [fmt stringFromDate:date];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self createText];
+    [_txtName becomeFirstResponder];
 }
 
 - (void)createText

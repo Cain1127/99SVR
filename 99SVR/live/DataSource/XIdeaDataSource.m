@@ -45,19 +45,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *viewPointCellName = @"TQIdeaTableViewIdentifier";
-    NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
-    if (!viewCache)
+//    NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
+//    if (!viewCache)
+//    {
+//        viewCache = [[NSCache alloc] init];
+//        [viewCache setTotalCostLimit:10];
+//    }
+    TQIdeaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:viewPointCellName];
+    if (!cell)
     {
-        viewCache = [[NSCache alloc] init];
-        [viewCache setTotalCostLimit:10];
+        cell = [[TQIdeaTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:viewPointCellName];
     }
-    TQIdeaTableViewCell *cell = [viewCache objectForKey:strKey];
-    if (!cell) {
-        cell = [[TQIdeaTableViewCell alloc] initWithReuseIdentifier:viewPointCellName];
-//        cell = [[TQIdeaTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:viewPointCellName];
-        [viewCache setObject:cell forKey:viewCache];
-    }
-    if (_aryModel.count>indexPath.row) {
+    if (_aryModel.count>indexPath.row)
+    {
         [cell setIdeaModel:[_aryModel objectAtIndex:indexPath.section]];
     }
     return cell;

@@ -81,10 +81,10 @@
     buyStatusLable.font = XCFONT(14);
     [attrDescButton addSubview:buyStatusLable];
     if (isOpen) {
-        buyStatusLable.text = @"已购买";
+        buyStatusLable.text = @"已兑换";
         buyStatusLable.textColor = UIColorFromRGB(0xff7a1e);
     } else {
-        buyStatusLable.text = @"未购买";
+        buyStatusLable.text = @"未兑换";
         buyStatusLable.textColor = UIColorFromRGB(0x919191);
     }
     

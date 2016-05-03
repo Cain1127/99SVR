@@ -20,8 +20,10 @@
 #import "ZLPrivateDataSource.h"
 #import "RoomHttp.h"
 #import "PrivateVipView.h"
+#import "ZLWhatIsPrivateView.h"
+#import "XPrivateDetailViewController.h"
 
-@interface TQMeCustomizedViewController ()<MeCustomDelegate>
+@interface TQMeCustomizedViewController ()<MeCustomDelegate,PrivateDelegate>
 {
     
 }
@@ -34,6 +36,7 @@
 @property (nonatomic,strong) RoomHttp *room;
 @property (nonatomic,strong) PrivateVipView *privateView;
 @property (nonatomic,strong) UIView *buyView;
+@property (nonatomic,strong) ZLWhatIsPrivateView *whatIsPrivate;
 
 @end
 
@@ -42,7 +45,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-124) withStyle:UITableViewStylePlain];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64) withStyle:UITableViewStylePlain];
     [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
     _buyDataSource = [[XMeCustomDataSource alloc] init];
     _noBuyDataSource = [[ZLPrivateDataSource alloc] init];
@@ -57,15 +60,15 @@
         [self.tableView reloadData];
     };
     
-    _buyView = [[UIView alloc] initWithFrame:Rect(0, self.view.height-60, kScreenWidth, 60)];
+    _buyView = [[UIView alloc] initWithFrame:Rect(10,kScreenHeight-45, kScreenWidth, 44)];
     [self.view addSubview:_buyView];
     [_buyView setBackgroundColor:COLOR_Bg_Gay];
     _buyView.hidden = YES;
     
     UIButton *_btnBuy = [UIButton buttonWithType:UIButtonTypeCustom];
-    _btnBuy.frame = Rect(10,8, kScreenWidth-20, 44);
+    _btnBuy.frame = Rect(0,0, kScreenWidth-20, 44);
     [_buyView addSubview:_btnBuy];
-    [_btnBuy setTitle:@"兑    换" forState:UIControlStateNormal];
+    [_btnBuy setTitle:@"马上兑换" forState:UIControlStateNormal];
     [_btnBuy setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
     [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
@@ -79,11 +82,17 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(havePurchase:) name:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:nil];
     [self.view makeToastActivity_bird];
     [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
+    
+    _whatIsPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64)];
+    [self.view addSubview:_whatIsPrivate];
+    _whatIsPrivate.hidden = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
+    [kHTTPSingle RequestWhatIsPrivateService];
 }
 
 - (void)buyprivate
 {
-    TQPurchaseViewController *vc = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue]];
+    TQPurchaseViewController *vc = [[TQPurchaseViewController alloc] initWithTeamId:[_room.roomid intValue]];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -166,9 +175,9 @@
         {
             _noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height) imgView:image msg:@"请求私人定制失败"];
             [_noView setUserInteractionEnabled:YES];
-            [_tableView addSubview:_noView];
         }
     }
+    [_tableView addSubview:_noView];
     @WeakObj(self)
     [_noView clickWithBlock:^(UIGestureRecognizer *gesture) {
         [selfWeak.view makeToastActivity_bird];
@@ -264,14 +273,14 @@
     UILabel *expiryLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+10,_titleLable.y+30, kScreenWidth - 90, 30)];
     expiryLable.font = XCFONT(16);
     expiryLable.textColor = UIColorFromRGB(0x4c4c4c);
-    expiryLable.text = @"有效期:永远";
+    expiryLable.text = @"有效期:终身有效";
     [recommendView addSubview:expiryLable];
     
     // 注意
     UILabel *attentionLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+10,expiryLable.y+30, kScreenWidth - 90, 30)];
     attentionLable.font = XCFONT(14);
     attentionLable.textColor = [UIColor redColor];
-    attentionLable.text = @"开通高等级VIP，自动获得低等级VIP权限";
+    attentionLable.text = @"兑换高等级VIP，自动获得低等级VIP权限";
     [recommendView addSubview:attentionLable];
     [headerView addSubview:recommendView];
     
@@ -291,4 +300,32 @@
     return headerView;
 }
 
+- (void)showWhatIsPrivate
+{
+    _whatIsPrivate.hidden = NO;
+}
+
+- (void)showPrivateDetail:(XPrivateSummary *)summary
+{
+    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
+    [self.navigationController pushViewController:control animated:YES];
+}
+
+- (void)loadWhatsPrivate:(NSNotification *)notify
+{
+    NSDictionary *dict = notify.object;
+    if ([dict[@"code"] intValue]==1)
+    {
+        NSString *strInfo = dict[@"data"];
+        if(strInfo)
+        {
+            @WeakObj(_whatIsPrivate)
+            @WeakObj(strInfo)
+            dispatch_async(dispatch_get_main_queue(),
+            ^{
+                [_whatIsPrivateWeak setContent:strInfoWeak];
+            });
+        }
+    }
+}
 @end

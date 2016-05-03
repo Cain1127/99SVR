@@ -8,6 +8,8 @@
 
 #import "XTeamPrivateController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "TQPurchaseViewController.h"
+#import "XPrivateDetailViewController.h"
 #import "PrivateVipView.h"
 #import "TQPurchaseModel.h"
 #import "CustomizedTableViewCell.h"
@@ -20,6 +22,7 @@
 {
     ZLWhatIsPrivateView *whatPrivate;
 }
+
 @property (nonatomic,strong) UIButton *btnBuy;
 @property (nonatomic,strong) UILabel *titleLable;
 @property (nonatomic,copy) NSArray *aryVIP;
@@ -32,6 +35,7 @@
 @property (nonatomic) NSInteger selectIndex;
 @property (nonatomic,strong) ZLPrivateDataSource *dataSource;
 @property (nonatomic,strong) UIView *buyView;
+
 @end
 
 @implementation XTeamPrivateController
@@ -85,7 +89,8 @@
 
 - (void)buyprivate
 {
-    
+    TQPurchaseViewController *control = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue]];
+    [self.navigationController pushViewController:control animated:YES];
 }
 
 - (void)setupTableView
@@ -111,12 +116,16 @@
     {
         @StrongObj(self)
         self.dataSource.selectIndex = vipLevelId;
-        XPrivateService *model = [self.aryVIP objectAtIndex:vipLevelId-1];
-        if (model.isOpen) {
-            self.buyView.hidden = YES;
-        }else
-        {
-            self.buyView.hidden = NO;
+        if (self.dataSource.aryVIP.count>vipLevelId-1) {
+            XPrivateService *model = [self.dataSource.aryVIP objectAtIndex:vipLevelId-1];
+            if (model.isOpen)
+            {
+                self.buyView.hidden = YES;
+            }
+            else
+            {
+                self.buyView.hidden = NO;
+            }
         }
         [self.tableView reloadData];
     };
@@ -204,5 +213,10 @@
 {
     whatPrivate.hidden = NO;
 }
-
+- (void)showPrivateDetail:(XPrivateSummary *)summary
+{
+    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
+    
+    [self.navigationController pushViewController:control animated:YES];
+}
 @end

@@ -260,6 +260,7 @@
     [fmt setDateFormat:@"yyyyMMdd"];
     strDate = [fmt stringFromDate:date];
     [_txtName setDelegate:self];
+    [_txtName becomeFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -28,10 +28,10 @@
 
 @interface TQIdeaViewController ()<XIdeaDelegate>
 {
-    UIView *noView;
     NSCache *viewCache;
 }
 /** 数据数租 */
+@property (nonatomic,strong) UIView *noView;
 @property (nonatomic,assign) NSInteger nCurrent;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) XIdeaDataSource *dataSource;
@@ -57,6 +57,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
+    [self.tableView.footer setHidden:YES];
     [self.view makeToastActivity_bird];
     _nCurrent = 0;
 }
@@ -81,6 +82,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
         [selfWeak.view hideToastActivity];
+        [selfWeak.noView removeFromSuperview];
     });
     NSDictionary *dict = notify.object;
     if([[dict objectForKey:@"code"] intValue]==1)
@@ -105,14 +107,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
             @StrongObj(self)
             [self createView];
         });
-    }else
-    {
-        @WeakObj(noView)
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (noViewWeak) {
-                [noViewWeak removeFromSuperview];
-            }
-        });
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         @StrongObj(self)
@@ -135,7 +129,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 - (void)createView
 {
-    if (nil==noView)
+    if (nil==_noView)
     {
         char cString[255];
         const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
@@ -144,11 +138,17 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         UIImage *image = [UIImage imageWithContentsOfFile:objCString];
         if(image)
         {
-            noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height) imgView:image msg:@"没有专家发布观点"];
-            [noView setUserInteractionEnabled:NO];
-            [_tableView addSubview:noView];
+            _noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height) imgView:image msg:@"没有专家发布观点"];
         }
     }
+    [_tableView addSubview:_noView];
+    @WeakObj(self)
+    [_noView clickWithBlock:^(UIGestureRecognizer *gesture)
+    {
+        [selfWeak.noView removeFromSuperview];
+        [selfWeak.view makeToastActivity_bird];
+        [selfWeak updateRefresh];
+    }];
 }
 
 -(void)updateRefresh {

@@ -80,6 +80,7 @@ public:
     virtual void OnRoomGroupChanged();
     
     void OnRoomTeacherOnMicResp(RoomTeacherOnMicResp& info);
+    
     void OnEmailNewMsgNoty(EmailNewMsgNoty& info);
 };
 
@@ -363,7 +364,9 @@ class ZLRoomListener : public VideoRoomListener
     //≤È—Ø∂©‘ƒ◊¥Ã¨œÏ”¶
     virtual void OnTeacherSubscriptionStateQueryResp(TeacherSubscriptionStateQueryResp& info){}
     
-    //◊®º“π€µ„œ˚œ¢Õ∆ÀÕ£®∑øº‰ƒ⁄≤øπ„≤•£©
+    /**
+     *  专家观点请求
+     */
     virtual void OnExpertNewViewNoty(ExpertNewViewNoty& info){}
     
     //◊Ó«ø’Ω∂”÷‹∞Òªÿ”¶

@@ -83,7 +83,7 @@ void ViewpointDetailListener::OnError(int errCode)
 }
 
 /**
- *  请求观点列表
+ *  评论回复响应
  */
 void ReplyListener::onResponse(vector<Reply>& infos){
     NSMutableArray *ary = [NSMutableArray array];
@@ -93,7 +93,6 @@ void ReplyListener::onResponse(vector<Reply>& infos){
         reply.replytid = info.replytid();
         reply.viewpointid = info.viewpointid();
         reply.parentreplyid = info.parentreplyid();
-        
         reply.authorid = NSStringFromInt(info.authorid());
         reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
         reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];
@@ -223,7 +222,7 @@ void OperateStockAllDetailListener::OnError(int errCode)
 /**
  *  请求操盘详情
  */
-void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks, uint32 currLevelId, uint32 minVipLevel){
+void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, vector<OperateDataByTime>& totals, vector<OperateDataByTime>& month3s, vector<OperateDataByTime>& months, vector<OperateDataByTime>& weeks, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks, uint32 currLevelId, uint32 minVipLevel){
     
     //判断是否显示记录 
     BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
@@ -245,7 +244,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     
     
     //股票数据
-    StockDealModel *stockDataModel = [[StockDealModel alloc] initWithStockDealStockData:&data];
+    StockDealModel *stockDataModel = [[StockDealModel alloc] initWithStockDealStockData:&stocks];
     muDic[@"stockModel"] = stockDataModel;
     
     
@@ -305,8 +304,6 @@ void OperateStockTransactionListener::onResponse(vector<OperateStockTransaction>
         StockDealModel *model = [[StockDealModel alloc]initWithStockRecordBusinessData:operateStockTransaction];
         [muArray addObject:model];
     }
-    
-    
     mudic[@"code"] = @"1";
     mudic[@"data"] = muArray;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_RECORD_BUSINESS_VC object:mudic];
@@ -391,8 +388,6 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
                 int levelid = service.levelid();
                 NSDictionary *dict = @{@"teamid":teamid,@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
                                        @"expirationdate":expirationdate,@"levelid":@(levelid)};
-//                NSDictionary *dict = @{@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
-//                                       @"expirationdate":expirationdate,@"levelid":@(levelid)};
                 TQMeCustomizedModel *model = [TQMeCustomizedModel mj_objectWithKeyValues:dict];
                 [ary addObject:model];
             }
@@ -581,7 +576,7 @@ void TeamIntroduceListener::OnError(int errCode)
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEAM_INTRODUCE_VC object:@{@"dict":@(errCode)}];
 }
 
-void TeamVideoListener::onResponse(vector<VideoInfo> infos)
+void TeamVideoListener::onResponse(vector<VideoInfo>& infos)
 {
     NSMutableArray *aryIndex = [NSMutableArray array];
     for(int i=0;i<infos.size();i++)
@@ -708,12 +703,13 @@ void PrivateServiceSummaryListener::OnError(int errCode)
 
 void UnreadListener::onResponse(Unread& info)
 {
-    
+    NSDictionary *dict = @{@"code":@(1),@"system":@(info.system()),@"answer":@(info.answer()),@"reply":@(info.reply()),@"privateservice":@(info.privateservice())};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UNREAD_INFO_VC object:dict];
 }
 
 void UnreadListener::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UNREAD_INFO_VC object:@{@"code":@(1)}];
 }
 
 void HomePageListener::onResponse(std::vector<BannerItem>& banner_data, std::vector<Team>& team_data, std::vector<ViewpointSummary>& viewpoint_data, std::vector<OperateStockProfit>& operate_data)

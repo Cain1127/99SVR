@@ -16,7 +16,7 @@
 
 @property (strong, nonatomic) UIImageView *iconView;
 @property (strong, nonatomic) UILabel *nameLabel;
-
+@property (nonatomic,strong) UILabel *lblContent;
 @property (strong, nonatomic) UILabel *authorLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
 @property (strong, nonatomic) UIButton *commentBtn;
@@ -69,8 +69,15 @@
     _commentBtn.frame = Rect(kScreenWidth-_giftBtn.width*2-16,8,50,20);
     _commentBtn.titleLabel.font = XCFONT(12);
     
+    _lblContent = [[UILabel alloc] initWithFrame:Rect(8, 80, kScreenWidth-16, 40)];
+    [self.contentView addSubview:_lblContent];
+    [_lblContent setTextColor:UIColorFromRGB(0x343434)];
+    [_lblContent setFont:XCFONT(14)];
+    _lblContent.numberOfLines=2;
+    
     return self;
 }
+/*
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithReuseIdentifier:reuseIdentifier];
@@ -113,18 +120,18 @@
     
     return self;
 }
+*/
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.attributedTextContextView.frame = Rect(8, 80, kScreenWidth-16, 40);
 }
 
 - (void)setIdeaModel:(TQIdeaModel *)ideaModel
 {
     
-    [self setHTMLString:ideaModel.content];
     _content = ideaModel.content;
+    [_lblContent setText:_content];
     [_authorLabel setText:ideaModel.authorname];
     [_dateLabel setText:ideaModel.publishtime];
     [_commentBtn setTitle:NSStringFromInt(ideaModel.replycount) forState:UIControlStateNormal];
