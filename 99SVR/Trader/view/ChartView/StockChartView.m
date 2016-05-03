@@ -6,7 +6,7 @@
 #define topMenuBtn_h (topMenu_h*(1/2.0) - 10) //顶部控制栏按钮的高度
 #define topMenuBtn_w ValueWithTheIPhoneModelString(@"50,50,50,50") //顶部按钮的宽度
 #define lowMenu_h ValueWithTheIPhoneModelString(@"40,40,40,40") //底部按钮的高度
-#define lowLab_w   ValueWithTheIPhoneModelString(@"60,60,60,60") //底部标题的宽度
+#define lowLab_w   ValueWithTheIPhoneModelString(@"80,80,80,80") //底部标题的宽度
 #define lowLab_h ValueWithTheIPhoneModelString(@"17,17,17,17") //底部标题的高度
 #import "StockChartView.h"
 #import "StockMacro.h"

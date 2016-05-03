@@ -221,7 +221,7 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
     cell.notVipView.delegate = self;
-    [cell setCellDataWithModel:model withIsVip:_isVipBool withCellId:cellIdArray[indexPath.section]];
+    [cell setCellDataWithModel:model withIsVip:_isVipBool withCellId:cellIdArray[indexPath.section] withStockHeaderModel:_model];
     return cell;
 }
 

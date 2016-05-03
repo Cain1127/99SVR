@@ -39,17 +39,6 @@
 }
 
 
-#pragma mark 股票详情--股票走势图
-- (instancetype)initWithStockDealStockData:(void *)pData
-{
-    self = [super init];
-    if (self) {
-        OperateStocks *stockData = (OperateStocks*)pData;
-        _operateid = IntTransformIntToStr(stockData->operateid());
-        _selectBtnTag = 1;
-    }
-    return self;
-}
 #pragma mark 股票详情--交易动态记录
 - (instancetype)initWithStockDealBusinessRecoreData:(void *)pData{
 
