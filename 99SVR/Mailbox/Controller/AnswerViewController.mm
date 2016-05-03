@@ -106,6 +106,7 @@
     @WeakObj(self);
     dispatch_async(dispatch_get_main_queue(), ^{
         @StrongObj(self);
+        [self.view hideToastActivity];
         [self chickEmptyViewShowWithTab:_tableView withData:self.modelArray withCode:[dict[@"code"] intValue]];
     });
 }
@@ -113,6 +114,7 @@
 //开始请求.结束下拉刷新
 -(void)updateRefresh
 {
+    [self.view makeToastActivity_bird];
     [kHTTPSingle RequestQuestionAnswer:0 count:10 teamer:YES];
     [self.tableView.gifHeader endRefreshing];
 }

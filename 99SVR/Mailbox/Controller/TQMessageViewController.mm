@@ -62,6 +62,7 @@ static NSString *const messageCell = @"messageCell";
 //获取模型,刷新列表
 - (void)SystemMessage:(NSNotification *)notify
 {
+    
     NSDictionary *dict = notify.object;
     if ([dict[@"code"] intValue]==1) {
         NSArray *aryModel = dict[@"data"];
@@ -75,6 +76,7 @@ static NSString *const messageCell = @"messageCell";
     @WeakObj(self);
     dispatch_async(dispatch_get_main_queue(), ^{
         @StrongObj(self);
+        [self.view hideToastActivity];
         [self chickEmptyViewShowWithTab:_tableView withData:(NSMutableArray *)_aryMessage withCode:[dict[@"code"] intValue]];
     });
 }
@@ -100,6 +102,7 @@ static NSString *const messageCell = @"messageCell";
 
 //开始请求.结束下拉刷新
 -(void)updateRefresh {
+    [self.view makeToastActivity_bird];
     [kHTTPSingle RequestSystemMessage:0 count:8];
     [self.tableView.gifHeader endRefreshing];
 }

@@ -36,7 +36,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTitleText:@"信息"];
+    [self setTitleText:@"消息"];
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
     [_tableView setBackgroundColor:RGB(243, 243, 243)];
     [self.view addSubview:_tableView];
