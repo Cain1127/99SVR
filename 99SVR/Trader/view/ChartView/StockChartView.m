@@ -203,7 +203,6 @@
     btn.enabled = NO;
     btn.backgroundColor =  UIColorFromRGB(0x0078dd);
     
-    
     if (self.didSelcetIndex) {
         self.didSelcetIndex(btn.tag);
     }

@@ -31,6 +31,7 @@
         _winrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->winrate()))];
         
         _teamid = IntTransformIntToStr(profit->teamid());
+        _selectBtnTag = 1;
 //        NSLog(@"总收益%f 超赢收益%f 日利率%f 月收益%f",profit->totalprofit(),profit->winrate(),profit->dayprofit(),profit->monthprofit());
 
     }
@@ -45,6 +46,7 @@
     if (self) {
         OperateStockData *stockData = (OperateStockData*)pData;
         _operateid = IntTransformIntToStr(stockData->operateid());
+        _selectBtnTag = 1;
     }
     return self;
 }
@@ -62,6 +64,7 @@
         _count = IntTransformIntToStr(trans->count());
         _money = FloatTransformFloatToStr(trans->money());
         _time = StrTransformCToUTF8(trans->time().c_str());
+        _selectBtnTag = 1;
         
     }
     return self;
@@ -81,6 +84,7 @@
         _currprice = FloatTransformFloatToStr(stocks->currprice());
         _profitrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((stocks->profitrate()))];
         _profitmoney = FloatTransformFloatToStr(stocks->profitmoney());
+        _selectBtnTag = 1;
     }
     return self;
     

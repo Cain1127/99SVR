@@ -260,6 +260,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     }else{
         
         StockDealModel *model = [[StockDealModel alloc]init];
+        model.selectBtnTag = 1;
         [transArray addObject:model];
     }
     muDic[@"trans"] = transArray;
@@ -275,6 +276,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
         
     }else{
         StockDealModel *model = [[StockDealModel alloc]init];
+        model.selectBtnTag = 1;
         [stocksArray addObject:model];
     }
     

@@ -60,6 +60,9 @@
 /**最小vip等级*/
 @property (nonatomic , copy) NSString *minVipLevel;
 
+/**记录点击选择操盘的股票tag   全部 三个月 一个月*/
+@property (nonatomic , assign) __block NSInteger selectBtnTag;
+
 #pragma mark 股票详情--股票头部详情数据
 /**股票头部详情数据*/
 - (instancetype)initWithStockDealHeaderData:(void *)profit;

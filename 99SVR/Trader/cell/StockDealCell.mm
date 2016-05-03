@@ -51,6 +51,12 @@
 
     if ([cellId isEqualToString:@"section0"]) {
         
+//        if (self.chartView) {
+//            [self.chartView removeFromSuperview];
+//            self.chartView = [[StockChartView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,static_cast<CGFloat>(ScreenWidth*0.75)}];
+//            [self.bakImageView addSubview:self.chartView];
+//        }
+        
         self.tradeLabeView.hidden = YES;
         self.wareHouseViw.hidden = YES;
         self.chartView.hidden = NO;
@@ -61,6 +67,7 @@
         self.chartView.leftTitArrays = @[@"200%",@"100%",@"200%"];
         self.chartView.lowTitArrays = @[@"2016-1-3",@"2016-1-3",@"2016-1-3"];
 
+        DLog(@"%p",self.chartView);
         
         self.chartView.lineChartView.drawLine_X = YES;
         self.chartView.lineChartView.drawLine_Y = NO;
@@ -70,24 +77,22 @@
         self.chartView.lineChartView.level_Y = 2;
         self.chartView.lineChartView.level_X = 2;
         
-        NSMutableArray *arrayy =[NSMutableArray array];
-        NSMutableArray *arrayy1 =[NSMutableArray array];
+        NSArray *arrayy = @[@"500",@"300",@"200",@"100",@"700",@"200",@"100",@"300",@"200",@"900"];
+        NSArray *arrayy1 = @[@"300",@"1000",@"1200",@"1100",@"1700",@"1200",@"1100",@"1300",@"1200",@"1900"];
         
-        for (int i=0; i!=10; i++) {
-            [arrayy addObject:[NSString stringWithFormat:@"%d",(int)arc4random()%500]];
-        }
         
-        for (int i=0; i!=10; i++) {
-            [arrayy1 addObject:[NSString stringWithFormat:@"%d",(int)arc4random()%500]];
-        }
         [weakSelf.chartView.lineChartView clearLine];
         weakSelf.chartView.lineChartView.valuePoints_Y = @[arrayy,arrayy1];
         [weakSelf.chartView.lineChartView drawLine];
 
+
+        __weak __block typeof(model) weakModel = model;
         
         self.chartView.didSelcetIndex = ^(NSInteger index){
           
             DLog(@"点击的模块%ld",index);
+            
+            weakModel.selectBtnTag = index;
             
             NSMutableArray *array_y =[NSMutableArray array];
             NSMutableArray *array_y1 =[NSMutableArray array];
@@ -103,7 +108,7 @@
             weakSelf.chartView.lineChartView.valuePoints_Y = @[array_y,array_y1];
             [weakSelf.chartView.lineChartView drawLine];
         };
-
+        
         
     }else if ([cellId isEqualToString:@"section1"]){
         
@@ -114,8 +119,25 @@
         if (vipBool) {
             self.tradeLabeView.hidden = NO;
             self.notVipView.hidden = YES;
-            self.tradeLabeView.leftLab.text = [NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count];
-            self.tradeLabeView.rightLab.text = [NSString stringWithFormat:@"时间：%@",model.time];
+            
+            NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count]];
+            if ([model.buytype isEqualToString:@"买入"]) {
+                [attriStr addAttribute:NSForegroundColorAttributeName
+                                 value:[UIColor redColor]
+                                 range:NSMakeRange(0, 2)];
+            }else{
+                
+                [attriStr addAttribute:NSForegroundColorAttributeName
+                                 value:[UIColor greenColor]
+                                 range:NSMakeRange(0, 2)];
+            }
+            
+            [attriStr addAttribute:NSForegroundColorAttributeName
+                             value:COLOR_Text_Black
+                             range:NSMakeRange(2, ([attriStr length]-2))];
+            
+            self.tradeLabeView.leftLab.attributedText = attriStr;
+            self.tradeLabeView.rightLab.text = [NSString stringWithFormat:@"%@",model.time];
         }else{
             self.tradeLabeView.hidden = YES;
             self.notVipView.hidden = NO;

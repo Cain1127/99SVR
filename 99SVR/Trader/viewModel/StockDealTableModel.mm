@@ -213,8 +213,6 @@
     
     NSArray *cellIdArray = @[@"section0",@"section1",@"section2"];
     NSString *cellId = cellIdArray[indexPath.section];
-    
-
     StockDealCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
         cell = [[StockDealCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
