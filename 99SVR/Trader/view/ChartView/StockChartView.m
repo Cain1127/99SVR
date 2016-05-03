@@ -203,20 +203,10 @@
     btn.enabled = NO;
     btn.backgroundColor =  UIColorFromRGB(0x0078dd);
     
-    NSMutableArray *array_y =[NSMutableArray array];
-    NSMutableArray *array_y1 =[NSMutableArray array];
-
-    for (int i=0; i!=10; i++) {
-        [array_y addObject:[NSString stringWithFormat:@"%zi",(int)arc4random()%500-500*(btn.tag)]];
-    }
     
-    for (int i=0; i!=10; i++) {
-        [array_y1 addObject:[NSString stringWithFormat:@"%zi",(int)arc4random()%500-500*(btn.tag)]];
+    if (self.didSelcetIndex) {
+        self.didSelcetIndex(btn.tag);
     }
-    [self.lineChartView clearLine];
-    self.lineChartView.valuePoints_Y = @[array_y,array_y1];
-    [self.lineChartView drawLine];
-
 }
 
 

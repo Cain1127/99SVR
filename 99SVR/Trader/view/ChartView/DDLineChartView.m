@@ -237,9 +237,12 @@
 -(void)clearLine{
 
     for (CAShapeLayer *chartLine in self.chartLines) {
-        [chartLine removeFromSuperlayer];
+        
+        if (chartLine) {
+            
+            [chartLine removeFromSuperlayer];
+        }
     }
-
 }
 
 

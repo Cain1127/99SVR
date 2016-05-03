@@ -47,7 +47,7 @@
 
 -(void)setCellDataWithModel:(StockDealModel *)model withIsVip:(BOOL)vipBool withCellId:(NSString *)cellId{
     
-    
+    WeakSelf(self);
 
     if ([cellId isEqualToString:@"section0"]) {
         
@@ -69,6 +69,40 @@
         self.chartView.lineChartView.raneValue_Y = CGRangeMake(-2000, 2000);
         self.chartView.lineChartView.level_Y = 2;
         self.chartView.lineChartView.level_X = 2;
+        
+        NSMutableArray *arrayy =[NSMutableArray array];
+        NSMutableArray *arrayy1 =[NSMutableArray array];
+        
+        for (int i=0; i!=10; i++) {
+            [arrayy addObject:[NSString stringWithFormat:@"%d",(int)arc4random()%500]];
+        }
+        
+        for (int i=0; i!=10; i++) {
+            [arrayy1 addObject:[NSString stringWithFormat:@"%d",(int)arc4random()%500]];
+        }
+        [weakSelf.chartView.lineChartView clearLine];
+        weakSelf.chartView.lineChartView.valuePoints_Y = @[arrayy,arrayy1];
+        [weakSelf.chartView.lineChartView drawLine];
+
+        
+        self.chartView.didSelcetIndex = ^(NSInteger index){
+          
+            DLog(@"点击的模块%ld",index);
+            
+            NSMutableArray *array_y =[NSMutableArray array];
+            NSMutableArray *array_y1 =[NSMutableArray array];
+            
+            for (int i=0; i!=10; i++) {
+                [array_y addObject:[NSString stringWithFormat:@"%zi",(int)arc4random()%500-500*(index)]];
+            }
+            
+            for (int i=0; i!=10; i++) {
+                [array_y1 addObject:[NSString stringWithFormat:@"%zi",(int)arc4random()%500-500*(index)]];
+            }
+            [weakSelf.chartView.lineChartView clearLine];
+            weakSelf.chartView.lineChartView.valuePoints_Y = @[array_y,array_y1];
+            [weakSelf.chartView.lineChartView drawLine];
+        };
 
         
     }else if ([cellId isEqualToString:@"section1"]){
