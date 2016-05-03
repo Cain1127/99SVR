@@ -30,6 +30,8 @@
     self.buyLabel.textAlignment = NSTextAlignmentRight;
     self.buyLabel.font = Font_15;
     self.buyLabel.textColor = COLOR_Text_Gay;
+    self.buyLabel.hidden = YES;
+
     [self.selectView addSubview:self.buyLabel];
 }
 
@@ -54,7 +56,7 @@
         self.priceLabView.state = PriceLabViewType_Vip;
         
     }else{
-        self.buyLabel.hidden = NO;
+        self.buyLabel.hidden = YES;
         self.vipNameLab.textColor = COLOR_Auxiliary_Orange;
         self.clickBtn.enabled = YES;
         [self.clickBtn setTitle:@"升级" forState:UIControlStateNormal];

@@ -227,12 +227,9 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     
     //判断是否显示记录 
     BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
-//    BOOL isShowRecal = NO;
-
-    
-    DLog(@"---------------------------------------------------");
-//    DLog(@"currLevelId=%d   minVipLevel=%d _teamid = %s",currLevelId,minVipLevel,profit.teamid().c_str());
-    DLog(@"---------------------------------------------------");
+//    DLog(@"---------------------------------------------------");
+//    DLog(@"currLevelId=%d   minVipLevel=%d ",currLevelId,minVipLevel);
+//    DLog(@"---------------------------------------------------");
 
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
