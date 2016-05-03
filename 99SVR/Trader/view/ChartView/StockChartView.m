@@ -209,5 +209,18 @@
 }
 
 
+-(void)setSelectIndex:(NSInteger)selectIndex{
+    
+    _selectIndex = selectIndex;
+    for (int i=0; i!=_topTitItems.count; i++) {
+        UIButton *b = [self viewWithTag:i+1];
+        b.enabled  = YES;
+        b.backgroundColor =  [UIColor clearColor];
+    }
+    UIButton *btn = [self viewWithTag:selectIndex+1];
+    btn.enabled = NO;
+    btn.backgroundColor =  UIColorFromRGB(0x0078dd);
+
+}
 
 @end

@@ -19,5 +19,7 @@ typedef void(^DidSelectIndex)(NSInteger index);
 @property (nonatomic, strong) DDLineChartView *lineChartView;
 /**更新数据*/
 @property (nonatomic , copy)  DidSelectIndex  didSelcetIndex;
+/**选择的下标*/
+@property (nonatomic , assign) __block NSInteger selectIndex;
 
 @end

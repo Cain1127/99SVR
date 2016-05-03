@@ -111,15 +111,15 @@
     
     NSString *stockStr = model.focus;
     self.stockLab.text = stockStr;
-    [self.stockLab sizeToFit];
-    CGSize stockSize = self.stockLab.size;
     
-    CGFloat bottom = ((self.height*1/3)-stockSize.height-10)/2.0;
+    CGSize stockLabSize = [ShareFunction calculationOfTheText:self.stockLab.text withFont:stockNam_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
+    
+    CGFloat bottom = ((self.height*1/3)-stockLabSize.height-10)/2.0;
     
     [self.stockLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@10);
-        make.width.equalTo(@(stockSize.width + 10));
-        make.height.equalTo(@(stockSize.height + 10));
+        make.width.equalTo(@(stockLabSize.width + 10));
+        make.height.equalTo(@(stockLabSize.height + 10));
         make.bottom.equalTo(@(-bottom));
     }];
     

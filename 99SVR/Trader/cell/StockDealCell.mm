@@ -81,7 +81,7 @@
             NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count]];
             if ([model.buytype isEqualToString:@"买入"]) {
                 [attriStr addAttribute:NSForegroundColorAttributeName
-                                 value:[UIColor redColor]
+                                 value:COLOR_Auxiliary_Red
                                  range:NSMakeRange(0, 2)];
             }else{
                 
@@ -93,9 +93,12 @@
             [attriStr addAttribute:NSForegroundColorAttributeName
                              value:COLOR_Text_Black
                              range:NSMakeRange(2, ([attriStr length]-2))];
-            
+                        
+            [self.tradeLabeView setLeftLabText:[NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count] rightLabText:[NSString stringWithFormat:@"%@",model.time]];
+            self.tradeLabeView.leftLab.text = @"";
             self.tradeLabeView.leftLab.attributedText = attriStr;
-            self.tradeLabeView.rightLab.text = [NSString stringWithFormat:@"%@",model.time];
+            
+            
         }else{
             self.tradeLabeView.hidden = YES;
             self.notVipView.hidden = NO;
@@ -115,11 +118,17 @@
             self.lineView.hidden = NO;
             self.notVipView.hidden = YES;
 
-            self.wareHouseViw.titleLabV.leftLab.text = model.stockname;
-            self.wareHouseViw.costRmbLabV.leftLab.text = [NSString stringWithFormat:@"成本 %@",model.currprice];
-            self.wareHouseViw.nowRmbLabV.leftLab.text = [NSString stringWithFormat:@"现价 %@",model.currprice];
-            self.wareHouseViw.costRmbLabV.rightLab.text = [NSString stringWithFormat:@"持有数 %@",model.count];
-            self.wareHouseViw.nowRmbLabV.rightLab.text = [NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate];
+//            self.wareHouseViw.titleLabV.leftLab.text = model.stockname;
+//            self.wareHouseViw.costRmbLabV.leftLab.text = [NSString stringWithFormat:@"成本 %@",model.currprice];
+//            self.wareHouseViw.costRmbLabV.rightLab.text = [NSString stringWithFormat:@"持有数 %@",model.count];
+//            self.wareHouseViw.nowRmbLabV.leftLab.text = [NSString stringWithFormat:@"现价 %@",model.currprice];
+//            self.wareHouseViw.nowRmbLabV.rightLab.text = [NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate];
+
+            [self.wareHouseViw.titleLabV setLeftLabText:model.stockname rightLabText:@""];
+            [self.wareHouseViw.nowRmbLabV setLeftLabText:[NSString stringWithFormat:@"现价 %@",model.currprice] rightLabText:[NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate]];
+            [self.wareHouseViw.costRmbLabV setLeftLabText:[NSString stringWithFormat:@"成本 %@",model.currprice] rightLabText:[NSString stringWithFormat:@"持有数 %@",model.count]];
+            
+            
             
         }else{
         
@@ -147,13 +156,16 @@
         weakSelf.chartView.lineChartView.timeValue = 0;
         weakSelf.chartView.lineChartView.level_Y = 2;
         weakSelf.chartView.lineChartView.level_X = 2;
+        weakSelf.chartView.topTitItems = @[@"全部",@"三个月",@"一个月"];
+        weakSelf.chartView.selectIndex = headerModel.selectBtnTag;
         [weakSelf.bakImageView addSubview:weakSelf.chartView];
         
     }
     
-    weakSelf.chartView.topTitItems = @[@"全部",@"三个月",@"一个月"];
-    weakSelf.chartView.leftTitArrays = @[[NSString stringWithFormat:@"%@",model.maxY],@"100%",[NSString stringWithFormat:@"%@",model.minY]];
-    weakSelf.chartView.lowTitArrays = @[[model.dates firstObject],@"2016-1-3",[model.dates lastObject]];
+    CGFloat midLeftStr = ABS(((ABS([model.maxY floatValue]) - ABS([model.minY floatValue]))/2.0)) + [model.minY floatValue];
+    
+    weakSelf.chartView.leftTitArrays = @[[NSString stringWithFormat:@"%.2f%%",[model.maxY floatValue]],[NSString stringWithFormat:@"%.2f%%",midLeftStr],[NSString stringWithFormat:@"%.2f%%",[model.minY floatValue]]];
+    weakSelf.chartView.lowTitArrays = @[[model.dates firstObject],model.dates[(model.dates.count/2)],[model.dates lastObject]];
     weakSelf.chartView.lineChartView.raneValue_Y = CGRangeMake([model.minY floatValue], [model.maxY floatValue]);
     
     [weakSelf.chartView.lineChartView clearLine];
