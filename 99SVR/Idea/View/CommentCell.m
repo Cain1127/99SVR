@@ -57,7 +57,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    _textView.frame = Rect(56,17,kScreenWidth-80,self.contentView.height-34);
+    _textView.frame = Rect(50,17,kScreenWidth-60,self.contentView.height-20);
     _lblLine.frame = Rect(8, self.contentView.height-1, kScreenWidth-16, 0.5);
 }
 

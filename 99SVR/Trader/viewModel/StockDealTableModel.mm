@@ -259,7 +259,7 @@
 
         }else{
             
-            [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:_vc withCancleBtnStr:@"取消" withOtherBtnStr:@"去购买" withMessage:@"需要购买vip之后方可显示" completionCallback:^(NSInteger index) {
+            [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:_vc withCancleBtnStr:@"取消" withOtherBtnStr:@"去兑换" withMessage:[NSString stringWithFormat:@"需要兑换私人订制服务-vip%@才能查看详细内容",_model.minVipLevel] completionCallback:^(NSInteger index) {
                
                 if (index==0) {//取消
                     

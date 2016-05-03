@@ -83,7 +83,7 @@ void ViewpointDetailListener::OnError(int errCode)
 }
 
 /**
- *  请求观点列表
+ *  评论回复响应
  */
 void ReplyListener::onResponse(vector<Reply>& infos){
     NSMutableArray *ary = [NSMutableArray array];
@@ -93,7 +93,6 @@ void ReplyListener::onResponse(vector<Reply>& infos){
         reply.replytid = info.replytid();
         reply.viewpointid = info.viewpointid();
         reply.parentreplyid = info.parentreplyid();
-        
         reply.authorid = NSStringFromInt(info.authorid());
         reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
         reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];
@@ -223,27 +222,27 @@ void OperateStockAllDetailListener::OnError(int errCode)
 /**
  *  请求操盘详情
  */
-void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks, uint32 currLevelId, uint32 minVipLevel){
+void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, vector<OperateDataByTime>& totals, vector<OperateDataByTime>& month3s, vector<OperateDataByTime>& months, vector<OperateDataByTime>& weeks, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks, uint32 currLevelId, uint32 minVipLevel){
     
     //判断是否显示记录 
     BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
-    
-    DLog(@"---------------------------------------------------");
-//    DLog(@"currLevelId=%d   minVipLevel=%d _teamid = %s",currLevelId,minVipLevel,profit.teamid().c_str());
-    DLog(@"---------------------------------------------------");
+//    DLog(@"---------------------------------------------------");
+//    DLog(@"currLevelId=%d   minVipLevel=%d ",currLevelId,minVipLevel);
+//    DLog(@"---------------------------------------------------");
 
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
     
     //股票头部数据
     StockDealModel *headerModel = [[StockDealModel alloc] initWithStockDealHeaderData:&profit];
-    
+    headerModel.minVipLevel = IntTransformIntToStr(minVipLevel);
+    headerModel.currLevelId = IntTransformIntToStr(currLevelId);
     //头部数据
     muDic[@"headerModel"] = headerModel;
     
     
     //股票数据
-    StockDealModel *stockDataModel = [[StockDealModel alloc] initWithStockDealStockData:&data];
+    StockDealModel *stockDataModel = [[StockDealModel alloc] initWithStockDealStockData:&stocks];
     muDic[@"stockModel"] = stockDataModel;
     
     
@@ -573,7 +572,7 @@ void TeamIntroduceListener::OnError(int errCode)
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEAM_INTRODUCE_VC object:@{@"dict":@(errCode)}];
 }
 
-void TeamVideoListener::onResponse(vector<VideoInfo> infos)
+void TeamVideoListener::onResponse(vector<VideoInfo>& infos)
 {
     NSMutableArray *aryIndex = [NSMutableArray array];
     for(int i=0;i<infos.size();i++)
@@ -700,12 +699,6 @@ void PrivateServiceSummaryListener::OnError(int errCode)
 
 void UnreadListener::onResponse(Unread& info)
 {
-    /*
-    uint32	_system;
-    uint32	_answer;
-    uint32	_reply;
-    uint32	_privateservice;
-     */
     NSDictionary *dict = @{@"code":@(1),@"system":@(info.system()),@"answer":@(info.answer()),@"reply":@(info.reply()),@"privateservice":@(info.privateservice())};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UNREAD_INFO_VC object:dict];
 }

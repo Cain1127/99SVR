@@ -11,7 +11,7 @@
 @class TQIdeaModel;
 @class ZLViewPoint;
 
-@interface TQIdeaTableViewCell : DTAttributedTextCell
+@interface TQIdeaTableViewCell : UITableViewCell
 
 /** 模型 */
 //@property (nonatomic ,weak) TQIdeaModel *ideaModel;

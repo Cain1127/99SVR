@@ -58,6 +58,7 @@
     _btnPar.backgroundColor = UIColorFromRGB(0xffffff);
     
     CGFloat fWidth = kScreenWidth/4;
+    CGRect frame = Rect(fWidth/2-25-fWidth, 8, 50, 50);
     UIButton *btnWeChat = [self createShareBtn:Rect(fWidth/2-25, 8, 50, 50) normal:@"video_share_weixi_icon" high:@""];
     UIButton *btnFriend = [self createShareBtn:Rect(fWidth+fWidth/2-25, 8, 50, 50) normal:@"video_share_pengyouquan_icon" high:@""];
     UIButton *btnTenc = [self createShareBtn:Rect(fWidth*2+fWidth/2-25, 8, 50, 50) normal:@"video_share_qq_icon" high:@""];
@@ -67,20 +68,44 @@
     
     if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi])
     {
+        frame.origin.x += fWidth;
         [_btnPar addSubview:btnWeChat];
+        btnWeChat.frame = frame;
+        frame.origin.x += fWidth;
         [_btnPar addSubview:btnFriend];
+        btnFriend.frame = frame;
     }
     if ([TencentOAuth iphoneQQInstalled])
     {
+        frame.origin.x += fWidth;
         [_btnPar addSubview:btnTenc];
-    }
-    if ([TencentOAuth iphoneQQInstalled]) {
+        btnTenc.frame = frame;
+        frame.origin.x += fWidth;
         [_btnPar addSubview:btnSpace];
+        btnSpace.frame = frame;
     }
     if ([WeiboSDK isWeiboAppInstalled]) {
+        if(frame.origin.x+50+fWidth>kScreenWidth)
+        {
+            frame.origin.x = fWidth/2-25;
+            frame.origin.y = 80;
+        }else
+        {
+            frame.origin.x += fWidth;
+        }
+        btnSina.frame = frame;
         [_btnPar addSubview:btnSina];
     }
+    if(frame.origin.x+50+fWidth>kScreenWidth)
+    {
+        frame.origin.x = fWidth/2-25;
+        frame.origin.y = 80;
+    }else
+    {
+        frame.origin.x += fWidth;
+    }
     [_btnPar addSubview:btnCopy];
+    btnCopy.frame = frame;
     
     [btnWeChat addTarget:self action:@selector(shareEvent:) forControlEvents:UIControlEventTouchUpInside];
     [btnFriend addTarget:self action:@selector(shareEvent:) forControlEvents:UIControlEventTouchUpInside];
@@ -104,9 +129,7 @@
     [btnClose setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
     [btnClose setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     btnClose.titleLabel.font = XCFONT(15);
-    
     btnClose.frame = Rect(10,140, kScreenWidth-20, 44);
-    
     [btnClose addTarget:self action:@selector(setGestureHidden) forControlEvents:UIControlEventTouchUpInside];
 }
 

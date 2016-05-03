@@ -88,13 +88,13 @@
     [self.totalTab addGifHeaderWithRefreshingBlock:^{
         selfWeak.refreshState = MJRefreshState_Header;
         selfWeak.totalPagInteger = 1;
-        [kHTTPSingle RequestOperateStockProfitByAll:[selfWeak.room.teamid intValue] start:(int)selfWeak.totalPagInteger count:10];
+        [kHTTPSingle RequestOperateStockProfitByAll:[selfWeak.room.roomid intValue] start:(int)selfWeak.totalPagInteger count:10];
     }];
     
     [self.totalTab addLegendFooterWithRefreshingBlock:^{
         selfWeak.refreshState = MJRefreshState_Footer;
         selfWeak.totalPagInteger ++;
-        [kHTTPSingle RequestOperateStockProfitByAll:[selfWeak.room.teamid intValue] start:(int)selfWeak.totalPagInteger count:10];
+        [kHTTPSingle RequestOperateStockProfitByAll:[selfWeak.room.roomid intValue] start:(int)selfWeak.totalPagInteger count:10];
     }];
     [self.totalTab.gifHeader loadDefaultImg];
 }

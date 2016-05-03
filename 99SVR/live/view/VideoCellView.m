@@ -58,12 +58,6 @@
         [self addSubview:_roomIdLabel];
         
         ///观看次数
-//        _lookCountLabel = [[UILabel alloc] init];
-//        _lookCountLabel.font = [UIFont systemFontOfSize:12];
-//        _lookCountLabel.textColor = smallFontColor;
-//        [_lookCountLabel setTextAlignment:NSTextAlignmentLeft];
-//        [self addSubview:_lookCountLabel];
-        
         [self layoutViews];
     }
     return self;
@@ -73,10 +67,9 @@
 {
     _nameLabel.frame = Rect(_imageView.x+5,_imageView.height+_imageView.y-40,120,15);
     
-    _roomIdLabel.frame = Rect(_nameLabel.x,_imageView.y-20,80,15);
+    _roomIdLabel.frame = Rect(_nameLabel.x,_imageView.y+_imageView.height-20,80,15);
     
-    [_lookCountBtn setFrame:Rect(_imageView.x+_imageView.width-55,
-                            _nameLabel.y,80, 15)];
+    [_lookCountBtn setFrame:Rect(_imageView.x+_imageView.width-55,_roomIdLabel.y,80, 15)];
 }
 
 - (void)setNewRoom:(RoomHttp *)room

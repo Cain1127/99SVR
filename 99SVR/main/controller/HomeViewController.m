@@ -508,12 +508,13 @@ typedef enum : NSUInteger
     if ([tempObject isKindOfClass:[TQIdeaModel class]])
     {
         static NSString *viewPointCellName = @"TQIdeaTableViewIdentifier";
-        NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
-        TQIdeaTableViewCell *cell = [viewCache objectForKey:strKey];
+//        NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
+        TQIdeaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:viewPointCellName];
         NSString *strInfo = cell.content;
-        if (!cell) {
-            cell = [[TQIdeaTableViewCell alloc] initWithReuseIdentifier:viewPointCellName];
-            [viewCache setObject:cell forKey:viewCache];
+        if (!cell)
+        {
+            cell = [[TQIdeaTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:viewPointCellName];
+//            [viewCache setObject:cell forKey:viewCache];
         }
         if (tempArray.count>indexPath.row) {
             TQIdeaModel *model = tempArray[indexPath.row];

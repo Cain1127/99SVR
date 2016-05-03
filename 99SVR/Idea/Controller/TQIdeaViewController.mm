@@ -57,6 +57,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
+    [self.tableView.footer setHidden:YES];
     [self.view makeToastActivity_bird];
     _nCurrent = 0;
 }
@@ -144,6 +145,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     @WeakObj(self)
     [_noView clickWithBlock:^(UIGestureRecognizer *gesture)
     {
+        [selfWeak.noView removeFromSuperview];
         [selfWeak.view makeToastActivity_bird];
         [selfWeak updateRefresh];
     }];

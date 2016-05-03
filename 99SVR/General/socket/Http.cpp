@@ -157,8 +157,8 @@ char* Http::request(const char* host, short port, const char* url_tail, RequestP
 	if (ret != 0) 
 	{
 		socket.close_();
-		if (http_listener)
-			http_listener->OnError(PERR_CONNECT_ERROR);
+		/*if (http_listener)
+			http_listener->OnError(PERR_CONNECT_ERROR);*/
 		return NULL;
 	}
 
@@ -166,8 +166,8 @@ char* Http::request(const char* host, short port, const char* url_tail, RequestP
 	if (ret <= 0)  
 	{
 		socket.close_();
-		if (http_listener)
-			http_listener->OnError(PERR_IO_ERROR);
+		/*if (http_listener)
+			http_listener->OnError(PERR_IO_ERROR);*/
 		return NULL;
 	}
 
@@ -198,8 +198,8 @@ char* Http::request(const char* host, short port, const char* url_tail, RequestP
 		}
 	}
 
-	if (http_listener)
-		http_listener->OnError(PERR_IO_ERROR);
+	/*if (http_listener)
+		http_listener->OnError(PERR_IO_ERROR);*/
 
 	return NULL;
 }
