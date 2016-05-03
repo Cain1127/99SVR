@@ -2,6 +2,7 @@
 // Distributed under MIT license, or public domain if desired and
 // recognized in your jurisdiction.
 // See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
+#include "stdafx.h"
 
 #if !defined(JSON_IS_AMALGAMATION)
 #include "writer.h"
@@ -73,7 +74,7 @@
 #pragma warning(disable : 4996)
 #endif
 
-namespace ProtocolJson {
+namespace Json {
 
 #if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
 typedef std::unique_ptr<StreamWriter> StreamWriterPtr;
@@ -1165,11 +1166,11 @@ static void getValidWriterKeys(std::set<JSONCPP_STRING>* valid_keys)
   valid_keys->insert("useSpecialFloats");
   valid_keys->insert("precision");
 }
-bool StreamWriterBuilder::validate(ProtocolJson::Value* invalid) const
+bool StreamWriterBuilder::validate(Json::Value* invalid) const
 {
-  ProtocolJson::Value my_invalid;
+  Json::Value my_invalid;
   if (!invalid) invalid = &my_invalid;  // so we do not need to test for NULL
-  ProtocolJson::Value& inv = *invalid;
+  Json::Value& inv = *invalid;
   std::set<JSONCPP_STRING> valid_keys;
   getValidWriterKeys(&valid_keys);
   Value::Members keys = settings_.getMemberNames();
@@ -1187,7 +1188,7 @@ Value& StreamWriterBuilder::operator[](JSONCPP_STRING key)
   return settings_[key];
 }
 // static
-void StreamWriterBuilder::setDefaults(ProtocolJson::Value* settings)
+void StreamWriterBuilder::setDefaults(Json::Value* settings)
 {
   //! [StreamWriterBuilderDefaults]
   (*settings)["commentStyle"] = "All";
@@ -1213,4 +1214,4 @@ JSONCPP_OSTREAM& operator<<(JSONCPP_OSTREAM& sout, Value const& root) {
   return sout;
 }
 
-} // namespace ProtocolJson
+} // namespace Json

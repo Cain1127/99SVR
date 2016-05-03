@@ -44,7 +44,7 @@
 
 /** \brief JSON (JavaScript Object Notation).
  */
-namespace ProtocolJson {
+namespace Json {
 
 /** Base class for all exceptions we throw.
  *
@@ -63,7 +63,7 @@ protected:
  *
  * E.g. out-of-memory (when we use malloc), stack-overflow, malicious input
  * 
- * \remark derived from ProtocolJson::Exception
+ * \remark derived from Json::Exception
  */
 class JSON_API RuntimeError : public Exception {
 public:
@@ -74,7 +74,7 @@ public:
  *
  * These are precondition-violations (user bugs) and internal errors (our bugs).
  * 
- * \remark derived from ProtocolJson::Exception
+ * \remark derived from Json::Exception
  */
 class JSON_API LogicError : public Exception {
 public:
@@ -120,8 +120,8 @@ enum CommentPlacement {
  *
  * Example of usage:
  * \code
- * ProtocolJson::Value aValue( StaticString("some text") );
- * ProtocolJson::Value object;
+ * Json::Value aValue( StaticString("some text") );
+ * Json::Value object;
  * static const StaticString code("code");
  * object[code] = 1234;
  * \endcode
@@ -178,38 +178,38 @@ public:
   typedef std::vector<JSONCPP_STRING> Members;
   typedef ValueIterator iterator;
   typedef ValueConstIterator const_iterator;
-  typedef ProtocolJson::UInt UInt;
-  typedef ProtocolJson::Int Int;
+  typedef Json::UInt UInt;
+  typedef Json::Int Int;
 #if defined(JSON_HAS_INT64)
-  typedef ProtocolJson::UInt64 UInt64;
-  typedef ProtocolJson::Int64 Int64;
+  typedef Json::UInt64 UInt64;
+  typedef Json::Int64 Int64;
 #endif // defined(JSON_HAS_INT64)
-  typedef ProtocolJson::LargestInt LargestInt;
-  typedef ProtocolJson::LargestUInt LargestUInt;
-  typedef ProtocolJson::ArrayIndex ArrayIndex;
+  typedef Json::LargestInt LargestInt;
+  typedef Json::LargestUInt LargestUInt;
+  typedef Json::ArrayIndex ArrayIndex;
 
   static const Value& null;  ///< We regret this reference to a global instance; prefer the simpler Value().
   static const Value& nullRef;  ///< just a kludge for binary-compatibility; same as null
-  /// Minimum signed integer value that can be stored in a ProtocolJson::Value.
+  /// Minimum signed integer value that can be stored in a Json::Value.
   static const LargestInt minLargestInt;
-  /// Maximum signed integer value that can be stored in a ProtocolJson::Value.
+  /// Maximum signed integer value that can be stored in a Json::Value.
   static const LargestInt maxLargestInt;
-  /// Maximum unsigned integer value that can be stored in a ProtocolJson::Value.
+  /// Maximum unsigned integer value that can be stored in a Json::Value.
   static const LargestUInt maxLargestUInt;
 
-  /// Minimum signed int value that can be stored in a ProtocolJson::Value.
+  /// Minimum signed int value that can be stored in a Json::Value.
   static const Int minInt;
-  /// Maximum signed int value that can be stored in a ProtocolJson::Value.
+  /// Maximum signed int value that can be stored in a Json::Value.
   static const Int maxInt;
-  /// Maximum unsigned int value that can be stored in a ProtocolJson::Value.
+  /// Maximum unsigned int value that can be stored in a Json::Value.
   static const UInt maxUInt;
 
 #if defined(JSON_HAS_INT64)
-  /// Minimum signed 64 bits int value that can be stored in a ProtocolJson::Value.
+  /// Minimum signed 64 bits int value that can be stored in a Json::Value.
   static const Int64 minInt64;
-  /// Maximum signed 64 bits int value that can be stored in a ProtocolJson::Value.
+  /// Maximum signed 64 bits int value that can be stored in a Json::Value.
   static const Int64 maxInt64;
-  /// Maximum unsigned 64 bits int value that can be stored in a ProtocolJson::Value.
+  /// Maximum unsigned 64 bits int value that can be stored in a Json::Value.
   static const UInt64 maxUInt64;
 #endif // defined(JSON_HAS_INT64)
 
@@ -272,9 +272,9 @@ This is useful since clear() and resize() will not alter types.
 
     Examples:
 \code
-ProtocolJson::Value null_value; // null
-ProtocolJson::Value arr_value(ProtocolJson::arrayValue); // []
-ProtocolJson::Value obj_value(ProtocolJson::objectValue); // {}
+Json::Value null_value; // null
+Json::Value arr_value(Json::arrayValue); // []
+Json::Value obj_value(Json::objectValue); // {}
 \endcode
   */
   Value(ValueType type = nullValue);
@@ -299,7 +299,7 @@ ProtocolJson::Value obj_value(ProtocolJson::objectValue); // {}
    * Example of usage:
    * \code
    * static StaticString foo("some text");
-   * ProtocolJson::Value aValue(foo);
+   * Json::Value aValue(foo);
    * \endcode
    */
   Value(const StaticString& value);
@@ -455,7 +455,7 @@ ProtocolJson::Value obj_value(ProtocolJson::objectValue); // {}
    * the new entry is not duplicated.
    * Example of use:
    * \code
-   * ProtocolJson::Value object;
+   * Json::Value object;
    * static const StaticString code("code");
    * object[code] = 1234;
    * \endcode
@@ -848,13 +848,13 @@ public:
   pointer operator->() const { return &deref(); }
 };
 
-} // namespace ProtocolJson
+} // namespace Json
 
 
 namespace std {
-/// Specialize std::swap() for ProtocolJson::Value.
+/// Specialize std::swap() for Json::Value.
 template<>
-inline void swap(ProtocolJson::Value& a, ProtocolJson::Value& b) { a.swap(b); }
+inline void swap(Json::Value& a, Json::Value& b) { a.swap(b); }
 }
 
 

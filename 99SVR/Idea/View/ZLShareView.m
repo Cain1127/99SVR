@@ -65,7 +65,7 @@
     UIButton *btnSpace = [self createShareBtn:Rect(fWidth*3+fWidth/2-25, 8, 50, 50) normal:@"video_share_kongjian_icon" high:@""];
     UIButton *btnSina = [self createShareBtn:Rect(fWidth/2-25, 80, 50, 50) normal:@"video_share_weibo_icon" high:@""];
     UIButton *btnCopy = [self createShareBtn:Rect(fWidth+fWidth/2-25, 80, 50, 50) normal:@"video_share_lin_icon" high:@""];
-    
+/*
     if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi])
     {
         frame.origin.x += fWidth;
@@ -106,6 +106,7 @@
     }
     [_btnPar addSubview:btnCopy];
     btnCopy.frame = frame;
+ */
     
     [btnWeChat addTarget:self action:@selector(shareEvent:) forControlEvents:UIControlEventTouchUpInside];
     [btnFriend addTarget:self action:@selector(shareEvent:) forControlEvents:UIControlEventTouchUpInside];

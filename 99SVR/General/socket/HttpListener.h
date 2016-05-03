@@ -47,7 +47,7 @@ public:
 class OperateStockProfitListener : public HttpListener
 {
 public:
-	virtual void onResponse(vector<OperateStockProfit>& infos)=0;virtual void OnError(int errCode)=0;
+	virtual void onResponse(vector<OperateStockProfit>& infos)=0;
 };
 class OperateStockProfitListenerDay : public OperateStockProfitListener
 {
@@ -164,13 +164,13 @@ public:
 class QuestionAnswerListener : public HttpListener
 {
 public:
-	virtual void onResponse(vector<QuestionAnswer>& info);virtual void OnError(int errCode);
+	virtual void onResponse(vector<QuestionAnswer>& info,int isteacher);virtual void OnError(int errCode);
 };
 
 class MailReplyListener : public HttpListener
 {
 public:
-	virtual void onResponse(vector<MailReply>& info);virtual void OnError(int errCode);
+	virtual void onResponse(vector<MailReply>& info,int isteacher);virtual void OnError(int errCode);
 };
 
 class PrivateServiceSummaryListener : public HttpListener

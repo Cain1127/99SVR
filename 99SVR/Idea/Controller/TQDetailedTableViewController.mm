@@ -451,7 +451,7 @@
         DTAttributedTextContentView *content = [DTAttributedTextContentView new];
         content.attributedString = [[NSAttributedString alloc] initWithHTMLData:[comment.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
         CGFloat height = [content suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-60].height;
-        return height+20;
+        return height+30;
     }
     return 0;
 }

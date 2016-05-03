@@ -10,8 +10,38 @@
 #import "NSDate+convenience.h"
 #import "DecodeJson.h"
 #include "HttpMessage.pb.h"
-
+#include "VideoRoomMessage.pb.h"
 @implementation TQIdeaModel
+
+
+- (id)initWIthNewPointNotify:(void *)pData
+{
+    self = [super init];
+    ExpertNewViewNoty *notify = (ExpertNewViewNoty *)pData;
+    
+//    _authorid = NSStringFromInt(notify->authorid());
+    
+    _roomid = NSStringFromInt(notify->nvcbid());
+    
+    _authoricon = [NSString stringWithUTF8String:notify->sicon().c_str()];
+    
+    _authorname = [NSString stringWithUTF8String:notify->sname().c_str()];
+    
+    _publishtime = [NSString stringWithUTF8String:notify->spublictime().c_str()];
+    
+    _content = [NSString stringWithUTF8String:notify->content().c_str()];
+    
+    _replycount = notify->ncommentcnt();
+    
+    _giftcount = notify->nflowercnt();
+    
+    _viewpointid = notify->nmessageid();
+    
+    [self settingTime];
+    
+    
+    return self;
+}
 
 - (id)initWithViewpointSummary:(void *)pData
 {
@@ -19,7 +49,11 @@
     
     ViewpointSummary *viewPoint = (ViewpointSummary *)pData;
     
-//    _authorid = [NSString stringWithUTF8String:viewPoint->authorid().c_str()];
+    _authorid = NSStringFromInt(viewPoint->authorid());
+    
+    _roomid = NSStringFromInt(viewPoint->roomid());
+    
+    _title = [NSString stringWithUTF8String:viewPoint->title().c_str()];
     
     _authoricon = [NSString stringWithUTF8String:viewPoint->authoricon().c_str()];
     
@@ -35,7 +69,7 @@
     
     _viewpointid = viewPoint->viewpointid();
     
-    [self settingTime];
+//    [self settingTime];
     
     return self;
 }

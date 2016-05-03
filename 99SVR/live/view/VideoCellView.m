@@ -69,7 +69,7 @@
     
     _roomIdLabel.frame = Rect(_nameLabel.x,_imageView.y+_imageView.height-20,80,15);
     
-    [_lookCountBtn setFrame:Rect(_imageView.x+_imageView.width-55,_roomIdLabel.y,80, 15)];
+    [_lookCountBtn setFrame:Rect(_imageView.x+_imageView.width-90,_roomIdLabel.y,80, 15)];
 }
 
 - (void)setNewRoom:(RoomHttp *)room
@@ -88,7 +88,7 @@
     [_lookCountBtn setTitle:room.onlineusercount forState:UIControlStateNormal];
     _nameLabel.text = room.teamname;
     CGRect frame = [room.onlineusercount boundingRectWithSize:CGSizeMake(kScreenWidth, 20) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
-    _lookCountLabel.frame = Rect(kScreenWidth-frame.size.width-20, _nameLabel.y, frame.size.width+20, 15);
+    _lookCountLabel.frame = Rect(kScreenWidth-frame.size.width-30, _nameLabel.y, frame.size.width+20, 15);
     [_roomIdLabel setText:room.roomid];
 }
 

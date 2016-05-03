@@ -92,7 +92,7 @@
 
 - (void)buyprivate
 {
-    TQPurchaseViewController *vc = [[TQPurchaseViewController alloc] initWithTeamId:[_room.roomid intValue]];
+    TQPurchaseViewController *vc = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue] name:_room.teamname];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -187,14 +187,28 @@
 
 - (void)havePurchase:(NSNotification *)notify
 {
-    NSArray *aryModel = notify.object;
-    _buyDataSource.aryModel = aryModel;
     @WeakObj(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        selfWeak.tableView.delegate = selfWeak.buyDataSource;
-        selfWeak.tableView.dataSource = selfWeak.buyDataSource;
-        [selfWeak.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(),^{
+        [selfWeak.view hideToastActivity];
     });
+    NSDictionary *dict = notify.object;
+    if ([dict[@"code"] intValue]==1)
+    {
+        _buyDataSource.aryModel = dict[@"data"];
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            selfWeak.tableView.delegate = selfWeak.buyDataSource;
+            selfWeak.tableView.dataSource = selfWeak.buyDataSource;
+            [selfWeak.tableView reloadData];
+        });
+    }
+    else
+    {
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [selfWeak createNoView];
+        });
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated

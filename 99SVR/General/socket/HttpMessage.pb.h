@@ -2361,6 +2361,7 @@ class UserTeamRelatedInfo
 private:
 
 	uint32	_askremain;
+	uint32	_askcoin;
 	uint32	_viplevel;
 
 
@@ -2369,6 +2370,10 @@ public:
 	 inline uint32 askremain() { return _askremain; } const 
 
 	 inline void set_askremain(const uint32 value) { _askremain = value; }
+
+	 inline uint32 askcoin() { return _askcoin; } const 
+
+	 inline void set_askcoin(const uint32 value) { _askcoin = value; }
 
 	 inline uint32 viplevel() { return _viplevel; } const 
 
@@ -2381,6 +2386,7 @@ public:
 	{
 		protocol::tag_CMDUserTeamRelatedInfo* cmd = (protocol::tag_CMDUserTeamRelatedInfo*) data;
 		cmd->askremain = _askremain;
+		cmd->askcoin = _askcoin;
 		cmd->viplevel = _viplevel;
 	}
 
@@ -2388,6 +2394,7 @@ public:
 	{
 		protocol::tag_CMDUserTeamRelatedInfo* cmd = (protocol::tag_CMDUserTeamRelatedInfo*) data;
 		_askremain = cmd->askremain;
+		_askcoin = cmd->askcoin;
 		_viplevel = cmd->viplevel;
 	}
 
@@ -2395,6 +2402,7 @@ public:
 	{
 		LOG("--------Receive message: UserTeamRelatedInfo---------");
 		LOG("askremain = %d", _askremain);
+		LOG("askcoin = %d", _askcoin);
 		LOG("viplevel = %d", _viplevel);
 	}
 

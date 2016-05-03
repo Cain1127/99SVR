@@ -10,6 +10,7 @@
 #import "HttpMessage.pb.h"
 
 @interface TQIdeaDetailModel : NSObject
+
 @property (nonatomic,copy) NSString *roomid;
 @property (nonatomic,copy) NSString *authorId;
 @property (nonatomic,copy) NSString *authorname;
@@ -21,5 +22,7 @@
 @property (nonatomic) int viewpointid;
 
 - (id)initWithViewpointDetail:(ViewpointDetail *)details;
+//OnExpertNewViewNoty
+- (id)initWithNewViewNoty:(void *)details;
 
 @end

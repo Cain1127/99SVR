@@ -21,12 +21,12 @@
 
 // @todo <= add detail about condition in exception
 # define JSON_ASSERT(condition)                                                \
-  {if (!(condition)) {ProtocolJson::throwLogicError( "assert json failed" );}}
+  {if (!(condition)) {Json::throwLogicError( "assert json failed" );}}
 
 # define JSON_FAIL_MESSAGE(message)                                            \
   {                                                                            \
     JSONCPP_OSTRINGSTREAM oss; oss << message;                                    \
-    ProtocolJson::throwLogicError(oss.str());                                          \
+    Json::throwLogicError(oss.str());                                          \
     abort();                                                                   \
   }
 

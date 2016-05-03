@@ -227,7 +227,7 @@ class ZLRoomListener : public VideoRoomListener
     virtual void OnSysNoticeInfo(SysCastNotice& info){}
     
     //”√ªß’ ªß ˝æ›
-    virtual void OnUserAccountInfo(UserAccountInfo& info){}
+    virtual void OnUserAccountInfo(UserAccountInfo& info);
     
     //∑øº‰π‹¿ÌÕ®÷™ ˝æ›
     virtual void OnRoomManagerNotify(){}
@@ -367,7 +367,7 @@ class ZLRoomListener : public VideoRoomListener
     /**
      *  专家观点请求
      */
-    virtual void OnExpertNewViewNoty(ExpertNewViewNoty& info){}
+    virtual void OnExpertNewViewNoty(ExpertNewViewNoty& info);
     
     //◊Ó«ø’Ω∂”÷‹∞Òªÿ”¶
     virtual void OnTeamTopNResp(std::vector<TeamTopNResp>& infos){}

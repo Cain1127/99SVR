@@ -32,10 +32,10 @@
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    _iconView = [[UIImageView alloc] initWithFrame:Rect(8,8,70,70)];
+    _iconView = [[UIImageView alloc] initWithFrame:Rect(8,8,40,40)];
     [self.contentView addSubview:_iconView];
     _iconView.layer.masksToBounds = YES;
-    _iconView.layer.cornerRadius = 35;
+    _iconView.layer.cornerRadius = 20;
     
     _authorLabel = [[UILabel alloc] initWithFrame:Rect(_iconView.x+_iconView.width+8,8,150,20)];
     [self.contentView addSubview:_authorLabel];
@@ -69,7 +69,7 @@
     _commentBtn.frame = Rect(kScreenWidth-_giftBtn.width*2-16,8,50,20);
     _commentBtn.titleLabel.font = XCFONT(12);
     
-    _lblContent = [[UILabel alloc] initWithFrame:Rect(8, 80, kScreenWidth-16, 40)];
+    _lblContent = [[UILabel alloc] initWithFrame:Rect(8, _iconView.y+_iconView.height+5, kScreenWidth-16, 40)];
     [self.contentView addSubview:_lblContent];
     [_lblContent setTextColor:UIColorFromRGB(0x343434)];
     [_lblContent setFont:XCFONT(14)];

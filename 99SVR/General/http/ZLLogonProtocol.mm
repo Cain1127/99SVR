@@ -8,6 +8,8 @@
 #include <cassert>
 #include "crc32.h"
 #include "json/json.h"
+#import "TQIdeaModel.h"
+#import "TQIdeaDetailModel.h"
 #import "RoomUser.h"
 #import "RoomInfo.h"
 #import "RoomService.h"
@@ -90,6 +92,8 @@ void ZLPushListener::OnEmailNewMsgNoty(EmailNewMsgNoty& info)
 {
     
 }
+
+
 
 //*********************************************************
 
@@ -726,4 +730,27 @@ void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
 }
 
 
+void ZLRoomListener::OnExpertNewViewNoty(ExpertNewViewNoty& info)
+{
+    /*
+    uint32	_nmessageid;
+    uint32	_nvcbid;
+    string	_sname;
+    string	_sicon;
+    string	_spublictime;
+    uint32	_ncommentcnt;
+    uint32	_nlikecnt;
+    uint32	_nflowercnt;
+    uint32	_contlen;
+    string	_content;
+     */
+    TQIdeaModel *idea = [[TQIdeaModel alloc] initWIthNewPointNotify:&info];
+    NSDictionary *dict = @{@"code":@(1),@"view":idea};
+//    [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSString *)#> object:<#(nullable id)#>];
+}
 
+void ZLRoomListener::OnUserAccountInfo(UserAccountInfo& info)
+{
+    [UserInfo sharedUserInfo].goldCoin = info.nk()/1000.0f;
+    
+}

@@ -80,6 +80,7 @@
     _btnBuy.layer.masksToBounds = YES;
     _btnBuy.layer.cornerRadius = 2.5;
     [_btnBuy addTarget:self action:@selector(buyprivate) forControlEvents:UIControlEventTouchUpInside];
+    _buyView.hidden = YES;
     
     whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 0, kScreenWidth, self.view.height)];
     [self.view addSubview:whatPrivate];
@@ -89,7 +90,7 @@
 
 - (void)buyprivate
 {
-    TQPurchaseViewController *control = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue]];
+    TQPurchaseViewController *control = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue] name:_room.teamname];
     [self.navigationController pushViewController:control animated:YES];
 }
 
@@ -196,11 +197,7 @@
         NSString *strInfo = dict[@"data"];
         if(strInfo)
         {
-            @WeakObj(whatPrivate)
-            @WeakObj(strInfo)
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [whatPrivateWeak setContent:strInfoWeak];
-            });
+            [whatPrivate setContent:strInfo];
         }
     }
 }

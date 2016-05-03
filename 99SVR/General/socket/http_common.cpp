@@ -8,11 +8,11 @@
 std::string get_client_type()
 {
 #ifdef WIN
-	return "1";
+	return "0";
 #elif defined ANDROID
-	return "2";
+	return "1";
 #else
-	return "3";
+	return "2";
 #endif
 }
 

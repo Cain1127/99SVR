@@ -21,9 +21,13 @@
 #include <cstddef> // size_t
 #include <algorithm> // min()
 
+#ifdef _MSC_VER
+#include <windows.h>
+#endif
+
 #define JSON_ASSERT_UNREACHABLE assert(false)
 
-namespace ProtocolJson {
+namespace Json {
 
 // This is a walkaround to avoid the static initialization of Value::null.
 // kNull must be word-aligned to avoid crashing on ARM.  We use an alignment of
@@ -63,7 +67,7 @@ static inline bool InRange(double d, T min, U max) {
   return d >= min && d <= max;
 }
 #else  // if !defined(JSON_USE_INT64_DOUBLE_CONVERSION)
-static inline double integerToDouble(ProtocolJson::UInt64 value) {
+static inline double integerToDouble(Json::UInt64 value) {
   return static_cast<double>(Int64(value / 2)) * 2.0 + static_cast<double>(Int64(value & 1));
 }
 
@@ -84,6 +88,28 @@ static inline bool InRange(double d, T min, U max) {
  *               computed using strlen(value).
  * @return Pointer on the duplicate instance of string.
  */
+
+
+#ifdef _MSC_VER
+static std::string jsoncpp_utf8TOgbk(const std::string& strUTF8)  
+{  
+    int len = MultiByteToWideChar(CP_UTF8, 0, strUTF8.c_str(), -1, NULL, 0);  
+    unsigned short * wszGBK = new unsigned short[len + 1];  
+    memset(wszGBK, 0, len * 2 + 2);  
+    MultiByteToWideChar(CP_UTF8, 0, (LPCTSTR)strUTF8.c_str(), -1, (LPWSTR)wszGBK, len);  
+  
+    len = WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)wszGBK, -1, NULL, 0, NULL, NULL);  
+    char *szGBK = new char[len + 1];  
+    memset(szGBK, 0, len + 1);  
+    WideCharToMultiByte(CP_ACP,0, (LPCWSTR)wszGBK, -1, szGBK, len, NULL, NULL);  
+    //strUTF8 = szGBK;  
+    std::string strTemp(szGBK);  
+    delete[]szGBK;  
+    delete[]wszGBK;  
+    return strTemp;
+}
+#endif
+
 static inline char* duplicateStringValue(const char* value,
                                          size_t length)
 {
@@ -95,7 +121,7 @@ static inline char* duplicateStringValue(const char* value,
   char* newString = static_cast<char*>(malloc(length + 1));
   if (newString == NULL) {
     throwRuntimeError(
-        "in ProtocolJson::Value::duplicateStringValue(): "
+        "in Json::Value::duplicateStringValue(): "
         "Failed to allocate string value buffer");
   }
   memcpy(newString, value, length);
@@ -112,13 +138,13 @@ static inline char* duplicateAndPrefixStringValue(
   // Avoid an integer overflow in the call to malloc below by limiting length
   // to a sane value.
   JSON_ASSERT_MESSAGE(length <= static_cast<unsigned>(Value::maxInt) - sizeof(unsigned) - 1U,
-                      "in ProtocolJson::Value::duplicateAndPrefixStringValue(): "
+                      "in Json::Value::duplicateAndPrefixStringValue(): "
                       "length too big for prefixing");
   unsigned actualLength = length + static_cast<unsigned>(sizeof(unsigned)) + 1U;
   char* newString = static_cast<char*>(malloc(actualLength));
   if (newString == 0) {
     throwRuntimeError(
-        "in ProtocolJson::Value::duplicateAndPrefixStringValue(): "
+        "in Json::Value::duplicateAndPrefixStringValue(): "
         "Failed to allocate string value buffer");
   }
   *reinterpret_cast<unsigned*>(newString) = length;
@@ -164,7 +190,7 @@ static inline void releaseStringValue(char* value, unsigned) {
 }
 #endif // JSONCPP_USING_SECURE_MEMORY
 
-} // namespace ProtocolJson
+} // namespace Json
 
 // //////////////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////////////
@@ -178,7 +204,7 @@ static inline void releaseStringValue(char* value, unsigned) {
 #include "json_valueiterator.inl"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
-namespace ProtocolJson {
+namespace Json {
 
 Exception::Exception(JSONCPP_STRING const& msg)
   : msg_(msg)
@@ -228,7 +254,7 @@ void Value::CommentInfo::setComment(const char* text, size_t len) {
   JSON_ASSERT(text != 0);
   JSON_ASSERT_MESSAGE(
       text[0] == '\0' || text[0] == '/',
-      "in ProtocolJson::Value::setComment(): Comments must start with /");
+      "in Json::Value::setComment(): Comments must start with /");
   // It seems that /**/ style comments are acceptable as well.
   comment_ = duplicateStringValue(text, len);
 }
@@ -293,7 +319,7 @@ bool Value::CZString::operator<(const CZString& other) const {
   // Assume both are strings.
   unsigned this_len = this->storage_.length_;
   unsigned other_len = other.storage_.length_;
-  unsigned min_len = std::min(this_len, other_len);
+  unsigned min_len = (std::min)(this_len, other_len);
   JSON_ASSERT(this->cstr_ && other.cstr_);
   int comp = memcmp(this->cstr_, other.cstr_, min_len);
   if (comp < 0) return true;
@@ -555,7 +581,7 @@ bool Value::operator<(const Value& other) const {
     char const* other_str;
     decodePrefixedString(this->allocated_, this->value_.string_, &this_len, &this_str);
     decodePrefixedString(other.allocated_, other.value_.string_, &other_len, &other_str);
-    unsigned min_len = std::min(this_len, other_len);
+    unsigned min_len = (std::min)(this_len, other_len);
     JSON_ASSERT(this_str && other_str);
     int comp = memcmp(this_str, other_str, min_len);
     if (comp < 0) return true;
@@ -584,7 +610,7 @@ bool Value::operator>(const Value& other) const { return other < *this; }
 bool Value::operator==(const Value& other) const {
   // if ( type_ != other.type_ )
   // GCC 2.95.3 says:
-  // attempt to take address of bit-field structure member `ProtocolJson::Value::type_'
+  // attempt to take address of bit-field structure member `Json::Value::type_'
   // Beats me, but a temp solves the problem.
   int temp = other.type_;
   if (type_ != temp)
@@ -630,7 +656,7 @@ bool Value::operator!=(const Value& other) const { return !(*this == other); }
 
 const char* Value::asCString() const {
   JSON_ASSERT_MESSAGE(type_ == stringValue,
-                      "in ProtocolJson::Value::asCString(): requires stringValue");
+                      "in Json::Value::asCString(): requires stringValue");
   if (value_.string_ == 0) return 0;
   unsigned this_len;
   char const* this_str;
@@ -641,7 +667,7 @@ const char* Value::asCString() const {
 #if JSONCPP_USING_SECURE_MEMORY
 unsigned Value::getCStringLength() const {
   JSON_ASSERT_MESSAGE(type_ == stringValue,
-	                  "in ProtocolJson::Value::asCString(): requires stringValue");
+	                  "in Json::Value::asCString(): requires stringValue");
   if (value_.string_ == 0) return 0;
   unsigned this_len;
   char const* this_str;
@@ -669,7 +695,11 @@ JSONCPP_STRING Value::asString() const {
     unsigned this_len;
     char const* this_str;
     decodePrefixedString(this->allocated_, this->value_.string_, &this_len, &this_str);
-    return JSONCPP_STRING(this_str, this_len);
+#if defined(_MSC_VER)
+	return jsoncpp_utf8TOgbk(JSONCPP_STRING(this_str, this_len));
+#else
+	return JSONCPP_STRING(this_str, this_len);
+#endif
   }
   case booleanValue:
     return value_.bool_ ? "true" : "false";
@@ -1028,7 +1058,7 @@ bool Value::operator!() const { return isNull(); }
 void Value::clear() {
   JSON_ASSERT_MESSAGE(type_ == nullValue || type_ == arrayValue ||
                           type_ == objectValue,
-                      "in ProtocolJson::Value::clear(): requires complex value");
+                      "in Json::Value::clear(): requires complex value");
   start_ = 0;
   limit_ = 0;
   switch (type_) {
@@ -1043,7 +1073,7 @@ void Value::clear() {
 
 void Value::resize(ArrayIndex newSize) {
   JSON_ASSERT_MESSAGE(type_ == nullValue || type_ == arrayValue,
-                      "in ProtocolJson::Value::resize(): requires arrayValue");
+                      "in Json::Value::resize(): requires arrayValue");
   if (type_ == nullValue)
     *this = Value(arrayValue);
   ArrayIndex oldSize = size();
@@ -1062,7 +1092,7 @@ void Value::resize(ArrayIndex newSize) {
 Value& Value::operator[](ArrayIndex index) {
   JSON_ASSERT_MESSAGE(
       type_ == nullValue || type_ == arrayValue,
-      "in ProtocolJson::Value::operator[](ArrayIndex): requires arrayValue");
+      "in Json::Value::operator[](ArrayIndex): requires arrayValue");
   if (type_ == nullValue)
     *this = Value(arrayValue);
   CZString key(index);
@@ -1078,14 +1108,14 @@ Value& Value::operator[](ArrayIndex index) {
 Value& Value::operator[](int index) {
   JSON_ASSERT_MESSAGE(
       index >= 0,
-      "in ProtocolJson::Value::operator[](int index): index cannot be negative");
+      "in Json::Value::operator[](int index): index cannot be negative");
   return (*this)[ArrayIndex(index)];
 }
 
 const Value& Value::operator[](ArrayIndex index) const {
   JSON_ASSERT_MESSAGE(
       type_ == nullValue || type_ == arrayValue,
-      "in ProtocolJson::Value::operator[](ArrayIndex)const: requires arrayValue");
+      "in Json::Value::operator[](ArrayIndex)const: requires arrayValue");
   if (type_ == nullValue)
     return nullRef;
   CZString key(index);
@@ -1098,7 +1128,7 @@ const Value& Value::operator[](ArrayIndex index) const {
 const Value& Value::operator[](int index) const {
   JSON_ASSERT_MESSAGE(
       index >= 0,
-      "in ProtocolJson::Value::operator[](int index) const: index cannot be negative");
+      "in Json::Value::operator[](int index) const: index cannot be negative");
   return (*this)[ArrayIndex(index)];
 }
 
@@ -1116,7 +1146,7 @@ void Value::initBasic(ValueType vtype, bool allocated) {
 Value& Value::resolveReference(const char* key) {
   JSON_ASSERT_MESSAGE(
       type_ == nullValue || type_ == objectValue,
-      "in ProtocolJson::Value::resolveReference(): requires objectValue");
+      "in Json::Value::resolveReference(): requires objectValue");
   if (type_ == nullValue)
     *this = Value(objectValue);
   CZString actualKey(
@@ -1136,7 +1166,7 @@ Value& Value::resolveReference(char const* key, char const* cend)
 {
   JSON_ASSERT_MESSAGE(
       type_ == nullValue || type_ == objectValue,
-      "in ProtocolJson::Value::resolveReference(key, end): requires objectValue");
+      "in Json::Value::resolveReference(key, end): requires objectValue");
   if (type_ == nullValue)
     *this = Value(objectValue);
   CZString actualKey(
@@ -1162,7 +1192,7 @@ Value const* Value::find(char const* key, char const* cend) const
 {
   JSON_ASSERT_MESSAGE(
       type_ == nullValue || type_ == objectValue,
-      "in ProtocolJson::Value::find(key, end, found): requires objectValue or nullValue");
+      "in Json::Value::find(key, end, found): requires objectValue or nullValue");
   if (type_ == nullValue) return NULL;
   CZString actualKey(key, static_cast<unsigned>(cend-key), CZString::noDuplication);
   ObjectValues::const_iterator it = value_.map_->find(actualKey);
@@ -1247,7 +1277,7 @@ bool Value::removeMember(JSONCPP_STRING const& key, Value* removed)
 Value Value::removeMember(const char* key)
 {
   JSON_ASSERT_MESSAGE(type_ == nullValue || type_ == objectValue,
-                      "in ProtocolJson::Value::removeMember(): requires objectValue");
+                      "in Json::Value::removeMember(): requires objectValue");
   if (type_ == nullValue)
     return nullRef;
 
@@ -1313,7 +1343,7 @@ bool Value::isMember(const CppTL::ConstString& key) const {
 Value::Members Value::getMemberNames() const {
   JSON_ASSERT_MESSAGE(
       type_ == nullValue || type_ == objectValue,
-      "in ProtocolJson::Value::getMemberNames(), value must be objectValue");
+      "in Json::Value::getMemberNames(), value must be objectValue");
   if (type_ == nullValue)
     return Value::Members();
   Members members;
@@ -1683,4 +1713,4 @@ Value& Path::make(Value& root) const {
   return *node;
 }
 
-} // namespace ProtocolJson
+} // namespace Json

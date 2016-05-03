@@ -506,6 +506,9 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    if ([string isEqualToString:@""]) {
+        return YES;
+    }
     if (_txtName == textField)
     {
         if (range.location>11 || range.location+string.length>11)

@@ -25,7 +25,7 @@
     }
     if(userId == KUserSingleton.nUserId)
     {
-        return [NSString stringWithFormat:@"<span value=\"forme--%d\">%@</span>",userId,strName];
+        return [NSString stringWithFormat:@"<span value=\"forme--%d\" style=\"color:#919191\">%@</span>",userId,strName];
     }
     else
     {
@@ -182,15 +182,15 @@
         RoomUser *user = [rInfo findUser:toId];
         NSString *strTo = [RoomService getToUser:toId name:user.m_strUserAlias];
         NSString *strInfo = [NSString stringWithFormat:@"%@ 回复 %@ </span><br>%@</span>",strFrom,strTo,strMsg];
-        [aryChat addObject:strInfo];
+//        [aryChat addObject:strInfo];
     }
     else
     {
         NSString *strInfo = [NSString stringWithFormat:@"%@<br>%@</span>",strFrom,strMsg];
-        [aryChat addObject:strInfo];
+//        [aryChat addObject:strInfo];
     }
     [RoomService clearChatInfo:aryChat];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     return YES;
 }
 

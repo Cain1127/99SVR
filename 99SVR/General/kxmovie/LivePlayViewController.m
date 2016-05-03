@@ -490,8 +490,8 @@
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
     
-    lblText.hidden = NO;
-    lblText.text = @"没有讲师上麦";
+//    lblText.hidden = NO;
+//    lblText.text = @"没有讲师上麦";
 }
 
 - (void)viewWillDisappear:(BOOL)animated

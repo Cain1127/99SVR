@@ -39,6 +39,8 @@
     return self;
 }
 
+
+
 - (void)settingTime
 {
     UserInfo *userinfo = [UserInfo sharedUserInfo];

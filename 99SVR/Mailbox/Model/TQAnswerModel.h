@@ -51,6 +51,8 @@
 /** 客户端 */
 @property(nonatomic,assign)int fromclient;
 
+@property (nonatomic,copy) NSString *askAuthorHead;
+
 /** 是否展开 */
 @property (nonatomic, assign) BOOL isAllText;
 @property(nonatomic,assign) NSUInteger autoId;

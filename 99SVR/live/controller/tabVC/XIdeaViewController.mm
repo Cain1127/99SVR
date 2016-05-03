@@ -79,10 +79,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
-    if (_dataSource.aryModel.count==0)
-    {
-        [self.tableView.gifHeader beginRefreshing];
-    }
+   [self.tableView.gifHeader beginRefreshing];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

@@ -8,8 +8,89 @@
 
 #import "PlayIconView.h"
 #import "UIView+Touch.h"
+#import "RoomHttp.h"
+#import "RoomViewController.h"
+#import "UIImageFactory.h"
 
 @implementation PlayIconView
+
+DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
+
+- (id)init
+{
+    self = [super init];
+    _playView = [[PlayCurrentView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 60)];
+    _btnPlay = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnPlay.hidden = YES;
+    _playView.delegate = self;
+    [self addSubview:_playView];
+    [self addSubview:_btnPlay];
+    _btnPlay.frame = Rect(kScreenWidth-55, 8, 44, 44);
+    [UIImageFactory createBtnImage:@"home_play_icon" btn:_btnPlay state:UIControlStateNormal];
+    _btnPlay.hidden=YES;
+    [_btnPlay addTarget:self action:@selector(showPlayInfo) forControlEvents:UIControlEventTouchUpInside];
+    
+    return self;
+}
+
+- (void)hidenPlay
+{
+    _playView.hidden = YES;
+    _btnPlay.hidden = NO;
+}
+
+- (void)showPlayInfo
+{
+    _playView.hidden = NO;
+    _btnPlay.hidden = YES;
+}
+
+- (void)exitPlay
+{
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    [roomView exitRoom];
+    [self removeFromSuperview];
+}
+
+- (void)setRoom:(RoomHttp *)room
+{
+    [_playView.lblName setText:room.teamname];
+    [_playView.lblNumber setText:room.teamid];
+    [_playView.btnQuery setTitle:room.onlineusercount forState:UIControlStateNormal];
+    NSString *strUrl=nil;
+    if([room.teamicon length]==0)
+    {
+        strUrl = @"";
+    }
+    else
+    {
+        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.croompic];
+    }
+    [_playView.imgView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
+}
+
+- (void)gotoPlay
+{
+    UIViewController *viewControl = [self viewController];
+    if (viewControl)
+    {
+        [viewControl.navigationController pushViewController:[RoomViewController sharedRoomViewController] animated:YES];
+    }
+}
+
+- (UIViewController*)viewController {
+    for (UIView* next = [self superview]; next; next = next.superview) {
+        UIResponder* nextResponder = [next nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController*)nextResponder;
+        }
+    }
+    return nil;
+}
+
+@end
+
+@implementation PlayCurrentView
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -27,16 +108,17 @@
     [_lblName setFont:XCFONT(15)];
     [self addSubview:_lblName];
     
-    _lblNumber = [[UILabel alloc] initWithFrame:Rect(_lblName.x+_lblName.width+8, _lblName.y, 80, 20)];
-    [_lblNumber setTextColor:UIColorFromRGB(0xffffff)];
-    [_lblNumber setFont:XCFONT(15)];
-    [self addSubview:_lblNumber];
+//    _lblNumber = [[UILabel alloc] initWithFrame:Rect(_lblName.x+_lblName.width+8, _lblName.y, 80, 20)];
+//    [_lblNumber setTextColor:UIColorFromRGB(0xffffff)];
+//    [_lblNumber setFont:XCFONT(15)];
+//    [self addSubview:_lblNumber];
     
     _btnQuery = [UIButton buttonWithType:UIButtonTypeCustom];
-    _btnQuery.frame = Rect(_lblName.x, 30, 90,30);
+    _btnQuery.frame = Rect(_lblName.x, 30, 70,30);
     [_btnQuery setImage:[UIImage imageNamed:@"eye"] forState:UIControlStateNormal];
     [_btnQuery setTitle:@"1" forState:UIControlStateNormal];
     [_btnQuery setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+    _btnQuery.titleLabel.font = XCFONT(13);
     UIEdgeInsets inset = _btnQuery.imageEdgeInsets;
     inset.left -= 10;
     _btnQuery.imageEdgeInsets = inset;
@@ -60,14 +142,15 @@
     [self addSubview:_btnExit];
     [_btnHidn addTarget:self action:@selector(addEvent:) forControlEvents:UIControlEventTouchUpInside];
     [_btnExit addTarget:self action:@selector(addEvent:) forControlEvents:UIControlEventTouchUpInside];
-    
     @WeakObj(self)
-    [self clickWithBlock:^(UIGestureRecognizer *gesture) {
+    [self clickWithBlock:^(UIGestureRecognizer *gesture)
+    {
         [selfWeak goPlayInfo];
     }];
-    
     return self;
 }
+
+
 
 - (void)goPlayInfo
 {

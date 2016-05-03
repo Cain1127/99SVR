@@ -15,8 +15,19 @@
 - (void)gotoPlay;
 
 @end
+@class PlayCurrentView;
+@class RoomHttp;
+@interface PlayIconView : UIView <PlayIconDelegate>
 
-@interface PlayIconView : UIView
+DEFINE_SINGLETON_FOR_HEADER(PlayIconView)
+@property (nonatomic,strong) PlayCurrentView *playView;
+@property (nonatomic,strong) UIButton *btnPlay;
+
+- (void)setRoom:(RoomHttp *)room;
+
+@end
+
+@interface PlayCurrentView : UIView
 
 @property (nonatomic,assign) id<PlayIconDelegate> delegate;
 

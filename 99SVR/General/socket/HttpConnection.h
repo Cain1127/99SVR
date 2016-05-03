@@ -125,10 +125,10 @@ public:
 	void RequestSystemMessage(int startId, int count, SystemMessageListener* listener);
 
 	// 请求问题回复--已回答的（已提供）
-	void RequestQuestionAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeam = false);
+	void RequestQuestionAnswer(int startId, int count, QuestionAnswerListener* listener);
 
 	// 请求评论回复--收到的评论（已提供）
-	void RequestMailReply(int startId, int count, MailReplyListener* listener, bool isTeam = false);
+	void RequestMailReply(int startId, int count, MailReplyListener* listener);
 
 	// 请求私人定制（已提供）
 	void RequestPrivateServiceSummary(int startId, int count, PrivateServiceSummaryListener* listener);
@@ -142,11 +142,11 @@ public:
 	// 获取剩余提问次数等信息（未提供）
 	void RequestUserTeamRelatedInfo(int teamId, UserTeamRelatedInfoListener* listener);
 
-	// 请求问题回复--未回回答的（PC端接口）（X未提供）
-	void RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeam = false);
+	// 请求问题回复--未回回答的（PC端接口）
+	void RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener);
 
-	// 请求评论回复--发出的评论（PC端接口）（X未提供）
-	void RequestMailSendReply(int startId, int count, MailReplyListener* listener, bool isTeam = false);
+	// 请求评论回复--发出的评论（PC端接口）
+	void RequestMailSendReply(int startId, int count, MailReplyListener* listener);
 
 	// 讲师团队回答提问（PC端接口）（X未提供）
 	void PostAnswer(int questionId, char* content, HttpListener* listener);

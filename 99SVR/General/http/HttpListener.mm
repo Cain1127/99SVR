@@ -242,9 +242,9 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, vecto
     
     
     //股票数据
+    
     StockDealModel *stockDataModel = [[StockDealModel alloc] initWithStockDealStockData:&stocks];
     muDic[@"stockModel"] = stockDataModel;
-    
     
     //交易详情
     NSMutableArray *transArray = [NSMutableArray array];
@@ -370,25 +370,24 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_NOPURCHASE_VC object:dict];
         
     }else {
-        
+        //获取已经购买数据
+        NSMutableArray *ary = [NSMutableArray array];
         for (int i=0; i<infos.size(); i++) {
-            //获取已经购买数据
-            NSMutableArray *ary = [NSMutableArray array];
-            for (int i=0; i<infos.size(); i++) {
-                MyPrivateService service = infos[i];
-                NSString *teamid = NSStringFromInt(service.teamid());
-                NSString *teamname = [NSString stringWithUTF8String:service.teamname().c_str()];
-                NSString *teamicon = [NSString stringWithUTF8String:service.teamicon().c_str()];
-                NSString *levelname = [NSString stringWithUTF8String:service.levelname().c_str()];
-                NSString *expirationdate = [NSString stringWithUTF8String:service.expirationdate().c_str()];
-                int levelid = service.levelid();
-                NSDictionary *dict = @{@"teamid":teamid,@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
-                                       @"expirationdate":expirationdate,@"levelid":@(levelid)};
-                TQMeCustomizedModel *model = [TQMeCustomizedModel mj_objectWithKeyValues:dict];
-                [ary addObject:model];
-            }
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:ary];
+            MyPrivateService service = infos[i];
+            NSString *teamid = NSStringFromInt(service.teamid());
+            NSString *teamname = [NSString stringWithUTF8String:service.teamname().c_str()];
+            NSString *teamicon = [NSString stringWithUTF8String:service.teamicon().c_str()];
+            NSString *levelname = [NSString stringWithUTF8String:service.levelname().c_str()];
+            NSString *expirationdate = [NSString stringWithUTF8String:service.expirationdate().c_str()];
+            int levelid = service.levelid();
+            NSDictionary *dict = @{@"teamid":teamid,@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
+                                   @"expirationdate":expirationdate,@"levelid":@(levelid)};
+            TQMeCustomizedModel *model = [TQMeCustomizedModel mj_objectWithKeyValues:dict];
+            [ary addObject:model];
         }
+        NSDictionary *dict = @{@"code":@(1),@"data":ary};
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:dict];
+        
     }
 }
 
@@ -642,7 +641,7 @@ void SystemMessageListener::OnError(int errCode)
  *  请求信息--提问回复
  */
 
-void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info)
+void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info,int isteacher)
 {
     NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<info.size(); i++) {
@@ -662,7 +661,7 @@ void QuestionAnswerListener::OnError(int errCode)
  *  请求信息--评论回复
  */
 
-void MailReplyListener::onResponse(vector<MailReply>& info)
+void MailReplyListener::onResponse(vector<MailReply>& info,int isteacher)
 {
     NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<info.size(); i++) {
