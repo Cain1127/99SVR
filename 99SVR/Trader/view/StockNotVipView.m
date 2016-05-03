@@ -32,7 +32,7 @@
     self.buyLab = [[UILabel alloc]init];
     self.buyLab.textAlignment = NSTextAlignmentCenter;
     self.buyLab.font = [UIFont systemFontOfSize:buyLab_font];
-    self.buyLab.text = @"去购买";
+    self.buyLab.text = @"去兑换";
     self.buyLab.textColor = COLOR_Auxiliary_Orange;
     self.buyLab.userInteractionEnabled = YES;
     UITapGestureRecognizer *buyTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(buyLabelClick:)];
@@ -63,7 +63,7 @@
     CGFloat buyLab_top = 0;
     if (type==StockNotVipViewType_Business) {//交易动态
         self.frame = (CGRect){0,0,ScreenWidth,STORCK_Deal_BusinessRecordCell_NotVIP_H};
-        self.textLab.text = @"购买私人订制服务可查看详细交易记录";
+        self.textLab.text = @"兑换私人订制服务可查看详细交易记录";
         buyLab_top = buy_top_bottom;
         self.serviceLab.hidden = YES;
         
@@ -75,7 +75,7 @@
         
     }else{//持仓情况
         self.frame = (CGRect){0,0,ScreenWidth,STORCK_Deal_WareHouseRecordCell_NotVIP_H};
-        self.textLab.text = @"购买私人订制服务可查看详细持仓情况";
+        self.textLab.text = @"兑换私人订制服务可查看详细持仓情况";
         buyLab_top = storehouse_top_bottom;
         self.serviceLab.hidden = NO;
         

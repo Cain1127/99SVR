@@ -129,7 +129,9 @@
         [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"兑换" withMessage:@"是否确定兑换！" completionCallback:^(NSInteger index) {
 
             if (index==1) {//购买
+                
                 DLog(@"购买的vip等级%@   的战队ID = %@",model.levelid,self.stockModel.teamid);
+                [MBProgressHUD showMessage:@"兑换中..."];
                 ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
                 [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[model.levelid intValue]];
             }
@@ -214,7 +216,9 @@
     NSString *code = dic[@"code"];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-       
+        
+        [MBProgressHUD hideHUD];
+        
         if ([code isEqualToString:@"1"]) {//
             
             if ([UserInfo sharedUserInfo].banding) {//已绑定
@@ -273,6 +277,14 @@
         }
     }];
 
+}
+
+
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [super viewWillDisappear:animated];
+    
+    Loading_Bird_Hide
 }
 
 -(void)dealloc{

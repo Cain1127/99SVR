@@ -226,17 +226,17 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     
     //判断是否显示记录 
     BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
-    
-    DLog(@"---------------------------------------------------");
-//    DLog(@"currLevelId=%d   minVipLevel=%d _teamid = %s",currLevelId,minVipLevel,profit.teamid().c_str());
-    DLog(@"---------------------------------------------------");
+//    DLog(@"---------------------------------------------------");
+//    DLog(@"currLevelId=%d   minVipLevel=%d ",currLevelId,minVipLevel);
+//    DLog(@"---------------------------------------------------");
 
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
     
     //股票头部数据
     StockDealModel *headerModel = [[StockDealModel alloc] initWithStockDealHeaderData:&profit];
-    
+    headerModel.minVipLevel = IntTransformIntToStr(minVipLevel);
+    headerModel.currLevelId = IntTransformIntToStr(currLevelId);
     //头部数据
     muDic[@"headerModel"] = headerModel;
     

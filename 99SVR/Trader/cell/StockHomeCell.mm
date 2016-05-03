@@ -27,6 +27,7 @@
     
     self.nameLab = [[UILabel alloc]init];
     self.nameLab.font = [UIFont systemFontOfSize:name_fot];
+    self.nameLab.textColor = COLOR_Text_Black;
     [self.bakImageView addSubview:self.nameLab];
     
 
@@ -69,14 +70,6 @@
         make.width.equalTo(@(icon_w));
     }];
     
-    //名字
-    [self.nameLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.iconImv.mas_right).offset((ValueWithTheIPhoneModelString(@"10,10,10,10")));
-        make.right.equalTo(self.totalNumLab.mas_left).offset(-10);
-        make.height.equalTo(@(name_fot));
-        make.top.equalTo(self.iconImv.mas_top);
-    }];
-    
     //目标收益
     [self.targetLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.nameLab.mas_left);
@@ -106,11 +99,11 @@
         make.bottom.equalTo(@0);
         make.left.equalTo(@0);
     }];
-    
+
     self.bakImageView.layer.borderWidth = 1.0f;
     self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.5].CGColor;
     [self.bakImageView layoutIfNeeded];
-
+//
     //计算字体
     self.traderNameLab.text =  model.focus;
     CGSize traderNameLabSize = [ShareFunction calculationOfTheText:self.traderNameLab.text withFont:traderName_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
@@ -122,7 +115,7 @@
         make.height.equalTo(@(traderName_h));
         make.centerY.equalTo(self.iconImv.mas_centerY);
     }];
-    
+//
     //计算总收益字体
     self.totalNumLab.text =  model.totalprofit;
     CGSize totalNumLabSize = [ShareFunction calculationOfTheText:self.totalNumLab.text withFont:totalNumLab_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
@@ -134,6 +127,15 @@
         make.width.equalTo(@(totalNumLabSize.width + 10));
         make.height.equalTo(@(totalNumLab_fot));
     }];
+    
+    //名字
+    [self.nameLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.iconImv.mas_right).offset((ValueWithTheIPhoneModelString(@"10,10,10,10")));
+        make.right.equalTo(self.totalNumLab.mas_left).offset(-10);
+        make.height.equalTo(@(name_fot));
+        make.top.equalTo(self.iconImv.mas_top);
+    }];
+    
     [self.iconImv sd_setImageWithURL:[NSURL URLWithString:model.teamicon]];
     self.nameLab.text =  model.teamname;
     self.targetLab.text =  [NSString stringWithFormat:@"目标收益：%@",model.goalprofit];
@@ -179,6 +181,14 @@
 
         make.width.equalTo(@(totalNumLabSize.width));
         make.height.equalTo(@(totalNumLab_fot));
+    }];
+    
+    //名字
+    [self.nameLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.iconImv.mas_right).offset((ValueWithTheIPhoneModelString(@"10,10,10,10")));
+        make.right.equalTo(self.totalNumLab.mas_left).offset(-10);
+        make.height.equalTo(@(name_fot));
+        make.top.equalTo(self.iconImv.mas_top);
     }];
     
     [self.iconImv sd_setImageWithURL:[NSURL URLWithString:model.teamicon]];

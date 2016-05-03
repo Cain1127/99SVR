@@ -99,7 +99,6 @@
     [_itemsArray removeAllObjects];
     _leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"TQMeCustomizedViewController"]];
-    
     if (KUserSingleton.bIsLogin && KUserSingleton.nType ==1) {
         NSString *strName= [NSString stringWithFormat:@"我的九九币:  %.01f",KUserSingleton.goldCoin];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:strName icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
