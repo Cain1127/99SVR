@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FinanceOnlineVedioController.h"
-
-@interface SearchController : UIViewController
+#import "GFBaseViewController.h"
+@interface SearchController : GFBaseViewController
 
 @end

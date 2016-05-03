@@ -165,11 +165,22 @@
                 }
                 self.privateView.privateVipArray = muAryTemp;
             }
+            @WeakObj(self)
             dispatch_async(dispatch_get_main_queue(), ^{
-                @WeakObj(self)
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [selfWeak.tableView reloadData];
-                });
+                @StrongObj(self)
+                self.dataSource.selectIndex = 1;
+                if (self.dataSource.aryVIP.count>0) {
+                    XPrivateService *model = [self.dataSource.aryVIP objectAtIndex:0];
+                    if (model.isOpen)
+                    {
+                        self.buyView.hidden = YES;
+                    }
+                    else
+                    {
+                        self.buyView.hidden = NO;
+                    }
+                }
+                [self.tableView reloadData];
             });
             return;
         }
@@ -213,7 +224,6 @@
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
     XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
-    
     [self.navigationController pushViewController:control animated:YES];
 }
 @end

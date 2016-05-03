@@ -103,7 +103,7 @@
         XPrivateService *service = _aryVIP[_selectIndex-1];
         if (service.summaryList.count>indexPath.row)
         {
-             
+            [self showPrivateDetail:service.summaryList[indexPath.row]];
         }
     }
 }

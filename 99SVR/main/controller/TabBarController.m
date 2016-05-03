@@ -8,6 +8,7 @@
 
 #import "TabBarController.h"
 #import "ZLVideoListViewController.h"
+#import "GFNavigationController.h"
 #import "NavigationViewController.h"
 #import "HomeViewController.h"
 #import "IndexViewController.h"
@@ -137,7 +138,7 @@
     vc.title = title;
     vc.tabBarItem.image = [UIImage imageNamed:image];
     vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
-    NavigationViewController *nav = [[NavigationViewController alloc]initWithRootViewController:vc];
+    GFNavigationController *nav = [[GFNavigationController alloc]initWithRootViewController:vc];
     [self addChildViewController:nav];
 }
 

@@ -212,6 +212,9 @@
 		BB0D3D061CD0BF6100A57E77 /* XPrivateService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0D3D051CD0BF6100A57E77 /* XPrivateService.m */; };
 		BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B481CB112FC00C573E0 /* BaseService.m */; };
 		BB125B4C1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B4A1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m */; };
+		BB14B9CE1CD918360027E7E6 /* GFBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB14B9C91CD918360027E7E6 /* GFBaseViewController.m */; };
+		BB14B9CF1CD918360027E7E6 /* GFNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB14B9CB1CD918360027E7E6 /* GFNavigationController.m */; };
+		BB14B9D01CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m in Sources */ = {isa = PBXBuildFile; fileRef = BB14B9CD1CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m */; };
 		BB16616C1C3CA0B800D318BE /* UITableView+reloadComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */; };
 		BB16617C1C3D018C00D318BE /* PhotoToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16617B1C3D018C00D318BE /* PhotoToolBar.m */; };
 		BB16617F1C3D01F400D318BE /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16617E1C3D01F400D318BE /* Photo.m */; };
@@ -1171,6 +1174,12 @@
 		BB125B481CB112FC00C573E0 /* BaseService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseService.m; path = blocks/BaseService.m; sourceTree = "<group>"; };
 		BB125B491CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSJSONSerialization+RemovingNulls.h"; path = "blocks/NSJSONSerialization+RemovingNulls.h"; sourceTree = "<group>"; };
 		BB125B4A1CB112FC00C573E0 /* NSJSONSerialization+RemovingNulls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSJSONSerialization+RemovingNulls.m"; path = "blocks/NSJSONSerialization+RemovingNulls.m"; sourceTree = "<group>"; };
+		BB14B9C81CD918360027E7E6 /* GFBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GFBaseViewController.h; sourceTree = "<group>"; };
+		BB14B9C91CD918360027E7E6 /* GFBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GFBaseViewController.m; sourceTree = "<group>"; };
+		BB14B9CA1CD918360027E7E6 /* GFNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GFNavigationController.h; sourceTree = "<group>"; };
+		BB14B9CB1CD918360027E7E6 /* GFNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GFNavigationController.m; sourceTree = "<group>"; };
+		BB14B9CC1CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+GFNavigationControlller.h"; sourceTree = "<group>"; };
+		BB14B9CD1CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+GFNavigationControlller.m"; sourceTree = "<group>"; };
 		BB16616A1C3CA0B800D318BE /* UITableView+reloadComplete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+reloadComplete.h"; sourceTree = "<group>"; };
 		BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+reloadComplete.m"; sourceTree = "<group>"; };
 		BB16617A1C3D018C00D318BE /* PhotoToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoToolBar.h; sourceTree = "<group>"; };
@@ -3714,6 +3723,12 @@
 		BB63F5721C2CC7A300A042E8 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				BB14B9C81CD918360027E7E6 /* GFBaseViewController.h */,
+				BB14B9C91CD918360027E7E6 /* GFBaseViewController.m */,
+				BB14B9CA1CD918360027E7E6 /* GFNavigationController.h */,
+				BB14B9CB1CD918360027E7E6 /* GFNavigationController.m */,
+				BB14B9CC1CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.h */,
+				BB14B9CD1CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m */,
 				188741771C96FE25002EF25A /* NavigationViewController.h */,
 				188741781C96FE25002EF25A /* NavigationViewController.m */,
 				188741851C97058F002EF25A /* TabBarController.h */,
@@ -4707,6 +4722,7 @@
 				BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */,
 				BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */,
 				BB63F5D61C2CC7A300A042E8 /* UIView+MJExtension.m in Sources */,
+				BB14B9D01CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m in Sources */,
 				BBD46D2B1CB01B4B00E2B767 /* TextCoreViewController.m in Sources */,
 				BB63F6011C2CC7A300A042E8 /* GroupHeaderView.m in Sources */,
 				BB0D3D031CD0AA3200A57E77 /* XIdeaDataSource.m in Sources */,
@@ -4784,6 +4800,7 @@
 				BB2CA9E71CD5ECFB00DFE56E /* UITextView+Placeholder.m in Sources */,
 				18BF06B51C9A7DC70071E524 /* SignatureViewController.m in Sources */,
 				BB17692B1C7B006F00CE947C /* UIImage+GIF.m in Sources */,
+				BB14B9CE1CD918360027E7E6 /* GFBaseViewController.m in Sources */,
 				BB6F3ABD1C9ECB3C0035EBBE /* BannerModel.mm in Sources */,
 				185F596D1CC4CAD600F605F5 /* NSString+MJExtension.m in Sources */,
 				1898AC711C9BB77100F2681D /* VideoColletionViewController.m in Sources */,
@@ -4905,6 +4922,7 @@
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
 				BB2CA6141CD338A300DFE56E /* json_reader.cpp in Sources */,
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
+				BB14B9CF1CD918360027E7E6 /* GFNavigationController.m in Sources */,
 				1895B78A1CCB756900B86B0D /* TQMeCustomizedModel.m in Sources */,
 				BB1769211C7B006F00CE947C /* MKAnnotationView+WebCache.m in Sources */,
 				185DABAB1CBFDC970019C5A3 /* ideaDetailTableViewCell.m in Sources */,

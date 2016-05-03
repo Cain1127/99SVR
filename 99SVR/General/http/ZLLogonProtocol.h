@@ -19,9 +19,7 @@
 
 extern NSMutableArray *aryRoomChat;
 extern NSMutableArray *aryRoomPrichat;
-extern NSMutableArray *aryRoomUser;
 extern NSMutableArray *aryRoomNotice;
-extern NSMutableDictionary *dictRoomUser;
 extern RoomInfo *currentRoom;
 
 

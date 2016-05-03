@@ -31,6 +31,8 @@
     memset(cRoomName, 0, NAMELEN);
     sprintf(cRoomName,"%s",pResp->cname().c_str());
     _strRoomName = [NSString stringWithCString:cRoomName encoding:GBK_ENCODING];
+    [_aryUser removeAllObjects];
+    [_dictUser removeAllObjects];
 }
 
 - (id)initWithRoom:(JoinRoomResp *)pResp

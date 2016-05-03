@@ -30,9 +30,7 @@ ZLRoomListener room_listener;
 
 NSMutableArray *aryRoomChat;
 NSMutableArray *aryRoomPrichat;
-NSMutableArray *aryRoomUser;
 NSMutableArray *aryRoomNotice;
-NSMutableDictionary *dictRoomUser;
 RoomInfo *currentRoom;
 
 void ZLPushListener::OnConfChanged(int version)
@@ -343,13 +341,9 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
         aryRoomPrichat = [NSMutableArray array];
     }
     [aryRoomPrichat removeAllObjects];
-    if (aryRoomUser == nil) {
-        aryRoomUser = [NSMutableArray array];
-    }
-    if(dictRoomUser == nil){
-        dictRoomUser = [NSMutableDictionary dictionary];
-    }
-    [dictRoomUser removeAllObjects];
+    [currentRoom.aryUser removeAllObjects];
+    [currentRoom.dictUser removeAllObjects];
+    
     if (aryRoomNotice == nil) {
         aryRoomNotice = [NSMutableArray array];
     }
@@ -544,6 +538,7 @@ void ZLHallListener::OnBuyPrivateVipErr(ErrCodeResp& info)
  *  用户列表
  */
 void ZLRoomListener::OnRoomUserList(std::vector<RoomUserInfo>& infos){
+    DLog(@"infos.size:%ld",infos.size());
     for(int i = 0; i < infos.size(); i++){
         [RoomService addRoomUser:currentRoom user:&infos[i]];
     }

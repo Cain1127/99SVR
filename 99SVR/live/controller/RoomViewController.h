@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomViewController.h"
-
+#import "GFBaseViewController.h"
 @class  RoomHttp;
 
-@interface RoomViewController : UIViewController
+@interface RoomViewController : GFBaseViewController
 
 DEFINE_SINGLETON_FOR_HEADER(RoomViewController)
 

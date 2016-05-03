@@ -262,10 +262,7 @@ void _IQShowLog(NSString *logString);
 #pragma mark - Dealloc
 -(void)dealloc
 {
-    //  Disable the keyboard manager.
 	[self setEnable:NO];
-    
-    //Removing notification observers on dealloc.
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

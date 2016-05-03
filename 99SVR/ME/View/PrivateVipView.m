@@ -107,7 +107,9 @@
     UIImage *gift_frame = [UIImage imageNamed:@"gift_frame"];
     UIEdgeInsets insets = UIEdgeInsetsMake(2,2,gift_frame.size.height-4,gift_frame.size.height-4);
     [attrDescButton setBackgroundImage:[DecodeJson stretchImage:gift_frame capInsets:insets resizingMode:UIImageResizingModeStretch] forState:UIControlStateSelected];
-    
+    if(viewCount==1){
+        [self attrDescClick:attrDescButton];
+    }
     return attrDescButton;
 }
 

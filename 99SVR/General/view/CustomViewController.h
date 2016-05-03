@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface CustomViewController : UIViewController
+#import "GFBaseViewController.h"
+@interface CustomViewController : GFBaseViewController 
 
 @property (nonatomic,strong) UILabel *txtTitle;
 @property (nonatomic,strong) UIView *headView;
