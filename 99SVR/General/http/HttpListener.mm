@@ -239,7 +239,8 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     
     //股票头部数据
     StockDealModel *headerModel = [[StockDealModel alloc] initWithStockDealHeaderData:&profit];
-    
+    headerModel.minVipLevel = IntTransformIntToStr(minVipLevel);
+    headerModel.currLevelId = IntTransformIntToStr(currLevelId);
     //头部数据
     muDic[@"headerModel"] = headerModel;
     
