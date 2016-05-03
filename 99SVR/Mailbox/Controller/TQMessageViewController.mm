@@ -13,6 +13,7 @@
 #import "TableViewFactory.h"
 #import "MJRefresh.h"
 #import "TQMessageTableViewCell.h"
+#import "UIViewController+EmpetViewTips.h"
 
 @interface TQMessageViewController ()<UITableViewDataSource,UITableViewDelegate,TQMessageDelegate>
 {
@@ -41,8 +42,6 @@ static NSString *const messageCell = @"messageCell";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
      // 估算高度
     self.tableView.estimatedRowHeight = 44;
-
-    //[self addTableHeaderView];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -52,31 +51,56 @@ static NSString *const messageCell = @"messageCell";
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
+    [self.view makeToastActivity_bird];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_SYSTEMMESSAGE_VC object:nil];
 }
 
 //获取模型,刷新列表
 - (void)SystemMessage:(NSNotification *)notify
 {
+    
     NSDictionary *dict = notify.object;
     if ([dict[@"code"] intValue]==1) {
         NSArray *aryModel = dict[@"data"];
         _aryMessage = aryModel;
-        @WeakObj(self)
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [selfWeak.tableView reloadData];
-        });
+    }
+    
+    @WeakObj(self);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @StrongObj(self);
+        [self.view hideToastActivity];
+        [self.tableView.gifHeader endRefreshing];
+        [self chickEmptyViewShowWithTab:_tableView withData:(NSMutableArray *)_aryMessage withCode:[dict[@"code"] intValue]];
+    });
+}
+
+-(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSInteger)code{
+   [self hideEmptyViewInView:tab];
+    @WeakObj(self);
+    if(code!=1) {
+        [self showErrorViewInView:tab withMsg:@"网络请求失败" touchHanleBlock:^{
+            @StrongObj(self);
+            [self.tableView.gifHeader beginRefreshing];
+            
+        }];
+    } else if (dataArray.count==0 && code==1){//数据为0 请求成功
+        [self showEmptyViewInView:tab withMsg:[NSString stringWithFormat:@"暂无数据"] touchHanleBlock:^{
+            @StrongObj(self);
+            [self.tableView.gifHeader beginRefreshing];
+        }];
+    } else{//请求成功
+        [self.tableView reloadData];
     }
 }
+
 //开始请求.结束下拉刷新
 -(void)updateRefresh {
-    [kHTTPSingle RequestSystemMessage:0 count:8];
-    [self.tableView.gifHeader endRefreshing];
+    [kHTTPSingle RequestSystemMessage:0 count:10];
 }
 
 -(void)addTableHeaderView {

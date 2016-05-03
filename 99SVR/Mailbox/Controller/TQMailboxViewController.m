@@ -20,16 +20,13 @@
 #import "TQButton-RoundedRectBtn.h"
 #import "TQMeCustomizedViewController.h"
 #import "CommentReplyViewController.h"
+#import "UnreadModel.h"
 
 @interface TQMailboxViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,copy) NSArray *aryModel;
-
-@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *redPromptBtn;
-@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *systemBtn;
-@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *commetnRedBtn;
-@property (weak, nonatomic) IBOutlet TQButton_RoundedRectBtn *askRedBtn;
+@property (nonatomic, strong) UnreadModel *unreadModel;
 
 @end
 
@@ -39,18 +36,41 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTitleText:@"信息"];
-    _aryModel = [[NSArray alloc] initWithObjects:
-                 [[LeftCellModel alloc] initWithTitle:@"私人定制" icon:@"prv_vip_icon" goClassName:@"TQPersonalTailorViewController"],
-                 [[LeftCellModel alloc] initWithTitle:@"系统消息" icon:@"mes_sys_icon" goClassName:@"TQMessageViewController"],
-                 [[LeftCellModel alloc] initWithTitle:@"评论回复" icon:@"com_reply_icon" goClassName:@"CommentReplyViewController"],
-                 [[LeftCellModel alloc] initWithTitle:@"提问回复" icon:@"quiz_reply_icon" goClassName:@"AnswerViewController"],
-                 nil];
+    [self setTitleText:@"消息"];
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
     [_tableView setBackgroundColor:RGB(243, 243, 243)];
     [self.view addSubview:_tableView];
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUnreadCount:) name:MESSAGE_UNREAD_INFO_VC object:nil];
+    [kHTTPSingle RequestUnreadCount];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_UNREAD_INFO_VC object:nil];
+    [super viewWillDisappear:animated];
+}
+
+- (UnreadModel *)unreadModel
+{
+    if (!_unreadModel) {
+        _unreadModel = [[UnreadModel alloc] init];
+    }
+    return _unreadModel;
+}
+
+/**
+ *  获取到未读数据
+ */
+- (void)loadUnreadCount:(NSNotification *)notify
+{
+    self.unreadModel.system = [notify.object[@"system"] intValue];
+    self.unreadModel.answer = [notify.object[@"answer"] intValue];
+    self.unreadModel.privateservice = [notify.object[@"privateservice"] intValue];
+    self.unreadModel.reply = [notify.object[@"reply"] intValue];
+    [_tableView reloadData];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -81,10 +101,53 @@
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TQMailBoxTableViewIdentifier];
     }
-    LeftCellModel *model = [_aryModel objectAtIndex:indexPath.section];
-    cell.textLabel.text = model.title;
-    [cell.imageView setImage:[UIImage imageNamed:model.icon]];
+    
+    if (indexPath.section == 0) {
+        [cell addSubview:[self cellViewWithIcon:@"prv_vip_icon" title:@"私人定制"
+                                   isShowUnread:_unreadModel.privateservice]];
+    } else if(indexPath.section==1)
+    {
+        [cell addSubview:[self cellViewWithIcon:@"mes_sys_icon" title:@"系统消息"
+                                   isShowUnread:_unreadModel.system]];
+    } else if(indexPath.section == 2)
+    {
+        [cell addSubview:[self cellViewWithIcon:@"com_reply_icon" title:@"评论回复"
+                                   isShowUnread:_unreadModel.reply]];
+    } else{
+        [cell addSubview:[self cellViewWithIcon:@"quiz_reply_icon" title:@"提问回复"
+                                   isShowUnread:_unreadModel.answer]];
+    }
     return cell;
+}
+
+- (UIView *)cellViewWithIcon:(NSString *)icon title:(NSString *)title isShowUnread:(BOOL)isShowUnread
+{
+    CGFloat H = 77;
+    UIView *cellView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, H)];
+    
+    UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(12, 0, 40, H)];
+    iconImageView.image = [UIImage imageNamed:icon];
+    iconImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [cellView addSubview:iconImageView];
+    
+    CGSize titleSize = [title sizeMakeWithFont:Font_16];
+    UILabel *titleLabel = [[UILabel alloc] init];
+    titleLabel.frame = CGRectMake(60, 0, titleSize.width, H);
+    titleLabel.text = title;
+    titleLabel.font = Font_16;
+    [cellView addSubview:titleLabel];
+    
+    // 未读数
+    if(isShowUnread)
+    {
+        UIImageView *unreadimageView = [[UIImageView alloc] init];
+        unreadimageView.frame = CGRectMake(CGRectGetMaxX(titleLabel.frame), 25, 8, 8);
+        unreadimageView.image = [self imageWithColor:[UIColor redColor]];
+        unreadimageView.layer.masksToBounds = YES;
+        unreadimageView.layer.cornerRadius = 4;
+        [cellView addSubview:unreadimageView];
+    }
+    return cellView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -92,13 +155,38 @@
     return 77;
 }
 
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    LeftCellModel *model = _aryModel[indexPath.section];
-    UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
+    NSString *vc = @"TQPersonalTailorViewController";
+    if (indexPath.section == 0) {
+        vc = @"TQPersonalTailorViewController";
+    } else if(indexPath.section==1)
+    {
+        vc = @"TQMessageViewController";
+    } else if(indexPath.section == 2)
+    {
+        vc = @"CommentReplyViewController";
+    } else{
+        vc = @"AnswerViewController";
+    }
+    
+    UIViewController *viewController = [[[NSClassFromString(vc) class] alloc] init];
     [self.navigationController pushViewController:viewController animated:YES];
+}
+
+
+- (UIImage * _Nonnull)imageWithColor:(UIColor * _Nonnull)color {
+    CGRect rect = CGRectMake(0, 0, 1, 1);
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, [[UIScreen mainScreen] scale]);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    
+    CGContextFillRect(context, rect);
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
 }
 
 

@@ -47,7 +47,6 @@ static NSString *const answerCell = @"answerCell";
     //开始刷新,注册数据接受通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_ANSWERREPLY_VC object:nil];
     [self.tableView.gifHeader beginRefreshing];
-
 }
 
 - (void)loadRplayView:(NSNotification *)notify

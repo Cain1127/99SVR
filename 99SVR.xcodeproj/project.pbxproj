@@ -126,6 +126,8 @@
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
 		5A5784101CD2FE28002E120A /* CommentReplyViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */; };
 		5A6AE1301CD1DEE8002FBD02 /* start-mascot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */; };
+		5AA6402F1CD87B0E00CDAE48 /* UnreadModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6402E1CD87B0E00CDAE48 /* UnreadModel.m */; };
+		5AA640321CD87F1300CDAE48 /* MailboxTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.m */; };
 		5AA6D8191CCBC01300841960 /* AdViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D8181CCBC01300841960 /* AdViewController.mm */; };
 		5AA6D81C1CCBD00A00841960 /* NewfeatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D81B1CCBD00A00841960 /* NewfeatureViewController.m */; };
 		5AB43D8B1CCFD7AE00693494 /* PrivateVipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AB43D8A1CCFD7AE00693494 /* PrivateVipView.m */; };
@@ -1028,6 +1030,10 @@
 		5A57840E1CD2FE28002E120A /* CommentReplyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentReplyViewController.h; sourceTree = "<group>"; };
 		5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CommentReplyViewController.mm; sourceTree = "<group>"; };
 		5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-mascot.png"; sourceTree = "<group>"; };
+		5AA6402D1CD87B0E00CDAE48 /* UnreadModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnreadModel.h; sourceTree = "<group>"; };
+		5AA6402E1CD87B0E00CDAE48 /* UnreadModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnreadModel.m; sourceTree = "<group>"; };
+		5AA640301CD87F1300CDAE48 /* MailboxTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MailboxTableViewCell.h; sourceTree = "<group>"; };
+		5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MailboxTableViewCell.m; sourceTree = "<group>"; };
 		5AA6D8171CCBC01300841960 /* AdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdViewController.h; sourceTree = "<group>"; };
 		5AA6D8181CCBC01300841960 /* AdViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdViewController.mm; sourceTree = "<group>"; };
 		5AA6D81A1CCBD00A00841960 /* NewfeatureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewfeatureViewController.h; sourceTree = "<group>"; };
@@ -2213,6 +2219,8 @@
 				1895B77C1CCB56A300B86B0D /* TQAnswerModel.mm */,
 				1895B77D1CCB56A300B86B0D /* TQMessageModel.h */,
 				1895B77E1CCB56A300B86B0D /* TQMessageModel.mm */,
+				5AA6402D1CD87B0E00CDAE48 /* UnreadModel.h */,
+				5AA6402E1CD87B0E00CDAE48 /* UnreadModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2360,6 +2368,8 @@
 				1895B76E1CCB3B5800B86B0D /* TQButton-RoundedRectBtn.m */,
 				5AF635451CD1FB6100DFE89C /* TQMessageTableViewCell.h */,
 				5AF635461CD1FB6100DFE89C /* TQMessageTableViewCell.mm */,
+				5AA640301CD87F1300CDAE48 /* MailboxTableViewCell.h */,
+				5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4802,6 +4812,7 @@
 				BB6F117E1CC60B2000F02064 /* XVideoLiveViewcontroller.mm in Sources */,
 				B4EA09291CC8DF8400E8F933 /* StockRecordTabModel.mm in Sources */,
 				18F9710D1C92947F001B2575 /* DataSigner.m in Sources */,
+				5AA6402F1CD87B0E00CDAE48 /* UnreadModel.m in Sources */,
 				BB63F6241C2CC7A300A042E8 /* LeftCellModel.m in Sources */,
 				BB63F5FE1C2CC7A300A042E8 /* Video.m in Sources */,
 				BBAD0E631CD1C4E4002C0FD6 /* ReplyNullInfoCell.m in Sources */,
@@ -4915,6 +4926,7 @@
 				187C07F61C9A5A52007AE742 /* NickNameViewController.m in Sources */,
 				BBD58EA41CCA04E9009250DB /* XIdeaViewController.mm in Sources */,
 				BB63F5C51C2CC7A300A042E8 /* MASViewAttribute.m in Sources */,
+				5AA640321CD87F1300CDAE48 /* MailboxTableViewCell.m in Sources */,
 				BB16616C1C3CA0B800D318BE /* UITableView+reloadComplete.m in Sources */,
 				18EA822C1CC8C41C00BDB735 /* TQideaViewModel.mm in Sources */,
 				BB63F5C41C2CC7A300A042E8 /* MASLayoutConstraint.m in Sources */,
