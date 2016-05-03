@@ -227,9 +227,11 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     
     //判断是否显示记录 
     BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
-//    DLog(@"---------------------------------------------------");
-//    DLog(@"currLevelId=%d   minVipLevel=%d ",currLevelId,minVipLevel);
-//    DLog(@"---------------------------------------------------");
+    DLog(@"---------------------------------------------------");
+    DLog(@"currLevelId=%d   minVipLevel=%d ",currLevelId,minVipLevel);
+    DLog(@"---------------------------------------------------");
+
+//    BOOL isShowRecal = NO;
 
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
@@ -426,7 +428,7 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
         PrivateServiceLevelDescription *profit = &infos[i];
         TQPurchaseModel *headerModel =[[TQPurchaseModel alloc] initWithPrivateServiceLevelData:profit];
         
-        DLog(@"%zi === 是否开通%@",i,headerModel.isopen);
+        DLog(@"vip等级%zi === 是否开通%@",i,headerModel.isopen);
         [muArray addObject:headerModel];
     }
     

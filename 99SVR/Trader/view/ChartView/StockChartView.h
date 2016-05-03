@@ -12,7 +12,7 @@
 @property (nonatomic , strong) NSArray *lowTitArrays;
 /**左边的标签*/
 @property (nonatomic , strong) NSArray *leftTitArrays;
-
+/**曲线图*/
 @property (nonatomic, strong) DDLineChartView *lineChartView;
 
 @end

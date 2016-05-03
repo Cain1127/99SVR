@@ -48,28 +48,7 @@
     [self addSubview:self.topMenuView];
     //底部控制画图
     self.lineChartView = [[DDLineChartView alloc]initWithFrame:(CGRect){leftLab_w,topMenu_h,(_width-leftLab_w - 10),(_height-topMenu_h - lowMenu_h)}];
-    
-    NSMutableArray *array_y =[NSMutableArray array];
-    NSMutableArray *array_y1 =[NSMutableArray array];
-    
-    for (int i=0; i!=10; i++) {
-        [array_y addObject:[NSString stringWithFormat:@"%u",arc4random()%500+500]];
-    }
-    
-    for (int i=0; i!=10; i++) {
-        [array_y1 addObject:[NSString stringWithFormat:@"%u",arc4random()%500+500]];
-    }
-    
-    self.lineChartView.valuePoints_Y = @[array_y,array_y1];//第一是组合 第二是HS300
-    self.lineChartView.drawLine_X = YES;
-    self.lineChartView.drawLine_Y = NO;
-    self.lineChartView.lineColors = @[COLOR_Auxiliary_Orange,COLOR_Auxiliary_Blue];
-    self.lineChartView.timeValue = 0.5;
-    self.lineChartView.raneValue_Y = CGRangeMake(-2000, 2000);
-    self.lineChartView.level_Y = 2;
-    self.lineChartView.level_X = 2;
     [self addSubview:self.lineChartView];
-    [self.lineChartView drawLine];
     //底部
     [self addSubview:self.lowMenuView];
 }

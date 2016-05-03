@@ -132,7 +132,7 @@
             if (index==1) {//购买
                 
                 DLog(@"购买的vip等级%@   的战队ID = %@",model.levelid,self.stockModel.teamid);
-                [MBProgressHUD showMessage:@"兑换中..."];
+                [MBProgressHUD showMessage:@"Vip兑换中..."];
                 ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
                 [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[model.levelid intValue]];
             }
@@ -253,7 +253,7 @@
                 
             }else if ([code isEqualToString:@"1015"]){//已经购买
                 
-                [ProgressHUD showError:@"已经购买"];
+                [ProgressHUD showError:@"已经兑换该等级私人订制"];
                 
             }else if ([code isEqualToString:@"1016"]){//没有该私人定制
             

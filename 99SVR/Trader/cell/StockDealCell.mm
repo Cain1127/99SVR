@@ -26,9 +26,6 @@
         
     //股票走势图
     self.chartView = [[StockChartView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,static_cast<CGFloat>(ScreenWidth*0.75)}];
-    self.chartView.topTitItems = @[@"全部",@"三个月",@"一个月"];
-    self.chartView.leftTitArrays = @[@"200%",@"100%",@"200%"];
-    self.chartView.lowTitArrays = @[@"2016-1-3",@"2016-1-3",@"2016-1-3"];
     [self.bakImageView addSubview:self.chartView];
     
     //交易动态的 VIP
@@ -50,6 +47,8 @@
 
 -(void)setCellDataWithModel:(StockDealModel *)model withIsVip:(BOOL)vipBool withCellId:(NSString *)cellId{
     
+    
+
     if ([cellId isEqualToString:@"section0"]) {
         
         self.tradeLabeView.hidden = YES;
@@ -57,6 +56,19 @@
         self.chartView.hidden = NO;
         self.lineView.hidden = YES;
         self.notVipView.hidden = YES;
+        
+        self.chartView.topTitItems = @[@"全部",@"三个月",@"一个月"];
+        self.chartView.leftTitArrays = @[@"200%",@"100%",@"200%"];
+        self.chartView.lowTitArrays = @[@"2016-1-3",@"2016-1-3",@"2016-1-3"];
+
+        
+        self.chartView.lineChartView.drawLine_X = YES;
+        self.chartView.lineChartView.drawLine_Y = NO;
+        self.chartView.lineChartView.lineColors = @[COLOR_Auxiliary_Orange,COLOR_Auxiliary_Blue];
+        self.chartView.lineChartView.timeValue = 0.5;
+        self.chartView.lineChartView.raneValue_Y = CGRangeMake(-2000, 2000);
+        self.chartView.lineChartView.level_Y = 2;
+        self.chartView.lineChartView.level_X = 2;
 
         
     }else if ([cellId isEqualToString:@"section1"]){
