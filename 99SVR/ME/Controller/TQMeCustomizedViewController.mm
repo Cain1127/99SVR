@@ -60,7 +60,7 @@
         [self.tableView reloadData];
     };
     
-    _buyView = [[UIView alloc] initWithFrame:Rect(0, self.view.height-44, kScreenWidth, 44)];
+    _buyView = [[UIView alloc] initWithFrame:Rect(10,kScreenHeight-45, kScreenWidth, 44)];
     [self.view addSubview:_buyView];
     [_buyView setBackgroundColor:COLOR_Bg_Gay];
     _buyView.hidden = YES;

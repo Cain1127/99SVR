@@ -58,8 +58,8 @@
     _btnPar.backgroundColor = UIColorFromRGB(0xffffff);
     
     CGFloat fWidth = kScreenWidth/4;
-    CGRect frame = Rect(fWidth/2-25, 8, 50, 50);
-    UIButton *btnWeChat = [self createShareBtn:frame normal:@"video_share_weixi_icon" high:@""];
+    CGRect frame = Rect(fWidth/2-25-fWidth, 8, 50, 50);
+    UIButton *btnWeChat = [self createShareBtn:Rect(fWidth/2-25, 8, 50, 50) normal:@"video_share_weixi_icon" high:@""];
     UIButton *btnFriend = [self createShareBtn:Rect(fWidth+fWidth/2-25, 8, 50, 50) normal:@"video_share_pengyouquan_icon" high:@""];
     UIButton *btnTenc = [self createShareBtn:Rect(fWidth*2+fWidth/2-25, 8, 50, 50) normal:@"video_share_qq_icon" high:@""];
     UIButton *btnSpace = [self createShareBtn:Rect(fWidth*3+fWidth/2-25, 8, 50, 50) normal:@"video_share_kongjian_icon" high:@""];
@@ -68,9 +68,12 @@
     
     if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi])
     {
+        frame.origin.x += fWidth;
         [_btnPar addSubview:btnWeChat];
+        btnWeChat.frame = frame;
         frame.origin.x += fWidth;
         [_btnPar addSubview:btnFriend];
+        btnFriend.frame = frame;
     }
     if ([TencentOAuth iphoneQQInstalled])
     {
@@ -79,13 +82,30 @@
         btnTenc.frame = frame;
         frame.origin.x += fWidth;
         [_btnPar addSubview:btnSpace];
-        btnSina.frame = frame;
+        btnSpace.frame = frame;
     }
     if ([WeiboSDK isWeiboAppInstalled]) {
-        frame.origin.x += fWidth;
+        if(frame.origin.x+50+fWidth>kScreenWidth)
+        {
+            frame.origin.x = fWidth/2-25;
+            frame.origin.y = 80;
+        }else
+        {
+            frame.origin.x += fWidth;
+        }
+        btnSina.frame = frame;
         [_btnPar addSubview:btnSina];
     }
+    if(frame.origin.x+50+fWidth>kScreenWidth)
+    {
+        frame.origin.x = fWidth/2-25;
+        frame.origin.y = 80;
+    }else
+    {
+        frame.origin.x += fWidth;
+    }
     [_btnPar addSubview:btnCopy];
+    btnCopy.frame = frame;
     
     [btnWeChat addTarget:self action:@selector(shareEvent:) forControlEvents:UIControlEventTouchUpInside];
     [btnFriend addTarget:self action:@selector(shareEvent:) forControlEvents:UIControlEventTouchUpInside];

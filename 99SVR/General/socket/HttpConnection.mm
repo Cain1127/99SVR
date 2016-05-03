@@ -110,30 +110,44 @@ static void get_full_head_icon(const std::string& headid, std::string& absolute_
 static ThreadVoid http_request(void* _param)
 {
     HttpThreadParam* param = (HttpThreadParam*)_param;
-    Http http(param->request_method);
-    http.register_http_listener(param->http_listener);
-    http.register_parser(param->parser);
     
+    char s[128];
     param->request->insert(make_pair("client", get_client_type()));
     
-    if (param->request_method == HTTP_GET)
+    if (param->request_method == HTTP_POST)
     {
-        http.request(param->url, param->request);
-    }
-    else
-    {
-        strcat(param->url, "?s=");
-        
         std::map<string, string>::iterator it;
         
         it = param->request->find("s");
         if( it != param->request->end() )
         {
-            strcat(param->url, it->second.c_str());
+            strcpy(s, it->second.c_str());
             param->request->erase(it);
         }
-        
-        http.request(param->url, param->request);
+    }
+    
+    int try_count = 3;
+    while ( --try_count >= 0 )
+    {
+        Http http(param->request_method);
+        strcpy(param->url, HTTP_API);
+        if (param->request_method == HTTP_POST)
+        {
+            strcat(param->url, "?s=");
+            strcat(param->url, s);
+        }
+        http.register_http_listener(param->http_listener);
+        http.register_parser(param->parser);
+        char* ret = http.request(param->url, param->request);
+        if ( ret != NULL )
+        {
+            break;
+        }
+    }
+    
+    if ( try_count < 0 )
+    {
+        param->http_listener->OnError(PERR_CONNECT_ERROR);
     }
     
     if(param)
@@ -222,7 +236,7 @@ void parse_homepage(char* json, HttpListener* listener)
                             bannerItem.set_type(banner[i]["type"].asString());
                             
                             std::string out;
-                            get_full_img_url(banner[i]["croompic"].asString(), out);
+                            get_full_img_url(banner[i]["banner"].asString(), out);
                             bannerItem.set_croompic(out);
                             
                             vec_banner.push_back( bannerItem );
@@ -299,6 +313,7 @@ void parse_homepage(char* json, HttpListener* listener)
                             
                             viewpointItem.set_replycount(atoi(viewpoint[i]["replyCount"].asString().c_str()));
                             viewpointItem.set_content(viewpoint[i]["contents"].asString());
+                            
                             //viewpointItem.set_roomid(atoi(viewpoint[i]["roomid"].asString().c_str()));
                             
                             //viewpointItem.set_authoricon(viewpoint[i]["authorIcon"].asString());
@@ -646,6 +661,7 @@ void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener)
                                 JsonValue& list_item = data_item["list"][j];
                                 ss.set_id(atoi(list_item["psid"].asString().c_str()));
                                 ss.set_title(list_item["title"].asString());
+                                ss.set_cover(list_item["cover"].asString());
                                 ss.set_summary(list_item["summary"].asString());
                                 
                                 std::string strOut;
@@ -681,6 +697,80 @@ void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener)
     }
     
 }
+
+void parse_privatetraderecord(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    std::vector<OperateStockTransactionPC> vec_trans;
+    
+    int size_ = 0;
+    int i = 0;
+    
+    OperateStockTradeRecordListener* detail_listener = (OperateStockTradeRecordListener*)listener;
+    
+    try
+    {
+        // Ω‚Œˆ¬ﬂº≠
+        //..
+        if (reader.parse(strJson, value))
+        {
+            JsonValue& status = value["status"];
+            if(status.isNull())
+            {
+                detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+                return;
+            }
+            int statu = value["status"].asInt();
+            if(statu!=0)
+            {
+                detail_listener->OnError(statu);
+                return;
+            }
+            
+            JsonValue& datas = value["data"];
+            if(!datas.isNull())
+            {
+                size_ = datas.size();
+                vec_trans.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    OperateStockTransactionPC trans;
+                    trans.set_operateid(datas[i]["operateId"].asUInt());
+                    trans.set_transid(datas[i]["transId"].asUInt());
+                    trans.set_title(datas[i]["title"].asString());
+                    trans.set_buytype(datas[i]["buytype"].asString());
+                    trans.set_stockid(datas[i]["stockId"].asString());
+                    trans.set_stockname(datas[i]["stockName"].asString());
+                    trans.set_price(atof((datas[i]["price"].asString()).c_str()));
+                    trans.set_count(atoi((datas[i]["count"].asString()).c_str()));
+                    trans.set_money(atof((datas[i]["money"].asString()).c_str()));
+                    trans.set_time(datas[i]["time"].asString());
+                    trans.set_summary(datas[i]["summary"].asString());
+                    
+                    vec_trans.push_back(trans);
+                }
+                detail_listener->onResponse(vec_trans);
+            }
+            else
+            {
+                detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex)
+    {
+        detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
 
 void parse_PrivateServiceDetail(char* json, HttpListener* listener)
 {
@@ -1036,7 +1126,7 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
                                 summary.push_back(pack);
                             }
                             
-                            teamItem.set_roomid(team["id"].asInt());
+                            teamItem.set_teamid(team["id"].asInt());
                             teamItem.set_teamname(team["name"].asString());
                             
                             std::string icon;
@@ -2054,7 +2144,7 @@ void parse_groupspage(char* json, HttpListener* listener)
                             roomgroup.set_curl(groupspage[i]["curl"].asString());
                             roomgroup.set_gateurl(groupspage[i]["gateurl"].asString());
                             roomgroup.set_roomid(atoi(groupspage[i]["roomid"].asString().c_str()));
-                            roomgroup.set_type(groupspage[i]["type"].asInt());
+                            roomgroup.set_type(atoi(groupspage[i]["type"].asString().c_str()));
                             
                             roomgroup_list.push_back(roomgroup);
                         }
@@ -2270,11 +2360,11 @@ void parse_profitorder(char* json, HttpListener* listener)
                 profitorder_listener->onResponse(vec_profitorder);
                 
                 char cache_file[256] = {0};
-                if( (g_type >= 0 && g_type < 3)  && (0 == g_team_id) && (1 == g_page))
+                if( (g_type ==1)  && (0 == g_team_id) && ( g_page <= 1))
                 {
                     sprintf(cache_file, "operatestock_cache_%d.txt", g_type);
                     
-                    WriteProtocolCache((const char*)cache_file, strJson);
+                    //WriteProtocolCache((const char*)cache_file, strJson);
                 }
             }
             else
@@ -2300,6 +2390,10 @@ void parse_profitdetail(char* json, HttpListener* listener)
     JsonValue value;
     JsonReader reader;
     
+    std::vector<OperateDataByTime> vec_total;
+    std::vector<OperateDataByTime> vec_3month;
+    std::vector<OperateDataByTime> vec_month;
+    std::vector<OperateDataByTime> vec_week;
     std::vector<OperateStockTransaction> vec_trans;
     std::vector<OperateStocks> vec_stocks;
     
@@ -2342,8 +2436,49 @@ void parse_profitdetail(char* json, HttpListener* listener)
                 osprofit.set_monthprofit(atof((datas["profile"]["monthProfit"].asString()).c_str()));
                 osprofit.set_winrate(atof((datas["profile"]["winRate"].asString()).c_str()));
                 
-                OperateStockData osdata;
-                osdata.set_operateid(datas["curve"]["operateId"].asUInt());
+                size_ = datas["curve"]["dataAll"].size();
+                vec_total.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    OperateDataByTime total;
+                    total.set_rate(atof((datas["curve"]["dataAll"][i]["rate"].asString()).c_str()));
+                    total.set_trend(atof((datas["curve"]["dataAll"][i]["trend"].asString()).c_str()));
+                    total.set_date(datas["curve"]["dataAll"][i]["date"].asString());
+                    vec_total.push_back(total);
+                }
+                
+                size_ = datas["curve"]["data3Month"].size();
+                vec_3month.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    OperateDataByTime total;
+                    total.set_rate(atof((datas["curve"]["data3Month"][i]["rate"].asString()).c_str()));
+                    total.set_trend(atof((datas["curve"]["data3Month"][i]["trend"].asString()).c_str()));
+                    total.set_date(datas["curve"]["data3Month"][i]["date"].asString());
+                    vec_3month.push_back(total);
+                }
+                
+                size_ = datas["curve"]["dataMonth"].size();
+                vec_month.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    OperateDataByTime total;
+                    total.set_rate(atof((datas["curve"]["dataMonth"][i]["rate"].asString()).c_str()));
+                    total.set_trend(atof((datas["curve"]["dataMonth"][i]["trend"].asString()).c_str()));
+                    total.set_date(datas["curve"]["dataMonth"][i]["date"].asString());
+                    vec_month.push_back(total);
+                }
+                
+                size_ = datas["curve"]["dataWeek"].size();
+                vec_week.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    OperateDataByTime total;
+                    total.set_rate(atof((datas["curve"]["dataWeek"][i]["rate"].asString()).c_str()));
+                    total.set_trend(atof((datas["curve"]["dataWeek"][i]["trend"].asString()).c_str()));
+                    total.set_date(datas["curve"]["dataWeek"][i]["date"].asString());
+                    vec_week.push_back(total);
+                }
                 
                 size_ = datas["trans"].size();
                 vec_trans.clear();
@@ -2384,7 +2519,7 @@ void parse_profitdetail(char* json, HttpListener* listener)
                 uint32 minVipLevel=datas["minVipLevel"].asUInt();
                 
                 
-                detail_listener->onResponse(osprofit,osdata,vec_trans,vec_stocks,currLevelId,minVipLevel);
+                detail_listener->onResponse(osprofit,vec_total,vec_3month,vec_month,vec_week,vec_trans,vec_stocks,currLevelId,minVipLevel);
             }
             else
             {
@@ -2430,9 +2565,8 @@ void parse_splashimage(char* json, HttpListener* listener)
                     info.set_imageurl(out);
                     info.set_text(data["text"].asString());
                     info.set_url(data["url"].asString());
-                    info.set_startime(atoll(data["starTime"].asString().c_str()));
-                    info.set_endtime(atoll(data["endTime"].asString().c_str()));
-
+                    info.set_startime(atol(data["starTime"].asString().c_str()));
+                    info.set_endtime(atol(data["endTime"].asString().c_str()));
                     splash_listener->onResponse(info);
                 }
                 else
@@ -2461,19 +2595,19 @@ void parse_splashimage(char* json, HttpListener* listener)
 void HttpConnection::RequestHomePage(HomePageListener* listener)
 {
     std::string cache_content;
-    /*if(needHomePageCache)
-     {
-     needHomePageCache = false;
-     
-     ReadProtocolCache("homepage_cache.txt", cache_content);
-     
-     
-     if (!cache_content.empty())
-     {
-     const char* tmp = cache_content.c_str();
-     parse_homepage((char*)tmp, listener);
-     }
-     }*/
+    if(needHomePageCache)
+    {/*
+      needHomePageCache = false;
+      
+      ReadProtocolCache("homepage_cache.txt", cache_content);
+      
+      
+      if (!cache_content.empty())
+      {
+      const char* tmp = cache_content.c_str();
+      parse_homepage((char*)tmp, listener);
+      }
+      */}
     
     RequestParamter& param = get_request_param();
     param["s"] = "index/index";
@@ -2520,18 +2654,18 @@ void HttpConnection::RequestPrivateServiceDetail(int id, PrivateServiceDetailLis
 void HttpConnection::RequestTeamList(TeamListListener* listener)
 {
     std::string cache_content;
-    /*if(needHomePageCache)
-     {
-     needHomePageCache = false;
-     
-     ReadProtocolCache("teamlist_cache.txt", cache_content);
-     
-     if (!cache_content.empty())
-     {
-     const char* tmp = cache_content.c_str();
-     parse_TeamList((char*)tmp, listener);
-     }
-     }*/
+    if(needRoomListCache)
+    {/*
+      needRoomListCache = false;
+      
+      ReadProtocolCache("teamlist_cache.txt", cache_content);
+      
+      if (!cache_content.empty())
+      {
+      const char* tmp = cache_content.c_str();
+      parse_TeamList((char*)tmp, listener);
+      }
+      */}
     
     char tmp[32] = {0};
     
@@ -2584,18 +2718,18 @@ void HttpConnection::RequestConsumeRankList(int teamId, ConsumeRankListener* lis
 void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requestCount, ViewpointSummaryListener* listener)
 {
     std::string cache_content;
-    /*if(needViewPointCache)
-     {
-     needViewPointCache = false;
-     
-     ReadProtocolCache("viewpoint_cache.txt", cache_content);
-     
-     if (!cache_content.empty())
-     {
-     const char* tmp = cache_content.c_str();
-     parse_viewpoint((char*)tmp, listener);
-     }
-     }*/
+    if(needViewPointCache)
+    {/*
+      needViewPointCache = false;
+      
+      ReadProtocolCache("viewpoint_cache.txt", cache_content);
+      
+      if (!cache_content.empty())
+      {
+      const char* tmp = cache_content.c_str();
+      parse_viewpoint((char*)tmp, listener);
+      }
+      */}
     
     char tmp[32] = {0};
     
@@ -2659,6 +2793,7 @@ void HttpConnection::RequestReply(int viewpointId, int startId, int requestCount
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
+    
     http_request_asyn(listener, parse_viewpointreply, &request);
 }
 
@@ -2711,6 +2846,18 @@ void HttpConnection::RequestPrivateServiceSummary(int startId, int count,Private
     request["s"] = tmp;
     
     http_request_asyn(listener, parse_privateservicesummary, &request);
+}
+
+// ∏ﬂ ÷≤Ÿ≈ÃΩª“◊º«¬ºPC
+void HttpConnection::RequestPrivateTradeRecord(int startId, int count,OperateStockTradeRecordListener* listener)
+{
+    char tmp[512];
+    sprintf(tmp,"/operate/tradeRecord/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
+    
+    RequestParamter& request = get_request_param();
+    request["s"] = tmp;
+    
+    http_request_asyn(listener, parse_privatetraderecord, &request);
     
 }
 
@@ -2778,7 +2925,7 @@ void HttpConnection::PostAskQuestion(int teamId,const char* stock,const char* qu
 {
     RequestParamter& request = get_request_param();
     request["s"] = "questions/postaskquestion";
-    request["userid"] = int2string(login_userid);
+    request["userid"] = get_user_id();
     request["teamId"] = int2string(teamId);
     request["stock"] = stock;
     //request["question"] = GBKToUTF8(question);
@@ -2799,23 +2946,23 @@ void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, 
     char cache_file[256] = {0};
     std::string cache_content;
     
-    /*if( (g_type > 0 && g_type < 3)  && (0 == g_team_id) && (1 == g_page))
-     {
-     if(needOperateStocksCache[type])
-     {
-     needOperateStocksCache[type] = false;
-     
-     sprintf(cache_file, "operatestock_cache_%d.txt", g_type);
-     
-     ReadProtocolCache((const char*)cache_file, cache_content);
-     
-     if (!cache_content.empty())
-     {
-     const char* tmp = cache_content.c_str();
-     parse_profitorder((char*)tmp, listener);
-     }
-     }
-     }*/
+    if( (g_type ==1)  && (0 == g_team_id) && (g_page <= 1))
+    {
+        /*if(needOperateStocksCache[type])
+         {
+         needOperateStocksCache[type] = false;
+         
+         sprintf(cache_file, "operatestock_cache_%d.txt", g_type);
+         
+         ReadProtocolCache((const char*)cache_file, cache_content);
+         
+         if (!cache_content.empty())
+         {
+         const char* tmp = cache_content.c_str();
+         parse_profitorder((char*)tmp, listener);
+         }
+         }*/
+    }
     
     char tmp[1024] = {0};
     sprintf(tmp,"/operate/lists/type/%d/team_id/%d/page/%d/size/%d",type,team_id,page,size);

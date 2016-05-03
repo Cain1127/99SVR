@@ -43,7 +43,7 @@
 {
     self = [super init];
     if (self) {
-        OperateStockData *stockData = (OperateStockData*)pData;
+        OperateStocks *stockData = (OperateStocks*)pData;
         _operateid = IntTransformIntToStr(stockData->operateid());
     }
     return self;

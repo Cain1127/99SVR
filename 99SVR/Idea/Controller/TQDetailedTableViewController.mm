@@ -445,14 +445,13 @@
     if (_aryCommont.count==0) {
         return 200;
     }
-    
     if (_aryCommont.count>indexPath.row)
     {
         ZLReply *comment = [_aryCommont objectAtIndex:indexPath.row];
         DTAttributedTextContentView *content = [DTAttributedTextContentView new];
         content.attributedString = [[NSAttributedString alloc] initWithHTMLData:[comment.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
-        CGFloat height = [content suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-80].height;
-        return height+34;
+        CGFloat height = [content suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-60].height;
+        return height+20;
     }
     return 0;
 }
@@ -688,7 +687,8 @@
         _chatView.nDetails = commentId;
         [_chatView setChatInfo:user];
     }
-    else{
+    else
+    {
         [MBProgressHUD showError:@"不能对自己回复"];
     }
 }

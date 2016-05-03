@@ -222,7 +222,7 @@ void OperateStockAllDetailListener::OnError(int errCode)
 /**
  *  请求操盘详情
  */
-void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, OperateStockData& data, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks, uint32 currLevelId, uint32 minVipLevel){
+void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, vector<OperateDataByTime>& totals, vector<OperateDataByTime>& month3s, vector<OperateDataByTime>& months, vector<OperateDataByTime>& weeks, vector<OperateStockTransaction>& trans, vector<OperateStocks>& stocks, uint32 currLevelId, uint32 minVipLevel){
     
     //判断是否显示记录 
     BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
@@ -242,7 +242,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, Opera
     
     
     //股票数据
-    StockDealModel *stockDataModel = [[StockDealModel alloc] initWithStockDealStockData:&data];
+    StockDealModel *stockDataModel = [[StockDealModel alloc] initWithStockDealStockData:&stocks];
     muDic[@"stockModel"] = stockDataModel;
     
     
@@ -572,7 +572,7 @@ void TeamIntroduceListener::OnError(int errCode)
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TEAM_INTRODUCE_VC object:@{@"dict":@(errCode)}];
 }
 
-void TeamVideoListener::onResponse(vector<VideoInfo> infos)
+void TeamVideoListener::onResponse(vector<VideoInfo>& infos)
 {
     NSMutableArray *aryIndex = [NSMutableArray array];
     for(int i=0;i<infos.size();i++)

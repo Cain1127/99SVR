@@ -145,6 +145,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     @WeakObj(self)
     [_noView clickWithBlock:^(UIGestureRecognizer *gesture)
     {
+        [selfWeak.noView removeFromSuperview];
         [selfWeak.view makeToastActivity_bird];
         [selfWeak updateRefresh];
     }];
