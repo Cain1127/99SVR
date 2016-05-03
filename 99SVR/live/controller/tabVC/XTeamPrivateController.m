@@ -116,12 +116,16 @@
     {
         @StrongObj(self)
         self.dataSource.selectIndex = vipLevelId;
-        XPrivateService *model = [self.dataSource.aryVIP objectAtIndex:vipLevelId-1];
-        if (model.isOpen) {
-            self.buyView.hidden = YES;
-        }else
-        {
-            self.buyView.hidden = NO;
+        if (self.dataSource.aryVIP.count>vipLevelId-1) {
+            XPrivateService *model = [self.dataSource.aryVIP objectAtIndex:vipLevelId-1];
+            if (model.isOpen)
+            {
+                self.buyView.hidden = YES;
+            }
+            else
+            {
+                self.buyView.hidden = NO;
+            }
         }
         [self.tableView reloadData];
     };

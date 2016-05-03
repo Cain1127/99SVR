@@ -51,11 +51,7 @@
 {
     self = [super init];
     if (self) {
-        // 统一设置Item的文字属性
-//        [self setUpItemTextAttrs];
-//        
-        // 添加所以子控制器
-//        [self setUpAllChildViewControllers];
+
     }
     return self;
 }

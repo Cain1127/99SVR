@@ -2659,7 +2659,6 @@ void HttpConnection::RequestReply(int viewpointId, int startId, int requestCount
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
-    
     http_request_asyn(listener, parse_viewpointreply, &request);
 }
 

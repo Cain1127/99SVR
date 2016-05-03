@@ -83,7 +83,7 @@ void ViewpointDetailListener::OnError(int errCode)
 }
 
 /**
- *  请求观点列表
+ *  评论回复响应
  */
 void ReplyListener::onResponse(vector<Reply>& infos){
     NSMutableArray *ary = [NSMutableArray array];
@@ -93,7 +93,6 @@ void ReplyListener::onResponse(vector<Reply>& infos){
         reply.replytid = info.replytid();
         reply.viewpointid = info.viewpointid();
         reply.parentreplyid = info.parentreplyid();
-        
         reply.authorid = NSStringFromInt(info.authorid());
         reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
         reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];
@@ -700,12 +699,6 @@ void PrivateServiceSummaryListener::OnError(int errCode)
 
 void UnreadListener::onResponse(Unread& info)
 {
-    /*
-    uint32	_system;
-    uint32	_answer;
-    uint32	_reply;
-    uint32	_privateservice;
-     */
     NSDictionary *dict = @{@"code":@(1),@"system":@(info.system()),@"answer":@(info.answer()),@"reply":@(info.reply()),@"privateservice":@(info.privateservice())};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UNREAD_INFO_VC object:dict];
 }

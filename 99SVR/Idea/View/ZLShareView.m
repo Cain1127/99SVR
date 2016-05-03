@@ -58,7 +58,8 @@
     _btnPar.backgroundColor = UIColorFromRGB(0xffffff);
     
     CGFloat fWidth = kScreenWidth/4;
-    UIButton *btnWeChat = [self createShareBtn:Rect(fWidth/2-25, 8, 50, 50) normal:@"video_share_weixi_icon" high:@""];
+    CGRect frame = Rect(fWidth/2-25, 8, 50, 50);
+    UIButton *btnWeChat = [self createShareBtn:frame normal:@"video_share_weixi_icon" high:@""];
     UIButton *btnFriend = [self createShareBtn:Rect(fWidth+fWidth/2-25, 8, 50, 50) normal:@"video_share_pengyouquan_icon" high:@""];
     UIButton *btnTenc = [self createShareBtn:Rect(fWidth*2+fWidth/2-25, 8, 50, 50) normal:@"video_share_qq_icon" high:@""];
     UIButton *btnSpace = [self createShareBtn:Rect(fWidth*3+fWidth/2-25, 8, 50, 50) normal:@"video_share_kongjian_icon" high:@""];
@@ -68,16 +69,20 @@
     if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi])
     {
         [_btnPar addSubview:btnWeChat];
+        frame.origin.x += fWidth;
         [_btnPar addSubview:btnFriend];
     }
     if ([TencentOAuth iphoneQQInstalled])
     {
+        frame.origin.x += fWidth;
         [_btnPar addSubview:btnTenc];
-    }
-    if ([TencentOAuth iphoneQQInstalled]) {
+        btnTenc.frame = frame;
+        frame.origin.x += fWidth;
         [_btnPar addSubview:btnSpace];
+        btnSina.frame = frame;
     }
     if ([WeiboSDK isWeiboAppInstalled]) {
+        frame.origin.x += fWidth;
         [_btnPar addSubview:btnSina];
     }
     [_btnPar addSubview:btnCopy];
@@ -104,9 +109,7 @@
     [btnClose setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
     [btnClose setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     btnClose.titleLabel.font = XCFONT(15);
-    
     btnClose.frame = Rect(10,140, kScreenWidth-20, 44);
-    
     [btnClose addTarget:self action:@selector(setGestureHidden) forControlEvents:UIControlEventTouchUpInside];
 }
 

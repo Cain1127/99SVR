@@ -97,7 +97,7 @@
     UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(showShareView) image:@"video_room_share_icon_n" highImage:@"video_room_share_icon_p"];
     [self setRightBtn:btnRight];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyRepson:) name:MESSAGE_IDEA_REPLY_RESPONSE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyResp:) name:MESSAGE_IDEA_REPLY_RESPONSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView:) name:MESSAGE_HTTP_REQUEST_REPLY_VC object:nil];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _tableView = [[UITableView alloc] initWithFrame:Rect(0,64, kScreenWidth,kScreenHeight-64)];
@@ -107,6 +107,7 @@
     [self.view makeToastActivity];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(requestMoreReply)];
+    [_tableView.footer setHidden:YES];
     
     UIButton *btnGift = [ChatRightView createButton:Rect(kScreenWidth-50, kScreenHeight-150, 44, 44)];
     NSString *strName = [NSString stringWithFormat:@"chatRightView3"];
@@ -155,7 +156,10 @@
  *  获取更多评论
  */
 - (void)requestMoreReply{
-    if (_aryCommont.count>0) {
+    if (_aryCommont.count>0)
+    {
+        ZLReply *reply = _aryCommont[_aryCommont.count-1];
+        [kHTTPSingle RequestReply:_ideaDetail.viewpointid start:reply.replytid count:20];
         nCurrent+=20;
     }else{
         [_tableView.footer endRefreshing];
@@ -222,7 +226,7 @@
     
     CGFloat height = [_textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-16].height;
     
-    contentView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, height+122)];
+    contentView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, height+142)];
     [contentView addSubview:_textView];
     
     UILabel *lblAuthor = [[UILabel alloc] initWithFrame:Rect(8, 10,100, 20)];
@@ -255,9 +259,11 @@
         downContentView = [[UIView alloc] initWithFrame:Rect(0, _textView.y+_textView.height+10, kScreenWidth, 67)];
         [contentView addSubview:downContentView];
         
-        UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 10)];
+        UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 30)];
         [lblTemp setText:@"【仅代表个人观点,不构成投资建议,风险自负】"];
         [lblTemp setTextColor:UIColorFromRGB(0x555555)];
+        [lblTemp setFont:XCFONT(13)];
+        lblTemp.numberOfLines = 0;
         [lblTemp setTextAlignment:NSTextAlignmentCenter];
         [downContentView addSubview:lblTemp];
         
@@ -457,26 +463,47 @@
 - (void)loadCommentView:(NSNotification  *)notify
 {
     NSDictionary *parameters = [notify object];
-    if ([[parameters objectForKey:@"code"] intValue]==1) {
-        _aryCommont = parameters[@"model"];
+    if ([[parameters objectForKey:@"code"] intValue]==1)
+    {
+        if (_aryCommont.count>0 && _aryCommont.count != nCurrent)
+        {
+            NSMutableArray *array = [NSMutableArray array];
+            [array addObjectsFromArray:_aryCommont];
+            NSArray *aryParameters = parameters[@"model"];
+            for (ZLReply *model in aryParameters)
+            {
+                [array addObject:model];
+            }
+            _aryCommont = array;
+        }
+        else
+        {
+            _aryCommont = parameters[@"model"];
+        }
         __weak UITableView *__tableView = _tableView;
         __block int __ncurrent = nCurrent;
         dispatch_async(dispatch_get_main_queue(),
         ^{
            [__tableView.footer endRefreshing];
-           if (__ncurrent!=_aryCommont.count) {
+           if (__ncurrent!=_aryCommont.count)
+           {
                [__tableView.footer noticeNoMoreData];
+           }else
+           {
+               [__tableView.footer setHidden:NO];
+               [__tableView.footer resetNoMoreData];
            }
            [__tableView reloadData];
         });
     }
 }
 
-- (void)replyRepson:(NSNotification *)notify
+- (void)replyResp:(NSNotification *)notify
 {
     NSDictionary *parameters = [notify object];
     if ([[parameters objectForKey:@"code"] intValue]==1) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
             [ProgressHUD showSuccess:@"评论成功!"];
         });
         [kHTTPSingle RequestReply:_viewId start:0 count:20];
@@ -568,7 +595,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (_aryCommont.count > indexPath.row) {
         ZLReply *reply = [_aryCommont objectAtIndex:indexPath.row];
-        if([reply.fromauthorid intValue]== KUserSingleton.nUserId)
+        if([reply.authorid intValue]== KUserSingleton.nUserId)
         {
             [ProgressHUD showSuccess:@"不能回复自己的信息"];
         }
