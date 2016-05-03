@@ -71,4 +71,23 @@
  */
 + (NSString *)dateWithTimeIntervalSince1970:(NSTimeInterval)seconds dateStringWithFormat:(NSString *)format;
 
+/**
+ *  排序 小到大
+ *
+ *  @param array 原来数据源
+ *
+ *  @return 返回小到大
+ */
++(NSMutableArray *)sortOfSmallToBig:(NSArray *)array;
+
+/**
+ *  返回两个数组的最大值和最小值 数组第一个最小值，第二个是最大值
+ *
+ *  @param arrA A数组
+ *  @param arrB B数组
+ *
+ */
++(NSArray *)returnMinandMaxWithArrayA:(NSArray *)arrA withArrayB:(NSArray *)arrB;
+
+
 @end

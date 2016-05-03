@@ -31,6 +31,7 @@
         _winrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((profit->winrate()))];
         
         _teamid = IntTransformIntToStr(profit->teamid());
+        _selectBtnTag = 1;
 //        NSLog(@"总收益%f 超赢收益%f 日利率%f 月收益%f",profit->totalprofit(),profit->winrate(),profit->dayprofit(),profit->monthprofit());
 
     }
@@ -38,16 +39,6 @@
 }
 
 
-#pragma mark 股票详情--股票走势图
-- (instancetype)initWithStockDealStockData:(void *)pData
-{
-    self = [super init];
-    if (self) {
-        OperateStocks *stockData = (OperateStocks*)pData;
-        _operateid = IntTransformIntToStr(stockData->operateid());
-    }
-    return self;
-}
 #pragma mark 股票详情--交易动态记录
 - (instancetype)initWithStockDealBusinessRecoreData:(void *)pData{
 
@@ -62,6 +53,7 @@
         _count = IntTransformIntToStr(trans->count());
         _money = FloatTransformFloatToStr(trans->money());
         _time = StrTransformCToUTF8(trans->time().c_str());
+        _selectBtnTag = 1;
         
     }
     return self;
@@ -81,6 +73,7 @@
         _currprice = FloatTransformFloatToStr(stocks->currprice());
         _profitrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((stocks->profitrate()))];
         _profitmoney = FloatTransformFloatToStr(stocks->profitmoney());
+        _selectBtnTag = 1;
     }
     return self;
     

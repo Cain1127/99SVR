@@ -125,7 +125,6 @@
     NSArray *fromDataArray = fromDataDic[@"data"];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-       
         if ([code isEqualToString:@"1"]) {//数据加载成功
             
             if (table == self.businessTab) {//交易记录
@@ -156,9 +155,6 @@
         [table.footer endRefreshing];
 
         [tableModel setDataArray:toDataArray WithRecordTableTag:tag];
-        
-        
-        DLog(@"%ld 网络代码%@",toDataArray.count,code);
         
         if (toDataArray.count==0&&[code intValue]!=1) {
             
@@ -192,7 +188,7 @@
         }
         
         [table reloadData];
-        
+
     });
 }
 

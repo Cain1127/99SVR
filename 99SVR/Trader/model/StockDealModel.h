@@ -60,14 +60,28 @@
 /**最小vip等级*/
 @property (nonatomic , copy) NSString *minVipLevel;
 
+
+
+
+
+
+/**记录点击选择操盘的股票tag   全部 三个月 一个月*/
+@property (nonatomic , assign) __block NSInteger selectBtnTag;
+/**组合收益的点*/
+@property (nonatomic , strong) NSArray *rateYs;
+/**大盘收益的点*/
+@property (nonatomic , strong) NSArray *trendYs;
+/**时间*/
+@property (nonatomic , strong) NSArray *dates;
+/**最大值*/
+@property (nonatomic , copy) NSString *maxY;
+/**最小值*/
+@property (nonatomic , copy) NSString *minY;
+
+
 #pragma mark 股票详情--股票头部详情数据
 /**股票头部详情数据*/
 - (instancetype)initWithStockDealHeaderData:(void *)profit;
-
-
-#pragma mark 股票详情--股票走势图
-/**股票走势图*/
-- (instancetype)initWithStockDealStockData:(void *)stockData;
 
 #pragma mark 股票详情--交易动态记录
 /**交易动态*/

@@ -18,6 +18,6 @@
 /**不是VIP 的交易动态*/
 @property (nonatomic , strong) StockNotVipView *notVipView;
 
--(void)setCellDataWithModel:(StockDealModel *)model withIsVip:(BOOL)vipBool withCellId:(NSString *)cellId;
+-(void)setCellDataWithModel:(id)modelObject withIsVip:(BOOL)vipBool withCellId:(NSString *)cellId withStockHeaderModel:(StockDealModel *)headerModel;
 
 @end

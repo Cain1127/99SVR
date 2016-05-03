@@ -6,7 +6,7 @@
 #define topMenuBtn_h (topMenu_h*(1/2.0) - 10) //顶部控制栏按钮的高度
 #define topMenuBtn_w ValueWithTheIPhoneModelString(@"50,50,50,50") //顶部按钮的宽度
 #define lowMenu_h ValueWithTheIPhoneModelString(@"40,40,40,40") //底部按钮的高度
-#define lowLab_w   ValueWithTheIPhoneModelString(@"60,60,60,60") //底部标题的宽度
+#define lowLab_w   ValueWithTheIPhoneModelString(@"80,80,80,80") //底部标题的宽度
 #define lowLab_h ValueWithTheIPhoneModelString(@"17,17,17,17") //底部标题的高度
 #import "StockChartView.h"
 #import "StockMacro.h"
@@ -48,28 +48,7 @@
     [self addSubview:self.topMenuView];
     //底部控制画图
     self.lineChartView = [[DDLineChartView alloc]initWithFrame:(CGRect){leftLab_w,topMenu_h,(_width-leftLab_w - 10),(_height-topMenu_h - lowMenu_h)}];
-    
-    NSMutableArray *array_y =[NSMutableArray array];
-    NSMutableArray *array_y1 =[NSMutableArray array];
-    
-    for (int i=0; i!=10; i++) {
-        [array_y addObject:[NSString stringWithFormat:@"%u",arc4random()%500+500]];
-    }
-    
-    for (int i=0; i!=10; i++) {
-        [array_y1 addObject:[NSString stringWithFormat:@"%u",arc4random()%500+500]];
-    }
-    
-    self.lineChartView.valuePoints_Y = @[array_y,array_y1];//第一是组合 第二是HS300
-    self.lineChartView.drawLine_X = YES;
-    self.lineChartView.drawLine_Y = NO;
-    self.lineChartView.lineColors = @[COLOR_Auxiliary_Orange,COLOR_Auxiliary_Blue];
-    self.lineChartView.timeValue = 0.5;
-    self.lineChartView.raneValue_Y = CGRangeMake(-2000, 2000);
-    self.lineChartView.level_Y = 2;
-    self.lineChartView.level_X = 2;
     [self addSubview:self.lineChartView];
-    [self.lineChartView drawLine];
     //底部
     [self addSubview:self.lowMenuView];
 }
@@ -224,22 +203,24 @@
     btn.enabled = NO;
     btn.backgroundColor =  UIColorFromRGB(0x0078dd);
     
-    NSMutableArray *array_y =[NSMutableArray array];
-    NSMutableArray *array_y1 =[NSMutableArray array];
-
-    for (int i=0; i!=10; i++) {
-        [array_y addObject:[NSString stringWithFormat:@"%zi",(int)arc4random()%500-500*(btn.tag)]];
+    if (self.didSelcetIndex) {
+        self.didSelcetIndex(btn.tag);
     }
-    
-    for (int i=0; i!=10; i++) {
-        [array_y1 addObject:[NSString stringWithFormat:@"%zi",(int)arc4random()%500-500*(btn.tag)]];
-    }
-    [self.lineChartView clearLine];
-    self.lineChartView.valuePoints_Y = @[array_y,array_y1];
-    [self.lineChartView drawLine];
-
 }
 
 
+-(void)setSelectIndex:(NSInteger)selectIndex{
+    
+    _selectIndex = selectIndex;
+    for (int i=0; i!=_topTitItems.count; i++) {
+        UIButton *b = [self viewWithTag:i+1];
+        b.enabled  = YES;
+        b.backgroundColor =  [UIColor clearColor];
+    }
+    UIButton *btn = [self viewWithTag:selectIndex+1];
+    btn.enabled = NO;
+    btn.backgroundColor =  UIColorFromRGB(0x0078dd);
+
+}
 
 @end
