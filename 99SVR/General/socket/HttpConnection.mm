@@ -2828,7 +2828,7 @@ void HttpConnection::RequestTotalUnreadCount(TotalUnreadListener* listener)
 void HttpConnection::RequestUnreadCount(UnreadListener* listener)
 {
     char tmp[512];
-    sprintf(tmp,"/mail/main/uid/%d",1708450);
+    sprintf(tmp,"/mail/main/uid/%d",login_userid);
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
@@ -2840,7 +2840,7 @@ void HttpConnection::RequestUnreadCount(UnreadListener* listener)
 void HttpConnection::RequestPrivateServiceSummary(int startId, int count,PrivateServiceSummaryListener* listener)
 {
     char tmp[512];
-    sprintf(tmp,"/mail/secret_index/uid/%d/size/%d/id/%d/type/%d",1821648,count,startId,0);
+    sprintf(tmp,"/mail/secret_index/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
@@ -2865,7 +2865,7 @@ void HttpConnection::RequestPrivateTradeRecord(int startId, int count,OperateSto
 void HttpConnection::RequestSystemMessage(int startId, int count, SystemMessageListener* listener)
 {
     char tmp[512];
-    sprintf(tmp,"/mail/system/uid/%d/size/%d/id/%d/type/%d",1706716,count,startId,0);
+    sprintf(tmp,"/mail/system/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
@@ -2877,7 +2877,7 @@ void HttpConnection::RequestSystemMessage(int startId, int count, SystemMessageL
 void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer)
 {
     char tmp[512];
-    sprintf(tmp,"/mail/question/uid/%d/size/%d/id/%d/type/%d",1708450,count,startId,0);
+    sprintf(tmp,"/mail/question/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
@@ -2889,7 +2889,7 @@ void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswe
 void HttpConnection::RequestMailReply(int startId, int count, MailReplyListener* listener, bool isTeam)
 {
     char tmp[512];
-    sprintf(tmp,"/mail/comment/uid/%d/size/%d/id/%d/type/%d",1680028,count,startId,0);
+    sprintf(tmp,"/mail/comment/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;

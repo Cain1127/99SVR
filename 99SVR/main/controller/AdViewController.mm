@@ -22,6 +22,8 @@
 
 @implementation AdViewController
 
+NSUInteger secondsCountDown = 5;//倒计时秒数
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -57,7 +59,7 @@
     // 3.多少秒后跳过，广告倒计时
     _adButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _adButton.titleLabel.font = [UIFont systemFontOfSize:16];
-    [_adButton setTitle:[NSString stringWithFormat:@"%@ 跳过",@"3"] forState:UIControlStateNormal];
+    [_adButton setTitle:[NSString stringWithFormat:@"%lu 跳过",(unsigned long)secondsCountDown] forState:UIControlStateNormal];
     _adButton.backgroundColor = [UIColor whiteColor];
     [_adButton setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [_adButton addTarget:self action:@selector(adSkipClick) forControlEvents:UIControlEventTouchUpInside];
@@ -74,7 +76,6 @@
 /**
  *  广告倒计时
  */
-NSUInteger secondsCountDown = 5;//60秒倒计时
 - (void)timerCountDown
 {
     secondsCountDown--;
