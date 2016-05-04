@@ -3048,7 +3048,7 @@ void HttpConnection::RequestReply(int viewpointId, int startId, int requestCount
 }
 
 // ªÿ∏¥π€µ„
-void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId, int fromAuthorId, char* content, PostReplyListener* listener)
+void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId, int fromAuthorId, const char* content, PostReplyListener* listener)
 {
     RequestParamter& request = get_request_param();
     request["s"] = "viewpoint/replycomments";

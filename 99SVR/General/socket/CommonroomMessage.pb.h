@@ -3113,6 +3113,7 @@ private:
 	uint32	_userid;
 	uint32	_roomid;
 	uint32	_teamid;
+	uint32	_viewid;
 	uint32	_giftid;
 	uint32	_giftnum;
 
@@ -3120,23 +3121,21 @@ private:
 public:
 
 	 inline uint32 userid() { return _userid; } const 
-
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline uint32 roomid() { return _roomid; } const 
-
 	 inline void set_roomid(const uint32 value) { _roomid = value; }
 
 	 inline uint32 teamid() { return _teamid; } const 
-
 	 inline void set_teamid(const uint32 value) { _teamid = value; }
 
-	 inline uint32 giftid() { return _giftid; } const 
+	 inline uint32 viewid() { return _viewid; } const 
+	 inline void set_viewid(const uint32 value) { _viewid = value; }
 
+	 inline uint32 giftid() { return _giftid; } const 
 	 inline void set_giftid(const uint32 value) { _giftid = value; }
 
 	 inline uint32 giftnum() { return _giftnum; } const 
-
 	 inline void set_giftnum(const uint32 value) { _giftnum = value; }
 
 
@@ -3148,6 +3147,7 @@ public:
 		cmd->userid = _userid;
 		cmd->roomid = _roomid;
 		cmd->teamid = _teamid;
+		cmd->viewid = _viewid;
 		cmd->giftid = _giftid;
 		cmd->giftnum = _giftnum;
 	}
@@ -3158,6 +3158,7 @@ public:
 		_userid = cmd->userid;
 		_roomid = cmd->roomid;
 		_teamid = cmd->teamid;
+		_viewid = cmd->viewid;
 		_giftid = cmd->giftid;
 		_giftnum = cmd->giftnum;
 	}
@@ -3168,6 +3169,7 @@ public:
 		LOG("userid = %d", _userid);
 		LOG("roomid = %d", _roomid);
 		LOG("teamid = %d", _teamid);
+		LOG("viewid = %d", _viewid);
 		LOG("giftid = %d", _giftid);
 		LOG("giftnum = %d", _giftnum);
 	}
@@ -3185,6 +3187,7 @@ private:
 	uint32	_roomid;
 	uint32	_teamid;
 	string	_teamalias;
+	uint32	_viewid;
 	uint32	_giftid;
 	uint32	_giftnum;
 
@@ -3192,31 +3195,27 @@ private:
 public:
 
 	 inline uint32 userid() { return _userid; } const 
-
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline string& useralias() { return _useralias; } const 
-
 	 inline void set_useralias(const string& value) { _useralias = value; }
 
 	 inline uint32 roomid() { return _roomid; } const 
-
 	 inline void set_roomid(const uint32 value) { _roomid = value; }
 
 	 inline uint32 teamid() { return _teamid; } const 
-
 	 inline void set_teamid(const uint32 value) { _teamid = value; }
 
 	 inline string& teamalias() { return _teamalias; } const 
-
 	 inline void set_teamalias(const string& value) { _teamalias = value; }
 
-	 inline uint32 giftid() { return _giftid; } const 
+	 inline uint32 viewid() { return _viewid; } const 
+	 inline void set_viewid(const uint32 value) { _viewid = value; }
 
+	 inline uint32 giftid() { return _giftid; } const 
 	 inline void set_giftid(const uint32 value) { _giftid = value; }
 
 	 inline uint32 giftnum() { return _giftnum; } const 
-
 	 inline void set_giftnum(const uint32 value) { _giftnum = value; }
 
 
@@ -3230,6 +3229,7 @@ public:
 		cmd->roomid = _roomid;
 		cmd->teamid = _teamid;
 		strcpy(cmd->teamalias, _teamalias.c_str());
+		cmd->viewid = _viewid;
 		cmd->giftid = _giftid;
 		cmd->giftnum = _giftnum;
 	}
@@ -3242,6 +3242,7 @@ public:
 		_roomid = cmd->roomid;
 		_teamid = cmd->teamid;
 		_teamalias = cmd->teamalias;
+		_viewid = cmd->viewid;
 		_giftid = cmd->giftid;
 		_giftnum = cmd->giftnum;
 	}
@@ -3254,6 +3255,7 @@ public:
 		LOG("roomid = %d", _roomid);
 		LOG("teamid = %d", _teamid);
 		LOG("teamalias = %s", _teamalias.c_str());
+		LOG("viewid = %d", _viewid);
 		LOG("giftid = %d", _giftid);
 		LOG("giftnum = %d", _giftnum);
 	}

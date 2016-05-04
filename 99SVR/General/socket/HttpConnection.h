@@ -112,8 +112,7 @@ public:
 	void RequestReply(int viewpointId, int startId, int requestCount, ReplyListener* listener);
 
 	// 回复观点（已提供）
-	void PostReply(int viewpointId, int parentReplyId, int authorId, int fromAuthorId, char* content, PostReplyListener* listener);
-
+	void PostReply(int viewpointId, int parentReplyId, int authorId, int fromAuthorId, const char* content, PostReplyListener* listener);
 
 	// 请求每个分类的未读数（已提供）
 	void RequestUnreadCount(UnreadListener* listener);
@@ -137,7 +136,7 @@ public:
 	void RequestPrivateTradeRecord(int startId, int count,OperateStockTradeRecordListener* listener);
 
 	// 提问（已提供）
-	void PostAskQuestion(int teamId,const char* stock,const char* question, AskQuestionListener* listener);
+	void PostAskQuestion(int teamId, const char* stock, const char* question, AskQuestionListener* listener);
 
 	// 获取剩余提问次数等信息（未提供）
 	void RequestUserTeamRelatedInfo(int teamId, UserTeamRelatedInfoListener* listener);
@@ -149,7 +148,7 @@ public:
 	void RequestMailSendReply(int startId, int count, MailReplyListener* listener);
 
 	// 讲师团队回答提问（PC端接口）（X未提供）
-	void PostAnswer(int questionId, char* content, HttpListener* listener);
+	void PostAnswer(int questionId, int teamId, char* answer, AnswerQuestionListener* listener);
 
 	// PC左侧菜单
 	void RequestPcGroupsPage(GroupsPageListener* listener);

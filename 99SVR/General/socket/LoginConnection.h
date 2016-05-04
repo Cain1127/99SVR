@@ -102,6 +102,8 @@ public:
 	//私人订制购买响应
 	void SendMsg_BuyPrivateVipReq(uint32 teacherid,uint32 viptype);
 	
+	//观点赠送礼物请求
+	void SendMsg_ViewpointTradeGiftReq(ViewpointTradeGiftReq& req);
 
 	void close();
 

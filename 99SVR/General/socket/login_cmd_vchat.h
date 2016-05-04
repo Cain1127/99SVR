@@ -68,6 +68,8 @@ namespace protocol
 		char   cIpAddr[IPADDRLEN];  //ip地址
 		byte   nimstate;        //IM状态:如隐身登录
 		byte   nmobile;         //0-PC,1-Android,2-IOS,3-web
+		char   devicemodel[32];     // 设备型号
+		char   deviceos[16];        // 设备系统
 	}CMDUserLogonReq4_t;
 
 	//Logon from other platform
@@ -85,6 +87,8 @@ namespace protocol
 		char   cIpAddr[IPADDRLEN];  //ip地址
 		byte   nimstate;            //IM状态:如隐身登录
 		byte   nmobile;             //0-PC,1-Android,2-IOS,3-web
+		char   devicemodel[32];     // 设备型号
+		char   deviceos[16];        // 设备系统
 	}CMDUserLogonReq5_t;
 
 	//登录错误消息

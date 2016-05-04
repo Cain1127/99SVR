@@ -70,7 +70,7 @@
 
 - (void)sendGift:(int)giftId num:(int)giftNum
 {
-    [kProtocolSingle sendGiftInfo:giftId number:giftNum toUser:[_ideaDetail.authorId intValue] toName:_ideaDetail.authorname roomId:[_ideaDetail.roomid intValue]];
+    [kProtocolSingle sendGiftInfo:giftId number:giftNum toUser:[_ideaDetail.authorId intValue] toViewId:_ideaDetail.viewpointid roomId:[_ideaDetail.roomid intValue]];
     [_giftView setGestureHidden];
 }
 
@@ -400,7 +400,7 @@
             imageView = [[UIImageView alloc] initWithFrame:frame];
             @WeakObj(self)
             [imageView sd_setImageWithURL:attachment.contentURL placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                [selfWeak updateTextView:imageURL changeSize:image.size];
+//                [selfWeak updateTextView:imageURL changeSize:image.size];
             }];
             imageView.userInteractionEnabled = YES;
             [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageInfo:)]];
