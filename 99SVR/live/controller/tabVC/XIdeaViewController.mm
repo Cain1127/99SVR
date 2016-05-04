@@ -131,10 +131,12 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         }
         if (self.nCurrent != self.dataSource.aryModel.count && self.dataSource.aryModel.count!=0)
         {
-            [self.tableView.footer noticeNoMoreData];
+//            [self.tableView.footer noticeNoMoreData];
+            [self.tableView.footer setHidden:YES];
         }else
         {
-            [self.tableView.footer resetNoMoreData];
+//            [self.tableView.footer resetNoMoreData];
+            [self.tableView.footer setHidden:NO];
         }
         [self.tableView reloadData];
     });

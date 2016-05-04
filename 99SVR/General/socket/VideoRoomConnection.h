@@ -133,9 +133,6 @@ public:
 	//最强战队周榜请求
 	void SendMsg_TeamTopNReq(TeamTopNReq& req);
 
-	//观点赠送礼物请求
-	void SendMsg_ViewpointTradeGiftReq(ViewpointTradeGiftReq& req);
-
 	void close();
 
 	VideoRoomConnection();

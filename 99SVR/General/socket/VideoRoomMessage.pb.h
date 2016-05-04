@@ -3909,6 +3909,7 @@ private:
 
 	uint32	_nmessageid;
 	uint32	_nvcbid;
+	uint32	_teamid;
 	string	_sname;
 	string	_sicon;
 	string	_spublictime;
@@ -3922,43 +3923,36 @@ private:
 public:
 
 	 inline uint32 nmessageid() { return _nmessageid; } const 
-
 	 inline void set_nmessageid(const uint32 value) { _nmessageid = value; }
 
 	 inline uint32 nvcbid() { return _nvcbid; } const 
-
 	 inline void set_nvcbid(const uint32 value) { _nvcbid = value; }
 
-	 inline string& sname() { return _sname; } const 
+	 inline uint32 teamid() { return _teamid; } const 
+	 inline void set_teamid(const uint32 value) { _teamid = value; }
 
+	 inline string& sname() { return _sname; } const 
 	 inline void set_sname(const string& value) { _sname = value; }
 
 	 inline string& sicon() { return _sicon; } const 
-
 	 inline void set_sicon(const string& value) { _sicon = value; }
 
 	 inline string& spublictime() { return _spublictime; } const 
-
 	 inline void set_spublictime(const string& value) { _spublictime = value; }
 
 	 inline uint32 ncommentcnt() { return _ncommentcnt; } const 
-
 	 inline void set_ncommentcnt(const uint32 value) { _ncommentcnt = value; }
 
 	 inline uint32 nlikecnt() { return _nlikecnt; } const 
-
 	 inline void set_nlikecnt(const uint32 value) { _nlikecnt = value; }
 
 	 inline uint32 nflowercnt() { return _nflowercnt; } const 
-
 	 inline void set_nflowercnt(const uint32 value) { _nflowercnt = value; }
 
 	 inline uint32 contlen() { return _contlen; } const 
-
 	 inline void set_contlen(const uint32 value) { _contlen = value; }
 
 	 inline string& content() { return _content; } const 
-
 	 inline void set_content(const string& value) { _content = value; }
 
 
@@ -3969,6 +3963,7 @@ public:
 		protocol::tag_CMDExpertNewViewNoty* cmd = (protocol::tag_CMDExpertNewViewNoty*) data;
 		cmd->nmessageid = _nmessageid;
 		cmd->nvcbid = _nvcbid;
+		cmd->teamid = _teamid;
 		strcpy(cmd->sName, _sname.c_str());
 		strcpy(cmd->sIcon, _sicon.c_str());
 		strcpy(cmd->sPublicTime, _spublictime.c_str());
@@ -3984,6 +3979,7 @@ public:
 		protocol::tag_CMDExpertNewViewNoty* cmd = (protocol::tag_CMDExpertNewViewNoty*) data;
 		_nmessageid = cmd->nmessageid;
 		_nvcbid = cmd->nvcbid;
+		_teamid = cmd->teamid;
 		_sname = cmd->sName;
 		_sicon = cmd->sIcon;
 		_spublictime = cmd->sPublicTime;
@@ -3999,6 +3995,7 @@ public:
 		LOG("--------Receive message: ExpertNewViewNoty---------");
 		LOG("nmessageid = %d", _nmessageid);
 		LOG("nvcbid = %d", _nvcbid);
+		LOG("teamid = %d", _teamid);
 		LOG("sname = %s", _sname.c_str());
 		LOG("sicon = %s", _sicon.c_str());
 		LOG("spublictime = %s", _spublictime.c_str());
@@ -4010,6 +4007,7 @@ public:
 	}
 
 };
+
 
 
 class TeamTopNReq

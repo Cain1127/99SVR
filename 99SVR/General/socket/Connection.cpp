@@ -548,6 +548,12 @@ string Connection::get_error_desc(int err_code)
 	case protocol::ERR_CODE_FAILED_PRIVATENOTFOUND:
 		str="没有该私人订制";
 		break;
+	case protocol::ERR_CODE_FAILED_TEAMNOTFOUND:
+		str="没有找到战队ID";
+		break;
+	case protocol::ERR_CODE_FAILED_GIFTNOTFOUND:
+		str="没有找到礼物ID";
+		break;
 	default:
 		str="未知错误";
 		break;

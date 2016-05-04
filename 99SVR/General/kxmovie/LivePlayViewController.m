@@ -8,6 +8,7 @@
 
 #import "LivePlayViewController.h"
 #import "UIImageView+WebCache.h"
+#import "RoomHttp.h"
 #import "AudioPlayer.h"
 #import "Toast+UIView.h"
 #import "KxMovieDecoder.h"
@@ -66,6 +67,42 @@
 @implementation LivePlayViewController
 
 @synthesize bFull;
+
+
+- (void)setRoomId:(int)roomId
+{
+    _roomid = roomId;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoList:) name:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
+    [kHTTPSingle RequestCollection];
+}
+
+- (void)loadVideoList:(NSNotification *)notify
+{
+    NSDictionary *dict = notify.object;
+    @WeakObj(self)
+    if([dict isKindOfClass:[NSDictionary class]])
+    {
+        int nStatus = [dict[@"code"] intValue];
+        if(nStatus==1)
+        {
+            NSArray *aryCollet = dict[@"data"];
+            if (aryCollet.count==0)
+            {
+                for (RoomHttp *_roomTemp in aryCollet)
+                {
+                    if ([_roomTemp.roomid intValue]==_roomid)
+                    {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            selfWeak.btnShare.selected = YES;
+                        });
+                        break;
+                    }
+                }
+            }
+        }
+    }
+ 
+}
 
 - (void)didReceiveMemoryWarning
 {

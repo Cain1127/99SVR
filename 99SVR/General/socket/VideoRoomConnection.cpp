@@ -86,7 +86,9 @@ void VideoRoomConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 	join_req = req;
 	on_do_connected();
 	//connect_from_lbs_asyn();
-/*
+	
+
+/*	
 	int ret;
 	
 	ret = connect("172.16.41.215", 22706);
@@ -300,11 +302,6 @@ void VideoRoomConnection::SendMsg_TeamTopNReq(TeamTopNReq& req)
 	SEND_MESSAGE(protocol::Sub_Vchat_TeamTopNReq, req);
 }
 
-void VideoRoomConnection::SendMsg_ViewpointTradeGiftReq(ViewpointTradeGiftReq& req)
-{
-	SEND_MESSAGE(protocol::Sub_Vchat_ViewpointTradeGiftReq, req);
-}
-
 void VideoRoomConnection::close(void)
 {
 	SendMsg_ExitRoomReq(join_req.vcbid());
@@ -371,7 +368,8 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 			break;
 		//房间用户列表数据结束
 		case protocol::Sub_Vchat_RoomUserListFinished:
-			room_listener->OnRoomUserList(g_vec_RoomUserInfo);
+			if ( room_listener != NULL )
+				room_listener->OnRoomUserList(g_vec_RoomUserInfo);
 			break;
 
 		//新增用户通知
@@ -394,6 +392,7 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 				}
 			}
 
+			if ( room_listener != NULL )
 			room_listener->OnRoomPubMicStateNoty(g_vec_RoomPubMicStateNoty);
 			break;
 
@@ -433,7 +432,8 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 					body += sizeof(uint32);
 				}
 
-				room_listener->OnWaitiMicListInfo(g_vec_WaitiMicListInfo);
+				if ( room_listener != NULL )
+					room_listener->OnWaitiMicListInfo(g_vec_WaitiMicListInfo);
 			}
 			break;
 
@@ -624,7 +624,8 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 				infos.push_back(keywordInfo);
 				body += keywordInfo.ByteSize();
 			}
-			room_listener->OnAdKeyWordOperateNoty(infos);
+			if ( room_listener != NULL )
+				room_listener->OnAdKeyWordOperateNoty(infos);
 		}
 			break;
 		//收到禁言关键词更新通知
@@ -664,7 +665,8 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 					body += objTeacherGiftListResp.ByteSize();
 				}
 
-				room_listener->OnTeacherGiftListResp(g_vec_TeacherGiftListResp);
+				if ( room_listener != NULL )
+					room_listener->OnTeacherGiftListResp(g_vec_TeacherGiftListResp);
 			}
 			break;
 
@@ -690,7 +692,8 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 					body += objUserScoreNoty.ByteSize();
 				}
 
-				room_listener->OnUserScoreListNotify(g_vec_UserScoreNoty);
+				if ( room_listener != NULL )
+					room_listener->OnUserScoreListNotify(g_vec_UserScoreNoty);
 			}
 			break;
 		//用户对讲师的平均分
@@ -768,7 +771,8 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 					body += info.ByteSize();
 				}
 			}
-			room_listener->OnTeamTopNResp(g_vec_teamtop);
+			if ( room_listener != NULL )
+				room_listener->OnTeamTopNResp(g_vec_teamtop);
 			break;
 
 		//观点赠送礼物通知

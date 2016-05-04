@@ -627,6 +627,7 @@ namespace protocol
 	{
 		uint32 nmessageid;      //观点ID
 		uint32 nvcbid;          //房间ID
+		uint32 teamid;          //战队ID
 		char  sName[48];        //专家名称
 		char  sIcon[256];       //头像信息
 		char  sPublicTime[32];  //发表时间

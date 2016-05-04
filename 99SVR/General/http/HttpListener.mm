@@ -74,7 +74,15 @@ void ViewpointDetailListener::onResponse(ViewpointDetail& info, vector<ImageInfo
     DLog(@"images:%ld",images.size());
     TQIdeaDetailModel *model = [[TQIdeaDetailModel alloc] initWithViewpointDetail:&info];
     
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i = 0; i<images.size(); i++) {
+        ImageInfo info = images[i];
+        NSDictionary *dict = @{@"path":[NSString stringWithUTF8String:info.path().c_str()],
+                               @"width":@(info.width()),@"height":@(info.height())};
+        [array addObject:dict];
+    }
     
+    [model addImage:array];
     
     NSDictionary *dict = @{@"code":@(1),@"model":model};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTDETAIL_VC object:dict];

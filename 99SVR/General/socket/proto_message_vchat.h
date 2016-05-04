@@ -44,7 +44,7 @@ namespace protocol
 
 		ERR_CODE_FAILED =                   1000, //失败 1000~1999
 		ERR_CODE_FAILED_PACKAGEERROR =      1001,  //请求包长度错误
-		ERR_CODE_FAILED_DBERROR =           1002, //数据库类型错误
+		ERR_CODE_FAILED_DBERROR =           1002, //数据库类型错误 
 
 		ERR_CODE_FAILED_INVALIDCHAR =       1003,//输入了非法字符
 		ERR_CODE_FAILED_USERNOTFOUND =      1004, //找不到该用户
@@ -62,7 +62,10 @@ namespace protocol
 		ERR_CODE_FAILED_KEYWORDFOUND =      1013,   //发现关键词
 		ERR_CODE_FAILED_NOT_ENOUGH_GOLD =   1014,   //金币不足
 		ERR_CODE_FAILED_ALREADY_BUY =       1015,   //已经购买
-		ERR_CODE_FAILED_PRIVATENOTFOUND =   1016    //没有该私人订制
+		ERR_CODE_FAILED_PRIVATENOTFOUND =   1016,    //没有该私人订制
+		ERR_CODE_FAILED_TEAMNOTFOUND =      1017,   //没有找到战队ID
+		ERR_CODE_FAILED_GIFTNOTFOUND =      1018   //没有找到礼物ID
+
 	};
 	
 	enum {

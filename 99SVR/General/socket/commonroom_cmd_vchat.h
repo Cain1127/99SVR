@@ -453,23 +453,25 @@ namespace protocol
 	//观点赠送礼物请求
 	typedef struct tag_CMDViewpointTradeGiftReq
 	{
-	uint32 userid;     // 送礼人
-	uint32 roomid;     // 送给哪个roomId
-	uint32 teamid;     // 送给哪个teamid
-	uint32 giftid;     // 礼物id
-	uint32 giftnum;    // 赠送数目
+	  uint32 userid;     // 送礼人
+	  uint32 roomid;     // 送给哪个roomId
+	  uint32 teamid;     // 送给哪个teamid
+	  uint32 viewid;     // 观点id
+	  uint32 giftid;     // 礼物id
+	  uint32 giftnum;    // 赠送数目
 	}CMDViewpointTradeGiftReq_t;
 
 	//观点赠送礼物通知
 	typedef struct tag_CMDViewpointTradeGiftNoty
 	{
-	uint32 userid;     // 送礼人
-	char useralias[NAMELEN];     // 送礼人昵称
-	uint32 roomid;     // 送给哪个roomId
-	uint32 teamid;     // 送给哪个teamid
-	char teamalias[NAMELEN];     // team昵称
-	uint32 giftid;     // 礼物id
-	uint32 giftnum;    // 赠送数目
+	  uint32 userid;     // 送礼人
+	  char useralias[NAMELEN];     // 送礼人昵称
+	  uint32 roomid;     // 送给哪个roomId
+	  uint32 teamid;     // 送给哪个teamid
+	  char teamalias[NAMELEN];     // team昵称
+	  uint32 viewid;     // 观点id
+	  uint32 giftid;     // 礼物id
+	  uint32 giftnum;    // 赠送数目
 	}CMDViewpointTradeGiftNoty_t;
 
 };
