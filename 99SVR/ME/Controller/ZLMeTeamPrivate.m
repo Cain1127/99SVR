@@ -1,12 +1,12 @@
 //
-//  XTeamPrivateController.m
+//  ZLMeTeamPrivate.m
 //  99SVR
 //
-//  Created by xia zhonglin  on 4/24/16.
+//  Created by xia zhonglin  on 5/4/16.
 //  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
-#import "XTeamPrivateController.h"
+#import "ZLMeTeamPrivate.h"
 #import <DTCoreText/DTCoreText.h>
 #import "TQPurchaseViewController.h"
 #import "XPrivateDetailViewController.h"
@@ -18,7 +18,9 @@
 #import "XPrivateService.h"
 #import "ZLPrivateDataSource.h"
 #import "ZLWhatIsPrivateView.h"
-@interface XTeamPrivateController()<DTAttributedTextContentViewDelegate,PrivateDelegate>
+#import "TQMeCustomizedModel.h"
+
+@interface ZLMeTeamPrivate()<DTAttributedTextContentViewDelegate,PrivateDelegate>
 {
     ZLWhatIsPrivateView *whatPrivate;
 }
@@ -28,7 +30,7 @@
 @property (nonatomic,copy) NSArray *aryVIP;
 @property (nonatomic,strong) DTAttributedTextView *textView;
 @property (nonatomic,strong) PrivateVipView *privateView;
-@property (nonatomic,strong) RoomHttp *room;
+@property (nonatomic,strong) TQMeCustomizedModel *room;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) UIImageView *selectIconImageView;
 @property (nonatomic,strong) UILabel *selectVipLable;
@@ -39,20 +41,16 @@
 
 @end
 
-@implementation XTeamPrivateController
+@implementation ZLMeTeamPrivate
 
-- (id)initWithModel:(RoomHttp*)room
+- (id)initWIthModel:(TQMeCustomizedModel *)model
 {
     self = [super init];
-    _room = room;
+    _room = model;
     return self;
 }
 
-- (void)loadView{
-    self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
-}
-
-- (void)setModel:(RoomHttp *)room
+- (void)setModel:(TQMeCustomizedModel *)room
 {
     _room = room;
     NSString *strName = [NSString stringWithFormat:@"开通团队:%@",_room.teamname];
@@ -62,6 +60,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setTitleText:@"私人定制"];
     [self setupTableView];
     [self.view addSubview:_textView];
     
@@ -83,8 +82,9 @@
     [_btnBuy addTarget:self action:@selector(buyprivate) forControlEvents:UIControlEventTouchUpInside];
     _buyView.hidden = YES;
     
-    whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 0, kScreenWidth, self.view.height)];
+    whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64)];
     [self.view addSubview:whatPrivate];
+    whatPrivate.hidden = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
     [kHTTPSingle RequestWhatIsPrivateService];
 }
@@ -98,7 +98,7 @@
 - (void)setupTableView
 {
     _dataSource  = [[ZLPrivateDataSource alloc] init];
-    _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth,self.view.height) style:UITableViewStyleGrouped];;
+    _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth,kScreenHeight-64) style:UITableViewStyleGrouped];;
     _tableView.dataSource = _dataSource;
     _tableView.delegate = _dataSource;
     _dataSource.delegate = self;

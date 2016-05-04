@@ -139,5 +139,11 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     
 }
 
+- (void)colletRoomInfo:(int)roomId
+{
+    if (protocol) {
+//        protocol->send
+    }
+}
 
 @end

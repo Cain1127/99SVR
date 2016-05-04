@@ -8,6 +8,7 @@
 
 #import "TQMeCustomizedViewController.h"
 #import "TQMeCustomizedModel.h"
+#import "ZLMeTeamPrivate.h"
 #import "ViewNullFactory.h"
 #import "XPrivateService.h"
 #import "TQNoCustomView.h"
@@ -46,8 +47,9 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64) withStyle:UITableViewStylePlain];
-    [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     _buyDataSource = [[XMeCustomDataSource alloc] init];
+    _buyDataSource.delegate = self;
     _noBuyDataSource = [[ZLPrivateDataSource alloc] init];
     [self.view addSubview:_tableView];
     [self initUi];
@@ -232,9 +234,10 @@
 
 - (void)selectIndex:(TQMeCustomizedModel *)model
 {
-    XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithModel:model];
-    [self.navigationController pushViewController:detailView animated:YES];
+    ZLMeTeamPrivate *privateTeam = [[ZLMeTeamPrivate alloc] initWIthModel:model];
+    [self.navigationController pushViewController:privateTeam animated:YES];
 }
+
 #define kNetWork_anomaly_image_height  170
 /**
 *  创建table HeadView

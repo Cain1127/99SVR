@@ -182,6 +182,8 @@ public :
      *   加入房间成功后，请求信息
      */
     void requestRoomMsg();
+    
+    void colletRoomInfo(int roomId);
     ~ZLLogonProtocol();
 };
 

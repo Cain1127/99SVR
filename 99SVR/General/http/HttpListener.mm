@@ -122,10 +122,10 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
     reply.replytid = info.replytid();
     reply.viewpointid = info.viewpointid();
     reply.parentreplyid = info.parentreplyid();
-//    reply.authorid = [NSString stringWithUTF8String:info.authorid().c_str()];
+    reply.authorid = NSStringFromInt(info.authorid());
     reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
     reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];
-//    reply.fromauthorid = [NSString stringWithUTF8String:info.fromauthorid().c_str()];
+    reply.fromauthorid = NSStringFromInt(info.fromauthorid());
     reply.fromauthorname = [NSString stringWithUTF8String:info.fromauthorname().c_str()];
     reply.fromauthoricon = [NSString stringWithUTF8String:info.fromauthoricon().c_str()];
     reply.publishtime = [NSString stringWithUTF8String:info.publishtime().c_str()];

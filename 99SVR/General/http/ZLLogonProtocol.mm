@@ -484,6 +484,11 @@ void ZLLogonProtocol::requestRoomMsg()
     video_room->SendMsg_AfterJoinRoomReq();
 }
 
+void ZLLogonProtocol::colletRoomInfo(int roomId)
+{
+    
+}
+
 //**********************************************************************************
 //**********************************************************************************
 #pragma mark ZLHallListener
