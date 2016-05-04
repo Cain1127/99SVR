@@ -56,8 +56,7 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
 /**
  *  赠送礼物,接收者id可以得到，但是昵称怎么来
  */
-- (void)sendGiftInfo:(int)nGiftId number:(int)num toUser:(int)userId toName:(NSString *)name;
-
+- (void)sendGiftInfo:(int)nGiftId number:(int)num toUser:(int)userId toName:(NSString *)name roomId:(int)roomId;
 /**
  *  退出房间
  */

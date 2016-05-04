@@ -197,7 +197,7 @@
 
     dispatch_async(dispatch_get_main_queue(), ^{
         //再次刷新
-        [self.view makeToastActivity];
+        [self.view makeToastActivity_bird];
         [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
         
     });

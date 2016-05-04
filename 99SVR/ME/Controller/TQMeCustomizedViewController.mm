@@ -83,7 +83,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(noPurchase:) name:MESSAGE_HTTP_NOPURCHASE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(havePurchase:) name:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:nil];
-    [self.view makeToastActivity_bird];
+    [self.view makeToastActivity_bird_bird];
     [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
     
     _whatIsPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64)];
@@ -183,7 +183,7 @@
     [_tableView addSubview:_noView];
     @WeakObj(self)
     [_noView clickWithBlock:^(UIGestureRecognizer *gesture) {
-        [selfWeak.view makeToastActivity_bird];
+        [selfWeak.view makeToastActivity_bird_bird];
         [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
     }];
 }

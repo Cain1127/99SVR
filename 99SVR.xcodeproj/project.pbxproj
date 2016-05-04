@@ -131,6 +131,8 @@
 		5AA6D8191CCBC01300841960 /* AdViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D8181CCBC01300841960 /* AdViewController.mm */; };
 		5AA6D81C1CCBD00A00841960 /* NewfeatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D81B1CCBD00A00841960 /* NewfeatureViewController.m */; };
 		5AB43D8B1CCFD7AE00693494 /* PrivateVipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AB43D8A1CCFD7AE00693494 /* PrivateVipView.m */; };
+		5AC00A511CD99E6600379081 /* MessageTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AC00A501CD99E6600379081 /* MessageTableViewCell.mm */; };
+		5AC00A541CD99EF400379081 /* MessageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AC00A531CD99EF400379081 /* MessageViewController.mm */; };
 		5AD25E4D1CCE225A005C5BE6 /* SplashModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AD25E4C1CCE225A005C5BE6 /* SplashModel.mm */; };
 		5AD25E511CCE2265005C5BE6 /* SplashTool.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AD25E501CCE2265005C5BE6 /* SplashTool.mm */; };
 		5AD6673C1CD044EB00DA2C6D /* start_page_1242x2208.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD667381CD044EB00DA2C6D /* start_page_1242x2208.png */; };
@@ -155,7 +157,6 @@
 		5AE9A3CC1CCE680500831606 /* CustomizedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AE9A3CB1CCE680500831606 /* CustomizedViewController.m */; };
 		5AE9A3CF1CCE6A4B00831606 /* CustomizedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AE9A3CE1CCE6A4B00831606 /* CustomizedTableViewCell.m */; };
 		5AE9A3D21CCE6D1900831606 /* CustomizedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AE9A3D11CCE6D1900831606 /* CustomizedModel.m */; };
-		5AF635471CD1FB6100DFE89C /* TQMessageTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AF635461CD1FB6100DFE89C /* TQMessageTableViewCell.mm */; };
 		87D9EE0FC59214DC02EE2C95 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A43875FF97FDC1CA789AE15 /* libPods.a */; };
 		B404A0791CD36A4D00E814CC /* UIViewController+EmpetViewTips.m in Sources */ = {isa = PBXBuildFile; fileRef = B404A0781CD36A4D00E814CC /* UIViewController+EmpetViewTips.m */; };
 		B44F77681CC39FF1008E3B26 /* StockDealHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */; };
@@ -1044,6 +1045,10 @@
 		5AA6D81B1CCBD00A00841960 /* NewfeatureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewfeatureViewController.m; sourceTree = "<group>"; };
 		5AB43D891CCFD7AE00693494 /* PrivateVipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivateVipView.h; sourceTree = "<group>"; };
 		5AB43D8A1CCFD7AE00693494 /* PrivateVipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrivateVipView.m; sourceTree = "<group>"; };
+		5AC00A4F1CD99E6600379081 /* MessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTableViewCell.h; sourceTree = "<group>"; };
+		5AC00A501CD99E6600379081 /* MessageTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessageTableViewCell.mm; sourceTree = "<group>"; };
+		5AC00A521CD99EF400379081 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
+		5AC00A531CD99EF400379081 /* MessageViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessageViewController.mm; sourceTree = "<group>"; };
 		5AD25E4B1CCE225A005C5BE6 /* SplashModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashModel.h; sourceTree = "<group>"; };
 		5AD25E4C1CCE225A005C5BE6 /* SplashModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SplashModel.mm; sourceTree = "<group>"; };
 		5AD25E4F1CCE2265005C5BE6 /* SplashTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashTool.h; sourceTree = "<group>"; };
@@ -1076,8 +1081,6 @@
 		5AE9A3CE1CCE6A4B00831606 /* CustomizedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomizedTableViewCell.m; sourceTree = "<group>"; };
 		5AE9A3D01CCE6D1900831606 /* CustomizedModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomizedModel.h; sourceTree = "<group>"; };
 		5AE9A3D11CCE6D1900831606 /* CustomizedModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomizedModel.m; sourceTree = "<group>"; };
-		5AF635451CD1FB6100DFE89C /* TQMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TQMessageTableViewCell.h; sourceTree = "<group>"; };
-		5AF635461CD1FB6100DFE89C /* TQMessageTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TQMessageTableViewCell.mm; sourceTree = "<group>"; };
 		852CCF5B274ED41B4EE71D75 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		8D4A66C414F8E52B12645457 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		B404A0771CD36A4D00E814CC /* UIViewController+EmpetViewTips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+EmpetViewTips.h"; sourceTree = "<group>"; };
@@ -2347,6 +2350,8 @@
 				5ADDD24D1CD274A1008B2961 /* AnswerViewController.mm */,
 				5A57840E1CD2FE28002E120A /* CommentReplyViewController.h */,
 				5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */,
+				5AC00A521CD99EF400379081 /* MessageViewController.h */,
+				5AC00A531CD99EF400379081 /* MessageViewController.mm */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2378,10 +2383,10 @@
 				18D7A9111CC4E6A8006D9B74 /* TQAllReplyCell.xib */,
 				1895B76D1CCB3B5800B86B0D /* TQButton-RoundedRectBtn.h */,
 				1895B76E1CCB3B5800B86B0D /* TQButton-RoundedRectBtn.m */,
-				5AF635451CD1FB6100DFE89C /* TQMessageTableViewCell.h */,
-				5AF635461CD1FB6100DFE89C /* TQMessageTableViewCell.mm */,
 				5AA640301CD87F1300CDAE48 /* MailboxTableViewCell.h */,
 				5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.m */,
+				5AC00A4F1CD99E6600379081 /* MessageTableViewCell.h */,
+				5AC00A501CD99E6600379081 /* MessageTableViewCell.mm */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4725,6 +4730,7 @@
 				18B0CECC1CC07CC700BA82DF /* NSCalendar+init.m in Sources */,
 				1827FF591C9959BF009D9C79 /* MyScrollView.m in Sources */,
 				BB2CA60F1CD338A300DFE56E /* Connection.cpp in Sources */,
+				5AC00A511CD99E6600379081 /* MessageTableViewCell.mm in Sources */,
 				BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */,
 				BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */,
 				BB63F5D61C2CC7A300A042E8 /* UIView+MJExtension.m in Sources */,
@@ -4737,6 +4743,7 @@
 				188E4A131CC600DD00D97254 /* TQSuspensionBtn.m in Sources */,
 				BB63F5CE1C2CC7A300A042E8 /* MJRefreshFooter.m in Sources */,
 				BB63F5FB1C2CC7A300A042E8 /* RoomViewController.mm in Sources */,
+				5AC00A541CD99EF400379081 /* MessageViewController.mm in Sources */,
 				185F596C1CC4CAD600F605F5 /* NSObject+MJProperty.m in Sources */,
 				BB5E1CAC1CC4CF320076C416 /* RoomHeaderView.m in Sources */,
 				BB63F5FA1C2CC7A300A042E8 /* FinanceOnlineVedioController.m in Sources */,
@@ -4903,7 +4910,6 @@
 				18EA82291CC8A5B200BDB735 /* UIImageView+Header.m in Sources */,
 				BB6F3ABA1C9D6EC50035EBBE /* FloatingView.m in Sources */,
 				BB63F5C61C2CC7A300A042E8 /* MASViewConstraint.m in Sources */,
-				5AF635471CD1FB6100DFE89C /* TQMessageTableViewCell.mm in Sources */,
 				18D3CB811CC0CFB400816BD0 /* TQMessageViewController.mm in Sources */,
 				BB25D8121C15729800314C1E /* main.m in Sources */,
 				BB9765F61C86831D00FAA5B7 /* TextChatModel.m in Sources */,
@@ -5088,8 +5094,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yida li (CVLMA4926L)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yida li (CVLMA4926L)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -5135,8 +5141,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yida li (CVLMA4926L)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yida li (CVLMA4926L)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -5197,7 +5203,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "29210d47-fd0f-4824-9529-30cfa3ce8cf9";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5244,7 +5250,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "29210d47-fd0f-4824-9529-30cfa3ce8cf9";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";

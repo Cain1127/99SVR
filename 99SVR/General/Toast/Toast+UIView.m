@@ -114,7 +114,7 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
 #pragma mark - Toast Activity Methods
 
 #pragma mark 鸟的加载图
-- (void)makeToastActivity_bird{
+- (void)makeToastActivity_bird_bird{
     
     UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);
     if (existingActivityView != nil) return;
@@ -161,17 +161,17 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
 
 
 
-- (void)makeToastActivity
+- (void)makeToastActivity_bird
 {
-    [self makeToastActivity:CSToastActivityDefaultPosition msg:@"正在加载，请稍后"];
+    [self makeToastActivity_bird:CSToastActivityDefaultPosition msg:@"正在加载，请稍后"];
 }
 
 - (void)makeToastMsgActivity:(NSString *)strMsg
 {
-    [self makeToastActivity:CSToastActivityDefaultPosition msg:strMsg];
+    [self makeToastActivity_bird:CSToastActivityDefaultPosition msg:strMsg];
 }
 
-- (void)makeToastActivity:(id)position msg:(NSString *)strMsg{
+- (void)makeToastActivity_bird:(id)position msg:(NSString *)strMsg{
     UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);
     if (existingActivityView != nil) return;
     
@@ -215,7 +215,7 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
      } completion:nil];
 }
 
-- (void)makeToastActivity_2:(id)position
+- (void)makeToastActivity_bird_2:(id)position
 {
     UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);
     if (existingActivityView != nil) return;

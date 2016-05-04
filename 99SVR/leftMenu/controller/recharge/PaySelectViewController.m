@@ -50,7 +50,7 @@
     [request setHTTPMethod: @"POST"];
     [request setHTTPBody: [body dataUsingEncoding: NSUTF8StringEncoding]];
     [webView loadRequest:request];
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     
 }
 

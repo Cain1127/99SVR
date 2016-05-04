@@ -276,7 +276,7 @@
 #pragma mark 微信登录请求
 - (void)weiChatLogin
 {
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     SendAuthReq *req = [[SendAuthReq alloc] init];
     req.scope = @"snsapi_userinfo,snsapi_base";
     req.state = @"0744";
@@ -322,7 +322,7 @@
     //进入新的界面先
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        [__self.view makeToastActivity];
+        [__self.view makeToastActivity_bird];
     });
     __block NSString *__strUser = strUser;
     __block NSString *__strPwd = strPwd;
@@ -353,7 +353,7 @@
 
 - (void)sinaLogin
 {
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     WBAuthorizeRequest *request = [WBAuthorizeRequest request];
     request.redirectURI = kRedirectURI;
     request.scope = @"all";
@@ -367,7 +367,7 @@
 - (void)qqLogin
 {
 //    [ProgressHUD show:@"QQ授权中..." viewInfo:self.view];
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     _tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1105298719" andDelegate:self];
     NSArray* permissions = [NSArray arrayWithObjects:
                             kOPEN_PERMISSION_GET_USER_INFO,

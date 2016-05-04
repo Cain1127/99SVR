@@ -83,7 +83,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self hiddenTopHud];
+    [self showTopHUD];
 }
 
 - (void)hiddenTopHud
@@ -107,7 +107,7 @@
         {
             _TopHUD.hidden = NO;
         }
-        [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:2.0];
+        [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:5.0];
     }
     else
     {
@@ -124,7 +124,7 @@
 #pragma mark - View lifecycle
 - (void)startLoad
 {
-    [_glView makeToastActivity_2:@"bottom"];
+    [_glView makeToastActivity_bird_2:@"bottom"];
 }
 
 - (void)stopLoad
@@ -345,6 +345,7 @@
     _btnCollet = [self createPlayBtn:@"video_room_follow_icon_n" high:@"video_room_follow_icon_p"];
     [_btnCollet addTarget:self action:@selector(colletInfo) forControlEvents:UIControlEventTouchUpInside];
     [self updateDownHUD];
+    _downHUD.alpha = 0;
 }
 
 - (void)updateDownHUD

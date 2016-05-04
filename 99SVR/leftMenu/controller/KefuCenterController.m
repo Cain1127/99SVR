@@ -56,7 +56,7 @@
     }
     else
     {
-        [self.view makeToastActivity_bird];
+        [self.view makeToastActivity_bird_bird];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoList:) name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
         [kHTTPSingle RequestTeamList];
     }
@@ -149,7 +149,7 @@
 }
 
 - (void)connectRoom:(RoomHttp *)room{
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     if (_roomViewModel==nil)
     {
         _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];

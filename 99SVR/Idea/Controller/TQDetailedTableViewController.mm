@@ -70,7 +70,7 @@
 
 - (void)sendGift:(int)giftId num:(int)giftNum
 {
-    [kProtocolSingle sendGiftInfo:giftId number:giftNum toUser:[_ideaDetail.authorId intValue] toName:_ideaDetail.authorname];
+    [kProtocolSingle sendGiftInfo:giftId number:giftNum toUser:[_ideaDetail.authorId intValue] toName:_ideaDetail.authorname roomId:[_ideaDetail.roomid intValue]];
     [_giftView setGestureHidden];
 }
 
@@ -115,7 +115,7 @@
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(requestMoreReply)];
     [_tableView.footer setHidden:YES];
@@ -675,12 +675,12 @@
         [ProgressHUD showError:@"不能发送空信息"];
         return ;
     }
-    
+    int toUser = !nUser ? [_ideaDetail.authorId intValue] : nUser;
     NSString *strComment = [textView.textStorage getPlainString];
 
     char cBuf[1024]={0};
     ::strcpy(cBuf,[strComment UTF8String]);
-    [kHTTPSingle PostReply:_viewId replyId:nDetails author:KUserSingleton.nUserId content:cBuf fromId:[_ideaDetail.authorId intValue]];
+    [kHTTPSingle PostReply:_viewId replyId:nDetails author:KUserSingleton.nUserId content:cBuf fromId:toUser];
     textView.text = @"";
     [_chatView setHidden:YES];
     _chatView.nUserId = 0;

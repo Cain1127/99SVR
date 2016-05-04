@@ -165,7 +165,7 @@
  */
 - (void)connectRoom:(RoomHttp *)room
 {
-   [self.view makeToastActivity];
+   [self.view makeToastActivity_bird];
     if (_roomViewModel==nil) {
         _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
     }

@@ -39,7 +39,7 @@
     [_txtTitle setFont:XCFONT(16)];
     [_headView addSubview:_txtTitle];
     [_txtTitle setTextAlignment:NSTextAlignmentCenter];
-    [_txtTitle setTextColor:kNavColor];
+    [_txtTitle setTextColor:UIColorFromRGB(0x4C4C4C)];
     
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(MailBoxEvent) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
     [_headView addSubview:btnLeft];
