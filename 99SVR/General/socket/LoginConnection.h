@@ -19,6 +19,8 @@ extern uint32 login_userid;
 extern string login_password;
 extern SessionTokenResp login_token;
 
+extern JoinRoomReq join_req;
+extern JoinRoomResp room_info;
 
 class LoginConnection : public Connection
 {
@@ -32,6 +34,8 @@ private:
 
 	void dispatch_push_message(void* body);
 	void dispatch_error_message(void* body);
+
+	void rejoin_room();
 
 
 protected:

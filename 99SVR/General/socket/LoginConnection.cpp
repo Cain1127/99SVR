@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "crc32.h"
 #include "platform.h"
 #include "Http.h"
 #include "LoginConnection.h"
@@ -7,7 +8,7 @@
 
 UserLogonSuccess2 loginuser;
 UserLogonReq4 login_req4;
-UserLogonReq5  login_req5;
+UserLogonReq5 login_req5;
 
 uint32 login_reqv;
 uint32 login_nmobile;
@@ -15,6 +16,8 @@ uint32 login_version;
 uint32 login_userid;
 string login_password;
 SessionTokenResp login_token;
+
+
 
 LoginConnection::LoginConnection() :
 login_listener(NULL), hall_listener(NULL), push_listener(NULL)
@@ -47,6 +50,44 @@ void LoginConnection::SendMsg_Ping()
 	SEND_MESSAGE2(protocol::Sub_Vchat_ClientPing, protocol::CMDClientPing_t, &ping);
 }
 
+void LoginConnection::rejoin_room()
+{
+	{
+		protocol::CMDJoinRoomReq_t temreq =
+		{ 0 };
+		string ip = join_req.cipaddr();
+		join_req.set_cipaddr("");
+		join_req.set_userid(loginuser.userid());
+		join_req.set_cuserpwd(login_password);
+		join_req.set_devtype(login_nmobile);
+		join_req.set_bloginsource(login_reqv == 4 ? 0 : 1);
+		join_req.set_time((uint32) time(0));
+		join_req.set_coremessagever(10690001);
+		join_req.set_reserve1(0);
+		join_req.set_reserve2(0);
+
+		join_req.set_crc32(15);
+		join_req.SerializeToArray(&temreq, sizeof(protocol::CMDJoinRoomReq_t));
+
+		uint32 crcval = crc32((void*) &temreq, sizeof(protocol::CMDJoinRoomReq_t), CRC_MAGIC);
+		join_req.set_crc32(crcval);
+		join_req.set_cipaddr(ip);
+
+		join_req.Log();
+
+		LOG("RE JOIN ROOM");
+		SEND_MESSAGE_F(protocol::MDM_Vchat_Room, protocol::Sub_Vchat_JoinRoomReq, join_req);
+	}
+
+	{
+		AfterJoinRoomReq req;
+		req.set_userid(join_req.userid());
+		req.set_vcbid(join_req.vcbid());
+
+		SEND_MESSAGE_F(protocol::MDM_Vchat_Room, protocol::Sub_Vchat_AfterJoinRoomReq, req);
+	}
+}
+
 void LoginConnection::on_do_connected()
 {
 	SendMsg_Hello();
@@ -66,6 +107,11 @@ void LoginConnection::on_do_connected()
 		login_nmobile = login_req5.nmobile();
 		login_version = login_req5.nversion();
 		login_password = "";
+	}
+
+	if ( in_room )
+	{
+		rejoin_room();
 	}
 
 	start_read_thread();
@@ -88,7 +134,7 @@ void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 	login_reqv = 4;
 	
 	//connect_from_lbs_asyn();
-	connect("122.13.81.62", 7301);
+	connect("121.12.118.32", 7301);
 	//connect("172.16.41.137", 7301);
 	//connect("172.16.41.215", 7301);
 	//connect("172.16.41.114", 7301);
@@ -195,6 +241,7 @@ void LoginConnection::close(void)
 	Connection::close();
 }
 
+
 void LoginConnection::DispatchSocketMessage(void* msg)
 {
 
@@ -247,6 +294,11 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 	case protocol::Sub_Vchat_RoomGroupListBegin:
 		room_groups_count = 0;
 		room_groups = new RoomGroupItem[20];
+		break;
+
+	//收到服务器ping消息的返回,表示房间活着
+	case protocol::Sub_Vchat_ClientPingResp:
+		//ON_MESSAGE(login_listener, ClientPingResp, OnClientPingResp);
 		break;
 
 	//房间组列表
@@ -375,6 +427,11 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 	case protocol::Sub_Vchat_Resp_ErrCode:
 		LOG("protocol::Sub_Vchat_Resp_ErrCode");
 		dispatch_error_message(body);
+		break;
+
+	//观点赠送礼物响应
+	case protocol::Sub_Vchat_ViewpointTradeGiftResp:
+		ON_MESSAGE(hall_listener,ViewpointTradeGiftNoty, OnViewpointTradeGiftResp);
 		break;
 
 	default:

@@ -38,13 +38,44 @@ public:
 	//查看问答提醒
 	virtual void OnHallAnswerResp(std::vector<AnswerResp>& infos) = 0;
 
+	//查看观点回复
+	//virtual void OnViewShowResp(std::vector<ViewShowResp>& infos) = 0;
+
+	//查看我的粉丝
+	//virtual void OnTeacherFansResp(std::vector<TeacherFansResp>& infos) = 0;
+
+	//查看我的关注（已关注讲师）
+	//virtual void OnInterestResp(std::vector<InterestResp>& infos) = 0;
+
+	//查看我的关注（无关注讲师）
+	//virtual void OnUnInterestResp(std::vector<UnInterestResp>& infos) = 0;
+
+	//查看明日预测（已关注的讲师）
+	//virtual void OnTextLivePointListResp(std::vector<TextLivePointListResp>& infos) = 0;
+
+	//查看已购买的个人秘籍
+	//virtual void OnSecretsListResp(std::vector<HallSecretsListResp>& infos) = 0;
+
+	//查看系统消息
 	virtual void OnSystemInfoResp(std::vector<HallSystemInfoListResp>& infos) = 0;
 
+	//讲师回复（包含观点回复和回答提问）
+	//virtual void OnViewAnswerResp(ViewAnswerResp& info) = 0;
+
+	//关注（无关注讲师时返回所有讲师列表，点击关注）
 	virtual void OnInterestForResp(InterestForResp& info) = 0;
 
+	//获取讲师的粉丝总数响应
+	//virtual void OnFansCountResp(FansCountResp& info) = 0;
+
+	//私人订制购买响应
 	virtual void OnBuyPrivateVipResp(BuyPrivateVipResp& info) = 0;
 
+	//私人订制购买失败
 	virtual void OnBuyPrivateVipErr(ErrCodeResp& info) = 0;
+
+	//观点赠送礼物响应
+	virtual void OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info) = 0;
 };
 
 #endif

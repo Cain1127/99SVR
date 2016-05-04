@@ -282,7 +282,7 @@ void parse_homepage(char* json, HttpListener* listener)
 
 							//viewpointItem.set_authoricon(viewpoint[i]["authorIcon"].asString());
 							std::string icon;
-							get_full_head_icon(viewpoint[i]["authorId"].asString(), icon);
+							get_full_head_icon(viewpoint[i]["authorIcon"].asString(), icon);
 							viewpointItem.set_authoricon(icon);
 							viewpointItem.set_authorname(viewpoint[i]["authorName"].asString());
 
@@ -830,7 +830,7 @@ void parse_ViewpointSummary(char* json, HttpListener* listener)
 							viewpoint.set_authorname(data_item["authorname"].asString());
 
 							std::string icon;
-							get_full_head_icon(data_item["authorid"].asString(), icon);
+							get_full_head_icon(data_item["authoricon"].asString(), icon);
 							viewpoint.set_authoricon(icon);
 
 							std::string strOut;
@@ -1480,7 +1480,7 @@ void parse_viewpointreply(char* json, HttpListener* listener)
 					reply.set_authorname(replys[i]["authorName"].asString());
 
 					std::string icon;
-					get_full_head_icon(replys[i]["authorId"].asString(), icon);
+					get_full_head_icon(replys[i]["authorIcon"].asString(), icon);//////////////////////////////////////
 					reply.set_authoricon(icon);
 
 					reply.set_fromauthorid(atoi(replys[i]["fromAuthorId"].asString().c_str()));
@@ -1551,7 +1551,7 @@ void parse_postreply(char* json, HttpListener* listener)
 				reply.set_authorname(replys["authorName"].asString());
 
 				std::string icon;
-				get_full_head_icon(replys["authorId"].asString(), icon);
+				get_full_head_icon(replys["authorIcon"].asString(), icon);   ////////////////////////////
 				reply.set_authoricon(icon);
 				
 				reply.set_fromauthorid(atoi(replys["fromAuthorId"].asString().c_str()));
