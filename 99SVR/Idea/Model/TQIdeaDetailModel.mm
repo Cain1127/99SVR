@@ -34,7 +34,7 @@
     
     _viewpointid = details->viewpointid();
     
-    [self settingTime];
+//    [self settingTime];
     
     return self;
 }

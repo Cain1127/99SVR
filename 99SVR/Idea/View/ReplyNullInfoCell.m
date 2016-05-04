@@ -22,7 +22,8 @@
     UIImage *image = [UIImage imageWithContentsOfFile:objCString];
     if (image)
     {
-        _view = [ViewNullFactory createViewBg:Rect(0, 0, kScreenWidth, 200) imgView:image msg:@"来抢个沙发吧!"];
+        _view = [ViewNullFactory createViewBg:Rect(0, 0, kScreenWidth, 200) imgView:image msg:@"暂时没有评论，你来吧!"];
+        [_view setUserInteractionEnabled:NO];
         [self.contentView addSubview:_view];
     }
     

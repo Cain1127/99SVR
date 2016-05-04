@@ -73,6 +73,9 @@ void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
 void ViewpointDetailListener::onResponse(ViewpointDetail& info, vector<ImageInfo>& images){
     DLog(@"images:%ld",images.size());
     TQIdeaDetailModel *model = [[TQIdeaDetailModel alloc] initWithViewpointDetail:&info];
+    
+    
+    
     NSDictionary *dict = @{@"code":@(1),@"model":model};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTDETAIL_VC object:dict];
 }

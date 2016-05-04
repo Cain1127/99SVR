@@ -60,7 +60,7 @@
 #pragma mark get history
 - (void)loadData
 {
-    [self.view makeToastActivity_bird_bird];
+    [self.view makeToastActivity_bird];
     [kHTTPSingle RequestCollection];
 }
 
@@ -118,7 +118,7 @@
     {
         [_noView setUserInteractionEnabled:YES];
         [_noView clickWithBlock:^(UIGestureRecognizer *gesture) {
-            [selfWeak.view makeToastActivity_bird_bird];
+            [selfWeak.view makeToastActivity_bird];
             [kHTTPSingle RequestCollection];
         }];
     }else

@@ -67,7 +67,7 @@
     NSInteger count = aryIndex.count;
     
     for (int i=0; i< count ; i++){
-        UIView *singGift = [[UIView alloc] initWithFrame:Rect((i/10*kScreenWidth)+i%5*width,i/5%2*kGiftHeight+1, width, kGiftHeight-2)];
+        UIView *singGift = [[UIView alloc] initWithFrame:Rect((i/10*kScreenWidth)+i%5*width,i/5%2*kGiftHeight, width, kGiftHeight-2)];
         [_scrollView addSubview:singGift];
         singGift.tag = i;
         
