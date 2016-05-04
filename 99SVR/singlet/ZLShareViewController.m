@@ -153,8 +153,12 @@
             [self shareFriend];
             break;
         case 6:
-            [self shareFriend];
-            break;
+        {
+            UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+            pboard.string = _strUrl;
+            [ProgressHUD showSuccess:@"复制成功"];
+        }
+        break;
             
     }
 }

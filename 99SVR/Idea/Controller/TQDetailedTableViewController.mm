@@ -619,7 +619,7 @@
         ZLReply *reply = [_aryCommont objectAtIndex:indexPath.row];
         if([reply.authorid intValue]== KUserSingleton.nUserId)
         {
-            [ProgressHUD showSuccess:@"不能回复自己的信息"];
+            [ProgressHUD showError:@"不能回复自己的信息"];
         }
         else
         {
