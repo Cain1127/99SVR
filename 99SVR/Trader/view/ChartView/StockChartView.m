@@ -57,11 +57,18 @@
     
     _leftTitArrays = leftTitArrays;
     for (int i=0; i!=leftTitArrays.count; i++) {
+        UILabel *targetLabel = [self viewWithTag:(i+10000)];
+        [targetLabel removeFromSuperview];
+    }
+    
+    
+    for (int i=0; i!=leftTitArrays.count; i++) {
         CGFloat labelOriginY = CGRectGetMinY(self.lineChartView.frame) - leftLab_h/2.0 + i*(CGRectGetHeight(self.lineChartView.frame)/(leftTitArrays.count-1));
         UILabel *label = [[UILabel alloc]initWithFrame:(CGRect){0,labelOriginY,leftLab_w,leftLab_h}];
         label.textAlignment = NSTextAlignmentCenter;
         label.textColor = COLOR_Text_Black;
         label.text = _leftTitArrays[i];
+        label.tag = 10000+i;
         label.font = [UIFont systemFontOfSize:13];
         [self addSubview:label];
     }
@@ -70,6 +77,11 @@
 -(void)setLowTitArrays:(NSArray *)lowTitArrays{
 
     _lowTitArrays = lowTitArrays;
+    
+    for (UILabel *label in _lowMenuView.subviews) {
+        [label removeFromSuperview];
+    }
+    
     for (int i=0; i!=lowTitArrays.count; i++) {
         CGFloat labOriginX = CGRectGetMinX(self.lineChartView.frame) + i *(CGRectGetWidth(self.lineChartView.frame)-(lowLab_w * lowTitArrays.count))/(lowTitArrays.count-1) + i*lowLab_w;
         UILabel *label = [[UILabel alloc]initWithFrame:(CGRect){labOriginX,10,lowLab_w,lowLab_h}];

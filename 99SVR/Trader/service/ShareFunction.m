@@ -118,8 +118,19 @@
 +(NSArray *)returnMinandMaxWithArrayA:(NSArray *)arrA withArrayB:(NSArray *)arrB{
 
     
+    DLog(@"arrA--%@",arrA);
+    
+    DLog(@"arrB --%@",arrB);
+    
     NSMutableArray *muArrayA = [ShareFunction sortOfSmallToBig:arrA];
     NSMutableArray *muArrayB = [ShareFunction sortOfSmallToBig:arrB];
+    
+    
+    
+    DLog(@"arrA-排序后-%@",arrA);
+    
+    DLog(@"arrB -排序后-%@",arrB);
+
     
     float minA = [[muArrayA firstObject] floatValue];
     float maxA = [[muArrayA lastObject] floatValue];
@@ -136,11 +147,21 @@
     }
     
     if (maxA>maxB) {
-        max = minA;
+        max = maxA;
     }else{
         max = maxB;
     }
-    return @[[NSString stringWithFormat:@"%f",((min -1.0))],[NSString stringWithFormat:@"%f",(max+1.0)]];
+    
+    CGFloat tempFloat = ABS(max-min) * 0.2;
+    if (max==min) {
+        min = -1.0;
+        max = 1.0;
+    }else{
+        max = max + tempFloat;
+        min = min - tempFloat;
+    }
+    
+    return @[[NSString stringWithFormat:@"%f",((min))],[NSString stringWithFormat:@"%f",(max)]];
 }
 
 

@@ -32,6 +32,7 @@
     self.chartView.lineChartView.timeValue = 0;
     self.chartView.lineChartView.level_Y = 2;
     self.chartView.lineChartView.level_X = 2;
+    self.chartView.topTitItems = @[@"全部",@"三个月",@"一个月"];
     [self.bakImageView addSubview:self.chartView];
     
     //交易动态的 VIP
@@ -62,15 +63,14 @@
         self.notVipView.hidden = YES;
 
         NSArray *stockLineArray = modelObject;
-        StockDealModel *model = stockLineArray[headerModel.selectBtnTag];
-        
-        [self setChartLineViewModel:model andHeaderModel:headerModel];
+        [self setChartLineViewModelArray:stockLineArray andHeaderModel:headerModel];
         
     }else if ([cellId isEqualToString:@"section1"]){
         
         
         StockDealModel *model = modelObject;
         self.chartView.hidden =YES;
+
         self.wareHouseViw.hidden = YES;
         self.lineView.hidden = YES;
         
@@ -112,17 +112,10 @@
         self.chartView.hidden =YES;
         self.tradeLabeView.hidden = YES;
         
-        
         if (vipBool) {
             self.wareHouseViw.hidden = NO;
             self.lineView.hidden = NO;
             self.notVipView.hidden = YES;
-
-//            self.wareHouseViw.titleLabV.leftLab.text = model.stockname;
-//            self.wareHouseViw.costRmbLabV.leftLab.text = [NSString stringWithFormat:@"成本 %@",model.currprice];
-//            self.wareHouseViw.costRmbLabV.rightLab.text = [NSString stringWithFormat:@"持有数 %@",model.count];
-//            self.wareHouseViw.nowRmbLabV.leftLab.text = [NSString stringWithFormat:@"现价 %@",model.currprice];
-//            self.wareHouseViw.nowRmbLabV.rightLab.text = [NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate];
 
             [self.wareHouseViw.titleLabV setLeftLabText:model.stockname rightLabText:@""];
             [self.wareHouseViw.nowRmbLabV setLeftLabText:[NSString stringWithFormat:@"现价 %@",model.currprice] rightLabText:[NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate]];
@@ -140,29 +133,14 @@
     }
 }
 
--(void)setChartLineViewModel:(StockDealModel *)model andHeaderModel:(StockDealModel *)headerModel{
-    
+-(void)setChartLineViewModelArray:(NSArray *)array andHeaderModel:(StockDealModel *)headerModel{
     
     WeakSelf(self);
+    weakSelf.chartView.selectIndex = headerModel.selectBtnTag;
+    StockDealModel *model = array[headerModel.selectBtnTag];
     
-    if (weakSelf.chartView) {
-        
-        [weakSelf.chartView removeFromSuperview];
-        //股票走势图
-        weakSelf.chartView = [[StockChartView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,static_cast<CGFloat>(ScreenWidth*0.75)}];
-        weakSelf.chartView.lineChartView.drawLine_X = YES;
-        weakSelf.chartView.lineChartView.drawLine_Y = NO;
-        weakSelf.chartView.lineChartView.lineColors = @[COLOR_Auxiliary_Orange,COLOR_Auxiliary_Blue];
-        weakSelf.chartView.lineChartView.timeValue = 0;
-        weakSelf.chartView.lineChartView.level_Y = 2;
-        weakSelf.chartView.lineChartView.level_X = 2;
-        weakSelf.chartView.topTitItems = @[@"全部",@"三个月",@"一个月"];
-        weakSelf.chartView.selectIndex = headerModel.selectBtnTag;
-        [weakSelf.bakImageView addSubview:weakSelf.chartView];
-        
-    }
-    
-    CGFloat midLeftStr = ABS(((ABS([model.maxY floatValue]) - ABS([model.minY floatValue]))/2.0)) + [model.minY floatValue];
+    CGFloat midLeftStr = 0.0;
+    midLeftStr = ABS(((ABS([model.maxY floatValue]) - [model.minY floatValue])/2.0)) + [model.minY floatValue];
     
     weakSelf.chartView.leftTitArrays = @[[NSString stringWithFormat:@"%.2f%%",[model.maxY floatValue]],[NSString stringWithFormat:@"%.2f%%",midLeftStr],[NSString stringWithFormat:@"%.2f%%",[model.minY floatValue]]];
     weakSelf.chartView.lowTitArrays = @[[model.dates firstObject],model.dates[(model.dates.count/2)],[model.dates lastObject]];
@@ -171,15 +149,13 @@
     [weakSelf.chartView.lineChartView clearLine];
     weakSelf.chartView.lineChartView.valuePoints_Y = @[model.rateYs,model.trendYs];
     [weakSelf.chartView.lineChartView drawLine];
-    
-    
-    
-    __weak typeof(model) weakModel = model;
+        
+    __weak typeof(array) weakArray = array;
     __weak typeof(headerModel) weakHeaderModel = headerModel;
     
     self.chartView.didSelcetIndex = ^(NSInteger index){
         weakHeaderModel.selectBtnTag = (index-1);
-        [weakSelf setChartLineViewModel:weakModel andHeaderModel:weakHeaderModel];
+        [weakSelf setChartLineViewModelArray:weakArray andHeaderModel:weakHeaderModel];
     };
 
     
