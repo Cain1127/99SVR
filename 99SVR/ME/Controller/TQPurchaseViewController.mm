@@ -40,7 +40,7 @@
     [super viewDidLoad];
     
     Loading_Bird_Show(self.tableView);
-    self.txtTitle.text = @"购买私人定制";
+    self.txtTitle.text = self.stockModel.teamname;
     self.dataArray = @[];
     self.automaticallyAdjustsScrollViewInsets = NO;
     //注册通知
