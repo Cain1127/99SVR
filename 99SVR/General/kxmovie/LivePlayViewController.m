@@ -80,6 +80,7 @@
 {
     NSDictionary *dict = notify.object;
     @WeakObj(self)
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
     if([dict isKindOfClass:[NSDictionary class]])
     {
         int nStatus = [dict[@"code"] intValue];
@@ -93,7 +94,7 @@
                     if ([_roomTemp.roomid intValue]==_roomid)
                     {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            selfWeak.btnShare.selected = YES;
+                            selfWeak.btnCollet.selected = YES;
                         });
                         break;
                     }
@@ -429,7 +430,7 @@
 
 - (void)colletInfo
 {
-    
+    [[ZLLogonServerSing sharedZLLogonServerSing] colletRoomInfo:!_btnCollet.selected];
 }
 
 - (UIButton *)createPlayBtn:(NSString *)strImg high:(NSString *)strHigh
