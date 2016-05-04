@@ -284,7 +284,7 @@
     
     NSDictionary *paramters;
     NSString *strInfo;
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     if(!banding)
     {
         //直接绑定手机

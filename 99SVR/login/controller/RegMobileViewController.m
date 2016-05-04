@@ -81,7 +81,7 @@
         [ProgressHUD showError:@"必须同意《用户服务协议》和《隐私权条款》"];
         return ;
     }
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     NSDictionary *paramters = @{@"type":@"2",@"account":_username,@"pwd":_password,@"vcode":strCode};
     NSString *strInfo = [NSString stringWithFormat:@"%@mapi/registerMulti",kRegisterNumber];
     @WeakObj(self)
@@ -196,7 +196,7 @@
         [ProgressHUD showError:@"请输入正确的手机号"];
         return ;
     }
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     [self getMobileCode:strMobile];
 }
 

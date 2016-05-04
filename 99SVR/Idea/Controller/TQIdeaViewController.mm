@@ -61,7 +61,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.footer setHidden:YES];
-    [self.view makeToastActivity_bird];
+    [self.view makeToastActivity_bird_bird];
     _nCurrent = 0;
 }
 
@@ -158,7 +158,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [_noView clickWithBlock:^(UIGestureRecognizer *gesture)
     {
         [selfWeak.noView removeFromSuperview];
-        [selfWeak.view makeToastActivity_bird];
+        [selfWeak.view makeToastActivity_bird_bird];
         [selfWeak updateRefresh];
     }];
 }

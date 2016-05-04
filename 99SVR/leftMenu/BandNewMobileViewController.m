@@ -155,7 +155,7 @@
         [ProgressHUD showError:@"请输入正确的手机号"];
         return ;
     }
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     [self getMobileCode:_mobile];
 }
 
@@ -231,7 +231,7 @@
     
     NSDictionary *paramters;
     NSString *strInfo;
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     
         //直接绑定手机
     paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(5),@"code":strCode,@"pwd":_password};

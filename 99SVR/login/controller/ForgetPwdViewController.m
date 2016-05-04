@@ -73,7 +73,7 @@
         [ProgressHUD showError:@"请输入正确的手机号"];
         return ;
     }
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     if(!strDate)
     {
         [ProgressHUD showError:@"手机异常"];
@@ -222,7 +222,7 @@
         [ProgressHUD showError:@"验证码不能为空"];
         return ;
     }
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     NSDictionary *parameters = @{@"phone":strMobile,@"code":strCode};
     NSString *strInfo = [NSString stringWithFormat:@"%@MApi/MobileFindPasswordCheckSMS",kRegisterNumber];
     _strMobile = strMobile;

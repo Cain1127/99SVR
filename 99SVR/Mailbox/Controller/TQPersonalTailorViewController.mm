@@ -47,7 +47,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
-    [self.view makeToastActivity_bird];
+    [self.view makeToastActivity_bird_bird];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -66,7 +66,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 
 //开始请求.结束下拉刷新
 -(void)updateRefresh {
-    //[self.view makeToastActivity_bird];
+    //[self.view makeToastActivity_bird_bird];
     [kHTTPSingle RequestPrivateServiceSummary:0 count:10];
     //[self.tableView.gifHeader endRefreshing];
 }

@@ -33,6 +33,8 @@
         self.userInteractionEnabled = YES;
         _imageView = [[UIImageView alloc] init];
         _imageView.frame = CGRectMake(0,4, frame.size.width,frame.size.height-8);
+        _imageView.layer.masksToBounds = YES;
+        _imageView.layer.cornerRadius = 2.5;
         [self addSubview:_imageView];
         UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(_imageView.x,_imageView.height+_imageView.y-40, _imageView.width,40)];
         [imgView setImage:[UIImage imageNamed:@"romm_bg"]];

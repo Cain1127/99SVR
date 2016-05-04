@@ -67,7 +67,7 @@
         [ProgressHUD showError:@"两次密码不一致"];
         return ;
     }
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     NSDictionary *parameters = @{@"phone":_strMobile,@"password":strPassword};
     NSString *strInfo = [NSString stringWithFormat:@"%@MApi/MobileFindPassword",kRegisterNumber];
     _strPwd = strPassword;

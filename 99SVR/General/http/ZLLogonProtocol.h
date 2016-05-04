@@ -173,7 +173,7 @@ public :
      */
     void sendGift(int giftId,int num);
     
-    void sendGiftInfo(int giftId,int num,int toName,const char *name);
+    void sendGiftInfo(int giftId, int num, int toUser, const char *name,int roomId);
     /**
      *   购买VIP
      */
@@ -375,7 +375,7 @@ class ZLRoomListener : public VideoRoomListener
     //◊Ó«ø’Ω∂”÷‹∞Òªÿ”¶
     virtual void OnTeamTopNResp(std::vector<TeamTopNResp>& infos){}
    
-    virtual void OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info){}
+    virtual void OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info);
     
     virtual void OnFavoriteVcbResp(FavoriteRoomResp& info){}
 };

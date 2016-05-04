@@ -394,7 +394,7 @@
     
     NSDictionary *paramters;
     NSString *strInfo;
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     [_lblError setText:@""];
     {
         //直接绑定手机

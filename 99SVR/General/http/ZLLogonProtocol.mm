@@ -462,16 +462,15 @@ void ZLLogonProtocol::sendGift(int giftId,int num){
     video_room->SendMsg_TradeGiftReq(req);
 }
 
-void ZLLogonProtocol::sendGiftInfo(int giftId, int num, int toUser, const char *name)
+void ZLLogonProtocol::sendGiftInfo(int giftId, int num, int toUser, const char *name,int roomId)
 {
-    TradeGiftRecord req;
-    req.set_toid(toUser);
+    ViewpointTradeGiftReq req;
+    req.set_teamid(toUser);
     req.set_giftid(giftId);
     req.set_giftnum(num);
-    req.set_action(2);
-    if(name){
-        req.set_toalias(name);
-    }
+    req.set_roomid(roomId);
+    req.set_userid(KUserSingleton.nUserId);
+    video_room->SendMsg_ViewpointTradeGiftReq(req);
 }
 
 void ZLLogonProtocol::buyPrivateVip(int teacherId,int type)
@@ -703,14 +702,10 @@ void ZLRoomListener::OnTradeGiftNotify(TradeGiftRecord& info){
     [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:parameters];
 }
 
-
-
-
-
-
-
-
-
+void ZLRoomListener::OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info)
+{
+    DLog(@"收到观点详情礼物通知!");
+}
 
 
 void ZLMessageListener::OnLoginMessageComming(void* msg)
