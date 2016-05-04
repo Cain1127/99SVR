@@ -37,7 +37,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.txtTitle.text = @"交易记录";
+    self.txtTitle.text = self.caoPanName;
     self.view.backgroundColor = COLOR_Bg_Gay;
     [self initData];
     [self initUI];

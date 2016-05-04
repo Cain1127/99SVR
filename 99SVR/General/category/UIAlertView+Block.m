@@ -69,7 +69,7 @@ static NSString *UIAlertViewKey = @"UIAlertViewKey";
 
 +(void)createAlertViewWithTitle:(NSString *)title withViewController:(UIViewController *)viewController withCancleBtnStr:(NSString *)cancelStr withOtherBtnStr:(NSString *)otherBthStr withMessage:(NSString *)message completionCallback:(void (^)(NSInteger index))completionCallback{
     
-    if ([[[UIDevice currentDevice] systemVersion] floatValue]<=8.0) {//8系统以上的
+    if ([[[UIDevice currentDevice] systemVersion] floatValue]>=8.0) {//8系统以上的
         UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         //取消按钮
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelStr style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {

@@ -223,6 +223,7 @@
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = tag==1 ? RecordType_Business : RecordType_StoreHouse;
             recordVC.operateId = [self.headerModel.operateid integerValue];
+            recordVC.caoPanName = self.headerModel.focus;
             [self.navigationController pushViewController:recordVC animated:YES];
             
         }else{
@@ -246,6 +247,7 @@
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = indexPath.section==1 ? RecordType_Business : RecordType_StoreHouse;
             recordVC.operateId = [self.headerModel.operateid integerValue];
+            recordVC.caoPanName = self.headerModel.focus;
             [self.navigationController pushViewController:recordVC animated:YES];
         }
     }
