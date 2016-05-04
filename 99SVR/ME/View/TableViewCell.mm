@@ -44,7 +44,7 @@
         self.vipNameLab.textColor = COLOR_Auxiliary_Blue;
         self.clickBtn.enabled = NO;
         self.buyLabel.hidden = YES;
-        [self.clickBtn setTitle:@"已购买" forState:UIControlStateDisabled];
+        [self.clickBtn setTitle:@"已兑换" forState:UIControlStateDisabled];
         self.clickBtn.backgroundColor = [UIColor clearColor];
         [self.clickBtn mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(@0);

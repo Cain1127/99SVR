@@ -37,10 +37,6 @@
     self.rightLab.textAlignment = NSTextAlignmentRight;
     self.rightLab.textColor = COLOR_Text_Black;
     [self addSubview:self.rightLab];
-    
-//    self.leftLab.backgroundColor = [UIColor yellowColor];
-//    
-//    self.rightLab.backgroundColor = [UIColor grayColor];
 
 }
 
@@ -55,8 +51,6 @@
 
 
     if (leftLabSize.width>rightLabSize.width) {//左边大过右边
-        
-        NSLog(@"%@",self.leftLab.text);
         
         self.leftLab.frame = (CGRect){10,0,leftLabSize.width + 10,self.height};
         self.rightLab.frame = (CGRect){CGRectGetMaxX(self.leftLab.frame),0,(self.width-CGRectGetMaxX(self.leftLab.frame)-10),self.height};

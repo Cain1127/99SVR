@@ -49,11 +49,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    /**显示鸟的加载图*/
-    Loading_Bird_Show
-    
+        
     [self initData];
     [self initUi];
     
@@ -88,7 +84,8 @@
     WeakSelf(self);
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-
+    weakSelf.tabViewTag = 1;
+    
     //day
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDayData:) name:MESSAGE_STOCK_HOME_DAY__VC object:nil];
     //mon
@@ -140,7 +137,12 @@
     [self.dayTab.gifHeader loadDefaultImg];
     [self.monTab.gifHeader loadDefaultImg];
     [self.totalTab.gifHeader loadDefaultImg];
-
+    
+    Loading_Bird_Show(self.dayTab);
+    Loading_Bird_Show(self.monTab);
+    Loading_Bird_Show(self.totalTab);
+    
+    
     [self.dayTab.gifHeader beginRefreshing];
     [self.monTab.gifHeader beginRefreshing];
     [self.totalTab.gifHeader beginRefreshing];
@@ -175,7 +177,7 @@
  */
 -(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockHomeTableViewModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray{
     
-    Loading_Bird_Hide
+    Loading_Bird_Hide(table);
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -342,26 +344,30 @@
         
         [self showErrorViewInView:tab withMsg:[NSString stringWithFormat:@"网络请求失败%@,点击重新请求",code] touchHanleBlock:^{
            
-            Loading_Bird_Show
             if (weakSelf.tabViewTag==1) {//日收益
-                [self.dayTab.gifHeader beginRefreshing];
+                Loading_Bird_Show(weakSelf.dayTab);
+                [weakSelf.dayTab.gifHeader beginRefreshing];
             }else if (weakSelf.tabViewTag==2){//月收益
-                [self.monTab.gifHeader beginRefreshing];
+                Loading_Bird_Show(weakSelf.monTab);
+                [weakSelf.monTab.gifHeader beginRefreshing];
             }else if (weakSelf.tabViewTag==3){//总收益
-                [self.totalTab.gifHeader beginRefreshing];
+                Loading_Bird_Show(weakSelf.totalTab);
+                [weakSelf.totalTab.gifHeader beginRefreshing];
             }
         }];
     }else if (dataArray.count==0&&[code intValue]==1){//数据为0 请求成功
         
         [self showEmptyViewInView:tab withMsg:[NSString stringWithFormat:@"暂无数据"] touchHanleBlock:^{
             
-            Loading_Bird_Show
             if (weakSelf.tabViewTag==1) {//日收益
-                [self.dayTab.gifHeader beginRefreshing];
+                Loading_Bird_Show(weakSelf.dayTab);
+                [weakSelf.dayTab.gifHeader beginRefreshing];
             }else if (weakSelf.tabViewTag==2){//月收益
-                [self.monTab.gifHeader beginRefreshing];
+                Loading_Bird_Show(weakSelf.monTab);
+                [weakSelf.monTab.gifHeader beginRefreshing];
             }else if (weakSelf.tabViewTag==3){//总收益
-                [self.totalTab.gifHeader beginRefreshing];
+                Loading_Bird_Show(weakSelf.totalTab);
+                [weakSelf.totalTab.gifHeader beginRefreshing];
             }
         }];
         

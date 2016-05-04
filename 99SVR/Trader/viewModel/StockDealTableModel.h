@@ -9,15 +9,21 @@
 
 @protocol StockDealTableModelDelegate <NSObject>
 
-//-(void)stockDealTableModelRefreshData;
+/**去购买Vip*/
+-(void)goBuyVipService;
+/**点击头部的提示跳转*/
+-(void)didClickTableHeaderViewTag:(NSInteger)tag;
+/**点击tableView的回调跳转*/
+-(void)didSelectRowAtIndexPathWithTableView:(NSIndexPath *)indexPath;
+
 
 @end
 
 @interface StockDealTableModel : NSObject<UITableViewDelegate,UITableViewDataSource>
 /**vip等级*/
 @property (nonatomic , strong) NSArray *dataArray;
-@property (nonatomic , weak) UIViewController *viewController;
-//@property (nonatomic , weak) id <StockDealTableModelDelegate> delegate;
+@property (nonatomic , weak) id<StockDealTableModelDelegate>delegate;
+
 
 -(void)setIsShowRecal:(NSString *)showRecal withDataModel:(StockDealModel *)model;
 
