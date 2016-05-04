@@ -41,7 +41,7 @@
     self.txtTitle.text = self.stockModel.teamname;
     self.warningLab.text = @"仅代表讲师个人操盘记录,不构成投资建议，风险自负";
     
-    Loading_Bird_Show
+    Loading_Bird_Show(self.tableView);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
     [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
@@ -59,7 +59,7 @@
 - (void)printInfo:(NSNotification *)notify{
     
 
-    Loading_Bird_Hide
+    Loading_Bird_Hide(self.tableView);
     NSDictionary *dic = notify.object;
     NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
     [self.view hideToastActivity];
@@ -114,7 +114,7 @@
         
         [self showErrorViewInView:self.tableView withMsg:[NSString stringWithFormat:@"网络链接错误%@,点击重新链接",code] touchHanleBlock:^{
             
-            Loading_Bird_Show
+            Loading_Bird_Show(weakSelf.tableView);
             [kHTTPSingle RequestOperateStockAllDetail:[weakSelf.stockModel.operateid intValue]];
         }];
         
@@ -180,7 +180,6 @@
     
     [super viewWillDisappear:animated];
     
-    Loading_Bird_Hide
 }
 -(void)dealloc{
 

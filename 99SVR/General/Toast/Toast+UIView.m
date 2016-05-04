@@ -146,6 +146,7 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
     objc_setAssociatedObject (self, &CSToastActivityViewKey, activityView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     [self addSubview:activityView];
+    [self bringSubviewToFront:activityView];
     
     [UIView animateWithDuration:CSToastFadeDuration
                           delay:0.0

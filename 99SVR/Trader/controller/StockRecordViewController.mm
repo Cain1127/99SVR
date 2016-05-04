@@ -58,10 +58,6 @@
 -(void)initData{
     
     WeakSelf(self);
-
-    /**显示鸟的加载图*/
-    Loading_Bird_Show
-
     
     //交易记录通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBusinessData:) name:MESSAGE_STOCK_RECORD_BUSINESS_VC object:nil];
@@ -87,6 +83,7 @@
     //持仓详情请求
     [kHTTPSingle RequestOperateStocks:(int)weakSelf.operateId];
     
+    Loading_Bird_Show(self.businessTab);
     [self.businessTab.gifHeader loadDefaultImg];
     [self.businessTab.gifHeader beginRefreshing];
     self.businessTab.footer.hidden = YES;
@@ -117,7 +114,7 @@
 -(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockRecordTabModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray withTabTag:(NSInteger )tag{
     
     /**显示鸟的加载图*/
-    Loading_Bird_Hide
+    Loading_Bird_Hide(table);
     
     WeakSelf(self);
     
@@ -159,7 +156,7 @@
         if (toDataArray.count==0&&[code intValue]!=1) {
             
             [self showErrorViewInView:table withMsg:[NSString stringWithFormat:@"网络异常代码%@",code] touchHanleBlock:^{
-                Loading_Bird_Show
+                Loading_Bird_Show(table);
                 if (weakSelf.tabViewTag==1) {//交易记录
                     [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
 
@@ -172,8 +169,7 @@
     
             [self showEmptyViewInView:table withMsg:[NSString stringWithFormat:@"暂无数据"] touchHanleBlock:^{
                 
-                Loading_Bird_Show
-                
+                Loading_Bird_Show(table);
                 if (weakSelf.tabViewTag==1) {//交易记录
                     [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
 
@@ -300,8 +296,6 @@
 -(void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    
-    Loading_Bird_Hide
 }
 
 
