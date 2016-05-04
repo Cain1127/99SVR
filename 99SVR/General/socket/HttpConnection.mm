@@ -151,12 +151,6 @@ static void http_request_asyn(HttpListener* uiListener, ParseJson jsonPaser, Req
 
 
 
-// Ω≤ ¶Õ≈∂”ªÿ¥Ã·Œ £®PC∂ÀΩ”ø⁄£©
-void PostAnswer(int questionId, string content, HttpListener* listener)
-{
-    
-}
-
 /******************************Ω‚Œˆjson******************************/
 
 void parse_homepage(char* json, HttpListener* listener)
@@ -278,13 +272,15 @@ void parse_homepage(char* json, HttpListener* listener)
                             viewpointItem.set_replycount(atoi(viewpoint[i]["replyCount"].asString().c_str()));
                             viewpointItem.set_content(viewpoint[i]["contents"].asString());
                             
-                            //viewpointItem.set_roomid(atoi(viewpoint[i]["roomid"].asString().c_str()));
+                            viewpointItem.set_roomid(atoi(viewpoint[i]["roomid"].asString().c_str()));
                             
                             //viewpointItem.set_authoricon(viewpoint[i]["authorIcon"].asString());
                             std::string icon;
-                            get_full_head_icon(viewpoint[i]["authorId"].asString(), icon);
+                            get_full_head_icon(viewpoint[i]["authorIcon"].asString(), icon);
                             viewpointItem.set_authoricon(icon);
                             viewpointItem.set_authorname(viewpoint[i]["authorName"].asString());
+                            
+                            viewpointItem.set_giftcount(atoi(viewpoint[i]["giftcount"].asString().c_str()));
                             
                             std::string strOut;
                             string2timestamp(viewpoint[i]["publishTime"].asString(), strOut);
@@ -303,10 +299,20 @@ void parse_homepage(char* json, HttpListener* listener)
                         for(i = 0; i < size_; i++)
                         {
                             OperateStockProfit operateItem;
-                            operateItem.set_totalprofit(atof(operate[i]["rate"].asString().c_str()));
-                            operateItem.set_focus(operate[i]["name"].asString());
-                            operateItem.set_goalprofit(atof(operate[i]["target"].asString().c_str()));
-                            operateItem.set_teamname(operate[i]["nickname"].asString());
+                            operateItem.set_operateid(atoi(operate[i]["operateId"].asString().c_str()));
+                            operateItem.set_teamid(atoi(operate[i]["teamId"].asString().c_str()));
+                            operateItem.set_teamname(operate[i]["teamName"].asString());
+                            
+                            std::string icon;
+                            get_full_head_icon(operate[i]["teamIcon"].asString(), icon);
+                            operateItem.set_teamicon(icon);
+                            
+                            operateItem.set_focus(operate[i]["focus"].asString());
+                            operateItem.set_goalprofit(atof(operate[i]["goalProfit"].asString().c_str()));
+                            operateItem.set_totalprofit(atof(operate[i]["totalProfit"].asString().c_str()));
+                            operateItem.set_dayprofit(atof(operate[i]["dayProfit"].asString().c_str()));
+                            operateItem.set_monthprofit(atof(operate[i]["monthProfit"].asString().c_str()));
+                            operateItem.set_winrate(atof(operate[i]["winRate"].asString().c_str()));
                             
                             vec_operate.push_back(operateItem);
                         }
@@ -712,7 +718,11 @@ void parse_privatetraderecord(char* json, HttpListener* listener)
                     trans.set_price(atof((datas[i]["price"].asString()).c_str()));
                     trans.set_count(atoi((datas[i]["count"].asString()).c_str()));
                     trans.set_money(atof((datas[i]["money"].asString()).c_str()));
-                    trans.set_time(datas[i]["time"].asString());
+                    
+                    std::string strOut;
+                    string2timestamp(datas[i]["time"].asString(), strOut);
+                    trans.set_time(strOut);
+                    
                     trans.set_summary(datas[i]["summary"].asString());
                     
                     vec_trans.push_back(trans);
@@ -830,12 +840,13 @@ void parse_ViewpointSummary(char* json, HttpListener* listener)
                             viewpoint.set_authorname(data_item["authorname"].asString());
                             
                             std::string icon;
-                            get_full_head_icon(data_item["authorid"].asString(), icon);
+                            get_full_head_icon(data_item["authoricon"].asString(), icon);
                             viewpoint.set_authoricon(icon);
                             
                             std::string strOut;
                             string2timestamp(data_item["publishtime"].asString(), strOut);
                             viewpoint.set_publishtime(strOut);
+                            
                             viewpoint.set_content(data_item["content"].asString());
                             viewpoint.set_replycount(atoi(data_item["replycount"].asString().c_str()));
                             viewpoint.set_giftcount(atoi(data_item["giftcount"].asString().c_str()));
@@ -1038,13 +1049,13 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
                                 JsonValue& data_item = buylist[i];
                                 
                                 mps.set_teamid(data_item["teacherid"].asInt());
-                                mps.set_teamname(data_item["teacherid"].asString());
+                                mps.set_teamname(data_item["calias"].asString());
                                 
                                 std::string icon;
                                 get_full_head_icon(data_item["nheadid"].asString(), icon);
                                 mps.set_teamicon(icon);
                                 
-                                mps.set_levelid(data_item["viplevel"].asInt());
+                                mps.set_levelid(data_item["viptype"].asInt());
                                 mps.set_levelname(data_item["vipinfoname"].asString());
                                 
                                 std::string strOut1, strOut2;
@@ -1167,8 +1178,13 @@ void parse_BuyPrivateService(char* json, HttpListener* listener)
                             psld.set_updateprice(data_item["upgrade_price"].asFloat());
                             
                             psld.set_isopen(data_item["flag"].asInt());
-                            psld.set_buytime(data_item["buytime"].asString());
-                            psld.set_expirtiontime(data_item["expirtiontime"].asString());
+                            
+                            std::string strOut1,strOut2;
+                            string2timestamp(data_item["buytime"].asString(), strOut1);
+                            string2timestamp(data_item["expirtiontime"].asString(), strOut2);
+                            
+                            psld.set_buytime(strOut1);
+                            psld.set_expirtiontime(strOut2);
                             
                             psld_list.push_back(psld);
                         }
@@ -1397,6 +1413,7 @@ void parse_viewpointdetail(char* json, HttpListener* listener)
                 detail.set_content(details["content"].asString());
                 detail.set_replycount(atoi((details["replyCount"].asString()).c_str()));
                 detail.set_giftcount(atoi((details["giftcount"].asString()).c_str()));
+                detail.set_html5url(details["share_link"].asString());
                 
                 size_ = details["pic"].size();
                 img_list.clear();
@@ -1480,7 +1497,7 @@ void parse_viewpointreply(char* json, HttpListener* listener)
                     reply.set_authorname(replys[i]["authorName"].asString());
                     
                     std::string icon;
-                    get_full_head_icon(replys[i]["authorId"].asString(), icon);
+                    get_full_head_icon(replys[i]["authorIcon"].asString(), icon);//////////////////////////////////////
                     reply.set_authoricon(icon);
                     
                     reply.set_fromauthorid(atoi(replys[i]["fromAuthorId"].asString().c_str()));
@@ -1488,7 +1505,11 @@ void parse_viewpointreply(char* json, HttpListener* listener)
                     
                     get_full_head_icon(replys[i]["fromAuthorIcon"].asString(), icon);
                     reply.set_fromauthoricon(icon);
-                    reply.set_publishtime(replys[i]["publishTime"].asString());
+                    
+                    std::string strOut;
+                    string2timestamp(replys[i]["publishTime"].asString(), strOut);
+                    reply.set_publishtime(strOut);
+                    
                     reply.set_content(replys[i]["content"].asString());
                     
                     vec_reply.push_back(reply);
@@ -1551,7 +1572,7 @@ void parse_postreply(char* json, HttpListener* listener)
                 reply.set_authorname(replys["authorName"].asString());
                 
                 std::string icon;
-                get_full_head_icon(replys["authorId"].asString(), icon);
+                get_full_head_icon(replys["authorIcon"].asString(), icon);   ////////////////////////////
                 reply.set_authoricon(icon);
                 
                 reply.set_fromauthorid(atoi(replys["fromAuthorId"].asString().c_str()));
@@ -1559,7 +1580,11 @@ void parse_postreply(char* json, HttpListener* listener)
                 
                 get_full_head_icon(replys["fromAuthorIcon"].asString(), icon);
                 reply.set_fromauthoricon(icon);
-                reply.set_publishtime(replys["publishTime"].asString());
+                
+                std::string strOut;
+                string2timestamp(replys["publishTime"].asString(), strOut);
+                reply.set_publishtime(strOut);
+                
                 reply.set_content(replys["content"].asString());
                 
                 
@@ -1614,7 +1639,7 @@ void parse_totalunreadcount(char* json, HttpListener* listener)
             if(!datas.isNull())
             {
                 TotalUnread unread;
-                unread.set_total(atoi((datas["tips"]["total"].asString()).c_str()));
+                unread.set_total(atoi((datas["total"].asString()).c_str()));
                 
                 unread_listener->onResponse(unread);
             }
@@ -1735,7 +1760,10 @@ void parse_privateservicesummary(char* json, HttpListener* listener)
                     privateserv.set_title(datas["list"][i]["title"].asString());
                     privateserv.set_summary(datas["list"][i]["summary"].asString());
                     privateserv.set_teamname(datas["list"][i]["teamName"].asString());
-                    privateserv.set_publishtime(datas["list"][i]["publishTime"].asString());
+                    
+                    std::string strOut;
+                    string2timestamp(datas["list"][i]["publishTime"].asString(), strOut);
+                    privateserv.set_publishtime(strOut);
                     
                     vec_private.push_back(privateserv);
                 }
@@ -1792,7 +1820,11 @@ void parse_privateservicedetail(char* json, HttpListener* listener)
                 PrivateServiceDetail detail;
                 detail.set_title(datas["row"]["title"].asString());
                 detail.set_content(datas["row"]["content"].asString());
-                detail.set_publishtime(datas["row"]["publishTime"].asString());
+                
+                std::string strOut;
+                string2timestamp(datas["row"]["publishTime"].asString(), strOut);
+                detail.set_publishtime(strOut);
+                
                 detail.set_videourl(datas["row"]["videoUrl"].asString());
                 detail.set_videoname(datas["row"]["videoName"].asString());
                 detail.set_attachmenturl(datas["row"]["attachmentUrl"].asString());
@@ -1862,7 +1894,11 @@ void parse_systemmessage(char* json, HttpListener* listener)
                     system.set_id(atoi((datas["list"][i]["id"].asString()).c_str()));
                     system.set_title(datas["list"][i]["title"].asString());
                     system.set_content(datas["list"][i]["content"].asString());
-                    system.set_publishtime(datas["list"][i]["publishTime"].asString());
+                    
+                    std::string strOut;
+                    string2timestamp(datas["list"][i]["publishTime"].asString(), strOut);
+                    system.set_publishtime(strOut);
+                    
                     vec_system.push_back(system);
                 }
                 
@@ -1944,7 +1980,7 @@ void parse_questionanswer(char* json, HttpListener* listener)
                     questionanswer.set_askauthorname(datas["list"][i]["askAuthorName"].asString());
                     
                     
-                    get_full_head_icon(datas["list"][i]["askAuthorId"].asString(), icon);
+                    get_full_head_icon(datas["list"][i]["askAuthorHead"].asString(), icon);
                     questionanswer.set_askauthorhead(icon);
                     
                     questionanswer.set_askauthorrole(atoi((datas["list"][i]["askAuthorRole"].asString()).c_str()));
@@ -2032,7 +2068,10 @@ void parse_comment(char* json, HttpListener* listener)
                     comment.set_asktime(datas["list"][i]["askTime"].asString());
                     comment.set_answerauthorid(datas["list"][i]["answerAuthorId"].asString());
                     comment.set_answerauthorname(datas["list"][i]["answerAuthorName"].asString());
+                    
                     comment.set_answerauthorhead(datas["list"][i]["answerAuthorHead"].asString());
+                    
+                    
                     comment.set_answerauthorrole(atoi((datas["list"][i]["answerAuthorRole"].asString()).c_str()));
                     comment.set_answertime(datas["list"][i]["answerTime"].asString());
                     comment.set_answercontent(datas["list"][i]["answerContent"].asString());
@@ -2099,6 +2138,41 @@ void parse_postaskquestion(char* json, HttpListener* listener)
     catch ( std::exception& ex)
     {
         ask_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+void parse_postanswer(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    AnswerQuestionListener* ans_listener = (AnswerQuestionListener*)listener;
+    
+    try
+    {
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                
+                std::string info = value["info"].asString();
+                
+                LOG("---------[%s]---------", info.c_str());
+                
+                //TODO
+                ans_listener->onResponse(status);
+            }
+            else
+            {
+                ans_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+    }
+    catch( std::exception& ex )
+    {
+        ans_listener->OnError(PERR_JSON_PARSE_ERROR);
     }
 }
 
@@ -2724,7 +2798,10 @@ void parse_questionunanswer(char* json, HttpListener* listener)
                         questionanswer.set_askauthorrole(atoi((datas["list"][i]["askAuthorRole"].asString()).c_str()));
                         questionanswer.set_askstock(datas["list"][i]["askStock"].asString());
                         questionanswer.set_askcontent(datas["list"][i]["askContent"].asString());
-                        questionanswer.set_asktime(datas["list"][i]["askTime"].asString());
+                        
+                        std::string strOut;
+                        string2timestamp(datas["list"][i]["askTime"].asString(), strOut);
+                        questionanswer.set_asktime(strOut);
                         
                         questionanswer.set_answerauthorid(0);
                         questionanswer.set_answerauthorname("");
@@ -2809,7 +2886,10 @@ void parse_sendcomment(char* json, HttpListener* listener)
                     comment.set_askauthorhead(icon);
                     comment.set_askauthorrole(atoi((datas["list"][i]["askAuthorRole"].asString()).c_str()));
                     comment.set_askcontent(datas["list"][i]["askContent"].asString());
-                    comment.set_asktime(datas["list"][i]["askTime"].asString());
+                    
+                    std::string strOut;
+                    string2timestamp(datas["list"][i]["askTime"].asString(), strOut);
+                    comment.set_asktime(strOut);
                     
                     comment.set_answerauthorid("");
                     comment.set_answerauthorname("");
@@ -3115,7 +3195,7 @@ void HttpConnection::RequestPrivateTradeRecord(int startId, int count,OperateSto
 void HttpConnection::RequestSystemMessage(int startId, int count, SystemMessageListener* listener)
 {
     char tmp[512];
-    sprintf(tmp,"/mail/system/uid/%d/size/%d/id/%d/type/%d",1706716,count,startId,0);
+    sprintf(tmp,"/mail/system/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
@@ -3171,7 +3251,7 @@ void HttpConnection::RequestTeamVideo(int teamId, TeamVideoListener* listener)
     http_request_asyn(listener, parse_teamvideo, &request);
 }
 
-void HttpConnection::PostAskQuestion(int teamId,const char* stock,const char* question, AskQuestionListener* listener)
+void HttpConnection::PostAskQuestion(int teamId, const char* stock, const char* question, AskQuestionListener* listener)
 {
     RequestParamter& request = get_request_param();
     request["s"] = "questions/postaskquestion";
@@ -3185,6 +3265,20 @@ void HttpConnection::PostAskQuestion(int teamId,const char* stock,const char* qu
     http_request_asyn(listener, parse_postaskquestion, &request, HTTP_POST);
 }
 
+// Ω≤ ¶Õ≈∂”ªÿ¥Ã·Œ £®PC∂ÀΩ”ø⁄£©
+void HttpConnection::PostAnswer(int questionId, int teamId, char* answer, AnswerQuestionListener* listener)
+{	
+    RequestParamter& request = get_request_param();
+    request["s"] = "Questions/PostAnswer";
+    request["userid"] = get_user_id().c_str();
+    
+    request["questionid"] = int2string(questionId);
+    request["teamId"] = int2string(teamId);
+    request["answer"] = answer;
+    request["questionstype"] = get_client_type().c_str();
+    
+    http_request_asyn(listener, parse_postanswer, &request, HTTP_POST);
+}
 
 // «Î«Û≤Ÿ≈Ã¡–±Ì(»’ ’“Ê≈≈–Ú/‘¬ ’“Ê≈≈–Ú/◊‹ ’“Ê≈≈–Ú type:0-»´≤ø ’“Ê;1-»’ ’“Ê;2-‘¬ ’“Ê;ƒ¨»œŒ™0 )
 void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, int size, OperateStockProfitListener* listener)

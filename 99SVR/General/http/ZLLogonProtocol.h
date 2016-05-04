@@ -184,7 +184,7 @@ public :
      */
     void requestRoomMsg();
     
-    void colletRoomInfo(int roomId);
+    void colletRoomInfo(int action);
     ~ZLLogonProtocol();
 };
 

@@ -68,7 +68,7 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
 
 - (void)requestRoomInfo;
 
-- (void)colletRoomInfo:(int)roomId;
+- (void)colletRoomInfo:(int)action;
 
 
 @end
