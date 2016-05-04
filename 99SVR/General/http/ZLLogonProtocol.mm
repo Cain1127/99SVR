@@ -95,6 +95,13 @@ void ZLPushListener::OnEmailNewMsgNoty(EmailNewMsgNoty& info)
 
 //*********************************************************
 
+void ZLHallListener::OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info)
+{
+    NSDictionary *dict = @{@"userid":@(info.userid()),@"roomid":@(info.roomid()),@"teamid":@(info.roomid()),@"giftid":@(info.giftid()),
+                           @"giftnum":@(info.giftnum())};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VIEW_DETAILS_GIFT_VC object:dict];
+}
+
 void ZLHallListener::OnSetUserPwdResp(SetUserPwdResp& info)
 {
     DLog(@"error:%d",info.errorid());
@@ -423,7 +430,7 @@ void ZLLogonProtocol::sendMessage(const char *msg,int toId,const char *toalias){
 }
 
 void ZLLogonProtocol::exitRoomInfo(){
-    video_room->SendMsg_ExitRoomReq();
+    video_room->SendMsg_ExitRoomReq(room_info.vcbid());
     [currentRoom.aryUser removeAllObjects];
     [currentRoom.dictUser removeAllObjects];
 }
@@ -454,6 +461,19 @@ void ZLLogonProtocol::sendGift(int giftId,int num){
     }
     video_room->SendMsg_TradeGiftReq(req);
 }
+
+void ZLLogonProtocol::sendGiftInfo(int giftId, int num, int toUser, const char *name)
+{
+    TradeGiftRecord req;
+    req.set_toid(toUser);
+    req.set_giftid(giftId);
+    req.set_giftnum(num);
+    req.set_action(2);
+    if(name){
+        req.set_toalias(name);
+    }
+}
+
 void ZLLogonProtocol::buyPrivateVip(int teacherId,int type)
 {
     conn->SendMsg_BuyPrivateVipReq(teacherId, type);

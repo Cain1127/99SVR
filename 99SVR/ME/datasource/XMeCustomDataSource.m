@@ -50,13 +50,13 @@ static NSString *const MeCustomizedCell = @"MeCustomizedCell";
         TQMeCustomizedModel *model = _aryModel[indexPath.section];
         cell.lblName.text = model.teamname;
         cell.lblLevel.text = model.levelname;
-        cell.lblTime.text = model.expirationdate;
+        cell.lblTime.text = @"终身有效";
         
         char cBuffer[100]={0};
         sprintf(cBuffer,"100_1");
         NSString *strName = [NSString stringWithUTF8String:cBuffer];
         NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
-        [cell.imgView sd_setImageWithURL:url1 placeholderImage:[UIImage imageNamed:@"defaultHead_1"]];
+        [cell.imgView sd_setImageWithURL:url1 placeholderImage:[UIImage imageNamed:@"default"]];
         NSString *imgName = [NSString stringWithFormat:@"customized_vip%d_icon",model.levelid];
         cell.imgLevel.image = [UIImage imageNamed:imgName];
     }

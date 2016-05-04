@@ -54,7 +54,8 @@
     
     @WeakObj(self)
     _privateView = [[PrivateVipView alloc] init];
-    _privateView.selectVipBlock = ^(NSUInteger vipLevelId){
+    _privateView.selectVipBlock = ^(NSUInteger vipLevelId)
+    {
         @StrongObj(self)
         self.noBuyDataSource.selectIndex = vipLevelId;
         [self.tableView reloadData];

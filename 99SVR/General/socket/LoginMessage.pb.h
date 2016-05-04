@@ -4667,8 +4667,6 @@ public:
 };
 
 
-
-
 class ErrCodeResp
 {
 
@@ -4682,12 +4680,15 @@ private:
 public:
 
 	 inline uint32 errmaincmd() { return _errmaincmd; } const 
+
 	 inline void set_errmaincmd(const uint32 value) { _errmaincmd = value; }
 
 	 inline uint32 errsubcmd() { return _errsubcmd; } const 
+
 	 inline void set_errsubcmd(const uint32 value) { _errsubcmd = value; }
 
 	 inline uint32 errcode() { return _errcode; } const 
+
 	 inline void set_errcode(const uint32 value) { _errcode = value; }
 
 
@@ -4718,7 +4719,6 @@ public:
 	}
 
 };
-
 
 
 

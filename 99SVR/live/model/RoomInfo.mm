@@ -55,8 +55,8 @@
     _strRoomName = [NSString stringWithCString:pResp->cname().c_str() encoding:GBK_ENCODING];
     _strPwd = [NSString stringWithCString:pResp->cpwd().c_str() encoding:GBK_ENCODING];
     memset(cCarName, 0, NAMELEN);
-    sprintf(cCarName, "%s",pResp->carname().c_str());
-    _ncarid = pResp->ncarid();
+//    sprintf(cCarName, "%s",pRespcnameme().c_str());
+//    _ncarid = pResp->ncarid();
     return self;
 }
 

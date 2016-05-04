@@ -174,7 +174,7 @@ int Socket::get_address()
 {
 	sockaddr_in sockAddr;
 	memset(&sockAddr, 0, sizeof(sockAddr));
-	socklen_t nAddrLen = sizeof(sockAddr);
+	my_socklen_t nAddrLen = sizeof(sockAddr);
 
 	//根据套接字获取地址信息
 	//if (::getpeername(socket, (struct sockaddr*)&sockAddr, &nAddrLen) != 0)

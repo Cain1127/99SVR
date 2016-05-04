@@ -22,9 +22,10 @@ static char lbs_curr[256] = {0};
 static int lbs_count;
 
 
-void SetProtocolCachePath(const char* path)
+void InitProtocolContext(const char* path)
 {
 	strcpy(cache_path, path);
+	in_room = false;
 }
 
 void ReadProtocolCache(const char *suffix_path, std::string& cache_content)
@@ -37,16 +38,18 @@ void ReadProtocolCache(const char *suffix_path, std::string& cache_content)
 	std::string full_path;
 
 	full_path = cache_path;
+	full_path += FILE_SEPARATOR;
 	full_path += suffix_path;
 
 	char contentBuf[256] = {0};
+
+	LOG("read path:%s:", full_path.c_str());
 
 	FILE *fp;
 	fp = fopen(full_path.c_str(), "r");
 	
 	if(!fp)
 	{
-		//fclose(fp);
 		return;
 	}
 
@@ -56,6 +59,8 @@ void ReadProtocolCache(const char *suffix_path, std::string& cache_content)
 		contentBuf[n_read] = '\0';
 		cache_content += contentBuf;
 	}
+
+	LOG("read json:%s:", cache_content.c_str());
 
 	fclose(fp);
 }
@@ -70,33 +75,27 @@ void WriteProtocolCache(const char *suffix_path, std::string& cache_content)
 	std::string full_path;
 
 	full_path = cache_path;
+	full_path += FILE_SEPARATOR;
 	full_path += suffix_path;
+
+	LOG("save path:%s:", full_path.c_str());
 
 	FILE *fp;
 	fp = fopen(full_path.c_str(), "w");
 
 	if(!fp)
 	{
-		//fclose(fp);
 		return;
 	}
 
 	const char* pContent = cache_content.c_str();
 	const char* pStart = pContent;
 
-	int idx = 0;
 	int length = cache_content.size();
 
-	/*while(idx < length)
-	{
-		size_t cnt = fwrite(pStart, 1, 255, fp);
-
-		pStart += cnt;
-
-		idx += cnt;
-	}*/
-
 	fwrite(pStart, 1, length, fp);
+
+	LOG("save json:%s:", cache_content.c_str());
 
 	fclose(fp);
 }
@@ -490,6 +489,73 @@ void Connection::do_error()
 
 }
 
+string Connection::get_error_desc(int err_code)
+{
+	string str="";
+	switch(err_code)
+	{
+	case protocol::ERR_CODE_SUCCESS:
+		str="成功";
+		break;
+	case protocol::ERR_CODE_FAILED:
+		str="失败";
+		break;
+	case protocol::ERR_CODE_FAILED_PACKAGEERROR:
+		str="请求包长度错误";
+		break;
+	case protocol::ERR_CODE_FAILED_DBERROR:
+		str="数据库类型错误";
+		break;
+	case protocol::ERR_CODE_FAILED_INVALIDCHAR:
+		str="输入了非法字符";
+		break;
+	case protocol::ERR_CODE_FAILED_USERNOTFOUND:
+		str="找不到该用户";
+		break;
+	case protocol::ERR_CODE_FAILED_USERFROSEN:
+		str="用户被冻结";
+		break;
+	case protocol::ERR_CODE_FAILED_UNKNONMESSAGETYPE:
+		str="未知消息类型";
+		break;
+	case protocol::ERR_CODE_FAILED_REQUEST_OUTOFRANGE:
+		str="请求数据过多或者内容过长";
+		break;
+	case protocol::ERR_CODE_FAILED_SAMEUSERLOGIN:
+		str="完全相同的用户加入房间";
+		break;
+	case protocol::ERR_CODE_FAILED_AREAIDNOTFOUND:
+		str="没有找到区域ID";
+		break;
+	case protocol::ERR_CODE_FAILED_ROOMIDNOTFOUND:
+		str="没有找到房间ID";
+		break;
+	case protocol::ERR_CODE_FAILED_CRC:
+		str="CRC校验错误";
+		break;
+	case protocol::ERR_CODE_FAILED_CREATEUSER:
+		str="没有找到创建用户失败";
+		break;
+	case protocol::ERR_CODE_FAILED_KEYWORDFOUND:
+		str="发现关键词";
+		break;
+	case protocol::ERR_CODE_FAILED_NOT_ENOUGH_GOLD:
+		str="金币不足";
+		break;
+	case protocol::ERR_CODE_FAILED_ALREADY_BUY:
+		str="已经购买";
+		break;
+	case protocol::ERR_CODE_FAILED_PRIVATENOTFOUND:
+		str="没有该私人订制";
+		break;
+	default:
+		str="未知错误";
+		break;
+	}
+
+	return str;
+}
+
 void Connection::RegisterConnectionListener(
 		ConnectionListener* connection_listener)
 {
@@ -690,7 +756,6 @@ void Connection::on_dispatch_message(void* msg)
 	if (message_listener != NULL)
 	{
 		protocol::COM_MSG_HEADER* head = (protocol::COM_MSG_HEADER*)msg;
-		LOG("MDM_Vchat_Room:%d:%d", head->maincmd, head->subcmd);
 		switch ( head->maincmd )
 		{
 		case protocol::MDM_Vchat_Login:
@@ -698,7 +763,6 @@ void Connection::on_dispatch_message(void* msg)
 			message_listener->OnLoginMessageComming(msg);
 			break;
 		case protocol::MDM_Vchat_Room:
-
 			message_listener->OnVideoRoomMessageComming(msg);
 			break;
 		case protocol::MDM_Vchat_Usermgr:

@@ -17,9 +17,6 @@ private:
 	VideoRoomListener* room_listener;
 	VideoRoomJoinListener* room_join_listener;
 
-	JoinRoomReq join_req;
-	JoinRoomResp room_info;
-
 	void dispatch_push_message(void* body);
 
 protected:
@@ -47,7 +44,7 @@ public:
 	void SendMsg_AfterJoinRoomReq();
 
 	//用户自己退出房间
-	void SendMsg_ExitRoomReq();
+	void SendMsg_ExitRoomReq(uint32 roomid);
 
 	//关键字操作请求
 	void SendMsg_ModifyAdKeywordsReq(AdKeywordsReq& req);
@@ -135,6 +132,9 @@ public:
 
 	//最强战队周榜请求
 	void SendMsg_TeamTopNReq(TeamTopNReq& req);
+
+	//观点赠送礼物请求
+	void SendMsg_ViewpointTradeGiftReq(ViewpointTradeGiftReq& req);
 
 	void close();
 
