@@ -25,23 +25,28 @@ static NSString *UIAlertViewKey = @"UIAlertViewKey";
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelButtonName otherButtonTitles: otherButtonTitles, nil];
     
-    unsigned int count;
-    
-    Ivar *ivars= class_copyIvarList([alert class], &count);
-    objc_property_t *objc_property_ts= class_copyPropertyList([alert class], &count);
-    
-    for (int i=0; i!=count; i++) {
-        
-        objc_property_t proty = objc_property_ts[i];
-        
-        NSLog(@"%@",[NSString stringWithCString:property_getName(proty) encoding:NSUTF8StringEncoding]);
-        
-    }
-    
-    for (int i=0; i!=count; i++) {
-        
-        NSLog(@"%@",[NSString stringWithUTF8String:ivar_getName(ivars[i])]);
-    }
+//    unsigned int count;
+//    
+//    Ivar *ivars= class_copyIvarList([alert class], &count);
+//    objc_property_t *objc_property_ts= class_copyPropertyList([alert class], &count);
+//    
+//    for (int i=0; i!=count; i++) {
+//        
+//        objc_property_t proty = objc_property_ts[i];
+//        
+//        NSLog(@"proty %@",[NSString stringWithCString:property_getName(proty) encoding:NSUTF8StringEncoding]);
+//        
+//    }
+//    
+//    for (int i=0; i!=count; i++) {
+//        
+//        
+//        const char *type = ivar_getTypeEncoding(ivars[i]);
+//        
+//        NSLog(@"ivars %@ %s",[NSString stringWithUTF8String:ivar_getName(ivars[i])],type);
+//
+//    
+//    }
 
     
 
@@ -64,13 +69,13 @@ static NSString *UIAlertViewKey = @"UIAlertViewKey";
 
 +(void)createAlertViewWithTitle:(NSString *)title withViewController:(UIViewController *)viewController withCancleBtnStr:(NSString *)cancelStr withOtherBtnStr:(NSString *)otherBthStr withMessage:(NSString *)message completionCallback:(void (^)(NSInteger index))completionCallback{
     
-    if ([[[UIDevice currentDevice] systemVersion] floatValue]>=8.0) {//8系统以上的
+    if ([[[UIDevice currentDevice] systemVersion] floatValue]<=8.0) {//8系统以上的
         UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         //取消按钮
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelStr style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             completionCallback(0);
         }];
-//        [cancelAction setValue:[UIColor grayColor] forKey:@"_titleTextColor"];
+        [cancelAction setValue:COLOR_Text_Gay forKey:@"_titleTextColor"];
         //其它按钮
         UIAlertAction *otherAction = [UIAlertAction actionWithTitle:otherBthStr style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             completionCallback(1);
