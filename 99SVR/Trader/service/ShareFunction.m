@@ -140,7 +140,7 @@
     }else{
         max = maxB;
     }
-    return @[[NSString stringWithFormat:@"%f",((min-1.0))],[NSString stringWithFormat:@"%f",(max+1.0)]];
+    return @[[NSString stringWithFormat:@"%f",((min -1.0))],[NSString stringWithFormat:@"%f",(max+1.0)]];
 }
 
 
