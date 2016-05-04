@@ -119,7 +119,7 @@
 
             [self.wareHouseViw.titleLabV setLeftLabText:model.stockname rightLabText:@""];
             [self.wareHouseViw.nowRmbLabV setLeftLabText:[NSString stringWithFormat:@"现价 %@",model.currprice] rightLabText:[NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate]];
-            [self.wareHouseViw.costRmbLabV setLeftLabText:[NSString stringWithFormat:@"成本 %@",model.currprice] rightLabText:[NSString stringWithFormat:@"持有数 %@",model.count]];
+            [self.wareHouseViw.costRmbLabV setLeftLabText:[NSString stringWithFormat:@"成本 %@",model.cost] rightLabText:[NSString stringWithFormat:@"持有数 %@",model.count]];
             
             
             
