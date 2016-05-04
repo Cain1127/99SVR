@@ -173,7 +173,9 @@
     weakSelf.chartView.lineChartView.raneValue_Y = CGRangeMake([model.minY floatValue], [model.maxY floatValue]);
     
     [weakSelf.chartView.lineChartView clearLine];
+//    model.rateYs = @[@"0.78",@"1.59",@"0.02",@"2.39",@"0.82",@"0.78"];
     weakSelf.chartView.lineChartView.valuePoints_Y = @[model.rateYs,model.trendYs];
+//    NSLog(@"%@ %@",model.rateYs,model.trendYs);
     [weakSelf.chartView.lineChartView drawLine];
         
     __weak typeof(array) weakArray = array;
