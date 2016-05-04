@@ -154,5 +154,18 @@
     return @[[NSString stringWithFormat:@"%f",((min))],[NSString stringWithFormat:@"%f",(max)]];
 }
 
++(NSArray *)returnStockDelChartLineViewLeftLabelTextWithDataArray:(NSArray *)array{
+
+    NSMutableArray *muArray = [NSMutableArray array];
+    CGFloat tempFloat = ABS([[array firstObject] floatValue] - [[array lastObject] floatValue])/4.0;
+    
+    for (int i=0; i!=5; i++) {
+        CGFloat floatStr = [[array lastObject] floatValue] - (i * tempFloat);
+        [muArray addObject:[NSString stringWithFormat:@"%.2f%%",floatStr]];
+    }
+    return muArray;
+}
+
+
 
 @end

@@ -81,7 +81,7 @@
             shapeLayer.path = path.CGPath;
             shapeLayer.strokeColor = COLOR_Line_Small_Gay.CGColor;
             shapeLayer.fillColor = [[UIColor whiteColor] CGColor];
-            shapeLayer.lineWidth = 1;
+            shapeLayer.lineWidth = LineView_Height;
             [self.layer addSublayer:shapeLayer];
         }
     }
@@ -114,7 +114,7 @@
             shapeLayer.path = path.CGPath;
             shapeLayer.strokeColor =  COLOR_Line_Small_Gay.CGColor;
             shapeLayer.fillColor = [[UIColor whiteColor] CGColor];
-            shapeLayer.lineWidth = 1;
+            shapeLayer.lineWidth = LineView_Height;
             [self.layer addSublayer:shapeLayer];
         }
     }

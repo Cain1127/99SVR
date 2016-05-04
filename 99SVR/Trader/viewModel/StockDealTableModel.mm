@@ -109,7 +109,7 @@
         
         UIView *backView = [[UIView alloc]init];
         backView.layer.borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.2].CGColor;
-        backView.layer.borderWidth = 1.0f;
+        backView.layer.borderWidth = LineView_Height;
         backView.layer.masksToBounds = YES;
         backView.backgroundColor = [UIColor whiteColor];
         [headerView.contentView addSubview:backView];

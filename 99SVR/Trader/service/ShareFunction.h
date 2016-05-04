@@ -88,6 +88,13 @@
  *
  */
 +(NSArray *)returnMinandMaxWithArrayA:(NSArray *)arrA withArrayB:(NSArray *)arrB;
-
+/**
+ *  返回高手操盘股票详情右边的数值
+ *
+ *  @param array 传入一个数组【最小值，最大值】；
+ *
+ *  @return 一个处理好的数组
+ */
++(NSArray *)returnStockDelChartLineViewLeftLabelTextWithDataArray:(NSArray *)array;
 
 @end

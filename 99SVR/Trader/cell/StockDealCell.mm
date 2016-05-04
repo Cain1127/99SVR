@@ -3,6 +3,7 @@
 
 #import "StockDealCell.h"
 #import "StockMacro.h"
+#import "ShareFunction.h"
 @implementation StockDealCell
 
 
@@ -30,7 +31,7 @@
     self.chartView.lineChartView.drawLine_Y = NO;
     self.chartView.lineChartView.lineColors = @[COLOR_Auxiliary_Orange,COLOR_Auxiliary_Blue];
     self.chartView.lineChartView.timeValue = 0;
-    self.chartView.lineChartView.level_Y = 2;
+    self.chartView.lineChartView.level_Y = 4;
     self.chartView.lineChartView.level_X = 2;
     self.chartView.topTitItems = @[@"全部",@"三个月",@"一个月"];
     [self.bakImageView addSubview:self.chartView];
@@ -142,7 +143,8 @@
     CGFloat midLeftStr = 0.0;
     midLeftStr = ABS(((ABS([model.maxY floatValue]) - [model.minY floatValue])/2.0)) + [model.minY floatValue];
     
-    weakSelf.chartView.leftTitArrays = @[[NSString stringWithFormat:@"%.2f%%",[model.maxY floatValue]],[NSString stringWithFormat:@"%.2f%%",midLeftStr],[NSString stringWithFormat:@"%.2f%%",[model.minY floatValue]]];
+//    weakSelf.chartView.leftTitArrays = @[[NSString stringWithFormat:@"%.2f%%",[model.maxY floatValue]],[NSString stringWithFormat:@"%.2f%%",midLeftStr],[NSString stringWithFormat:@"%.2f%%",[model.minY floatValue]]];
+    weakSelf.chartView.leftTitArrays = [ShareFunction returnStockDelChartLineViewLeftLabelTextWithDataArray:@[model.minY,model.maxY]];
     
     
     NSString *leftlowStr = @"";

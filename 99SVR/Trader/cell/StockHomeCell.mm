@@ -100,7 +100,7 @@
         make.left.equalTo(@0);
     }];
 
-    self.bakImageView.layer.borderWidth = 1.0f;
+    self.bakImageView.layer.borderWidth = LineView_Height;
     self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.5].CGColor;
     [self.bakImageView layoutIfNeeded];
 //

@@ -50,7 +50,7 @@
         make.top.equalTo(@(self.height*2/3));
         make.left.equalTo(@10);
         make.right.equalTo(@(-10));
-        make.height.equalTo(@(1));
+        make.height.equalTo(@(LineView_Height));
     }];
     
     //标题

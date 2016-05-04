@@ -55,4 +55,7 @@
 #define COLOR_Auxiliary_Red UIColorFromRGB(0xea544a)//辅助色红色
 #define COLOR_Auxiliary_Blue UIColorFromRGB(0x038cff)//辅助蓝色
 
+#pragma mark 分割线的高度
+#define LineView_Height 0.5f
+
 #endif /* PubColorAndFont_h */
