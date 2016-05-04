@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+@class MailboxModel;
 
 @interface MailboxTableViewCell : UITableViewCell
+
+@property(nonatomic, strong) MailboxModel *mailboxModel;
 + (instancetype)cellWithTableView:(UITableView *)tableView;
+
 @end

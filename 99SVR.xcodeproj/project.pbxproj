@@ -126,13 +126,13 @@
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
 		5A5784101CD2FE28002E120A /* CommentReplyViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */; };
 		5A6AE1301CD1DEE8002FBD02 /* start-mascot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */; };
-		5AA6402F1CD87B0E00CDAE48 /* UnreadModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6402E1CD87B0E00CDAE48 /* UnreadModel.m */; };
-		5AA640321CD87F1300CDAE48 /* MailboxTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.m */; };
+		5AA640321CD87F1300CDAE48 /* MailboxTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.mm */; };
 		5AA6D8191CCBC01300841960 /* AdViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D8181CCBC01300841960 /* AdViewController.mm */; };
 		5AA6D81C1CCBD00A00841960 /* NewfeatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D81B1CCBD00A00841960 /* NewfeatureViewController.m */; };
 		5AB43D8B1CCFD7AE00693494 /* PrivateVipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AB43D8A1CCFD7AE00693494 /* PrivateVipView.m */; };
 		5AC00A511CD99E6600379081 /* MessageTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AC00A501CD99E6600379081 /* MessageTableViewCell.mm */; };
 		5AC00A541CD99EF400379081 /* MessageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AC00A531CD99EF400379081 /* MessageViewController.mm */; };
+		5AC00A571CD9E6F500379081 /* MailboxModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AC00A561CD9E6F500379081 /* MailboxModel.m */; };
 		5AD25E4D1CCE225A005C5BE6 /* SplashModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AD25E4C1CCE225A005C5BE6 /* SplashModel.mm */; };
 		5AD25E511CCE2265005C5BE6 /* SplashTool.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AD25E501CCE2265005C5BE6 /* SplashTool.mm */; };
 		5AD6673C1CD044EB00DA2C6D /* start_page_1242x2208.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD667381CD044EB00DA2C6D /* start_page_1242x2208.png */; };
@@ -1035,10 +1035,8 @@
 		5A57840E1CD2FE28002E120A /* CommentReplyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentReplyViewController.h; sourceTree = "<group>"; };
 		5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CommentReplyViewController.mm; sourceTree = "<group>"; };
 		5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-mascot.png"; sourceTree = "<group>"; };
-		5AA6402D1CD87B0E00CDAE48 /* UnreadModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnreadModel.h; sourceTree = "<group>"; };
-		5AA6402E1CD87B0E00CDAE48 /* UnreadModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnreadModel.m; sourceTree = "<group>"; };
 		5AA640301CD87F1300CDAE48 /* MailboxTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MailboxTableViewCell.h; sourceTree = "<group>"; };
-		5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MailboxTableViewCell.m; sourceTree = "<group>"; };
+		5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MailboxTableViewCell.mm; sourceTree = "<group>"; };
 		5AA6D8171CCBC01300841960 /* AdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdViewController.h; sourceTree = "<group>"; };
 		5AA6D8181CCBC01300841960 /* AdViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdViewController.mm; sourceTree = "<group>"; };
 		5AA6D81A1CCBD00A00841960 /* NewfeatureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewfeatureViewController.h; sourceTree = "<group>"; };
@@ -1049,6 +1047,8 @@
 		5AC00A501CD99E6600379081 /* MessageTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessageTableViewCell.mm; sourceTree = "<group>"; };
 		5AC00A521CD99EF400379081 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
 		5AC00A531CD99EF400379081 /* MessageViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessageViewController.mm; sourceTree = "<group>"; };
+		5AC00A551CD9E6F500379081 /* MailboxModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MailboxModel.h; sourceTree = "<group>"; };
+		5AC00A561CD9E6F500379081 /* MailboxModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MailboxModel.m; sourceTree = "<group>"; };
 		5AD25E4B1CCE225A005C5BE6 /* SplashModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashModel.h; sourceTree = "<group>"; };
 		5AD25E4C1CCE225A005C5BE6 /* SplashModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SplashModel.mm; sourceTree = "<group>"; };
 		5AD25E4F1CCE2265005C5BE6 /* SplashTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashTool.h; sourceTree = "<group>"; };
@@ -2234,8 +2234,8 @@
 				1895B77C1CCB56A300B86B0D /* TQAnswerModel.mm */,
 				1895B77D1CCB56A300B86B0D /* TQMessageModel.h */,
 				1895B77E1CCB56A300B86B0D /* TQMessageModel.mm */,
-				5AA6402D1CD87B0E00CDAE48 /* UnreadModel.h */,
-				5AA6402E1CD87B0E00CDAE48 /* UnreadModel.m */,
+				5AC00A551CD9E6F500379081 /* MailboxModel.h */,
+				5AC00A561CD9E6F500379081 /* MailboxModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2384,7 +2384,7 @@
 				1895B76D1CCB3B5800B86B0D /* TQButton-RoundedRectBtn.h */,
 				1895B76E1CCB3B5800B86B0D /* TQButton-RoundedRectBtn.m */,
 				5AA640301CD87F1300CDAE48 /* MailboxTableViewCell.h */,
-				5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.m */,
+				5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.mm */,
 				5AC00A4F1CD99E6600379081 /* MessageTableViewCell.h */,
 				5AC00A501CD99E6600379081 /* MessageTableViewCell.mm */,
 			);
@@ -4723,6 +4723,7 @@
 				BB1769251C7B006F00CE947C /* SDWebImageDecoder.m in Sources */,
 				BB2CA60D1CD338A300DFE56E /* ZLLogonProtocol.mm in Sources */,
 				BBD58EFD1CCD2287009250DB /* XLiveQuestionView.m in Sources */,
+				5AC00A571CD9E6F500379081 /* MailboxModel.m in Sources */,
 				18D3CB901CC0E37700816BD0 /* TQMessageCell.mm in Sources */,
 				BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */,
 				BB63F5C71C2CC7A300A042E8 /* NSArray+MASAdditions.m in Sources */,
@@ -4842,7 +4843,6 @@
 				BB6F117E1CC60B2000F02064 /* XVideoLiveViewcontroller.mm in Sources */,
 				B4EA09291CC8DF8400E8F933 /* StockRecordTabModel.mm in Sources */,
 				18F9710D1C92947F001B2575 /* DataSigner.m in Sources */,
-				5AA6402F1CD87B0E00CDAE48 /* UnreadModel.m in Sources */,
 				BB63F6241C2CC7A300A042E8 /* LeftCellModel.m in Sources */,
 				BB63F5FE1C2CC7A300A042E8 /* Video.m in Sources */,
 				BBAD0E631CD1C4E4002C0FD6 /* ReplyNullInfoCell.m in Sources */,
@@ -4956,7 +4956,7 @@
 				187C07F61C9A5A52007AE742 /* NickNameViewController.m in Sources */,
 				BBD58EA41CCA04E9009250DB /* XIdeaViewController.mm in Sources */,
 				BB63F5C51C2CC7A300A042E8 /* MASViewAttribute.m in Sources */,
-				5AA640321CD87F1300CDAE48 /* MailboxTableViewCell.m in Sources */,
+				5AA640321CD87F1300CDAE48 /* MailboxTableViewCell.mm in Sources */,
 				BB16616C1C3CA0B800D318BE /* UITableView+reloadComplete.m in Sources */,
 				18EA822C1CC8C41C00BDB735 /* TQideaViewModel.mm in Sources */,
 				BB63F5C41C2CC7A300A042E8 /* MASLayoutConstraint.m in Sources */,

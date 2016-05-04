@@ -3115,7 +3115,7 @@ void HttpConnection::RequestPrivateTradeRecord(int startId, int count,OperateSto
 void HttpConnection::RequestSystemMessage(int startId, int count, SystemMessageListener* listener)
 {
     char tmp[512];
-    sprintf(tmp,"/mail/system/uid/%d/size/%d/id/%d/type/%d",1706716,count,startId,0);
+    sprintf(tmp,"/mail/system/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
     
     RequestParamter& request = get_request_param();
     request["s"] = tmp;
