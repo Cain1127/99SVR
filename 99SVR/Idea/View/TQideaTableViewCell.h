@@ -17,6 +17,7 @@
 //@property (nonatomic ,weak) TQIdeaModel *ideaModel;
 @property (nonatomic,copy) NSString *content;
 
+- (void)setIdeaModel:(TQIdeaModel *)ideaModel line:(BOOL)bLine;
 - (void)setIdeaModel:(TQIdeaModel *)ideaModel;
 
 @end

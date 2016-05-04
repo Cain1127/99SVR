@@ -192,10 +192,13 @@
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:) name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
-    if (_roomId!=[_room.teamid intValue])
+    if (_roomId)
+    {
+        
+    }
+    else
     {
         [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
-        _roomId = [_room.teamid intValue];
     }
 }
 

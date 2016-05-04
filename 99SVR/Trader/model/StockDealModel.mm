@@ -110,7 +110,7 @@
         _cost = FloatTransformFloatToStr(data->cost());
         _currprice = FloatTransformFloatToStr(data->currprice());
         _profitmoney = FloatTransformFloatToStr(data->profitmoney());
-        _profitrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((data->profitrate()*100))];
+        _profitrate = [NSString stringWithFormat:@"%@%%",FloatTransformFloatToStr((data->profitrate()))];
     }
     return self;
 }

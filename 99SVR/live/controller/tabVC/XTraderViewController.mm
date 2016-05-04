@@ -126,7 +126,7 @@
  */
 -(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockHomeTableViewModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray{
     
-    Loading_Bird_Hide
+    Loading_Bird_Hide(table);
     
     NSString *code = [NSString stringWithFormat:@"%@",fromDataDic[@"code"]];
     

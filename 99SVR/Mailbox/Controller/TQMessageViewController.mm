@@ -51,7 +51,7 @@ static NSString *const messageCell = @"messageCell";
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
-    [self.view makeToastActivity_bird];
+    [self.view makeToastActivity_bird_bird];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

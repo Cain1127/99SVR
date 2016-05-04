@@ -74,7 +74,7 @@
         return ;
     }
     
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",_username,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];

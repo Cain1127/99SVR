@@ -30,7 +30,8 @@
 @property (nonatomic , copy) NSString *vipValue;
 /**实际要购买的vip的价格*/
 @property (nonatomic , copy) NSString *actualPrice;
-
+/**战队头像*/
+@property (nonatomic , copy) NSString *teamIcon;
 #pragma mark 购买私人订制的
 /**股票首页*/
 - (id)initWithPrivateServiceLevelData:(void *)pData;

@@ -44,7 +44,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_ANSWERREPLY_VC object:nil];
     [super viewWillAppear:animated];
     
-    [self.view makeToastActivity_bird];
+    [self.view makeToastActivity_bird_bird];
     [self.tableView.gifHeader beginRefreshing];
 }
 

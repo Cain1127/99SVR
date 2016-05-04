@@ -39,9 +39,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    Loading_Bird_Show
-    
-    self.txtTitle.text = @"购买私人定制";
+    Loading_Bird_Show(self.tableView);
+    self.txtTitle.text = self.stockModel.teamname;
     self.dataArray = @[];
     self.automaticallyAdjustsScrollViewInsets = NO;
     //注册通知
@@ -57,7 +56,7 @@
         [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
     }
     
-    DLog(@"讲师ID %d",[self.stockModel.teamid intValue]);
+//    DLog(@"讲师ID %d",[self.stockModel.teamid intValue]);
     
     self.view.backgroundColor = COLOR_Bg_Gay;
 }
@@ -157,7 +156,7 @@
 #pragma mark 刷新数据
 -(void)refreshDayData:(NSNotification *)notfi{
     
-    Loading_Bird_Hide
+    Loading_Bird_Hide(self.tableView);
     
     NSString *code = [NSString stringWithFormat:@"%@",[notfi.object valueForKey:@"code"]];
     
@@ -168,6 +167,7 @@
         
         if ([code isEqualToString:@"1"]) {//请求成功
             self.headerModel = [notfi.object valueForKey:@"headerModel"];
+            self.headerModel.teamIcon = self.stockModel.teamicon;
             if(_strName)
             {
                 self.headerModel.teamName = _strName;
@@ -201,7 +201,7 @@
         
         [self showErrorViewInView:self.tableView withMsg:[NSString stringWithFormat:@"网络链接错误%@,点击重新链接",code] touchHanleBlock:^{
             
-            Loading_Bird_Show
+            Loading_Bird_Show(weakSelf.tableView);
             [kHTTPSingle RequestBuyPrivateServicePage:[weakSelf.stockModel.teamid intValue]];
             
         }];
@@ -296,7 +296,6 @@
     
     [super viewWillDisappear:animated];
     
-    Loading_Bird_Hide
 }
 
 -(void)dealloc{

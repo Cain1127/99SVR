@@ -18,7 +18,6 @@
 @interface StockDealTableModel ()<StockNotVipViewDelegate>
 {
     NSCache *_cache;
-    UIViewController *_vc;
     BOOL _isVipBool;
     StockDealModel *_model;
 }
@@ -41,11 +40,7 @@
     _dataArray = dataArray;
 }
 
--(void)setViewController:(UIViewController *)viewController{
-    
-    _viewController = viewController;
-    _vc = viewController;
-}
+
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -228,16 +223,9 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (_isVipBool) {
-        
-        if (indexPath.section==1 || indexPath.section==2) {
-            StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
-            recordVC.recordType = indexPath.section==1 ? RecordType_Business : RecordType_StoreHouse;
-            recordVC.operateId = [_model.operateid integerValue];
-            [_vc.navigationController pushViewController:recordVC animated:YES];
-        }
-    }
-    
+    if ([self.delegate respondsToSelector:@selector(didSelectRowAtIndexPathWithTableView:)]) {
+        [self.delegate didSelectRowAtIndexPathWithTableView:indexPath];
+    }    
 }
 
 #pragma mark 点击hederView
@@ -246,33 +234,8 @@
     UIView *view = gap.view;
     NSInteger tag = view.tag;
     
-    if (tag==1 || tag==2) {
-        
-        if (_isVipBool) {
-            
-            StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
-            recordVC.recordType = tag==1 ? RecordType_Business : RecordType_StoreHouse;
-            recordVC.operateId = [_model.operateid integerValue];
-            [_vc.navigationController pushViewController:recordVC animated:YES];
-
-        }else{
-            
-            [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:_vc withCancleBtnStr:@"取消" withOtherBtnStr:@"去兑换" withMessage:[NSString stringWithFormat:@"需要兑换私人订制服务-vip%@才能查看详细内容",_model.minVipLevel] completionCallback:^(NSInteger index) {
-               
-                if (index==0) {//取消
-                    
-                    
-                }else{//去购买
-                    
-                    [self goBuyVip];
-
-                }
-                
-            }];
-            
-            
-        }
-        
+    if ([self.delegate respondsToSelector:@selector(didClickTableHeaderViewTag:)]) {
+        [self.delegate didClickTableHeaderViewTag:tag];
     }
 }
 
@@ -314,26 +277,10 @@
  */
 #pragma mark 去购买VIP
 -(void)goBuyVip{
-
-    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {//已登陆 //1：注册账户
-        
-        TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
-        tqVC.stockModel = _model;
-        [_vc.navigationController pushViewController:tqVC animated:YES];
-        
-    }else{//未登录
-        
-        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:_vc withCancleBtnStr:@"取消" withOtherBtnStr:@"确定" withMessage:@"未登陆，请登陆后操作" completionCallback:^(NSInteger index) {
-            
-            if (index==1) {
-                LoginViewController *loginVC = [[LoginViewController alloc]init];
-                [_vc.navigationController pushViewController:loginVC animated:YES];
-            }
-            
-        }];        
+    
+    if ([self.delegate respondsToSelector:@selector(goBuyVipService)]) {
+        [self.delegate goBuyVipService];
     }
-    
-    
 }
 
 @end

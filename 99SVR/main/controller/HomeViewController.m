@@ -67,8 +67,9 @@ typedef enum : NSUInteger
 ///当前数据请求状态:0-未开始请求/1-正在请求/2-banner完成请求/3-列表完成请求
 @property (nonatomic, assign) CJHomeRequestType refreshStatus;
 @property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
-
-
+@property (nonatomic,strong) UIView *videoView;
+@property (nonatomic,strong) UIView *ideaView;
+@property (nonatomic,strong) UIView *operatorView;
 @property (nonatomic,strong) UIButton *btnPlay;
 
 @end
@@ -89,7 +90,7 @@ typedef enum : NSUInteger
     _scrollView.currentPageDotColor = UIColorFromRGB(0x4c4c4c); // 自定义分页控件小圆标颜色
     _scrollView.pageDotColor = UIColorFromRGB(0xa8a8a8);
     _scrollView.autoScrollTimeInterval = 5;
-    [_scrollView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [_scrollView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     @WeakObj(self)
     _scrollView.clickItemOperationBlock = ^(NSInteger index) {
          BannerModel *model = [selfWeak.aryBanner objectAtIndex:index];
@@ -103,13 +104,14 @@ typedef enum : NSUInteger
 
 - (void)initTableView
 {
-    _tableView = [[UITableView alloc] initWithFrame:Rect(0.0f, kNavigationHeight, kScreenWidth, kScreenHeight-kNavigationHeight) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0.0f, kNavigationHeight, kScreenWidth, kScreenHeight-kNavigationHeight-44) style:UITableViewStyleGrouped];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.showsHorizontalScrollIndicator = NO;
-    _tableView.backgroundColor = [UIColor whiteColor];
+    _tableView.backgroundColor = UIColorFromRGB(0xf8f8f8);
+    _tableView.tableHeaderView = _scrollView;
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
@@ -138,7 +140,7 @@ typedef enum : NSUInteger
     [self createScroll];
     [self createPage];
     [self initTableView];
-    [self.view makeToastActivity_bird];
+    [self.view makeToastActivity_bird_bird];
     ///添加MJ头部刷新
     [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [_tableView.gifHeader loadDefaultImg];
@@ -299,28 +301,6 @@ typedef enum : NSUInteger
  */
 - (void)initLivingData
 {
-//    __weak HomeViewController *__self = self;
-//    [BaseService postJSONWithUrl:kHome_LivingList_URL parameters:nil success:^(id responseObject)
-//     {
-//         NSDictionary *dict = nil;;
-//         if ([responseObject isKindOfClass:[NSDictionary class]]) {
-//             dict = responseObject;
-//         }
-//         else{
-//             dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-//         }
-//         [UserDefaults setObject:dict forKey:kLiveInfo];
-//         [__self updateLiveInfo:dict];
-//     } fail:^(NSError *error) {
-//         NSDictionary *dict = [UserDefaults objectForKey:kLiveInfo];
-//         [__self updateLiveInfo:dict];
-//         [UserDefaults setObject:dict forKey:kLiveInfo];
-//         [UserDefaults synchronize];
-//         int nUserid = [UserInfo sharedUserInfo].nUserId;
-//         NSString *strMsg =[NSString stringWithFormat:@"ReportItem=GetRoomList&ClientType=3&UserId=%d&ServerIP=58.210.107.53&Error=request_home_fail_%d",
-//                            nUserid,(int)error.code];
-//         [DecodeJson postPHPServerMsg:strMsg];
-//     }];
     [kHTTPSingle RequestHomePage];
 }
 
@@ -422,22 +402,18 @@ typedef enum : NSUInteger
 #pragma mark table view delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _aryLiving.count + 1;
+    return _aryLiving.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (0 == section)
-    {
-        return 0;
-    }
     if (section <= _aryLiving.count)
     {
         
-        if ([_aryLiving[section - 1] isKindOfClass:[NSArray class]] ||
-            [_aryLiving[section - 1] isKindOfClass:[NSMutableArray class]])
+        if ([_aryLiving[section] isKindOfClass:[NSArray class]] ||
+            [_aryLiving[section] isKindOfClass:[NSMutableArray class]])
         {
-            NSArray *tempArray = _aryLiving[section - 1];
+            NSArray *tempArray = _aryLiving[section];
             if (0 >= tempArray.count)
             {
                 return 0;
@@ -453,7 +429,6 @@ typedef enum : NSUInteger
             return tempArray.count;
         }
     }
-    
     return 0;
     
 }
@@ -465,17 +440,16 @@ typedef enum : NSUInteger
     {
         return [self createDefaultTableViewCell:tableView];
     }
-    if (!([_aryLiving[indexPath.section - 1] isKindOfClass:[NSArray class]]))
+    if (!([_aryLiving[indexPath.section] isKindOfClass:[NSArray class]]))
     {
         return [self createDefaultTableViewCell:tableView];;
     }
     ///根据对象数组内的类型加载HeaderView
-    NSArray *tempArray = _aryLiving[indexPath.section - 1];
+    NSArray *tempArray = _aryLiving[indexPath.section];
     if (0 >= tempArray.count)
     {
         return [self createDefaultTableViewCell:tableView];
     }
-    
     if (indexPath.row >= tempArray.count)
     {
         return [self createDefaultTableViewCell:tableView];
@@ -527,18 +501,17 @@ typedef enum : NSUInteger
     if ([tempObject isKindOfClass:[TQIdeaModel class]])
     {
         static NSString *viewPointCellName = @"TQIdeaTableViewIdentifier";
-//        NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
         TQIdeaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:viewPointCellName];
         NSString *strInfo = cell.content;
         if (!cell)
         {
             cell = [[TQIdeaTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:viewPointCellName];
-//            [viewCache setObject:cell forKey:viewCache];
         }
-        if (tempArray.count>indexPath.row) {
+        if (tempArray.count>indexPath.row)
+        {
             TQIdeaModel *model = tempArray[indexPath.row];
             if (![strInfo isEqualToString:model.content]) {
-                [cell setIdeaModel:model];
+                [cell setIdeaModel:model line:YES];
             }
         }
         return cell;
@@ -563,153 +536,109 @@ typedef enum : NSUInteger
     UITableViewCell *tempCell = [tableView dequeueReusableCellWithIdentifier:defaultCell];
     if (tempCell)
     {
-        
         tempCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:defaultCell];
-        
     }
-    
     return tempCell;
 
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    
-    ///banner
-    if (0 == section)
-    {
-        
-        return _scrollView;
-        
-    }
-
-    ///判断不同的section数据模型，返回不同的view
-    if (section > _aryLiving.count)
-    {
-        
-        return nil;
-        
-    }
-    
-    if (!([_aryLiving[section - 1] isKindOfClass:[NSArray class]]))
-    {
-        
-        return nil;
-        
-    }
-    
-    ///根据对象数组内的类型加载HeaderView
-    NSArray *tempArray = _aryLiving[section - 1];
+    NSArray *tempArray = _aryLiving[section];
     if (0 >= tempArray.count)
     {
         return nil;
     }
-    
     NSObject *tempObject = tempArray[0];
-    CGFloat tempHeight = 44.0f;
     CGFloat rightButtonWidth = 140.0f;
     ///视频直播内容
     if ([tempObject isKindOfClass:[RoomHttp class]])
     {
-        static NSString *vedioHeaderViewName = @"vedioHeaderViewName";
-        UIView *tempHeaderView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:vedioHeaderViewName];
-        if (!tempHeaderView)
+        if (!_videoView)
         {
-            
-            tempHeaderView = [[UIView alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tableView.frame), tempHeight)];
-            
-            ///title label
-            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f, CGRectGetWidth(tempHeaderView.frame) - rightButtonWidth - 30.0f, tempHeight)];
+            _videoView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44)];
+            [_videoView setBackgroundColor:UIColorFromRGB(0xffffff)];
+            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f, rightButtonWidth, 44)];
             [lblHot setText:@"财经直播"];
             [lblHot setFont:XCFONT(15)];
             [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
             lblHot.textAlignment = NSTextAlignmentLeft;
-            [tempHeaderView addSubview:lblHot];
-            
+            [_videoView addSubview:lblHot];
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
-            [button setFrame:Rect(kScreenWidth-50, 0, 44, 44)];
+            [button setFrame:Rect(kScreenWidth-44, 0, 44, 44)];
             button.tag = 1;
             [button addTarget:self action:@selector(enterEvent:) forControlEvents:UIControlEventTouchUpInside];
-            [tempHeaderView addSubview:button];
+            [_videoView addSubview:button];
+            
         }
-        return tempHeaderView;
+        return _videoView;
         
     }
     ///文字直播内容
     if ([tempObject isKindOfClass:[ZLOperateStock class]])
     {
-        static NSString *textHeaderViewName = @"textHeaderViewName";
-        UIView *tempHeaderView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:textHeaderViewName];
-        if (!tempHeaderView)
+        if(!_operatorView)
         {
-            tempHeaderView = [[UIView alloc] initWithFrame:Rect(0.0f, 0.0f,kScreenWidth, tempHeight)];
-            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f, tempHeaderView.width - rightButtonWidth - 30.0f, tempHeight)];
+            _operatorView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44)];
+            [_operatorView setBackgroundColor:UIColorFromRGB(0xffffff)];
+            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f, rightButtonWidth, 44)];
             [lblHot setText:@"高手操盘"];
             [lblHot setFont:XCFONT(15)];
             [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
-            [tempHeaderView addSubview:lblHot];
+            [_operatorView addSubview:lblHot];
             
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
-            [button setFrame:Rect(kScreenWidth-50, 0, 44, 44)];
+            [button setFrame:Rect(kScreenWidth-44, 0, 44, 44)];
             button.tag = 3;
             [button addTarget:self action:@selector(enterEvent:) forControlEvents:UIControlEventTouchUpInside];
-            [tempHeaderView addSubview:button];
+            [_operatorView addSubview:button];
         }
-        return tempHeaderView;
-        
+        return _operatorView;
     }
     
     ///精彩视点
     if ([tempObject isKindOfClass:[TQIdeaModel class]])
     {
-        static NSString *viewPointHeaderViewName = @"viewPointHeaderViewName";
-        UIView *tempHeaderView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:viewPointHeaderViewName];
-        if (!tempHeaderView)
-        {
-            tempHeaderView = [[UIView alloc] initWithFrame:Rect(0.0f, 0.0f, CGRectGetWidth(tableView.frame), tempHeight)];
-            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f, CGRectGetWidth(tempHeaderView.frame) - 30.0f, tempHeight)];
+        if (!_ideaView) {
+            _ideaView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44)];
+            [_ideaView setBackgroundColor:UIColorFromRGB(0xffffff)];
+            
+            UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f,rightButtonWidth,44)];
             [lblHot setText:@"专家观点"];
             [lblHot setFont:XCFONT(15)];
             [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
-            [tempHeaderView addSubview:lblHot];
+            [_ideaView addSubview:lblHot];
+            
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setImage:[UIImage imageNamed:@"home_seeall_arrow"] forState:UIControlStateNormal];
-            [button setFrame:Rect(kScreenWidth-50, 0, 44, 44)];
+            [button setFrame:Rect(kScreenWidth-44, 0, 44, 44)];
             button.tag = 2;
             [button addTarget:self action:@selector(enterEvent:) forControlEvents:UIControlEventTouchUpInside];
-            [tempHeaderView addSubview:button];
-            
+            [_ideaView addSubview:button];
         }
-        return tempHeaderView;
+        return _ideaView;
     }
     return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     ///取消选择状态
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    ///判断点击的section
-    if (0 == indexPath.section)
-    {
-        return;
-    }
     ///判断不同的section数据模型，返回不同的view
     if (indexPath.section > _aryLiving.count)
     {
         return;
     }
-    if (!([_aryLiving[indexPath.section - 1] isKindOfClass:[NSArray class]]))
+    if (!([_aryLiving[indexPath.section] isKindOfClass:[NSArray class]]))
     {
         return;
     }
     
     ///根据对象数组内的类型加载HeaderView
-    NSArray *tempArray = _aryLiving[indexPath.section - 1];
+    NSArray *tempArray = _aryLiving[indexPath.section];
     if (0 >= tempArray.count)
     {
         return;
@@ -735,28 +664,11 @@ typedef enum : NSUInteger
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //banner height
-    if (0 == indexPath.section)
+    if (!([_aryLiving[indexPath.section] isKindOfClass:[NSArray class]]))
     {
         return 0.0f;
     }
-    
-    ///判断不同的section数据模型，返回不同的view
-    if (indexPath.section > _aryLiving.count)
-    {
-        return 0.0f;
-    }
-    if (!([_aryLiving[indexPath.section - 1] isKindOfClass:[NSArray class]]))
-    {
-        return 0.0f;
-    }
-    
-    ///根据对象数组内的类型加载HeaderView
-    NSArray *tempArray = _aryLiving[indexPath.section - 1];
-    if (0 >= tempArray.count)
-    {
-        return 0.0f;
-    }
+    NSArray *tempArray = _aryLiving[indexPath.section];
     NSObject *tempObject = tempArray[0];
     if ([tempObject isKindOfClass:[RoomHttp class]])
     {
@@ -766,18 +678,18 @@ typedef enum : NSUInteger
     {
         return ValueWithTheIPhoneModelString(@"110,110,110,110");
     }
-    return 90.0f;
+    return 130.0f;
     
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    //banner height
-    if (0 == section)
-    {
-        return kPictureHeight;
-    }
     return 44.0f;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.1;
 }
 
 #pragma mark hotViewDelegate
@@ -787,7 +699,7 @@ typedef enum : NSUInteger
 }
 
 - (void)connectRoom:(RoomHttp *)room{
-    [self.view makeToastActivity];
+    [self.view makeToastActivity_bird];
     if (_roomViewModel==nil) {
         _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
     }

@@ -111,12 +111,12 @@
     _leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"TQMeCustomizedViewController"]];
     if (KUserSingleton.bIsLogin && KUserSingleton.nType ==1) {
-        NSString *strName= [NSString stringWithFormat:@"我的九九币:  %.01f",KUserSingleton.goldCoin];
+        NSString *strName= [NSString stringWithFormat:@"我的玖玖币:  %.01f",KUserSingleton.goldCoin];
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:strName icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
     }
     else
     {
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的九九币" icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的玖玖币" icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
     }
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的消费记录" icon:@"personal_consumption_icon" goClassName:@"CustomizedViewController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的关注" icon:@"personal_follow_icon" goClassName:@"VideoColletionViewController"]];
