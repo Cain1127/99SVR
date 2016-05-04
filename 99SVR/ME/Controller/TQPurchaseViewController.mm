@@ -123,6 +123,20 @@
     TQPurchaseModel *model = self.dataArray[row];
     
     
+    DLog(@"账户%f",[UserInfo sharedUserInfo].goldCoin);
+    DLog(@"实际价格%f",[model.actualPrice floatValue]);
+    
+    if ([UserInfo sharedUserInfo].goldCoin >= [model.actualPrice floatValue]) {//账户余额大于购买的余额
+        
+        DLog(@"goldCoin 大");
+        
+    }else{
+        
+        DLog(@"actualPrice 小");
+    }
+    
+    
+    
     if ([UserInfo sharedUserInfo].goldCoin >= [model.actualPrice floatValue]) {//账户余额大于购买的余额
         
         [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"兑换" withMessage:@"是否确定兑换！" completionCallback:^(NSInteger index) {

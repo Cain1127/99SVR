@@ -143,7 +143,31 @@
     midLeftStr = ABS(((ABS([model.maxY floatValue]) - [model.minY floatValue])/2.0)) + [model.minY floatValue];
     
     weakSelf.chartView.leftTitArrays = @[[NSString stringWithFormat:@"%.2f%%",[model.maxY floatValue]],[NSString stringWithFormat:@"%.2f%%",midLeftStr],[NSString stringWithFormat:@"%.2f%%",[model.minY floatValue]]];
-    weakSelf.chartView.lowTitArrays = @[[model.dates firstObject],model.dates[(model.dates.count/2)],[model.dates lastObject]];
+    
+    
+    NSString *leftlowStr = @"";
+    NSString *midLowStr = @"";
+    NSString *rightLowStr = @"";
+    
+    if(model.dates.count>0) {
+        
+        if (model.dates.count==2) {
+            midLowStr = @"";
+        }else{
+            midLowStr = model.dates[(model.dates.count/2)];
+        }
+        
+        leftlowStr = [model.dates firstObject];
+        rightLowStr = [model.dates lastObject];
+
+        
+    }else if (model.dates.count==0){//
+        leftlowStr = @"";
+        midLowStr = @"";
+        rightLowStr = @"";
+    }
+    
+    weakSelf.chartView.lowTitArrays = @[leftlowStr,midLowStr,rightLowStr];
     weakSelf.chartView.lineChartView.raneValue_Y = CGRangeMake([model.minY floatValue], [model.maxY floatValue]);
     
     [weakSelf.chartView.lineChartView clearLine];

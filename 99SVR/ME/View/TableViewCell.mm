@@ -137,7 +137,7 @@
     self.vipIconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%d_icon",[model.levelid intValue]]];
     self.vipNameLab.text = model.levelname;
     
-    DLog(@"buyprice = %@ updateprice=%@  isopen =%@",model.buyprice,model.updateprice,model.isopen);
+//    DLog(@"buyprice = %@ updateprice=%@  isopen =%@",model.buyprice,model.updateprice,model.isopen);
     
     BOOL isVipValue = [model.vipValue isEqualToString:@"0"] ? NO : YES;
     

@@ -59,7 +59,7 @@
     self.stockLab.font = [UIFont systemFontOfSize:stockNam_fot];
     self.stockLab.layer.cornerRadius = 5.0;
     self.stockLab.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.stockLab.layer.borderWidth = 1.f;
+    self.stockLab.layer.borderWidth = 0.5f;
     self.stockLab.layer.masksToBounds = YES;
     self.stockLab.textColor = [UIColor whiteColor];
     [self addSubview:self.stockLab];
@@ -167,7 +167,7 @@
     self.titLab = [[UILabel alloc]init];
     self.titLab.font = [UIFont systemFontOfSize:15];
     self.titLab.textAlignment = NSTextAlignmentCenter;
-    self.titLab.textColor = COLOR_Text_B2B2B2;
+    self.titLab.textColor = COLOR_Text_Gay;
     [self addSubview:self.titLab];
     
     

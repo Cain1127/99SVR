@@ -118,20 +118,10 @@
 +(NSArray *)returnMinandMaxWithArrayA:(NSArray *)arrA withArrayB:(NSArray *)arrB{
 
     
-    DLog(@"arrA--%@",arrA);
-    
-    DLog(@"arrB --%@",arrB);
     
     NSMutableArray *muArrayA = [ShareFunction sortOfSmallToBig:arrA];
     NSMutableArray *muArrayB = [ShareFunction sortOfSmallToBig:arrB];
-    
-    
-    
-    DLog(@"arrA-排序后-%@",arrA);
-    
-    DLog(@"arrB -排序后-%@",arrB);
 
-    
     float minA = [[muArrayA firstObject] floatValue];
     float maxA = [[muArrayA lastObject] floatValue];
 

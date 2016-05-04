@@ -59,13 +59,15 @@
 - (void)printInfo:(NSNotification *)notify{
     
 
-    Loading_Bird_Hide(self.tableView);
-    NSDictionary *dic = notify.object;
-    NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
-    [self.view hideToastActivity];
     
     dispatch_async(dispatch_get_main_queue(), ^{
 
+        Loading_Bird_Hide(self.tableView);
+        NSDictionary *dic = notify.object;
+        NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
+        [self.view hideToastActivity];
+
+        
     if ([code isEqualToString:@"1"]) {//请求成功
         
         [self.tableViewDataArray removeAllObjects];

@@ -14,6 +14,10 @@
         _descriptionStr = StrTransformCToUTF8(profit->description().c_str());
         _buytime = StrTransformCToUTF8(profit->buytime().c_str());
         _expirtiontime = StrTransformCToUTF8(profit->expirtiontime().c_str());
+        if (_expirtiontime.length==0) {
+            _expirtiontime = @"终身有效";
+        }
+
         _levelid = IntTransformIntToStr(profit->levelid());
         _isopen = IntTransformIntToStr(profit->isopen());
         _buyprice = [NSString stringWithFormat:@"%.2f",(profit->buyprice())];
