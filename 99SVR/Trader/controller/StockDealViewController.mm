@@ -9,8 +9,11 @@
 #import "HttpMessage.pb.h"
 #import "TQPurchaseViewController.h"
 #import "UIViewController+EmpetViewTips.h"
+#import "LoginViewController.h"
+#import "UIAlertView+Block.h"
+#import "StockRecordViewController.h"
 
-@interface StockDealViewController ()
+@interface StockDealViewController ()<StockDealTableModelDelegate>
 @property (nonatomic , strong) UITableView *tableView;
 @property (nonatomic , strong) StockDealHeaderView *headerView;
 @property (nonatomic , strong) StockDealTableModel *tableViewModel;
@@ -21,6 +24,7 @@
 @property (nonatomic , strong) NSMutableArray *tableViewDataArray;
 /**数据加载view*/
 @property (nonatomic , strong) UIView *emptyView;
+@property (nonatomic , assign) BOOL isVipBool;
 @end
 
 @implementation StockDealViewController
@@ -30,11 +34,6 @@
     
     self.view.backgroundColor = COLOR_Bg_Gay;
     [self initData];
-    [self initUI];
-}
-
--(void)initUI{
-    //表格
 }
 
 -(void)initData{
@@ -81,6 +80,13 @@
         //持仓记录
         [self.tableViewDataArray addObject:dic[@"stocks"]];
 
+        
+        if ([[NSString stringWithFormat:@"%@",dic[@"recalState"]] isEqualToString:@"show"]) {//是否是VIP
+            self.isVipBool = YES;
+        }else{
+            self.isVipBool = NO;
+        }
+        
         
         self.tableView.tableFooterView = self.warningLab;
         [self.headerView setHeaderViewWithDataModel:self.headerModel];
@@ -140,7 +146,7 @@
         CGFloat navbarH = CGRectGetMaxY(self.navigationController.navigationBar.frame);
         _tableView = [[UITableView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH} style:UITableViewStyleGrouped];
         self.tableViewModel = [[StockDealTableModel alloc]init];
-        self.tableViewModel.viewController = self;
+        self.tableViewModel.delegate = self;
         _tableView.delegate = self.tableViewModel;
         _tableView.dataSource = self.tableViewModel;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -178,7 +184,7 @@
 }
 -(void)dealloc{
 
-    DLog(@"终于释放了--------------------股票详情");
+    DLog(@"delloc---------StockDealViewController");
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_DEAL_VC object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
@@ -191,30 +197,79 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         //再次刷新
         [self.view makeToastActivity];
-        
-        NSLog(@"💗💗💗💗💗💗💗💗💗💗💗💗💗请求的id%@",self.stockModel.operateid);
-        
         [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
         
     });
 }
 
 
+#pragma mark StockDealTableModelDelegate
+#pragma mark 去购买VIP
+-(void)goBuyVipService{
+ 
+    [self goBuyVipServiceViewController];
+}
+
+#pragma mark 点击tableHeaderViw的提示
+-(void)didClickTableHeaderViewTag:(NSInteger)tag{
+        
+    WeakSelf(self);
+    
+    if (tag==1 || tag==2) {
+        
+        if (self.isVipBool) {
+            
+            StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
+            recordVC.recordType = tag==1 ? RecordType_Business : RecordType_StoreHouse;
+            recordVC.operateId = [self.headerModel.operateid integerValue];
+            [self.navigationController pushViewController:recordVC animated:YES];
+            
+        }else{
+            
+            [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"去兑换" withMessage:[NSString stringWithFormat:@"需要兑换私人订制服务-vip%@才能查看详细内容",self.headerModel.minVipLevel] completionCallback:^(NSInteger index) {
+                
+                if (index==1) {
+                    [weakSelf goBuyVipServiceViewController];
+                }
+                
+            }];
+        }
+        
+    }
+}
+#pragma mark 点击tableView的跳转
+-(void)didSelectRowAtIndexPathWithTableView:(NSIndexPath *)indexPath{
+    
+    if (self.isVipBool) {
+        if (indexPath.section==1 || indexPath.section==2) {
+            StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
+            recordVC.recordType = indexPath.section==1 ? RecordType_Business : RecordType_StoreHouse;
+            recordVC.operateId = [self.headerModel.operateid integerValue];
+            [self.navigationController pushViewController:recordVC animated:YES];
+        }
+    }
+    
+}
 
 
-//-(void)MarchBackLeft{
-//    
-//    
-//    DLog(@"测试");
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        //再次刷新
-//        [self.view makeToastActivity];
-//        
-//        NSLog(@"💗💗💗💗💗💗💗💗💗💗💗💗💗请求的id%@",self.stockModel.operateid);
-//        
-//        [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
-//        
-//    });
-//}
+#pragma mark 购买VIP页面
+-(void)goBuyVipServiceViewController{
+    
+    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {//已登陆 //1：注册账户
+        
+        TQPurchaseViewController *tqVC = [[TQPurchaseViewController alloc]init];
+        tqVC.stockModel = self.headerModel;
+        [self.navigationController pushViewController:tqVC animated:YES];
+        
+    }else{//未登录
+        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"确定" withMessage:@"未登陆，请登陆后操作" completionCallback:^(NSInteger index) {
+            if (index==1) {
+                LoginViewController *loginVC = [[LoginViewController alloc]init];
+                [self.navigationController pushViewController:loginVC animated:YES];
+            }
+        }];
+    }
+}
+
 
 @end

@@ -231,7 +231,7 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, vecto
 //    DLog(@"currLevelId=%d   minVipLevel=%d ",currLevelId,minVipLevel);
 //    DLog(@"---------------------------------------------------");
 
-    isShowRecal = NO;
+//    isShowRecal = NO;
 
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
