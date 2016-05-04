@@ -217,6 +217,7 @@
 		BB14B9CF1CD918360027E7E6 /* GFNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB14B9CB1CD918360027E7E6 /* GFNavigationController.m */; };
 		BB14B9D01CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m in Sources */ = {isa = PBXBuildFile; fileRef = BB14B9CD1CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m */; };
 		BB14B9D31CD9B6D00027E7E6 /* ZLMeTeamPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = BB14B9D21CD9B6D00027E7E6 /* ZLMeTeamPrivate.m */; };
+		BB14B9D61CDA213D0027E7E6 /* RoomChatNull.m in Sources */ = {isa = PBXBuildFile; fileRef = BB14B9D51CDA213D0027E7E6 /* RoomChatNull.m */; };
 		BB16616C1C3CA0B800D318BE /* UITableView+reloadComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */; };
 		BB16617C1C3D018C00D318BE /* PhotoToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16617B1C3D018C00D318BE /* PhotoToolBar.m */; };
 		BB16617F1C3D01F400D318BE /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16617E1C3D01F400D318BE /* Photo.m */; };
@@ -1186,6 +1187,8 @@
 		BB14B9CD1CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+GFNavigationControlller.m"; sourceTree = "<group>"; };
 		BB14B9D11CD9B6D00027E7E6 /* ZLMeTeamPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLMeTeamPrivate.h; sourceTree = "<group>"; };
 		BB14B9D21CD9B6D00027E7E6 /* ZLMeTeamPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLMeTeamPrivate.m; sourceTree = "<group>"; };
+		BB14B9D41CDA213D0027E7E6 /* RoomChatNull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomChatNull.h; sourceTree = "<group>"; };
+		BB14B9D51CDA213D0027E7E6 /* RoomChatNull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomChatNull.m; sourceTree = "<group>"; };
 		BB16616A1C3CA0B800D318BE /* UITableView+reloadComplete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+reloadComplete.h"; sourceTree = "<group>"; };
 		BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+reloadComplete.m"; sourceTree = "<group>"; };
 		BB16617A1C3D018C00D318BE /* PhotoToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoToolBar.h; sourceTree = "<group>"; };
@@ -3659,6 +3662,8 @@
 				BBAD0DFE1CD19E36002C0FD6 /* ZLRoomVideoCell.m */,
 				BBAD0E001CD19E8D002C0FD6 /* ZLRoomVideoView.h */,
 				BBAD0E011CD19E8D002C0FD6 /* ZLRoomVideoView.m */,
+				BB14B9D41CDA213D0027E7E6 /* RoomChatNull.h */,
+				BB14B9D51CDA213D0027E7E6 /* RoomChatNull.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -4814,6 +4819,7 @@
 				18BF06B51C9A7DC70071E524 /* SignatureViewController.m in Sources */,
 				BB17692B1C7B006F00CE947C /* UIImage+GIF.m in Sources */,
 				BB14B9CE1CD918360027E7E6 /* GFBaseViewController.m in Sources */,
+				BB14B9D61CDA213D0027E7E6 /* RoomChatNull.m in Sources */,
 				BB6F3ABD1C9ECB3C0035EBBE /* BannerModel.mm in Sources */,
 				185F596D1CC4CAD600F605F5 /* NSString+MJExtension.m in Sources */,
 				1898AC711C9BB77100F2681D /* VideoColletionViewController.m in Sources */,

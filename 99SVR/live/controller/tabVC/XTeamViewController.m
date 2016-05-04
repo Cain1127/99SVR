@@ -56,7 +56,7 @@
     NSString *strUrl = [NSString stringWithFormat:@"%@",_room.croompic];
     [imgHead sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     
-    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, imgHead.y+imgHead.height+8, kScreenWidth, 20)];
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 160, kScreenWidth, 20)];
     [lblName setTextColor:UIColorFromRGB(0xffffff)];
     [lblName setText:_room.teamname];
     [lblName setFont:XCFONT(15)];
