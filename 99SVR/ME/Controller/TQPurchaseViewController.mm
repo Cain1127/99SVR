@@ -168,6 +168,7 @@
         
         if ([code isEqualToString:@"1"]) {//请求成功
             self.headerModel = [notfi.object valueForKey:@"headerModel"];
+            self.headerModel.teamIcon = self.stockModel.teamicon;
             if(_strName)
             {
                 self.headerModel.teamName = _strName;

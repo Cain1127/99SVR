@@ -46,11 +46,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(printInfo:) name:MESSAGE_STOCK_DEAL_VC object:nil];
     [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
-
-
-
 }
 
 -(NSMutableArray *)tableViewDataArray{
@@ -180,12 +176,13 @@
     
     Loading_Bird_Hide
 }
-
-
 -(void)dealloc{
 
+    DLog(@"终于释放了--------------------股票详情");
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_DEAL_VC object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+
 }
 
 #pragma mark refreshData 再次刷新页面数据
@@ -194,10 +191,30 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         //再次刷新
         [self.view makeToastActivity];
+        
+        NSLog(@"💗💗💗💗💗💗💗💗💗💗💗💗💗请求的id%@",self.stockModel.operateid);
+        
         [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
         
     });
 }
 
+
+
+
+//-(void)MarchBackLeft{
+//    
+//    
+//    DLog(@"测试");
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        //再次刷新
+//        [self.view makeToastActivity];
+//        
+//        NSLog(@"💗💗💗💗💗💗💗💗💗💗💗💗💗请求的id%@",self.stockModel.operateid);
+//        
+//        [kHTTPSingle RequestOperateStockAllDetail:[self.stockModel.operateid intValue]];
+//        
+//    });
+//}
 
 @end
