@@ -131,7 +131,7 @@
         //右边的图标
         UIImageView *imageView = [[UIImageView alloc]init];
         imageView.tag = 102;
-        imageView.image =[UIImage imageNamed:@"stock_right_next_icon"];
+        imageView.image =[UIImage imageNamed:@"arrow"];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         [backView addSubview:imageView];
         
