@@ -20,6 +20,7 @@
 - (id)initWithSystemMessage:(SystemMessage *)SystemMessage
 {
     self = [super init];
+    _Id = SystemMessage->id();
     _content = [NSString stringWithUTF8String:SystemMessage->content().c_str()];
     _title = [NSString stringWithUTF8String:SystemMessage->title().c_str()];
     _publishtime = [NSString stringWithUTF8String:SystemMessage->publishtime().c_str()];

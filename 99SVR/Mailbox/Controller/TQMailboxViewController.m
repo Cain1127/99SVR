@@ -10,7 +10,7 @@
 #import "TQCustomizedCell.h"
 #import "TQMailboxCell.h"
 #import "TQAnswerViewController.h"
-#import "TQMessageViewController.h"
+#import "MessageViewController.h"
 #import "TQCommentReplyViewController.h"
 #import "TQPersonalTailorViewController.h"
 #import "TableViewFactory.h"
@@ -32,16 +32,20 @@
 
 @implementation TQMailboxViewController
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setTitleText:@"消息"];
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
     [_tableView setBackgroundColor:RGB(243, 243, 243)];
-    [self.view addSubview:_tableView];
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    [self.view addSubview:_tableView];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUnreadCount:) name:MESSAGE_UNREAD_INFO_VC object:nil];
     [kHTTPSingle RequestUnreadCount];
@@ -163,7 +167,7 @@
         vc = @"TQPersonalTailorViewController";
     } else if(indexPath.section==1)
     {
-        vc = @"TQMessageViewController";
+        vc = @"MessageViewController";
     } else if(indexPath.section == 2)
     {
         vc = @"CommentReplyViewController";

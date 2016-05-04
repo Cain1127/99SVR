@@ -29,7 +29,7 @@
 {
     [super viewDidLoad];
     [self setTitleText:@"客服中心"];
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 72, kScreenWidth, kScreenHeight-72) withStyle:UITableViewStylePlain];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
     _tableView.dataSource = self;
