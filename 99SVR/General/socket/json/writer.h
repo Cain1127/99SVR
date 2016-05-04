@@ -20,7 +20,7 @@
 #pragma warning(disable : 4251)
 #endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 
-namespace ProtocolJson {
+namespace Json {
 
 class Value;
 
@@ -28,7 +28,7 @@ class Value;
 
 Usage:
 \code
-  using namespace ProtocolJson;
+  using namespace Json;
   void writeToStdout(StreamWriter::Factory const& factory, Value const& value) {
     std::unique_ptr<StreamWriter> const writer(
       factory.newStreamWriter());
@@ -73,12 +73,12 @@ JSONCPP_STRING JSON_API writeString(StreamWriter::Factory const& factory, Value 
 
 Usage:
 \code
-  using namespace ProtocolJson;
+  using namespace Json;
   Value value = ...;
   StreamWriterBuilder builder;
   builder["commentStyle"] = "None";
   builder["indentation"] = "   ";  // or whatever you like
-  std::unique_ptr<ProtocolJson::StreamWriter> writer(
+  std::unique_ptr<Json::StreamWriter> writer(
       builder.newStreamWriter());
   writer->write(value, &std::cout);
   std::cout << std::endl;  // add lf and flush
@@ -86,7 +86,7 @@ Usage:
 */
 class JSON_API StreamWriterBuilder : public StreamWriter::Factory {
 public:
-  // Note: We use a ProtocolJson::Value so that we can add data-members to this class
+  // Note: We use a Json::Value so that we can add data-members to this class
   // without a major version bump.
   /** Configuration of this builder.
     Available settings (case-sensitive):
@@ -109,7 +109,7 @@ public:
     JSON Value.
     \sa setDefaults()
     */
-  ProtocolJson::Value settings_;
+  Json::Value settings_;
 
   StreamWriterBuilder();
   ~StreamWriterBuilder() JSONCPP_OVERRIDE;
@@ -122,17 +122,17 @@ public:
   /** \return true if 'settings' are legal and consistent;
    *   otherwise, indicate bad settings via 'invalid'.
    */
-  bool validate(ProtocolJson::Value* invalid) const;
+  bool validate(Json::Value* invalid) const;
   /** A simple way to update a specific setting.
    */
   Value& operator[](JSONCPP_STRING key);
 
   /** Called by ctor, but you can use this to reset settings_.
-   * \pre 'settings' != NULL (but ProtocolJson::null is fine)
+   * \pre 'settings' != NULL (but Json::null is fine)
    * \remark Defaults:
    * \snippet src/lib_json/json_writer.cpp StreamWriterBuilderDefaults
    */
-  static void setDefaults(ProtocolJson::Value* settings);
+  static void setDefaults(Json::Value* settings);
 };
 
 /** \brief Abstract class for writers.
@@ -319,10 +319,10 @@ JSONCPP_STRING JSON_API valueToString(bool value);
 JSONCPP_STRING JSON_API valueToQuotedString(const char* value);
 
 /// \brief Output using the StyledStreamWriter.
-/// \see ProtocolJson::operator>>()
+/// \see Json::operator>>()
 JSON_API JSONCPP_OSTREAM& operator<<(JSONCPP_OSTREAM&, const Value& root);
 
-} // namespace ProtocolJson
+} // namespace Json
 
 #if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 #pragma warning(pop)

@@ -59,7 +59,7 @@ typedef enum : NSUInteger
 {
     NSCache *viewCache;
 }
-@property (nonatomic,strong) NSMutableArray *aryBanner;
+@property (nonatomic,strong) NSArray *aryBanner;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *aryLiving;
 @property (nonatomic,strong) SDCycleScrollView *scrollView;
@@ -83,12 +83,13 @@ typedef enum : NSUInteger
     {
         return ;
     }
-    _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0.0f, 0.0f, kScreenWidth, kPictureHeight) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0.0f, 0.0f, kScreenWidth, kPictureHeight) delegate:self placeholderImage:nil];
     _scrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
     _scrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
     _scrollView.currentPageDotColor = UIColorFromRGB(0x4c4c4c); // 自定义分页控件小圆标颜色
     _scrollView.pageDotColor = UIColorFromRGB(0xa8a8a8);
-    _scrollView.autoScrollTimeInterval = 2;
+    _scrollView.autoScrollTimeInterval = 5;
+    [_scrollView setBackgroundColor:UIColorFromRGB(0xffffff)];
     @WeakObj(self)
     _scrollView.clickItemOperationBlock = ^(NSInteger index) {
          BannerModel *model = [selfWeak.aryBanner objectAtIndex:index];
@@ -127,7 +128,7 @@ typedef enum : NSUInteger
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
     self.refreshStatus = cCJHomeRequestTypeDefault;
-    [self setTitleText:@"99乐投"];
+    [self setTitleText:@"首页"];
     viewCache = [[NSCache alloc] init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLiveInfo:) name:MESSAGE_HOME_BANNER_VC object:nil];
 
@@ -137,7 +138,7 @@ typedef enum : NSUInteger
     [self createScroll];
     [self createPage];
     [self initTableView];
-    
+    [self.view makeToastActivity_bird];
     ///添加MJ头部刷新
     [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [_tableView.gifHeader loadDefaultImg];
@@ -147,6 +148,14 @@ typedef enum : NSUInteger
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if (roomView.room)
+    {
+        PlayIconView *iconView = [PlayIconView sharedPlayIconView];
+        iconView.frame = Rect(0, kScreenHeight-104, kScreenWidth, 60);
+        [self.view addSubview:iconView];
+        [iconView setRoom:roomView.room];
+    }
 }
 
 - (void)updateRefresh
@@ -164,6 +173,18 @@ typedef enum : NSUInteger
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
           selfWeak.scrollView.imageURLStringsGroup = selfWeak.aryBanner;
     });
+    
+    selfWeak.scrollView.clickItemOperationBlock = ^(NSInteger currentIndex)
+    {
+        if(selfWeak.aryBanner.count>currentIndex)
+        {
+            BannerModel *model = selfWeak.aryBanner[currentIndex];
+            if (model.webUrl!=nil) {
+                NNSVRViewController *svr = [[NNSVRViewController alloc] initWithPath:model.webUrl title:@""];
+                [selfWeak.navigationController pushViewController:svr animated:YES];
+            }
+        }
+    };
 }
 
 - (void)showLeftView
@@ -174,15 +195,7 @@ typedef enum : NSUInteger
 
 - (void)updateBannerInfo:(NSArray *)array
 {
-    if (0 < array.count)
-    {
-        [_aryBanner removeAllObjects];
-    }
-    for (NSDictionary *param in array)
-    {
-        BannerModel *model = [BannerModel resultWithDict:param];
-        [self.aryBanner addObject:model];
-    }
+    _aryBanner = array;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateRefreshStatus:cCJHomeRequestTypeBannerFinish];
         [self loadImageView];
@@ -193,10 +206,16 @@ typedef enum : NSUInteger
 #pragma mark - home date init request and analyze
 - (void)initData
 {
+    
 }
 
 - (void)updateLiveInfo:(NSNotification *)notify
 {
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.tableView.header endRefreshing];
+        [selfWeak.view hideToastActivity];
+    });
     if (!notify.object)
     {
         [self updateRefreshStatus:cCJHomeRequestTypeListFinish];
@@ -747,7 +766,7 @@ typedef enum : NSUInteger
     {
         return ValueWithTheIPhoneModelString(@"110,110,110,110");
     }
-    return 130.0f;
+    return 90.0f;
     
 }
 

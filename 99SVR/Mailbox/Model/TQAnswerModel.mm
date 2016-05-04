@@ -67,7 +67,7 @@ uint32	_fromclient;
 
     
     _userID = QuestionAnswer->id();
-
+    _askAuthorHead = [NSString stringWithUTF8String:QuestionAnswer->askauthorhead().c_str()];
 //    _askauthorheadid = QuestionAnswer->askauthorheadid();
     _fromclient = QuestionAnswer->fromclient();
     

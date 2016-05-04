@@ -9,4 +9,6 @@
 /**右边标签*/
 @property (nonatomic , strong) UILabel *rightLab;
 
+-(void)setLeftLabText:(NSString *)leftStr rightLabText:(NSString *)rightStr;
+
 @end

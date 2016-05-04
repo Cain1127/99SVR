@@ -54,58 +54,32 @@ static void get_full_img_url(const std::string& relative_path, std::string& abso
 
 static void get_full_head_icon(const std::string& headid, std::string& absolute_path)
 {
-    if(headid.size() == 0)
-    {
-        return;
-    }
+    /*if(headid.size() == 0)
+     {
+     return;
+     }
+     
+     absolute_path = HTTP_ICON_SVR;
+     absolute_path += "/";
+     absolute_path += HTTP_ICON_FOLDER;
+     absolute_path += "/";
+     absolute_path += headid;
+     if ( headid.find('.') == string::npos)
+     {
+     absolute_path += ".png";
+     }*/
     
-    absolute_path = HTTP_ICON_SVR;
-    absolute_path += "/";
-    absolute_path += HTTP_ICON_FOLDER;
-    absolute_path += "/";
-    absolute_path += headid;
-    if ( headid.find('.') == string::npos)
+    std::string relative_path = headid;
+    
+    if(string::npos == headid.find(".png") && string::npos == headid.find(".jpg"))
     {
-        absolute_path += ".png";
+        absolute_path = headid;
+    }
+    else
+    {
+        get_full_img_url(headid, absolute_path);
     }
 }
-
-/*
- string UTF8ToGBK(const std::string& strUTF8)
- {
- int len = MultiByteToWideChar(CP_UTF8, 0, strUTF8.c_str(), -1, NULL, 0);
- unsigned short * wszGBK = new unsigned short[len + 1];
- memset(wszGBK, 0, len * 2 + 2);
- MultiByteToWideChar(CP_UTF8, 0, (LPCTSTR)strUTF8.c_str(), -1, (LPWSTR)wszGBK, len);
- 
- len = WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)wszGBK, -1, NULL, 0, NULL, NULL);
- char *szGBK = new char[len + 1];
- memset(szGBK, 0, len + 1);
- WideCharToMultiByte(CP_ACP,0, (LPCWSTR)wszGBK, -1, szGBK, len, NULL, NULL);
- //strUTF8 = szGBK;
- std::string strTemp(szGBK);
- delete[]szGBK;
- delete[]wszGBK;
- return strTemp;
- }
- 
- string HttpConnection::GBKToUTF8(const std::string& strGBK)
- {
- string strOutUTF8 = "";
- WCHAR * str1;
- int n = MultiByteToWideChar(CP_ACP, 0, strGBK.c_str(), -1, NULL, 0);
- str1 = new WCHAR[n];
- MultiByteToWideChar(CP_ACP, 0, strGBK.c_str(), -1, str1, n);
- n = WideCharToMultiByte(CP_UTF8, 0, str1, -1, NULL, 0, NULL, NULL);
- char * str2 = new char[n];
- WideCharToMultiByte(CP_UTF8, 0, str1, -1, str2, n, NULL, NULL);
- strOutUTF8 = str2;
- delete[]str1;
- str1 = NULL;
- delete[]str2;
- str2 = NULL;
- return strOutUTF8;
- }*/
 
 static ThreadVoid http_request(void* _param)
 {
@@ -175,17 +149,7 @@ static void http_request_asyn(HttpListener* uiListener, ParseJson jsonPaser, Req
 }
 
 
-// «Î«ÛŒ Ã‚ªÿ∏¥--Œ¥ªÿªÿ¥µƒ£®PC∂ÀΩ”ø⁄£©
-void RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer = false)
-{
-    
-}
 
-// «Î«Û∆¿¬€ªÿ∏¥--∑¢≥ˆµƒ∆¿¬€£®PC∂ÀΩ”ø⁄£©
-void RequestMailSendReply(int startId, int count, MailReplyListener* listener)
-{
-    
-}
 
 // Ω≤ ¶Õ≈∂”ªÿ¥Ã·Œ £®PC∂ÀΩ”ø⁄£©
 void PostAnswer(int questionId, string content, HttpListener* listener)
@@ -651,7 +615,7 @@ void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener)
                             if ( !data_item["vipinfoname"].isNull() ){
                                 pack.set_vipLevelName(data_item["vipinfoname"].asString());
                             }
-                            pack.set_isOpen(data_item["isopen"].asBool());
+                            pack.set_isOpen(data_item["isopen"].asInt());
                             
                             std::vector<PrivateServiceSummary> ss_list;
                             for(j = 0; j < size1_; j++)
@@ -1071,11 +1035,15 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
                             {
                                 MyPrivateService mps;
                                 
-                                JsonValue& data_item = data[i];
+                                JsonValue& data_item = buylist[i];
                                 
                                 mps.set_teamid(data_item["teacherid"].asInt());
                                 mps.set_teamname(data_item["teacherid"].asString());
-                                mps.set_teamicon(data_item["nheadid"].asString());
+                                
+                                std::string icon;
+                                get_full_head_icon(data_item["nheadid"].asString(), icon);
+                                mps.set_teamicon(icon);
+                                
                                 mps.set_levelid(data_item["viplevel"].asInt());
                                 mps.set_levelname(data_item["vipinfoname"].asString());
                                 
@@ -1344,7 +1312,10 @@ void parse_viewpoint(char* json, HttpListener* listener)
                     viewpoint.set_authoricon(icon);
                     
                     viewpoint.set_viewpointid(atoi((viewpoints[i]["viewpointid"].asString()).c_str()));
-                    viewpoint.set_publishtime(viewpoints[i]["publishtime"].asString());
+                    
+                    std::string strOut;
+                    string2timestamp(viewpoints[i]["publishtime"].asString(), strOut);
+                    viewpoint.set_publishtime(strOut);
                     viewpoint.set_title(viewpoints[i]["title"].asString());
                     viewpoint.set_content(viewpoints[i]["content"].asString());
                     viewpoint.set_replycount(atoi((viewpoints[i]["replycount"].asString()).c_str()));
@@ -1382,6 +1353,9 @@ void parse_viewpointdetail(char* json, HttpListener* listener)
     JsonReader reader;
     
     ViewpointDetailListener* detail_listener = (ViewpointDetailListener*)listener;
+    std::vector<ImageInfo> img_list;
+    int size_ = 0;
+    int i = 0;
     
     try
     {
@@ -1415,14 +1389,32 @@ void parse_viewpointdetail(char* json, HttpListener* listener)
                 get_full_head_icon(details["authorIcon"].asString(), icon);
                 detail.set_authoricon(icon);
                 
-                detail.set_publishtime(details["publishTime"].asString());
+                std::string strOut;
+                string2timestamp(details["publishTime"].asString(), strOut);
+                detail.set_publishtime(strOut);
+                
                 detail.set_title(details["title"].asString());
                 detail.set_content(details["content"].asString());
                 detail.set_replycount(atoi((details["replyCount"].asString()).c_str()));
                 detail.set_giftcount(atoi((details["giftcount"].asString()).c_str()));
                 
-                vector<ImageInfo> images;
-                detail_listener->onResponse(detail, images);
+                size_ = details["pic"].size();
+                img_list.clear();
+                
+                for( i = 0; i < size_; i ++ )
+                {
+                    ImageInfo image;
+                    image.set_height(atoi(details["pic"][i]["height"].asString().c_str()));
+                    image.set_width(atoi(details["pic"][i]["width"].asString().c_str()));
+                    
+                    std::string out;
+                    get_full_img_url(details["pic"][i]["img"].asString(), out);
+                    image.set_path(out);
+                    
+                    img_list.push_back(image);
+                }
+                
+                detail_listener->onResponse(detail, img_list);
             }
             else
             {
@@ -1493,7 +1485,9 @@ void parse_viewpointreply(char* json, HttpListener* listener)
                     
                     reply.set_fromauthorid(atoi(replys[i]["fromAuthorId"].asString().c_str()));
                     reply.set_fromauthorname(replys[i]["fromAuthorName"].asString());
-                    reply.set_fromauthoricon(replys[i]["fromAuthorIcon"].asString());
+                    
+                    get_full_head_icon(replys[i]["fromAuthorIcon"].asString(), icon);
+                    reply.set_fromauthoricon(icon);
                     reply.set_publishtime(replys[i]["publishTime"].asString());
                     reply.set_content(replys[i]["content"].asString());
                     
@@ -1562,7 +1556,9 @@ void parse_postreply(char* json, HttpListener* listener)
                 
                 reply.set_fromauthorid(atoi(replys["fromAuthorId"].asString().c_str()));
                 reply.set_fromauthorname(replys["fromAuthorName"].asString());
-                reply.set_fromauthoricon(replys["fromAuthorIcon"].asString());
+                
+                get_full_head_icon(replys["fromAuthorIcon"].asString(), icon);
+                reply.set_fromauthoricon(icon);
                 reply.set_publishtime(replys["publishTime"].asString());
                 reply.set_content(replys["content"].asString());
                 
@@ -1924,6 +1920,9 @@ void parse_questionanswer(char* json, HttpListener* listener)
             JsonValue& datas = value["data"];
             if(!datas.isNull())
             {
+                int isteacher=0;
+                if(!datas["isTeacher"].isNull())
+                    isteacher=(atoi((datas["isTeacher"].asString()).c_str()));
                 size_ = datas["list"].size();
                 vec_questionanswer.clear();
                 for(i = 0; i < size_; i++)
@@ -1932,14 +1931,19 @@ void parse_questionanswer(char* json, HttpListener* listener)
                     questionanswer.set_id(atoi((datas["list"][i]["id"].asString()).c_str()));
                     questionanswer.set_answerauthorid(atoi(datas["list"][i]["answerAuthorId"].asString().c_str()));
                     questionanswer.set_answerauthorname(datas["list"][i]["answerAuthorName"].asString());
-                    questionanswer.set_answerauthorhead(datas["list"][i]["answerAuthorHead"].asString());
+                    
+                    std::string icon;
+                    get_full_head_icon(datas["list"][i]["answerAuthorHead"].asString(), icon);
+                    questionanswer.set_answerauthorhead(icon);
+                    
+                    
                     questionanswer.set_answerauthorrole(atoi((datas["list"][i]["answerAuthorRole"].asString()).c_str()));
                     questionanswer.set_answertime(datas["list"][i]["answerTime"].asString());
                     questionanswer.set_answercontent(datas["list"][i]["answerContent"].asString());
                     questionanswer.set_askauthorid(atoi(datas["list"][i]["askAuthorId"].asString().c_str()));
                     questionanswer.set_askauthorname(datas["list"][i]["askAuthorName"].asString());
                     
-                    std::string icon;
+                    
                     get_full_head_icon(datas["list"][i]["askAuthorId"].asString(), icon);
                     questionanswer.set_askauthorhead(icon);
                     
@@ -1951,7 +1955,7 @@ void parse_questionanswer(char* json, HttpListener* listener)
                     vec_questionanswer.push_back(questionanswer);
                 }
                 
-                questionanswer_listener->onResponse(vec_questionanswer);
+                questionanswer_listener->onResponse(vec_questionanswer,isteacher);
             }
             else
             {
@@ -2005,13 +2009,16 @@ void parse_comment(char* json, HttpListener* listener)
             JsonValue& datas = value["data"];
             if(!datas.isNull())
             {
+                int isteacher=0;
+                if(!datas["isTeacher"].isNull())
+                    isteacher=(atoi((datas["isTeacher"].asString()).c_str()));
                 size_ = datas["list"].size();
                 vec_comment.clear();
                 for(i = 0; i < size_; i++)
                 {
                     MailReply comment;
                     comment.set_id(atoi((datas["list"][i]["id"].asString()).c_str()));
-                    comment.set_viewpointid(atoi((datas["list"][i]["viewpointid"].asString()).c_str()));
+                    comment.set_viewpointid(atoi((datas["list"][i]["viewpointId"].asString()).c_str()));
                     comment.set_title(datas["list"][i]["title"].asString());
                     comment.set_askauthorid(atoi(datas["list"][i]["askAuthorId"].asString().c_str()));
                     comment.set_askauthorname(datas["list"][i]["askAuthorName"].asString());
@@ -2033,7 +2040,7 @@ void parse_comment(char* json, HttpListener* listener)
                     vec_comment.push_back(comment);
                 }
                 
-                comment_listener->onResponse(vec_comment);
+                comment_listener->onResponse(vec_comment,isteacher);
             }
             else
             {
@@ -2166,6 +2173,54 @@ void parse_groupspage(char* json, HttpListener* listener)
     }
 }
 
+void parse_UserTeamRelatedInfo(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    UserTeamRelatedInfo info;
+    
+    UserTeamRelatedInfoListener* related_listener = (UserTeamRelatedInfoListener*)listener;
+    
+    try
+    {
+        if (reader.parse(strJson, value))
+        {
+            if(!value["status"].isNull())
+            {
+                int status = value["status"].asInt();
+                JsonValue& data = value["data"];
+                
+                if(0 == status)
+                {
+                    info.set_askremain(atoi(data["count"].asString().c_str()));
+                    info.set_askcoin(data["gold"].asInt());
+                    
+                    related_listener->onResponse(info);
+                }
+                else
+                {
+                    related_listener->OnError(status);
+                }
+            }
+            else
+            {
+                related_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            related_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch(std::exception& ex)
+    {
+        related_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
+
 void parse_teamvideo(char* json, HttpListener* listener)
 {
     std::string strJson = json;
@@ -2268,7 +2323,11 @@ void parse_teamintroduce(char* json, HttpListener* listener)
             {
                 Team introduce;
                 introduce.set_teamname(datas["cname"].asString());
-                introduce.set_teamicon(datas["headid"].asString());
+                
+                std::string icon;
+                get_full_head_icon(datas["headid"].asString(), icon);
+                introduce.set_teamicon(icon);
+                
                 introduce.set_introduce(datas["introduce"].asString());
                 
                 introduce.set_roomid(0);
@@ -2277,7 +2336,7 @@ void parse_teamintroduce(char* json, HttpListener* listener)
                 introduce.set_locked(0);
                 introduce.set_alias("");
                 
-                introduce_listener->onResponse(introduce);	
+                introduce_listener->onResponse(introduce);
             }
             else
             {
@@ -2428,7 +2487,11 @@ void parse_profitdetail(char* json, HttpListener* listener)
                 osprofit.set_operateid(atoi((datas["profile"]["operateId"].asString()).c_str()));
                 osprofit.set_teamid(atoi(datas["profile"]["teamId"].asString().c_str()));
                 osprofit.set_teamname(datas["profile"]["teamName"].asString());
-                osprofit.set_teamicon(datas["profile"]["teamIcon"].asString());
+                
+                std::string icon;
+                get_full_head_icon(datas["profile"]["teamIcon"].asString(), icon);
+                osprofit.set_teamicon(icon);
+                
                 osprofit.set_focus(datas["profile"]["focus"].asString());
                 osprofit.set_goalprofit(atof((datas["profile"]["goalProfit"].asString()).c_str()));
                 osprofit.set_totalprofit(atof((datas["profile"]["totalProfit"].asString()).c_str()));
@@ -2587,7 +2650,194 @@ void parse_splashimage(char* json, HttpListener* listener)
 }
 
 
+void parse_questionunanswer(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    std::vector<QuestionAnswer> vec_questionanswer;
+    
+    int size_ = 0;
+    int i = 0;
+    
+    QuestionAnswerListener* questionanswer_listener = (QuestionAnswerListener*)listener;
+    
+    try
+    {
+        // Ω‚Œˆ¬ﬂº≠
+        //..
+        if (reader.parse(strJson, value))
+        {
+            JsonValue& status = value["status"];
+            if(status.isNull())
+            {
+                questionanswer_listener->OnError(PERR_JSON_PARSE_ERROR);
+                return;
+            }
+            int statu = value["status"].asInt();
+            if(statu!=0)
+            {
+                questionanswer_listener->OnError(statu);
+                return;
+            }
+            
+            JsonValue& datas = value["data"];
+            if(!datas.isNull())
+            {
+                int isteacher=0;
+                if(!datas["isTeacher"].isNull())
+                    isteacher=(atoi((datas["isTeacher"].asString()).c_str()));
+                size_ = datas["list"].size();
+                vec_questionanswer.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    QuestionAnswer questionanswer;
+                    if(isteacher==0)
+                    {
+                        questionanswer.set_id(atoi((datas["list"][i]["id"].asString()).c_str()));
+                        questionanswer.set_answerauthorid(atoi(datas["list"][i]["answerAuthorId"].asString().c_str()));
+                        questionanswer.set_answerauthorname(datas["list"][i]["answerAuthorName"].asString());
+                        questionanswer.set_answerauthorhead(datas["list"][i]["answerAuthorHead"].asString());	
+                        questionanswer.set_answerauthorrole(atoi((datas["list"][i]["answerAuthorRole"].asString()).c_str()));
+                        questionanswer.set_askstock(datas["list"][i]["askStock"].asString());
+                        questionanswer.set_askcontent(datas["list"][i]["askContent"].asString());
+                        questionanswer.set_asktime(datas["list"][i]["askTime"].asString());
+                        
+                        questionanswer.set_answertime("");
+                        questionanswer.set_answercontent("");
+                        questionanswer.set_askauthorid(0);
+                        questionanswer.set_askauthorname("");
+                        questionanswer.set_askauthorhead("");
+                        questionanswer.set_askauthorrole(0);
+                        questionanswer.set_fromclient(0);
+                    }
+                    else
+                    {
+                        questionanswer.set_id(atoi((datas["list"][i]["id"].asString()).c_str()));
+                        questionanswer.set_askauthorid(atoi(datas["list"][i]["askAuthorId"].asString().c_str()));
+                        questionanswer.set_askauthorname(datas["list"][i]["askAuthorName"].asString());
+                        std::string icon;
+                        get_full_head_icon(datas["list"][i]["askAuthorId"].asString(), icon);
+                        questionanswer.set_askauthorhead(icon);
+                        questionanswer.set_askauthorrole(atoi((datas["list"][i]["askAuthorRole"].asString()).c_str()));
+                        questionanswer.set_askstock(datas["list"][i]["askStock"].asString());
+                        questionanswer.set_askcontent(datas["list"][i]["askContent"].asString());
+                        questionanswer.set_asktime(datas["list"][i]["askTime"].asString());
+                        
+                        questionanswer.set_answerauthorid(0);
+                        questionanswer.set_answerauthorname("");
+                        questionanswer.set_answerauthorhead("");	
+                        questionanswer.set_answerauthorrole(0);
+                        questionanswer.set_answertime("");
+                        questionanswer.set_answercontent("");
+                        questionanswer.set_fromclient(0);
+                    }
+                    vec_questionanswer.push_back(questionanswer);
+                }
+                
+                questionanswer_listener->onResponse(vec_questionanswer,isteacher);
+            }
+            else
+            {
+                questionanswer_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            questionanswer_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex)
+    {
+        questionanswer_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
 
+void parse_sendcomment(char* json, HttpListener* listener)
+{
+    std::string strJson = json;
+    
+    JsonValue value;
+    JsonReader reader;
+    
+    std::vector<MailReply> vec_comment;
+    
+    int size_ = 0;
+    int i = 0;
+    
+    MailReplyListener* comment_listener = (MailReplyListener*)listener;
+    
+    try
+    {
+        // Ω‚Œˆ¬ﬂº≠
+        //..
+        if (reader.parse(strJson, value))
+        {
+            JsonValue& status = value["status"];
+            if(status.isNull())
+            {
+                comment_listener->OnError(PERR_JSON_PARSE_ERROR);
+                return;
+            }
+            int statu = value["status"].asInt();
+            if(statu!=0)
+            {
+                comment_listener->OnError(statu);
+                return;
+            }
+            
+            JsonValue& datas = value["data"];
+            if(!datas.isNull())
+            {
+                int isteacher=0;
+                if(!datas["isTeacher"].isNull())
+                    isteacher=(atoi((datas["isTeacher"].asString()).c_str()));
+                size_ = datas["list"].size();
+                vec_comment.clear();
+                for(i = 0; i < size_; i++)
+                {
+                    MailReply comment;
+                    comment.set_id(atoi((datas["list"][i]["id"].asString()).c_str()));
+                    comment.set_viewpointid(atoi((datas["list"][i]["viewpointId"].asString()).c_str()));
+                    comment.set_title(datas["list"][i]["title"].asString());
+                    comment.set_askauthorid(atoi(datas["list"][i]["askAuthorId"].asString().c_str()));
+                    comment.set_askauthorname(datas["list"][i]["askAuthorName"].asString());
+                    std::string icon;
+                    get_full_head_icon(datas["list"][i]["askAuthorId"].asString(), icon);
+                    comment.set_askauthorhead(icon);
+                    comment.set_askauthorrole(atoi((datas["list"][i]["askAuthorRole"].asString()).c_str()));
+                    comment.set_askcontent(datas["list"][i]["askContent"].asString());
+                    comment.set_asktime(datas["list"][i]["askTime"].asString());
+                    
+                    comment.set_answerauthorid("");
+                    comment.set_answerauthorname("");
+                    comment.set_answerauthorhead("");	
+                    comment.set_answerauthorrole(0);
+                    comment.set_answertime("");
+                    comment.set_answercontent("");
+                    comment.set_fromclient(0);
+                    vec_comment.push_back(comment);
+                }
+                
+                comment_listener->onResponse(vec_comment,isteacher);
+            }
+            else
+            {
+                comment_listener->OnError(PERR_JSON_PARSE_ERROR);
+            }
+        }
+        else
+        {
+            comment_listener->OnError(PERR_JSON_PARSE_ERROR);
+        }
+    }
+    catch ( std::exception& ex)
+    {
+        comment_listener->OnError(PERR_JSON_PARSE_ERROR);
+    }
+}
 
 /******************************∑¢∆«Î«Û******************************/
 
@@ -2874,7 +3124,7 @@ void HttpConnection::RequestSystemMessage(int startId, int count, SystemMessageL
 }
 
 // «Î«ÛŒ Ã‚ªÿ∏¥
-void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswerListener* listener, bool isTeamer)
+void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswerListener* listener)
 {
     char tmp[512];
     sprintf(tmp,"/mail/question/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
@@ -2886,7 +3136,7 @@ void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswe
 }
 
 // «Î«Û∆¿¬€ªÿ∏¥
-void HttpConnection::RequestMailReply(int startId, int count, MailReplyListener* listener, bool isTeam)
+void HttpConnection::RequestMailReply(int startId, int count, MailReplyListener* listener)
 {
     char tmp[512];
     sprintf(tmp,"/mail/comment/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
@@ -3033,4 +3283,42 @@ void HttpConnection::RequestPcGroupsPage(GroupsPageListener* listener)
     http_request_asyn(listener, parse_groupspage, &request);
 }
 
+void HttpConnection::RequestUserTeamRelatedInfo(int teamId, UserTeamRelatedInfoListener* listener)
+{
+    char tmp[128] = {0};
+    
+    RequestParamter& request = get_request_param();
+    
+    sprintf(tmp, "/Questions/getAskCount/teamId/%d/userid/%s", teamId, get_user_id().c_str());
+    request["s"] = tmp;
+    
+    http_request_asyn(listener, parse_UserTeamRelatedInfo, &request);
+}
+
+// «Î«ÛŒ Ã‚ªÿ∏¥--Œ¥ªÿªÿ¥µƒ£®PC∂ÀΩ”ø⁄£©
+void HttpConnection::RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener)
+{
+    char tmp[512];
+    //sprintf(tmp,"/mail/questionUnread/uid/%d",1793418);
+    sprintf(tmp,"/mail/questionUnread/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
+    
+    RequestParamter& request = get_request_param();
+    request["s"] = tmp;
+    
+    http_request_asyn(listener, parse_questionunanswer, &request);
+}
+
+
+// «Î«Û∆¿¬€ªÿ∏¥--∑¢≥ˆµƒ∆¿¬€£®PC∂ÀΩ”ø⁄£©
+void HttpConnection::RequestMailSendReply(int startId, int count, MailReplyListener* listener)
+{
+    char tmp[512];
+    //sprintf(tmp,"/mail/commentPosted/uid/%d",1793418);
+    sprintf(tmp,"/mail/commentPosted/uid/%d/size/%d/id/%d/type/%d",login_userid,count,startId,0);
+    
+    RequestParamter& request = get_request_param();
+    request["s"] = tmp;
+    
+    http_request_asyn(listener, parse_sendcomment, &request);
+}
 

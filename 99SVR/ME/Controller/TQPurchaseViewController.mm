@@ -23,12 +23,12 @@
 /**数据加载view*/
 @property (nonatomic , strong) UIView *emptyView;
 @property (nonatomic,assign) int nId;
-
+@property (nonatomic,copy) NSString *strName;
 @end
 
 @implementation TQPurchaseViewController
 
-- (id)initWithTeamId:(int)nId
+- (id)initWithTeamId:(int)nId name:(NSString *)strName
 {
     self = [super init];
     _nId = nId;
@@ -131,9 +131,15 @@
             if (index==1) {//购买
                 
                 DLog(@"购买的vip等级%@   的战队ID = %@",model.levelid,self.stockModel.teamid);
-                [MBProgressHUD showMessage:@"兑换中..."];
+                [MBProgressHUD showMessage:@"Vip兑换中..."];
                 ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
-                [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[model.levelid intValue]];
+                if(_nId)
+                {
+                    [sing requestBuyPrivateVip:_nId vipType:[model.levelid intValue]];
+                }else
+                {
+                    [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[model.levelid intValue]];
+                }
             }
         }];
     }else{//需要充值
@@ -162,7 +168,13 @@
         
         if ([code isEqualToString:@"1"]) {//请求成功
             self.headerModel = [notfi.object valueForKey:@"headerModel"];
-            self.headerModel.teamName = self.stockModel.teamname;
+            if(_strName)
+            {
+                self.headerModel.teamName = _strName;
+            }
+            else{
+                self.headerModel.teamName = self.stockModel.teamname;
+            }
             
             [self.headerView setHeaderViewWithModel:self.headerModel];
             self.tableView.tableHeaderView = self.headerView;
@@ -252,7 +264,7 @@
                 
             }else if ([code isEqualToString:@"1015"]){//已经购买
                 
-                [ProgressHUD showError:@"已经购买"];
+                [ProgressHUD showError:@"已经兑换该等级私人订制"];
                 
             }else if ([code isEqualToString:@"1016"]){//没有该私人定制
             

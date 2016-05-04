@@ -49,21 +49,24 @@
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [imgView sd_setImageWithURL:url1];
     
-    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-50,64,100,100)];
+    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-32.5,64,65,65)];
     [self.view addSubview:imgHead];
     imgHead.layer.masksToBounds = YES;
-    imgHead.layer.cornerRadius = 50;
-    NSString *strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,_room.croompic];
+    imgHead.layer.cornerRadius = 32;
+    NSString *strUrl = [NSString stringWithFormat:@"%@",_room.croompic];
     [imgHead sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
+    
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, imgHead.y+imgHead.height+8, kScreenWidth, 20)];
+    [lblName setTextColor:UIColorFromRGB(0xffffff)];
+    [lblName setText:_room.teamname];
+    [lblName setFont:XCFONT(15)];
+    [lblName setTextAlignment:NSTextAlignmentCenter];
+    [self.view addSubview:lblName];
 
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 185, kScreenWidth, kScreenHeight-185) withStyle:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
-    
-    
-    
-    
 }
 
 - (void)loadVideoInfo:(NSNotification *)notify
@@ -146,7 +149,7 @@
     UIView *nameView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44)];
     [nameView setBackgroundColor:UIColorFromRGB(0xffffff)];
     UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(10, 0, 100, 44)];
-    [lblName setFont:XCFONT(15)];
+    [lblName setFont:XCFONT(16)];
     lblName.text = section == 0 ? @"擅长" : @"精彩课程";
     [nameView addSubview:lblName];
     return nameView;

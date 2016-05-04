@@ -12,12 +12,17 @@
 
 #include <vector>
 
+JoinRoomReq join_req;
+JoinRoomResp room_info;
+bool in_room;
+
+
 VideoRoomConnection::VideoRoomConnection(void) :
-room_listener(NULL)
+room_join_listener(NULL), room_listener(NULL)
 {
 	main_cmd = protocol::MDM_Vchat_Room;
-	strcpy(lbs_type, "/tygetgate");
 	closed = false;
+	room_info.set_vcbid(0);
 }
 
 
@@ -42,15 +47,12 @@ void VideoRoomConnection::SendMsg_Ping()
 
 void VideoRoomConnection::on_do_connected()
 {
-	//SendMsg_Hello();
 
 	closed = false;
 	protocol::CMDJoinRoomReq_t temreq = { 0 };
 	string ip = join_req.cipaddr();
 	join_req.set_cipaddr("");
 	join_req.set_userid(loginuser.userid()); 
-	//join_req.set_vcbid(40000);
-	//join_req.set_croompwd("123");
 	join_req.set_cuserpwd(login_password);
 	join_req.set_devtype(login_nmobile);
 	join_req.set_bloginsource(login_reqv == 4 ? 0 : 1);
@@ -66,10 +68,9 @@ void VideoRoomConnection::on_do_connected()
 	join_req.set_crc32(crcval);
 	join_req.set_cipaddr(ip);
 	
-	LOG("SEND  join...");
 	join_req.Log();
 
-	LOG("XXXXXXXXXXXJOIN ROOM");
+	LOG("SEND JOIN ROOM");
 	SEND_MESSAGE(protocol::Sub_Vchat_JoinRoomReq, join_req);
 
 }
@@ -85,9 +86,7 @@ void VideoRoomConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 	join_req = req;
 	on_do_connected();
 	//connect_from_lbs_asyn();
-	
-
-/*	
+/*
 	int ret;
 	
 	ret = connect("172.16.41.215", 22706);
@@ -119,11 +118,14 @@ void VideoRoomConnection::SendMsg_AfterJoinRoomReq()
 	SEND_MESSAGE(protocol::Sub_Vchat_AfterJoinRoomReq, req);
 }
 
-void VideoRoomConnection::SendMsg_ExitRoomReq()
+void VideoRoomConnection::SendMsg_ExitRoomReq(uint32 roomid)
 {
+	room_info.set_vcbid(0);
+	in_room = false;
+
 	UserExitRoomInfo req;
 	req.set_userid(join_req.userid());
-	req.set_vcbid(join_req.vcbid());
+	req.set_vcbid(roomid);
 
 	SEND_MESSAGE(protocol::Sub_Vchat_RoomUserExitReq, req);
 }
@@ -298,10 +300,14 @@ void VideoRoomConnection::SendMsg_TeamTopNReq(TeamTopNReq& req)
 	SEND_MESSAGE(protocol::Sub_Vchat_TeamTopNReq, req);
 }
 
+void VideoRoomConnection::SendMsg_ViewpointTradeGiftReq(ViewpointTradeGiftReq& req)
+{
+	SEND_MESSAGE(protocol::Sub_Vchat_ViewpointTradeGiftReq, req);
+}
+
 void VideoRoomConnection::close(void)
 {
-	SendMsg_ExitRoomReq();
-	Connection::close();
+	SendMsg_ExitRoomReq(join_req.vcbid());
 }
 
 void VideoRoomConnection::DispatchSocketMessage(void* msg)
@@ -338,6 +344,7 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 				room_info.ParseFromArray(body, room_info.ByteSize());
 				room_join_listener->OnJoinRoomResp(room_info);
 			}
+			in_room = true;
 			break;
 		//加入房间失败
 		case protocol::Sub_Vchat_JoinRoomErr:
@@ -557,7 +564,7 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 
 		//收藏房间响应
 		case protocol::Sub_Vchat_FavoriteVcbResp:
-			//暂无操作
+			ON_MESSAGE(room_listener, FavoriteRoomResp, OnFavoriteVcbResp);
 			break;
 
 		//设置房间公告响应
@@ -762,6 +769,11 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 				}
 			}
 			room_listener->OnTeamTopNResp(g_vec_teamtop);
+			break;
+
+		//观点赠送礼物通知
+		case protocol::Sub_Vchat_ViewpointTradeGiftNoty:
+			ON_MESSAGE(room_listener,ViewpointTradeGiftNoty, OnViewpointTradeGiftNoty);
 			break;
 
 		default:

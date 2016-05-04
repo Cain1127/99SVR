@@ -56,7 +56,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     dispatch_async(dispatch_get_main_queue(), ^{
         [_controlWeak.view hideToastActivity];
-        [ProgressHUD showSuccess:@"加入房间成功"];
         RoomViewController *roomView = [RoomViewController sharedRoomViewController];
         [roomView setRoom:_room];
         [_controlWeak.navigationController pushViewController:roomView animated:YES];
@@ -70,7 +69,7 @@
     @WeakObj(_control)
     dispatch_async(dispatch_get_main_queue(), ^{
         [_controlWeak.view hideToastActivity];
-        [ProgressHUD showError:@"加入房间失败" ];
+        [ProgressHUD showError:@"加入房间失败"];
     });
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

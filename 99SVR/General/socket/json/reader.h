@@ -23,7 +23,7 @@
 #pragma warning(disable : 4251)
 #endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 
-namespace ProtocolJson {
+namespace Json {
 
 /** \brief Unserialize a <a HREF="http://www.json.org">JSON</a> document into a
  *Value.
@@ -98,7 +98,7 @@ public:
              bool collectComments = true);
 
   /// \brief Parse from input stream.
-  /// \see ProtocolJson::operator>>(std::istream&, ProtocolJson::Value&).
+  /// \see Json::operator>>(std::istream&, Json::Value&).
   bool parse(JSONCPP_ISTREAM& is, Value& root, bool collectComments = true);
 
   /** \brief Returns a user friendly string that list errors in the parsed
@@ -282,7 +282,7 @@ public:
 
 Usage:
 \code
-  using namespace ProtocolJson;
+  using namespace Json;
   CharReaderBuilder builder;
   builder["collectComments"] = false;
   Value value;
@@ -292,7 +292,7 @@ Usage:
 */
 class JSON_API CharReaderBuilder : public CharReader::Factory {
 public:
-  // Note: We use a ProtocolJson::Value so that we can add data-members to this class
+  // Note: We use a Json::Value so that we can add data-members to this class
   // without a major version bump.
   /** Configuration of this builder.
     These are case-sensitive.
@@ -330,7 +330,7 @@ public:
     JSON Value.
     \sa setDefaults()
     */
-  ProtocolJson::Value settings_;
+  Json::Value settings_;
 
   CharReaderBuilder();
   ~CharReaderBuilder() JSONCPP_OVERRIDE;
@@ -340,24 +340,24 @@ public:
   /** \return true if 'settings' are legal and consistent;
    *   otherwise, indicate bad settings via 'invalid'.
    */
-  bool validate(ProtocolJson::Value* invalid) const;
+  bool validate(Json::Value* invalid) const;
 
   /** A simple way to update a specific setting.
    */
   Value& operator[](JSONCPP_STRING key);
 
   /** Called by ctor, but you can use this to reset settings_.
-   * \pre 'settings' != NULL (but ProtocolJson::null is fine)
+   * \pre 'settings' != NULL (but Json::null is fine)
    * \remark Defaults:
    * \snippet src/lib_json/json_reader.cpp CharReaderBuilderDefaults
    */
-  static void setDefaults(ProtocolJson::Value* settings);
+  static void setDefaults(Json::Value* settings);
   /** Same as old Features::strictMode().
-   * \pre 'settings' != NULL (but ProtocolJson::null is fine)
+   * \pre 'settings' != NULL (but Json::null is fine)
    * \remark Defaults:
    * \snippet src/lib_json/json_reader.cpp CharReaderBuilderStrictMode
    */
-  static void strictMode(ProtocolJson::Value* settings);
+  static void strictMode(Json::Value* settings);
 };
 
 /** Consume entire stream and use its begin/end.
@@ -376,7 +376,7 @@ bool JSON_API parseFromStream(
  This can be used to read a file into a particular sub-object.
  For example:
  \code
- ProtocolJson::Value root;
+ Json::Value root;
  cin >> root["dir"]["file"];
  cout << root;
  \endcode
@@ -391,11 +391,11 @@ bool JSON_API parseFromStream(
  }
  \endverbatim
  \throw std::exception on parse error.
- \see ProtocolJson::operator<<()
+ \see Json::operator<<()
 */
 JSON_API JSONCPP_ISTREAM& operator>>(JSONCPP_ISTREAM&, Value&);
 
-} // namespace ProtocolJson
+} // namespace Json
 
 #if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 #pragma warning(pop)

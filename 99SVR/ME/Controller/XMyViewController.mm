@@ -8,6 +8,9 @@
 
 #import "XMyViewController.h"
 #import "LeftMenuHeaderView.h"
+#import "RoomHttp.h"
+#import "RoomViewController.h"
+#import "PlayIconView.h"
 #import "TextColletViewController.h"
 #import "LeftCellModel.h"
 #import "LeftViewCell.h"
@@ -92,6 +95,14 @@
 {
     [super viewWillAppear:animated];
     [self checkLogin];
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if (roomView.room)
+    {
+        PlayIconView *iconView = [PlayIconView sharedPlayIconView];
+        iconView.frame = Rect(0, kScreenHeight-104, kScreenWidth, 60);
+        [self.view addSubview:iconView];
+        [iconView setRoom:roomView.room];
+    }
 }
 
 - (void)checkLogin

@@ -8,6 +8,7 @@
 
 #import "TabBarController.h"
 #import "ZLVideoListViewController.h"
+#import "GFNavigationController.h"
 #import "NavigationViewController.h"
 #import "HomeViewController.h"
 #import "IndexViewController.h"
@@ -51,7 +52,11 @@
 {
     self = [super init];
     if (self) {
-
+        // 统一设置Item的文字属性
+        [self setUpItemTextAttrs];
+        
+        // 添加所以子控制器
+        [self setUpAllChildViewControllers];
     }
     return self;
 }
@@ -59,25 +64,25 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPlayIconView) name:MESSAGE_TABBAR_APPER_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hiddenPlayIconView) name:MESSAGE_TABBAR_DISAPPER_VC object:nil];
-    // 统一设置Item的文字属性
-    [self setUpItemTextAttrs];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPlayIconView) name:MESSAGE_TABBAR_APPER_VC object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hiddenPlayIconView) name:MESSAGE_TABBAR_DISAPPER_VC object:nil];
     
-    // 添加所以子控制器
-    [self setUpAllChildViewControllers];
-    
-    _iConView = [[PlayIconView alloc] initWithFrame:Rect(0, kScreenHeight-108, kScreenWidth, 64)];
-    [self.view addSubview:_iConView];
-    _iConView.hidden = YES;
-    _iConView.delegate = self;
-    
-    _btnPlay = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.view addSubview:_btnPlay];
-    _btnPlay.frame = Rect(kScreenWidth-55, kScreenHeight-98, 44, 44);
-    [UIImageFactory createBtnImage:@"home_play_icon" btn:_btnPlay state:UIControlStateNormal];
-    _btnPlay.hidden=YES;
-    [_btnPlay addTarget:self action:@selector(showPlayInfo) forControlEvents:UIControlEventTouchUpInside];
+//    _iConView = [[PlayIconView alloc] initWithFrame:Rect(0, kScreenHeight-108, kScreenWidth, 64)];
+//    [self.view addSubview:_iConView];
+//    _iConView.hidden = YES;
+//    _iConView.delegate = self;
+//    
+//    [_iConView clickWithBlock:^(UIGestureRecognizer *gesture) {
+//        RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+//        [self.selectedViewController.navigationController pushViewController:roomView animated:YES];
+//    }];
+//    
+//    _btnPlay = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [self.view addSubview:_btnPlay];
+//    _btnPlay.frame = Rect(kScreenWidth-55, kScreenHeight-98, 44, 44);
+//    [UIImageFactory createBtnImage:@"home_play_icon" btn:_btnPlay state:UIControlStateNormal];
+//    _btnPlay.hidden=YES;
+//    [_btnPlay addTarget:self action:@selector(showPlayInfo) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)showPlayInfo
@@ -89,19 +94,7 @@
 - (void)showIconView
 {
     RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    NSString *strUrl=nil;
-    if([roomView.room.teamicon length]==0)
-    {
-        strUrl = @"";
-    }
-    else
-    {
-        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,roomView.room.croompic];
-    }
-    [_iConView.imgView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
-    [_iConView.lblName setText:roomView.room.teamname];
-    [_iConView.lblNumber setText:roomView.room.teamid];
-    [_iConView.btnQuery setTitle:roomView.room.onlineusercount forState:UIControlStateNormal];
+
     _iConView.hidden = NO;
 }
 
@@ -145,7 +138,7 @@
     vc.title = title;
     vc.tabBarItem.image = [UIImage imageNamed:image];
     vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
-    NavigationViewController *nav = [[NavigationViewController alloc]initWithRootViewController:vc];
+    GFNavigationController *nav = [[GFNavigationController alloc]initWithRootViewController:vc];
     [self addChildViewController:nav];
 }
 

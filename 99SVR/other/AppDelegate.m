@@ -162,19 +162,19 @@
     }
     else if(status == ReachableViaWiFi)
     {
-        __weak UIWindow *__windows = self.window;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [__windows makeToast:@"当前网络:WIFI"];
-        });
+//        __weak UIWindow *__windows = self.window;
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [__windows makeToast:@"当前网络:WIFI"];
+//        });
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
     }
     else if(status == ReachableViaWWAN)
     {
-        __weak UIWindow *__windows = self.window;
-        dispatch_async(dispatch_get_main_queue(),
-           ^{
-               [__windows makeToast:@"当前网络:移动网络"];
-           });
+//        __weak UIWindow *__windows = self.window;
+//        dispatch_async(dispatch_get_main_queue(),
+//           ^{
+//               [__windows makeToast:@"当前网络:移动网络"];
+//           });
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
     }
     nowStatus = status;

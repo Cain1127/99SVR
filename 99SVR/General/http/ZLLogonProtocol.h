@@ -19,9 +19,7 @@
 
 extern NSMutableArray *aryRoomChat;
 extern NSMutableArray *aryRoomPrichat;
-extern NSMutableArray *aryRoomUser;
 extern NSMutableArray *aryRoomNotice;
-extern NSMutableDictionary *dictRoomUser;
 extern RoomInfo *currentRoom;
 
 
@@ -56,6 +54,8 @@ class ZLHallListener: public HallListener
     virtual void OnBuyPrivateVipResp(BuyPrivateVipResp& info);
     
     virtual void OnBuyPrivateVipErr(ErrCodeResp& info);
+    
+    virtual void OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info);
 };
 
 class ZLPushListener: public PushListener
@@ -172,6 +172,8 @@ public :
      *  赠送礼物
      */
     void sendGift(int giftId,int num);
+    
+    void sendGiftInfo(int giftId,int num,int toName,const char *name);
     /**
      *   购买VIP
      */
@@ -180,6 +182,8 @@ public :
      *   加入房间成功后，请求信息
      */
     void requestRoomMsg();
+    
+    void colletRoomInfo(int roomId);
     ~ZLLogonProtocol();
 };
 
@@ -227,7 +231,7 @@ class ZLRoomListener : public VideoRoomListener
     virtual void OnSysNoticeInfo(SysCastNotice& info){}
     
     //”√ªß’ ªß ˝æ›
-    virtual void OnUserAccountInfo(UserAccountInfo& info){}
+    virtual void OnUserAccountInfo(UserAccountInfo& info);
     
     //∑øº‰π‹¿ÌÕ®÷™ ˝æ›
     virtual void OnRoomManagerNotify(){}
@@ -367,10 +371,13 @@ class ZLRoomListener : public VideoRoomListener
     /**
      *  专家观点请求
      */
-    virtual void OnExpertNewViewNoty(ExpertNewViewNoty& info){}
-    
+    virtual void OnExpertNewViewNoty(ExpertNewViewNoty& info);
     //◊Ó«ø’Ω∂”÷‹∞Òªÿ”¶
     virtual void OnTeamTopNResp(std::vector<TeamTopNResp>& infos){}
+   
+    virtual void OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info){}
+    
+    virtual void OnFavoriteVcbResp(FavoriteRoomResp& info){}
 };
 
 

@@ -75,10 +75,10 @@
         
         [self.tableViewDataArray removeAllObjects];
         
-        //    //拿到头部视图的数据
+        //拿到头部视图的数据
         self.headerView.backgroundColor = COLOR_Bg_Blue;
         self.headerModel = dic[@"headerModel"];
-        //    //拿到股票视图的数据
+        //拿到股票视图的数据
         [self.tableViewDataArray addObject:@[dic[@"stockModel"]]];
         //交易详情
         [self.tableViewDataArray addObject:dic[@"trans"]];

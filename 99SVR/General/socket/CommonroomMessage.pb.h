@@ -305,7 +305,9 @@ private:
 	uint32	_userid;
 	uint32	_vcbid;
 	uint32	_roomtype;
-	uint32	_flags;
+	uint32	_busepwd;
+	uint32	_biscollectroom;
+	uint32	_devtype;
 	uint32	_seats;
 	uint32	_groupid;
 	uint32	_runstate;
@@ -319,11 +321,11 @@ private:
 	int64	_nb;
 	int64	_nlotterypool;
 	int32	_nchestnum;
-	int32	_ncarid;
-	string	_carname;
 	string	_cname;
 	string	_cmediaaddr;
 	string	_cpwd;
+	uint64	_naccess_times;
+	uint32	_ncollect_times;
 
 
 public:
@@ -340,9 +342,17 @@ public:
 
 	 inline void set_roomtype(const uint32 value) { _roomtype = value; }
 
-	 inline uint32 flags() { return _flags; } const 
+	 inline uint32 busepwd() { return _busepwd; } const 
 
-	 inline void set_flags(const uint32 value) { _flags = value; }
+	 inline void set_busepwd(const uint32 value) { _busepwd = value; }
+
+	 inline uint32 biscollectroom() { return _biscollectroom; } const 
+
+	 inline void set_biscollectroom(const uint32 value) { _biscollectroom = value; }
+
+	 inline uint32 devtype() { return _devtype; } const 
+
+	 inline void set_devtype(const uint32 value) { _devtype = value; }
 
 	 inline uint32 seats() { return _seats; } const 
 
@@ -396,14 +406,6 @@ public:
 
 	 inline void set_nchestnum(const int32 value) { _nchestnum = value; }
 
-	 inline int32 ncarid() { return _ncarid; } const 
-
-	 inline void set_ncarid(const int32 value) { _ncarid = value; }
-
-	 inline string& carname() { return _carname; } const 
-
-	 inline void set_carname(const string& value) { _carname = value; }
-
 	 inline string& cname() { return _cname; } const 
 
 	 inline void set_cname(const string& value) { _cname = value; }
@@ -416,6 +418,14 @@ public:
 
 	 inline void set_cpwd(const string& value) { _cpwd = value; }
 
+	 inline uint64 naccess_times() { return _naccess_times; } const 
+
+	 inline void set_naccess_times(const uint64 value) { _naccess_times = value; }
+
+	 inline uint32 ncollect_times() { return _ncollect_times; } const 
+
+	 inline void set_ncollect_times(const uint32 value) { _ncollect_times = value; }
+
 
 	int ByteSize() { return sizeof(protocol::tag_CMDJoinRoomResp); }
 
@@ -425,7 +435,9 @@ public:
 		cmd->userid = _userid;
 		cmd->vcbid = _vcbid;
 		cmd->roomtype = _roomtype;
-		cmd->flags = _flags;
+		cmd->busepwd = _busepwd;
+		cmd->bIsCollectRoom = _biscollectroom;
+		cmd->devtype = _devtype;
 		cmd->seats = _seats;
 		cmd->groupid = _groupid;
 		cmd->runstate = _runstate;
@@ -439,11 +451,11 @@ public:
 		cmd->nb = _nb;
 		cmd->nlotterypool = _nlotterypool;
 		cmd->nchestnum = _nchestnum;
-		cmd->ncarid = _ncarid;
-		strcpy(cmd->carname, _carname.c_str());
 		strcpy(cmd->cname, _cname.c_str());
 		strcpy(cmd->cmediaaddr, _cmediaaddr.c_str());
 		strcpy(cmd->cpwd, _cpwd.c_str());
+		cmd->naccess_times = _naccess_times;
+		cmd->ncollect_times = _ncollect_times;
 	}
 
 	void ParseFromArray(void* data, int size)
@@ -452,7 +464,9 @@ public:
 		_userid = cmd->userid;
 		_vcbid = cmd->vcbid;
 		_roomtype = cmd->roomtype;
-		_flags = cmd->flags;
+		_busepwd = cmd->busepwd;
+		_biscollectroom = cmd->bIsCollectRoom;
+		_devtype = cmd->devtype;
 		_seats = cmd->seats;
 		_groupid = cmd->groupid;
 		_runstate = cmd->runstate;
@@ -466,11 +480,11 @@ public:
 		_nb = cmd->nb;
 		_nlotterypool = cmd->nlotterypool;
 		_nchestnum = cmd->nchestnum;
-		_ncarid = cmd->ncarid;
-		_carname = cmd->carname;
 		_cname = cmd->cname;
 		_cmediaaddr = cmd->cmediaaddr;
 		_cpwd = cmd->cpwd;
+		_naccess_times = cmd->naccess_times;
+		_ncollect_times = cmd->ncollect_times;
 	}
 
 	void Log()
@@ -479,7 +493,9 @@ public:
 		LOG("userid = %d", _userid);
 		LOG("vcbid = %d", _vcbid);
 		LOG("roomtype = %d", _roomtype);
-		LOG("flags = %d", _flags);
+		LOG("busepwd = %d", _busepwd);
+		LOG("biscollectroom = %d", _biscollectroom);
+		LOG("devtype = %d", _devtype);
 		LOG("seats = %d", _seats);
 		LOG("groupid = %d", _groupid);
 		LOG("runstate = %d", _runstate);
@@ -493,11 +509,11 @@ public:
 		LOG("nb = %lld", _nb);
 		LOG("nlotterypool = %lld", _nlotterypool);
 		LOG("nchestnum = %d", _nchestnum);
-		LOG("ncarid = %d", _ncarid);
-		LOG("carname = %s", _carname.c_str());
 		LOG("cname = %s", _cname.c_str());
 		LOG("cmediaaddr = %s", _cmediaaddr.c_str());
 		LOG("cpwd = %s", _cpwd.c_str());
+		LOG("naccess_times = %lld", _naccess_times);
+		LOG("ncollect_times = %d", _ncollect_times);
 	}
 
 };
@@ -3084,6 +3100,162 @@ public:
 		LOG("nmask = %d", _nmask);
 		LOG("userid = %d", _userid);
 		LOG("errcode = %d", _errcode);
+	}
+
+};
+
+
+class ViewpointTradeGiftReq
+{
+
+private:
+
+	uint32	_userid;
+	uint32	_roomid;
+	uint32	_teamid;
+	uint32	_giftid;
+	uint32	_giftnum;
+
+
+public:
+
+	 inline uint32 userid() { return _userid; } const 
+
+	 inline void set_userid(const uint32 value) { _userid = value; }
+
+	 inline uint32 roomid() { return _roomid; } const 
+
+	 inline void set_roomid(const uint32 value) { _roomid = value; }
+
+	 inline uint32 teamid() { return _teamid; } const 
+
+	 inline void set_teamid(const uint32 value) { _teamid = value; }
+
+	 inline uint32 giftid() { return _giftid; } const 
+
+	 inline void set_giftid(const uint32 value) { _giftid = value; }
+
+	 inline uint32 giftnum() { return _giftnum; } const 
+
+	 inline void set_giftnum(const uint32 value) { _giftnum = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDViewpointTradeGiftReq); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDViewpointTradeGiftReq* cmd = (protocol::tag_CMDViewpointTradeGiftReq*) data;
+		cmd->userid = _userid;
+		cmd->roomid = _roomid;
+		cmd->teamid = _teamid;
+		cmd->giftid = _giftid;
+		cmd->giftnum = _giftnum;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDViewpointTradeGiftReq* cmd = (protocol::tag_CMDViewpointTradeGiftReq*) data;
+		_userid = cmd->userid;
+		_roomid = cmd->roomid;
+		_teamid = cmd->teamid;
+		_giftid = cmd->giftid;
+		_giftnum = cmd->giftnum;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: ViewpointTradeGiftReq---------");
+		LOG("userid = %d", _userid);
+		LOG("roomid = %d", _roomid);
+		LOG("teamid = %d", _teamid);
+		LOG("giftid = %d", _giftid);
+		LOG("giftnum = %d", _giftnum);
+	}
+
+};
+
+
+class ViewpointTradeGiftNoty
+{
+
+private:
+
+	uint32	_userid;
+	string	_useralias;
+	uint32	_roomid;
+	uint32	_teamid;
+	string	_teamalias;
+	uint32	_giftid;
+	uint32	_giftnum;
+
+
+public:
+
+	 inline uint32 userid() { return _userid; } const 
+
+	 inline void set_userid(const uint32 value) { _userid = value; }
+
+	 inline string& useralias() { return _useralias; } const 
+
+	 inline void set_useralias(const string& value) { _useralias = value; }
+
+	 inline uint32 roomid() { return _roomid; } const 
+
+	 inline void set_roomid(const uint32 value) { _roomid = value; }
+
+	 inline uint32 teamid() { return _teamid; } const 
+
+	 inline void set_teamid(const uint32 value) { _teamid = value; }
+
+	 inline string& teamalias() { return _teamalias; } const 
+
+	 inline void set_teamalias(const string& value) { _teamalias = value; }
+
+	 inline uint32 giftid() { return _giftid; } const 
+
+	 inline void set_giftid(const uint32 value) { _giftid = value; }
+
+	 inline uint32 giftnum() { return _giftnum; } const 
+
+	 inline void set_giftnum(const uint32 value) { _giftnum = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDViewpointTradeGiftNoty); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDViewpointTradeGiftNoty* cmd = (protocol::tag_CMDViewpointTradeGiftNoty*) data;
+		cmd->userid = _userid;
+		strcpy(cmd->useralias, _useralias.c_str());
+		cmd->roomid = _roomid;
+		cmd->teamid = _teamid;
+		strcpy(cmd->teamalias, _teamalias.c_str());
+		cmd->giftid = _giftid;
+		cmd->giftnum = _giftnum;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDViewpointTradeGiftNoty* cmd = (protocol::tag_CMDViewpointTradeGiftNoty*) data;
+		_userid = cmd->userid;
+		_useralias = cmd->useralias;
+		_roomid = cmd->roomid;
+		_teamid = cmd->teamid;
+		_teamalias = cmd->teamalias;
+		_giftid = cmd->giftid;
+		_giftnum = cmd->giftnum;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: ViewpointTradeGiftNoty---------");
+		LOG("userid = %d", _userid);
+		LOG("useralias = %s", _useralias.c_str());
+		LOG("roomid = %d", _roomid);
+		LOG("teamid = %d", _teamid);
+		LOG("teamalias = %s", _teamalias.c_str());
+		LOG("giftid = %d", _giftid);
+		LOG("giftnum = %d", _giftnum);
 	}
 
 };

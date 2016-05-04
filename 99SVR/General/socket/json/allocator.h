@@ -9,7 +9,7 @@
 #include <cstring>
 #include <memory>
 
-namespace ProtocolJson {
+namespace Json {
 template<typename T>
 class SecureAllocator {
 	public:
@@ -89,6 +89,6 @@ bool operator!=(const SecureAllocator<T>&, const SecureAllocator<U>&) {
 	return false;
 }
 
-} //namespace ProtocolJson
+} //namespace Json
 
 #endif // CPPTL_JSON_ALLOCATOR_H_INCLUDED

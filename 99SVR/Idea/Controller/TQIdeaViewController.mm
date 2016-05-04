@@ -8,6 +8,9 @@
 /**************************************** < 专家观点首页 >**********************************/
 
 #import "TQIdeaViewController.h"
+#import "RoomViewController.h"
+#import "PlayIconView.h"
+#import "roomhttp.h"
 #import "TableViewFactory.h"
 #import "TQideaTableViewCell.h"
 #import "XIdeaDataSource.h"
@@ -70,6 +73,14 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     {
         [self.tableView.gifHeader beginRefreshing];
     }
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if (roomView.room)
+    {
+        PlayIconView *iconView = [PlayIconView sharedPlayIconView];
+        iconView.frame = Rect(0, kScreenHeight-104, kScreenWidth, 60);
+        [self.view addSubview:iconView];
+        [iconView setRoom:roomView.room];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -88,7 +99,8 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     if([[dict objectForKey:@"code"] intValue]==1)
     {
         NSArray *aryIndex = [dict objectForKey:@"model"];
-        if (_dataSource.aryModel.count>0) {
+        if (_dataSource.aryModel.count>0)
+        {
             NSMutableArray *aryAll = [NSMutableArray array];
             [aryAll addObjectsFromArray:_dataSource.aryModel];
             for (TQIdeaModel *model in aryIndex) {

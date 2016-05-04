@@ -8,6 +8,9 @@
 #import "StockMacro.h"
 #import "StockDealViewController.h"
 #import "StockHomeTableViewModel.h"
+#import "roomhttp.h"
+#import "PlayIconView.h"
+#import "RoomViewController.h"
 #import "MJRefresh.h"
 #import "MJRefreshComponent.h"
 #import "StockDealModel.h"
@@ -386,5 +389,17 @@
 
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if (roomView.room)
+    {
+        PlayIconView *iconView = [PlayIconView sharedPlayIconView];
+        iconView.frame = Rect(0, kScreenHeight-104, kScreenWidth, 60);
+        [self.view addSubview:iconView];
+        [iconView setRoom:roomView.room];
+    }
+}
 
 @end

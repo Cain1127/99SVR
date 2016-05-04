@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "StatisticReport.h"
 #include "platform.h"
 #include "Http.h"

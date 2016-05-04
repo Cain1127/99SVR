@@ -168,9 +168,8 @@
     }
     else
     {
-        [IQKeyboardManager sharedManager].enable = YES;
-        [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
-        if ([_textView isFirstResponder]) {
+        if ([_textView isFirstResponder])
+        {
             [_textView resignFirstResponder];
         }
         if(_emojiView.hidden==NO){
@@ -182,9 +181,9 @@
             lblPlace.text = @"点此和大家说点什么吧";
             _nUserId = 0;
         }
+        [IQKeyboardManager sharedManager].enable = YES;
+        [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
     }
-    
-    
 }
 
 /**

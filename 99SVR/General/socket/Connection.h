@@ -17,8 +17,10 @@
 
 extern Socket g_socket;
 extern char cache_path[256];
+extern bool in_room;
 
-void SetProtocolCachePath(const char* path);
+
+void InitProtocolContext(const char* path);
 
 void ReadProtocolCache(const char *suffix_path, std::string& cache_content);
 
@@ -117,6 +119,8 @@ public:
 	void report_connect_error(int err_code);
 	void get_host_form_lbs(char* lbs);
 
+	string get_error_desc(int err_code);
+
 	Connection(void);
 	virtual ~Connection(void);
 };
@@ -140,6 +144,17 @@ public:
 	pHead->version = protocol::MDM_Version_Value;                        \
 	pHead->checkcode = 0;                                      \
 	pHead->maincmd = (short)main_cmd;                          \
+	pHead->subcmd = (short)sub_cmd;                            \
+	req.SerializeToArray(pHead->content, req.ByteSize());             \
+	this->send((const char*)pHead, pHead->length);
+
+#define SEND_MESSAGE_F(param_maincmd, sub_cmd, req)                   \
+	memset(send_buf, 0, MAX_MESSAGE_SIZE);       \
+	protocol::COM_MSG_HEADER* pHead = (protocol::COM_MSG_HEADER*)send_buf;        \
+	pHead->length = sizeof(protocol::COM_MSG_HEADER) + req.ByteSize(); \
+	pHead->version = protocol::MDM_Version_Value;                        \
+	pHead->checkcode = 0;                                      \
+	pHead->maincmd = (short)param_maincmd;                          \
 	pHead->subcmd = (short)sub_cmd;                            \
 	req.SerializeToArray(pHead->content, req.ByteSize());             \
 	this->send((const char*)pHead, pHead->length);

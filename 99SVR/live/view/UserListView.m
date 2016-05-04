@@ -61,17 +61,13 @@
 
 - (void)initView
 {
-//    self.layer.shadowColor = [UIColor blackColor].CGColor;
-//    self.layer.shadowOffset = CGSizeMake(0,0);
-//    self.layer.shadowOpacity = 1;
-//    self.layer.shadowRadius = 4;
-    
+
     _hiddenView = [[UIView alloc] initWithFrame:Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight)];
     [self addSubview:_hiddenView];
     [_hiddenView setUserInteractionEnabled:YES];
     [_hiddenView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     
-    _tableView = [[UITableView alloc] initWithFrame:Rect(0, kScreenHeight*0.5, kScreenWidth, kScreenHeight*0.5)];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0, kVideoImageHeight+kRoom_head_view_height, kScreenWidth, self.height-kVideoImageHeight)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];

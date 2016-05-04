@@ -68,6 +68,12 @@
 
 @synthesize downContentView;
 
+- (void)sendGift:(int)giftId num:(int)giftNum
+{
+    [kProtocolSingle sendGiftInfo:giftId number:giftNum toUser:[_ideaDetail.authorId intValue] toName:_ideaDetail.authorname];
+    [_giftView setGestureHidden];
+}
+
 - (id)initWithViewId:(int)viewId home:(BOOL)bHome{
     self = [super init];
     _viewId = viewId;
@@ -89,6 +95,11 @@
     [viewControl show];
 }
 
+- (void)sendGiftResp:(NSNotification *)notify
+{
+    DLog(@"送礼成功");
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -96,7 +107,7 @@
     
     UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(showShareView) image:@"video_room_share_icon_n" highImage:@"video_room_share_icon_p"];
     [self setRightBtn:btnRight];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendGiftResp:) name:MESSAGE_VIEW_DETAILS_GIFT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyResp:) name:MESSAGE_IDEA_REPLY_RESPONSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView:) name:MESSAGE_HTTP_REQUEST_REPLY_VC object:nil];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
@@ -451,7 +462,7 @@
         DTAttributedTextContentView *content = [DTAttributedTextContentView new];
         content.attributedString = [[NSAttributedString alloc] initWithHTMLData:[comment.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
         CGFloat height = [content suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-60].height;
-        return height+20;
+        return height+30;
     }
     return 0;
 }
@@ -505,7 +516,19 @@
         ^{
             [ProgressHUD showSuccess:@"评论成功!"];
         });
-        [kHTTPSingle RequestReply:_viewId start:0 count:20];
+        NSMutableArray *aryTemp = [NSMutableArray array];
+        ZLReply *reply = parameters[@"model"];
+        [aryTemp addObject:reply];
+        for (ZLReply *ply in _aryCommont)
+        {
+            [aryTemp addObject:ply];
+        }
+        _aryCommont = aryTemp;
+        nCurrent++;
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [selfWeak.tableView reloadData];
+        });
     }
     else
     {
@@ -596,7 +619,7 @@
         ZLReply *reply = [_aryCommont objectAtIndex:indexPath.row];
         if([reply.authorid intValue]== KUserSingleton.nUserId)
         {
-            [ProgressHUD showSuccess:@"不能回复自己的信息"];
+            [ProgressHUD showError:@"不能回复自己的信息"];
         }
         else
         {

@@ -117,6 +117,9 @@ public:
 	//禁言通知
 	virtual void OnForbidUserChatNotify(ForbidUserChat& info) = 0;
 
+	//收藏房间响应
+	virtual void OnFavoriteVcbResp(FavoriteRoomResp& info) = 0;
+
 	//设置房间公告响应
 	virtual void OnSetRoomNoticeResp(SetRoomNoticeResp& info) = 0;
 
@@ -194,6 +197,10 @@ public:
 
 	//最强战队周榜回应
 	virtual void OnTeamTopNResp(std::vector<TeamTopNResp>& infos) = 0;
+
+	//观点赠送礼物通知
+	virtual void OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info) = 0;
+
 };
 
 

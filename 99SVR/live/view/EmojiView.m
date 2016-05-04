@@ -25,7 +25,7 @@
     
     int nY = frame.size.height/kEmoji_Width_Number;
     
-    for (int i=0; i<=34; i++)
+    for (int i=0; i<32; i++)
     {
         UIButton *btnEmoji = [UIButton buttonWithType:UIButtonTypeCustom];
         UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%d",i+1] ofType:@"gif"]];

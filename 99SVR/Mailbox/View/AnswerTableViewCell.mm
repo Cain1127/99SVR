@@ -114,6 +114,7 @@
     /** 头像 */
     CGFloat iconH = 30;
     _answerauthoriconImageView.frame = CGRectMake(LR, 5, iconH, iconH);
+    //askauthorhead
     [_answerauthoriconImageView sd_setImageWithURL:[NSURL URLWithString:answerModel.answerauthorhead] placeholderImage:[UIImage imageNamed:@"personal_user_head"]];
     
     /** 回答者 */

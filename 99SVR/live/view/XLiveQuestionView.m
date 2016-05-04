@@ -25,12 +25,12 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    _hiddenView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+    _hiddenView = [[UIView alloc] initWithFrame:Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight)];
     [self addSubview:_hiddenView];
     [_hiddenView setUserInteractionEnabled:YES];
     [_hiddenView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     
-    UIView *liveQuestion = [[UIView alloc] initWithFrame:Rect(0,kVideoImageHeight+kRoom_head_view_height, kScreenWidth, kScreenHeight-kRoom_head_view_height-kVideoImageHeight)];
+    UIView *liveQuestion = [[UIView alloc] initWithFrame:Rect(0,kVideoImageHeight+kRoom_head_view_height, kScreenWidth, frame.size.height-kVideoImageHeight)];
     [liveQuestion setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self addSubview:liveQuestion];
     

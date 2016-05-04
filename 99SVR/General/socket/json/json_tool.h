@@ -12,7 +12,7 @@
  * It is an internal header that must not be exposed.
  */
 
-namespace ProtocolJson {
+namespace Json {
 
 /// Converts a unicode code-point to UTF-8.
 static inline JSONCPP_STRING codePointToUTF8(unsigned int cp) {
@@ -82,6 +82,6 @@ static inline void fixNumericLocale(char* begin, char* end) {
   }
 }
 
-} // namespace ProtocolJson {
+} // namespace Json {
 
 #endif // LIB_JSONCPP_JSON_TOOL_H_INCLUDED

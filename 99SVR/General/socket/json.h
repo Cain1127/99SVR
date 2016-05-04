@@ -3,7 +3,7 @@
 
 #include "json/json.h"
 
-typedef ProtocolJson::Value JsonValue;
-typedef ProtocolJson::Reader JsonReader;
+typedef Json::Value JsonValue;
+typedef Json::Reader JsonReader;
 
 #endif

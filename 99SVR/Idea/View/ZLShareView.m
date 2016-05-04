@@ -58,7 +58,7 @@
     _btnPar.backgroundColor = UIColorFromRGB(0xffffff);
     
     CGFloat fWidth = kScreenWidth/4;
-    CGRect frame = Rect(fWidth/2-25-fWidth, 8, 50, 50);
+//    CGRect frame = Rect(fWidth/2-25-fWidth, 8, 50, 50);
     UIButton *btnWeChat = [self createShareBtn:Rect(fWidth/2-25, 8, 50, 50) normal:@"video_share_weixi_icon" high:@""];
     UIButton *btnFriend = [self createShareBtn:Rect(fWidth+fWidth/2-25, 8, 50, 50) normal:@"video_share_pengyouquan_icon" high:@""];
     UIButton *btnTenc = [self createShareBtn:Rect(fWidth*2+fWidth/2-25, 8, 50, 50) normal:@"video_share_qq_icon" high:@""];
@@ -66,6 +66,13 @@
     UIButton *btnSina = [self createShareBtn:Rect(fWidth/2-25, 80, 50, 50) normal:@"video_share_weibo_icon" high:@""];
     UIButton *btnCopy = [self createShareBtn:Rect(fWidth+fWidth/2-25, 80, 50, 50) normal:@"video_share_lin_icon" high:@""];
     
+    [_btnPar addSubview:btnWeChat];
+    [_btnPar addSubview:btnFriend];
+    [_btnPar addSubview:btnTenc];
+    [_btnPar addSubview:btnSpace];
+    [_btnPar addSubview:btnSina];
+    [_btnPar addSubview:btnCopy];
+/*
     if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi])
     {
         frame.origin.x += fWidth;
@@ -106,6 +113,7 @@
     }
     [_btnPar addSubview:btnCopy];
     btnCopy.frame = frame;
+ */
     
     [btnWeChat addTarget:self action:@selector(shareEvent:) forControlEvents:UIControlEventTouchUpInside];
     [btnFriend addTarget:self action:@selector(shareEvent:) forControlEvents:UIControlEventTouchUpInside];

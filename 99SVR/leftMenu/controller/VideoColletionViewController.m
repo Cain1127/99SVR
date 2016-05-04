@@ -34,6 +34,7 @@
     [self setTitleText:@"我的关注"];
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
     [self.view addSubview:_tableView];
+    [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
 }

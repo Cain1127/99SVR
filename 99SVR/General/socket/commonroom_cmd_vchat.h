@@ -54,10 +54,9 @@ namespace protocol
 		uint32 userid;       //用户id
 		uint32 vcbid;        //房间id
 		byte   roomtype;     //房间类型
-		//byte   busepwd:1;      //
-		//byte   bIsCollectRoom:1;  //
-		//byte   reserve1:6;    //
-		byte flags;
+		byte   busepwd;      //是否需要房间密码
+		byte   bIsCollectRoom;  //是否被该用户收藏
+		byte   devtype;    //设备类型 PC端 1:安卓 2:IOS 3:WEB
 		uint16 seats;        //总人数
 		uint32 groupid;        //组id, 可以用来做区长判断?
 		uint32 runstate;       //房间 管理状态
@@ -71,12 +70,13 @@ namespace protocol
 		int64 nb;                //用户余额,nb
 		int64 nlotterypool;      //幸运奖池彩金
 		int32 nchestnum;         //用户现有宝箱个数
-		int32  ncarid;            //座驾id.0-没有
-		char   carname[NAMELEN];  //座驾名称,如果有座驾的话
 		char   cname[NAMELEN];         //房间名字
 		char   cmediaaddr[MEDIAADDRLEN];   //媒体服务器地址
 		char   cpwd[PWDLEN];     
+		uint64 naccess_times;		   //房间访问人气(人次)
+		uint32 ncollect_times;		   //房间收藏次数(粉丝数)
 	}CMDJoinRoomResp_t;
+
 
 	//加入房间错误
 	typedef struct tag_CMDJoinRoomErr
@@ -449,6 +449,28 @@ namespace protocol
 		uint32 userid;
 		uint8  errcode;//返回错误码
 	}CMDTeacherSubscriptionResp_t;
+
+	//观点赠送礼物请求
+	typedef struct tag_CMDViewpointTradeGiftReq
+	{
+	uint32 userid;     // 送礼人
+	uint32 roomid;     // 送给哪个roomId
+	uint32 teamid;     // 送给哪个teamid
+	uint32 giftid;     // 礼物id
+	uint32 giftnum;    // 赠送数目
+	}CMDViewpointTradeGiftReq_t;
+
+	//观点赠送礼物通知
+	typedef struct tag_CMDViewpointTradeGiftNoty
+	{
+	uint32 userid;     // 送礼人
+	char useralias[NAMELEN];     // 送礼人昵称
+	uint32 roomid;     // 送给哪个roomId
+	uint32 teamid;     // 送给哪个teamid
+	char teamalias[NAMELEN];     // team昵称
+	uint32 giftid;     // 礼物id
+	uint32 giftnum;    // 赠送数目
+	}CMDViewpointTradeGiftNoty_t;
 
 };
 

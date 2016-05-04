@@ -33,6 +33,7 @@
 #import "RoomHttp.h"
 #import "TQPurchaseModel.h"
 #import "RoomHttp.h"
+#import "ShareFunction.h"
 
 /**
  *  闪屏响应
@@ -121,10 +122,10 @@ void PostReplyListener::onResponse(int errorCode, Reply& info){
     reply.replytid = info.replytid();
     reply.viewpointid = info.viewpointid();
     reply.parentreplyid = info.parentreplyid();
-//    reply.authorid = [NSString stringWithUTF8String:info.authorid().c_str()];
+    reply.authorid = NSStringFromInt(info.authorid());
     reply.authorname = [NSString stringWithUTF8String:info.authorname().c_str()];
     reply.authoricon = [NSString stringWithUTF8String:info.authoricon().c_str()];
-//    reply.fromauthorid = [NSString stringWithUTF8String:info.fromauthorid().c_str()];
+    reply.fromauthorid = NSStringFromInt(info.fromauthorid());
     reply.fromauthorname = [NSString stringWithUTF8String:info.fromauthorname().c_str()];
     reply.fromauthoricon = [NSString stringWithUTF8String:info.fromauthoricon().c_str()];
     reply.publishtime = [NSString stringWithUTF8String:info.publishtime().c_str()];
@@ -230,6 +231,8 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, vecto
 //    DLog(@"currLevelId=%d   minVipLevel=%d ",currLevelId,minVipLevel);
 //    DLog(@"---------------------------------------------------");
 
+//    isShowRecal = NO;
+
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
     
@@ -237,15 +240,96 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, vecto
     StockDealModel *headerModel = [[StockDealModel alloc] initWithStockDealHeaderData:&profit];
     headerModel.minVipLevel = IntTransformIntToStr(minVipLevel);
     headerModel.currLevelId = IntTransformIntToStr(currLevelId);
+    //默认选择是全部组合的数据
+    headerModel.selectBtnTag = 0;
     //头部数据
     muDic[@"headerModel"] = headerModel;
     
     
     //股票数据
-    StockDealModel *stockDataModel = [[StockDealModel alloc] initWithStockDealStockData:&stocks];
-    muDic[@"stockModel"] = stockDataModel;
+
+    //股票全部数据
+    NSMutableArray *totalRateArrar = [NSMutableArray array];//组合
+    NSMutableArray *totalTrendArrar = [NSMutableArray array];//大盘
+    NSMutableArray *totalDateArray = [NSMutableArray array];//时间
+
+    /**
+     总的数据model
+     */
+    StockDealModel *totalDelModel = [[StockDealModel alloc]init];
+    for (size_t i=0; i!=totals.size(); i++) {//全部
+        OperateDataByTime *total = &totals[i];
+        //组合
+        [totalRateArrar addObject:[NSString stringWithFormat:@"%f",total->rate()*100.0]];
+        //大盘
+        [totalTrendArrar addObject:[NSString stringWithFormat:@"%f",total->trend()*100.0]];
+        //时间
+        [totalDateArray addObject:[NSString stringWithCString:total->date().c_str() encoding:NSUTF8StringEncoding]];
+    }
+    //第一个是最小值 第二个是最大值
+    NSArray *totalarray = [ShareFunction returnMinandMaxWithArrayA:totalRateArrar withArrayB:totalTrendArrar];
+    
+    totalDelModel.rateYs = totalRateArrar;
+    totalDelModel.trendYs = totalTrendArrar;
+    totalDelModel.dates = totalDateArray;
+    totalDelModel.minY = [totalarray firstObject];
+    totalDelModel.maxY = [totalarray lastObject];
+    
+//    股票三个月数据
+    NSMutableArray *month3sRateArrar = [NSMutableArray array];//组合
+    NSMutableArray *month3sTrendArrar = [NSMutableArray array];//大盘
+    NSMutableArray *month3sDateArray = [NSMutableArray array];//时间
+    /**
+     三个月的数据model
+     */
+    StockDealModel *month3sDelModel = [[StockDealModel alloc]init];
+    for (size_t i=0; i!=month3s.size(); i++) {//全部
+        OperateDataByTime *month3 = &month3s[i];
+        //组合
+        [month3sRateArrar addObject:[NSString stringWithFormat:@"%f",month3->rate()*100.0]];
+        //大盘
+        [month3sTrendArrar addObject:[NSString stringWithFormat:@"%f",month3->trend()*100.0]];
+        //时间
+        [month3sDateArray addObject:[NSString stringWithCString:month3->date().c_str() encoding:NSUTF8StringEncoding]];
+    }
+    //第一个是最小值 第二个是最大值
+    NSArray *month3sarray = [ShareFunction returnMinandMaxWithArrayA:month3sRateArrar withArrayB:month3sTrendArrar];
+    
+    month3sDelModel.rateYs = month3sRateArrar;
+    month3sDelModel.trendYs = month3sTrendArrar;
+    month3sDelModel.dates = month3sDateArray;
+    month3sDelModel.minY = [month3sarray firstObject];
+    month3sDelModel.maxY = [month3sarray lastObject];
     
     
+    //股票一个月数据
+    NSMutableArray *monthsRateArrar = [NSMutableArray array];//组合
+    NSMutableArray *monthsTrendArrar = [NSMutableArray array];//大盘
+    NSMutableArray *monthsDateArray = [NSMutableArray array];//时间
+    /**
+     一个月的数据model
+     */
+    StockDealModel *monthsDelModel = [[StockDealModel alloc]init];
+    for (size_t i=0; i!=months.size(); i++) {//全部
+        OperateDataByTime *month = &months[i];
+        //组合
+        [monthsRateArrar addObject:[NSString stringWithFormat:@"%f",month->rate()*100.0]];
+        //大盘
+        [monthsTrendArrar addObject:[NSString stringWithFormat:@"%f",month->trend()*100.0]];
+        //时间
+        [monthsDateArray addObject:[NSString stringWithCString:month->date().c_str() encoding:NSUTF8StringEncoding]];
+    }
+    //第一个是最小值 第二个是最大值
+    NSArray *monthsarray = [ShareFunction returnMinandMaxWithArrayA:monthsRateArrar withArrayB:monthsTrendArrar];
+    
+    monthsDelModel.rateYs = monthsRateArrar;
+    monthsDelModel.trendYs = monthsTrendArrar;
+    monthsDelModel.dates = monthsDateArray;
+    monthsDelModel.minY = [monthsarray firstObject];
+    monthsDelModel.maxY = [monthsarray lastObject];
+    
+    muDic[@"stockModel"] = @[totalDelModel,month3sDelModel,monthsDelModel];
+
     //交易详情
     NSMutableArray *transArray = [NSMutableArray array];
     if (isShowRecal) {
@@ -282,7 +366,6 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, vecto
     
     muDic[@"recalState"] = isShowRecal ? @"show" : @"hide";
     muDic[@"operateId"] = [NSString stringWithFormat:@"%d",profit.operateid()];
-    //ID
     muDic[@"code"] = @"1";
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_DEAL_VC object:muDic];
 }
@@ -370,25 +453,24 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_NOPURCHASE_VC object:dict];
         
     }else {
-        
+        //获取已经购买数据
+        NSMutableArray *ary = [NSMutableArray array];
         for (int i=0; i<infos.size(); i++) {
-            //获取已经购买数据
-            NSMutableArray *ary = [NSMutableArray array];
-            for (int i=0; i<infos.size(); i++) {
-                MyPrivateService service = infos[i];
-                NSString *teamid = NSStringFromInt(service.teamid());
-                NSString *teamname = [NSString stringWithUTF8String:service.teamname().c_str()];
-                NSString *teamicon = [NSString stringWithUTF8String:service.teamicon().c_str()];
-                NSString *levelname = [NSString stringWithUTF8String:service.levelname().c_str()];
-                NSString *expirationdate = [NSString stringWithUTF8String:service.expirationdate().c_str()];
-                int levelid = service.levelid();
-                NSDictionary *dict = @{@"teamid":teamid,@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
-                                       @"expirationdate":expirationdate,@"levelid":@(levelid)};
-                TQMeCustomizedModel *model = [TQMeCustomizedModel mj_objectWithKeyValues:dict];
-                [ary addObject:model];
-            }
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:ary];
+            MyPrivateService service = infos[i];
+            NSString *teamid = NSStringFromInt(service.teamid());
+            NSString *teamname = [NSString stringWithUTF8String:service.teamname().c_str()];
+            NSString *teamicon = [NSString stringWithUTF8String:service.teamicon().c_str()];
+            NSString *levelname = [NSString stringWithUTF8String:service.levelname().c_str()];
+            NSString *expirationdate = [NSString stringWithUTF8String:service.expirationdate().c_str()];
+            int levelid = service.levelid();
+            NSDictionary *dict = @{@"teamid":teamid,@"teamname":teamname,@"teamicon":teamicon,@"levelname":levelname,
+                                   @"expirationdate":expirationdate,@"levelid":@(levelid)};
+            TQMeCustomizedModel *model = [TQMeCustomizedModel mj_objectWithKeyValues:dict];
+            [ary addObject:model];
         }
+        NSDictionary *dict = @{@"code":@(1),@"data":ary};
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:dict];
+        
     }
 }
 
@@ -420,8 +502,10 @@ void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription
     for (size_t i=0; i!=infos.size(); i++) {
         PrivateServiceLevelDescription *profit = &infos[i];
         TQPurchaseModel *headerModel =[[TQPurchaseModel alloc] initWithPrivateServiceLevelData:profit];
+//
         
-        DLog(@"%zi === 是否开通%@",i,headerModel.isopen);
+        DLog(@"vip等级%zi === 是否开通%@",i,[NSString stringWithFormat:@"%d",profit->isopen()]);
+//        headerModel.isopen = @"1";
         [muArray addObject:headerModel];
     }
     
@@ -642,7 +726,7 @@ void SystemMessageListener::OnError(int errCode)
  *  请求信息--提问回复
  */
 
-void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info)
+void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info,int isteacher)
 {
     NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<info.size(); i++) {
@@ -662,7 +746,7 @@ void QuestionAnswerListener::OnError(int errCode)
  *  请求信息--评论回复
  */
 
-void MailReplyListener::onResponse(vector<MailReply>& info)
+void MailReplyListener::onResponse(vector<MailReply>& info,int isteacher)
 {
     NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<info.size(); i++) {

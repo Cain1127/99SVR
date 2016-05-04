@@ -10,7 +10,7 @@
 #include "config.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
-namespace ProtocolJson {
+namespace Json {
 
 // writer.h
 class FastWriter;
@@ -32,6 +32,6 @@ class ValueIteratorBase;
 class ValueIterator;
 class ValueConstIterator;
 
-} // namespace ProtocolJson
+} // namespace Json
 
 #endif // JSON_FORWARDS_H_INCLUDED

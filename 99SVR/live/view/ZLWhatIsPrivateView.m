@@ -17,10 +17,11 @@
     
     _textView = [DTAttributedTextView new];
     
-    [_textView setFrame:Rect(0, 0, kScreenWidth, frame.size.height-54)];
+    [_textView setFrame:Rect(10, 10, kScreenWidth-20, frame.size.height-59)];
     
     UIButton *btnClose = [UIButton buttonWithType:UIButtonTypeCustom];
     
+    [self addSubview:_textView];
     [self addSubview:btnClose];
     
     

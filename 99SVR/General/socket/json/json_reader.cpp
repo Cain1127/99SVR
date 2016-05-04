@@ -2,6 +2,7 @@
 // Distributed under MIT license, or public domain if desired and
 // recognized in your jurisdiction.
 // See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
+#include "stdafx.h"
 
 #if !defined(JSON_IS_AMALGAMATION)
 #include "assertions.h"
@@ -47,7 +48,7 @@
 static int const stackLimit_g = 1000;
 static int       stackDepth_g = 0;  // see readValue()
 
-namespace ProtocolJson {
+namespace Json {
 
 #if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
 typedef std::unique_ptr<CharReader> CharReaderPtr;
@@ -1979,11 +1980,11 @@ static void getValidReaderKeys(std::set<JSONCPP_STRING>* valid_keys)
   valid_keys->insert("rejectDupKeys");
   valid_keys->insert("allowSpecialFloats");
 }
-bool CharReaderBuilder::validate(ProtocolJson::Value* invalid) const
+bool CharReaderBuilder::validate(Json::Value* invalid) const
 {
-  ProtocolJson::Value my_invalid;
+  Json::Value my_invalid;
   if (!invalid) invalid = &my_invalid;  // so we do not need to test for NULL
-  ProtocolJson::Value& inv = *invalid;
+  Json::Value& inv = *invalid;
   std::set<JSONCPP_STRING> valid_keys;
   getValidReaderKeys(&valid_keys);
   Value::Members keys = settings_.getMemberNames();
@@ -2001,7 +2002,7 @@ Value& CharReaderBuilder::operator[](JSONCPP_STRING key)
   return settings_[key];
 }
 // static
-void CharReaderBuilder::strictMode(ProtocolJson::Value* settings)
+void CharReaderBuilder::strictMode(Json::Value* settings)
 {
 //! [CharReaderBuilderStrictMode]
   (*settings)["allowComments"] = false;
@@ -2016,7 +2017,7 @@ void CharReaderBuilder::strictMode(ProtocolJson::Value* settings)
 //! [CharReaderBuilderStrictMode]
 }
 // static
-void CharReaderBuilder::setDefaults(ProtocolJson::Value* settings)
+void CharReaderBuilder::setDefaults(Json::Value* settings)
 {
 //! [CharReaderBuilderDefaults]
   (*settings)["collectComments"] = true;
@@ -2063,4 +2064,4 @@ JSONCPP_ISTREAM& operator>>(JSONCPP_ISTREAM& sin, Value& root) {
   return sin;
 }
 
-} // namespace ProtocolJson
+} // namespace Json

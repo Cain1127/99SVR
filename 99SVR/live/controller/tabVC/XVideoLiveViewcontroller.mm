@@ -86,6 +86,9 @@
 - (void)reloadModel:(RoomHttp *)room
 {
     _room = room;
+    [self roomChatMSg];
+    [self roomListNotice];
+    [self roomChatPriMsg];
     [_ffPlay setRoomName:_room.teamname];
 }
 
@@ -129,10 +132,12 @@
     [super viewDidAppear:animated];
     [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
     [self hiddenTopHud];
 }
 
-- (void)initTableView{
+- (void)initTableView
+{
     CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-44-kVideoImageHeight);
     _chatAllView = [[UIView alloc] initWithFrame:frame];
     
@@ -284,20 +289,34 @@
 - (void)updateRoomTeachInfo:(NSNotification *)notify
 {
     NSString *strTeach = notify.object;
-    @WeakObj(strTeach)
-    @WeakObj(_teachView)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strTeachWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
-    });
-    [_questionView.txtName resignFirstResponder];
-    [_questionView.txtContent resignFirstResponder];
-    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
-        [UIView animateWithDuration:0.5 animations:^{
-            [_questionView setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
-        } completion:^(BOOL finished)
-        {
-            _questionView.hidden = NO;
-        }];
+    if ([strTeach isKindOfClass:[NSString class]])
+    {
+        if (strTeach.length>0) {
+            @WeakObj(self)
+            dispatch_async(dispatch_get_main_queue(),
+               ^{
+                   if (selfWeak.nSelectIndex != 4) {
+                       selfWeak.menuView.showBadgeIndex = 4;
+                   }
+               });
+            @WeakObj(strTeach)
+            @WeakObj(_teachView)
+            
+            dispatch_async(dispatch_get_main_queue(),
+                           ^{
+                               _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strTeachWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
+                           });
+            [_questionView.txtName resignFirstResponder];
+            [_questionView.txtContent resignFirstResponder];
+            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+                [UIView animateWithDuration:0.5 animations:^{
+                    [_questionView setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
+                } completion:^(BOOL finished)
+                 {
+                     _questionView.hidden = NO;
+                 }];
+            }
+        }
     }
 }
 
@@ -331,9 +350,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_NETWORK_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(TradeGiftError:) name:MESSAGE_TRADE_GIFT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startPlayThread:) name:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatPriMsg:) name:MESSAGE_ROOM_TO_ME_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatMSg:) name:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomListNotice:) name:MESSAGE_ROOM_NOTICE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatPriMsg) name:MESSAGE_ROOM_TO_ME_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatMSg) name:MESSAGE_ROOM_CHAT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomListNotice) name:MESSAGE_ROOM_NOTICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomUserList:) name:MESSAGE_ROOM_ALL_USER_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomBeExit:) name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(room_kickout) name:MESSAGE_ROOM_KICKOUT_VC object:nil];
@@ -426,7 +445,7 @@
 /**
  *  私聊数据更新
  */
-- (void)roomChatPriMsg:(NSNotification *)notify
+- (void)roomChatPriMsg
 {
     @WeakObj(self)
     [_prichatDataSource setModel:aryRoomPrichat];
@@ -454,7 +473,7 @@
 /**
  *  聊天响应
  */
-- (void)roomChatMSg:(NSNotification *)notify
+- (void)roomChatMSg
 {
     [_chatDataSource setModel:aryRoomChat];
     @WeakObj(self)
@@ -483,7 +502,7 @@
 /**
  *  公告刷新
  */
-- (void)roomListNotice:(NSNotification *)notify
+- (void)roomListNotice
 {
     @WeakObj(self)
     [_noticeDataSource setModel:aryRoomNotice];
@@ -719,7 +738,7 @@
         return ;
     }
     
-    [RoomService sendLocalInfo:strInfo toid:toUser roomInfo:currentRoom aryChat:aryRoomChat];
+//    [RoomService sendLocalInfo:strInfo toid:toUser roomInfo:currentRoom aryChat:aryRoomChat];
     
     [kProtocolSingle sendMessage:strInfo toId:toUser];
     
@@ -771,7 +790,7 @@
         [self.view makeToast:@"游客不能送花"];
         return ;
     }
-    [RoomService sendLocalInfo:@"[$999$]" toid:0 roomInfo:currentRoom aryChat:aryRoomChat];
+//    [RoomService sendLocalInfo:@"[$999$]" toid:0 roomInfo:currentRoom aryChat:aryRoomChat];
     [kProtocolSingle sendRose];
 }
 

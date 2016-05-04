@@ -10,7 +10,7 @@
 #include "forwards.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
-namespace ProtocolJson {
+namespace Json {
 
 /** \brief Configuration passed to reader and writer.
  * This configuration object can be used to force the Reader or Writer
@@ -52,6 +52,6 @@ public:
   bool allowNumericKeys_;
 };
 
-} // namespace ProtocolJson
+} // namespace Json
 
 #endif // CPPTL_JSON_FEATURES_H_INCLUDED

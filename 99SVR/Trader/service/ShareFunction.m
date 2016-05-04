@@ -98,5 +98,50 @@
     return [dateFormatte stringFromDate:date];
 }
 
+#pragma mark 小到大
++(NSMutableArray *)sortOfSmallToBig:(NSArray *)array{
+    
+    NSMutableArray *muArray = [NSMutableArray arrayWithArray:array];
+    for (int i = 0; i < muArray.count; i++) {
+        for (int j = 0; j < muArray.count - i - 1;j++) {
+            if ([muArray[j+1]floatValue] < [muArray[j] floatValue]) {
+                float temp = [muArray[j] floatValue];
+                muArray[j] = muArray[j + 1];
+                muArray[j + 1] = [NSString stringWithFormat:@"%f",temp];
+            }
+        }
+    }
+    return muArray;
+}
+
+
++(NSArray *)returnMinandMaxWithArrayA:(NSArray *)arrA withArrayB:(NSArray *)arrB{
+
+    
+    NSMutableArray *muArrayA = [ShareFunction sortOfSmallToBig:arrA];
+    NSMutableArray *muArrayB = [ShareFunction sortOfSmallToBig:arrB];
+    
+    float minA = [[muArrayA firstObject] floatValue];
+    float maxA = [[muArrayA lastObject] floatValue];
+
+    float minB = [[muArrayB firstObject] floatValue];
+    float maxB = [[muArrayB lastObject] floatValue];
+    
+    float min = 0.0;
+    float max = 0.0;
+    if (minA>minB) {
+        min = minB;
+    }else{
+        min = minA;
+    }
+    
+    if (maxA>maxB) {
+        max = minA;
+    }else{
+        max = maxB;
+    }
+    return @[[NSString stringWithFormat:@"%f",((min-1.0))],[NSString stringWithFormat:@"%f",(max+1.0)]];
+}
+
 
 @end

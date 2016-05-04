@@ -8,6 +8,8 @@
 #include <cassert>
 #include "crc32.h"
 #include "json/json.h"
+#import "TQIdeaModel.h"
+#import "TQIdeaDetailModel.h"
 #import "RoomUser.h"
 #import "RoomInfo.h"
 #import "RoomService.h"
@@ -28,9 +30,7 @@ ZLRoomListener room_listener;
 
 NSMutableArray *aryRoomChat;
 NSMutableArray *aryRoomPrichat;
-NSMutableArray *aryRoomUser;
 NSMutableArray *aryRoomNotice;
-NSMutableDictionary *dictRoomUser;
 RoomInfo *currentRoom;
 
 void ZLPushListener::OnConfChanged(int version)
@@ -91,7 +91,16 @@ void ZLPushListener::OnEmailNewMsgNoty(EmailNewMsgNoty& info)
     
 }
 
+
+
 //*********************************************************
+
+void ZLHallListener::OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info)
+{
+    NSDictionary *dict = @{@"userid":@(info.userid()),@"roomid":@(info.roomid()),@"teamid":@(info.roomid()),@"giftid":@(info.giftid()),
+                           @"giftnum":@(info.giftnum())};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VIEW_DETAILS_GIFT_VC object:dict];
+}
 
 void ZLHallListener::OnSetUserPwdResp(SetUserPwdResp& info)
 {
@@ -339,13 +348,9 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
         aryRoomPrichat = [NSMutableArray array];
     }
     [aryRoomPrichat removeAllObjects];
-    if (aryRoomUser == nil) {
-        aryRoomUser = [NSMutableArray array];
-    }
-    if(dictRoomUser == nil){
-        dictRoomUser = [NSMutableDictionary dictionary];
-    }
-    [dictRoomUser removeAllObjects];
+    [currentRoom.aryUser removeAllObjects];
+    [currentRoom.dictUser removeAllObjects];
+    
     if (aryRoomNotice == nil) {
         aryRoomNotice = [NSMutableArray array];
     }
@@ -425,7 +430,7 @@ void ZLLogonProtocol::sendMessage(const char *msg,int toId,const char *toalias){
 }
 
 void ZLLogonProtocol::exitRoomInfo(){
-    video_room->SendMsg_ExitRoomReq();
+    video_room->SendMsg_ExitRoomReq(room_info.vcbid());
     [currentRoom.aryUser removeAllObjects];
     [currentRoom.dictUser removeAllObjects];
 }
@@ -456,6 +461,19 @@ void ZLLogonProtocol::sendGift(int giftId,int num){
     }
     video_room->SendMsg_TradeGiftReq(req);
 }
+
+void ZLLogonProtocol::sendGiftInfo(int giftId, int num, int toUser, const char *name)
+{
+    TradeGiftRecord req;
+    req.set_toid(toUser);
+    req.set_giftid(giftId);
+    req.set_giftnum(num);
+    req.set_action(2);
+    if(name){
+        req.set_toalias(name);
+    }
+}
+
 void ZLLogonProtocol::buyPrivateVip(int teacherId,int type)
 {
     conn->SendMsg_BuyPrivateVipReq(teacherId, type);
@@ -464,6 +482,11 @@ void ZLLogonProtocol::buyPrivateVip(int teacherId,int type)
 void ZLLogonProtocol::requestRoomMsg()
 {
     video_room->SendMsg_AfterJoinRoomReq();
+}
+
+void ZLLogonProtocol::colletRoomInfo(int roomId)
+{
+    
 }
 
 //**********************************************************************************
@@ -540,6 +563,7 @@ void ZLHallListener::OnBuyPrivateVipErr(ErrCodeResp& info)
  *  用户列表
  */
 void ZLRoomListener::OnRoomUserList(std::vector<RoomUserInfo>& infos){
+    DLog(@"infos.size:%ld",infos.size());
     for(int i = 0; i < infos.size(); i++){
         [RoomService addRoomUser:currentRoom user:&infos[i]];
     }
@@ -726,4 +750,27 @@ void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
 }
 
 
+void ZLRoomListener::OnExpertNewViewNoty(ExpertNewViewNoty& info)
+{
+    /*
+    uint32	_nmessageid;
+    uint32	_nvcbid;
+    string	_sname;
+    string	_sicon;
+    string	_spublictime;
+    uint32	_ncommentcnt;
+    uint32	_nlikecnt;
+    uint32	_nflowercnt;
+    uint32	_contlen;
+    string	_content;
+     */
+    TQIdeaModel *idea = [[TQIdeaModel alloc] initWIthNewPointNotify:&info];
+    NSDictionary *dict = @{@"code":@(1),@"view":idea};
+//    [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSString *)#> object:<#(nullable id)#>];
+}
 
+void ZLRoomListener::OnUserAccountInfo(UserAccountInfo& info)
+{
+    [UserInfo sharedUserInfo].goldCoin = info.nk()/1000.0f;
+    
+}

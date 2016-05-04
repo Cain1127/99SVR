@@ -33,7 +33,7 @@
     HistorySearchDataSource *_dataSource;
     UITableView *_historyTable;
 }
-
+@property (nonatomic,strong) UIView *footView;
 @property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
 @property(nonatomic, strong) UITableView *searchResultsTable;
 @property (nonatomic,copy) NSArray *aryResult;
@@ -43,6 +43,26 @@
 @end
 
 @implementation SearchController
+
+- (UIView *)footView
+{
+    NSArray *array = [UserDefaults objectForKey:kHistoryList];
+    if (array.count==0) {
+        _footView = nil;
+        return nil;
+    }
+    if (!_footView) {
+        _footView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44)];
+        UIButton *btnClear = [UIButton buttonWithType:UIButtonTypeCustom];
+        btnClear.frame = Rect(0, 0, kScreenWidth, 44);
+        [_footView addSubview:btnClear];
+        [btnClear setTitle:@"清楚历史记录" forState:UIControlStateNormal];
+        [btnClear setTitleColor:COLOR_Text_0078DD forState:UIControlStateNormal];
+        [btnClear setTitleColor:COLOR_Text_Black forState:UIControlStateHighlighted];
+        [btnClear addTarget:self action:@selector(deleteAll) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _footView;
+}
 
 - (void)searchBtnEvent:(UIButton *)sender
 {
@@ -199,8 +219,10 @@
     _historyTable.delegate = _dataSource;
     _dataSource.delegate = self;
     NSArray *array = [UserDefaults objectForKey:kHistoryList];
-    if (array.count) {
+    if (array.count)
+    {
         [_dataSource setModel:array];
+        _historyTable.tableFooterView = self.footView;
         [_historyTable reloadData];
     }
 }
@@ -215,9 +237,15 @@
         _defaultView.hidden = NO;
         _historyTable.hidden =  NO;
         NSArray *array = [UserDefaults objectForKey:kHistoryList];
-        if (array.count) {
+        if (array.count)
+        {
             [_dataSource setModel:array];
+            _historyTable.tableFooterView = self.footView;
             [_historyTable reloadData];
+        }
+        else
+        {
+            _historyTable.tableFooterView = self.footView;
         }
     }
     else
@@ -349,10 +377,10 @@
 - (void)delSelectIndex:(NSString *)strInfo{
     NSArray *array = [UserDefaults objectForKey:kHistoryList];
     NSMutableArray *tableAry = [NSMutableArray array];
-    if (array!=nil) {
+    if (array!=nil)
+    {
         [tableAry addObjectsFromArray:array];
     }
-    
     for (int i=0; i<tableAry.count; i++) {
         if([strInfo isEqualToString:tableAry[i]])
         {
@@ -386,6 +414,7 @@
     [UserDefaults synchronize];
     
     [_dataSource setModel:tableAry];
+    _historyTable.tableFooterView = nil;
     [_historyTable reloadData];
 }
 

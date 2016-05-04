@@ -50,14 +50,14 @@ static NSString *const MeCustomizedCell = @"MeCustomizedCell";
         TQMeCustomizedModel *model = _aryModel[indexPath.section];
         cell.lblName.text = model.teamname;
         cell.lblLevel.text = model.levelname;
-        cell.lblTime.text = model.expirationdate;
+        cell.lblTime.text = @"终身有效";
         
         char cBuffer[100]={0};
         sprintf(cBuffer,"100_1");
         NSString *strName = [NSString stringWithUTF8String:cBuffer];
         NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
-        [cell.imgView sd_setImageWithURL:url1 placeholderImage:[UIImage imageNamed:@"defaultHead_1"]];
-        NSString *imgName = [NSString stringWithFormat:@"customized_vip%d_icon",model.levelid];
+        [cell.imgView sd_setImageWithURL:url1 placeholderImage:[UIImage imageNamed:@"default"]];
+        NSString *imgName = [NSString stringWithFormat:@"customized_vip%d_icon",model.levelid+1];
         cell.imgLevel.image = [UIImage imageNamed:imgName];
     }
     return cell;
@@ -69,6 +69,7 @@ static NSString *const MeCustomizedCell = @"MeCustomizedCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if(_aryModel.count>indexPath.section && _delegate && [_delegate respondsToSelector:@selector(selectIndex:)])
     {
         TQMeCustomizedModel *model = _aryModel[indexPath.section];

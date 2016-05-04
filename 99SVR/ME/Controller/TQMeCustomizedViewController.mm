@@ -8,6 +8,7 @@
 
 #import "TQMeCustomizedViewController.h"
 #import "TQMeCustomizedModel.h"
+#import "ZLMeTeamPrivate.h"
 #import "ViewNullFactory.h"
 #import "XPrivateService.h"
 #import "TQNoCustomView.h"
@@ -46,15 +47,17 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64) withStyle:UITableViewStylePlain];
-    [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     _buyDataSource = [[XMeCustomDataSource alloc] init];
+    _buyDataSource.delegate = self;
     _noBuyDataSource = [[ZLPrivateDataSource alloc] init];
     [self.view addSubview:_tableView];
     [self initUi];
     
     @WeakObj(self)
     _privateView = [[PrivateVipView alloc] init];
-    _privateView.selectVipBlock = ^(NSUInteger vipLevelId){
+    _privateView.selectVipBlock = ^(NSUInteger vipLevelId)
+    {
         @StrongObj(self)
         self.noBuyDataSource.selectIndex = vipLevelId;
         [self.tableView reloadData];
@@ -92,7 +95,7 @@
 
 - (void)buyprivate
 {
-    TQPurchaseViewController *vc = [[TQPurchaseViewController alloc] initWithTeamId:[_room.roomid intValue]];
+    TQPurchaseViewController *vc = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue] name:_room.teamname];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -187,14 +190,28 @@
 
 - (void)havePurchase:(NSNotification *)notify
 {
-    NSArray *aryModel = notify.object;
-    _buyDataSource.aryModel = aryModel;
     @WeakObj(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        selfWeak.tableView.delegate = selfWeak.buyDataSource;
-        selfWeak.tableView.dataSource = selfWeak.buyDataSource;
-        [selfWeak.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(),^{
+        [selfWeak.view hideToastActivity];
     });
+    NSDictionary *dict = notify.object;
+    if ([dict[@"code"] intValue]==1)
+    {
+        _buyDataSource.aryModel = dict[@"data"];
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            selfWeak.tableView.delegate = selfWeak.buyDataSource;
+            selfWeak.tableView.dataSource = selfWeak.buyDataSource;
+            [selfWeak.tableView reloadData];
+        });
+    }
+    else
+    {
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [selfWeak createNoView];
+        });
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -217,9 +234,10 @@
 
 - (void)selectIndex:(TQMeCustomizedModel *)model
 {
-    XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithModel:model];
-    [self.navigationController pushViewController:detailView animated:YES];
+    ZLMeTeamPrivate *privateTeam = [[ZLMeTeamPrivate alloc] initWIthModel:model];
+    [self.navigationController pushViewController:privateTeam animated:YES];
 }
+
 #define kNetWork_anomaly_image_height  170
 /**
 *  创建table HeadView

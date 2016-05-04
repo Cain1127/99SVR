@@ -345,6 +345,7 @@ namespace protocol
 	typedef struct tag_CMDUserTeamRelatedInfo
 	{
 		uint32 askremain; // 剩余提问次数
+		uint32 askcoin; // 提问所需的金币数
 		uint32 viplevel; // 开通的vip等级
 	}CMDUserTeamRelatedInfo_t;
 

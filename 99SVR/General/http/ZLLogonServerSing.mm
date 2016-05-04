@@ -128,4 +128,22 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     }
 }
 
+- (void)sendGiftInfo:(int)nGiftId number:(int)num toUser:(int)userId toName:(NSString *)name
+{
+    if(protocol)
+    {
+        char cBuf[100]={0};
+        ::strcpy(cBuf,(char *)[name dataUsingEncoding:GBK_ENCODING].bytes);
+        protocol->sendGiftInfo(nGiftId, num,userId,cBuf);
+    }
+    
+}
+
+- (void)colletRoomInfo:(int)roomId
+{
+    if (protocol) {
+//        protocol->send
+    }
+}
+
 @end

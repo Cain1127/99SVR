@@ -8,6 +8,8 @@
 
 #import "ZLVideoListViewController.h"
 #import "RoomHttp.h"
+#import "RoomViewController.h"
+#import "PlayIconView.h"
 #import "HttpManagerSing.h"
 #import "TableViewFactory.h"
 #import "VideoCell.h"
@@ -58,6 +60,14 @@
     if (_aryVideo.count==0) {
         [_tableView.gifHeader beginRefreshing];
     }
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if (roomView.room)
+    {
+        PlayIconView *iconView = [PlayIconView sharedPlayIconView];
+        iconView.frame = Rect(0, kScreenHeight-104, kScreenWidth, 60);
+        [self.view addSubview:iconView];
+        [iconView setRoom:roomView.room];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -96,28 +106,8 @@
         }
     }
     if (_aryVideo.count==0) {
-        if (nil==_noView)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                char cString[255];
-                const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
-                sprintf(cString, "%s/network_anomaly_fail.png",path);
-                NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
-                UIImage *image = [UIImage imageWithContentsOfFile:objCString];
-                if(image)
-                {
-                    selfWeak.noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height)
-                                                   imgView:image msg:@"获取财经直播列表失败"];
-                    selfWeak.noView.userInteractionEnabled = NO;
-                    [selfWeak.tableView addSubview:selfWeak.noView];
-                }
-            });
-        }
-    }
-    else
-    {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [selfWeak.noView removeFromSuperview];
+            [selfWeak createView];
         });
     }
     dispatch_async(dispatch_get_main_queue(),
@@ -125,6 +115,30 @@
          [selfWeak.tableView.header endRefreshing];
          [selfWeak.tableView reloadData];
     });
+}
+
+- (void)createView
+{
+    if (nil==_noView)
+    {
+        char cString[255];
+        const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+        sprintf(cString, "%s/network_anomaly_fail.png",path);
+        NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+        UIImage *image = [UIImage imageWithContentsOfFile:objCString];
+        if(image)
+        {
+            _noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height) imgView:image msg:@"没有专家发布观点"];
+        }
+    }
+    [_tableView addSubview:_noView];
+    @WeakObj(self)
+    [_noView clickWithBlock:^(UIGestureRecognizer *gesture)
+     {
+         [selfWeak.noView removeFromSuperview];
+         [selfWeak.view makeToastActivity_bird];
+         [selfWeak updateRefresh];
+     }];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

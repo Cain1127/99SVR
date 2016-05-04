@@ -13,6 +13,8 @@
 
 /** authorID房间ID */
 @property (nonatomic ,copy) NSString *authorid;
+
+@property (nonatomic ,copy) NSString *roomid;
 /** 头像 */
 @property (nonatomic ,copy) NSString *authoricon;
 /** name */
@@ -28,6 +30,11 @@
 /** 礼物数 */
 @property (nonatomic)int giftcount;
 
+@property (nonatomic,copy ) NSString *title;
+
+
 - (id)initWithViewpointSummary:(void *)pData;
+
+- (id)initWIthNewPointNotify:(void *)pData;
 
 @end
