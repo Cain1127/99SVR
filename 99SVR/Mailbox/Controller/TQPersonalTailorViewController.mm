@@ -47,7 +47,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.gifHeader beginRefreshing];
-    [self.view makeToastActivity_bird_bird];
+    [self.view makeToastActivity_bird];
 }
 
 - (void)viewWillAppear:(BOOL)animated

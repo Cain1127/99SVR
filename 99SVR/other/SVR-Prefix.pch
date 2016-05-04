@@ -33,7 +33,7 @@
 #import "HttpManagerSing.h"
 
 
-#define kMain_color UIColorFromRGB(0x0078FF)
+#define kMain_color UIColorFromRGB(0x0078dd)
 
 #define KUserSingleton [UserInfo sharedUserInfo]
 #define kProtocolSingle [ZLLogonServerSing sharedZLLogonServerSing]

@@ -61,7 +61,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.footer setHidden:YES];
-    [self.view makeToastActivity_bird_bird];
+    [self.view makeToastActivity_bird];
     _nCurrent = 0;
 }
 
@@ -145,7 +145,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     {
         char cString[255];
         const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
-        sprintf(cString, "%s/network_anomaly_fail.png",path);
+        sprintf(cString, "%s/text_blank_page.png",path);
         NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
         UIImage *image = [UIImage imageWithContentsOfFile:objCString];
         if(image)
@@ -158,7 +158,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [_noView clickWithBlock:^(UIGestureRecognizer *gesture)
     {
         [selfWeak.noView removeFromSuperview];
-        [selfWeak.view makeToastActivity_bird_bird];
+        [selfWeak.view makeToastActivity_bird];
         [selfWeak updateRefresh];
     }];
 }

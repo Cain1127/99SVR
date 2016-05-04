@@ -120,7 +120,8 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     [_btnQuery setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     _btnQuery.titleLabel.font = XCFONT(13);
     UIEdgeInsets inset = _btnQuery.imageEdgeInsets;
-    inset.left -= 10;
+    inset.left = 0;
+    inset.right = 55;
     _btnQuery.imageEdgeInsets = inset;
     [self addSubview:_btnQuery];
     [_btnQuery setEnabled:NO];

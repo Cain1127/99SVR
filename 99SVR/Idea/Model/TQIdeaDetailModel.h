@@ -21,6 +21,8 @@
 @property (nonatomic) int giftcount;
 @property (nonatomic) int viewpointid;
 
+- (void)addImage:(NSArray *)array;
+
 - (id)initWithViewpointDetail:(ViewpointDetail *)details;
 //OnExpertNewViewNoty
 - (id)initWithNewViewNoty:(void *)details;

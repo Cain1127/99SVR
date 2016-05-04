@@ -120,11 +120,11 @@
     [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(requestMoreReply)];
     [_tableView.footer setHidden:YES];
     
-    UIButton *btnGift = [ChatRightView createButton:Rect(kScreenWidth-50, kScreenHeight-150, 44, 44)];
+    UIButton *btnGift = [ChatRightView createButton:Rect(kScreenWidth-60, kScreenHeight-155, 45, 45)];
     NSString *strName = [NSString stringWithFormat:@"chatRightView3"];
     [UIImageFactory createBtnImage:strName btn:btnGift state:UIControlStateNormal];
     
-    UIButton *btnComment = [ChatRightView createButton:Rect(kScreenWidth-50, kScreenHeight-100, 44, 44)];
+    UIButton *btnComment = [ChatRightView createButton:Rect(btnGift.x, kScreenHeight-83,btnGift.width, btnGift.height)];
     NSString *strComment = [NSString stringWithFormat:@"chatRightView4"];
     [UIImageFactory createBtnImage:strComment btn:btnComment state:UIControlStateNormal];
     [btnGift addTarget:self action:@selector(showGiftView) forControlEvents:UIControlEventTouchUpInside];
@@ -330,6 +330,10 @@
         if (!cell) {
             cell = [[ReplyNullInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ReplyNullInfocell"];
         }
+        @WeakObj(self)
+        [cell clickWithBlock:^(UIGestureRecognizer *gesture) {
+            [selfWeak showChatInfo];
+        }];
         return cell;
     }
     
@@ -623,7 +627,7 @@
         }
         else
         {
-            [self showChatView:reply.parentreplyid name:reply.authorname commentId:[reply.fromauthorid intValue]];
+            [self showChatView:[reply.authorid intValue] name:reply.authorname commentId:reply.parentreplyid];
         }
     }
 }

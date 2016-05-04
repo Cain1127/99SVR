@@ -65,6 +65,10 @@
     [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
     [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
     [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
+    
+    btnRight.layer.cornerRadius = 2.5;
+    btnRight.layer.masksToBounds = YES;
+    
     [self.view addSubview:btnRight];
     self.commitBtn = btnRight;
     [self checkLogBtnIsEnableWithText:self.nickNameTextField.text];
