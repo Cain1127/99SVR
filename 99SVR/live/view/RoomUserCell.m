@@ -28,27 +28,22 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
-    imgView = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth-27, 10, 17, 17)];
+    imgView = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth-25, 10, 17, 17)];
     
     imgViewPic = [[UIImageView alloc] initWithFrame:Rect(10, 10, 40, 40)];
     imgViewPic.layer.masksToBounds = YES;
     imgViewPic.layer.cornerRadius = 20;
     
-    lblName = [[UILabel alloc] initWithFrame:Rect(imgViewPic.x+imgViewPic.width+8,13,kScreenWidth-80,16)];
+    lblName = [[UILabel alloc] initWithFrame:Rect(imgViewPic.x+imgViewPic.width+8,10,kScreenWidth-80,40)];
     [lblName setTextColor:UIColorFromRGB(0x343434)];
     [lblName setFont:XCFONT(14)];
-    
-    lblContent = [[UILabel alloc] initWithFrame:Rect(lblName.x,lblName.y+lblName.height+5,kScreenWidth-80, 16)];
-    [lblContent setTextColor:UIColorFromRGB(0x919191)];
-    [lblContent setFont:XCFONT(14)];
-    
-    [self.contentView addSubview:lblContent];
+
     [self.contentView addSubview:lblName];
     [self.contentView addSubview:imgViewPic];
     [self.contentView addSubview:imgView];
     
-    imgMicView = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth-44, 10, 17, 17)];
-//    [self.contentView addSubview:imgMicView];
+    imgMicView = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth-50, 10, 17, 17)];
+    [self.contentView addSubview:imgMicView];
     
     lblLine = [[UILabel alloc] initWithFrame:Rect(10, 59, kScreenWidth-10, 0.5)];
     [self.contentView addSubview:lblLine];

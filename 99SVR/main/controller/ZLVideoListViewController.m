@@ -45,7 +45,7 @@
 
 - (void)updateRefresh
 {
-    if (_aryVideo.count>0)
+    if (_aryVideo.count==0)
     {
         [self.view makeToastActivity_bird_bird];
     }

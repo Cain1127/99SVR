@@ -734,6 +734,8 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
         currentRoom = [[RoomInfo alloc] init];
     }
     [currentRoom setRoomInfo:&info];
+    [aryRoomChat addObject:@"<span style=\"color:#919191\">[系统消息]加入房间成功</span>"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
 }
 

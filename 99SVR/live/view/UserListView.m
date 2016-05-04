@@ -67,7 +67,7 @@
     [_hiddenView setUserInteractionEnabled:YES];
     [_hiddenView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     
-    _tableView = [[UITableView alloc] initWithFrame:Rect(0, kVideoImageHeight+kRoom_head_view_height, kScreenWidth, self.height-kVideoImageHeight)];
+    _tableView = [[UITableView alloc] initWithFrame:Rect(0, kVideoImageHeight+kRoom_head_view_height, kScreenWidth, self.height-kVideoImageHeight-kRoom_head_view_height)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];

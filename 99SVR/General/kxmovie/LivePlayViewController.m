@@ -344,6 +344,7 @@
     [_btnShare addTarget:self action:@selector(shareInfo) forControlEvents:UIControlEventTouchUpInside];
     _btnCollet = [self createPlayBtn:@"video_room_follow_icon_n" high:@"video_room_follow_icon_p"];
     [_btnCollet addTarget:self action:@selector(colletInfo) forControlEvents:UIControlEventTouchUpInside];
+    [self updateDownHUD];
     _downHUD.alpha = 0;
 }
 

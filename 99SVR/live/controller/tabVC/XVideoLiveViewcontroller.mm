@@ -133,6 +133,7 @@
     [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
     [self hiddenTopHud];
 }
 
@@ -532,8 +533,8 @@
  */
 - (void)roomUserList:(NSNotification*)notify
 {
-    _aryUser = currentRoom.aryUser;
-    [_listView reloadItems:_aryUser];
+//    _aryUser = currentRoom.aryUser;
+    [_listView reloadItems:currentRoom.aryUser];
 }
 /**
  *  后退
