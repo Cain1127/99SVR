@@ -133,6 +133,10 @@
 		5AC00A511CD99E6600379081 /* MessageTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AC00A501CD99E6600379081 /* MessageTableViewCell.mm */; };
 		5AC00A541CD99EF400379081 /* MessageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AC00A531CD99EF400379081 /* MessageViewController.mm */; };
 		5AC00A571CD9E6F500379081 /* MailboxModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AC00A561CD9E6F500379081 /* MailboxModel.m */; };
+		5AC0A04B1CDA3AF600DC4B25 /* CFTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AC0A0461CDA3AF600DC4B25 /* CFTextAttachment.m */; };
+		5AC0A04C1CDA3AF600DC4B25 /* CFTextModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AC0A0481CDA3AF600DC4B25 /* CFTextModel.m */; };
+		5AC0A04D1CDA3AF600DC4B25 /* CFTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AC0A04A1CDA3AF600DC4B25 /* CFTextView.m */; };
+		5AC0A04F1CDA40C800DC4B25 /* EmotionGifList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AC0A04E1CDA40C800DC4B25 /* EmotionGifList.plist */; };
 		5AD25E4D1CCE225A005C5BE6 /* SplashModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AD25E4C1CCE225A005C5BE6 /* SplashModel.mm */; };
 		5AD25E511CCE2265005C5BE6 /* SplashTool.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AD25E501CCE2265005C5BE6 /* SplashTool.mm */; };
 		5AD6673C1CD044EB00DA2C6D /* start_page_1242x2208.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD667381CD044EB00DA2C6D /* start_page_1242x2208.png */; };
@@ -1049,6 +1053,13 @@
 		5AC00A531CD99EF400379081 /* MessageViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessageViewController.mm; sourceTree = "<group>"; };
 		5AC00A551CD9E6F500379081 /* MailboxModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MailboxModel.h; sourceTree = "<group>"; };
 		5AC00A561CD9E6F500379081 /* MailboxModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MailboxModel.m; sourceTree = "<group>"; };
+		5AC0A0451CDA3AF600DC4B25 /* CFTextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFTextAttachment.h; sourceTree = "<group>"; };
+		5AC0A0461CDA3AF600DC4B25 /* CFTextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFTextAttachment.m; sourceTree = "<group>"; };
+		5AC0A0471CDA3AF600DC4B25 /* CFTextModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFTextModel.h; sourceTree = "<group>"; };
+		5AC0A0481CDA3AF600DC4B25 /* CFTextModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFTextModel.m; sourceTree = "<group>"; };
+		5AC0A0491CDA3AF600DC4B25 /* CFTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFTextView.h; sourceTree = "<group>"; };
+		5AC0A04A1CDA3AF600DC4B25 /* CFTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFTextView.m; sourceTree = "<group>"; };
+		5AC0A04E1CDA40C800DC4B25 /* EmotionGifList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EmotionGifList.plist; sourceTree = "<group>"; };
 		5AD25E4B1CCE225A005C5BE6 /* SplashModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashModel.h; sourceTree = "<group>"; };
 		5AD25E4C1CCE225A005C5BE6 /* SplashModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SplashModel.mm; sourceTree = "<group>"; };
 		5AD25E4F1CCE2265005C5BE6 /* SplashTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashTool.h; sourceTree = "<group>"; };
@@ -2359,6 +2370,12 @@
 		18D3CB711CC0917C00816BD0 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				5AC0A0451CDA3AF600DC4B25 /* CFTextAttachment.h */,
+				5AC0A0461CDA3AF600DC4B25 /* CFTextAttachment.m */,
+				5AC0A0471CDA3AF600DC4B25 /* CFTextModel.h */,
+				5AC0A0481CDA3AF600DC4B25 /* CFTextModel.m */,
+				5AC0A0491CDA3AF600DC4B25 /* CFTextView.h */,
+				5AC0A04A1CDA3AF600DC4B25 /* CFTextView.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -2873,6 +2890,7 @@
 		BB25D7D71C1571B400314C1E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5AC0A04E1CDA40C800DC4B25 /* EmotionGifList.plist */,
 				BB2CA9AE1CD5A2CC00DFE56E /* noMic@2x.png */,
 				BB2CA6DD1CD51FD500DFE56E /* live */,
 				BB2CA61F1CD34D7E00DFE56E /* me */,
@@ -4384,6 +4402,7 @@
 				BB63F2C71C27FB2800A042E8 /* 30.gif in Resources */,
 				BBCE9D451CB3AD5600DA56D6 /* 163_1.png in Resources */,
 				BB63F5DA1C2CC7A300A042E8 /* checkbox1_unchecked@2x.png in Resources */,
+				5AC0A04F1CDA40C800DC4B25 /* EmotionGifList.plist in Resources */,
 				BB2CA6B01CD34D7E00DFE56E /* register_repeat_password_icon@2x.png in Resources */,
 				5AD667661CD0957C00DA2C6D /* iPhone6P_1@3x.png in Resources */,
 				BBCE9D081CB3AD5600DA56D6 /* 102_1.png in Resources */,
@@ -4693,6 +4712,7 @@
 				5AD25E511CCE2265005C5BE6 /* SplashTool.mm in Sources */,
 				BB2CA61D1CD338A300DFE56E /* Util.cpp in Sources */,
 				BB63F6131C2CC7A300A042E8 /* MainViewController.m in Sources */,
+				5AC0A04B1CDA3AF600DC4B25 /* CFTextAttachment.m in Sources */,
 				BB14B9D31CD9B6D00027E7E6 /* ZLMeTeamPrivate.m in Sources */,
 				BB63F6211C2CC7A300A042E8 /* HtmlRoomViewCell.m in Sources */,
 				BB63F5AC1C2CC7A300A042E8 /* UIView+Frame.m in Sources */,
@@ -4734,6 +4754,7 @@
 				5AC00A511CD99E6600379081 /* MessageTableViewCell.mm in Sources */,
 				BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */,
 				BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */,
+				5AC0A04C1CDA3AF600DC4B25 /* CFTextModel.m in Sources */,
 				BB63F5D61C2CC7A300A042E8 /* UIView+MJExtension.m in Sources */,
 				BB14B9D01CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m in Sources */,
 				BBD46D2B1CB01B4B00E2B767 /* TextCoreViewController.m in Sources */,
@@ -4893,6 +4914,7 @@
 				BB16619D1C3E2DC700D318BE /* ZLButton.m in Sources */,
 				B4EA090A1CC754C500E8F933 /* StockDealTableModel.mm in Sources */,
 				BB2CA60B1CD338A300DFE56E /* HttpListener.mm in Sources */,
+				5AC0A04D1CDA3AF600DC4B25 /* CFTextView.m in Sources */,
 				BB63F5AA1C2CC7A300A042E8 /* UIControl+BlocksKit.m in Sources */,
 				18EA82B11CCA148F00BDB735 /* TQNoCustomView.m in Sources */,
 				185DABAD1CBFDC970019C5A3 /* TQideaTableViewCell.mm in Sources */,
