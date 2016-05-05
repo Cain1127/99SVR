@@ -293,6 +293,7 @@
     UILabel *expiryLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+10,_titleLable.y+30, kScreenWidth - 90, 30)];
     expiryLable.font = XCFONT(16);
     expiryLable.textColor = UIColorFromRGB(0x4c4c4c);
+//    NSString *strInfo = [NSString stringWithFormat:@"有效期:%@",_room];
     expiryLable.text = @"有效期:终身有效";
     [recommendView addSubview:expiryLable];
     

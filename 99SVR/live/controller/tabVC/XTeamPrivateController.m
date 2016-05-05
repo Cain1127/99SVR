@@ -8,6 +8,7 @@
 
 #import "XTeamPrivateController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "NNSVRViewController.h"
 #import "TQPurchaseViewController.h"
 #import "XPrivateDetailViewController.h"
 #import "PrivateVipView.h"
@@ -231,7 +232,11 @@
 }
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
-    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
-    [[self viewController].navigationController pushViewController:control animated:YES];
+//    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
+//    [[self viewController].navigationController pushViewController:control animated:YES];
+    
+    NSString *strInfo = [NSString stringWithFormat:@"%@%d.html",kPrivate_detail_url,summary.nId];
+    NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strInfo title:summary.teamname];
+    [[self viewController].navigationController pushViewController:svrView animated:YES];
 }
 @end

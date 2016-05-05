@@ -221,8 +221,7 @@ typedef struct _tag_MediaFrameBuffer
     [_aryVideo removeAllObjects];
     
     _gcdSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(0, 0)];
-//    if (![_gcdSocket connectToHost:strIp onPort:nPort error:nil])
-    if (![_gcdSocket connectToHost:@"121.12.118.32" onPort:819 error:nil])
+    if (![_gcdSocket connectToHost:strIp onPort:nPort error:nil])
     {
         DLog(@"连接失败");
     }
@@ -569,7 +568,7 @@ if(_block) \
         NSString *strErrlog =[NSString stringWithFormat:@"ReportItem=DirectSeedingQuality&ClientType=3&UserId=%d&ServerIP=%@&Error=kadun",
                               [UserInfo sharedUserInfo].nUserId,[UserInfo sharedUserInfo].strMediaAddr];
         [DecodeJson postPHPServerMsg:strErrlog];
-        _nFall = 0;
+        return ;
     }
     if(err)
     {
