@@ -75,6 +75,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [_tableView.gifHeader loadDefaultImg];
     [_tableView.gifHeader beginRefreshing];
+    [_tableView.footer setHidden:YES];
     [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
     
     [self.view addSubview:_tableView];
