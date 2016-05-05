@@ -14,12 +14,19 @@
     sprintf(cFrom,"<span style=\"color:#0078DD\">%s</span>",[_authorname UTF8String]);
     NSString *strFrom = [NSString stringWithUTF8String:cFrom];
     NSString *strContentInfo = nil;
+//    if (_parentreplyid!=0) {
+//        strContentInfo = [NSString stringWithFormat:@"<p style=\"line-height:10px\">%@ 回复 <span style=\"color:#919191\">%@</span><p>%@</p></p>",
+//                       strFrom,_fromauthorname,_content];
+//    }else{
+//        strContentInfo = [NSString stringWithFormat:@"<p style=\"line-height:10px\">%@<p style=\"color:#919191\">%@</p><p>%@</p></p>",strFrom,_publishtime,_content];
+//    }
+    
     if (_parentreplyid!=0) {
-        strContentInfo = [NSString stringWithFormat:@"<p style=\"line-height:10px\">%@ 回复 <span style=\"color:#919191\">%@</span><p>%@</p></p>",
-                       strFrom,_fromauthorname,_content];
+        strContentInfo = [NSString stringWithFormat:@"<p style=\"line-height:10px\">%@ 回复 <span style=\"color:#919191\">%@</span><p><span style=\"color:#919191\">%@<p style=\"color:#919191\">%@</p></p>",strFrom,_fromauthorname,_publishtime,_content];
     }else{
-        strContentInfo = [NSString stringWithFormat:@"<p style=\"line-height:10px\">%@<p>%@</p></p>",strFrom,_content];
+        strContentInfo = [NSString stringWithFormat:@"<p style=\"line-height:10px\">%@<p style=\"color:#919191\">%@</p><p><span style=\"color:#919191\">%@</p></p>",strFrom,_publishtime,_content];
     }
+    
     _strContent = [DecodeJson replaceEmojiNewString:strContentInfo];
     return _strContent;
 }

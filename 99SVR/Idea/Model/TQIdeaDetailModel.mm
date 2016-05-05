@@ -26,7 +26,7 @@
     
     _publishtime = [NSString stringWithUTF8String:details->publishtime().c_str()];
     
-    _content = [NSString stringWithFormat:@"<span style=\"line-height:26px;\">%@</span>",[NSString stringWithUTF8String:details->content().c_str()]];
+    _content = [NSString stringWithFormat:@"<span style=\"line-height:26px;\"><span style=\"font-size:30em;\">%@</span>",[NSString stringWithUTF8String:details->content().c_str()]];
 //    _content = [NSString stringWithUTF8String:details->content().c_str()];
     
     _replycount = details->replycount();
