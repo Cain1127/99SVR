@@ -22,6 +22,7 @@
 #import "SearchButton.h"
 #import "HistorySearchDataSource.h"
 #import "TableViewFactory.h"
+#import "UIViewController+EmpetViewTips.h"
 
 @interface SearchController()<UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate,HistoryDelegate>
 {
@@ -56,7 +57,7 @@
         UIButton *btnClear = [UIButton buttonWithType:UIButtonTypeCustom];
         btnClear.frame = Rect(0, 0, kScreenWidth, 44);
         [_footView addSubview:btnClear];
-        [btnClear setTitle:@"清除历史记录" forState:UIControlStateNormal];
+        [btnClear setTitle:@"清除搜索记录" forState:UIControlStateNormal];
         [btnClear setTitleColor:COLOR_Text_0078DD forState:UIControlStateNormal];
         [btnClear setTitleColor:COLOR_Text_Black forState:UIControlStateHighlighted];
         [btnClear addTarget:self action:@selector(deleteAll) forControlEvents:UIControlEventTouchUpInside];
@@ -147,9 +148,9 @@
     [exitBtn setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
     __weak SearchController *__self = self;
     [exitBtn clickWithBlock:^(UIGestureRecognizer *gesture)
-    {
-        [__self dismissViewControllerAnimated:YES completion:nil];
-    }];
+     {
+         [__self dismissViewControllerAnimated:YES completion:nil];
+     }];
     [headView addSubview:exitBtn];
     [exitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(50, 44));
@@ -186,7 +187,7 @@
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(navback) image:@"back" highImage:@"back"];
     [_headView addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
-
+    
     _mySearchBar = [[UITextField alloc] initWithFrame:Rect(0,64,kScreenWidth, 44)];
     [self.view addSubview:_mySearchBar];
     
@@ -224,6 +225,7 @@
     _dataSource = [[HistorySearchDataSource alloc] init];
     _historyTable.dataSource = _dataSource;
     _historyTable.delegate = _dataSource;
+
     _dataSource.delegate = self;
     NSArray *array = [UserDefaults objectForKey:kHistoryList];
     if (array.count)
@@ -260,6 +262,7 @@
         if(_allDatas.count>0)
         {
             _defaultView.hidden = YES;
+            
             NSString *searchWords = [NSString stringWithFormat:@"teamname like '*%@*' or roomid like '*%@*'" , keywords, keywords];
             NSPredicate *pre = [NSPredicate predicateWithFormat:searchWords];
             
@@ -269,7 +272,16 @@
                 [dictionary setObject:room forKey:room.teamid];
             }
             _aryResult = [dictionary allValues];
-            _historyTable.hidden = _aryResult.count ? YES : NO;
+            if (_aryResult.count) {
+                [self hideEmptyViewInView:_searchResultsTable];
+            }else{
+                @WeakObj(self);
+                [self showEmptyViewInView:_searchResultsTable withMsg:@"暂无数据" touchHanleBlock:^{
+                    @StrongObj(self);
+                    [self startSearch:_mySearchBar.text];
+                }];
+            }
+            _historyTable.hidden = YES;
             [_searchResultsTable reloadData];
         }
         else
@@ -338,7 +350,8 @@
         }
     }
     
-    [tableAry addObject:strText];
+    //[tableAry addObject:strText];
+    [tableAry insertObject:strText atIndex:0]; // 插入排在最上面
     if (tableAry.count>5) {
         [tableAry removeObjectAtIndex:0];
     }
@@ -430,5 +443,6 @@
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
 }
+
 
 @end
