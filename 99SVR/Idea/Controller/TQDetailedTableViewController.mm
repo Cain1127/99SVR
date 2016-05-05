@@ -127,7 +127,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyResp:) name:MESSAGE_IDEA_REPLY_RESPONSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView:) name:MESSAGE_HTTP_REQUEST_REPLY_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendGiftFail:) name:MESSAGE_GIFT_VIEW_ERR_VC object:nil];
-    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [self.view setBackgroundColor:COLOR_Bg_Gay];
     _tableView = [[UITableView alloc] initWithFrame:Rect(0,64, kScreenWidth,kScreenHeight-64)];
     [self.view addSubview:_tableView];
     _tableView.delegate = self;
@@ -252,7 +252,7 @@
     _textView.shouldDrawImages = YES;
     _textView.shouldDrawLinks = YES;
     
-    CGFloat height = [_textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-16].height;
+    CGFloat height = [_textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
     
     contentView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, height+142)];
     [contentView addSubview:_textView];
@@ -270,7 +270,7 @@
     [lblTime setTextAlignment:NSTextAlignmentRight];
     [contentView addSubview:lblTime];
     
-    _textView.frame = Rect(8,lblTime.y+lblTime.height+10, kScreenWidth-16, height);
+    _textView.frame = Rect(10,lblTime.y+lblTime.height+10, kScreenWidth-20, height);
     [self updateContentView];
     
     [_tableView setTableHeaderView:contentView];
@@ -402,12 +402,12 @@
         //重新加载图片
         [_textView relayoutText];
         CGRect frame = contentView.frame;
-        CGFloat height = [_textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-16].height;
+        CGFloat height = [_textView.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
         CGRect textFrame = _textView.frame;
         contentView.frame = Rect(0, 0, kScreenWidth,frame.size.height-textFrame.size.height+height);
         //需要重新设置contentView  刷新tableview table HeaderView 更新
         [_tableView setTableHeaderView:contentView];
-        _textView.frame = Rect(8,textFrame.origin.y, kScreenWidth-16, height);
+        _textView.frame = Rect(10,textFrame.origin.y, kScreenWidth-20, height);
         [self updateContentView];
     }
 }
