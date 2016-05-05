@@ -40,8 +40,10 @@
     [self.headView setBackgroundColor:[UIColor clearColor]];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     
+    UIView *headView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
+    
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
-    [self.view insertSubview:imgView atIndex:0];
+    [headView insertSubview:imgView atIndex:0];
 
     char cBuffer[100]={0};
     sprintf(cBuffer,"video_profiles_bg@2x");
@@ -50,7 +52,7 @@
     [imgView sd_setImageWithURL:url1];
     
     UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-32.5,64,65,65)];
-    [self.view addSubview:imgHead];
+    [headView addSubview:imgHead];
     imgHead.layer.masksToBounds = YES;
     imgHead.layer.cornerRadius = 32;
     NSString *strUrl = [NSString stringWithFormat:@"%@",_room.croompic];
@@ -61,12 +63,13 @@
     [lblName setText:_room.teamname];
     [lblName setFont:XCFONT(15)];
     [lblName setTextAlignment:NSTextAlignmentCenter];
-    [self.view addSubview:lblName];
+    [headView addSubview:lblName];
 
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 185, kScreenWidth, kScreenHeight-185) withStyle:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
+    _tableView.tableHeaderView = headView;
     [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
 }
 

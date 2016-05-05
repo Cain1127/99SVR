@@ -101,7 +101,7 @@
     if (_aryVIP.count>_selectIndex-1)
     {
         XPrivateService *service = _aryVIP[_selectIndex-1];
-        if (service.summaryList.count>indexPath.row)
+        if (service.summaryList.count>indexPath.row && service.isOpen)
         {
             [self showPrivateDetail:service.summaryList[indexPath.row]];
         }
@@ -117,7 +117,8 @@
 
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
-    if (_delegate && [_delegate respondsToSelector:@selector(showPrivateDetail:)]) {
+    if (_delegate && [_delegate respondsToSelector:@selector(showPrivateDetail:)])
+    {
         [_delegate showPrivateDetail:summary];
     }
 }
