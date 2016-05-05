@@ -97,8 +97,16 @@
 
 - (void)buyprivate
 {
-    TQPurchaseViewController *vc = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue] name:_room.teamname];
-    [self.navigationController pushViewController:vc animated:YES];
+//    TQPurchaseViewController *vc = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue] name:_room.teamname];
+    
+    TQPurchaseViewController *control = [[TQPurchaseViewController alloc] init];
+    control.stockModel = [[StockDealModel alloc]init];
+    control.stockModel.teamicon = _room.teamicon;
+    control.stockModel.teamid = _room.teamid;
+    control.stockModel.teamname = _room.teamname;
+    control.stockModel.teamicon = _room.teamicon;
+    [self.navigationController pushViewController:control animated:YES];
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)nopurchaseVc {

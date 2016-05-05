@@ -26,17 +26,17 @@
 
 @implementation TQPurchaseViewController
 
-- (id)initWithTeamId:(int)nId name:(NSString *)strName
-{
-    self = [super init];
-    
-    self.stockModel = [[StockDealModel alloc]init];
-    
-    self.stockModel.teamid = [NSString stringWithFormat:@"%d",nId];
-    self.stockModel.teamname = strName;
-    
-    return self;
-}
+//- (id)initWithTeamId:(int)nId name:(NSString *)strName
+//{
+//    self = [super init];
+//    
+//    self.stockModel = [[StockDealModel alloc]init];
+//    
+//    self.stockModel.teamid = [NSString stringWithFormat:@"%d",nId];
+//    self.stockModel.teamname = strName;
+//    
+//    return self;
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -55,7 +55,7 @@
 
     [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
     
-//    DLog(@"讲师ID %d",[self.stockModel.teamid intValue]);
+    DLog(@"讲师ID %d",[self.stockModel.teamid intValue]);
     
     self.view.backgroundColor = COLOR_Bg_Gay;
 }
