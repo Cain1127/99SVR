@@ -1011,7 +1011,7 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
     JsonReader reader;
     int i,j;
     int size_;
-    char tmp[32] = {0};
+    char tmp[64] = {0};
     std::string sTmp;
     
     std::vector<MyPrivateService> mps_list;
