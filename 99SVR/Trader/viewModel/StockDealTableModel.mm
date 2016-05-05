@@ -189,7 +189,7 @@
         imageView.hidden = NO;
     }else{
         
-        leftLab.text = @"持仓详情";
+        leftLab.text = @"持仓情况";
         rightLab.text = @"全部持仓";
         imageView.hidden = NO;
     }
