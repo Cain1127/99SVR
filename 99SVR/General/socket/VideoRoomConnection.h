@@ -15,6 +15,7 @@ class VideoRoomConnection : public Connection
 private:
 
 	uint32 main_room_id;
+	int joinRoomSucFlag;
 
 	VideoRoomListener* room_listener;
 	VideoRoomJoinListener* room_join_listener;
@@ -140,7 +141,6 @@ public:
 	void SendMsg_AskQuestionReq(AskQuestionReq& req);
 
 	void close();
-
 
 	string GetVideoRoomShareUrl();
 

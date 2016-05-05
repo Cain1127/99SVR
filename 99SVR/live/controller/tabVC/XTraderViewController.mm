@@ -46,12 +46,12 @@
     return self;
 }
 
-- (void)addNotice
+- (void)addNotify
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
 }
 
-- (void)removeNotice
+- (void)removeNotify
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -59,7 +59,7 @@
 - (void)reloadModel:(RoomHttp *)room
 {
     _room = room;
-    [self addNotice];
+    [self addNotify];
     [_totalTab.header beginRefreshing];
 }
 
@@ -72,7 +72,7 @@
 
 - (void)initBody
 {
-    [self addNotice];
+    [self addNotify];
     [self initData];
     [self initUi];
 }

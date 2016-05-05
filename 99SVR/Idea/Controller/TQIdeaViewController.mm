@@ -78,6 +78,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     {
         PlayIconView *iconView = [PlayIconView sharedPlayIconView];
         iconView.frame = Rect(0, kScreenHeight-104, kScreenWidth, 60);
+        [roomView removeNotice];
         [self.view addSubview:iconView];
         [iconView setRoom:roomView.room];
     }

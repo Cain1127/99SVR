@@ -14,6 +14,8 @@ std::string get_user_password();
 
 std::string& get_user_token();
 
+int get_user_isguest();
+
 void set_user_id(uint32 user_id);
 
 #endif

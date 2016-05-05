@@ -126,5 +126,6 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 
 - (void)RequestBanner;////获取Banner
 
+- (NSString *)requestGoid;
 
 @end

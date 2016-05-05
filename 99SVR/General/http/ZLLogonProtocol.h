@@ -20,6 +20,10 @@
 extern NSMutableArray *aryRoomChat;
 extern NSMutableArray *aryRoomPrichat;
 extern NSMutableArray *aryRoomNotice;
+extern int nRoom_count_info;
+extern int nRoom_fans_info;
+extern int nRoom_is_collet;
+
 extern RoomInfo *currentRoom;
 
 
@@ -57,6 +61,8 @@ class ZLHallListener: public HallListener
     
     virtual void OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info);
     virtual void OnViewpointTradeGiftErr(ErrCodeResp& info);
+    virtual void OnOnMicRobertResp(OnMicRobertResp& info);
+    
 };
 
 class ZLPushListener: public PushListener

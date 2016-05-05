@@ -39,8 +39,6 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self setTitleText:@"讲师团队简介"];
-//    [self.headView setBackgroundColor:[UIColor clearColor]];
-    
     UIView *headView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
     
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
@@ -52,10 +50,10 @@
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [imgView sd_setImageWithURL:url1];
     
-    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-32.5,64,65,65)];
+    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-50,20,100,100)];
     [headView addSubview:imgHead];
     imgHead.layer.masksToBounds = YES;
-    imgHead.layer.cornerRadius = 32;
+    imgHead.layer.cornerRadius = 50;
     NSString *strUrl = [NSString stringWithFormat:@"%@",_room.croompic];
     [imgHead sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     

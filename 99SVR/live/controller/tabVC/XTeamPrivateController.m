@@ -61,12 +61,13 @@
 
 - (void)addNotify
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:) name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:)
+                                                 name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
 }
 
 - (void)removeNotify
 {
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)initBody
@@ -94,7 +95,8 @@
     
     whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 0, kScreenWidth, self.height) withViewTag:0];
     [self addSubview:whatPrivate];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:)
+                                                 name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
     [kHTTPSingle RequestWhatIsPrivateService];
     [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }

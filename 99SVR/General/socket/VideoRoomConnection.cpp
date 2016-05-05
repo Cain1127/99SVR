@@ -9,6 +9,7 @@
 #include "VideoRoomConnection.h"
 #include "Thread.h"
 #include "videoroom_cmd_vchat.h"
+#include "Util.h"
 
 #include <vector>
 
@@ -24,6 +25,7 @@ room_join_listener(NULL), room_listener(NULL)
 	main_cmd = protocol::MDM_Vchat_Room;
 	closed = false;
 	room_info.set_vcbid(0);
+	joinRoomSucFlag=0;
 }
 
 
@@ -83,7 +85,8 @@ void VideoRoomConnection::SendMsg_RreJoinRoomReq(PreJoinRoomReq& req)
 
 void VideoRoomConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 {
-	
+	joinRoomSucFlag=0;
+	main_room_id = 0;
 	join_req = req;
 	on_do_connected();
 	//connect_from_lbs_asyn();
@@ -119,6 +122,7 @@ void VideoRoomConnection::SendMsg_AfterJoinRoomReq()
 	req.set_vcbid(join_req.vcbid());
 
 	SEND_MESSAGE(protocol::Sub_Vchat_AfterJoinRoomReq, req);
+	joinRoomSucFlag=1;
 }
 
 void VideoRoomConnection::SendMsg_ExitRoomReq(uint32 roomid)
@@ -305,6 +309,8 @@ void VideoRoomConnection::SendMsg_TeamTopNReq(TeamTopNReq& req)
 
 void VideoRoomConnection::SendMsg_AskQuestionReq(AskQuestionReq& req)
 {
+	req.set_userid(join_req.userid());
+	req.set_userid(join_req.vcbid());
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_AskQuestionReq, req, req.questionlen());
 }
 
@@ -330,6 +336,8 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 	int sub_cmd = head->subcmd;
 	int body_len = head->length - sizeof(protocol::COM_MSG_HEADER);
 
+	if(joinRoomSucFlag!=1 && sub_cmd!=protocol::Sub_Vchat_PreJoinRoomResp && sub_cmd!=protocol::Sub_Vchat_JoinRoomResp && sub_cmd!=protocol::Sub_Vchat_JoinRoomErr)
+		return;
 	LOG("on video message:%d", sub_cmd);
 
 	switch ( sub_cmd ) {
@@ -709,7 +717,14 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 
 		//主房间和子房间id，目前只有移动端有，PC端没有
 		case protocol::Sub_Vchat_RoomAndSubRoomId_Noty:
-			ON_MESSAGE(room_listener, RoomAndSubRoomIdNoty, OnRoomAndSubRoomId_Noty);
+			//ON_MESSAGE(room_listener, RoomAndSubRoomIdNoty, OnRoomAndSubRoomId_Noty);
+			if ( room_listener != NULL )
+			{
+				RoomAndSubRoomIdNoty info;
+				info.ParseFromArray(body, info.ByteSize());
+				room_listener->OnRoomAndSubRoomId_Noty(info);
+				main_room_id = info.roomid();
+			}
 			break;
 
 		//房间发送系统公告
@@ -827,6 +842,17 @@ void VideoRoomConnection::dispatch_push_message(void* body)
 	}
 }
 
+string VideoRoomConnection::GetVideoRoomShareUrl()
+{
+	if ( main_room_id != 0 )
+	{
+		return string("http://pull.99ducaijing.cn/live/") + int2string(main_room_id) + "/playlist.m3u8";
+	}
+	else
+	{
+		return "";
+	}
+}
 
 VideoRoomConnection::~VideoRoomConnection(void)
 {

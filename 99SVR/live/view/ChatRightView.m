@@ -65,12 +65,28 @@
         {
             btnQuestion.cjr_acceptEventInterval = 0.5;
         }
-        NSString *strName = [NSString stringWithFormat:@"chatRightView%d",i+1];
-        [UIImageFactory createBtnImage:strName btn:btnQuestion state:UIControlStateNormal];
-        [_scrollView addSubview:btnQuestion];
-        buttonFrame.origin.y+=59;
-        btnQuestion.tag = i+1;
-        [btnQuestion addTarget:self action:@selector(addEvent:) forControlEvents:UIControlEventTouchUpInside];
+        
+        if(i==0 || i ==2)
+        {
+            if (KUserSingleton.nStatus == 1)
+            {
+                NSString *strName = [NSString stringWithFormat:@"chatRightView%d",i+1];
+                [UIImageFactory createBtnImage:strName btn:btnQuestion state:UIControlStateNormal];
+                [_scrollView addSubview:btnQuestion];
+                buttonFrame.origin.y+=59;
+                btnQuestion.tag = i+1;
+                [btnQuestion addTarget:self action:@selector(addEvent:) forControlEvents:UIControlEventTouchUpInside];
+            }
+        }
+        else
+        {
+            NSString *strName = [NSString stringWithFormat:@"chatRightView%d",i+1];
+            [UIImageFactory createBtnImage:strName btn:btnQuestion state:UIControlStateNormal];
+            [_scrollView addSubview:btnQuestion];
+            buttonFrame.origin.y+=59;
+            btnQuestion.tag = i+1;
+            [btnQuestion addTarget:self action:@selector(addEvent:) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     [_scrollView setContentSize:CGSizeMake(44,buttonFrame.origin.y)];
     return self;

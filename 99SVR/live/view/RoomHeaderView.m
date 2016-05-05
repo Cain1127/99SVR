@@ -32,7 +32,7 @@
     [_lblTitle setTextColor:UIColorFromRGB(0xffffff)];
     [_lblTitle setTextAlignment:NSTextAlignmentCenter];
     
-    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-130,45,80, 16)];
+    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-130,45,80, 20)];
     [self addSubview:lblTemp];
     [lblTemp setFont:XCFONT(13)];
     [lblTemp setTextColor:UIColorFromRGB(0xf8f8f8)];
@@ -53,7 +53,7 @@
     [lblFanTemp setTextAlignment:NSTextAlignmentRight];
     [lblFanTemp setText:@"粉丝:"];
     
-    _lblFans = [[UILabel alloc] initWithFrame:Rect(lblFanTemp.x+lblFanTemp.width+3,_lblCount.y,45, 20)];
+    _lblFans = [[UILabel alloc] initWithFrame:Rect(lblFanTemp.x+lblFanTemp.width+3,lblFanTemp.y,45, 20)];
     [self addSubview:_lblFans];
     [_lblFans setFont:XCFONT(13)];
     [_lblFans setTextColor:UIColorFromRGB(0xffffff)];

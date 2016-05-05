@@ -133,6 +133,7 @@
     [_dateLabel setText:ideaModel.publishtime];
     [_commentBtn setTitle:NSStringFromInt(ideaModel.replycount) forState:UIControlStateNormal];
     [_giftBtn setTitle:NSStringFromInt(ideaModel.giftcount) forState:UIControlStateNormal];
+    
     CGRect rect = [NSStringFromInt(ideaModel.giftcount) boundingRectWithSize:CGSizeMake(kScreenWidth-20,50) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
     _giftBtn.frame = Rect(kScreenWidth-rect.size.width-25,_iconView.y,rect.size.width+20,20);
     CGRect commentFrame = [NSStringFromInt(ideaModel.replycount) boundingRectWithSize:CGSizeMake(kScreenWidth-20,50) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];

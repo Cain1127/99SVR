@@ -326,7 +326,7 @@ namespace protocol
 	typedef struct tag_CMDTeacherInfoResp
 	{
 		uint32  teacherid;          //讲师ID
-		uint32  headid;             //讲师头像ID
+		char    sIcon[64];       //头像信息
 		uint32  vcbid;         			//讲师所属文字直播房间ID
 		int16   introducelen;       //个人介绍长度
 		int16   lablelen;           //个人标签长度
@@ -336,7 +336,7 @@ namespace protocol
 		uint64  moods;							//讲师人气数
 		uint64  fans;								//讲师粉丝数
 		int8  	fansflag;           //是否已经关注讲师（0-未关注；1-已关注）
-		int8  	subflag;           //是否已经订阅讲师课程（0-未关注；1-已关注）
+		int8  	subflag;           //是否已经订阅讲师课程（0-未订阅；1-已订阅）
 		char    content[0];         //消息内容，格式：个人介绍+个人标签+讲师级别
 	}CMDTeacherInfoResp_t;
 
@@ -472,6 +472,7 @@ namespace protocol
 	  uint32 viewid;     // 观点id
 	  uint32 giftid;     // 礼物id
 	  uint32 giftnum;    // 赠送数目
+	  uint64 nk;         //账户余额
 	}CMDViewpointTradeGiftNoty_t;
 
 };

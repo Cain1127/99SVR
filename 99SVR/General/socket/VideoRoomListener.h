@@ -2,9 +2,10 @@
 #define __ROOM_LISTENER_H__
 
 #include <vector>
+#include "LoginMessage.pb.h"
 #include "VideoRoomMessage.pb.h"
 #include "CommonroomMessage.pb.h"
-#include "LoginMessage.pb.h"
+
 class VideoRoomListener
 {
 public:

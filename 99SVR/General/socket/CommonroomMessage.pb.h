@@ -2185,7 +2185,7 @@ class TeacherInfoResp
 private:
 
 	uint32	_teacherid;
-	uint32	_headid;
+	string	_sicon;
 	uint32	_vcbid;
 	int32	_introducelen;
 	int32	_lablelen;
@@ -2205,9 +2205,9 @@ public:
 
 	 inline void set_teacherid(const uint32 value) { _teacherid = value; }
 
-	 inline uint32 headid() { return _headid; } const 
+	 inline string& sicon() { return _sicon; } const 
 
-	 inline void set_headid(const uint32 value) { _headid = value; }
+	 inline void set_sicon(const string& value) { _sicon = value; }
 
 	 inline uint32 vcbid() { return _vcbid; } const 
 
@@ -2260,7 +2260,7 @@ public:
 	{
 		protocol::tag_CMDTeacherInfoResp* cmd = (protocol::tag_CMDTeacherInfoResp*) data;
 		cmd->teacherid = _teacherid;
-		cmd->headid = _headid;
+		strcpy(cmd->sIcon, _sicon.c_str());
 		cmd->vcbid = _vcbid;
 		cmd->introducelen = _introducelen;
 		cmd->lablelen = _lablelen;
@@ -2278,7 +2278,7 @@ public:
 	{
 		protocol::tag_CMDTeacherInfoResp* cmd = (protocol::tag_CMDTeacherInfoResp*) data;
 		_teacherid = cmd->teacherid;
-		_headid = cmd->headid;
+		_sicon = cmd->sIcon;
 		_vcbid = cmd->vcbid;
 		_introducelen = cmd->introducelen;
 		_lablelen = cmd->lablelen;
@@ -2296,7 +2296,7 @@ public:
 	{
 		LOG("--------Receive message: TeacherInfoResp---------");
 		LOG("teacherid = %d", _teacherid);
-		LOG("headid = %d", _headid);
+		LOG("sicon = %s", _sicon.c_str());
 		LOG("vcbid = %d", _vcbid);
 		LOG("introducelen = %d", _introducelen);
 		LOG("lablelen = %d", _lablelen);
@@ -3196,6 +3196,7 @@ private:
 	uint32	_viewid;
 	uint32	_giftid;
 	uint32	_giftnum;
+	uint64	_nk;
 
 
 public:
@@ -3232,6 +3233,10 @@ public:
 
 	 inline void set_giftnum(const uint32 value) { _giftnum = value; }
 
+	 inline uint64 nk() { return _nk; } const 
+
+	 inline void set_nk(const uint64 value) { _nk = value; }
+
 
 	int ByteSize() { return sizeof(protocol::tag_CMDViewpointTradeGiftNoty); }
 
@@ -3246,6 +3251,7 @@ public:
 		cmd->viewid = _viewid;
 		cmd->giftid = _giftid;
 		cmd->giftnum = _giftnum;
+		cmd->nk = _nk;
 	}
 
 	void ParseFromArray(void* data, int size)
@@ -3259,6 +3265,7 @@ public:
 		_viewid = cmd->viewid;
 		_giftid = cmd->giftid;
 		_giftnum = cmd->giftnum;
+		_nk = cmd->nk;
 	}
 
 	void Log()
@@ -3272,6 +3279,7 @@ public:
 		LOG("viewid = %d", _viewid);
 		LOG("giftid = %d", _giftid);
 		LOG("giftnum = %d", _giftnum);
+		LOG("nk = %lld", _nk);
 	}
 
 };

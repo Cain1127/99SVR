@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.5</string>
+	<string>1.3.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -40,7 +40,7 @@
 			<key>CFBundleURLIconFile</key>
 			<string>bigest_logo@2x</string>
 			<key>CFBundleURLName</key>
-			<string>com.weibo</string>
+			<string>weibo</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>wb4288225685</string>
@@ -72,7 +72,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>19</string>
+	<string>3</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>weixin</string>

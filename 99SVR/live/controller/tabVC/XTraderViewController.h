@@ -18,8 +18,9 @@ typedef void(^TouchHanleBlock)(void);
 
 - (void)reloadModel:(RoomHttp *)room;
 
-- (void)addNotice;
+- (void)addNotify;
 
-- (void)removeNotice;
+- (void)removeNotify;
+
 
 @end

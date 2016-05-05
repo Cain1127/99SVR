@@ -665,6 +665,7 @@ namespace protocol
 	//提问请求
 	typedef struct tag_CMDAskQuestionResp
 	{
+	  uint64 nk;        //账户余额
 	  uint32 questionid;  
 	  uint32 userid;
 	  uint32 teamid;

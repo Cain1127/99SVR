@@ -18,11 +18,11 @@
     _imgHead.layer.masksToBounds = YES;
     _imgHead.layer.cornerRadius = 20;
     
-    _lblName = [[UILabel alloc] initWithFrame:Rect(_imgHead.x+_imgHead.width+8,10,kScreenWidth-80,30)];
+    _lblName = [[UILabel alloc] initWithFrame:Rect(_imgHead.x+_imgHead.width+8,15,kScreenWidth-80,30)];
     [_lblName setTextColor:UIColorFromRGB(0x343434)];
     [_lblName setFont:XCFONT(14)];
     
-    _lblGoid = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-80,_lblName.y,80, 16)];
+    _lblGoid = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-80,_lblName.y,80, 30)];
     [_lblGoid setTextColor:UIColorFromRGB(0x919191)];
     [_lblGoid setFont:XCFONT(14)];
     
@@ -32,6 +32,7 @@
      
     _lblBad = [[UILabel alloc] initWithFrame:Rect(8, 10, 40, 30)];
     [_lblBad setTextColor:UIColorFromRGB(0x00)];
+    [_lblBad setTextAlignment:NSTextAlignmentCenter];
    
     _imgRank = [[UIImageView alloc] initWithFrame:Rect(8, 8, 40, 40)];
     _imgRank.layer.masksToBounds = YES;
@@ -56,8 +57,5 @@
         [self.contentView addSubview:_lblBad];
     }
 }
-
-
-
 
 @end

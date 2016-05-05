@@ -107,6 +107,9 @@ public:
 	//观点赠送礼物请求
 	void SendMsg_ViewpointTradeGiftReq(ViewpointTradeGiftReq& req);
 
+	//获取房间的转播机器人ID请求
+	void SendMsg_OnMicRobertReq(OnMicRobertReq& req);
+
 	void close();
 
 	LoginConnection();

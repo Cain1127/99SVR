@@ -610,6 +610,7 @@
 		BB98EE601CB588C70028AAEF /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE581CB588C70028AAEF /* SBJsonBase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BB98EE611CB588C70028AAEF /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE5A1CB588C70028AAEF /* SBJsonParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE5C1CB588C70028AAEF /* SBJsonWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		BB9C7EDB1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB9C7EDA1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm */; };
 		BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA16DA41C8C75B000D84E80 /* NSDate+convenience.m */; };
 		BBAB82E41C7049FB00C6AC34 /* ThumButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAB82E31C7049FB00C6AC34 /* ThumButton.m */; };
 		BBAD0DFF1CD19E36002C0FD6 /* ZLRoomVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD0DFE1CD19E36002C0FD6 /* ZLRoomVideoCell.m */; };
@@ -1868,6 +1869,8 @@
 		BB98EE5A1CB588C70028AAEF /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		BB98EE5B1CB588C70028AAEF /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		BB98EE5C1CB588C70028AAEF /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		BB9C7ED91CDB9A8300FD3532 /* ZLRoomVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLRoomVideoViewController.h; sourceTree = "<group>"; };
+		BB9C7EDA1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZLRoomVideoViewController.mm; sourceTree = "<group>"; };
 		BBA16DA31C8C75B000D84E80 /* NSDate+convenience.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+convenience.h"; sourceTree = "<group>"; };
 		BBA16DA41C8C75B000D84E80 /* NSDate+convenience.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+convenience.m"; sourceTree = "<group>"; };
 		BBAB82E21C7049FB00C6AC34 /* ThumButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumButton.h; sourceTree = "<group>"; };
@@ -3631,6 +3634,8 @@
 				BB63F5441C2CC7A300A042E8 /* FinanceOnlineVedioController.m */,
 				BB63F5451C2CC7A300A042E8 /* RoomViewController.h */,
 				BB63F5461C2CC7A300A042E8 /* RoomViewController.mm */,
+				BB9C7ED91CDB9A8300FD3532 /* ZLRoomVideoViewController.h */,
+				BB9C7EDA1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -4902,6 +4907,7 @@
 				5AB43D8B1CCFD7AE00693494 /* PrivateVipView.m in Sources */,
 				BB17694D1C7D9E7300CE947C /* InputPwdViewController.m in Sources */,
 				BBD58EF11CCBE6AC009250DB /* XPrivateDetailViewController.m in Sources */,
+				BB9C7EDB1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm in Sources */,
 				18BF06B81C9A86B00071E524 /* RechargeResultViewController.m in Sources */,
 				BB2CA6191CD338A300DFE56E /* Socket.cpp in Sources */,
 				1898AC691C9BADE600F2681D /* MyDataController.m in Sources */,
@@ -5279,7 +5285,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "29210d47-fd0f-4824-9529-30cfa3ce8cf9";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5326,7 +5332,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "29210d47-fd0f-4824-9529-30cfa3ce8cf9";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";

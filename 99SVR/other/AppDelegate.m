@@ -75,7 +75,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[CrashReporter sharedInstance] installWithAppId:@"900018787" applicationGroupIdentifier:@"com.hctt.svrnn"];
+    [[CrashReporter sharedInstance] installWithAppId:@"900018787" applicationGroupIdentifier:@"com.hctt.fae99"];
     [[MTAConfig getInstance] setDebugEnable:TRUE];
     [[MTAConfig getInstance] setAutoExceptionCaught:FALSE];
     [[MTAConfig getInstance] setSmartReporting:false];

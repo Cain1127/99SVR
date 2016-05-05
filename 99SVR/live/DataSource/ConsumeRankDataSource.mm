@@ -53,12 +53,13 @@
 
 - (void)setModel:(NSInteger)nRow cell:(ConsumeRankCell *)cell{
     [cell setRankInfo:nRow];
-    if (nRow<3) {
+    if (nRow<3)
+    {
         NSString *strName = [NSString stringWithFormat:@"video_list_%zi_icon",nRow+1];
         [cell.imgRank setImage:[UIImage imageNamed:strName]];
     }
     XConsumeRankModel *model = _aryModel[nRow];
-    [cell.lblBad setText:NSStringFromInteger(nRow)];
+    [cell.lblBad setText:NSStringFromInteger(nRow+1)];
     char cBuffer[100]={0};
     sprintf(cBuffer,"%d_1",model.headid);
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
