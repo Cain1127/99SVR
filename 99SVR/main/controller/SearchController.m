@@ -32,6 +32,7 @@
     UITextField *_mySearchBar;
     HistorySearchDataSource *_dataSource;
     UITableView *_historyTable;
+    UIView *tempView;
 }
 @property (nonatomic,strong) UIView *footView;
 @property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
@@ -130,7 +131,7 @@
     }
     else
     {
-        [self.view makeToastActivity_bird_bird];
+        [self.view makeToastActivity_bird];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoList:) name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
         [kHTTPSingle RequestTeamList];
     }
@@ -187,17 +188,26 @@
     [_headView addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
     
-    _mySearchBar = [[UITextField alloc] initWithFrame:Rect(0,70,kScreenWidth, 44)];
-    [self.view addSubview:_mySearchBar];
-    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(0,0,44,44)];
-    _mySearchBar.leftView = imgHead;
-    imgHead.image = [UIImage imageNamed:@"search_high"];
+    tempView = [[UIView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44)];
+    [tempView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    [self.view addSubview:tempView];
+    _mySearchBar = [[UITextField alloc] initWithFrame:Rect(0,2.5,kScreenWidth, 39)];
+    
+    [tempView addSubview:_mySearchBar];
+    
+    UIView *leftView = [[UIView alloc] initWithFrame:Rect(0, 0, 38, 39)];
+    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(10,11,18,18)];
+    imgHead.image = [UIImage imageNamed:@"search_icon"];
+    imgHead.contentMode = UIViewContentModeScaleAspectFit;
+    [leftView addSubview:imgHead];
+    _mySearchBar.leftView = leftView;
     _mySearchBar.leftViewMode = UITextFieldViewModeAlways;
     _mySearchBar.font = XCFONT(14);
     _mySearchBar.placeholder = @"请输入房间ID或者房间名称";
     _mySearchBar.layer.borderColor = UIColorFromRGB(0xcfcfcf).CGColor;
     _mySearchBar.layer.borderWidth = 0.5;
     _mySearchBar.returnKeyType = UIReturnKeySearch;
+    [_mySearchBar setBackgroundColor:UIColorFromRGB(0xffffff)];
     [_mySearchBar addTarget:self action:@selector(onChange:) forControlEvents:UIControlEventEditingChanged];
     _mySearchBar.delegate = self;
     
@@ -208,10 +218,10 @@
     keywordsTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:keywordsTable];
     _searchResultsTable = keywordsTable;
-    _searchResultsTable.frame = Rect(0,_mySearchBar.y+_mySearchBar.height+8,kScreenWidth,kScreenHeight-(_mySearchBar.y+_mySearchBar.height+8));
+    _searchResultsTable.frame = Rect(0,tempView.y+tempView.height+8,kScreenWidth,kScreenHeight-(tempView.y+tempView.height+8));
     [_searchResultsTable registerClass:[VideoCell class] forCellReuseIdentifier:@"cellId"];
     
-    _historyTable = [TableViewFactory createTableViewWithFrame:Rect(0, _mySearchBar.y+_mySearchBar.height, kScreenWidth, 200) withStyle:UITableViewStylePlain];
+    _historyTable = [TableViewFactory createTableViewWithFrame:Rect(0, tempView.y+tempView.height, kScreenWidth, 200) withStyle:UITableViewStylePlain];
     [self.view addSubview:_historyTable];
     [_historyTable setBackgroundColor:UIColorFromRGB(0xffffff)];
     _dataSource = [[HistorySearchDataSource alloc] init];

@@ -31,6 +31,8 @@
 
 //开始播放
 
+- (void)setRoomId:(int)roomId;
+
 - (void)setDefaultImg;
 
 - (void)setNullMic;

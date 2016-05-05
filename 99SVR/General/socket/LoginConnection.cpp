@@ -235,6 +235,11 @@ void LoginConnection::SendMsg_BuyPrivateVipReq(uint32 teacherid,uint32 viptype)
 	SEND_MESSAGE(protocol::Sub_Vchat_BuyPrivateVipReq, req);
 }
 
+void LoginConnection::SendMsg_ViewpointTradeGiftReq(ViewpointTradeGiftReq& req)
+{
+	SEND_MESSAGE(protocol::Sub_Vchat_ViewpointTradeGiftReq, req);
+}
+
 void LoginConnection::close(void)
 {
 	//SendMsg_ExitAlertReq();
@@ -383,7 +388,8 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		SetUserProfileReq _SetUserProfileReq;
 		_SetUserProfileReq.ParseFromArray(body, _SetUserProfileReq.ByteSize());
 
-		hall_listener->OnSetUserProfileResp(_SetUserProfileResp, _SetUserProfileReq);
+		if (login_listener != NULL)
+			hall_listener->OnSetUserProfileResp(_SetUserProfileResp, _SetUserProfileReq);
 	}
 		break;
 
@@ -454,6 +460,11 @@ void LoginConnection::dispatch_error_message(void* body)
 	case protocol::Sub_Vchat_BuyPrivateVipReq:
 		ON_MESSAGE(hall_listener, ErrCodeResp, OnBuyPrivateVipErr)
 		break;
+	case protocol::Sub_Vchat_ViewpointTradeGiftReq:
+		ON_MESSAGE(hall_listener, ErrCodeResp, OnViewpointTradeGiftErr)
+		break;
+	default:
+		break;
 	}
 }
 
@@ -510,31 +521,41 @@ void LoginConnection::dispatch_push_message(void* body)
 		protocol::tag_CMDConfigSvrNoty* conf_change_info = (protocol::tag_CMDConfigSvrNoty*) push->content;
 		if (conf_change_info->type == 1)
 		{
-			push_listener->OnConfChanged(conf_change_info->data_ver);
+			if (push_listener != NULL)
+				push_listener->OnConfChanged(conf_change_info->data_ver);
 		}
 		else if (conf_change_info->type == 2)
 		{
-			push_listener->OnGiftListChanged(conf_change_info->data_ver);
+			if (push_listener != NULL)
+				push_listener->OnGiftListChanged(conf_change_info->data_ver);
 		}
 		else if (conf_change_info->type == 3)
 		{
-			push_listener->OnShowFunctionChanged(conf_change_info->data_ver);
+			if (push_listener != NULL)
+				push_listener->OnShowFunctionChanged(conf_change_info->data_ver);
 		}
 	}
 		break;
 
 	case 2:
-		push_listener->OnPrintLog();
+		{
+			if (push_listener != NULL)
+				push_listener->OnPrintLog();
+		}
 		break;
 
 	case 3:
-		push_listener->OnUpdateApp();
+		{
+			if (push_listener != NULL)
+				push_listener->OnUpdateApp();
+		}
 		break;
 
 	case 4:
 	{
 		protocol::tag_CMDHitGoldEggClientNoty* money_change_info = (protocol::tag_CMDHitGoldEggClientNoty*) push->content;
-		push_listener->OnMoneyChanged(money_change_info->money);
+		if (push_listener != NULL)
+			push_listener->OnMoneyChanged(money_change_info->money);
 	}
 		break;
 	case 5:
@@ -543,7 +564,10 @@ void LoginConnection::dispatch_push_message(void* body)
 		break;
 
 	case 6:
-		push_listener->OnRoomGroupChanged();
+		{
+			if (push_listener != NULL)
+				push_listener->OnRoomGroupChanged();
+		}
 		break;
 
 	case 7:

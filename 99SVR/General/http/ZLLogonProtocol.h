@@ -56,6 +56,7 @@ class ZLHallListener: public HallListener
     virtual void OnBuyPrivateVipErr(ErrCodeResp& info);
     
     virtual void OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info);
+    virtual void OnViewpointTradeGiftErr(ErrCodeResp& info);
 };
 
 class ZLPushListener: public PushListener
@@ -173,7 +174,7 @@ public :
      */
     void sendGift(int giftId,int num);
     
-    void sendGiftInfo(int giftId, int num, int toUser, const char *name,int roomId);
+    void sendGiftInfo(int viewid, int giftId, int num, int toUser,int roomId);
     /**
      *   购买VIP
      */
@@ -183,7 +184,7 @@ public :
      */
     void requestRoomMsg();
     
-    void colletRoomInfo(int roomId);
+    void colletRoomInfo(int action);
     ~ZLLogonProtocol();
 };
 

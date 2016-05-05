@@ -34,7 +34,7 @@
     
     _viewpointid = details->viewpointid();
     
-    [self settingTime];
+//    [self settingTime];
     
     return self;
 }
@@ -59,6 +59,23 @@
         _publishtime = [NSString stringWithFormat:@"%04d年%02d月%02d日 %02d:%02d",date.year,date.month,date.day,date.hour,date.minute];
     }
     
+}
+
+- (void)addImage:(NSArray *)array
+{
+    NSMutableString *url = [[NSMutableString alloc] init];
+    for (NSDictionary *dict in array)
+    {
+        int srcWidth = [dict[@"width"] intValue];
+        int srcHeight = [dict[@"height"] intValue];
+        CGFloat bNum = (float)srcWidth/(kScreenWidth-16);
+        CGFloat fHeight = srcHeight/bNum;
+        NSString *strPath = dict[@"path"];
+        NSString *strInfo = [NSString stringWithFormat:@"<img src=\"%@\" width=\"%d\" height=\"%d\"></img><br/>",strPath,(int)(kScreenWidth-16),(int)fHeight];
+        [url appendString:strInfo];
+    }
+    DLog(@"url:%@",url);
+    _content = [NSString stringWithFormat:@"<span style=\"line-height:20px;\">%@%@</span>",url,_content];
 }
 
 @end

@@ -41,7 +41,7 @@
     
     _btnTitle = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnTitle setTitle:@"提问" forState:UIControlStateNormal];
-    _btnTitle.titleLabel.font = XCFONT(15);
+    _btnTitle.titleLabel.font = XCFONT(24);
     _btnTitle.frame = Rect(3, 3, 90, 40);
     [_btnTitle setTitleColor:UIColorFromRGB(0x000000) forState:UIControlStateNormal];
     [UIImageFactory createBtnImage:@"chatRightView1" btn:_btnTitle state:UIControlStateNormal];
@@ -49,6 +49,10 @@
     inset.left -= 20;
     _btnTitle.imageEdgeInsets = inset;
     [liveQuestion addSubview:_btnTitle];
+    
+    UILabel *lineTemp1 = [[UILabel alloc] initWithFrame:Rect(0, 43.5, kScreenWidth, 0.5)];
+    [lineTemp1 setBackgroundColor:COLOR_Line_Small_Gay];
+    [self addSubview:lineTemp1];
     
     _btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnRight setTitle:@"取消" forState:UIControlStateNormal];
@@ -74,7 +78,7 @@
     [lblTest1 setFont:XCFONT(14)];
     [liveQuestion addSubview:lblTest1];
     
-    _txtName = [[UITextField alloc] initWithFrame:Rect(lblTest1.x+lblTest1.width+5, lblTest1.y,kScreenWidth-lblTest1.x-lblTest1.width-10, 20)];
+    _txtName = [[UITextField alloc] initWithFrame:Rect(lblTest1.x+lblTest1.width+8, lblTest1.y,kScreenWidth-lblTest1.x-lblTest1.width-10, 20)];
     [liveQuestion addSubview:_txtName];
     [_txtName setPlaceholder:@"个股代号/拼音/名称"];
     [_txtName setFont:XCFONT(14)];

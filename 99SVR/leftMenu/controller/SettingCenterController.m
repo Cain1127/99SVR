@@ -118,12 +118,7 @@
     [logoutBtn setTitle:@"退出" forState:UIControlStateNormal];
     [logoutBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [logoutBtn setTitleColor:UIColorFromRGB(0x629bff) forState:UIControlStateHighlighted];
-    [logoutBtn setImage:[UIImage imageNamed:@"exit_n"] forState:UIControlStateNormal];
-    [logoutBtn setImage:[UIImage imageNamed:@"exit"] forState:UIControlStateHighlighted];
-    
-    UIEdgeInsets btnInsets = logoutBtn.imageEdgeInsets;
-    btnInsets.left -= 10;
-    logoutBtn.imageEdgeInsets = btnInsets;
+
     lblContent.hidden = YES;
     logoutBtn.hidden = YES;
     __weak SettingCenterController *__self = self;

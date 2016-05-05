@@ -21,7 +21,7 @@
     [imgView setImage:image];
     
     UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, imgView.y+imgView.height+5, kScreenWidth, 20)];
-    [lblName setTextColor:UIColorFromRGB(0x4c4c4c)];
+    [lblName setTextColor:UIColorFromRGB(0x919191)];
     [view addSubview:lblName];
     [lblName setFont:XCFONT(15)];
     [lblName setText:strMsg];

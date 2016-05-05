@@ -17,6 +17,7 @@ void string2timestamp(const std::string &str,std::string &retStr)
 	//20160421035614
 	if(str.size() != 14)
 	{
+		retStr = str;
 		return;
 	}
 

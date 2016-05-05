@@ -35,6 +35,8 @@
     btnRight.frame = Rect(10,tableView.y+tableView.height+20, kScreenWidth-20, 40);
     [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [btnRight addTarget:self action:@selector(rightItemClick) forControlEvents:UIControlEventTouchUpInside];
+    btnRight.layer.cornerRadius = 2.5;
+    btnRight.layer.masksToBounds = YES;
 }
 
 /**

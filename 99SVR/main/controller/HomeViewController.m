@@ -140,7 +140,7 @@ typedef enum : NSUInteger
     [self createScroll];
     [self createPage];
     [self initTableView];
-    [self.view makeToastActivity_bird_bird];
+    [self.view makeToastActivity_bird];
     ///添加MJ头部刷新
     [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [_tableView.gifHeader loadDefaultImg];

@@ -8,6 +8,7 @@
 
 #import "XTraderViewController.h"
 #import "StockHomeTableViewModel.h"
+#import "UIViewController+EmpetViewTips.h"
 #import "ViewNullFactory.h"
 #import "TableViewFactory.h"
 #import "MJRefresh.h"
@@ -31,12 +32,25 @@
 @end
 
 @implementation XTraderViewController
-- (void)loadView{
+- (void)loadView
+{
     self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
 }
+
+- (void)addNotice
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+}
+
+- (void)removeNotice
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)reloadModel:(RoomHttp *)room
 {
     _room = room;
+    [self addNotice];
     [_totalTab.header beginRefreshing];
 }
 
@@ -46,24 +60,12 @@
     _room = room;
     return self;
 }
-- (void)viewDidLoad
-{
+
+- (void)viewDidLoad {
     [super viewDidLoad];
+    [self addNotice];
     [self initData];
     [self initUi];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
-    [self.totalTab.gifHeader beginRefreshing];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -73,48 +75,40 @@
 #pragma mark initUi
 -(void)initUi{
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    [self.view addSubview:self.totalTab];
-
 }
 
 #pragma mark initData
 -(void)initData{
-    
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    //total
-
+    WeakSelf(self);
     @WeakObj(self)
-    [self.totalTab addGifHeaderWithRefreshingBlock:^{
-        selfWeak.refreshState = MJRefreshState_Header;
-        selfWeak.totalPagInteger = 1;
-        [kHTTPSingle RequestOperateStockProfitByAll:[selfWeak.room.teamid intValue] start:(int)selfWeak.totalPagInteger count:10];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+   [self.totalTab addGifHeaderWithRefreshingBlock:^{
+       @StrongObj(self)
+        weakSelf.refreshState = MJRefreshState_Header;
+        weakSelf.totalPagInteger = 1;
+        [kHTTPSingle RequestOperateStockProfitByAll:[self.room.teamid intValue] start:(int)weakSelf.totalPagInteger count:10];
     }];
     
     [self.totalTab addLegendFooterWithRefreshingBlock:^{
-        selfWeak.refreshState = MJRefreshState_Footer;
-        selfWeak.totalPagInteger ++;
-        [kHTTPSingle RequestOperateStockProfitByAll:[selfWeak.room.teamid intValue] start:(int)selfWeak.totalPagInteger count:10];
+        @StrongObj(self)
+        weakSelf.refreshState = MJRefreshState_Footer;
+        weakSelf.totalPagInteger ++;
+        [kHTTPSingle RequestOperateStockProfitByAll:[self.room.teamid intValue] start:(int)weakSelf.totalPagInteger count:10];
     }];
+    
     [self.totalTab.gifHeader loadDefaultImg];
+    Loading_Bird_Show(self.totalTab);
+    
+    [self.totalTab.gifHeader beginRefreshing];
+    self.totalTab.footer.hidden = YES;
+    
+    
 }
 
+#pragma mark 刷新数据
 -(void)refreshTotalData:(NSNotification *)notfi{
-    @WeakObj(self)
-    NSDictionary *dict = notfi.object;
-    if ([dict isKindOfClass:[NSDictionary class]]) {
-        @WeakObj(dict)
-        dispatch_async(dispatch_get_main_queue(),^{
-            @StrongObj(self)
-            [self refreshTableDataWithTable:self.totalTab WithTableViewModel:self.totalTableViewModel fromDataDic:dictWeak toDataArray:self.totalDataArray];
-        });
-    }else
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [selfWeak.totalTab.header endRefreshing];
-            [selfWeak.totalTab.footer endRefreshing];
-        });
-    }
+    
+    [self refreshTableDataWithTable:self.totalTab WithTableViewModel:self.totalTableViewModel fromDataDic:(NSDictionary *)notfi.object toDataArray:self.totalDataArray];
 }
 /**
  *  刷新数据
@@ -128,48 +122,54 @@
     
     Loading_Bird_Hide(table);
     
-    NSString *code = [NSString stringWithFormat:@"%@",fromDataDic[@"code"]];
-    
-    if ([code isEqualToString:@"1"]) {//请求成功
-        
-        if (self.refreshState == MJRefreshState_Header) {//头部刷新需要清空数据
-            [toDataArray removeAllObjects];
-        }
-        
-        
-        NSArray *fromDataArray = fromDataDic[@"data"];
-        
-        if ([fromDataArray  count]==0) {
-            [table.footer noticeNoMoreData];
-            [UIView animateWithDuration:1 animations:^{
-                table.footer.hidden = YES;
-            }];
-        }else{
-            table.footer.hidden = NO;
-            [table.footer resetNoMoreData];
-        }
-        [table.gifHeader endRefreshing];
-        [table.footer endRefreshing];
-        
-        for (int i=0; i!=[fromDataArray  count]; i++) {
-            [toDataArray addObject:fromDataArray[i]];
-        }
-    }else{//请求失败
-        
-        table.footer.hidden = YES;
-        [table.gifHeader endRefreshing];
-        [table.footer endRefreshing];
-        
-    }
-    
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSString *code = [NSString stringWithFormat:@"%@",fromDataDic[@"code"]];
+        if ([code isEqualToString:@"1"]) {//请求成功
+            
+            if (self.refreshState == MJRefreshState_Header) {//头部刷新需要清空数据
+                [toDataArray removeAllObjects];
+            }
+            
+            
+            NSArray *fromDataArray = fromDataDic[@"data"];
+            
+            if ([fromDataArray  count]==0) {
+                [table.footer noticeNoMoreData];
+                [UIView animateWithDuration:1 animations:^{
+                    table.footer.hidden = YES;
+                }];
+            }else{
+                table.footer.hidden = NO;
+                [table.footer resetNoMoreData];
+            }
+            
+            [table.gifHeader endRefreshing];
+            [table.footer endRefreshing];
+            
+            for (int i=0; i!=[fromDataArray  count]; i++) {
+                [toDataArray addObject:fromDataArray[i]];
+            }
+            
+            
+            
+        }else{//请求失败
+            
+            table.footer.hidden = YES;
+            [table.gifHeader endRefreshing];
+            [table.footer endRefreshing];
+            
+        }
+        
         [tableModel setDataArray:toDataArray];
         [table reloadData];
+        
+        [self chickEmptyViewShowWithTab:table withData:toDataArray withCode:code];
+        
     });
     
-    [self chickEmptyViewShow:toDataArray withCode:code];
+    
 }
-
 
 -(NSMutableArray *)totalDataArray{
     
@@ -183,7 +183,7 @@
 -(UITableView *)totalTab{
     
     if (!_totalTab) {
-        _totalTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,ScreenHeight} withStyle:UITableViewStylePlain];
+        _totalTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,self.view.height} withStyle:UITableViewStylePlain];
         _totalTab.delegate = self.totalTableViewModel;
         _totalTab.dataSource = self.totalTableViewModel;
     }
@@ -198,38 +198,29 @@
 }
 
 #pragma mark 请求成功时候-检测是否出现提示图
--(void)chickEmptyViewShow:(NSMutableArray *)dataArray withCode:(NSString *)code{
+-(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSString *)code{
     
-    BOOL requestBool = [code isEqualToString:@"1"] ? YES : NO;
+    WeakSelf(self);
     
-    if (requestBool) {//请求成功
+    if (dataArray.count==0&&[code intValue]!=1) {//数据为0 请求失败
         
-        if (dataArray.count ==0) {//不存在数据时候
-            
-            if (dataArray == self.totalDataArray) {
-                self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"text_blank_page@3x.png"] msg:RequestState_EmptyStr(@"总收益")];
-                [self.totalTab addSubview:self.totalEmptyView];
-            }
-        }else{//存在数据
-            if (self.totalEmptyView) {
-                [self.totalEmptyView removeFromSuperview];
-            }
-        }
-    }else{
-        //请求失败
-        if (self.totalEmptyView) {
-            [self.totalEmptyView removeFromSuperview];
-        }
+        [self showErrorViewInView:tab withMsg:[NSString stringWithFormat:@"网络请求失败%@,点击重新请求",code] touchHanleBlock:^{
+            Loading_Bird_Show(weakSelf.totalTab);
+            [weakSelf.totalTab.gifHeader beginRefreshing];
+        }];
+    }else if (dataArray.count==0&&[code intValue]==1){//数据为0 请求成功
+        [self showEmptyViewInView:tab withMsg:[NSString stringWithFormat:@"暂无数据"] touchHanleBlock:^{
+            Loading_Bird_Show(weakSelf.totalTab);
+            [weakSelf.totalTab.gifHeader beginRefreshing];
+        }];
         
-        if (dataArray.count==0) {
-            self.totalEmptyView = [ViewNullFactory createViewBg:self.totalTab.bounds imgView:[UIImage imageNamed:@"network_anomaly_fail"] msg:RequestState_NetworkErrorStr(code)];
-            [self.totalTab addSubview:self.totalEmptyView];
-        }else{
-            
-        }
+    }else{//请求成功
+        
+        [self hideEmptyViewInView:tab];
+        
     }
+    
 }
-
 
 -(UITableView *)createTableViewWithFrame:(CGRect)frame withStyle:(UITableViewStyle)style{
     UITableView *tableView = [[UITableView alloc]initWithFrame:frame style:style];
@@ -241,7 +232,6 @@
 -(void)dealloc{
     
     DLog(@"释放");
-    
     
 }
 

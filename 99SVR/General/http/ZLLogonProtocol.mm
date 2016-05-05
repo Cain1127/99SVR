@@ -102,6 +102,11 @@ void ZLHallListener::OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info)
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VIEW_DETAILS_GIFT_VC object:dict];
 }
 
+void ZLHallListener::OnViewpointTradeGiftErr(ErrCodeResp& info)
+{
+    
+}
+
 void ZLHallListener::OnSetUserPwdResp(SetUserPwdResp& info)
 {
     DLog(@"error:%d",info.errorid());
@@ -462,7 +467,7 @@ void ZLLogonProtocol::sendGift(int giftId,int num){
     video_room->SendMsg_TradeGiftReq(req);
 }
 
-void ZLLogonProtocol::sendGiftInfo(int giftId, int num, int toUser, const char *name,int roomId)
+void ZLLogonProtocol::sendGiftInfo(int viewid, int giftId, int num, int toUser,int roomId)
 {
     ViewpointTradeGiftReq req;
     req.set_teamid(toUser);
@@ -470,7 +475,8 @@ void ZLLogonProtocol::sendGiftInfo(int giftId, int num, int toUser, const char *
     req.set_giftnum(num);
     req.set_roomid(roomId);
     req.set_userid(KUserSingleton.nUserId);
-    video_room->SendMsg_ViewpointTradeGiftReq(req);
+    req.set_viewid(viewid);
+    conn->SendMsg_ViewpointTradeGiftReq(req);
 }
 
 void ZLLogonProtocol::buyPrivateVip(int teacherId,int type)
@@ -483,9 +489,9 @@ void ZLLogonProtocol::requestRoomMsg()
     video_room->SendMsg_AfterJoinRoomReq();
 }
 
-void ZLLogonProtocol::colletRoomInfo(int roomId)
+void ZLLogonProtocol::colletRoomInfo(int action)
 {
-    
+    video_room->SendMsg_CollectRoomReq(action);
 }
 
 //**********************************************************************************

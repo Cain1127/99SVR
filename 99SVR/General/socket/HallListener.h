@@ -76,6 +76,10 @@ public:
 
 	//观点赠送礼物响应
 	virtual void OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info) = 0;
+
+	//观点赠送礼物失败
+	virtual void OnViewpointTradeGiftErr(ErrCodeResp& info) = 0;
+	
 };
 
 #endif

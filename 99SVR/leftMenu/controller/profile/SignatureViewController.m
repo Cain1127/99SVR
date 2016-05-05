@@ -9,7 +9,7 @@
 #import "SignatureViewController.h"
 #import "ZLLogonServerSing.h"
 #import "UserInfo.h"
-
+#import "UITextView+Placeholder.h"
 @interface SignatureViewController ()<UITextFieldDelegate>
 
 ///最新签名信息输入框
@@ -65,6 +65,8 @@
     [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
     [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     [self.view addSubview:btnRight];
+    btnRight.layer.cornerRadius = 2.5;
+    btnRight.layer.masksToBounds = YES;
     self.commitBtn = btnRight;
     [self checkLogBtnIsEnableWithText:self.signatureTextField.text];
     btnRight.frame = Rect(10,_signatureTextField.y+_signatureTextField.height+30, kScreenWidth-20, 40);

@@ -16,4 +16,7 @@
 
 - (void)reloadModel:(RoomHttp *)room;
 
+- (void)addNotice;
+- (void)removeNotice;
+
 @end

@@ -25,6 +25,18 @@
     return btn;
 }
 
++ (UIButton *)createChatButton:(CGRect)frame
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setBackgroundColor:UIColorFromRGB(0xffffff)];
+    btn.layer.borderWidth = 1;
+    btn.layer.borderColor = UIColorFromRGB(0xe5e5e5).CGColor;
+    btn.layer.masksToBounds = YES;
+    btn.layer.cornerRadius = 22;
+    btn.frame = frame;
+    return btn;
+}
+
 - (UIScrollView *)createChatScroll:(CGRect)frame{
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:frame];
     scrollView.clipsToBounds = YES;
@@ -45,7 +57,7 @@
     [self addSubview:_scrollView];
     CGRect buttonFrame = Rect(5, 6, 44, 44);
     for (int i=0; i<5; i++) {
-        UIButton *btnQuestion = [ChatRightView createButton:buttonFrame];
+        UIButton *btnQuestion = [ChatRightView createChatButton:buttonFrame];
         if (i==1) {
             btnQuestion.cjr_acceptEventInterval = 3;
         }
@@ -56,7 +68,7 @@
         NSString *strName = [NSString stringWithFormat:@"chatRightView%d",i+1];
         [UIImageFactory createBtnImage:strName btn:btnQuestion state:UIControlStateNormal];
         [_scrollView addSubview:btnQuestion];
-        buttonFrame.origin.y+=50;
+        buttonFrame.origin.y+=59;
         btnQuestion.tag = i+1;
         [btnQuestion addTarget:self action:@selector(addEvent:) forControlEvents:UIControlEventTouchUpInside];
     }

@@ -86,6 +86,7 @@
 - (void)reloadModel:(RoomHttp *)room
 {
     _room = room;
+    [_ffPlay setRoomId:[_room.roomid intValue]];
     [self roomChatMSg];
     [self roomListNotice];
     [self roomChatPriMsg];
@@ -194,6 +195,7 @@
     _ffPlay = [[LivePlayViewController alloc] init];
     [self.view addSubview:_ffPlay.view];
     _ffPlay.view.frame = Rect(0,0, kScreenWidth, kScreenHeight);
+    [_ffPlay setRoomId:[_room.roomid intValue]];
     [self addChildViewController:_ffPlay];
     [_ffPlay setRoomName:_room.teamname];
     

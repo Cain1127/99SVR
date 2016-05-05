@@ -45,7 +45,7 @@
     imgMicView = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth-50, 10, 17, 17)];
     [self.contentView addSubview:imgMicView];
     
-    lblLine = [[UILabel alloc] initWithFrame:Rect(10, 59, kScreenWidth-10, 0.5)];
+    lblLine = [[UILabel alloc] initWithFrame:Rect(8, 59, kScreenWidth-16, 0.5)];
     [self.contentView addSubview:lblLine];
     [lblLine setBackgroundColor:UIColorFromRGB(0xF0F0F0)];
     return self;

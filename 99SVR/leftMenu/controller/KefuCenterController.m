@@ -56,7 +56,7 @@
     }
     else
     {
-        [self.view makeToastActivity_bird_bird];
+        [self.view makeToastActivity_bird];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoList:) name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
         [kHTTPSingle RequestTeamList];
     }

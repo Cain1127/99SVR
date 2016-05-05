@@ -48,8 +48,6 @@
     tableView.dataSource = self;
     tableView.bounces = NO;
     tableView.backgroundColor = kTableViewBgColor;
-    tableView.tableHeaderView = [self setupTableHeaderView];
-    tableView.tableFooterView = [[UIView alloc] init];
     [self.view addSubview:tableView];
     self.tableView = tableView;
 }
@@ -129,8 +127,8 @@
     else if(indexPath.row == 2){
         cell.textLabel.text = @"签名";
         cell.detailTextLabel.text = [UserInfo sharedUserInfo].strIntro;
+        cell.detailTextLabel.numberOfLines = 0;
     }
-    
     cell.selectedBackgroundView.backgroundColor = UIColorFromRGB(0xe5e5e5);
     
     return cell;
@@ -157,6 +155,11 @@
 
 #pragma mark 设置每行高度（每行高度可以不一样）
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    if(indexPath.row==2)
+    {
+        return 60;
+    }
     return 44;
 }
 

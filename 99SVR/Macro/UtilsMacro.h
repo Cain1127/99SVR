@@ -115,7 +115,7 @@ enum connectP2P
 
 #pragma mark 小鸟加载图像
 /**显示小鸟加载*/
-#define Loading_Bird_Show [[UIApplication sharedApplication].keyWindow makeToastActivity_bird_bird];
+#define Loading_Bird_Show [[UIApplication sharedApplication].keyWindow makeToastActivity_bird];
 #define Loading_Bird_Show(view) [view makeToastActivity_bird]
 /**隐藏小鸟加载*/
 #define Loading_Bird_Hide(view) [view hideToastActivity]

@@ -8,6 +8,7 @@
 
 #import "RoomChatDataSource.h"
 #import <DTCoreText/DTCoreText.h>
+#import "RoomChatNull.h"
 #import "Photo.h"
 #import "PhotoViewController.h"
 
@@ -36,6 +37,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if(_aryChat.count==0)
+    {
+        return 1;
+    }
     return _aryChat.count;
 }
 
@@ -45,6 +50,15 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if(_aryChat.count==0)
+    {
+        RoomChatNull *cell = [tableView dequeueReusableCellWithIdentifier:@"nullInfoCell"];
+        if (!cell)
+        {
+            cell = [[RoomChatNull alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"nullInfoCell"];
+        }
+        return cell;
+    }
     DTAttributedTextCell *cell = [self tableView:tableView chatPreparedCellForIndexPath:indexPath];
     return cell;
 }
@@ -82,6 +96,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (_aryChat.count==0)
+    {
+        return kScreenHeight-kRoom_head_view_height-kVideoImageHeight-44;
+    }
     DTAttributedTextCell *cell = [self tableView:tableView chatPreparedCellForIndexPath:indexPath];
     return [cell requiredRowHeightInTableView:tableView];
 }
@@ -94,8 +112,6 @@
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
         [imageView sd_setImageWithURL:attachment.contentURL];
         imageView.userInteractionEnabled = YES;
-        [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                action:@selector(showImageInfo:)]];
         return imageView;
     }
     else if([attachment isKindOfClass:[DTObjectTextAttachment class]])
@@ -143,19 +159,5 @@
     }
 }
 
-//- (void)showImageInfo:(UITapGestureRecognizer *)tapGest
-//{
-//    UIImageView *imageView = (UIImageView *)tapGest.view;
-//    if (imageView.image)
-//    {
-//        NSMutableArray *aryIndex = [NSMutableArray array];
-//        Photo *_photo = [[Photo alloc] init];
-//        _photo.nId = 0;
-//        _photo.imgName = imageView.image;
-//        [aryIndex addObject:_photo];
-//        PhotoViewController *photoControl = [[PhotoViewController alloc] initWithArray:aryIndex current:0];
-//        [photoControl show];
-//    }
-//}
 
 @end
