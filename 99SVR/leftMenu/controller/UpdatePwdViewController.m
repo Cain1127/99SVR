@@ -237,7 +237,7 @@
      {
          [selfWeak.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
+         if (dict && [[dict objectForKey:@"status"] intValue]==0)
          {
              DLog(@"dict:%@",dict);
              [selfWeak startTimer];
@@ -247,7 +247,7 @@
          }
          else
          {
-             [selfWeak.lblError setText:[dict objectForKey:@"errmsg"]];
+             [selfWeak.lblError setText:[dict objectForKey:@"info"]];
          }
      }
                             fail:^(NSError *error)
@@ -407,7 +407,7 @@
      {
          gcd_main_safe(^{[selfWeak.view hideToastActivity];});
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if(dict && [dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
+         if(dict && [dict objectForKey:@"status"] && [[dict objectForKey:@"status"] intValue]==0)
          {
              //没绑定过的，直接绑定，然后返回
              [selfWeak.navigationController popViewControllerAnimated:YES];
@@ -415,7 +415,7 @@
          }
          else
          {
-            [selfWeak.lblError setText:[dict objectForKey:@"errmsg"]];
+            [selfWeak.lblError setText:[dict objectForKey:@"info"]];
          }
      }
      fail:^(NSError *error)

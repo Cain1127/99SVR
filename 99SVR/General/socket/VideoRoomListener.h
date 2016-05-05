@@ -4,7 +4,7 @@
 #include <vector>
 #include "VideoRoomMessage.pb.h"
 #include "CommonroomMessage.pb.h"
-
+#include "LoginMessage.pb.h"
 class VideoRoomListener
 {
 public:
@@ -200,6 +200,12 @@ public:
 
 	//观点赠送礼物通知
 	virtual void OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info) = 0;
+
+	//提问响应
+	virtual void OnAskQuestionResp(AskQuestionResp& info) = 0;
+	
+	//提问响应
+	virtual void OnAskQuestionErr(ErrCodeResp& info) = 0;
 
 };
 

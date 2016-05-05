@@ -14,10 +14,13 @@ class VideoRoomConnection : public Connection
 {
 private:
 
+	uint32 main_room_id;
+
 	VideoRoomListener* room_listener;
 	VideoRoomJoinListener* room_join_listener;
 
 	void dispatch_push_message(void* body);
+	void dispatch_error_message(void* body);
 
 protected:
 
@@ -133,7 +136,13 @@ public:
 	//最强战队周榜请求
 	void SendMsg_TeamTopNReq(TeamTopNReq& req);
 
+	//提问响应
+	void SendMsg_AskQuestionReq(AskQuestionReq& req);
+
 	void close();
+
+
+	string GetVideoRoomShareUrl();
 
 	VideoRoomConnection();
 

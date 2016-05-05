@@ -489,6 +489,24 @@
     });
 }
 
++ (BOOL)isEmpty:(NSString*)strMsg
+{
+    if (!strMsg)
+    {
+        return true;
+    } else {
+        NSCharacterSet *set = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+        NSString *trimedString = [strMsg stringByTrimmingCharactersInSet:set];
+        if ([trimedString length] == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
 @end
 
 

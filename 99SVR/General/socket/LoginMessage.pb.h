@@ -329,39 +329,51 @@ private:
 public:
 
 	 inline uint32 nmessageid() { return _nmessageid; } const 
+
 	 inline void set_nmessageid(const uint32 value) { _nmessageid = value; }
 
 	 inline string& cloginid() { return _cloginid; } const 
+
 	 inline void set_cloginid(const string& value) { _cloginid = value; }
 
 	 inline uint32 nversion() { return _nversion; } const 
+
 	 inline void set_nversion(const uint32 value) { _nversion = value; }
 
 	 inline uint32 nmask() { return _nmask; } const 
+
 	 inline void set_nmask(const uint32 value) { _nmask = value; }
 
 	 inline string& cuserpwd() { return _cuserpwd; } const 
+
 	 inline void set_cuserpwd(const string& value) { _cuserpwd = value; }
 
 	 inline string& cserial() { return _cserial; } const 
+
 	 inline void set_cserial(const string& value) { _cserial = value; }
 
 	 inline string& cmacaddr() { return _cmacaddr; } const 
+
 	 inline void set_cmacaddr(const string& value) { _cmacaddr = value; }
 
 	 inline string& cipaddr() { return _cipaddr; } const 
+
 	 inline void set_cipaddr(const string& value) { _cipaddr = value; }
 
 	 inline uint32 nimstate() { return _nimstate; } const 
+
 	 inline void set_nimstate(const uint32 value) { _nimstate = value; }
 
 	 inline uint32 nmobile() { return _nmobile; } const 
+
 	 inline void set_nmobile(const uint32 value) { _nmobile = value; }
 
 	 inline string& devicemodel() { return _devicemodel; } const 
+
 	 inline void set_devicemodel(const string& value) { _devicemodel = value; }
 
 	 inline string& deviceos() { return _deviceos; } const 
+
 	 inline void set_deviceos(const string& value) { _deviceos = value; }
 
 
@@ -445,45 +457,59 @@ private:
 public:
 
 	 inline uint32 nmessageid() { return _nmessageid; } const 
+
 	 inline void set_nmessageid(const uint32 value) { _nmessageid = value; }
 
 	 inline uint32 userid() { return _userid; } const 
+
 	 inline void set_userid(const uint32 value) { _userid = value; }
 
 	 inline string& openid() { return _openid; } const 
+
 	 inline void set_openid(const string& value) { _openid = value; }
 
 	 inline string& opentoken() { return _opentoken; } const 
+
 	 inline void set_opentoken(const string& value) { _opentoken = value; }
 
 	 inline uint32 platformtype() { return _platformtype; } const 
+
 	 inline void set_platformtype(const uint32 value) { _platformtype = value; }
 
 	 inline uint32 nversion() { return _nversion; } const 
+
 	 inline void set_nversion(const uint32 value) { _nversion = value; }
 
 	 inline uint32 nmask() { return _nmask; } const 
+
 	 inline void set_nmask(const uint32 value) { _nmask = value; }
 
 	 inline string& cserial() { return _cserial; } const 
+
 	 inline void set_cserial(const string& value) { _cserial = value; }
 
 	 inline string& cmacaddr() { return _cmacaddr; } const 
+
 	 inline void set_cmacaddr(const string& value) { _cmacaddr = value; }
 
 	 inline string& cipaddr() { return _cipaddr; } const 
+
 	 inline void set_cipaddr(const string& value) { _cipaddr = value; }
 
 	 inline uint32 nimstate() { return _nimstate; } const 
+
 	 inline void set_nimstate(const uint32 value) { _nimstate = value; }
 
 	 inline uint32 nmobile() { return _nmobile; } const 
+
 	 inline void set_nmobile(const uint32 value) { _nmobile = value; }
 
 	 inline string& devicemodel() { return _devicemodel; } const 
+
 	 inline void set_devicemodel(const string& value) { _devicemodel = value; }
 
 	 inline string& deviceos() { return _deviceos; } const 
+
 	 inline void set_deviceos(const string& value) { _deviceos = value; }
 
 
@@ -547,8 +573,6 @@ public:
 	}
 
 };
-
-
 
 
 class UserLogonErr

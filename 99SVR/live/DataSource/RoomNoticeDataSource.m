@@ -58,6 +58,7 @@
         {
             cell = [[RoomChatNull alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"nullInfoCell"];
         }
+        cell.lblInfo.text = @"讲师没有发布公告";
         return cell;
     }
     ZLCoreTextCell *cell = [self tableView:tableView preparedCellForZLIndexPath:indexPath];

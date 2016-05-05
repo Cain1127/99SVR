@@ -62,9 +62,9 @@ namespace protocol
 		ERR_CODE_FAILED_KEYWORDFOUND =      1013,   //发现关键词
 		ERR_CODE_FAILED_NOT_ENOUGH_GOLD =   1014,   //金币不足
 		ERR_CODE_FAILED_ALREADY_BUY =       1015,   //已经购买
-		ERR_CODE_FAILED_PRIVATENOTFOUND =   1016,    //没有该私人订制
+		ERR_CODE_FAILED_PRIVATENOTFOUND =   1016,   //没有该私人订制
 		ERR_CODE_FAILED_TEAMNOTFOUND =      1017,   //没有找到战队ID
-		ERR_CODE_FAILED_GIFTNOTFOUND =      1018   //没有找到礼物ID
+		ERR_CODE_FAILED_GIFTNOTFOUND =      1018    //没有找到礼物ID
 
 	};
 	
@@ -223,9 +223,11 @@ namespace protocol
 		Sub_Vchat_TeamTopNResp                              =2135,	      //最强战队周榜回应
 		Sub_Vchat_AfterJoinRoomReq                          =2136,	      //加入房间成功后请求推送信息	
 		Sub_Vchat_ViewpointTradeGiftReq                     =2137,        //观点送礼请求
-		Sub_Vchat_ViewpointTradeGiftNoty                    =2138,        //观点送礼响应
+		Sub_Vchat_ViewpointTradeGiftNoty                    =2138,        //观点送礼通知
 		Sub_Vchat_ViewpointTradeGiftResp                    =2139,        //观点送礼响应
-		
+		Sub_Vchat_AskQuestionReq                            =2140,        //提问请求
+		Sub_Vchat_AskQuestionResp                           =2141,        //提问响应
+
 		Sub_Vchat_TeacherOnMicReq                           =20000,       //    讲师上麦通知订阅用户请求
 		Sub_Vchat_PrivateVipNoty                            =20001,       //    私人订制通知订阅用户请求
 		                                                                                                                    

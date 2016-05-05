@@ -28,7 +28,6 @@
 @interface XIdeaViewController ()<XIdeaDelegate>
 {
     UIView *noView;
-    NSCache *viewCache;
 }
 /** 数据数租 */
 @property (nonatomic,strong) UITableView *tableView;
@@ -36,56 +35,49 @@
 @property (nonatomic,strong) RoomHttp *room;
 @property (nonatomic) NSInteger nCurrent;
 @property (nonatomic,strong) XIdeaDataSource *dataSource;
+
 @end
 
 @implementation XIdeaViewController
 
 static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
-- (id)initWihModel:(RoomHttp *)room
+- (id)initWithFrame:(CGRect)frame model:(RoomHttp *)room
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
     _room = room;
+    [self addNotify];
+    [self initBody];
     return self;
 }
 
 - (void)setModel:(RoomHttp *)room
 {
     _room = room;
-}
-
-- (void)loadView
-{
-    self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
-}
-
-- (void)viewDidLoad{
-    [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    viewCache = [[NSCache alloc] init];
-    [viewCache setTotalCostLimit:10];
-    [self setIdeaTableView];
-    [self.navigationController.navigationBar setHidden:YES];
+    [self addNotify];
+    [self.tableView.gifHeader beginRefreshing];
     
+}
+
+- (void)addNotify
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
+}
+
+- (void)removeNotify
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)initBody
+{
+    self.backgroundColor = [UIColor whiteColor];
+    [self setIdeaTableView];
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
-    
-    
     _nCurrent = 0;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
-   [self.tableView.gifHeader beginRefreshing];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.tableView.gifHeader beginRefreshing];
 }
 
 - (void)loadViewPoint:(NSNotification *)notify{
@@ -131,11 +123,9 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         }
         if (self.nCurrent != self.dataSource.aryModel.count && self.dataSource.aryModel.count!=0)
         {
-//            [self.tableView.footer noticeNoMoreData];
             [self.tableView.footer setHidden:YES];
         }else
         {
-//            [self.tableView.footer resetNoMoreData];
             [self.tableView.footer setHidden:NO];
         }
         [self.tableView reloadData];
@@ -160,7 +150,8 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     }
 }
 
--(void)updateRefresh {
+-(void)updateRefresh
+{
     _nCurrent = 20;
     _dataSource.aryModel = nil;
     [kHTTPSingle RequestViewpointSummary:[_room.teamid intValue] start:0 count:20];
@@ -175,9 +166,10 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     }
 }
 
--(void)setIdeaTableView {
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth,self.view.height) withStyle:UITableViewStyleGrouped];
-    [self.view addSubview:_tableView];
+-(void)setIdeaTableView
+{
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth,self.height) withStyle:UITableViewStyleGrouped];
+    [self addSubview:_tableView];
     _dataSource = [[XIdeaDataSource alloc] init];
     _dataSource.delegate = self;
     _tableView.dataSource = _dataSource;
@@ -189,7 +181,17 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)selectIdea:(TQIdeaModel *)model
 {
     TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
-    [self.navigationController pushViewController:detaileVc animated:YES];
+    [[self viewController].navigationController pushViewController:detaileVc animated:YES];
+}
+
+- (UIViewController*)viewController {
+    for (UIView* next = [self superview]; next; next = next.superview) {
+        UIResponder* nextResponder = [next nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController*)nextResponder;
+        }
+    }
+    return nil;
 }
 
 @end

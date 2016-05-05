@@ -446,7 +446,8 @@ void MyPrivateServiceListener::onResponse(vector<MyPrivateService>& infos, Team 
             service.vipLevelName = [NSString stringWithUTF8String:pack.vipLevelName().c_str()];
             service.isOpen = pack.isOpen();
             NSMutableArray *array = [NSMutableArray array];
-            for (int j = 0 ; j < pack.summaryList().size(); j++) {
+            for (int j = 0 ; j < pack.summaryList().size(); j++)
+            {
                 PrivateServiceSummary sumary = pack.summaryList()[j];
                 XPrivateSummary *priSummary = [[XPrivateSummary alloc] init];
                 priSummary.nId = sumary.id();
@@ -581,8 +582,8 @@ void TeamPrivateServiceSummaryPackListener::OnError(int errCode)
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:dict];
 }
 
-void PrivateServiceDetailListener::onResponse(PrivateServiceDetail& info){
-    
+void PrivateServiceDetailListener::onResponse(PrivateServiceDetail& info)
+{
     NSString *title = [NSString stringWithUTF8String:info.title().c_str()];
     NSString *content = [NSString stringWithUTF8String:info.content().c_str()];
     NSString *publishtime = [NSString stringWithUTF8String:info.publishtime().c_str()];
@@ -596,6 +597,7 @@ void PrivateServiceDetailListener::onResponse(PrivateServiceDetail& info){
                            @"videoname":videoname,@"attachmenturl":attachmenturl,@"attachmentname":attachmentname,@"html5url":html5url,
                            @"operatestockid":@(operatestockid)};
     XPrivateDetail *detail = [XPrivateDetail mj_objectWithKeyValues:dict];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_DETAIL_VC object:detail];
 }
 

@@ -246,7 +246,7 @@
     NSString *results=[[NSString alloc]initWithBytes:[receivedData bytes] length:[receivedData length] encoding:NSUTF8StringEncoding];
     NSDictionary *resultDict = [NSJSONSerialization JSONObjectWithData:[results dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableLeaves error:nil];
     NSLog(@"result:%@",results);
-    if([[resultDict objectForKey:@"status"] intValue]==0){
+    if([[resultDict objectForKey:@"status"] intValue]==1){
         [self.navigationController popViewControllerAnimated:YES];
         return true;
     }

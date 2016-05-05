@@ -22,6 +22,8 @@ extern SessionTokenResp login_token;
 extern JoinRoomReq join_req;
 extern JoinRoomResp room_info;
 
+extern uint32 main_room_id;
+
 class LoginConnection : public Connection
 {
 

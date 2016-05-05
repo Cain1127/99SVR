@@ -311,8 +311,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setBackGroudMode:) name:MESSAGE_ENTER_BACK_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectMedia:) name:MESSAGE_MEDIA_DISCONNECT_VC object:nil];
+
 }
 
 - (void)setBackGroudMode:(NSNotification *)notify
@@ -380,10 +379,14 @@
     [_btnFull addTarget:self action:@selector(fullPlayMode) forControlEvents:UIControlEventTouchUpInside];
     _btnShare = [self createPlayBtn:@"video_room_share_icon_n" high:@"video_room_share_icon_p"];
     [_btnShare addTarget:self action:@selector(shareInfo) forControlEvents:UIControlEventTouchUpInside];
-    _btnCollet = [self createPlayBtn:@"video_room_follow_icon_n" high:@"video_room_follow_icon_p"];
+    _btnCollet = [self createPlayBtn:@"video_room_follow_icon_n" high:@"personal_follow_icon"];
     [_btnCollet addTarget:self action:@selector(colletInfo) forControlEvents:UIControlEventTouchUpInside];
     [self updateDownHUD];
     _downHUD.alpha = 0;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setBackGroudMode:) name:MESSAGE_ENTER_BACK_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectMedia:) name:MESSAGE_MEDIA_DISCONNECT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollet:) name:MESSAGE_COLLET_RESP_VC object:nil];
 }
 
 - (void)updateDownHUD
@@ -455,8 +458,6 @@
         sender.selected = !sender.selected;
     }
 }
-
-
 
 - (void)handleDoubleTapFrom{
     [self fullPlayMode];
@@ -531,11 +532,6 @@
     
 //    lblText.hidden = NO;
 //    lblText.text = @"没有讲师上麦";
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -820,5 +816,10 @@
 }
 
 #pragma mark AVAudioSession
+
+- (void)updateCollet:(NSNotification *)notify
+{
+    
+}
 
 @end

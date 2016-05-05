@@ -15,10 +15,11 @@
 
 @end
 
-@interface XTeamPrivateController : UIViewController
+@interface XTeamPrivateController : UIView
 
 @property (nonatomic,assign) id<WhatIsDelegate> delegate;
 
+- (id)initWithFrame:(CGRect)frame model:(RoomHttp *)room;
 - (id)initWithModel:(RoomHttp*)room;
 
 - (void)setModel:(RoomHttp *)room;
