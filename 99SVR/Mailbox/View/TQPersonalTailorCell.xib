@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -24,13 +24,13 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="今日净值下跌0.7% 仓位6成昨天投机的退市博元今天选择做Ｔ，这笔交易的整体今日净值下跌0.7% 仓位6成昨天投机的退市博元今天选择做Ｔ，这笔交易的整体" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AeZ-84-ZcU">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="今日净值下跌0.7% 仓位6成昨天投机的退市博元今天选择做Ｔ，这笔交易的整体今日净值下跌0.7% 仓位6成昨天投机的退市博元今天选择做Ｔ，这笔交易的整体" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AeZ-84-ZcU">
                         <rect key="frame" x="13" y="45" width="433" height="33.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gf3-dz-tDU">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gf3-dz-tDU">
                         <rect key="frame" x="13" y="81" width="433" height="69.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2016-01-01 18:20" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ol-ab-W4E">
@@ -42,7 +42,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bne-cC-kNg">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bne-cC-kNg">
                                 <rect key="frame" x="365" y="33" width="68" height="33"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <state key="normal" title="点击查看"/>
@@ -50,7 +50,7 @@
                                     <action selector="openClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="QZq-rv-UWG"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sxH-GC-OGx">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sxH-GC-OGx">
                                 <rect key="frame" x="391" y="8" width="42" height="20.5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20.5" id="Vo8-pA-nwN"/>
@@ -66,8 +66,8 @@
                             <constraint firstAttribute="trailing" secondItem="sxH-GC-OGx" secondAttribute="trailing" id="Eng-nE-fVH"/>
                             <constraint firstItem="bne-cC-kNg" firstAttribute="top" secondItem="sxH-GC-OGx" secondAttribute="bottom" constant="5" id="Rya-MK-Z1a"/>
                             <constraint firstItem="7ol-ab-W4E" firstAttribute="top" secondItem="Gf3-dz-tDU" secondAttribute="top" id="Syc-zZ-gHX"/>
-                            <constraint firstItem="sxH-GC-OGx" firstAttribute="top" secondItem="Gf3-dz-tDU" secondAttribute="top" constant="5" id="V74-4e-UtN"/>
-                            <constraint firstAttribute="height" constant="63" id="YI5-d4-w2W"/>
+                            <constraint firstItem="sxH-GC-OGx" firstAttribute="top" secondItem="Gf3-dz-tDU" secondAttribute="top" constant="8" id="V74-4e-UtN"/>
+                            <constraint firstAttribute="height" constant="69.5" id="YI5-d4-w2W"/>
                             <constraint firstItem="7ol-ab-W4E" firstAttribute="leading" secondItem="Gf3-dz-tDU" secondAttribute="leading" id="nMD-Qo-fI4"/>
                             <constraint firstAttribute="bottom" secondItem="bne-cC-kNg" secondAttribute="bottom" constant="5" id="w7Z-dF-y8a"/>
                         </constraints>
@@ -82,10 +82,10 @@
                     <constraint firstItem="eh9-Sy-9xy" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="2w0-6S-yDy"/>
                     <constraint firstItem="Gf3-dz-tDU" firstAttribute="top" secondItem="AeZ-84-ZcU" secondAttribute="bottom" constant="5" id="6IE-87-R68"/>
                     <constraint firstItem="Gf3-dz-tDU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="8Mc-hI-VLt"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="Gf3-dz-tDU" secondAttribute="bottom" constant="5" id="HM7-D7-ROJ"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Gf3-dz-tDU" secondAttribute="bottom" constant="6" id="HM7-D7-ROJ"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Gf3-dz-tDU" secondAttribute="bottom" constant="5" id="NtY-AZ-AMf"/>
                     <constraint firstItem="AeZ-84-ZcU" firstAttribute="top" secondItem="eh9-Sy-9xy" secondAttribute="bottom" constant="8" id="OyI-4K-jCt"/>
-                    <constraint firstItem="Gf3-dz-tDU" firstAttribute="top" secondItem="AeZ-84-ZcU" secondAttribute="bottom" constant="6" id="QFV-mm-aQt"/>
+                    <constraint firstItem="Gf3-dz-tDU" firstAttribute="top" secondItem="AeZ-84-ZcU" secondAttribute="bottom" constant="2.5" id="QFV-mm-aQt"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Gf3-dz-tDU" secondAttribute="bottom" constant="5.5" id="UTK-Cx-Tk8"/>
                     <constraint firstItem="eh9-Sy-9xy" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="d31-rw-1Zs"/>
                     <constraint firstAttribute="trailingMargin" secondItem="eh9-Sy-9xy" secondAttribute="trailing" constant="10" id="huN-qt-Ecv"/>

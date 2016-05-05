@@ -12,10 +12,13 @@
 #import "MJRefresh.h"
 #import "UIViewController+EmpetViewTips.h"
 
+static NSUInteger const kPageCount = 10; // 每页显示多少条
+
 @interface CommentReplyViewController()<UITableViewDelegate,UITableViewDataSource,AnswerTableViewCellDelegate>
-/** tableView */
+
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *modelArray;
+
 @end
 
 @implementation CommentReplyViewController
@@ -43,9 +46,6 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRplayView:) name:MESSAGE_MAILREPLY_VC object:nil];
     [super viewWillAppear:animated];
-    
-    [self.view makeToastActivity_bird];
-    [self.tableView.gifHeader beginRefreshing];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -64,10 +64,13 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableFooterView = [UIView new];
     _tableView.backgroundColor = COLOR_Bg_Gay;
-    [self.view addSubview:_tableView];
-    
     [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
+    [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [_tableView.gifHeader loadDefaultImg];
+    [_tableView.gifHeader beginRefreshing];
+    
+    [self.view addSubview:_tableView];
+    [self.view makeToastActivity_bird];
 }
 
 -(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSInteger)code{
@@ -91,15 +94,21 @@
 - (void)loadRplayView:(NSNotification *)notify
 {
     NSDictionary *dict = notify.object;
-    if ([dict[@"code"] intValue]==1)
-    {
+    if ([dict[@"code"] intValue]==1) {
         NSArray *aryModel = dict[@"data"];
-        [self.modelArray removeAllObjects];
-        for (int i = 0; i < aryModel.count; i++)
-        {
-            TQAnswerModel *model = aryModel[i];
-            model.autoId = i;
+        if ([self.tableView.header isRefreshing]) { // 下拉刷新，清除原来的数据
+            [self.modelArray removeAllObjects];
+        }
+        for (TQAnswerModel *model in aryModel) {
             [self.modelArray addObject:model];
+        }
+        
+        // 隐藏上拉刷新
+        if ([self.tableView.footer isRefreshing]
+            && aryModel.count < kPageCount){
+            [self.tableView.footer setHidden:YES];
+        } else {
+            [self.tableView.footer setHidden:NO];
         }
     }
     
@@ -107,15 +116,27 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         @StrongObj(self);
         [self.view hideToastActivity];
-        [self chickEmptyViewShowWithTab:_tableView withData:self.modelArray withCode:[dict[@"code"] intValue]];
+        if ([self.tableView.header isRefreshing]) {
+            [self.tableView.header endRefreshing];
+        }else{
+            [self.tableView.footer endRefreshing];
+        }
+        [self chickEmptyViewShowWithTab:_tableView withData:(NSMutableArray *)_modelArray withCode:[dict[@"code"] intValue]];
     });
 }
 
-//开始请求.结束下拉刷新
--(void)updateRefresh
+// 开始请求.结束下拉刷新
+-(void)updateRefresh {
+    [kHTTPSingle RequestMailReply:0 count:kPageCount];
+}
+
+// 加载更多
+- (void)uploadMore
 {
-    [kHTTPSingle RequestMailReply:0 count:10];
-    [self.tableView.gifHeader endRefreshing];
+    if (_modelArray.count > 0) {
+        TQAnswerModel *model = _modelArray[_modelArray.count-1];
+        [kHTTPSingle RequestMailReply:model.ID count:kPageCount];
+    }
 }
 
 
@@ -139,7 +160,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     CGFloat LR = 12;
-    CGFloat H = 130;
+    CGFloat H = 150;
     TQAnswerModel *model = self.modelArray[indexPath.row];
     if(!model.answercontent)
     {

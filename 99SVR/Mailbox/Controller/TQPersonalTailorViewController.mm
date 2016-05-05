@@ -14,40 +14,28 @@
 #import "MJRefresh.h"
 #import "UIViewController+EmpetViewTips.h"
 
+static NSUInteger const kPageCount = 10; // 每页显示多少条
+static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
+
 @interface TQPersonalTailorViewController ()<UITableViewDataSource,UITableViewDelegate,TQPersonalTailorCellDelegate>
 
 /** 模型数组 */
-@property (nonatomic ,strong)NSArray *aryModel;
-@property (nonatomic,strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *personalArray;
+@property (nonatomic, strong) UITableView *tableView;
 
 @end
 
 @implementation TQPersonalTailorViewController
 
-static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 
 #pragma mark - 生命周期
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setTitleText:@"私人定制"];
-    
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    [_tableView setBackgroundColor:RGB(243, 243, 243)];
-    [self.view addSubview:_tableView];
-    [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
-    // cell自动计算高度
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    // 估算高度
-    self.tableView.estimatedRowHeight = 44;
-    
-    //开始刷新,注册数据接受通知
-    [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
-    [self.tableView.gifHeader loadDefaultImg];
-    [self.tableView.gifHeader beginRefreshing];
-    [self.view makeToastActivity_bird];
+    self.view.backgroundColor = COLOR_Bg_Gay;
+    // 初始化tableView
+    [self setupTableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -62,13 +50,50 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     [super viewWillDisappear:animated];
 }
 
+#pragma mark - 懒加载
+
+-(NSMutableArray *)personalArray
+{
+    if (!_personalArray) {
+        _personalArray = [NSMutableArray array];
+    }
+    return _personalArray;
+}
+
+#pragma mark - 初始化界面
+
+- (void)setupTableView
+{
+    _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight-64) style:UITableViewStylePlain];;
+    _tableView.dataSource = self;
+    _tableView.delegate=self;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.tableFooterView = [UIView new];
+    _tableView.backgroundColor = COLOR_Bg_Gay;
+    [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
+    [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
+    [_tableView.gifHeader loadDefaultImg];
+    [_tableView.gifHeader beginRefreshing];
+    [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TQPersonalTailorCell class]) bundle:nil] forCellReuseIdentifier:PersonalTailorCell];
+    
+    [self.view addSubview:_tableView];
+    [self.view makeToastActivity_bird];
+}
+
 #pragma mark - 加载数据
 
 //开始请求.结束下拉刷新
 -(void)updateRefresh {
-    //[self.view makeToastActivity_bird_bird];
-    [kHTTPSingle RequestPrivateServiceSummary:0 count:10];
-    //[self.tableView.gifHeader endRefreshing];
+    [kHTTPSingle RequestPrivateServiceSummary:0 count:kPageCount];
+}
+
+// 加载更多
+- (void)uploadMore
+{
+    if (_personalArray.count > 0) {
+        TQPersonalModel *model = _personalArray[_personalArray.count-1];
+        [kHTTPSingle RequestPrivateServiceSummary:model.ID count:kPageCount];
+    }
 }
 
 - (void)loadRplayView:(NSNotification *)notify
@@ -76,23 +101,38 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     NSDictionary *dict = notify.object;
     if ([dict[@"code"] intValue]==1) {
         NSArray *aryModel = dict[@"data"];
-        _aryModel = aryModel;
-//        __weak typeof(self) weakSelf = self;
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [weakSelf.tableView reloadData];
-//        });
+        
+        if ([self.tableView.header isRefreshing]) { // 下拉刷新，清除原来的数据
+            [self.personalArray removeAllObjects];
+        }
+        
+        for (TQPersonalModel *model in aryModel) {
+            [self.personalArray addObject:model];
+        }
+        
+        // 隐藏上拉刷新
+        if ([self.tableView.footer isRefreshing]
+            && aryModel.count < kPageCount){
+            [self.tableView.footer setHidden:YES];
+        } else {
+            [self.tableView.footer setHidden:NO];
+        }
     }
     
     @WeakObj(self);
     dispatch_async(dispatch_get_main_queue(), ^{
         @StrongObj(self);
         [self.view hideToastActivity];
-        [self.tableView.gifHeader endRefreshing];
-        [self chickEmptyViewShowWithTab:_tableView withData:(NSMutableArray *)_aryModel withCode:[dict[@"code"] intValue]];
+        if ([self.tableView.header isRefreshing]) {
+            [self.tableView.header endRefreshing];
+        }else{
+            [self.tableView.footer endRefreshing];
+        }
+        [self chickEmptyViewShowWithTab:_tableView withData:(NSMutableArray *)_personalArray withCode:[dict[@"code"] intValue]];
     });
 }
 
--(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSInteger)code{
+- (void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSInteger)code{
     [self hideEmptyViewInView:tab];
     @WeakObj(self);
     if(code!=1) {
@@ -117,6 +157,13 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     return 9;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *HeaderSectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
+    HeaderSectionView.backgroundColor = COLOR_Bg_Gay;
+    return HeaderSectionView;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0.5;
@@ -125,7 +172,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _aryModel.count;
+    return _personalArray.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -136,8 +183,8 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     
     TQPersonalTailorCell *cell = [tableView dequeueReusableCellWithIdentifier:PersonalTailorCell];
     cell.delegate = self;
-    if (_aryModel.count>indexPath.section) {
-        TQPersonalModel *personalModel = _aryModel[indexPath.section];
+    if (_personalArray.count > indexPath.section) {
+        TQPersonalModel *personalModel = _personalArray[indexPath.section];
         cell.TITLELabel.text = personalModel.title;
         cell.summaryLabel.text = personalModel.summary;
         cell.timeLabel.text = personalModel.publishtime;
@@ -156,8 +203,8 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (_aryModel.count>indexPath.section) {
-        TQPersonalModel *model = _aryModel[indexPath.section];
+    if (_personalArray.count>indexPath.section) {
+        TQPersonalModel *model = _personalArray[indexPath.section];
         XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithCustomId:model.ID];
         [self.navigationController pushViewController:detailView animated:YES];
     }
