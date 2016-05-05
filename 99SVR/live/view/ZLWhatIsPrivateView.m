@@ -9,7 +9,7 @@
 #import "ZLWhatIsPrivateView.h"
 @implementation ZLWhatIsPrivateView
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CGRect)frame withViewTag:(NSInteger)tag
 {
     self = [super initWithFrame:frame];
     
@@ -19,22 +19,28 @@
     
     [_textView setFrame:Rect(10, 10, kScreenWidth-20, frame.size.height-59)];
     
-    UIButton *btnClose = [UIButton buttonWithType:UIButtonTypeCustom];
     
     [self addSubview:_textView];
-    [self addSubview:btnClose];
     
     
-    [btnClose setTitle:@"关 闭" forState:UIControlStateNormal];
-    [btnClose setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
-    [btnClose setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
-    [btnClose setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
-    [btnClose setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
-    btnClose.titleLabel.font = XCFONT(15);
+    if (tag==0) {
+        UIButton *btnClose = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self addSubview:btnClose];
+        
+        [btnClose mas_makeConstraints:^(MASConstraintMaker *make) {
+           
+            make.top.equalTo(@(10));
+            make.right.equalTo(@(-10));
+            make.width.equalTo(@30);
+            make.height.equalTo(@30);
+        }];
+        
+        [btnClose setImage:[UIImage imageNamed:@"video_customized_close_icon"] forState:UIControlStateNormal];
+        
+        [btnClose addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
+    }
     
-    btnClose.frame = Rect(10, _textView.height+5, kScreenWidth-20, 44);
     
-    [btnClose addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
     return self;
 }
 

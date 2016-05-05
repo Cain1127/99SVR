@@ -13,7 +13,7 @@
 #import "StockDealModel.h"
 @interface TQPurchaseViewController : CustomViewController
 
-- (id)initWithTeamId:(int)nId name:(NSString *)strName;
+//- (id)initWithTeamId:(int)nId name:(NSString *)strName;
 
 @property (nonatomic , strong) StockDealModel *stockModel;
 

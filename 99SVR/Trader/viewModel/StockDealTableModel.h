@@ -9,8 +9,10 @@
 
 @protocol StockDealTableModelDelegate <NSObject>
 
-/**去购买Vip*/
+/**跳转购买Vip*/
 -(void)goBuyVipService;
+/**跳转什么是私人订制*/
+-(void)goWhatIsPrivateVc;
 /**点击头部的提示跳转*/
 -(void)didClickTableHeaderViewTag:(NSInteger)tag;
 /**点击tableView的回调跳转*/

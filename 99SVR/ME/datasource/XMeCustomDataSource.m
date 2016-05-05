@@ -53,11 +53,11 @@ static NSString *const MeCustomizedCell = @"MeCustomizedCell";
         NSString *strInfo = [NSString stringWithFormat:@"有效期:%@",model.expirationdate];
         cell.lblTime.text = strInfo;
         
-        char cBuffer[100]={0};
-        sprintf(cBuffer,"100_1");
-        NSString *strName = [NSString stringWithUTF8String:cBuffer];
-        NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
-        [cell.imgView sd_setImageWithURL:url1 placeholderImage:[UIImage imageNamed:@"default"]];
+//        char cBuffer[100]={0};
+//        sprintf(cBuffer,"100_1");
+//        NSString *strName = [NSString stringWithUTF8String:cBuffer];
+//        NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
+        [cell.imgView sd_setImageWithURL:[NSURL URLWithString:model.teamicon] placeholderImage:[UIImage imageNamed:@"default"]];
         NSString *imgName = [NSString stringWithFormat:@"customized_vip%d_icon",model.levelid];
         cell.imgLevel.image = [UIImage imageNamed:imgName];
     }

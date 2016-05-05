@@ -82,7 +82,11 @@
     lineView.backgroundColor = UIColorFromRGB(0xe5e5e5);
     [headerSectionView addSubview:lineView];
     
-    return headerSectionView;
+    if (_aryVIP.count) {
+        return headerSectionView;
+    }else{
+        return nil;
+    }
 }
 
 #pragma mark - UITableViewDelegate 代理方法

@@ -22,24 +22,29 @@
 @property (nonatomic , strong) TQPurchaseModel *headerModel;
 /**数据加载view*/
 @property (nonatomic , strong) UIView *emptyView;
-@property (nonatomic,assign) int nId;
-@property (nonatomic,copy) NSString *strName;
 @end
 
 @implementation TQPurchaseViewController
 
-- (id)initWithTeamId:(int)nId name:(NSString *)strName
-{
-    self = [super init];
-    _nId = nId;
-    return self;
-}
+//- (id)initWithTeamId:(int)nId name:(NSString *)strName
+//{
+//    self = [super init];
+//    
+//    self.stockModel = [[StockDealModel alloc]init];
+//    
+//    self.stockModel.teamid = [NSString stringWithFormat:@"%d",nId];
+//    self.stockModel.teamname = strName;
+//    
+//    return self;
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.txtTitle.text = @"兑换私人订制";
+
+    
     Loading_Bird_Show(self.tableView);
-    self.txtTitle.text = self.stockModel.teamname;
     self.dataArray = @[];
     self.automaticallyAdjustsScrollViewInsets = NO;
     //注册通知
@@ -47,15 +52,10 @@
     //购买VIP
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buyVipData:) name:MESSAGE_BUY_PRIVATE_VIP_VC object:nil];
 
-    if (_nId) {
-        [kHTTPSingle RequestBuyPrivateServicePage:_nId];
-    }
-    else
-    {
-        [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
-    }
+
+    [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
     
-//    DLog(@"讲师ID %d",[self.stockModel.teamid intValue]);
+    DLog(@"讲师ID %d",[self.stockModel.teamid intValue]);
     
     self.view.backgroundColor = COLOR_Bg_Gay;
 }
@@ -130,13 +130,7 @@
                 DLog(@"购买的vip等级%@   的战队ID = %@",model.levelid,self.stockModel.teamid);
                 [MBProgressHUD showMessage:@"Vip兑换中..."];
                 ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
-                if(_nId)
-                {
-                    [sing requestBuyPrivateVip:_nId vipType:[model.levelid intValue]];
-                }else
-                {
-                    [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[model.levelid intValue]];
-                }
+                [sing requestBuyPrivateVip:[self.stockModel.teamid intValue] vipType:[model.levelid intValue]];
             }
         }];
     }else{//需要充值
@@ -166,14 +160,7 @@
         if ([code isEqualToString:@"1"]) {//请求成功
             self.headerModel = [notfi.object valueForKey:@"headerModel"];
             self.headerModel.teamIcon = self.stockModel.teamicon;
-            if(_strName)
-            {
-                self.headerModel.teamName = _strName;
-            }
-            else{
-                self.headerModel.teamName = self.stockModel.teamname;
-            }
-            
+            self.headerModel.teamName = self.stockModel.teamname;
             [self.headerView setHeaderViewWithModel:self.headerModel];
             self.tableView.tableHeaderView = self.headerView;
             self.dataArray = [[notfi.object valueForKey:@"data"] copy];

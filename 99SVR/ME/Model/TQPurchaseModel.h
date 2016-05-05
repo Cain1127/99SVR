@@ -32,6 +32,8 @@
 @property (nonatomic , copy) NSString *actualPrice;
 /**战队头像*/
 @property (nonatomic , copy) NSString *teamIcon;
+/**限制购买的数量*/
+@property (nonatomic , copy) NSString *maxnum;
 #pragma mark 购买私人订制的
 /**股票首页*/
 - (id)initWithPrivateServiceLevelData:(void *)pData;
