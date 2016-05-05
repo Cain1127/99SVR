@@ -148,7 +148,11 @@ typedef struct _tag_MediaFrameBuffer
         return ;
     }
     int nLbs = _nFall/3;
-    NSString *addrTemp = [KUserSingleton.dictRoomMedia objectForKey:@(nLbs)];
+    NSString *addrTemp = nil;
+    if([KUserSingleton.dictRoomMedia allKeys].count>nLbs)
+    {
+        addrTemp = [KUserSingleton.dictRoomMedia objectForKey:@(nLbs)];
+    }
     if (addrTemp == nil)
     {
         NSString *strInfo = [kLbs_all_path componentsSeparatedByString:@";"][nLbs];
@@ -188,13 +192,18 @@ typedef struct _tag_MediaFrameBuffer
     }
     else
     {
+        DLog(@"temp:%@",addrTemp);
         int nIndex = _nFall+1;
+        
         NSArray *arrayIndex = [addrTemp componentsSeparatedByString:@";"];
         NSString *strAddrInfo = arrayIndex.count > nIndex ? arrayIndex[nIndex] : @"nil";
-        if ([strAddrInfo isEqualToString:@"nil"]) {
+        if ([strAddrInfo isEqualToString:@"nil"])
+        {
             _nFall= nLbs+1;
             [self getMediaHost];
-        }else{
+        }
+        else
+        {
             NSString *strAddr = [strAddrInfo componentsSeparatedByString:@":"][0];
             int nPort = [[strAddrInfo componentsSeparatedByString:@":"][1] intValue];
             [self connectIpAndPort:strAddr port:nPort];

@@ -244,7 +244,8 @@
     DLog(@"发送礼物");
     if (_delegate && [_delegate respondsToSelector:@selector(sendGift:num:)]) {
         int number = [_btnNumber.titleLabel.text intValue];
-        if (_selectView.tag>0) {
+        if (_selectView.tag>0)
+        {
             [_delegate sendGift:(int)_selectView.tag num:number];
         }
     }
