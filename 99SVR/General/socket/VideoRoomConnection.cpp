@@ -17,6 +17,7 @@ JoinRoomResp room_info;
 bool in_room;
 
 
+
 VideoRoomConnection::VideoRoomConnection(void) :
 room_join_listener(NULL), room_listener(NULL)
 {
@@ -300,6 +301,11 @@ void VideoRoomConnection::SendMsg_GetUserInfoReq(TextRoomList_mobile& head,GetUs
 void VideoRoomConnection::SendMsg_TeamTopNReq(TeamTopNReq& req)
 {
 	SEND_MESSAGE(protocol::Sub_Vchat_TeamTopNReq, req);
+}
+
+void VideoRoomConnection::SendMsg_AskQuestionReq(AskQuestionReq& req)
+{
+	SEND_MESSAGE_EX(protocol::Sub_Vchat_AskQuestionReq, req, req.questionlen());
 }
 
 void VideoRoomConnection::close(void)
@@ -780,9 +786,32 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 			ON_MESSAGE(room_listener,ViewpointTradeGiftNoty, OnViewpointTradeGiftNoty);
 			break;
 
+		//ÌáÎÊÏìÓ¦
+		case protocol::Sub_Vchat_AskQuestionResp:
+			ON_MESSAGE(room_listener,AskQuestionResp, OnAskQuestionResp);
+			break;
+
+		case protocol::Sub_Vchat_Resp_ErrCode:
+			LOG("protocol::Sub_Vchat_Resp_ErrCode");
+			dispatch_error_message(body);
+			break;
+
 		default:
 			LOG("+++++++unimplenment message+++++++:%d", sub_cmd );
 			break;
+	}
+}
+
+void VideoRoomConnection::dispatch_error_message(void* body)
+{
+	protocol::CMDErrCodeResp_t* errorinfo = (protocol::CMDErrCodeResp_t*) body;
+	switch (errorinfo->errsubcmd)
+	{
+	case protocol::Sub_Vchat_AskQuestionReq:
+		ON_MESSAGE(room_listener, ErrCodeResp, OnAskQuestionErr)
+		break;
+	default:
+		break;
 	}
 }
 

@@ -657,6 +657,18 @@ void ZLRoomListener::OnRobotTeacherIdNoty(RobotTeacherIdNoty& info)
     }
 }
 
+//Ã·Œ œÏ”¶
+void ZLRoomListener::OnAskQuestionResp(AskQuestionResp& info)
+{
+    
+}
+
+//Ã·Œ œÏ”¶
+void ZLRoomListener::OnAskQuestionErr(ErrCodeResp& info)
+{
+    
+}
+
 /**
  *  麦状态变换触发
  */

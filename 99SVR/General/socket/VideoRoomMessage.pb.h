@@ -3923,36 +3923,47 @@ private:
 public:
 
 	 inline uint32 nmessageid() { return _nmessageid; } const 
+
 	 inline void set_nmessageid(const uint32 value) { _nmessageid = value; }
 
 	 inline uint32 nvcbid() { return _nvcbid; } const 
+
 	 inline void set_nvcbid(const uint32 value) { _nvcbid = value; }
 
 	 inline uint32 teamid() { return _teamid; } const 
+
 	 inline void set_teamid(const uint32 value) { _teamid = value; }
 
 	 inline string& sname() { return _sname; } const 
+
 	 inline void set_sname(const string& value) { _sname = value; }
 
 	 inline string& sicon() { return _sicon; } const 
+
 	 inline void set_sicon(const string& value) { _sicon = value; }
 
 	 inline string& spublictime() { return _spublictime; } const 
+
 	 inline void set_spublictime(const string& value) { _spublictime = value; }
 
 	 inline uint32 ncommentcnt() { return _ncommentcnt; } const 
+
 	 inline void set_ncommentcnt(const uint32 value) { _ncommentcnt = value; }
 
 	 inline uint32 nlikecnt() { return _nlikecnt; } const 
+
 	 inline void set_nlikecnt(const uint32 value) { _nlikecnt = value; }
 
 	 inline uint32 nflowercnt() { return _nflowercnt; } const 
+
 	 inline void set_nflowercnt(const uint32 value) { _nflowercnt = value; }
 
 	 inline uint32 contlen() { return _contlen; } const 
+
 	 inline void set_contlen(const uint32 value) { _contlen = value; }
 
 	 inline string& content() { return _content; } const 
+
 	 inline void set_content(const string& value) { _content = value; }
 
 
@@ -4007,7 +4018,6 @@ public:
 	}
 
 };
-
 
 
 class TeamTopNReq
@@ -4105,6 +4115,162 @@ public:
 		LOG("vcbid = %d", _vcbid);
 		LOG("teamname = %s", _teamname.c_str());
 		LOG("giftmoney = %lld", _giftmoney);
+	}
+
+};
+
+
+class AskQuestionReq
+{
+
+private:
+
+	uint32	_roomid;
+	uint32	_userid;
+	uint32	_teamid;
+	string	_stock;
+	uint32	_questionlen;
+	string	_question;
+
+
+public:
+
+	 inline uint32 roomid() { return _roomid; } const 
+
+	 inline void set_roomid(const uint32 value) { _roomid = value; }
+
+	 inline uint32 userid() { return _userid; } const 
+
+	 inline void set_userid(const uint32 value) { _userid = value; }
+
+	 inline uint32 teamid() { return _teamid; } const 
+
+	 inline void set_teamid(const uint32 value) { _teamid = value; }
+
+	 inline string& stock() { return _stock; } const 
+
+	 inline void set_stock(const string& value) { _stock = value; }
+
+	 inline uint32 questionlen() { return _questionlen; } const 
+
+	 inline void set_questionlen(const uint32 value) { _questionlen = value; }
+
+	 inline string& question() { return _question; } const 
+
+	 inline void set_question(const string& value) { _question = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDAskQuestionReq); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDAskQuestionReq* cmd = (protocol::tag_CMDAskQuestionReq*) data;
+		cmd->roomid = _roomid;
+		cmd->userid = _userid;
+		cmd->teamid = _teamid;
+		strcpy(cmd->stock, _stock.c_str());
+		cmd->questionlen = _questionlen;
+		strcpy(cmd->question, _question.c_str());
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDAskQuestionReq* cmd = (protocol::tag_CMDAskQuestionReq*) data;
+		_roomid = cmd->roomid;
+		_userid = cmd->userid;
+		_teamid = cmd->teamid;
+		_stock = cmd->stock;
+		_questionlen = cmd->questionlen;
+		_question = cmd->question;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: AskQuestionReq---------");
+		LOG("roomid = %d", _roomid);
+		LOG("userid = %d", _userid);
+		LOG("teamid = %d", _teamid);
+		LOG("stock = %s", _stock.c_str());
+		LOG("questionlen = %d", _questionlen);
+		LOG("question = %s", _question.c_str());
+	}
+
+};
+
+
+class AskQuestionResp
+{
+
+private:
+
+	uint32	_questionid;
+	uint32	_userid;
+	uint32	_teamid;
+	string	_stock;
+	uint32	_questionlen;
+	string	_question;
+
+
+public:
+
+	 inline uint32 questionid() { return _questionid; } const 
+
+	 inline void set_questionid(const uint32 value) { _questionid = value; }
+
+	 inline uint32 userid() { return _userid; } const 
+
+	 inline void set_userid(const uint32 value) { _userid = value; }
+
+	 inline uint32 teamid() { return _teamid; } const 
+
+	 inline void set_teamid(const uint32 value) { _teamid = value; }
+
+	 inline string& stock() { return _stock; } const 
+
+	 inline void set_stock(const string& value) { _stock = value; }
+
+	 inline uint32 questionlen() { return _questionlen; } const 
+
+	 inline void set_questionlen(const uint32 value) { _questionlen = value; }
+
+	 inline string& question() { return _question; } const 
+
+	 inline void set_question(const string& value) { _question = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDAskQuestionResp); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDAskQuestionResp* cmd = (protocol::tag_CMDAskQuestionResp*) data;
+		cmd->questionid = _questionid;
+		cmd->userid = _userid;
+		cmd->teamid = _teamid;
+		strcpy(cmd->stock, _stock.c_str());
+		cmd->questionlen = _questionlen;
+		strcpy(cmd->question, _question.c_str());
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDAskQuestionResp* cmd = (protocol::tag_CMDAskQuestionResp*) data;
+		_questionid = cmd->questionid;
+		_userid = cmd->userid;
+		_teamid = cmd->teamid;
+		_stock = cmd->stock;
+		_questionlen = cmd->questionlen;
+		_question = cmd->question;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: AskQuestionResp---------");
+		LOG("questionid = %d", _questionid);
+		LOG("userid = %d", _userid);
+		LOG("teamid = %d", _teamid);
+		LOG("stock = %s", _stock.c_str());
+		LOG("questionlen = %d", _questionlen);
+		LOG("question = %s", _question.c_str());
 	}
 
 };

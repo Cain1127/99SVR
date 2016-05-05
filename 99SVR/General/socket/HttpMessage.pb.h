@@ -1032,6 +1032,7 @@ private:
 	float	_buyprice;
 	float	_updateprice;
 	uint32	_isopen;
+	uint32	_maxnum;
 
 
 public:
@@ -1068,6 +1069,10 @@ public:
 
 	 inline void set_isopen(const uint32 value) { _isopen = value; }
 
+	 inline uint32 maxnum() { return _maxnum; } const 
+
+	 inline void set_maxnum(const uint32 value) { _maxnum = value; }
+
 
 	int ByteSize() { return sizeof(protocol::tag_CMDPrivateServiceLevelDescription); }
 
@@ -1082,6 +1087,7 @@ public:
 		cmd->buyPrice = _buyprice;
 		cmd->updatePrice = _updateprice;
 		cmd->isopen = _isopen;
+		cmd->maxnum = _maxnum;
 	}
 
 	void ParseFromArray(void* data, int size)
@@ -1095,6 +1101,7 @@ public:
 		_buyprice = cmd->buyPrice;
 		_updateprice = cmd->updatePrice;
 		_isopen = cmd->isopen;
+		_maxnum = cmd->maxnum;
 	}
 
 	void Log()
@@ -1108,6 +1115,7 @@ public:
 		LOG("buyprice = %f", _buyprice);
 		LOG("updateprice = %f", _updateprice);
 		LOG("isopen = %d", _isopen);
+		LOG("maxnum = %d", _maxnum);
 	}
 
 };

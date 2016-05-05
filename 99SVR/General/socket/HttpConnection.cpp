@@ -87,6 +87,7 @@ static ThreadVoid http_request(void* _param)
 
 	char s[128];
 	param->request->insert(make_pair("client", get_client_type()));
+	param->request->insert(make_pair("token", get_user_token()));
 
 	if (param->request_method == HTTP_POST)
 	{
@@ -151,12 +152,6 @@ static void http_request_asyn(HttpListener* uiListener, ParseJson jsonPaser, Req
 
 
 
-// 讲师团队回答提问（PC端接口）
-void PostAnswer(int questionId, string content, HttpListener* listener)
-{
-
-}
-
 /******************************解析json******************************/
 
 void parse_homepage(char* json, HttpListener* listener)
@@ -175,6 +170,11 @@ void parse_homepage(char* json, HttpListener* listener)
 	std::vector<Team> vec_team;
 	std::vector<ViewpointSummary> vec_viewpoint;
 	std::vector<OperateStockProfit> vec_operate;
+
+	vec_banner.clear();
+	vec_team.clear();
+	vec_viewpoint.clear();
+	vec_operate.clear();
 	
 	try
 	{
@@ -189,7 +189,6 @@ void parse_homepage(char* json, HttpListener* listener)
 				{
 					JsonValue& banner = value["data"]["banner"];
 					
-					vec_banner.clear();
 					if(!banner.isNull())
 					{
 						size_ = banner.size();
@@ -209,7 +208,6 @@ void parse_homepage(char* json, HttpListener* listener)
 
 					JsonValue& team = value["data"]["videoroom"];
 
-					vec_team.clear();
 					if(!team.isNull())
 					{
 						size_ = team.size();
@@ -262,7 +260,6 @@ void parse_homepage(char* json, HttpListener* listener)
 
 					JsonValue& viewpoint = value["data"]["viewpoint"];
 
-					vec_viewpoint.clear();
 					if(!viewpoint.isNull())
 					{
 						size_ = viewpoint.size();
@@ -278,13 +275,15 @@ void parse_homepage(char* json, HttpListener* listener)
 							viewpointItem.set_replycount(atoi(viewpoint[i]["replyCount"].asString().c_str()));
 							viewpointItem.set_content(viewpoint[i]["contents"].asString());
 
-							//viewpointItem.set_roomid(atoi(viewpoint[i]["roomid"].asString().c_str()));
+							viewpointItem.set_roomid(atoi(viewpoint[i]["roomid"].asString().c_str()));
 
 							//viewpointItem.set_authoricon(viewpoint[i]["authorIcon"].asString());
 							std::string icon;
-							get_full_head_icon(viewpoint[i]["authorId"].asString(), icon);
+							get_full_head_icon(viewpoint[i]["authorIcon"].asString(), icon);
 							viewpointItem.set_authoricon(icon);
 							viewpointItem.set_authorname(viewpoint[i]["authorName"].asString());
+
+							viewpointItem.set_giftcount(atoi(viewpoint[i]["giftcount"].asString().c_str()));
 
 							std::string strOut;
 							string2timestamp(viewpoint[i]["publishTime"].asString(), strOut);
@@ -296,17 +295,26 @@ void parse_homepage(char* json, HttpListener* listener)
 
 					JsonValue& operate = value["data"]["operate"];
 
-					vec_operate.clear();
 					if(!operate.isNull())
 					{
 						size_ = operate.size();
 						for(i = 0; i < size_; i++)
 						{
 							OperateStockProfit operateItem;
-							operateItem.set_totalprofit(atof(operate[i]["rate"].asString().c_str()));
-							operateItem.set_focus(operate[i]["name"].asString());
-							operateItem.set_goalprofit(atof(operate[i]["target"].asString().c_str()));
-							operateItem.set_teamname(operate[i]["nickname"].asString());
+							operateItem.set_operateid(atoi(operate[i]["operateId"].asString().c_str()));
+							operateItem.set_teamid(atoi(operate[i]["teamId"].asString().c_str()));
+							operateItem.set_teamname(operate[i]["teamName"].asString());
+
+							std::string icon;
+							get_full_head_icon(operate[i]["teamIcon"].asString(), icon);
+							operateItem.set_teamicon(icon);
+
+							operateItem.set_focus(operate[i]["focus"].asString());
+							operateItem.set_goalprofit(atof(operate[i]["goalProfit"].asString().c_str()));
+							operateItem.set_totalprofit(atof(operate[i]["totalProfit"].asString().c_str()));
+							operateItem.set_dayprofit(atof(operate[i]["dayProfit"].asString().c_str()));
+							operateItem.set_monthprofit(atof(operate[i]["monthProfit"].asString().c_str()));
+							operateItem.set_winrate(atof(operate[i]["winRate"].asString().c_str()));
 
 							vec_operate.push_back(operateItem);
 						}
@@ -318,12 +326,12 @@ void parse_homepage(char* json, HttpListener* listener)
 				}
 				else
 				{
-					homepage_listener->OnError(status);
+					homepage_listener->onResponse(vec_banner, vec_team, vec_viewpoint, vec_operate);
 				}
 			}
 			else
 			{
-				homepage_listener->OnError(PERR_JSON_PARSE_ERROR);
+				homepage_listener->onResponse(vec_banner, vec_team, vec_viewpoint, vec_operate);
 			}
 		}
 		else
@@ -353,6 +361,7 @@ void parse_collectionlist(char* json, HttpListener* listener)
 	int size_ = 0;
 	int i = 0;
 
+	vec_collect.clear();
 	try
 	{
 		// 解析逻辑
@@ -370,7 +379,6 @@ void parse_collectionlist(char* json, HttpListener* listener)
 
 						size_ = data.size();
 
-						vec_collect.clear();
 						for(i = 0; i < size_; i++)
 						{
 							Team collect;
@@ -406,7 +414,7 @@ void parse_collectionlist(char* json, HttpListener* listener)
 					}
 					else
 					{
-						collection_listener->OnError(PERR_JSON_PARSE_ERROR);
+						collection_listener->onResponse(vec_collect);
 					}
 				}
 				else
@@ -443,6 +451,7 @@ void parse_operatestocks(char* json, HttpListener* listener)
 
 	OperateStocksListener* operatestockslistener = (OperateStocksListener*)listener;
 
+	operatestocks_list.clear();
 	try
 	{
 		if (reader.parse(strJson, value))
@@ -457,8 +466,6 @@ void parse_operatestocks(char* json, HttpListener* listener)
 						JsonValue& data = value["data"];
 
 						size_ = data.size();
-
-						operatestocks_list.clear();
 
 						for(i = 0; i < size_; i++)
 						{
@@ -480,7 +487,7 @@ void parse_operatestocks(char* json, HttpListener* listener)
 					}
 					else
 					{
-						operatestockslistener->OnError(PERR_JSON_PARSE_ERROR);
+						operatestockslistener->onResponse(operatestocks_list);
 					}
 				}
 				else
@@ -514,6 +521,7 @@ void parse_operatestocktransaction(char* json, HttpListener* listener)
 
 	OperateStockTransactionListener* operatestockstranlistener = (OperateStockTransactionListener*)listener;
 
+	operatestockstrans_list.clear();
 	try
 	{
 		if (reader.parse(strJson, value))
@@ -528,8 +536,6 @@ void parse_operatestocktransaction(char* json, HttpListener* listener)
 						JsonValue& data = value["data"];
 
 						size_ = data.size();
-
-						operatestockstrans_list.clear();
 
 						for(i = 0; i < size_; i++)
 						{
@@ -555,7 +561,7 @@ void parse_operatestocktransaction(char* json, HttpListener* listener)
 					}
 					else
 					{
-						operatestockstranlistener->OnError(PERR_JSON_PARSE_ERROR);
+						operatestockstranlistener->onResponse(operatestockstrans_list);
 					}
 				}
 				else
@@ -587,10 +593,9 @@ void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener)
 
 	TeamPrivateServiceSummaryPackListener* summary_listener = (TeamPrivateServiceSummaryPackListener*)listener;
 
+	summary.clear();
 	try
 	{
-		summary.clear();
-
 		if (reader.parse(strJson, value))
 		{
 			if(!value["status"].isNull())
@@ -644,7 +649,7 @@ void parse_PrivateServiceSummaryPack(char* json, HttpListener* listener)
 					}
 					else
 					{
-						summary_listener->OnError(PERR_JSON_PARSE_ERROR);
+						summary_listener->onResponse(summary);
 					}
 
 				}
@@ -676,6 +681,7 @@ void parse_privatetraderecord(char* json, HttpListener* listener)
 
 	OperateStockTradeRecordListener* detail_listener = (OperateStockTradeRecordListener*)listener;
 
+	vec_trans.clear();
 	try
 	{
 		// 解析逻辑
@@ -712,7 +718,11 @@ void parse_privatetraderecord(char* json, HttpListener* listener)
 					trans.set_price(atof((datas[i]["price"].asString()).c_str()));
 					trans.set_count(atoi((datas[i]["count"].asString()).c_str()));
 					trans.set_money(atof((datas[i]["money"].asString()).c_str()));
-					trans.set_time(datas[i]["time"].asString());
+
+					std::string strOut;
+					string2timestamp(datas[i]["time"].asString(), strOut);
+					trans.set_time(strOut);
+
 					trans.set_summary(datas[i]["summary"].asString());
 					
 					vec_trans.push_back(trans);
@@ -721,7 +731,7 @@ void parse_privatetraderecord(char* json, HttpListener* listener)
 			}
 			else
 			{
-				detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+				detail_listener->onResponse(vec_trans);
 			}
 		}
 		else
@@ -776,6 +786,14 @@ void parse_PrivateServiceDetail(char* json, HttpListener* listener)
 
 							detail_listener->onResponse(detail);
 						}
+						else
+						{
+							detail_listener->OnError(PERR_JSON_PARSE_ERROR);
+						}
+					}
+					else
+					{
+						detail_listener->OnError(PERR_JSON_PARSE_ERROR);
 					}
 				}
 				else
@@ -804,6 +822,7 @@ void parse_ViewpointSummary(char* json, HttpListener* listener)
 
 	ViewpointSummaryListener* view_listener = (ViewpointSummaryListener*)listener;
 
+	viewpoint_list.clear();
 	try
 	{
 		if (reader.parse(strJson, value))
@@ -818,8 +837,7 @@ void parse_ViewpointSummary(char* json, HttpListener* listener)
 						JsonValue& data = value["data"];
 
 						int size_ = data.size();
-
-						viewpoint_list.clear();
+						
 						for(i = 0; i < size_; i++)
 						{
 							ViewpointSummary viewpoint;
@@ -830,12 +848,13 @@ void parse_ViewpointSummary(char* json, HttpListener* listener)
 							viewpoint.set_authorname(data_item["authorname"].asString());
 
 							std::string icon;
-							get_full_head_icon(data_item["authorid"].asString(), icon);
+							get_full_head_icon(data_item["authoricon"].asString(), icon);
 							viewpoint.set_authoricon(icon);
 
 							std::string strOut;
 							string2timestamp(data_item["publishtime"].asString(), strOut);
 							viewpoint.set_publishtime(strOut);
+
 							viewpoint.set_content(data_item["content"].asString());
 							viewpoint.set_replycount(atoi(data_item["replycount"].asString().c_str()));
 							viewpoint.set_giftcount(atoi(data_item["giftcount"].asString().c_str()));
@@ -852,7 +871,7 @@ void parse_ViewpointSummary(char* json, HttpListener* listener)
 					}
 					else
 					{
-						view_listener->OnError(PERR_JSON_PARSE_ERROR);
+						view_listener->onResponse(viewpoint_list);
 					}
 				}
 				else
@@ -883,6 +902,9 @@ void parse_TeamList(char* json, HttpListener* listener)
 
 	TeamListListener* team_listener = (TeamListListener*)listener;
 
+	team_list.clear();
+	hiden_list.clear();
+	custom_service_list.clear();
 	try
 	{
 		if (reader.parse(strJson, value))
@@ -898,9 +920,6 @@ void parse_TeamList(char* json, HttpListener* listener)
 
 						int size_ = data.size();
 
-						team_list.clear();
-						hiden_list.clear();
-						custom_service_list.clear();
 						for(i = 0; i < size_; i++)
 						{
 							Team team;
@@ -913,7 +932,7 @@ void parse_TeamList(char* json, HttpListener* listener)
 							get_full_img_url(data_item["croompic"].asString(), out);
 							team.set_teamicon(out);
 							team.set_onlineusercount(data_item["ncount"].asInt());
-							team.set_teamid(data_item["ncreateid"].asInt());
+							team.set_teamid(data_item["teacherid"].asInt());
 							team.set_alias(data_item["calias"].asString());
 							team.set_locked(data_item["nusepwd"].asInt());
 
@@ -938,7 +957,7 @@ void parse_TeamList(char* json, HttpListener* listener)
 					}
 					else
 					{
-						team_listener->OnError(PERR_JSON_PARSE_ERROR);
+						team_listener->onResponse(team_list, hiden_list, custom_service_list);
 					}
 				}
 				else
@@ -984,6 +1003,10 @@ void parse_WhatIsPrivateService(char* json, HttpListener* listener)
 					what_listener->OnError(status);
 				}
 			}
+			else
+			{
+				what_listener->OnError(PERR_JSON_PARSE_ERROR);
+			}
 		}
 	}
 	catch( std::exception& ex )
@@ -1000,7 +1023,7 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
 	JsonReader reader;
 	int i,j;
 	int size_;
-	char tmp[32] = {0};
+	char tmp[64] = {0};
 	std::string sTmp;
 
 	std::vector<MyPrivateService> mps_list;
@@ -1009,6 +1032,8 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
 
 	MyPrivateServiceListener* my_listener = (MyPrivateServiceListener*)listener;
 
+	mps_list.clear();
+	summary.clear();
 	try
 	{
 		if (reader.parse(strJson, value))
@@ -1030,7 +1055,6 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
 
 						if( 0 != size_ )
 						{
-							mps_list.clear();
 							for(i = 0; i < size_; i++)
 							{
 								MyPrivateService mps;
@@ -1038,13 +1062,13 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
 								JsonValue& data_item = buylist[i];
 
 								mps.set_teamid(data_item["teacherid"].asInt());
-								mps.set_teamname(data_item["teacherid"].asString());
+								mps.set_teamname(data_item["calias"].asString());
 
 								std::string icon;
 								get_full_head_icon(data_item["nheadid"].asString(), icon);
 								mps.set_teamicon(icon);
 
-								mps.set_levelid(data_item["viplevel"].asInt());
+								mps.set_levelid(data_item["viptype"].asInt());
 								mps.set_levelname(data_item["vipinfoname"].asString());
 
 								std::string strOut1, strOut2;
@@ -1058,7 +1082,7 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
 							}
 						}
 						else
-						{
+						{/*
 							size_ = recommend.size();
 
 							for(i = 0; i < size_; i++)
@@ -1100,7 +1124,7 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
 							std::string icon;
 							get_full_head_icon(team["headid"].asString(), icon);
 							teamItem.set_teamicon(icon);
-						}
+						*/}
 						
 						my_listener->onResponse(mps_list, teamItem, summary);
 					}
@@ -1114,11 +1138,15 @@ void parse_MyPrivateService(char* json, HttpListener* listener)
 					my_listener->OnError(status);
 				}
 			}
+			else
+			{
+				my_listener->OnError(PERR_JSON_PARSE_ERROR);
+			}
 		}
 	}
 	catch( std::exception& ex )
 	{
-		my_listener->OnError(PERR_JSON_PARSE_ERROR);
+		//my_listener->OnError(PERR_JSON_PARSE_ERROR);
 	}
 }
 
@@ -1136,6 +1164,7 @@ void parse_BuyPrivateService(char* json, HttpListener* listener)
 
 	BuyPrivateServiceListener* buy_listener = (BuyPrivateServiceListener*)listener;
 
+	psld_list.clear();
 	try
 	{
 		// 解析逻辑
@@ -1153,7 +1182,6 @@ void parse_BuyPrivateService(char* json, HttpListener* listener)
 
 						int size_ = data.size();
 
-						psld_list.clear();
 						for(i = 0; i < size_; i++)
 						{
 							PrivateServiceLevelDescription psld;
@@ -1167,8 +1195,14 @@ void parse_BuyPrivateService(char* json, HttpListener* listener)
 							psld.set_updateprice(data_item["upgrade_price"].asFloat());
 
 							psld.set_isopen(data_item["flag"].asInt());
-							psld.set_buytime(data_item["buytime"].asString());
-							psld.set_expirtiontime(data_item["expirtiontime"].asString());
+							psld.set_maxnum(data_item["maxnum"].asInt());
+
+							std::string strOut1,strOut2;
+							string2timestamp(data_item["buytime"].asString(), strOut1);
+							string2timestamp(data_item["expirtiontime"].asString(), strOut2);
+
+							psld.set_buytime(strOut1);
+							psld.set_expirtiontime(strOut2);
 							
 							psld_list.push_back(psld);
 						}
@@ -1177,7 +1211,7 @@ void parse_BuyPrivateService(char* json, HttpListener* listener)
 					}
 					else
 					{
-						buy_listener->OnError(PERR_JSON_PARSE_ERROR);
+						buy_listener->onResponse(psld_list);
 					}
 				}
 				else
@@ -1185,6 +1219,10 @@ void parse_BuyPrivateService(char* json, HttpListener* listener)
 					buy_listener->OnError(status);
 				}
 			}
+		}
+		else
+		{
+			buy_listener->OnError(PERR_JSON_PARSE_ERROR);
 		}
 	}
 	catch ( std::exception& ex)
@@ -1208,6 +1246,7 @@ void parse_consumerank(char* json, HttpListener* listener)
 
 	ConsumeRankListener* consumerank_listener = (ConsumeRankListener*)listener;
 
+	vec_consume.clear();
 	try
 	{
 		// 解析逻辑
@@ -1231,7 +1270,7 @@ void parse_consumerank(char* json, HttpListener* listener)
 			if(!consumes.isNull())
 			{
 				size_ = consumes.size();
-				vec_consume.clear();
+
 				for(i = 0; i < size_; i++)
 				{
 					ConsumeRank consume;
@@ -1249,7 +1288,7 @@ void parse_consumerank(char* json, HttpListener* listener)
 			}
 			else
 			{
-				consumerank_listener->OnError(PERR_JSON_PARSE_ERROR);
+				consumerank_listener->onResponse(vec_consume);
 			}
 		}
 		else
@@ -1277,6 +1316,7 @@ void parse_viewpoint(char* json, HttpListener* listener)
 
 	ViewpointSummaryListener* viewpoint_listener = (ViewpointSummaryListener*)listener;
 
+	vec_viewpoint.clear();
 	try
 	{
 		// 解析逻辑
@@ -1300,7 +1340,7 @@ void parse_viewpoint(char* json, HttpListener* listener)
 			if(!viewpoints.isNull())
 			{
 				size_ = viewpoints.size();
-				vec_viewpoint.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					ViewpointSummary viewpoint;
@@ -1332,7 +1372,7 @@ void parse_viewpoint(char* json, HttpListener* listener)
 			}
 			else
 			{
-				viewpoint_listener->OnError(PERR_JSON_PARSE_ERROR);
+				viewpoint_listener->onResponse(vec_viewpoint);
 			}
 		}
 		else
@@ -1354,9 +1394,11 @@ void parse_viewpointdetail(char* json, HttpListener* listener)
 
 	ViewpointDetailListener* detail_listener = (ViewpointDetailListener*)listener;
 	std::vector<ImageInfo> img_list;
+	ViewpointDetail detail;
 	int size_ = 0;
 	int i = 0;
 
+	img_list.clear();
 	try
 	{
 		// 解析逻辑
@@ -1379,7 +1421,6 @@ void parse_viewpointdetail(char* json, HttpListener* listener)
 			JsonValue& details = value["data"];
 			if(!details.isNull())
 			{
-				ViewpointDetail detail;	
 				detail.set_viewpointid(atoi((details["viewpointId"].asString()).c_str()));
 				detail.set_authorid(atoi(details["teacherid"].asString().c_str()));
 				detail.set_roomid(atoi(details["authorId"].asString().c_str()));
@@ -1393,10 +1434,11 @@ void parse_viewpointdetail(char* json, HttpListener* listener)
 				string2timestamp(details["publishTime"].asString(), strOut);
 				detail.set_publishtime(strOut);
 
-				detail.set_title(details["title"].asString());		
-				detail.set_content(details["content"].asString());			
+				detail.set_title(details["title"].asString());
+				detail.set_content(details["content"].asString());
 				detail.set_replycount(atoi((details["replyCount"].asString()).c_str()));
 				detail.set_giftcount(atoi((details["giftcount"].asString()).c_str()));
+				detail.set_html5url(details["share_link"].asString());
 
 				size_ = details["pic"].size();
 				img_list.clear();
@@ -1446,6 +1488,7 @@ void parse_viewpointreply(char* json, HttpListener* listener)
 
 	ReplyListener* reply_listener = (ReplyListener*)listener;
 
+	vec_reply.clear();
 	try
 	{
 		// 解析逻辑
@@ -1469,7 +1512,7 @@ void parse_viewpointreply(char* json, HttpListener* listener)
 			if(!replys.isNull())
 			{
 				size_ = replys.size();
-				vec_reply.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					Reply reply;
@@ -1480,7 +1523,7 @@ void parse_viewpointreply(char* json, HttpListener* listener)
 					reply.set_authorname(replys[i]["authorName"].asString());
 
 					std::string icon;
-					get_full_head_icon(replys[i]["authorId"].asString(), icon);
+					get_full_head_icon(replys[i]["authorIcon"].asString(), icon);//////////////////////////////////////
 					reply.set_authoricon(icon);
 
 					reply.set_fromauthorid(atoi(replys[i]["fromAuthorId"].asString().c_str()));
@@ -1488,7 +1531,11 @@ void parse_viewpointreply(char* json, HttpListener* listener)
 
 					get_full_head_icon(replys[i]["fromAuthorIcon"].asString(), icon);
 					reply.set_fromauthoricon(icon);
-					reply.set_publishtime(replys[i]["publishTime"].asString());			
+
+					std::string strOut;
+					string2timestamp(replys[i]["publishTime"].asString(), strOut);
+					reply.set_publishtime(strOut);
+					
 					reply.set_content(replys[i]["content"].asString());
 
 					vec_reply.push_back(reply);
@@ -1498,7 +1545,7 @@ void parse_viewpointreply(char* json, HttpListener* listener)
 			}
 			else
 			{
-				reply_listener->OnError(PERR_JSON_PARSE_ERROR);
+				reply_listener->onResponse(vec_reply);
 			}
 		}
 		else
@@ -1520,6 +1567,8 @@ void parse_postreply(char* json, HttpListener* listener)
 	JsonReader reader;
 
 	PostReplyListener* reply_listener = (PostReplyListener*)listener;
+
+	Reply reply;
 
 	try
 	{
@@ -1543,7 +1592,6 @@ void parse_postreply(char* json, HttpListener* listener)
 			JsonValue& replys = value["data"];
 			if(!replys.isNull())
 			{
-				Reply reply;	
 				reply.set_replytid(atoi((replys["replytId"].asString()).c_str()));
 				reply.set_viewpointid(atoi((replys["viewpointId"].asString()).c_str()));
 				reply.set_parentreplyid(atoi((replys["parentReplyId"].asString()).c_str()));
@@ -1551,7 +1599,7 @@ void parse_postreply(char* json, HttpListener* listener)
 				reply.set_authorname(replys["authorName"].asString());
 
 				std::string icon;
-				get_full_head_icon(replys["authorId"].asString(), icon);
+				get_full_head_icon(replys["authorIcon"].asString(), icon);   ////////////////////////////
 				reply.set_authoricon(icon);
 				
 				reply.set_fromauthorid(atoi(replys["fromAuthorId"].asString().c_str()));
@@ -1559,7 +1607,11 @@ void parse_postreply(char* json, HttpListener* listener)
 
 				get_full_head_icon(replys["fromAuthorIcon"].asString(), icon);
 				reply.set_fromauthoricon(icon);
-				reply.set_publishtime(replys["publishTime"].asString());			
+
+				std::string strOut;
+				string2timestamp(replys["publishTime"].asString(), strOut);
+				reply.set_publishtime(strOut);
+				
 				reply.set_content(replys["content"].asString());				
 
 
@@ -1568,7 +1620,7 @@ void parse_postreply(char* json, HttpListener* listener)
 			}
 			else
 			{
-				reply_listener->OnError(PERR_JSON_PARSE_ERROR);
+				reply_listener->onResponse(0,reply);
 			}
 		}
 		else
@@ -1614,7 +1666,7 @@ void parse_totalunreadcount(char* json, HttpListener* listener)
 			if(!datas.isNull())
 			{
 				TotalUnread unread;
-				unread.set_total(atoi((datas["tips"]["total"].asString()).c_str()));			
+				unread.set_total(atoi((datas["total"].asString()).c_str()));
 
 				unread_listener->onResponse(unread);
 			}
@@ -1704,6 +1756,7 @@ void parse_privateservicesummary(char* json, HttpListener* listener)
 
 	PrivateServiceSummaryListener* private_listener = (PrivateServiceSummaryListener*)listener;
 
+	vec_private.clear();
 	try
 	{
 		// 解析逻辑
@@ -1727,7 +1780,7 @@ void parse_privateservicesummary(char* json, HttpListener* listener)
 			if(!datas.isNull())
 			{
 				size_ = datas["list"].size();
-				vec_private.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					PrivateServiceSummary privateserv;
@@ -1735,7 +1788,10 @@ void parse_privateservicesummary(char* json, HttpListener* listener)
 					privateserv.set_title(datas["list"][i]["title"].asString());
 					privateserv.set_summary(datas["list"][i]["summary"].asString());
 					privateserv.set_teamname(datas["list"][i]["teamName"].asString());
-					privateserv.set_publishtime(datas["list"][i]["publishTime"].asString());
+
+					std::string strOut;
+					string2timestamp(datas["list"][i]["publishTime"].asString(), strOut);
+					privateserv.set_publishtime(strOut);
 
 					vec_private.push_back(privateserv);
 				}
@@ -1744,7 +1800,7 @@ void parse_privateservicesummary(char* json, HttpListener* listener)
 			}
 			else
 			{
-				private_listener->OnError(PERR_JSON_PARSE_ERROR);
+				private_listener->onResponse(vec_private);
 			}
 		}
 		else
@@ -1767,6 +1823,7 @@ void parse_privateservicedetail(char* json, HttpListener* listener)
 
 	PrivateServiceDetailListener* detail_listener = (PrivateServiceDetailListener*)listener;
 
+	PrivateServiceDetail detail;
 	try
 	{
 		// 解析逻辑
@@ -1789,10 +1846,14 @@ void parse_privateservicedetail(char* json, HttpListener* listener)
 			JsonValue& datas = value["data"];
 			if(!datas.isNull())
 			{
-				PrivateServiceDetail detail;	
+				
 				detail.set_title(datas["row"]["title"].asString());
 				detail.set_content(datas["row"]["content"].asString());
-				detail.set_publishtime(datas["row"]["publishTime"].asString());
+
+				std::string strOut;
+				string2timestamp(datas["row"]["publishTime"].asString(), strOut);
+				detail.set_publishtime(strOut);
+				
 				detail.set_videourl(datas["row"]["videoUrl"].asString());
 				detail.set_videoname(datas["row"]["videoName"].asString());
 				detail.set_attachmenturl(datas["row"]["attachmentUrl"].asString());
@@ -1832,6 +1893,7 @@ void parse_systemmessage(char* json, HttpListener* listener)
 
 	SystemMessageListener* system_listener = (SystemMessageListener*)listener;
 
+	vec_system.clear();
 	try
 	{
 		// 解析逻辑
@@ -1855,14 +1917,18 @@ void parse_systemmessage(char* json, HttpListener* listener)
 			if(!datas.isNull())
 			{
 				size_ = datas["list"].size();
-				vec_system.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					SystemMessage system;
 					system.set_id(atoi((datas["list"][i]["id"].asString()).c_str()));
 					system.set_title(datas["list"][i]["title"].asString());
 					system.set_content(datas["list"][i]["content"].asString());
-					system.set_publishtime(datas["list"][i]["publishTime"].asString());			
+
+					std::string strOut;
+					string2timestamp(datas["list"][i]["publishTime"].asString(), strOut);
+					system.set_publishtime(strOut);
+					
 					vec_system.push_back(system);
 				}
 
@@ -1870,7 +1936,7 @@ void parse_systemmessage(char* json, HttpListener* listener)
 			}
 			else
 			{
-				system_listener->OnError(PERR_JSON_PARSE_ERROR);
+				system_listener->onResponse(vec_system);
 			}
 		}
 		else
@@ -1898,6 +1964,7 @@ void parse_questionanswer(char* json, HttpListener* listener)
 
 	QuestionAnswerListener* questionanswer_listener = (QuestionAnswerListener*)listener;
 
+	vec_questionanswer.clear();
 	try
 	{
 		// 解析逻辑
@@ -1924,7 +1991,7 @@ void parse_questionanswer(char* json, HttpListener* listener)
 				if(!datas["isTeacher"].isNull())
 					isteacher=(atoi((datas["isTeacher"].asString()).c_str()));
 				size_ = datas["list"].size();
-				vec_questionanswer.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					QuestionAnswer questionanswer;
@@ -1944,7 +2011,7 @@ void parse_questionanswer(char* json, HttpListener* listener)
 					questionanswer.set_askauthorname(datas["list"][i]["askAuthorName"].asString());
 					
 					
-					get_full_head_icon(datas["list"][i]["askAuthorId"].asString(), icon);
+					get_full_head_icon(datas["list"][i]["askAuthorHead"].asString(), icon);
 					questionanswer.set_askauthorhead(icon);
 					
 					questionanswer.set_askauthorrole(atoi((datas["list"][i]["askAuthorRole"].asString()).c_str()));
@@ -1987,6 +2054,7 @@ void parse_comment(char* json, HttpListener* listener)
 
 	MailReplyListener* comment_listener = (MailReplyListener*)listener;
 
+	vec_comment.clear();
 	try
 	{
 		// 解析逻辑
@@ -2013,7 +2081,7 @@ void parse_comment(char* json, HttpListener* listener)
 				if(!datas["isTeacher"].isNull())
 					isteacher=(atoi((datas["isTeacher"].asString()).c_str()));
 				size_ = datas["list"].size();
-				vec_comment.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					MailReply comment;
@@ -2032,7 +2100,10 @@ void parse_comment(char* json, HttpListener* listener)
 					comment.set_asktime(datas["list"][i]["askTime"].asString());
 					comment.set_answerauthorid(datas["list"][i]["answerAuthorId"].asString());
 					comment.set_answerauthorname(datas["list"][i]["answerAuthorName"].asString());
-					comment.set_answerauthorhead(datas["list"][i]["answerAuthorHead"].asString());	
+
+					comment.set_answerauthorhead(datas["list"][i]["answerAuthorHead"].asString());
+
+
 					comment.set_answerauthorrole(atoi((datas["list"][i]["answerAuthorRole"].asString()).c_str()));
 					comment.set_answertime(datas["list"][i]["answerTime"].asString());
 					comment.set_answercontent(datas["list"][i]["answerContent"].asString());
@@ -2101,6 +2172,41 @@ void parse_postaskquestion(char* json, HttpListener* listener)
 		ask_listener->OnError(PERR_JSON_PARSE_ERROR);
 	}
 }
+void parse_postanswer(char* json, HttpListener* listener)
+{
+	std::string strJson = json;
+
+	JsonValue value;
+	JsonReader reader;
+
+	AnswerQuestionListener* ans_listener = (AnswerQuestionListener*)listener;
+
+	try
+	{
+		if (reader.parse(strJson, value))
+		{
+			if(!value["status"].isNull())
+			{
+				int status = value["status"].asInt();
+
+				std::string info = value["info"].asString();
+
+				LOG("---------[%s]---------", info.c_str());
+
+				//TODO
+				ans_listener->onResponse(status);
+			}
+			else
+			{
+				ans_listener->OnError(PERR_JSON_PARSE_ERROR);
+			}
+		}
+	}
+	catch( std::exception& ex )
+	{
+		ans_listener->OnError(PERR_JSON_PARSE_ERROR);
+	}
+}
 
 void parse_groupspage(char* json, HttpListener* listener)
 {
@@ -2116,6 +2222,7 @@ void parse_groupspage(char* json, HttpListener* listener)
 
 	GroupsPageListener* page_listener = (GroupsPageListener*)listener;
 
+	roomgroup_list.clear();
 	try
 	{
 		// 解析逻辑
@@ -2131,33 +2238,39 @@ void parse_groupspage(char* json, HttpListener* listener)
 				{
 					JsonValue& groupspage = value["data"];
 
-					size_ = groupspage.size();
-
-					roomgroup_list.clear();
-					if(0 != size_)
+					if(!groupspage.isNull())
 					{
-						for( i = 0; i < size_; i++ )
+						size_ = groupspage.size();
+
+						if(0 != size_)
 						{
-							NavigationItem roomgroup;
+							for( i = 0; i < size_; i++ )
+							{
+								NavigationItem roomgroup;
 
-							roomgroup.set_nid(atoi(groupspage[i]["nid"].asString().c_str()));
-							roomgroup.set_level(atoi(groupspage[i]["nglevel"].asString().c_str()));
-							roomgroup.set_grouptype(atoi(groupspage[i]["ngrouptype"].asString().c_str()));
-							roomgroup.set_parentid(atoi(groupspage[i]["nparentid"].asString().c_str()));
-							roomgroup.set_showflag(atoi(groupspage[i]["nshowflag"].asString().c_str()));
-							roomgroup.set_sortid(atoi(groupspage[i]["nsortid"].asString().c_str()));
-							roomgroup.set_name(groupspage[i]["cname"].asString());
-							roomgroup.set_fontcolor(groupspage[i]["cfontcolor"].asString());
-							roomgroup.set_curl(groupspage[i]["curl"].asString());
-							roomgroup.set_gateurl(groupspage[i]["gateurl"].asString());
-							roomgroup.set_roomid(atoi(groupspage[i]["roomid"].asString().c_str()));
-							roomgroup.set_type(atoi(groupspage[i]["type"].asString().c_str()));
+								roomgroup.set_nid(atoi(groupspage[i]["nid"].asString().c_str()));
+								roomgroup.set_level(atoi(groupspage[i]["nglevel"].asString().c_str()));
+								roomgroup.set_grouptype(atoi(groupspage[i]["ngrouptype"].asString().c_str()));
+								roomgroup.set_parentid(atoi(groupspage[i]["nparentid"].asString().c_str()));
+								roomgroup.set_showflag(atoi(groupspage[i]["nshowflag"].asString().c_str()));
+								roomgroup.set_sortid(atoi(groupspage[i]["nsortid"].asString().c_str()));
+								roomgroup.set_name(groupspage[i]["cname"].asString());
+								roomgroup.set_fontcolor(groupspage[i]["cfontcolor"].asString());
+								roomgroup.set_curl(groupspage[i]["curl"].asString());
+								roomgroup.set_gateurl(groupspage[i]["gateurl"].asString());
+								roomgroup.set_roomid(atoi(groupspage[i]["roomid"].asString().c_str()));
+								roomgroup.set_type(atoi(groupspage[i]["type"].asString().c_str()));
 
-							roomgroup_list.push_back(roomgroup);
+								roomgroup_list.push_back(roomgroup);
+							}
 						}
-					}
 
-					page_listener->onResponse(roomgroup_list);
+						page_listener->onResponse(roomgroup_list);
+					}
+					else
+					{
+						page_listener->onResponse(roomgroup_list);
+					}
 
 				}
 				else
@@ -2195,10 +2308,17 @@ void parse_UserTeamRelatedInfo(char* json, HttpListener* listener)
 
 				if(0 == status)
 				{
-					info.set_askremain(atoi(data["count"].asString().c_str()));
-					info.set_askcoin(data["gold"].asInt());
+					if(!data.isNull())
+					{
+						info.set_askremain(atoi(data["count"].asString().c_str()));
+						info.set_askcoin(data["gold"].asInt());
 
-					related_listener->onResponse(info);
+						related_listener->onResponse(info);
+					}
+					else
+					{
+						related_listener->OnError(PERR_JSON_PARSE_ERROR);
+					}
 				}
 				else
 				{
@@ -2235,6 +2355,7 @@ void parse_teamvideo(char* json, HttpListener* listener)
 
 	TeamVideoListener* video_listener = (TeamVideoListener*)listener;
 
+	vec_video.clear();
 	try
 	{
 		// 解析逻辑
@@ -2276,7 +2397,7 @@ void parse_teamvideo(char* json, HttpListener* listener)
 			}
 			else
 			{
-				video_listener->OnError(PERR_JSON_PARSE_ERROR);
+				video_listener->onResponse(vec_video);
 			}
 		}
 		else
@@ -2368,6 +2489,7 @@ void parse_profitorder(char* json, HttpListener* listener)
 
 	OperateStockProfitListener* profitorder_listener = (OperateStockProfitListener*)listener;
 
+	vec_profitorder.clear();
 	try
 	{
 		// 解析逻辑
@@ -2391,7 +2513,7 @@ void parse_profitorder(char* json, HttpListener* listener)
 			if(!datas.isNull())
 			{
 				size_ = datas["list"].size();
-				vec_profitorder.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					OperateStockProfit profitorder;
@@ -2428,7 +2550,7 @@ void parse_profitorder(char* json, HttpListener* listener)
 			}
 			else
 			{
-				profitorder_listener->OnError(PERR_JSON_PARSE_ERROR);
+				profitorder_listener->onResponse(vec_profitorder);
 			}
 		}
 		else
@@ -2461,6 +2583,12 @@ void parse_profitdetail(char* json, HttpListener* listener)
 
 	OperateStockAllDetailListener* detail_listener = (OperateStockAllDetailListener*)listener;
 
+	vec_total.clear();
+	vec_3month.clear();
+	vec_month.clear();
+	vec_week.clear();
+	vec_trans.clear();
+	vec_stocks.clear();
 	try
 	{
 		// 解析逻辑
@@ -2500,51 +2628,51 @@ void parse_profitdetail(char* json, HttpListener* listener)
 				osprofit.set_winrate(atof((datas["profile"]["winRate"].asString()).c_str()));
 				
 				size_ = datas["curve"]["dataAll"].size();
-				vec_total.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					OperateDataByTime total;
 					total.set_rate(atof((datas["curve"]["dataAll"][i]["rate"].asString()).c_str()));
-					total.set_trend(atof((datas["curve"]["dataAll"][i]["trend"].asString()).c_str()));
+					total.set_trend(atof((datas["curve"]["dataAll"][i]["cpi"].asString()).c_str()));
 					total.set_date(datas["curve"]["dataAll"][i]["date"].asString());
 					vec_total.push_back(total);
 				}
 
 				size_ = datas["curve"]["data3Month"].size();
-				vec_3month.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					OperateDataByTime total;
 					total.set_rate(atof((datas["curve"]["data3Month"][i]["rate"].asString()).c_str()));
-					total.set_trend(atof((datas["curve"]["data3Month"][i]["trend"].asString()).c_str()));
+					total.set_trend(atof((datas["curve"]["data3Month"][i]["cpi"].asString()).c_str()));
 					total.set_date(datas["curve"]["data3Month"][i]["date"].asString());
 					vec_3month.push_back(total);
 				}
 
 				size_ = datas["curve"]["dataMonth"].size();
-				vec_month.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					OperateDataByTime total;
 					total.set_rate(atof((datas["curve"]["dataMonth"][i]["rate"].asString()).c_str()));
-					total.set_trend(atof((datas["curve"]["dataMonth"][i]["trend"].asString()).c_str()));
+					total.set_trend(atof((datas["curve"]["dataMonth"][i]["cpi"].asString()).c_str()));
 					total.set_date(datas["curve"]["dataMonth"][i]["date"].asString());
 					vec_month.push_back(total);
 				}
 
 				size_ = datas["curve"]["dataWeek"].size();
-				vec_week.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					OperateDataByTime total;
 					total.set_rate(atof((datas["curve"]["dataWeek"][i]["rate"].asString()).c_str()));
-					total.set_trend(atof((datas["curve"]["dataWeek"][i]["trend"].asString()).c_str()));
+					total.set_trend(atof((datas["curve"]["dataWeek"][i]["cpi"].asString()).c_str()));
 					total.set_date(datas["curve"]["dataWeek"][i]["date"].asString());
 					vec_week.push_back(total);
 				}
 
 				size_ = datas["trans"].size();
-				vec_trans.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					OperateStockTransaction trans;
@@ -2561,7 +2689,7 @@ void parse_profitdetail(char* json, HttpListener* listener)
 				}
 
 				size_ = datas["stocks"].size();
-				vec_stocks.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					OperateStocks stocks;
@@ -2623,14 +2751,21 @@ void parse_splashimage(char* json, HttpListener* listener)
 
 				if(0 == status)
 				{
-					std::string out;
-					get_full_img_url(data["imageUrl"].asString(), out);
-					info.set_imageurl(out);
-					info.set_text(data["text"].asString());
-					info.set_url(data["url"].asString());
-					info.set_startime(atol(data["starTime"].asString().c_str()));
-					info.set_endtime(atol(data["endTime"].asString().c_str()));
-					splash_listener->onResponse(info);
+					if(!data.isNull())
+					{
+						std::string out;
+						get_full_img_url(data["imageUrl"].asString(), out);
+						info.set_imageurl(out);
+						info.set_text(data["text"].asString());
+						info.set_url(data["url"].asString());
+						info.set_startime(atol(data["starTime"].asString().c_str()));
+						info.set_endtime(atol(data["endTime"].asString().c_str()));
+						splash_listener->onResponse(info);
+					}
+					else
+					{
+						splash_listener->OnError(PERR_JSON_PARSE_ERROR);
+					}
 				}
 				else
 				{
@@ -2664,6 +2799,7 @@ void parse_splashimage(char* json, HttpListener* listener)
 
 	QuestionAnswerListener* questionanswer_listener = (QuestionAnswerListener*)listener;
 
+	vec_questionanswer.clear();
 	try
 	{
 		// 解析逻辑
@@ -2690,7 +2826,7 @@ void parse_splashimage(char* json, HttpListener* listener)
 				if(!datas["isTeacher"].isNull())
 					isteacher=(atoi((datas["isTeacher"].asString()).c_str()));
 				size_ = datas["list"].size();
-				vec_questionanswer.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					QuestionAnswer questionanswer;
@@ -2724,7 +2860,10 @@ void parse_splashimage(char* json, HttpListener* listener)
 						questionanswer.set_askauthorrole(atoi((datas["list"][i]["askAuthorRole"].asString()).c_str()));
 						questionanswer.set_askstock(datas["list"][i]["askStock"].asString());
 						questionanswer.set_askcontent(datas["list"][i]["askContent"].asString());
-						questionanswer.set_asktime(datas["list"][i]["askTime"].asString());
+
+						std::string strOut;
+						string2timestamp(datas["list"][i]["askTime"].asString(), strOut);
+						questionanswer.set_asktime(strOut);
 						
 						questionanswer.set_answerauthorid(0);
 						questionanswer.set_answerauthorname("");
@@ -2769,6 +2908,7 @@ void parse_sendcomment(char* json, HttpListener* listener)
 
 	MailReplyListener* comment_listener = (MailReplyListener*)listener;
 
+	vec_comment.clear();
 	try
 	{
 		// 解析逻辑
@@ -2795,7 +2935,7 @@ void parse_sendcomment(char* json, HttpListener* listener)
 				if(!datas["isTeacher"].isNull())
 					isteacher=(atoi((datas["isTeacher"].asString()).c_str()));
 				size_ = datas["list"].size();
-				vec_comment.clear();
+				
 				for(i = 0; i < size_; i++)
 				{
 					MailReply comment;
@@ -2809,7 +2949,10 @@ void parse_sendcomment(char* json, HttpListener* listener)
 					comment.set_askauthorhead(icon);
 					comment.set_askauthorrole(atoi((datas["list"][i]["askAuthorRole"].asString()).c_str()));
 					comment.set_askcontent(datas["list"][i]["askContent"].asString());
-					comment.set_asktime(datas["list"][i]["askTime"].asString());
+
+					std::string strOut;
+					string2timestamp(datas["list"][i]["askTime"].asString(), strOut);
+					comment.set_asktime(strOut);
 
 					comment.set_answerauthorid("");
 					comment.set_answerauthorname("");
@@ -3048,7 +3191,7 @@ void HttpConnection::RequestReply(int viewpointId, int startId, int requestCount
 }
 
 // 回复观点
-void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId, int fromAuthorId, char* content, PostReplyListener* listener)
+void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId, int fromAuthorId, const char* content, PostReplyListener* listener)
 {
 	RequestParamter& request = get_request_param();
 	request["s"] = "viewpoint/replycomments";
@@ -3171,7 +3314,7 @@ void HttpConnection::RequestTeamVideo(int teamId, TeamVideoListener* listener)
 	http_request_asyn(listener, parse_teamvideo, &request);
 }
 
-void HttpConnection::PostAskQuestion(int teamId,const char* stock,const char* question, AskQuestionListener* listener)
+void HttpConnection::PostAskQuestion(int teamId, const char* stock, const char* question, AskQuestionListener* listener)
 {
 	RequestParamter& request = get_request_param();
 	request["s"] = "questions/postaskquestion";
@@ -3185,6 +3328,20 @@ void HttpConnection::PostAskQuestion(int teamId,const char* stock,const char* qu
 	http_request_asyn(listener, parse_postaskquestion, &request, HTTP_POST);
 }
 
+// 讲师团队回答提问（PC端接口）
+void HttpConnection::PostAnswer(int questionId, int teamId, char* answer, AnswerQuestionListener* listener)
+{	
+	RequestParamter& request = get_request_param();
+	request["s"] = "Questions/PostAnswer";
+	request["userid"] = get_user_id().c_str();
+
+	request["questionid"] = int2string(questionId);
+	request["teamId"] = int2string(teamId);
+	request["answer"] = answer;
+	request["questionstype"] = get_client_type().c_str();
+
+	http_request_asyn(listener, parse_postanswer, &request, HTTP_POST);
+}
 
 // 请求操盘列表(日收益排序/月收益排序/总收益排序 type:0-全部收益;1-日收益;2-月收益;默认为0 )
 void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, int size, OperateStockProfitListener* listener)
@@ -3322,3 +3479,13 @@ void HttpConnection::RequestMailSendReply(int startId, int count, MailReplyListe
 	http_request_asyn(listener, parse_sendcomment, &request);
 }
 
+
+string HttpConnection::GetPrivateServiceDetailUrl(int psid)
+{
+	return string("http://testphp.99ducaijing.cn/mobile.php?s=/Share/personalSecrets/id/" + int2string(psid) + ".html");
+}
+
+string HttpConnection::GetConsumeRecordUrl()
+{
+	return string("http://testphp.99ducaijing.cn/mobile.php?s=/Share/getConsumeRecord/id/" + get_user_id());
+}

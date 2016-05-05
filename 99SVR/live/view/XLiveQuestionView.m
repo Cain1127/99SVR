@@ -8,6 +8,7 @@
 
 #import "XLiveQuestionView.h"
 #import "UIImageFactory.h"
+#import "DecodeJson.h"
 #import "ProgressHUD.h"
 #import "UITextView+Placeholder.h"
 #import "Toast+UIView.h"
@@ -126,13 +127,14 @@
 {
     NSString *strName = _txtName.text;
     NSString *strContent = _txtContent.text;
-    if(strName.length==0)
+    if([DecodeJson isEmpty:strName])
     {
         [ProgressHUD showError:@"个股名称不能为空"];
         return ;
     }
     
-    if (strContent.length==0) {
+    if([DecodeJson isEmpty:strContent])
+    {
         [ProgressHUD showError:@"描述不能为空"];
         return ;
     }
@@ -140,7 +142,8 @@
         [ProgressHUD showError:@"描述不能超过200字"];
         return ;
     }
-    if (_delegate && [_delegate respondsToSelector:@selector(requestQuestion:content:)]) {
+    if (_delegate && [_delegate respondsToSelector:@selector(requestQuestion:content:)])
+    {
         [_delegate requestQuestion:strName content:strContent];
     }
 }

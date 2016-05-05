@@ -54,6 +54,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)setModel:(RoomHttp *)room
 {
     _room = room;
+    [self addNotify];
     [self.tableView.gifHeader beginRefreshing];
     
 }
@@ -149,7 +150,8 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     }
 }
 
--(void)updateRefresh {
+-(void)updateRefresh
+{
     _nCurrent = 20;
     _dataSource.aryModel = nil;
     [kHTTPSingle RequestViewpointSummary:[_room.teamid intValue] start:0 count:20];

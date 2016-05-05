@@ -8,6 +8,7 @@
 
 #import "XVideoLiveViewcontroller.h"
 #import "LivePlayViewController.h"
+#import "DecodeJson.h"
 #import "RoomChatDataSource.h"
 #import "TableViewFactory.h"
 #import "XLiveQuestionView.h"
@@ -712,18 +713,16 @@
 
 - (void)sendChatMessage:(NSString *)strInfo
 {
-    if([UserInfo sharedUserInfo].nType != 1 && ![_room.nvcbid isEqualToString:@"10000"] && ![_room.nvcbid isEqualToString:@"10001"])
+    if([UserInfo sharedUserInfo].nType != 1 && ![_room.roomid isEqualToString:@"10000"] && ![_room.roomid isEqualToString:@"10001"])
     {
         [self.view makeToast:@"游客不能发送信息"];
         return ;
     }
-    if (strInfo.length == 0)
+    if ([DecodeJson isEmpty:strInfo])
     {
-        [self.view makeToast:@"不能发送空的内容"];
+        [self.view makeToast:@"请输入聊天内容"];
         return ;
     }
-    
-//    [RoomService sendLocalInfo:strInfo toid:toUser roomInfo:currentRoom aryChat:aryRoomChat];
     
     [kProtocolSingle sendMessage:strInfo toId:toUser];
     

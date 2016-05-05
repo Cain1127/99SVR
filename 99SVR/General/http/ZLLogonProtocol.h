@@ -379,6 +379,12 @@ class ZLRoomListener : public VideoRoomListener
     virtual void OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info);
     
     virtual void OnFavoriteVcbResp(FavoriteRoomResp& info);
+    
+    //Ã·Œ œÏ”¶
+    virtual void OnAskQuestionResp(AskQuestionResp& info);
+    
+    //Ã·Œ œÏ”¶
+    virtual void OnAskQuestionErr(ErrCodeResp& info);
 };
 
 

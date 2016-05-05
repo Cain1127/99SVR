@@ -11,7 +11,7 @@ using std::vector;
 class HttpListener
 {
 public:
-	virtual void OnError(int errCode)=0;
+	virtual void OnError(int errCode)= 0;
 };
 
 class SplashImageListener : public HttpListener
@@ -144,6 +144,12 @@ public:
 };
 
 class AskQuestionListener : public HttpListener
+{
+public:
+	virtual void onResponse(int retCode);void OnError(int errCode);
+};
+
+class AnswerQuestionListener : public HttpListener
 {
 public:
 	virtual void onResponse(int retCode);void OnError(int errCode);

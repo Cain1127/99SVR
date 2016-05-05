@@ -134,41 +134,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     _scrollView = nil;
 }
 
-- (void)colletRoom
-{
-    if([UserInfo sharedUserInfo].aryCollet.count>=1)
-    {
-        RoomGroup *group = [[UserInfo sharedUserInfo].aryCollet objectAtIndex:0];
-        for (RoomHttp *room in group.roomList)
-        {
-            if([_room.nvcbid isEqualToString:room.nvcbid])
-            {
-                __weak RoomViewController *__self = self;
-                dispatch_main_async_safe(
-                ^{
-                   [__self.btnRight setSelected:YES];
-                });
-                break;
-            }
-        }
-    }
-}
-
-#pragma mark 关注
-- (void)colletCurrentRoom
-{
-    if([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
-    {
-        _btnRight.selected = !_btnRight.selected;
-        NSString *strMsg = _btnRight.selected ? @"关注成功" : @"取消关注";
-        [self.view makeToast:strMsg];
-    }
-    else
-    {
-        [self.view makeToast:@"游客不能关注"];
-    }
-}
-
 - (void)createScrolView:(CGRect)frame{
     if (_scrollView==nil) {
         _scrollView = [[MyScrollView alloc] initWithFrame:frame];
@@ -245,28 +210,13 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     [super viewDidLoad];
     room_gcd = dispatch_queue_create("decode_gcd",0);
     [self initUIHead];
-    @WeakObj(self)
-    dispatch_async(dispatch_get_global_queue(0,0),
-    ^{
-        [selfWeak colletRoom];
-    });
+
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     DLog(@"收到内存警告");
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark 重力感应设置
