@@ -56,11 +56,7 @@
         UIButton *btnClear = [UIButton buttonWithType:UIButtonTypeCustom];
         btnClear.frame = Rect(0, 0, kScreenWidth, 44);
         [_footView addSubview:btnClear];
-<<<<<<< HEAD
         [btnClear setTitle:@"清除历史记录" forState:UIControlStateNormal];
-=======
-        [btnClear setTitle:@"清楚搜索记录" forState:UIControlStateNormal];
->>>>>>> e0f756fe910fed966696b69d26550aaf824df4fa
         [btnClear setTitleColor:COLOR_Text_0078DD forState:UIControlStateNormal];
         [btnClear setTitleColor:COLOR_Text_Black forState:UIControlStateHighlighted];
         [btnClear addTarget:self action:@selector(deleteAll) forControlEvents:UIControlEventTouchUpInside];
