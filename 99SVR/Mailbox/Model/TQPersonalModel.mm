@@ -22,39 +22,18 @@ string	_teamname;
 
     self = [super init];
     
-    _summary = [NSString stringWithUTF8String:PrivateServiceSummary->summary().c_str()];
-    _title = [NSString stringWithUTF8String:PrivateServiceSummary->title().c_str()];
-    _publishtime = [NSString stringWithUTF8String:PrivateServiceSummary->publishtime().c_str()];
-    _teamname = [NSString stringWithUTF8String:PrivateServiceSummary->teamname().c_str()];
+    self.summary = [NSString stringWithUTF8String:PrivateServiceSummary->summary().c_str()];
+    self.title = [NSString stringWithUTF8String:PrivateServiceSummary->title().c_str()];
+    self.publishtime = [NSString stringWithUTF8String:PrivateServiceSummary->publishtime().c_str()];
+    self.teamname = [NSString stringWithUTF8String:PrivateServiceSummary->teamname().c_str()];
+    self.ID = PrivateServiceSummary->id();
 
-    _ID = PrivateServiceSummary->id();
-    
-    
-    [self settingTime];
-    
-    
     return self;
 }
 
-
-- (void)settingTime
+-(void)setPublishtime:(NSString *)publishtime
 {
-    UserInfo *userinfo = [UserInfo sharedUserInfo];
-    NSDate *date = [userinfo.fmt dateFromString:_publishtime];
-    int result = [DecodeJson compareDate:date];
-    if (result == 1)
-    {
-        _publishtime = [NSString stringWithFormat:@"今天 %02d:%02d",date.hour,date.minute];
-    }
-    else if(result == 0)
-    {
-        _publishtime = [NSString stringWithFormat:@"昨天 %02d:%02d",date.hour,date.minute];
-    }
-    else
-    {
-        _publishtime = [NSString stringWithFormat:@"%04d年%02d月%02d日 %02d:%02d",date.year,date.month,date.day,date.hour,date.minute];
-    }
-    
+    _publishtime = [publishtime DataFormatter];
 }
 
 @end

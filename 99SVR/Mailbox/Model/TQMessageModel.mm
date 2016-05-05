@@ -17,38 +17,21 @@
 #import "NSDate+convenience.h"
 
 @implementation TQMessageModel
+
 - (id)initWithSystemMessage:(SystemMessage *)SystemMessage
 {
     self = [super init];
-    _Id = SystemMessage->id();
-    _content = [NSString stringWithUTF8String:SystemMessage->content().c_str()];
-    _title = [NSString stringWithUTF8String:SystemMessage->title().c_str()];
-    _publishtime = [NSString stringWithUTF8String:SystemMessage->publishtime().c_str()];
-    _userID = SystemMessage->id();
-    [self settingTime];
+    self.Id = SystemMessage->id();
+    self.content = [NSString stringWithUTF8String:SystemMessage->content().c_str()];
+    self.title = [NSString stringWithUTF8String:SystemMessage->title().c_str()];
+    self.publishtime = [NSString stringWithUTF8String:SystemMessage->publishtime().c_str()];
+    self.userID = SystemMessage->id();
     return self;
 }
 
-- (void)settingTime
+- (void)setPublishtime:(NSString *)publishtime
 {
-    UserInfo *userinfo = [UserInfo sharedUserInfo];
-    NSDate *date = [userinfo.fmt dateFromString:_publishtime];
-    int result = [DecodeJson compareDate:date];
-    if (result == 1)
-    {
-        _publishtime = [NSString stringWithFormat:@"今天 %02d:%02d",date.hour,date.minute];
-    }
-    else if(result == 0)
-    {
-        _publishtime = [NSString stringWithFormat:@"昨天 %02d:%02d",date.hour,date.minute];
-    }
-    else
-    {
-        _publishtime = [NSString stringWithFormat:@"%04d年%02d月%02d日 %02d:%02d",date.year,date.month,date.day,date.hour,date.minute];
-    }
-    
+    _publishtime = [publishtime DataFormatter];
 }
-
-
 
 @end
