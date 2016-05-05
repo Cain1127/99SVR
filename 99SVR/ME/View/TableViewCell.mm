@@ -30,8 +30,6 @@
     self.buyLabel.textAlignment = NSTextAlignmentRight;
     self.buyLabel.font = Font_15;
     self.buyLabel.textColor = COLOR_Text_Gay;
-    self.buyLabel.hidden = YES;
-
     [self.selectView addSubview:self.buyLabel];
 }
 
@@ -56,7 +54,7 @@
         self.priceLabView.state = PriceLabViewType_Vip;
         
     }else{
-        self.buyLabel.hidden = YES;
+        self.buyLabel.hidden = NO;
         self.vipNameLab.textColor = COLOR_Auxiliary_Orange;
         self.clickBtn.enabled = YES;
         [self.clickBtn setTitle:@"升级" forState:UIControlStateNormal];
@@ -69,6 +67,7 @@
             make.width.equalTo(@100);
         }];
         
+        self.buyLabel.text = [NSString stringWithFormat:@"限%@个名额",model.maxnum];
         CGSize buyLabelSize = [ShareFunction calculationOfTheText:self.buyLabel.text withFont:15 withMaxSize:(CGSize){200,CGFLOAT_MAX}];
         [self.buyLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(@0);
@@ -81,6 +80,7 @@
         self.priceLabView.oldpriceStr = model.buyprice;
         self.priceLabView.state = PriceLabViewType_NotVip;
         model.actualPrice = model.updateprice;
+
     }
 
 }
@@ -101,10 +101,8 @@
     }];
     
     
-    self.buyLabel.text = [NSString stringWithFormat:@"限10086个名额"];
-    
+    self.buyLabel.text = [NSString stringWithFormat:@"限%@个名额",model.maxnum];
     CGSize buyLabelSize = [ShareFunction calculationOfTheText:self.buyLabel.text withFont:15 withMaxSize:(CGSize){200,CGFLOAT_MAX}];
-
     [self.buyLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@0);
         make.right.equalTo(self.clickBtn.mas_left).offset(-5);
