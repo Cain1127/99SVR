@@ -597,7 +597,6 @@ void PrivateServiceDetailListener::onResponse(PrivateServiceDetail& info)
                            @"videoname":videoname,@"attachmenturl":attachmenturl,@"attachmentname":attachmentname,@"html5url":html5url,
                            @"operatestockid":@(operatestockid)};
     XPrivateDetail *detail = [XPrivateDetail mj_objectWithKeyValues:dict];
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_DETAIL_VC object:detail];
 }
 

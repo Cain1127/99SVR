@@ -416,7 +416,7 @@
     {
         if ([user isOnMic])
         {
-            [_ffPlay startPlayRoomId:[_room.teamid intValue] user:user.m_nUserId name:_room.teamname];
+            [_ffPlay startPlayRoomId:[_room.roomid intValue] user:user.m_nUserId name:_room.teamname];
             return ;
         }
     }
