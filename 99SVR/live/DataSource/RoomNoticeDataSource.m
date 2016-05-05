@@ -8,10 +8,12 @@
 
 #import "RoomNoticeDataSource.h"
 #import <DTCoreText/DTCoreText.h>
+#import "ReplyNullInfoCell.h"
 #import "NoticeModel.h"
 #import "ZLCoreTextCell.h"
 #import "Photo.h"
 #import "PhotoViewController.h"
+#import "RoomChatNull.h"
 
 @interface RoomNoticeDataSource()<DTAttributedTextContentViewDelegate>
 {
@@ -43,10 +45,21 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if (_aryNotice.count==0) {
+        return 1;
+    }
     return _aryNotice.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (_aryNotice.count==0) {
+        RoomChatNull *cell = [tableView dequeueReusableCellWithIdentifier:@"nullInfoCell"];
+        if (!cell)
+        {
+            cell = [[RoomChatNull alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"nullInfoCell"];
+        }
+        return cell;
+    }
     ZLCoreTextCell *cell = [self tableView:tableView preparedCellForZLIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -74,7 +87,7 @@
         if(![strInfo isEqualToString:cell.strInfo])
         {
             cell.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strInfo dataUsingEncoding:NSUTF8StringEncoding]
-                                                              documentAttributes:nil];
+                documentAttributes:nil];
             cell.section = indexPath.section;
             cell.strInfo = strInfo;
             cell.textDelegate = self;
@@ -92,6 +105,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (_aryNotice.count==0)
+    {
+        return kScreenHeight-kRoom_head_view_height-kVideoImageHeight-44;
+    }
     ZLCoreTextCell *coreText = [self tableView:tableView preparedCellForZLIndexPath:indexPath];
     CGFloat height = [coreText.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
     return height;
