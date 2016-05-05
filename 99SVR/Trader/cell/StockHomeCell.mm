@@ -102,7 +102,7 @@
 
     self.bakImageView.layer.borderWidth = LineView_Height;
     self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.5].CGColor;
-    [self.bakImageView layoutIfNeeded];
+//    [self.bakImageView layoutIfNeeded];
 //
     //计算字体
     self.traderNameLab.text =  model.focus;
@@ -156,7 +156,7 @@
     
     self.bakImageView.layer.borderWidth = 0.5f;
     self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.5].CGColor;
-    [self.bakImageView layoutIfNeeded];
+//    [self.bakImageView layoutIfNeeded];
     
     self.traderNameLab.text =  model.focus;
     CGSize traderNameLabSize = [ShareFunction calculationOfTheText:self.traderNameLab.text withFont:traderName_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
