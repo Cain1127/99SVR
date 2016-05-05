@@ -60,7 +60,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTitleText:@"私人定制"];
+    [self setTitleText:_room.teamname];
     [self setupTableView];
     [self.view addSubview:_textView];
     
