@@ -219,13 +219,17 @@
     _searchResultsTable.frame = Rect(0,_mySearchBar.y+_mySearchBar.height+8,kScreenWidth,kScreenHeight-(_mySearchBar.y+_mySearchBar.height+8));
     [_searchResultsTable registerClass:[VideoCell class] forCellReuseIdentifier:@"cellId"];
     
-    _historyTable = [TableViewFactory createTableViewWithFrame:Rect(0, _mySearchBar.y+_mySearchBar.height, kScreenWidth, 200) withStyle:UITableViewStylePlain];
+    _historyTable = [TableViewFactory createTableViewWithFrame:Rect(0, _mySearchBar.y+_mySearchBar.height, kScreenWidth, kScreenHeight - (_mySearchBar.y+_mySearchBar.height)) withStyle:UITableViewStylePlain];
     [self.view addSubview:_historyTable];
     [_historyTable setBackgroundColor:UIColorFromRGB(0xffffff)];
     _dataSource = [[HistorySearchDataSource alloc] init];
     _historyTable.dataSource = _dataSource;
     _historyTable.delegate = _dataSource;
 
+    UITapGestureRecognizer *tapGr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHideTapped:)];
+    tapGr.cancelsTouchesInView = NO;
+    [_historyTable addGestureRecognizer:tapGr];
+    
     _dataSource.delegate = self;
     NSArray *array = [UserDefaults objectForKey:kHistoryList];
     if (array.count)
@@ -276,7 +280,7 @@
                 [self hideEmptyViewInView:_searchResultsTable];
             }else{
                 @WeakObj(self);
-                [self showEmptyViewInView:_searchResultsTable withMsg:@"暂无数据" touchHanleBlock:^{
+                [self showEmptyViewInView:_searchResultsTable withMsg:@"没有搜索结果" touchHanleBlock:^{
                     @StrongObj(self);
                     [self startSearch:_mySearchBar.text];
                 }];
@@ -444,5 +448,10 @@
     [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
 }
 
+// 隐藏键盘
+-(void)keyboardHideTapped:(UITapGestureRecognizer*)tapGr
+{
+    [_mySearchBar resignFirstResponder];
+}
 
 @end

@@ -146,29 +146,31 @@
     //@"说好的回报难吃难吃难吃[吃难吃][$17$][$19$][$17$][$17$][$20$][$17$][$20$][$17$][$17$][$20$][$17$][$20$]你当年的你惹麻烦麻烦吗";
     _contentTextView.attributedText = [self ContentAttributedString:answerModel.answercontent];
     CGSize answercontentSize = [answerModel.answercontent sizeMakeWithFont:Font_14 maxW:kScreenWidth - 2* LR];
-    if (answerModel.isAllText||answercontentSize.height < 35) {
-        _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answerauthornameLable.frame), answercontentSize.width+ 20, answercontentSize.height + 10);
-    } else if(answercontentSize.height > 35) {
-        _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), answercontentSize.width+20, 35);
-    }
+    _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), answercontentSize.width + 10, answercontentSize.height + 10);
+    //_contentTextView.backgroundColor = [UIColor redColor];
+//    if (answerModel.isAllText||answercontentSize.height < 35) {
+//        _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answerauthornameLable.frame), answercontentSize.width+ 20, answercontentSize.height + 10);
+//    } else if(answercontentSize.height > 35) {
+//        _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), answercontentSize.width + 10, 40);
+//    }
     
     // 全文按钮
-    _allButton.tag = answerModel.autoId;
-    _allButton.frame = CGRectMake(kScreenWidth - 60, CGRectGetMaxY(_contentTextView.frame), 50, 25);
-    if(answercontentSize.height > 35 && answerModel.isAllText)
-    {
-        _allButton.hidden = NO;
-        [_allButton setTitle:@"收起" forState:UIControlStateNormal];
-    } else if(answercontentSize.height > 35 && !answerModel.isAllText)
-    {
-        _allButton.hidden = NO;
-        [_allButton setTitle:@"全文" forState:UIControlStateNormal];
-    } else {
-        _allButton.hidden = YES;
-    }
+//    _allButton.tag = answerModel.ID;
+//    _allButton.frame = CGRectMake(kScreenWidth - 60, CGRectGetMaxY(_contentTextView.frame), 50, 25);
+//    if(answercontentSize.height > 35 && answerModel.isAllText)
+//    {
+//        _allButton.hidden = NO;
+//        [_allButton setTitle:@"收起" forState:UIControlStateNormal];
+//    } else if(answercontentSize.height > 35 && !answerModel.isAllText)
+//    {
+//        _allButton.hidden = NO;
+//        [_allButton setTitle:@"全文" forState:UIControlStateNormal];
+//    } else {
+//        _allButton.hidden = YES;
+//    }
     
     /** 提问者Bg Y值 */
-    CGFloat askBgViewY = CGRectGetMaxY(_contentTextView.frame) + 10;
+    CGFloat askBgViewY = CGRectGetMaxY(_contentTextView.frame);
     if (!_allButton.hidden) {
         askBgViewY = askBgViewY + 15;
     }
@@ -183,7 +185,8 @@
 //    _askcontentLabel.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), askcontentSize.width, askcontentSize.height);
     _askcontentTextView.attributedText = [self ContentAttributedString:answerModel.askcontent];//answerModel.askcontent;
     CGSize askcontentSize = [_askcontentTextView.text sizeMakeWithFont:Font_14 maxW:kScreenWidth - 4 * LR];
-    _askcontentTextView.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), kScreenWidth - 4 * LR, askcontentSize.height+20);
+    CGFloat askcontentH = askcontentSize.height  > 50 ? askcontentSize.height+50 : askcontentSize.height+20;
+    _askcontentTextView.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), kScreenWidth - 4 * LR, askcontentH);
     
     /** 提问者Bg */
     CGFloat askBgViewH = CGRectGetMaxY(_askcontentTextView.frame) - CGRectGetMaxY(_askauthornameLabel.frame) + 35;
