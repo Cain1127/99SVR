@@ -88,7 +88,7 @@
     [self.view makeToastActivity_bird];
     [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
     
-    _whatIsPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64)];
+    _whatIsPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64) withViewTag:0];
     [self.view addSubview:_whatIsPrivate];
     _whatIsPrivate.hidden = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];

@@ -10,7 +10,7 @@
 #import "MailboxModel.h"
 
 @interface MailboxTableViewCell()
-
+@property(nonatomic, strong) UIView *bgView;
 /** 图标 */
 @property(nonatomic, strong) UIImageView *iconImageView;
 /** 标题 */
@@ -32,18 +32,23 @@
         lineView.backgroundColor = COLOR_Bg_Gay;
         [self.contentView addSubview:lineView];
         
+        _bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 10, kScreenWidth, 77)];
+        _bgView.layer.borderWidth = 0.5;
+        _bgView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
+        [self.contentView addSubview:_bgView];
+        
         _iconImageView = [[UIImageView alloc] init];
         _iconImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.contentView  addSubview:_iconImageView];
+        [_bgView  addSubview:_iconImageView];
         
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.font = Font_16;
-        [self.contentView  addSubview:_titleLabel];
+        [_bgView  addSubview:_titleLabel];
         
         _unreadimageView = [[UIImageView alloc] init];
         _unreadimageView.layer.masksToBounds = YES;
         _unreadimageView.layer.cornerRadius = 4;
-        [self.contentView  addSubview:_unreadimageView];
+        [_bgView  addSubview:_unreadimageView];
     }
     return self;
 }
@@ -52,14 +57,14 @@
 {
     CGFloat H = 77;
     
-    _iconImageView.frame = CGRectMake(12, 10, 40, H);
+    _iconImageView.frame = CGRectMake(12, 0, 40, H);
     _iconImageView.image = [UIImage imageNamed:mailboxModel.icon];
     
     CGSize titleSize = [mailboxModel.title sizeMakeWithFont:_titleLabel.font];
-    _titleLabel.frame = CGRectMake(60, 10, titleSize.width, H);
+    _titleLabel.frame = CGRectMake(60, 0, titleSize.width, H);
     _titleLabel.text = mailboxModel.title;
     
-    _unreadimageView.frame = CGRectMake(CGRectGetMaxX(_titleLabel.frame), 35, 8, 8);
+    _unreadimageView.frame = CGRectMake(CGRectGetMaxX(_titleLabel.frame), 25, 8, 8);
     _unreadimageView.image = [self imageWithColor:[UIColor redColor]];
     
     if(mailboxModel.unreadCount > 0)

@@ -15,7 +15,6 @@
 
 @interface AnswerTableViewCell()
 
-@property(nonatomic, strong) UIView *bgView;
 /** 头像 */
 @property(nonatomic, strong) UIImageView *answerauthoriconImageView;
 /** 回答名称 */
@@ -45,21 +44,21 @@
 {
     if (self==[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
-        _bgView = [[UIView alloc] init];
-        [self.contentView addSubview:_bgView];
+        self.contentView.layer.borderWidth = 0.5;
+        self.contentView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
         
         /** 头像 */
         _answerauthoriconImageView = [[UIImageView alloc] init];
         _answerauthoriconImageView.layer.cornerRadius = 15;
         _answerauthoriconImageView.clipsToBounds = YES;
         _answerauthoriconImageView.contentMode = UIViewContentModeScaleAspectFill;
-        [_bgView addSubview:_answerauthoriconImageView];
+        [self.contentView addSubview:_answerauthoriconImageView];
         
         /** 回答名称 */
         _answerauthornameLable = [[UILabel alloc] init];
         _answerauthornameLable.font = Font_16;
         _answerauthornameLable.textColor = COLOR_Text_Black;
-        [_bgView addSubview:_answerauthornameLable];
+        [self.contentView addSubview:_answerauthornameLable];
         
         /** 回答内容 */
         //        _answercontentLable = [[UILabel alloc] init];
@@ -70,26 +69,26 @@
         _contentTextView = [[CFTextView alloc] init];
         _contentTextView.userInteractionEnabled = NO;
         _contentTextView.font = Font_14;
-        [_bgView addSubview:_contentTextView];
+        [self.contentView addSubview:_contentTextView];
         
         /** 回答时间 */
         _answertimeLable = [[UILabel alloc] init];
         _answertimeLable.font = Font_14;
         _answertimeLable.textColor = COLOR_Text_Gay;
-        [_bgView addSubview:_answertimeLable];
+        [self.contentView addSubview:_answertimeLable];
         
         /** 提问者Bg */
         _askBgView = [[UIView alloc] init];
         _askBgView.backgroundColor = COLOR_Bg_Gay;
         _askBgView.layer.masksToBounds = YES;
         _askBgView.layer.cornerRadius = 5;
-        [_bgView addSubview:_askBgView];
+        [self.contentView addSubview:_askBgView];
         
         /** 提问者姓名 */
         _askauthornameLabel = [[UILabel alloc] init];
         _askauthornameLabel.font = Font_16;
         _askauthornameLabel.textColor = COLOR_Text_Gay;
-        [_bgView addSubview:_askauthornameLabel];
+        [self.contentView addSubview:_askauthornameLabel];
         
         /** 提问内容 */
 //        _askcontentLabel = [[UILabel alloc] init];
@@ -101,7 +100,7 @@
         _askcontentTextView.userInteractionEnabled = NO;
         _askcontentTextView.font = Font_14;
         _askcontentTextView.backgroundColor = [UIColor clearColor];
-        [_bgView addSubview:_askcontentTextView];
+        [self.contentView addSubview:_askcontentTextView];
         
         // 全文
         _allButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -109,27 +108,28 @@
         [_allButton setTitleColor:COLOR_Bg_Blue forState:UIControlStateNormal];
         [_allButton.titleLabel setFont:Font_14];
         [_allButton addTarget:self action:@selector(allTextClick:) forControlEvents:UIControlEventTouchUpInside];
-        [_bgView addSubview:_allButton];
+        [self.contentView addSubview:_allButton];
     }
     return self;
 }
 
 -(void)setAnswerModel:(TQAnswerModel *)answerModel
 {
-    CGFloat top = 12; //上下
+    CGFloat top = 20; //上下
     CGFloat LR = 12; // 左右
-    
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
+
+    // -0.5隐藏边框
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, kScreenWidth, 10.5)];
     lineView.backgroundColor = COLOR_Bg_Gay;
     [self addSubview:lineView];
     
-    /** 背景 */
-    //_answerauthoriconImageView.image = answerModel.answerauthoricon;
-    _bgView.frame = CGRectMake(0, 10, kScreenWidth, 150);
+    UIView *lineTop = [[UIView alloc] initWithFrame:CGRectMake(0, 10, kScreenWidth, 0.5)];
+    lineTop.backgroundColor = COLOR_Line_Small_Gay;
+    [self.contentView addSubview:lineTop];
     
     /** 头像 */
     CGFloat iconH = 30;
-    _answerauthoriconImageView.frame = CGRectMake(LR, 5, iconH, iconH);
+    _answerauthoriconImageView.frame = CGRectMake(LR, 15, iconH, iconH);
     //askauthorhead
     [_answerauthoriconImageView sd_setImageWithURL:[NSURL URLWithString:answerModel.answerauthorhead] placeholderImage:[UIImage imageNamed:@"personal_user_head"]];
     
