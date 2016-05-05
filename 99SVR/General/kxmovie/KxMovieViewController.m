@@ -99,12 +99,7 @@ static NSMutableDictionary * gHistory;
 
     UIBarButtonItem     *_playBtn;
     UIBarButtonItem     *_pauseBtn;
-    UIBarButtonItem     *_rewindBtn;
-    UIBarButtonItem     *_fforwardBtn;
-    UIBarButtonItem     *_spaceItem;
-    UIBarButtonItem     *_fixedSpaceItem;
-
-    UIButton            *_doneButton;
+    
     UILabel             *_progressLabel;
     UILabel             *_leftLabel;
     UIButton            *_infoButton;
@@ -228,18 +223,6 @@ static NSMutableDictionary * gHistory;
     
     CGFloat width = bounds.size.width;
     CGFloat height = bounds.size.height;
-    
-#ifdef DEBUG
-    _messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,40,width-40,40)];
-    _messageLabel.backgroundColor = [UIColor clearColor];
-    _messageLabel.textColor = [UIColor redColor];
-_messageLabel.hidden = YES;
-    _messageLabel.font = [UIFont systemFontOfSize:14];
-    _messageLabel.numberOfLines = 2;
-    _messageLabel.textAlignment = NSTextAlignmentCenter;
-    _messageLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [self.view addSubview:_messageLabel];
-#endif
 
     CGFloat topH = 50;
     CGFloat botH = 50;
@@ -259,20 +242,6 @@ _messageLabel.hidden = YES;
     [self.view addSubview:_topHUD];
     [self.view addSubview:_bottomBar];
 
-    // top hud
-
-    _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _doneButton.frame = CGRectMake(0, 1, 50, topH);
-    _doneButton.backgroundColor = [UIColor clearColor];
-//    _doneButton.backgroundColor = [UIColor redColor];
-    [_doneButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [_doneButton setTitle:NSLocalizedString(@"OK", nil) forState:UIControlStateNormal];
-    _doneButton.titleLabel.font = [UIFont systemFontOfSize:18];
-    _doneButton.showsTouchWhenHighlighted = YES;
-    [_doneButton addTarget:self action:@selector(doneDidTouch:)
-          forControlEvents:UIControlEventTouchUpInside];
-//    [_doneButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
-
     _progressLabel = [[UILabel alloc] initWithFrame:CGRectMake(46, 1, 50, topH)];
     _progressLabel.backgroundColor = [UIColor clearColor];
     _progressLabel.opaque = NO;
@@ -286,9 +255,7 @@ _messageLabel.hidden = YES;
     _progressSlider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _progressSlider.continuous = NO;
     _progressSlider.value = 0;
-//    [_progressSlider setThumbImage:[UIImage imageNamed:@"kxmovie.bundle/sliderthumb"]
-//                          forState:UIControlStateNormal];
-
+    
     _leftLabel = [[UILabel alloc] initWithFrame:CGRectMake(width-92, 1, 60, topH)];
     _leftLabel.backgroundColor = [UIColor clearColor];
     _leftLabel.opaque = NO;
@@ -305,27 +272,6 @@ _messageLabel.hidden = YES;
     _infoButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     [_infoButton addTarget:self action:@selector(infoDidTouch:) forControlEvents:UIControlEventTouchUpInside];
     
-    [_topHUD addSubview:_doneButton];
-    [_topHUD addSubview:_progressLabel];
-    [_topHUD addSubview:_progressSlider];
-    [_topHUD addSubview:_leftLabel];
-    [_topHUD addSubview:_infoButton];
-
-    // bottom hud
-
-    _spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                               target:nil
-                                                               action:nil];
-    
-    _fixedSpaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                    target:nil
-                                                                    action:nil];
-    _fixedSpaceItem.width = 30;
-    
-    _rewindBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
-                                                               target:self
-                                                               action:@selector(rewindDidTouch:)];
-
     _playBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay
                                                              target:self
                                                              action:@selector(playDidTouch:)];
@@ -335,10 +281,6 @@ _messageLabel.hidden = YES;
                                                               target:self
                                                               action:@selector(playDidTouch:)];
     _pauseBtn.width = 50;
-
-    _fforwardBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFastForward
-                                                                 target:self
-                                                                 action:@selector(forwardDidTouch:)];
 
     [self updateBottomBar];
 
@@ -554,7 +496,6 @@ _messageLabel.hidden = YES;
         return;
 
     self.playing = NO;
-    //_interrupted = YES;
     [self enableAudio:NO];
     [self updatePlayButton];
     DLog(@"pause movie");
@@ -1279,8 +1220,7 @@ _messageLabel.hidden = YES;
 - (void) updateBottomBar
 {
     UIBarButtonItem *playPauseBtn = self.playing ? _pauseBtn : _playBtn;
-    [_bottomBar setItems:@[_spaceItem, _rewindBtn, _fixedSpaceItem, playPauseBtn,
-                           _fixedSpaceItem, _fforwardBtn, _spaceItem] animated:NO];
+    [_bottomBar setItems:@[playPauseBtn] animated:NO];
 }
 
 - (void) updatePlayButton
@@ -1302,36 +1242,7 @@ _messageLabel.hidden = YES;
     
     if (_decoder.duration != MAXFLOAT)
         _leftLabel.text = formatTimeInterval(duration - position, YES);
-
-#ifdef DEBUG
-    const NSTimeInterval timeSinceStart = [NSDate timeIntervalSinceReferenceDate] - _debugStartTime;
-    NSString *subinfo = _decoder.validSubtitles ? [NSString stringWithFormat: @" %d",_subtitles.count] : @"";
     
-    NSString *audioStatus;
-    
-    if (_debugAudioStatus) {
-        
-        if (NSOrderedAscending == [_debugAudioStatusTS compare: [NSDate dateWithTimeIntervalSinceNow:-0.5]]) {
-            _debugAudioStatus = 0;
-        }
-    }
-    
-    if      (_debugAudioStatus == 1) audioStatus = @"\n(audio outrun)";
-    else if (_debugAudioStatus == 2) audioStatus = @"\n(audio lags)";
-    else if (_debugAudioStatus == 3) audioStatus = @"\n(audio silence)";
-    else audioStatus = @"";
-
-    _messageLabel.text = [NSString stringWithFormat:@"%d %d%@ %c - %@ %@ %@\n%@",
-                          _videoFrames.count,
-                          _audioFrames.count,
-                          subinfo,
-                          self.decoding ? 'D' : ' ',
-                          formatTimeInterval(timeSinceStart, NO),
-                          //timeSinceStart > _moviePosition + 0.5 ? @" (lags)" : @"",
-                          _decoder.isEOF ? @"- END" : @"",
-                          audioStatus,
-                          _buffered ? [NSString stringWithFormat:@"buffering %.1f%%", _bufferedDuration / _minBufferedDuration * 100] : @""];
-#endif
 }
 
 - (void) showHUD: (BOOL) show
@@ -1357,13 +1268,7 @@ _messageLabel.hidden = YES;
 
 - (void) fullscreenMode: (BOOL) on
 {
-    _fullscreen = on;
-    UIApplication *app = [UIApplication sharedApplication];
-    [app setStatusBarHidden:on withAnimation:UIStatusBarAnimationNone];
-    // if (!self.presentingViewController) {
-    //[self.navigationController setNavigationBarHidden:on animated:YES];
-    //[self.tabBarController setTabBarHidden:on animated:YES];
-    // }
+   _fullscreen = on;
 }
 
 - (void) setMoviePositionFromDecoder

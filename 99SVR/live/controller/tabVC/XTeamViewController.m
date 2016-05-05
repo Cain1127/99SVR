@@ -207,6 +207,7 @@
 - (void)connectVideo:(XVideoModel *)video
 {
     NSString *strUrl = video.videourl;
+    strUrl = @"http://testphp.99ducaijing.cn/Uploads/20160422163127.mp4";
     [self.navigationController pushViewController:[KxMovieViewController movieViewControllerWithContentPath:strUrl parameters:nil] animated:YES];
 }
 
