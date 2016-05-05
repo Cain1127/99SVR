@@ -12,6 +12,7 @@
 #import "LoginViewController.h"
 #import "UIAlertView+Block.h"
 #import "StockRecordViewController.h"
+#import "HDWhatIsPrivateViewViewController.h"
 
 @interface StockDealViewController ()<StockDealTableModelDelegate>
 @property (nonatomic , strong) UITableView *tableView;
@@ -211,6 +212,12 @@
     [self goBuyVipServiceViewController];
 }
 
+#pragma mark 跳转什么是私人定制
+-(void)goWhatIsPrivateVc{
+    
+    HDWhatIsPrivateViewViewController *lhdWhatVC = [[HDWhatIsPrivateViewViewController alloc]init];
+    [self presentViewController:lhdWhatVC animated:YES completion:nil];
+}
 #pragma mark 点击tableHeaderViw的提示
 -(void)didClickTableHeaderViewTag:(NSInteger)tag{
         

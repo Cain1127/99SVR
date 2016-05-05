@@ -145,15 +145,15 @@
         
         [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
            
-            make.right.equalTo(@(-10));
+            make.right.equalTo(@(10));
             make.top.equalTo(@0);
-            make.width.equalTo(@18);
+            make.width.equalTo(@44);
             make.bottom.equalTo(@0);
         }];
         
         
         [rightLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(imageView.mas_left).offset(-10);
+            make.right.equalTo(imageView.mas_left).offset(10);
             make.top.equalTo(@0);
             make.width.equalTo(@100);
             make.bottom.equalTo(@0);
@@ -262,7 +262,9 @@
         case 2://什么是私人订制
         {
             
-            DLog(@"什么是私人订制");
+            if ([self.delegate respondsToSelector:@selector(goWhatIsPrivateVc)]) {
+                [self.delegate goWhatIsPrivateVc];
+            }
         }
             break;
 

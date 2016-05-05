@@ -82,7 +82,7 @@
     [_btnBuy addTarget:self action:@selector(buyprivate) forControlEvents:UIControlEventTouchUpInside];
     _buyView.hidden = YES;
     
-    whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64)];
+    whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withViewTag:0];
     [self.view addSubview:whatPrivate];
     whatPrivate.hidden = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
