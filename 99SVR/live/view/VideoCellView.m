@@ -69,6 +69,7 @@
 
 - (void)layoutViews
 {
+//    _nameLabel.backgroundColor = [UIColor yellowColor];
     _nameLabel.frame = Rect(_imageView.x+5,_imageView.height+_imageView.y-40,120,15);
     
     _roomIdLabel.frame = Rect(_nameLabel.x,_imageView.y+_imageView.height-20,80,15);
@@ -90,7 +91,7 @@
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     [_lookCountBtn setTitle:room.onlineusercount forState:UIControlStateNormal];
-//    _nameLabel.text = room.teamname;
+    _nameLabel.text = room.teamname;
     CGRect frame = [room.onlineusercount boundingRectWithSize:CGSizeMake(kScreenWidth, 20) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
     _lookCountLabel.frame = Rect(_imageView.x+_imageView.width-frame.size.width-16, _nameLabel.y, frame.size.width+8, 15);
     [_roomIdLabel setText:room.roomid];
