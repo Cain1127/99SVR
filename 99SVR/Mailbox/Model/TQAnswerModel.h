@@ -46,10 +46,10 @@
 @property(nonatomic,assign)int askauthorheadid;
 /** 提问时间 */
 @property(nonatomic,copy) NSString *asktime;
-/** 用户ID */
-@property(nonatomic,assign)int userID;
+/** 排序ID */
+@property(nonatomic,assign) int ID;
 /** 客户端 */
-@property(nonatomic,assign)int fromclient;
+@property(nonatomic,assign) int fromclient;
 
 @property (nonatomic,copy) NSString *askAuthorHead;
 

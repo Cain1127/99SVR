@@ -66,7 +66,7 @@ uint32	_fromclient;
     _answerauthorhead = [NSString stringWithUTF8String:QuestionAnswer->answerauthorhead().c_str()];
 
     
-    _userID = QuestionAnswer->id();
+    _ID = QuestionAnswer->id();
     _askAuthorHead = [NSString stringWithUTF8String:QuestionAnswer->askauthorhead().c_str()];
 //    _askauthorheadid = QuestionAnswer->askauthorheadid();
     _fromclient = QuestionAnswer->fromclient();
@@ -94,7 +94,7 @@ uint32	_fromclient;
     _answerauthorhead = [NSString stringWithUTF8String:MailReply->answerauthorhead().c_str()];
 
     
-    _userID = MailReply->id();
+    _ID = MailReply->id();
     _fromclient = MailReply->fromclient();
     
     [self settingTime:_answertime];

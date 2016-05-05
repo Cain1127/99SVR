@@ -46,6 +46,16 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
     [super viewWillDisappear:animated];
 }
 
+#pragma mark - 懒加载
+
+-(NSMutableArray *)messageArray
+{
+    if (!_messageArray) {
+        _messageArray = [NSMutableArray array];
+    }
+    return _messageArray;
+}
+
 #pragma mark - 初始化界面
 
 - (void)setupTableView
@@ -65,15 +75,7 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
     [self.view makeToastActivity_bird];
 }
 
-#pragma mark - 懒加载
-
--(NSMutableArray *)messageArray
-{
-    if (!_messageArray) {
-        _messageArray = [NSMutableArray array];
-    }
-    return _messageArray;
-}
+#pragma mark - 加载数据
 
 //获取模型,刷新列表
 - (void)loadSystemMessage:(NSNotification *)notify

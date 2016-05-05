@@ -8,6 +8,10 @@
 
 #import "AnswerTableViewCell.h"
 #import "TQAnswerModel.h"
+#import "CFTextView.h"
+#import "CFTextModel.h"
+#import "CFTextAttachment.h"
+#import "UIImage+GIF.h"
 
 @interface AnswerTableViewCell()
 
@@ -17,7 +21,9 @@
 /** 回答名称 */
 @property(nonatomic, strong) UILabel *answerauthornameLable;
 /** 回答内容 */
-@property(nonatomic, strong) UILabel *answercontentLable;
+//@property(nonatomic, strong) UILabel *answercontentLable;
+@property(nonatomic, strong) CFTextView *contentTextView;
+
 /** 回答时间 */
 @property(nonatomic, strong) UILabel *answertimeLable;
 /** 提问者Bg */
@@ -25,7 +31,8 @@
 /** 提问者姓名 */
 @property(nonatomic, strong) UILabel *askauthornameLabel;
 /** 提问内容 */
-@property(nonatomic, strong) UILabel *askcontentLabel;
+//@property(nonatomic, strong) UILabel *askcontentLabel;
+@property(nonatomic, strong) CFTextView *askcontentTextView;
 
 /** 全文 */
 @property (nonatomic, strong) UIButton *allButton;
@@ -39,7 +46,7 @@
     if (self==[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         _bgView = [[UIView alloc] init];
-        [self addSubview:_bgView];
+        [self.contentView addSubview:_bgView];
         
         /** 头像 */
         _answerauthoriconImageView = [[UIImageView alloc] init];
@@ -55,11 +62,15 @@
         [_bgView addSubview:_answerauthornameLable];
         
         /** 回答内容 */
-        _answercontentLable = [[UILabel alloc] init];
-        _answercontentLable.font = Font_14;
-        _answercontentLable.textColor = COLOR_Text_Black;
-        _answercontentLable.numberOfLines = 0;
-        [_bgView addSubview:_answercontentLable];
+        //        _answercontentLable = [[UILabel alloc] init];
+        //        _answercontentLable.font = Font_14;
+        //        _answercontentLable.textColor = COLOR_Text_Black;
+        //        _answercontentLable.numberOfLines = 0;
+        //        [_bgView addSubview:_answercontentLable];
+        _contentTextView = [[CFTextView alloc] init];
+        _contentTextView.userInteractionEnabled = NO;
+        _contentTextView.font = Font_14;
+        [_bgView addSubview:_contentTextView];
         
         /** 回答时间 */
         _answertimeLable = [[UILabel alloc] init];
@@ -81,11 +92,16 @@
         [_bgView addSubview:_askauthornameLabel];
         
         /** 提问内容 */
-        _askcontentLabel = [[UILabel alloc] init];
-        _askcontentLabel.font = Font_14;
-        _askcontentLabel.textColor = COLOR_Text_Gay;
-        _askcontentLabel.numberOfLines = 0;
-        [_bgView addSubview:_askcontentLabel];
+//        _askcontentLabel = [[UILabel alloc] init];
+//        _askcontentLabel.font = Font_14;
+//        _askcontentLabel.textColor = COLOR_Text_Gay;
+//        _askcontentLabel.numberOfLines = 0;
+//        [_bgView addSubview:_askcontentLabel];
+        _askcontentTextView = [[CFTextView alloc] init];
+        _askcontentTextView.userInteractionEnabled = NO;
+        _askcontentTextView.font = Font_14;
+        _askcontentTextView.backgroundColor = [UIColor clearColor];
+        [_bgView addSubview:_askcontentTextView];
         
         // 全文
         _allButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -127,17 +143,18 @@
     _answertimeLable.frame = CGRectMake(kScreenWidth - answerSize.width - LR, top, answerSize.width, 25);
     
     /** 回答内容 */
-    _answercontentLable.text = answerModel.answercontent;
-    CGSize answercontentSize = [_answercontentLable.text sizeMakeWithFont:_answercontentLable.font maxW:kScreenWidth - 2* LR];
+    //@"说好的回报难吃难吃难吃[吃难吃][$17$][$19$][$17$][$17$][$20$][$17$][$20$][$17$][$17$][$20$][$17$][$20$]你当年的你惹麻烦麻烦吗";
+    _contentTextView.attributedText = [self ContentAttributedString:answerModel.answercontent];
+    CGSize answercontentSize = [answerModel.answercontent sizeMakeWithFont:Font_14 maxW:kScreenWidth - 2* LR];
     if (answerModel.isAllText||answercontentSize.height < 35) {
-        _answercontentLable.frame = CGRectMake(LR, CGRectGetMaxY(_answerauthornameLable.frame), answercontentSize.width, answercontentSize.height + 10);
+        _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answerauthornameLable.frame), answercontentSize.width+ 20, answercontentSize.height + 10);
     } else if(answercontentSize.height > 35) {
-        _answercontentLable.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), answercontentSize.width, 35);
+        _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), answercontentSize.width+20, 35);
     }
     
     // 全文按钮
     _allButton.tag = answerModel.autoId;
-    _allButton.frame = CGRectMake(kScreenWidth - 60, CGRectGetMaxY(_answercontentLable.frame), 50, 25);
+    _allButton.frame = CGRectMake(kScreenWidth - 60, CGRectGetMaxY(_contentTextView.frame), 50, 25);
     if(answercontentSize.height > 35 && answerModel.isAllText)
     {
         _allButton.hidden = NO;
@@ -151,7 +168,7 @@
     }
     
     /** 提问者Bg Y值 */
-    CGFloat askBgViewY = CGRectGetMaxY(_answercontentLable.frame) + 10;
+    CGFloat askBgViewY = CGRectGetMaxY(_contentTextView.frame) + 10;
     if (!_allButton.hidden) {
         askBgViewY = askBgViewY + 15;
     }
@@ -161,13 +178,69 @@
     _askauthornameLabel.frame = CGRectMake(2*LR, askBgViewY+10, askauthorSize.width, askauthorSize.height);
     
     /** 提问内容 */
-    _askcontentLabel.text = answerModel.askcontent;
-    CGSize askcontentSize = [_askcontentLabel.text sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
-    _askcontentLabel.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), askcontentSize.width, askcontentSize.height);
+//    _askcontentLabel.text = answerModel.askcontent;
+//    CGSize askcontentSize = [_askcontentLabel.text sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
+//    _askcontentLabel.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), askcontentSize.width, askcontentSize.height);
+    _askcontentTextView.attributedText = [self ContentAttributedString:answerModel.askcontent];//answerModel.askcontent;
+    CGSize askcontentSize = [_askcontentTextView.text sizeMakeWithFont:Font_14 maxW:kScreenWidth - 4 * LR];
+    _askcontentTextView.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), kScreenWidth - 4 * LR, askcontentSize.height+20);
     
     /** 提问者Bg */
-    CGFloat askBgViewH = CGRectGetMaxY(_askcontentLabel.frame) - CGRectGetMaxY(_askauthornameLabel.frame) + 35;
+    CGFloat askBgViewH = CGRectGetMaxY(_askcontentTextView.frame) - CGRectGetMaxY(_askauthornameLabel.frame) + 35;
     _askBgView.frame = CGRectMake(LR, askBgViewY, kScreenWidth - 2 *LR, askBgViewH);
+}
+
+- (NSMutableAttributedString *)ContentAttributedString:(NSString *)contentString
+{
+    NSString *pattern = @"\\[[$0-9$]+\\]";
+    NSRegularExpression *regx = [[NSRegularExpression alloc] initWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSMutableDictionary *gifEomtionDict = [[NSMutableDictionary alloc] init];
+    [regx enumerateMatchesInString:contentString options:NSMatchingReportProgress range:NSMakeRange(0, contentString.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
+        NSString * resultString = [contentString substringWithRange:result.range];
+        NSString *gifName = [[contentString substringWithRange:result.range] stringByReplacingOccurrencesOfString:@"[$" withString:@""];
+        gifName = [gifName stringByReplacingOccurrencesOfString:@"$]" withString:@""];
+        
+        for (int i = 0; resultString.length > 2 && !gifName; i++) {
+            resultString = [resultString substringWithRange:NSMakeRange(0, resultString.length - 1)];
+        }
+        
+        if (gifName&&gifName.length > 0) {
+            gifEomtionDict[NSStringFromRange(NSMakeRange(result.range.location, resultString.length))] = gifName;
+            //NSLog(@"%@----%@====%@", resultString, gifName, gifEomtionDict);
+        }
+    }];
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:contentString];
+    NSMutableArray *ranges = [gifEomtionDict.allKeys mutableCopy];
+    [ranges sortUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
+        NSRange range1 = NSRangeFromString(obj1);
+        NSRange range2 = NSRangeFromString(obj2);
+        
+        if (range1.location < range2.location) {
+            return NSOrderedDescending;
+        }
+        
+        return NSOrderedAscending;
+    }];
+    
+    // 创建图片图片附件
+    for (NSString *rangeString in ranges) { //rangeString = @"{148, 3}"
+        //        CFTextAttachment* attachment = [[CFTextAttachment alloc] init];
+        //        attachment.bounds = CGRectMake(0, 0, 20, 20);
+        //        attachment.gifName = gifEomtionDict[rangeString];
+        
+        NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+        attachment.bounds = CGRectMake(0, 0, 20, 20);
+        attachment.image = [UIImage sd_animatedGIFNamed:gifEomtionDict[rangeString]];
+        
+        NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+        [attributedString replaceCharactersInRange:NSRangeFromString(rangeString) withAttributedString:attachmentString];
+    }
+    
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, attributedString.length)];
+    [attributedString addAttribute:NSBackgroundColorAttributeName value:[UIColor clearColor] range:NSMakeRange(0, attributedString.length)];
+    
+    return attributedString;
 }
 
 - (void)allTextClick:(UIButton *)btn
