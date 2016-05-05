@@ -121,4 +121,6 @@
 
 + (void)cancelPerfor:(id)object;
 
++ (BOOL)isEmpty:(NSString*)strMsg;
+
 @end

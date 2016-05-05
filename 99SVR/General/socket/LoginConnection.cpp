@@ -95,18 +95,18 @@ void LoginConnection::on_do_connected()
 	if (login_reqv == 4)
 	{
 		login_req4.set_nmobile(CLIENT_TYPE);
-		SEND_MESSAGE(protocol::Sub_Vchat_logonReq4, login_req4);
 		login_nmobile = login_req4.nmobile();
 		login_version = login_req4.nversion();
 		login_password = login_req4.cuserpwd();
+		SEND_MESSAGE(protocol::Sub_Vchat_logonReq4, login_req4);
 	}
 	else
 	{
 		login_req5.set_nmobile(CLIENT_TYPE);
-		SEND_MESSAGE(protocol::Sub_Vchat_logonReq5, login_req5);
 		login_nmobile = login_req5.nmobile();
 		login_version = login_req5.nversion();
 		login_password = "";
+		SEND_MESSAGE(protocol::Sub_Vchat_logonReq5, login_req5);
 	}
 
 	if ( in_room )

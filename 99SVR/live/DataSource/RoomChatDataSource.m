@@ -57,6 +57,7 @@
         {
             cell = [[RoomChatNull alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"nullInfoCell"];
         }
+        cell.lblInfo.text = @"没有人@我";
         return cell;
     }
     DTAttributedTextCell *cell = [self tableView:tableView chatPreparedCellForIndexPath:indexPath];

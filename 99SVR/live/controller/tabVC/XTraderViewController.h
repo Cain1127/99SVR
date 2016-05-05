@@ -10,13 +10,16 @@
 
 @class RoomHttp;
 
-@interface XTraderViewController : UIViewController
+typedef void(^TouchHanleBlock)(void);
 
-- (id)initWihModel:(RoomHttp *)room;
+@interface XTraderViewController :UIView
+
+- (id)initWithFrame:(CGRect)frame model:(RoomHttp *)room control:(UIViewController *)control;
 
 - (void)reloadModel:(RoomHttp *)room;
 
 - (void)addNotice;
+
 - (void)removeNotice;
 
 @end

@@ -10,10 +10,10 @@
 
 @class RoomHttp;
 
-@interface XIdeaViewController : UIViewController
+@interface XIdeaViewController : UIView
 
-- (id)initWihModel:(RoomHttp *)room;
-
+- (id)initWithFrame:(CGRect)frame model:(RoomHttp *)room;
+//- (id)initWihModel:(RoomHttp *)room;
 - (void)setModel:(RoomHttp *)room;
 
 @end

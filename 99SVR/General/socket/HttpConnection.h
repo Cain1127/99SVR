@@ -114,6 +114,7 @@ public:
 	// 回复观点（已提供）
 	void PostReply(int viewpointId, int parentReplyId, int authorId, int fromAuthorId, const char* content, PostReplyListener* listener);
 
+
 	// 请求每个分类的未读数（已提供）
 	void RequestUnreadCount(UnreadListener* listener);
 
@@ -152,6 +153,11 @@ public:
 
 	// PC左侧菜单
 	void RequestPcGroupsPage(GroupsPageListener* listener);
+
+
+	string GetPrivateServiceDetailUrl(int psid);
+
+	string GetConsumeRecordUrl();
 
 };
 

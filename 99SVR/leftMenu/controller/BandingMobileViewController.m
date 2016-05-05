@@ -193,11 +193,12 @@
         parameters = @{@"action":@(4),@"userid":@([UserInfo sharedUserInfo].nUserId),@"key":strMd5,@"client":@(2)};
     }
     @WeakObj(self)
-    [BaseService postJSONWithUrl:kBand_mobile_getcode_URL parameters:parameters success:^(id responseObject)
+    NSString *strUrl = [NSString stringWithFormat:@"%@Message/getmsgcode",kRegisterNumber];
+    [BaseService postJSONWithUrl:strUrl parameters:parameters success:^(id responseObject)
     {
          [self.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
+         if (dict && [[dict objectForKey:@"status"] intValue]==0)
          {
              DLog(@"dict:%@",dict);
              [selfWeak startTimer];
@@ -208,13 +209,13 @@
          }
          else
          {
-             [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+             [ProgressHUD showError:[dict objectForKey:@"info"]];
          }
      }
      fail:^(NSError *error)
      {
          [self.view hideToastActivity];
-         [ProgressHUD showError:@"请求验证码失败"];
+         [ProgressHUD showError:@"连接服务器失败"];
      }];
 }
 
@@ -285,16 +286,17 @@
     NSDictionary *paramters;
     NSString *strInfo;
     [self.view makeToastActivity_bird];
+    
     if(!banding)
     {
         //直接绑定手机
         paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(3),@"code":strCode};
-        strInfo = kBand_mobile_setphone_URL;
+        strInfo = [NSString stringWithFormat:@"%@Message/bindPhone",kRegisterNumber];
     }
     else
     {
         paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"action":@(4),@"code":strCode};
-        strInfo = kBand_mobile_checkcode_URL;
+        strInfo = [NSString stringWithFormat:@"%@Message/checkphonecode",kRegisterNumber];
     }
     @WeakObj(self);
     __block int __banding = banding;
@@ -302,7 +304,7 @@
      {
          [selfWeak.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if(dict && [dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
+         if(dict && [dict objectForKey:@"status"] && [[dict objectForKey:@"status"] intValue]==0)
          {
              //没绑定过的，直接绑定，然后返回
              if (!__banding) {
@@ -318,14 +320,14 @@
          {
              gcd_main_safe(
              ^{
-                   [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+                   [ProgressHUD showError:[dict objectForKey:@"info"]];
              });
          }
      }fail:^(NSError *error)
      {
          gcd_main_safe(^{
              [selfWeak.view hideToastActivity];
-             [ProgressHUD showError:@"注册失败"];
+             [ProgressHUD showError:@"连接服务器失败"];
          });
      }];
 }

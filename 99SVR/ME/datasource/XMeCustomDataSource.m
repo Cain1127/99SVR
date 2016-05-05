@@ -57,7 +57,7 @@ static NSString *const MeCustomizedCell = @"MeCustomizedCell";
         NSString *strName = [NSString stringWithUTF8String:cBuffer];
         NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
         [cell.imgView sd_setImageWithURL:url1 placeholderImage:[UIImage imageNamed:@"default"]];
-        NSString *imgName = [NSString stringWithFormat:@"customized_vip%d_icon",model.levelid+1];
+        NSString *imgName = [NSString stringWithFormat:@"customized_vip%d_icon",model.levelid];
         cell.imgLevel.image = [UIImage imageNamed:imgName];
     }
     return cell;

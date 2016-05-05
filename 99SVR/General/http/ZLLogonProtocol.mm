@@ -657,6 +657,18 @@ void ZLRoomListener::OnRobotTeacherIdNoty(RobotTeacherIdNoty& info)
     }
 }
 
+//Ã·Œ œÏ”¶
+void ZLRoomListener::OnAskQuestionResp(AskQuestionResp& info)
+{
+    
+}
+
+//Ã·Œ œÏ”¶
+void ZLRoomListener::OnAskQuestionErr(ErrCodeResp& info)
+{
+    
+}
+
 /**
  *  麦状态变换触发
  */
@@ -741,6 +753,7 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
     }
     [currentRoom setRoomInfo:&info];
     [aryRoomChat addObject:@"<span style=\"color:#919191\">[系统消息]加入房间成功</span>"];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
 }
@@ -755,18 +768,7 @@ void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
 
 void ZLRoomListener::OnExpertNewViewNoty(ExpertNewViewNoty& info)
 {
-    /*
-    uint32	_nmessageid;
-    uint32	_nvcbid;
-    string	_sname;
-    string	_sicon;
-    string	_spublictime;
-    uint32	_ncommentcnt;
-    uint32	_nlikecnt;
-    uint32	_nflowercnt;
-    uint32	_contlen;
-    string	_content;
-     */
+    //新观点通知
     TQIdeaModel *idea = [[TQIdeaModel alloc] initWIthNewPointNotify:&info];
     NSDictionary *dict = @{@"code":@(1),@"view":idea};
 //    [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSString *)#> object:<#(nullable id)#>];
@@ -775,5 +777,11 @@ void ZLRoomListener::OnExpertNewViewNoty(ExpertNewViewNoty& info)
 void ZLRoomListener::OnUserAccountInfo(UserAccountInfo& info)
 {
     [UserInfo sharedUserInfo].goldCoin = info.nk()/1000.0f;
+    
+}
+
+void ZLRoomListener::OnFavoriteVcbResp(FavoriteRoomResp& info)
+{
+    DLog(@"colletInfo:%d--errid:%d",info.actionid(),info.errorid());
     
 }

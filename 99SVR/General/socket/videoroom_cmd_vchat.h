@@ -651,6 +651,28 @@ namespace protocol
 	  uint64 giftmoney;      //礼物金币
 	}CMDTeamTopNResp_t;
 
+	//提问请求
+	typedef struct tag_CMDAskQuestionReq
+	{
+	  uint32 roomid;
+	  uint32 userid;
+	  uint32 teamid;
+	  char stock[32];
+	  uint32 questionlen;
+	  char question[0];
+	}CMDAskQuestionReq_t;
+
+	//提问请求
+	typedef struct tag_CMDAskQuestionResp
+	{
+	  uint32 questionid;  
+	  uint32 userid;
+	  uint32 teamid;
+	  char stock[32];
+	  uint32 questionlen;
+	  char question[0];
+	}CMDAskQuestionResp_t;
+
 	//0:Both,1:Email,2:SMS
 	typedef enum
 	{

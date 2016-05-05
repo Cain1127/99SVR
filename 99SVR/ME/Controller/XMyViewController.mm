@@ -64,7 +64,7 @@
     [self.view addSubview:_leftMenuHeaderView];
     
     //添加一个tableView
-    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, _leftMenuHeaderView.height+_leftMenuHeaderView.y, kScreenWidth, kScreenHeight-44) style:UITableViewStyleGrouped];
+    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, _leftMenuHeaderView.height+_leftMenuHeaderView.y, kScreenWidth, kScreenHeight-(_leftMenuHeaderView.height+_leftMenuHeaderView.y)) style:UITableViewStyleGrouped];
     _listTableView.delegate = self;
     _listTableView.dataSource = self;
     _listTableView.bounces = NO;

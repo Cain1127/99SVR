@@ -222,6 +222,7 @@
 		BB14B9D01CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m in Sources */ = {isa = PBXBuildFile; fileRef = BB14B9CD1CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m */; };
 		BB14B9D31CD9B6D00027E7E6 /* ZLMeTeamPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = BB14B9D21CD9B6D00027E7E6 /* ZLMeTeamPrivate.m */; };
 		BB14B9D61CDA213D0027E7E6 /* RoomChatNull.m in Sources */ = {isa = PBXBuildFile; fileRef = BB14B9D51CDA213D0027E7E6 /* RoomChatNull.m */; };
+		BB14B9D81CDA35940027E7E6 /* HttpConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB14B9D71CDA35940027E7E6 /* HttpConnection.cpp */; };
 		BB16616C1C3CA0B800D318BE /* UITableView+reloadComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */; };
 		BB16617C1C3D018C00D318BE /* PhotoToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16617B1C3D018C00D318BE /* PhotoToolBar.m */; };
 		BB16617F1C3D01F400D318BE /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = BB16617E1C3D01F400D318BE /* Photo.m */; };
@@ -269,7 +270,6 @@
 		BB2CA6101CD338A300DFE56E /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5CB1CD338A200DFE56E /* crc32.cpp */; };
 		BB2CA6111CD338A300DFE56E /* Http.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5CE1CD338A200DFE56E /* Http.cpp */; };
 		BB2CA6121CD338A300DFE56E /* http_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5D11CD338A200DFE56E /* http_common.cpp */; };
-		BB2CA6131CD338A300DFE56E /* HttpConnection.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5D41CD338A200DFE56E /* HttpConnection.mm */; };
 		BB2CA6141CD338A300DFE56E /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5E01CD338A200DFE56E /* json_reader.cpp */; };
 		BB2CA6151CD338A300DFE56E /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5E21CD338A200DFE56E /* json_value.cpp */; };
 		BB2CA6161CD338A300DFE56E /* json_valueiterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = BB2CA5E31CD338A200DFE56E /* json_valueiterator.inl */; };
@@ -1200,6 +1200,7 @@
 		BB14B9D21CD9B6D00027E7E6 /* ZLMeTeamPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLMeTeamPrivate.m; sourceTree = "<group>"; };
 		BB14B9D41CDA213D0027E7E6 /* RoomChatNull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomChatNull.h; sourceTree = "<group>"; };
 		BB14B9D51CDA213D0027E7E6 /* RoomChatNull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomChatNull.m; sourceTree = "<group>"; };
+		BB14B9D71CDA35940027E7E6 /* HttpConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HttpConnection.cpp; sourceTree = "<group>"; };
 		BB16616A1C3CA0B800D318BE /* UITableView+reloadComplete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+reloadComplete.h"; sourceTree = "<group>"; };
 		BB16616B1C3CA0B800D318BE /* UITableView+reloadComplete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+reloadComplete.m"; sourceTree = "<group>"; };
 		BB16617A1C3D018C00D318BE /* PhotoToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoToolBar.h; sourceTree = "<group>"; };
@@ -1310,7 +1311,6 @@
 		BB2CA5D11CD338A200DFE56E /* http_common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = http_common.cpp; sourceTree = "<group>"; };
 		BB2CA5D21CD338A200DFE56E /* http_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = http_common.h; sourceTree = "<group>"; };
 		BB2CA5D31CD338A200DFE56E /* HttpConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpConnection.h; sourceTree = "<group>"; };
-		BB2CA5D41CD338A200DFE56E /* HttpConnection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HttpConnection.mm; sourceTree = "<group>"; };
 		BB2CA5D51CD338A200DFE56E /* HttpListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpListener.h; sourceTree = "<group>"; };
 		BB2CA5D61CD338A200DFE56E /* HttpMessage.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpMessage.pb.h; sourceTree = "<group>"; };
 		BB2CA5D71CD338A200DFE56E /* HttpMessageComplex.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpMessageComplex.pb.h; sourceTree = "<group>"; };
@@ -2963,6 +2963,7 @@
 		BB2CA5C51CD338A200DFE56E /* socket */ = {
 			isa = PBXGroup;
 			children = (
+				BB14B9D71CDA35940027E7E6 /* HttpConnection.cpp */,
 				BB2CA5C61CD338A200DFE56E /* commonroom_cmd_vchat.h */,
 				BB2CA5C71CD338A200DFE56E /* CommonroomMessage.pb.h */,
 				BB2CA5C81CD338A200DFE56E /* Connection.cpp */,
@@ -2977,7 +2978,6 @@
 				BB2CA5D11CD338A200DFE56E /* http_common.cpp */,
 				BB2CA5D21CD338A200DFE56E /* http_common.h */,
 				BB2CA5D31CD338A200DFE56E /* HttpConnection.h */,
-				BB2CA5D41CD338A200DFE56E /* HttpConnection.mm */,
 				BB2CA5D51CD338A200DFE56E /* HttpListener.h */,
 				BB2CA5D61CD338A200DFE56E /* HttpMessage.pb.h */,
 				BB2CA5D71CD338A200DFE56E /* HttpMessageComplex.pb.h */,
@@ -4826,8 +4826,8 @@
 				BB2CA6181CD338A300DFE56E /* LoginConnection.cpp in Sources */,
 				BB63F5DB1C2CC7A300A042E8 /* QCheckBox.m in Sources */,
 				BBD58F001CCE7C54009250DB /* HomeCustomViewController.m in Sources */,
-				BB2CA6131CD338A300DFE56E /* HttpConnection.mm in Sources */,
 				BB6F3AD41C9F86270035EBBE /* TAAbstractDotView.m in Sources */,
+				BB14B9D81CDA35940027E7E6 /* HttpConnection.cpp in Sources */,
 				BB63F5AD1C2CC7A300A042E8 /* UIView+Touch.m in Sources */,
 				BB6F3ADA1C9F86270035EBBE /* UIView+SDExtension.m in Sources */,
 				BBCF9A681CADAB60005B9DCE /* TextColletViewController.m in Sources */,

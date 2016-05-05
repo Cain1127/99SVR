@@ -30,4 +30,8 @@
 
 - (void)stopNewPlay;
 
+- (void)removeAllNotify;
+
+- (void)removeNotify;
+
 @end

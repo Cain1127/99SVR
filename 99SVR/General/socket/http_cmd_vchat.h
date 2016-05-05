@@ -170,6 +170,7 @@ namespace protocol
 		float buyPrice;
 		float updatePrice;
 		uint32 isopen;
+		uint32 maxnum;
 	}CMDPrivateServiceLevelDescription_t;
 
 	// 私人定制缩略信息

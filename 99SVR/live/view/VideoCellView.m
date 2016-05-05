@@ -90,10 +90,10 @@
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     [_lookCountBtn setTitle:room.onlineusercount forState:UIControlStateNormal];
-//    _nameLabel.text = room.teamname;
+    _nameLabel.text = room.teamname;
     CGRect frame = [room.onlineusercount boundingRectWithSize:CGSizeMake(kScreenWidth, 20) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
-    _lookCountLabel.frame = Rect(_imageView.x+_imageView.width-frame.size.width-16, _nameLabel.y, frame.size.width+8, 15);
     [_roomIdLabel setText:room.roomid];
+    _lookCountBtn.frame = Rect(_imageView.x+_imageView.width-frame.size.width-20, _roomIdLabel.y, frame.size.width+8, 15);
 }
 
 - (void)setRoom:(RoomHttp *)room

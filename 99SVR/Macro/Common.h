@@ -82,7 +82,7 @@
 #if 1
 #define kTEXT_FOLLOW_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=follow&userid="
 #define kTEXT_GROUP_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=script"
-#define kRegisterNumber @"http://api.99ducaijing.com/"
+#define kRegisterNumber @"http://testphp.99ducaijing.cn/api.php?s="
 #else
 #define kRegisterNumber @"http://api.99ducaijing.com/"
 #define kImage_TEXT_URL @"http://122.13.81.62:22806/test/getimage.php?tid="
