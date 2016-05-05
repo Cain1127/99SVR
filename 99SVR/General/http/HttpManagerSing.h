@@ -128,4 +128,6 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 
 - (NSString *)requestGoid;
 
+- (void)RequestUserTeamRelatedInfo:(int)teamId;
+
 @end

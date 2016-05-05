@@ -72,7 +72,6 @@
                       messageUnreadCount:[notify.object[@"system"] intValue]
                         replyUnreadCount:[notify.object[@"reply"] intValue]
                        answerUnreadCount:[notify.object[@"answer"] intValue]];
-    
     [_tableView reloadData];
 }
 

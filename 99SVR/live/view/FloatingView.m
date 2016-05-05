@@ -119,7 +119,8 @@
 - (id)initWithFrame:(CGRect)frame color:(int)nColor name:(NSString *)strName number:(int)nNumber gid:(int)ngid userid:(int)nUserid
 {
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         _strName = strName;
         _nNumber = nNumber;
         _nUserId = nUserid;

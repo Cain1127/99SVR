@@ -81,7 +81,7 @@
 {
     _room = room;
     NSString *strUrl=nil;
-    if([room.croompic length]==0)
+    if([room.teamicon length]==0)
     {
         strUrl = @"";
     }
@@ -89,6 +89,7 @@
     {
         strUrl = [NSString stringWithFormat:@"%@",room.teamicon];
     }
+    
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     [_lookCountBtn setTitle:room.onlineusercount forState:UIControlStateNormal];
     _nameLabel.text = room.teamname;
@@ -101,13 +102,13 @@
 {
     _room = room;
     NSString *strUrl=nil;
-    if([room.croompic length]==0)
+    if([room.teamicon length]==0)
     {
         strUrl = @"";
     }
     else
     {
-       strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.croompic];
+       strUrl = [NSString stringWithFormat:@"%@",room.teamicon];
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     _nameLabel.text = room.teamname;

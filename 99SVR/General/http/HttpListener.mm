@@ -867,7 +867,16 @@ void CollectionListener::OnError(int errCode)
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_COLLET_UPDATE_VC object:@{@"code":@(errCode)}];
 }
 
+void UserTeamRelatedInfoListener::onResponse(UserTeamRelatedInfo &info)
+{
+    NSDictionary *dict = @{@"code":@(1),@"askremain":@(info.askremain()),@"askcoin":@(info.askcoin()),@"viplevel":@(info.viplevel())};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_REQSTION_REMAIN_VC object:dict];
+}
 
+void UserTeamRelatedInfoListener::OnError(int errCode)
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_REQSTION_REMAIN_VC object:@{@"code":@(errCode)}];
+}
 
 
 

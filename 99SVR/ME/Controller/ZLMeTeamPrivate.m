@@ -87,7 +87,14 @@
     [self.view addSubview:whatPrivate];
     whatPrivate.hidden = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPrivate)
+                                                 name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
     [kHTTPSingle RequestWhatIsPrivateService];
+}
+
+- (void)requestPrivate
+{
+    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
 
 - (void)buyprivate
@@ -230,8 +237,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:) name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
     if (_roomId!=[_room.teamid intValue])
     {

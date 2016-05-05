@@ -53,11 +53,11 @@
     DTAttributedTextView *_teachView;
     UIView *_chatAllView;
     ChatRightView *_rightView;
-    
 }
 
 @property (nonatomic,assign) int nCurGift;
-
+@property (nonatomic,assign) int question_times;
+@property (nonatomic,assign) float question_coin;
 @property (nonatomic,strong) RoomHttp *room;
 @property (nonatomic,copy) NSArray *aryChat;
 @property (nonatomic,copy) NSArray *aryPriChat;
@@ -100,6 +100,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
     [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
+    [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
 }
 
 - (id)initWithModel:(RoomHttp *)room
@@ -128,6 +129,7 @@
     _ffPlay.roomIsCollet = nRoom_is_collet;
     [self addNotification];
     [kHTTPSingle RequestConsumeRank:[_room.teamid intValue]];
+    [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
 }
 
 - (void)connectUnVideo:(UIButton *)sender
@@ -143,7 +145,6 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    
     [super viewDidAppear:animated];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
@@ -335,8 +336,26 @@
     }
 }
 
+- (void)loadAllInfo:(NSNotification *)notify
+{
+     dispatch_async(dispatch_get_main_queue(), ^{
+         [ProgressHUD showError:@"提问失败"];
+     });
+}
+
+- (void)onLoadDict:(NSNotification *)notify
+{
+    NSDictionary *dict = notify.object;
+    if ([dict[@"code"] intValue]==1) {
+        _question_coin = [dict[@"askcoin"] floatValue];
+        _question_times = [dict[@"askremain"] floatValue];
+    }
+}
+
 - (void)addNotification
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLoadDict:) name:MESSAGE_REQSTION_REMAIN_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadFailQuestion:) name:MESSAGE_QUESTION_FAIL_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseQuestion:) name:MESSAGE_ROOM_QUESTION_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRoomTeachInfo:) name:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadConsumeRank:) name:MESSAGE_CONSUMERANK_LIST_VC object:nil];
@@ -689,6 +708,8 @@
                 [UIView animateWithDuration:0.5 animations:^{
                     _questionView.hidden = NO;
                     [_questionView setFrame:Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight)];
+                    NSString *strmsg = [NSString stringWithFormat:@"温馨提示:您还剩%d次免费提问的机会，问股仅供参考，不构成投资建议",_question_times];
+                    _questionView.lblTimes.text = strmsg;
                 } completion:^(BOOL finished) {}];
             }
             else

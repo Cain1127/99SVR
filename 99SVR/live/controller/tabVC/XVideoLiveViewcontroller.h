@@ -36,4 +36,6 @@
 
 - (void)addNotify;
 
+- (void)startNewPlay;
+
 @end

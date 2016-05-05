@@ -51,8 +51,8 @@
 
 @implementation TQAnswerModel
 
-- (id)initWithAnswer:(QuestionAnswer *)QuestionAnswer {
-    
+- (id)initWithAnswer:(QuestionAnswer *)QuestionAnswer
+{
     self = [super init];
     
     self.answercontent = [NSString stringWithUTF8String:QuestionAnswer->answercontent().c_str()];
@@ -84,16 +84,6 @@
     self.ID = MailReply->id();
     self.fromclient = MailReply->fromclient();
     return self;
-}
-
--(void)setAnswertime:(NSString *)answertime
-{
-    _answertime = [answertime DataFormatter];
-}
-
-- (void)setAsktime:(NSString *)asktime
-{
-    _asktime = [asktime DataFormatter];
 }
 
 @end

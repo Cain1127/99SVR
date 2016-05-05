@@ -8,6 +8,7 @@
 
 #import "XTeamViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "RoomViewController.h"
 #import "ZLRoomVideoCell.h"
 #import "TableViewFactory.h"
 #import "XVideoTeamInfo.h"
@@ -95,7 +96,11 @@
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadTeamContent:) name:MESSAGE_TEAM_INTRODUCE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoInfo:) name:MESSAGE_ROOM_VIDEO_LIST_VC object:nil];
-    [kHTTPSingle RequestTeamIntroduce:[_room.teamid intValue]];
+    if(_introduce==nil && _aryVideo.count == 0)
+    {
+        [kHTTPSingle RequestTeamIntroduce:[_room.teamid intValue]];
+    }
+    [[RoomViewController sharedRoomViewController] startVideoPlay];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -207,13 +212,18 @@
 - (void)connectVideo:(XVideoModel *)video
 {
     NSString *strUrl = video.videourl;
-    strUrl = @"http://testphp.99ducaijing.cn/Uploads/20160422163127.mp4";
-    [self.navigationController pushViewController:[KxMovieViewController movieViewControllerWithContentPath:strUrl parameters:nil] animated:YES];
+    [[RoomViewController sharedRoomViewController] stopVideoPlay];
+    [self presentViewController:[KxMovieViewController movieViewControllerWithContentPath:strUrl parameters:nil]
+                       animated:YES completion:nil];
 }
+
+
 
 - (void)dealloc
 {
     DLog(@"dealloc");
 }
+
+
 
 @end

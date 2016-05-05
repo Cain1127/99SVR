@@ -48,8 +48,17 @@
         NSDictionary *dict = [notify object];
         int errid = [[dict objectForKey:@"err"] intValue];
         NSString *strMsg = [dict objectForKey:@"msg"];
-        if (errid==201) {
-            [AlertFactory createPassswordAlert:_control room:_room];
+        if (errid==201)
+        {
+            if ([UserInfo sharedUserInfo].nStatus) {
+                [AlertFactory createPassswordAlert:_control room:_room];
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [ProgressHUD showError:@"加入房间失败或房间被关闭"];
+                });
+            }
         }
         else{
             @WeakObj(strMsg)

@@ -28,10 +28,24 @@
     [btn setTitle:title forState:UIControlStateNormal];
     return btn;
 }
+
+- (void)loadInfo:(NSNotification *)notify
+{
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak.readBtn showNumber:KUserSingleton.nUnRead];
+    });
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [_readBtn showNumber:KUserSingleton.nUnRead];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     _headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
     _headView.backgroundColor = UIColorFromRGB(0xffffff);
@@ -44,10 +58,13 @@
     
     if ([UserInfo sharedUserInfo].nStatus)
     {
-        UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(MailBoxEvent) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
-        [_headView addSubview:btnLeft];
-        [btnLeft setFrame:Rect(0,20,44,44)];
-        _btnLeft = btnLeft;
+        _readBtn = [[UnReadButton alloc] initWithFrame:Rect(0, 20, 44, 44)];
+        [_readBtn addTarget:self action:@selector(MailBoxEvent) forControlEvents:UIControlEventTouchUpInside];
+        // 设置图片
+        UIImage *img = [UIImage imageNamed:@"nav_menu_icon_n"];
+        [_readBtn setImage:img forState:UIControlStateNormal];
+        [_readBtn setImage:[UIImage imageNamed:@"nav_menu_icon_p"] forState:UIControlStateHighlighted];
+        [_headView addSubview:_readBtn];
     }
     UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchViewController) image:@"nav_search_icon_n" highImage:@"nav_search_icon_p"];
     [_headView addSubview:btnRight];
@@ -56,20 +73,13 @@
     _headLine = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
     [_headLine setBackgroundColor:COLOR_Line_Big_Gay];
     [self.view addSubview:_headLine];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadInfo:) name:MESSAGE_UNREAD_NUMBER_VC object:nil];
 }
 
 - (void)MailBoxEvent
 {
-    //    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
-    //    {
     TQMailboxViewController *mailBox = [[TQMailboxViewController alloc] init];
     [self.navigationController pushViewController:mailBox animated:YES];
-    //    }
-    //    else
-    //    {
-    //        LoginViewController *loginView = [[LoginViewController alloc] init];
-    //        [self.navigationController pushViewController:loginView animated:YES];
-    //    }
 }
 
 - (void)searchViewController

@@ -44,6 +44,7 @@ UnreadListener _unreadListener;
 CollectionListener _collectionListener;
 //BannerListener _bannerListener;
 TeamPrivateServiceSummaryPackListener _teamPrivateListener;
+UserTeamRelatedInfoListener _userTeamRelatedInfoListener;
 
 @interface HttpProtocolManager()
 {
@@ -306,5 +307,12 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
     NSString *str = [NSString stringWithUTF8String:hConnection->GetConsumeRecordUrl().c_str()];
     return str;
 }
+
+- (void)RequestUserTeamRelatedInfo:(int)teamId
+{
+    [self createHttpConnection];
+    hConnection->RequestUserTeamRelatedInfo(teamId,&_userTeamRelatedInfoListener);
+}
+
 
 @end

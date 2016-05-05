@@ -8,6 +8,7 @@
 #include "Connection.h"
 #include "Http.h"
 #include "Json.h"
+#import "UserInfo.h"
 #include "StatisticReport.h"
 
 Socket g_socket;
@@ -314,7 +315,17 @@ void Connection::connect_from_lbs_asyn()
 
 	if (!is_set_lbs)
 	{
+        const char* lbs_info = NULL;
+        if(KUserSingleton.nStatus)
+        {
+            lbs_info = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,lbs3.99ducaijing.cn:2222";
+        }
+        else
+        {
+            lbs_info = lbs0;
+        }
 		const char* lbs = lbs0;
+            
 		if (*cache_path)
 		{
 			lbs = get_lbs_from_file();
@@ -328,7 +339,14 @@ void Connection::connect_from_lbs_asyn()
 				}
 				else
 				{
-					lbs = lbs0;
+                    if(KUserSingleton.nStatus)
+                    {
+                        lbs = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,lbs3.99ducaijing.cn:2222";
+                    }
+                    else
+                    {
+                        lbs = lbs0;
+                    }
 					LOG("use lbs from default:%s", lbs);
 				}
 			}

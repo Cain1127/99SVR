@@ -8,6 +8,7 @@
 
 #import "XMyViewController.h"
 #import "LeftMenuHeaderView.h"
+#import "NNSVRViewController.h"
 #import "RoomHttp.h"
 #import "RoomViewController.h"
 #import "PlayIconView.h"
@@ -121,16 +122,19 @@
 {
     [_itemsArray removeAllObjects];
     _leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"TQMeCustomizedViewController"]];
-    if (KUserSingleton.bIsLogin && KUserSingleton.nType ==1) {
-        NSString *strName= [NSString stringWithFormat:@"我的玖玖币:  %.01f",KUserSingleton.goldCoin];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:strName icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
+    if (KUserSingleton.nStatus) {
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"TQMeCustomizedViewController"]];
+        if (KUserSingleton.bIsLogin && KUserSingleton.nType ==1) {
+            NSString *strName= [NSString stringWithFormat:@"我的玖玖币:  %.01f",KUserSingleton.goldCoin];
+            [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:strName icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
+        }
+        else
+        {
+            [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的玖玖币" icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
+        }
+        
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的消费记录" icon:@"personal_consumption_icon" goClassName:@"NNSVRViewController"]];
     }
-    else
-    {
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的玖玖币" icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
-    }
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的消费记录" icon:@"personal_consumption_icon" goClassName:@"CustomizedViewController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的关注" icon:@"personal_follow_icon" goClassName:@"VideoColletionViewController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"personal_services_icon" goClassName:@"KefuCenterController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"personal_ste_icon" goClassName:@"SettingCenterController"]];
@@ -211,8 +215,14 @@
     {
         if (_itemsArray.count>nRow)
         {
-            
             LeftCellModel *model = _itemsArray[nRow];
+            if([model.goClassName isEqualToString:@"NNSVRViewController"])
+            {
+                NSString *strPath = [kHTTPSingle requestGoid];
+                NNSVRViewController  *svrView = [[NNSVRViewController alloc] initWithPath:strPath title:@"消费记录"];
+                [self.navigationController pushViewController:svrView animated:YES];
+                return ;
+            }
             UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
             [self.navigationController pushViewController:viewController animated:YES];
         }

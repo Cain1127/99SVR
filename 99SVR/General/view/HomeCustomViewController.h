@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "GFBaseViewController.h"
+#import "UnReadButton.h"
+
 @interface HomeCustomViewController : GFBaseViewController
 
-
+@property (nonatomic,strong) UnReadButton *readBtn;
 @property (nonatomic,strong) UILabel *txtTitle;
 @property (nonatomic,strong) UIView *headView;
 @property (nonatomic,weak) UIButton *btnLeft;

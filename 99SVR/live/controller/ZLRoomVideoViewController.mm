@@ -107,7 +107,6 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
     [_ffPlay.view addGestureRecognizer:singleRecogn];
     _ffPlay.roomIsCollet = nRoom_is_collet;
     [self addNotification];
-    [kHTTPSingle RequestConsumeRank:[_room.roomid intValue]];
 }
 
 - (void)connectUnVideo:(UIButton *)sender

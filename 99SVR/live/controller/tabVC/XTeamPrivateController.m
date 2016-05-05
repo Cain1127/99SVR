@@ -51,6 +51,11 @@
     return self;
 }
 
+- (void)requestPrivate
+{
+    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+}
+
 - (void)setModel:(RoomHttp *)room
 {
     _room = room;
@@ -61,6 +66,8 @@
 
 - (void)addNotify
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPrivate)
+                                                 name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:)
                                                  name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
 }
@@ -113,9 +120,6 @@
 
 - (void)buyprivate
 {
-//    TQPurchaseViewController *control = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue] name:_room.teamname];
-//    [[self viewController].navigationController pushViewController:control animated:YES];
-    
     TQPurchaseViewController *control = [[TQPurchaseViewController alloc] init];
     control.stockModel = [[StockDealModel alloc]init];
     control.stockModel.teamicon = _room.teamicon;

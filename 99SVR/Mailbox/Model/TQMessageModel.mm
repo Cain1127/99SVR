@@ -29,9 +29,4 @@
     return self;
 }
 
-- (void)setPublishtime:(NSString *)publishtime
-{
-    _publishtime = [publishtime DataFormatter];
-}
-
 @end

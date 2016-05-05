@@ -97,8 +97,8 @@ static NSMutableDictionary * gHistory;
     UIToolbar           *_bottomBar;
     UISlider            *_progressSlider;
 
-    UIBarButtonItem     *_playBtn;
-    UIBarButtonItem     *_pauseBtn;
+    UIButton     *_playBtn;
+    UIButton     *_pauseBtn;
     
     UILabel             *_progressLabel;
     UILabel             *_leftLabel;
@@ -126,6 +126,12 @@ static NSMutableDictionary * gHistory;
     BOOL                _savedIdleTimer;
     
     NSDictionary        *_parameters;
+    UIButton *_doneButton;
+    UILabel *_lblName;
+    UIView *_downHUD;
+    
+    CGFloat fWidth;
+    CGFloat fHeight;
 }
 
 @property (readwrite) BOOL playing;
@@ -200,95 +206,6 @@ static NSMutableDictionary * gHistory;
     }
 }
 
-- (void)loadView
-{
-//    CGRect bounds = [[UIScreen mainScreen] applicationFrame];
-//    self.view = [[UIView alloc] initWithFrame:bounds];
-//    self.view.backgroundColor = [UIColor blackColor];
-//    self.view.tintColor = [UIColor blackColor];
-//
-//    _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhiteLarge];
-//    _activityIndicatorView.center = self.view.center;
-//    _activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-//    
-//    [self.view addSubview:_activityIndicatorView];
-//    
-//    CGFloat width = bounds.size.width;
-//    CGFloat height = bounds.size.height;
-//
-//    CGFloat topH = 50;
-//    CGFloat botH = 50;
-//
-//    _topHUD    = [[UIView alloc] initWithFrame:CGRectMake(0,0,0,0)];
-//    _topBar    = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, width, topH)];
-//    _bottomBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, height-botH, width, botH)];
-//    _bottomBar.tintColor = [UIColor blackColor];
-//
-//    _topHUD.frame = CGRectMake(0,0,width,_topBar.frame.size.height);
-//
-//    _topHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-//    _topBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-//    _bottomBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-//
-//    [self.view addSubview:_topBar];
-//    [self.view addSubview:_topHUD];
-//    [self.view addSubview:_bottomBar];
-//
-//    _progressLabel = [[UILabel alloc] initWithFrame:CGRectMake(46, 1, 50, topH)];
-//    _progressLabel.backgroundColor = [UIColor clearColor];
-//    _progressLabel.opaque = NO;
-//    _progressLabel.adjustsFontSizeToFitWidth = NO;
-//    _progressLabel.textAlignment = NSTextAlignmentRight;
-//    _progressLabel.textColor = [UIColor blackColor];
-//    _progressLabel.text = @"";
-//    _progressLabel.font = [UIFont systemFontOfSize:12];
-//    
-//    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(100, 2, width-197, topH)];
-//    _progressSlider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-//    _progressSlider.continuous = NO;
-//    _progressSlider.value = 0;
-//    
-//    _leftLabel = [[UILabel alloc] initWithFrame:CGRectMake(width-92, 1, 60, topH)];
-//    _leftLabel.backgroundColor = [UIColor clearColor];
-//    _leftLabel.opaque = NO;
-//    _leftLabel.adjustsFontSizeToFitWidth = NO;
-//    _leftLabel.textAlignment = NSTextAlignmentLeft;
-//    _leftLabel.textColor = [UIColor blackColor];
-//    _leftLabel.text = @"";
-//    _leftLabel.font = [UIFont systemFontOfSize:12];
-//    _leftLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-//    
-//    _infoButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
-//    _infoButton.frame = CGRectMake(width-31, (topH-20)/2+1, 20, 20);
-//    _infoButton.showsTouchWhenHighlighted = YES;
-//    _infoButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-//    [_infoButton addTarget:self action:@selector(infoDidTouch:) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    _playBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay
-//                                                             target:self
-//                                                             action:@selector(playDidTouch:)];
-//    _playBtn.width = 50;
-//    
-//    _pauseBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause
-//                                                              target:self
-//                                                              action:@selector(playDidTouch:)];
-//    _pauseBtn.width = 50;
-//
-//    [self updateBottomBar];
-//
-//    if (_decoder) {
-//        
-//        [self setupPresentView];
-//        
-//    } else {
-//        
-//        _progressLabel.hidden = YES;
-//        _progressSlider.hidden = YES;
-//        _leftLabel.hidden = YES;
-//        _infoButton.hidden = YES;
-//    }
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -311,10 +228,10 @@ static NSMutableDictionary * gHistory;
             [_decoder closeFile];
             [_decoder openFile:nil error:nil];
             
-            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Failure", nil)
-                                        message:NSLocalizedString(@"Out of memory", nil)
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"播放视频失败", nil)
+                                        message:NSLocalizedString(@"内存泄露", nil)
                                        delegate:nil
-                              cancelButtonTitle:NSLocalizedString(@"Close", nil)
+                              cancelButtonTitle:NSLocalizedString(@"关闭", nil)
                               otherButtonTitles:nil] show];
         }
         
@@ -448,29 +365,20 @@ static NSMutableDictionary * gHistory;
 {
     if (self.playing)
         return;
-    
     if (!_decoder.validVideo &&
         !_decoder.validAudio) {
-        
         return;
     }
-    
     if (_interrupted)
         return;
-
     self.playing = YES;
     _interrupted = NO;
     _disableUpdateHUD = NO;
     _tickCorrectionTime = 0;
     _tickCounter = 0;
-
-#ifdef DEBUG
-    _debugStartTime = -1;
-#endif
-
     [self asyncDecodeFrames];
     [self updatePlayButton];
-
+    //修改按钮状态
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [self tick];
@@ -486,10 +394,10 @@ static NSMutableDictionary * gHistory;
 {
     if (!self.playing)
         return;
-
     self.playing = NO;
     [self enableAudio:NO];
     [self updatePlayButton];
+    //修改按钮状态
     DLog(@"pause movie");
 }
 
@@ -640,7 +548,7 @@ static NSMutableDictionary * gHistory;
         [self play];
 }
 
-- (void) setupPresentView
+- (void)setupPresentView
 {
     CGRect bounds = self.view.bounds;
     
@@ -1209,17 +1117,6 @@ static NSMutableDictionary * gHistory;
     return actual.count || outdated.count;
 }
 
-- (void) updateBottomBar
-{
-    UIBarButtonItem *playPauseBtn = self.playing ? _pauseBtn : _playBtn;
-    [_bottomBar setItems:@[playPauseBtn] animated:NO];
-}
-
-- (void) updatePlayButton
-{
-    [self updateBottomBar];
-}
-
 - (void) updateHUD
 {
     if (_disableUpdateHUD)
@@ -1239,6 +1136,7 @@ static NSMutableDictionary * gHistory;
 
 - (void) showHUD: (BOOL) show
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     _hiddenHUD = !show;    
     _panGestureRecognizer.enabled = _hiddenHUD;
         
@@ -1248,14 +1146,26 @@ static NSMutableDictionary * gHistory;
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionNone
                      animations:^{
-                         
                          CGFloat alpha = _hiddenHUD ? 0 : 1;
-                         _topBar.alpha = alpha;
                          _topHUD.alpha = alpha;
-                         _bottomBar.alpha = alpha;
+                         _downHUD.alpha = alpha;
+                         if (alpha==1) {
+                            [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:5.0];
+                         }
                      }
                      completion:nil];
     
+}
+
+- (void)hiddenTopHud
+{
+    __weak UIView *__downHUD = _downHUD;
+    __weak UIView *__topHUD = _topHUD;
+    dispatch_main_async_safe(
+    ^{
+        __topHUD.alpha = 0;
+        __downHUD.alpha = 0;
+    });
 }
 
 - (void) fullscreenMode: (BOOL) on
@@ -1399,10 +1309,10 @@ static NSMutableDictionary * gHistory;
 
 - (void) handleDecoderMovieError: (NSError *) error
 {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Failure", nil)
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"播放失败", nil)
                                                         message:[error localizedDescription]
                                                        delegate:nil
-                                              cancelButtonTitle:NSLocalizedString(@"Close", nil)
+                                              cancelButtonTitle:NSLocalizedString(@"关闭", nil)
                                               otherButtonTitles:nil];
     
     [alertView show];
@@ -1426,6 +1336,156 @@ static NSMutableDictionary * gHistory;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self initToolBar_1];
+    [self initGesture];
+}
+
+-(void)initToolBar_1
+{
+    [self.view setBackgroundColor:RGB(255, 255, 255)];
+    
+    fWidth = kScreenWidth>kScreenHeight ? kScreenWidth : kScreenHeight;
+    fHeight = kScreenWidth>kScreenHeight ? kScreenHeight : kScreenWidth;
+    
+    _topHUD = [[UIView alloc] initWithFrame:CGRectMake(0,0,fWidth,44)];
+    _topHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:_topHUD];
+    _topHUD.alpha = 1;
+    
+    UIImageView *topViewBg = [[UIImageView alloc] initWithFrame:_topHUD.bounds];
+    [topViewBg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
+    [_topHUD addSubview:topViewBg];
+    topViewBg.tag = 1008;
+    
+    UILabel *sLine1 = [[UILabel alloc] initWithFrame:CGRectMake(0, _topHUD.frame.size.height-0.2, fWidth, 0.1)];
+    sLine1.backgroundColor = [UIColor colorWithRed:198/255.0
+                                             green:198/255.0
+                                              blue:198/255.0
+                                             alpha:1.0];
+    UILabel *sLine2 = [[UILabel alloc] initWithFrame:CGRectMake(0, _topHUD.frame.size.height-0.1, fWidth, 0.1)] ;
+    sLine2.backgroundColor = [UIColor whiteColor];
+    sLine1.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+    sLine2.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+    [_topHUD addSubview:sLine1];
+    [_topHUD addSubview:sLine2];
+    
+    
+    _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _doneButton.frame = CGRectMake(0, 0, 40, 40);
+    [_doneButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+    [_doneButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateHighlighted];
+    _doneButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:18];
+    _doneButton.showsTouchWhenHighlighted = YES;
+    [_doneButton addTarget:self action:@selector(doneDidTouch)
+          forControlEvents:UIControlEventTouchUpInside];
+    [_topHUD addSubview:_doneButton];
+    
+    _lblName = [[UILabel alloc] initWithFrame:Rect(30,15,fWidth-60,20)];
+    [_lblName setTextAlignment:NSTextAlignmentCenter];
+    [_lblName setText:@"视频播放"];
+    [_lblName setFont:XCFONT(15)];
+    [_lblName setTextColor:[UIColor whiteColor]];
+    [_topHUD addSubview:_lblName];
+    
+    _downHUD = [[UIView alloc] initWithFrame:CGRectMake(0, fHeight-44,fWidth, 44)];
+    _downHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:_downHUD];
+    _downHUD.alpha = 1.0f;
+    [_downHUD setBackgroundColor:[UIColor clearColor]];
+    [_downHUD setUserInteractionEnabled:YES];
+    
+    UIImageView *downViewBg = [[UIImageView alloc] initWithFrame:_downHUD.bounds];
+    [downViewBg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
+    [_downHUD addSubview:downViewBg];
+    downViewBg.tag = 1008;
+    
+    UILabel *sLine3 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0.4, fWidth, 0.1)];
+    sLine3.backgroundColor = [UIColor colorWithRed:198/255.0
+                                             green:198/255.0
+                                              blue:198/255.0
+                                             alpha:1.0];
+    UILabel *sLine4 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0.5, fWidth, 0.1)] ;
+    sLine4.backgroundColor = [UIColor whiteColor];
+    sLine3.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+    sLine4.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+    [_downHUD addSubview:sLine3];
+    [_downHUD addSubview:sLine4];
+    
+    _progressLabel = [[UILabel alloc] initWithFrame:CGRectMake(52,12,60,20)];
+    _progressLabel.opaque = NO;
+    _progressLabel.adjustsFontSizeToFitWidth = NO;
+    _progressLabel.textAlignment = NSTextAlignmentCenter;
+    _progressLabel.textColor = [UIColor whiteColor];
+    _progressLabel.text = @"00:00:00";
+    _progressLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0f];
+    
+    _progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(110,12,fWidth-190,20)];
+    
+    _progressSlider.continuous = NO;
+    _progressSlider.value = 0;
+    [_progressSlider setUserInteractionEnabled:YES];
+    
+    _leftLabel = [[UILabel alloc] initWithFrame:CGRectMake(fWidth-60,12,60,20)];
+    _leftLabel.opaque = NO;
+    _leftLabel.adjustsFontSizeToFitWidth = NO;
+    _leftLabel.textAlignment = NSTextAlignmentCenter;
+    _leftLabel.textColor = [UIColor whiteColor];
+    _leftLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0f];
+    _leftLabel.text = @"-99:59:59";
+    _leftLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
+    
+    [_downHUD addSubview:_progressLabel];
+    [_downHUD addSubview:_progressSlider];
+    [_downHUD addSubview:_leftLabel];
+    
+    _playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_playBtn setImage:[UIImage imageNamed:@"video_profiles_play_icon_p"] forState:UIControlStateNormal];
+    [_playBtn setImage:[UIImage imageNamed:@"video_profiles_pause_icon_p"] forState:UIControlStateSelected];
+    [_playBtn addTarget:self action:@selector(playDidTouch:) forControlEvents:UIControlEventTouchUpInside];
+    [_downHUD addSubview:_playBtn];
+    _playBtn.tag = 1001;
+    _playBtn.frame = Rect(8,0, 44,44);
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+}
+
+-(void)initGesture
+{
+    //添加单击与双击的手势,单击HUD隐藏与显示切换    双击图片渲染比例填充
+    _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleNetPlay:)];
+    
+    _tapGestureRecognizer.numberOfTapsRequired = 1; // 单击
+    [self.view addGestureRecognizer:_tapGestureRecognizer];
+}
+
+#pragma mark 退出
+-(void)doneDidTouch
+{
+    
+    [self dismissViewControllerAnimated:YES completion:
+     ^{
+     }];
+}
+
+-(void)handleNetPlay:(UITapGestureRecognizer*)tapGesture
+{
+    
+    if (tapGesture.state == UIGestureRecognizerStateEnded)
+    {
+        CGPoint point = [tapGesture locationInView:self.view];
+        if (point.y < 40 || point.y > _downHUD.frame.origin.y)
+        {
+            return ;
+        }
+        if (tapGesture == _tapGestureRecognizer)
+        {
+            [self showHUD: _hiddenHUD];
+        }
+    }
+}
+
+- (void)updatePlayButton
+{
+    _playBtn.selected = self.playing;
 }
 
 @end

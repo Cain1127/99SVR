@@ -25,7 +25,7 @@
 
 @property (nonatomic,strong) UITextField *txtName;
 @property (nonatomic,strong) UITextView *txtContent;
-
+@property (nonatomic,strong) UILabel *lbltimes;
 @property (nonatomic,strong) UIView *hiddenView;
 
 @end

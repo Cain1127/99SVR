@@ -46,31 +46,31 @@ static NSString * errorMessage (kxMovieError errorCode)
             return @"";
             
         case kxMovieErrorOpenFile:
-            return NSLocalizedString(@"Unable to open file", nil);
+            return NSLocalizedString(@"无法连接到视频", nil);
             
         case kxMovieErrorStreamInfoNotFound:
-            return NSLocalizedString(@"Unable to find stream information", nil);
+            return NSLocalizedString(@"找不到流媒体信息", nil);
             
         case kxMovieErrorStreamNotFound:
-            return NSLocalizedString(@"Unable to find stream", nil);
+            return NSLocalizedString(@"找不到码流", nil);
             
         case kxMovieErrorCodecNotFound:
-            return NSLocalizedString(@"Unable to find codec", nil);
+            return NSLocalizedString(@"无法解码", nil);
             
         case kxMovieErrorOpenCodec:
-            return NSLocalizedString(@"Unable to open codec", nil);
+            return NSLocalizedString(@"解码失败", nil);
             
         case kxMovieErrorAllocateFrame:
-            return NSLocalizedString(@"Unable to allocate frame", nil);
+            return NSLocalizedString(@"解码失败", nil);
             
         case kxMovieErroSetupScaler:
-            return NSLocalizedString(@"Unable to setup scaler", nil);
+            return NSLocalizedString(@"解码失败", nil);
             
         case kxMovieErroReSampler:
-            return NSLocalizedString(@"Unable to setup resampler", nil);
+            return NSLocalizedString(@"解码失败", nil);
             
         case kxMovieErroUnsupported:
-            return NSLocalizedString(@"The ability is not supported", nil);
+            return NSLocalizedString(@"解码失败", nil);
     }
 }
 

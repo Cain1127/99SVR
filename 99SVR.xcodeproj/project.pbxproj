@@ -276,7 +276,7 @@
 		BB2CA60C1CD338A300DFE56E /* HttpManagerSing.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5C01CD338A200DFE56E /* HttpManagerSing.mm */; };
 		BB2CA60D1CD338A300DFE56E /* ZLLogonProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5C21CD338A200DFE56E /* ZLLogonProtocol.mm */; };
 		BB2CA60E1CD338A300DFE56E /* ZLLogonServerSing.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5C41CD338A200DFE56E /* ZLLogonServerSing.mm */; };
-		BB2CA60F1CD338A300DFE56E /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5C81CD338A200DFE56E /* Connection.cpp */; };
+		BB2CA60F1CD338A300DFE56E /* Connection.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5C81CD338A200DFE56E /* Connection.mm */; };
 		BB2CA6101CD338A300DFE56E /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5CB1CD338A200DFE56E /* crc32.cpp */; };
 		BB2CA6111CD338A300DFE56E /* Http.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5CE1CD338A200DFE56E /* Http.cpp */; };
 		BB2CA6121CD338A300DFE56E /* http_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5D11CD338A200DFE56E /* http_common.cpp */; };
@@ -611,6 +611,7 @@
 		BB98EE611CB588C70028AAEF /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE5A1CB588C70028AAEF /* SBJsonParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE5C1CB588C70028AAEF /* SBJsonWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BB9C7EDB1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB9C7EDA1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm */; };
+		BB9C7EF61CDBD47100FD3532 /* UnReadButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9C7EF51CDBD47100FD3532 /* UnReadButton.m */; };
 		BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA16DA41C8C75B000D84E80 /* NSDate+convenience.m */; };
 		BBAB82E41C7049FB00C6AC34 /* ThumButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAB82E31C7049FB00C6AC34 /* ThumButton.m */; };
 		BBAD0DFF1CD19E36002C0FD6 /* ZLRoomVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD0DFE1CD19E36002C0FD6 /* ZLRoomVideoCell.m */; };
@@ -1326,7 +1327,7 @@
 		BB2CA5C41CD338A200DFE56E /* ZLLogonServerSing.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZLLogonServerSing.mm; sourceTree = "<group>"; };
 		BB2CA5C61CD338A200DFE56E /* commonroom_cmd_vchat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = commonroom_cmd_vchat.h; sourceTree = "<group>"; };
 		BB2CA5C71CD338A200DFE56E /* CommonroomMessage.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonroomMessage.pb.h; sourceTree = "<group>"; };
-		BB2CA5C81CD338A200DFE56E /* Connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Connection.cpp; sourceTree = "<group>"; };
+		BB2CA5C81CD338A200DFE56E /* Connection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Connection.mm; sourceTree = "<group>"; };
 		BB2CA5C91CD338A200DFE56E /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
 		BB2CA5CA1CD338A200DFE56E /* ConnectionListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionListener.h; sourceTree = "<group>"; };
 		BB2CA5CB1CD338A200DFE56E /* crc32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc32.cpp; sourceTree = "<group>"; };
@@ -1871,6 +1872,8 @@
 		BB98EE5C1CB588C70028AAEF /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		BB9C7ED91CDB9A8300FD3532 /* ZLRoomVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLRoomVideoViewController.h; sourceTree = "<group>"; };
 		BB9C7EDA1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZLRoomVideoViewController.mm; sourceTree = "<group>"; };
+		BB9C7EF41CDBD47100FD3532 /* UnReadButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnReadButton.h; sourceTree = "<group>"; };
+		BB9C7EF51CDBD47100FD3532 /* UnReadButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnReadButton.m; sourceTree = "<group>"; };
 		BBA16DA31C8C75B000D84E80 /* NSDate+convenience.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+convenience.h"; sourceTree = "<group>"; };
 		BBA16DA41C8C75B000D84E80 /* NSDate+convenience.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+convenience.m"; sourceTree = "<group>"; };
 		BBAB82E21C7049FB00C6AC34 /* ThumButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumButton.h; sourceTree = "<group>"; };
@@ -3000,7 +3003,7 @@
 				BB14B9D71CDA35940027E7E6 /* HttpConnection.cpp */,
 				BB2CA5C61CD338A200DFE56E /* commonroom_cmd_vchat.h */,
 				BB2CA5C71CD338A200DFE56E /* CommonroomMessage.pb.h */,
-				BB2CA5C81CD338A200DFE56E /* Connection.cpp */,
+				BB2CA5C81CD338A200DFE56E /* Connection.mm */,
 				BB2CA5C91CD338A200DFE56E /* Connection.h */,
 				BB2CA5CA1CD338A200DFE56E /* ConnectionListener.h */,
 				BB2CA5CB1CD338A200DFE56E /* crc32.cpp */,
@@ -3893,6 +3896,8 @@
 				189880031CAA52F8000E9F1C /* RightImageButton.m */,
 				BBD58E9D1CC9CB62009250DB /* PlayIconView.h */,
 				BBD58E9E1CC9CB62009250DB /* PlayIconView.m */,
+				BB9C7EF41CDBD47100FD3532 /* UnReadButton.h */,
+				BB9C7EF51CDBD47100FD3532 /* UnReadButton.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -4805,7 +4810,7 @@
 				B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */,
 				18B0CECC1CC07CC700BA82DF /* NSCalendar+init.m in Sources */,
 				1827FF591C9959BF009D9C79 /* MyScrollView.m in Sources */,
-				BB2CA60F1CD338A300DFE56E /* Connection.cpp in Sources */,
+				BB2CA60F1CD338A300DFE56E /* Connection.mm in Sources */,
 				5AC00A511CD99E6600379081 /* MessageTableViewCell.mm in Sources */,
 				BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */,
 				BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */,
@@ -4916,6 +4921,7 @@
 				BB63F5C31C2CC7A300A042E8 /* MASConstraintMaker.m in Sources */,
 				BB63F5C91C2CC7A300A042E8 /* View+MASAdditions.m in Sources */,
 				BB63F5D21C2CC7A300A042E8 /* MJRefreshLegendFooter.m in Sources */,
+				BB9C7EF61CDBD47100FD3532 /* UnReadButton.m in Sources */,
 				BB16618B1C3D094F00D318BE /* ZLCoreTextCell.m in Sources */,
 				1895B7801CCB56A300B86B0D /* TQMessageModel.mm in Sources */,
 				BB6F3AC01C9EFADC0035EBBE /* BandingMobileViewController.m in Sources */,
@@ -5285,8 +5291,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
-
+				PROVISIONING_PROFILE = "29210d47-fd0f-4824-9529-30cfa3ce8cf9";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5333,8 +5338,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
-
+				PROVISIONING_PROFILE = "accd3a0e-be4d-4a10-9575-25dc39480081";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";

@@ -55,8 +55,7 @@
 
 #define LBS_HTTP_HOST @"http://testlbs.99ducaijing.cn:2222/"
 
-//#define kPay_URL @"http://api.99ducaijing.com/mobile/wap_cz"
-#define kPay_URL @"http://testphp.99ducaijing.cn/mobile.php?s=/pay/index"
+#define kPay_URL @"http://phpapi.99ducaijing.cn/mobile.php?s=/pay/index"
 #define kGift_URL @"http://admin.99ducaijing.com/index.php?m=Api&c=Gift"
 
 #define kGif_Image_URL "http://admin.99ducaijing.com/Uploads/Picture"
@@ -84,7 +83,7 @@
 #if 1
 #define kTEXT_FOLLOW_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=follow&userid="
 #define kTEXT_GROUP_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=script"
-#define kRegisterNumber @"http://testphp.99ducaijing.cn/api.php?s="
+#define kRegisterNumber @"http://phpapi.99ducaijing.cn/api.php?s="
 #else
 #define kRegisterNumber @"http://api.99ducaijing.com/"
 #define kImage_TEXT_URL @"http://122.13.81.62:22806/test/getimage.php?tid="

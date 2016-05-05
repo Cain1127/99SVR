@@ -28,7 +28,8 @@
     [SVRInitLBS httpTest];
 }
 
-+ (void)httpTest{
++ (void)httpTest
+{
     [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
 }
 
@@ -41,13 +42,13 @@
     KUserSingleton.dictRoomText = [NSMutableDictionary dictionary];
     KUserSingleton.dictRoomMedia = [NSMutableDictionary dictionary];
     //获取视频服务器地址
-    [BaseService get:LBS_ROOM_GATE dictionay:nil timeout:10 success:^(id responseObject)
-     {
-         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-         NSString *strAddr = [DecodeJson getArrayAddr:strInfo];
-         [KUserSingleton.dictRoomGate setObject:strAddr forKey:@(0)];
-     }fail:nil];
-     
+//    [BaseService get:LBS_ROOM_GATE dictionay:nil timeout:10 success:^(id responseObject)
+//     {
+//         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+//         NSString *strAddr = [DecodeJson getArrayAddr:strInfo];
+//         [KUserSingleton.dictRoomGate setObject:strAddr forKey:@(0)];
+//     }fail:nil];
+    
 //    [BaseService get:LBS_ROOM_MEDIA dictionay:nil timeout:10 success:^(id responseObject) {
 //        NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
 //        NSString *strAddr = [DecodeJson getArrayAddr:strInfo];
@@ -55,11 +56,11 @@
 //    } fail:nil];
     
     //获取文字直播服务器
-    [BaseService get:LBS_ROOM_TEXT dictionay:nil timeout:10 success:^(id responseObject) {
-        NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        NSString *strAddr = [DecodeJson getArrayAddr:strInfo];
-        [KUserSingleton.dictRoomText setObject:strAddr forKey:@(0)];
-    } fail:nil];
+//    [BaseService get:LBS_ROOM_TEXT dictionay:nil timeout:10 success:^(id responseObject) {
+//        NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+//        NSString *strAddr = [DecodeJson getArrayAddr:strInfo];
+//        [KUserSingleton.dictRoomText setObject:strAddr forKey:@(0)];
+//    } fail:nil];
 }
 
 /**

@@ -23,6 +23,7 @@
     }];
 }
 
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -67,14 +68,14 @@
     [line1 setBackgroundColor:COLOR_Line_Small_Gay];
     [liveQuestion addSubview:line1];
     
-    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(8, 48, kScreenWidth-6, 34)];
-    lblTemp.numberOfLines = 0;
-    [lblTemp setFont:XCFONT(12)];
-    [lblTemp setText:@"温馨提示:您还剩3次免费提问的机会，问股仅供参考，不构成投资建议"];
-    [lblTemp setTextColor:UIColorFromRGB(0x919191)];
-    [liveQuestion addSubview:lblTemp];
+    _lblTimes = [[UILabel alloc] initWithFrame:Rect(8, 48, kScreenWidth-6, 34)];
+    _lblTimes.numberOfLines = 0;
+    [_lblTimes setFont:XCFONT(12)];
+    [_lblTimes setText:@"温馨提示:您还剩3次免费提问的机会，问股仅供参考，不构成投资建议"];
+    [_lblTimes setTextColor:UIColorFromRGB(0x919191)];
+    [liveQuestion addSubview:_lblTimes];
     
-    UILabel *lblTest1 = [[UILabel alloc] initWithFrame:Rect(8, lblTemp.y+lblTemp.height+10, 80, 20)];
+    UILabel *lblTest1 = [[UILabel alloc] initWithFrame:Rect(8, _lblTimes.y+_lblTimes.height+10, 80, 20)];
     [lblTest1 setText:@"个股名称:"];
     [lblTest1 setFont:XCFONT(14)];
     [liveQuestion addSubview:lblTest1];

@@ -18,7 +18,7 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
  *  服务器配置参数
  */
 @property (nonatomic) int nStatus;
-
+@property (nonatomic) int nUnRead;
 /**
  *  头像id
  */

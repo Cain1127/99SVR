@@ -125,6 +125,11 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     [_liveControl removeAllNotify];
 }
 
+- (void)startVideoPlay
+{
+    [_liveControl startNewPlay];
+}
+
 /**
 *  释放房间中的内容
 */
@@ -132,6 +137,11 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 {
     [[SDImageCache sharedImageCache] clearMemory];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
+}
+
+- (void)stopVideoPlay
+{
+    [_liveControl stopNewPlay];
 }
 
 - (void)exitRoom

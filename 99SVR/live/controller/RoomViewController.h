@@ -28,6 +28,10 @@ DEFINE_SINGLETON_FOR_HEADER(RoomViewController)
 - (void)addNotify;
 
 
+- (void)stopVideoPlay;
+
+- (void)startVideoPlay;
+
 @end
 
 

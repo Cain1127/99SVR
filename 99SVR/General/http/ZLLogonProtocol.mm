@@ -233,6 +233,7 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_SUCESS_VC object:@"登录成功"];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
+    [kHTTPSingle RequestUnreadCount];
 }
 
 /**
@@ -763,7 +764,52 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
 void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
 {
     DLog(@"加入房间失败");
-    NSDictionary *parameters = @{@"err":@(info.errid()),@"msg":@"test"};
+//    NSString *strMsg = [NSString stringWithUTF8String:conn->get_error_desc(info.errid()).c_str()];
+    NSString *strMsg = nil;
+    switch (info.errid()) {
+    
+    case 201:
+    {
+        strMsg = @"[系统消息]需要输入密码";
+    }
+    break;
+    case 101:
+    {
+        strMsg = @"[系统消息]房间黑名单";
+    }
+    break;
+    case 203:
+    {
+        strMsg = @"[系统消息]用户名/密码查询错误，无法加入房间!";
+    }
+    break;
+    case 404:
+    {
+        strMsg = @"[系统消息]加入房间 不存在";
+    }
+    break;
+    case 405:
+    {
+        strMsg = @"[系统消息]房间已经被房主关闭，不能进入";
+    }
+    break;
+    case 502:
+    {
+        strMsg = @"[系统消息]房间人数已满";
+    }
+    break;
+    case 505:
+    {
+        strMsg = @"[系统消息]通信版本过低，不能使用，请升级";
+    }
+    break;
+    default:
+    {
+        strMsg = @"[系统消息]未知错误";
+    }
+    break;
+    }
+    NSDictionary *parameters = @{@"err":@(info.errid()),@"msg":strMsg};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:parameters];
 }
 
@@ -785,14 +831,18 @@ void ZLRoomListener::OnFavoriteVcbResp(FavoriteRoomResp& info)
 {
     NSDictionary *dict = @{@"code":@(info.actionid())};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_COLLET_RESP_VC object:dict];
-
 }
 
 void ZLRoomListener::OnAskQuestionErr(ErrCodeResp& info)
 {
     NSString *strErr = [NSString stringWithUTF8String:conn->get_error_desc(info.errcode()).c_str()];
-    
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_COLLET_RESP_VC object:strErr];
+    if (strErr!=nil) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:strErr];
+    }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:@"提问失败"];
+    }
 }
 
 

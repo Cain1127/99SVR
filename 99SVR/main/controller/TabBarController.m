@@ -61,10 +61,21 @@
     return self;
 }
 
+- (void)loadInfo:(NSNotification *)notify
+{
+    int nAllNum = [notify.object[@"privateservice"] intValue] + [notify.object[@"system"] intValue] +
+                                    [notify.object[@"reply"] intValue]+[notify.object[@"answer"] intValue];
+    DLog(@"总数字:%d",nAllNum);
+    KUserSingleton.nUnRead = nAllNum;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UNREAD_NUMBER_VC object:nil];
+}
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadInfo:) name:MESSAGE_UNREAD_INFO_VC object:nil];
+    [kHTTPSingle RequestUnreadCount];
 }
 
 /**
@@ -97,7 +108,6 @@
         [self setUpOneViewController:[[TQIdeaViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
         [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"tab_operate_n" selectImage:@"tab_operate_h"];
     }
-    
     [self setUpOneViewController:[[XMyViewController alloc]init] title:@"我" image:@"tab_me_n" selectImage:@"tab_me_p"];
     
 }
