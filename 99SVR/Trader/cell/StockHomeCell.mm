@@ -100,9 +100,9 @@
         make.left.equalTo(@0);
     }];
 
-    self.bakImageView.layer.borderWidth = 1.0f;
+    self.bakImageView.layer.borderWidth = LineView_Height;
     self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.5].CGColor;
-    [self.bakImageView layoutIfNeeded];
+//    [self.bakImageView layoutIfNeeded];
 //
     //计算字体
     self.traderNameLab.text =  model.focus;
@@ -155,8 +155,8 @@
     }];
     
     self.bakImageView.layer.borderWidth = 0.5f;
-    self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.2].CGColor;
-    [self.bakImageView layoutIfNeeded];
+    self.bakImageView.layer.borderColor = [COLOR_Line_Big_Gay colorWithAlphaComponent:0.5].CGColor;
+//    [self.bakImageView layoutIfNeeded];
     
     self.traderNameLab.text =  model.focus;
     CGSize traderNameLabSize = [ShareFunction calculationOfTheText:self.traderNameLab.text withFont:traderName_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
@@ -171,15 +171,14 @@
     
     //计算总收益字体
 
-    self.totalNumLab.text =  [NSString stringWithFormat:@"%.02f%%",model.totalprofit*100];
+    self.totalNumLab.text =  [NSString stringWithFormat:@"%.02f%%",model.totalprofit];
     CGSize totalNumLabSize = [ShareFunction calculationOfTheText:self.totalNumLab.text withFont:totalNumLab_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
     
     //总收益数字
     [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.iconImv.mas_top);
         make.right.equalTo(@(ValueWithTheIPhoneModelString(@"-10,-10,-10,-10")));
-
-        make.width.equalTo(@(totalNumLabSize.width));
+        make.width.equalTo(@(totalNumLabSize.width +10));
         make.height.equalTo(@(totalNumLab_fot));
     }];
     
@@ -193,7 +192,7 @@
     
     [self.iconImv sd_setImageWithURL:[NSURL URLWithString:model.teamicon]];
     self.nameLab.text =  model.teamname;
-    self.targetLab.text =  [NSString stringWithFormat:@"目标收益：%.02f%%",model.goalprofit*100];
+    self.targetLab.text =  [NSString stringWithFormat:@"目标收益：%.02f%%",model.goalprofit];
     self.totalTitLab.text = @"总收益";
 }
 

@@ -99,6 +99,8 @@
 @property (nonatomic, strong) UIView *lineView;
 //存储每个title的orginX值 滑动底部时候 顶部滑动更顺畅
 @property (nonatomic, strong) NSMutableArray *titleOrginXArrays;
+/**底部的界线*/
+@property (nonatomic , strong) UIView *bottomLineView;
 @end
 @implementation SliderMenuTopScrollView
 
@@ -119,6 +121,7 @@
         _lineViewOffset = 5;
         _titleOffset = 20;
         _selectIndex = index;
+        self.bottomLineView.backgroundColor = COLOR_Line_Small_Gay;
         [self calculateJianGeWithTitleArrays:titles];
         [self createTitle];
         
@@ -209,6 +212,18 @@
     }
     return _lineView;
 }
+
+-(UIView *)bottomLineView{
+    
+    if (!_bottomLineView) {
+        
+        _bottomLineView = [[UIView alloc]initWithFrame:(CGRect){0,self.height-0.5,self.width,0.5}];
+        [self addSubview:_bottomLineView];
+    }
+    
+    return _bottomLineView;
+}
+
 
 /** 标题栏label的点击事件 */
 - (void)titleLabelClick:(UITapGestureRecognizer *)recognizer

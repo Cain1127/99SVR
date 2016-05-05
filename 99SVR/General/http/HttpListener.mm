@@ -838,7 +838,7 @@ void HomePageListener::onResponse(std::vector<BannerItem>& banner_data, std::vec
         operStock.totalprofit = item.totalprofit();
         operStock.dayprofit = item.dayprofit();
         operStock.monthprofit = item.monthprofit();
-        
+        operStock.winrate = item.winrate();
         [aryOperate addObject:operStock];
     }
     NSDictionary *dict = @{@"code":@(1),@"video":videoRoom,@"viewpoint":aryViewPoint,@"operate":aryOperate,@"banner":banner};

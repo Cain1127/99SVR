@@ -130,7 +130,7 @@
         [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateDisabled];
         btn.backgroundColor = [UIColor clearColor];
-        btn.layer.borderWidth = 0.5f;
+        btn.layer.borderWidth = LineView_Height;
         btn.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
         btn.layer.cornerRadius = 2.0;
         btn.layer.masksToBounds = YES;
@@ -152,7 +152,7 @@
         _topMenuView.userInteractionEnabled = YES;
         
         //中间的线
-        UIView *minView = [[UIView alloc]initWithFrame:(CGRect){10,topMenu_h*(1/2.0),_width-20,1}];
+        UIView *minView = [[UIView alloc]initWithFrame:(CGRect){10,topMenu_h*(1/2.0),_width-20,LineView_Height}];
         minView.backgroundColor = COLOR_Line_Small_Gay;
         [_topMenuView addSubview:minView];
         

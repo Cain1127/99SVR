@@ -186,6 +186,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     _dataSource.delegate = self;
     _tableView.dataSource = _dataSource;
     _tableView.delegate = _dataSource;
+    [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
 }
 
 #pragma mark - TableView dataSource

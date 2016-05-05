@@ -14,9 +14,9 @@ typedef NS_ENUM(NSInteger,RecordType){
 @interface StockRecordViewController : CustomViewController
 /**类型*/
 @property (nonatomic , assign) RecordType recordType;
-
 /**operateId*/
 @property (nonatomic , assign) NSInteger operateId;
-
+/**操盘名字title*/
+@property (nonatomic , copy) NSString *caoPanName;
 
 @end

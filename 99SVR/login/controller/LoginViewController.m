@@ -23,6 +23,7 @@
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "WeiboSDK.h"
 #import "LoginViewController.h"
+#import "StockDealViewController.h"
 
 @interface LoginViewController ()<UITextFieldDelegate,TencentSessionDelegate>
 {
@@ -49,7 +50,27 @@
 
 - (void)popBack
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    //判断有没有高手操盘详情
+    
+    BOOL backStockDealVCBool = NO;
+    UIViewController *stockDealVC = nil;
+    
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:[StockDealViewController class]]) {//高手操盘详情
+            backStockDealVCBool =  YES;
+            stockDealVC = viewController;
+            break;
+        }
+    }
+    if (backStockDealVCBool) {//跳转到到股票详情视图
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+        [self.navigationController popToViewController:stockDealVC animated:YES];
+    }else{//正常返回
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+        
 }
 
 -(void)initUIHead
@@ -388,7 +409,7 @@
     
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
-    [_txtUser becomeFirstResponder];
+//    [_txtUser becomeFirstResponder];
 }
 
 - (void)closeKeyBoard

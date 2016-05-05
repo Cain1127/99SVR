@@ -18,15 +18,10 @@
     _imgView = [[UIImageView alloc] initWithFrame:Rect(8, 17,40, 40)];
     [self.contentView addSubview:_imgView];
     
-    //    _lblTitle = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+8, 17, kScreenWidth-150, 20)];
-    //    [self.contentView addSubview:_lblTitle];
-    //    [_lblTitle setFont:XCFONT(17)];
+    self.attributedTextContextView.edgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    self.attributedTextContextView.frame = Rect(50,17, kScreenWidth-60,20);
     
-    _textView = [DTAttributedTextContentView new];
-    _textView.edgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
-    [self.contentView addSubview:_textView];
-    
-    _lblTime = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-120,17, 115, 20)];
+    _lblTime = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-148,17, 140, 20)];
     [_lblTime setFont:XCFONT(12)];
     [_lblTime setTextAlignment:NSTextAlignmentRight];
     [_lblTime setTextColor:UIColorFromRGB(0x919191)];
@@ -36,6 +31,7 @@
     [_lblLine setBackgroundColor:kLineColor];
     [self.contentView addSubview:_lblLine];
     [_btnReply addTarget:self action:@selector(eventReply) forControlEvents:UIControlEventTouchUpInside];
+    
     return self;
 }
 
@@ -51,14 +47,15 @@
     _reply = reply;
     [_lblTitle setText:_reply.authorname];
     [_lblTime setText:_reply.publishtime];
+    [self setHTMLString:reply.strContent];
     [_imgView setImage:[UIImage imageNamed:@"personal_user_head"]];
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    _textView.frame = Rect(50,17,kScreenWidth-60,self.contentView.height-20);
     _lblLine.frame = Rect(8, self.contentView.height-1, kScreenWidth-16, 0.5);
+    self.attributedTextContextView.frame = Rect(50,17, kScreenWidth-60,self.contentView.height-20);
 }
 
 - (void)awakeFromNib

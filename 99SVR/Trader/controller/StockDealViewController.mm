@@ -59,13 +59,15 @@
 - (void)printInfo:(NSNotification *)notify{
     
 
-    Loading_Bird_Hide(self.tableView);
-    NSDictionary *dic = notify.object;
-    NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
-    [self.view hideToastActivity];
     
     dispatch_async(dispatch_get_main_queue(), ^{
 
+        Loading_Bird_Hide(self.tableView);
+        NSDictionary *dic = notify.object;
+        NSString *code = [NSString stringWithFormat:@"%@",dic[@"code"]];
+        [self.view hideToastActivity];
+
+        
     if ([code isEqualToString:@"1"]) {//请求成功
         
         [self.tableViewDataArray removeAllObjects];
@@ -112,7 +114,7 @@
     
     if (dataArray.count==0&&[code intValue]!=1) {//数据为0 错误代码不为1
         
-        [self showErrorViewInView:self.tableView withMsg:[NSString stringWithFormat:@"网络链接错误%@,点击重新链接",code] touchHanleBlock:^{
+        [self showErrorViewInView:self.tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
             
             Loading_Bird_Show(weakSelf.tableView);
             [kHTTPSingle RequestOperateStockAllDetail:[weakSelf.stockModel.operateid intValue]];
@@ -120,7 +122,7 @@
         
     }else if (dataArray.count==0&&[code intValue]==1){
         
-        [self showEmptyViewInView:self.tableView withMsg:[NSString stringWithFormat:@"暂无数据%@",code] touchHanleBlock:^{
+        [self showEmptyViewInView:self.tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
             
         }];
         
@@ -221,6 +223,7 @@
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = tag==1 ? RecordType_Business : RecordType_StoreHouse;
             recordVC.operateId = [self.headerModel.operateid integerValue];
+            recordVC.caoPanName = self.headerModel.focus;
             [self.navigationController pushViewController:recordVC animated:YES];
             
         }else{
@@ -244,6 +247,7 @@
             StockRecordViewController *recordVC = [[StockRecordViewController alloc]init];
             recordVC.recordType = indexPath.section==1 ? RecordType_Business : RecordType_StoreHouse;
             recordVC.operateId = [self.headerModel.operateid integerValue];
+            recordVC.caoPanName = self.headerModel.focus;
             [self.navigationController pushViewController:recordVC animated:YES];
         }
     }

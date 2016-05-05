@@ -17,10 +17,9 @@
 
 @end
 
-@interface CommentCell : UITableViewCell
+@interface CommentCell : DTAttributedTextCell
 
 @property (nonatomic,strong) UILabel *lblTitle;
-@property (nonatomic,strong) DTAttributedTextContentView *textView;
 @property (nonatomic,strong) UIImageView *imgView;
 @property (nonatomic,strong) UILabel *lblTime;
 @property (nonatomic,strong) UIButton *btnReply;

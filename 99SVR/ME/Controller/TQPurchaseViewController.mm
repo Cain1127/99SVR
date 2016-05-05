@@ -122,7 +122,6 @@
 {
     TQPurchaseModel *model = self.dataArray[row];
     
-    
     if ([UserInfo sharedUserInfo].goldCoin >= [model.actualPrice floatValue]) {//账户余额大于购买的余额
         
         [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"兑换" withMessage:@"是否确定兑换！" completionCallback:^(NSInteger index) {
@@ -199,7 +198,7 @@
     
     if (dataArray.count==0&&[code intValue]!=1) {//数据为0 错误代码不为1
         
-        [self showErrorViewInView:self.tableView withMsg:[NSString stringWithFormat:@"网络链接错误%@,点击重新链接",code] touchHanleBlock:^{
+        [self showErrorViewInView:self.tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
             
             Loading_Bird_Show(weakSelf.tableView);
             [kHTTPSingle RequestBuyPrivateServicePage:[weakSelf.stockModel.teamid intValue]];
@@ -208,7 +207,7 @@
 
     }else if (dataArray.count==0&&[code intValue]==1){
     
-        [self showEmptyViewInView:self.tableView withMsg:[NSString stringWithFormat:@"暂无数据%@",code] touchHanleBlock:^{
+        [self showEmptyViewInView:self.tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
             
             
         }];

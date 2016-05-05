@@ -50,7 +50,8 @@ static NSString *const MeCustomizedCell = @"MeCustomizedCell";
         TQMeCustomizedModel *model = _aryModel[indexPath.section];
         cell.lblName.text = model.teamname;
         cell.lblLevel.text = model.levelname;
-        cell.lblTime.text = @"终身有效";
+        NSString *strInfo = [NSString stringWithFormat:@"有效期:%@",model.expirationdate];
+        cell.lblTime.text = strInfo;
         
         char cBuffer[100]={0};
         sprintf(cBuffer,"100_1");

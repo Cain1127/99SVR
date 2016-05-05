@@ -157,7 +157,7 @@
 
 
 #pragma mark 状态提示语
-#define RequestState_NetworkErrorStr(str)  [NSString stringWithFormat:@"网络异常,请重试%@",str]
-#define RequestState_EmptyStr(str)  [NSString stringWithFormat:@"没有%@数据",str]
+#define RequestState_NetworkErrorStr(str)  [NSString stringWithFormat:@"网络连接异常，请点击屏幕重试"]
+#define RequestState_EmptyStr(str)  [NSString stringWithFormat:@"暂无数据"]
 
 #endif

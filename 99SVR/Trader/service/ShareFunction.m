@@ -118,20 +118,10 @@
 +(NSArray *)returnMinandMaxWithArrayA:(NSArray *)arrA withArrayB:(NSArray *)arrB{
 
     
-    DLog(@"arrA--%@",arrA);
-    
-    DLog(@"arrB --%@",arrB);
     
     NSMutableArray *muArrayA = [ShareFunction sortOfSmallToBig:arrA];
     NSMutableArray *muArrayB = [ShareFunction sortOfSmallToBig:arrB];
-    
-    
-    
-    DLog(@"arrA-排序后-%@",arrA);
-    
-    DLog(@"arrB -排序后-%@",arrB);
 
-    
     float minA = [[muArrayA firstObject] floatValue];
     float maxA = [[muArrayA lastObject] floatValue];
 
@@ -163,6 +153,19 @@
     
     return @[[NSString stringWithFormat:@"%f",((min))],[NSString stringWithFormat:@"%f",(max)]];
 }
+
++(NSArray *)returnStockDelChartLineViewLeftLabelTextWithDataArray:(NSArray *)array{
+
+    NSMutableArray *muArray = [NSMutableArray array];
+    CGFloat tempFloat = ABS([[array firstObject] floatValue] - [[array lastObject] floatValue])/4.0;
+    
+    for (int i=0; i!=5; i++) {
+        CGFloat floatStr = [[array lastObject] floatValue] - (i * tempFloat);
+        [muArray addObject:[NSString stringWithFormat:@"%.2f%%",floatStr]];
+    }
+    return muArray;
+}
+
 
 
 @end

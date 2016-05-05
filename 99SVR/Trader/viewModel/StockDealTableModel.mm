@@ -109,7 +109,7 @@
         
         UIView *backView = [[UIView alloc]init];
         backView.layer.borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.2].CGColor;
-        backView.layer.borderWidth = 1.0f;
+        backView.layer.borderWidth = LineView_Height;
         backView.layer.masksToBounds = YES;
         backView.backgroundColor = [UIColor whiteColor];
         [headerView.contentView addSubview:backView];
@@ -131,7 +131,7 @@
         //右边的图标
         UIImageView *imageView = [[UIImageView alloc]init];
         imageView.tag = 102;
-        imageView.image =[UIImage imageNamed:@"stock_right_next_icon"];
+        imageView.image =[UIImage imageNamed:@"home_seeall_arrow"];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         [backView addSubview:imageView];
         

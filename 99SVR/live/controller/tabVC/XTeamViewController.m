@@ -11,6 +11,7 @@
 #import "ZLRoomVideoCell.h"
 #import "TableViewFactory.h"
 #import "XVideoTeamInfo.h"
+#import "KxMovieViewController.h"
 
 @interface XTeamViewController()<DTAttributedTextContentViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
@@ -36,9 +37,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTitleText:@"讲师团队简介"];
-    [self.headView setBackgroundColor:[UIColor clearColor]];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [self setTitleText:@"讲师团队简介"];
+//    [self.headView setBackgroundColor:[UIColor clearColor]];
     
     UIView *headView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
     
@@ -65,7 +66,7 @@
     [lblName setTextAlignment:NSTextAlignmentCenter];
     [headView addSubview:lblName];
 
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 185, kScreenWidth, kScreenHeight-185) withStyle:UITableViewStylePlain];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-185) withStyle:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
@@ -116,8 +117,6 @@
             _introduce = [NSString stringWithFormat:@"<span stype=\"line-height:17px;\">%@</span>",teamInfo.introduce];
             @WeakObj(self)
             dispatch_async(dispatch_get_main_queue(), ^{
-//                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
-//                [selfWeak.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                 [selfWeak.tableView reloadData];
             });
         }
@@ -177,10 +176,10 @@
     {
         cell = [[ZLRoomVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TeamVideoCell"];;
     }
-
+    @WeakObj(self)
     cell.itemOnClick = ^(XVideoModel *room)
     {
-        
+        [selfWeak connectVideo:room];
     };
     int length = 2;
     int loc = (int)indexPath.row * length;
@@ -205,6 +204,12 @@
         CGFloat height = ((kScreenWidth - 36.0f) / 2.0f) * 10 / 16 + 8;
         return height;
     }
+}
+
+- (void)connectVideo:(XVideoModel *)video
+{
+    NSString *strUrl = video.videourl;
+    [self.navigationController pushViewController:[KxMovieViewController movieViewControllerWithContentPath:strUrl parameters:nil] animated:YES];
 }
 
 - (void)dealloc

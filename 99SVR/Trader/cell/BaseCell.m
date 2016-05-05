@@ -39,7 +39,7 @@
         
         [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.and.right.and.bottom.equalTo(@0);
-            make.height.equalTo(@1);
+            make.height.equalTo(@(LineView_Height));
         }];
         
         [self initUI];

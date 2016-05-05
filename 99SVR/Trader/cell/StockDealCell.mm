@@ -3,6 +3,7 @@
 
 #import "StockDealCell.h"
 #import "StockMacro.h"
+#import "ShareFunction.h"
 @implementation StockDealCell
 
 
@@ -30,7 +31,7 @@
     self.chartView.lineChartView.drawLine_Y = NO;
     self.chartView.lineChartView.lineColors = @[COLOR_Auxiliary_Orange,COLOR_Auxiliary_Blue];
     self.chartView.lineChartView.timeValue = 0;
-    self.chartView.lineChartView.level_Y = 2;
+    self.chartView.lineChartView.level_Y = 4;
     self.chartView.lineChartView.level_X = 2;
     self.chartView.topTitItems = @[@"全部",@"三个月",@"一个月"];
     [self.bakImageView addSubview:self.chartView];
@@ -142,12 +143,39 @@
     CGFloat midLeftStr = 0.0;
     midLeftStr = ABS(((ABS([model.maxY floatValue]) - [model.minY floatValue])/2.0)) + [model.minY floatValue];
     
-    weakSelf.chartView.leftTitArrays = @[[NSString stringWithFormat:@"%.2f%%",[model.maxY floatValue]],[NSString stringWithFormat:@"%.2f%%",midLeftStr],[NSString stringWithFormat:@"%.2f%%",[model.minY floatValue]]];
-    weakSelf.chartView.lowTitArrays = @[[model.dates firstObject],model.dates[(model.dates.count/2)],[model.dates lastObject]];
+//    weakSelf.chartView.leftTitArrays = @[[NSString stringWithFormat:@"%.2f%%",[model.maxY floatValue]],[NSString stringWithFormat:@"%.2f%%",midLeftStr],[NSString stringWithFormat:@"%.2f%%",[model.minY floatValue]]];
+    weakSelf.chartView.leftTitArrays = [ShareFunction returnStockDelChartLineViewLeftLabelTextWithDataArray:@[model.minY,model.maxY]];
+    
+    
+    NSString *leftlowStr = @"";
+    NSString *midLowStr = @"";
+    NSString *rightLowStr = @"";
+    
+    if(model.dates.count>0) {
+        
+        if (model.dates.count==2) {
+            midLowStr = @"";
+        }else{
+            midLowStr = model.dates[(model.dates.count/2)];
+        }
+        
+        leftlowStr = [model.dates firstObject];
+        rightLowStr = [model.dates lastObject];
+
+        
+    }else if (model.dates.count==0){//
+        leftlowStr = @"";
+        midLowStr = @"";
+        rightLowStr = @"";
+    }
+    
+    weakSelf.chartView.lowTitArrays = @[leftlowStr,midLowStr,rightLowStr];
     weakSelf.chartView.lineChartView.raneValue_Y = CGRangeMake([model.minY floatValue], [model.maxY floatValue]);
     
     [weakSelf.chartView.lineChartView clearLine];
+//    model.rateYs = @[@"0.78",@"1.59",@"0.02",@"2.39",@"0.82",@"0.78"];
     weakSelf.chartView.lineChartView.valuePoints_Y = @[model.rateYs,model.trendYs];
+//    NSLog(@"%@ %@",model.rateYs,model.trendYs);
     [weakSelf.chartView.lineChartView drawLine];
         
     __weak typeof(array) weakArray = array;

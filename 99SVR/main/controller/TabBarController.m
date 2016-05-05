@@ -64,38 +64,7 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPlayIconView) name:MESSAGE_TABBAR_APPER_VC object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hiddenPlayIconView) name:MESSAGE_TABBAR_DISAPPER_VC object:nil];
-    
-//    _iConView = [[PlayIconView alloc] initWithFrame:Rect(0, kScreenHeight-108, kScreenWidth, 64)];
-//    [self.view addSubview:_iConView];
-//    _iConView.hidden = YES;
-//    _iConView.delegate = self;
-//    
-//    [_iConView clickWithBlock:^(UIGestureRecognizer *gesture) {
-//        RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-//        [self.selectedViewController.navigationController pushViewController:roomView animated:YES];
-//    }];
-//    
-//    _btnPlay = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [self.view addSubview:_btnPlay];
-//    _btnPlay.frame = Rect(kScreenWidth-55, kScreenHeight-98, 44, 44);
-//    [UIImageFactory createBtnImage:@"home_play_icon" btn:_btnPlay state:UIControlStateNormal];
-//    _btnPlay.hidden=YES;
-//    [_btnPlay addTarget:self action:@selector(showPlayInfo) forControlEvents:UIControlEventTouchUpInside];
-}
-
-- (void)showPlayInfo
-{
-    _btnPlay.hidden = YES;
-    _iConView.hidden = NO;
-}
-
-- (void)showIconView
-{
-    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-
-    _iConView.hidden = NO;
+    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
 }
 
 /**
@@ -149,20 +118,6 @@
     vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
     MyNavigationViewController *nav = [[MyNavigationViewController alloc]initWithRootViewController:vc];
     [self addChildViewController:nav];
-}
-
-- (void)showPlayIconView
-{
-    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    if (roomView.room!=nil) {
-        [self showIconView];
-    }
-}
-
-- (void)hiddenPlayIconView
-{
-    _btnPlay.hidden = YES;
-    _iConView.hidden = YES;
 }
 
 - (void)dealloc
