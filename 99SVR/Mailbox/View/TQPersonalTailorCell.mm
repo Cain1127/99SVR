@@ -15,6 +15,13 @@
 
 @implementation TQPersonalTailorCell
 
+-(void)awakeFromNib{
+    [super awakeFromNib];
+
+    self.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
+    self.layer.borderWidth = 0.5;
+}
+
 - (IBAction)openClick:(id)sender {
     
     DLog(@"openClick");

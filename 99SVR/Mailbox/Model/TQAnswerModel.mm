@@ -6,19 +6,19 @@
 //  Copyright © 2016年 xia zhonglin . All rights reserved.
 //
 /*
-uint32	_id;
-string	_answerauthorid;
-string	_answerauthorname;
-string	_answerauthoricon;
-string	_answertime;
-string	_answercontent;
-string	_askauthorname;
-uint32	_askauthorheadid;
-string	_askstock;
-string	_askcontent;
-string	_asktime;
-uint32	_fromclient;
-*/
+ uint32	_id;
+ string	_answerauthorid;
+ string	_answerauthorname;
+ string	_answerauthoricon;
+ string	_answertime;
+ string	_answercontent;
+ string	_askauthorname;
+ uint32	_askauthorheadid;
+ string	_askstock;
+ string	_askcontent;
+ string	_asktime;
+ uint32	_fromclient;
+ */
 /*
  uint32	_id;
  uint32	_viewpointid;
@@ -55,76 +55,45 @@ uint32	_fromclient;
     
     self = [super init];
     
-    _answercontent = [NSString stringWithUTF8String:QuestionAnswer->answercontent().c_str()];
-//    _answerauthoricon = [NSString stringWithUTF8String:QuestionAnswer->answerauthorid().c_str()];
-    _answerauthorname = [NSString stringWithUTF8String:QuestionAnswer->answerauthorname().c_str()];
-    _answertime = [NSString stringWithUTF8String:QuestionAnswer->answertime().c_str()];
-    _askauthorname = [NSString stringWithUTF8String:QuestionAnswer->askauthorname().c_str()];
-    _askstock = [NSString stringWithUTF8String:QuestionAnswer->askstock().c_str()];
-    _askcontent = [NSString stringWithUTF8String:QuestionAnswer->askcontent().c_str()];
-    _asktime = [NSString stringWithUTF8String:QuestionAnswer->asktime().c_str()];
-    _answerauthorhead = [NSString stringWithUTF8String:QuestionAnswer->answerauthorhead().c_str()];
-
-    
-    _ID = QuestionAnswer->id();
-    _askAuthorHead = [NSString stringWithUTF8String:QuestionAnswer->askauthorhead().c_str()];
-//    _askauthorheadid = QuestionAnswer->askauthorheadid();
-    _fromclient = QuestionAnswer->fromclient();
-    
-    [self settingTime:_answertime];
-    [self settingTime:_asktime];
-
+    self.answercontent = [NSString stringWithUTF8String:QuestionAnswer->answercontent().c_str()];
+    self.answerauthorname = [NSString stringWithUTF8String:QuestionAnswer->answerauthorname().c_str()];
+    self.answertime = [NSString stringWithUTF8String:QuestionAnswer->answertime().c_str()];
+    self.askauthorname = [NSString stringWithUTF8String:QuestionAnswer->askauthorname().c_str()];
+    self.askstock = [NSString stringWithUTF8String:QuestionAnswer->askstock().c_str()];
+    self.askcontent = [NSString stringWithUTF8String:QuestionAnswer->askcontent().c_str()];
+    self.asktime = [NSString stringWithUTF8String:QuestionAnswer->asktime().c_str()];
+    self.answerauthorhead = [NSString stringWithUTF8String:QuestionAnswer->answerauthorhead().c_str()];
+    self.ID = QuestionAnswer->id();
+    self.askAuthorHead = [NSString stringWithUTF8String:QuestionAnswer->askauthorhead().c_str()];
+    self.fromclient = QuestionAnswer->fromclient();
+  
     return self;
 }
 
 - (id)initWithRplay:(MailReply *)MailReply;
 {
     self = [super init];
-    
-    _answercontent = [NSString stringWithUTF8String:MailReply->answercontent().c_str()];
-    
-    _answerauthorid = [NSString stringWithUTF8String:MailReply->answerauthorid().c_str()];
-    
-    _answerauthorname = [NSString stringWithUTF8String:MailReply->answerauthorname().c_str()];
-    _answertime = [NSString stringWithUTF8String:MailReply->answertime().c_str()];
-    _askauthorname = [NSString stringWithUTF8String:MailReply->askauthorname().c_str()];
-    //    _askstock = [NSString stringWithUTF8String:MailReply->askstock().c_str()];
-    _askcontent = [NSString stringWithUTF8String:MailReply->askcontent().c_str()];
-    _asktime = [NSString stringWithUTF8String:MailReply->asktime().c_str()];
-    _answerauthorhead = [NSString stringWithUTF8String:MailReply->answerauthorhead().c_str()];
-
-    
-    _ID = MailReply->id();
-    _fromclient = MailReply->fromclient();
-    
-    [self settingTime:_answertime];
-    [self settingTime:_asktime];
-    
+    self.answercontent = [NSString stringWithUTF8String:MailReply->answercontent().c_str()];
+    self.answerauthorid = [NSString stringWithUTF8String:MailReply->answerauthorid().c_str()];
+    self.answerauthorname = [NSString stringWithUTF8String:MailReply->answerauthorname().c_str()];
+    self.answertime = [NSString stringWithUTF8String:MailReply->answertime().c_str()];
+    self.askauthorname = [NSString stringWithUTF8String:MailReply->askauthorname().c_str()];
+    self.askcontent = [NSString stringWithUTF8String:MailReply->askcontent().c_str()];
+    self.asktime = [NSString stringWithUTF8String:MailReply->asktime().c_str()];
+    self.answerauthorhead = [NSString stringWithUTF8String:MailReply->answerauthorhead().c_str()];
+    self.ID = MailReply->id();
+    self.fromclient = MailReply->fromclient();
     return self;
 }
 
-- (void)settingTime:(NSString *)_publishtime
+-(void)setAnswertime:(NSString *)answertime
 {
-    UserInfo *userinfo = [UserInfo sharedUserInfo];
-    NSDate *date = [userinfo.fmt dateFromString:_publishtime];
-    int result = [DecodeJson compareDate:date];
-    if (result == 1)
-    {
-        _answertime = [NSString stringWithFormat:@"今天 %02d:%02d",date.hour,date.minute];
-    }
-    else if(result == 0)
-    {
-        _answertime = [NSString stringWithFormat:@"昨天 %02d:%02d",date.hour,date.minute];
-    }
-    else
-    {
-        _answertime = [NSString stringWithFormat:@"%04d年%02d月%02d日 %02d:%02d",date.year,date.month,date.day,date.hour,date.minute];
-    }
-    
+    _answertime = [answertime DataFormatter];
 }
 
-
-
-
+- (void)setAsktime:(NSString *)asktime
+{
+    _asktime = [asktime DataFormatter];
+}
 
 @end
