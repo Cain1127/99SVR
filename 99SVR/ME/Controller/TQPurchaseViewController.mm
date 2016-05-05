@@ -33,6 +33,8 @@
     self = [super init];
     _nId = nId;
     
+    self.txtTitle.text = strName;
+
     return self;
 }
 
@@ -40,7 +42,6 @@
     [super viewDidLoad];
     
     Loading_Bird_Show(self.tableView);
-    self.txtTitle.text = self.stockModel.teamname;
     self.dataArray = @[];
     self.automaticallyAdjustsScrollViewInsets = NO;
     //注册通知
@@ -50,9 +51,11 @@
 
     if (_nId) {
         [kHTTPSingle RequestBuyPrivateServicePage:_nId];
+
     }
     else
     {
+        self.txtTitle.text = self.stockModel.teamname;
         [kHTTPSingle RequestBuyPrivateServicePage:[self.stockModel.teamid intValue]];
     }
     

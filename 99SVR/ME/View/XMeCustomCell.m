@@ -18,6 +18,7 @@
     [self.contentView addSubview:_imgView];
     _imgView.layer.masksToBounds = YES;
     _imgView.layer.cornerRadius = 32;
+    _imgView.contentMode = UIViewContentModeScaleAspectFill;
     
     _lblName = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+10, _imgView.y, 200, 20)];
     [_lblName setFont:XCFONT(15)];
