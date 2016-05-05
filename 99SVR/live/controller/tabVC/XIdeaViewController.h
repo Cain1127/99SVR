@@ -16,4 +16,8 @@
 //- (id)initWihModel:(RoomHttp *)room;
 - (void)setModel:(RoomHttp *)room;
 
+- (void)removeNotify;
+
+- (void)addNotify;
+
 @end

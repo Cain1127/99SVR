@@ -134,10 +134,12 @@ void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 	login_reqv = 4;
 	
 	//connect_from_lbs_asyn();
-    connect("121.12.118.32", 7301);    
+	connect("121.12.118.32", 7301);
+	//connect("122.13.81.62", 7301);
 	//connect("172.16.41.137", 7301);
 	//connect("172.16.41.215", 7301);
 	//connect("172.16.41.114", 7301);
+	//connect("172.16.41.45", 7301);
 
 	/*
 	SendMsg_Hello();
@@ -238,6 +240,11 @@ void LoginConnection::SendMsg_BuyPrivateVipReq(uint32 teacherid,uint32 viptype)
 void LoginConnection::SendMsg_ViewpointTradeGiftReq(ViewpointTradeGiftReq& req)
 {
 	SEND_MESSAGE(protocol::Sub_Vchat_ViewpointTradeGiftReq, req);
+}
+
+void LoginConnection::SendMsg_OnMicRobertReq(OnMicRobertReq& req)
+{
+	SEND_MESSAGE(protocol::Sub_Vchat_GetOnMicRobertReq, req);
 }
 
 void LoginConnection::close(void)
@@ -438,6 +445,11 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 	//观点赠送礼物响应
 	case protocol::Sub_Vchat_ViewpointTradeGiftResp:
 		ON_MESSAGE(hall_listener,ViewpointTradeGiftNoty, OnViewpointTradeGiftResp);
+		break;
+
+	//获取房间的转播机器人ID应答
+	case protocol::Sub_Vchat_GetOnMicRobertResp:
+		ON_MESSAGE(hall_listener,OnMicRobertResp, OnOnMicRobertResp);
 		break;
 
 	default:

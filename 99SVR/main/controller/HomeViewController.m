@@ -42,20 +42,6 @@
 
 #define kPictureHeight kScreenWidth * (0.43)
 
-/**
- *  @brief  当前请求的类型，用来处理请求事件
- */
-typedef enum : NSUInteger
-{
-    
-    cCJHomeRequestTypeDefault = 1,  //!<默认状态
-    cCJHomeRequestTypeRequesting,   //!<正在请求，同时所有请求都没有完成
-    cCJHomeRequestTypeBannerFinish, //!<banner信息请求完成
-    cCJHomeRequestTypeListFinish,   //!<列表信息请求完成
-    cCJHomeRequestTypeRequestFail   //!<请求失败或者中途断开
-    
-} CJHomeRequestType;
-
 @interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate>
 {
     NSCache *viewCache;
@@ -66,7 +52,6 @@ typedef enum : NSUInteger
 @property (nonatomic,strong) SDCycleScrollView *scrollView;
 
 ///当前数据请求状态:0-未开始请求/1-正在请求/2-banner完成请求/3-列表完成请求
-@property (nonatomic, assign) CJHomeRequestType refreshStatus;
 @property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
 @property (nonatomic,strong) UIView *videoView;
 @property (nonatomic,strong) UIView *ideaView;
@@ -129,7 +114,6 @@ typedef enum : NSUInteger
 {
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
-    self.refreshStatus = cCJHomeRequestTypeDefault;
     [self setTitleText:@"首页"];
     viewCache = [[NSCache alloc] init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLiveInfo:) name:MESSAGE_HOME_BANNER_VC object:nil];
@@ -156,13 +140,13 @@ typedef enum : NSUInteger
         PlayIconView *iconView = [PlayIconView sharedPlayIconView];
         iconView.frame = Rect(0, kScreenHeight-104, kScreenWidth, 60);
         [self.view addSubview:iconView];
+        [roomView removeNotice];
         [iconView setRoom:roomView.room];
     }
 }
 
 - (void)updateRefresh
 {
-    self.refreshStatus = cCJHomeRequestTypeRequesting;
     [self initData];
     [self initLivingData];
 }
@@ -175,18 +159,6 @@ typedef enum : NSUInteger
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
           selfWeak.scrollView.imageURLStringsGroup = selfWeak.aryBanner;
     });
-    
-//    selfWeak.scrollView.clickItemOperationBlock = ^(NSInteger currentIndex)
-//    {
-//        if(selfWeak.aryBanner.count>currentIndex)
-//        {
-//            BannerModel *model = selfWeak.aryBanner[currentIndex];
-//            if (model.webUrl!=nil) {
-//                NNSVRViewController *svr = [[NNSVRViewController alloc] initWithPath:model.webUrl title:@""];
-//                [selfWeak.navigationController pushViewController:svr animated:YES];
-//            }
-//        }
-//    };
 }
 
 - (void)showLeftView
@@ -199,7 +171,6 @@ typedef enum : NSUInteger
 {
     _aryBanner = array;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateRefreshStatus:cCJHomeRequestTypeBannerFinish];
         [self loadImageView];
     });
 }
@@ -220,13 +191,11 @@ typedef enum : NSUInteger
     });
     if (!notify.object)
     {
-        [self updateRefreshStatus:cCJHomeRequestTypeListFinish];
         return;
     }
     
     if (1 != [notify.object[@"code"] intValue])
     {
-        [self updateRefreshStatus:cCJHomeRequestTypeListFinish];
         return;
     }
     
@@ -254,149 +223,45 @@ typedef enum : NSUInteger
     {
         DLog(@"home list data is not include videoroom data. http API: %@", kHome_LivingList_URL);
     }
-    // NSDictionary *dict = @{@"code":@(1),@"video":videoRoom,@"viewpoint":aryViewPoint,@"operate":aryOperate};
-    if ([dict objectForKey:@"operate"])
+    if (KUserSingleton.nStatus)
     {
-        ///初始化数据模型
-        NSArray *operate = [dict objectForKey:@"operate"];
-        [self.aryLiving addObject:operate];
+        if ([dict objectForKey:@"operate"])
+        {
+            ///初始化数据模型
+            NSArray *operate = [dict objectForKey:@"operate"];
+            [self.aryLiving addObject:operate];
+        }
+        else
+        {
+            DLog(@"home list data is not include textroom data. http API: %@", kHome_LivingList_URL);
+        }
+        if ([dict objectForKey:@"viewpoint"])
+        {
+            ///初始化数据模型
+            NSArray *viewPoint = [dict objectForKey:@"viewpoint"];
+            [self.aryLiving addObject:viewPoint];
+        }
+        else
+        {
+            DLog(@"home list data is not include viewpoint data. http API: %@", kHome_LivingList_URL);
+        }
     }
-    else
-    {
-        DLog(@"home list data is not include textroom data. http API: %@", kHome_LivingList_URL);
-    }
-    if ([dict objectForKey:@"viewpoint"])
-    {
-        ///初始化数据模型
-        NSArray *viewPoint = [dict objectForKey:@"viewpoint"];
-        [self.aryLiving addObject:viewPoint];
-    }
-    else
-    {
-        DLog(@"home list data is not include viewpoint data. http API: %@", kHome_LivingList_URL);
-    }
-    
-    ///主线程刷新UI
     if ([NSThread isMainThread])
     {
-        [self updateRefreshStatus:cCJHomeRequestTypeListFinish];
         [self.tableView reloadData];
     }
     else
     {
         @WeakObj(self)
         dispatch_async(dispatch_get_main_queue(), ^{
-            [selfWeak updateRefreshStatus:cCJHomeRequestTypeListFinish];
             [selfWeak.tableView reloadData];
         });
     }
 }
 
-/**
- *  @author yangshengmeng, 16-03-29 09:03:43
- *
- *  @brief  request home list data
- *
- *  @since  v1.0.0
- */
 - (void)initLivingData
 {
     [kHTTPSingle RequestHomePage];
-}
-
-/**
- *  @author                     yangshengmeng, 16-03-30 09:03:31
- *
- *  @brief                      更新当前的网络请求状态，方便进行请求的处理
- *
- *  @param currentRequestStatus 当前完成的请求类型
- *
- *  @since                      v1.0.0
- */
-- (void)updateRefreshStatus:(CJHomeRequestType)currentRequestStatus
-{
-    if ([NSThread isMainThread])
-    {
-        switch (self.refreshStatus)
-        {
-                ///之前处于正在请求状态
-            case cCJHomeRequestTypeRequesting:
-            {
-            
-                ///banner 完成请求
-                if (cCJHomeRequestTypeBannerFinish == currentRequestStatus)
-                {
-                    
-                    self.refreshStatus = cCJHomeRequestTypeBannerFinish;
-                    return;
-                    
-                }
-                ///列表完成请求
-                else if (cCJHomeRequestTypeListFinish == currentRequestStatus)
-                {
-                    
-                    self.refreshStatus = cCJHomeRequestTypeListFinish;
-                    return;
-                    
-                }
-            
-            }
-                break;
-                
-                ///之前已完成banner请求
-            case cCJHomeRequestTypeBannerFinish:
-            {
-            
-                ///列表完成请求
-                if (cCJHomeRequestTypeListFinish == currentRequestStatus)
-                {
-                    
-                    ///完成头部刷新动画
-                    [self.tableView.gifHeader endRefreshing];
-                    self.refreshStatus = cCJHomeRequestTypeDefault;
-                    return;
-                    
-                }
-            
-            }
-                break;
-                
-                ///之前已完成list请求
-            case cCJHomeRequestTypeListFinish:
-            {
-                ///banner 完成请求
-                if (cCJHomeRequestTypeBannerFinish == currentRequestStatus)
-                {
-                    ///完成头部刷新动画
-                    [self.tableView.gifHeader endRefreshing];
-                    self.refreshStatus = cCJHomeRequestTypeDefault;
-                    return;
-                }
-            }
-            break;
-            ///当前处于默认状态，无请求
-            case cCJHomeRequestTypeDefault:
-            case cCJHomeRequestTypeRequestFail:
-            default:
-            {
-            
-                ///完成头部刷新动画
-                [self.tableView.header endRefreshing];
-                self.refreshStatus = cCJHomeRequestTypeDefault;
-            
-            }
-                break;
-        }
-        
-    }
-    else
-    {
-    
-        @WeakObj(self);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [selfWeak updateRefreshStatus:currentRequestStatus];
-        });
-    }
 }
 
 #pragma mark table view delegate
@@ -428,6 +293,8 @@ typedef enum : NSUInteger
             }
             return tempArray.count;
         }
+        NSArray *tempArray = _aryLiving[section];
+        return tempArray.count;
     }
     return 0;
     
@@ -510,9 +377,7 @@ typedef enum : NSUInteger
         if (tempArray.count>indexPath.row)
         {
             TQIdeaModel *model = tempArray[indexPath.row];
-            if (![strInfo isEqualToString:model.content]) {
-                [cell setIdeaModel:model line:YES];
-            }
+            [cell setIdeaModel:model line:YES];
         }
         return cell;
     }
@@ -570,7 +435,12 @@ typedef enum : NSUInteger
             button.tag = 1;
             [button addTarget:self action:@selector(enterEvent:) forControlEvents:UIControlEventTouchUpInside];
             [_videoView addSubview:button];
-            
+            @WeakObj(self)
+            [_videoView clickWithBlock:^(UIGestureRecognizer *gesture)
+            {
+                UIButton *btn = (UIButton *)[selfWeak.videoView viewWithTag:1];
+                [selfWeak enterEvent:btn];
+            }];
         }
         return _videoView;
         
@@ -594,6 +464,13 @@ typedef enum : NSUInteger
             button.tag = 3;
             [button addTarget:self action:@selector(enterEvent:) forControlEvents:UIControlEventTouchUpInside];
             [_operatorView addSubview:button];
+            
+            @WeakObj(self)
+            [_operatorView clickWithBlock:^(UIGestureRecognizer *gesture)
+             {
+                 UIButton *btn = (UIButton *)[selfWeak.operatorView viewWithTag:3];
+                 [selfWeak enterEvent:btn];
+             }];
         }
         return _operatorView;
     }
@@ -616,6 +493,13 @@ typedef enum : NSUInteger
             button.tag = 2;
             [button addTarget:self action:@selector(enterEvent:) forControlEvents:UIControlEventTouchUpInside];
             [_ideaView addSubview:button];
+            
+            @WeakObj(self)
+            [_ideaView clickWithBlock:^(UIGestureRecognizer *gesture)
+             {
+                 UIButton *btn = (UIButton *)[selfWeak.ideaView viewWithTag:2];
+                 [selfWeak enterEvent:btn];
+             }];
         }
         return _ideaView;
     }

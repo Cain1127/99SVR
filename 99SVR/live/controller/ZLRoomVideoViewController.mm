@@ -1,12 +1,12 @@
 //
-//  XVideoLiveViewcontroller.m
+//  ZLRoomVideoViewController.m
 //  99SVR
 //
-//  Created by xia zhonglin  on 4/19/16.
+//  Created by xia zhonglin  on 5/5/16.
 //  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
-#import "XVideoLiveViewcontroller.h"
+#import "ZLRoomVideoViewController.h"
 #import "LivePlayViewController.h"
 #import "DecodeJson.h"
 #import "RoomChatDataSource.h"
@@ -32,8 +32,8 @@
 #import "ConsumeRankDataSource.h"
 #import "HttpManagerSing.h"
 
-@interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
-                                ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
+@interface ZLRoomVideoViewController()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
+ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
 {
     UserListView *_listView;
     RoomDownView *_infoView;
@@ -82,25 +82,7 @@
 
 @end
 
-@implementation XVideoLiveViewcontroller
-
-- (void)addNotify
-{
-    [self addNotification];
-}
-
-- (void)reloadModel:(RoomHttp *)room
-{
-    _room = room;
-    _ffPlay.roomIsCollet = nRoom_is_collet;
-    [_ffPlay setRoomName:_room.teamname];
-    [_ffPlay setRoomId:[_room.roomid intValue]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
-}
+@implementation ZLRoomVideoViewController
 
 - (id)initWithModel:(RoomHttp *)room
 {
@@ -110,12 +92,10 @@
     return self;
 }
 
-- (void)loadView{
-    self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
-}
-
 - (void)viewDidLoad{
     [super viewDidLoad];
+    [self setTitleText:_room.teamname];
+    
     dictGift = [NSMutableDictionary dictionary];
     nColor = 10000;
     [self initUIHead];
@@ -127,7 +107,7 @@
     [_ffPlay.view addGestureRecognizer:singleRecogn];
     _ffPlay.roomIsCollet = nRoom_is_collet;
     [self addNotification];
-    [kHTTPSingle RequestConsumeRank:[_room.teamid intValue]];
+    [kHTTPSingle RequestConsumeRank:[_room.roomid intValue]];
 }
 
 - (void)connectUnVideo:(UIButton *)sender
@@ -154,7 +134,7 @@
 
 - (void)initTableView
 {
-    CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-44-kVideoImageHeight);
+    CGRect frame = Rect(0,kVideoImageHeight+_ffPlay.view.y,kScreenWidth,self.view.height-(kVideoImageHeight+_ffPlay.view.y));
     _chatAllView = [[UIView alloc] initWithFrame:frame];
     
     _chatView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth-54,frame.size.height) withStyle:UITableViewStylePlain];
@@ -194,10 +174,9 @@
 }
 
 - (void)initSlideView{
-    _menuView = [[SliderMenuView alloc] initWithFrame:Rect(0,kVideoImageHeight, kScreenWidth,self.view.height-kVideoImageHeight)
-                                           withTitles:@[@"聊天",@"我的",@"公告",@"课程表",@"贡献榜"] withDefaultSelectIndex:0];
-    _menuView.viewArrays = @[_chatAllView,_priChatView,_noticeView,_teachView,_tableConsumeRank];
-    
+    _menuView = [[SliderMenuView alloc] initWithFrame:Rect(0,_ffPlay.view.y+kVideoImageHeight, kScreenWidth,self.view.height-(_ffPlay.view.y+kVideoImageHeight))
+                                           withTitles:@[@"聊天",@"我的",@"公告"] withDefaultSelectIndex:0];
+    _menuView.viewArrays = @[_chatAllView,_priChatView,_noticeView];
     _menuView.DidSelectSliderIndex = ^(NSInteger index)
     {
         _nSelectIndex = index;
@@ -208,7 +187,7 @@
     
     _ffPlay = [[LivePlayViewController alloc] init];
     [self.view addSubview:_ffPlay.view];
-    _ffPlay.view.frame = Rect(0,0, kScreenWidth, kScreenHeight);
+    _ffPlay.view.frame = Rect(0,64, kScreenWidth, kScreenHeight);
     [_ffPlay setRoomId:[_room.roomid intValue]];
     [self addChildViewController:_ffPlay];
     [_ffPlay setRoomName:_room.teamname];
@@ -223,32 +202,20 @@
     UILabel *lblDownLine = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];
     [lblDownLine setBackgroundColor:UIColorFromRGB(0xcfcfcf)];
     [downView addSubview:lblDownLine];
-    
     UIView *whiteView = [[UIView alloc] initWithFrame:Rect(10, 7, kScreenWidth-20, 36)];
     [whiteView setBackgroundColor:UIColorFromRGB(0xffffff)];
     [downView addSubview:whiteView];
-    
-    //发送消息按钮
-    _giftView = [[GiftView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth, kScreenHeight)];
-    [self.view addSubview:_giftView];
-    _giftView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
-    _giftView.delegate = self;
-    
-    _listView = [[UserListView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth, kScreenHeight) array:nil];
+    _listView = [[UserListView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight) array:nil];
     [self.view addSubview:_listView];
     _listView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
     _listView.delegate = self;
-
-    _inputView = [[ChatView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth,kScreenHeight)];
+    
+    _inputView = [[ChatView alloc] initWithFrame:Rect(0,0, kScreenWidth,kScreenHeight)];
     [self.view addSubview:_inputView];
     _inputView.hidden = YES;
     _inputView.delegate = self;
     
-    _questionView = [[XLiveQuestionView alloc] initWithFrame:Rect(0,-kRoom_head_view_height,kScreenWidth,self.view.height)];
-    [self.view addSubview:_questionView];
-    _questionView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
-    _questionView.hidden = YES;
-    _questionView.delegate = self;
+    
 }
 
 - (void)requestQuestion:(NSString *)strName content:(NSString *)strContent
@@ -287,11 +254,11 @@
         if (strTeach.length>0) {
             @WeakObj(self)
             dispatch_async(dispatch_get_main_queue(),
-               ^{
+            ^{
                    if (selfWeak.nSelectIndex != 4) {
                        selfWeak.menuView.showBadgeIndex = 4;
                    }
-               });
+            });
             @WeakObj(strTeach)
             @WeakObj(_teachView)
             
@@ -364,9 +331,9 @@
     }
     @WeakObj(_ffPlay)
     dispatch_main_async_safe(
-     ^{
-         [_ffPlayWeak setNullMic];
-     });
+                             ^{
+                                 [_ffPlayWeak setNullMic];
+                             });
 }
 
 
@@ -378,9 +345,9 @@
     }
     @WeakObj(_ffPlay)
     dispatch_main_async_safe(
-     ^{
-         [_ffPlayWeak setDefaultImg];
-     });
+                             ^{
+                                 [_ffPlayWeak setDefaultImg];
+                             });
 }
 
 /**
@@ -390,9 +357,9 @@
 {
     NSNumber *number = notify.object;
     if ([number intValue]==202) {
-//        @WeakObj(self)
+        //        @WeakObj(self)
         dispatch_async(dispatch_get_main_queue(), ^{
-//            [selfWeak createPaySVR];
+            //            [selfWeak createPaySVR];
         });
     }
     else{
@@ -409,10 +376,10 @@
 {
     @WeakObj(self)
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)),
-    dispatch_get_global_queue(0, 0),
-    ^{
-       [selfWeak startNewPlay];
-    });
+                   dispatch_get_global_queue(0, 0),
+                   ^{
+                       [selfWeak startNewPlay];
+                   });
 }
 
 /**
@@ -430,9 +397,9 @@
     }
     @WeakObj(_ffPlay)
     dispatch_main_async_safe(
-    ^{
-        [_ffPlayWeak setNullMic];
-    });
+                             ^{
+                                 [_ffPlayWeak setNullMic];
+                             });
 }
 
 /**
@@ -444,11 +411,11 @@
     [_prichatDataSource setModel:aryRoomPrichat];
     if (aryRoomPrichat.count>0) {
         dispatch_async(dispatch_get_main_queue(),
-       ^{
-           if (selfWeak.nSelectIndex != 2) {
-               selfWeak.menuView.showBadgeIndex = 2;
-           }
-       });
+                       ^{
+                           if (selfWeak.nSelectIndex != 2) {
+                               selfWeak.menuView.showBadgeIndex = 2;
+                           }
+                       });
     }
     dispatch_async(dispatch_get_main_queue(),^{
         [selfWeak.priChatView reloadDataWithCompletion:
@@ -472,24 +439,24 @@
     @WeakObj(self)
     if (aryRoomChat.count>0) {
         dispatch_async(dispatch_get_main_queue(),
-        ^{
-            if (selfWeak.nSelectIndex != 1) {
-                selfWeak.menuView.showBadgeIndex = 1;
-            }
-        });
+                       ^{
+                           if (selfWeak.nSelectIndex != 1) {
+                               selfWeak.menuView.showBadgeIndex = 1;
+                           }
+                       });
     }
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [selfWeak.chatView reloadDataWithCompletion:
-        ^{
-            NSInteger numberOfRows = [selfWeak.chatView numberOfRowsInSection:0];
-            if (numberOfRows > 0)
-            {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
-                [selfWeak.chatView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-            }
-        }];
-    });
+                   ^{
+                       [selfWeak.chatView reloadDataWithCompletion:
+                        ^{
+                            NSInteger numberOfRows = [selfWeak.chatView numberOfRowsInSection:0];
+                            if (numberOfRows > 0)
+                            {
+                                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
+                                [selfWeak.chatView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                            }
+                        }];
+                   });
 }
 
 /**
@@ -501,23 +468,23 @@
     [_noticeDataSource setModel:aryRoomNotice];
     if (aryRoomNotice.count>0) {
         dispatch_async(dispatch_get_main_queue(),
-        ^{
-            if (selfWeak.nSelectIndex != 3) {
-                selfWeak.menuView.showBadgeIndex = 3;
-            }
-        });
+                       ^{
+                           if (selfWeak.nSelectIndex != 3) {
+                               selfWeak.menuView.showBadgeIndex = 3;
+                           }
+                       });
     }
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-       [selfWeak.noticeView reloadDataWithCompletion:
-        ^{
-            if (selfWeak.aryNotice.count > 0)
-            {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:selfWeak.aryNotice.count-1];
-                [selfWeak.noticeView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-            }
-        }];
-    });
+                   ^{
+                       [selfWeak.noticeView reloadDataWithCompletion:
+                        ^{
+                            if (selfWeak.aryNotice.count > 0)
+                            {
+                                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:selfWeak.aryNotice.count-1];
+                                [selfWeak.noticeView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                            }
+                        }];
+                   });
 }
 
 /**
@@ -525,7 +492,7 @@
  */
 - (void)roomUserList:(NSNotification*)notify
 {
-//    _aryUser = currentRoom.aryUser;
+    //    _aryUser = currentRoom.aryUser;
     [_listView reloadItems:currentRoom.aryUser];
 }
 /**
@@ -535,13 +502,13 @@
 {
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(),
-       ^{
-           [selfWeak.view makeToast:@"当前房间被关闭" duration:2.0 position:@"center"];
-           dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-              ^{
-                  [selfWeak.navigationController popViewControllerAnimated:YES];
-              });
-       });
+                   ^{
+                       [selfWeak.view makeToast:@"当前房间被关闭" duration:2.0 position:@"center"];
+                       dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
+                                      ^{
+                                          [selfWeak.navigationController popViewControllerAnimated:YES];
+                                      });
+                   });
 }
 
 /**
@@ -551,12 +518,12 @@
 {
     @WeakObj(self)
     dispatch_main_async_safe(
-     ^{
-         [selfWeak.view makeToast:@"您被人踢出当前房间" duration:2 position:@"center"];
-         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-             [selfWeak.navigationController popViewControllerAnimated:YES];
-         });
-     });
+                             ^{
+                                 [selfWeak.view makeToast:@"您被人踢出当前房间" duration:2 position:@"center"];
+                                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                     [selfWeak.navigationController popViewControllerAnimated:YES];
+                                 });
+                             });
 }
 
 /**
@@ -565,9 +532,9 @@
 - (void)sendLiwuRespInfo
 {
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [ProgressHUD showSuccess:@"赠送礼物成功"];
-    });
+                   ^{
+                       [ProgressHUD showSuccess:@"赠送礼物成功"];
+                   });
 }
 
 /**
@@ -654,12 +621,15 @@
                 }];
             }
         }
-            break;
+        break;
         case 5://显示成员
         {
-            _listView.bShow = YES;
+            [UIView animateWithDuration:0.5 animations:^{
+                _listView.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
+            } completion:^(BOOL finished)
+            {}];
         }
-            break;
+        break;
         case 3://显示礼物
         {
             if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
@@ -684,20 +654,7 @@
         break;
         case 1:
         {
-            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
-                [_giftView updateGoid];
-                [UIView animateWithDuration:0.5 animations:^{
-                    _questionView.hidden = NO;
-                    [_questionView setFrame:Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight)];
-                } completion:^(BOOL finished) {}];
-            }
-            else
-            {
-                @WeakObj(self)
-                [AlertFactory createLoginAlert:self block:^{
-                    [selfWeak closeRoomInfo];
-                }];
-            }
+            [self sendRose];
         }
         break;
     }
@@ -737,7 +694,7 @@
     
     [_inputView.textView setText:@""];
     [_inputView setHidden:YES];
-//    [self switchBtn:1];
+    //    [self switchBtn:1];
 }
 
 #pragma mark 送礼物
@@ -783,7 +740,6 @@
         [self.view makeToast:@"游客不能送花"];
         return ;
     }
-//    [RoomService sendLocalInfo:@"[$999$]" toid:0 roomInfo:currentRoom aryChat:aryRoomChat];
     [kProtocolSingle sendRose];
 }
 
@@ -804,28 +760,28 @@
 #pragma mark 横屏
 - (void)horizontalViewControl
 {
-
+    
 }
 
 #pragma mark 竖屏
 - (void)verticalViewControl
 {
-//    _topHUD.frame = Rect(0, 0, kScreenWidth, 64);
-//    [_topHUD viewWithTag:1].frame = Rect(0, 0, kScreenWidth, 64);
-//    _lblName.frame = Rect(50, 35, kScreenWidth-100, 15);
-//    [_topHUD viewWithTag:2].frame = Rect(0, 20, 44, 44);
-//    _btnRight.frame = Rect(kScreenWidth-50, 20, 44, 44);
-//    _downHUD.frame = Rect(0, kVideoImageHeight-24, kScreenWidth, 44);
-//    _ffPlay.view.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
-//    _ffPlay.glView.frame = Rect(0,0,kScreenWidth, kVideoImageHeight);
-//
-//    _btnFull.frame = Rect(kScreenWidth-54, 0, 44, 44);
-//    
-//    _group.hidden = NO;
-//    downView.hidden = NO;
-//    _lblBlue.hidden = NO;
-//    _scrollView.hidden = NO;
-//    [self setNeedsStatusBarAppearanceUpdate];
+    //    _topHUD.frame = Rect(0, 0, kScreenWidth, 64);
+    //    [_topHUD viewWithTag:1].frame = Rect(0, 0, kScreenWidth, 64);
+    //    _lblName.frame = Rect(50, 35, kScreenWidth-100, 15);
+    //    [_topHUD viewWithTag:2].frame = Rect(0, 20, 44, 44);
+    //    _btnRight.frame = Rect(kScreenWidth-50, 20, 44, 44);
+    //    _downHUD.frame = Rect(0, kVideoImageHeight-24, kScreenWidth, 44);
+    //    _ffPlay.view.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
+    //    _ffPlay.glView.frame = Rect(0,0,kScreenWidth, kVideoImageHeight);
+    //
+    //    _btnFull.frame = Rect(kScreenWidth-54, 0, 44, 44);
+    //
+    //    _group.hidden = NO;
+    //    downView.hidden = NO;
+    //    _lblBlue.hidden = NO;
+    //    _scrollView.hidden = NO;
+    //    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (BOOL)prefersStatusBarHidden//for iOS7.0
@@ -855,9 +811,9 @@
 {
     __weak UIView *__downHUD = _downHUD;
     dispatch_main_async_safe(
-     ^{
-         __downHUD.alpha = 0;
-     });
+                             ^{
+                                 __downHUD.alpha = 0;
+                             });
 }
 
 - (void)dealloc{

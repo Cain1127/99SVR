@@ -68,12 +68,27 @@
 
 @synthesize bFull;
 
+- (void)addNotify
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setBackGroudMode:) name:MESSAGE_ENTER_BACK_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectMedia:) name:MESSAGE_MEDIA_DISCONNECT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollet:) name:MESSAGE_COLLET_RESP_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoList:) name:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
+}
 
 - (void)setRoomId:(int)roomId
 {
     _roomid = roomId;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoList:) name:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
     [kHTTPSingle RequestCollection];
+    [self addNotify];
+    if (_roomIsCollet)
+    {
+        _btnCollet.selected = YES;
+    }
+    else
+    {
+        _btnCollet.selected = NO;
+    }
 }
 
 - (void)loadVideoList:(NSNotification *)notify
@@ -336,6 +351,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self addNotify];
     [self frameView];
     lblText = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-100,160,200,20)];
     [lblText setTextColor:[UIColor whiteColor]];
@@ -373,6 +389,7 @@
     [_downHUD addSubview:downImg];
     [downImg setTag:1];
     [_glView addSubview:_downHUD];
+    
     _btnVideo = [self createPlayBtn:@"video_h" high:@"video"];
     [_btnVideo addTarget:self action:@selector(connectUnVideo:) forControlEvents:UIControlEventTouchUpInside];
     _btnFull = [self createPlayBtn:@"full" high:@"full_h"];
@@ -380,13 +397,19 @@
     _btnShare = [self createPlayBtn:@"video_room_share_icon_n" high:@"video_room_share_icon_p"];
     [_btnShare addTarget:self action:@selector(shareInfo) forControlEvents:UIControlEventTouchUpInside];
     _btnCollet = [self createPlayBtn:@"video_room_follow_icon_n" high:@"personal_follow_icon"];
+    [_btnCollet setImage:[UIImage imageNamed:@"personal_follow_icon"] forState:UIControlStateSelected];
     [_btnCollet addTarget:self action:@selector(colletInfo) forControlEvents:UIControlEventTouchUpInside];
     [self updateDownHUD];
-    _downHUD.alpha = 0;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setBackGroudMode:) name:MESSAGE_ENTER_BACK_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectMedia:) name:MESSAGE_MEDIA_DISCONNECT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollet:) name:MESSAGE_COLLET_RESP_VC object:nil];
+    _downHUD.alpha = 0;
+    if (_roomIsCollet)
+    {
+        _btnCollet.selected = YES;
+    }
+    else
+    {
+        _btnCollet.selected = NO;
+    }
 }
 
 - (void)updateDownHUD
@@ -404,7 +427,6 @@
         _downHUD.frame = Rect(0,fHeight-44, fWidth, 44);
         UIImageView *downImg = (UIImageView *)[_downHUD viewWithTag:1];
         downImg.frame = _downHUD.bounds;
-
    }
    else
    {
@@ -413,15 +435,26 @@
        _TopHUD.hidden = YES;
        _downHUD.frame = Rect(0,fHeight-44, fWidth, 44);
    }
-    CGFloat fWith = fWidth/4;
+    int number = 3;
+    if (KUserSingleton.nStatus) {
+        number = 4;
+    }
+    CGFloat fWith = fWidth/ number;
+    
     _btnFull.frame = Rect(fWith/2-22, 0,44, 44);
     _btnVideo.frame = Rect(fWith+fWith/2-22, 0,44, 44);
-    _btnShare.frame = Rect(fWith*2+fWith/2-22, 0,44, 44);
-    _btnCollet.frame = Rect(fWith*3+fWith/2-22, 0,44, 44);
-    if (_statusBarHidden) {
+    CGRect frame = _btnVideo.frame;
+    frame.origin.x += fWith;
+    if (KUserSingleton.nStatus)
+    {
+        _btnShare.frame = frame;
+        frame.origin.x += fWith;
+    }
+    _btnCollet.frame = frame;
+    if (_statusBarHidden)
+    {
         _statusBarHidden(YES);
     }
-    
 }
 
 - (void)shareInfo
@@ -798,7 +831,8 @@
                                        NO,
                                        kCGRenderingIntentDefault);
     CGColorSpaceRelease(colorSpace);
-    if (cgImage) {
+    if (cgImage)
+    {
         _currentImage = [UIImage imageWithCGImage:cgImage];
     }
     CGImageRelease(cgImage);
@@ -818,7 +852,21 @@
 
 - (void)updateCollet:(NSNotification *)notify
 {
-    
+    @WeakObj(self)
+    NSDictionary *dict = notify.object;
+    if ([dict[@"code"] intValue]==1)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            selfWeak.btnCollet.selected = YES;
+            [ProgressHUD showSuccess:@"关注成功"];
+        });
+    }else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            selfWeak.btnCollet.selected = NO;
+            [ProgressHUD showSuccess:@"取消关注"];
+        });
+    }
 }
 
 @end

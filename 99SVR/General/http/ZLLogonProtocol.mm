@@ -31,6 +31,9 @@ ZLRoomListener room_listener;
 NSMutableArray *aryRoomChat;
 NSMutableArray *aryRoomPrichat;
 NSMutableArray *aryRoomNotice;
+int nRoom_count_info;
+int nRoom_fans_info;
+int nRoom_is_collet;
 RoomInfo *currentRoom;
 
 void ZLPushListener::OnConfChanged(int version)
@@ -95,8 +98,14 @@ void ZLPushListener::OnEmailNewMsgNoty(EmailNewMsgNoty& info)
 
 //*********************************************************
 
+void ZLHallListener::OnOnMicRobertResp(OnMicRobertResp& info)
+{
+    
+}
+
 void ZLHallListener::OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info)
 {
+    KUserSingleton.goldCoin = info.nk()/1000.0f;
     NSDictionary *dict = @{@"userid":@(info.userid()),@"roomid":@(info.roomid()),@"teamid":@(info.roomid()),@"giftid":@(info.giftid()),
                            @"giftnum":@(info.giftnum())};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VIEW_DETAILS_GIFT_VC object:dict];
@@ -318,6 +327,7 @@ int ZLLogonProtocol::startOtherLogin(uint32 cloginid,const char *openid,const ch
 int ZLLogonProtocol::updatePwd(const char *cOld,const char *cNew)
 {
     conn->SendMsg_SetUserPwdReq(0,1,cOld,cNew);
+    
     return 1;
 }
 
@@ -662,13 +672,6 @@ void ZLRoomListener::OnAskQuestionResp(AskQuestionResp& info)
 {
     
 }
-
-//Ã·Œ œÏ”¶
-void ZLRoomListener::OnAskQuestionErr(ErrCodeResp& info)
-{
-    
-}
-
 /**
  *  麦状态变换触发
  */
@@ -723,6 +726,7 @@ void ZLRoomListener::OnTradeGiftNotify(TradeGiftRecord& info){
 void ZLRoomListener::OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info)
 {
     DLog(@"收到观点详情礼物通知!");
+    
 }
 
 
@@ -735,10 +739,6 @@ void ZLMessageListener::OnVideoRoomMessageComming(void* msg)
 {
     video_room->DispatchSocketMessage(msg);
 }
-
-
-
-
 
 void ZLJoinRoomListener::OnPreJoinRoomResp(PreJoinRoomResp& info)
 {
@@ -753,7 +753,9 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
     }
     [currentRoom setRoomInfo:&info];
     [aryRoomChat addObject:@"<span style=\"color:#919191\">[系统消息]加入房间成功</span>"];
-    
+    nRoom_count_info = info.naccess_times();
+    nRoom_fans_info = info.ncollect_times();
+    nRoom_is_collet = info.biscollectroom();
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
 }
@@ -777,15 +779,21 @@ void ZLRoomListener::OnExpertNewViewNoty(ExpertNewViewNoty& info)
 void ZLRoomListener::OnUserAccountInfo(UserAccountInfo& info)
 {
     [UserInfo sharedUserInfo].goldCoin = info.nk()/1000.0f;
-    
 }
 
 void ZLRoomListener::OnFavoriteVcbResp(FavoriteRoomResp& info)
 {
-    DLog(@"colletInfo:%d--errid:%d",info.actionid(),info.errorid());
-    
-    NSString *strErr = [NSString stringWithUTF8String:conn->get_error_desc(info.errorid()).c_str()];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_GIFT_VIEW_ERR_VC object:strErr];
+    NSDictionary *dict = @{@"code":@(info.actionid())};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_COLLET_RESP_VC object:dict];
 
 }
+
+void ZLRoomListener::OnAskQuestionErr(ErrCodeResp& info)
+{
+    NSString *strErr = [NSString stringWithUTF8String:conn->get_error_desc(info.errcode()).c_str()];
+    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_COLLET_RESP_VC object:strErr];
+}
+
+
+

@@ -300,5 +300,11 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
     [self createHttpConnection];
 }
 
+- (NSString *)requestGoid
+{
+    [self createHttpConnection];
+    NSString *str = [NSString stringWithUTF8String:hConnection->GetConsumeRecordUrl().c_str()];
+    return str;
+}
 
 @end

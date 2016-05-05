@@ -4203,6 +4203,7 @@ class AskQuestionResp
 
 private:
 
+	uint64	_nk;
 	uint32	_questionid;
 	uint32	_userid;
 	uint32	_teamid;
@@ -4212,6 +4213,10 @@ private:
 
 
 public:
+
+	 inline uint64 nk() { return _nk; } const 
+
+	 inline void set_nk(const uint64 value) { _nk = value; }
 
 	 inline uint32 questionid() { return _questionid; } const 
 
@@ -4243,6 +4248,7 @@ public:
 	void SerializeToArray(void* data, int size)
 	{
 		protocol::tag_CMDAskQuestionResp* cmd = (protocol::tag_CMDAskQuestionResp*) data;
+		cmd->nk = _nk;
 		cmd->questionid = _questionid;
 		cmd->userid = _userid;
 		cmd->teamid = _teamid;
@@ -4254,6 +4260,7 @@ public:
 	void ParseFromArray(void* data, int size)
 	{
 		protocol::tag_CMDAskQuestionResp* cmd = (protocol::tag_CMDAskQuestionResp*) data;
+		_nk = cmd->nk;
 		_questionid = cmd->questionid;
 		_userid = cmd->userid;
 		_teamid = cmd->teamid;
@@ -4265,6 +4272,7 @@ public:
 	void Log()
 	{
 		LOG("--------Receive message: AskQuestionResp---------");
+		LOG("nk = %lld", _nk);
 		LOG("questionid = %d", _questionid);
 		LOG("userid = %d", _userid);
 		LOG("teamid = %d", _teamid);

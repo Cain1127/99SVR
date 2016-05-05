@@ -13,15 +13,26 @@
 #import "AlertFactory.h"
 #import "Toast+UIView.h"
 #import "ZLLogonServerSing.h"
+#import "ZLRoomVideoViewController.h"
+
 @implementation ConnectRoomViewModel
 
-- (id)initWithViewController:(UIViewController *)control{
+- (id)initWithViewController:(UIViewController *)control
+{
     self = [super init];
     _control = control;
     return self;
 }
 
-- (void)connectViewModel:(RoomHttp *)room{
+- (void)connectViewModel:(RoomHttp *)room
+{
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if ([roomView.room.roomid isEqualToString:room.roomid])
+    {
+        [_control.navigationController pushViewController:roomView animated:YES];
+        return ;
+    }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     _room = room;
@@ -56,9 +67,17 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     dispatch_async(dispatch_get_main_queue(), ^{
         [_controlWeak.view hideToastActivity];
-        RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-        [roomView setRoom:_room];
-        [_controlWeak.navigationController pushViewController:roomView animated:YES];
+        if (KUserSingleton.nStatus)
+        {
+            RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+            [roomView setRoom:_room];
+            [_controlWeak.navigationController pushViewController:roomView animated:YES];
+        }
+        else
+        {
+            ZLRoomVideoViewController *control = [[ZLRoomVideoViewController alloc] initWithModel:_room];
+            [_controlWeak.navigationController pushViewController:control animated:YES];
+        }
     });
     
 }

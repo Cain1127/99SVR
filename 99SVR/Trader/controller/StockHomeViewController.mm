@@ -405,6 +405,7 @@
         PlayIconView *iconView = [PlayIconView sharedPlayIconView];
         iconView.frame = Rect(0, kScreenHeight-104, kScreenWidth, 60);
         [self.view addSubview:iconView];
+        [roomView removeNotice];
         [iconView setRoom:roomView.room];
     }
 }

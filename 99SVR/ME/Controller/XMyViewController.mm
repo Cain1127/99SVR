@@ -8,6 +8,8 @@
 
 #import "XMyViewController.h"
 #import "LeftMenuHeaderView.h"
+#import "HttpManagerSing.h"
+#import "NNSVRViewController.h"
 #import "RoomHttp.h"
 #import "RoomViewController.h"
 #import "PlayIconView.h"
@@ -69,15 +71,10 @@
     _listTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _listTableView.delegate = self;
     _listTableView.dataSource = self;
-    
     if (kiPhone4_OR_4s) {
-     
         _listTableView.bounces = YES;
-
     }else{
-        
         _listTableView.bounces = NO;
-
     }
     
     [self.view addSubview:_listTableView];
@@ -91,7 +88,8 @@
     NSNumber *number = notify.object;
     if ([number intValue]==0) {
         @WeakObj(self)
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
             selfWeak.leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
         });
     }
@@ -113,6 +111,7 @@
         PlayIconView *iconView = [PlayIconView sharedPlayIconView];
         iconView.frame = Rect(0, kScreenHeight-104, kScreenWidth, 60);
         [self.view addSubview:iconView];
+        [roomView removeNotice];
         [iconView setRoom:roomView.room];
     }
 }
@@ -121,16 +120,18 @@
 {
     [_itemsArray removeAllObjects];
     _leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"TQMeCustomizedViewController"]];
-    if (KUserSingleton.bIsLogin && KUserSingleton.nType ==1) {
-        NSString *strName= [NSString stringWithFormat:@"我的玖玖币:  %.01f",KUserSingleton.goldCoin];
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:strName icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
+    if (KUserSingleton.nStatus) {
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"TQMeCustomizedViewController"]];
+        if (KUserSingleton.bIsLogin && KUserSingleton.nType ==1) {
+            NSString *strName= [NSString stringWithFormat:@"我的玖玖币:  %.01f",KUserSingleton.goldCoin];
+            [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:strName icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
+        }
+        else
+        {
+            [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的玖玖币" icon:@"personal_recharge_icon" goClassName:@"NNSVRViewController"]];
+        }
+        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的消费记录" icon:@"personal_consumption_icon" goClassName:@"CustomizedViewController"]];
     }
-    else
-    {
-        [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的玖玖币" icon:@"personal_recharge_icon" goClassName:@"PaySelectViewController"]];
-    }
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的消费记录" icon:@"personal_consumption_icon" goClassName:@"CustomizedViewController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的关注" icon:@"personal_follow_icon" goClassName:@"VideoColletionViewController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"personal_services_icon" goClassName:@"KefuCenterController"]];
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"personal_ste_icon" goClassName:@"SettingCenterController"]];
@@ -211,10 +212,18 @@
     {
         if (_itemsArray.count>nRow)
         {
-            
             LeftCellModel *model = _itemsArray[nRow];
-            UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
-            [self.navigationController pushViewController:viewController animated:YES];
+            if ([model.goClassName isEqualToString:@"NNSVRViewController"])
+            {
+                NSString *strPath = [kHTTPSingle requestGoid];
+                NNSVRViewController  *svrView = [[NNSVRViewController alloc] initWithPath:strPath title:@"消费记录"];
+                [self.navigationController pushViewController:svrView animated:YES];
+            }
+            else
+            {
+                UIViewController *viewController = [[[NSClassFromString(model.goClassName) class] alloc] init];
+                [self.navigationController pushViewController:viewController animated:YES];
+            }
         }
     }
     else

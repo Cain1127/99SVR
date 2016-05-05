@@ -4753,6 +4753,90 @@ public:
 };
 
 
+class OnMicRobertReq
+{
+
+private:
+
+	uint32	_vcbid;
+
+
+public:
+
+	 inline uint32 vcbid() { return _vcbid; } const 
+
+	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDOnMicRobertReq); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDOnMicRobertReq* cmd = (protocol::tag_CMDOnMicRobertReq*) data;
+		cmd->vcbid = _vcbid;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDOnMicRobertReq* cmd = (protocol::tag_CMDOnMicRobertReq*) data;
+		_vcbid = cmd->vcbid;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: OnMicRobertReq---------");
+		LOG("vcbid = %d", _vcbid);
+	}
+
+};
+
+
+class OnMicRobertResp
+{
+
+private:
+
+	uint32	_vcbid;
+	uint32	_robertid;
+
+
+public:
+
+	 inline uint32 vcbid() { return _vcbid; } const 
+
+	 inline void set_vcbid(const uint32 value) { _vcbid = value; }
+
+	 inline uint32 robertid() { return _robertid; } const 
+
+	 inline void set_robertid(const uint32 value) { _robertid = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDOnMicRobertResp); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDOnMicRobertResp* cmd = (protocol::tag_CMDOnMicRobertResp*) data;
+		cmd->vcbid = _vcbid;
+		cmd->robertid = _robertid;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDOnMicRobertResp* cmd = (protocol::tag_CMDOnMicRobertResp*) data;
+		_vcbid = cmd->vcbid;
+		_robertid = cmd->robertid;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: OnMicRobertResp---------");
+		LOG("vcbid = %d", _vcbid);
+		LOG("robertid = %d", _robertid);
+	}
+
+};
+
+
 
 
 

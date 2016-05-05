@@ -42,11 +42,13 @@
     [_txtTitle setTextAlignment:NSTextAlignmentCenter];
     [_txtTitle setTextColor:UIColorFromRGB(0x4C4C4C)];
     
-    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(MailBoxEvent) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
-    [_headView addSubview:btnLeft];
-    [btnLeft setFrame:Rect(0,20,44,44)];
-    _btnLeft = btnLeft;
-    
+    if ([UserInfo sharedUserInfo].nStatus)
+    {
+        UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(MailBoxEvent) image:@"nav_menu_icon_n" highImage:@"nav_menu_icon_p"];
+        [_headView addSubview:btnLeft];
+        [btnLeft setFrame:Rect(0,20,44,44)];
+        _btnLeft = btnLeft;
+    }
     UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchViewController) image:@"nav_search_icon_n" highImage:@"nav_search_icon_p"];
     [_headView addSubview:btnRight];
     [btnRight setFrame:Rect(kScreenWidth-44, 20, 44, 44)];

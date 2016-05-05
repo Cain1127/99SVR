@@ -678,6 +678,19 @@ namespace protocol
 		 uint16 errcode;
 	}CMDErrCodeResp_t;
 
+	//获取房间的转播机器人ID请求
+	typedef struct tag_CMDOnMicRobertReq
+	{
+	  uint32 vcbid;
+	}CMDOnMicRobertReq_t;
+
+	//获取房间的转播机器人ID应答
+	typedef struct tag_CMDOnMicRobertResp
+	{
+	  uint32 vcbid;
+	  uint32 robertid;
+	}CMDOnMicRobertResp_t;
+
 };
 
 #pragma pack()

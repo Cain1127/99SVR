@@ -34,4 +34,6 @@
 
 - (void)removeNotify;
 
+- (void)addNotify;
+
 @end

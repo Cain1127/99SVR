@@ -88,10 +88,19 @@
 
 DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 
+- (void)addNotify
+{
+    [_liveControl addNotify];
+    [_ideaControl addNotify];
+    [_tradeView addNotify];
+    [_privateView addNotify];
+}
+
 - (void)setRoom:(RoomHttp*)room
 {
     _room = room;
-    if([self isViewLoaded]){
+    if([self isViewLoaded])
+    {
         [self loadHeadModel];
         [_liveControl stopNewPlay];
         [_liveControl reloadModel:_room];
@@ -99,7 +108,21 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
         [_tradeView reloadModel:_room];
         [_ideaControl setModel:_room];
         [_privateView setModel:_room];
+        [self addNotify];
     }
+}
+
+- (void)removeNotice
+{
+    [_liveControl removeNotify];
+    [_ideaControl removeNotify];
+    [_tradeView removeNotify];
+    [_privateView removeNotify];
+}
+
+- (void)removeAllNotice
+{
+    [_liveControl removeAllNotify];
 }
 
 /**
@@ -154,8 +177,8 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 - (void)loadHeadModel
 {
     headView.lblTitle.text = _room.teamname;
-    headView.lblCount.text = _room.onlineusercount;
-//    headView.lblFans.text = _room.;
+    headView.lblCount.text = NSStringFromInt(nRoom_count_info);
+    headView.lblFans.text = NSStringFromInt(nRoom_fans_info);
 }
 
 /**

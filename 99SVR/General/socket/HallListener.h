@@ -79,7 +79,9 @@ public:
 
 	//观点赠送礼物失败
 	virtual void OnViewpointTradeGiftErr(ErrCodeResp& info) = 0;
-	
+
+	//获取房间的转播机器人ID应答
+	virtual void OnOnMicRobertResp(OnMicRobertResp& info) = 0;
 };
 
 #endif

@@ -13,8 +13,6 @@
 
 @implementation ZLPrivateDataSource
 
-
-
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -34,7 +32,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CustomizedTableViewCell *cell = [CustomizedTableViewCell cellWithTableView:tableView];
-    if (_aryVIP.count>_selectIndex) {
+    if (_aryVIP.count>_selectIndex-1) {
         XPrivateService *service = _aryVIP[_selectIndex-1];
         if (service.summaryList.count>indexPath.row) {
             XPrivateSummary *summary = service.summaryList[indexPath.row];

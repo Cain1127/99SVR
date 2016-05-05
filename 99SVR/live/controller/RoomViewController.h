@@ -21,6 +21,13 @@ DEFINE_SINGLETON_FOR_HEADER(RoomViewController)
 
 - (void)exitRoom;
 
+- (void)removeNotice;
+
+- (void)removeAllNotice;
+
+- (void)addNotify;
+
+
 @end
 
 
