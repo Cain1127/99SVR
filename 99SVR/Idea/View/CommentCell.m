@@ -21,7 +21,7 @@
     self.attributedTextContextView.edgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     self.attributedTextContextView.frame = Rect(50,17, kScreenWidth-60,20);
     
-    _lblTime = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-148,17, 140, 20)];
+    _lblTime = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-170,17, 165, 20)];
     [_lblTime setFont:XCFONT(12)];
     [_lblTime setTextAlignment:NSTextAlignmentRight];
     [_lblTime setTextColor:UIColorFromRGB(0x919191)];
