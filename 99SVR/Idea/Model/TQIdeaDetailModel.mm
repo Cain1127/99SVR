@@ -34,7 +34,7 @@
     
     _viewpointid = details->viewpointid();
     
-//    [self settingTime];
+    _html5url = [NSString stringWithUTF8String:details->html5url().c_str()];
     
     return self;
 }

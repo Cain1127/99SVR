@@ -47,6 +47,7 @@
     int nCurrent;
     UIView *noView;
     GiftView *_giftView;
+    NSCache *commentCache;
 }
 @property (nonatomic,strong) DTAttributedTextView *textView;
 @property (nonatomic,strong) UIView *downContentView;
@@ -91,25 +92,41 @@
 - (void)showShareView
 {
     NSString *strInfo = [NSString stringWithFormat:@"我在99乐投看到了一篇非常好的分析文章，分享给你，赶快过来看看吧!"];
-    ZLShareViewController *viewControl = [[ZLShareViewController alloc] initWithTitle:strInfo url:@"www.99ducaijing.com"];
+    
+    ZLShareViewController *viewControl = [[ZLShareViewController alloc] initWithTitle:strInfo url:_ideaDetail.html5url];
+    
     [viewControl show];
+}
+
+- (void)sendGiftFail:(NSNotification *)notify
+{
+    NSString *strErr = notify.object;
+    @WeakObj(strErr)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *str = [NSString stringWithFormat:@"送礼失败:%@",strErrWeak];
+        [ProgressHUD showError:str];
+    });
 }
 
 - (void)sendGiftResp:(NSNotification *)notify
 {
-    DLog(@"送礼成功");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [ProgressHUD showSuccess:@"送礼成功"];
+    });
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setTitleText:@"观点正文"];
-    
+    commentCache = [[NSCache alloc] init];
+    [commentCache setTotalCostLimit:10];
     UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(showShareView) image:@"video_room_share_icon_n" highImage:@"video_room_share_icon_p"];
     [self setRightBtn:btnRight];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendGiftResp:) name:MESSAGE_VIEW_DETAILS_GIFT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyResp:) name:MESSAGE_IDEA_REPLY_RESPONSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView:) name:MESSAGE_HTTP_REQUEST_REPLY_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendGiftFail:) name:MESSAGE_GIFT_VIEW_ERR_VC object:nil];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _tableView = [[UITableView alloc] initWithFrame:Rect(0,64, kScreenWidth,kScreenHeight-64)];
     [self.view addSubview:_tableView];
@@ -322,7 +339,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *identifier = @"commentIdentifier";
     if(_aryCommont.count==0)
     {
         [_tableView.footer setHidden:YES];
@@ -336,18 +352,24 @@
         }];
         return cell;
     }
+    DTAttributedTextCell *cell = [self bufferView:tableView index:indexPath];
     
-    CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    if(cell==nil)
+    return cell;
+}
+
+- (DTAttributedTextCell *)bufferView:(UITableView *)tableView index:(NSIndexPath *)indexPath
+{
+    NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
+    CommentCell *cell = [commentCache objectForKey:strKey];
+    if(!cell)
     {
-        cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"commentIdentifier"];
+        [commentCache setObject:cell forKey:strKey];
     }
     if(_aryCommont.count > indexPath.row)
     {
         ZLReply *reply = [_aryCommont objectAtIndex:indexPath.row];
-        cell.textView.shouldDrawImages = YES;
-        cell.textView.delegate = self;
-        cell.textView.attributedString = [[NSAttributedString alloc] initWithHTMLData:[reply.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
+        cell.textDelegate = self;
         [cell setReplyModel:reply];
     }
     return cell;
@@ -462,11 +484,8 @@
     }
     if (_aryCommont.count>indexPath.row)
     {
-        ZLReply *comment = [_aryCommont objectAtIndex:indexPath.row];
-        DTAttributedTextContentView *content = [DTAttributedTextContentView new];
-        content.attributedString = [[NSAttributedString alloc] initWithHTMLData:[comment.strContent dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
-        CGFloat height = [content suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-60].height;
-        return height+30;
+        DTAttributedTextCell *cell = [self bufferView:tableView index:indexPath];
+        return [cell requiredRowHeightInTableView:tableView]+40;
     }
     return 0;
 }
@@ -727,6 +746,8 @@
 {
     DLog(@"dealloc");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[SDImageCache sharedImageCache] clearMemory];
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
 /**

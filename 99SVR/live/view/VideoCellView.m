@@ -94,7 +94,7 @@
     _nameLabel.text = room.teamname;
     CGRect frame = [room.onlineusercount boundingRectWithSize:CGSizeMake(kScreenWidth, 20) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
     [_roomIdLabel setText:room.roomid];
-    _lookCountBtn.frame = Rect(_imageView.x+_imageView.width-frame.size.width-20, _roomIdLabel.y, frame.size.width+8, 15);
+    _lookCountBtn.frame = Rect(_imageView.x+_imageView.width-frame.size.width-30, _roomIdLabel.y, frame.size.width+23, 15);
 }
 
 - (void)setRoom:(RoomHttp *)room

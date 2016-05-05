@@ -53,7 +53,7 @@
 #define  kWXAPP_ID "wxfbfe01336f468525"
 #define  kWXAPP_SEC "acc28b09efbb768a1b5b7b6514903ef8"
 
-#define LBS_HTTP_HOST @"http://lbs1.99ducaijing.cn:2222/"
+#define LBS_HTTP_HOST @"http://testlbs.99ducaijing.cn:2222/"
 
 //#define kPay_URL @"http://api.99ducaijing.com/mobile/wap_cz"
 #define kPay_URL @"http://testphp.99ducaijing.cn/mobile.php?s=/pay/index"
@@ -89,7 +89,8 @@
 #define kTEXT_GROUP_URL @"http://122.13.81.62:22806/test/test.php?act=script"
 #endif
 
-#define kLbs_all_path @"lbs1.99ducaijing.cn:2222;lbs2.99ducaijing.cn:2222;58.210.107.54:2222;122.193.102.23:2222;112.25.230.249:2222"
+//#define kLbs_all_path @"lbs1.99ducaijing.cn:2222;lbs2.99ducaijing.cn:2222;58.210.107.54:2222;122.193.102.23:2222;112.25.230.249:2222"
+#define kLbs_all_path @"testlbs.99ducaijing.cn:2222;lbs2.99ducaijing.cn:2222"
 
 #endif
 

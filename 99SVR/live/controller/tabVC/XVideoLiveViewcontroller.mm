@@ -119,7 +119,7 @@
     [_ffPlay.view addGestureRecognizer:singleRecogn];
     
     [self addNotification];
-    [kHTTPSingle RequestConsumeRank:[_room.nvcbid intValue]];
+    [kHTTPSingle RequestConsumeRank:[_room.roomid intValue]];
 }
 
 - (void)connectUnVideo:(UIButton *)sender
@@ -137,12 +137,11 @@
 {
     
     [super viewDidAppear:animated];
-    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [self hiddenTopHud];
+    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
 }
 
 - (void)initTableView
@@ -413,11 +412,11 @@
  */
 - (void)startNewPlay
 {
-    for (RoomUser *user in _aryUser)
+    for (RoomUser *user in currentRoom.aryUser)
     {
         if ([user isOnMic])
         {
-            [_ffPlay startPlayRoomId:[_room.nvcbid intValue] user:user.m_nUserId name:_room.teamname];
+            [_ffPlay startPlayRoomId:[_room.teamid intValue] user:user.m_nUserId name:_room.teamname];
             return ;
         }
     }
@@ -635,7 +634,7 @@
         case 4://显示聊天
         {
             if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
-                ([_room.nvcbid intValue]==10000 || [_room.nvcbid intValue]==10001)) {
+                ([_room.roomid intValue]==10000 || [_room.roomid intValue]==10001)) {
                 _inputView.hidden = !_inputView.hidden;
             }
             else
@@ -702,7 +701,8 @@
     NSString *strInfo = [textView.textStorage getPlainString];
     if (user.m_nVipLevel>2) {}
     else{
-        if ([strInfo length]>=20) {
+        if ([strInfo length]>=20)
+        {
             [ProgressHUD showError:@"不能发送超过20个字符内容"];
             return ;
         }
@@ -769,7 +769,7 @@
 
 - (void)sendRose
 {
-    if([UserInfo sharedUserInfo].nType != 1 && ![_room.nvcbid isEqualToString:@"10000"] && ![_room.nvcbid isEqualToString:@"10001"])
+    if([UserInfo sharedUserInfo].nType != 1 && ![_room.roomid isEqualToString:@"10000"] && ![_room.roomid isEqualToString:@"10001"])
     {
         [self.view makeToast:@"游客不能送花"];
         return ;

@@ -15,6 +15,7 @@
 @property (nonatomic,strong) UIView *headView;
 @property (nonatomic,weak) UIButton *btnLeft;
 @property (nonatomic,weak) UIButton *btnRight;
+@property (nonatomic,strong) UILabel *headLine;
 
 - (void)setHeadViewHidden:(BOOL)bFlag;
 - (void)setViewBgColor:(UIColor *)bgColor;

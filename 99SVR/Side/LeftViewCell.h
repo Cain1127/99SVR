@@ -19,6 +19,13 @@
 @interface LeftViewCell : UITableViewCell
 
 @property (nonatomic,strong) UILabel *lblRight;
+@property (nonatomic,strong) UILabel *headLine;
+@property (nonatomic,strong) UILabel *endLine;
+
+- (void)setHeadLineFrame:(CGRect )frame;
+
+- (void)setEndLineFrame:(CGRect) frame;
+
 
 - (void)setModel:(LeftCellModel *)cellModel;
 
