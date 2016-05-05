@@ -17,6 +17,7 @@
 #import "TargetConditionals.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <Accelerate/Accelerate.h>
+#import "KxLogger.h"
 
 #define MAX_FRAME_SIZE 4096
 #define MAX_CHAN       2
@@ -112,7 +113,7 @@ static OSStatus renderCallback (void *inRefCon, AudioUnitRenderActionFlags	*ioAc
         } \
         [dump appendFormat:@"\n"]; \
     } \
-    DLog(@"%@", dump); \
+    LoggerAudio(3, @"%@", dump); \
 }
 
 #define dumpAudioSamplesNonInterleaved(prefix, dataBuffer, samplePrintFormat, sampleCount, channelCount) \
@@ -126,7 +127,7 @@ static OSStatus renderCallback (void *inRefCon, AudioUnitRenderActionFlags	*ioAc
         } \
         [dump appendFormat:@"\n"]; \
     } \
-    DLog(@"%@", dump); \
+    LoggerAudio(3, @"%@", dump); \
 }
 
 - (BOOL) checkAudioRoute
@@ -238,8 +239,8 @@ static OSStatus renderCallback (void *inRefCon, AudioUnitRenderActionFlags	*ioAc
     _numBytesPerSample = _outputFormat.mBitsPerChannel / 8;
     _numOutputChannels = _outputFormat.mChannelsPerFrame;
     
-    DLog(@"Current output bytes per sample: %u", _numBytesPerSample);
-    DLog(@"Current output num channels: %u", _numOutputChannels);
+    DLog(@"Current output bytes per sample: %ld", _numBytesPerSample);
+    DLog(@"Current output num channels: %ld", _numOutputChannels);
             
     // Slap a render callback on the unit
     AURenderCallbackStruct callbackStruct;
@@ -523,7 +524,7 @@ static BOOL checkError(OSStatus error, const char *operation)
 		// no, format it as an integer
 		sprintf(str, "%d", (int)error);
     
-    DLog(@"Error: %s (%s)\n", operation, str);
+	DLog(@"Error: %s (%s)\n", operation, str);
     
 	//exit(1);
     

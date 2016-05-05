@@ -32,7 +32,6 @@
     UITextField *_mySearchBar;
     HistorySearchDataSource *_dataSource;
     UITableView *_historyTable;
-    UIView *tempView;
 }
 @property (nonatomic,strong) UIView *footView;
 @property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
@@ -57,11 +56,7 @@
         UIButton *btnClear = [UIButton buttonWithType:UIButtonTypeCustom];
         btnClear.frame = Rect(0, 0, kScreenWidth, 44);
         [_footView addSubview:btnClear];
-<<<<<<< HEAD
-        [btnClear setTitle:@"清除历史记录" forState:UIControlStateNormal];
-=======
         [btnClear setTitle:@"清楚搜索记录" forState:UIControlStateNormal];
->>>>>>> 051e5a11141ea785ad9caf8651608de360be8abf
         [btnClear setTitleColor:COLOR_Text_0078DD forState:UIControlStateNormal];
         [btnClear setTitleColor:COLOR_Text_Black forState:UIControlStateHighlighted];
         [btnClear addTarget:self action:@selector(deleteAll) forControlEvents:UIControlEventTouchUpInside];
@@ -191,16 +186,13 @@
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(navback) image:@"back" highImage:@"back"];
     [_headView addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
+
+    _mySearchBar = [[UITextField alloc] initWithFrame:Rect(0,64,kScreenWidth, 44)];
+    [self.view addSubview:_mySearchBar];
     
-    tempView = [[UIView alloc] initWithFrame:Rect(0, 64, kScreenWidth, 44)];
-    [tempView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
-    [self.view addSubview:tempView];
-    _mySearchBar = [[UITextField alloc] initWithFrame:Rect(0,2.5,kScreenWidth, 39)];
+    UIView *leftView = [[UIView alloc] initWithFrame:Rect(0, 0, 38, 44)];
+    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(10,13,18,18)];
     
-    [tempView addSubview:_mySearchBar];
-    
-    UIView *leftView = [[UIView alloc] initWithFrame:Rect(0, 0, 38, 39)];
-    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(10,11,18,18)];
     imgHead.image = [UIImage imageNamed:@"search_icon"];
     imgHead.contentMode = UIViewContentModeScaleAspectFit;
     [leftView addSubview:imgHead];
@@ -222,10 +214,11 @@
     keywordsTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:keywordsTable];
     _searchResultsTable = keywordsTable;
-    _searchResultsTable.frame = Rect(0,tempView.y+tempView.height+8,kScreenWidth,kScreenHeight-(tempView.y+tempView.height+8));
+    
+    _searchResultsTable.frame = Rect(0,_mySearchBar.y+_mySearchBar.height+8,kScreenWidth,kScreenHeight-(_mySearchBar.y+_mySearchBar.height+8));
     [_searchResultsTable registerClass:[VideoCell class] forCellReuseIdentifier:@"cellId"];
     
-    _historyTable = [TableViewFactory createTableViewWithFrame:Rect(0, tempView.y+tempView.height, kScreenWidth, 200) withStyle:UITableViewStylePlain];
+    _historyTable = [TableViewFactory createTableViewWithFrame:Rect(0, _mySearchBar.y+_mySearchBar.height, kScreenWidth, 200) withStyle:UITableViewStylePlain];
     [self.view addSubview:_historyTable];
     [_historyTable setBackgroundColor:UIColorFromRGB(0xffffff)];
     _dataSource = [[HistorySearchDataSource alloc] init];

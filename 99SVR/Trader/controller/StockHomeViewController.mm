@@ -53,6 +53,7 @@
     [self initData];
     [self initUi];
     
+    self.headLine.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning {

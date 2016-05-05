@@ -784,4 +784,8 @@ void ZLRoomListener::OnFavoriteVcbResp(FavoriteRoomResp& info)
 {
     DLog(@"colletInfo:%d--errid:%d",info.actionid(),info.errorid());
     
+    NSString *strErr = [NSString stringWithUTF8String:conn->get_error_desc(info.errorid()).c_str()];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_GIFT_VIEW_ERR_VC object:strErr];
+
 }

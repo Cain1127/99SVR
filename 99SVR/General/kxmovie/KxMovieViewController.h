@@ -10,28 +10,21 @@
 //  KxMovie is licenced under the LGPL v3, see lgpl-3.0.txt
 
 #import <UIKit/UIKit.h>
-
+#import "GFBaseViewController.h"
 @class KxMovieDecoder;
 
 extern NSString * const KxMovieParameterMinBufferedDuration;    // Float
 extern NSString * const KxMovieParameterMaxBufferedDuration;    // Float
 extern NSString * const KxMovieParameterDisableDeinterlacing;   // BOOL
 
-@interface KxMovieViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+@interface KxMovieViewController : GFBaseViewController <UITableViewDataSource, UITableViewDelegate>
 
 + (id) movieViewControllerWithContentPath: (NSString *) path
                                parameters: (NSDictionary *) parameters;
 
-- (void)startPlayWithURLString:(NSString *)path;
-
 @property (readonly) BOOL playing;
-@property (nonatomic,strong) UIImageView *imageView;
 
 - (void) play;
 - (void) pause;
 
-- (void)stop;
-
-- (void)setDefaultImg;
-- (void)setNullMic;
 @end

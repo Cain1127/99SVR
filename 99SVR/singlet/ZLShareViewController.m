@@ -36,7 +36,9 @@
     
     _strTitle = title;
     _strUrl = url;
+    
     _tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1105298719" andDelegate:self];
+    
     return self;
 }
 -(void)show

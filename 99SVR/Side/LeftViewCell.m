@@ -53,6 +53,12 @@
         [_lblTitle setFont:XCFONT(14)];
         [_lblTitle setTextColor:UIColorFromRGB(0x343434)];
         
+        _headLine = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];
+        [_headLine setBackgroundColor:COLOR_Line_Small_Gay];
+        
+        _endLine = [[UILabel alloc] initWithFrame:Rect(0, 43.5, kScreenWidth, 0.5)];
+        [_endLine setBackgroundColor:COLOR_Line_Small_Gay];
+        
         [self.contentView addSubview:_lblTitle];
         [self.contentView addSubview:_imgView];
     }
@@ -82,5 +88,18 @@
     _lblRight.hidden = NO;
     [_lblRight setText:strInfo];
 }
+
+- (void)setHeadLineFrame:(CGRect )frame
+{
+    [_headLine setFrame:frame];
+    [self.contentView addSubview:_headLine];
+}
+
+- (void)setEndLineFrame:(CGRect) frame
+{
+    [_endLine setFrame:frame];
+    [self.contentView addSubview:_endLine];
+}
+
 
 @end

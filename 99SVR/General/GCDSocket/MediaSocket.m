@@ -181,18 +181,18 @@ typedef struct _tag_MediaFrameBuffer
         {
              if(selfWeak.nFall<12)
              {
-                 selfWeak.nFall=(__nLbs+1)*3;
+                 selfWeak.nFall=__nLbs+1;
                  [selfWeak getMediaHost];
              }
          }];
     }
     else
     {
-        int nIndex = _nFall%3;
+        int nIndex = _nFall+1;
         NSArray *arrayIndex = [addrTemp componentsSeparatedByString:@";"];
         NSString *strAddrInfo = arrayIndex.count > nIndex ? arrayIndex[nIndex] : @"nil";
         if ([strAddrInfo isEqualToString:@"nil"]) {
-            _nFall=(nLbs+1)*3;
+            _nFall= nLbs+1;
             [self getMediaHost];
         }else{
             NSString *strAddr = [strAddrInfo componentsSeparatedByString:@":"][0];

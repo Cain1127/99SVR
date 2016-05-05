@@ -702,7 +702,8 @@
     NSString *strInfo = [textView.textStorage getPlainString];
     if (user.m_nVipLevel>2) {}
     else{
-        if ([strInfo length]>=20) {
+        if ([strInfo length]>=20)
+        {
             [ProgressHUD showError:@"不能发送超过20个字符内容"];
             return ;
         }

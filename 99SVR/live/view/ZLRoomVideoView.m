@@ -89,7 +89,7 @@
     }
     else
     {
-        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,_videoModel.picurl];
+        strUrl = [NSString stringWithFormat:@"%@",_videoModel.picurl];
     }
     [_imageView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     _nameLabel.text = _videoModel.name;

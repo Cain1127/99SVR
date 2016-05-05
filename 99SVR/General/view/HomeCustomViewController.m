@@ -51,7 +51,9 @@
     [_headView addSubview:btnRight];
     [btnRight setFrame:Rect(kScreenWidth-44, 20, 44, 44)];
     _btnRight = btnRight;
-    
+    _headLine = [[UILabel alloc] initWithFrame:Rect(0, 63.5, kScreenWidth, 0.5)];
+    [_headLine setBackgroundColor:COLOR_Line_Big_Gay];
+    [self.view addSubview:_headLine];
 }
 
 - (void)MailBoxEvent

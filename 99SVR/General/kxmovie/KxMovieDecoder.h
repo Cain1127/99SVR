@@ -38,47 +38,48 @@ typedef enum {
     
 } KxMovieFrameType;
 
-typedef enum
-{
+typedef enum {
+        
     KxVideoFrameFormatRGB,
     KxVideoFrameFormatYUV,
+    
 } KxVideoFrameFormat;
 
 @interface KxMovieFrame : NSObject
-@property (nonatomic) KxMovieFrameType type;
-@property (nonatomic) CGFloat position;
-@property (nonatomic) CGFloat duration;
+@property (readonly, nonatomic) KxMovieFrameType type;
+@property (readonly, nonatomic) CGFloat position;
+@property (readonly, nonatomic) CGFloat duration;
 @end
 
 @interface KxAudioFrame : KxMovieFrame
-@property (nonatomic, strong) NSData *samples;
+@property (readonly, nonatomic, strong) NSData *samples;
 @end
 
 @interface KxVideoFrame : KxMovieFrame
-@property (nonatomic) KxVideoFrameFormat format;
-@property (nonatomic) NSUInteger width;
-@property (nonatomic) NSUInteger height;
+@property (readonly, nonatomic) KxVideoFrameFormat format;
+@property (readonly, nonatomic) NSUInteger width;
+@property (readonly, nonatomic) NSUInteger height;
 @end
 
 @interface KxVideoFrameRGB : KxVideoFrame
-@property ( nonatomic) NSUInteger linesize;
-@property ( nonatomic, strong) NSData *rgb;
+@property (readonly, nonatomic) NSUInteger linesize;
+@property (readonly, nonatomic, strong) NSData *rgb;
 - (UIImage *) asImage;
 @end
 
 @interface KxVideoFrameYUV : KxVideoFrame
-@property ( nonatomic, strong) NSData *luma;
-@property ( nonatomic, strong) NSData *chromaB;
-@property ( nonatomic, strong) NSData *chromaR;
+@property (readonly, nonatomic, strong) NSData *luma;
+@property (readonly, nonatomic, strong) NSData *chromaB;
+@property (readonly, nonatomic, strong) NSData *chromaR;
 @end
 
 @interface KxArtworkFrame : KxMovieFrame
-@property (nonatomic, strong) NSData *picture;
+@property (readonly, nonatomic, strong) NSData *picture;
 - (UIImage *) asImage;
 @end
 
 @interface KxSubtitleFrame : KxMovieFrame
-@property (nonatomic, strong) NSString *text;
+@property (readonly, nonatomic, strong) NSString *text;
 @end
 
 typedef BOOL(^KxMovieDecoderInterruptCallback)();

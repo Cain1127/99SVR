@@ -11,6 +11,7 @@
 
 @interface TQIdeaDetailModel : NSObject
 
+@property (nonatomic,copy) NSString *html5url;
 @property (nonatomic,copy) NSString *roomid;
 @property (nonatomic,copy) NSString *authorId;
 @property (nonatomic,copy) NSString *authorname;
