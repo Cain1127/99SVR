@@ -160,7 +160,7 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     CGFloat LR = 12;
-    CGFloat H = 130;
+    CGFloat H = 150;
     TQAnswerModel *model = self.modelArray[indexPath.row];
     if(!model.answercontent)
     {

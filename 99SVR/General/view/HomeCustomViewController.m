@@ -56,16 +56,16 @@
 
 - (void)MailBoxEvent
 {
-    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
-    {
-        TQMailboxViewController *mailBox = [[TQMailboxViewController alloc] init];
-        [self.navigationController pushViewController:mailBox animated:YES];
-    }
-    else
-    {
-        LoginViewController *loginView = [[LoginViewController alloc] init];
-        [self.navigationController pushViewController:loginView animated:YES];
-    }
+    //    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
+    //    {
+    TQMailboxViewController *mailBox = [[TQMailboxViewController alloc] init];
+    [self.navigationController pushViewController:mailBox animated:YES];
+    //    }
+    //    else
+    //    {
+    //        LoginViewController *loginView = [[LoginViewController alloc] init];
+    //        [self.navigationController pushViewController:loginView animated:YES];
+    //    }
 }
 
 - (void)searchViewController
