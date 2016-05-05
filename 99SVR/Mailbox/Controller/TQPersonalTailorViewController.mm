@@ -8,6 +8,7 @@
 
 #import "TQPersonalTailorViewController.h"
 #import "TQPersonalTailorCell.h"
+#import "NNSVRViewController.h"
 #import "XPrivateDetailViewController.h"
 #import "TableViewFactory.h"
 #import "TQPersonalModel.h"
@@ -197,8 +198,11 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (_personalArray.count>indexPath.section) {
         TQPersonalModel *model = _personalArray[indexPath.section];
-        XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithCustomId:model.ID];
-        [self.navigationController pushViewController:detailView animated:YES];
+//        XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithCustomId:model.ID];
+//        [self.navigationController pushViewController:detailView animated:YES];
+        NSString *strInfo = [NSString stringWithFormat:@"%@%d.html",kPrivate_detail_url,model.ID];
+        NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strInfo title:model.teamname];
+        [self.navigationController pushViewController:svrView animated:YES];
     }
 }
 

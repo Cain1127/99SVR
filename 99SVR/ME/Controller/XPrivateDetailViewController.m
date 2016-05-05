@@ -76,20 +76,13 @@
     _tableView.dataSource = self;
     _tableView.tableHeaderView = tableHeader;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-//    _textView = [[DTAttributedTextView alloc] initWithFrame:Rect(8, 60, kScreenWidth-16,kScreenHeight-120)];
-//    _textView.textDelegate = self;
-//    _textView.scrollEnabled = YES;
-//    [scrollView addSubview:_textView];
-//    scrollView.contentSize = CGSizeMake(kScreenWidth,kScreenHeight-64);
 }
-
-
 
 - (void)setInfo:(NSNotification *)notify
 {
     if (notify.object!=nil) {
         _detail = notify.object;
+        DLog(@"_detail:%@",_detail.html5url);
         @WeakObj(self)
         dispatch_async(dispatch_get_main_queue(), ^{
             [selfWeak.lblTitle setText:selfWeak.detail.title];

@@ -8,6 +8,7 @@
 
 #import "TQMeCustomizedViewController.h"
 #import "TQMeCustomizedModel.h"
+#import "NNSVRViewController.h"
 #import "ZLMeTeamPrivate.h"
 #import "ViewNullFactory.h"
 #import "XPrivateService.h"
@@ -43,7 +44,8 @@
 
 @implementation TQMeCustomizedViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64) withStyle:UITableViewStylePlain];
@@ -325,8 +327,11 @@
 
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
-    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
-    [self.navigationController pushViewController:control animated:YES];
+//    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
+//    [self.navigationController pushViewController:control animated:YES];
+    NSString *strInfo = [NSString stringWithFormat:@"%@%d.html",kPrivate_detail_url,summary.nId];
+    NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strInfo title:summary.teamname];
+    [self.navigationController pushViewController:svrView animated:YES];
 }
 
 - (void)loadWhatsPrivate:(NSNotification *)notify

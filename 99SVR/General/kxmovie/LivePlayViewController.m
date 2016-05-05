@@ -606,7 +606,6 @@
 
 - (void)checkMedia
 {
-    return ;
     while (_playing)
     {
         if (_media.audioBuf.count+_media.videoBuf.count>0)

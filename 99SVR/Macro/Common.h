@@ -79,6 +79,8 @@
 
 #define kTEXT_NEW_DETAILS_URL @"http://hall.99ducaijing.cn:8081/viewpoint/index.php?s=/Index/getViewPoint/id/"
 
+#define kPrivate_detail_url @"http://testphp.99ducaijing.cn/mobile.php?s=/Share/personalSecrets/id/"
+
 #if 1
 #define kTEXT_FOLLOW_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=follow&userid="
 #define kTEXT_GROUP_URL @"http://hall.99ducaijing.cn:8081/mobile/text_rooms.php?act=script"
@@ -89,8 +91,8 @@
 #define kTEXT_GROUP_URL @"http://122.13.81.62:22806/test/test.php?act=script"
 #endif
 
-//#define kLbs_all_path @"lbs1.99ducaijing.cn:2222;lbs2.99ducaijing.cn:2222;58.210.107.54:2222;122.193.102.23:2222;112.25.230.249:2222"
-#define kLbs_all_path @"testlbs.99ducaijing.cn:2222;lbs2.99ducaijing.cn:2222"
+#define kLbs_all_path @"lbs1.99ducaijing.cn:2222;lbs2.99ducaijing.cn:2222;58.210.107.54:2222;122.193.102.23:2222;112.25.230.249:2222"
+//#define kLbs_all_path @"testlbs.99ducaijing.cn:2222;lbs2.99ducaijing.cn:2222"
 
 #endif
 

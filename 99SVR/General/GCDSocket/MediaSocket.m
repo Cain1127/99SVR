@@ -160,7 +160,8 @@ typedef struct _tag_MediaFrameBuffer
         @WeakObj(self)
         __block int __nLbs = nLbs;
         [BaseService get:strPath dictionay:nil timeout:5 success:^(id responseObject) {
-            if (responseObject) {
+            if (responseObject)
+            {
                 NSString *addrInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
                 addrInfo = [DecodeJson getArrayAddr:addrInfo];
                 [KUserSingleton.dictRoomMedia setObject:addrInfo forKey:@(__nLbs)];
@@ -192,9 +193,7 @@ typedef struct _tag_MediaFrameBuffer
     }
     else
     {
-        DLog(@"temp:%@",addrTemp);
         int nIndex = _nFall+1;
-        
         NSArray *arrayIndex = [addrTemp componentsSeparatedByString:@";"];
         NSString *strAddrInfo = arrayIndex.count > nIndex ? arrayIndex[nIndex] : @"nil";
         if ([strAddrInfo isEqualToString:@"nil"])
@@ -209,7 +208,6 @@ typedef struct _tag_MediaFrameBuffer
             [self connectIpAndPort:strAddr port:nPort];
         }
     }
-    
 }
 /**
  *  连接流媒体服务器ip,port
@@ -223,7 +221,8 @@ typedef struct _tag_MediaFrameBuffer
     [_aryVideo removeAllObjects];
     
     _gcdSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(0, 0)];
-    if (![_gcdSocket connectToHost:strIp onPort:nPort error:nil])
+//    if (![_gcdSocket connectToHost:strIp onPort:nPort error:nil])
+    if (![_gcdSocket connectToHost:@"121.12.118.32" onPort:819 error:nil])
     {
         DLog(@"连接失败");
     }
@@ -265,6 +264,7 @@ typedef struct _tag_MediaFrameBuffer
     gettimeofday(&result,NULL);
     nReadTime = result.tv_sec;
     __weak MediaSocket *__self = self;
+    bFlag = YES;
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
         [__self sendAllInfo];
