@@ -8,6 +8,7 @@
 
 #import "TQMeCustomizedViewController.h"
 #import "TQMeCustomizedModel.h"
+#import "NNSVRViewController.h"
 #import "ZLMeTeamPrivate.h"
 #import "ViewNullFactory.h"
 #import "XPrivateService.h"
@@ -43,7 +44,8 @@
 
 @implementation TQMeCustomizedViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64) withStyle:UITableViewStylePlain];
@@ -291,6 +293,7 @@
     UILabel *expiryLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+10,_titleLable.y+30, kScreenWidth - 90, 30)];
     expiryLable.font = XCFONT(16);
     expiryLable.textColor = UIColorFromRGB(0x4c4c4c);
+//    NSString *strInfo = [NSString stringWithFormat:@"有效期:%@",_room];
     expiryLable.text = @"有效期:终身有效";
     [recommendView addSubview:expiryLable];
     
@@ -325,8 +328,11 @@
 
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
-    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
-    [self.navigationController pushViewController:control animated:YES];
+//    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
+//    [self.navigationController pushViewController:control animated:YES];
+    NSString *strInfo = [NSString stringWithFormat:@"%@%d.html",kPrivate_detail_url,summary.nId];
+    NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strInfo title:summary.teamname];
+    [self.navigationController pushViewController:svrView animated:YES];
 }
 
 - (void)loadWhatsPrivate:(NSNotification *)notify

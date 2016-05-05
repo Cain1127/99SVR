@@ -32,7 +32,6 @@
 {
     self = [super init];
     _nId = nId;
-    
     return self;
 }
 
