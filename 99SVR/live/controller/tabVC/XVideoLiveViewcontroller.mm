@@ -116,6 +116,9 @@
     singleRecogn.numberOfTapsRequired = 1; // 双击
     [_ffPlay.view setUserInteractionEnabled:YES];
     [_ffPlay.view addGestureRecognizer:singleRecogn];
+    
+    [self addNotification];
+    [kHTTPSingle RequestConsumeRank:[_room.nvcbid intValue]];
 }
 
 - (void)connectUnVideo:(UIButton *)sender
@@ -127,11 +130,14 @@
     }
 }
 
+
+
 - (void)viewDidAppear:(BOOL)animated
 {
     
     [super viewDidAppear:animated];
     [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
@@ -254,30 +260,6 @@
              _questionView.hidden = YES;
          }];
     }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self addNotification];
-    [kHTTPSingle RequestConsumeRank:[_room.nvcbid intValue]];
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_QUESTION_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_NETWORK_ERR_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_TRADE_GIFT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_TO_ME_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_NOTICE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_KICKOUT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MEESAGE_ROOM_SEND_LIWU_RESP_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
 }
 
 - (void)loadConsumeRank:(NSNotification *)notify
@@ -883,5 +865,25 @@
     }
 }
 
+- (void)removeAllNotify
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
+- (void)removeNotify
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_QUESTION_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_NETWORK_ERR_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_TRADE_GIFT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_TO_ME_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_CHAT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_NOTICE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_ALL_USER_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_KICKOUT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MEESAGE_ROOM_SEND_LIWU_RESP_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
+}
 @end

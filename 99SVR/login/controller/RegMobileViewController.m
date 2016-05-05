@@ -83,7 +83,7 @@
     }
     [self.view makeToastActivity_bird];
     NSDictionary *paramters = @{@"type":@"2",@"account":_username,@"pwd":_password,@"vcode":strCode};
-    NSString *strInfo = [NSString stringWithFormat:@"%@mapi/registerMulti",kRegisterNumber];
+    NSString *strInfo = [NSString stringWithFormat:@"%@User/registerMulti",kRegisterNumber];
     @WeakObj(self)
     [BaseService postJSONWithUrl:strInfo parameters:paramters success:^(id responseObject)
     {
@@ -91,7 +91,7 @@
         gcd_main_safe(^{
             [selfWeak.view hideToastActivity];}
         );
-        if(dict && [dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
+        if(dict && [dict objectForKey:@"status"] && [[dict objectForKey:@"status"] intValue]==0)
         {
             [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:selfWeak.username pwd:selfWeak.password];
             [self navBack];
@@ -101,7 +101,7 @@
         {
             dispatch_async(dispatch_get_main_queue(),
             ^{
-                [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+                [ProgressHUD showError:[dict objectForKey:@"info"]];
             });
         }
     }
@@ -126,7 +126,7 @@
     NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",strMobile,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = [NSString stringWithFormat:@"%@mapi/getregmsgcode?pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
+    NSString *strInfo = [NSString stringWithFormat:@"%@Message/getregmsgcode&pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
     __weak RegMobileViewController *__self = self;
     [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject)
      {
@@ -137,7 +137,7 @@
          else{
              dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          }
-         if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
+         if (dict && [[dict objectForKey:@"status"] intValue]==0)
          {
              DLog(@"dict:%@",dict);
              [__self startTimer];
@@ -154,7 +154,7 @@
              dispatch_async(dispatch_get_main_queue(),
              ^{
                  [__self.view hideToastActivity];
-                 [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+                 [ProgressHUD showError:[dict objectForKey:@"info"]];
              });
          }
      }

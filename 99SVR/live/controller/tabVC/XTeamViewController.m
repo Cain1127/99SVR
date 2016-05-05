@@ -67,6 +67,7 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
+    [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
 }
 
 - (void)loadVideoInfo:(NSNotification *)notify
@@ -109,7 +110,7 @@
         int nStatus = [parametesrs[@"code"] intValue];
         if (nStatus==1) {
             XVideoTeamInfo *teamInfo = parametesrs[@"data"];
-            _introduce = [NSString stringWithFormat:@"<span stype=\"line-height:6px;\">%@</span>",teamInfo.introduce];
+            _introduce = [NSString stringWithFormat:@"<span stype=\"line-height:17px;\">%@</span>",teamInfo.introduce];
             @WeakObj(self)
             dispatch_async(dispatch_get_main_queue(), ^{
 //                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];

@@ -20,7 +20,6 @@ std::string get_user_id()
 {
 	return int2string(login_userid);
 	//return "1680008";
-	//return "1682818";
 }
 
 std::string get_user_password()

@@ -41,7 +41,7 @@
     
     _btnTitle = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnTitle setTitle:@"提问" forState:UIControlStateNormal];
-    _btnTitle.titleLabel.font = XCFONT(24);
+    _btnTitle.titleLabel.font = XCFONT(15);
     _btnTitle.frame = Rect(3, 3, 90, 40);
     [_btnTitle setTitleColor:UIColorFromRGB(0x000000) forState:UIControlStateNormal];
     [UIImageFactory createBtnImage:@"chatRightView1" btn:_btnTitle state:UIControlStateNormal];
@@ -63,8 +63,8 @@
     [liveQuestion addSubview:_btnRight];
     
     UILabel *line1 = [[UILabel alloc] initWithFrame:Rect(0, 45, kScreenWidth, 0.5)];
+    [line1 setBackgroundColor:COLOR_Line_Small_Gay];
     [liveQuestion addSubview:line1];
-    [line1 setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     
     UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(8, 48, kScreenWidth-6, 34)];
     lblTemp.numberOfLines = 0;
@@ -85,7 +85,7 @@
     
     UILabel *line2 = [[UILabel alloc] initWithFrame:Rect(0, _txtName.y+_txtName.height+8, kScreenWidth, 0.5)];
     [liveQuestion addSubview:line2];
-    [line2 setBackgroundColor:COLOR_Line_Big_Gay];
+    [line2 setBackgroundColor:COLOR_Line_Small_Gay];
     
     UILabel *lblTest2 = [[UILabel alloc] initWithFrame:Rect(8, line2.y+line2.height+10, 80, 20)];
     [lblTest2 setText:@"问题描述:"];
@@ -99,7 +99,7 @@
     
     UILabel *line3 = [[UILabel alloc] initWithFrame:Rect(0, _txtContent.y+_txtContent.height+3, kScreenWidth, 0.5)];
     [liveQuestion addSubview:line3];
-    [line3 setBackgroundColor:COLOR_Line_Big_Gay];
+    [line3 setBackgroundColor:COLOR_Line_Small_Gay];
     
     _btnSubmit = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnSubmit setTitle:@"我要提问" forState:UIControlStateNormal];
@@ -116,6 +116,7 @@
     [lblTest3 setText:@"10玖玖币/次"];
     [lblTest3 setTextColor:UIColorFromRGB(0x919191)];
     [lblTest3 setTextAlignment:NSTextAlignmentCenter];
+    [lblTest3 setFont:XCFONT(12)];
     [liveQuestion addSubview:lblTest3];
     
     return self;

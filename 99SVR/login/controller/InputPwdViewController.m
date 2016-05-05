@@ -69,7 +69,7 @@
     }
     [self.view makeToastActivity_bird];
     NSDictionary *parameters = @{@"phone":_strMobile,@"password":strPassword};
-    NSString *strInfo = [NSString stringWithFormat:@"%@MApi/MobileFindPassword",kRegisterNumber];
+    NSString *strInfo = [NSString stringWithFormat:@"%@Verify/MobileFindPassword",kRegisterNumber];
     _strPwd = strPassword;
     __weak InputPwdViewController *__self = self;
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id response)
@@ -78,7 +78,7 @@
              [__self.view hideToastActivity];
          });
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
+         if (dict && [[dict objectForKey:@"status"] intValue]==0)
          {
              [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:__self.strMobile pwd:__self.strPwd];
              [self navBack];
@@ -88,7 +88,7 @@
          {
              dispatch_async(dispatch_get_main_queue(),
              ^{
-                 [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+                 [ProgressHUD showError:[dict objectForKey:@"info"]];
              });
          }
          

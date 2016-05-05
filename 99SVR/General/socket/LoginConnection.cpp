@@ -133,7 +133,7 @@ void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 	login_req4 = req;
 	login_reqv = 4;
 	
-	//connect_from_lbs_asyn();
+//	connect_from_lbs_asyn();
 	connect("121.12.118.32", 7301);
 	//connect("172.16.41.137", 7301);
 	//connect("172.16.41.215", 7301);

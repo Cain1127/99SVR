@@ -8,19 +8,21 @@
 
 #import "XTraderViewController.h"
 #import "StockHomeTableViewModel.h"
-#import "UIViewController+EmpetViewTips.h"
 #import "ViewNullFactory.h"
 #import "TableViewFactory.h"
 #import "MJRefresh.h"
 #import "StockDealModel.h"
 #import "RoomHttp.h"
 #import "MJRefresh.h"
+
+#import <objc/runtime.h>
+
 @interface XTraderViewController()
 {
     
 }
 @property (nonatomic,strong) RoomHttp *room;
-/**总的*/
+@property (nonatomic,strong) UIView *noView;
 @property (nonatomic , strong) UITableView *totalTab;
 @property (nonatomic , strong) StockHomeTableViewModel *totalTableViewModel;
 @property (nonatomic , strong) __block NSMutableArray *totalDataArray;
@@ -28,13 +30,20 @@
 @property (nonatomic , strong) UIView *totalEmptyView;
 
 @property (nonatomic , assign) __block MJRefreshState refreshState;
+@property (nonatomic, strong) UIViewController *control;
 
 @end
 
 @implementation XTraderViewController
-- (void)loadView
+
+- (id)initWithFrame:(CGRect)frame model:(RoomHttp *)room control:(UIViewController *)control
 {
-    self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
+    self = [super initWithFrame:frame];
+    _room = room;
+    _control = control;
+    [self initBody];
+    
+    return self;
 }
 
 - (void)addNotice
@@ -61,48 +70,38 @@
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)initBody
+{
     [self addNotice];
     [self initData];
     [self initUi];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark initUi
 -(void)initUi{
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = [UIColor whiteColor];
 }
 
 #pragma mark initData
--(void)initData{
+-(void)initData
+{
     WeakSelf(self);
-    @WeakObj(self)
-    self.automaticallyAdjustsScrollViewInsets = NO;
    [self.totalTab addGifHeaderWithRefreshingBlock:^{
-       @StrongObj(self)
         weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.totalPagInteger = 1;
-        [kHTTPSingle RequestOperateStockProfitByAll:[self.room.teamid intValue] start:(int)weakSelf.totalPagInteger count:10];
+        [kHTTPSingle RequestOperateStockProfitByAll:[weakSelf.room.teamid intValue] start:(int)weakSelf.totalPagInteger count:20];
     }];
     
     [self.totalTab addLegendFooterWithRefreshingBlock:^{
-        @StrongObj(self)
         weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.totalPagInteger ++;
-        [kHTTPSingle RequestOperateStockProfitByAll:[self.room.teamid intValue] start:(int)weakSelf.totalPagInteger count:10];
+        [kHTTPSingle RequestOperateStockProfitByAll:[weakSelf.room.teamid intValue] start:(int)weakSelf.totalPagInteger count:20];
     }];
     
     [self.totalTab.gifHeader loadDefaultImg];
     Loading_Bird_Show(self.totalTab);
-    
     [self.totalTab.gifHeader beginRefreshing];
     self.totalTab.footer.hidden = YES;
-    
-    
 }
 
 #pragma mark 刷新数据
@@ -121,25 +120,24 @@
 -(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockHomeTableViewModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray{
     
     Loading_Bird_Hide(table);
-    
+    @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
         
         NSString *code = [NSString stringWithFormat:@"%@",fromDataDic[@"code"]];
         if ([code isEqualToString:@"1"]) {//请求成功
             
-            if (self.refreshState == MJRefreshState_Header) {//头部刷新需要清空数据
+            if (self.refreshState == MJRefreshState_Header)
+            {//头部刷新需要清空数据
                 [toDataArray removeAllObjects];
             }
             
-            
             NSArray *fromDataArray = fromDataDic[@"data"];
             
-            if ([fromDataArray  count]==0) {
-                [table.footer noticeNoMoreData];
-                [UIView animateWithDuration:1 animations:^{
-                    table.footer.hidden = YES;
-                }];
-            }else{
+            if ([fromDataArray count]< selfWeak.totalPagInteger * 20 ) {
+                [table.footer setHidden:YES];
+            }
+            else
+            {
                 table.footer.hidden = NO;
                 [table.footer resetNoMoreData];
             }
@@ -150,8 +148,6 @@
             for (int i=0; i!=[fromDataArray  count]; i++) {
                 [toDataArray addObject:fromDataArray[i]];
             }
-            
-            
             
         }else{//请求失败
             
@@ -182,29 +178,44 @@
 
 -(UITableView *)totalTab{
     
-    if (!_totalTab) {
-        _totalTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,self.view.height} withStyle:UITableViewStylePlain];
+    if (!_totalTab)
+    {
+        _totalTab = [self createTableViewWithFrame:(CGRect){0,0,ScreenWidth,self.height} withStyle:UITableViewStylePlain];
         _totalTab.delegate = self.totalTableViewModel;
         _totalTab.dataSource = self.totalTableViewModel;
+        [self addSubview:_totalTab];
     }
     return _totalTab;
 }
 
--(StockHomeTableViewModel *)totalTableViewModel{
-    if (!_totalTableViewModel) {
-        _totalTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:self];
+-(StockHomeTableViewModel *)totalTableViewModel
+{
+    if (!_totalTableViewModel)
+    {
+        _totalTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:_control];
     }
     return _totalTableViewModel;
 }
 
+- (UIViewController*)viewController {
+    for (UIView* next = [self superview]; next; next = next.superview) {
+        UIResponder* nextResponder = [next nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController*)nextResponder;
+        }
+    }
+    return nil;
+}
+
 #pragma mark 请求成功时候-检测是否出现提示图
--(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSString *)code{
-    
+-(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSMutableArray *)dataArray withCode:(NSString *)code
+{
     WeakSelf(self);
-    
-    if (dataArray.count==0&&[code intValue]!=1) {//数据为0 请求失败
+    if (dataArray.count==0&&[code intValue]!=1)
+    {//数据为0 请求失败
         
-        [self showErrorViewInView:tab withMsg:[NSString stringWithFormat:@"网络请求失败%@,点击重新请求",code] touchHanleBlock:^{
+        [self showErrorViewInView:tab withMsg:[NSString stringWithFormat:@"网络请求失败%@,点击重新请求",code] touchHanleBlock:
+        ^{
             Loading_Bird_Show(weakSelf.totalTab);
             [weakSelf.totalTab.gifHeader beginRefreshing];
         }];
@@ -213,13 +224,12 @@
             Loading_Bird_Show(weakSelf.totalTab);
             [weakSelf.totalTab.gifHeader beginRefreshing];
         }];
-        
-    }else{//请求成功
-        
-        [self hideEmptyViewInView:tab];
-        
     }
-    
+    else
+    {
+        //请求成功
+        [self hideEmptyViewInView:tab];
+    }
 }
 
 -(UITableView *)createTableViewWithFrame:(CGRect)frame withStyle:(UITableViewStyle)style{
@@ -232,6 +242,82 @@
 -(void)dealloc{
     
     DLog(@"释放");
+    
+}
+
+#define EmptyViewTag 99999
+
+static char  * TapRecognizerBlockKey;
+-(void)showEmptyViewInView:(UIView *)targetView withMsg:(NSString *)msg  withImageName:(NSString *)imageName touchHanleBlock:(TouchHanleBlock)hanleBlock{
+    UIView *emptyView = [targetView viewWithTag:EmptyViewTag];
+    if (emptyView) {
+        [emptyView removeFromSuperview];
+    }
+    
+    CGFloat width = targetView.frame.size.width;
+    CGFloat height = targetView.frame.size.height;
+    
+    UIView *view = [[UIView alloc] initWithFrame:(CGRect){0,0,width,height}];
+    view.userInteractionEnabled = YES;
+    [view setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
+    view.tag = EmptyViewTag;
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]init];
+    tapRecognizer.numberOfTapsRequired = 1;
+    [tapRecognizer addTarget:self action:@selector(tapRecognizerAction:)];
+    [view addGestureRecognizer:tapRecognizer];
+    objc_setAssociatedObject(self, &TapRecognizerBlockKey, hanleBlock, OBJC_ASSOCIATION_COPY);
+    [targetView addSubview:view];
+    
+    UIImageView *imageView = [[UIImageView alloc]init];
+    imageView.frame = (CGRect){0,0,120,120};
+    imageView.center = CGPointMake(view.center.x, view.center.y-60);
+    imageView.image = [UIImage imageNamed:imageName];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [view addSubview:imageView];
+    
+    UILabel *titLab = [[UILabel alloc]init];
+    titLab.textAlignment = NSTextAlignmentCenter;
+    titLab.numberOfLines = 0;
+    titLab.textColor = UIColorFromRGB(0x4c4c4c);
+    titLab.text = msg;
+    [titLab sizeToFit];
+    titLab.frame = (CGRect){0,CGRectGetMaxY(imageView.frame),width,titLab.frame.size.height};
+    [view addSubview:titLab];
+}
+
+-(void)tapRecognizerAction:(UITapGestureRecognizer *)tap{
+    
+    
+    TouchHanleBlock block = objc_getAssociatedObject(self, &TapRecognizerBlockKey);
+    if (block)
+    {
+        block();
+    }
+    
+    UIView *tapView = tap.view;
+    if (tapView) {
+        [tapView removeFromSuperview];
+    }
+}
+
+
+-(void)hideEmptyViewInView:(UIView *)targetView{
+    
+    UIView *view = [targetView viewWithTag:EmptyViewTag];
+    if (view) {
+        [view removeFromSuperview];
+    }
+}
+
+-(void)showEmptyViewInView:(UIView *)targetView withMsg:(NSString *)msg touchHanleBlock:(TouchHanleBlock)hanleBlock{
+    
+    [self showEmptyViewInView:targetView withMsg:msg withImageName:@"text_blank_page" touchHanleBlock:hanleBlock];
+}
+
+
+-(void)showErrorViewInView:(UIView *)targetView withMsg:(NSString *)msg touchHanleBlock:(TouchHanleBlock)hanleBlock{
+    
+    [self showEmptyViewInView:targetView withMsg:msg withImageName:@"network_anomaly_fail" touchHanleBlock:hanleBlock];
     
 }
 

@@ -45,12 +45,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *viewPointCellName = @"TQIdeaTableViewIdentifier";
-//    NSString *strKey = [NSString stringWithFormat:@"%zi-%zi",indexPath.row,indexPath.section];
-//    if (!viewCache)
-//    {
-//        viewCache = [[NSCache alloc] init];
-//        [viewCache setTotalCostLimit:10];
-//    }
     TQIdeaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:viewPointCellName];
     if (!cell)
     {

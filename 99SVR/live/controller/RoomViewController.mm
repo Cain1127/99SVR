@@ -114,6 +114,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 - (void)exitRoom
 {
     [_liveControl stopNewPlay];
+    [_liveControl removeAllNotify];
     _room = nil;
     [kProtocolSingle exitRoom];
     [[SDImageCache sharedImageCache] clearMemory];
@@ -189,7 +190,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 {
     headView.lblTitle.text = _room.teamname;
     headView.lblCount.text = _room.onlineusercount;
-    headView.lblFans.text = _room.onlineusercount;
+//    headView.lblFans.text = _room.;
 }
 
 /**
@@ -209,6 +210,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     [self addChildViewController:_liveControl];
     _liveControl.view.frame = frame;
     _liveControl.delegate = self;
+    [_scrollView addSubview:_liveControl.view];
     
     @WeakObj(self)
     _liveControl.ffPlay.statusBarHidden=^(BOOL bFull)
@@ -217,31 +219,25 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     };
     
     frame.origin.x += kScreenWidth;
-    _ideaControl = [[XIdeaViewController alloc] initWihModel:_room];
-    [self addChildViewController:_ideaControl];
-    _ideaControl.view.frame = frame;
+    //伪UIViewController
+    _ideaControl = [[XIdeaViewController alloc] initWithFrame:frame model:_room];
+    [_scrollView addSubview:_ideaControl];
     
     frame.origin.x += kScreenWidth;
-    _tradeView = [[XTraderViewController alloc] initWihModel:_room];
-    [self addChildViewController:_tradeView];
-    _tradeView.view.frame = frame;
+    //伪UIViewController
+    _tradeView = [[XTraderViewController alloc] initWithFrame:frame model:_room control:self];
+    [_scrollView addSubview:_tradeView];
+    
     
     frame.origin.x += kScreenWidth;
-    _privateView = [[XTeamPrivateController alloc] initWithModel:_room];
-    [self addChildViewController:_privateView];
-    _privateView.view.frame = frame;
-    
-    [_scrollView addSubview:_liveControl.view];
-    [_scrollView addSubview:_ideaControl.view];
-    [_scrollView addSubview:_tradeView.view];
-    [_scrollView addSubview:_privateView.view];
+    _privateView = [[XTeamPrivateController alloc] initWithFrame:frame model:_room];
+    [_scrollView addSubview:_privateView];
    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-
 }
 
 - (void)viewDidLoad
@@ -308,22 +304,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     int temp = floor((scrollView.contentOffset.x - kScreenWidth/2.0)/kScreenWidth +1);//判断是否翻页
     if (temp != _currentPage)
     {
-        if (temp > _currentPage)
-        {
-            if (_tag < 3)
-            {
-                _tag++;
-                [headView.segmented setSelectedSegmentIndex:_tag];
-            }
-        }
-        else
-        {
-            if (_tag > 0)
-            {
-                _tag--;
-                [headView.segmented setSelectedSegmentIndex:_tag];
-            }
-        }
         updateCount++;
         _currentPage = temp;
     }
@@ -333,14 +313,16 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 {
     if (updateCount == 1)//正常
     {
-        
-    }
-    else if(updateCount == 0 && _currentPage == 0)
-    {
-
+        DLog(@"x:%f--y:%f",scrollView.contentOffset.x,scrollView.contentOffset.y);
+        _tag = scrollView.contentOffset.x/kScreenWidth;
+        [headView.segmented setSelectedSegmentIndex:_tag];
     }
     else//加速
-    {}
+    {
+        DLog(@"x:%f--y:%f",scrollView.contentOffset.x,scrollView.contentOffset.y);
+        _tag = scrollView.contentOffset.x/kScreenWidth;
+        [headView.segmented setSelectedSegmentIndex:_tag];
+    }
     updateCount = 0;
     startContentOffsetX=0;
     willEndContentOffsetX = 0;

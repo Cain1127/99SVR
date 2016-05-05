@@ -62,6 +62,11 @@
 
 - (void)shareWeChat:(int)nType
 {
+    if (![WXApi isWXAppInstalled])
+    {
+        [ProgressHUD showError:@"没有安装微信,无法分享"];
+        return ;
+    }
     SendMessageToWXReq *sendReq = [[SendMessageToWXReq alloc] init];
     sendReq.bText = NO;//不使用文本信息
     sendReq.scene = nType;//0 = 好友列表 1 = 朋友圈 2 = 收藏
@@ -85,6 +90,12 @@
 
 - (void)shareQQChat
 {
+    if (![TencentOAuth iphoneQQInstalled])
+    {
+        [ProgressHUD showError:@"没有安装QQ,无法分享"];
+        return ;
+    }
+    
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"bigest_logo@2x" ofType:@"png"];
     NSData *data = [NSData dataWithContentsOfFile:filePath];
     QQApiURLObject *urlObj = [[QQApiURLObject alloc] initWithURL:[NSURL URLWithString:_strUrl] title:@"99乐投" description:_strTitle previewImageData:data targetContentType:QQApiURLTargetTypeNews];
@@ -95,7 +106,10 @@
 }
 
 - (void)shareFriend{
-    
+    if (![WeiboSDK isWeiboAppInstalled]) {
+        [ProgressHUD showError:@"没有安装微博,无法分享"];
+        return ;
+    }
     WBAuthorizeRequest *authRequest = [WBAuthorizeRequest request];
     authRequest.redirectURI =kRedirectURI;
     authRequest.scope =@"all";

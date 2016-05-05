@@ -108,11 +108,7 @@ void Http::build_param(string& out, RequestParamter* param)
 		}
 		out += it->first;
 		out += "=";
-#ifdef WIN
-		out += GBKToUTF8(it->second);
-#else
 		out += it->second;
-#endif
 	}
 }
 

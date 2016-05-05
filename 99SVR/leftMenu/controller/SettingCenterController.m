@@ -8,6 +8,8 @@
 
 #import "SettingCenterController.h"
 #import "AboutController.h"
+#import "PlayIconView.h"
+#import "RoomViewController.h"
 #import "ZLLogonServerSing.h"
 #import "UserInfo.h"
 #import "LeftViewCell.h"
@@ -132,9 +134,7 @@
 
 /**
  *  @author yangshengmeng, 16-03-30 16:03:47
- *
  *  @brief  区分登录和不登录时的设置菜单栏
- *
  *  @since  v1.0.0
  */
 - (void)setDefaultSettingItems
@@ -202,7 +202,10 @@
 {
     if (buttonIndex == 1)
     {
+        [[PlayIconView sharedPlayIconView] exitPlay];
+        
         [[ZLLogonServerSing sharedZLLogonServerSing] closeProtocol];
+        
         [UserInfo sharedUserInfo].bIsLogin = NO;
         [UserInfo sharedUserInfo].otherLogin = 0;
         [UserInfo sharedUserInfo].nUserId = 0;

@@ -400,7 +400,7 @@
             imageView = [[UIImageView alloc] initWithFrame:frame];
             @WeakObj(self)
             [imageView sd_setImageWithURL:attachment.contentURL placeholderImage:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//                [selfWeak updateTextView:imageURL changeSize:image.size];
+                [selfWeak updateTextView:imageURL changeSize:image.size];
             }];
             imageView.userInteractionEnabled = YES;
             [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageInfo:)]];
@@ -627,7 +627,7 @@
         }
         else
         {
-            [self showChatView:[reply.authorid intValue] name:reply.authorname commentId:reply.parentreplyid];
+            [self showChatView:[reply.authorid intValue] name:reply.authorname commentId:reply.replytid];
         }
     }
 }
@@ -727,9 +727,6 @@
 {
     DLog(@"dealloc");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    if(_bHome){
-        
-    }
 }
 
 /**

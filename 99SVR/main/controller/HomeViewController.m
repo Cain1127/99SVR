@@ -55,7 +55,7 @@ typedef enum : NSUInteger
     
 } CJHomeRequestType;
 
-@interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate,PlayIconDelegate>
+@interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate>
 {
     NSCache *viewCache;
 }
@@ -94,8 +94,7 @@ typedef enum : NSUInteger
     @WeakObj(self)
     _scrollView.clickItemOperationBlock = ^(NSInteger index) {
          BannerModel *model = [selfWeak.aryBanner objectAtIndex:index];
-         DLog(@"type:%@",model.type);
-         if([model.type isEqualToString:@"web"] && model.webUrl!=nil && model.webUrl.length>10){
+         if(model.webUrl!=nil && model.webUrl.length>0){
              NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:model.webUrl title:model.title];
              [selfWeak.navigationController pushViewController:svrView animated:YES];
          }
@@ -176,17 +175,17 @@ typedef enum : NSUInteger
           selfWeak.scrollView.imageURLStringsGroup = selfWeak.aryBanner;
     });
     
-    selfWeak.scrollView.clickItemOperationBlock = ^(NSInteger currentIndex)
-    {
-        if(selfWeak.aryBanner.count>currentIndex)
-        {
-            BannerModel *model = selfWeak.aryBanner[currentIndex];
-            if (model.webUrl!=nil) {
-                NNSVRViewController *svr = [[NNSVRViewController alloc] initWithPath:model.webUrl title:@""];
-                [selfWeak.navigationController pushViewController:svr animated:YES];
-            }
-        }
-    };
+//    selfWeak.scrollView.clickItemOperationBlock = ^(NSInteger currentIndex)
+//    {
+//        if(selfWeak.aryBanner.count>currentIndex)
+//        {
+//            BannerModel *model = selfWeak.aryBanner[currentIndex];
+//            if (model.webUrl!=nil) {
+//                NNSVRViewController *svr = [[NNSVRViewController alloc] initWithPath:model.webUrl title:@""];
+//                [selfWeak.navigationController pushViewController:svr animated:YES];
+//            }
+//        }
+//    };
 }
 
 - (void)showLeftView

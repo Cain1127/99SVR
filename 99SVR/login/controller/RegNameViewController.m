@@ -78,7 +78,7 @@
     NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",_username,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = [NSString stringWithFormat:@"%@mapi/registerMulti",kRegisterNumber];
+    NSString *strInfo = [NSString stringWithFormat:@"%@User/registerMulti",kRegisterNumber];
     NSDictionary *parameters = @{@"account":_username,@"key":strMd5,@"pwd":_password,@"type":@"21"};
 //    __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
     @WeakObj(self)
@@ -86,7 +86,7 @@
      {
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          [selfWeak.view hideToastActivity];
-         if ([dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
+         if ([dict objectForKey:@"status"] && [[dict objectForKey:@"status"] intValue]==0)
          {
              [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:selfWeak.username pwd:selfWeak.password];
              [selfWeak navBack];
@@ -94,10 +94,10 @@
          }
          else
          {
-                 NSString *strNull = [dict objectForKey:@"errmsg"];
+                 NSString *strNull = [dict objectForKey:@"info"];
                  if(strNull)
                  {
-                     [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+                     [ProgressHUD showError:[dict objectForKey:@"info"]];
                  }
                  else
                  {

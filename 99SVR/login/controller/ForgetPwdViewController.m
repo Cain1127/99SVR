@@ -82,7 +82,7 @@
     NSString *strMd5 = [NSString stringWithFormat:@"action=find&account=%@&date=%@",strMobile,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = [NSString stringWithFormat:@"%@mapi/GetFindPasswordMsgCode?pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
+    NSString *strInfo = [NSString stringWithFormat:@"%@Message/GetFindPasswordMsgCode&pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
     __weak ForgetPwdViewController *__self = self;
     [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject)
      {
@@ -94,7 +94,7 @@
          else{
              dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
          }
-         if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
+         if (dict && [[dict objectForKey:@"status"] intValue]==0)
          {
              DLog(@"dict:%@",dict);
              [__self startTimer];
@@ -104,7 +104,7 @@
          }
          else
          {
-             [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+             [ProgressHUD showError:[dict objectForKey:@"info"]];
          }
      }fail:^(NSError *error)
      {
@@ -224,7 +224,7 @@
     }
     [self.view makeToastActivity_bird];
     NSDictionary *parameters = @{@"phone":strMobile,@"code":strCode};
-    NSString *strInfo = [NSString stringWithFormat:@"%@MApi/MobileFindPasswordCheckSMS",kRegisterNumber];
+    NSString *strInfo = [NSString stringWithFormat:@"%@Verify/MobileFindPasswordCheckSMS",kRegisterNumber];
     _strMobile = strMobile;
     __weak ForgetPwdViewController *__self = self;
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id response)
@@ -234,7 +234,7 @@
             [__self.view hideToastActivity];
         });
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-        if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
+        if (dict && [[dict objectForKey:@"status"] intValue]==0)
         {
             __self.btnCode.enabled = NO;
             [ProgressHUD showSuccess:@"验证成功"];
@@ -243,7 +243,7 @@
         }
         else
         {
-            [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+            [ProgressHUD showError:[dict objectForKey:@"info"]];
         }
     } fail:^(NSError *error) {
         [ProgressHUD showError:@"连接服务器失败"];

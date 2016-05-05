@@ -179,7 +179,7 @@
      {
          [selfWeak.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if (dict && [[dict objectForKey:@"errcode"] intValue]==1)
+         if (dict && [[dict objectForKey:@"status"] intValue]==0)
          {
              DLog(@"dict:%@",dict);
              [selfWeak startTimer];
@@ -189,7 +189,7 @@
          }
          else
          {
-             [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+             [ProgressHUD showError:[dict objectForKey:@"info"]];
          }
      }
                             fail:^(NSError *error)
@@ -235,13 +235,13 @@
     
         //直接绑定手机
     paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(5),@"code":strCode,@"pwd":_password};
-    strInfo = kBand_mobile_setphone_URL;
+    strInfo = [NSString stringWithFormat:@"%@User/bindPhone",kRegisterNumber];
     @WeakObj(self);
     [BaseService postJSONWithUrl:strInfo parameters:paramters success:^(id responseObject)
      {
          [selfWeak.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if(dict && [dict objectForKey:@"errcode"] && [[dict objectForKey:@"errcode"] intValue]==1)
+         if(dict && [dict objectForKey:@"status"] && [[dict objectForKey:@"status"] intValue]==0)
          {
              //没绑定过的，直接绑定，然后返回
              [selfWeak.navigationController popToRootViewControllerAnimated:YES];
@@ -249,7 +249,7 @@
          }
          else
          {
-              [ProgressHUD showError:[dict objectForKey:@"errmsg"]];
+              [ProgressHUD showError:[dict objectForKey:@"info"]];
          }
      }fail:^(NSError *error)
      {

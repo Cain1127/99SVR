@@ -785,7 +785,7 @@ NSDictionary *_classesForNames = nil;
 	}
 	
 	NSString *color = [styles objectForKey:@"color"];
-    if ([color isEqualToString:@"#4c4c4c"] || [color isEqualToString:@"#919191"] || [color isEqualToString:@"#0078dd"])
+    if (color)
 	{
 		self.textColor = DTColorCreateWithHTMLName(color);
 	}

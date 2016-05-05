@@ -41,15 +41,13 @@
 
 @implementation XTeamPrivateController
 
-- (id)initWithModel:(RoomHttp*)room
+- (id)initWithFrame:(CGRect)frame model:(RoomHttp *)room
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
     _room = room;
+    [self addNotify];
+    [self initBody];
     return self;
-}
-
-- (void)loadView{
-    self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
 }
 
 - (void)setModel:(RoomHttp *)room
@@ -57,16 +55,26 @@
     _room = room;
     NSString *strName = [NSString stringWithFormat:@"开通团队:%@",_room.teamname];
     _titleLable.text = strName;
+    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
 
-- (void)viewDidLoad
+- (void)addNotify
 {
-    [super viewDidLoad];
-    [self setupTableView];
-    [self.view addSubview:_textView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:) name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
+}
+
+- (void)removeNotify
+{
     
-    _buyView = [[UIView alloc] initWithFrame:Rect(0, self.view.height-60, kScreenWidth, 60)];
-    [self.view addSubview:_buyView];
+}
+
+- (void)initBody
+{
+    [self setupTableView];
+    [self addSubview:_textView];
+    
+    _buyView = [[UIView alloc] initWithFrame:Rect(0, self.height-60, kScreenWidth, 60)];
+    [self addSubview:_buyView];
     [_buyView setBackgroundColor:COLOR_Bg_Gay];
     
     _btnBuy = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -83,29 +91,40 @@
     [_btnBuy addTarget:self action:@selector(buyprivate) forControlEvents:UIControlEventTouchUpInside];
     _buyView.hidden = YES;
     
-    whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 0, kScreenWidth, self.view.height)];
-    [self.view addSubview:whatPrivate];
+    whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 0, kScreenWidth, self.height)];
+    [self addSubview:whatPrivate];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
     [kHTTPSingle RequestWhatIsPrivateService];
+    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+}
+
+- (UIViewController*)viewController {
+    for (UIView* next = [self superview]; next; next = next.superview) {
+        UIResponder* nextResponder = [next nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController*)nextResponder;
+        }
+    }
+    return nil;
 }
 
 - (void)buyprivate
 {
     TQPurchaseViewController *control = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue] name:_room.teamname];
-    [self.navigationController pushViewController:control animated:YES];
+    [[self viewController].navigationController pushViewController:control animated:YES];
 }
 
 - (void)setupTableView
 {
     _dataSource  = [[ZLPrivateDataSource alloc] init];
-    _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth,self.view.height) style:UITableViewStyleGrouped];;
+    _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth,self.height) style:UITableViewStyleGrouped];;
     _tableView.dataSource = _dataSource;
     _tableView.delegate = _dataSource;
     _dataSource.delegate = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableHeaderView = [self tableHeaderView];
     _tableView.tableFooterView = [UIView new];
-    [self.view addSubview:_tableView];
+    [self addSubview:_tableView];
 }
 
 - (UIView *)tableHeaderView
@@ -188,25 +207,6 @@
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:) name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
-    if (_roomId)
-    {
-        
-    }
-    else
-    {
-        [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
-    }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 - (void)loadWhatsPrivate:(NSNotification *)notify
 {
@@ -232,6 +232,6 @@
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
     XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
-    [self.navigationController pushViewController:control animated:YES];
+    [[self viewController].navigationController pushViewController:control animated:YES];
 }
 @end
