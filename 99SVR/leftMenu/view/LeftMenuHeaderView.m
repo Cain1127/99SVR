@@ -114,7 +114,7 @@
         _circleLine.layer.masksToBounds = YES;
         _circleLine.layer.cornerRadius = (kCircle) / 2;
         _circleLine.layer.borderWidth = 0.5;
-        _circleLine.layer.borderColor = UIColorFromRGB(0xe5e5e5).CGColor;
+        _circleLine.layer.borderColor = UIColorFromRGB(0xcfcfcf).CGColor;
         [self addSubview:_circleLine];
         
         _circleLine.frame = Rect(self.width/2-kCircle/2, 10, kCircle, kCircle);

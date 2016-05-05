@@ -57,33 +57,43 @@
     [self.navigationController.navigationBar setHidden:YES];
     [self setTitleText:@"我"];
     
-    _itemsArray = [NSMutableArray array];
-    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    _leftMenuHeaderView = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 64,kScreenWidth, 185)];
-    _leftMenuHeaderView.delegate = self;
-    [self.view addSubview:_leftMenuHeaderView];
+//    _itemsArray = [NSMutableArray array];
+//    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+//    _leftMenuHeaderView = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 64,kScreenWidth, 185)];
+//    _leftMenuHeaderView.delegate = self;
+//    [self.view addSubview:_leftMenuHeaderView];
     
     //添加一个tableView
-    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, _leftMenuHeaderView.height+_leftMenuHeaderView.y, kScreenWidth, kScreenHeight-49- _leftMenuHeaderView.height-_leftMenuHeaderView.y) style:UITableViewStyleGrouped];
+    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) style:UITableViewStyleGrouped];
     [_listTableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
-    _listTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    //_listTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _listTableView.delegate = self;
     _listTableView.dataSource = self;
+    _listTableView.tableHeaderView = [self tableHeaderView];
     
-    if (kiPhone4_OR_4s) {
-     
-        _listTableView.bounces = YES;
-
-    }else{
-        
-        _listTableView.bounces = NO;
-
-    }
+//    if (kiPhone4_OR_4s) {
+//     
+//        _listTableView.bounces = YES;
+//
+//    }else{
+//        
+//        _listTableView.bounces = NO;
+//
+//    }
     
     [self.view addSubview:_listTableView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadProfile:) name:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
+}
+
+- (UIView *)tableHeaderView
+{
+    _itemsArray = [NSMutableArray array];
+    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    _leftMenuHeaderView = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 0,kScreenWidth, 165)];
+    _leftMenuHeaderView.delegate = self;
+    return _leftMenuHeaderView;
 }
 
 - (void)reloadProfile:(NSNotification *)notify

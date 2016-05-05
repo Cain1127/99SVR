@@ -15,7 +15,7 @@
 // 代理方法一般都定义为@optional
 @optional
 // 代理方法名都以控件名开头,代理方法至少有1个参数,将控件本身传递出去
--(void)answerTableViewCell:(AnswerTableViewCell *)answerTableViewCell allTextClick:(NSUInteger)btnId;
+-(void)answerTableViewCell:(AnswerTableViewCell *)answerTableViewCell allTextClick:(NSInteger)btnId;
 
 @end
 

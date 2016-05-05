@@ -171,28 +171,40 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
     CGSize answercontentSize = [model.answercontent sizeMakeWithFont:Font_14 maxW:kScreenWidth - 2* LR];
     CGSize askcontentSize = [model.askcontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
     DLog(@"%f --- answercontentSize.height",answercontentSize.height);
-    if (answercontentSize.height < 18) {
-        H = H + 18;
-    } else if (answercontentSize.height > 18 && !model.isAllText) {
-        H = H + 40;
-    } else if(model.isAllText){
-        H = H + answercontentSize.height + 20;
-    }
-    
-    if (askcontentSize.height > 18) {
-        H = H + askcontentSize.height;
-    }
-    return H;
+//    if (answercontentSize.height < 18) {
+//        H = H + 18;
+//    } else if (answercontentSize.height > 18 && !model.isAllText) {
+//        H = H + 40;
+//    } else if(model.isAllText){
+//        H = H + answercontentSize.height + 20;
+//    }
+//    
+//    if (askcontentSize.height > 18) {
+//        H = H + askcontentSize.height;
+//    }
+    return H + answercontentSize.height + askcontentSize.height;;
 }
 
 #pragma mark - AnswerTableViewCellDelegate
 
 - (void)answerTableViewCell:(AnswerTableViewCell *)answerTableViewCell allTextClick:(NSUInteger)btnId
 {
-    TQAnswerModel *model = self.modelArray[btnId];
-    model.isAllText = !model.isAllText;
-    [self.modelArray replaceObjectAtIndex:btnId withObject:model];
-    [self.tableView reloadData];
+    int index = -1 ;
+    
+    TQAnswerModel *model = [[TQAnswerModel alloc] init];
+    for (int i = 0; i<self.modelArray.count; i++) {
+        TQAnswerModel *oldModel = self.modelArray[i];
+        if (oldModel.ID == btnId) {
+            model = oldModel;
+            index = i;
+        }
+    }
+    
+    if (index >= 0) {
+        model.isAllText = !model.isAllText;
+        [self.modelArray replaceObjectAtIndex:index withObject:model];
+        [self.tableView reloadData];
+    }
 }
 
 @end
