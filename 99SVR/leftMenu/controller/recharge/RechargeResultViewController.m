@@ -10,6 +10,7 @@
 #import "AssetViewController.h"
 #import "ProfileViewController.h"
 #import "RoomViewController.h"
+#import "XMyViewController.h"
 #import "TQPurchaseViewController.h"
 @interface RechargeResultViewController ()
 
@@ -97,7 +98,7 @@
     }
     
     for (UIViewController *control in aryIndex) {
-        if ([control isKindOfClass:[AssetViewController class]]) {
+        if ([control isKindOfClass:[XMyViewController class]]) {
             [self.navigationController popToViewController:control animated:YES];
             return ;
         }
