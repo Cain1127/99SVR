@@ -342,7 +342,7 @@
     
     if (dataArray.count==0&&[code intValue]!=1) {//数据为0 请求失败
         
-        [self showErrorViewInView:tab withMsg:[NSString stringWithFormat:@"网络请求失败%@,点击重新请求",code] touchHanleBlock:^{
+        [self showErrorViewInView:tab withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
            
             if (weakSelf.tabViewTag==1) {//日收益
                 Loading_Bird_Show(weakSelf.dayTab);
@@ -357,7 +357,7 @@
         }];
     }else if (dataArray.count==0&&[code intValue]==1){//数据为0 请求成功
         
-        [self showEmptyViewInView:tab withMsg:[NSString stringWithFormat:@"暂无数据"] touchHanleBlock:^{
+        [self showEmptyViewInView:tab withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
             
             if (weakSelf.tabViewTag==1) {//日收益
                 Loading_Bird_Show(weakSelf.dayTab);

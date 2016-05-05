@@ -74,12 +74,12 @@
     [self hideEmptyViewInView:tab];
     @WeakObj(self);
     if(code!=1) {
-        [self showErrorViewInView:tab withMsg:@"网络请求失败" touchHanleBlock:^{
+        [self showErrorViewInView:tab withMsg:RequestState_NetworkErrorStr(@"AnswerViewController") touchHanleBlock:^{
             @StrongObj(self);
             [self.tableView.gifHeader beginRefreshing];
         }];
     } else if (dataArray.count==0 && code==1){//数据为0 请求成功
-        [self showEmptyViewInView:tab withMsg:[NSString stringWithFormat:@"暂无数据"] touchHanleBlock:^{
+        [self showEmptyViewInView:tab withMsg:RequestState_EmptyStr(@"AnswerViewController") touchHanleBlock:^{
             @StrongObj(self);
             [self.tableView.gifHeader beginRefreshing];
         }];

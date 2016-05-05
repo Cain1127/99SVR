@@ -155,7 +155,7 @@
         
         if (toDataArray.count==0&&[code intValue]!=1) {
             
-            [self showErrorViewInView:table withMsg:[NSString stringWithFormat:@"网络异常代码%@",code] touchHanleBlock:^{
+            [self showErrorViewInView:table withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
                 Loading_Bird_Show(table);
                 if (weakSelf.tabViewTag==1) {//交易记录
                     [kHTTPSingle RequestOperateStockTransaction:(int)weakSelf.operateId start:0 cout:10];
@@ -167,7 +167,7 @@
             }];
         }else if (toDataArray.count==0&&[code intValue]==1){
     
-            [self showEmptyViewInView:table withMsg:[NSString stringWithFormat:@"暂无数据"] touchHanleBlock:^{
+            [self showEmptyViewInView:table withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
                 
                 Loading_Bird_Show(table);
                 if (weakSelf.tabViewTag==1) {//交易记录
