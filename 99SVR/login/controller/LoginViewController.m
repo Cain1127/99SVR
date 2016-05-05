@@ -513,7 +513,7 @@
     }
     if (dict && [dict objectForKey:@"code"])
     {
-        NSString *strInfo = [NSString stringWithFormat:@"%@User/VailUserByWeixin?client=2&code=%@",kRegisterNumber,[dict objectForKey:@"code"]];
+        NSString *strInfo = [NSString stringWithFormat:@"%@User/VailUserByWeixin&client=2&code=%@",kRegisterNumber,[dict objectForKey:@"code"]];
         __weak LoginViewController *__self = self;
         __weak UserInfo *__user = [UserInfo sharedUserInfo];
         [BaseService get:strInfo dictionay:nil timeout:10 success:^(id responseObject)
@@ -565,8 +565,9 @@
         return ;
     }
     //检测 user id
-    if (dict && [dict objectForKey:@"userID"] && [dict objectForKey:@"accessToken"]) {
-        NSString *strInfo = [NSString stringWithFormat:@"%@User/VailUserByWeibo?client=2&openid=%@&token=%@",
+    if (dict && [dict objectForKey:@"userID"] && [dict objectForKey:@"accessToken"])
+    {
+        NSString *strInfo = [NSString stringWithFormat:@"%@User/VailUserByWeibo&client=2&openid=%@&token=%@",
                              kRegisterNumber,[dict objectForKey:@"userID"],[dict objectForKey:@"accessToken"]];
         __weak UserInfo *__user = [UserInfo sharedUserInfo];
         @WeakObj(self)
@@ -673,7 +674,7 @@
     if ([_tencentOAuth accessToken] && 0 != [[_tencentOAuth accessToken] length])
     {
         DLog(@"token:%@ openId;%@",[_tencentOAuth accessToken],[_tencentOAuth openId]);
-        NSString *strInfo = [NSString stringWithFormat:@"%@User/VailUserByQQ?client=2&openid=%@&token=%@",
+        NSString *strInfo = [NSString stringWithFormat:@"%@User/VailUserByQQ&client=2&openid=%@&token=%@",
                              kRegisterNumber,[_tencentOAuth openId],[_tencentOAuth accessToken]];
         @WeakObj(self)
         [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject)
