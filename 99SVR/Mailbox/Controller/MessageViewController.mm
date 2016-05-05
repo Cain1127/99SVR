@@ -84,7 +84,7 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
     if ([dict[@"code"] intValue]==1) {
         NSArray *aryModel = dict[@"data"];
         if ([self.tableView.header isRefreshing]) { // 下拉刷新，清除原来的数据
-             [_messageArray removeAllObjects];
+            [_messageArray removeAllObjects];
         }
         for (TQMessageModel *model in aryModel) {
             [self.messageArray addObject:model];
@@ -158,6 +158,15 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
     if (self.messageArray.count > 0) {
         cell.messageModel = self.messageArray[indexPath.row];
     }
+    
+//    UIView *lineTop = [[UIView alloc] initWithFrame:CGRectMake(0, 10, kScreenWidth, 0.5)];
+//    lineTop.backgroundColor = COLOR_Line_Small_Gay;
+//    [cell addSubview:lineTop];
+//    
+//    UIView *lineButton = [[UIView alloc] initWithFrame:CGRectMake(0, cell.height - 0.5, kScreenWidth, 0.5)];
+//    lineButton.backgroundColor = COLOR_Line_Small_Gay;
+//    [cell addSubview:lineButton];
+    
     return cell;
 }
 

@@ -28,6 +28,8 @@
 {
     if (self==[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+        self.contentView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
+        self.contentView.layer.borderWidth = 0.5;
         self.contentView.backgroundColor = [UIColor whiteColor];
         
         _titleLabel = [[UILabel alloc] init];
@@ -62,9 +64,14 @@
     CGFloat top = 15; //上下
     CGFloat LR = 12; // 左右边距
     
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
+    // -0.5隐藏边框
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, - 0.5, kScreenWidth, 10.5)];
     lineView.backgroundColor = COLOR_Bg_Gay;
-    [self.contentView addSubview:lineView];
+    [self addSubview:lineView];
+    
+    UIView *lineTop = [[UIView alloc] initWithFrame:CGRectMake(0, 10, kScreenWidth, 0.5)];
+    lineTop.backgroundColor = COLOR_Line_Small_Gay;
+    [self.contentView addSubview:lineTop];
  
     _titleLabel.text = messageModel.title;
     _titleLabel.frame = CGRectMake(LR, top, kScreenWidth, 30);
@@ -98,6 +105,21 @@
         _allButton.hidden = YES;
     }
 }
+
+//- (CGFloat)cellHightWithContent:(NSString *)content isShowAllText:(BOOL)isShowAllText{
+//    CGFloat LR = 12;
+//    CGFloat H = 80;
+//    
+//    CGSize contentSize = [content sizeMakeWithFont:Font_14 maxW:kScreenWidth - 2 * LR];
+//    
+//    if (contentSize.height > 18 && !isShowAllText) {
+//        H = H + 30;
+//    } else if(isShowAllText){
+//        H = H + contentSize.height + 10;
+//    }
+//    
+//    return H;
+//}
 
 - (void)allTextClick:(UIButton *)btn
 {

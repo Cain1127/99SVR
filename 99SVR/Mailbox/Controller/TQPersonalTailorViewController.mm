@@ -33,6 +33,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setTitleText:@"私人定制"];
+    self.view.backgroundColor = COLOR_Bg_Gay;
     // 初始化tableView
     [self setupTableView];
 }
@@ -154,6 +155,13 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 9;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *HeaderSectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
+    HeaderSectionView.backgroundColor = COLOR_Bg_Gay;
+    return HeaderSectionView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
