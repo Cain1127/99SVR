@@ -131,7 +131,7 @@
         //右边的图标
         UIImageView *imageView = [[UIImageView alloc]init];
         imageView.tag = 102;
-        imageView.image =[UIImage imageNamed:@"arrow"];
+        imageView.image =[UIImage imageNamed:@"home_seeall_arrow"];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         [backView addSubview:imageView];
         

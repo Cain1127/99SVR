@@ -39,7 +39,7 @@
 #import "StockDealViewController.h"
 #import "StockDealModel.h"
 
-#define kPictureHeight 0.3 * kScreenHeight
+#define kPictureHeight kScreenWidth * (0.43)
 
 /**
  *  @brief  当前请求的类型，用来处理请求事件
@@ -556,12 +556,12 @@ typedef enum : NSUInteger
     {
         if (!_videoView)
         {
-            _videoView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44)];
+            _videoView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 34)];
             [_videoView setBackgroundColor:UIColorFromRGB(0xffffff)];
             UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f, rightButtonWidth, 44)];
             [lblHot setText:@"财经直播"];
             [lblHot setFont:XCFONT(15)];
-            [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
+            [lblHot setTextColor:UIColorFromRGB(0x4c4c4c)];
             lblHot.textAlignment = NSTextAlignmentLeft;
             [_videoView addSubview:lblHot];
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -585,7 +585,7 @@ typedef enum : NSUInteger
             UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f, rightButtonWidth, 44)];
             [lblHot setText:@"高手操盘"];
             [lblHot setFont:XCFONT(15)];
-            [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
+            [lblHot setTextColor:UIColorFromRGB(0x4c4c4c)];
             [_operatorView addSubview:lblHot];
             
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -604,11 +604,10 @@ typedef enum : NSUInteger
         if (!_ideaView) {
             _ideaView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44)];
             [_ideaView setBackgroundColor:UIColorFromRGB(0xffffff)];
-            
             UILabel *lblHot = [[UILabel alloc] initWithFrame:Rect(15.0f, 0.0f,rightButtonWidth,44)];
             [lblHot setText:@"专家观点"];
             [lblHot setFont:XCFONT(15)];
-            [lblHot setTextColor:UIColorFromRGB(0x0078DD)];
+            [lblHot setTextColor:UIColorFromRGB(0x4c4c4c)];
             [_ideaView addSubview:lblHot];
             
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -684,7 +683,14 @@ typedef enum : NSUInteger
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 44.0f;
+    
+    if (section==0) {
+        
+        return 34.0;
+    }else{
+        
+        return 44.0f;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
