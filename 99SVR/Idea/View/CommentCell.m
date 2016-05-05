@@ -20,12 +20,13 @@
     
     self.attributedTextContextView.edgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
     self.attributedTextContextView.frame = Rect(50,17, kScreenWidth-60,20);
-    
+    /*
     _lblTime = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-170,17, 165, 20)];
     [_lblTime setFont:XCFONT(12)];
     [_lblTime setTextAlignment:NSTextAlignmentRight];
     [_lblTime setTextColor:UIColorFromRGB(0x919191)];
     [self.contentView addSubview:_lblTime];
+    */
     
     _lblLine = [UILabel new];
     [_lblLine setBackgroundColor:kLineColor];
@@ -46,7 +47,7 @@
 {
     _reply = reply;
     [_lblTitle setText:_reply.authorname];
-    [_lblTime setText:_reply.publishtime];
+//    [_lblTime setText:_reply.publishtime];
     [self setHTMLString:reply.strContent];
     [_imgView setImage:[UIImage imageNamed:@"personal_user_head"]];
 }

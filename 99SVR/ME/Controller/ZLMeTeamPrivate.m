@@ -19,6 +19,7 @@
 #import "ZLPrivateDataSource.h"
 #import "ZLWhatIsPrivateView.h"
 #import "TQMeCustomizedModel.h"
+#import "UIViewController+EmpetViewTips.h"
 
 @interface ZLMeTeamPrivate()<DTAttributedTextContentViewDelegate,PrivateDelegate>
 {
@@ -60,7 +61,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTitleText:@"私人定制"];
+    [self setTitleText:_room.teamname];
     [self setupTableView];
     [self.view addSubview:_textView];
     
@@ -91,7 +92,12 @@
 
 - (void)buyprivate
 {
-    TQPurchaseViewController *control = [[TQPurchaseViewController alloc] initWithTeamId:[_room.teamid intValue] name:_room.teamname];
+    TQPurchaseViewController *control = [[TQPurchaseViewController alloc] init];
+    control.stockModel = [[StockDealModel alloc]init];
+    control.stockModel.teamicon = _room.teamicon;
+    control.stockModel.teamid = _room.teamid;
+    control.stockModel.teamname = _room.teamname;
+    control.stockModel.teamicon = _room.teamicon;
     [self.navigationController pushViewController:control animated:YES];
 }
 
@@ -137,6 +143,7 @@
 
 - (void)loadPrivate:(NSNotification *)notify
 {
+    Loading_Bird_Hide(self.tableView);
     NSDictionary *dict = notify.object;
     if ([dict isKindOfClass:[NSDictionary class]]) {
         int code = [dict[@"code"] intValue];
@@ -185,15 +192,50 @@
             });
             return;
         }
+        
     }
 }
+
+//#pragma mark
+//-(void)chickEmptyViewShow:(NSArray *)dataArray withCode:(NSString *)code{
+//    
+//    WeakSelf(self);
+//    
+//    [self showEmptyViewInView:weakSelf.tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
+//        
+//        Loading_Bird_Show(weakSelf.tableView);
+//        [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+//    }];
+//    
+//    if (dataArray.count==0&&[code intValue]!=1) {//数据为0 错误代码不为1
+//        
+//        [self showErrorViewInView:self.tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
+//            
+//            
+//        }];
+//        
+//    }else if (dataArray.count==0&&[code intValue]==1){
+//        
+//        [self showEmptyViewInView:weakSelf.tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
+//           
+//            Loading_Bird_Show(weakSelf.tableView);
+//            [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+//        }];
+//        
+//    }else{
+//        [self hideEmptyViewInView:weakSelf.tableView];
+//    }
+//}
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:) name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
     if (_roomId!=[_room.teamid intValue])
     {
+        Loading_Bird_Show(self.tableView);
         [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
         _roomId = [_room.teamid intValue];
     }
