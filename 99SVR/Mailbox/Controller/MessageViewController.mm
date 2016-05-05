@@ -70,6 +70,7 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
     [_tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [_tableView.gifHeader loadDefaultImg];
     [_tableView.gifHeader beginRefreshing];
+    [_tableView.footer setHidden:YES];
     
     [self.view addSubview:_tableView];
     [self.view makeToastActivity_bird];
