@@ -10,6 +10,7 @@
 
 @interface SignatureViewController:CustomViewController
 
+@property (nonatomic, copy) NSString *signature;
 /**
  *  修改签名信息成功后的回调
  */

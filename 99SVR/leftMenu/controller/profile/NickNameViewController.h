@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface NickNameViewController : CustomViewController
+
+@property (nonatomic, copy) NSString *nickName;
 /**
  *  回调
  */

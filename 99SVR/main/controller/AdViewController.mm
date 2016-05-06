@@ -22,7 +22,7 @@
 
 @implementation AdViewController
 
-NSUInteger secondsCountDown = 5;//倒计时秒数
+NSUInteger secondsCountDown = 3;//倒计时秒数
 
 - (void)viewDidLoad
 {

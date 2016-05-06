@@ -9,75 +9,111 @@
 #import "SignatureViewController.h"
 #import "ZLLogonServerSing.h"
 #import "UserInfo.h"
-#import "UITextView+Placeholder.h"
-@interface SignatureViewController ()<UITextFieldDelegate>
 
-///最新签名信息输入框
-@property(nonatomic,strong) UITextField *signatureTextField;
+@interface SignatureViewController ()<UITextFieldDelegate,UITextViewDelegate>
 
 @property (nonatomic, strong) UIButton *commitBtn;
-
-
+@property (nonatomic, strong) UIView *bgView;        /**<背景view*/
+@property (nonatomic, strong) UITextView *contentTV;        /**<输入内容框*/
+@property (nonatomic, strong) UILabel *confineLabel;        /**<字体长度限制*/
+@property (nonatomic, strong) UILabel *lssuePlaceHolderLab;        /**提示*/
 @end
 
 @implementation SignatureViewController
 
 - (void)viewDidLoad
 {
-    
     [super viewDidLoad];
     [self setTitleText:@"修改个性签名"];
-     
+    
     [self setupView];
+    
+    // 赋值
+    if (_signature) {
+        _contentTV.text = _signature;
+        [self textViewDidChange:_contentTV];
+    }
 }
 
-- (void)setupView
-{
-    self.view.backgroundColor = kTableViewBgColor;
+- (void)setupView {
     
-    //签名输入框
-    _signatureTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0f, 64.0f + 10.0f, kScreenWidth - 2.0f * 12.0f, 150.0f)];
-    _signatureTextField.placeholder = @"请输入签名";
-    _signatureTextField.delegate = self;
-    _signatureTextField.font = kFontSize(14);
-    _signatureTextField.textColor = [UIColor blackColor];
-    _signatureTextField.keyboardType = UIKeyboardTypeDefault;
-    _signatureTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    _signatureTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    [_signatureTextField setValue:kFontSize(14) forKeyPath:@"_placeholderLabel.font"];
-    [_signatureTextField setValue:RGB(151, 151, 151) forKeyPath:@"_placeholderLabel.textColor"];
-    [self.view addSubview:_signatureTextField];
-    [_signatureTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-
+    // 背景
+    self.bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64)];
+    self.bgView.backgroundColor = COLOR_Bg_Gay;
+    [self.view addSubview:self.bgView];
     
-    //建议提醒文字
-//    UILabel * adviceLabel = [[UILabel alloc] init];
-//    adviceLabel.text = @"昵称支持4-20中英文、数字及下划线组合";
-//    adviceLabel.textColor = [UIColor blackColor];
-//    adviceLabel.font = kFontSize(14);;
-//    adviceLabel.numberOfLines = 0;
-//    adviceLabel.frame = CGRectMake(12, CGRectGetMaxY(_signatureTextField.frame), kScreenWidth - 12*2, 30);
-//    [self.view addSubview:adviceLabel];
+    // 签名框
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, kScreenWidth, 100)];
+    contentView.backgroundColor = [UIColor whiteColor];
+    contentView.layer.borderWidth = 0.5;
+    contentView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
+    [self.bgView addSubview:contentView];
+    [self setupContentView:contentView];
     
-    UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnRight setTitle:@"保存" forState:UIControlStateNormal];
-    [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
-    [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
-    [self.view addSubview:btnRight];
-    btnRight.layer.cornerRadius = 2.5;
-    btnRight.layer.masksToBounds = YES;
-    self.commitBtn = btnRight;
-    [self checkLogBtnIsEnableWithText:self.signatureTextField.text];
-    btnRight.frame = Rect(10,_signatureTextField.y+_signatureTextField.height+30, kScreenWidth-20, 40);
-    [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
-    [btnRight addTarget:self action:@selector(rightItemClick) forControlEvents:UIControlEventTouchUpInside];
+    // 保存
+    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+    [saveButton setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+    [saveButton setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
+    [saveButton setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
+    saveButton.layer.cornerRadius = 2.5;
+    saveButton.layer.masksToBounds = YES;
+    saveButton.frame = Rect(10,CGRectGetMaxY(contentView.frame)+30, kScreenWidth-20, 40);
+    [saveButton setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
+    [saveButton addTarget:self action:@selector(rightItemClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.bgView addSubview:saveButton];
+    _commitBtn = saveButton;
+    [self checkLogBtnIsEnableWithText:_contentTV.text];
 }
 
--(void)textFieldDidChange:(id)sender{
+- (void)setupContentView:(UIView *)view {
+    self.contentTV = [[UITextView alloc] init];
+    self.contentTV.font = Font_15;
+    self.contentTV.textColor = COLOR_Text_Gay;
+    self.contentTV.keyboardType = UIKeyboardTypeDefault;
+    self.contentTV.returnKeyType = UIReturnKeyDone;
+    self.contentTV.delegate = self;
+    [view addSubview:self.contentTV];
     
-    [self checkLogBtnIsEnableWithText:self.signatureTextField.text];
+    [self.contentTV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(view).insets(UIEdgeInsetsMake(5, 12, 30, 12));
+    }];
     
+    self.confineLabel = [[UILabel alloc] init];
+    self.confineLabel.text = @"0/20";
+    self.confineLabel.font = Font_14;
+    self.confineLabel.textColor = COLOR_Text_Gay;
+    [view addSubview:self.confineLabel];
+    [self.confineLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(view.mas_right).offset(-12);
+        make.bottom.equalTo(view.mas_bottom).offset(-12);
+    }];
+    
+    UILabel *lssuePlaceHolderLab = [[UILabel alloc] initWithFrame:CGRectMake(5, 4, 120, 23.5)];
+    lssuePlaceHolderLab.font = Font_15;
+    lssuePlaceHolderLab.textColor = COLOR_Text_Gay;
+    lssuePlaceHolderLab.text = @"请输入个性签名...";
+    _lssuePlaceHolderLab = lssuePlaceHolderLab;
+    [self.contentTV addSubview:lssuePlaceHolderLab];
+}
+
+#pragma mark UITextViewDelegate
+
+- (void)textViewDidChange:(UITextView *)textView {
+    if (textView.text.length == 0) {
+       _lssuePlaceHolderLab.text= @"请输入个性签名...";
+    }
+    else {
+        _lssuePlaceHolderLab.text= @"";
+    }
+    
+    NSString* str = [NSString stringWithFormat:@"%d/20",20 - (int)textView.text.length];
+    if (textView.text.length>20) {
+        self.contentTV.text = [textView.text substringToIndex:20];
+        str = @"20字";
+    }
+    self.confineLabel.text  = str ;
+    [self checkLogBtnIsEnableWithText:self.contentTV.text];
 }
 
 /**
@@ -102,7 +138,7 @@
  */
 - (void)rightItemClick
 {
-    NSString *strMsg = _signatureTextField.text;
+    NSString *strMsg = _contentTV.text;
     if ([strMsg length]==0) {
         [MBProgressHUD showError:@"个性签名不能为空"];
         return ;
@@ -117,7 +153,7 @@
 
 - (void)updatePro:(NSNotification *)notify
 {
-    NSString *strMsg = _signatureTextField.text;
+    NSString *strMsg = _contentTV.text;
     __weak NSString *__strMsg = strMsg;
     NSNumber *number = notify.object;
     if ([number intValue]==0) {
@@ -131,9 +167,9 @@
     else
     {
         gcd_main_safe(
-            ^{
-            [MBProgressHUD showError:@"修改个性签名出错"];
-        });
+                      ^{
+                          [MBProgressHUD showError:@"修改个性签名出错"];
+                      });
     }
 }
 
