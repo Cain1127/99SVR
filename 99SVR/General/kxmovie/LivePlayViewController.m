@@ -468,6 +468,9 @@
 
 - (void)colletInfo
 {
+    
+    WeakSelf(self);
+    
     if(KUserSingleton.nType==1 && KUserSingleton.bIsLogin)
     {
         [[ZLLogonServerSing sharedZLLogonServerSing] colletRoomInfo:!_btnCollet.selected];
@@ -477,7 +480,7 @@
         [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"确定" withMessage:@"您未登陆，登陆后就可以和讲师互动了" completionCallback:^(NSInteger index) {
             if (index==1) {
                 LoginViewController *loginVC = [[LoginViewController alloc]init];
-                [self.navigationController pushViewController:loginVC animated:YES];
+                [weakSelf.navigationController pushViewController:loginVC animated:YES];
             }
         }];
 
