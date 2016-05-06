@@ -24,6 +24,7 @@
 #import "WeiboSDK.h"
 #import "LoginViewController.h"
 #import "StockDealViewController.h"
+#import "RegisterTextField.h"
 
 @interface LoginViewController ()<UITextFieldDelegate,TencentSessionDelegate>
 {
@@ -39,7 +40,7 @@
 @property (nonatomic,strong) UIButton *btnRegin;
 @property (nonatomic,strong) UIImageView *imgBg;
 @property (nonatomic,strong) LoginTextField *txtUser;
-@property (nonatomic,strong) LoginTextField *txtPwd;
+@property (nonatomic,strong) RegisterTextField *txtPwd;
 @property (nonatomic,strong) QCheckBox *check;
 @property (nonatomic,strong) QCheckBox *autoLogin;
 @property (nonatomic,strong) UIButton *btnFind;
@@ -96,7 +97,7 @@
     });
     
     _txtUser = [[LoginTextField alloc] initWithFrame:CGRectMake(15,bodyView.y+bodyView.height, kScreenWidth-30, 44)];
-    _txtPwd = [[LoginTextField alloc] initWithFrame:CGRectMake(_txtUser.x, _txtUser.frame.origin.y+_txtUser.frame.size.height+10, _txtUser.width, 44)];
+    _txtPwd = [[RegisterTextField alloc] initWithFrame:CGRectMake(_txtUser.x, _txtUser.frame.origin.y+_txtUser.frame.size.height+10, _txtUser.width, 44)];
     _txtUser.delegate = self;
     _txtPwd.delegate = self;
     
@@ -133,9 +134,11 @@
     _txtPwd.leftView = imgPwd;
     
     _txtPwd.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    _txtPwd.leftViewMode = UITextFieldViewModeAlways;
+    //_txtPwd.leftViewMode = UITextFieldViewModeAlways;
     [_txtPwd setBackgroundColor:[UIColor clearColor]];
     [_txtPwd setTextColor:UIColorFromRGB(0x343434)];
+    _txtPwd.isShowTextBool = YES;
+    _txtPwd.leftViewImageName = @"register_pwd_ok";
     
     UIColor *color = UIColorFromRGB(0xB2B2B2);
     _txtUser.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"99账号/手机号码/用户名" attributes:@{NSForegroundColorAttributeName: color}];
