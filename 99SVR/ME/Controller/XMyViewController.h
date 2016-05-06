@@ -1,10 +1,6 @@
-//
-//  XMyViewController.h
-//  99SVR
-//
-//  Created by xia zhonglin  on 4/22/16.
-//  Copyright © 2016 xia zhonglin . All rights reserved.
-//
+
+
+/**我的个人中心页面*/
 
 #import <UIKit/UIKit.h>
 #import "HomeCustomViewController.h"

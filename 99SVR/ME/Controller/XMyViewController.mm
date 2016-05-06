@@ -121,6 +121,7 @@
 - (void)checkLogin
 {
     [_itemsArray removeAllObjects];
+    
     _leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
     if (KUserSingleton.nStatus) {
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"TQMeCustomizedViewController"]];
