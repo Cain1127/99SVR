@@ -128,7 +128,6 @@
     [_ffPlay.view addGestureRecognizer:singleRecogn];
     _ffPlay.roomIsCollet = nRoom_is_collet;
     [self addNotification];
-    [kHTTPSingle RequestConsumeRank:[_room.teamid intValue]];
     [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
 }
 
@@ -448,6 +447,7 @@
         if ([user isOnMic])
         {
             [_ffPlay startPlayRoomId:[_room.roomid intValue] user:user.m_nUserId name:_room.teamname];
+            [kHTTPSingle RequestConsumeRank:user.m_nUserId];
             return ;
         }
     }

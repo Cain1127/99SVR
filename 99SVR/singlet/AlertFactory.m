@@ -59,15 +59,7 @@
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
     {
        UITextField *login = alert.textFields.firstObject;
-       if ([login.text length]==0){
-           dispatch_async(dispatch_get_main_queue(),
-           ^{
-                [senderWeak.view hideToastActivity];
-                [senderWeak.view makeToast:@"密码不能为空"];
-                [AlertFactory createPassswordAlert:senderWeak room:roomWeak];
-           });
-       }
-       else
+       if ([login.text length]==0)
        {
            [kProtocolSingle connectVideoRoom:[roomWeak.nvcbid intValue] roomPwd:login.text];
        }

@@ -38,12 +38,14 @@
     [lblTemp setTextColor:UIColorFromRGB(0xf8f8f8)];
     [lblTemp setTextAlignment:NSTextAlignmentRight];
     [lblTemp setText:@"累计人气:"];
+    lblTemp.textColor = RGBA(255, 255, 255, 0.8);
     
     _lblCount = [[UILabel alloc] initWithFrame:Rect(lblTemp.x+lblTemp.width+3,lblTemp.y,45, 20)];
     [self addSubview:_lblCount];
     [_lblCount setFont:XCFONT(13)];
     [_lblCount setTextColor:UIColorFromRGB(0xffffff)];
     [_lblFans setTextAlignment:NSTextAlignmentLeft];
+    _lblCount.textColor = RGBA(255, 255, 255, 0.8);
     
     UILabel *lblFanTemp = [[UILabel alloc] initWithFrame:Rect(_lblCount.x+_lblCount.width+15,_lblCount.y,30, 20)];
     
@@ -52,19 +54,21 @@
     [lblFanTemp setTextColor:UIColorFromRGB(0xf8f8f8)];
     [lblFanTemp setTextAlignment:NSTextAlignmentRight];
     [lblFanTemp setText:@"粉丝:"];
+    lblFanTemp.textColor = RGBA(255, 255, 255, 0.8);
     
     _lblFans = [[UILabel alloc] initWithFrame:Rect(lblFanTemp.x+lblFanTemp.width+3,lblFanTemp.y,45, 20)];
     [self addSubview:_lblFans];
     [_lblFans setFont:XCFONT(13)];
     [_lblFans setTextColor:UIColorFromRGB(0xffffff)];
     [_lblFans setTextAlignment:NSTextAlignmentLeft];
+    _lblFans.textColor = RGBA(255, 255, 255, 0.8);
+    
     
     _segmented = [[UISegmentedControl alloc] initWithItems:@[@"直播",@"专家观点",@"高手操盘",@"私人订制"]];
     _segmented.frame = CGRectMake(30,_lblFans.y+_lblFans.height+10,kScreenWidth-60, 35.0);
     _segmented.selectedSegmentIndex = 0;//设置默认选择项索引
     [self addSubview:_segmented];
     _segmented.tintColor = [UIColor whiteColor];
-    
     [_segmented addTarget:self action:@selector(selectChanged) forControlEvents:UIControlEventValueChanged];
     
     return self;
@@ -90,6 +94,14 @@
     {
         [_delegate exitRoomHeader];
     }
+}
+
+- (void)setDict:(NSDictionary *)dict
+{
+//    CGRect frame
+    
+    
+//    _lblCount.frame =
 }
 
 @end

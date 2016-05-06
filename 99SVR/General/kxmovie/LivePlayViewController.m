@@ -276,15 +276,15 @@
     int returnValue = 0;
     while (_playing)
     {
-        if (_media.audioBuf.count==0)
+        if (_media.audioBuf.count<25)
         {
-            [NSThread sleepForTimeInterval:0.5f];
+            [NSThread sleepForTimeInterval:0.01f];
             continue ;
         }
         @autoreleasepool
         {
             NSData *data = nil;
-            if(_media.audioBuf.count>0)
+            if(_media.audioBuf.count>20)
             {
                 data = [_media.audioBuf objectAtIndex:0];
             }
@@ -295,7 +295,7 @@
                 {
                     continue;
                 }
-                [_playAudio putAudioData:_out_buffer];
+                [_playAudio putAudioData:_out_buffer size:1920*2*sizeof(opus_int16)];
             }
             @synchronized(_media.audioBuf)
             {
@@ -304,7 +304,7 @@
                     [_media.audioBuf removeObjectAtIndex:0];
                 }
             }
-            [NSThread sleepForTimeInterval:0.01];
+            [NSThread sleepForTimeInterval:0.03];
         }
     }
     [_playAudio stopPlay];
@@ -577,9 +577,6 @@
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
-    
-//    lblText.hidden = NO;
-//    lblText.text = @"没有讲师上麦";
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -621,7 +618,14 @@
     {
         videoQueue = dispatch_queue_create("video_tid", 0);
     }
-    
+    dispatch_async(videoQueue,
+       ^{
+           [__self decodeVideo];
+       });
+    dispatch_async(audioQueue,
+   ^{
+       [__self decodeAudio];
+   });
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
         [__self checkMedia];
@@ -663,14 +667,6 @@
             ^{
                  [__self.glView hideToastActivity];
             });
-            dispatch_async(videoQueue,
-           ^{
-               [__self decodeVideo];
-           });
-            dispatch_async(audioQueue,
-           ^{
-               [__self decodeAudio];
-           });
            return;
         }
         [NSThread sleepForTimeInterval:0.5f];
@@ -683,7 +679,7 @@
     if (_playing && _bVideo)
     {
         __weak LivePlayViewController *__self = self;
-        if (_media.videoBuf.count<=0)
+        if (_media.videoBuf.count<20)
         {
             [NSThread sleepForTimeInterval:.5f];
         }

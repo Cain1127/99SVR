@@ -170,7 +170,7 @@
     strMd5 = [NSString stringWithFormat:@"action=5&date=%@&pnum=%@",strDate,_mobile];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = kBand_mobile_getcode_URL;
+    NSString *strInfo = [NSString stringWithFormat:@"%@Message/getmsgcode",kRegisterNumber];
     NSDictionary *parameters = nil;
     parameters = @{@"action":@(5),@"pnum":_mobile,@"key":strMd5,@"client":@(2)};
     
