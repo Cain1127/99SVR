@@ -57,7 +57,7 @@
         /** 回答名称 */
         _answerauthornameLable = [[UILabel alloc] init];
         _answerauthornameLable.font = Font_16;
-        _answerauthornameLable.textColor = COLOR_Text_Black;
+        _answerauthornameLable.textColor = COLOR_Text_Gay;
         [self.contentView addSubview:_answerauthornameLable];
         
         /** 回答内容 */
@@ -82,6 +82,8 @@
         _askBgView.backgroundColor = COLOR_Bg_Gay;
         _askBgView.layer.masksToBounds = YES;
         _askBgView.layer.cornerRadius = 5;
+        _askBgView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
+        _askBgView.layer.borderWidth = 0.5;
         [self.contentView addSubview:_askBgView];
         
         /** 提问者姓名 */
@@ -146,7 +148,8 @@
     //@"说好的回报难吃难吃难吃[吃难吃][$17$][$19$][$17$][$17$][$20$][$17$][$20$][$17$][$17$][$20$][$17$][$20$]你当年的你惹麻烦麻烦吗";
     _contentTextView.attributedText = [self ContentAttributedString:answerModel.answercontent];
     CGSize answercontentSize = [answerModel.answercontent sizeMakeWithFont:Font_14 maxW:kScreenWidth - 2* LR];
-    _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), answercontentSize.width + 10, answercontentSize.height + 10);
+    CGFloat answercontentH = answercontentSize.height  > 50 ? answercontentSize.height+40 : answercontentSize.height+10;
+    _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), kScreenWidth - 2* LR, answercontentH);
     //_contentTextView.backgroundColor = [UIColor redColor];
 //    if (answerModel.isAllText||answercontentSize.height < 35) {
 //        _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answerauthornameLable.frame), answercontentSize.width+ 20, answercontentSize.height + 10);
@@ -240,8 +243,9 @@
         [attributedString replaceCharactersInRange:NSRangeFromString(rangeString) withAttributedString:attachmentString];
     }
     
-    [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, attributedString.length)];
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, attributedString.length)];
     [attributedString addAttribute:NSBackgroundColorAttributeName value:[UIColor clearColor] range:NSMakeRange(0, attributedString.length)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:COLOR_Text_Black range:NSMakeRange(0, attributedString.length)];
     
     return attributedString;
 }
