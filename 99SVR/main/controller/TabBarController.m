@@ -103,11 +103,7 @@
     
     [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
     [self setUpOneViewController:[[ZLVideoListViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
-<<<<<<< HEAD
-=======
-#warning 开发时候把这个nstatus 设置成1。方便完善。
-//    [UserInfo sharedUserInfo].nStatus = 1;
->>>>>>> master
+
 
     if ([UserInfo sharedUserInfo].nStatus)
     {
