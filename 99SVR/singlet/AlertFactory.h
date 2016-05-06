@@ -15,4 +15,6 @@
 
 + (void)createPassswordAlert:(UIViewController *)sender room:(RoomHttp *)room;
 
++ (void)createPassswordAlert:(UIViewController *)sender room:(RoomHttp*)room block:(void (^)(NSString *pwd))block;
+
 @end

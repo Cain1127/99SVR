@@ -33,7 +33,6 @@
         [_control.navigationController pushViewController:roomView animated:YES];
         return ;
     }
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     _room = room;
@@ -44,19 +43,25 @@
 
 - (void)joinRoomErr:(NSNotification *)notify{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [DecodeJson cancelPerfor:self];
     if ([notify.object isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dict = [notify object];
         int errid = [[dict objectForKey:@"err"] intValue];
         NSString *strMsg = [dict objectForKey:@"msg"];
         if (errid==201)
         {
-            if ([UserInfo sharedUserInfo].nStatus) {
-                [AlertFactory createPassswordAlert:_control room:_room];
+            @WeakObj(self)
+            if ([UserInfo sharedUserInfo].nStatus)
+            {
+                [AlertFactory createPassswordAlert:_control room:_room block:^(NSString *pwd) {
+                    [selfWeak connectViewModel:selfWeak.room];
+                }];
             }
             else
             {
                 @WeakObj(_control)
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_async(dispatch_get_main_queue(),
+                ^{
                     [_controlWeak.view hideToastActivity];
                     [ProgressHUD showError:@"加入房间失败或房间被关闭"];
                 });
@@ -64,7 +69,6 @@
         }
         else
         {
-            [DecodeJson cancelPerfor:self];
             @WeakObj(strMsg)
             [[NSNotificationCenter defaultCenter] removeObserver:self];
             dispatch_async(dispatch_get_main_queue(), ^{
