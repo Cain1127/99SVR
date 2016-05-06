@@ -19,7 +19,6 @@ static char  * TapRecognizerBlockKey;
 -(void)showErrorViewInView:(UIView *)targetView withMsg:(NSString *)msg touchHanleBlock:(TouchHanleBlock)hanleBlock{
 
     [self showEmptyViewInView:targetView withMsg:msg withImageName:@"network_anomaly_fail" touchHanleBlock:hanleBlock];
-
 }
 
 
@@ -53,10 +52,11 @@ static char  * TapRecognizerBlockKey;
     UILabel *titLab = [[UILabel alloc]init];
     titLab.textAlignment = NSTextAlignmentCenter;
     titLab.numberOfLines = 0;
-    titLab.textColor = UIColorFromRGB(0x4c4c4c);
+    titLab.textColor = UIColorFromRGB(0x919191);
     titLab.text = msg;
+    titLab.font = Font_15;
     [titLab sizeToFit];
-    titLab.frame = (CGRect){0,CGRectGetMaxY(imageView.frame),width,titLab.frame.size.height};
+    titLab.frame = (CGRect){0,CGRectGetMaxY(imageView.frame)+10,width,titLab.frame.size.height};
     [view addSubview:titLab];
 }
 

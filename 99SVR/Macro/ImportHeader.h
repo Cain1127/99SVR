@@ -21,5 +21,4 @@
 #import "MBProgressHUD+Add.h"
 #import "PubColorAndFont.h"
 #import "NSString+Size.h"
-#import "NSString+Format.h"
 #endif /* ImportHeader_h */
