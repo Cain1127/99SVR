@@ -33,6 +33,6 @@
 -(id)initWithSampleRate:(int)sampleRate;
 -(void)startPlayWithBufferByteSize:(int)bufferByteSize;
 -(void)stopPlay;
--(void)putAudioData:(short*)pcmData;
+-(void)putAudioData:(short*)pcmData size:(int)nSize;
 
 @end

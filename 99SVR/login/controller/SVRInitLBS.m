@@ -79,9 +79,8 @@
 /**
  *  请求版本内容操作
  */
-+ (void)authVersion{
-    
-    
++ (void)authVersion
+{
     NSString *strVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] stringByReplacingOccurrencesOfString:@"." withString:@""];
     if ([UserDefaults objectForKey:strVersion]!=nil) {
         BOOL bStatus = [[UserDefaults objectForKey:strVersion] boolValue];
@@ -96,9 +95,14 @@
     NSString *strLbs = [NSString stringWithFormat:@"%@%@",lbs_status,strVersion];
     [BaseService get:strLbs dictionay:nil timeout:10 success:^(id responseObject) {
          NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         KUserSingleton.nStatus = [[parameters objectForKey:__strVersion] intValue];
-        [UserDefaults setBool:KUserSingleton.nStatus forKey:__strVersion];
-        [UserDefaults synchronize];
+        if([parameters objectForKey:@"errcode"])
+        {}
+        else
+        {
+            KUserSingleton.nStatus = [[parameters objectForKey:__strVersion] intValue];
+            [UserDefaults setBool:KUserSingleton.nStatus forKey:__strVersion];
+            [UserDefaults synchronize];
+        }
     } fail:nil];
 }
 

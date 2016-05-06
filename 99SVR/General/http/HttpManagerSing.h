@@ -87,7 +87,7 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 - (void) RequestTeamIntroduce:(int)teamId;
 
 // 请求贡献榜
-- (void) RequestConsumeRank:(int)teamId;
+- (void)RequestConsumeRank:(int)teamId;
 
 // 提问
 - (void) PostAskQuestion:(int)teamId stock:(const char*)stock question:(const char *)question;
