@@ -51,7 +51,12 @@
     strDate = [fmt stringFromDate:date];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self createText];
-    [_txtName becomeFirstResponder];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [_txtName becomeFirstResponder];
+    });
+    
 }
 
 - (void)createText
@@ -291,12 +296,12 @@
     {
         //直接绑定手机
         paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(3),@"code":strCode};
-        strInfo = [NSString stringWithFormat:@"%@Message/bindPhone",kRegisterNumber];
+        strInfo = [NSString stringWithFormat:@"%@User/bindPhone",kRegisterNumber];
     }
     else
     {
         paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"action":@(4),@"code":strCode};
-        strInfo = [NSString stringWithFormat:@"%@Message/checkphonecode",kRegisterNumber];
+        strInfo = [NSString stringWithFormat:@"%@User/checkphonecode",kRegisterNumber];
     }
     @WeakObj(self);
     __block int __banding = banding;

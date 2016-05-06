@@ -8,6 +8,7 @@
 
 #import "RoomHeaderView.h"
 #import "CustomViewController.h"
+#import "ShareFunction.h"
 
 @implementation RoomHeaderView
 
@@ -32,31 +33,31 @@
     [_lblTitle setTextColor:UIColorFromRGB(0xffffff)];
     [_lblTitle setTextAlignment:NSTextAlignmentCenter];
     
-    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-130,45,80, 20)];
-    [self addSubview:lblTemp];
-    [lblTemp setFont:XCFONT(13)];
-    [lblTemp setTextColor:UIColorFromRGB(0xf8f8f8)];
-    [lblTemp setTextAlignment:NSTextAlignmentRight];
-    [lblTemp setText:@"累计人气:"];
-    lblTemp.textColor = RGBA(255, 255, 255, 0.8);
+    _lblTemp = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-130,45,80, 20)];
+    [self addSubview:_lblTemp];
+    [_lblTemp setFont:XCFONT(13)];
+    [_lblTemp setTextColor:UIColorFromRGB(0xf8f8f8)];
+    [_lblTemp setTextAlignment:NSTextAlignmentRight];
+    [_lblTemp setText:@"累计人气:"];
+    _lblTemp.textColor = RGBA(255, 255, 255, 0.8);
     
-    _lblCount = [[UILabel alloc] initWithFrame:Rect(lblTemp.x+lblTemp.width+3,lblTemp.y,45, 20)];
+    _lblCount = [[UILabel alloc] initWithFrame:Rect(_lblTemp.x+_lblTemp.width+3,_lblTemp.y,45, 20)];
     [self addSubview:_lblCount];
     [_lblCount setFont:XCFONT(13)];
     [_lblCount setTextColor:UIColorFromRGB(0xffffff)];
     [_lblFans setTextAlignment:NSTextAlignmentLeft];
     _lblCount.textColor = RGBA(255, 255, 255, 0.8);
     
-    UILabel *lblFanTemp = [[UILabel alloc] initWithFrame:Rect(_lblCount.x+_lblCount.width+15,_lblCount.y,30, 20)];
+    _lblFanTemp = [[UILabel alloc] initWithFrame:Rect(_lblCount.x+_lblCount.width+15,_lblCount.y,30, 20)];
     
-    [self addSubview:lblFanTemp];
-    [lblFanTemp setFont:XCFONT(13)];
-    [lblFanTemp setTextColor:UIColorFromRGB(0xf8f8f8)];
-    [lblFanTemp setTextAlignment:NSTextAlignmentRight];
-    [lblFanTemp setText:@"粉丝:"];
-    lblFanTemp.textColor = RGBA(255, 255, 255, 0.8);
+    [self addSubview:_lblFanTemp];
+    [_lblFanTemp setFont:XCFONT(13)];
+    [_lblFanTemp setTextColor:UIColorFromRGB(0xf8f8f8)];
+    [_lblFanTemp setTextAlignment:NSTextAlignmentLeft];
+    [_lblFanTemp setText:@"粉丝:"];
+    _lblFanTemp.textColor = RGBA(255, 255, 255, 0.8);
     
-    _lblFans = [[UILabel alloc] initWithFrame:Rect(lblFanTemp.x+lblFanTemp.width+3,lblFanTemp.y,45, 20)];
+    _lblFans = [[UILabel alloc] initWithFrame:Rect(_lblFanTemp.x+_lblFanTemp.width+3,_lblFanTemp.y,45, 20)];
     [self addSubview:_lblFans];
     [_lblFans setFont:XCFONT(13)];
     [_lblFans setTextColor:UIColorFromRGB(0xffffff)];
@@ -98,10 +99,18 @@
 
 - (void)setDict:(NSDictionary *)dict
 {
-//    CGRect frame
+    CGSize sizeCount = [ShareFunction calculationOfTheText:dict[@"count"] withFont:13 withMaxSize:CGSizeMake(kScreenWidth, 20)];
     
+    CGSize sizeFans = [ShareFunction calculationOfTheText:@"粉丝" withFont:13 withMaxSize:CGSizeMake(kScreenWidth, 20)];
+    _lblCount.text = dict[@"count"];
+    _lblFans.text = dict[@"fans"];
     
-//    _lblCount.frame =
+    _lblCount.frame = Rect(kScreenWidth/2-sizeCount.width+5-5, 45, sizeCount.width+5, 20);
+    _lblTemp.frame = Rect(_lblCount.x-90, 45, 80, 20);
+    
+    _lblFanTemp.frame = Rect(kScreenWidth/2+5, 45,sizeFans.width+5,20);
+    _lblFans.frame = Rect(_lblFanTemp.x+_lblFanTemp.width+5,45,50, 20);
+    
 }
 
 @end
