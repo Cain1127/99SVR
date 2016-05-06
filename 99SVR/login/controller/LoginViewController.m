@@ -232,19 +232,19 @@
     
     UIButton *btnQQ = [UIButton buttonWithType:UIButtonTypeCustom];
     
-//    if ([TencentOAuth iphoneQQInstalled])
-//    {
+    if ([TencentOAuth iphoneQQInstalled])
+    {
         [hidenView addSubview:btnQQ];
-//    }
+    }
     btnQQ.frame = Rect(kScreenWidth/2-22, 50, 44, 44);
     [btnQQ setImage:[UIImage imageNamed:@"QQLogin"] forState:UIControlStateNormal];
     [btnQQ setImage:[UIImage imageNamed:@"QQLogin_h"] forState:UIControlStateHighlighted];
     [btnQQ addTarget:self action:@selector(qqLogin) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *btnWeiBo = [UIButton buttonWithType:UIButtonTypeCustom];
-//    if ([WeiboSDK isWeiboAppInstalled]) {
+    if ([WeiboSDK isWeiboAppInstalled]) {
         [hidenView addSubview:btnWeiBo];
-//    }
+    }
     [btnWeiBo setImage:[UIImage imageNamed:@"weibo"] forState:UIControlStateNormal];
     [btnWeiBo setImage:[UIImage imageNamed:@"weibo_h"] forState:UIControlStateHighlighted];
     btnWeiBo.frame = Rect(kScreenWidth/2+62, 50, 44, 44);
@@ -259,12 +259,12 @@
         [btnWeiChat setImage:[UIImage imageNamed:@"weichat_h"] forState:UIControlStateHighlighted];
         [btnWeiChat addTarget:self action:@selector(weiChatLogin) forControlEvents:UIControlEventTouchUpInside];
         btnWeiChat.frame = Rect(kScreenWidth/2-102, 50, 44, 44);
-        //    if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi])
-        //    {
+    if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi])
+    {
         [hidenView addSubview:btnWeiChat];
-        //    }
-        
     }
+    
+}
 
     
     

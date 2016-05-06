@@ -11,6 +11,7 @@
 @protocol RoomHeadViewDelegate <NSObject>
 
 @optional
+
 - (void)selectIndexSegment:(NSInteger)nIndex;
 - (void)enterTeamIntroduce;
 - (void)exitRoomHeader;
@@ -29,5 +30,7 @@
 @property (nonatomic,strong) UIButton *btnRight;
 
 @property (nonatomic,strong) UISegmentedControl *segmented;
+
+- (void)setDict:(NSDictionary *)dict;
 
 @end

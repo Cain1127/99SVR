@@ -7,7 +7,10 @@
 //
 
 #import "AudioPlayer.h"
+#import <AVFoundation/AVAudioSession.h>
+
 @implementation AudioPlayer
+
 @synthesize mQueue;
 
 void AQBufferCallback(void *                inUserData ,
@@ -27,6 +30,21 @@ void AQBufferCallback(void *                inUserData ,
     
 }
 
+- (void)handleAudioNotify:(NSNotification *)notification
+{
+    if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification])
+    {
+        if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]])
+        {
+            
+        }
+        else if([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeEnded]])
+        {
+            
+        }
+    }
+}
+
 -(id)init
 {
     return [self initWithSampleRate:16000];
@@ -35,16 +53,21 @@ void AQBufferCallback(void *                inUserData ,
 -(id)initWithSampleRate:(int)sampleRate
 {
     self = [super init];
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleAudioNotify:) name:AVAudioSessionInterruptionNotification object:nil];
     if(self)
     {
         memset(&mPlayFormat, 0, sizeof(mPlayFormat));
         mPlayFormat.mFormatID = kAudioFormatLinearPCM;
-        mPlayFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
-        mPlayFormat.mBitsPerChannel = 16;
-        mPlayFormat.mChannelsPerFrame = 2;
-        mPlayFormat.mBytesPerPacket = mPlayFormat.mBytesPerFrame = (mPlayFormat.mBitsPerChannel / 8) * mPlayFormat.mChannelsPerFrame;
+        mPlayFormat.mSampleRate = 44100;
+        mPlayFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger;
         mPlayFormat.mFramesPerPacket = 1;
-        mPlayFormat.mSampleRate = sampleRate;
+        mPlayFormat.mBytesPerFrame = 4;
+        mPlayFormat.mBitsPerChannel = 16;
+        mPlayFormat.mBytesPerPacket = 4;
+        mPlayFormat.mChannelsPerFrame = 2;
         mIsRunning = false;
         mIsInitialized = false;
     }
@@ -60,6 +83,7 @@ void AQBufferCallback(void *                inUserData ,
     for (int i=0; i<kNumberBuffers; i++) {
         AudioQueueAllocateBuffer(mQueue, mBufferByteSize,  &mBuffers[i]);
     }
+    
     AudioQueueSetParameter(mQueue, kAudioQueueParam_Volume, 1.0);
     mIsInitialized = true;
     int ret = pipe(pip_fd);
@@ -82,12 +106,13 @@ void AQBufferCallback(void *                inUserData ,
     NSLog(@"stop play queue");
 }
 
--(void)putAudioData:(short*)pcmData
+-(void)putAudioData:(short*)pcmData size:(int)nSize
 {
+    
     if (!mIsRunning) {
-        memcpy(mBuffers[mIndex]->mAudioData, pcmData, mBufferByteSize);
-        mBuffers[mIndex]->mAudioDataByteSize = mBufferByteSize;
-        mBuffers[mIndex]->mPacketDescriptionCount = mBufferByteSize/2;
+        memcpy(mBuffers[mIndex]->mAudioData, pcmData, nSize);
+        mBuffers[mIndex]->mAudioDataByteSize = nSize;
+        mBuffers[mIndex]->mPacketDescriptionCount = nSize/2;
         AudioQueueEnqueueBuffer(mQueue, mBuffers[mIndex], 0, NULL);
         NSLog(@"fill audio queue buffer[%d]",mIndex);
         if(mIndex == kNumberBuffers - 1) {
@@ -98,7 +123,7 @@ void AQBufferCallback(void *                inUserData ,
             mIndex++;
         }
     }else {
-        if(write(pip_fd[1], pcmData, mBufferByteSize) < 0){
+        if(write(pip_fd[1], pcmData, nSize) < 0){
             NSLog(@"write to the pipe failed!");
         }
     }

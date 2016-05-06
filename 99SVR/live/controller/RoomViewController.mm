@@ -187,8 +187,8 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 - (void)loadHeadModel
 {
     headView.lblTitle.text = _room.teamname;
-    headView.lblCount.text = NSStringFromInt(nRoom_count_info);
-    headView.lblFans.text = NSStringFromInt(nRoom_fans_info);
+    NSDictionary *dict = @{@"count":NSStringFromInt(nRoom_count_info),@"fans":NSStringFromInt(nRoom_fans_info)};
+    [headView setDict:dict];
 }
 
 /**

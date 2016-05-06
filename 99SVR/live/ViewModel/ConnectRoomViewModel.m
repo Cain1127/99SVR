@@ -29,6 +29,7 @@
     RoomViewController *roomView = [RoomViewController sharedRoomViewController];
     if ([roomView.room.roomid isEqualToString:room.roomid])
     {
+        [_control.view hideToastActivity];
         [_control.navigationController pushViewController:roomView animated:YES];
         return ;
     }
@@ -42,7 +43,6 @@
 }
 
 - (void)joinRoomErr:(NSNotification *)notify{
-    [DecodeJson cancelPerfor:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     if ([notify.object isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dict = [notify object];
@@ -55,12 +55,16 @@
             }
             else
             {
+                @WeakObj(_control)
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    [_controlWeak.view hideToastActivity];
                     [ProgressHUD showError:@"加入房间失败或房间被关闭"];
                 });
             }
         }
-        else{
+        else
+        {
+            [DecodeJson cancelPerfor:self];
             @WeakObj(strMsg)
             [[NSNotificationCenter defaultCenter] removeObserver:self];
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -78,12 +82,14 @@
         [_controlWeak.view hideToastActivity];
         if (KUserSingleton.nStatus)
         {
+            [_controlWeak.view hideToastActivity];
             RoomViewController *roomView = [RoomViewController sharedRoomViewController];
             [roomView setRoom:_room];
             [_controlWeak.navigationController pushViewController:roomView animated:YES];
         }
         else
         {
+            [_controlWeak.view hideToastActivity];
             ZLRoomVideoViewController *control = [[ZLRoomVideoViewController alloc] initWithModel:_room];
             [_controlWeak.navigationController pushViewController:control animated:YES];
         }

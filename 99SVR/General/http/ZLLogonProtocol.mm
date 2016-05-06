@@ -770,42 +770,42 @@ void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
     
     case 201:
     {
-        strMsg = @"[系统消息]需要输入密码";
+        strMsg = @"需要输入密码";
     }
     break;
     case 101:
     {
-        strMsg = @"[系统消息]房间黑名单";
+        strMsg = @"]房间黑名单";
     }
     break;
     case 203:
     {
-        strMsg = @"[系统消息]用户名/密码查询错误，无法加入房间!";
+        strMsg = @"用户名/密码查询错误，无法加入房间!";
     }
     break;
     case 404:
     {
-        strMsg = @"[系统消息]加入房间 不存在";
+        strMsg = @"加入房间 不存在";
     }
     break;
     case 405:
     {
-        strMsg = @"[系统消息]房间已经被房主关闭，不能进入";
+        strMsg = @"房间已经被房主关闭，不能进入";
     }
     break;
     case 502:
     {
-        strMsg = @"[系统消息]房间人数已满";
+        strMsg = @"房间人数已满";
     }
     break;
     case 505:
     {
-        strMsg = @"[系统消息]通信版本过低，不能使用，请升级";
+        strMsg = @"通信版本过低，不能使用，请升级";
     }
     break;
     default:
     {
-        strMsg = @"[系统消息]未知错误";
+        strMsg = @"未知错误";
     }
     break;
     }
