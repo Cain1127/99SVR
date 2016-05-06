@@ -254,6 +254,10 @@
 
 - (void)requestQuestion:(NSString *)strName content:(NSString *)strContent
 {
+    
+    //提问完再次检测提问次数
+    [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
+    
     char cName[100]={0};
     char cContent[400]={0};
     strcpy(cName, [strName UTF8String]);
@@ -704,13 +708,16 @@
         case 1:
         {
             if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+
                 [_giftView updateGoid];
                 [UIView animateWithDuration:0.5 animations:^{
                     _questionView.hidden = NO;
                     [_questionView setFrame:Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight)];
                     NSString *strmsg = [NSString stringWithFormat:@"温馨提示:您还剩%d次免费提问的机会，问股仅供参考，不构成投资建议",_question_times];
                     _questionView.lblTimes.text = strmsg;
-                } completion:^(BOOL finished) {}];
+                } completion:^(BOOL finished) {
+                
+                }];
             }
             else
             {
