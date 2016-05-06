@@ -13,7 +13,7 @@
 - (void)showNumber:(int)nNum
 {
     if (!_readNumber) {
-        _readNumber = [[UILabel alloc] initWithFrame:Rect(self.frame.size.width-22, 0, 16, 16)];
+        _readNumber = [[UILabel alloc] initWithFrame:Rect(self.frame.size.width-18, 5, 16, 16)];
         _readNumber.layer.cornerRadius = 8;
         _readNumber.layer.masksToBounds = YES;
         [_readNumber setBackgroundColor:[UIColor redColor]];

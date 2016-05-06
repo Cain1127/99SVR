@@ -69,7 +69,7 @@
     [_listTableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     _listTableView.delegate = self;
     _listTableView.dataSource = self;
-
+    [_listTableView setSeparatorColor:COLOR_Line_Small_Gay];
     _listTableView.tableHeaderView = [self tableHeaderView];
     
     [self.view addSubview:_listTableView];
