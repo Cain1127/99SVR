@@ -196,9 +196,9 @@
 
 - (void)initSlideView{
     _menuView = [[SliderMenuView alloc] initWithFrame:Rect(0,kVideoImageHeight, kScreenWidth,self.view.height-kVideoImageHeight)
-                                           withTitles:@[@"聊天",@"我的",@"公告",@"课程表",@"贡献榜"] withDefaultSelectIndex:0];
+                                           withTitles:@[@"聊天",@"我的",@"公告",@"课程表",@"贡献榜"] withDefaultSelectIndex:1];
     _menuView.viewArrays = @[_chatAllView,_priChatView,_noticeView,_teachView,_tableConsumeRank];
-    
+    _menuView.bottomScroView.scrollEnabled = NO;
     _menuView.DidSelectSliderIndex = ^(NSInteger index)
     {
         _nSelectIndex = index;
