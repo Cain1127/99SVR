@@ -71,7 +71,7 @@
     
     // 疑问
     UIButton *questionButton= [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth - 40, 0, 40, 40)];
-    [questionButton setImage:[UIImage imageNamed:@"pwd_play_h"] forState:UIControlStateNormal];
+    [questionButton setImage:[UIImage imageNamed:@"text_ live_ask_icon"] forState:UIControlStateNormal];
     [questionButton addTarget:self action:@selector(questionClick) forControlEvents:UIControlEventTouchUpInside];
     [headerSectionView addSubview:questionButton];
     

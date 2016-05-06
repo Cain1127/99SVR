@@ -65,7 +65,7 @@
 //    [self.view addSubview:_leftMenuHeaderView];
     
     //添加一个tableView
-    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) style:UITableViewStyleGrouped];
+    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64 - 49) style:UITableViewStyleGrouped];
     [_listTableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     _listTableView.delegate = self;
     _listTableView.dataSource = self;

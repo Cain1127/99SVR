@@ -87,16 +87,16 @@
     [self.view addSubview:whatPrivate];
     whatPrivate.hidden = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPrivate)
-                                                 name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+
     [kHTTPSingle RequestWhatIsPrivateService];
 }
 
-- (void)requestPrivate
+- (void)refreshData:(NSNotification *)notify
 {
     [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
-
+#pragma mark 兑换私人订制
 - (void)buyprivate
 {
     TQPurchaseViewController *control = [[TQPurchaseViewController alloc] init];
@@ -197,42 +197,53 @@
                 }
                 [self.tableView reloadData];
             });
-            return;
+        }else{//请求错误
+            
         }
         
+        [self chickEmptyViewShow:self.dataSource.aryVIP withCode:[NSString stringWithFormat:@"%d",code]];
     }
 }
 
-//#pragma mark
-//-(void)chickEmptyViewShow:(NSArray *)dataArray withCode:(NSString *)code{
-//    
-//    WeakSelf(self);
-//    
-//    [self showEmptyViewInView:weakSelf.tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
-//        
-//        Loading_Bird_Show(weakSelf.tableView);
-//        [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
-//    }];
-//    
-//    if (dataArray.count==0&&[code intValue]!=1) {//数据为0 错误代码不为1
-//        
-//        [self showErrorViewInView:self.tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
-//            
-//            
-//        }];
-//        
-//    }else if (dataArray.count==0&&[code intValue]==1){
-//        
-//        [self showEmptyViewInView:weakSelf.tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
-//           
-//            Loading_Bird_Show(weakSelf.tableView);
-//            [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
-//        }];
-//        
-//    }else{
-//        [self hideEmptyViewInView:weakSelf.tableView];
-//    }
-//}
+#pragma mark
+-(void)chickEmptyViewShow:(NSArray *)dataArray withCode:(NSString *)code{
+    
+    WeakSelf(self);
+
+    __weak typeof(_room) weakRoom = _room;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        [self showEmptyViewInView:weakSelf.tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
+            
+            Loading_Bird_Show(weakSelf.tableView);
+            [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[weakRoom.teamid intValue]];
+        }];
+        
+        if (dataArray.count==0&&[code intValue]!=1) {//数据为0 错误代码不为1
+            
+            [self showErrorViewInView:weakSelf.tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
+                
+                Loading_Bird_Show(weakSelf.tableView);
+                [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[weakRoom.teamid intValue]];
+
+            }];
+            
+        }else if (dataArray.count==0&&[code intValue]==1){//请求成功 空数据
+            
+            [self showEmptyViewInView:weakSelf.tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
+                
+            }];
+            
+        }else{
+            [self hideEmptyViewInView:weakSelf.tableView];
+        }
+
+    });
+    
+    
+    
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -249,7 +260,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
 }
 
 - (void)loadWhatsPrivate:(NSNotification *)notify
@@ -278,4 +289,13 @@
     XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
     [self.navigationController pushViewController:control animated:YES];
 }
+
+-(void)dealloc{
+    
+    DLog(@"delloc");
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+    
+}
+
 @end
