@@ -210,7 +210,7 @@
         make.bottom.equalTo(_txtPwd);
     }];
 
-    _btnLogin.frame = Rect(15, _txtPwd.y+_txtPwd.height+30, kScreenWidth-30, 40);
+    _btnLogin.frame = Rect(15, _txtPwd.y+_txtPwd.height+15, kScreenWidth-30, 40);
     _btnFind.titleLabel.font = XCFONT(15);
     _btnRegin.titleLabel.font = XCFONT(15);
     _btnRegin.frame = Rect(20, kScreenHeight-50, findSize.width, 40);

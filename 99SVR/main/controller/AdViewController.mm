@@ -61,7 +61,7 @@ NSUInteger secondsCountDown = 5;//倒计时秒数
     _adButton.titleLabel.font = [UIFont systemFontOfSize:16];
     [_adButton setTitle:[NSString stringWithFormat:@"%lu 跳过",(unsigned long)secondsCountDown] forState:UIControlStateNormal];
     _adButton.backgroundColor = [UIColor whiteColor];
-    [_adButton setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
+    [_adButton setTitleColor:COLOR_Text_Gay forState:UIControlStateNormal];
     [_adButton addTarget:self action:@selector(adSkipClick) forControlEvents:UIControlEventTouchUpInside];
     _adButton.frame = CGRectMake(kScreenWidth - 75, 25 , 60, 35);
     _adButton.titleLabel.font = XCFONT(14);
