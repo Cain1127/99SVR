@@ -296,12 +296,12 @@
     {
         //直接绑定手机
         paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(3),@"code":strCode};
-        strInfo = [NSString stringWithFormat:@"%@Message/bindPhone",kRegisterNumber];
+        strInfo = [NSString stringWithFormat:@"%@User/bindPhone",kRegisterNumber];
     }
     else
     {
         paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"action":@(4),@"code":strCode};
-        strInfo = [NSString stringWithFormat:@"%@Message/checkphonecode",kRegisterNumber];
+        strInfo = [NSString stringWithFormat:@"%@User/checkphonecode",kRegisterNumber];
     }
     @WeakObj(self);
     __block int __banding = banding;
