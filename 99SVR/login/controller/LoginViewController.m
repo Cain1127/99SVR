@@ -250,16 +250,23 @@
     btnWeiBo.frame = Rect(kScreenWidth/2+62, 50, 44, 44);
     [btnWeiBo addTarget:self action:@selector(sinaLogin) forControlEvents:UIControlEventTouchUpInside];
     
-    UIButton *btnWeiChat = [UIButton buttonWithType:UIButtonTypeCustom];
-    [hidenView addSubview:btnWeiChat];
-    [btnWeiChat setImage:[UIImage imageNamed:@"weichat"] forState:UIControlStateNormal];
-    [btnWeiChat setImage:[UIImage imageNamed:@"weichat_h"] forState:UIControlStateHighlighted];
-    [btnWeiChat addTarget:self action:@selector(weiChatLogin) forControlEvents:UIControlEventTouchUpInside];
-    btnWeiChat.frame = Rect(kScreenWidth/2-102, 50, 44, 44);
-//    if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi])
-//    {
+    // 检测微信是否安装
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]]) {
+        
+        UIButton *btnWeiChat = [UIButton buttonWithType:UIButtonTypeCustom];
         [hidenView addSubview:btnWeiChat];
-//    }
+        [btnWeiChat setImage:[UIImage imageNamed:@"weichat"] forState:UIControlStateNormal];
+        [btnWeiChat setImage:[UIImage imageNamed:@"weichat_h"] forState:UIControlStateHighlighted];
+        [btnWeiChat addTarget:self action:@selector(weiChatLogin) forControlEvents:UIControlEventTouchUpInside];
+        btnWeiChat.frame = Rect(kScreenWidth/2-102, 50, 44, 44);
+        //    if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi])
+        //    {
+        [hidenView addSubview:btnWeiChat];
+        //    }
+        
+    }
+
+    
     
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(popBack) image:@"back" highImage:@"back"];
     [self.view addSubview:btnLeft];
@@ -276,6 +283,7 @@
 #pragma mark 微信登录请求
 - (void)weiChatLogin
 {
+    
     [self.view makeToastActivity_bird];
     SendAuthReq *req = [[SendAuthReq alloc] init];
     req.scope = @"snsapi_userinfo,snsapi_base";
