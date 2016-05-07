@@ -4,7 +4,7 @@
 #define typeLab_Top_h (((self.height*2/3) - typeLab_h)/2.0)//日收益 月收益 总收益的lab 距离顶部的高度
 #define stockNam_fot ValueWithTheIPhoneModelString(@"15,15,15,15")//股票的名称大小
 #define totalTitLabFont ValueWithTheIPhoneModelString(@"15,15,15,15")//总收益的大小
-#define totalNumLabFont ValueWithTheIPhoneModelString(@"25,25,25,25")//总收益的大小
+#define totalNumLabFont ValueWithTheIPhoneModelString(@"20,20,25,25")//总收益,收益排行，与收益，日收益数字的大小
 
 #import "StockDealHeaderView.h"
 #import "StockMacro.h"
@@ -100,7 +100,7 @@
     
     [AttributedStr addAttribute:NSFontAttributeName
      
-                          value:[UIFont systemFontOfSize:25.0]
+                          value:[UIFont systemFontOfSize:totalNumLabFont]
      
                           range:NSMakeRange(2, rankStr.length-2)];
     
@@ -172,7 +172,7 @@
     
     
     self.numLab = [[UILabel alloc]init];
-    self.numLab.font = [UIFont systemFontOfSize:25];
+    self.numLab.font = [UIFont systemFontOfSize:totalNumLabFont];
     self.numLab.textColor = [UIColor whiteColor];
     self.numLab.textAlignment = NSTextAlignmentCenter;
     [self addSubview:self.numLab];
@@ -189,7 +189,7 @@
         make.left.equalTo(@0);
         make.bottom.equalTo(@0);
         make.right.equalTo(@0);
-        make.height.equalTo(@25);
+        make.height.equalTo(@(totalNumLabFont));
     }];
 }
 

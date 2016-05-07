@@ -545,7 +545,7 @@ void ZLHallListener::OnBuyPrivateVipResp(BuyPrivateVipResp& info)
     uint32	_viptype;
     uint64	_nk;  */
     NSDictionary *didct = @{@"userid":@(info.userid()),@"teacherid":@(info.teacherid()),@"viptype":@(info.viptype()),@"goid":@(info.nk()),@"code":@"1"};
-    [UserInfo sharedUserInfo].goldCoin = info.nk();
+    [UserInfo sharedUserInfo].goldCoin = info.nk()/1000.0;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_BUY_PRIVATE_VIP_VC object:didct];
 }
 
