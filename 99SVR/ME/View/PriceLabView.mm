@@ -1,6 +1,13 @@
 
+
+#define vipOldPriceText_Font ValueWithTheIPhoneModelString(@"12,12,15,15") //vip
+#define notVipOldPriceText_Font ValueWithTheIPhoneModelString(@"10,10,12,12")//没有vip
+#define newPriceText_Font ValueWithTheIPhoneModelString(@"12,12,15,15")//
+
+
 #import "PriceLabView.h"
 #import "ShareFunction.h"
+#import "StockMacro.h"
 @interface PriceLabView ()
 @property (nonatomic , strong) UILabel *oldpriceLab;
 @property (nonatomic , strong) UILabel *newpriceLab;
@@ -23,12 +30,13 @@
         
         
         self.newpriceLab = [[UILabel alloc]init];
-        self.newpriceLab.font = Font_15;
+        self.newpriceLab.font = [UIFont systemFontOfSize:newPriceText_Font];
         [self addSubview:self.newpriceLab];
         
         self.oleLabLineView = [[UIView alloc]init];
         self.oleLabLineView.backgroundColor = COLOR_Text_Gay;
         [self addSubview:self.oleLabLineView];
+        
     }
     return self;
 }
@@ -41,7 +49,7 @@
         
         self.newpriceLab.hidden = YES;
         self.oleLabLineView.hidden = YES;
-        self.oldpriceLab.font = Font_15;
+        self.oldpriceLab.font = [UIFont systemFontOfSize:vipOldPriceText_Font];
         self.oldpriceLab.textColor = COLOR_Text_Gay;
         self.oldpriceLab.text = _oldpriceStr;
         [self.oldpriceLab sizeToFit];
@@ -64,7 +72,7 @@
         }];
         
         self.oldpriceLab.text = _oldpriceStr;
-        self.oldpriceLab.font = Font_12;
+        self.oldpriceLab.font = [UIFont systemFontOfSize:notVipOldPriceText_Font];
         self.newpriceLab.textColor = COLOR_Auxiliary_Orange;
         self.oldpriceLab.textColor = COLOR_Text_Gay;
         self.width = self.newpriceLab.width;

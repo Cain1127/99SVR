@@ -15,7 +15,7 @@
  *  未登录的提示
  *
  *  @param sender 当前控制器
- *  @param msg    提示
+ *  @param msg    提示 (前缀统一为：登录后才能xxxxxxxxxx)
  *  @param block  回调
  */
 + (void)createLoginAlert:(UIViewController *)sender withMsg:(NSString *)msg block:(void (^)())block;
