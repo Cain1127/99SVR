@@ -90,7 +90,7 @@
     ///微信支付
     context[@"Wxpay"] = ^() {
         if (![WXApi isWXAppInstalled]) {
-            [ProgressHUD showError:@"请先安装微信"];
+            [ProgressHUD showError:@"没有安装微信,无法支付"];
         }
         else
         {
