@@ -95,4 +95,12 @@
     }
 }
 
+// 滑动关闭键盘
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ([_delegate respondsToSelector:@selector(HistorySearchCloseKeyboard)]) {
+        [_delegate HistorySearchCloseKeyboard];
+    }
+}
+
 @end

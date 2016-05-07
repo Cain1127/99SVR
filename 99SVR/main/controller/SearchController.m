@@ -24,7 +24,7 @@
 #import "TableViewFactory.h"
 #import "UIViewController+EmpetViewTips.h"
 
-@interface SearchController()<UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate,HistoryDelegate>
+@interface SearchController()<UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate,HistoryDelegate,UIScrollViewDelegate>
 {
     NSArray *_keywordsArr;
     UIView *_accessoryView; // 遮盖层
@@ -219,17 +219,13 @@
     _searchResultsTable.frame = Rect(0,_mySearchBar.y+_mySearchBar.height+8,kScreenWidth,kScreenHeight-(_mySearchBar.y+_mySearchBar.height+8));
     [_searchResultsTable registerClass:[VideoCell class] forCellReuseIdentifier:@"cellId"];
     
+    // 历史记录
     _historyTable = [TableViewFactory createTableViewWithFrame:Rect(0, _mySearchBar.y+_mySearchBar.height, kScreenWidth, kScreenHeight - (_mySearchBar.y+_mySearchBar.height)) withStyle:UITableViewStylePlain];
     [self.view addSubview:_historyTable];
     [_historyTable setBackgroundColor:UIColorFromRGB(0xffffff)];
     _dataSource = [[HistorySearchDataSource alloc] init];
     _historyTable.dataSource = _dataSource;
     _historyTable.delegate = _dataSource;
-
-    UITapGestureRecognizer *tapGr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHideTapped:)];
-    tapGr.cancelsTouchesInView = NO;
-    [_historyTable addGestureRecognizer:tapGr];
-    
     _dataSource.delegate = self;
     NSArray *array = [UserDefaults objectForKey:kHistoryList];
     if (array.count)
@@ -238,6 +234,10 @@
         _historyTable.tableFooterView = self.footView;
         [_historyTable reloadData];
     }
+    // 给历史记录添加关闭键盘手势
+    UITapGestureRecognizer *tapGr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHideTapped:)];
+    tapGr.cancelsTouchesInView = NO;
+    [_historyTable addGestureRecognizer:tapGr];
 }
 
 #pragma mark 开始搜索
@@ -282,6 +282,7 @@
                 @WeakObj(self);
                 [self showEmptyViewInView:_searchResultsTable withMsg:@"没有搜索结果" touchHanleBlock:^{
                     @StrongObj(self);
+                    [self.view endEditing:YES]; // 关闭键盘
                     [self startSearch:_mySearchBar.text];
                 }];
             }
@@ -356,8 +357,8 @@
     
     //[tableAry addObject:strText];
     [tableAry insertObject:strText atIndex:0]; // 插入排在最上面
-    if (tableAry.count>5) {
-        [tableAry removeObjectAtIndex:0];
+    if (tableAry.count > 5) {
+        [tableAry removeObject:tableAry.lastObject]; // 删除最后一条搜索记录
     }
     [UserDefaults setObject:tableAry forKey:kHistoryList];
     [UserDefaults synchronize];
@@ -398,6 +399,9 @@
     [self startSearch:textField.text];
 }
 
+#pragma mark - HistorySearch代理方法
+
+// HistorySearch代理方法 -- 清除搜索记录
 - (void)delSelectIndex:(NSString *)strInfo{
     NSArray *array = [UserDefaults objectForKey:kHistoryList];
     NSMutableArray *tableAry = [NSMutableArray array];
@@ -419,12 +423,14 @@
     [_historyTable reloadData];
 }
 
+// HistorySearch代理方法 -- 选择搜索记录
 - (void)selectIndex:(NSString *)strInfo
 {
     _mySearchBar.text = strInfo;
     [self startSearch:strInfo];
 }
 
+// HistorySearch代理方法 -- 删除搜索记录
 - (void)deleteAll
 {
     NSArray *array = [UserDefaults objectForKey:kHistoryList];
@@ -440,6 +446,12 @@
     [_dataSource setModel:tableAry];
     _historyTable.tableFooterView = nil;
     [_historyTable reloadData];
+}
+
+// HistorySearch代理方法 -- 关闭键盘
+-(void)HistorySearchCloseKeyboard
+{
+    [self.view endEditing:YES];
 }
 
 - (void)dealloc

@@ -18,9 +18,11 @@
 
 - (void)deleteAll;
 
+- (void)HistorySearchCloseKeyboard;
+
 @end
 
-@interface HistorySearchDataSource : NSObject<UITableViewDelegate,UITableViewDataSource>
+@interface HistorySearchDataSource : NSObject<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
 
 @property (nonatomic,assign) id<HistoryDelegate> delegate;
 
