@@ -97,6 +97,10 @@
         make.bottom.equalTo(@(-storehouse_top_bottom));
     }];
     
+    
+    //隐藏什么是私人订制
+    self.serviceLab.hidden = YES;
+    
 }
 /**购买*/
 -(void)buyLabelClick:(UITapGestureRecognizer *)tap{
