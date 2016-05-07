@@ -310,7 +310,7 @@ void VideoRoomConnection::SendMsg_TeamTopNReq(TeamTopNReq& req)
 void VideoRoomConnection::SendMsg_AskQuestionReq(AskQuestionReq& req)
 {
 	req.set_userid(join_req.userid());
-	req.set_userid(join_req.vcbid());
+	req.set_roomid(join_req.vcbid());
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_AskQuestionReq, req, req.questionlen());
 }
 
