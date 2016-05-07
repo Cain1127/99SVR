@@ -672,9 +672,11 @@
             else
             {
                 @WeakObj(self)
-                [AlertFactory createLoginAlert:self block:^{
+                
+                [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
                     [selfWeak closeRoomInfo];
                 }];
+                
             }
         }
             break;
@@ -694,7 +696,8 @@
             else
             {
                 @WeakObj(self)
-                [AlertFactory createLoginAlert:self block:^{
+                
+                [AlertFactory createLoginAlert:self withMsg:@"送礼物" block:^{
                     [selfWeak closeRoomInfo];
                 }];
             }
@@ -722,7 +725,8 @@
             else
             {
                 @WeakObj(self)
-                [AlertFactory createLoginAlert:self block:^{
+                
+                [AlertFactory createLoginAlert:self withMsg:@"提问" block:^{
                     [selfWeak closeRoomInfo];
                 }];
             }

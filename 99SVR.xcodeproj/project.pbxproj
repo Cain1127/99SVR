@@ -192,6 +192,7 @@
 		B4EA09231CC8B9E000E8F933 /* StockRecordViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09221CC8B9E000E8F933 /* StockRecordViewController.mm */; };
 		B4EA09291CC8DF8400E8F933 /* StockRecordTabModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09281CC8DF8400E8F933 /* StockRecordTabModel.mm */; };
 		B4EA092C1CC8E12600E8F933 /* StockRecordCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA092B1CC8E12600E8F933 /* StockRecordCell.mm */; };
+		B4EE59141CDD77110063FDC3 /* AdLinkShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EE59131CDD77110063FDC3 /* AdLinkShowViewController.m */; };
 		B4FEC65B1CD1B2580090DD50 /* TableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4FEC6591CD1B2580090DD50 /* TableViewCell.mm */; };
 		B4FEC65C1CD1B2580090DD50 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4FEC65A1CD1B2580090DD50 /* TableViewCell.xib */; };
 		B4FEC6691CD1E2FA0090DD50 /* customized_no_opened@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4FEC65D1CD1E2FA0090DD50 /* customized_no_opened@2x.png */; };
@@ -1171,6 +1172,8 @@
 		B4EA092A1CC8E12600E8F933 /* StockRecordCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockRecordCell.h; sourceTree = "<group>"; };
 		B4EA092B1CC8E12600E8F933 /* StockRecordCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockRecordCell.mm; sourceTree = "<group>"; };
 		B4EA092D1CC8E8B800E8F933 /* StockMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockMacro.h; sourceTree = "<group>"; };
+		B4EE59121CDD77110063FDC3 /* AdLinkShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdLinkShowViewController.h; sourceTree = "<group>"; };
+		B4EE59131CDD77110063FDC3 /* AdLinkShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdLinkShowViewController.m; sourceTree = "<group>"; };
 		B4FEC6581CD1B2580090DD50 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
 		B4FEC6591CD1B2580090DD50 /* TableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TableViewCell.mm; sourceTree = "<group>"; };
 		B4FEC65A1CD1B2580090DD50 /* TableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewCell.xib; sourceTree = "<group>"; };
@@ -3803,6 +3806,8 @@
 		BB63F5721C2CC7A300A042E8 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				B4EE59121CDD77110063FDC3 /* AdLinkShowViewController.h */,
+				B4EE59131CDD77110063FDC3 /* AdLinkShowViewController.m */,
 				BB14B9C81CD918360027E7E6 /* GFBaseViewController.h */,
 				BB14B9C91CD918360027E7E6 /* GFBaseViewController.m */,
 				BB14B9CA1CD918360027E7E6 /* GFNavigationController.h */,
@@ -4845,6 +4850,7 @@
 				1879B8FD1CC85C9400E981A5 /* TQGifConllectionCell.m in Sources */,
 				188490FF1CC73F79007FD1ED /* UIBarButtonItem+Item.m in Sources */,
 				BB63F5D41C2CC7A300A042E8 /* UIScrollView+MJExtension.m in Sources */,
+				B4EE59141CDD77110063FDC3 /* AdLinkShowViewController.m in Sources */,
 				BB6F11A91CC78B1600F02064 /* HistorySearchDataSource.m in Sources */,
 				BB2CA9E21CD5E99900DFE56E /* IQToolbar.m in Sources */,
 				18F9710F1C92947F001B2575 /* MD5DataSigner.m in Sources */,

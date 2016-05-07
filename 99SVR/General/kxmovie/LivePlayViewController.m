@@ -477,7 +477,7 @@
         
     }else
     {
-        [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"确定" withMessage:@"您未登陆，登陆后就可以和讲师互动了" completionCallback:^(NSInteger index) {
+        [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"登录" withMessage:@"登录后才能关注讲师" completionCallback:^(NSInteger index) {
             if (index==1) {
                 LoginViewController *loginVC = [[LoginViewController alloc]init];
                 [weakSelf.navigationController pushViewController:loginVC animated:YES];

@@ -640,7 +640,8 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
             else
             {
                 @WeakObj(self)
-                [AlertFactory createLoginAlert:self block:^{
+                
+                [AlertFactory createLoginAlert:self withMsg:@"才能送礼物" block:^{
                     [selfWeak closeRoomInfo];
                 }];
             }

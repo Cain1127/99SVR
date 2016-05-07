@@ -10,8 +10,32 @@
 #import "LoginViewController.h"
 #import "RoomHttp.h"
 #import "Toast+UIView.h"
+#import "UIAlertView+Block.h"
 
 @implementation AlertFactory
+
+/**未登录的操作提示*/
++ (void)createLoginAlert:(UIViewController *)sender withMsg:(NSString *)msg block:(void (^)())block{
+
+   
+    __weak typeof(sender) weakSender = sender;
+    
+    [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:sender withCancleBtnStr:@"取消" withOtherBtnStr:@"登录" withMessage:[NSString stringWithFormat:@"登录后才能%@",msg] completionCallback:^(NSInteger index) {
+        if (index==1) {
+            if (block) {
+                block();
+            }
+            LoginViewController *loginView = [[LoginViewController alloc] init];
+            [weakSender.navigationController pushViewController:loginView animated:YES];
+        }
+        
+    }];
+    
+    
+    
+}
+
+
 
 + (void)createLoginAlert:(UIViewController *)sender block:(void (^)())block
 {

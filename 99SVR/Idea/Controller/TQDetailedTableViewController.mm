@@ -174,9 +174,11 @@
     }
     else
     {
-        [AlertFactory createLoginAlert:self block:^{
+        
+        [AlertFactory createLoginAlert:self withMsg:@"送礼物" block:^{
             
         }];
+        
     }
 }
 
@@ -201,9 +203,11 @@
     {
         _chatView.hidden = NO;
     }else{
-        [AlertFactory createLoginAlert:self block:^{
+        
+        [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
             
         }];
+
     }
 }
 /**
@@ -689,8 +693,12 @@
 {
     UserInfo *info = KUserSingleton;
     if (info.nType != 1 && info.bIsLogin) {
-        [AlertFactory createLoginAlert:self block:^{
+        
+        [AlertFactory createLoginAlert:self withMsg:@"发表评论" block:^{
+            
         }];
+
+        
         return ;
     }
     if ([textView.textStorage getPlainString].length == 0)

@@ -11,6 +11,15 @@
 @class RoomHttp;
 @interface AlertFactory : NSObject
 
+/**
+ *  未登录的提示
+ *
+ *  @param sender 当前控制器
+ *  @param msg    提示
+ *  @param block  回调
+ */
++ (void)createLoginAlert:(UIViewController *)sender withMsg:(NSString *)msg block:(void (^)())block;
+
 + (void)createLoginAlert:(UIViewController *)sender block:(void (^)())block;
 
 + (void)createPassswordAlert:(UIViewController *)sender room:(RoomHttp *)room;
