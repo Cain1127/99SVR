@@ -612,6 +612,9 @@
 		BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = BB98EE5C1CB588C70028AAEF /* SBJsonWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BB9C7EDB1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB9C7EDA1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm */; };
 		BB9C7EF61CDBD47100FD3532 /* UnReadButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9C7EF51CDBD47100FD3532 /* UnReadButton.m */; };
+		BB9C7F5C1CDD560500FD3532 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9C7F5B1CDD560500FD3532 /* AVFoundation.framework */; };
+		BB9C7F5E1CDD561F00FD3532 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9C7F5D1CDD561F00FD3532 /* Security.framework */; };
+		BB9C7F601CDD563200FD3532 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9C7F5F1CDD563200FD3532 /* Foundation.framework */; };
 		BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA16DA41C8C75B000D84E80 /* NSDate+convenience.m */; };
 		BBAB82E41C7049FB00C6AC34 /* ThumButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAB82E31C7049FB00C6AC34 /* ThumButton.m */; };
 		BBAD0DFF1CD19E36002C0FD6 /* ZLRoomVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD0DFE1CD19E36002C0FD6 /* ZLRoomVideoCell.m */; };
@@ -1874,6 +1877,9 @@
 		BB9C7EDA1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZLRoomVideoViewController.mm; sourceTree = "<group>"; };
 		BB9C7EF41CDBD47100FD3532 /* UnReadButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnReadButton.h; sourceTree = "<group>"; };
 		BB9C7EF51CDBD47100FD3532 /* UnReadButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnReadButton.m; sourceTree = "<group>"; };
+		BB9C7F5B1CDD560500FD3532 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		BB9C7F5D1CDD561F00FD3532 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BB9C7F5F1CDD563200FD3532 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BBA16DA31C8C75B000D84E80 /* NSDate+convenience.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+convenience.h"; sourceTree = "<group>"; };
 		BBA16DA41C8C75B000D84E80 /* NSDate+convenience.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+convenience.m"; sourceTree = "<group>"; };
 		BBAB82E21C7049FB00C6AC34 /* ThumButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumButton.h; sourceTree = "<group>"; };
@@ -2050,6 +2056,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB9C7F601CDD563200FD3532 /* Foundation.framework in Frameworks */,
+				BB9C7F5E1CDD561F00FD3532 /* Security.framework in Frameworks */,
+				BB9C7F5C1CDD560500FD3532 /* AVFoundation.framework in Frameworks */,
 				B48591F11CB4FC1E00DAC61F /* WebKit.framework in Frameworks */,
 				BB2E24BA1CB04C1400E0B549 /* libmtasdk.a in Frameworks */,
 				188969081CAD828600C7E04E /* StoreKit.framework in Frameworks */,
@@ -4030,6 +4039,9 @@
 		BB9003C01C8D8395007E1C48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BB9C7F5F1CDD563200FD3532 /* Foundation.framework */,
+				BB9C7F5D1CDD561F00FD3532 /* Security.framework */,
+				BB9C7F5B1CDD560500FD3532 /* AVFoundation.framework */,
 				B48591F01CB4FC1E00DAC61F /* WebKit.framework */,
 				188969071CAD828600C7E04E /* StoreKit.framework */,
 				18F971161C92A40A001B2575 /* JavaScriptCore.framework */,
