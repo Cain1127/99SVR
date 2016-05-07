@@ -3806,8 +3806,6 @@
 		BB63F5721C2CC7A300A042E8 /* controller */ = {
 			isa = PBXGroup;
 			children = (
-				B4EE59121CDD77110063FDC3 /* AdLinkShowViewController.h */,
-				B4EE59131CDD77110063FDC3 /* AdLinkShowViewController.m */,
 				BB14B9C81CD918360027E7E6 /* GFBaseViewController.h */,
 				BB14B9C91CD918360027E7E6 /* GFBaseViewController.m */,
 				BB14B9CA1CD918360027E7E6 /* GFNavigationController.h */,
@@ -3832,6 +3830,8 @@
 				BBB515F61C4D29E3008F2CEC /* AllColletViewController.m */,
 				5AA6D8171CCBC01300841960 /* AdViewController.h */,
 				5AA6D8181CCBC01300841960 /* AdViewController.mm */,
+				B4EE59121CDD77110063FDC3 /* AdLinkShowViewController.h */,
+				B4EE59131CDD77110063FDC3 /* AdLinkShowViewController.m */,
 				5AA6D81A1CCBD00A00841960 /* NewfeatureViewController.h */,
 				5AA6D81B1CCBD00A00841960 /* NewfeatureViewController.m */,
 				BBD58EDD1CCB6D88009250DB /* MyNavigationViewController.h */,
@@ -5297,7 +5297,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5344,7 +5344,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
