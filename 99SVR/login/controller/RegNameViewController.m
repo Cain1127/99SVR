@@ -42,6 +42,9 @@
 @implementation RegNameViewController
 - (void)registerServer
 {
+    // 退出键盘
+    [self.view endEditing:YES];
+    
     if (strDate==nil)
     {
         return ;
@@ -69,6 +72,11 @@
         [ProgressHUD showError:@"密码不能为空"];
         return ;
     }
+    if (![_txtPwd.text isEqualToString:_txtCmd.text]) {
+        [ProgressHUD showError:@"两次输入的密码不一致"];
+        return;
+    }
+    
     if (!_checkAgree.checked) {
         [ProgressHUD showError:@"必须同意《用户服务协议》和《隐私权条款》"];
         return ;

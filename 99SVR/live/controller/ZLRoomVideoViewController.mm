@@ -640,7 +640,8 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
             else
             {
                 @WeakObj(self)
-                [AlertFactory createLoginAlert:self block:^{
+                
+                [AlertFactory createLoginAlert:self withMsg:@"才能送礼物" block:^{
                     [selfWeak closeRoomInfo];
                 }];
             }
@@ -736,7 +737,12 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
 {
     if([UserInfo sharedUserInfo].nType != 1 && ![_room.roomid isEqualToString:@"10000"] && ![_room.roomid isEqualToString:@"10001"])
     {
-        [self.view makeToast:@"游客不能送花"];
+        
+        [AlertFactory createLoginAlert:self withMsg:@"给讲师喝彩" block:^{
+            
+        }];
+
+        
         return ;
     }
     [kProtocolSingle sendRose];

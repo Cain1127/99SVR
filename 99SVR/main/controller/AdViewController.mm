@@ -9,10 +9,11 @@
 #import "AdViewController.h"
 #import "UIImageView+WebCache.h"
 #import "NewfeatureViewController.h"
-//#import "UIWindow+Extension.h"
 #import "SplashModel.h"
 #import "SplashTool.h"
 #import "SwitchRootTool.h"
+#import "AdLinkShowViewController.h"
+#import "AppDelegate.h"
 
 @interface AdViewController ()
 /** 定时器 */
@@ -22,7 +23,7 @@
 
 @implementation AdViewController
 
-NSUInteger secondsCountDown = 5;//倒计时秒数
+NSUInteger secondsCountDown = 3;//倒计时秒数
 
 - (void)viewDidLoad
 {
@@ -49,19 +50,23 @@ NSUInteger secondsCountDown = 5;//倒计时秒数
     // 2.广告图片
     SplashModel *splash = [SplashTool get];
     NSString *str = splash.imageUrl;
-    UIImageView *ad = [[UIImageView alloc] init];
-    ad.contentMode = UIViewContentModeScaleAspectFill;
-    ad.clipsToBounds = YES;
-    ad.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.80);
-    [ad sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"start-mascot"]];
-    [self.view addSubview:ad];
+    UIImageView *adImageView = [[UIImageView alloc] init];
+    adImageView.contentMode = UIViewContentModeScaleAspectFill;
+    adImageView.clipsToBounds = YES;
+    adImageView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.80);
+    adImageView.userInteractionEnabled = YES;
+    [adImageView sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"start-mascot"]];
+    UITapGestureRecognizer *tapGr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(adImageViewTapped:)];
+    tapGr.cancelsTouchesInView = NO;
+    [adImageView addGestureRecognizer:tapGr];
+    [self.view addSubview:adImageView];
     
     // 3.多少秒后跳过，广告倒计时
     _adButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _adButton.titleLabel.font = [UIFont systemFontOfSize:16];
     [_adButton setTitle:[NSString stringWithFormat:@"%lu 跳过",(unsigned long)secondsCountDown] forState:UIControlStateNormal];
     _adButton.backgroundColor = [UIColor whiteColor];
-    [_adButton setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
+    [_adButton setTitleColor:COLOR_Text_Gay forState:UIControlStateNormal];
     [_adButton addTarget:self action:@selector(adSkipClick) forControlEvents:UIControlEventTouchUpInside];
     _adButton.frame = CGRectMake(kScreenWidth - 75, 25 , 60, 35);
     _adButton.titleLabel.font = XCFONT(14);
@@ -96,6 +101,23 @@ NSUInteger secondsCountDown = 5;//倒计时秒数
     _timer=nil;
     
     [SwitchRootTool switchRootForViewController];
+}
+
+// 广告跳转
+-(void)adImageViewTapped:(UITapGestureRecognizer*)tapGr
+{
+    if (_timer.isValid) {
+        [_timer invalidate];
+    }
+    _timer=nil;
+    
+    SplashModel *splash = [SplashTool get];
+    if (splash.url) {
+        AdLinkShowViewController *adLinkShowVc = [[AdLinkShowViewController alloc] init];
+        adLinkShowVc.linkShowUrl = splash.url;
+        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        app.window.rootViewController = adLinkShowVc;
+    }
 }
 
 @end

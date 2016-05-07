@@ -43,6 +43,7 @@
         
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.font = Font_16;
+        _titleLabel.textColor = COLOR_Text_Black;
         [_bgView  addSubview:_titleLabel];
         
         _unreadimageView = [[UIImageView alloc] init];

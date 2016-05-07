@@ -53,6 +53,7 @@
     _buyDataSource = [[XMeCustomDataSource alloc] init];
     _buyDataSource.delegate = self;
     _noBuyDataSource = [[ZLPrivateDataSource alloc] init];
+    _noBuyDataSource.delegate = self;
     [self.view addSubview:_tableView];
     [self initUi];
     
@@ -360,4 +361,6 @@
         }
     }
 }
+
+
 @end

@@ -20,6 +20,11 @@
 
     self.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
     self.layer.borderWidth = 0.5;
+    
+    _TITLELabel.textColor = COLOR_Text_Black;
+    _summaryLabel.textColor = COLOR_Text_Gay;
+    _timeLabel.textColor = COLOR_Text_Gay;
+    _nameLabel.textColor = COLOR_Text_Gay;
 }
 
 - (IBAction)openClick:(id)sender {

@@ -170,7 +170,7 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
     if (!model.askcontent) {
         return H;
     }
-    CGSize answercontentSize = [model.answercontent sizeMakeWithFont:Font_14 maxW:kScreenWidth - 2* LR];
+    CGSize answercontentSize = [model.answercontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 2* LR];
     CGSize askcontentSize = [model.askcontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
     DLog(@"%f --- answercontentSize.height",answercontentSize.height);
 //    if (answercontentSize.height < 18) {

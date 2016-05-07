@@ -1,13 +1,13 @@
-//
-//  TableViewCell.m
-//  Demo
-//
-//  Created by 林柏参 on 16/4/22.
-//  Copyright © 2016年 XMG. All rights reserved.
-//
+
+
+
+#define clickBtn_W ValueWithTheIPhoneModelString(@"60,60,100,100")
+#define clickBtn_Font ValueWithTheIPhoneModelString(@"12,12,15,15")
+#define priceLabView_h ValueWithTheIPhoneModelString(@"60,60,60,60")
 
 #import "TableViewCell.h"
 #import "ShareFunction.h"
+#import "StockMacro.h"
 @implementation TableViewCell
 
 - (void)awakeFromNib {
@@ -19,11 +19,11 @@
     
     self.clickBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.clickBtn addTarget:self action:@selector(clickBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.clickBtn.titleLabel.font = Font_15;
+    self.clickBtn.titleLabel.font = [UIFont systemFontOfSize:clickBtn_Font];
     [self.clickBtn setTitleColor:COLOR_Text_Gay forState:UIControlStateDisabled];
     [self.selectView addSubview:self.clickBtn];
     
-    self.priceLabView = [[PriceLabView alloc]initWithFrame:(CGRect){0,0,100,60}];
+    self.priceLabView = [[PriceLabView alloc]initWithFrame:(CGRect){0,0,100,priceLabView_h}];
     [self.selectView addSubview:self.priceLabView];
     
     self.buyLabel = [[UILabel alloc]init];
@@ -31,6 +31,9 @@
     self.buyLabel.font = Font_15;
     self.buyLabel.textColor = COLOR_Text_Gay;
     [self.selectView addSubview:self.buyLabel];
+    
+    
+    
 }
 
 
@@ -48,9 +51,9 @@
             make.top.equalTo(@0);
             make.right.equalTo(@(-10));
             make.bottom.equalTo(@0);
-            make.width.equalTo(@46);
+            make.width.equalTo(@(clickBtn_W*0.75));
         }];
-        self.priceLabView.oldpriceStr = model.buyprice;
+        self.priceLabView.oldpriceStr = [NSString stringWithFormat:@"%@%@",model.buyprice,model.vipLevelExpirtiontime];
         self.priceLabView.state = PriceLabViewType_Vip;
         
     }else{
@@ -64,7 +67,7 @@
             make.top.equalTo(@0);
             make.right.equalTo(@0);
             make.bottom.equalTo(@0);
-            make.width.equalTo(@100);
+            make.width.equalTo(@(clickBtn_W));
         }];
         
         self.buyLabel.text = [NSString stringWithFormat:@"限%@个名额",model.maxnum];
@@ -76,8 +79,9 @@
             make.width.equalTo(@(buyLabelSize.width+10));
         }];
 
-        self.priceLabView.newpriceStr = model.updateprice;
-        self.priceLabView.oldpriceStr = model.buyprice;
+        self.priceLabView.oldpriceStr = [NSString stringWithFormat:@"%@%@",model.buyprice,model.vipLevelExpirtiontime];
+        self.priceLabView.newpriceStr = [NSString stringWithFormat:@"%@%@",model.updateprice,model.vipLevelExpirtiontime];
+
         self.priceLabView.state = PriceLabViewType_NotVip;
         model.actualPrice = model.updateprice;
 
@@ -97,7 +101,7 @@
         make.top.equalTo(@0);
         make.right.equalTo(@0);
         make.bottom.equalTo(@0);
-        make.width.equalTo(@100);
+        make.width.equalTo(@(clickBtn_W));
     }];
     
     
@@ -110,7 +114,7 @@
         make.width.equalTo(@(buyLabelSize.width+10));
     }];
     
-    self.priceLabView.oldpriceStr = [NSString stringWithFormat:@"%@玖玖币",model.buyprice];
+    self.priceLabView.oldpriceStr = [NSString stringWithFormat:@"%@%@",model.buyprice,model.vipLevelExpirtiontime];
     self.priceLabView.state = PriceLabViewType_Vip;
     model.actualPrice = model.buyprice;
 }

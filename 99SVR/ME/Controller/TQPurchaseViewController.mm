@@ -26,18 +26,6 @@
 
 @implementation TQPurchaseViewController
 
-//- (id)initWithTeamId:(int)nId name:(NSString *)strName
-//{
-//    self = [super init];
-//    
-//    self.stockModel = [[StockDealModel alloc]init];
-//    
-//    self.stockModel.teamid = [NSString stringWithFormat:@"%d",nId];
-//    self.stockModel.teamname = strName;
-//    
-//    return self;
-//}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -224,6 +212,7 @@
                     
                     [MBProgressHUD hideHUD];
                     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+                                        
                     [self.navigationController popViewControllerAnimated:YES];
                 });
                 
@@ -236,6 +225,7 @@
                     }else{
                         
                         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+
                         [weakSelf.navigationController popViewControllerAnimated:YES];
                     }
                 }];

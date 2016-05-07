@@ -71,8 +71,10 @@
     
     // 疑问
     UIButton *questionButton= [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth - 40, 0, 40, 40)];
-    [questionButton setImage:[UIImage imageNamed:@"pwd_play_h"] forState:UIControlStateNormal];
+    [questionButton setImage:[UIImage imageNamed:@"text_ live_ask_icon"] forState:UIControlStateNormal];
     [questionButton addTarget:self action:@selector(questionClick) forControlEvents:UIControlEventTouchUpInside];
+#pragma mark 隐藏什么是私人订制
+    questionButton.hidden = YES;
     [headerSectionView addSubview:questionButton];
     
     // 添加底部线条

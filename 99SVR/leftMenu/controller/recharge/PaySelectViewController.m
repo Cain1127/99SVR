@@ -89,20 +89,26 @@
     
     ///微信支付
     context[@"Wxpay"] = ^() {
-        DLog(@"----微信开始充值----");
-        NSArray *args = [JSContext currentArguments];
-        if (args.count==0) {
-            [ProgressHUD showError:@"请求微信支付失败"];
-            return ;
+        if (![WXApi isWXAppInstalled]) {
+            [ProgressHUD showError:@"没有安装微信,无法支付"];
         }
-        NSString *param = ((JSValue *)args[0]).toString;
-        if (param) {
-            NSData *jsonData = [param dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil removingNulls:YES ignoreArrays:NO];
-            // 微信支付充值
-            [selfWeak weixinPayWithDict:responseDict];
+        else
+        {
+            DLog(@"----微信开始充值----");
+            NSArray *args = [JSContext currentArguments];
+            if (args.count==0) {
+                [ProgressHUD showError:@"请求微信支付失败"];
+                return ;
+            }
+            NSString *param = ((JSValue *)args[0]).toString;
+            if (param) {
+                NSData *jsonData = [param dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil removingNulls:YES ignoreArrays:NO];
+                // 微信支付充值
+                [selfWeak weixinPayWithDict:responseDict];
+            }
+            DLog(@"微信开始充值参数-----%@", param);
         }
-        DLog(@"微信开始充值参数-----%@", param);
     };
 }
 
@@ -114,7 +120,7 @@
     rechargeResultVc.isRechargeSucceed = reslut;
     // 这里应该还需要一个订单号
     [self.navigationController pushViewController:rechargeResultVc animated:YES];
-
+    
 }
 
 #pragma mark -- 微信支付
@@ -122,7 +128,7 @@
  *  微信支付
  */
 - (void)weixinPayWithDict:(NSDictionary *)dict{
-
+    
     PayReq* req             = [[PayReq alloc] init];
     req.partnerId           = [dict objectForKey:@"partnerId"];
     req.prepayId            = [dict objectForKey:@"prepayId"];

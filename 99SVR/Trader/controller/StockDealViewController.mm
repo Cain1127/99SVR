@@ -13,6 +13,8 @@
 #import "UIAlertView+Block.h"
 #import "StockRecordViewController.h"
 #import "HDWhatIsPrivateViewViewController.h"
+#import "AlertFactory.h"
+
 
 @interface StockDealViewController ()<StockDealTableModelDelegate>
 @property (nonatomic , strong) UITableView *tableView;
@@ -272,11 +274,9 @@
         [self.navigationController pushViewController:tqVC animated:YES];
         
     }else{//未登录
-        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"确定" withMessage:@"未登陆，请登陆后操作" completionCallback:^(NSInteger index) {
-            if (index==1) {
-                LoginViewController *loginVC = [[LoginViewController alloc]init];
-                [self.navigationController pushViewController:loginVC animated:YES];
-            }
+        
+        [AlertFactory createLoginAlert:self withMsg:@"兑换私人定制" block:^{
+            
         }];
     }
 }

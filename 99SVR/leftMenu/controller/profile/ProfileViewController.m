@@ -170,6 +170,7 @@
     {
         NickNameViewController *nickNameVc = [[NickNameViewController alloc] init];
         nickNameVc.title = @"昵称";
+        nickNameVc.nickName = [UserInfo sharedUserInfo].strName;
         nickNameVc.nickNameBlock = ^(NSString * nickName){
             [weakSelf.tableView reloadData];
         };
@@ -187,6 +188,7 @@
     }
     else{
         SignatureViewController *signatureVc = [[SignatureViewController alloc] init];
+        signatureVc.signature = [UserInfo sharedUserInfo].strIntro;
         signatureVc.signatureBlock =^(NSString * nickName){
             // 回调处理，同步
             [weakSelf.tableView reloadData];

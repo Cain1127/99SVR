@@ -672,9 +672,11 @@
             else
             {
                 @WeakObj(self)
-                [AlertFactory createLoginAlert:self block:^{
+                
+                [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
                     [selfWeak closeRoomInfo];
                 }];
+                
             }
         }
             break;
@@ -694,7 +696,8 @@
             else
             {
                 @WeakObj(self)
-                [AlertFactory createLoginAlert:self block:^{
+                
+                [AlertFactory createLoginAlert:self withMsg:@"送礼物" block:^{
                     [selfWeak closeRoomInfo];
                 }];
             }
@@ -722,7 +725,8 @@
             else
             {
                 @WeakObj(self)
-                [AlertFactory createLoginAlert:self block:^{
+                
+                [AlertFactory createLoginAlert:self withMsg:@"提问" block:^{
                     [selfWeak closeRoomInfo];
                 }];
             }
@@ -807,8 +811,11 @@
 - (void)sendRose
 {
     if([UserInfo sharedUserInfo].nType != 1 && ![_room.roomid isEqualToString:@"10000"] && ![_room.roomid isEqualToString:@"10001"])
-    {
-        [self.view makeToast:@"游客不能送花"];
+    {        
+        [AlertFactory createLoginAlert:self withMsg:@"给讲师喝彩" block:^{
+            
+        }];
+
         return ;
     }
 //    [RoomService sendLocalInfo:@"[$999$]" toid:0 roomInfo:currentRoom aryChat:aryRoomChat];

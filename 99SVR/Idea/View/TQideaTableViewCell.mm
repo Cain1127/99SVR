@@ -11,6 +11,7 @@
 #import "TQIdeaModel.h"
 #import "ZLViewPoint.h"
 #import "UIImageView+WebCache.h"
+#import "ShareFunction.h"
 
 @interface TQIdeaTableViewCell ()
 
@@ -94,15 +95,12 @@
 
 - (void)setIdeaModel:(TQIdeaModel *)ideaModel
 {
-    
     _content = ideaModel.content;
-//    [_lblContent setText:_content];
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:_content];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:8];//调整行间距
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [_content length])];
-    _lblContent.attributedText = attributedString;
-    [_lblContent sizeToFit];
+    CGSize lblContentSize = [ShareFunction calculationOfTheText:ideaModel.content withFont:15 withMaxSize:(CGSize){kScreenWidth-16,40}];
+    _lblContent.width = lblContentSize.width;
+    _lblContent.height = lblContentSize.height;
+    _lblContent.text = ideaModel.content;
+    _lblContent.textColor = COLOR_Text_Black;
     
     [_authorLabel setText:ideaModel.authorname];
     [_dateLabel setText:ideaModel.publishtime];

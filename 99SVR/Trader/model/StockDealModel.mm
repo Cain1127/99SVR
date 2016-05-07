@@ -32,7 +32,6 @@
         
         _teamid = IntTransformIntToStr(profit->teamid());
         _selectBtnTag = 1;
-//        NSLog(@"总收益%f 超赢收益%f 日利率%f 月收益%f",profit->totalprofit(),profit->winrate(),profit->dayprofit(),profit->monthprofit());
 
     }
     return self;

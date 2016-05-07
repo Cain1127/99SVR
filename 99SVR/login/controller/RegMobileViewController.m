@@ -246,9 +246,9 @@
 
 - (void)initUIHead
 {
-    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(gotoRegName) title:@"账号注册"];
+    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(gotoRegName) title:@"用户名注册"];
     [self.view addSubview:btnRight];
-    btnRight.frame = Rect(kScreenWidth-60, 20, 60, 44);
+    btnRight.frame = Rect(kScreenWidth-80, 20, 80, 44);
     btnRight.titleLabel.font = XCFONT(13);
     
     //手机号

@@ -65,11 +65,11 @@
 //    [self.view addSubview:_leftMenuHeaderView];
     
     //添加一个tableView
-    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) style:UITableViewStyleGrouped];
+    _listTableView = [[UITableView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64 - 49) style:UITableViewStyleGrouped];
     [_listTableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     _listTableView.delegate = self;
     _listTableView.dataSource = self;
-
+    [_listTableView setSeparatorColor:COLOR_Line_Small_Gay];
     _listTableView.tableHeaderView = [self tableHeaderView];
     
     [self.view addSubview:_listTableView];
@@ -121,6 +121,7 @@
 - (void)checkLogin
 {
     [_itemsArray removeAllObjects];
+    
     _leftMenuHeaderView.login = [UserInfo sharedUserInfo].bIsLogin;
     if (KUserSingleton.nStatus) {
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的私人定制" icon:@"personal_user_icon" goClassName:@"TQMeCustomizedViewController"]];

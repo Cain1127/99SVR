@@ -18,6 +18,8 @@
 #import "SDWebImageCompat.h"
 #import <AVFoundation/AVAudioSession.h>
 #import "ZLShareViewController.h"
+#import "LoginViewController.h"
+#import "UIAlertView+Block.h"
 
 @interface LivePlayViewController()
 {
@@ -466,7 +468,23 @@
 
 - (void)colletInfo
 {
-    [[ZLLogonServerSing sharedZLLogonServerSing] colletRoomInfo:!_btnCollet.selected];
+    
+    WeakSelf(self);
+    
+    if(KUserSingleton.nType==1 && KUserSingleton.bIsLogin)
+    {
+        [[ZLLogonServerSing sharedZLLogonServerSing] colletRoomInfo:!_btnCollet.selected];
+        
+    }else
+    {
+        [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"登录" withMessage:@"登录后才能关注讲师" completionCallback:^(NSInteger index) {
+            if (index==1) {
+                LoginViewController *loginVC = [[LoginViewController alloc]init];
+                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+            }
+        }];
+
+    }
 }
 
 - (UIButton *)createPlayBtn:(NSString *)strImg high:(NSString *)strHigh

@@ -49,7 +49,7 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
     {
         _imgView = [[UIImageView alloc] initWithFrame:Rect(15,22-kImageWidth/2, kImageWidth, kImageWidth)];
-        _lblTitle = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+10,_imgView.y, 160, 16)];
+        _lblTitle = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+10,_imgView.y, kScreenWidth, 16)];
         [_lblTitle setFont:XCFONT(14)];
         [_lblTitle setTextColor:UIColorFromRGB(0x343434)];
         

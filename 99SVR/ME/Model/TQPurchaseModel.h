@@ -34,6 +34,8 @@
 @property (nonatomic , copy) NSString *teamIcon;
 /**限制购买的数量*/
 @property (nonatomic , copy) NSString *maxnum;
+/**vip1-vip6 的有效期拼接*/
+@property (nonatomic , copy) NSString *vipLevelExpirtiontime;
 #pragma mark 购买私人订制的
 /**股票首页*/
 - (id)initWithPrivateServiceLevelData:(void *)pData;

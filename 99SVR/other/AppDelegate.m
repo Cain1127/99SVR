@@ -328,7 +328,8 @@
     {
         [WXApi handleOpenURL:url delegate:self];
     }
-    else if([url.absoluteString rangeOfString:@"weibo"].location != NSNotFound)
+    // 微博返回来的，不是weibo，是wb+kSinaKey
+    else if([url.absoluteString rangeOfString:@"wb4288225685"].location != NSNotFound)
     {
         [WeiboSDK handleOpenURL:url delegate:self] ;
     }
@@ -345,7 +346,8 @@
     {
         [WXApi handleOpenURL:url delegate:self];
     }
-    else if([url.absoluteString rangeOfString:@"weibo"].location != NSNotFound)
+    // 微博返回来的，不是weibo，是wb+kSinaKey
+    else if([url.absoluteString rangeOfString:@"wb4288225685"].location != NSNotFound)
     {
         [WeiboSDK handleOpenURL:url delegate:self] ;
     }
@@ -362,7 +364,8 @@
     {
         [WXApi handleOpenURL:url delegate:self];
     }
-    else if([url.absoluteString rangeOfString:@"weibo"].location != NSNotFound)
+    // 微博返回来的，不是weibo，是wb+kSinaKey
+    else if([url.absoluteString rangeOfString:@"wb4288225685"].location != NSNotFound)
     {
         [WeiboSDK handleOpenURL:url delegate:self] ;
     }

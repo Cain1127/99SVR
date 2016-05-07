@@ -148,28 +148,15 @@
     
     
     NSString *leftlowStr = @"";
-    NSString *midLowStr = @"";
     NSString *rightLowStr = @"";
     
     if(model.dates.count>0) {
         
-        if (model.dates.count==2) {
-            midLowStr = @"";
-        }else{
-            midLowStr = model.dates[(model.dates.count/2)];
-        }
-        
         leftlowStr = [model.dates firstObject];
         rightLowStr = [model.dates lastObject];
-
-        
-    }else if (model.dates.count==0){//
-        leftlowStr = @"";
-        midLowStr = @"";
-        rightLowStr = @"";
     }
     
-    weakSelf.chartView.lowTitArrays = @[leftlowStr,midLowStr,rightLowStr];
+    weakSelf.chartView.lowTitArrays = @[leftlowStr,rightLowStr];
     weakSelf.chartView.lineChartView.raneValue_Y = CGRangeMake([model.minY floatValue], [model.maxY floatValue]);
     
     [weakSelf.chartView.lineChartView clearLine];

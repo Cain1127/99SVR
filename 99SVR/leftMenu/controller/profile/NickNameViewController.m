@@ -10,7 +10,7 @@
 #import "UserInfo.h"
 #import "ZLLogonServerSing.h"
 
-@interface NickNameViewController ()<UITextFieldDelegate>
+@interface NickNameViewController()<UITextFieldDelegate>
 /** 昵称输入框 */
 @property(nonatomic,strong) UITextField *nickNameTextField;
 /**修改昵称按钮*/
@@ -24,6 +24,11 @@
     [super viewDidLoad];
     [self setTitleText:@"修改昵称"];
     [self setupView];
+    
+    if (_nickName) {
+        _nickNameTextField.text = _nickName;
+        [self checkLogBtnIsEnableWithText:_nickName];
+    }
 }
 
 - (void)setupView
@@ -33,7 +38,9 @@
     //输入框底层
     UIView *inputView = [[UIView alloc] init];
     inputView.backgroundColor = [UIColor whiteColor];
-    inputView.frame = CGRectMake(0, 74, kScreenWidth, 48);
+    inputView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
+    inputView.layer.borderWidth = 0.5;
+    inputView.frame = CGRectMake(0, 84, kScreenWidth, 48);
     [self.view addSubview:inputView];
     
     //昵称输入框
@@ -49,7 +56,7 @@
     [_nickNameTextField setValue:RGB(151, 151, 151) forKeyPath:@"_placeholderLabel.textColor"];
     [self.view addSubview:_nickNameTextField];
     [_nickNameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    _nickNameTextField.frame = CGRectMake(12, 74, kScreenWidth - 2 * 12, 48);
+    _nickNameTextField.frame = CGRectMake(12, 84, kScreenWidth - 2 * 12, 48);
     
     //建议提醒文字
 //    UILabel * adviceLabel = [[UILabel alloc] init];
@@ -75,7 +82,6 @@
     btnRight.frame = Rect(10,_nickNameTextField.y+_nickNameTextField.height+30, kScreenWidth-20, 40);
     [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
     [btnRight addTarget:self action:@selector(rightItemClick) forControlEvents:UIControlEventTouchUpInside];
-    
 }
 
 
