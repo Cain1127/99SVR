@@ -14,20 +14,20 @@
 #import "StockDealModel.h"
 #import "RoomHttp.h"
 #import "MJRefresh.h"
-
+#import "StockDealViewController.h"
 #import <objc/runtime.h>
-
-@interface XTraderViewController()
+#import "StockHomeTableViewModel.h"
+@interface XTraderViewController()<StockHomeTableViewModelDelegate>
 {
     
 }
 @property (nonatomic,strong) RoomHttp *room;
 @property (nonatomic,strong) UIView *noView;
 @property (nonatomic , strong) UITableView *totalTab;
-@property (nonatomic , strong) StockHomeTableViewModel *totalTableViewModel;
 @property (nonatomic , strong) __block NSMutableArray *totalDataArray;
 @property (nonatomic , assign) __block NSInteger totalPagInteger;
 @property (nonatomic , strong) UIView *totalEmptyView;
+@property (nonatomic , strong) StockHomeTableViewModel *totalTableViewModel;
 
 @property (nonatomic , assign) __block MJRefreshState refreshState;
 @property (nonatomic, strong) UIViewController *control;
@@ -192,7 +192,8 @@
 {
     if (!_totalTableViewModel)
     {
-        _totalTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:_control];
+        _totalTableViewModel = [[StockHomeTableViewModel alloc]initWithViewModelType:StockHomeTableViewType_XTraderViewVC];
+        _totalTableViewModel.delegate = self;
     }
     return _totalTableViewModel;
 }
@@ -320,5 +321,15 @@ static char  * TapRecognizerBlockKey;
     [self showEmptyViewInView:targetView withMsg:msg withImageName:@"network_anomaly_fail" touchHanleBlock:hanleBlock];
     
 }
+
+#pragma mark StockHomeTableViewModelDelegate
+-(void)tabViewDidSelectRowAtIndexPath:(NSIndexPath *)indexPath withModel:(id)model{
+    
+    StockDealModel *stockModel = model;
+    StockDealViewController *stockVC = [[StockDealViewController alloc]init];
+    stockVC.stockModel = stockModel;
+    [_control.navigationController pushViewController:stockVC animated:YES];
+}
+
 
 @end

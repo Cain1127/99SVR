@@ -358,7 +358,18 @@
         if(tempArray.count>indexPath.row)
         {
             ZLOperateStock *model = tempArray[indexPath.row];
-            [cell setCellStockModel:model];
+            StockDealModel *stockModel = [[StockDealModel alloc]init];
+            stockModel.operateid = [NSString stringWithFormat:@"%d",model.operateid];
+            stockModel.teamid = [NSString stringWithFormat:@"%@",model.teamid];
+            stockModel.teamname = [NSString stringWithFormat:@"%@",model.teamname];
+            stockModel.teamicon = [NSString stringWithFormat:@"%@",model.teamicon];
+            stockModel.focus = [NSString stringWithFormat:@"%@",model.focus];
+            stockModel.goalprofit = [NSString stringWithFormat:@"%.2f%%",model.goalprofit];
+            stockModel.totalprofit = [NSString stringWithFormat:@"%.2f%%",model.totalprofit];
+            stockModel.dayprofit = [NSString stringWithFormat:@"%.2f%%",model.dayprofit];
+            stockModel.monthprofit = [NSString stringWithFormat:@"%.2f%%",model.monthprofit];
+            stockModel.winrate = [NSString stringWithFormat:@"%.2f%%",model.winrate];
+            [cell setCellDataWithModel:stockModel withTabBarInteger:1];
             cell.backgroundColor = [UIColor clearColor];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         }

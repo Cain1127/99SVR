@@ -814,13 +814,17 @@ void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:parameters];
 }
 
-
+#pragma mark 新观点的通知
 void ZLRoomListener::OnExpertNewViewNoty(ExpertNewViewNoty& info)
 {
     //新观点通知
     TQIdeaModel *idea = [[TQIdeaModel alloc] initWIthNewPointNotify:&info];
-    NSDictionary *dict = @{@"code":@(1),@"view":idea};
-//    [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSString *)#> object:<#(nullable id)#>];
+    NSDictionary *dict = @{@"code":@"1",@"data":idea};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQIdeaView_NewNotifi_VC object:dict];
+    // XIdeaView
+    // NSArray
+    // nsmutablearray
+    
 }
 
 void ZLRoomListener::OnUserAccountInfo(UserAccountInfo& info)

@@ -49,7 +49,10 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
     self.view.backgroundColor = UIColorFromRGB(0xffffff);
-    
+
+    //添加更新专家观点的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newIdeaNotifi:) name:MESSAGE_TQIdeaView_NewNotifi_VC object:nil];
+
     [self setTitleText:@"专家观点"];
     
     viewCache = [[NSCache alloc] init];
@@ -88,6 +91,13 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+/**新的专家观点通知*/
+- (void)newIdeaNotifi:(NSNotification *)notify{
+    
+    DLog(@"新的专家观点%@",notify.object);
+    
 }
 
 - (void)loadViewPoint:(NSNotification *)notify{
