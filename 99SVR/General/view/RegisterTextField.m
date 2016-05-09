@@ -14,7 +14,6 @@
 /**是否显示密码*/
 @property (nonatomic, strong) UIButton *showPwdBtn;
 
-
 @end
 
 @implementation RegisterTextField
@@ -35,6 +34,7 @@
         [self.showPwdBtn setImage:[UIImage imageNamed:@"hidePwd"] forState:UIControlStateNormal];
         [self.showPwdBtn setImage:[UIImage imageNamed:@"showPwd"] forState:UIControlStateSelected];
         [self.showPwdBtn addTarget:self action:@selector(btnClickAction:) forControlEvents:UIControlEventTouchUpInside];
+
     }
     return self;
 }

@@ -170,27 +170,7 @@
 
 - (void)closeKeyBoard
 {
-    if([_txtOld isFirstResponder])
-    {
-        [_txtOld resignFirstResponder];
-    }
-    else if([_txtCode isFirstResponder])
-    {
-        [_txtCode resignFirstResponder];
-    }
-    else if([_txtNew isFirstResponder])
-    {
-        [_txtNew resignFirstResponder];
-    }
-    else if([_txtCmd isFirstResponder])
-    {
-        [_txtCmd resignFirstResponder];
-    }
-    else if([_txtMobile isFirstResponder])
-    {
-        [_txtMobile resignFirstResponder];
-    }
-
+    [self.view endEditing:YES];
 }
 
 - (void)getAuthCode

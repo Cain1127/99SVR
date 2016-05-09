@@ -425,15 +425,8 @@
 
 - (void)closeKeyBoard
 {
-    if ([_txtUser isFirstResponder]) {
-        [_txtUser resignFirstResponder];
-    }
-    else if ([_txtPwd isFirstResponder])
-    {
-        [_txtPwd resignFirstResponder];
-    }
+    [self.view endEditing:YES];
 }
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

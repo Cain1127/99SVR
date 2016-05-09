@@ -13,6 +13,7 @@
 #import "ProgressHUD.h"
 #import "Toast+UIView.h"
 #import "BaseService.h"
+#import "NSString+Regex.h"
 
 @interface InputPwdViewController ()<UITextFieldDelegate>
 @property (nonatomic,strong) RegisterTextField *txtName;
@@ -65,8 +66,24 @@
     if (![strCode isEqualToString:strPassword])
     {
         [ProgressHUD showError:@"两次密码不一致"];
+        _txtName.text = @"";
+        _txtCode.text = @"";
+        [_txtName becomeFirstResponder];
+        [self checkLogBtnIsEnableWithPwd:_txtName.text withAgainPwd:_txtCode.text];
         return ;
     }
+    
+    //判断密码是否为空 并且是在6到16位
+    if (!([strPassword isPassword] && [strCode isPassword])) {
+        [ProgressHUD showError:@"密码包含空格或密码长度不为6到16个字符"];
+        _txtName.text = @"";
+        _txtCode.text = @"";
+        [_txtName becomeFirstResponder];
+        [self checkLogBtnIsEnableWithPwd:_txtName.text withAgainPwd:_txtCode.text];
+        return ;
+    }
+    
+    
     [self.view makeToastActivity_bird];
     NSDictionary *parameters = @{@"phone":_strMobile,@"password":strPassword};
     NSString *strInfo = [NSString stringWithFormat:@"%@Verify/MobileFindPassword",kRegisterNumber];
@@ -156,18 +173,22 @@
 
 - (void)closeKeyBoard
 {
-    
+    [self.view endEditing:YES];
 }
-    // Do any additional setup after loading the view.
+
+// Do any additional setup after loading the view.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self initUIHead];
     [_txtName setDelegate:self];
     [_txtCode setDelegate:self];
-    [_txtName becomeFirstResponder];
     [self setTitleText:@"设置新密码"];
-    [_txtName becomeFirstResponder];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_txtName becomeFirstResponder];
+    });
+    
 }
 
 - (void)didReceiveMemoryWarning {
