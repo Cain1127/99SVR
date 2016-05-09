@@ -161,7 +161,7 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     CGFloat LR = 12;
-    CGFloat H = 150;
+    CGFloat H = 140;
     TQAnswerModel *model = self.modelArray[indexPath.row];
     if(!model.answercontent)
     {
@@ -172,18 +172,7 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
     }
     CGSize answercontentSize = [model.answercontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 2* LR];
     CGSize askcontentSize = [model.askcontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
-    DLog(@"%f --- answercontentSize.height",answercontentSize.height);
-//    if (answercontentSize.height < 18) {
-//        H = H + 18;
-//    } else if (answercontentSize.height > 18 && !model.isAllText) {
-//        H = H + 40;
-//    } else if(model.isAllText){
-//        H = H + answercontentSize.height + 20;
-//    }
-//    
-//    if (askcontentSize.height > 18) {
-//        H = H + askcontentSize.height;
-//    }
+
     return H + answercontentSize.height + askcontentSize.height;
 }
 

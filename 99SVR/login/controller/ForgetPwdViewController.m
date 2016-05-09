@@ -12,6 +12,7 @@
 #import "InputPwdViewController.h"
 #import "BaseService.h"
 #import "Toast+UIView.h"
+#import "KefuCenterController.h"
 
 @interface ForgetPwdViewController ()<UITextFieldDelegate>
 {
@@ -25,7 +26,10 @@
 @property (nonatomic,strong) RegisterTextField *txtCode;
 @property (nonatomic,strong) UIButton *btnCode;
 @property (nonatomic, strong) UIButton *nextBtn;
-
+/**注意文本*/
+@property (nonatomic , strong) UILabel *attentionLab;
+/**联系客服按钮*/
+@property (nonatomic , strong) UIButton *attentionBtn;
 
 @end
 
@@ -171,7 +175,7 @@
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, _btnCode.y+50, kScreenWidth-60, 40);
+    btnRegister.frame = Rect(10, _btnCode.y+50, kScreenWidth-20, 40);
     [btnRegister setTitle:@"下一步" forState:UIControlStateNormal];
     [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
@@ -185,11 +189,38 @@
     [btnRegister addTarget:self action:@selector(authMobile) forControlEvents:UIControlEventTouchUpInside];
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
+    
+    //注意事项
+    self.attentionLab = [[UILabel alloc]init];
+    self.attentionLab.text = @"注：如未使用手机号注册或绑定手机，请";
+    self.attentionLab.textColor = COLOR_Text_Gay;
+    self.attentionLab.font = Font_12;
+    [self.attentionLab sizeToFit];
+    [self.view addSubview:self.attentionLab];
+    self.attentionLab.frame = (CGRect){self.nextBtn.x,CGRectGetMaxY(self.nextBtn.frame)+10,self.attentionLab.width,self.attentionLab.height};
+    //联系客服的按钮
+    self.attentionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.attentionBtn setTitle:@"联系客服" forState:UIControlStateNormal];
+    self.attentionBtn.titleLabel.font = Font_12;
+    [self.attentionBtn sizeToFit];
+    [self.attentionBtn setTitleColor:COLOR_Bg_Blue forState:UIControlStateNormal];
+    self.attentionBtn.frame = (CGRect){CGRectGetMaxX(self.attentionLab.frame),CGRectGetMaxY(self.nextBtn.frame)+10,self.attentionBtn.width,self.attentionLab.height};
+    [self.attentionBtn addTarget:self action:@selector(contactService) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.attentionBtn];
+    
+}
+
+#pragma mark 联系客服
+-(void)contactService{
+    
+    [self.view endEditing:YES];
+    KefuCenterController *kefuVc = [[KefuCenterController alloc]init];
+    [self.navigationController pushViewController:kefuVc animated:YES];
 }
 
 - (void)closeKeyBoard
 {
-    
+    [self.view endEditing:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated

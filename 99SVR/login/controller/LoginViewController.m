@@ -425,15 +425,8 @@
 
 - (void)closeKeyBoard
 {
-    if ([_txtUser isFirstResponder]) {
-        [_txtUser resignFirstResponder];
-    }
-    else if ([_txtPwd isFirstResponder])
-    {
-        [_txtPwd resignFirstResponder];
-    }
+    [self.view endEditing:YES];
 }
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -511,6 +504,7 @@
 
 - (void)weichat_login:(NSNotification *)notify
 {
+    [self.view hideToastActivity];
     NSDictionary *dict = [notify object];
     __weak LoginViewController *__self = self;
     if (dict && [dict objectForKey:@"status"])
@@ -564,6 +558,7 @@
 #pragma mark 新浪登录响应
 - (void)sinaLogin_response:(NSNotification *)notify
 {
+    [self.view hideToastActivity];
     NSDictionary *dict = [notify object];
     DLog(@"dict:%@",dict);
     if(dict && [dict objectForKey:@"error"])
@@ -682,6 +677,7 @@
 
 - (void)tencentDidLogin
 {
+    [self.view hideToastActivity];
     if ([_tencentOAuth accessToken] && 0 != [[_tencentOAuth accessToken] length])
     {
         DLog(@"token:%@ openId;%@",[_tencentOAuth accessToken],[_tencentOAuth openId]);

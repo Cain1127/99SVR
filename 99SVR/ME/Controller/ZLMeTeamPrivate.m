@@ -96,7 +96,7 @@
 {
     [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
-#pragma mark 兑换私人订制
+#pragma mark 兑换私人定制
 - (void)buyprivate
 {
     TQPurchaseViewController *control = [[TQPurchaseViewController alloc] init];

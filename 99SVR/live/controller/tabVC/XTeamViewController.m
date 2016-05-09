@@ -65,7 +65,7 @@
     [lblName setTextAlignment:NSTextAlignmentCenter];
     [headView addSubview:lblName];
 
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-185) withStyle:UITableViewStylePlain];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];

@@ -1,6 +1,6 @@
 
 
-/**购买私人订制的model*/
+/**购买私人定制的model*/
 
 
 #import <Foundation/Foundation.h>
@@ -36,7 +36,7 @@
 @property (nonatomic , copy) NSString *maxnum;
 /**vip1-vip6 的有效期拼接*/
 @property (nonatomic , copy) NSString *vipLevelExpirtiontime;
-#pragma mark 购买私人订制的
+#pragma mark 购买私人定制的
 /**股票首页*/
 - (id)initWithPrivateServiceLevelData:(void *)pData;
 

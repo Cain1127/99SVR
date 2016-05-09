@@ -11,7 +11,7 @@
 
 /**跳转购买Vip*/
 -(void)goBuyVipService;
-/**跳转什么是私人订制*/
+/**跳转什么是私人定制*/
 -(void)goWhatIsPrivateVc;
 /**点击头部的提示跳转*/
 -(void)didClickTableHeaderViewTag:(NSInteger)tag;

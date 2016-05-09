@@ -44,8 +44,8 @@
     if (_isRechargeSucceed) {
         iconView.image = [UIImage imageNamed:@"register_prompt-icon"];
     } else{
-        // 失败的图片，暂时还没有
-        iconView.image = [UIImage imageNamed:@"register_prompt-icon"];
+        // 充值失败
+        iconView.image = [UIImage imageNamed:@"register_prompt_wrong_icon"];
     }
     [bgView addSubview:iconView];
     
@@ -56,7 +56,7 @@
     if (_isRechargeSucceed) {
         explainLable.text = @"支付成功，请稍后查看金币余额";
     } else {
-        explainLable.text = @"充值未成功，请重试一下吧";
+        explainLable.text = @"充值失败，请点击重试";
     }
     explainLable.textAlignment = NSTextAlignmentCenter;
     [bgView addSubview:explainLable];
@@ -104,7 +104,7 @@
         }
     }
     
-    //回到购买私人订制
+    //回到购买私人定制
     for (UIViewController *control in aryIndex) {
         if ([control isKindOfClass:[TQPurchaseViewController class]]) {
             [self.navigationController popToViewController:control animated:YES];

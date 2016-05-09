@@ -97,4 +97,6 @@
  */
 +(NSArray *)returnStockDelChartLineViewLeftLabelTextWithDataArray:(NSArray *)array;
 
+
+
 @end
