@@ -15,17 +15,20 @@
 #import "UserInfo.h"
 #import "SettingCenterController.h"
 #import "StockDealViewController.h"
+#import "RegisterTextField.h"
+
 @interface BandingMobileViewController ()<UITextFieldDelegate>
 {
     int nSecond;
     NSString *strDate;
     int banding;
 }
-@property (nonatomic,strong) UITextField *txtName;
-@property (nonatomic,strong) UITextField *txtCode;
+@property (nonatomic,strong) RegisterTextField *txtName;
+@property (nonatomic,strong) RegisterTextField *txtCode;
 @property (nonatomic,strong) UIButton *btnCode;
-@property (nonatomic,strong) UITextField *txtPwd;
-
+@property (nonatomic,strong) RegisterTextField *txtPwd;
+/**注册按钮*/
+@property (nonatomic , strong) UIButton *btnRegister;
 
 @property (nonatomic,strong) NSTimer *timer;
 @property (nonatomic,copy) NSString *mobile;
@@ -61,10 +64,10 @@
 
 - (void)createText
 {
-    CGRect frame = Rect(30.0f, 84.0f, kScreenWidth - 160.0f, 30.0f);
+    CGRect frame = Rect(10.0f, 84.0f, kScreenWidth - 100.0f, 30.0f);
     if (!banding) {
-        [self createLabelWithRect:Rect(30.0f, 84.0f, 80.0f, 30.0f)];
-        _txtName = [self createTextField:Rect(30.0f, 84.0f, kScreenWidth - 60.0f, 30.0f)];
+        [self createLabelWithRect:Rect(10.0f, 84.0f, 80.0f, 30.0f)];
+        _txtName = [self createTextField:Rect(10.0f, 84.0f, kScreenWidth - 20.0f, 30.0f)];
         [_txtName setPlaceholder:@"请输入手机号码"];
         [_txtName setKeyboardType:UIKeyboardTypeNumberPad];
         frame.origin.y = _txtName.y + 50.0f;
@@ -74,7 +77,7 @@
         frame.origin.y = 84.0f;
     }
     
-    [self createLabelWithRect:Rect(30, frame.origin.y,80, 30)];
+    [self createLabelWithRect:Rect(10, frame.origin.y,80, 30)];
     _txtCode = [self createTextField:frame];
     [_txtCode setPlaceholder:@"请输入验证码"];
     [_txtCode setKeyboardType:UIKeyboardTypeNumberPad];
@@ -86,23 +89,31 @@
     [_btnCode setTitleColor:kNavColor forState:UIControlStateHighlighted];
     [_btnCode setTitle:@"获取验证码" forState:UIControlStateNormal];
     [self.view addSubview:_btnCode];
-    _btnCode.frame = Rect(_txtCode.x+_txtCode.width+5,_txtCode.y-3, 95, 36);
+    _btnCode.frame = Rect(kScreenWidth-110,_txtCode.y-3, 95, 36);
     [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
     _btnCode.titleLabel.font = XCFONT(15);
     _btnCode.layer.masksToBounds = YES;
     _btnCode.layer.cornerRadius = 3;
-    frame = Rect(30, _txtCode.y+50, kScreenWidth-60, 20);
     
-    UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.view addSubview:btnRegister];
-    btnRegister.frame = Rect(30, _btnCode.y+50, kScreenWidth-60, 40);
-    [btnRegister setTitle:@"确定" forState:UIControlStateNormal];
-    [btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
-    [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
-    btnRegister.layer.masksToBounds = YES;
-    btnRegister.layer.cornerRadius = 3;
-    [btnRegister addTarget:self action:@selector(authMobile) forControlEvents:UIControlEventTouchUpInside];
+    
+    [_txtName addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [_txtCode addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
+    _txtCode.leftViewImageName = @"register_code";
+    _txtName.leftViewImageName = @"register_mob";
+
+    
+    self.btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.view addSubview:self.btnRegister];
+    self.btnRegister.frame = Rect(10, _btnCode.y+60, kScreenWidth-20, 40);
+    [self.btnRegister setTitle:@"确定" forState:UIControlStateNormal];
+    [self.btnRegister setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+    [self.btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+    [self.btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    self.btnRegister.layer.masksToBounds = YES;
+    self.btnRegister.layer.cornerRadius = 3;
+    [self.btnRegister addTarget:self action:@selector(authMobile) forControlEvents:UIControlEventTouchUpInside];
+    self.btnRegister.enabled = NO;
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
 }
@@ -120,14 +131,19 @@
 
 }
 
+-(void)textFieldDidChange:(id)sender{
+    
+    [self checkEnterBtnIsEnableWithPhone:_txtName.text withCode:_txtCode.text];
+}
+
 - (void)dealloc
 {
     DLog(@"dealloc");
 }
 
-- (UITextField *)createTextField:(CGRect)frame
+- (RegisterTextField *)createTextField:(CGRect)frame
 {
-    UITextField *textField = [[UITextField alloc] initWithFrame:frame];
+    RegisterTextField *textField = [[RegisterTextField alloc] initWithFrame:frame];
     [self.view addSubview:textField];
     [textField setTextColor:UIColorFromRGB(0x555555)];
     [textField setFont:XCFONT(15)];
@@ -313,6 +329,8 @@
          {
              //没绑定过的，直接绑定，然后返回
              if (!__banding) {
+                 
+                 [UserInfo sharedUserInfo].banding = 1;
                  [selfWeak.navigationController popViewControllerAnimated:YES];
                  [ProgressHUD showSuccess:@"绑定手机成功"];
              }
@@ -360,6 +378,55 @@
     
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+
+
+/**
+ *  检测确定按钮是否可以点击
+ *
+ *  @param phoneText 手机号
+ *  @param pwdText   密码
+ *  @param codeText  验证码
+ */
+
+-(void)checkEnterBtnIsEnableWithPhone:(NSString *)phoneText withCode:(NSString *)codeText{
+    
+    BOOL phoneTextBool;
+    BOOL codeTextBool;
+    
+
+    
+    
+    if (([phoneText isEqualToString:@""]||[phoneText length]==0)) {
+        
+        phoneTextBool = NO;
+        
+    }else{
+        phoneTextBool = YES;
+    }
+
+    if (([codeText isEqualToString:@""]||[codeText length]==0)) {
+        codeTextBool = NO;
+    }else{
+        codeTextBool = YES;
+    }
+
+    
+    
+    if (banding) {//已绑定过手机号
+        
+        self.btnRegister.enabled = codeTextBool;
+
+        
+    }else{//未绑定手机号
+
+        if (_txtName.text.length >=11) {
+            _txtName.text = [_txtName.text substringToIndex:11];
+        }
+        self.btnRegister.enabled = (codeTextBool && phoneTextBool);
+    
+    }
+    
 }
 
 

@@ -16,6 +16,7 @@
 #import "ZLLogonServerSing.h"
 #import "ProgressHUD.h"
 #import "DecodeJson.h"
+#import "NSString+Regex.h"
 @interface RegNameViewController ()<UITextFieldDelegate>
 {
     NSString *strDate;
@@ -79,6 +80,16 @@
     
     if (!_checkAgree.checked) {
         [ProgressHUD showError:@"必须同意《用户服务协议》和《隐私权条款》"];
+        return ;
+    }
+    
+    //判断密码是否为空 并且是在6到16位
+    if (!([_txtPwd.text isPassword] && [_txtCmd.text isPassword])) {
+        [ProgressHUD showError:@"密码包含空格或密码长度不为6到16个字符"];
+        _txtPwd.text = @"";
+        _txtCmd.text = @"";
+        [_txtName becomeFirstResponder];
+        [self checkLogBtnIsEnableWithPwd:_txtPwd.text withCmdPwd:_txtCmd.text withUser:_txtName.text];
         return ;
     }
     

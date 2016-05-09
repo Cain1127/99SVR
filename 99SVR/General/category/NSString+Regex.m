@@ -158,7 +158,7 @@
  */
 - (BOOL)isPassword
 {
-    NSString *      regex = @"(^[A-Za-z0-9(_)]{6,18}$)";
+    NSString *      regex = @"(^[A-Za-z0-9]{6,16}$)";
     NSPredicate *   pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     
     return [pred evaluateWithObject:self];
