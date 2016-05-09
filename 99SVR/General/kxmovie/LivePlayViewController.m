@@ -379,7 +379,11 @@
     [_btnCollet setImage:[UIImage imageNamed:@"personal_follow_icon"] forState:UIControlStateSelected];
     [_btnCollet addTarget:self action:@selector(colletInfo) forControlEvents:UIControlEventTouchUpInside];
     [self updateDownHUD];
-    [kMediaShare clientCoreInit];
+    SVRMediaClient *client = [SVRMediaClient sharedSVRMediaClient];
+    if (![client clientCoreInit])
+    {
+        DLog(@"12345678");
+    }
     kMediaShare.delegate = self;
     _downHUD.alpha = 0;
     if (_roomIsCollet)
@@ -595,7 +599,7 @@
     _roomid = roomid;
     _nuserid = userid;
     
-    [kMediaShare clientRcvStreamStart:@"121.12.118.32" tcpPort:819 rtmpAddr:@"rtmp://push.99ducaijing.cn/live" userId:_nuserid roomId:_roomid];
+    [kMediaShare clientRcvStreamStart:@"122.13.81.62" tcpPort:819 rtmpAddr:@"rtmp://push.99ducaijing.cn/live" userId:_nuserid roomId:_roomid];
     
     if (audioQueue==nil)
     {
