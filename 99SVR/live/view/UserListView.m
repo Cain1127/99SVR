@@ -66,6 +66,7 @@
     [self addSubview:_hiddenView];
     [_hiddenView setUserInteractionEnabled:YES];
     [_hiddenView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
+    [_hiddenView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     
     _tableView = [[UITableView alloc] initWithFrame:Rect(0, kVideoImageHeight+kRoom_head_view_height, kScreenWidth, self.height-kVideoImageHeight-kRoom_head_view_height)];
     _tableView.delegate = self;

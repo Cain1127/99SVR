@@ -28,7 +28,8 @@ static const char *UIControl_acceptEventTime = "UIControl_acceptEventTime";
     return [objc_getAssociatedObject(self, UIControl_acceptEventTime) doubleValue];
 }
 
-- (void)setCjr_acceptEventTime:(NSTimeInterval)cjr_acceptEventTime{
+- (void)setCjr_acceptEventTime:(NSTimeInterval)cjr_acceptEventTime
+{
     objc_setAssociatedObject(self, UIControl_acceptEventTime, @(cjr_acceptEventTime), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -46,9 +47,9 @@ static const char *UIControl_acceptEventTime = "UIControl_acceptEventTime";
     //如果方法已经存在了
     if (didAddMethod) {
         class_replaceMethod(self, mySEL, method_getImplementation(systemMethod), method_getTypeEncoding(systemMethod));
-    }else{
+    }else
+    {
         method_exchangeImplementations(systemMethod, myMethod);
-        
     }
     
     //----------------以上主要是实现两个方法的互换,load是gcd的只shareinstance，果断保证执行一次
@@ -56,7 +57,9 @@ static const char *UIControl_acceptEventTime = "UIControl_acceptEventTime";
 }
 
 - (void)cjr_sendAction:(SEL)action to:(id)target forEvent:(UIEvent *)event{
-    if (NSDate.date.timeIntervalSince1970 - self.cjr_acceptEventTime < self.cjr_acceptEventInterval) {
+    if (NSDate.date.timeIntervalSince1970 - self.cjr_acceptEventTime < self.cjr_acceptEventInterval)
+    {
+        
         return;
     }
     

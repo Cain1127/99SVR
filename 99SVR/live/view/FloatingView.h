@@ -20,7 +20,6 @@
 
 - (void)showGift:(CGFloat)time;
 
-//- (id)initWithFrame:(CGRect)frame color:(int)nColor name:(NSString *)strName number:(int)nNumber gid:(int)ngid;
 - (id)initWithFrame:(CGRect)frame color:(int)nColor name:(NSString *)strName number:(int)nNumber gid:(int)ngid userid:(int)nUserid;
 
 @end

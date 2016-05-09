@@ -8,10 +8,10 @@
 
 #import "LivePlayViewController.h"
 #import "UIImageView+WebCache.h"
+#import "SVRMediaClient.h"
 #import "RoomHttp.h"
 #import "AudioPlayer.h"
 #import "Toast+UIView.h"
-#import "KxMovieDecoder.h"
 #import "MediaSocket.h"
 #include <sys/time.h>
 #import "opus.h"
@@ -21,19 +21,15 @@
 #import "LoginViewController.h"
 #import "UIAlertView+Block.h"
 
-@interface LivePlayViewController()
+#define kMediaShare [SVRMediaClient sharedSVRMediaClient]
+
+@interface LivePlayViewController()<SVRMediaClientDelegate>
 {
     UITapGestureRecognizer *tapGesture;
     int nSourceWidth;
     int nSourceHeight;
     UIAlertView *myAlert;
-    struct SwsContext *_swsContext;
     BOOL _pictureValid;
-    AVCodecContext *_audioContext;
-    AVCodecContext *_pCodecCtx;
-    AVFrame *_pFrame;
-    AVPicture _picture;
-    OpusDecoder *_decoder;
     NSTimer *_timer;
     dispatch_queue_t videoQueue;
     dispatch_queue_t audioQueue;
@@ -47,22 +43,21 @@
     UIView *_downHUD;
     UIView *_TopHUD;
 }
+
 @property (nonatomic) BOOL backGroud;
 @property (nonatomic) BOOL bVideo;
 @property (nonatomic,strong) AudioPlayer *playAudio;
-@property (nonatomic) opus_int16 *out_buffer;
 @property (nonatomic,copy) UIImage *currentImage;
 @property (nonatomic,strong) UIImageView *smallView;
 @property (nonatomic,copy) NSString *strPath;
-
 @property (nonatomic,strong) UIButton *btnVideo;
 @property (nonatomic,strong) UIButton *btnFull;
-
 @property (nonatomic,strong) UIButton *btnShare;
-
 @property (nonatomic,strong) UIButton *btnCollet;
-
 @property (nonatomic,copy) NSString *roomName;
+
+@property (nonatomic,strong) NSMutableArray *aryVideo;
+@property (nonatomic,strong) NSMutableArray *aryAudio;
 
 @end
 
@@ -254,29 +249,15 @@
 
 - (void)initDecode
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        av_register_all();
-    });
-    AVCodec *codec = avcodec_find_decoder(AV_CODEC_ID_H264);
-    _pCodecCtx = avcodec_alloc_context3(codec);
-    if (avcodec_open2(_pCodecCtx,codec, nil)<0)
-    {
-        DLog(@"打开失败");
-    }
-    _pFrame = av_frame_alloc();
     _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
-    _decoder = opus_decoder_create(48000,2,0);
-    _out_buffer = (opus_int16 *)malloc(1920*2*sizeof(opus_int16));
 }
 
 - (void)decodeAudio
 {
     [_playAudio startPlayWithBufferByteSize:7680];
-    int returnValue = 0;
     while (_playing)
     {
-        if (_media.audioBuf.count<25)
+        if(_aryAudio.count<10)
         {
             [NSThread sleepForTimeInterval:0.01f];
             continue ;
@@ -284,27 +265,22 @@
         @autoreleasepool
         {
             NSData *data = nil;
-            if(_media.audioBuf.count>20)
+            if(_aryAudio.count>0)
             {
-                data = [_media.audioBuf objectAtIndex:0];
-            }
-            if (data && data.length > 0)
-            {
-                returnValue = opus_decode(_decoder,data.bytes,(int32_t)data.length,_out_buffer, 1920, 0);
-                if (returnValue<0)
+                data = [_aryAudio objectAtIndex:0];
+                if (data && data.length > 0)
                 {
-                    continue;
+                    [_playAudio putAudioData:(short *)data.bytes size:(int)data.length];
                 }
-                [_playAudio putAudioData:_out_buffer size:1920*2*sizeof(opus_int16)];
-            }
-            @synchronized(_media.audioBuf)
-            {
-                if(_media.audioBuf.count>0)
+                @synchronized(_aryAudio)
                 {
-                    [_media.audioBuf removeObjectAtIndex:0];
+                    if(_aryAudio.count>0)
+                    {
+                        [_aryAudio removeObjectAtIndex:0];
+                    }
                 }
+                [NSThread sleepForTimeInterval:0.03];
             }
-            [NSThread sleepForTimeInterval:0.03];
         }
     }
     [_playAudio stopPlay];
@@ -316,7 +292,8 @@
     DLog(@"视频停止");
     _media.nFall = 0;
     _playing = NO;
-    [_media closeSocket];
+    [kMediaShare clientCoreUnInit];
+    [kMediaShare clientRcvStreamStop];
     @WeakObj(self)
     gcd_main_safe(^{
          [selfWeak setDefaultImg];
@@ -402,7 +379,8 @@
     [_btnCollet setImage:[UIImage imageNamed:@"personal_follow_icon"] forState:UIControlStateSelected];
     [_btnCollet addTarget:self action:@selector(colletInfo) forControlEvents:UIControlEventTouchUpInside];
     [self updateDownHUD];
-    
+    [kMediaShare clientCoreInit];
+    kMediaShare.delegate = self;
     _downHUD.alpha = 0;
     if (_roomIsCollet)
     {
@@ -412,7 +390,11 @@
     {
         _btnCollet.selected = NO;
     }
+    
+    _aryAudio = [NSMutableArray array];
+    _aryVideo = [NSMutableArray array];
 }
+
 
 - (void)updateDownHUD
 {
@@ -610,9 +592,11 @@
         [__self setDefaultImg];
     });
     _bVideo = YES;
-    [_media connectRoomId:roomid mic:userid];
     _roomid = roomid;
     _nuserid = userid;
+    
+    [kMediaShare clientRcvStreamStart:@"121.12.118.32" tcpPort:819 rtmpAddr:@"rtmp://push.99ducaijing.cn/live" userId:_nuserid roomId:_roomid];
+    
     if (audioQueue==nil)
     {
         audioQueue = dispatch_queue_create("audio",0);
@@ -642,10 +626,11 @@
     _bVideo = enable;
     if (!enable)
     {
-        @synchronized(_media.videoBuf)
+        @synchronized(_aryVideo)
         {
-            [_media.videoBuf removeAllObjects];
+            [_aryVideo removeAllObjects];
         }
+        [kMediaShare clientMuteVideoStream:NO];
         [self setNoVideo];
     }
     else
@@ -656,6 +641,7 @@
         ^{
             [__self decodeVideo];
         });
+        [kMediaShare clientMuteVideoStream:YES];
     }
 }
 
@@ -690,31 +676,7 @@
         {
             @autoreleasepool
             {
-                NSData *data = nil;
-                @synchronized(_media.videoBuf)
-                {
-                    data = [_media.videoBuf objectAtIndex:0];
-                    [_media.videoBuf removeObjectAtIndex:0];
-                }
-                if (data && data.length > 0)
-                {
-                    AVPacket packet;
-                    av_init_packet(&packet);
-                    packet.size = (int)data.length;
-                    unsigned char cBuffer[data.length];
-                    memcpy(cBuffer,data.bytes,data.length);
-                    packet.data = cBuffer;
-                    int got_pictrue;
-                    int len;
-                    len = avcodec_decode_video2(_pCodecCtx,_pFrame,&got_pictrue,&packet);
-                    if (len<0)
-                    {}
-                    else
-                    {
-                        [self createVideoFrame];
-                    }
-                    av_free_packet(&packet);
-                }
+                //拿到码流并且显示
             }
         }
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1/20 * NSEC_PER_SEC)),videoQueue,
@@ -724,85 +686,7 @@
     }
     else
     {
-        avcodec_flush_buffers(_pCodecCtx);
-        [self closeScaler];
         [_media.videoBuf removeAllObjects];
-    }
-}
-
-#pragma mark -
-#pragma mark custom methods
-
-- (BOOL)setupScaler:(AVCodecContext *)pCodecCtx
-{
-    [self closeScaler];
-    
-    _pictureValid = avpicture_alloc(&_picture,
-                                    PIX_FMT_RGB24,
-                                    nSourceWidth,
-                                    nSourceHeight) == 0;
-    if (!_pictureValid)
-        return NO;
-    _swsContext = sws_getCachedContext(_swsContext,
-                                       pCodecCtx->width,
-                                       pCodecCtx->height,
-                                       pCodecCtx->pix_fmt,
-                                       nSourceWidth,
-                                       nSourceHeight,
-                                       PIX_FMT_RGB24,
-                                       SWS_FAST_BILINEAR,
-                                       NULL, NULL, NULL);
-    return _swsContext != NULL;
-}
-
-- (void)createVideoFrame
-{
-    if (!_pictureValid)
-    {
-        [self setupScaler:_pCodecCtx];
-    }
-    static uint8_t *p = NULL;
-    p = _pFrame->data[1];
-    _pFrame->data[1] = _pFrame->data[2];
-    _pFrame->data[2] = p;
-    
-    _pFrame->data[0] += _pFrame->linesize[0] * (_pCodecCtx->height - 1);
-    _pFrame->linesize[0] *= -1;
-    _pFrame->data[1] += _pFrame->linesize[1] * (_pCodecCtx->height / 2 - 1);
-    _pFrame->linesize[1] *= -1;
-    _pFrame->data[2] += _pFrame->linesize[2] * (_pCodecCtx->height / 2 - 1);
-    _pFrame->linesize[2] *= -1;
-    
-    int nRef = sws_scale(_swsContext,(const uint8_t **)_pFrame->data,_pFrame->linesize,
-              0,_pCodecCtx->height,_picture.data,_picture.linesize);
-    if (nRef>0)
-    {
-        __weak LivePlayViewController *__self = self;
-        [self imageFromAVPicture:_picture width:kScreenWidth height:kVideoImageHeight];
-        __weak UIImage *__rgbImage = _currentImage;
-        dispatch_main_sync_safe(
-        ^{
-            if(__self.bVideo && !__self.backGroud)
-            {
-                if(__rgbImage){
-                    __self.glView.image = __rgbImage;
-                }
-            }
-        });
-    }
-}
-
-- (void) closeScaler
-{
-    if (_swsContext)
-    {
-        sws_freeContext(_swsContext);
-        _swsContext = NULL;
-    }
-    
-    if (_pictureValid) {
-        avpicture_free(&_picture);
-        _pictureValid = NO;
     }
 }
 
@@ -811,55 +695,12 @@
 
 - (void)dealloc
 {
-    DLog(@"已经释放");
-    if(_out_buffer)
-    {
-        free(_out_buffer);
-        _out_buffer = NULL;
-    }
-    opus_decoder_destroy(_decoder);
-    if(_pFrame)
-    {
-        av_frame_free(&_pFrame);
-    }
-    if (_pCodecCtx)
-    {
-        avcodec_close(_pCodecCtx);
-    }
-}
-
--(void)imageFromAVPicture:(AVPicture)pict width:(int)width height:(int)height {
-    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
-    CFDataRef data = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, pict.data[0], pict.linesize[0]*height,kCFAllocatorNull);
-    CGDataProviderRef provider = CGDataProviderCreateWithCFData(data);
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGImageRef cgImage = CGImageCreate(width,
-                                       height,
-                                       8,
-                                       24,
-                                       pict.linesize[0],
-                                       colorSpace,
-                                       bitmapInfo,
-                                       provider,
-                                       NULL,
-                                       NO,
-                                       kCGRenderingIntentDefault);
-    CGColorSpaceRelease(colorSpace);
-    if (cgImage)
-    {
-        _currentImage = [UIImage imageWithCGImage:cgImage];
-    }
-    CGImageRelease(cgImage);
-    CGDataProviderRelease(provider);
-    CFRelease(data);
+    [kMediaShare clientCoreUnInit];
 }
 
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-//    _smallView.frame = Rect(_glView.width/2-44,_glView.height/2-35, 88, 71);
-//    CGFloat originY = _glView.height == kVideoImageHeight ? _glView.height/2+30 : _glView.height/2+40;
-//    lblText.frame = Rect(_glView.width/2-100,originY+10, 200, 20);
 }
 
 #pragma mark AVAudioSession
@@ -881,6 +722,44 @@
             [ProgressHUD showSuccess:@"取消关注"];
         });
     }
+}
+
+- (void)onAudioData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len
+{
+    @synchronized(_aryAudio)
+    {
+        [_aryAudio addObject:data];
+    }
+}
+
+- (void)onVideoData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height
+{
+    @synchronized(_aryVideo)
+    {
+        [_aryVideo addObject:data];
+    }
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+//            Byte *testByte = (Byte*)[data bytes];
+//            self.g_width  = width;
+//            self.g_height = height;
+//            self.g_bytesPerPixel = 4;
+//            self.g_rgbBuf = malloc(self.g_width*self.g_height*self.g_bytesPerPixel);
+//            memcpy(self.g_rgbBuf, testByte, len);
+//            colorSpace = CGColorSpaceCreateDeviceRGB();
+//            CGContextRef newContext = CGBitmapContextCreate(self.g_rgbBuf,
+//                                                            self.g_width, self.g_height, 8,
+//                                                            self.g_width * self.g_bytesPerPixel,
+//                                                            colorSpace, kCGImageAlphaPremultipliedFirst);
+//            CGImageRef frame = CGBitmapContextCreateImage(newContext);
+//            self.imageview.image = [UIImage imageWithCGImage:frame];
+//            
+//            CGImageRelease(frame);
+//            CGContextRelease(newContext);
+//            CGColorSpaceRelease(colorSpace);
+//            free(self.g_rgbBuf);
+        });
+    });
 }
 
 @end

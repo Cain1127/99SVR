@@ -8,6 +8,7 @@
 
 #import "ZLVideoListViewController.h"
 #import "RoomHttp.h"
+#import "UIViewController+EmpetViewTips.h"
 #import "RoomViewController.h"
 #import "PlayIconView.h"
 #import "HttpManagerSing.h"
@@ -47,7 +48,8 @@
 {
     if (_aryVideo.count==0)
     {
-        [self.view makeToastActivity_bird];
+        [self hideEmptyViewInView:_tableView];
+        [_tableView makeToastActivity_bird];
     }
     [kHTTPSingle RequestTeamList];
 }
@@ -81,68 +83,56 @@
 
 - (void)loadVideo:(NSNotification *)notify
 {
-    NSDictionary *dict = notify.object;
+    NSDictionary *parameters = notify.object;
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak.view hideToastActivity];
-        [selfWeak.noView removeFromSuperview];
+        [selfWeak.tableView.header endRefreshing];
+        [selfWeak.tableView hideToastActivity];
     });
-    if([dict isKindOfClass:[NSDictionary class]])
+    int code = [parameters[@"code"] intValue];
+    NSArray *aryShow = parameters[@"show"];
+    if (code!=1 && !_aryVideo)
     {
-        int nStatus = [dict[@"code"] intValue];
-        if(nStatus==1)
-        {
-            _aryVideo = dict[@"show"];
-            NSMutableArray *aryAll = [NSMutableArray array];
-            [aryAll addObjectsFromArray:_aryVideo];
-            NSArray *aryHidden = dict[@"hidden"];
-            for (RoomHttp *room in aryHidden)
-            {
-                [aryAll addObject:room];
-            }
-            NSArray *aryHelp = dict[@"help"];
-            [UserInfo sharedUserInfo].aryHelp = aryHelp;
-            for (RoomHttp *room in aryHelp)
-            {
-                [aryAll addObject:room];
-            }
-            [UserInfo sharedUserInfo].aryRoom = aryAll;
-        }
+        [self showErrorViewInView:_tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
+            Loading_Bird_Show(selfWeak.tableView);
+            [selfWeak.tableView.header beginRefreshing];
+        }];
     }
-    if (_aryVideo.count==0) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [selfWeak createView];
+    else if (aryShow.count==0 && code==1 && !_aryVideo)
+    {
+        [self showEmptyViewInView:_tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
+            Loading_Bird_Show(selfWeak.tableView);
+            [selfWeak.tableView.header beginRefreshing];
+        }];
+    }
+    else
+    {
+        [self hideEmptyViewInView:_tableView];
+        if(aryShow.count == 0)
+        {
+            return ;
+        }
+        _aryVideo = aryShow;
+        NSMutableArray *aryAll = [NSMutableArray array];
+        [aryAll addObjectsFromArray:_aryVideo];
+        NSArray *aryHidden = parameters[@"hidden"];
+        for (RoomHttp *room in aryHidden)
+        {
+            [aryAll addObject:room];
+        }
+        NSArray *aryHelp = parameters[@"help"];
+        
+        [UserInfo sharedUserInfo].aryHelp = aryHelp;
+        for (RoomHttp *room in aryHelp)
+        {
+            [aryAll addObject:room];
+        }
+        [UserInfo sharedUserInfo].aryRoom = aryAll;
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+           [selfWeak.tableView reloadData];
         });
     }
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-         [selfWeak.tableView.header endRefreshing];
-         [selfWeak.tableView reloadData];
-    });
-}
-
-- (void)createView
-{
-    if (nil==_noView)
-    {
-        char cString[255];
-        const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
-        sprintf(cString, "%s/network_anomaly_fail.png",path);
-        NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
-        UIImage *image = [UIImage imageWithContentsOfFile:objCString];
-        if(image)
-        {
-            _noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height) imgView:image msg:@"没有专家发布观点"];
-        }
-    }
-    [_tableView addSubview:_noView];
-    @WeakObj(self)
-    [_noView clickWithBlock:^(UIGestureRecognizer *gesture)
-     {
-         [selfWeak.noView removeFromSuperview];
-         [selfWeak.view makeToastActivity_bird];
-         [selfWeak updateRefresh];
-     }];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
