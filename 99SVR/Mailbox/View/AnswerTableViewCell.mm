@@ -8,9 +8,6 @@
 
 #import "AnswerTableViewCell.h"
 #import "TQAnswerModel.h"
-#import "CFTextView.h"
-#import "CFTextModel.h"
-#import "CFTextAttachment.h"
 #import "UIImage+GIF.h"
 
 @interface AnswerTableViewCell()
@@ -20,9 +17,7 @@
 /** 回答名称 */
 @property(nonatomic, strong) UILabel *answerauthornameLable;
 /** 回答内容 */
-//@property(nonatomic, strong) UILabel *answercontentLable;
-@property(nonatomic, strong) CFTextView *contentTextView;
-
+@property(nonatomic, strong) UILabel *answercontentLable;
 /** 回答时间 */
 @property(nonatomic, strong) UILabel *answertimeLable;
 /** 提问者Bg */
@@ -30,9 +25,7 @@
 /** 提问者姓名 */
 @property(nonatomic, strong) UILabel *askauthornameLabel;
 /** 提问内容 */
-//@property(nonatomic, strong) UILabel *askcontentLabel;
-@property(nonatomic, strong) CFTextView *askcontentTextView;
-
+@property(nonatomic, strong) UILabel *askcontentLabel;
 /** 全文 */
 @property (nonatomic, strong) UIButton *allButton;
 
@@ -61,15 +54,11 @@
         [self.contentView addSubview:_answerauthornameLable];
         
         /** 回答内容 */
-        //        _answercontentLable = [[UILabel alloc] init];
-        //        _answercontentLable.font = Font_14;
-        //        _answercontentLable.textColor = COLOR_Text_Black;
-        //        _answercontentLable.numberOfLines = 0;
-        //        [_bgView addSubview:_answercontentLable];
-        _contentTextView = [[CFTextView alloc] init];
-        _contentTextView.userInteractionEnabled = NO;
-        _contentTextView.font = Font_14;
-        [self.contentView addSubview:_contentTextView];
+        _answercontentLable = [[UILabel alloc] init];
+        _answercontentLable.font = Font_15;
+        _answercontentLable.textColor = COLOR_Text_Black;
+        _answercontentLable.numberOfLines = 0;
+        [self.contentView addSubview:_answercontentLable];
         
         /** 回答时间 */
         _answertimeLable = [[UILabel alloc] init];
@@ -93,16 +82,11 @@
         [self.contentView addSubview:_askauthornameLabel];
         
         /** 提问内容 */
-//        _askcontentLabel = [[UILabel alloc] init];
-//        _askcontentLabel.font = Font_14;
-//        _askcontentLabel.textColor = COLOR_Text_Gay;
-//        _askcontentLabel.numberOfLines = 0;
-//        [_bgView addSubview:_askcontentLabel];
-        _askcontentTextView = [[CFTextView alloc] init];
-        _askcontentTextView.userInteractionEnabled = NO;
-        _askcontentTextView.font = Font_14;
-        _askcontentTextView.backgroundColor = [UIColor clearColor];
-        [self.contentView addSubview:_askcontentTextView];
+        _askcontentLabel = [[UILabel alloc] init];
+        _askcontentLabel.font = Font_15;
+        _askcontentLabel.textColor = COLOR_Text_Gay;
+        _askcontentLabel.numberOfLines = 0;
+        [self.contentView addSubview:_askcontentLabel];
         
         // 全文
         _allButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -119,7 +103,7 @@
 {
     CGFloat top = 20; //上下
     CGFloat LR = 12; // 左右
-
+    
     // -0.5隐藏边框
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, kScreenWidth, 10.5)];
     lineView.backgroundColor = COLOR_Bg_Gay;
@@ -146,34 +130,28 @@
     
     /** 回答内容 */
     //@"说好的回报难吃难吃难吃[吃难吃][$17$][$19$][$17$][$17$][$20$][$17$][$20$][$17$][$17$][$20$][$17$][$20$]你当年的你惹麻烦麻烦吗";
-    _contentTextView.attributedText = [self ContentAttributedString:answerModel.answercontent];
-    CGSize answercontentSize = [answerModel.answercontent sizeMakeWithFont:Font_14 maxW:kScreenWidth - 2* LR];
-    CGFloat answercontentH = answercontentSize.height  > 50 ? answercontentSize.height+40 : answercontentSize.height+10;
-    _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), kScreenWidth - 2* LR, answercontentH);
-    //_contentTextView.backgroundColor = [UIColor redColor];
-//    if (answerModel.isAllText||answercontentSize.height < 35) {
-//        _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answerauthornameLable.frame), answercontentSize.width+ 20, answercontentSize.height + 10);
-//    } else if(answercontentSize.height > 35) {
-//        _contentTextView.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), answercontentSize.width + 10, 40);
-//    }
+    _answercontentLable.attributedText = [self ContentAttributedString:answerModel.answercontent];
+    CGSize answercontentSize = [answerModel.answercontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 2* LR];
+    CGFloat answercontentH = answercontentSize.height+10;//answercontentSize.height  > 50 ? answercontentSize.height+40 : answercontentSize.height+10;
+    _answercontentLable.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), kScreenWidth - 2* LR, answercontentH);
     
     // 全文按钮
-//    _allButton.tag = answerModel.ID;
-//    _allButton.frame = CGRectMake(kScreenWidth - 60, CGRectGetMaxY(_contentTextView.frame), 50, 25);
-//    if(answercontentSize.height > 35 && answerModel.isAllText)
-//    {
-//        _allButton.hidden = NO;
-//        [_allButton setTitle:@"收起" forState:UIControlStateNormal];
-//    } else if(answercontentSize.height > 35 && !answerModel.isAllText)
-//    {
-//        _allButton.hidden = NO;
-//        [_allButton setTitle:@"全文" forState:UIControlStateNormal];
-//    } else {
-//        _allButton.hidden = YES;
-//    }
+    //    _allButton.tag = answerModel.ID;
+    //    _allButton.frame = CGRectMake(kScreenWidth - 60, CGRectGetMaxY(_contentTextView.frame), 50, 25);
+    //    if(answercontentSize.height > 35 && answerModel.isAllText)
+    //    {
+    //        _allButton.hidden = NO;
+    //        [_allButton setTitle:@"收起" forState:UIControlStateNormal];
+    //    } else if(answercontentSize.height > 35 && !answerModel.isAllText)
+    //    {
+    //        _allButton.hidden = NO;
+    //        [_allButton setTitle:@"全文" forState:UIControlStateNormal];
+    //    } else {
+    //        _allButton.hidden = YES;
+    //    }
     
     /** 提问者Bg Y值 */
-    CGFloat askBgViewY = CGRectGetMaxY(_contentTextView.frame);
+    CGFloat askBgViewY = CGRectGetMaxY(_answercontentLable.frame);
     if (!_allButton.hidden) {
         askBgViewY = askBgViewY + 15;
     }
@@ -183,16 +161,13 @@
     _askauthornameLabel.frame = CGRectMake(2*LR, askBgViewY+10, askauthorSize.width, askauthorSize.height);
     
     /** 提问内容 */
-//    _askcontentLabel.text = answerModel.askcontent;
-//    CGSize askcontentSize = [_askcontentLabel.text sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
-//    _askcontentLabel.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), askcontentSize.width, askcontentSize.height);
-    _askcontentTextView.attributedText = [self ContentAttributedString:answerModel.askcontent];//answerModel.askcontent;
-    CGSize askcontentSize = [_askcontentTextView.text sizeMakeWithFont:Font_14 maxW:kScreenWidth - 4 * LR];
-    CGFloat askcontentH = askcontentSize.height  > 50 ? askcontentSize.height+50 : askcontentSize.height+20;
-    _askcontentTextView.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), kScreenWidth - 4 * LR, askcontentH);
+    _askcontentLabel.attributedText = [self ContentAttributedString:answerModel.askcontent];
+    CGSize askcontentSize = [answerModel.askcontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
+    CGFloat askcontentH = askcontentSize.height+10;
+    _askcontentLabel.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), kScreenWidth - 4 * LR, askcontentH);
     
     /** 提问者Bg */
-    CGFloat askBgViewH = CGRectGetMaxY(_askcontentTextView.frame) - CGRectGetMaxY(_askauthornameLabel.frame) + 35;
+    CGFloat askBgViewH = CGRectGetMaxY(_askcontentLabel.frame) - CGRectGetMaxY(_askauthornameLabel.frame) + 35;
     _askBgView.frame = CGRectMake(LR, askBgViewY, kScreenWidth - 2 *LR, askBgViewH);
 }
 
@@ -243,7 +218,7 @@
         [attributedString replaceCharactersInRange:NSRangeFromString(rangeString) withAttributedString:attachmentString];
     }
     
-    [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, attributedString.length)];
+    [attributedString addAttribute:NSFontAttributeName value:Font_15 range:NSMakeRange(0, attributedString.length)];
     [attributedString addAttribute:NSBackgroundColorAttributeName value:[UIColor clearColor] range:NSMakeRange(0, attributedString.length)];
     [attributedString addAttribute:NSForegroundColorAttributeName value:COLOR_Text_Black range:NSMakeRange(0, attributedString.length)];
     
