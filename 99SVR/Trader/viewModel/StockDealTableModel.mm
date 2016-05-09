@@ -259,7 +259,7 @@
             [self goBuyVip];
         }
             break;
-        case 2://什么是私人订制
+        case 2://什么是私人定制
         {
             
             if ([self.delegate respondsToSelector:@selector(goWhatIsPrivateVc)]) {

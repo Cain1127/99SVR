@@ -1,5 +1,5 @@
 
-/**购买私人订制的价格View*/
+/**购买私人定制的价格View*/
 
 #import <UIKit/UIKit.h>
 

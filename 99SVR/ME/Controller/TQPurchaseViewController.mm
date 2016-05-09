@@ -29,7 +29,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.txtTitle.text = @"兑换私人订制";
+    self.txtTitle.text = @"兑换私人定制";
 
     
     Loading_Bird_Show(self.tableView);
@@ -239,7 +239,7 @@
                 
             }else if ([code isEqualToString:@"1015"]){//已经购买
                 
-                [ProgressHUD showError:@"已经兑换该等级私人订制"];
+                [ProgressHUD showError:@"已经兑换该等级私人定制"];
                 
             }else if ([code isEqualToString:@"1016"]){//没有该私人定制
             

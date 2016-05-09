@@ -419,8 +419,16 @@
     [UserDefaults setObject:tableAry forKey:kHistoryList];
     [UserDefaults synchronize];
     
-    [_dataSource setModel:tableAry];
-    [_historyTable reloadData];
+    if (tableAry.count)
+    {
+        [_dataSource setModel:array];
+        _historyTable.tableFooterView = self.footView;
+        [_historyTable reloadData];
+    }
+    else
+    {
+        _historyTable.tableFooterView = self.footView;
+    }
 }
 
 // HistorySearch代理方法 -- 选择搜索记录
@@ -446,12 +454,6 @@
     [_dataSource setModel:tableAry];
     _historyTable.tableFooterView = nil;
     [_historyTable reloadData];
-}
-
-// HistorySearch代理方法 -- 关闭键盘
--(void)HistorySearchCloseKeyboard
-{
-    [self.view endEditing:YES];
 }
 
 - (void)dealloc

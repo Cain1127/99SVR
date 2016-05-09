@@ -104,7 +104,7 @@
         }
     }
     
-    //回到购买私人订制
+    //回到购买私人定制
     for (UIViewController *control in aryIndex) {
         if ([control isKindOfClass:[TQPurchaseViewController class]]) {
             [self.navigationController popToViewController:control animated:YES];

@@ -18,8 +18,6 @@
 
 - (void)deleteAll;
 
-- (void)HistorySearchCloseKeyboard;
-
 @end
 
 @interface HistorySearchDataSource : NSObject<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
