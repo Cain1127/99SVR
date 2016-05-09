@@ -285,14 +285,9 @@
 
 - (void)closeKeyBoard
 {
-
-    [self.txtName resignFirstResponder];
-
-    [self.txtCmd resignFirstResponder];
-
-    [self.txtPwd resignFirstResponder];
-
+    [self.view endEditing:YES];
 }
+
 
 - (void)openHttpView:(UIButton *)btnSender
 {

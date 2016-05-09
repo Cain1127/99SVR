@@ -120,15 +120,7 @@
 
 - (void)closeKeyBoard
 {
-    if([_txtName isFirstResponder])
-    {
-        [_txtName resignFirstResponder];
-    }
-    else if([_txtCode isFirstResponder])
-    {
-        [_txtCode resignFirstResponder];
-    }
-
+    [self.view endEditing:YES];
 }
 
 -(void)textFieldDidChange:(id)sender{

@@ -346,20 +346,10 @@
     
 }
 
+
 - (void)closeKeyBoard
 {
-    if ([_txtName isFirstResponder])
-    {
-        [_txtName resignFirstResponder];
-    }
-    else if([_txtCode isFirstResponder])
-    {
-        [_txtCode resignFirstResponder];
-    }
-    else if([_txtPwd isFirstResponder])
-    {
-        [_txtPwd resignFirstResponder];
-    }
+    [self.view endEditing:YES];
 }
 
 - (void)registerServer

@@ -173,17 +173,10 @@
 
 - (void)closeKeyBoard
 {
-    
-    if ([_txtCode isFirstResponder]) {
-        
-        [_txtCode resignFirstResponder];
-    }else if ([_txtName isFirstResponder]){
-        [_txtName resignFirstResponder];
-    }
-    
-    
+    [self.view endEditing:YES];
 }
-    // Do any additional setup after loading the view.
+
+// Do any additional setup after loading the view.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
