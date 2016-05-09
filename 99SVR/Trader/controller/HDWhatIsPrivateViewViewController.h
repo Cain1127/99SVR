@@ -1,6 +1,6 @@
 
 
-/**什么是私人订制*/
+/**什么是私人定制*/
 
 #import "CustomViewController.h"
 

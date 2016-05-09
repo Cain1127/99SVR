@@ -95,14 +95,25 @@
             }
         });
     }
+    [self chickEmptyViewShowWithTab:_tableView withCode:notify.object?1:0];
 }
 
-
+- (void)chickEmptyViewShowWithTab:(UITableView *)tab withCode:(NSInteger)code{
+    [self.view hideToastActivity];
+    if(code!=1) {
+        [self showErrorViewInView:tab withMsg:@"加载数据失败，请点击屏幕重试" touchHanleBlock:^{
+            [kHTTPSingle RequestPrivateServiceDetail:_customId];
+        }];
+    } else{//请求成功
+        // 不需要处理
+    }
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setInfo:) name:MESSAGE_PRIVATE_DETAIL_VC object:nil];
+    [self.view makeToastActivity_bird];
     [kHTTPSingle RequestPrivateServiceDetail:_customId];
 }
 
@@ -110,6 +121,7 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.view hideToastActivity];
 }
 
 - (void)dealloc

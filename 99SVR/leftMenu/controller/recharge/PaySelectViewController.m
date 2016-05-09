@@ -39,7 +39,7 @@
 - (void)loadWebView
 {
     UIWebView *webView = [[UIWebView alloc] init];
-    webView.frame = Rect(0, 64, kScreenWidth, kScreenHeight);
+    webView.frame = Rect(0, 64, kScreenWidth, kScreenHeight-64);
     webView.delegate = self;
     self.webView = webView;
     [self.view addSubview:webView];
@@ -183,6 +183,19 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+/**
+ *  充值协议弹出，则回退。其它关闭
+ */
+-(void)MarchBackLeft
+{
+    if([self.webView canGoBack]){
+        [self.webView goBack];
+    } else
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)dealloc {

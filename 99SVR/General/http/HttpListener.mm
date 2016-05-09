@@ -504,7 +504,7 @@ void WhatIsPrivateServiceListener::OnError(int errCode)
 }
 
 /**
- *  请求信息--购买 私人订制的详情列表。
+ *  请求信息--购买 私人定制的详情列表。
  */
 
 void BuyPrivateServiceListener::onResponse(vector<PrivateServiceLevelDescription>& infos){
