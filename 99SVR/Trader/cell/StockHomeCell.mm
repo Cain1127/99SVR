@@ -129,9 +129,8 @@
     }
     
     //计算总收益字体
-    self.totalNumLab.text =  model.totalprofit;
-    CGSize totalNumLabSize = [ShareFunction calculationOfTheText:self.totalNumLab.text withFont:totalNumLab_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
-
+    CGSize totalNumLabSize = [ShareFunction calculationOfTheText:model.totalprofit withFont:totalNumLab_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
+    
     //总收益数字
     [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@(totalNum_top_h));
@@ -139,6 +138,9 @@
         make.width.equalTo(@(totalNumLabSize.width + 10));
         make.height.equalTo(@(totalNumLab_fot));
     }];
+    
+    self.totalNumLab.attributedText = [self changeText:model.totalprofit];
+    
 
     //操盘名字
     [self.nameLab mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -189,8 +191,7 @@
         
     
     //计算总收益字体
-    self.totalNumLab.text =  model.totalprofit;
-    CGSize totalNumLabSize = [ShareFunction calculationOfTheText:self.totalNumLab.text withFont:totalNumLab_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
+    CGSize totalNumLabSize = [ShareFunction calculationOfTheText:model.totalprofit withFont:totalNumLab_fot withMaxSize:(CGSize){200,CGFLOAT_MAX}];
     
     //总收益数字
     [self.totalNumLab mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -199,6 +200,9 @@
         make.width.equalTo(@(totalNumLabSize.width + 10));
         make.height.equalTo(@(totalNumLab_fot));
     }];
+    
+    self.totalNumLab.attributedText = [self changeText:model.totalprofit];
+
     
     //总收益文字
     [self.totalTitLab mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -231,11 +235,27 @@
     
     
     self.nameLab.text =  model.focus;
-    self.targetLab.text =  [NSString stringWithFormat:@"目标收益：%@",model.goalprofit];
+    self.targetLab.text = [NSString stringWithFormat:@"目标收益：%@",model.goalprofit];
+//    self.targetLab.attributedText = [self changeText:[NSString stringWithFormat:@"目标收益：%@",model.goalprofit]];
     self.totalTitLab.text = @"总收益";
     self.traderNameLab.text = model.teamname;
 
 
 }
+
+#pragma mark 返回一个富文本
+-(NSMutableAttributedString *)changeText:(NSString *)str{
+    
+    NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc]initWithString:str];
+    
+    [attributedStr addAttribute:NSFontAttributeName
+     
+                          value:[UIFont systemFontOfSize:(totalNumLab_fot/2.0)]
+     
+                          range:NSMakeRange([str length]-1, 1)];
+    
+    return attributedStr;
+}
+
 
 @end
