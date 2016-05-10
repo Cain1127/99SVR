@@ -118,6 +118,7 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableHeaderView = [self tableHeaderView];
     _tableView.tableFooterView = [UIView new];
+    _tableView.backgroundColor = COLOR_Bg_Gay;
     [self.view addSubview:_tableView];
 }
 
