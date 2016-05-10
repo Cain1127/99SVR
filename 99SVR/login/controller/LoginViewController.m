@@ -333,7 +333,7 @@
     //进入新的界面先
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        [__self.view makeToastActivity_bird];
+        Loading_Cup_Show(__self.view);
     });
     __block NSString *__strUser = strUser;
     __block NSString *__strPwd = strPwd;
@@ -364,7 +364,7 @@
 
 - (void)sinaLogin
 {
-    [self.view makeToastActivity_bird];
+    Loading_Cup_Show(self.view);
     WBAuthorizeRequest *request = [WBAuthorizeRequest request];
     request.redirectURI = kRedirectURI;
     request.scope = @"all";
@@ -378,7 +378,7 @@
 - (void)qqLogin
 {
 //    [ProgressHUD show:@"QQ授权中..." viewInfo:self.view];
-    [self.view makeToastActivity_bird];
+    Loading_Cup_Show(self.view);
     _tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1105298719" andDelegate:self];
     NSArray* permissions = [NSArray arrayWithObjects:
                             kOPEN_PERMISSION_GET_USER_INFO,
@@ -504,14 +504,14 @@
 
 - (void)weichat_login:(NSNotification *)notify
 {
-    [self.view hideToastActivity];
+    Loading_Hide(self.view);
     NSDictionary *dict = [notify object];
     __weak LoginViewController *__self = self;
     if (dict && [dict objectForKey:@"status"])
     {
         dispatch_async(dispatch_get_main_queue(),
         ^{
-            [__self.view hideToastActivity];
+            Loading_Hide(__self.view);
             [__self.view makeToast:@"微信登录失败"];
         });
         return ;
@@ -525,7 +525,7 @@
          {
              dispatch_async(dispatch_get_main_queue(),
              ^{
-                 [__self.view hiddenActivityInView];
+                 Loading_Hide(__self.view);
              });
              NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
              if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
@@ -542,15 +542,16 @@
              }
              else
              {
-                [__self.view hideToastActivity];
+                 Loading_Hide(__self.view);
                 [__self.view makeToast:@"微信登录授权失败"];
              }
              
          }
          fail:^(NSError *error)
          {
-                 [__self.view hideToastActivity];
-                 [__self.view makeToast:@"微信登录授权失败"];
+
+             Loading_Hide(__self.view);
+             [__self.view makeToast:@"微信登录授权失败"];
          }];
     }
 }
@@ -558,14 +559,14 @@
 #pragma mark 新浪登录响应
 - (void)sinaLogin_response:(NSNotification *)notify
 {
-    [self.view hideToastActivity];
+    Loading_Hide(self.view);
     NSDictionary *dict = [notify object];
     DLog(@"dict:%@",dict);
     if(dict && [dict objectForKey:@"error"])
     {
         __weak LoginViewController *__self = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [__self.view hideToastActivity];
+            Loading_Hide(__self.view);
             [__self.view makeToast:@"新浪微博授权失败"];
         });
         return ;
@@ -599,12 +600,12 @@
             }
             else
             {
-               [selfWeak.view hideToastActivity];
+                Loading_Hide(selfWeak.view);
                [selfWeak.view makeToast:@"新浪微博登录失败"];
             }
         } fail:^(NSError *error)
         {
-            [selfWeak.view hideToastActivity];
+            Loading_Hide(selfWeak.view);
             [selfWeak.view makeToast:@"新浪微博登录失败"];
         }];
     }
@@ -637,7 +638,7 @@
     dispatch_async(dispatch_get_main_queue(),
     ^{
         [NSObject cancelPreviousPerformRequestsWithTarget:__self];
-        [__self.view hideToastActivity];
+        Loading_Hide(__self.view);
     });
     if (notify==nil)
     {
@@ -654,7 +655,7 @@
     {
         dispatch_async(dispatch_get_main_queue(),
         ^{
-            [__self.view hideToastActivity];
+            Loading_Hide(__self.view);
             [ProgressHUD showError:@"账号或密码错误，请重新输入"];
         });
     }
@@ -671,13 +672,15 @@
     dispatch_async(dispatch_get_main_queue(),
     ^{
         [self.view hideToastActivity];
+        Loading_Hide(__self.view);
         [__self.view makeToast:@"登录超时"];
     });
 }
 
 - (void)tencentDidLogin
 {
-    [self.view hideToastActivity];
+    Loading_Hide(self.view);
+    
     if ([_tencentOAuth accessToken] && 0 != [[_tencentOAuth accessToken] length])
     {
         DLog(@"token:%@ openId;%@",[_tencentOAuth accessToken],[_tencentOAuth openId]);
@@ -712,7 +715,7 @@
             {
                 dispatch_async(dispatch_get_main_queue(),
                ^{
-                   [selfWeak.view hideToastActivity];
+                   Loading_Hide(selfWeak.view);
                    [selfWeak.view makeToast:@"QQ登录授权失败"];
                });
             }
@@ -721,7 +724,7 @@
         {
             dispatch_async(dispatch_get_main_queue(),
             ^{
-                [selfWeak.view hideToastActivity];
+                Loading_Hide(selfWeak.view);
                 [selfWeak.view makeToast:@"QQ登录授权失败"];
             });
         }];
@@ -730,7 +733,7 @@
     {
         __weak LoginViewController *__self = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [__self.view hideToastActivity];
+            Loading_Hide(__self.view);
             [__self.view makeToast:@"QQ登录授权失败"];
         });
     }
@@ -750,7 +753,7 @@
     __weak LoginViewController *__self = self;
     __weak NSString *__strMsg = strMsg;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [__self.view hideToastActivity];
+        Loading_Hide(__self.view);
         [__self.view makeToast:__strMsg];
     });
 }
@@ -759,7 +762,7 @@
 {
     __weak LoginViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [__self.view hideToastActivity];
+        Loading_Hide(__self.view);
         [__self.view makeToast:@"网络故障"];
     });
 }

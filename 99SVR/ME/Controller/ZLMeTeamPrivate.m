@@ -150,7 +150,7 @@
 
 - (void)loadPrivate:(NSNotification *)notify
 {
-    Loading_Bird_Hide(self.tableView);
+    Loading_Hide(self.tableView);
     NSDictionary *dict = notify.object;
     if ([dict isKindOfClass:[NSDictionary class]]) {
         int code = [dict[@"code"] intValue];

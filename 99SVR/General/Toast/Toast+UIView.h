@@ -40,13 +40,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 - (void)makeToast:(NSString *)message duration:(CGFloat)interval position:(id)position image:(UIImage *)image;
 
 // displays toast with an activity spinner
-- (void)makeToastActivity_bird;
-- (void)makeToastActivity_bird:(id)position;
-- (void)makeToastActivity_bird_2:(id)position;
+- (void)makeToastActivity:(id)position;
 - (void)hideToastActivity;
-/**加载鸟的视图*/
-- (void)makeToastActivity_bird_bird;
 
+/**鸟的加载*/
+- (void)makeToastActivity_bird;
+/**杯子的加载*/
+- (void)makeToastActivity_cup;
 
 // the showToast methods display any view as toast
 - (void)showToast:(UIView *)toast;

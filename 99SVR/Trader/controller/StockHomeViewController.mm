@@ -172,7 +172,7 @@
  */
 -(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockHomeTableViewModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray{
     
-    Loading_Bird_Hide(table);
+    Loading_Hide(table);
     
     dispatch_async(dispatch_get_main_queue(), ^{
         

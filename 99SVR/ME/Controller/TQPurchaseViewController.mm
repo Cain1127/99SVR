@@ -136,7 +136,7 @@
 #pragma mark 刷新数据
 -(void)refreshDayData:(NSNotification *)notfi{
     
-    Loading_Bird_Hide(self.tableView);
+    Loading_Hide(self.tableView);
     
     NSString *code = [NSString stringWithFormat:@"%@",[notfi.object valueForKey:@"code"]];
     

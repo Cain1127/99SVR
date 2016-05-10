@@ -158,20 +158,59 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
     
 }
 
+#pragma mark 杯子加载
+- (void)makeToastActivity_cup{
+    
+    UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);
+    if (existingActivityView != nil) return;
+    
+    UIView *activityView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 120, 140)];
+    activityView.center = [self centerPointForPosition:CSToastActivityDefaultPosition withToast:activityView];
+    activityView.backgroundColor = [UIColor clearColor];
+    //    activityView.alpha = 0.0;
+    activityView.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);
+    activityView.layer.cornerRadius = CSToastCornerRadius;
+    activityView.backgroundColor = RGB(57,64,66);
+    
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(activityView.bounds.size.width/2-15,activityView.bounds.size.height/2-15, 30, 30)];
+    NSMutableArray *images = [NSMutableArray array];
+    [activityView addSubview:imgView];
+    for (int i=1; i<13; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading-beizi80X8000%02d",i]];
+        [images addObject:image];
+    }
+    imgView.animationImages = images;
+    imgView.animationDuration= 1;
+    [imgView startAnimating];
+    
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0,CGRectGetMaxY(imgView.frame), activityView.width, 20)];
+    [lblName setText:@"正在加载，请稍后"];
+    [lblName setTextColor:COLOR_Text_Gay];
+    [lblName setTextAlignment:NSTextAlignmentCenter];
+    [activityView addSubview:lblName];
+    [lblName setFont:XCFONT(12)];
+    
+    objc_setAssociatedObject (self, &CSToastActivityViewKey, activityView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    [self addSubview:activityView];
+    [self bringSubviewToFront:activityView];
+    
+    [UIView animateWithDuration:CSToastFadeDuration
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:
+     ^{
+         activityView.alpha = 1.0;
+     } completion:nil];
 
-
-
-//- (void)makeToastActivity_bird
-//{
-//    [self makeToastActivity_bird:CSToastActivityDefaultPosition msg:@"正在加载，请稍后"];
-//}
+}
 
 - (void)makeToastMsgActivity:(NSString *)strMsg
 {
-    [self makeToastActivity_bird:CSToastActivityDefaultPosition msg:strMsg];
+    [self makeToastActivity:CSToastActivityDefaultPosition msg:strMsg];
 }
 
-- (void)makeToastActivity_bird:(id)position msg:(NSString *)strMsg{
+- (void)makeToastActivity:(id)position msg:(NSString *)strMsg{
     UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);
     if (existingActivityView != nil) return;
     
@@ -215,7 +254,7 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
      } completion:nil];
 }
 
-- (void)makeToastActivity_bird_2:(id)position
+- (void)makeToastActivity:(id)position
 {
     UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);
     if (existingActivityView != nil) return;
