@@ -8,6 +8,7 @@
 
 #import "XVideoLiveViewcontroller.h"
 #import "LivePlayViewController.h"
+#import "GiftShowAnimate.h"
 #import "DecodeJson.h"
 #import "RoomChatDataSource.h"
 #import "TableViewFactory.h"
@@ -42,6 +43,7 @@
     ChatView *_inputView;
     
     NSMutableDictionary *dictGift;
+    NSMutableArray *aryGift;
     BOOL bGiftView;
     BOOL bFull;
     int nColor;
@@ -118,7 +120,7 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    dictGift = [NSMutableDictionary dictionary];
+    aryGift = [NSMutableArray array];
     nColor = 10000;
     [self initUIHead];
     UITapGestureRecognizer* singleRecogn;
@@ -256,13 +258,8 @@
 {
     
     //提问完再次检测提问次数
-    [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
-    
-    char cName[100]={0};
-    char cContent[400]={0};
-    strcpy(cName, [strName UTF8String]);
-    strcpy(cContent, [strContent UTF8String]);
-    [kHTTPSingle PostAskQuestion:[_room.teamid intValue] stock:cName question:cContent];
+//    [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
+    [[ZLLogonServerSing sharedZLLogonServerSing] requestQuestion:[_room.roomid intValue] team:[_room.teamid intValue] stock:strName question:strContent];
     [_questionView.txtName resignFirstResponder];
     [_questionView.txtContent resignFirstResponder];
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
@@ -327,6 +324,7 @@
 - (void)responseQuestion:(NSNotification *)notify
 {
     NSDictionary *dict = notify.object;
+    [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
     if ([dict[@"code"] intValue]==0)
     {
         @WeakObj(_questionView)
@@ -357,6 +355,15 @@
         _question_coin = [dict[@"askcoin"] floatValue];
         _question_times = [dict[@"askremain"] floatValue];
     }
+}
+
+- (void)loadFailQuestion:(NSNotification *)notify
+{
+    NSString *strMsg = notify.object;
+    __weak NSString *__strMsg = strMsg;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [ProgressHUD showError:__strMsg];
+    });
 }
 
 - (void)addNotification
@@ -608,8 +615,7 @@
      */
     NSDictionary *parameter = notify.object;
     @WeakObj(self)
-    [dictGift setObject:parameter forKey:@(nColor)];
-    nColor++;
+    [aryGift addObject:parameter];
     dispatch_async(dispatch_get_main_queue(), ^{
         [selfWeak showGiftInfo];
     });
@@ -617,29 +623,7 @@
 
 - (void)showGiftInfo
 {
-    if (_nCurGift<2)
-    {
-        NSNumber *number = [dictGift allKeys][0];
-        NSDictionary *parameter = [dictGift objectForKey:number];
-        @WeakObj(self)
-        @WeakObj(dictGift)
-        FloatingView *floatView = [selfWeak createFloatView:parameter color:[number intValue] onlyOne:_nCurGift];
-        [self.view addSubview:floatView];
-        DLog(@"frame:%@",NSStringFromCGRect(floatView.frame));
-        floatView.tag = [number integerValue];
-        _nCurGift ++;
-        int num = [[parameter objectForKey:@"num"] intValue];
-        CGFloat nTime = num/10+1;
-        @WeakObj(number)
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(nTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            FloatingView *giftFloat = [selfWeak.view viewWithTag:[numberWeak integerValue]];
-            [dictGiftWeak removeObjectForKey:numberWeak];
-            [giftFloat removeFromSuperview];
-            selfWeak.nCurGift--;
-        });
-        [dictGift removeObjectForKey:number];
-    }
-    [NSThread sleepForTimeInterval:0.2f];
+    
 }
 
 - (FloatingView*)createFloatView:(NSDictionary *)parameter color:(int)ncolor onlyOne:(int)nOnly{
@@ -656,7 +640,6 @@
     }
     return nil;
 }
-
 
 #pragma mark RoomDwonDelegate
 - (void)clickRoom:(UIButton *)button index:(NSInteger)nIndex
@@ -675,7 +658,6 @@
                 [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
                     [selfWeak closeRoomInfo];
                 }];
-                
             }
         }
             break;
@@ -695,7 +677,6 @@
             else
             {
                 @WeakObj(self)
-                
                 [AlertFactory createLoginAlert:self withMsg:@"送礼物" block:^{
                     [selfWeak closeRoomInfo];
                 }];
@@ -724,7 +705,6 @@
             else
             {
                 @WeakObj(self)
-                
                 [AlertFactory createLoginAlert:self withMsg:@"提问" block:^{
                     [selfWeak closeRoomInfo];
                 }];
@@ -763,12 +743,9 @@
         [self.view makeToast:@"请输入聊天内容"];
         return ;
     }
-    
     [kProtocolSingle sendMessage:strInfo toId:toUser];
-    
     [_inputView.textView setText:@""];
     [_inputView setHidden:YES];
-//    [self switchBtn:1];
 }
 
 #pragma mark 送礼物

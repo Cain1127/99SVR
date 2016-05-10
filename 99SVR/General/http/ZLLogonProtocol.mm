@@ -450,6 +450,16 @@ void ZLLogonProtocol::sendMessage(const char *msg,int toId,const char *toalias){
     }
     video_room->SendMsg_RoomChatReq(roomMsg);
 }
+void ZLLogonProtocol::sendQuestion(int roomId,int teamId,const char *stock,const char *question)
+{
+    AskQuestionReq req;
+    req.set_roomid(roomId);
+    req.set_teamid(teamId);
+    req.set_stock(stock);
+    req.set_question(question);
+    req.set_questionlen((int)strlen(question));
+    video_room->SendMsg_AskQuestionReq(req);
+}
 
 void ZLLogonProtocol::exitRoomInfo(){
     video_room->SendMsg_ExitRoomReq(room_info.vcbid());
@@ -678,7 +688,15 @@ void ZLRoomListener::OnRobotTeacherIdNoty(RobotTeacherIdNoty& info)
 //Ã·Œ œÏ”¶
 void ZLRoomListener::OnAskQuestionResp(AskQuestionResp& info)
 {
-    
+//    uint64	_nk;
+//    uint32	_questionid;
+//    uint32	_userid;
+//    uint32	_teamid;
+//    string	_stock;
+//    uint32	_questionlen;
+//    string	_question;
+    [UserInfo sharedUserInfo].goldCoin = info.nk()/1000.0f;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_QUESTION_VC object:@"提问成功"];
 }
 /**
  *  麦状态变换触发
@@ -849,7 +867,8 @@ void ZLRoomListener::OnFavoriteVcbResp(FavoriteRoomResp& info)
 void ZLRoomListener::OnAskQuestionErr(ErrCodeResp& info)
 {
     NSString *strErr = [NSString stringWithUTF8String:conn->get_error_desc(info.errcode()).c_str()];
-    if (strErr!=nil) {
+    if (strErr!=nil)
+    {
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:strErr];
     }
     else

@@ -18,10 +18,9 @@
 #import "RoomHttp.h"
 #import "XPrivateService.h"
 #import "ZLPrivateDataSource.h"
-#import "ZLWhatIsPrivateView.h"
 @interface XTeamPrivateController()<DTAttributedTextContentViewDelegate,PrivateDelegate>
 {
-    ZLWhatIsPrivateView *whatPrivate;
+    
 }
 
 @property (nonatomic,strong) UIButton *btnBuy;
@@ -221,15 +220,6 @@
 
 - (void)loadWhatsPrivate:(NSNotification *)notify
 {
-    NSDictionary *dict = notify.object;
-    if ([dict[@"code"] intValue]==1)
-    {
-        NSString *strInfo = dict[@"data"];
-        if(strInfo)
-        {
-            [whatPrivate setContent:strInfo];
-        }
-    }
 }
 
 /**
@@ -238,14 +228,10 @@
 
 - (void)showWhatIsPrivate
 {
-    whatPrivate.hidden = NO;
 }
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
-//    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
-//    [[self viewController].navigationController pushViewController:control animated:YES];
-    
-    NSString *strInfo = [NSString stringWithFormat:@"%@%d.html",kPrivate_detail_url,summary.nId];
+    NSString *strInfo = [kHTTPSingle GetPrivateServiceDetailUrl:summary.nId];
     NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strInfo title:summary.teamname];
     [[self viewController].navigationController pushViewController:svrView animated:YES];
 }

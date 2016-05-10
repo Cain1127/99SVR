@@ -16,6 +16,7 @@
  */
 #import <Foundation/Foundation.h>
 #import "HttpMessage.pb.h"
+
 @interface TQPersonalModel : NSObject
 
 - (id)initWithMyPrivateService:(PrivateServiceSummary *)PrivateServiceSummary;
