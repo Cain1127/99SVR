@@ -28,7 +28,6 @@
     
     //交易记录或者持仓情况
     self.dealView = [[StockDealCellView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,STORCK_RecordCell_H}];
-    self.dealView.titleLabV.leftLab.font = [UIFont systemFontOfSize:15];
     self.dealView.titleLabV.leftLab.textColor = UIColorFromRGB(0x343434);
     [self.bakImageView addSubview:self.dealView];
 }
@@ -57,12 +56,13 @@
 
         
         [self.dealView.titleLabV setLeftLabText:[NSString stringWithFormat:@"%@ %@ %@",model.buytype,model.stockname,model.count] rightLabText:@" "];
-        [self.dealView.costRmbLabV setLeftLabText:[NSString stringWithFormat:@"成交价 %@",model.price] rightLabText: [NSString stringWithFormat:@"成交数量 %@",model.count]];
-        [self.dealView.nowRmbLabV setLeftLabText:[NSString stringWithFormat:@"成交额 %@",model.money] rightLabText:[NSString stringWithFormat:@"成交时间 %@",model.time]];
+        [self.dealView.costRmbLabV setLeftLabText:[NSString stringWithFormat:@"成交价 %@",model.price] rightLabText: [NSString stringWithFormat:@"成交数 %@",model.count]];
+        [self.dealView.nowRmbLabV setLeftLabText:[NSString stringWithFormat:@"成交额 %@",model.money] rightLabText:[NSString stringWithFormat:@"%@",model.time]];
         self.dealView.titleLabV.leftLab.attributedText = attriStr;
-
-        
-        self.dealView.nowRmbLabV.rightLab.textColor = COLOR_Text_Black;
+        self.dealView.nowRmbLabV.rightLab.textColor = COLOR_Text_Gay;
+        self.dealView.nowRmbLabV.leftLab.textColor = COLOR_Text_Gay;
+        self.dealView.costRmbLabV.leftLab.textColor = COLOR_Text_Gay;
+        self.dealView.costRmbLabV.rightLab.textColor = COLOR_Text_Gay;
 
     }else{//仓库详情
     

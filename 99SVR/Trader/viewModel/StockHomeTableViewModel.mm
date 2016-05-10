@@ -81,15 +81,9 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     StockDealModel *model = self.tabDataArray[indexPath.row];
-
     if ([self.delegate respondsToSelector:@selector(tabViewDidSelectRowAtIndexPath:withModel:)]) {
         [self.delegate tabViewDidSelectRowAtIndexPath:indexPath withModel:model];
     }
-//    
-//    
-//    StockDealViewController *stockVC = [[StockDealViewController alloc]init];
-//    stockVC.stockModel = model;
-//    [self.viewController.navigationController pushViewController:stockVC animated:YES];
 }
 
 -(void)setDataArray:(NSArray *)dataArray{

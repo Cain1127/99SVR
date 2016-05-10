@@ -107,7 +107,6 @@
     control.stockModel.teamname = _room.teamname;
     control.stockModel.teamicon = _room.teamicon;
     [self.navigationController pushViewController:control animated:YES];
-//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)nopurchaseVc {

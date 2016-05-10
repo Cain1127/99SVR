@@ -1,14 +1,10 @@
-//
-//  StockDealCellView.m
-//  99SVR
-//
-//  Created by 刘海东 on 16/4/20.
-//  Copyright © 2016年 xia zhonglin . All rights reserved.
-//
+
+
+#define titleFont ValueWithTheIPhoneModelString(@"12,12,15,15")
 
 #import "StockDealCellLabelView.h"
 #import "ShareFunction.h"
-
+#import "StockMacro.h"
 
 @implementation StockDealCellLabelView
 
@@ -26,18 +22,17 @@
 -(void)initUI{
     
     self.leftLab = [[UILabel alloc]init];
-    self.leftLab.font = [UIFont systemFontOfSize:15];
+    self.leftLab.font = [UIFont systemFontOfSize:titleFont];
     self.leftLab.textAlignment = NSTextAlignmentLeft;
     self.leftLab.textColor = COLOR_Text_Black;
     [self addSubview:self.leftLab];
     
     
     self.rightLab = [[UILabel alloc]init];
-    self.rightLab.font = [UIFont systemFontOfSize:15];
+    self.rightLab.font = [UIFont systemFontOfSize:titleFont];
     self.rightLab.textAlignment = NSTextAlignmentRight;
     self.rightLab.textColor = COLOR_Text_Black;
     [self addSubview:self.rightLab];
-
 }
 
 -(void)setLeftLabText:(NSString *)leftStr rightLabText:(NSString *)rightStr{
@@ -46,14 +41,15 @@
     self.rightLab.text = rightStr;
 
     
-    CGSize leftLabSize = [ShareFunction calculationOfTheText:self.leftLab.text withFont:15 withMaxSize:(CGSize){self.width,CGFLOAT_MAX}];
-    CGSize rightLabSize = [ShareFunction calculationOfTheText:self.rightLab.text withFont:15 withMaxSize:(CGSize){self.width,CGFLOAT_MAX}];
+    CGSize leftLabSize = [ShareFunction calculationOfTheText:self.leftLab.text withFont:titleFont withMaxSize:(CGSize){self.width,CGFLOAT_MAX}];
+    CGSize rightLabSize = [ShareFunction calculationOfTheText:self.rightLab.text withFont:titleFont withMaxSize:(CGSize){self.width,CGFLOAT_MAX}];
 
 
     if (leftLabSize.width>rightLabSize.width) {//左边大过右边
         
         self.leftLab.frame = (CGRect){10,0,leftLabSize.width + 10,self.height};
         self.rightLab.frame = (CGRect){CGRectGetMaxX(self.leftLab.frame),0,(self.width-CGRectGetMaxX(self.leftLab.frame)-10),self.height};
+
         
     }else{//右边大过左边
         

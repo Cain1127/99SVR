@@ -1,8 +1,8 @@
 
 
-#define lab_Top ValueWithTheIPhoneModelString(@"20,20,20,20") //第一个labe距离上面的高度
-#define lab_Bottom ValueWithTheIPhoneModelString(@"20,20,20,20") //最后一个label距离下面的高度
-#define lab_h ValueWithTheIPhoneModelString(@"15,15,15,15") //所有lab的高度
+#define lab_Top ValueWithTheIPhoneModelString(@"15,15,20,20") //第一个labe距离上面的高度
+#define lab_Bottom ValueWithTheIPhoneModelString(@"15,15,20,20") //最后一个label距离下面的高度
+#define lab_h ValueWithTheIPhoneModelString(@"12,12,15,15") //所有lab的高度
 
 
 #import "StockDealCellView.h"
