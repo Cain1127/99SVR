@@ -163,6 +163,12 @@
     self.topScroView.backgroundColor = topBagColor;
 }
 
+- (void)setDefaultIndex:(int)nIndex
+{
+    [self hanleBlockWith:nIndex];
+    [self.topScroView setTitleIndex:nIndex badgeHide:YES];
+}
+
 @end
 
 

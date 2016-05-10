@@ -258,6 +258,7 @@
 		BB17694A1C7D88E000CE947C /* ForgetPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1769491C7D88E000CE947C /* ForgetPwdViewController.m */; };
 		BB17694D1C7D9E7300CE947C /* InputPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB17694C1C7D9E7300CE947C /* InputPwdViewController.m */; };
 		BB1EC9961CE1C18600884774 /* libSVRMedia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB1EC9951CE1C18600884774 /* libSVRMedia.a */; };
+		BB1EC9981CE232B400884774 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1EC9971CE232B400884774 /* Connection.cpp */; };
 		BB25D7F21C1571B400314C1E /* _9SVRTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7F11C1571B400314C1E /* _9SVRTests.m */; };
 		BB25D7FD1C1571B400314C1E /* _9SVRUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7FC1C1571B400314C1E /* _9SVRUITests.m */; };
 		BB25D80F1C15729800314C1E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D80B1C15729800314C1E /* AppDelegate.m */; };
@@ -266,7 +267,6 @@
 		BB2CA60C1CD338A300DFE56E /* HttpManagerSing.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5C01CD338A200DFE56E /* HttpManagerSing.mm */; };
 		BB2CA60D1CD338A300DFE56E /* ZLLogonProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5C21CD338A200DFE56E /* ZLLogonProtocol.mm */; };
 		BB2CA60E1CD338A300DFE56E /* ZLLogonServerSing.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5C41CD338A200DFE56E /* ZLLogonServerSing.mm */; };
-		BB2CA60F1CD338A300DFE56E /* Connection.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5C81CD338A200DFE56E /* Connection.mm */; };
 		BB2CA6101CD338A300DFE56E /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5CB1CD338A200DFE56E /* crc32.cpp */; };
 		BB2CA6111CD338A300DFE56E /* Http.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5CE1CD338A200DFE56E /* Http.cpp */; };
 		BB2CA6121CD338A300DFE56E /* http_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA5D11CD338A200DFE56E /* http_common.cpp */; };
@@ -1280,6 +1280,7 @@
 		BB17694B1C7D9E7300CE947C /* InputPwdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputPwdViewController.h; sourceTree = "<group>"; };
 		BB17694C1C7D9E7300CE947C /* InputPwdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputPwdViewController.m; sourceTree = "<group>"; };
 		BB1EC9951CE1C18600884774 /* libSVRMedia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSVRMedia.a; sourceTree = "<group>"; };
+		BB1EC9971CE232B400884774 /* Connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Connection.cpp; sourceTree = "<group>"; };
 		BB25D7D41C1571B400314C1E /* 99SVR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 99SVR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB25D7ED1C1571B400314C1E /* 99SVRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 99SVRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB25D7F11C1571B400314C1E /* _9SVRTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _9SVRTests.m; sourceTree = "<group>"; };
@@ -1304,7 +1305,6 @@
 		BB2CA5C41CD338A200DFE56E /* ZLLogonServerSing.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZLLogonServerSing.mm; sourceTree = "<group>"; };
 		BB2CA5C61CD338A200DFE56E /* commonroom_cmd_vchat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = commonroom_cmd_vchat.h; sourceTree = "<group>"; };
 		BB2CA5C71CD338A200DFE56E /* CommonroomMessage.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonroomMessage.pb.h; sourceTree = "<group>"; };
-		BB2CA5C81CD338A200DFE56E /* Connection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Connection.mm; sourceTree = "<group>"; };
 		BB2CA5C91CD338A200DFE56E /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
 		BB2CA5CA1CD338A200DFE56E /* ConnectionListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionListener.h; sourceTree = "<group>"; };
 		BB2CA5CB1CD338A200DFE56E /* crc32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc32.cpp; sourceTree = "<group>"; };
@@ -2968,10 +2968,10 @@
 		BB2CA5C51CD338A200DFE56E /* socket */ = {
 			isa = PBXGroup;
 			children = (
+				BB1EC9971CE232B400884774 /* Connection.cpp */,
 				BB14B9D71CDA35940027E7E6 /* HttpConnection.cpp */,
 				BB2CA5C61CD338A200DFE56E /* commonroom_cmd_vchat.h */,
 				BB2CA5C71CD338A200DFE56E /* CommonroomMessage.pb.h */,
-				BB2CA5C81CD338A200DFE56E /* Connection.mm */,
 				BB2CA5C91CD338A200DFE56E /* Connection.h */,
 				BB2CA5CA1CD338A200DFE56E /* ConnectionListener.h */,
 				BB2CA5CB1CD338A200DFE56E /* crc32.cpp */,
@@ -4804,7 +4804,6 @@
 				B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */,
 				18B0CECC1CC07CC700BA82DF /* NSCalendar+init.m in Sources */,
 				1827FF591C9959BF009D9C79 /* MyScrollView.m in Sources */,
-				BB2CA60F1CD338A300DFE56E /* Connection.mm in Sources */,
 				5AC00A511CD99E6600379081 /* MessageTableViewCell.mm in Sources */,
 				BBA16DA51C8C75B000D84E80 /* NSDate+convenience.m in Sources */,
 				BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */,
@@ -4886,6 +4885,7 @@
 				BB2CA9DB1CD5E99900DFE56E /* IQUIWindow+Hierarchy.m in Sources */,
 				BB16619E1C3E2DC700D318BE /* ZLTabBar.m in Sources */,
 				BBAD0E021CD19E8D002C0FD6 /* ZLRoomVideoView.m in Sources */,
+				BB1EC9981CE232B400884774 /* Connection.cpp in Sources */,
 				BB2CA9E71CD5ECFB00DFE56E /* UITextView+Placeholder.m in Sources */,
 				18BF06B51C9A7DC70071E524 /* SignatureViewController.m in Sources */,
 				BB17692B1C7B006F00CE947C /* UIImage+GIF.m in Sources */,

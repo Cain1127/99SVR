@@ -379,7 +379,7 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     req.set_croompwd(roomPwd);
     req.set_devtype(2);
     req.set_bloginsource(platform);
-    video_room->SendMsg_JoinRoomReq(req);
+    conn->SendMsg_JoinRoomReq(req);
 }
 
 /**
@@ -696,7 +696,7 @@ void ZLRoomListener::OnAskQuestionResp(AskQuestionResp& info)
 //    uint32	_questionlen;
 //    string	_question;
     [UserInfo sharedUserInfo].goldCoin = info.nk()/1000.0f;
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_QUESTION_VC object:@"提问成功"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_QUESTION_VC object:@{@"code":@(1)}];
 }
 /**
  *  麦状态变换触发
@@ -754,7 +754,24 @@ void ZLRoomListener::OnTradeGiftNotify(TradeGiftRecord& info){
 void ZLRoomListener::OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info)
 {
     DLog(@"收到观点详情礼物通知!");
-    
+    /**
+     *  	uint32	_userid;
+     string	_useralias;
+     uint32	_roomid;
+     uint32	_teamid;
+     string	_teamalias;
+     uint32	_viewid;
+     uint32	_giftid;
+     uint32	_giftnum;
+     uint64	_nk;
+     */
+    NSString *strName = [NSString stringWithCString:info.useralias().c_str() encoding:GBK_ENCODING];
+    int gitId = info.giftid();
+    int number = info.giftnum();
+    NSString *toName = [NSString stringWithCString:info.teamalias().c_str() encoding:GBK_ENCODING];
+    NSDictionary *parameters = @{@"srcName":strName,@"gId":@(gitId),@"number":@(number),@"srcId":@(info.userid()),
+                                 @"toName":toName};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VIEWPOINT_GIFT_NOTIFY_VC object:parameters];
 }
 
 

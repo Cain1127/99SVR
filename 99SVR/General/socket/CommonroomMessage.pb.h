@@ -2708,10 +2708,7 @@ public:
 		cmd->totype = _totype;
 		cmd->giftid = _giftid;
 		cmd->giftnum = _giftnum;
-		cmd->action = _action;
-		cmd->servertype = _servertype;
-		cmd->banonymous = _banonymous;
-		cmd->casttype = _casttype;
+		
 		cmd->dtime = _dtime;
 		cmd->oldnum = _oldnum;
 		cmd->flyid = _flyid;
@@ -2732,10 +2729,7 @@ public:
 		_totype = cmd->totype;
 		_giftid = cmd->giftid;
 		_giftnum = cmd->giftnum;
-		_action = cmd->action;
-		_servertype = cmd->servertype;
-		_banonymous = cmd->banonymous;
-		_casttype = cmd->casttype;
+
 		_dtime = cmd->dtime;
 		_oldnum = cmd->oldnum;
 		_flyid = cmd->flyid;

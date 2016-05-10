@@ -153,9 +153,10 @@ void PostReplyListener::OnError(int errCode)
 }
 
 /**
- *  请求操盘列表日
+ *  请求操盘列表日 void onResponse(vector<OperateStockProfit>& infos, int seq, bool bRefresh)
  */
-void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day){
+void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day,int seq, bool bRefresh)
+{
     
     NSMutableArray *muArray = [NSMutableArray array];
     for (size_t i=0; i!=day.size(); i++) {
@@ -178,7 +179,8 @@ void OperateStockProfitListenerDay::OnError(int errCode)
  *  请求操盘列表月
  */
 
-void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& mon){
+void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& mon,int seq, bool bRefresh)
+{
     
     NSMutableArray *muArray = [NSMutableArray array];
     
@@ -202,7 +204,8 @@ void OperateStockProfitListenerMonth::OnError(int errCode)
 /**
  *  请求操盘列表总的
  */
-void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total){
+void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total,int seq, bool bRefresh)
+{
     
     NSMutableArray *muArray = [NSMutableArray array];
     

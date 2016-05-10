@@ -36,7 +36,7 @@ std::string& get_user_token()
 
 int get_user_isguest()
 {
-	return loginuser.viplevel() == 0 ? 1 : 0;
+	return loginuser.viplevel() == 1 ? 1 : 0;
 }
 
 void set_user_id(uint32 user_id)

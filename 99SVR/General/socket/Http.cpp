@@ -17,7 +17,7 @@ RequestParamter& get_request_param()
 
 char* parse_response(char* recv_buf)
 {
-	LOG("%s", recv_buf);
+	//LOG("%s", recv_buf);
 	char* content = strstr(recv_buf, "\r\n\r\n");
 	if (content != NULL)
 	{
@@ -144,7 +144,7 @@ void Http::build_request(string& req, const char* host, const char* url_tail, Re
 		req += "\r\n";
 	}
 
-	LOG("req:%s", req.c_str());
+	//LOG("req:%s", req.c_str());
 }
 
 char* Http::request(const char* host, short port, const char* url_tail, RequestParamter* param)

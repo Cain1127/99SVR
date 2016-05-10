@@ -706,6 +706,7 @@ private:
 
 	uint32	_transid;
 	uint32	_operateid;
+	uint32	_buytypeflag;
 	string	_buytype;
 	string	_stockid;
 	string	_stockname;
@@ -724,6 +725,10 @@ public:
 	 inline uint32 operateid() { return _operateid; } const 
 
 	 inline void set_operateid(const uint32 value) { _operateid = value; }
+
+	 inline uint32 buytypeflag() { return _buytypeflag; } const 
+
+	 inline void set_buytypeflag(const uint32 value) { _buytypeflag = value; }
 
 	 inline string& buytype() { return _buytype; } const 
 
@@ -761,6 +766,7 @@ public:
 		protocol::tag_CMDOperateStockTransaction* cmd = (protocol::tag_CMDOperateStockTransaction*) data;
 		cmd->transId = _transid;
 		cmd->operateId = _operateid;
+		cmd->buytypeflag = _buytypeflag;
 		strcpy(cmd->buytype, _buytype.c_str());
 		strcpy(cmd->stockId, _stockid.c_str());
 		strcpy(cmd->stockName, _stockname.c_str());
@@ -775,6 +781,7 @@ public:
 		protocol::tag_CMDOperateStockTransaction* cmd = (protocol::tag_CMDOperateStockTransaction*) data;
 		_transid = cmd->transId;
 		_operateid = cmd->operateId;
+		_buytypeflag = cmd->buytypeflag;
 		_buytype = cmd->buytype;
 		_stockid = cmd->stockId;
 		_stockname = cmd->stockName;
@@ -789,6 +796,7 @@ public:
 		LOG("--------Receive message: OperateStockTransaction---------");
 		LOG("transid = %d", _transid);
 		LOG("operateid = %d", _operateid);
+		LOG("buytypeflag = %d", _buytypeflag);
 		LOG("buytype = %s", _buytype.c_str());
 		LOG("stockid = %s", _stockid.c_str());
 		LOG("stockname = %s", _stockname.c_str());
@@ -2412,6 +2420,60 @@ public:
 		LOG("askremain = %d", _askremain);
 		LOG("askcoin = %d", _askcoin);
 		LOG("viplevel = %d", _viplevel);
+	}
+
+};
+
+
+class TeacherFansResp
+{
+
+private:
+
+	uint32	_userid;
+	string	_useralias;
+	uint32	_userheadid;
+
+
+public:
+
+	 inline uint32 userid() { return _userid; } const 
+
+	 inline void set_userid(const uint32 value) { _userid = value; }
+
+	 inline string& useralias() { return _useralias; } const 
+
+	 inline void set_useralias(const string& value) { _useralias = value; }
+
+	 inline uint32 userheadid() { return _userheadid; } const 
+
+	 inline void set_userheadid(const uint32 value) { _userheadid = value; }
+
+
+	int ByteSize() { return sizeof(protocol::tag_CMDTeacherFansResp); }
+
+	void SerializeToArray(void* data, int size)
+	{
+		protocol::tag_CMDTeacherFansResp* cmd = (protocol::tag_CMDTeacherFansResp*) data;
+		cmd->userid = _userid;
+		strcpy(cmd->useralias, _useralias.c_str());
+		cmd->userheadid = _userheadid;
+	}
+
+	void ParseFromArray(void* data, int size)
+	{
+		protocol::tag_CMDTeacherFansResp* cmd = (protocol::tag_CMDTeacherFansResp*) data;
+		_userid = cmd->userid;
+		_useralias = cmd->useralias;
+		_userheadid = cmd->userheadid;
+	}
+
+	void Log()
+	{
+		LOG("--------Receive message: TeacherFansResp---------");
+		LOG("userid = %d", _userid);
+		LOG("useralias = %s", _useralias.c_str());
+		LOG("userheadid = %d", _userheadid);
 	}
 
 };

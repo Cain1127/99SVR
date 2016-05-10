@@ -12,7 +12,7 @@
 #import "ProgressHUD.h"
 #import "UITextView+Placeholder.h"
 #import "Toast+UIView.h"
-
+#import "IQKeyboardManager.h"
 #define kLive_question_height 320
 
 @implementation XLiveQuestionView
@@ -20,24 +20,49 @@
 - (void)setGestureHidden
 {
     [UIView animateWithDuration:0.5 animations:^{
+        [self closeKeyboard];
         [self setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
     } completion:^(BOOL finished) {
         self.hidden = YES;
+        [self removeFromSuperview];
     }];
+}
+
+- (void)closeKeyboard
+{
+    if ([_txtName isFirstResponder])
+    {
+        [_txtName resignFirstResponder];
+    }
+    else if([_txtContent isFirstResponder])
+    {
+        [_txtContent resignFirstResponder];
+    }
+}
+
+- (void)setHidden:(BOOL)hidden
+{
+    [super setHidden:hidden];
+    [IQKeyboardManager sharedManager].enable = YES;
+    [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
 }
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    _hiddenView = [[UIView alloc] initWithFrame:Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight)];
+    _hiddenView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
     [self addSubview:_hiddenView];
     [_hiddenView setUserInteractionEnabled:YES];
     [_hiddenView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     [_hiddenView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     
-    UIView *liveQuestion = [[UIView alloc] initWithFrame:Rect(0,frame.size.height+kRoom_head_view_height-kLive_question_height, kScreenWidth,kLive_question_height)];
+    UIView *liveQuestion = [[UIView alloc] initWithFrame:Rect(0,kScreenHeight-kLive_question_height, kScreenWidth,kLive_question_height)];
     [liveQuestion setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self addSubview:liveQuestion];
+    
+    [liveQuestion setUserInteractionEnabled:YES];
+    [liveQuestion addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyboard)]];
+    [liveQuestion addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyboard)]];
     
     self.layer.shadowColor = [UIColor blackColor].CGColor;
     self.layer.shadowOffset = CGSizeMake(0,0);
@@ -57,14 +82,14 @@
     
     UILabel *lineTemp1 = [[UILabel alloc] initWithFrame:Rect(0, 43.5, kScreenWidth, 0.5)];
     [lineTemp1 setBackgroundColor:COLOR_Line_Small_Gay];
-    [self addSubview:lineTemp1];
+    [liveQuestion addSubview:lineTemp1];
     
     _btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnRight setTitle:@"取消" forState:UIControlStateNormal];
     _btnRight.titleLabel.font = XCFONT(15);
     _btnRight.frame = Rect(kScreenWidth-50, 3, 40, 40);
     [_btnRight setTitleColor:UIColorFromRGB(0x000000) forState:UIControlStateNormal];
-    [_btnRight addTarget:self action:@selector(hiddenEvent) forControlEvents:UIControlEventTouchUpInside];
+    [_btnRight addTarget:self action:@selector(setGestureHidden) forControlEvents:UIControlEventTouchUpInside];
     [liveQuestion addSubview:_btnRight];
     
     UILabel *line1 = [[UILabel alloc] initWithFrame:Rect(0, 45, kScreenWidth, 0.5)];
