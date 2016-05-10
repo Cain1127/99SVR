@@ -22,6 +22,7 @@
 
 #define kGiftInfo @"SVRGiftInfo"
 #define kBannerInfo @"BannerInfo"
+#define kHomeInfo @"HomeInfo"
 #define kLiveInfo @"kLiveInfo"
 #define kTextList @"kTextListViewInfo"
 #define kVideoList @"VideoListSVR"

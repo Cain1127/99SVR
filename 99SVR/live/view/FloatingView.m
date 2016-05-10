@@ -106,12 +106,12 @@
      } completion:^(BOOL finished){
          [UIView animateWithDuration:nTime-0.25 delay:0.25 options:UIViewAnimationOptionCurveEaseIn animations:^{
                               self.alpha = 1.0;
-                          } completion:^(BOOL finished) {
-                              __weak FloatingView *__self = self;
-                              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                  [__self removeFromSuperview];
-                              });
-                          }];
+              } completion:^(BOOL finished) {
+                  __weak FloatingView *__self = self;
+                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                      [__self removeFromSuperview];
+                  });
+              }];
      }];
     
 }

@@ -28,6 +28,7 @@
 #import "ViewNullFactory.h"
 #import "UIImage+MultiFormat.h"
 #import "Toast+UIView.h"
+#import "UIViewController+EmpetViewTips.h"
 
 @interface TQIdeaViewController ()<XIdeaDelegate>
 {
@@ -49,7 +50,10 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
     self.view.backgroundColor = UIColorFromRGB(0xffffff);
-    
+
+    //添加更新专家观点的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newIdeaNotifi:) name:MESSAGE_TQIdeaView_NewNotifi_VC object:nil];
+
     [self setTitleText:@"专家观点"];
     
     viewCache = [[NSCache alloc] init];
@@ -61,7 +65,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.footer setHidden:YES];
-    [self.view makeToastActivity_bird];
+    
     _nCurrent = 0;
 }
 
@@ -90,16 +94,39 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+/**新的专家观点通知*/
+- (void)newIdeaNotifi:(NSNotification *)notify{
+    
+    DLog(@"新的专家观点%@",notify.object);
+    
+}
+
 - (void)loadViewPoint:(NSNotification *)notify{
+    NSDictionary *parameters = notify.object;
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak.view hideToastActivity];
-        [selfWeak.noView removeFromSuperview];
+        [selfWeak.tableView hideToastActivity];
+        [selfWeak.tableView.header endRefreshing];
     });
-    NSDictionary *dict = notify.object;
-    if([[dict objectForKey:@"code"] intValue]==1)
+    int code = [parameters[@"code"] intValue];
+    NSArray *aryIndex = parameters[@"model"];
+    if (code!=1 && _dataSource.aryModel.count ==0)
     {
-        NSArray *aryIndex = [dict objectForKey:@"model"];
+        [self showErrorViewInView:_tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
+            Loading_Bird_Show(selfWeak.tableView);
+            [selfWeak.tableView.header beginRefreshing];
+        }];
+    }
+    else if (aryIndex.count==0 && code==1 && _dataSource.aryModel.count ==0 )
+    {
+        [self showEmptyViewInView:_tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
+            Loading_Bird_Show(selfWeak.tableView);
+            [selfWeak.tableView.header beginRefreshing];
+        }];
+    }
+    else
+    {
+        [self hideEmptyViewInView:_tableView];
         if (_dataSource.aryModel.count>0)
         {
             NSMutableArray *aryAll = [NSMutableArray array];
@@ -113,67 +140,42 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         {
             _dataSource.aryModel = aryIndex;
         }
-    }
-    if(_dataSource.aryModel.count==0)
-    {
         dispatch_async(dispatch_get_main_queue(), ^{
             @StrongObj(self)
-            [self createView];
+            if ([self.tableView.header isRefreshing]) {
+                [self.tableView.header endRefreshing];
+            }else{
+                [self.tableView.footer endRefreshing];
+            }
+            if (self.nCurrent != self.dataSource.aryModel.count && self.dataSource.aryModel.count!=0)
+            {
+                [self.tableView.footer setHidden:YES];
+            }
+            else
+            {
+                [self.tableView.footer setHidden:NO];
+            }
+            [self.tableView reloadData];
         });
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        @StrongObj(self)
-        if ([self.tableView.header isRefreshing]) {
-            [self.tableView.header endRefreshing];
-        }else{
-            [self.tableView.footer endRefreshing];
-        }
-        if (self.nCurrent != self.dataSource.aryModel.count && self.dataSource.aryModel.count!=0)
-        {
-            [self.tableView.footer setHidden:YES];
-        }
-        else
-        {
-            [self.tableView.footer setHidden:NO];
-        }
-        [self.tableView reloadData];
-    });
 }
 
-- (void)createView
+-(void)updateRefresh
 {
-    if (nil==_noView)
-    {
-        char cString[255];
-        const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
-        sprintf(cString, "%s/text_blank_page.png",path);
-        NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
-        UIImage *image = [UIImage imageWithContentsOfFile:objCString];
-        if(image)
-        {
-            _noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,_tableView.height) imgView:image msg:@"没有专家发布观点"];
-        }
-    }
-    [_tableView addSubview:_noView];
-    @WeakObj(self)
-    [_noView clickWithBlock:^(UIGestureRecognizer *gesture)
-    {
-        [selfWeak.noView removeFromSuperview];
-        [selfWeak.view makeToastActivity_bird];
-        [selfWeak updateRefresh];
-    }];
-}
-
--(void)updateRefresh {
-    
     _nCurrent = 20;
+    if (_dataSource.aryModel.count==0)
+    {
+        [self hideEmptyViewInView:_tableView];
+        [_tableView makeToastActivity_bird];
+    }
     _dataSource.aryModel = nil;
     [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
 }
 
 - (void)uploadMore
 {
-    if (_dataSource.aryModel.count>0) {
+    if (_dataSource.aryModel.count>0)
+    {
         TQIdeaModel *model = _dataSource.aryModel[_dataSource.aryModel.count-1];
         _nCurrent += 20;
         [kHTTPSingle RequestViewpointSummary:0 start:model.viewpointid count:20];

@@ -78,26 +78,10 @@
         if (vipBool) {
             self.tradeLabeView.hidden = NO;
             self.notVipView.hidden = YES;
-            
-            NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count]];
-            if ([model.buytype isEqualToString:@"买入"]) {
-                [attriStr addAttribute:NSForegroundColorAttributeName
-                                 value:COLOR_Auxiliary_Red
-                                 range:NSMakeRange(0, 2)];
-            }else{
-                
-                [attriStr addAttribute:NSForegroundColorAttributeName
-                                 value:[UIColor greenColor]
-                                 range:NSMakeRange(0, 2)];
-            }
-            
-            [attriStr addAttribute:NSForegroundColorAttributeName
-                             value:COLOR_Text_Black
-                             range:NSMakeRange(2, ([attriStr length]-2))];
+        
                         
             [self.tradeLabeView setLeftLabText:[NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count] rightLabText:[NSString stringWithFormat:@"%@",model.time]];
-            self.tradeLabeView.leftLab.text = @"";
-            self.tradeLabeView.leftLab.attributedText = attriStr;
+            self.tradeLabeView.leftLab.text = [NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count];
             
             
         }else{
@@ -142,8 +126,7 @@
     
     CGFloat midLeftStr = 0.0;
     midLeftStr = ABS(((ABS([model.maxY floatValue]) - [model.minY floatValue])/2.0)) + [model.minY floatValue];
-    
-//    weakSelf.chartView.leftTitArrays = @[[NSString stringWithFormat:@"%.2f%%",[model.maxY floatValue]],[NSString stringWithFormat:@"%.2f%%",midLeftStr],[NSString stringWithFormat:@"%.2f%%",[model.minY floatValue]]];
+
     weakSelf.chartView.leftTitArrays = [ShareFunction returnStockDelChartLineViewLeftLabelTextWithDataArray:@[model.minY,model.maxY]];
     
     
@@ -160,9 +143,7 @@
     weakSelf.chartView.lineChartView.raneValue_Y = CGRangeMake([model.minY floatValue], [model.maxY floatValue]);
     
     [weakSelf.chartView.lineChartView clearLine];
-//    model.rateYs = @[@"0.78",@"1.59",@"0.02",@"2.39",@"0.82",@"0.78"];
     weakSelf.chartView.lineChartView.valuePoints_Y = @[model.rateYs,model.trendYs];
-//    NSLog(@"%@ %@",model.rateYs,model.trendYs);
     [weakSelf.chartView.lineChartView drawLine];
         
     __weak typeof(array) weakArray = array;

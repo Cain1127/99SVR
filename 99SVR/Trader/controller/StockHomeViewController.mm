@@ -17,7 +17,7 @@
 #import "TQMailboxViewController.h"
 #import "UIViewController+EmpetViewTips.h"
 
-@interface StockHomeViewController ()
+@interface StockHomeViewController ()<StockHomeTableViewModelDelegate>
 /**滑动控制器*/
 @property (nonatomic, strong) SliderMenuView *sliderMenuView;
 /**日*/
@@ -49,14 +49,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-        
     [self initData];
     [self initUi];
-    
     self.headLine.hidden = YES;
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
 }
 
@@ -64,19 +63,14 @@
 -(void)initUi{
     
     WeakSelf(self);
-    
     [self.navigationController.navigationBar setHidden:YES];
-
     [self setTitleText:@"高手操盘"];
-
-    
     self.view.backgroundColor = [UIColor whiteColor];
-    
     [self.view addSubview:self.sliderMenuView];
-    self.sliderMenuView.DidSelectSliderIndex = ^(NSInteger index){
+    self.sliderMenuView.DidSelectSliderIndex = ^(NSInteger index)
+    {
         weakSelf.tabViewTag = index;
     };
-    
 }
 
 #pragma mark initData
@@ -317,21 +311,24 @@
 
 -(StockHomeTableViewModel *)dayTableViewModel{
     if (!_dayTableViewModel) {
-        _dayTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:self];
+        _dayTableViewModel = [[StockHomeTableViewModel alloc]initWithViewModelType:StockHomeTableViewType_StockHomeVC];
+        _dayTableViewModel.delegate = self;
     }
     return _dayTableViewModel;
 }
 
 -(StockHomeTableViewModel *)monTableViewModel{
     if (!_monTableViewModel) {
-        _monTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:self];
+        _monTableViewModel = [[StockHomeTableViewModel alloc]initWithViewModelType:StockHomeTableViewType_StockHomeVC];
+        _monTableViewModel.delegate = self;
     }
     return _monTableViewModel;
 }
 
 -(StockHomeTableViewModel *)totalTableViewModel{
     if (!_totalTableViewModel) {
-        _totalTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:self];
+        _totalTableViewModel = [[StockHomeTableViewModel alloc]initWithViewModelType:StockHomeTableViewType_StockHomeVC];
+        _totalTableViewModel.delegate = self;
     }
     return _totalTableViewModel;
 }
@@ -395,6 +392,17 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
 
 }
+
+#pragma mark StockHomeTableViewModelDelegate
+-(void)tabViewDidSelectRowAtIndexPath:(NSIndexPath *)indexPath withModel:(id)model{
+    
+    StockDealModel *stockModel = model;
+    StockDealViewController *stockVC = [[StockDealViewController alloc]init];
+    stockVC.stockModel = stockModel;
+    [self.navigationController pushViewController:stockVC animated:YES];
+    
+}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {

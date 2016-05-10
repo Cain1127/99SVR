@@ -8,6 +8,7 @@
 
 #import "HomeViewController.h"
 #import "ZLTabBar.h"
+#import "UIViewController+EmpetViewTips.h"
 #import "TQDetailedTableViewController.h"
 #import "TQIdeaModel.h"
 #import "TQideaTableViewCell.h"
@@ -124,13 +125,14 @@
     [self createScroll];
     [self createPage];
     [self initTableView];
-    [self.view makeToastActivity_bird];
     ///添加MJ头部刷新
     [_tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [_tableView.gifHeader loadDefaultImg];
     [_tableView.gifHeader beginRefreshing];
+    [_tableView makeToastActivity_bird];
     
 }
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -185,75 +187,56 @@
 - (void)updateLiveInfo:(NSNotification *)notify
 {
     @WeakObj(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        [selfWeak.tableView hideToastActivity];
         [selfWeak.tableView.header endRefreshing];
-        [selfWeak.view hideToastActivity];
     });
-    if (!notify.object)
+    NSDictionary *parameters = notify.object;
+    int code = [parameters[@"code"] intValue];
+    NSArray *aryBanner = parameters[@"banner"];
+    NSArray *aryVideo = parameters[@"video"];
+    NSArray *aryOperator = parameters[@"operate"];
+    NSArray *aryViewPoint = parameters[@"viewpoint"];
+    if (code!=1 && _aryLiving.count == 0 )
     {
-        return;
+        [self showErrorViewInView:_tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
+            Loading_Bird_Show(selfWeak.tableView);
+            [selfWeak.tableView.header beginRefreshing];
+        }];
     }
-    
-    if (1 != [notify.object[@"code"] intValue])
+    else if (aryBanner.count==0 && aryVideo.count ==0 && aryOperator.count == 0 && aryViewPoint.count == 0 && code==1 && _aryLiving.count == 0)
     {
-        return;
+        [self showEmptyViewInView:_tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
+                Loading_Bird_Show(selfWeak.tableView);
+                [selfWeak.tableView.header beginRefreshing];
+        }];
     }
-    
-    ///reset data model
-    if (self.aryLiving)
+    else
     {
+        [self hideEmptyViewInView:_tableView];
+        if (aryBanner.count==0 && aryVideo.count ==0 && aryOperator.count == 0 && aryViewPoint.count == 0) {
+            return ;
+        }
+        if (self.aryLiving)
+        {
+            [self.aryLiving removeAllObjects];
+        }
+        else
+        {
+            self.aryLiving = [NSMutableArray array];
+        }
+        ///清空原数据
         [self.aryLiving removeAllObjects];
-    }
-    else
-    {
-        self.aryLiving = [NSMutableArray array];
-    }
-    ///清空原数据
-    [self.aryLiving removeAllObjects];
-    NSDictionary *dict = notify.object;
-    NSArray *bannerList = dict[@"banner"];
-    [self updateBannerInfo:bannerList];
-    if ([dict objectForKey:@"video"])
-    {
-        ///初始化数据模型
-        NSArray *roomHttpDictionaryArray = [dict objectForKey:@"video"];
-        [self.aryLiving addObject:roomHttpDictionaryArray];
-    }
-    else
-    {
-        DLog(@"home list data is not include videoroom data. http API: %@", kHome_LivingList_URL);
-    }
-    if (KUserSingleton.nStatus)
-    {
-        if ([dict objectForKey:@"operate"])
+        [self updateBannerInfo:aryBanner];
+        [self.aryLiving addObject:aryVideo];
+        if (KUserSingleton.nStatus)
         {
-            ///初始化数据模型
-            NSArray *operate = [dict objectForKey:@"operate"];
-            [self.aryLiving addObject:operate];
+            [self.aryLiving addObject:aryOperator];
+            [self.aryLiving addObject:aryViewPoint];
         }
-        else
-        {
-            DLog(@"home list data is not include textroom data. http API: %@", kHome_LivingList_URL);
-        }
-        if ([dict objectForKey:@"viewpoint"])
-        {
-            ///初始化数据模型
-            NSArray *viewPoint = [dict objectForKey:@"viewpoint"];
-            [self.aryLiving addObject:viewPoint];
-        }
-        else
-        {
-            DLog(@"home list data is not include viewpoint data. http API: %@", kHome_LivingList_URL);
-        }
-    }
-    if ([NSThread isMainThread])
-    {
-        [self.tableView reloadData];
-    }
-    else
-    {
-        @WeakObj(self)
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_main_async_safe(
+        ^{
             [selfWeak.tableView reloadData];
         });
     }
@@ -358,7 +341,18 @@
         if(tempArray.count>indexPath.row)
         {
             ZLOperateStock *model = tempArray[indexPath.row];
-            [cell setCellStockModel:model];
+            StockDealModel *stockModel = [[StockDealModel alloc]init];
+            stockModel.operateid = [NSString stringWithFormat:@"%d",model.operateid];
+            stockModel.teamid = [NSString stringWithFormat:@"%@",model.teamid];
+            stockModel.teamname = [NSString stringWithFormat:@"%@",model.teamname];
+            stockModel.teamicon = [NSString stringWithFormat:@"%@",model.teamicon];
+            stockModel.focus = [NSString stringWithFormat:@"%@",model.focus];
+            stockModel.goalprofit = [NSString stringWithFormat:@"%.2f%%",model.goalprofit];
+            stockModel.totalprofit = [NSString stringWithFormat:@"%.2f%%",model.totalprofit];
+            stockModel.dayprofit = [NSString stringWithFormat:@"%.2f%%",model.dayprofit];
+            stockModel.monthprofit = [NSString stringWithFormat:@"%.2f%%",model.monthprofit];
+            stockModel.winrate = [NSString stringWithFormat:@"%.2f%%",model.winrate];
+            [cell setCellDataWithModel:stockModel withTabBarInteger:1];
             cell.backgroundColor = [UIColor clearColor];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         }

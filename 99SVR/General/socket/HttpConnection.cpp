@@ -22,7 +22,6 @@
 
 static int g_authorId;
 static int g_startId;
-
 static int g_type;
 static int g_team_id;
 static int g_page;
@@ -236,29 +235,6 @@ void parse_homepage(char* json, HttpListener* listener)
 							vec_team.push_back(teamItem);
 						}
 					}
-
-					/*
-					JsonValue& textroom = value["data"]["textroom"];
-					if(!textroom.isNull())
-					{
-						size_ = textroom.size();
-						vec_textroom.clear();
-						for(i = 0; i < size_; i++)
-						{
-							HomePageTextroomItem textroomItem;
-							
-							textroomItem.set_nvcbid(textroom[i]["nvcbid"].asString());
-							textroomItem.set_roomname(textroom[i]["roomname"].asString());
-							textroomItem.set_croompic(textroom[i]["croompic"].asString());
-							textroomItem.set_livetype(textroom[i]["livetype"].asString());
-							textroomItem.set_ncount(textroom[i]["ncount"].asString());
-							textroomItem.set_clabel(textroom[i]["clabel"].asString());
-							textroomItem.set_teacherid(textroom[i]["teacherid"].asString());
-
-							vec_textroom.push_back(textroomItem);
-						}
-					}
-					*/
 
 					JsonValue& viewpoint = value["data"]["viewpoint"];
 
@@ -3498,7 +3474,7 @@ void HttpConnection::RequestMailSendReply(int startId, int count, MailReplyListe
 
 string HttpConnection::GetPrivateServiceDetailUrl(int psid)
 {
-	return string("http://testphp.99ducaijing.cn/mobile.php?s=/Share/personalSecrets/id/" + int2string(psid) + ".html");
+    return string("http://testphp.99ducaijing.cn/mobile.php?s=/User/personalSecrets/id/" + int2string(psid) + "/uid/" + get_user_id() + "/token/" + get_user_token() + "/client/" + get_client_type());
 }
 
 string HttpConnection::GetConsumeRecordUrl()

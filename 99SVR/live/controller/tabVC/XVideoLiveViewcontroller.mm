@@ -92,6 +92,7 @@
 - (void)reloadModel:(RoomHttp *)room
 {
     _room = room;
+    [_menuView hanleBlockWith:1];
     _ffPlay.roomIsCollet = nRoom_is_collet;
     [_ffPlay setRoomName:_room.teamname];
     [_ffPlay setRoomId:[_room.roomid intValue]];
@@ -279,7 +280,10 @@
     NSArray *aryConsume = notify.object;
     if ([aryConsume isKindOfClass:[NSArray class]] && aryConsume.count>0) {
         [_consumeDataSource setAryModel:aryConsume];
-        [_tableConsumeRank reloadData];
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [selfWeak.tableConsumeRank reloadData];
+        });
     }
 }
 
@@ -611,36 +615,31 @@
     });
 }
 
-- (void)showGiftInfo{
-    if(bGiftView){
-        return ;
+- (void)showGiftInfo
+{
+    if (_nCurGift<2)
+    {
+        NSNumber *number = [dictGift allKeys][0];
+        NSDictionary *parameter = [dictGift objectForKey:number];
+        @WeakObj(self)
+        @WeakObj(dictGift)
+        FloatingView *floatView = [selfWeak createFloatView:parameter color:[number intValue] onlyOne:_nCurGift];
+        [self.view addSubview:floatView];
+        DLog(@"frame:%@",NSStringFromCGRect(floatView.frame));
+        floatView.tag = [number integerValue];
+        _nCurGift ++;
+        int num = [[parameter objectForKey:@"num"] intValue];
+        CGFloat nTime = num/10+1;
+        @WeakObj(number)
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(nTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            FloatingView *giftFloat = [selfWeak.view viewWithTag:[numberWeak integerValue]];
+            [dictGiftWeak removeObjectForKey:numberWeak];
+            [giftFloat removeFromSuperview];
+            selfWeak.nCurGift--;
+        });
+        [dictGift removeObjectForKey:number];
     }
-    bGiftView = YES;
-    while (dictGift.allKeys.count>0) {
-        if (_nCurGift<2) {
-            NSNumber *number = [dictGift allKeys][0];
-            NSDictionary *parameter = [dictGift objectForKey:number];
-            @WeakObj(self)
-            @WeakObj(dictGift)
-            FloatingView *floatView = [selfWeak createFloatView:parameter color:[number intValue] onlyOne:_nCurGift];
-            [self.view addSubview:floatView];
-            DLog(@"frame:%@",NSStringFromCGRect(floatView.frame));
-            floatView.tag = [number integerValue];
-            _nCurGift ++;
-            int num = [[parameter objectForKey:@"num"] intValue];
-            CGFloat nTime = num/10+1;
-            @WeakObj(number)
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(nTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                FloatingView *giftFloat = [selfWeak.view viewWithTag:[numberWeak integerValue]];
-                [dictGiftWeak removeObjectForKey:numberWeak];
-                [giftFloat removeFromSuperview];
-                selfWeak.nCurGift--;
-            });
-            [dictGift removeObjectForKey:number];
-        }
-        [NSThread sleepForTimeInterval:0.2f];
-    }
-    bGiftView = NO;
+    [NSThread sleepForTimeInterval:0.2f];
 }
 
 - (FloatingView*)createFloatView:(NSDictionary *)parameter color:(int)ncolor onlyOne:(int)nOnly{
@@ -786,7 +785,7 @@
 #pragma mark 用户列表选择某一列
 - (void)selectUser:(NSInteger)nIndex
 {
-    if(_aryUser.count>nIndex)
+    if(currentRoom.aryUser.count>nIndex)
     {
         RoomUser *_user = [currentRoom.aryUser objectAtIndex:nIndex];
         if(_user.m_nUserId != [UserInfo sharedUserInfo].nUserId)

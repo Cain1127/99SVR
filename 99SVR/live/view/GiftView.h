@@ -12,6 +12,8 @@
 
 - (void)sendGift:(int)giftId num:(int)giftNum;
 
+- (void)showPayView;
+
 @end
 
 @interface GiftView : UIView <UIScrollViewDelegate>

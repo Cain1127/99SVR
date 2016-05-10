@@ -102,6 +102,8 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     if([self isViewLoaded])
     {
         [self loadHeadModel];
+        [headView.segmented setSelectedSegmentIndex:0];
+        [self selectIndexSegment:0];
         [_liveControl stopNewPlay];
         [_liveControl reloadModel:_room];
         [_ideaControl setModel:_room];
@@ -168,7 +170,8 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 }
 
 - (void)createScrolView:(CGRect)frame{
-    if (_scrollView==nil) {
+    if (_scrollView==nil)
+    {
         _scrollView = [[MyScrollView alloc] initWithFrame:frame];
         [self.view addSubview:_scrollView];
         _scrollView.clipsToBounds = YES;

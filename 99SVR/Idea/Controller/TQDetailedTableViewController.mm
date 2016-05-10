@@ -11,6 +11,7 @@
 #import "ZLShareView.h"
 #import "ChatRightView.h"
 #import "UIImageFactory.h"
+#import "GiftShowAnimate.h"
 #import "MJRefresh.h"
 #import "CommentCell.h"
 #import "ZLReply.h"
@@ -72,6 +73,20 @@
 - (void)sendGift:(int)giftId num:(int)giftNum
 {
     [kProtocolSingle sendGiftInfo:giftId number:giftNum toUser:[_ideaDetail.authorId intValue] toViewId:_ideaDetail.viewpointid roomId:[_ideaDetail.roomid intValue]];
+    NSDictionary *parameter = @{@"number":@(giftNum),@"gId":@(giftId),@"srcName":@"srcName",@"toName":@"toName",@"srcId":@(1234567)};
+    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,64,kScreenWidth-60,46) dict:parameter];
+    [UIView animateWithDuration:1.0
+                          delay:1.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         [self.view addSubview:giftAnimate];
+                         [giftAnimate addrightViewAnimation];
+                     } completion:^(BOOL finished){
+                         @WeakObj(giftAnimate)
+                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                             [giftAnimateWeak removeFromSuperview];
+                         });
+                     }];
     [_giftView setGestureHidden];
 }
 
@@ -155,7 +170,7 @@
     _giftView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
     _giftView.delegate = self;
     
-    _chatView = [[ChatView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kScreenHeight)];
+    _chatView = [[ChatView alloc] initWithFrame:Rect(0, 0, kScreenWidth,kScreenHeight) emoji:YES];
     [self.view addSubview:_chatView];
     _chatView.hidden = YES;
     _chatView.delegate = self;
@@ -174,11 +189,7 @@
     }
     else
     {
-        
-        [AlertFactory createLoginAlert:self withMsg:@"送礼物" block:^{
-            
-        }];
-        
+        [AlertFactory createLoginAlert:self withMsg:@"送礼物" block:^{}];
     }
 }
 
@@ -207,7 +218,6 @@
         [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
             
         }];
-
     }
 }
 /**

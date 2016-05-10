@@ -18,16 +18,17 @@
 @property (nonatomic , strong) NSArray *tabDataArray;
 @property (nonatomic , assign) NSInteger tableTag;
 @property (nonatomic , strong) UIViewController *viewController;
+@property (nonatomic , assign) StockHomeTableViewType viewModelType;
 @end
 
 @implementation StockHomeTableViewModel
 
-- (instancetype)initWithViewController:(UIViewController *)viewController
+- (instancetype)initWithViewModelType:(StockHomeTableViewType)viewModelType
 {
     self = [super init];
     if (self) {
         self.tabDataArray = @[];
-        self.viewController = viewController;
+        self.viewModelType = viewModelType;
     }
     return self;
 }
@@ -65,7 +66,13 @@
         return nil;
     }
     StockDealModel *model = self.tabDataArray[indexPath.row];
-    [cell setCellDataWithModel:model];
+    
+    if (self.viewModelType == StockHomeTableViewType_StockHomeVC) {//首页高手操盘
+        [cell setCellDataWithModel:model withTabBarInteger:2];
+    }else{//房间高手操盘
+        [cell setXTraderVCcellStockModel:model];
+    }
+    
     cell.backgroundColor = [UIColor clearColor];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -74,9 +81,15 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     StockDealModel *model = self.tabDataArray[indexPath.row];
-    StockDealViewController *stockVC = [[StockDealViewController alloc]init];
-    stockVC.stockModel = model;
-    [self.viewController.navigationController pushViewController:stockVC animated:YES];
+
+    if ([self.delegate respondsToSelector:@selector(tabViewDidSelectRowAtIndexPath:withModel:)]) {
+        [self.delegate tabViewDidSelectRowAtIndexPath:indexPath withModel:model];
+    }
+//    
+//    
+//    StockDealViewController *stockVC = [[StockDealViewController alloc]init];
+//    stockVC.stockModel = model;
+//    [self.viewController.navigationController pushViewController:stockVC animated:YES];
 }
 
 -(void)setDataArray:(NSArray *)dataArray{
