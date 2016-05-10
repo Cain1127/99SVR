@@ -81,9 +81,20 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     }
 }
 
-- (void)connectVideoRoom:(int)nRoomId roomPwd:(NSString *)roomPwd{
-    if (protocol) {
-        protocol->connectRoomInfo(nRoomId,KUserSingleton.otherLogin);
+- (void)connectVideoRoom:(int)nRoomId roomPwd:(NSString *)roomPwd
+{
+    if (protocol)
+    {
+        const char *cRoomPwd = nil;
+        if ([roomPwd length]>0) {
+//            cRoomPwd = [[DecodeJson XCmdMd5String:roomPwd] UTF8String];
+            cRoomPwd = [roomPwd UTF8String];
+        }
+        else
+        {
+            cRoomPwd = "";
+        }
+        protocol->connectRoomInfo(nRoomId,KUserSingleton.otherLogin,cRoomPwd);
     }
 }
 
@@ -98,8 +109,9 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     NSData *data = [strMsg dataUsingEncoding:GBK_ENCODING];
     ::strncpy(cBuffer, (const char *)data.bytes,data.length);
     if (protocol)
-    protocol->sendMessage(cBuffer, toId, "");
-    
+    {
+        protocol->sendMessage(cBuffer, toId,"");
+    }
 }
 
 - (void)exitRoom{

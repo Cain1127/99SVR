@@ -23,7 +23,7 @@
     CGFloat originalY;
     EmojiView *_emojiView;
 }
-
+@property (nonatomic) BOOL bShow;
 @property (nonatomic) int keyboardPresentFlag;
 
 @end
@@ -31,6 +31,22 @@
 
 @synthesize lblPlace;
 @synthesize whiteView;
+
+- (id)initWithFrame:(CGRect )frame emoji:(BOOL)bFlag
+{
+    self = [super initWithFrame:frame];
+    if (self){
+        _bShow = bFlag;
+        [self createView];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:)
+                                                     name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(keyboardWasHidden:)
+                                                      name:UIKeyboardWillHideNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardFrameDidChange:)
+                                                     name:UIKeyboardDidChangeFrameNotification object:nil];
+    }
+    return self;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -90,7 +106,10 @@
     UIButton *btnEmoji = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnEmoji setImage:[UIImage imageNamed:@"Expression"] forState:UIControlStateNormal];
     [btnEmoji setImage:[UIImage imageNamed:@"Expression_t"] forState:UIControlStateHighlighted];
-    [whiteView addSubview:btnEmoji];
+    if(!_bShow)
+    {
+        [whiteView addSubview:btnEmoji];
+    }
     btnEmoji.frame = Rect(whiteView.width-36, 0, 36, 36);
     [btnEmoji addTarget:self action:@selector(showEmojiView) forControlEvents:UIControlEventTouchUpInside];
     

@@ -37,7 +37,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     _room = room;
     [[ZLLogonServerSing sharedZLLogonServerSing] exitRoom];
-    [kProtocolSingle connectVideoRoom:[room.roomid intValue] roomPwd:@""];
+    [kProtocolSingle connectVideoRoom:[room.roomid intValue] roomPwd:_room.password];
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
 }
 
@@ -54,6 +54,7 @@
             if ([UserInfo sharedUserInfo].nStatus)
             {
                 [AlertFactory createPassswordAlert:_control room:_room block:^(NSString *pwd) {
+                    selfWeak.room.password = pwd;
                     [selfWeak connectViewModel:selfWeak.room];
                 }];
             }

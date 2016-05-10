@@ -31,6 +31,7 @@
 @property (nonatomic,copy) NSString *strName;
 @property (nonatomic,assign) int32_t nDetails;
 
+- (id)initWithFrame:(CGRect )frame emoji:(BOOL)bFlag;
 
 - (void)setChatInfo:(RoomUser *)user;
 

@@ -376,7 +376,7 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     const char *uId = [[DeviceUID uid] UTF8String];
     req.set_cserial(uId);
     req.set_vcbid(nRoomId);
-    req.set_croompwd("");
+    req.set_croompwd(roomPwd);
     req.set_devtype(2);
     req.set_bloginsource(platform);
     video_room->SendMsg_JoinRoomReq(req);
@@ -440,8 +440,14 @@ void ZLLogonProtocol::sendMessage(const char *msg,int toId,const char *toalias){
     uint32_t nLength = (int)strlen(msg)+1;
     roomMsg.set_textlen(nLength);
     roomMsg.set_toid(toId);
-    roomMsg.set_toalias(toalias);
-    
+    if(toId)
+    {
+        RoomUser *_roomUser = [currentRoom findUser:toId];
+        NSData *dataInfo = [_roomUser.m_strUserAlias dataUsingEncoding:GBK_ENCODING];
+        char cName[64]={0};
+        ::strncpy(cName,(const char*)dataInfo.bytes,dataInfo.length);
+        roomMsg.set_toalias(cName);
+    }
     video_room->SendMsg_RoomChatReq(roomMsg);
 }
 
@@ -721,7 +727,9 @@ void ZLRoomListener::OnTradeGiftNotify(TradeGiftRecord& info){
     NSString *strName = [NSString stringWithCString:info.srcalias().c_str() encoding:GBK_ENCODING];
     int gitId = info.giftid();
     int number = info.giftnum();
-    NSDictionary *parameters = @{@"name":strName,@"gitId":@(gitId),@"num":@(number),@"userid":@(info.srcid())};
+    NSString *toName = [NSString stringWithCString:info.toalias().c_str() encoding:GBK_ENCODING];
+    NSDictionary *parameters = @{@"srcName":strName,@"gId":@(gitId),@"number":@(number),@"srcId":@(info.srcid()),
+                                 @"toName":toName};
     [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:parameters];
 }
 

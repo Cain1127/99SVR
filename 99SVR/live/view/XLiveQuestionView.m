@@ -12,6 +12,9 @@
 #import "ProgressHUD.h"
 #import "UITextView+Placeholder.h"
 #import "Toast+UIView.h"
+
+#define kLive_question_height 320
+
 @implementation XLiveQuestionView
 
 - (void)setGestureHidden
@@ -23,7 +26,6 @@
     }];
 }
 
-
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -31,8 +33,9 @@
     [self addSubview:_hiddenView];
     [_hiddenView setUserInteractionEnabled:YES];
     [_hiddenView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
+    [_hiddenView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     
-    UIView *liveQuestion = [[UIView alloc] initWithFrame:Rect(0,kVideoImageHeight+kRoom_head_view_height, kScreenWidth, frame.size.height-kVideoImageHeight)];
+    UIView *liveQuestion = [[UIView alloc] initWithFrame:Rect(0,frame.size.height+kRoom_head_view_height-kLive_question_height, kScreenWidth,kLive_question_height)];
     [liveQuestion setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self addSubview:liveQuestion];
     

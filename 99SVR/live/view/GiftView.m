@@ -51,6 +51,7 @@
     [self addSubview:_hiddenView];
     [_hiddenView setUserInteractionEnabled:YES];
     [_hiddenView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
+    [_hiddenView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     
     _scrollView = [[UIScrollView alloc] initWithFrame:Rect(0, kScreenHeight-(kGiftHeight*2+80), kScreenWidth,kGiftHeight*2+30)];
     [self addSubview:_scrollView];
@@ -139,6 +140,7 @@
     sprintf(cBuffer, "余额:%.01f",[UserInfo sharedUserInfo].goldCoin);
     [_lblPrice setText:[NSString stringWithUTF8String:cBuffer]];
     
+    
     //赠送按钮
     UIButton *btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnSend setTitle:@"赠送" forState:UIControlStateNormal];
@@ -149,6 +151,16 @@
     btnSend.layer.masksToBounds = YES;
     btnSend.layer.cornerRadius = 3;
     [btnSend addTarget:self action:@selector(sendGift) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *btnPay = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnPay setTitle:@"充值" forState:UIControlStateNormal];
+    [btnPay setTitleColor:UIColorFromRGB(0xFF7A1E) forState:UIControlStateNormal];
+    [btnPay setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateHighlighted];
+    [downView addSubview:btnPay];
+    btnPay.frame = Rect(btnSend.x-150, 3, 60,44);
+    btnPay.layer.masksToBounds = YES;
+    btnPay.layer.cornerRadius = 3;
+    [btnPay addTarget:self action:@selector(paySelect) forControlEvents:UIControlEventTouchUpInside];
     
     self.layer.shadowColor = [UIColor blackColor].CGColor;
     self.layer.shadowOffset = CGSizeMake(0,0);
@@ -190,6 +202,14 @@
     [self createButton:@"66" frame:Rect(0,height*4, kNumberGift, height)];
     [self createButton:@"16" frame:Rect(0,height*5, kNumberGift, height)];
     [self createButton:@"1" frame:Rect(0,height*6, kNumberGift, height)];
+}
+
+- (void)paySelect
+{
+    if(_delegate && [_delegate respondsToSelector:@selector(showPayView)])
+    {
+        [_delegate showPayView];
+    }
 }
 
 - (void)updateGoid
