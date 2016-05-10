@@ -118,6 +118,8 @@
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
 		5A5784101CD2FE28002E120A /* CommentReplyViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */; };
 		5A6AE1301CD1DEE8002FBD02 /* start-mascot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */; };
+		5A7629381CE1B7C400C6A092 /* NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7629351CE1B7C400C6A092 /* NJKWebViewProgress.m */; };
+		5A7629391CE1B7C400C6A092 /* NJKWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7629371CE1B7C400C6A092 /* NJKWebViewProgressView.m */; };
 		5AA640321CD87F1300CDAE48 /* MailboxTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.mm */; };
 		5AA6D8191CCBC01300841960 /* AdViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D8181CCBC01300841960 /* AdViewController.mm */; };
 		5AA6D81C1CCBD00A00841960 /* NewfeatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D81B1CCBD00A00841960 /* NewfeatureViewController.m */; };
@@ -1023,6 +1025,10 @@
 		5A57840E1CD2FE28002E120A /* CommentReplyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentReplyViewController.h; sourceTree = "<group>"; };
 		5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CommentReplyViewController.mm; sourceTree = "<group>"; };
 		5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-mascot.png"; sourceTree = "<group>"; };
+		5A7629341CE1B7C400C6A092 /* NJKWebViewProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJKWebViewProgress.h; sourceTree = "<group>"; };
+		5A7629351CE1B7C400C6A092 /* NJKWebViewProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NJKWebViewProgress.m; sourceTree = "<group>"; };
+		5A7629361CE1B7C400C6A092 /* NJKWebViewProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJKWebViewProgressView.h; sourceTree = "<group>"; };
+		5A7629371CE1B7C400C6A092 /* NJKWebViewProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NJKWebViewProgressView.m; sourceTree = "<group>"; };
 		5AA640301CD87F1300CDAE48 /* MailboxTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MailboxTableViewCell.h; sourceTree = "<group>"; };
 		5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MailboxTableViewCell.mm; sourceTree = "<group>"; };
 		5AA6D8171CCBC01300841960 /* AdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdViewController.h; sourceTree = "<group>"; };
@@ -2574,6 +2580,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		5A7629331CE1B7C400C6A092 /* NJKWebViewProgress */ = {
+			isa = PBXGroup;
+			children = (
+				5A7629341CE1B7C400C6A092 /* NJKWebViewProgress.h */,
+				5A7629351CE1B7C400C6A092 /* NJKWebViewProgress.m */,
+				5A7629361CE1B7C400C6A092 /* NJKWebViewProgressView.h */,
+				5A7629371CE1B7C400C6A092 /* NJKWebViewProgressView.m */,
+			);
+			path = NJKWebViewProgress;
+			sourceTree = "<group>";
+		};
 		5AA6D8201CCBD90800841960 /* newfeature */ = {
 			isa = PBXGroup;
 			children = (
@@ -3358,6 +3375,7 @@
 		BB63F4861C2CC7A200A042E8 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				5A7629331CE1B7C400C6A092 /* NJKWebViewProgress */,
 				BB2CA9B01CD5E99800DFE56E /* IQKeyboardManager */,
 				BB2CA5BC1CD338A200DFE56E /* http */,
 				BB2CA5C51CD338A200DFE56E /* socket */,
@@ -4741,6 +4759,7 @@
 				B44F77681CC39FF1008E3B26 /* StockDealHeaderView.mm in Sources */,
 				BB63F5F61C2CC7A300A042E8 /* ProgressHUD.m in Sources */,
 				BB63F6031C2CC7A300A042E8 /* RoomTitleView.m in Sources */,
+				5A7629381CE1B7C400C6A092 /* NJKWebViewProgress.m in Sources */,
 				BB5138381C97F30400E09EF5 /* GiftRequest.m in Sources */,
 				BBD49D741C5B142400EADF74 /* LivePlayViewController.m in Sources */,
 				188741811C9702DA002EF25A /* Foundation+Log.m in Sources */,
@@ -4866,6 +4885,7 @@
 				BB2CA6191CD338A300DFE56E /* Socket.cpp in Sources */,
 				1898AC691C9BADE600F2681D /* MyDataController.m in Sources */,
 				18F9710E1C92947F001B2575 /* DataVerifier.m in Sources */,
+				5A7629391CE1B7C400C6A092 /* NJKWebViewProgressView.m in Sources */,
 				BB6F116A1CC519FF00F02064 /* ConnectRoomViewModel.m in Sources */,
 				BB63F5C31C2CC7A300A042E8 /* MASConstraintMaker.m in Sources */,
 				BB63F5C91C2CC7A300A042E8 /* View+MASAdditions.m in Sources */,
