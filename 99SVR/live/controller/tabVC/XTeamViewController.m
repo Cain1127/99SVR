@@ -41,7 +41,8 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:COLOR_Bg_Gay];//UIColorFromRGB(0xffffff)];
     [self setTitleText:@"讲师团队简介"];
-    UIView *headView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
+    UIView *headView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 195)];
+    headView.backgroundColor = COLOR_Bg_Gay;
     
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
     [headView insertSubview:imgView atIndex:0];
@@ -52,22 +53,24 @@
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [imgView sd_setImageWithURL:url1];
     
-    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-50,20,100,100)];
+    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-50,30,100,100)];
     [headView addSubview:imgHead];
     imgHead.layer.masksToBounds = YES;
     imgHead.layer.cornerRadius = 50;
     NSString *strUrl = [NSString stringWithFormat:@"%@",_room.croompic];
     [imgHead sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     
-    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 140, kScreenWidth, 20)];
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 145, kScreenWidth, 20)];
     [lblName setTextColor:UIColorFromRGB(0xffffff)];
     [lblName setText:_room.teamname];
-    [lblName setFont:XCFONT(15)];
+    [lblName setFont:XCFONT(16)];
     [lblName setTextAlignment:NSTextAlignmentCenter];
     [headView addSubview:lblName];
     
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 185, kScreenWidth, 10)];
-    lineView.backgroundColor = COLOR_Bg_Gay;
+    // 分割线
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 185, kScreenWidth, 9)];
+    lineView.layer.borderWidth = 0.5;
+    lineView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
     [headView addSubview:lineView];
 
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
@@ -157,9 +160,14 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
-    footerView.backgroundColor = COLOR_Bg_Gay;
-    return footerView;
+    if (section == 0) {
+        UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
+        footerView.backgroundColor = COLOR_Bg_Gay;
+        footerView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
+        footerView.layer.borderWidth = 0.5;
+        return footerView;
+    }
+    return [UIView new];
 }
 
 - (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
