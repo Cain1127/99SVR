@@ -53,7 +53,7 @@
         _money = FloatTransformFloatToStr(trans->money());
         _time = StrTransformCToUTF8(trans->time().c_str());
         _selectBtnTag = 1;
-        
+        _buytypeflag = IntTransformIntToStr(trans->buytypeflag());
     }
     return self;
 
@@ -92,6 +92,8 @@
         _money = FloatTransformFloatToStr(data->money());
         _time = StrTransformCToUTF8(data->time().c_str());
         _transId = IntTransformIntToStr(data->transid());
+        _buytypeflag = IntTransformIntToStr(data->buytypeflag());
+
     }
     return self;
 }

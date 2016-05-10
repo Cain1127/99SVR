@@ -14,7 +14,8 @@
 + (SVRMediaClient *)sharedSVRMediaClient;
 - (BOOL) clientCoreInit;
 - (BOOL) clientCoreUnInit;
-- (BOOL) clientRcvStreamStart:(NSString*)tcpAddr tcpPort:(int32_t)tcpPort rtmpAddr:(NSString*)rtmpAddr userId:(int32_t)userId roomId:(int32_t)roomId;
+- (BOOL) clientRcvStreamStart:(int32_t)userId roomId:(int32_t)roomId;
+//- (BOOL) clientRcvStreamStart:(NSString*)tcpAddr tcpPort:(int32_t)tcpPort rtmpAddr:(NSString*)rtmpAddr userId:(int32_t)userId roomId:(int32_t)roomId;
 - (BOOL) clientRcvStreamStop;
 - (BOOL) clientMuteVideoStream:(BOOL)en;
 - (BOOL) clientMuteAudioStream:(BOOL)en;

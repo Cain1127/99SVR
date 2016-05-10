@@ -88,6 +88,13 @@
 
 - (void)refreshData:(NSNotification *)notify
 {
+    
+    if (_dataSource.aryVIP.count>0) {
+        Loading_Cup_Show(self.tableView);
+    }else{
+        Loading_Bird_Show(self.tableView);
+    }
+    
     [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
 #pragma mark 兑换私人定制

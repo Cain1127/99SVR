@@ -60,11 +60,8 @@
 /**最小vip等级*/
 @property (nonatomic , copy) NSString *minVipLevel;
 
-
-
-
-
-
+/**股票交易记录的类型 1：买入 2:是卖出*/
+@property (nonatomic , copy) NSString *buytypeflag;
 /**记录点击选择操盘的股票tag   全部 三个月 一个月*/
 @property (nonatomic , assign) __block NSInteger selectBtnTag;
 /**组合收益的点*/

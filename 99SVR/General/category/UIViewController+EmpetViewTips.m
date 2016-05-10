@@ -43,7 +43,7 @@ static char  * TapRecognizerBlockKey;
     [targetView addSubview:view];
     
     UIImageView *imageView = [[UIImageView alloc]init];
-    imageView.frame = (CGRect){0,0,120,120};
+    imageView.frame = (CGRect){0,0,180,180};
     imageView.center = CGPointMake(view.center.x, view.center.y-60);
     imageView.image = [UIImage imageNamed:imageName];
     imageView.contentMode = UIViewContentModeScaleAspectFit;

@@ -1,8 +1,8 @@
 /*
-*ÎÒµÄ£º×¢²á
-*ÓÊÏä ×ÜµÄÎ´¶ÁÊı PC¶Ë½Ó¿Ú
-*Õ½¶Ó¼ò½é
-*»º´æ
+*Å’â€œÂµÆ’Â£âˆ«â—ŠÂ¢â‰¤Â·
+*â€Â Å“â€° â—Šâ€¹ÂµÆ’Å’Â¥âˆ‚Â¡Â Ë PCâˆ‚Ã€Î©â€Ã¸â„
+*â€™Î©âˆ‚â€ÂºÃšÎ©Ãˆ
+*Âªâˆ«Â¥ÃŠ
 */
 #include "stdafx.h"
 #include "HttpConnection.h"
@@ -152,7 +152,7 @@ static void http_request_asyn(HttpListener* uiListener, ParseJson jsonPaser, Req
 
 
 
-/******************************½âÎöjson******************************/
+/******************************Î©â€šÅ’Ë†json******************************/
 
 void parse_homepage(char* json, HttpListener* listener)
 {
@@ -178,7 +178,7 @@ void parse_homepage(char* json, HttpListener* listener)
 	
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		if (reader.parse(strJson, value))
 		{
 			if(!value["status"].isNull())
@@ -342,7 +342,7 @@ void parse_collectionlist(char* json, HttpListener* listener)
 	vec_collect.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -524,7 +524,8 @@ void parse_operatestocktransaction(char* json, HttpListener* listener)
 							stockstrans.set_operateid(data[i]["operateId"].asInt());
 							stockstrans.set_transid(atoi(data[i]["transId"].asString().c_str()));
 							stockstrans.set_buytype(data[i]["buytype"].asString());
-							stockstrans.set_stockid(data[i]["stockId"].asString());
+                            stockstrans.set_buytypeflag(data[i]["buytypeflag"].asInt());
+                            stockstrans.set_stockid(data[i]["stockId"].asString());
 							stockstrans.set_stockname(data[i]["stockName"].asString());
 							stockstrans.set_price(atof(data[i]["price"].asString().c_str()));
 							stockstrans.set_count(atoi(data[i]["count"].asString().c_str()));
@@ -664,7 +665,7 @@ void parse_privatetraderecord(char* json, HttpListener* listener)
 	vec_trans.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1157,7 +1158,7 @@ void parse_BuyPrivateService(char* json, HttpListener* listener)
 	psld_list.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1239,7 +1240,7 @@ void parse_consumerank(char* json, HttpListener* listener)
 	vec_consume.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1309,7 +1310,7 @@ void parse_viewpoint(char* json, HttpListener* listener)
 	vec_viewpoint.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1391,7 +1392,7 @@ void parse_viewpointdetail(char* json, HttpListener* listener)
 	img_list.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1481,7 +1482,7 @@ void parse_viewpointreply(char* json, HttpListener* listener)
 	vec_reply.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1562,7 +1563,7 @@ void parse_postreply(char* json, HttpListener* listener)
 
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1635,7 +1636,7 @@ void parse_totalunreadcount(char* json, HttpListener* listener)
 
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1687,7 +1688,7 @@ void parse_unreadcount(char* json, HttpListener* listener)
 
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1749,7 +1750,7 @@ void parse_privateservicesummary(char* json, HttpListener* listener)
 	vec_private.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1816,7 +1817,7 @@ void parse_privateservicedetail(char* json, HttpListener* listener)
 	PrivateServiceDetail detail;
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1886,7 +1887,7 @@ void parse_systemmessage(char* json, HttpListener* listener)
 	vec_system.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -1957,7 +1958,7 @@ void parse_questionanswer(char* json, HttpListener* listener)
 	vec_questionanswer.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -2047,7 +2048,7 @@ void parse_comment(char* json, HttpListener* listener)
 	vec_comment.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -2131,7 +2132,7 @@ void parse_postaskquestion(char* json, HttpListener* listener)
 
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -2215,7 +2216,7 @@ void parse_groupspage(char* json, HttpListener* listener)
 	roomgroup_list.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -2348,7 +2349,7 @@ void parse_teamvideo(char* json, HttpListener* listener)
 	vec_video.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -2414,7 +2415,7 @@ void parse_teamintroduce(char* json, HttpListener* listener)
 
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -2484,7 +2485,7 @@ void parse_profitorder(char* json, HttpListener* listener)
 	vec_profitorder.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -2583,7 +2584,7 @@ void parse_profitdetail(char* json, HttpListener* listener)
 	vec_stocks.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -2671,6 +2672,7 @@ void parse_profitdetail(char* json, HttpListener* listener)
 					trans.set_operateid(datas["trans"][i]["operateId"].asUInt());
 					trans.set_transid(datas["trans"][i]["transId"].asUInt());
 					trans.set_buytype(datas["trans"][i]["buytype"].asString());
+                    trans.set_buytypeflag(datas["trans"][i]["buytypeflag"].asInt());
 					trans.set_stockid(datas["trans"][i]["stockId"].asString());
 					trans.set_stockname(datas["trans"][i]["stockName"].asString());
 					trans.set_price(atof((datas["trans"][i]["price"].asString()).c_str()));
@@ -2794,7 +2796,7 @@ void parse_splashimage(char* json, HttpListener* listener)
 	vec_questionanswer.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -2903,7 +2905,7 @@ void parse_sendcomment(char* json, HttpListener* listener)
 	vec_comment.clear();
 	try
 	{
-		// ½âÎöÂß¼­
+		// Î©â€šÅ’Ë†Â¬ï¬‚Âºâ‰ 
 		//..
 		if (reader.parse(strJson, value))
 		{
@@ -2974,9 +2976,9 @@ void parse_sendcomment(char* json, HttpListener* listener)
 	}
 }
 
-/******************************·¢ÆğÇëÇó******************************/
+/******************************âˆ‘Â¢âˆ†ï£¿Â«ÃÂ«Ã›******************************/
 
-//Ê×Ò³ÁĞ±íÊı¾İ
+//Â â—Šâ€œâ‰¥Â¡â€“Â±ÃŒÂ ËÃ¦â€º
 void HttpConnection::RequestHomePage(HomePageListener* listener)
 {
 	std::string cache_content;
@@ -3002,7 +3004,7 @@ void HttpConnection::RequestHomePage(HomePageListener* listener)
 }
 
 
-// ÇëÇóÕ½¶ÓµÄË½ÈË¶¨ÖÆËõÂÔĞÅÏ¢
+// Â«ÃÂ«Ã›â€™Î©âˆ‚â€ÂµÆ’Ã€Î©Â»Ã€âˆ‚Â®Ã·âˆ†Ã€Ä±Â¬â€˜â€“â‰ˆÅ“Â¢
 void HttpConnection::RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivateServiceSummaryPackListener* listener)
 {
 	char tmp[32] = {0};
@@ -3020,7 +3022,7 @@ void HttpConnection::RequestTeamPrivateServiceSummaryPack(int teamId, TeamPrivat
 	http_request_asyn(listener, parse_PrivateServiceSummaryPack, &request);
 }
 
-// ÇëÇóË½ÈË¶¨ÖÆÏêÇé
+// Â«ÃÂ«Ã›Ã€Î©Â»Ã€âˆ‚Â®Ã·âˆ†Å“ÃÂ«Ãˆ
 void HttpConnection::RequestPrivateServiceDetail(int id, PrivateServiceDetailListener* listener)
 {
 	char tmp[32] = {0};
@@ -3035,7 +3037,7 @@ void HttpConnection::RequestPrivateServiceDetail(int id, PrivateServiceDetailLis
 	http_request_asyn(listener, parse_PrivateServiceDetail, &request);
 }
 
-// ÇëÇóÕ½¶Ó£¨²Æ¾­Ö±²¥£©ÁĞ±í
+// Â«ÃÂ«Ã›â€™Î©âˆ‚â€Â£Â®â‰¤âˆ†Ã¦â‰ Ã·Â±â‰¤â€¢Â£Â©Â¡â€“Â±ÃŒ
 void HttpConnection::RequestTeamList(TeamListListener* listener)
 {
 	std::string cache_content;
@@ -3061,7 +3063,7 @@ void HttpConnection::RequestTeamList(TeamListListener* listener)
 	http_request_asyn(listener, parse_TeamList, &request);
 }
 
-// Ê²Ã´ÊÇÎÒµÄË½ÈË¶¨ÖÆ
+// Â â‰¤âˆšÂ¥Â Â«Å’â€œÂµÆ’Ã€Î©Â»Ã€âˆ‚Â®Ã·âˆ†
 void HttpConnection::RequestWhatIsPrivateService(WhatIsPrivateServiceListener* listener)
 {
 	
@@ -3072,7 +3074,7 @@ void HttpConnection::RequestWhatIsPrivateService(WhatIsPrivateServiceListener* l
 	http_request_asyn(listener, parse_WhatIsPrivateService, &request);
 }
 
-// ÇëÇóÎÒÒÑ¾­¹ºÂòµÄË½ÈË¶¨ÖÆ
+// Â«ÃÂ«Ã›Å’â€œâ€œâ€”Ã¦â‰ Ï€âˆ«Â¬ÃšÂµÆ’Ã€Î©Â»Ã€âˆ‚Â®Ã·âˆ†
 void HttpConnection::RequestMyPrivateService(MyPrivateServiceListener* listener)
 {
 	RequestParamter& request = get_request_param();
@@ -3085,7 +3087,7 @@ void HttpConnection::RequestMyPrivateService(MyPrivateServiceListener* listener)
 }
 
 
-// ÇëÇó¹±Ï×°ñ£¨ÖÒÊµÖÜ°ñ£©ÁĞ±í
+// Â«ÃÂ«Ã›Ï€Â±Å“â—ŠâˆÃ’Â£Â®Ã·â€œÂ ÂµÃ·â€¹âˆÃ’Â£Â©Â¡â€“Â±ÃŒ
 void HttpConnection::RequestConsumeRankList(int teamId, ConsumeRankListener* listener)
 {
 	char tmp[32] = {0};
@@ -3099,7 +3101,7 @@ void HttpConnection::RequestConsumeRankList(int teamId, ConsumeRankListener* lis
 	http_request_asyn(listener, parse_consumerank, &request);
 }
 
-// ÇëÇó¹ÛµãÁĞ±í
+// Â«ÃÂ«Ã›Ï€â‚¬Âµâ€Â¡â€“Â±ÃŒ
 void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requestCount, ViewpointSummaryListener* listener)
 {
 	std::string cache_content;
@@ -3132,7 +3134,7 @@ void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requ
 }
 
 
-// ÏÔÊ¾¹ºÂòË½ÈË¶¨ÖÆÒ³
+// Å“â€˜Â Ã¦Ï€âˆ«Â¬ÃšÃ€Î©Â»Ã€âˆ‚Â®Ã·âˆ†â€œâ‰¥
 void HttpConnection::RequestBuyPrivateServicePage(int teacher_id, BuyPrivateServiceListener* listener)
 {
 	char tmp[128] = {0};
@@ -3145,7 +3147,7 @@ void HttpConnection::RequestBuyPrivateServicePage(int teacher_id, BuyPrivateServ
 	http_request_asyn(listener, parse_BuyPrivateService, &request);
 }
 
-//ÊÕ²Øurl(¸ÄÃûÎªÎÒµÄ¹Ø×¢)
+//Â â€™â‰¤Ã¿url(âˆÆ’âˆšËšÅ’â„¢Å’â€œÂµÆ’Ï€Ã¿â—ŠÂ¢)
 void HttpConnection::RequestCollection(CollectionListener* listener)
 {
 	char tmp[128] = {0};
@@ -3158,7 +3160,7 @@ void HttpConnection::RequestCollection(CollectionListener* listener)
 	http_request_asyn(listener, parse_collectionlist, &request);
 }
 
-// ÇëÇó¹ÛµãÏêÇé
+// Â«ÃÂ«Ã›Ï€â‚¬Âµâ€Å“ÃÂ«Ãˆ
 void HttpConnection::RequestViewpointDetail(int viewpointId, ViewpointDetailListener* listener)
 {
 	char tmp[512] = {0};
@@ -3170,7 +3172,7 @@ void HttpConnection::RequestViewpointDetail(int viewpointId, ViewpointDetailList
 	http_request_asyn(listener, parse_viewpointdetail, &request);
 }
 
-// ÇëÇó¹Ûµã»Ø¸´
+// Â«ÃÂ«Ã›Ï€â‚¬Âµâ€ÂªÃ¿âˆÂ¥
 void HttpConnection::RequestReply(int viewpointId, int startId, int requestCount, ReplyListener* listener)
 {
 	char tmp[512] = {0};
@@ -3182,7 +3184,7 @@ void HttpConnection::RequestReply(int viewpointId, int startId, int requestCount
 	http_request_asyn(listener, parse_viewpointreply, &request);
 }
 
-// »Ø¸´¹Ûµã
+// ÂªÃ¿âˆÂ¥Ï€â‚¬Âµâ€
 void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId, int fromAuthorId, const char* content, PostReplyListener* listener)
 {
 	RequestParamter& request = get_request_param();
@@ -3197,7 +3199,7 @@ void HttpConnection::PostReply(int viewpointId, int parentReplyId, int authorId,
 
 }
 
-// ÇëÇó×ÜµÄÎ´¶ÁÊı
+// Â«ÃÂ«Ã›â—Šâ€¹ÂµÆ’Å’Â¥âˆ‚Â¡Â Ë
 void HttpConnection::RequestTotalUnreadCount(TotalUnreadListener* listener)
 {
 	char tmp[512];
@@ -3209,7 +3211,7 @@ void HttpConnection::RequestTotalUnreadCount(TotalUnreadListener* listener)
 	http_request_asyn(listener, parse_totalunreadcount, &request);
 }
 
-// ÇëÇóÎ´¶ÁÊı
+// Â«ÃÂ«Ã›Å’Â¥âˆ‚Â¡Â Ë
 void HttpConnection::RequestUnreadCount(UnreadListener* listener)
 {
 	char tmp[512];
@@ -3221,7 +3223,7 @@ void HttpConnection::RequestUnreadCount(UnreadListener* listener)
 	http_request_asyn(listener, parse_unreadcount, &request);
 }
 
-// ÇëÇóË½ÈË¶¨ÖÆ
+// Â«ÃÂ«Ã›Ã€Î©Â»Ã€âˆ‚Â®Ã·âˆ†
 void HttpConnection::RequestPrivateServiceSummary(int startId, int count,PrivateServiceSummaryListener* listener)
 {
 	char tmp[512];
@@ -3233,7 +3235,7 @@ void HttpConnection::RequestPrivateServiceSummary(int startId, int count,Private
 	http_request_asyn(listener, parse_privateservicesummary, &request);
 }
 
-// ¸ßÊÖ²ÙÅÌ½»Ò×¼ÇÂ¼PC
+// âˆï¬‚Â Ã·â‰¤Å¸â‰ˆÃƒÎ©Âªâ€œâ—ŠÂºÂ«Â¬ÂºPC
 void HttpConnection::RequestPrivateTradeRecord(int startId, int count,OperateStockTradeRecordListener* listener)
 {
 	char tmp[512];
@@ -3246,7 +3248,7 @@ void HttpConnection::RequestPrivateTradeRecord(int startId, int count,OperateSto
 
 }
 
-// ÇëÇóÏµÍ³ÏûÏ¢
+// Â«ÃÂ«Ã›Å“ÂµÃ•â‰¥Å“ËšÅ“Â¢
 void HttpConnection::RequestSystemMessage(int startId, int count, SystemMessageListener* listener)
 {
 	char tmp[512];
@@ -3258,7 +3260,7 @@ void HttpConnection::RequestSystemMessage(int startId, int count, SystemMessageL
 	http_request_asyn(listener, parse_systemmessage, &request);
 }
 
-// ÇëÇóÎÊÌâ»Ø¸´
+// Â«ÃÂ«Ã›Å’Â Ãƒâ€šÂªÃ¿âˆÂ¥
 void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswerListener* listener)
 {
 	char tmp[512];
@@ -3270,7 +3272,7 @@ void HttpConnection::RequestQuestionAnswer(int startId, int count, QuestionAnswe
 	http_request_asyn(listener, parse_questionanswer, &request);
 }
 
-// ÇëÇóÆÀÂÛ»Ø¸´
+// Â«ÃÂ«Ã›âˆ†Â¿Â¬â‚¬ÂªÃ¿âˆÂ¥
 void HttpConnection::RequestMailReply(int startId, int count, MailReplyListener* listener)
 {
 	char tmp[512];
@@ -3282,7 +3284,7 @@ void HttpConnection::RequestMailReply(int startId, int count, MailReplyListener*
 	http_request_asyn(listener, parse_comment, &request);
 }
 
-// ÇëÇóÕ½¶Ó¼ò½é
+// Â«ÃÂ«Ã›â€™Î©âˆ‚â€ÂºÃšÎ©Ãˆ
 void HttpConnection::RequestTeamIntroduce(int teamId, TeamIntroduceListener* listener)
 {
 	char tmp[512];
@@ -3294,7 +3296,7 @@ void HttpConnection::RequestTeamIntroduce(int teamId, TeamIntroduceListener* lis
 	http_request_asyn(listener, parse_teamintroduce, &request);
 }
 
-// ÇëÇóÕ½¶ÓÊÓÆµÁĞ±í
+// Â«ÃÂ«Ã›â€™Î©âˆ‚â€Â â€âˆ†ÂµÂ¡â€“Â±ÃŒ
 void HttpConnection::RequestTeamVideo(int teamId, TeamVideoListener* listener)
 {
 	char tmp[512];
@@ -3320,7 +3322,7 @@ void HttpConnection::PostAskQuestion(int teamId, const char* stock, const char* 
 	http_request_asyn(listener, parse_postaskquestion, &request, HTTP_POST);
 }
 
-// ½²Ê¦ÍÅ¶Ó»Ø´ğÌáÎÊ£¨PC¶Ë½Ó¿Ú£©
+// Î©â‰¤Â Â¶Ã•â‰ˆâˆ‚â€ÂªÃ¿Â¥ï£¿ÃƒÂ·Å’Â Â£Â®PCâˆ‚Ã€Î©â€Ã¸â„Â£Â©
 void HttpConnection::PostAnswer(int questionId, int teamId, char* answer, AnswerQuestionListener* listener)
 {	
 	RequestParamter& request = get_request_param();
@@ -3335,7 +3337,7 @@ void HttpConnection::PostAnswer(int questionId, int teamId, char* answer, Answer
 	http_request_asyn(listener, parse_postanswer, &request, HTTP_POST);
 }
 
-// ÇëÇó²ÙÅÌÁĞ±í(ÈÕÊÕÒæÅÅĞò/ÔÂÊÕÒæÅÅĞò/×ÜÊÕÒæÅÅĞò type:0-È«²¿ÊÕÒæ;1-ÈÕÊÕÒæ;2-ÔÂÊÕÒæ;Ä¬ÈÏÎª0 )
+// Â«ÃÂ«Ã›â‰¤Å¸â‰ˆÃƒÂ¡â€“Â±ÃŒ(Â»â€™Â â€™â€œÃŠâ‰ˆâ‰ˆâ€“Ãš/â€˜Â¬Â â€™â€œÃŠâ‰ˆâ‰ˆâ€“Ãš/â—Šâ€¹Â â€™â€œÃŠâ‰ˆâ‰ˆâ€“Ãš type:0-Â»Â´â‰¤Ã¸Â â€™â€œÃŠ;1-Â»â€™Â â€™â€œÃŠ;2-â€˜Â¬Â â€™â€œÃŠ;Æ’Â¨Â»Å“Å’â„¢0 )
 void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, int size, OperateStockProfitListener* listener)
 {
 	g_type = type;
@@ -3373,7 +3375,7 @@ void HttpConnection::RequestOperateStockProfit(int type ,int team_id, int page, 
 	http_request_asyn(listener, parse_profitorder, &request);
 }
 
-// ÇëÇó²ÙÅÌÏêÇé
+// Â«ÃÂ«Ã›â‰¤Å¸â‰ˆÃƒÅ“ÃÂ«Ãˆ
 void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAllDetailListener* listener)
 {
 	char tmp[1024] = {0};
@@ -3386,7 +3388,7 @@ void HttpConnection::RequestOperateStockAllDetail(int operateId, OperateStockAll
 	http_request_asyn(listener, parse_profitdetail, &request);
 }
 
-// ÇëÇó²ÙÅÌÏêÇé--³Ö²ÖÇé¿ö
+// Â«ÃÂ«Ã›â‰¤Å¸â‰ˆÃƒÅ“ÃÂ«Ãˆ--â‰¥Ã·â‰¤Ã·Â«ÃˆÃ¸Ë†
 void HttpConnection::RequestOperateStocks(int operateId, OperateStocksListener* listener)
 {
 	char tmp[128] = {0};
@@ -3399,7 +3401,7 @@ void HttpConnection::RequestOperateStocks(int operateId, OperateStocksListener* 
 	http_request_asyn(listener, parse_operatestocks, &request);
 }
 
-// ÇëÇó²ÙÅÌÏêÇé--½»Ò×¼ÇÂ¼
+// Â«ÃÂ«Ã›â‰¤Å¸â‰ˆÃƒÅ“ÃÂ«Ãˆ--Î©Âªâ€œâ—ŠÂºÂ«Â¬Âº
 void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, int count, OperateStockTransactionListener* listener)
 {
 	char tmp[128] = {0};
@@ -3412,7 +3414,7 @@ void HttpConnection::RequestOperateStockTransaction(int operateId, int startId, 
 	http_request_asyn(listener, parse_operatestocktransaction, &request);
 }
 
-//ÇëÇóÉÁÆÁÍ¼Æ¬
+//Â«ÃÂ«Ã›â€¦Â¡âˆ†Â¡Ã•Âºâˆ†Â¨
 void HttpConnection::RequestSplashImage(SplashImageListener* listener)
 {
 	RequestParamter& request = get_request_param();
@@ -3422,7 +3424,7 @@ void HttpConnection::RequestSplashImage(SplashImageListener* listener)
 	http_request_asyn(listener, parse_splashimage, &request);
 }
 
-//ÇëÇóPCÊ×Ò³µ¼º½
+//Â«ÃÂ«Ã›PCÂ â—Šâ€œâ‰¥ÂµÂºâˆ«Î©
 void HttpConnection::RequestPcGroupsPage(GroupsPageListener* listener)
 {
 	RequestParamter& request = get_request_param();
@@ -3444,7 +3446,7 @@ void HttpConnection::RequestUserTeamRelatedInfo(int teamId, UserTeamRelatedInfoL
 	http_request_asyn(listener, parse_UserTeamRelatedInfo, &request);
 }
 
-// ÇëÇóÎÊÌâ»Ø¸´--Î´»Ø»Ø´ğµÄ£¨PC¶Ë½Ó¿Ú£©
+// Â«ÃÂ«Ã›Å’Â Ãƒâ€šÂªÃ¿âˆÂ¥--Å’Â¥ÂªÃ¿ÂªÃ¿Â¥ï£¿ÂµÆ’Â£Â®PCâˆ‚Ã€Î©â€Ã¸â„Â£Â©
 void HttpConnection::RequestQuestionUnAnswer(int startId, int count, QuestionAnswerListener* listener)
 {
 	char tmp[512];
@@ -3458,7 +3460,7 @@ void HttpConnection::RequestQuestionUnAnswer(int startId, int count, QuestionAns
 }
 
 
-// ÇëÇóÆÀÂÛ»Ø¸´--·¢³öµÄÆÀÂÛ£¨PC¶Ë½Ó¿Ú£©
+// Â«ÃÂ«Ã›âˆ†Â¿Â¬â‚¬ÂªÃ¿âˆÂ¥--âˆ‘Â¢â‰¥Ë†ÂµÆ’âˆ†Â¿Â¬â‚¬Â£Â®PCâˆ‚Ã€Î©â€Ã¸â„Â£Â©
 void HttpConnection::RequestMailSendReply(int startId, int count, MailReplyListener* listener)
 {
 	char tmp[512];
