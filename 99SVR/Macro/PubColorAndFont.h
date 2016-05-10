@@ -14,7 +14,7 @@
 #define COLOR_Bg_Gay UIColorFromRGB(0xf8f8f8)//
 #define COLOR_Bg_Blue UIColorFromRGB(0x0078dd)//
 #define COLOR_Bg_Red UIColorFromRGB(0xf6594e)//
-#define COLOR_Bg_Green UIColorFromRGB(0x0078dd)//
+#define COLOR_Bg_Green UIColorFromRGB(0x0fc167)//
 #define COLOR_Bg_Black UIColorFromRGB(0x000000)//
 
 #pragma mark 分割线

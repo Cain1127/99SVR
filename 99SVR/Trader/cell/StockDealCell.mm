@@ -107,13 +107,13 @@
             //成本
             NSString *costRmbLeftAttText = [NSString stringWithFormat:@"成本 %@",model.cost];
             NSString *costRmbRightAttText = [NSString stringWithFormat:@"持有数 %@",model.count];
-            [self.wareHouseViw.costRmbLabV setLeftLabAttText:costRmbLeftAttText withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:@"成本" withLeftTextColor:COLOR_Text_Black rightLabAttText:costRmbRightAttText withRightAttTextColor:COLOR_Text_BigBlack withRightText:@"持有数" withRightTextColor:COLOR_Text_Black];
+            [self.wareHouseViw.costRmbLabV setLeftLabAttText:costRmbLeftAttText withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:@"成本" withLeftTextColor:COLOR_Text_Gay rightLabAttText:costRmbRightAttText withRightAttTextColor:COLOR_Text_BigBlack withRightText:@"持有数" withRightTextColor:COLOR_Text_Gay];
             
             
             //现价
             NSString *nowRmbLeftAttText = [NSString stringWithFormat:@"现价 %@",model.currprice];
             NSString *nowRmbRightAttText = [NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate];
-            [self.wareHouseViw.nowRmbLabV setLeftLabAttText:nowRmbLeftAttText withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:@"现价" withLeftTextColor:COLOR_Text_Black rightLabAttText:nowRmbRightAttText withRightAttTextColor:COLOR_Auxiliary_Red withRightText:@"盈亏" withRightTextColor:COLOR_Text_Black];
+            [self.wareHouseViw.nowRmbLabV setLeftLabAttText:nowRmbLeftAttText withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:@"现价" withLeftTextColor:COLOR_Text_Gay rightLabAttText:nowRmbRightAttText withRightAttTextColor:COLOR_Auxiliary_Red withRightText:@"盈亏" withRightTextColor:COLOR_Text_Gay];
             
         }else{
         
