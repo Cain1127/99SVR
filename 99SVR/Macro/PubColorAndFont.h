@@ -30,6 +30,8 @@
 #define COLOR_Text_038CFF UIColorFromRGB(0x038cff)//
 #define COLOR_Text_0078DD UIColorFromRGB(0x0078dd)//
 #define COLOR_Text_B2B2B2 UIColorFromRGB(0xb2b2b2)//
+#define COLOR_Text_BigBlack UIColorFromRGB(0x000000)//纯黑色
+
 
 
 #pragma mark 文字大小
