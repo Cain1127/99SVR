@@ -601,8 +601,11 @@
     _bVideo = YES;
     _roomid = roomid;
     _nuserid = userid;
-    
-    [kMediaShare clientRcvStreamStart:@"122.13.81.62" tcpPort:819 rtmpAddr:@"rtmp://push.99ducaijing.cn/live" userId:_nuserid roomId:_roomid];
+    DLog(@"userid:%d--roomid:%d",_nuserid,_roomid);
+    if(![kMediaShare clientRcvStreamStart:@"122.13.81.62" tcpPort:819 rtmpAddr:@"rtmp://push.99ducaijing.cn/live" userId:_nuserid roomId:_roomid])
+    {
+        DLog(@"开启接收码流失败");
+    }
     
     if (audioQueue==nil)
     {

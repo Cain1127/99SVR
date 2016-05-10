@@ -191,6 +191,10 @@ public :
     void requestRoomMsg();
     
     void colletRoomInfo(int action);
+    /**
+     *  提问
+     */
+    void sendQuestion(int roomId,int teamId,const char *stock,const char *question);
     ~ZLLogonProtocol();
 };
 

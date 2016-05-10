@@ -20,7 +20,8 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         [self createGiftImage];
         [self initHiddenView];
     }
@@ -40,9 +41,10 @@
 
 - (void)setGestureHidden
 {
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.5 animations:
+    ^{
         self.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
-    } completion:nil];
+    }completion:nil];
 }
 
 - (void)initHiddenView
@@ -147,7 +149,7 @@
     [btnSend setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     [btnSend setBackgroundColor:UIColorFromRGB(0xFF7A1E)];
     [downView addSubview:btnSend];
-    btnSend.frame = Rect(kScreenWidth - 100, 3, 90,44);
+    btnSend.frame = Rect(kScreenWidth - 68, 3, 60,44);
     btnSend.layer.masksToBounds = YES;
     btnSend.layer.cornerRadius = 3;
     [btnSend addTarget:self action:@selector(sendGift) forControlEvents:UIControlEventTouchUpInside];
@@ -157,7 +159,7 @@
     [btnPay setTitleColor:UIColorFromRGB(0xFF7A1E) forState:UIControlStateNormal];
     [btnPay setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateHighlighted];
     [downView addSubview:btnPay];
-    btnPay.frame = Rect(btnSend.x-150, 3, 60,44);
+    btnPay.frame = Rect(btnSend.x-134, 3, 60,44);
     btnPay.layer.masksToBounds = YES;
     btnPay.layer.cornerRadius = 3;
     [btnPay addTarget:self action:@selector(paySelect) forControlEvents:UIControlEventTouchUpInside];
@@ -172,7 +174,7 @@
     UIImage *imgArrow = [UIImage imageNamed:@"video_present_number_point"];
     [_btnNumber setImage:imgArrow forState:UIControlStateNormal];
     [downView addSubview:_btnNumber];
-    _btnNumber.frame = Rect(btnSend.x-88, btnSend.y+4, 65, 36);
+    _btnNumber.frame = Rect(btnSend.x-68, btnSend.y+4,60, 36);
     [_btnNumber setBackgroundColor:UIColorFromRGB(0xE5E5E5)];
     [_btnNumber setTitleColor:UIColorFromRGB(0xff7a1e) forState:UIControlStateNormal];
     _btnNumber.titleLabel.font = XCFONT(15);

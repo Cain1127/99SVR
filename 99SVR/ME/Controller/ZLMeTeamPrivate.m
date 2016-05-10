@@ -8,6 +8,7 @@
 
 #import "ZLMeTeamPrivate.h"
 #import <DTCoreText/DTCoreText.h>
+#import "NNSVRViewController.h"
 #import "TQPurchaseViewController.h"
 #import "XPrivateDetailViewController.h"
 #import "PrivateVipView.h"
@@ -23,7 +24,6 @@
 
 @interface ZLMeTeamPrivate()<DTAttributedTextContentViewDelegate,PrivateDelegate>
 {
-    ZLWhatIsPrivateView *whatPrivate;
 }
 
 @property (nonatomic,strong) UIButton *btnBuy;
@@ -83,13 +83,7 @@
     [_btnBuy addTarget:self action:@selector(buyprivate) forControlEvents:UIControlEventTouchUpInside];
     _buyView.hidden = YES;
     
-    whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withViewTag:0];
-    [self.view addSubview:whatPrivate];
-    whatPrivate.hidden = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
-
-    [kHTTPSingle RequestWhatIsPrivateService];
 }
 
 - (void)refreshData:(NSNotification *)notify
@@ -118,6 +112,7 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableHeaderView = [self tableHeaderView];
     _tableView.tableFooterView = [UIView new];
+    _tableView.backgroundColor = COLOR_Bg_Gay;
     [self.view addSubview:_tableView];
 }
 
@@ -265,15 +260,7 @@
 
 - (void)loadWhatsPrivate:(NSNotification *)notify
 {
-    NSDictionary *dict = notify.object;
-    if ([dict[@"code"] intValue]==1)
-    {
-        NSString *strInfo = dict[@"data"];
-        if(strInfo)
-        {
-            [whatPrivate setContent:strInfo];
-        }
-    }
+
 }
 
 /**
@@ -282,13 +269,14 @@
 
 - (void)showWhatIsPrivate
 {
-    whatPrivate.hidden = NO;
 }
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
-    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
-    [self.navigationController pushViewController:control animated:YES];
+    NSString *strUrl = [kHTTPSingle GetPrivateServiceDetailUrl:summary.nId];
+    NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strUrl title:summary.teamname];
+    [self.navigationController pushViewController:svrView animated:YES];
 }
+
 
 -(void)dealloc{
     

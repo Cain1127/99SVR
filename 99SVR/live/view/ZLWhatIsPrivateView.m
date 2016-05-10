@@ -19,11 +19,10 @@
     
     [_textView setFrame:Rect(10, 10, kScreenWidth-20, frame.size.height-59)];
     
-    
     [self addSubview:_textView];
     
-    
-    if (tag==0) {
+    if (tag==0)
+    {
         UIButton *btnClose = [UIButton buttonWithType:UIButtonTypeCustom];
         [self addSubview:btnClose];
         

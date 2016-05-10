@@ -113,8 +113,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
         }
         
         // 隐藏上拉刷新
-        if ([self.tableView.footer isRefreshing]
-            && aryModel.count < kPageCount){
+        if (aryModel.count < kPageCount){
             [self.tableView.footer setHidden:YES];
         } else {
             [self.tableView.footer setHidden:NO];
@@ -207,9 +206,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (_personalArray.count>indexPath.section) {
         TQPersonalModel *model = _personalArray[indexPath.section];
-//        XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithCustomId:model.ID];
-//        [self.navigationController pushViewController:detailView animated:YES];
-        NSString *strInfo = [NSString stringWithFormat:@"%@%d.html",kPrivate_detail_url,model.ID];
+        NSString *strInfo = [kHTTPSingle GetPrivateServiceDetailUrl:model.ID];
         NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strInfo title:model.teamname];
         [self.navigationController pushViewController:svrView animated:YES];
     }
@@ -219,8 +216,9 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
 
 -(void)personalTailorCell:(TQPersonalTailorCell *)personalTailorCell seeButtonClickAtPersonalModel:(TQPersonalModel *)personalModel
 {
-    XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithCustomId:personalModel.ID];
-    [self.navigationController pushViewController:detailView animated:YES];
+    NSString *strInfo = [kHTTPSingle GetPrivateServiceDetailUrl:personalModel.ID];
+    NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strInfo title:personalModel.teamname];
+    [self.navigationController pushViewController:svrView animated:YES];
 }
 
 @end

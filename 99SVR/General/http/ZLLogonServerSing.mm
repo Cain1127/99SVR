@@ -157,4 +157,15 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     }
 }
 
+- (void)requestQuestion:(int)roomId team:(int)teamId stock:(NSString *)stock question:(NSString *)question
+{
+    if (protocol)
+    {
+        char cStock[64]={0};
+        ::strncpy(cStock, (const char *)[stock dataUsingEncoding:GBK_ENCODING].bytes, [stock dataUsingEncoding:GBK_ENCODING].length);
+        char cQuestion[1024]={0};
+        ::strncpy(cQuestion, (const char *)[question dataUsingEncoding:GBK_ENCODING].bytes,[question dataUsingEncoding:GBK_ENCODING].length);
+        protocol->sendQuestion(roomId,teamId,cStock,cQuestion);
+    }
+}
 @end

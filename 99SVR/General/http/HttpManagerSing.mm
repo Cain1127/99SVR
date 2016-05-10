@@ -314,5 +314,11 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
     hConnection->RequestUserTeamRelatedInfo(teamId,&_userTeamRelatedInfoListener);
 }
 
+- (NSString *)GetPrivateServiceDetailUrl:(int)psid
+{
+    [self createHttpConnection];
+    return [NSString stringWithUTF8String:hConnection->GetPrivateServiceDetailUrl(psid).c_str()];
+}
+
 
 @end

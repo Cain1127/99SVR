@@ -44,23 +44,6 @@
     _adaptiveWebView = nil;
 }
 
-//
-//- (void)dealloc
-//{
-//
-//    
-//    [[NSURLCache sharedURLCache] removeAllCachedResponses];
-//
-//
-//}
-//
-//- (void)webViewDidFinishLoad:(UIWebView *)webView{
-//    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
-//    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"WebKitDiskImageCacheEnabled"];//自己添加的，原文没有提到。
-//    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"WebKitOfflineWebApplicationCacheEnabled"];//自己添加的，原文没有提到。
-//    [[NSUserDefaults standardUserDefaults] synchronize];
-//    
-//
-//}
+
 
 @end
