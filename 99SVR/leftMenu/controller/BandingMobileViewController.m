@@ -16,6 +16,7 @@
 #import "SettingCenterController.h"
 #import "StockDealViewController.h"
 #import "RegisterTextField.h"
+#import "ZLMeTeamPrivate.h"
 
 @interface BandingMobileViewController ()<UITextFieldDelegate>
 {
@@ -353,17 +354,26 @@
 
     //判断有没有高手操盘详情
 
-    BOOL backStockDealVCBool = NO;
+    BOOL backotherVCBool = NO;
     UIViewController *stockDealVC = nil;
     
     for (UIViewController *viewController in self.navigationController.viewControllers) {
         if ([viewController isKindOfClass:[StockDealViewController class]]) {//高手操盘详情
-            backStockDealVCBool =  YES;
+            backotherVCBool =  YES;
             stockDealVC = viewController;
             break;
         }
     }
-    if (backStockDealVCBool) {//跳转到到股票详情视图
+    
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:[ZLMeTeamPrivate class]]) {//团队的vip详情页面
+            backotherVCBool =  YES;
+            stockDealVC = viewController;
+            break;
+        }
+    }
+
+    if (backotherVCBool) {//跳转到到股票详情视图
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
         [self.navigationController popToViewController:stockDealVC animated:YES];
     }else{//正常返回
