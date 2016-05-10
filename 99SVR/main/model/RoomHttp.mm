@@ -19,7 +19,8 @@
     _roomid = NSStringFromInt(_team->roomid());
     _teamid = NSStringFromInt(_team->teamid());
     _teamname = [NSString stringWithUTF8String:_team->teamname().c_str()];
-    _teamicon = [NSString stringWithUTF8String:_team->teamicon().c_str()];
+    _teamicon = [NSString stringWithFormat:@"http://roompic.99ducaijing.cn:8081/%s",_team->teamicon().c_str()];
+//    _teamicon = [NSString stringWithUTF8String:_team->teamicon().c_str()];
     _introduce = [NSString stringWithUTF8String:_team->introduce().c_str()];
     _onlineusercount = NSStringFromInteger(_team->onlineusercount());
     _locked = NSStringFromInt(_team->locked());

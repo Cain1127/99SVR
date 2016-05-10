@@ -123,7 +123,14 @@
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
         _avatarImageView.layer.cornerRadius = kImageWidth / 2;
         _avatarImageView.layer.masksToBounds = YES;
-        _avatarImageView.image = [UIImage imageNamed:@"personal_user_head"];
+        if([UserInfo sharedUserInfo].m_nVipLevel>3)
+        {
+            _avatarImageView.image = [UIImage imageNamed:@"personal_user_head"];
+        }
+        else
+        {
+            _avatarImageView.image = [UIImage imageNamed:@"100_1"];
+        }
         [_circleLine addSubview:_avatarImageView];
         _avatarImageView.userInteractionEnabled = YES;
         [_avatarImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loginDelegate)]];

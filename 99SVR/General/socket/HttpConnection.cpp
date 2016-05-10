@@ -217,8 +217,7 @@ void parse_homepage(char* json, HttpListener* listener)
 							teamItem.set_roomid(atoi(team[i]["nvcbid"].asString().c_str()));
 
 							std::string out;
-							get_full_img_url(team[i]["croompic"].asString(), out);
-							teamItem.set_teamicon(out);
+							teamItem.set_teamicon(team[i]["croompic"].asString());
 
 							//videoroomItem.set_livetype(videoroom[i]["livetype"].asString());
 							//????
@@ -917,8 +916,8 @@ void parse_TeamList(char* json, HttpListener* listener)
 							team.set_teamname(data_item["cname"].asString());
 
 							std::string out;
-							get_full_img_url(data_item["croompic"].asString(), out);
-							team.set_teamicon(out);
+//							get_full_img_url(data_item["croompic"].asString(), out);
+							team.set_teamicon(data_item["croompic"].asString());
 							team.set_onlineusercount(data_item["ncount"].asInt());
 							int tid = data_item["teacherid"].asInt();
 							team.set_teamid(tid == 0 ? -1 : tid);

@@ -130,4 +130,7 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 
 - (void)RequestUserTeamRelatedInfo:(int)teamId;
 
+- (NSString *)GetPrivateServiceDetailUrl:(int)psid;
+
+
 @end

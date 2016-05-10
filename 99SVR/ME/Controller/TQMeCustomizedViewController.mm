@@ -38,7 +38,6 @@
 @property (nonatomic,strong) RoomHttp *room;
 @property (nonatomic,strong) PrivateVipView *privateView;
 @property (nonatomic,strong) UIView *buyView;
-@property (nonatomic,strong) ZLWhatIsPrivateView *whatIsPrivate;
 
 @end
 
@@ -88,12 +87,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(havePurchase:) name:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:nil];
     [self.view makeToastActivity_bird];
     [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
-    
-    _whatIsPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64) withViewTag:0];
-    [self.view addSubview:_whatIsPrivate];
-    _whatIsPrivate.hidden = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
-    [kHTTPSingle RequestWhatIsPrivateService];
 }
 
 - (void)buyprivate
@@ -330,37 +323,15 @@
     return headerView;
 }
 
-- (void)showWhatIsPrivate
-{
-    _whatIsPrivate.hidden = NO;
-}
-
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
 //    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
 //    [self.navigationController pushViewController:control animated:YES];
-    NSString *strInfo = [NSString stringWithFormat:@"%@%d.html",kPrivate_detail_url,summary.nId];
+    NSString *strInfo = [kHTTPSingle GetPrivateServiceDetailUrl:summary.nId];
     NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strInfo title:summary.teamname];
     [self.navigationController pushViewController:svrView animated:YES];
 }
 
-- (void)loadWhatsPrivate:(NSNotification *)notify
-{
-    NSDictionary *dict = notify.object;
-    if ([dict[@"code"] intValue]==1)
-    {
-        NSString *strInfo = dict[@"data"];
-        if(strInfo)
-        {
-            @WeakObj(_whatIsPrivate)
-            @WeakObj(strInfo)
-            dispatch_async(dispatch_get_main_queue(),
-            ^{
-                [_whatIsPrivateWeak setContent:strInfoWeak];
-            });
-        }
-    }
-}
 
 
 @end

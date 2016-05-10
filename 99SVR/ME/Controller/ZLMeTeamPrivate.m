@@ -23,7 +23,6 @@
 
 @interface ZLMeTeamPrivate()<DTAttributedTextContentViewDelegate,PrivateDelegate>
 {
-    ZLWhatIsPrivateView *whatPrivate;
 }
 
 @property (nonatomic,strong) UIButton *btnBuy;
@@ -83,13 +82,7 @@
     [_btnBuy addTarget:self action:@selector(buyprivate) forControlEvents:UIControlEventTouchUpInside];
     _buyView.hidden = YES;
     
-    whatPrivate = [[ZLWhatIsPrivateView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withViewTag:0];
-    [self.view addSubview:whatPrivate];
-    whatPrivate.hidden = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadWhatsPrivate:) name:MEESAGE_WHAT_IS_PRIVATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
-
-    [kHTTPSingle RequestWhatIsPrivateService];
 }
 
 - (void)refreshData:(NSNotification *)notify
@@ -265,15 +258,7 @@
 
 - (void)loadWhatsPrivate:(NSNotification *)notify
 {
-    NSDictionary *dict = notify.object;
-    if ([dict[@"code"] intValue]==1)
-    {
-        NSString *strInfo = dict[@"data"];
-        if(strInfo)
-        {
-            [whatPrivate setContent:strInfo];
-        }
-    }
+
 }
 
 /**
@@ -282,7 +267,6 @@
 
 - (void)showWhatIsPrivate
 {
-    whatPrivate.hidden = NO;
 }
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {

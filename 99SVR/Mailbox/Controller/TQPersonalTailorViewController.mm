@@ -209,7 +209,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
         TQPersonalModel *model = _personalArray[indexPath.section];
 //        XPrivateDetailViewController *detailView = [[XPrivateDetailViewController alloc] initWithCustomId:model.ID];
 //        [self.navigationController pushViewController:detailView animated:YES];
-        NSString *strInfo = [NSString stringWithFormat:@"%@%d.html",kPrivate_detail_url,model.ID];
+        NSString *strInfo = [kHTTPSingle GetPrivateServiceDetailUrl:model.ID];
         NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strInfo title:model.teamname];
         [self.navigationController pushViewController:svrView animated:YES];
     }

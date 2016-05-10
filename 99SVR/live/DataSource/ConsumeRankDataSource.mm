@@ -64,7 +64,7 @@
     sprintf(cBuffer,"%d_1",model.headid);
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
-    [cell.imgHead sd_setImageWithURL:url1 placeholderImage:[UIImage imageNamed:@"defaultHead_1"]];
+    [cell.imgHead sd_setImageWithURL:url1 placeholderImage:[UIImage imageNamed:@"100_1"]];
     [cell.lblName setText:model.username];
     NSString *strConsume = [NSString stringWithFormat:@"%.01f",[model.consume floatValue]];
     [cell.lblGoid setText:strConsume];
