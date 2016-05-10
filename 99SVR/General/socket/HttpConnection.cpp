@@ -18,10 +18,6 @@
 #define HTTP_API "http://testphp.99ducaijing.cn/api.php"
 #define HTTP_IMG_SVR "http://testphp.99ducaijing.cn:8081"
 #define HTTP_ICON_SVR "http://testphp.99ducaijing.cn:8081"
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 #define HTTP_ICON_FOLDER "icon"
 
 static int g_authorId;
