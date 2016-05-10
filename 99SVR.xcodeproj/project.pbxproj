@@ -257,6 +257,7 @@
 		BB1769411C7C090F00CE947C /* RegNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1769401C7C090F00CE947C /* RegNameViewController.m */; };
 		BB17694A1C7D88E000CE947C /* ForgetPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1769491C7D88E000CE947C /* ForgetPwdViewController.m */; };
 		BB17694D1C7D9E7300CE947C /* InputPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB17694C1C7D9E7300CE947C /* InputPwdViewController.m */; };
+		BB1EC9961CE1C18600884774 /* libSVRMedia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB1EC9951CE1C18600884774 /* libSVRMedia.a */; };
 		BB25D7F21C1571B400314C1E /* _9SVRTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7F11C1571B400314C1E /* _9SVRTests.m */; };
 		BB25D7FD1C1571B400314C1E /* _9SVRUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D7FC1C1571B400314C1E /* _9SVRUITests.m */; };
 		BB25D80F1C15729800314C1E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BB25D80B1C15729800314C1E /* AppDelegate.m */; };
@@ -435,7 +436,6 @@
 		BB37853F1CDF1DC3008365FD /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3785301CDF1DC3008365FD /* libavutil.a */; };
 		BB3785401CDF1DC3008365FD /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3785311CDF1DC3008365FD /* libcrypto.a */; };
 		BB3785411CDF1DC3008365FD /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3785321CDF1DC3008365FD /* libssl.a */; };
-		BB3785421CDF1DC3008365FD /* libSVRMedia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3785331CDF1DC3008365FD /* libSVRMedia.a */; };
 		BB3785431CDF1DC3008365FD /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3785341CDF1DC3008365FD /* libswresample.a */; };
 		BB3785441CDF1DC3008365FD /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3785351CDF1DC3008365FD /* libswscale.a */; };
 		BB3785451CDF1DC3008365FD /* libuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3785361CDF1DC3008365FD /* libuv.a */; };
@@ -1279,6 +1279,7 @@
 		BB1769491C7D88E000CE947C /* ForgetPwdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgetPwdViewController.m; sourceTree = "<group>"; };
 		BB17694B1C7D9E7300CE947C /* InputPwdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputPwdViewController.h; sourceTree = "<group>"; };
 		BB17694C1C7D9E7300CE947C /* InputPwdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputPwdViewController.m; sourceTree = "<group>"; };
+		BB1EC9951CE1C18600884774 /* libSVRMedia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSVRMedia.a; sourceTree = "<group>"; };
 		BB25D7D41C1571B400314C1E /* 99SVR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 99SVR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB25D7ED1C1571B400314C1E /* 99SVRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 99SVRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB25D7F11C1571B400314C1E /* _9SVRTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _9SVRTests.m; sourceTree = "<group>"; };
@@ -1549,7 +1550,6 @@
 		BB3785301CDF1DC3008365FD /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavutil.a; sourceTree = "<group>"; };
 		BB3785311CDF1DC3008365FD /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		BB3785321CDF1DC3008365FD /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
-		BB3785331CDF1DC3008365FD /* libSVRMedia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSVRMedia.a; sourceTree = "<group>"; };
 		BB3785341CDF1DC3008365FD /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswresample.a; sourceTree = "<group>"; };
 		BB3785351CDF1DC3008365FD /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswscale.a; sourceTree = "<group>"; };
 		BB3785361CDF1DC3008365FD /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libuv.a; sourceTree = "<group>"; };
@@ -2041,7 +2041,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB3785421CDF1DC3008365FD /* libSVRMedia.a in Frameworks */,
 				BB3785461CDF1DC3008365FD /* libmtasdk.a in Frameworks */,
 				BB9C7F601CDD563200FD3532 /* Foundation.framework in Frameworks */,
 				BB9C7F5E1CDD561F00FD3532 /* Security.framework in Frameworks */,
@@ -2054,6 +2053,7 @@
 				18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */,
 				18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */,
 				BB3785401CDF1DC3008365FD /* libcrypto.a in Frameworks */,
+				BB1EC9961CE1C18600884774 /* libSVRMedia.a in Frameworks */,
 				18AC140C1C8FB55600FDFF40 /* CoreTelephony.framework in Frameworks */,
 				18F970A61C9292DE001B2575 /* AlipaySDK.framework in Frameworks */,
 				18F970AA1C92945F001B2575 /* libssl.a in Frameworks */,
@@ -3282,13 +3282,13 @@
 		BB37852C1CDF1DC3008365FD /* media_libs */ = {
 			isa = PBXGroup;
 			children = (
+				BB1EC9951CE1C18600884774 /* libSVRMedia.a */,
 				BB37852D1CDF1DC3008365FD /* libavcodec.a */,
 				BB37852E1CDF1DC3008365FD /* libavfilter.a */,
 				BB37852F1CDF1DC3008365FD /* libavformat.a */,
 				BB3785301CDF1DC3008365FD /* libavutil.a */,
 				BB3785311CDF1DC3008365FD /* libcrypto.a */,
 				BB3785321CDF1DC3008365FD /* libssl.a */,
-				BB3785331CDF1DC3008365FD /* libSVRMedia.a */,
 				BB3785341CDF1DC3008365FD /* libswresample.a */,
 				BB3785351CDF1DC3008365FD /* libswscale.a */,
 				BB3785361CDF1DC3008365FD /* libuv.a */,
