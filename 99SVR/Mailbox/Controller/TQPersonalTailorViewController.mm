@@ -113,8 +113,7 @@ static NSString *const PersonalTailorCell = @"PersonalTailorCell.h";
         }
         
         // 隐藏上拉刷新
-        if ([self.tableView.footer isRefreshing]
-            && aryModel.count < kPageCount){
+        if (aryModel.count < kPageCount){
             [self.tableView.footer setHidden:YES];
         } else {
             [self.tableView.footer setHidden:NO];

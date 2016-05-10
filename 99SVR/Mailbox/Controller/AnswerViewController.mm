@@ -104,8 +104,7 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
         }
         
         // 隐藏上拉刷新
-        if ([self.tableView.footer isRefreshing]
-            && aryModel.count < kPageCount){
+        if (aryModel.count < kPageCount){
             [self.tableView.footer setHidden:YES];
         } else {
             [self.tableView.footer setHidden:NO];
@@ -158,21 +157,20 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
 
 // 设置每行高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     CGFloat LR = 12;
     CGFloat H = 140;
     TQAnswerModel *model = self.modelArray[indexPath.row];
-    if(!model.answercontent)
+    if(model.answercontent)
     {
-        return H;
+        CGSize answercontentSize = [model.answercontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 2* LR];
+        H = H + answercontentSize.height;
     }
-    if (!model.askcontent) {
-        return H;
+    if (model.askcontent) {
+        CGSize askcontentSize = [model.askcontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
+        H = H + askcontentSize.height;
     }
-    CGSize answercontentSize = [model.answercontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 2* LR];
-    CGSize askcontentSize = [model.askcontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
-
-    return H + answercontentSize.height + askcontentSize.height;;
+    
+    return H;
 }
 
 #pragma mark - AnswerTableViewCellDelegate
