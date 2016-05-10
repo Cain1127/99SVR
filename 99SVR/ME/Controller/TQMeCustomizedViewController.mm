@@ -325,8 +325,6 @@
 
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
-//    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
-//    [self.navigationController pushViewController:control animated:YES];
     NSString *strInfo = [kHTTPSingle GetPrivateServiceDetailUrl:summary.nId];
     NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strInfo title:summary.teamname];
     [self.navigationController pushViewController:svrView animated:YES];

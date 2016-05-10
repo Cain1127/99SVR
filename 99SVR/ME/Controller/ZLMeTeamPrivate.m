@@ -8,6 +8,7 @@
 
 #import "ZLMeTeamPrivate.h"
 #import <DTCoreText/DTCoreText.h>
+#import "NNSVRViewController.h"
 #import "TQPurchaseViewController.h"
 #import "XPrivateDetailViewController.h"
 #import "PrivateVipView.h"
@@ -270,9 +271,11 @@
 }
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
-    XPrivateDetailViewController *control = [[XPrivateDetailViewController alloc] initWithCustomId:summary.nId];
-    [self.navigationController pushViewController:control animated:YES];
+    NSString *strUrl = [kHTTPSingle GetPrivateServiceDetailUrl:summary.nId];
+    NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strUrl title:summary.teamname];
+    [self.navigationController pushViewController:svrView animated:YES];
 }
+
 
 -(void)dealloc{
     
