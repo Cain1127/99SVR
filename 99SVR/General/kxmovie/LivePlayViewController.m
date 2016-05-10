@@ -21,8 +21,6 @@
 #import "LoginViewController.h"
 #import "UIAlertView+Block.h"
 
-#define kMediaShare [SVRMediaClient sharedSVRMediaClient]
-
 @interface LivePlayViewController()<SVRMediaClientDelegate>
 {
     UITapGestureRecognizer *tapGesture;
@@ -42,6 +40,9 @@
     UIView *sunView;
     UIView *_downHUD;
     UIView *_TopHUD;
+    int _videoWidth;
+    int _videoHeight;
+    CGColorSpaceRef colorSpace;
 }
 
 @property (nonatomic) BOOL backGroud;
@@ -55,7 +56,6 @@
 @property (nonatomic,strong) UIButton *btnShare;
 @property (nonatomic,strong) UIButton *btnCollet;
 @property (nonatomic,copy) NSString *roomName;
-
 @property (nonatomic,strong) NSMutableArray *aryVideo;
 @property (nonatomic,strong) NSMutableArray *aryAudio;
 
@@ -253,6 +253,7 @@
 - (void)initDecode
 {
     _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
+    [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
 }
 
 - (void)decodeAudio
@@ -295,8 +296,8 @@
     DLog(@"视频停止");
     _media.nFall = 0;
     _playing = NO;
-    [kMediaShare clientCoreUnInit];
-    [kMediaShare clientRcvStreamStop];
+    [[SVRMediaClient sharedSVRMediaClient] clientCoreUnInit];
+    [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
     @WeakObj(self)
     gcd_main_safe(^{
          [selfWeak setDefaultImg];
@@ -382,12 +383,9 @@
     [_btnCollet setImage:[UIImage imageNamed:@"personal_follow_icon"] forState:UIControlStateSelected];
     [_btnCollet addTarget:self action:@selector(colletInfo) forControlEvents:UIControlEventTouchUpInside];
     [self updateDownHUD];
-    SVRMediaClient *client = [SVRMediaClient sharedSVRMediaClient];
-    if (![client clientCoreInit])
-    {
-        DLog(@"12345678");
-    }
-    kMediaShare.delegate = self;
+    SVRMediaClient *svrClient = [SVRMediaClient sharedSVRMediaClient];
+    svrClient.delegate = self;
+    
     _downHUD.alpha = 0;
     if (_roomIsCollet)
     {
@@ -602,7 +600,7 @@
     _roomid = roomid;
     _nuserid = userid;
     DLog(@"userid:%d--roomid:%d",_nuserid,_roomid);
-    if(![kMediaShare clientRcvStreamStart:@"122.13.81.62" tcpPort:819 rtmpAddr:@"rtmp://push.99ducaijing.cn/live" userId:_nuserid roomId:_roomid])
+    if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:_nuserid roomId:_roomid])
     {
         DLog(@"开启接收码流失败");
     }
@@ -640,7 +638,7 @@
         {
             [_aryVideo removeAllObjects];
         }
-        [kMediaShare clientMuteVideoStream:NO];
+        [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
         [self setNoVideo];
     }
     else
@@ -651,7 +649,7 @@
         ^{
             [__self decodeVideo];
         });
-        [kMediaShare clientMuteVideoStream:YES];
+        [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
     }
 }
 
@@ -659,7 +657,7 @@
 {
     while (_playing)
     {
-        if (_media.audioBuf.count+_media.videoBuf.count>0)
+        if (_aryVideo.count)
         {
             __weak LivePlayViewController *__self = self;
             dispatch_main_async_safe(
@@ -680,18 +678,30 @@
     if (_playing && _bVideo)
     {
         __weak LivePlayViewController *__self = self;
-        if (_media.videoBuf.count<20)
+        if (_aryVideo.count==0)
         {
-            [NSThread sleepForTimeInterval:.5f];
+            [NSThread sleepForTimeInterval:.01f];
         }
         else
         {
             @autoreleasepool
             {
-                //拿到码流并且显示
+                NSData *data = nil;
+                if(_aryVideo.count>0)
+                {
+                    data = [_aryVideo objectAtIndex:0];
+                    [self createImage:data];
+                    @synchronized(_aryVideo)
+                    {
+                        if(_aryVideo.count>0)
+                        {
+                            [_aryVideo removeObjectAtIndex:0];
+                        }
+                    }
+                }
             }
         }
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1/20 * NSEC_PER_SEC)),videoQueue,
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)),videoQueue,
         ^{
             [__self decodeVideo];
         });
@@ -702,12 +712,33 @@
     }
 }
 
+- (void)createImage:(NSData *)data
+{
+    if(!colorSpace)
+    {
+        colorSpace = CGColorSpaceCreateDeviceRGB();
+    }
+    CGContextRef newContext = CGBitmapContextCreate((void *)data.bytes,
+                                                    _videoWidth, _videoHeight, 8,
+                                                    _videoWidth * 4,
+                                                    colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+    CGImageRef frame = CGBitmapContextCreateImage(newContext);
+    _currentImage = [UIImage imageWithCGImage:frame];
+    CGImageRelease(frame);
+    CGContextRelease(newContext);
+    [self performSelectorOnMainThread:@selector(updateGlView) withObject:nil waitUntilDone:YES];
+}
+
+- (void)updateGlView
+{
+    _glView.image = _currentImage;
+}
+
 #pragma mark -
 #pragma mark ibaction methods
 
 - (void)dealloc
 {
-    [kMediaShare clientCoreUnInit];
 }
 
 - (void)viewDidLayoutSubviews
@@ -729,7 +760,8 @@
         });
     }else
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^
+        {
             selfWeak.btnCollet.selected = NO;
             [ProgressHUD showSuccess:@"取消关注"];
         });
@@ -746,32 +778,13 @@
 
 - (void)onVideoData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height
 {
+    DLog(@"count:%zi",_aryVideo.count);
     @synchronized(_aryVideo)
     {
         [_aryVideo addObject:data];
+        _videoWidth = width;
+        _videoHeight = height;
     }
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-//            Byte *testByte = (Byte*)[data bytes];
-//            self.g_width  = width;
-//            self.g_height = height;
-//            self.g_bytesPerPixel = 4;
-//            self.g_rgbBuf = malloc(self.g_width*self.g_height*self.g_bytesPerPixel);
-//            memcpy(self.g_rgbBuf, testByte, len);
-//            colorSpace = CGColorSpaceCreateDeviceRGB();
-//            CGContextRef newContext = CGBitmapContextCreate(self.g_rgbBuf,
-//                                                            self.g_width, self.g_height, 8,
-//                                                            self.g_width * self.g_bytesPerPixel,
-//                                                            colorSpace, kCGImageAlphaPremultipliedFirst);
-//            CGImageRef frame = CGBitmapContextCreateImage(newContext);
-//            self.imageview.image = [UIImage imageWithCGImage:frame];
-//            
-//            CGImageRelease(frame);
-//            CGContextRelease(newContext);
-//            CGColorSpaceRelease(colorSpace);
-//            free(self.g_rgbBuf);
-        });
-    });
 }
 
 @end
