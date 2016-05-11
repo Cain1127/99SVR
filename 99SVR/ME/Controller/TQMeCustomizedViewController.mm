@@ -197,6 +197,7 @@
 #pragma 重新加载新数据
 - (void)refreshData:(NSNotification *)notify{
     
+    _tableView.frame = Rect(0,64,kScreenWidth,kScreenHeight-64);
     Loading_Cup_Show(self.tableView);
     [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
     self.tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectZero];
@@ -210,6 +211,7 @@
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(),^{
         Loading_Hide(selfWeak.tableView);
+        _tableView.frame = Rect(0,64,kScreenWidth,kScreenHeight-64);
     });
     NSDictionary *dict = notify.object;
     if ([dict[@"code"] intValue]==1)

@@ -40,7 +40,7 @@
 #import "PlayIconView.h"
 #import "StockDealViewController.h"
 #import "StockDealModel.h"
-
+#import "UIAlertView+Block.h"
 #define kPictureHeight kScreenWidth * (0.43)
 
 @interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate>

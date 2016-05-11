@@ -405,13 +405,6 @@
     stockVC.stockModel = stockModel;
     [self.navigationController pushViewController:stockVC animated:YES];
     
-//    NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-//    
-//    if([[UIApplication sharedApplication] canOpenURL:url]) {
-//        
-//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=Setting"]];
-//        
-//    }
 }
 
 
