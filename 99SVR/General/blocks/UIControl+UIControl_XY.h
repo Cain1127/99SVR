@@ -10,6 +10,7 @@
 
 @interface UIControl (UIControl_XY)
 @property (nonatomic, assign) NSTimeInterval cjr_acceptEventInterval;// 可以用这个给重复点击加间隔
+
 @end
 
 
