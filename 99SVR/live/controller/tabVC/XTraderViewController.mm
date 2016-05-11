@@ -270,13 +270,7 @@ static char  * TapRecognizerBlockKey;
     [targetView addSubview:view];
     
     UIImageView *imageView = [[UIImageView alloc]init];
-    
-    if (kiPhone4_OR_4s || kiPhone5_OR_5c_OR_5s) {
-        imageView.frame = (CGRect){0,0,120,120};
-    }else{
-        imageView.frame = (CGRect){0,0,180,180};
-    }
-    
+    imageView.frame = (CGRect){0,0,120,120};
     imageView.center = CGPointMake(view.center.x, view.center.y-60);
     imageView.image = [UIImage imageNamed:imageName];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -285,11 +279,10 @@ static char  * TapRecognizerBlockKey;
     UILabel *titLab = [[UILabel alloc]init];
     titLab.textAlignment = NSTextAlignmentCenter;
     titLab.numberOfLines = 0;
-    titLab.textColor = UIColorFromRGB(0x919191);
+    titLab.textColor = UIColorFromRGB(0x4c4c4c);
     titLab.text = msg;
-    titLab.font = Font_15;
     [titLab sizeToFit];
-    titLab.frame = (CGRect){0,CGRectGetMaxY(imageView.frame)+10,width,titLab.frame.size.height};
+    titLab.frame = (CGRect){0,CGRectGetMaxY(imageView.frame),width,titLab.frame.size.height};
     [view addSubview:titLab];
 }
 
