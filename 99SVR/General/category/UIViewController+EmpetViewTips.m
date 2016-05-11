@@ -98,12 +98,15 @@ static char  * TapRecognizerBlockKey;
 
 
 -(void)hideEmptyViewInView:(UIView *)targetView{
+    dispatch_async(dispatch_get_main_queue(), ^{
 
     UIView *view = [targetView viewWithTag:EmptyViewTag];
     if (view)
     {
         [view removeFromSuperview];
-    }    
+    }
+        
+    });
 }
 
 
