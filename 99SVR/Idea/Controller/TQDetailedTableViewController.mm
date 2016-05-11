@@ -636,7 +636,12 @@
         @WeakObj(self)
         dispatch_async(dispatch_get_main_queue(), ^{
             [selfWeak.view hideToastActivity];
-            [selfWeak loadNullView];
+            //[selfWeak loadNullView];
+            [selfWeak showErrorViewInView:selfWeak.tableView withMsg:RequestState_NetworkErrorStr(@"AnswerViewController") touchHanleBlock:^{
+                @StrongObj(self);
+                [self.view makeToastActivity_bird];
+                [self requestView];
+            }];
         });
     }
 }

@@ -419,9 +419,15 @@
     [UserDefaults setObject:tableAry forKey:kHistoryList];
     [UserDefaults synchronize];
     
-    [_dataSource setModel:tableAry];
-    _historyTable.tableFooterView = nil;
-    [_historyTable reloadData];
+    if(tableAry.count)
+    {
+        [_dataSource setModel:tableAry];
+        [_historyTable reloadData];
+    } else {
+        [_dataSource setModel:tableAry];
+        _historyTable.tableFooterView = nil;
+        [_historyTable reloadData];
+    }
 }
 
 // HistorySearch代理方法 -- 选择搜索记录
