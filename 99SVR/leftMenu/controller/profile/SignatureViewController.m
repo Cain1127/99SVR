@@ -59,7 +59,8 @@
     saveButton.layer.cornerRadius = 2.5;
     saveButton.layer.masksToBounds = YES;
     saveButton.frame = Rect(10,CGRectGetMaxY(contentView.frame)+30, kScreenWidth-20, 40);
-    [saveButton setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
+    [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [saveButton setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateDisabled];
     [saveButton addTarget:self action:@selector(rightItemClick) forControlEvents:UIControlEventTouchUpInside];
     [self.bgView addSubview:saveButton];
     _commitBtn = saveButton;

@@ -65,7 +65,7 @@
         btnLogin.tag = 2;
         [btnLogin setTitle:@"登录" forState:UIControlStateNormal];
         
-        UILabel *line = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-0.25, 10, 0.5, 20)];
+        UILabel *line = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-0.25, 12, 0.5, 20)];
         [_unLoginView addSubview:line];
         [line setBackgroundColor:UIColorFromRGB(0xcfcfcf)];
         
@@ -114,7 +114,7 @@
         _circleLine.layer.masksToBounds = YES;
         _circleLine.layer.cornerRadius = (kCircle) / 2;
         _circleLine.layer.borderWidth = 1;
-        _circleLine.layer.borderColor = UIColorFromRGB(0xcfcfcf).CGColor;
+        _circleLine.layer.borderColor = UIColorFromRGB(0x3f99e5).CGColor;
         [self addSubview:_circleLine];
         
         _circleLine.frame = Rect(self.width/2-kCircle/2, 10, kCircle, kCircle);
