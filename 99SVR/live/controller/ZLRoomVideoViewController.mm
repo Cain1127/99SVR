@@ -604,6 +604,7 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
 #pragma mark RoomDwonDelegate
 - (void)clickRoom:(UIButton *)button index:(NSInteger)nIndex
 {
+    
     switch (nIndex) {
         case 4://显示聊天
         {

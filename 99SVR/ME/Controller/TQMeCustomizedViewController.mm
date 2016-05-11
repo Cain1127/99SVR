@@ -38,6 +38,7 @@
 @property (nonatomic,strong) RoomHttp *room;
 @property (nonatomic,strong) PrivateVipView *privateView;
 @property (nonatomic,strong) UIView *buyView;
+@property (nonatomic , strong) UIButton *btnBuy;
 
 @end
 
@@ -70,7 +71,7 @@
     [_buyView setBackgroundColor:COLOR_Bg_Gay];
     _buyView.hidden = YES;
     
-    UIButton *_btnBuy = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnBuy = [UIButton buttonWithType:UIButtonTypeCustom];
     _btnBuy.frame = Rect(0,0, kScreenWidth-20, 44);
     [_buyView addSubview:_btnBuy];
     [_btnBuy setTitle:@"马上兑换" forState:UIControlStateNormal];
@@ -85,7 +86,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(noPurchase:) name:MESSAGE_HTTP_NOPURCHASE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(havePurchase:) name:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:nil];
-    [self.view makeToastActivity_bird];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+
+    Loading_Bird_Show(self.view);
     [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
 }
 
@@ -117,7 +120,7 @@
     NSDictionary *dict = notify.object;
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak.view hideToastActivity];
+        Loading_Hide(selfWeak.view);
         [selfWeak.noView removeFromSuperview];
     });
     
@@ -186,16 +189,27 @@
     [_tableView addSubview:_noView];
     @WeakObj(self)
     [_noView clickWithBlock:^(UIGestureRecognizer *gesture) {
-        [selfWeak.view makeToastActivity_bird];
+        Loading_Bird_Show(selfWeak.view);
         [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
     }];
+}
+
+#pragma 重新加载新数据
+- (void)refreshData:(NSNotification *)notify{
+    
+    Loading_Cup_Show(self.tableView);
+    [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
+    self.tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectZero];
+    _buyView.hidden = YES;
+
+    
 }
 
 - (void)havePurchase:(NSNotification *)notify
 {
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(),^{
-        [selfWeak.view hideToastActivity];
+        Loading_Hide(selfWeak.tableView);
     });
     NSDictionary *dict = notify.object;
     if ([dict[@"code"] intValue]==1)
@@ -206,6 +220,7 @@
             selfWeak.tableView.delegate = selfWeak.buyDataSource;
             selfWeak.tableView.dataSource = selfWeak.buyDataSource;
             [selfWeak.tableView reloadData];
+            
         });
     }
     else
@@ -223,16 +238,10 @@
 
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-
 -(void)dealloc
 {
-    DLog(@"dealloc!");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
 }
 
 - (void)selectIndex:(TQMeCustomizedModel *)model

@@ -17,7 +17,7 @@
 #import "StockDealViewController.h"
 #import "RegisterTextField.h"
 #import "ZLMeTeamPrivate.h"
-
+#import "TQMeCustomizedViewController.h"
 @interface BandingMobileViewController ()<UITextFieldDelegate>
 {
     int nSecond;
@@ -366,13 +366,21 @@
     }
     
     for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:[TQMeCustomizedViewController class]]) {//查看我的私私人定制的列表看有几个
+            backotherVCBool =  YES;
+            stockDealVC = viewController;
+            break;
+        }
+    }
+    
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
         if ([viewController isKindOfClass:[ZLMeTeamPrivate class]]) {//团队的vip详情页面
             backotherVCBool =  YES;
             stockDealVC = viewController;
             break;
         }
     }
-
+    
     if (backotherVCBool) {//跳转到到股票详情视图
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
         [self.navigationController popToViewController:stockDealVC animated:YES];
