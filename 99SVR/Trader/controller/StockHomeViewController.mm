@@ -25,6 +25,7 @@
 @property (nonatomic , strong) StockHomeTableViewModel *dayTableViewModel;
 @property (nonatomic , strong) __block NSMutableArray *dayDataArray;
 @property (nonatomic , assign) __block NSInteger dayPagInteger;
+
 /**月*/
 @property (nonatomic , strong) UITableView *monTab;
 @property (nonatomic , strong) StockHomeTableViewModel *monTableViewModel;
@@ -151,6 +152,7 @@
 
 #pragma mark 刷新数据
 -(void)refreshDayData:(NSNotification *)notfi{
+
     [self refreshTableDataWithTable:self.dayTab WithTableViewModel:self.dayTableViewModel fromDataDic:(NSDictionary *)notfi.object toDataArray:self.dayDataArray];
 }
 -(void)refreshMonData:(NSNotification *)notfi{
@@ -159,7 +161,6 @@
 
 }
 -(void)refreshTotalData:(NSNotification *)notfi{
-
     [self refreshTableDataWithTable:self.totalTab WithTableViewModel:self.totalTableViewModel fromDataDic:(NSDictionary *)notfi.object toDataArray:self.totalDataArray];
 }
 /**
@@ -185,17 +186,22 @@
             
             
             NSArray *fromDataArray = fromDataDic[@"data"];
-            
-            if ([fromDataArray  count]==0) {
-                [table.footer noticeNoMoreData];
-                [UIView animateWithDuration:1 animations:^{
-                    table.footer.hidden = YES;
-                }];
+
+            //检测有没有上啦加载更多
+            if ([fromDataDic[@"refresh"] isEqualToString:@"1"]) {
+                if ([fromDataArray  count]==0) {//返回数据时候为0
+                    [table.footer noticeNoMoreData];
+                    [UIView animateWithDuration:1 animations:^{
+                        table.footer.hidden = YES;
+                    }];
+                }else{
+                    table.footer.hidden = NO;
+                    [table.footer resetNoMoreData];
+                }
+                
             }else{
-                table.footer.hidden = NO;
-                [table.footer resetNoMoreData];
+                table.footer.hidden = YES;
             }
-            
             [table.gifHeader endRefreshing];
             [table.footer endRefreshing];
             
@@ -217,10 +223,8 @@
         [table reloadData];
 
         [self chickEmptyViewShowWithTab:table withData:toDataArray withCode:code];
-    
+        
     });
-
-
 }
 
 

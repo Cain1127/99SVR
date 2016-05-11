@@ -165,8 +165,9 @@ void OperateStockProfitListenerDay::onResponse(vector<OperateStockProfit>& day,i
         StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
         [muArray addObject:allModel];
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:@{@"data":muArray,@"code":@"1"}];
+    NSString *refresh = bRefresh ? @"1" : @"0";
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_DAY__VC object:@{@"data":muArray,@"code":@"1",@"refresh":refresh}];
 }
 
 void OperateStockProfitListenerDay::OnError(int errCode)
@@ -190,7 +191,10 @@ void OperateStockProfitListenerMonth::onResponse(vector<OperateStockProfit>& mon
         StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
         [muArray addObject:allModel];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:@{@"data":muArray,@"code":@"1"}];
+    
+    NSString *refresh = bRefresh ? @"1" : @"0";
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_MON__VC object:@{@"data":muArray,@"code":@"1",@"refresh":refresh}];
 }
 
 void OperateStockProfitListenerMonth::OnError(int errCode)
@@ -215,7 +219,9 @@ void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total
         StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
         [muArray addObject:allModel];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:@{@"data":muArray,@"code":@(1)}];
+    NSString *refresh = bRefresh ? @"1" : @"0";
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:@{@"data":muArray,@"code":@(1),@"refresh":refresh}];
 }
 
 void OperateStockProfitListenerAll::OnError(int errCode)
