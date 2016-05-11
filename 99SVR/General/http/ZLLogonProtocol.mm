@@ -106,14 +106,32 @@ void ZLHallListener::OnOnMicRobertResp(OnMicRobertResp& info)
 void ZLHallListener::OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info)
 {
     KUserSingleton.goldCoin = info.nk()/1000.0f;
-    NSDictionary *dict = @{@"userid":@(info.userid()),@"roomid":@(info.roomid()),@"teamid":@(info.roomid()),@"giftid":@(info.giftid()),
-                           @"giftnum":@(info.giftnum())};
+    NSDictionary *dict = @{@"userid":@(info.userid()),@"roomid":@(info.roomid()),@"teamid":@(info.roomid()),@"giftid":@(info.giftid()),@"giftnum":@(info.giftnum())};
+    DLog(@"send gift ok!");
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VIEW_DETAILS_GIFT_VC object:dict];
+    
+    NSString *strName = [NSString stringWithCString:info.useralias().c_str() encoding:GBK_ENCODING];
+    int gitId = info.giftid();
+    int number = info.giftnum();
+    NSString *toName = [NSString stringWithCString:info.teamalias().c_str() encoding:GBK_ENCODING];
+    NSDictionary *parameters = @{@"srcName":strName,@"gId":@(gitId),@"number":@(number),@"srcId":@(info.userid()),@"toName":toName};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VIEWPOINT_GIFT_NOTIFY_VC object:parameters];
+    
 }
 
 void ZLHallListener::OnViewpointTradeGiftErr(ErrCodeResp& info)
 {
-    
+    DLog(@"send gift fail");
+    NSString *strErr = [NSString stringWithUTF8String:conn->get_error_desc(info.errcode()).c_str()];
+    if (strErr!=nil)
+    {
+        DLog(@"strerr:%@",strErr);
+//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:strErr];
+    }
+    else
+    {
+//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:@"提问失败"];
+    }
 }
 
 void ZLHallListener::OnSetUserPwdResp(SetUserPwdResp& info)
@@ -667,7 +685,11 @@ void ZLRoomListener::OnRoomNoticeNotify(RoomNotice& info){
         [RoomService getNoticeInfo:&info notice:aryRoomNotice];
     }
 }
-
+/**
+ *  上麦后，用户信息修改
+ *
+ *  @param info <#info description#>
+ */
 void ZLRoomListener::OnRobotTeacherIdNoty(RobotTeacherIdNoty& info)
 {
     RoomUser *_roomUser = [currentRoom.dictUser objectForKey:NSStringFromInt(info.vcbid())];
@@ -755,7 +777,8 @@ void ZLRoomListener::OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info)
 {
     DLog(@"收到观点详情礼物通知!");
     /**
-     *  	uint32	_userid;
+     *
+     uint32	_userid;
      string	_useralias;
      uint32	_roomid;
      uint32	_teamid;
@@ -769,8 +792,7 @@ void ZLRoomListener::OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info)
     int gitId = info.giftid();
     int number = info.giftnum();
     NSString *toName = [NSString stringWithCString:info.teamalias().c_str() encoding:GBK_ENCODING];
-    NSDictionary *parameters = @{@"srcName":strName,@"gId":@(gitId),@"number":@(number),@"srcId":@(info.userid()),
-                                 @"toName":toName};
+    NSDictionary *parameters = @{@"srcName":strName,@"gId":@(gitId),@"number":@(number),@"srcId":@(info.userid()),@"toName":toName};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VIEWPOINT_GIFT_NOTIFY_VC object:parameters];
 }
 

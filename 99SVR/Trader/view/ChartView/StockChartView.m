@@ -127,7 +127,7 @@
         btn.frame = (CGRect){i*topMenuBtn_w + (i+1)*10,5,topMenuBtn_w,topMenuBtn_h};
         btn.titleLabel.font = [UIFont systemFontOfSize:13];
         [btn setTitle:itemName forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        [btn setTitleColor:COLOR_Text_Black forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateDisabled];
         btn.backgroundColor = [UIColor clearColor];
         btn.layer.borderWidth = LineView_Height;

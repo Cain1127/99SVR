@@ -58,7 +58,8 @@
     CGRect buttonFrame = Rect(5, 6, 44, 44);
     for (int i=0; i<5; i++) {
         UIButton *btnQuestion = [ChatRightView createChatButton:buttonFrame];
-        if (i==1) {
+        if (i==1)
+        {
             btnQuestion.cjr_acceptEventInterval = 3;
         }
         else

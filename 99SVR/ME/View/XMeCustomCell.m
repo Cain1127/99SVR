@@ -22,7 +22,7 @@
     
     _lblName = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+10, _imgView.y, 200, 20)];
     [_lblName setFont:XCFONT(15)];
-    [_lblName setTextColor:COLOR_Text_Gay];
+    [_lblName setTextColor:COLOR_Text_Black];
     [self.contentView addSubview:_lblName];
     
     _imgLevel = [[UIImageView alloc] initWithFrame:Rect(_lblName.x, _lblName.y+_lblName.height, 25, 25)];
@@ -30,12 +30,12 @@
     
     _lblLevel = [[UILabel alloc] initWithFrame:Rect(_imgLevel.x+_imgLevel.width+5, _imgLevel.y + 3, 50, 20)];
     [_lblLevel setFont:XCFONT(15)];
-    [_lblLevel setTextColor:COLOR_Text_Gay];
+    [_lblLevel setTextColor:COLOR_Text_Black];
     [self.contentView addSubview:_lblLevel];
     
     _lblTime = [[UILabel alloc] initWithFrame:Rect(_imgLevel.x, _imgLevel.y+_imgLevel.height+5, ScreenWidth - (CGRectGetMaxX(_imgView.frame)), 15)];
     [_lblTime setFont:XCFONT(15)];
-    [_lblTime setTextColor:COLOR_Text_Gay];
+    [_lblTime setTextColor:COLOR_Text_Black];
     [self.contentView addSubview:_lblTime];
     
     return self;

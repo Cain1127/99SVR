@@ -56,7 +56,8 @@ static const char *UIControl_acceptEventTime = "UIControl_acceptEventTime";
     
 }
 
-- (void)cjr_sendAction:(SEL)action to:(id)target forEvent:(UIEvent *)event{
+- (void)cjr_sendAction:(SEL)action to:(id)target forEvent:(UIEvent *)event
+{
     if (NSDate.date.timeIntervalSince1970 - self.cjr_acceptEventTime < self.cjr_acceptEventInterval)
     {
         

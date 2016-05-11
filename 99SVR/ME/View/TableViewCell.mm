@@ -12,15 +12,15 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-        
+    
     self.selectView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
     self.selectView.layer.borderWidth = 0.5f;
-    self.introduceLab.textColor = COLOR_Text_Gay;
+    self.introduceLab.textColor = COLOR_Text_Black;
     
     self.clickBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.clickBtn addTarget:self action:@selector(clickBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     self.clickBtn.titleLabel.font = [UIFont systemFontOfSize:clickBtn_Font];
-    [self.clickBtn setTitleColor:COLOR_Text_Gay forState:UIControlStateDisabled];
+    [self.clickBtn setTitleColor:COLOR_Text_Black forState:UIControlStateDisabled];
     [self.selectView addSubview:self.clickBtn];
     
     self.priceLabView = [[PriceLabView alloc]initWithFrame:(CGRect){0,0,100,priceLabView_h}];
@@ -29,7 +29,7 @@
     self.buyLabel = [[UILabel alloc]init];
     self.buyLabel.textAlignment = NSTextAlignmentRight;
     self.buyLabel.font = Font_15;
-    self.buyLabel.textColor = COLOR_Text_Gay;
+    self.buyLabel.textColor = COLOR_Text_Black;
     [self.selectView addSubview:self.buyLabel];
     
     
