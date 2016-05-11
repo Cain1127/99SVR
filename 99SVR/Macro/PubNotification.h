@@ -201,6 +201,6 @@
 
 #define MESSAGE_VIEWPOINT_GIFT_NOTIFY_VC @"MESSAGE_VIEWPOINT_GIFT_NOTIFY_VC"
 
-
+#define MESSAGE_TQIdeaView_NewNotifi_VC @"MESSAGE_TQIdeaView_NewNotifi_VC"
 
 #endif

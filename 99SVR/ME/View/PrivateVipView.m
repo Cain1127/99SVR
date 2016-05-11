@@ -62,7 +62,7 @@
     [attrDescButton addTarget:self action:@selector(attrDescClick:) forControlEvents:UIControlEventTouchUpInside];
     attrDescButton.frame = CGRectMake(viewX, viewY, viewW, viewH);
     
-    // 图票
+    // 图标
     UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 8, 30, 30)];
 //    iconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%@_icon",vipLevelId]];
     iconImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customized_vip%zi_icon",viewCount]];
@@ -92,6 +92,7 @@
     if (!(viewCount % column == 0 && viewCount >0)) {
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(viewW - 0.5, 10, 0.5, viewH - 2*10)];
         lineView.backgroundColor = UIColorFromRGB(0xe5e5e5);
+        lineView.tag = viewCount + 100; // 方便选中时隐藏
         [attrDescButton addSubview:lineView];
     }
     
@@ -118,12 +119,21 @@
  */
 - (void)attrDescClick:(UIButton *)button
 {
+    // 清空选中边框，显示分割线
     _selectButton.selected = NO;
+    UIView *lineView = (UIView *)[_selectButton viewWithTag:_selectButton.tag + 100];
+    if (lineView) {
+        lineView.hidden = NO;
+    }
     
-    UIButton *selectbutton = [button viewWithTag:button.tag];
+    // 显示选中边框，隐藏分割线
+    UIButton *selectbutton = [self viewWithTag:button.tag];
     selectbutton.selected = YES;
-    
-    _selectButton = selectbutton;
+    UIView *nowLineView = (UIView *)[selectbutton viewWithTag:button.tag + 100];
+    if (nowLineView) {
+        nowLineView.hidden = YES;
+    }
+     _selectButton = selectbutton;
     
     if (self.selectVipBlock) {
         self.selectVipBlock(button.tag);

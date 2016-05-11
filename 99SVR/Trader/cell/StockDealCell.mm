@@ -78,27 +78,11 @@
         if (vipBool) {
             self.tradeLabeView.hidden = NO;
             self.notVipView.hidden = YES;
-            
-            NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count]];
-            if ([model.buytype isEqualToString:@"买入"]) {
-                [attriStr addAttribute:NSForegroundColorAttributeName
-                                 value:COLOR_Auxiliary_Red
-                                 range:NSMakeRange(0, 2)];
-            }else{
-                
-                [attriStr addAttribute:NSForegroundColorAttributeName
-                                 value:[UIColor greenColor]
-                                 range:NSMakeRange(0, 2)];
-            }
-            
-            [attriStr addAttribute:NSForegroundColorAttributeName
-                             value:COLOR_Text_Black
-                             range:NSMakeRange(2, ([attriStr length]-2))];
-                        
-            [self.tradeLabeView setLeftLabText:[NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count] rightLabText:[NSString stringWithFormat:@"%@",model.time]];
-            self.tradeLabeView.leftLab.text = @"";
-            self.tradeLabeView.leftLab.attributedText = attriStr;
-            
+            NSString *leftAttText = [NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count];
+            NSString *leftText = model.count;
+            NSString *rightAttText = [NSString stringWithFormat:@"%@",model.time];
+            NSString *rightText = @"";
+            [self.tradeLabeView setLeftLabAttText:leftAttText withLeftAttTextColor:COLOR_Text_Black withLeftText:leftText withLeftTextColor:COLOR_Text_BigBlack rightLabAttText:rightAttText withRightAttTextColor:COLOR_Text_Black withRightText:rightText withRightTextColor:COLOR_Text_BigBlack];
             
         }else{
             self.tradeLabeView.hidden = YES;
@@ -117,12 +101,19 @@
             self.wareHouseViw.hidden = NO;
             self.lineView.hidden = NO;
             self.notVipView.hidden = YES;
-
-            [self.wareHouseViw.titleLabV setLeftLabText:model.stockname rightLabText:@""];
-            [self.wareHouseViw.nowRmbLabV setLeftLabText:[NSString stringWithFormat:@"现价 %@",model.currprice] rightLabText:[NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate]];
-            [self.wareHouseViw.costRmbLabV setLeftLabText:[NSString stringWithFormat:@"成本 %@",model.cost] rightLabText:[NSString stringWithFormat:@"持有数 %@",model.count]];
+            
+            //标题
+            [self.wareHouseViw.titleLabV setLeftLabAttText:model.stockname withLeftAttTextColor:COLOR_Text_Black withLeftText:model.stockname withLeftTextColor:COLOR_Text_Black rightLabAttText:@"" withRightAttTextColor:COLOR_Text_Black withRightText:@"" withRightTextColor:COLOR_Text_Black];
+            //成本
+            NSString *costRmbLeftAttText = [NSString stringWithFormat:@"成本 %@",model.cost];
+            NSString *costRmbRightAttText = [NSString stringWithFormat:@"持有数 %@",model.count];
+            [self.wareHouseViw.costRmbLabV setLeftLabAttText:costRmbLeftAttText withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:@"成本" withLeftTextColor:COLOR_Text_Gay rightLabAttText:costRmbRightAttText withRightAttTextColor:COLOR_Text_BigBlack withRightText:@"持有数" withRightTextColor:COLOR_Text_Gay];
             
             
+            //现价
+            NSString *nowRmbLeftAttText = [NSString stringWithFormat:@"现价 %@",model.currprice];
+            NSString *nowRmbRightAttText = [NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate];
+            [self.wareHouseViw.nowRmbLabV setLeftLabAttText:nowRmbLeftAttText withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:@"现价" withLeftTextColor:COLOR_Text_Gay rightLabAttText:nowRmbRightAttText withRightAttTextColor:COLOR_Auxiliary_Red withRightText:@"盈亏" withRightTextColor:COLOR_Text_Gay];
             
         }else{
         
@@ -142,8 +133,7 @@
     
     CGFloat midLeftStr = 0.0;
     midLeftStr = ABS(((ABS([model.maxY floatValue]) - [model.minY floatValue])/2.0)) + [model.minY floatValue];
-    
-//    weakSelf.chartView.leftTitArrays = @[[NSString stringWithFormat:@"%.2f%%",[model.maxY floatValue]],[NSString stringWithFormat:@"%.2f%%",midLeftStr],[NSString stringWithFormat:@"%.2f%%",[model.minY floatValue]]];
+
     weakSelf.chartView.leftTitArrays = [ShareFunction returnStockDelChartLineViewLeftLabelTextWithDataArray:@[model.minY,model.maxY]];
     
     
@@ -160,9 +150,7 @@
     weakSelf.chartView.lineChartView.raneValue_Y = CGRangeMake([model.minY floatValue], [model.maxY floatValue]);
     
     [weakSelf.chartView.lineChartView clearLine];
-//    model.rateYs = @[@"0.78",@"1.59",@"0.02",@"2.39",@"0.82",@"0.78"];
     weakSelf.chartView.lineChartView.valuePoints_Y = @[model.rateYs,model.trendYs];
-//    NSLog(@"%@ %@",model.rateYs,model.trendYs);
     [weakSelf.chartView.lineChartView drawLine];
         
     __weak typeof(array) weakArray = array;

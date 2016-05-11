@@ -100,14 +100,16 @@
 #pragma mark UITextViewDelegate
 
 - (void)textViewDidChange:(UITextView *)textView {
+    NSString *str = [NSString stringWithFormat:@"%d/20",(int)textView.text.length];
+    
     if (textView.text.length == 0) {
        _lssuePlaceHolderLab.text= @"请输入个性签名...";
+        str = @"0/20";
     }
     else {
         _lssuePlaceHolderLab.text= @"";
     }
     
-    NSString* str = [NSString stringWithFormat:@"%d/20",20 - (int)textView.text.length];
     if (textView.text.length>20) {
         self.contentTV.text = [textView.text substringToIndex:20];
         str = @"20字";

@@ -14,20 +14,20 @@
 #import "StockDealModel.h"
 #import "RoomHttp.h"
 #import "MJRefresh.h"
-
+#import "StockDealViewController.h"
 #import <objc/runtime.h>
-
-@interface XTraderViewController()
+#import "StockHomeTableViewModel.h"
+@interface XTraderViewController()<StockHomeTableViewModelDelegate>
 {
     
 }
 @property (nonatomic,strong) RoomHttp *room;
 @property (nonatomic,strong) UIView *noView;
 @property (nonatomic , strong) UITableView *totalTab;
-@property (nonatomic , strong) StockHomeTableViewModel *totalTableViewModel;
 @property (nonatomic , strong) __block NSMutableArray *totalDataArray;
 @property (nonatomic , assign) __block NSInteger totalPagInteger;
 @property (nonatomic , strong) UIView *totalEmptyView;
+@property (nonatomic , strong) StockHomeTableViewModel *totalTableViewModel;
 
 @property (nonatomic , assign) __block MJRefreshState refreshState;
 @property (nonatomic, strong) UIViewController *control;
@@ -119,7 +119,7 @@
  */
 -(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockHomeTableViewModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray{
     
-    Loading_Bird_Hide(table);
+    Loading_Hide(table);
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -192,7 +192,8 @@
 {
     if (!_totalTableViewModel)
     {
-        _totalTableViewModel = [[StockHomeTableViewModel alloc]initWithViewController:_control];
+        _totalTableViewModel = [[StockHomeTableViewModel alloc]initWithViewModelType:StockHomeTableViewType_XTraderViewVC];
+        _totalTableViewModel.delegate = self;
     }
     return _totalTableViewModel;
 }
@@ -269,7 +270,13 @@ static char  * TapRecognizerBlockKey;
     [targetView addSubview:view];
     
     UIImageView *imageView = [[UIImageView alloc]init];
-    imageView.frame = (CGRect){0,0,120,120};
+    
+    if (kiPhone4_OR_4s || kiPhone5_OR_5c_OR_5s) {
+        imageView.frame = (CGRect){0,0,120,120};
+    }else{
+        imageView.frame = (CGRect){0,0,180,180};
+    }
+    
     imageView.center = CGPointMake(view.center.x, view.center.y-60);
     imageView.image = [UIImage imageNamed:imageName];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -278,10 +285,11 @@ static char  * TapRecognizerBlockKey;
     UILabel *titLab = [[UILabel alloc]init];
     titLab.textAlignment = NSTextAlignmentCenter;
     titLab.numberOfLines = 0;
-    titLab.textColor = UIColorFromRGB(0x4c4c4c);
+    titLab.textColor = UIColorFromRGB(0x919191);
     titLab.text = msg;
+    titLab.font = Font_15;
     [titLab sizeToFit];
-    titLab.frame = (CGRect){0,CGRectGetMaxY(imageView.frame),width,titLab.frame.size.height};
+    titLab.frame = (CGRect){0,CGRectGetMaxY(imageView.frame)+10,width,titLab.frame.size.height};
     [view addSubview:titLab];
 }
 
@@ -320,5 +328,16 @@ static char  * TapRecognizerBlockKey;
     [self showEmptyViewInView:targetView withMsg:msg withImageName:@"network_anomaly_fail" touchHanleBlock:hanleBlock];
     
 }
+
+
+#pragma mark StockHomeTableViewModelDelegate
+-(void)tabViewDidSelectRowAtIndexPath:(NSIndexPath *)indexPath withModel:(id)model{
+    
+    StockDealModel *stockModel = model;
+    StockDealViewController *stockVC = [[StockDealViewController alloc]init];
+    stockVC.stockModel = stockModel;
+    [_control.navigationController pushViewController:stockVC animated:YES];
+}
+
 
 @end

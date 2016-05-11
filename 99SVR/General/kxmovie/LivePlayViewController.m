@@ -174,7 +174,9 @@
 #pragma mark - View lifecycle
 - (void)startLoad
 {
-    [_glView makeToastActivity_bird_2:@"bottom"];
+//    [_glView makeToastActivity_bird_2:@"bottom"];
+    
+    Loading_Bird_Show(_glView);
 }
 
 - (void)stopLoad
@@ -182,7 +184,8 @@
     __weak UIImageView *__glView = _glView;
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        [__glView hideToastActivity];
+//        [__glView hideToastActivity];
+        Loading_Hide(__glView);
     });
 }
 
@@ -658,7 +661,9 @@
             __weak LivePlayViewController *__self = self;
             dispatch_main_async_safe(
             ^{
-                 [__self.glView hideToastActivity];
+//                 [__self.glView hideToastActivity];
+                Loading_Hide(__self.glView);
+
             });
            return;
         }

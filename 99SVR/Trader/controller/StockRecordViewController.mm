@@ -114,7 +114,7 @@
 -(void)refreshTableDataWithTable:(UITableView *)table WithTableViewModel:(StockRecordTabModel *)tableModel fromDataDic:(NSDictionary *)fromDataDic toDataArray:(NSMutableArray *)toDataArray withTabTag:(NSInteger )tag{
     
     /**显示鸟的加载图*/
-    Loading_Bird_Hide(table);
+    Loading_Hide(table);
     
     WeakSelf(self);
     

@@ -14,7 +14,7 @@
 #define COLOR_Bg_Gay UIColorFromRGB(0xf8f8f8)//
 #define COLOR_Bg_Blue UIColorFromRGB(0x0078dd)//
 #define COLOR_Bg_Red UIColorFromRGB(0xf6594e)//
-#define COLOR_Bg_Green UIColorFromRGB(0x0078dd)//
+#define COLOR_Bg_Green UIColorFromRGB(0x0fc167)//
 #define COLOR_Bg_Black UIColorFromRGB(0x000000)//
 
 #pragma mark 分割线
@@ -30,6 +30,8 @@
 #define COLOR_Text_038CFF UIColorFromRGB(0x038cff)//
 #define COLOR_Text_0078DD UIColorFromRGB(0x0078dd)//
 #define COLOR_Text_B2B2B2 UIColorFromRGB(0xb2b2b2)//
+#define COLOR_Text_BigBlack UIColorFromRGB(0x000000)//纯黑色
+
 
 
 #pragma mark 文字大小

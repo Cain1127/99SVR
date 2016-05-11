@@ -13,6 +13,7 @@
 #import "TableViewFactory.h"
 #import "XVideoTeamInfo.h"
 #import "KxMovieViewController.h"
+#import "RoomChatNull.h"
 
 @interface XTeamViewController()<DTAttributedTextContentViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
@@ -38,9 +39,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [self.view setBackgroundColor:COLOR_Bg_Gay];//UIColorFromRGB(0xffffff)];
     [self setTitleText:@"讲师团队简介"];
-    UIView *headView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
+    UIView *headView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 195)];
+    headView.backgroundColor = COLOR_Bg_Gay;
     
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
     [headView insertSubview:imgView atIndex:0];
@@ -51,26 +53,32 @@
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [imgView sd_setImageWithURL:url1];
     
-    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-50,20,100,100)];
+    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-50,30,100,100)];
     [headView addSubview:imgHead];
     imgHead.layer.masksToBounds = YES;
     imgHead.layer.cornerRadius = 50;
     NSString *strUrl = [NSString stringWithFormat:@"%@",_room.croompic];
     [imgHead sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     
-    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 160, kScreenWidth, 20)];
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 145, kScreenWidth, 20)];
     [lblName setTextColor:UIColorFromRGB(0xffffff)];
     [lblName setText:_room.teamname];
-    [lblName setFont:XCFONT(15)];
+    [lblName setFont:XCFONT(16)];
     [lblName setTextAlignment:NSTextAlignmentCenter];
     [headView addSubview:lblName];
+    
+    // 分割线
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 185, kScreenWidth, 9)];
+    lineView.layer.borderWidth = 0.5;
+    lineView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
+    [headView addSubview:lineView];
 
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    [self.view addSubview:_tableView];
     _tableView.tableHeaderView = headView;
-    [_tableView setBackgroundColor:UIColorFromRGB(0xffffff)];
+    _tableView.tableFooterView = [UIView new];
+    [self.view addSubview:_tableView];
 }
 
 - (void)loadVideoInfo:(NSNotification *)notify
@@ -132,12 +140,12 @@
         return 1;
     }
     NSInteger count = (NSInteger)ceilf((1.0f * _aryVideo.count) / 2.0f);
-    return count;
+    return count==0?1:count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1+(_aryVideo.count ? 1 : 0);
+    return 2;//1+(_aryVideo.count ? 1 : 0);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -147,7 +155,19 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0.5;
+    return 10;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    if (section == 0) {
+        UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
+        footerView.backgroundColor = COLOR_Bg_Gay;
+        footerView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
+        footerView.layer.borderWidth = 0.5;
+        return footerView;
+    }
+    return [UIView new];
 }
 
 - (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -163,7 +183,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
     if (indexPath.section == 0) {
         DTAttributedTextCell *cell =[cache objectForKey:@"RoomTeamCell"];
         if (!cell) {
@@ -172,6 +191,18 @@
             [cache setObject:cell forKey:@"RoomTeamCell"];
         }
         [cell setHTMLString:_introduce];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        return cell;
+    }
+    if(_aryVideo.count==0)
+    {
+        RoomChatNull *cell = [tableView dequeueReusableCellWithIdentifier:@"nullInfoCell"];
+        if (!cell)
+        {
+            cell = [[RoomChatNull alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"nullInfoCell"];
+        }
+        cell.lblInfo.text = @"讲师还没有发布课程";
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
     ZLRoomVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TeamVideoCell"];
@@ -193,6 +224,7 @@
     NSRange range = NSMakeRange(loc, length);
     NSArray *aryIndex = [_aryVideo subarrayWithRange:range];
     [cell setRowDatas:aryIndex];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
 
@@ -200,10 +232,13 @@
 {
     if (indexPath.section==0) {
         DTAttributedTextCell *cell = (DTAttributedTextCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
-        return [cell requiredRowHeightInTableView:tableView];
+        return [cell requiredRowHeightInTableView:tableView]+5;
     }
     else
     {
+        if (_aryVideo.count==0) {
+            return 180;
+        }
         CGFloat height = ((kScreenWidth - 36.0f) / 2.0f) * 10 / 16 + 8;
         return height;
     }
@@ -217,13 +252,9 @@
                        animated:YES completion:nil];
 }
 
-
-
 - (void)dealloc
 {
     DLog(@"dealloc");
 }
-
-
 
 @end

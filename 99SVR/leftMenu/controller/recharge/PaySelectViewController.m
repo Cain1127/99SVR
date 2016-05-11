@@ -57,9 +57,9 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     DLog(@"新的地址:%@",[request.URL absoluteString]);
-    if ([[request.URL absoluteString] rangeOfString:@"Wap_Pay_Success"].location != NSNotFound) {
+    if ([[request.URL absoluteString] rangeOfString:@"Success"].location != NSNotFound) {
         [self jdAndPayunionPayWithResult:YES];
-    }else if([[request.URL absoluteString] rangeOfString:@"Wap_Pay_fail"].location != NSNotFound)
+    }else if([[request.URL absoluteString] rangeOfString:@"Fail"].location != NSNotFound)
     {
         [self jdAndPayunionPayWithResult:NO];
     }

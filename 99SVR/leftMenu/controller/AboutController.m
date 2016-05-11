@@ -37,11 +37,11 @@
     _logoImageView = [[UIImageView alloc] init];
     [self.view addSubview:_logoImageView];
     
-    UILabel *lblName = [UILabel new];
-    [lblName setText:@"99乐投"];
-    [self.view addSubview:lblName];
-    [lblName setTextColor:UIColorFromRGB(0x0078DD)];
-    [lblName setFont:XCFONT(16)];
+//    UILabel *lblName = [UILabel new];
+//    [lblName setText:@"99乐投"];
+//    [self.view addSubview:lblName];
+//    [lblName setTextColor:UIColorFromRGB(0x0078DD)];
+//    [lblName setFont:XCFONT(16)];
     
     UILabel *versionLabel = [[UILabel alloc] init];
     versionLabel.font = kFontSize(17);
@@ -63,21 +63,24 @@
         objCString = nil;
     #endif
     [self.view addSubview:versionLabel];
-    __weak AboutController *__self = self;
-    dispatch_async(dispatch_get_global_queue(0, 0),
-    ^{
-        char cString[255];
-        const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
-        sprintf(cString, "%s/bigest_logo.png",path);
-        NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
-        UIImage *image = [UIImage imageWithContentsOfFile:objCString];
-        if (image)
-        {
-           dispatch_async(dispatch_get_main_queue(), ^{
-               __self.logoImageView.image = image;
-           });
-        }
-    });
+//    __weak AboutController *__self = self;
+//    dispatch_async(dispatch_get_global_queue(0, 0),
+//    ^{
+//        char cString[255];
+//        const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+//        sprintf(cString, "%s/bigest_logo.png",path);
+//        NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+//        UIImage *image = [UIImage imageWithContentsOfFile:objCString];
+//        if (image)
+//        {
+//           dispatch_async(dispatch_get_main_queue(), ^{
+//               __self.logoImageView.image = image;
+//           });
+//        }
+//    });
+    
+    _logoImageView.image = [UIImage imageNamed:@"set_about_logo"];
+    
     UIButton *btnPro = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnPro setTitle:@"使用条款及隐私政策" forState:UIControlStateNormal];
     [btnPro setTitleColor:UIColorFromRGB(0x0078dd) forState:UIControlStateNormal];
@@ -87,15 +90,16 @@
     [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make)
     {
         make.top.equalTo(self.view).offset(108);
+        make.width.and.height.equalTo(@133);
         make.centerX.equalTo(self.view);
     }];
-    [lblName mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_logoImageView.mas_bottom).offset(15);
-        make.centerX.equalTo(self.view);
-    }];
+//    [lblName mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(_logoImageView.mas_bottom).offset(15);
+//        make.centerX.equalTo(self.view);
+//    }];
     [versionLabel mas_makeConstraints:^(MASConstraintMaker *make)
     {
-        make.top.mas_equalTo(_logoImageView.mas_bottom).offset(43);
+        make.top.mas_equalTo(_logoImageView.mas_bottom).offset(33);
         make.centerX.equalTo(self.view);
     }];
     [btnPro mas_makeConstraints:^(MASConstraintMaker *make)

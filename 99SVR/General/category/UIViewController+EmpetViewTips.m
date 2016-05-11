@@ -43,7 +43,13 @@ static char  * TapRecognizerBlockKey;
     [targetView addSubview:view];
     
     UIImageView *imageView = [[UIImageView alloc]init];
-    imageView.frame = (CGRect){0,0,120,120};
+    
+    if (kiPhone4_OR_4s || kiPhone5_OR_5c_OR_5s) {
+        imageView.frame = (CGRect){0,0,120,120};
+    }else{
+        imageView.frame = (CGRect){0,0,180,180};
+    }
+    
     imageView.center = CGPointMake(view.center.x, view.center.y-60);
     imageView.image = [UIImage imageNamed:imageName];
     imageView.contentMode = UIViewContentModeScaleAspectFit;

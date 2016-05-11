@@ -36,10 +36,10 @@
 #define STORCK_HOME_StockRecordCell_H ValueWithTheIPhoneModelString(@"120,120,120,120")//高手操盘首页cell的高度
 #define STORCK_Deal_HeaderView_H ValueWithTheIPhoneModelString(@"150,180,200,220")//股票交易详情headerView
 #define STORCK_Deal_StockCell_H ScreenWidth * 0.75 //股票交易详情股票走势图模块的
-#define STORCK_Deal_BusinessRecordCell_VIP_H ValueWithTheIPhoneModelString(@"50,50,50,50")//股票交易详情 交易纪录 VIP状态
+#define STORCK_Deal_BusinessRecordCell_VIP_H ValueWithTheIPhoneModelString(@"30,30,40,40")//股票交易详情 交易纪录 VIP状态
 #define STORCK_Deal_BusinessRecordCell_NotVIP_H ValueWithTheIPhoneModelString(@"88,88,88,88")//股票交易详情 交易纪录 不是VIP状态
-#define STORCK_Deal_WareHouseRecordCell_VIP_H ValueWithTheIPhoneModelString(@"120,120,120,120")//股票交易详情 持仓纪录 VIP状态
+#define STORCK_Deal_WareHouseRecordCell_VIP_H ValueWithTheIPhoneModelString(@"90,90,110,110")//股票交易详情 持仓纪录 VIP状态
 #define STORCK_Deal_WareHouseRecordCell_NotVIP_H ValueWithTheIPhoneModelString(@"200,200,200,200")//股票交易详情 持仓纪录 不是VIP状态
-#define STORCK_RecordCell_H  ValueWithTheIPhoneModelString(@"120,120,120,120")//股票交易记录，持仓情况cell
+#define STORCK_RecordCell_H  ValueWithTheIPhoneModelString(@"90,90,110,110")//股票交易记录，持仓情况cell
 
 #endif /* StockMacro_h */

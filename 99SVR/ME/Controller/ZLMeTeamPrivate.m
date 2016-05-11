@@ -88,6 +88,13 @@
 
 - (void)refreshData:(NSNotification *)notify
 {
+    
+    if (_dataSource.aryVIP.count>0) {
+        Loading_Cup_Show(self.tableView);
+    }else{
+        Loading_Bird_Show(self.tableView);
+    }
+    
     [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
 #pragma mark 兑换私人定制
@@ -112,6 +119,7 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableHeaderView = [self tableHeaderView];
     _tableView.tableFooterView = [UIView new];
+    _tableView.backgroundColor = COLOR_Bg_Gay;
     [self.view addSubview:_tableView];
 }
 
@@ -144,7 +152,7 @@
 
 - (void)loadPrivate:(NSNotification *)notify
 {
-    Loading_Bird_Hide(self.tableView);
+    Loading_Hide(self.tableView);
     NSDictionary *dict = notify.object;
     if ([dict isKindOfClass:[NSDictionary class]]) {
         int code = [dict[@"code"] intValue];
