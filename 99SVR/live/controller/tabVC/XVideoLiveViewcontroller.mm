@@ -33,7 +33,7 @@
 #import "ChatRightView.h"
 #import "ConsumeRankDataSource.h"
 #import "HttpManagerSing.h"
-
+#import "UIAlertView+Block.h"
 @interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
                                 ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
 {
@@ -262,11 +262,26 @@
     _questionView.delegate = self;
 }
 
+#pragma mark 提问完再次检测提问次数
 - (void)requestQuestion:(NSString *)strName content:(NSString *)strContent
 {
     
-    //提问完再次检测提问次数
+    if ((_questionView==0&&KUserSingleton.goldCoin<=10)) {//提问次数为0且金币小于提问的10玖玖币
+        
+        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"充值" withMessage:@"余额不足请充值" completionCallback:^(NSInteger index) {
+            
+            if (index==1) {
+                PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+                [self.navigationController pushViewController:paySelectVC animated:YES];
+            }else{//取消充值就隐藏
+                [_questionView setGestureHidden];
+            }
+        }];
+        return;
+    }
+    
     [[ZLLogonServerSing sharedZLLogonServerSing] requestQuestion:[_room.roomid intValue] team:[_room.teamid intValue] stock:strName question:strContent];
+    DLog(@"提问 roomid==%@ 提问的次数%d",_room.roomid,_question_times);
     [_questionView.txtName resignFirstResponder];
     [_questionView.txtContent resignFirstResponder];
     [_questionView setGestureHidden];

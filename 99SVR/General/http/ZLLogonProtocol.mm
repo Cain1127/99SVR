@@ -717,6 +717,7 @@ void ZLRoomListener::OnAskQuestionResp(AskQuestionResp& info)
 //    string	_stock;
 //    uint32	_questionlen;
 //    string	_question;
+    DLog(@"提问成功");
     [UserInfo sharedUserInfo].goldCoin = info.nk()/1000.0f;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_QUESTION_VC object:@{@"code":@(1)}];
 }
