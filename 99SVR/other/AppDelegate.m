@@ -177,19 +177,6 @@
         ^{
 //            [__windows makeToast:@"无网络"];
             
-            [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self.window.rootViewController withCancleBtnStr:@"取消" withOtherBtnStr:@"设置" withMessage:@"网络连接失败，请点击设置去检查网络" completionCallback:^(NSInteger index) {
-                
-                if (index==1) {
-                    NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                    
-                    if([[UIApplication sharedApplication] canOpenURL:url]) {
-                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=Setting"]];
-                    }
-                }
-                
-            }];
-            
-            
         });
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_ERR_VC object:nil];
         if(!(nowStatus == status)){
