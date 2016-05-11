@@ -201,6 +201,7 @@
         {
             cell = [[RoomChatNull alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"nullInfoCell"];
         }
+        cell.contentView.backgroundColor = [UIColor whiteColor];
         cell.lblInfo.text = @"讲师还没有发布课程";
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -237,7 +238,7 @@
     else
     {
         if (_aryVideo.count==0) {
-            return 180;
+            return 190;
         }
         CGFloat height = ((kScreenWidth - 36.0f) / 2.0f) * 10 / 16 + 8;
         return height;

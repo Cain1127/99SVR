@@ -48,7 +48,7 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64) withStyle:UITableViewStylePlain];
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-64 - 44) withStyle:UITableViewStylePlain];
     [_tableView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     _buyDataSource = [[XMeCustomDataSource alloc] init];
     _buyDataSource.delegate = self;
@@ -274,12 +274,12 @@
     UIView *recommendView = [[UIView alloc] initWithFrame:CGRectMake(0,kNetWork_anomaly_image_height, kScreenWidth, 154)];
     recommendView.backgroundColor = [UIColor whiteColor];
     
-    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(10,0,kScreenWidth-20,30)];
+    UILabel *lblTemp = [[UILabel alloc] initWithFrame:Rect(10,0,kScreenWidth-20,40)];
     [lblTemp setText:@"向您推荐"];
     [lblTemp setFont:XCFONT(16)];
     [recommendView addSubview:lblTemp];
     
-    UILabel *line = [[UILabel alloc] initWithFrame:Rect(0, 30, kScreenWidth, 0.5)];
+    UILabel *line = [[UILabel alloc] initWithFrame:Rect(0, 40, kScreenWidth, 0.5)];
     [recommendView addSubview:line];
     [line setBackgroundColor:UIColorFromRGB(0xe5e5e5)];
     

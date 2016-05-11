@@ -70,7 +70,7 @@
     
     // VIP
     UILabel *attrValueLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+8, 5, 80, 25)];
-    attrValueLable.textColor = UIColorFromRGB(0x919191);
+    attrValueLable.textColor = COLOR_Text_Black;
 //    attrValueLable.text = [NSString stringWithFormat:@"VIP%@",vipLevelId];
     attrValueLable.text = [NSString stringWithFormat:@"VIP%zi",viewCount];
     attrValueLable.font = XCFONT(14);
@@ -85,7 +85,7 @@
         buyStatusLable.textColor = UIColorFromRGB(0xff7a1e);
     } else {
         buyStatusLable.text = @"未兑换";
-        buyStatusLable.textColor = UIColorFromRGB(0x919191);
+        buyStatusLable.textColor = COLOR_Text_Black;
     }
     
     // 分割线

@@ -25,7 +25,7 @@
         
         
         self.leftImageView = [[UIImageView alloc]init];
-        CGFloat imageWidth = 24;
+        CGFloat imageWidth = 16;
         self.leftImageView.frame = (CGRect){0, 0, imageWidth, imageWidth};
         self.leftImageView.contentMode = UIViewContentModeScaleAspectFit;
         

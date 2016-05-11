@@ -12,10 +12,3 @@
 @interface SettingCenterController :CustomViewController
 
 @end
-
-@interface SettingCell : UITableViewCell
-
-@property(nonatomic, strong) UILabel *nameLabel;
-@property(nonatomic, strong) UIImageView *arrowImageView;
-
-@end

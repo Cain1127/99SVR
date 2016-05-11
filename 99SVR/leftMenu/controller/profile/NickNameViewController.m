@@ -80,7 +80,8 @@
     self.commitBtn = btnRight;
     [self checkLogBtnIsEnableWithText:self.nickNameTextField.text];
     btnRight.frame = Rect(10,_nickNameTextField.y+_nickNameTextField.height+30, kScreenWidth-20, 40);
-    [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
+    [btnRight setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateDisabled];
     [btnRight addTarget:self action:@selector(rightItemClick) forControlEvents:UIControlEventTouchUpInside];
 }
 
