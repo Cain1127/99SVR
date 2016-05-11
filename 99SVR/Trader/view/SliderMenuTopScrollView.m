@@ -94,6 +94,8 @@
     CGFloat _lineViewOffset;
     //默认选择的模块
     CGFloat _selectIndex;
+    /**顶部按钮下划线动画滑动的时间*/
+    CGFloat _animationTime;
 }
 /**文字底部下划线*/
 @property (nonatomic, strong) UIView *lineView;
@@ -121,6 +123,7 @@
         _lineViewOffset = 5;
         _titleOffset = 20;
         _selectIndex = index;
+        _animationTime = 0.5;
         self.bottomLineView.backgroundColor = COLOR_Line_Small_Gay;
         [self calculateJianGeWithTitleArrays:titles];
         [self createTitle];
@@ -239,7 +242,7 @@
     }
     titleLable.userInteractionEnabled = NO;
     
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:_animationTime animations:^{
         
         self.lineView.frame = (CGRect){CGRectGetMinX(titleLable.frame) - _lineViewOffset,_selfHeight-1,CGRectGetWidth(titleLable.frame)+ (2*_lineViewOffset),2};
     }];
@@ -287,7 +290,7 @@
     CGFloat lineViewOrginX = [self.titleOrginXArrays[titelIndex] floatValue] + (jiange_X * [tempDecimalStr floatValue])- _lineViewOffset;
     
 //    NSLog(@"下标%d 变化%@  下标的对应值%f 偏移量%f 坐标%f",titelIndex,tempDecimalStr,[self.titleOrginXArrays[titelIndex] floatValue],(jiange_X * [tempDecimalStr floatValue]),lineViewOrginX);
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:_animationTime animations:^{
         self.lineView.frame = (CGRect){lineViewOrginX,_selfHeight-1,CGRectGetWidth(titleLable.frame)+(2*_lineViewOffset),2};
     }];
     
@@ -339,6 +342,11 @@
             sliderLabel.backgroundColor = color;
         }
     }
+}
+
+#pragma mark 提供给外部修改顶部按钮下划线动画滑动的时间
+-(void)setAnimationTime:(CGFloat )timeFloat{
+    _animationTime = timeFloat;
 }
 
 

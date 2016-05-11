@@ -42,6 +42,8 @@
 -(void)setTitleBadgeColor:(UIColor *)color;
 /**提供给外部修改标题背景的颜色*/
 -(void)setTitleBagColor:(UIColor *)color;
+/**提供给外部修改顶部按钮下划线动画滑动的时间*/
+-(void)setAnimationTime:(CGFloat )timeFloat;
 @end
 
 

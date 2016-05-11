@@ -56,16 +56,23 @@ static const char *UIControl_acceptEventTime = "UIControl_acceptEventTime";
     
 }
 
-- (void)cjr_sendAction:(SEL)action to:(id)target forEvent:(UIEvent *)event{
+- (void)cjr_sendAction:(SEL)action to:(id)target forEvent:(UIEvent *)event
+{
     if (NSDate.date.timeIntervalSince1970 - self.cjr_acceptEventTime < self.cjr_acceptEventInterval)
     {
+        if (self.tag==2) {//点击喝彩多次
+            
+            [MBProgressHUD showText:@"喝彩太快了,请稍后再试"];
+        }
         
+
         return;
     }
     
     if (self.cjr_acceptEventInterval > 0) {
         self.cjr_acceptEventTime = NSDate.date.timeIntervalSince1970;
     }
+    
     
     [self cjr_sendAction:action to:target forEvent:event];
 }

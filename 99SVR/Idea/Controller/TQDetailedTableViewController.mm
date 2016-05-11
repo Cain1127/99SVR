@@ -145,19 +145,24 @@
     {
         return ;
     }
-    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,64,kScreenWidth-60,46) dict:parameter];
-    [UIView animateWithDuration:1.0
+    
+    @WeakObj(parameter)
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,64,kScreenWidth-60,46) dict:parameterWeak];
+    [UIView animateWithDuration:2.0
           delay:1.0
           options:UIViewAnimationOptionCurveEaseOut
           animations:^{
-              [self.view addSubview:giftAnimate];
+              [selfWeak.view addSubview:giftAnimate];
               [giftAnimate addrightViewAnimation];
            } completion:^(BOOL finished){
                @WeakObj(giftAnimate)
-             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                  [giftAnimateWeak removeFromSuperview];
              });
      }];
+    });
 }
 
 - (void)viewDidLoad
