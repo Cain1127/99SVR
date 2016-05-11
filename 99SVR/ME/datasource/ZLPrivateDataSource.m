@@ -63,7 +63,7 @@
     
     // 标题
     UILabel *_selectVipLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_selectIconImageView.frame)+8, 0, 150, 40)];
-    _selectVipLable.textColor = UIColorFromRGB(0x919191);
+    _selectVipLable.textColor = COLOR_Text_Black;
     NSString *strName = [NSString stringWithFormat:@"VIP%zi的服务内容",_selectIndex];
     _selectVipLable.text = strName;
     _selectVipLable.font = [UIFont boldSystemFontOfSize:15];
