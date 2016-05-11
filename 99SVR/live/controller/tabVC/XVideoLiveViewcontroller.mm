@@ -8,6 +8,7 @@
 
 #import "XVideoLiveViewcontroller.h"
 #import "LivePlayViewController.h"
+#import "PaySelectViewController.h"
 #import "GiftShowAnimate.h"
 #import "DecodeJson.h"
 #import "RoomChatDataSource.h"
@@ -94,7 +95,7 @@
 - (void)reloadModel:(RoomHttp *)room
 {
     _room = room;
-    [_menuView hanleBlockWith:1];
+    [_menuView setDefaultIndex:1];
     _ffPlay.roomIsCollet = nRoom_is_collet;
     [_ffPlay setRoomName:_room.teamname];
     [_ffPlay setRoomId:[_room.roomid intValue]];
@@ -247,10 +248,7 @@
     _inputView.hidden = YES;
     _inputView.delegate = self;
     
-    _questionView = [[XLiveQuestionView alloc] initWithFrame:Rect(0,-kRoom_head_view_height,kScreenWidth,self.view.height)];
-    [self.view addSubview:_questionView];
-    _questionView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
-    _questionView.hidden = YES;
+    _questionView = [[XLiveQuestionView alloc] initWithFrame:Rect(0,0,kScreenWidth,self.view.height)];
     _questionView.delegate = self;
 }
 
@@ -258,18 +256,10 @@
 {
     
     //提问完再次检测提问次数
-//    [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
     [[ZLLogonServerSing sharedZLLogonServerSing] requestQuestion:[_room.roomid intValue] team:[_room.teamid intValue] stock:strName question:strContent];
     [_questionView.txtName resignFirstResponder];
     [_questionView.txtContent resignFirstResponder];
-    if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
-        [UIView animateWithDuration:0.5 animations:^{
-            [_questionView setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
-        } completion:^(BOOL finished)
-         {
-             _questionView.hidden = YES;
-         }];
-    }
+    [_questionView setGestureHidden];
 }
 
 - (void)loadConsumeRank:(NSNotification *)notify
@@ -284,6 +274,11 @@
     }
 }
 
+/**
+ *  课程表数据   响应消息
+ *
+ *  @param notify
+ */
 - (void)updateRoomTeachInfo:(NSNotification *)notify
 {
     NSString *strTeach = notify.object;
@@ -301,19 +296,19 @@
             @WeakObj(_teachView)
             
             dispatch_async(dispatch_get_main_queue(),
-                           ^{
-                               _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strTeachWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
-                           });
-            [_questionView.txtName resignFirstResponder];
-            [_questionView.txtContent resignFirstResponder];
-            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
-                [UIView animateWithDuration:0.5 animations:^{
-                    [_questionView setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
-                } completion:^(BOOL finished)
-                 {
-                     _questionView.hidden = NO;
-                 }];
-            }
+               ^{
+                   _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strTeachWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
+               });
+//            [_questionView.txtName resignFirstResponder];
+//            [_questionView.txtContent resignFirstResponder];
+//            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
+//                [UIView animateWithDuration:0.5 animations:^{
+//                    [_questionView setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
+//                } completion:^(BOOL finished)
+//                 {
+//                     _questionView.hidden = NO;
+//                 }];
+//            }
         }
     }
 }
@@ -325,7 +320,7 @@
 {
     NSDictionary *dict = notify.object;
     [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
-    if ([dict[@"code"] intValue]==0)
+    if ([dict[@"code"] intValue]==1)
     {
         @WeakObj(_questionView)
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -386,6 +381,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendLiwuRespInfo) name:MEESAGE_ROOM_SEND_LIWU_RESP_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendLiwuNotifyInfo:) name:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:nil];
 }
+
 /**
  *  停止播放
  */
@@ -402,7 +398,9 @@
      });
 }
 
-
+/**
+ *  停止播放接口
+ */
 - (void)stopNewPlay
 {
     if(_ffPlay)
@@ -621,6 +619,9 @@
     });
 }
 
+/**
+ *  显示礼物赠送效果
+ */
 - (void)showGiftInfo
 {
     
@@ -695,12 +696,11 @@
                 [_giftView updateGoid];
                 [UIView animateWithDuration:0.5 animations:^{
                     _questionView.hidden = NO;
-                    [_questionView setFrame:Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight)];
+                    [self.parentViewController.view addSubview:_questionView];
+                    [_questionView setFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
                     NSString *strmsg = [NSString stringWithFormat:@"温馨提示:您还剩%d次免费提问的机会，问股仅供参考，不构成投资建议",_question_times];
                     _questionView.lblTimes.text = strmsg;
-                } completion:^(BOOL finished) {
-                
-                }];
+                } completion:^(BOOL finished) {}];
             }
             else
             {
@@ -757,6 +757,12 @@
     }else{
         [ProgressHUD showError:@"只能对在线讲师送礼"];
     }
+}
+
+- (void)showPayView
+{
+    PaySelectViewController *selectView = [[PaySelectViewController alloc] init];
+    [self.navigationController pushViewController:selectView animated:YES];
 }
 
 #pragma mark 用户列表选择某一列

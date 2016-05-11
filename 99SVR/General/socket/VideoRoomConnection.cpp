@@ -13,9 +13,6 @@
 
 #include <vector>
 
-JoinRoomReq join_req;
-JoinRoomResp room_info;
-bool in_room;
 
 
 
@@ -23,7 +20,6 @@ VideoRoomConnection::VideoRoomConnection(void) :
 room_join_listener(NULL), room_listener(NULL)
 {
 	main_cmd = protocol::MDM_Vchat_Room;
-	closed = false;
 	room_info.set_vcbid(0);
 	joinRoomSucFlag=0;
 }
@@ -51,7 +47,6 @@ void VideoRoomConnection::SendMsg_Ping()
 void VideoRoomConnection::on_do_connected()
 {
 
-	closed = false;
 	protocol::CMDJoinRoomReq_t temreq = { 0 };
 	string ip = join_req.cipaddr();
 	join_req.set_cipaddr("");
@@ -83,37 +78,14 @@ void VideoRoomConnection::SendMsg_RreJoinRoomReq(PreJoinRoomReq& req)
 	SEND_MESSAGE(protocol::Sub_Vchat_PreJoinRoomReq, req);
 }
 
+/*
 void VideoRoomConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 {
 	joinRoomSucFlag=0;
 	main_room_id = 0;
 	join_req = req;
 	on_do_connected();
-	//connect_from_lbs_asyn();
-	
-
-/*	
-	int ret;
-	
-	ret = connect("172.16.41.215", 22706);
-
-	if (ret != 0)
-		return;
-
-	join_req = req;
-
-	SendMsg_Hello();
-
-	SEND_MESSAGE(protocol::Sub_Vchat_JoinRoomReq, req);
-
-	//close();
-
-	//Sleep(3000);
-
-	start_read_thread();
-*/	
-	
-}
+}*/
 
 void VideoRoomConnection::SendMsg_AfterJoinRoomReq()
 {
@@ -123,12 +95,16 @@ void VideoRoomConnection::SendMsg_AfterJoinRoomReq()
 
 	SEND_MESSAGE(protocol::Sub_Vchat_AfterJoinRoomReq, req);
 	joinRoomSucFlag=1;
+
+	SendMsg_TeamTopNReq();
 }
 
 void VideoRoomConnection::SendMsg_ExitRoomReq(uint32 roomid)
 {
 	room_info.set_vcbid(0);
 	in_room = false;
+	need_join_room = false;
+	joinRoomSucFlag=0;
 
 	UserExitRoomInfo req;
 	req.set_userid(join_req.userid());
@@ -198,6 +174,7 @@ void VideoRoomConnection::SendMsg_SetRoomBaseInfoReq_v2(SetRoomInfoReq_v2& req)
 
 void VideoRoomConnection::SendMsg_SetRoomNoticeReq(SetRoomNoticeReq& req)
 {
+	req.set_textlen(req.content().size());
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_SetRoomNoticeReq, req, req.textlen());
 }
 
@@ -269,7 +246,7 @@ void VideoRoomConnection::SendMsg_ReportMediaGate(int RoomId, int UserId, char* 
 	req.set_content(content);
 	req.set_textlen(strlen(content));
 
-	SEND_MESSAGE(protocol::Sub_Vchat_ReportMediaGateReq, req);
+	SEND_MESSAGE_EX(protocol::Sub_Vchat_ReportMediaGateReq, req, req.textlen());
 }
 
 void VideoRoomConnection::SendMsg_TeacherScoreReq(TeacherScoreReq& req)
@@ -302,15 +279,19 @@ void VideoRoomConnection::SendMsg_GetUserInfoReq(TextRoomList_mobile& head,GetUs
 	SEND_MESSAGELIST(protocol::Sub_Vchat_GetUserInfoReq, head, req);
 }
 
-void VideoRoomConnection::SendMsg_TeamTopNReq(TeamTopNReq& req)
+void VideoRoomConnection::SendMsg_TeamTopNReq()
 {
-	SEND_MESSAGE(protocol::Sub_Vchat_TeamTopNReq, req);
+	TeamTopNReq req;
+	req.set_userid(login_userid);
+	req.set_vcbid(room_info.vcbid());
+	SEND_MESSAGE_F(protocol::MDM_Vchat_Room, protocol::Sub_Vchat_TeamTopNReq, req);
 }
 
 void VideoRoomConnection::SendMsg_AskQuestionReq(AskQuestionReq& req)
 {
 	req.set_userid(join_req.userid());
 	req.set_roomid(join_req.vcbid());
+	req.set_questionlen(req.question().size());
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_AskQuestionReq, req, req.questionlen());
 }
 

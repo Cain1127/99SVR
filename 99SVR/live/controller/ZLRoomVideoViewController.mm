@@ -303,7 +303,6 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
 
 - (void)addNotification
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseQuestion:) name:MESSAGE_ROOM_QUESTION_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRoomTeachInfo:) name:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadConsumeRank:) name:MESSAGE_CONSUMERANK_LIST_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_NETWORK_ERR_VC object:nil];

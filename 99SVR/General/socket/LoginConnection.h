@@ -37,12 +37,13 @@ private:
 	void dispatch_push_message(void* body);
 	void dispatch_error_message(void* body);
 
-	void rejoin_room();
+	void join_room();
 
 
 protected:
 
 	void on_do_connected();
+	void on_tick();
 	void on_dispatch_message(void* msg);
 
 
@@ -53,6 +54,8 @@ public:
 	void RegisterPushListener(PushListener* message_listener);
 
 	void DispatchSocketMessage(void* msg);
+
+	void RequestReconnect();
 
 	//ping请求
 	void SendMsg_Ping();
@@ -109,6 +112,14 @@ public:
 
 	//获取房间的转播机器人ID请求
 	void SendMsg_OnMicRobertReq(OnMicRobertReq& req);
+
+	//请求加入房间
+	void SendMsg_JoinRoomReq(JoinRoomReq& req);
+
+	// 最强战队 主动下发
+	void SendMsg_TeamTopNReq();
+
+
 
 	void close();
 

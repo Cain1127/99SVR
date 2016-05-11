@@ -41,9 +41,6 @@ public:
 	//加入房间预处理请求
 	void SendMsg_RreJoinRoomReq(PreJoinRoomReq& req);
 
-	//加入房间请求版本
-	void SendMsg_JoinRoomReq(JoinRoomReq& req);
-
 	//加入房间成功后请求推送信息
 	void SendMsg_AfterJoinRoomReq();
 
@@ -135,12 +132,13 @@ public:
 	void SendMsg_TeacherSubscriptionReq(TeacherSubscriptionReq& req);
 
 	//最强战队周榜请求
-	void SendMsg_TeamTopNReq(TeamTopNReq& req);
+	void SendMsg_TeamTopNReq();
 
 	//提问响应
 	void SendMsg_AskQuestionReq(AskQuestionReq& req);
 
 	void close();
+
 
 	string GetVideoRoomShareUrl();
 

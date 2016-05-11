@@ -3015,67 +3015,6 @@ public:
 };
 
 
-class TeacherFansResp
-{
-
-private:
-
-	uint32	_teacherid;
-	uint32	_userid;
-	string	_useralias;
-	uint32	_userheadid;
-
-
-public:
-
-	 inline uint32 teacherid() { return _teacherid; } const 
-
-	 inline void set_teacherid(const uint32 value) { _teacherid = value; }
-
-	 inline uint32 userid() { return _userid; } const 
-
-	 inline void set_userid(const uint32 value) { _userid = value; }
-
-	 inline string& useralias() { return _useralias; } const 
-
-	 inline void set_useralias(const string& value) { _useralias = value; }
-
-	 inline uint32 userheadid() { return _userheadid; } const 
-
-	 inline void set_userheadid(const uint32 value) { _userheadid = value; }
-
-
-	int ByteSize() { return sizeof(protocol::tag_CMDTeacherFansResp); }
-
-	void SerializeToArray(void* data, int size)
-	{
-		protocol::tag_CMDTeacherFansResp* cmd = (protocol::tag_CMDTeacherFansResp*) data;
-		cmd->teacherid = _teacherid;
-		cmd->userid = _userid;
-		strcpy(cmd->useralias, _useralias.c_str());
-		cmd->userheadid = _userheadid;
-	}
-
-	void ParseFromArray(void* data, int size)
-	{
-		protocol::tag_CMDTeacherFansResp* cmd = (protocol::tag_CMDTeacherFansResp*) data;
-		_teacherid = cmd->teacherid;
-		_userid = cmd->userid;
-		_useralias = cmd->useralias;
-		_userheadid = cmd->userheadid;
-	}
-
-	void Log()
-	{
-		LOG("--------Receive message: TeacherFansResp---------");
-		LOG("teacherid = %d", _teacherid);
-		LOG("userid = %d", _userid);
-		LOG("useralias = %s", _useralias.c_str());
-		LOG("userheadid = %d", _userheadid);
-	}
-
-};
-
 
 class InterestResp
 {

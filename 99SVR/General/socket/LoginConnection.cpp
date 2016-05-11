@@ -17,13 +17,21 @@ uint32 login_userid;
 string login_password;
 SessionTokenResp login_token;
 
+JoinRoomReq join_req;
+JoinRoomResp room_info;
+bool in_room;
+bool need_join_room;
 
+
+static time_t last_req_teamtopn_time;
 
 LoginConnection::LoginConnection() :
 login_listener(NULL), hall_listener(NULL), push_listener(NULL)
 {
+	loginuser.set_userid(0);
+	need_join_room = false;
+	last_req_teamtopn_time = 0;
 	main_cmd = protocol::MDM_Vchat_Login;
-	strcpy(lbs_type, "/tygetlogon");
 }
 
 void LoginConnection::RegisterLoginListener(LoginListener* message_listener)
@@ -47,21 +55,24 @@ void LoginConnection::SendMsg_Ping()
 	ping.userid = loginuser.userid();
 	ping.roomid = 0;
 
-	SEND_MESSAGE2(protocol::Sub_Vchat_ClientPing, protocol::CMDClientPing_t, &ping);
+	if (!socket_closed)
+	{
+		SEND_MESSAGE2(protocol::Sub_Vchat_ClientPing, protocol::CMDClientPing_t, &ping);
+	}
 }
 
-void LoginConnection::rejoin_room()
+void LoginConnection::join_room()
 {
+	if ( in_room || need_join_room )
 	{
-		protocol::CMDJoinRoomReq_t temreq =
-		{ 0 };
+		protocol::CMDJoinRoomReq_t temreq = { 0 };
 		string ip = join_req.cipaddr();
 		join_req.set_cipaddr("");
 		join_req.set_userid(loginuser.userid());
 		join_req.set_cuserpwd(login_password);
 		join_req.set_devtype(login_nmobile);
 		join_req.set_bloginsource(login_reqv == 4 ? 0 : 1);
-		join_req.set_time((uint32) time(0));
+		join_req.set_time((uint32)time(0));
 		join_req.set_coremessagever(10690001);
 		join_req.set_reserve1(0);
 		join_req.set_reserve2(0);
@@ -69,16 +80,15 @@ void LoginConnection::rejoin_room()
 		join_req.set_crc32(15);
 		join_req.SerializeToArray(&temreq, sizeof(protocol::CMDJoinRoomReq_t));
 
-		uint32 crcval = crc32((void*) &temreq, sizeof(protocol::CMDJoinRoomReq_t), CRC_MAGIC);
+		uint32 crcval = crc32((void*)&temreq, sizeof(protocol::CMDJoinRoomReq_t), CRC_MAGIC);
 		join_req.set_crc32(crcval);
 		join_req.set_cipaddr(ip);
-
 		join_req.Log();
-
 		LOG("RE JOIN ROOM");
 		SEND_MESSAGE_F(protocol::MDM_Vchat_Room, protocol::Sub_Vchat_JoinRoomReq, join_req);
 	}
 
+	if ( in_room )
 	{
 		AfterJoinRoomReq req;
 		req.set_userid(join_req.userid());
@@ -86,7 +96,52 @@ void LoginConnection::rejoin_room()
 
 		SEND_MESSAGE_F(protocol::MDM_Vchat_Room, protocol::Sub_Vchat_AfterJoinRoomReq, req);
 	}
+
+	need_join_room = false;
+
 }
+
+void LoginConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
+{
+
+	join_req = req;
+	protocol::CMDJoinRoomReq_t temreq = { 0 };
+	string ip = join_req.cipaddr();
+	join_req.set_cipaddr("");
+	join_req.set_userid(loginuser.userid());
+	join_req.set_cuserpwd(login_password);
+	join_req.set_devtype(login_nmobile);
+	join_req.set_bloginsource(login_reqv == 4 ? 0 : 1);
+	join_req.set_time((uint32)time(0));
+	join_req.set_coremessagever(10690001);
+	join_req.set_reserve1(0);
+	join_req.set_reserve2(0);
+
+	join_req.set_crc32(15);
+	join_req.SerializeToArray(&temreq, sizeof(protocol::CMDJoinRoomReq_t));
+
+	uint32 crcval = crc32((void*)&temreq, sizeof(protocol::CMDJoinRoomReq_t), CRC_MAGIC);
+	join_req.set_crc32(crcval);
+	join_req.set_cipaddr(ip);
+
+	if (socket_connecting)
+	{
+		need_join_room = true;
+	}
+	else if ( !socket_closed )
+	{
+		LOG("SEND JOIN ROOM。。。");
+		join_req.Log();
+		SEND_MESSAGE_F(protocol::MDM_Vchat_Room, protocol::Sub_Vchat_JoinRoomReq, join_req);
+		need_join_room = false;
+	}
+	else
+	{
+		connect_from_lbs_asyn();
+		need_join_room = true;
+	}
+}
+
 
 void LoginConnection::on_do_connected()
 {
@@ -109,12 +164,14 @@ void LoginConnection::on_do_connected()
 		SEND_MESSAGE(protocol::Sub_Vchat_logonReq5, login_req5);
 	}
 
-	if ( in_room )
-	{
-		rejoin_room();
-	}
-
 	start_read_thread();
+}
+
+void LoginConnection::RequestReconnect()
+{
+	close();
+	connect_from_lbs_asyn();
+	//connect("121.12.118.32", 7301);
 }
 
 void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
@@ -130,11 +187,18 @@ void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 	if (ret != 0)
 		return;
 	*/
-	login_req4 = req;
-	login_reqv = 4;
-	
-	//connect_from_lbs_asyn();
-	connect("121.12.118.32", 7301);
+	if ( !socket_connecting )
+	{
+		login_req4 = req;
+		login_reqv = 4;
+		connect_from_lbs_asyn();
+		//connect("172.16.41.137 ", 7301);
+	}
+	else
+	{
+		LOG("socket_connecting when login request.");
+	}
+	//connect("121.12.118.32", 7301);
 	//connect("122.13.81.62", 7301);
 	//connect("172.16.41.137", 7301);
 	//connect("172.16.41.215", 7301);
@@ -171,7 +235,7 @@ void LoginConnection::SendMsg_SessionTokenReq(uint32 userid)
 void LoginConnection::SendMsg_SetUserInfoReq(SetUserProfileReq& req)
 {
 	req.set_userid(loginuser.userid());
-	req.set_introducelen(strlen(req.introduce().c_str()));
+	req.set_introducelen(req.introduce().size());
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_SetUserProfileReq, req, req.introducelen());
 }
 
@@ -247,12 +311,33 @@ void LoginConnection::SendMsg_OnMicRobertReq(OnMicRobertReq& req)
 	SEND_MESSAGE(protocol::Sub_Vchat_GetOnMicRobertReq, req);
 }
 
+void LoginConnection::SendMsg_TeamTopNReq()
+{
+	TeamTopNReq req;
+	req.set_userid(login_userid);
+	req.set_vcbid(room_info.vcbid());
+	SEND_MESSAGE_F(protocol::MDM_Vchat_Room, protocol::Sub_Vchat_TeamTopNReq, req);
+}
+
 void LoginConnection::close(void)
 {
 	//SendMsg_ExitAlertReq();
+	loginuser.set_userid(0);
 	Connection::close();
 }
 
+void LoginConnection::on_tick()
+{
+	if (in_room)
+	{
+		time_t ctime = time(0);
+		if ( ctime - last_req_teamtopn_time > 60 * 5 )
+		{
+			SendMsg_TeamTopNReq();
+			last_req_teamtopn_time = ctime;
+		}
+	}
+}
 
 void LoginConnection::DispatchSocketMessage(void* msg)
 {
@@ -300,6 +385,8 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		login_userid = loginuser.userid();
 		if (login_listener != NULL)
 			login_listener->OnLogonSuccess(loginuser);
+		if (need_join_room || in_room)
+			join_room();
 		break;
 
 	//房间组列表开始
@@ -476,6 +563,12 @@ void LoginConnection::dispatch_error_message(void* body)
 		ON_MESSAGE(hall_listener, ErrCodeResp, OnViewpointTradeGiftErr)
 		break;
 	default:
+	{
+		ErrCodeResp info;
+		info.ParseFromArray(body, info.ByteSize());
+		info.Log();
+
+	}
 		break;
 	}
 }

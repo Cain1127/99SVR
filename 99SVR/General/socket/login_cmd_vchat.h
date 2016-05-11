@@ -436,15 +436,6 @@ namespace protocol
 		char   content[0];             //消息内容，格式：观点标题+观点内容+评论内容+回复内容
 	}CMDViewShowResp_t;
 
-	//查看我的粉丝
-	typedef struct tag_CMDTeacherFansResp
-	{
-		uint32 teacherid;              //讲师ID
-		uint32 userid;                 //用户ID
-		char   useralias[NAMELEN];     //用户昵称
-		uint32 userheadid;             //用户头像
-	}CMDTeacherFansResp_t;
-
 	//查看我的关注（已关注讲师）
 	typedef struct tag_CMDInterestResp
 	{

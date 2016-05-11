@@ -8,6 +8,7 @@
 
 #import "TQDetailedTableViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "PaySelectViewController.h"
 #import "ZLShareView.h"
 #import "ChatRightView.h"
 #import "UIImageFactory.h"
@@ -70,27 +71,34 @@
 
 @synthesize downContentView;
 
+- (void)showPayView
+{
+    PaySelectViewController *payView = [[PaySelectViewController alloc] init];
+    [self.navigationController pushViewController:payView animated:YES];
+}
+
 - (void)sendGift:(int)giftId num:(int)giftNum
 {
     [kProtocolSingle sendGiftInfo:giftId number:giftNum toUser:[_ideaDetail.authorId intValue] toViewId:_ideaDetail.viewpointid roomId:[_ideaDetail.roomid intValue]];
-    NSDictionary *parameter = @{@"number":@(giftNum),@"gId":@(giftId),@"srcName":@"srcName",@"toName":@"toName",@"srcId":@(1234567)};
-    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,64,kScreenWidth-60,46) dict:parameter];
-    [UIView animateWithDuration:1.0
-                          delay:1.0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         [self.view addSubview:giftAnimate];
-                         [giftAnimate addrightViewAnimation];
-                     } completion:^(BOOL finished){
-                         @WeakObj(giftAnimate)
-                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                             [giftAnimateWeak removeFromSuperview];
-                         });
-                     }];
+//    NSDictionary *parameter = @{@"number":@(giftNum),@"gId":@(giftId),@"srcName":@"srcName",@"toName":@"toName",@"srcId":@(1234567)};
+//    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,64,kScreenWidth-60,46) dict:parameter];
+//    [UIView animateWithDuration:1.0
+//          delay:1.0
+//          options:UIViewAnimationOptionCurveEaseOut
+//          animations:^{
+//              [self.view addSubview:giftAnimate];
+//              [giftAnimate addrightViewAnimation];
+//           } completion:^(BOOL finished){
+//               @WeakObj(giftAnimate)
+//             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                 [giftAnimateWeak removeFromSuperview];
+//             });
+//     }];
     [_giftView setGestureHidden];
 }
 
-- (id)initWithViewId:(int)viewId home:(BOOL)bHome{
+- (id)initWithViewId:(int)viewId home:(BOOL)bHome
+{
     self = [super init];
     _viewId = viewId;
     _bHome = bHome;
@@ -130,6 +138,28 @@
     });
 }
 
+- (void)loadGiftNotify:(NSNotification *)notify
+{
+    NSDictionary *parameter = notify.object;
+    if (![parameter isKindOfClass:[NSDictionary class]])
+    {
+        return ;
+    }
+    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,64,kScreenWidth-60,46) dict:parameter];
+    [UIView animateWithDuration:1.0
+          delay:1.0
+          options:UIViewAnimationOptionCurveEaseOut
+          animations:^{
+              [self.view addSubview:giftAnimate];
+              [giftAnimate addrightViewAnimation];
+           } completion:^(BOOL finished){
+               @WeakObj(giftAnimate)
+             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                 [giftAnimateWeak removeFromSuperview];
+             });
+     }];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -142,6 +172,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyResp:) name:MESSAGE_IDEA_REPLY_RESPONSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView:) name:MESSAGE_HTTP_REQUEST_REPLY_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendGiftFail:) name:MESSAGE_GIFT_VIEW_ERR_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadGiftNotify:) name:MESSAGE_VIEWPOINT_GIFT_NOTIFY_VC object:nil];
+    
+    
     [self.view setBackgroundColor:COLOR_Bg_Gay];
     _tableView = [[UITableView alloc] initWithFrame:Rect(0,64, kScreenWidth,kScreenHeight-64)];
     [self.view addSubview:_tableView];
@@ -578,7 +611,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
    [super viewWillAppear:animated];
-   //可能需要重连
+    
 }
 
 - (void)loadBodyView:(NSNotification *)notify
