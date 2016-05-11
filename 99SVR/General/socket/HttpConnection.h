@@ -101,6 +101,8 @@ public:
 	// 我的关注（已提供）
 	void RequestCollection(CollectionListener* listener);////收藏url
 
+	// 足迹
+	void RequestFootPrint(FootPrintListener* listener);
 
 	// 请求观点列表（已提供）
 	void RequestViewpointSummary(int authorId, int startId, int requestCount, ViewpointSummaryListener* listener);
@@ -148,8 +150,11 @@ public:
 	// 请求评论回复--发出的评论（PC端接口）
 	void RequestMailSendReply(int startId, int count, MailReplyListener* listener);
 
-	// 讲师团队回答提问（PC端接口）（X未提供）
-	void PostAnswer(int questionId, int teamId, char* answer, AnswerQuestionListener* listener);
+	//我的粉丝（讲师用）
+	void RequestTeacherFans(int startId, int count, TeacherFansListener* listener);
+
+	// 讲师团队回答提问（PC端接口）（已提供）
+	void PostAnswer(int questionId, int askuserid, const char* answer, AnswerQuestionListener* listener);
 
 	// PC左侧菜单
 	void RequestPcGroupsPage(GroupsPageListener* listener);

@@ -11,7 +11,7 @@ using std::vector;
 class HttpListener
 {
 public:
-	virtual void OnError(int errCode)= 0;
+	virtual void OnError(int errCode) =0;
 };
 
 class SplashImageListener : public HttpListener
@@ -47,22 +47,22 @@ public:
 class OperateStockProfitListener : public HttpListener
 {
 public:
-	virtual void onResponse(vector<OperateStockProfit>& infos)=0;
+	virtual void onResponse(vector<OperateStockProfit>& infos, int seq, bool bRefresh)=0;
 };
 class OperateStockProfitListenerDay : public OperateStockProfitListener
 {
 public:
-	virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode);
+	virtual void onResponse(vector<OperateStockProfit>& infos, int seq, bool bRefresh);void OnError(int errCode);
 };
 class OperateStockProfitListenerMonth : public OperateStockProfitListener
 {
 public:
-    virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode);
+    virtual void onResponse(vector<OperateStockProfit>& infos, int seq, bool bRefresh);void OnError(int errCode);
 };
 class OperateStockProfitListenerAll : public OperateStockProfitListener
 {
 public:
-    virtual void onResponse(vector<OperateStockProfit>& infos);void OnError(int errCode);
+    virtual void onResponse(vector<OperateStockProfit>& infos, int seq, bool bRefresh);void OnError(int errCode);
 };
 
 class OperateStockAllDetailListener : public HttpListener
@@ -215,6 +215,12 @@ public:
 	virtual void onResponse(std::vector<Team>& room_data);void OnError(int errCode);
 };
 
+class FootPrintListener : public HttpListener
+{
+public:
+	virtual void onResponse(std::vector<Team>& room_data, bool extra/*Œﬁ”√µƒ≤Œ ˝,Œ™∂‡÷ÿºÃ≥–∂¯ÃÌº”*/);void OnError(int errCode);
+};
+
 class GroupsPageListener : public HttpListener
 {
 public:
@@ -225,6 +231,12 @@ class OperateStockTradeRecordListener : public HttpListener
 {
 public:
 	virtual void onResponse(vector<OperateStockTransactionPC>& infos);void OnError(int errCode);
+};
+
+class TeacherFansListener : public HttpListener
+{
+public:
+	virtual void onResponse(vector<TeacherFansResp>& infos);void OnError(int errCode);
 };
 
 #endif

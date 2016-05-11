@@ -118,8 +118,13 @@ namespace protocol
 	{
 		uint32 transId;  // 本记录ID
 		uint32 operateId;  // 操盘ID
+<<<<<<< HEAD
         uint32 buytypeflag;  // 交易类型 买入 卖出
         char buytype[8];  // 交易类型 买入 卖出
+=======
+		uint32 buytypeflag;  // 交易类型 买入 卖出
+		char buytype[8];  // 交易类型 买入 卖出
+>>>>>>> d1a7034d39fe5ddd34d5fc2af3d5182ebea5ae9d
 		char stockId[8];  // 股票代码
 		char stockName[16];  // 股票名称
 		float price;  // 成交价
@@ -351,6 +356,13 @@ namespace protocol
 		uint32 viplevel; // 开通的vip等级
 	}CMDUserTeamRelatedInfo_t;
 
+	//查看我的粉丝
+	typedef struct tag_CMDTeacherFansResp
+	{
+		uint32 userid;                 //用户ID
+		char   useralias[NAMELEN];     //用户昵称
+		uint32 userheadid;             //用户头像
+	}CMDTeacherFansResp_t;
 };
 
 #pragma pack()

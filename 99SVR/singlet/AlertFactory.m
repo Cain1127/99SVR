@@ -8,6 +8,7 @@
 
 #import "AlertFactory.h"
 #import "LoginViewController.h"
+#import "KefuCenterController.h"
 #import "RoomHttp.h"
 #import "Toast+UIView.h"
 #import "UIAlertView+Block.h"
@@ -65,18 +66,23 @@
 + (void)createPassswordAlert:(UIViewController *)sender room:(RoomHttp*)room block:(void (^)(NSString *pwd))block
 {
     @WeakObj(sender)
-//    @WeakObj(room)
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示"
-                                                                   message:@"加入当前房间需要加入密码" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"输入密码"
+                                                                   message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    
     [alert addTextFieldWithConfigurationHandler:^(UITextField *textField)
      {
-         textField.placeholder = @"密码";
+         textField.placeholder = @"输入密码";
      }];
+    UIAlertAction *requestAction = [UIAlertAction actionWithTitle:@"我要密码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+       {
+           [senderWeak.view hideToastActivity];
+           KefuCenterController *control = [[KefuCenterController alloc] init];
+           [senderWeak.navigationController pushViewController:control animated:YES];
+       }];
     UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
         dispatch_async(dispatch_get_main_queue(),
               ^{
-                           //如果不再登录房间，取消notification
-                           [senderWeak.view hideToastActivity];
+                  [senderWeak.view hideToastActivity];
               });
     }];
     
@@ -88,6 +94,7 @@
             block(login.text);
         }
     }];
+    [alert addAction:requestAction];
     [alert addAction:canAction];
     [alert addAction:okAction];
     dispatch_async(dispatch_get_main_queue(), ^{

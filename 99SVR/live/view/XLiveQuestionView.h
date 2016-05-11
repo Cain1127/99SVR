@@ -28,4 +28,6 @@
 @property (nonatomic,strong) UILabel *lbltimes;
 @property (nonatomic,strong) UIView *hiddenView;
 
+- (void)setGestureHidden;
+
 @end

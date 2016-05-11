@@ -253,7 +253,6 @@
 - (void)initDecode
 {
     _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
-    [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
 }
 
 - (void)decodeAudio
@@ -296,7 +295,6 @@
     DLog(@"视频停止");
     _media.nFall = 0;
     _playing = NO;
-    [[SVRMediaClient sharedSVRMediaClient] clientCoreUnInit];
     [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
     @WeakObj(self)
     gcd_main_safe(^{
@@ -385,6 +383,7 @@
     [self updateDownHUD];
     SVRMediaClient *svrClient = [SVRMediaClient sharedSVRMediaClient];
     svrClient.delegate = self;
+    [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
     
     _downHUD.alpha = 0;
     if (_roomIsCollet)
@@ -701,7 +700,7 @@
                 }
             }
         }
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)),videoQueue,
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.03 * NSEC_PER_SEC)),videoQueue,
         ^{
             [__self decodeVideo];
         });
@@ -739,6 +738,7 @@
 
 - (void)dealloc
 {
+    [[SVRMediaClient sharedSVRMediaClient] clientCoreUnInit];
 }
 
 - (void)viewDidLayoutSubviews

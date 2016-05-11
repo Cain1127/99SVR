@@ -40,4 +40,6 @@
 
 -(void)hanleBlockWith:(NSInteger)index;
 
+- (void)setDefaultIndex:(int)nIndex;
+
 @end

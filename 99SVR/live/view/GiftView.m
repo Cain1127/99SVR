@@ -159,7 +159,7 @@
     [btnPay setTitleColor:UIColorFromRGB(0xFF7A1E) forState:UIControlStateNormal];
     [btnPay setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateHighlighted];
     [downView addSubview:btnPay];
-    btnPay.frame = Rect(btnSend.x-134, 3, 60,44);
+    btnPay.frame = Rect(btnSend.x-140, 3, 60,44);
     btnPay.layer.masksToBounds = YES;
     btnPay.layer.cornerRadius = 3;
     [btnPay addTarget:self action:@selector(paySelect) forControlEvents:UIControlEventTouchUpInside];
@@ -174,7 +174,7 @@
     UIImage *imgArrow = [UIImage imageNamed:@"video_present_number_point"];
     [_btnNumber setImage:imgArrow forState:UIControlStateNormal];
     [downView addSubview:_btnNumber];
-    _btnNumber.frame = Rect(btnSend.x-68, btnSend.y+4,60, 36);
+    _btnNumber.frame = Rect(btnSend.x-75, btnSend.y+4,70, 36);
     [_btnNumber setBackgroundColor:UIColorFromRGB(0xE5E5E5)];
     [_btnNumber setTitleColor:UIColorFromRGB(0xff7a1e) forState:UIControlStateNormal];
     _btnNumber.titleLabel.font = XCFONT(15);

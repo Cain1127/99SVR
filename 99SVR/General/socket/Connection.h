@@ -18,6 +18,15 @@
 extern Socket g_socket;
 extern char cache_path[256];
 extern bool in_room;
+extern bool need_join_room;
+extern bool socket_closed;
+extern bool socket_connecting;
+
+extern char connect_ip[32];
+extern short connect_port;
+
+extern char send_buf[MAX_MESSAGE_SIZE];
+extern char recv_buf[MAX_MESSAGE_SIZE];
 
 
 void InitProtocolContext(const char* path);
@@ -31,42 +40,14 @@ class Connection
 {
 
 private:
-	time_t connect_start_time;
-	int lbs_err_counter;
-	int get_host_index;
-	char host_from_lbs[8][128];
-	char lbss[STYPE_COUNT][8][32];
-	int lbs_counter[STYPE_COUNT];
-	bool islogining;
-	bool isfirst_read;
-	bool isfirst_error;
-	int read_counter;
 
-	char first_login_server[32];
-	int connect_stype_index;
-	int connect_stype_counter[STYPE_COUNT];
-	char connected_host[384];
-
-	bool is_set_lbs;
-
-
-	ThreadLock conn_lock;
 
 
 protected:
 
-	char send_buf[MAX_MESSAGE_SIZE];
-	char recv_buf[MAX_MESSAGE_SIZE];
 
 	int main_cmd;
-	char lbs_type[32];
 
-	char connect_ip[32];
-	short connect_port;
-
-	time_t last_ping_time;
-
-	bool closed;
 	
 	ConnectionListener* conn_listener;
 	MessageListener* message_listener;
@@ -76,8 +57,6 @@ protected:
 	void SendMsg_Hello();
 
 	virtual void SendMsg_Ping() = 0;
-
-	bool is_closed();
 
 	int send(const char* buf, int len);
 
@@ -92,6 +71,7 @@ protected:
 	int read_message(void);
 
 	virtual void on_do_connected() = 0;
+	void on_tick();
 	void on_dispatch_message(void* msg);
 
 	void on_connected();
@@ -120,6 +100,8 @@ public:
 	void get_host_form_lbs(char* lbs);
 
 	string get_error_desc(int err_code);
+
+	bool is_closed();
 
 	Connection(void);
 	virtual ~Connection(void);
