@@ -42,4 +42,8 @@
 
 - (void)setDefaultIndex:(int)nIndex;
 
+/**重置会默认选择第一个按钮*/
+-(void)resetSelectFirstIndex;
+
+
 @end

@@ -156,6 +156,16 @@
     [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    if (_menuView) {
+        //重置会默认选择第一个按钮
+        [_menuView resetSelectFirstIndex];
+    }
+}
+
 - (void)initTableView
 {
     CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-44-kVideoImageHeight);

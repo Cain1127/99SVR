@@ -169,6 +169,15 @@
     [self.topScroView setTitleIndex:nIndex badgeHide:YES];
 }
 
+/**重置会默认选择第一个按钮*/
+-(void)resetSelectFirstIndex{
+    
+    [self.topScroView setAnimationTime:0.f];
+    [self.bottomScroView setContentOffset:(CGPoint){(0)*_self_W,0} animated:YES];
+    [self.topScroView setAnimationTime:0.5f];
+
+}
+
 @end
 
 

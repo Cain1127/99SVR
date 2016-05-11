@@ -92,14 +92,14 @@
         
         weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.dayPagInteger = 1;
-        [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:10];
+        [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:0];
     }];
     
     [self.dayTab addLegendFooterWithRefreshingBlock:^{
 
         weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.dayPagInteger ++;
-        [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:10];
+        [kHTTPSingle RequestOperateStockProfitByDay:0 start:(int)weakSelf.dayPagInteger count:0];
         
     }];
     
@@ -107,27 +107,27 @@
     [self.monTab addGifHeaderWithRefreshingBlock:^{
         weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.monPagInteger = 1;
-        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:10];
+        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:0];
         
     }];
     
     [self.monTab addLegendFooterWithRefreshingBlock:^{
         weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.monPagInteger ++;
-        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:10];
+        [kHTTPSingle RequestOperateStockProfitByMonth:0 start:(int)weakSelf.monPagInteger count:0];
 
     }];
 
     [self.totalTab addGifHeaderWithRefreshingBlock:^{
         weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.totalPagInteger = 1;
-        [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:10];
+        [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:0];
     }];
     
     [self.totalTab addLegendFooterWithRefreshingBlock:^{
         weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.totalPagInteger ++;
-        [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:10];
+        [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:0];
     }];
 
     [self.dayTab.gifHeader loadDefaultImg];
