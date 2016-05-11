@@ -706,11 +706,7 @@ private:
 
 	uint32	_transid;
 	uint32	_operateid;
-<<<<<<< HEAD
-    uint32  _buytypeflag;
-=======
 	uint32	_buytypeflag;
->>>>>>> d1a7034d39fe5ddd34d5fc2af3d5182ebea5ae9d
 	string	_buytype;
 	string	_stockid;
 	string	_stockname;
@@ -721,11 +717,6 @@ private:
 
 
 public:
-    
-    inline uint32 buytypeflag() { return _buytypeflag; } const
-    
-    inline void set_buytypeflag(const uint32 value) { _buytypeflag = value; }
-
 
 	 inline uint32 transid() { return _transid; } const 
 
