@@ -88,7 +88,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(havePurchase:) name:MESSAGE_HTTP_MYPRIVATESERVICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
 
-    Loading_Bird_Show(self.view);
+    Loading_Bird_Show(self.tableView);
     [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
 }
 
@@ -120,7 +120,7 @@
     NSDictionary *dict = notify.object;
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
-        Loading_Hide(selfWeak.view);
+        Loading_Hide(selfWeak.tableView);
         [selfWeak.noView removeFromSuperview];
     });
     
@@ -189,7 +189,7 @@
     [_tableView addSubview:_noView];
     @WeakObj(self)
     [_noView clickWithBlock:^(UIGestureRecognizer *gesture) {
-        Loading_Bird_Show(selfWeak.view);
+        Loading_Bird_Show(selfWeak.tableView);
         [kHTTPSingle RequestMyPrivateService:KUserSingleton.nUserId];
     }];
 }
