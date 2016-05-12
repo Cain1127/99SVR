@@ -10,7 +10,7 @@
 #import "LoginViewController.h"
 #import "ZLLogonServerSing.h"
 #import "Toast+UIView.h"
-#import "Reachability.h"
+//#import "Reachability.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import "DecodeJson.h"
 #import "GiftModel.h"
@@ -34,7 +34,7 @@
 #import "AdViewController.h"
 #import "SwitchRootTool.h"
 #import "IQKeyboardManager.h"
-#import "UIAlertView+Block.h"
+//#import "UIAlertView+Block.h"
 #define APP_URL @"http://itunes.apple.com/lookup?id=1074104620"
 
 @interface AppDelegate ()<UIAlertViewDelegate,WeiboSDKDelegate,WXApiDelegate>
@@ -42,8 +42,8 @@
     IndexViewController *indexView;
     BOOL bStatus;
     BOOL bGGLogin;
-    Reachability *hostReach;
-    NetworkStatus nowStatus;
+//    Reachability *hostReach;
+//    NetworkStatus nowStatus;
 }
 
 @property (nonatomic,unsafe_unretained) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
@@ -120,89 +120,89 @@
         [DecodeJson setGiftInfo:parameters];
     }
     
-    
-    hostReach = [Reachability reachabilityWithHostName:@"www.163.com"];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reachabilityChanged:)
-                                                 name: kReachabilityChangedNotification
-                                               object: nil];
     [self updateVersion];
-    //开启网络通知
-    [hostReach startNotifier];
+    
+//    hostReach = [Reachability reachabilityWithHostName:@"www.163.com"];
+//    
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(reachabilityChanged:)
+//                                                 name: kReachabilityChangedNotification
+//                                               object: nil];
+//    //开启网络通知
+//    [hostReach startNotifier];
     return YES;
 }
 
-/**
-*  网络更改通知
-*/
--(void)reachabilityChanged:(NSNotification *)note
-{
-    Reachability *curReach = [note object];
-    NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
-    NetworkStatus status = [curReach currentReachabilityStatus];
-    
-    if (status == nowStatus) {
-        
-        return ;
-    }
-    
-    if (status == NotReachable)
-    {
-        DLog(@"网络状态:中断");
-        __weak UIWindow *__windows = self.window;
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-//            [__windows makeToast:@"无网络"];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self.window.rootViewController withCancleBtnStr:@"取消" withOtherBtnStr:@"设置" withMessage:@"网络连接失败，请点击设置去检查网络" completionCallback:^(NSInteger index) {
-                        
-                        if (index==1) {
-                            NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                            
-                            if([[UIApplication sharedApplication] canOpenURL:url]) {
-                                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=Setting"]];
-                            }
-                        }
-                        
-                    }];
-                    
-                });
-                
-            });
-            
-        });
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_ERR_VC object:nil];
-        if(!(nowStatus == status)){
-            
-        }
-        nowStatus = status;
-        return ;
-    }
-    else if(status == ReachableViaWiFi)
-    {
-//        __weak UIWindow *__windows = self.window;
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [__windows makeToast:@"当前网络:WIFI"];
-//        });
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
-    }
-    else if(status == ReachableViaWWAN)
-    {
+///**
+//*  网络更改通知
+//*/
+//-(void)reachabilityChanged:(NSNotification *)note
+//{
+//    Reachability *curReach = [note object];
+//    NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+//    NetworkStatus status = [curReach currentReachabilityStatus];
+//    
+//    if (status == nowStatus) {
+//        
+//        return ;
+//    }
+//    
+//    if (status == NotReachable)
+//    {
+//        DLog(@"网络状态:中断");
 //        __weak UIWindow *__windows = self.window;
 //        dispatch_async(dispatch_get_main_queue(),
-//           ^{
-//               [__windows makeToast:@"当前网络:移动网络"];
-//           });
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
-    }
-    nowStatus = status;
-    [KUserSingleton.dictRoomGate removeAllObjects];
-    [KUserSingleton.dictRoomMedia removeAllObjects];
-    [KUserSingleton.dictRoomText removeAllObjects];
-}
+//        ^{
+////            [__windows makeToast:@"无网络"];
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self.window.rootViewController withCancleBtnStr:@"取消" withOtherBtnStr:@"设置" withMessage:@"网络连接失败，请点击设置去检查网络" completionCallback:^(NSInteger index) {
+//                        
+//                        if (index==1) {
+//                            NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+//                            
+//                            if([[UIApplication sharedApplication] canOpenURL:url]) {
+//                                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=Setting"]];
+//                            }
+//                        }
+//                        
+//                    }];
+//                    
+//                });
+//                
+//            });
+//            
+//        });
+//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_ERR_VC object:nil];
+//        if(!(nowStatus == status)){
+//            
+//        }
+//        nowStatus = status;
+//        return ;
+//    }
+//    else if(status == ReachableViaWiFi)
+//    {
+////        __weak UIWindow *__windows = self.window;
+////        dispatch_async(dispatch_get_main_queue(), ^{
+////            [__windows makeToast:@"当前网络:WIFI"];
+////        });
+//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
+//    }
+//    else if(status == ReachableViaWWAN)
+//    {
+////        __weak UIWindow *__windows = self.window;
+////        dispatch_async(dispatch_get_main_queue(),
+////           ^{
+////               [__windows makeToast:@"当前网络:移动网络"];
+////           });
+//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
+//    }
+//    nowStatus = status;
+//    [KUserSingleton.dictRoomGate removeAllObjects];
+//    [KUserSingleton.dictRoomMedia removeAllObjects];
+//    [KUserSingleton.dictRoomText removeAllObjects];
+//}
 
 -(void)onCheckVersion
 {

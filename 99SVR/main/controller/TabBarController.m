@@ -22,11 +22,16 @@
 #import "UIImageFactory.h"
 #import "RoomHttp.h"
 #import "RoomViewController.h"
+#import "Reachability.h"
+#import "AppDelegate.h"
+#import "UIAlertView+Block.h"
 
 @interface TabBarController ()<PlayIconDelegate>
 
-@property (nonatomic,strong) PlayIconView *iConView;
-@property (nonatomic,strong) UIButton *btnPlay;
+@property (nonatomic, strong) Reachability *hostReach;
+@property (nonatomic, assign) NetworkStatus nowStatus;
+@property (nonatomic, strong) PlayIconView *iConView;
+@property (nonatomic, strong) UIButton *btnPlay;
 
 @end
 
@@ -64,7 +69,7 @@
 - (void)loadInfo:(NSNotification *)notify
 {
     int nAllNum = [notify.object[@"privateservice"] intValue] + [notify.object[@"system"] intValue] +
-                                    [notify.object[@"reply"] intValue]+[notify.object[@"answer"] intValue];
+    [notify.object[@"reply"] intValue]+[notify.object[@"answer"] intValue];
     DLog(@"总数字:%d",nAllNum);
     KUserSingleton.nUnRead = nAllNum;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UNREAD_NUMBER_VC object:nil];
@@ -76,6 +81,15 @@
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadInfo:) name:MESSAGE_UNREAD_INFO_VC object:nil];
     [kHTTPSingle RequestUnreadCount];
+    
+    // 网络检测
+    _hostReach = [Reachability reachabilityWithHostName:@"www.163.com"];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name: kReachabilityChangedNotification
+                                               object: nil];
+    //开启网络通知
+    [_hostReach startNotifier];
 }
 
 /**
@@ -103,8 +117,8 @@
     
     [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
     [self setUpOneViewController:[[ZLVideoListViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
-
-
+    
+    
     if ([UserInfo sharedUserInfo].nStatus)
     {
         [self setUpOneViewController:[[TQIdeaViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
@@ -134,6 +148,78 @@
     vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
     MyNavigationViewController *nav = [[MyNavigationViewController alloc]initWithRootViewController:vc];
     [self addChildViewController:nav];
+}
+
+/**
+ *  网络更改通知
+ */
+-(void)reachabilityChanged:(NSNotification *)note
+{
+    Reachability *curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+    NetworkStatus status = [curReach currentReachabilityStatus];
+    
+    //    if (status == _nowStatus) {
+    //
+    //        return ;
+    //    }
+    //
+    if (status == NotReachable)
+    {
+        DLog(@"网络状态:中断");
+        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        __weak UIWindow *__windows = app.window;
+        dispatch_async(dispatch_get_main_queue(),
+                       ^{
+                           //            [__windows makeToast:@"无网络"];
+                           dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                               
+                               dispatch_async(dispatch_get_main_queue(), ^{
+                                   [UIAlertView createAlertViewWithTitle:@"提示" withViewController:__windows.rootViewController withCancleBtnStr:@"取消" withOtherBtnStr:@"设置" withMessage:@"网络连接失败，请点击设置去检查网络" completionCallback:^(NSInteger index) {
+                                       
+                                       if (index==1) {
+                                           NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                           
+                                           if([[UIApplication sharedApplication] canOpenURL:url]) {
+                                               [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=Setting"]];
+                                           }
+                                       }
+                                       
+                                   }];
+                                   
+                               });
+                               
+                           });
+                           
+                       });
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_ERR_VC object:nil];
+        if(!(_nowStatus == status)){
+            
+        }
+        _nowStatus = status;
+        return ;
+    }
+    else if(status == ReachableViaWiFi)
+    {
+        //        __weak UIWindow *__windows = self.window;
+        //        dispatch_async(dispatch_get_main_queue(), ^{
+        //            [__windows makeToast:@"当前网络:WIFI"];
+        //        });
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
+    }
+    else if(status == ReachableViaWWAN)
+    {
+        //        __weak UIWindow *__windows = self.window;
+        //        dispatch_async(dispatch_get_main_queue(),
+        //           ^{
+        //               [__windows makeToast:@"当前网络:移动网络"];
+        //           });
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
+    }
+    _nowStatus = status;
+    [KUserSingleton.dictRoomGate removeAllObjects];
+    [KUserSingleton.dictRoomMedia removeAllObjects];
+    [KUserSingleton.dictRoomText removeAllObjects];
 }
 
 - (void)dealloc
