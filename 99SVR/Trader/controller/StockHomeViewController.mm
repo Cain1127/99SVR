@@ -119,12 +119,14 @@
     }];
 
     [self.totalTab addGifHeaderWithRefreshingBlock:^{
+        [weakSelf setRequestUserDefaults];
         weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.totalPagInteger = 1;
         [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:0];
     }];
     
     [self.totalTab addLegendFooterWithRefreshingBlock:^{
+        [weakSelf setRequestUserDefaults];
         weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.totalPagInteger ++;
         [kHTTPSingle RequestOperateStockProfitByAll:0 start:(int)weakSelf.totalPagInteger count:0];
@@ -407,6 +409,12 @@
     
 }
 
+#pragma mark 高手操盘总收益的请求 为了和房间内的高手操盘区别
+-(void)setRequestUserDefaults{
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    [user setObject:MESSAGE_STOCK_HOME_TOTAL__VC forKey:@"RequestOperateStockProfitByAll"];
+    [user synchronize];
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {

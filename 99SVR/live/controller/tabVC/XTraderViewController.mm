@@ -48,7 +48,7 @@
 
 - (void)addNotify
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_XTRADER_STOCK_TOTAL_VC object:nil];
 }
 
 - (void)removeNotify
@@ -87,12 +87,14 @@
 {
     WeakSelf(self);
    [self.totalTab addGifHeaderWithRefreshingBlock:^{
+       [weakSelf setRequestUserDefaults];
         weakSelf.refreshState = MJRefreshState_Header;
         weakSelf.totalPagInteger = 1;
         [kHTTPSingle RequestOperateStockProfitByAll:[weakSelf.room.teamid intValue] start:(int)weakSelf.totalPagInteger count:20];
     }];
     
     [self.totalTab addLegendFooterWithRefreshingBlock:^{
+        [weakSelf setRequestUserDefaults];
         weakSelf.refreshState = MJRefreshState_Footer;
         weakSelf.totalPagInteger ++;
         [kHTTPSingle RequestOperateStockProfitByAll:[weakSelf.room.teamid intValue] start:(int)weakSelf.totalPagInteger count:20];
@@ -102,6 +104,13 @@
     Loading_Bird_Show(self.totalTab);
     [self.totalTab.gifHeader beginRefreshing];
     self.totalTab.footer.hidden = YES;
+}
+
+#pragma mark 高手操盘总收益的请求 为了和房间内的高手操盘区别
+-(void)setRequestUserDefaults{
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    [user setObject:MESSAGE_XTRADER_STOCK_TOTAL_VC forKey:@"RequestOperateStockProfitByAll"];
+    [user synchronize];
 }
 
 #pragma mark 刷新数据

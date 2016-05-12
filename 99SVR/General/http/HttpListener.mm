@@ -212,23 +212,28 @@ void OperateStockProfitListenerAll::onResponse(vector<OperateStockProfit>& total
 {
     
     NSMutableArray *muArray = [NSMutableArray array];
-    
     for (size_t i=0; i!=total.size(); i++) {
         
         OperateStockProfit *profit = &total[i];
         StockDealModel *allModel = [[StockDealModel alloc]initWithHomeRecordData:profit];
         [muArray addObject:allModel];
     }
+    
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    NSString *postNotificationName = [user objectForKey:@"RequestOperateStockProfitByAll"];
     NSString *refresh = bRefresh ? @"1" : @"0";
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:@{@"data":muArray,@"code":@(1),@"refresh":refresh}];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:postNotificationName object:@{@"data":muArray,@"code":@(1),@"refresh":refresh}];
 }
+
 
 void OperateStockProfitListenerAll::OnError(int errCode)
 {
     
     NSString *code = [NSString stringWithFormat:@"%d",errCode];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_STOCK_HOME_TOTAL__VC object:@{@"code":code}];
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    NSString *postNotificationName = [user objectForKey:@"RequestOperateStockProfitByAll"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:postNotificationName object:@{@"code":code}];
 }
 
 /**
