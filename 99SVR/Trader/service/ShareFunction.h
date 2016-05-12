@@ -18,6 +18,18 @@
  */
 +(CGSize)calculationOfTheText:(NSString *)string withFont:(CGFloat)font withMaxSize:(CGSize)maxSize;
 
+/**
+ *  计算出字体的长度已经高度。包括行距
+ *
+ *  @param string    富文本字体
+ *  @param font      字体大小默认是系统的字体大小
+ *  @param lineFloat 行距
+ *  @param maxSize   最大的宽高
+ *
+ *  @return 字体的CGsize
+ */
++(CGSize)calculationOfTheText:(NSMutableAttributedString *)attributedString withFont:(CGFloat)font withLineFloat:(CGFloat)lineFloat withMaxSize:(CGSize)maxSize;
+
 
 /**
  *  设置导航条的颜色,已经隐藏导航条下面的线了

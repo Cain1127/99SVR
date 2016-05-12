@@ -95,15 +95,8 @@
 - (void)setIdeaModel:(TQIdeaModel *)ideaModel
 {
     _content = ideaModel.content;
-    
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:_content];
-    // 设置字体
-    [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, attributedString.length)];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:8];//调整行间距
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [attributedString length])];
-    // 自动获取attributedString所占CGSize 注意：获取前必须设置所有字体大小
-    CGSize  attributedStringSize = [attributedString boundingRectWithSize:CGSizeMake(kScreenWidth-16, 50) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil].size;
+    CGSize attributedStringSize = [ShareFunction calculationOfTheText:attributedString withFont:15 withLineFloat:8 withMaxSize:(CGSize){kScreenWidth-16,50}];
     _lblContent.width = attributedStringSize.width;
     _lblContent.height = attributedStringSize.height;
     _lblContent.attributedText = attributedString;
@@ -130,11 +123,12 @@
 {
     _content = ideaModel.content;
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:_content];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:8];//调整行间距
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [_content length])];
+    CGSize attributedStringSize = [ShareFunction calculationOfTheText:attributedString withFont:15 withLineFloat:8 withMaxSize:(CGSize){kScreenWidth-16,50}];
+    _lblContent.width = attributedStringSize.width;
+    _lblContent.height = attributedStringSize.height;
     _lblContent.attributedText = attributedString;
-    [_lblContent sizeToFit];
+    _lblContent.lineBreakMode = NSLineBreakByTruncatingTail;
+    _lblContent.textColor = COLOR_Text_Black;
     
     [_authorLabel setText:ideaModel.authorname];
     [_dateLabel setText:ideaModel.publishtime];

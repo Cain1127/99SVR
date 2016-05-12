@@ -12,6 +12,17 @@
     
     return [string boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:font]} context:nil].size;
 }
+#pragma mark 计算富文本的行距。包括了行高
++(CGSize)calculationOfTheText:(NSMutableAttributedString *)attributedString withFont:(CGFloat)font withLineFloat:(CGFloat)lineFloat withMaxSize:(CGSize)maxSize{
+    // 设置字体
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:font] range:NSMakeRange(0, attributedString.length)];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:lineFloat];//调整行间距
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [attributedString length])];
+    // 自动获取attributedString所占CGSize 注意：获取前必须设置所有字体大小
+    CGSize  attributedStringSize = [attributedString boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil].size;
+    return attributedStringSize;
+}
 
 #pragma mark 设置导航条的颜色,已经隐藏导航条下面的线了
 +(void)setNavigationBarColor:(UIColor *)color withTargetViewController:(id)target{
