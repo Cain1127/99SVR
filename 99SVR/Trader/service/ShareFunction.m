@@ -12,20 +12,7 @@
     
     return [string boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:font]} context:nil].size;
 }
-#pragma mark 计算出字体的长度已经高度。并且要设置行距。会对Lable进行处理。返回宽度和高度可以不用处理。
-+(CGRect)calculationOfTheText:(NSString *)string inLabel:(UILabel *)label withFont:(CGFloat)font withMaxWidth:(CGFloat)width withLineSpacing:(CGFloat)spacing{
-    //设置Label最大的宽度
-    label.frame = (CGRect){label.frame.origin.x,label.frame.origin.y,width,label.frame.size.width};
-    label.font = [UIFont systemFontOfSize:font];
-    label.numberOfLines = 0;
-    NSMutableAttributedString * attributedString = [[NSMutableAttributedString alloc] initWithString:string];
-    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:spacing];
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [string length])];
-    [label setAttributedText:attributedString];
-    [label sizeToFit];
-    return (CGRect){label.frame.origin.x,label.frame.origin.y,label.frame.size.width,label.frame.size.height};
-}
+
 #pragma mark 设置导航条的颜色,已经隐藏导航条下面的线了
 +(void)setNavigationBarColor:(UIColor *)color withTargetViewController:(id)target{
     

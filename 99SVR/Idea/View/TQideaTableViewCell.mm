@@ -95,23 +95,32 @@
 - (void)setIdeaModel:(TQIdeaModel *)ideaModel
 {
     _content = ideaModel.content;
-    CGSize lblContentSize = [ShareFunction calculationOfTheText:ideaModel.content withFont:15 withMaxSize:(CGSize){kScreenWidth-16,40}];
-    _lblContent.width = lblContentSize.width;
-    _lblContent.height = lblContentSize.height;
-    _lblContent.text = ideaModel.content;
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:_content];
+    // 设置字体
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, attributedString.length)];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:8];//调整行间距
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [attributedString length])];
+    // 自动获取attributedString所占CGSize 注意：获取前必须设置所有字体大小
+    CGSize  attributedStringSize = [attributedString boundingRectWithSize:CGSizeMake(kScreenWidth-16, 50) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil].size;
+    _lblContent.width = attributedStringSize.width;
+    _lblContent.height = attributedStringSize.height;
+    _lblContent.attributedText = attributedString;
+    _lblContent.lineBreakMode = NSLineBreakByTruncatingTail;
     _lblContent.textColor = COLOR_Text_Black;
+    
     
     [_authorLabel setText:ideaModel.authorname];
     [_dateLabel setText:ideaModel.publishtime];
     [_commentBtn setTitle:NSStringFromInt(ideaModel.replycount) forState:UIControlStateNormal];
     [_giftBtn setTitle:NSStringFromInt(ideaModel.giftcount) forState:UIControlStateNormal];
-//    CGRect rect = [NSStringFromInt(ideaModel.giftcount) boundingRectWithSize:CGSizeMake(kScreenWidth-20,50) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
-//    CGRect commentFrame = [NSStringFromInt(ideaModel.replycount) boundingRectWithSize:CGSizeMake(kScreenWidth-20,50) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
+
     
     _giftBtn.frame = Rect(kScreenWidth-55,_iconView.y,50,20);
     _commentBtn.frame = Rect(kScreenWidth-110,_iconView.y,50,20);
     
-    [_iconView sd_setImageWithURL:[NSURL URLWithString:ideaModel.authoricon]];
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:ideaModel.authoricon] placeholderImage:[UIImage imageNamed:@"personal_user_head"]];
     [self.contentView addSubview:_lblLine];
     [self.contentView addSubview:_lblLine1];
     
@@ -132,11 +141,9 @@
     [_commentBtn setTitle:NSStringFromInt(ideaModel.replycount) forState:UIControlStateNormal];
     [_giftBtn setTitle:NSStringFromInt(ideaModel.giftcount) forState:UIControlStateNormal];
     
-//    CGRect rect = [NSStringFromInt(ideaModel.giftcount) boundingRectWithSize:CGSizeMake(kScreenWidth-20,50) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
-//    CGRect commentFrame = [NSStringFromInt(ideaModel.replycount) boundingRectWithSize:CGSizeMake(kScreenWidth-20,50) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
     _giftBtn.frame = Rect(kScreenWidth-55,_iconView.y,50,20);
     _commentBtn.frame = Rect(kScreenWidth-110,_iconView.y,50,20);
-    [_iconView sd_setImageWithURL:[NSURL URLWithString:ideaModel.authoricon]];
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:ideaModel.authoricon] placeholderImage:[UIImage imageNamed:@"personal_user_head"]];
     if (bLine) {
         [self.contentView addSubview:_lblLine];
     }

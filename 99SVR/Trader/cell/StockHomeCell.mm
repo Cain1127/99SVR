@@ -159,7 +159,7 @@
     }];
 
     
-    [self.iconImv sd_setImageWithURL:[NSURL URLWithString:model.teamicon] placeholderImage:[UIImage imageNamed:@"default"]];
+    [self.iconImv sd_setImageWithURL:[NSURL URLWithString:model.teamicon] placeholderImage:[UIImage imageNamed:@"personal_user_head"]];
     self.nameLab.text =  model.focus;
     self.targetLab.text =  [NSString stringWithFormat:@"目标收益：%@",model.goalprofit];
     self.totalTitLab.text = @"总收益";

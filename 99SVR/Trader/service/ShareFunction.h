@@ -17,18 +17,7 @@
  *  @return 字体的CGsize
  */
 +(CGSize)calculationOfTheText:(NSString *)string withFont:(CGFloat)font withMaxSize:(CGSize)maxSize;
-/**
- *  计算出字体的长度已经高度。并且要设置行距。会对Lable进行处理。返回宽度和高度可以不用处理。
- *
- *  @param string  字体
- *  @param label   目标Lable
- *  @param font    字体大小
- *  @param width label最大的宽度
- *  @param spacing 行距
- *
- *  @return 处理过的Lable
- */
-+(CGRect)calculationOfTheText:(NSString *)string inLabel:(UILabel *)label withFont:(CGFloat)font withMaxWidth:(CGFloat)width withLineSpacing:(CGFloat)spacing;
+
 
 /**
  *  设置导航条的颜色,已经隐藏导航条下面的线了
