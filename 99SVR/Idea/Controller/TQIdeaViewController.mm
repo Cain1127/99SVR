@@ -112,17 +112,17 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     NSArray *aryIndex = parameters[@"model"];
     if (code!=1 && _dataSource.aryModel.count ==0)
     {
-        [self showErrorViewInView:_tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
-            Loading_Bird_Show(selfWeak.tableView);
-            [selfWeak.tableView.header beginRefreshing];
-        }];
+//        [self showErrorViewInView:_tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
+//            Loading_Bird_Show(selfWeak.tableView);
+//            [selfWeak.tableView.header beginRefreshing];
+//        }];
     }
     else if (aryIndex.count==0 && code==1 && _dataSource.aryModel.count ==0 )
     {
-        [self showEmptyViewInView:_tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
-            Loading_Bird_Show(selfWeak.tableView);
-            [selfWeak.tableView.header beginRefreshing];
-        }];
+//        [self showEmptyViewInView:_tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
+//            Loading_Bird_Show(selfWeak.tableView);
+//            [selfWeak.tableView.header beginRefreshing];
+//        }];
     }
     else
     {
