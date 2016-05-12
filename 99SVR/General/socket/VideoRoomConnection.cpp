@@ -300,6 +300,11 @@ void VideoRoomConnection::close(void)
 	SendMsg_ExitRoomReq(join_req.vcbid());
 }
 
+void VideoRoomConnection::on_tick(time_t ctime)
+{
+
+}
+
 void VideoRoomConnection::DispatchSocketMessage(void* msg)
 {
 

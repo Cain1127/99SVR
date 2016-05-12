@@ -103,7 +103,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
     [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
 }
 
@@ -936,4 +935,5 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
 }
+
 @end

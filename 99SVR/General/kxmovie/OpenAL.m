@@ -142,15 +142,12 @@
     int processed, queued;
     alGetSourcei(outSourceId, AL_SOURCE_STATE, &stateVaue);
     if (stateVaue != AL_PLAYING){
-        DLog(@"stateVaue:%d",stateVaue);
-        DLog(@"queued:%d",queued);
-        DLog(@"播放");
         [self playSound];
         return NO;
     }
     alGetSourcei(outSourceId, AL_BUFFERS_PROCESSED, &processed);
     alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
-    if (queued < processed || queued == 0 ||(queued == 1 && processed ==1) || queued >75){
+    if (queued < processed || queued >75){
         
         int nUserid = [UserInfo sharedUserInfo].nUserId;
         NSString *strErrlog =[NSString stringWithFormat:@"ReportItem=DirectSeedingQuality&ClientType=3&UserId=%d&ServerIP=%@&Error=kadun",nUserid,[UserInfo sharedUserInfo].strMediaAddr];

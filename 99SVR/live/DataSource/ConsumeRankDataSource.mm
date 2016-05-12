@@ -42,10 +42,12 @@
 {
     static NSString *strConsumeRank = @"ConsumeRankIdentifier";
     ConsumeRankCell *cell = [tableView dequeueReusableCellWithIdentifier:strConsumeRank];
-    if (!cell) {
+    if (!cell)
+    {
         cell = [[ConsumeRankCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strConsumeRank];
     }
-    if (_aryModel.count>indexPath.section) {
+    if (_aryModel.count>indexPath.section)
+    {
         [self setModel:indexPath.section cell:cell];
     }
     return cell;
@@ -66,7 +68,7 @@
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [cell.imgHead sd_setImageWithURL:url1 placeholderImage:[UIImage imageNamed:@"100_1"]];
     [cell.lblName setText:model.username];
-    NSString *strConsume = [NSString stringWithFormat:@"%.01f",[model.consume floatValue]];
+    NSString *strConsume = [NSString stringWithFormat:@"%.0f",floorf([model.consume floatValue])];
     [cell.lblGoid setText:strConsume];
     
 }

@@ -15,7 +15,6 @@
 #import "StockMacro.h"
 #import "StockHomeCell.h"
 #import "UIButton+WebCache.h"
-#import "ConnectRoomViewModel.h"
 #import "RoomViewController.h"
 #import "ZLOperateStock.h"
 #import "AlertFactory.h"
@@ -53,7 +52,6 @@
 @property (nonatomic,strong) SDCycleScrollView *scrollView;
 
 ///当前数据请求状态:0-未开始请求/1-正在请求/2-banner完成请求/3-列表完成请求
-@property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
 @property (nonatomic,strong) UIView *videoView;
 @property (nonatomic,strong) UIView *ideaView;
 @property (nonatomic,strong) UIView *operatorView;
@@ -593,11 +591,19 @@
 }
 
 - (void)connectRoom:(RoomHttp *)room{
-    [self.view makeToastActivity_bird];
-    if (_roomViewModel==nil) {
-        _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
+//    [self.view makeToastActivity_bird];
+//    if (_roomViewModel==nil) {
+//        _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
+//    }
+//    [_roomViewModel connectViewModel:room];
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if ([roomView.room.roomid isEqualToString:room.roomid])
+    {
+        [self.navigationController pushViewController:roomView animated:YES];
+        return ;
     }
-    [_roomViewModel connectViewModel:room];
+    [roomView setRoom:room];
+    [self.navigationController pushViewController:roomView animated:YES];
 }
 
 - (void)enterEvent:(UIButton *)sender
@@ -607,6 +613,7 @@
     {
         rootTabbarVC.selectedIndex = sender.tag;
     }
+    
 }
 
 @end

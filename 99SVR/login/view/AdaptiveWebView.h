@@ -7,12 +7,21 @@
 #else
 #import <WebKit/WebKit.h>
 #endif
+
+@protocol AdaptiveWebViewDelegate <NSObject>
+
+- (void)requestOperater:(NSString *)strId name:(NSString *)strName;
+
+@end
+
 @interface AdaptiveWebView : UIView
 
-/**网址*/
+@property (nonatomic,assign) id<AdaptiveWebViewDelegate> delegate;
+
 @property (nonatomic, copy) NSString *url;
 
 @property (nonatomic, strong) UIWebView *webView;
 
 @property (nonatomic, strong) WKWebView *wkWebView;
+
 @end

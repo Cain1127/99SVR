@@ -24,6 +24,7 @@ bool need_join_room;
 
 
 static time_t last_req_teamtopn_time;
+static time_t last_gettoken_time;
 
 LoginConnection::LoginConnection() :
 login_listener(NULL), hall_listener(NULL), push_listener(NULL)
@@ -167,13 +168,6 @@ void LoginConnection::on_do_connected()
 	start_read_thread();
 }
 
-void LoginConnection::RequestReconnect()
-{
-	close();
-	connect_from_lbs_asyn();
-	//connect("121.12.118.32", 7301);
-}
-
 void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 {
 	//121.12.118.32:7301
@@ -224,10 +218,10 @@ void LoginConnection::SendMsg_LoginReq5(UserLogonReq5& req)
 	connect_from_lbs_asyn();
 }
 
-void LoginConnection::SendMsg_SessionTokenReq(uint32 userid)
+void LoginConnection::SendMsg_SessionTokenReq()
 {
 	SessionTokenReq req;
-	req.set_userid(userid);
+	req.set_userid(login_userid);
 
 	SEND_MESSAGE(protocol::Sub_Vchat_logonTokenReq, req);
 }
@@ -326,16 +320,21 @@ void LoginConnection::close(void)
 	Connection::close();
 }
 
-void LoginConnection::on_tick()
+void LoginConnection::on_tick(time_t ctime)
 {
+	LOG("on_tick");
 	if (in_room)
 	{
-		time_t ctime = time(0);
-		if ( ctime - last_req_teamtopn_time > 60 * 5 )
+		if ( ctime - last_req_teamtopn_time > 5 * 60 )
 		{
 			SendMsg_TeamTopNReq();
 			last_req_teamtopn_time = ctime;
 		}
+	}
+
+	if ( ctime - last_gettoken_time > 60 * 60 * 8 )
+	{
+		SendMsg_SessionTokenReq();
 	}
 }
 
@@ -462,6 +461,7 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 	case protocol::Sub_Vchat_logonTokenNotify:
 		//ON_MESSAGE(login_listener, SessionTokenResp, OnLogonTokenNotify)
 		login_token.ParseFromArray(body, login_token.ByteSize());
+		last_gettoken_time = time(0);
 		if (login_listener)
 			login_listener->OnLogonTokenNotify(login_token);
 		break;
@@ -489,7 +489,21 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 
 	//设置用户密码响应
 	case protocol::Sub_Vchat_SetUserPwdResp:
-		ON_MESSAGE(hall_listener, SetUserPwdResp, OnSetUserPwdResp)
+	{
+		//ON_MESSAGE(hall_listener, SetUserPwdResp, OnSetUserPwdResp)
+		SetUserPwdResp _SetUserPwdResp;
+		_SetUserPwdResp.ParseFromArray(body, _SetUserPwdResp.ByteSize());
+
+		if( NULL != hall_listener)
+		{
+			hall_listener->OnSetUserPwdResp(_SetUserPwdResp);
+		}
+
+		if(0 == _SetUserPwdResp.errorid())
+		{
+			login_password = _SetUserPwdResp.cnewpwd();
+		}
+	}
 		break;
 
 	//获取房间网关地址响应

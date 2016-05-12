@@ -423,7 +423,7 @@ ZLLogonProtocol::~ZLLogonProtocol()
 ZLLogonProtocol::ZLLogonProtocol()
 {
     conn = new LoginConnection();
-
+    InitProtocolContext([kLibaryCache UTF8String]);
     conn->RegisterMessageListener(&message_listener);
     conn->RegisterLoginListener(&login_listener);
     conn->RegisterConnectionListener(&conn_listener);
@@ -615,7 +615,8 @@ void ZLHallListener::OnBuyPrivateVipErr(ErrCodeResp& info)
  */
 void ZLRoomListener::OnRoomUserList(std::vector<RoomUserInfo>& infos){
     DLog(@"infos.size:%ld",infos.size());
-    for(int i = 0; i < infos.size(); i++){
+    for(int i = 0; i < infos.size(); i++)
+    {
         [RoomService addRoomUser:currentRoom user:&infos[i]];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];

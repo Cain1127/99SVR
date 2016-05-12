@@ -31,9 +31,6 @@
         }
         
     }];
-    
-    
-    
 }
 
 
@@ -73,30 +70,27 @@
      {
          textField.placeholder = @"输入密码";
      }];
-    UIAlertAction *requestAction = [UIAlertAction actionWithTitle:@"我要密码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-       {
-           [senderWeak.view hideToastActivity];
-           KefuCenterController *control = [[KefuCenterController alloc] init];
-           [senderWeak.navigationController pushViewController:control animated:YES];
-       }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+                               {
+                                   UITextField *login = alert.textFields.firstObject;
+                                   if (block)
+                                   {
+                                       block(login.text);
+                                   }
+                               }];
     UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
-        dispatch_async(dispatch_get_main_queue(),
-              ^{
-                  [senderWeak.view hideToastActivity];
-              });
+        [senderWeak.view hideToastActivity];
     }];
     
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-        UITextField *login = alert.textFields.firstObject;
-        if (block)
-        {
-            block(login.text);
-        }
-    }];
-    [alert addAction:requestAction];
-    [alert addAction:canAction];
+    UIAlertAction *requestAction = [UIAlertAction actionWithTitle:@"我要密码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+                                    {
+                                        [senderWeak.view hideToastActivity];
+                                        KefuCenterController *control = [[KefuCenterController alloc] init];
+                                        [senderWeak.navigationController pushViewController:control animated:YES];
+                                    }];
     [alert addAction:okAction];
+    [alert addAction:canAction];
+    [alert addAction:requestAction];
     dispatch_async(dispatch_get_main_queue(), ^{
         [senderWeak presentViewController:alert animated:YES completion:nil];
     });

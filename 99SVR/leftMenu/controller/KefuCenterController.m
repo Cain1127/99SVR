@@ -8,6 +8,7 @@
 
 #import "KefuCenterController.h"
 #import "RoomGroup.h"
+#import "RoomViewController.h"
 #import "VideoCell.h"
 #import "UserInfo.h"
 #import "GroupListRequest.h"
@@ -149,12 +150,20 @@
 }
 
 - (void)connectRoom:(RoomHttp *)room{
-    [self.view makeToastActivity_bird];
-    if (_roomViewModel==nil)
+//    [self.view makeToastActivity_bird];
+//    if (_roomViewModel==nil)
+//    {
+//        _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
+//    }
+//    [_roomViewModel connectViewModel:room];
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if ([roomView.room.roomid isEqualToString:room.roomid])
     {
-        _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
+        [self.navigationController pushViewController:roomView animated:YES];
+        return ;
     }
-    [_roomViewModel connectViewModel:room];
+    [roomView setRoom:room];
+    [self.navigationController pushViewController:roomView animated:YES];
 }
 
 @end

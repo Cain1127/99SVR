@@ -733,6 +733,10 @@
 		BBD58F031CCF0C1F009250DB /* ViewNullFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58F021CCF0C1F009250DB /* ViewNullFactory.m */; };
 		BBD58F1F1CCF4F37009250DB /* ZLViewPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58F1E1CCF4F37009250DB /* ZLViewPoint.m */; };
 		BBD58F221CCF52F6009250DB /* ZLOperateStock.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD58F211CCF52F6009250DB /* ZLOperateStock.m */; };
+		BBD7197F1CE466A100FF9A38 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD719781CE466A100FF9A38 /* WebViewJavascriptBridge.m */; };
+		BBD719801CE466A100FF9A38 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD7197A1CE466A100FF9A38 /* WebViewJavascriptBridge_JS.m */; };
+		BBD719811CE466A100FF9A38 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD7197C1CE466A100FF9A38 /* WebViewJavascriptBridgeBase.m */; };
+		BBD719821CE466A100FF9A38 /* WKWebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD7197E1CE466A100FF9A38 /* WKWebViewJavascriptBridge.m */; };
 		BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB52B1C1E959500D7230F /* libxml2.tbd */; };
 		BBF22F771C80050400907AD9 /* RoomCoreTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */; };
 		BBFA851D1C30D216000466E4 /* 999.gif in Resources */ = {isa = PBXBuildFile; fileRef = BBFA851C1C30D216000466E4 /* 999.gif */; };
@@ -2012,6 +2016,14 @@
 		BBD58F1E1CCF4F37009250DB /* ZLViewPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLViewPoint.m; sourceTree = "<group>"; };
 		BBD58F201CCF52F6009250DB /* ZLOperateStock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLOperateStock.h; sourceTree = "<group>"; };
 		BBD58F211CCF52F6009250DB /* ZLOperateStock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLOperateStock.m; sourceTree = "<group>"; };
+		BBD719771CE466A100FF9A38 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
+		BBD719781CE466A100FF9A38 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
+		BBD719791CE466A100FF9A38 /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
+		BBD7197A1CE466A100FF9A38 /* WebViewJavascriptBridge_JS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge_JS.m; sourceTree = "<group>"; };
+		BBD7197B1CE466A100FF9A38 /* WebViewJavascriptBridgeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridgeBase.h; sourceTree = "<group>"; };
+		BBD7197C1CE466A100FF9A38 /* WebViewJavascriptBridgeBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridgeBase.m; sourceTree = "<group>"; };
+		BBD7197D1CE466A100FF9A38 /* WKWebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewJavascriptBridge.h; sourceTree = "<group>"; };
+		BBD7197E1CE466A100FF9A38 /* WKWebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		BBECB52B1C1E959500D7230F /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		BBF22F751C80050400907AD9 /* RoomCoreTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCoreTextCell.h; sourceTree = "<group>"; };
 		BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCoreTextCell.m; sourceTree = "<group>"; };
@@ -3375,6 +3387,7 @@
 		BB63F4861C2CC7A200A042E8 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				BBD719761CE466A100FF9A38 /* WebViewJavascriptBridge */,
 				5A7629331CE1B7C400C6A092 /* NJKWebViewProgress */,
 				BB2CA9B01CD5E99800DFE56E /* IQKeyboardManager */,
 				BB2CA5BC1CD338A200DFE56E /* http */,
@@ -4202,6 +4215,21 @@
 			path = datasource;
 			sourceTree = "<group>";
 		};
+		BBD719761CE466A100FF9A38 /* WebViewJavascriptBridge */ = {
+			isa = PBXGroup;
+			children = (
+				BBD719771CE466A100FF9A38 /* WebViewJavascriptBridge.h */,
+				BBD719781CE466A100FF9A38 /* WebViewJavascriptBridge.m */,
+				BBD719791CE466A100FF9A38 /* WebViewJavascriptBridge_JS.h */,
+				BBD7197A1CE466A100FF9A38 /* WebViewJavascriptBridge_JS.m */,
+				BBD7197B1CE466A100FF9A38 /* WebViewJavascriptBridgeBase.h */,
+				BBD7197C1CE466A100FF9A38 /* WebViewJavascriptBridgeBase.m */,
+				BBD7197D1CE466A100FF9A38 /* WKWebViewJavascriptBridge.h */,
+				BBD7197E1CE466A100FF9A38 /* WKWebViewJavascriptBridge.m */,
+			);
+			path = WebViewJavascriptBridge;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -4807,6 +4835,7 @@
 				BBF22F771C80050400907AD9 /* RoomCoreTextCell.m in Sources */,
 				BB17694A1C7D88E000CE947C /* ForgetPwdViewController.m in Sources */,
 				B4EA091D1CC7BDD700E8F933 /* StockDealCellView.m in Sources */,
+				BBD719821CE466A100FF9A38 /* WKWebViewJavascriptBridge.m in Sources */,
 				BB5F9BC71C5DDA9D00285EA6 /* MediaSocket.m in Sources */,
 				BB63F5F91C2CC7A300A042E8 /* UIView+Extension.m in Sources */,
 				1879B8FD1CC85C9400E981A5 /* TQGifConllectionCell.m in Sources */,
@@ -4880,6 +4909,7 @@
 				5AB43D8B1CCFD7AE00693494 /* PrivateVipView.m in Sources */,
 				BB17694D1C7D9E7300CE947C /* InputPwdViewController.m in Sources */,
 				BBD58EF11CCBE6AC009250DB /* XPrivateDetailViewController.m in Sources */,
+				BBD719801CE466A100FF9A38 /* WebViewJavascriptBridge_JS.m in Sources */,
 				BB9C7EDB1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm in Sources */,
 				18BF06B81C9A86B00071E524 /* RechargeResultViewController.m in Sources */,
 				BB2CA6191CD338A300DFE56E /* Socket.cpp in Sources */,
@@ -5016,6 +5046,8 @@
 				188968F81CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */,
 				18EA82261CC8A4C200BDB735 /* UIImage+Antialias.m in Sources */,
 				BB63F60E1C2CC7A300A042E8 /* LoginTextField.m in Sources */,
+				BBD7197F1CE466A100FF9A38 /* WebViewJavascriptBridge.m in Sources */,
+				BBD719811CE466A100FF9A38 /* WebViewJavascriptBridgeBase.m in Sources */,
 				BB1769271C7B006F00CE947C /* SDWebImageDownloaderOperation.m in Sources */,
 				BB6F3AD61C9F86270035EBBE /* TADotView.m in Sources */,
 				18D3CB8B1CC0D31800816BD0 /* TQPersonalTailorCell.mm in Sources */,
@@ -5261,7 +5293,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "29210d47-fd0f-4824-9529-30cfa3ce8cf9";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5316,7 +5348,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "accd3a0e-be4d-4a10-9575-25dc39480081";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";

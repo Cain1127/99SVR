@@ -8,6 +8,7 @@
 
 #import "VideoColletionViewController.h"
 #import "UserInfo.h"
+#import "RoomViewController.h"
 #import "CustomViewController.h"
 #import "VideoCell.h"
 #import "UserInfo.h"
@@ -173,12 +174,22 @@
 }
 
 - (void)connectRoom:(RoomHttp *)room{
+    /*
     [self.view makeToastActivity_bird];
     if (_roomViewModel==nil)
     {
         _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
     }
     [_roomViewModel connectViewModel:room];
+   */
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if ([roomView.room.roomid isEqualToString:room.roomid])
+    {
+        [self.navigationController pushViewController:roomView animated:YES];
+        return ;
+    }
+    [roomView setRoom:room];
+    [self.navigationController pushViewController:roomView animated:YES];
 }
 
 @end

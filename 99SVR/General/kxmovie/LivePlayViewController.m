@@ -8,6 +8,7 @@
 
 #import "LivePlayViewController.h"
 #import "UIImageView+WebCache.h"
+#import "OpenAL.h"
 #import "SVRMediaClient.h"
 #import "RoomHttp.h"
 #import "AudioPlayer.h"
@@ -48,6 +49,7 @@
 @property (nonatomic) BOOL backGroud;
 @property (nonatomic) BOOL bVideo;
 @property (nonatomic,strong) AudioPlayer *playAudio;
+@property (nonatomic,strong) OpenAL *openAL;
 @property (nonatomic,copy) UIImage *currentImage;
 @property (nonatomic,strong) UIImageView *smallView;
 @property (nonatomic,copy) NSString *strPath;
@@ -174,9 +176,8 @@
 #pragma mark - View lifecycle
 - (void)startLoad
 {
-//    [_glView makeToastActivity_bird_2:@"bottom"];
-    
-    Loading_Bird_Show(_glView);
+    [_glView makeToastActivity:@"bottom"];
+//    Loading_Bird_Show(_glView);
 }
 
 - (void)stopLoad
@@ -184,8 +185,8 @@
     __weak UIImageView *__glView = _glView;
     dispatch_async(dispatch_get_main_queue(),
     ^{
-//        [__glView hideToastActivity];
-        Loading_Hide(__glView);
+        [__glView hideToastActivity];
+//        Loading_Hide(__glView);
     });
 }
 
@@ -252,12 +253,16 @@
 
 - (void)initDecode
 {
-    _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
+    if (!_openAL) {
+        _openAL = [[OpenAL alloc] init];
+    }
+    [_openAL initOpenAL];
+//    _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
 }
 
 - (void)decodeAudio
 {
-    [_playAudio startPlayWithBufferByteSize:7680];
+//    [_playAudio startPlayWithBufferByteSize:7680];
     while (_playing)
     {
         if(_aryAudio.count<10)
@@ -273,7 +278,8 @@
                 data = [_aryAudio objectAtIndex:0];
                 if (data && data.length > 0)
                 {
-                    [_playAudio putAudioData:(short *)data.bytes size:(int)data.length];
+//                    [_playAudio putAudioData:(short *)data.bytes size:(int)data.length];
+                    [_openAL openAudioFromQueue:(unsigned char *)data.bytes dataSize:(int)data.length];
                 }
                 @synchronized(_aryAudio)
                 {
@@ -315,7 +321,8 @@
     if([notify.object isEqualToString:@"ON"])
     {
         _backGroud = YES;
-        [_media settingBackVideo:YES];
+//        [_media settingBackVideo:YES];
+        [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
         __weak LivePlayViewController *__self = self;
         dispatch_async(dispatch_get_main_queue(),
         ^{
@@ -325,7 +332,8 @@
     else
     {
         _backGroud = NO;
-        [_media settingBackVideo:NO];
+//        [_media settingBackVideo:NO];
+        [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
     }
 }
 
@@ -394,7 +402,6 @@
     {
         _btnCollet.selected = NO;
     }
-    
     _aryAudio = [NSMutableArray array];
     _aryVideo = [NSMutableArray array];
 }
@@ -603,7 +610,10 @@
     {
         DLog(@"开启接收码流失败");
     }
-    
+    dispatch_async(dispatch_get_global_queue(0, 0),
+       ^{
+           [__self checkMedia];
+       });
     if (audioQueue==nil)
     {
         audioQueue = dispatch_queue_create("audio",0);
@@ -620,16 +630,13 @@
    ^{
        [__self decodeAudio];
    });
-    dispatch_async(dispatch_get_global_queue(0, 0),
-    ^{
-        [__self checkMedia];
-    });
+
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 }
 
 - (void)setOnlyAudio:(BOOL)enable
 {
-    [_media setEnableVideo:enable];
+//    [_media setEnableVideo:enable];
     _bVideo = enable;
     if (!enable)
     {
@@ -778,7 +785,7 @@
 
 - (void)onVideoData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height
 {
-    DLog(@"count:%zi",_aryVideo.count);
+//    DLog(@"count:%zi",_aryVideo.count);
     @synchronized(_aryVideo)
     {
         [_aryVideo addObject:data];
