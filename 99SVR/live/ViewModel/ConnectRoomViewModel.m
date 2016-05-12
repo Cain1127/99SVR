@@ -83,8 +83,11 @@
 - (void)joinSuc
 {
     [DecodeJson cancelPerfor:self];
-    @WeakObj(_control)
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (_ConnectRoomResult)
+    {
+        _ConnectRoomResult(1);
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         if (KUserSingleton.nStatus)
         {

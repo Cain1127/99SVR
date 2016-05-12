@@ -51,7 +51,6 @@ public:
 		LOG("userid = %d", _userid);
 		LOG("roomid = %d", _roomid);
 	}
-
 };
 
 

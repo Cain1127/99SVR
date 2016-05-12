@@ -98,12 +98,24 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     [_privateView addNotify];
 }
 
+- (void)createRoomModel
+{
+    if (!_roomModel)
+    {
+        _roomModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
+    }
+    @WeakObj(self)
+    _roomModel.ConnectRoomResult = ^(int nStatus)
+    {
+        [selfWeak loadHeadModel];
+        [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
+    };
+}
+
 - (void)setRoom:(RoomHttp*)room
 {
     _room = room;
-    if (!_roomModel) {
-        _roomModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
-    }
+    [self createRoomModel];
     [_roomModel connectViewModel:room];
     if([self isViewLoaded])
     {

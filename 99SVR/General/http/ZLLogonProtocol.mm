@@ -597,7 +597,8 @@ void ZLHallListener::OnBuyPrivateVipErr(ErrCodeResp& info)
  */
 void ZLRoomListener::OnRoomUserList(std::vector<RoomUserInfo>& infos){
     DLog(@"infos.size:%ld",infos.size());
-    for(int i = 0; i < infos.size(); i++){
+    for(int i = 0; i < infos.size(); i++)
+    {
         [RoomService addRoomUser:currentRoom user:&infos[i]];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];

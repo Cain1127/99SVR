@@ -9,11 +9,14 @@
 #import <Foundation/Foundation.h>
 @class RoomHttp;
 
-//typedef void(^ConnectRoomResult)(int nStatus,RoomHttp *room);
+typedef void(^ConnectRoomResult)(int nStatus,RoomHttp *room);
 
 @interface ConnectRoomViewModel : NSObject
+
+@property (nonatomic, copy) void (^ ConnectRoomResult)(int nStatus);
+
 @property (nonatomic,strong) RoomHttp *room;
-//@property (nonatomic,copy) ConnectRoomResult blockResult;
+
 @property (nonatomic,strong) UIViewController *control;
 
 - (void)connectViewModel:(RoomHttp *)room;
