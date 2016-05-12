@@ -8,6 +8,7 @@
 
 #import "RoomViewController.h"
 #import "XTeamPrivateController.h"
+#import "ConnectRoomViewModel.h"
 #import "RoomService.h"
 #import "AlertFactory.h"
 
@@ -81,6 +82,7 @@
 @property (nonatomic,strong) XTeamPrivateController *privateView;
 @property (nonatomic,strong) XVideoLiveViewcontroller *liveControl;
 @property (nonatomic,strong) XIdeaViewController *ideaControl;
+@property (nonatomic,strong) ConnectRoomViewModel *roomModel;
 
 @end
 
@@ -99,6 +101,10 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 - (void)setRoom:(RoomHttp*)room
 {
     _room = room;
+    if (!_roomModel) {
+        _roomModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
+    }
+    [_roomModel connectViewModel:room];
     if([self isViewLoaded])
     {
         [self loadHeadModel];
@@ -246,7 +252,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     [super viewDidLoad];
     room_gcd = dispatch_queue_create("decode_gcd",0);
     [self initUIHead];
-
 }
 
 - (void)didReceiveMemoryWarning

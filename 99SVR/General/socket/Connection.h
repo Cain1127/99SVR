@@ -29,6 +29,24 @@ extern char send_buf[MAX_MESSAGE_SIZE];
 extern char recv_buf[MAX_MESSAGE_SIZE];
 
 
+
+extern UserLogonSuccess2 loginuser;
+extern UserLogonReq4 login_req4;
+extern UserLogonReq5 login_req5;
+
+extern uint32 login_reqv;
+extern uint32 login_nmobile;
+extern uint32 login_version;
+extern uint32 login_userid;
+extern string login_password;
+extern SessionTokenResp login_token;
+
+extern JoinRoomReq join_req;
+extern JoinRoomResp room_info;
+
+extern uint32 main_room_id;
+
+
 void InitProtocolContext(const char* path);
 
 void ReadProtocolCache(const char *suffix_path, std::string& cache_content);
@@ -71,7 +89,7 @@ protected:
 	int read_message(void);
 
 	virtual void on_do_connected() = 0;
-	void on_tick();
+	virtual void on_tick(time_t ctime) = 0;
 	void on_dispatch_message(void* msg);
 
 	void on_connected();
@@ -88,6 +106,9 @@ public:
 	void RegisterConnectionListener(ConnectionListener* connection_listener);
 	void RegisterMessageListener(MessageListener* message_listener);
 	virtual void DispatchSocketMessage(void* msg) = 0;
+
+	void Reconnect();
+	void OnNetworkChanged();
 
 	void connect_from_lbs_asyn();
 	void connect_asyn(const char* host, short port);

@@ -26,19 +26,20 @@
 
 - (void)connectViewModel:(RoomHttp *)room
 {
-    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    if ([roomView.room.roomid isEqualToString:room.roomid])
-    {
-        [_control.view hideToastActivity];
-        [_control.navigationController pushViewController:roomView animated:YES];
-        return ;
-    }
+//    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+//    if ([roomView.room.roomid isEqualToString:room.roomid])
+//    {
+//        [_control.view hideToastActivity];
+//        [_control.navigationController pushViewController:roomView animated:YES];
+//        return ;
+//    }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     _room = room;
     [[ZLLogonServerSing sharedZLLogonServerSing] exitRoom];
     [kProtocolSingle connectVideoRoom:[room.roomid intValue] roomPwd:_room.password];
     [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
+
 }
 
 - (void)joinRoomErr:(NSNotification *)notify{
@@ -79,24 +80,24 @@
     }
 }
 
-- (void)joinSuc{
+- (void)joinSuc
+{
     [DecodeJson cancelPerfor:self];
     @WeakObj(_control)
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_controlWeak.view hideToastActivity];
         if (KUserSingleton.nStatus)
         {
-            [_controlWeak.view hideToastActivity];
-            RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-            [roomView setRoom:_room];
-            [_controlWeak.navigationController pushViewController:roomView animated:YES];
+//            [_controlWeak.view hideToastActivity];
+//            RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+//            [roomView setRoom:_room];
+//            [_controlWeak.navigationController pushViewController:roomView animated:YES];
         }
         else
         {
-            [_controlWeak.view hideToastActivity];
-            ZLRoomVideoViewController *control = [[ZLRoomVideoViewController alloc] initWithModel:_room];
-            [_controlWeak.navigationController pushViewController:control animated:YES];
+//            [_controlWeak.view hideToastActivity];
+//            ZLRoomVideoViewController *control = [[ZLRoomVideoViewController alloc] initWithModel:_room];
+//            [_controlWeak.navigationController pushViewController:control animated:YES];
         }
     });
     
@@ -106,10 +107,10 @@
 {
     [DecodeJson cancelPerfor:self];
     @WeakObj(_control)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_controlWeak.view hideToastActivity];
-        [ProgressHUD showError:@"加入房间失败"];
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [_controlWeak.view hideToastActivity];
+//        [ProgressHUD showError:@"加入房间失败"];
+//    });
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

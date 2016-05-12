@@ -363,11 +363,19 @@
     [UserDefaults setObject:tableAry forKey:kHistoryList];
     [UserDefaults synchronize];
     
-    [self.view makeToastActivity_bird];
-    if (_roomViewModel==nil) {
-        _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
+//    [self.view makeToastActivity_bird];
+//    if (_roomViewModel==nil) {
+//        _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
+//    }
+//    [_roomViewModel connectViewModel:room];
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if ([roomView.room.roomid isEqualToString:room.roomid])
+    {
+        [self.navigationController pushViewController:roomView animated:YES];
+        return ;
     }
-    [_roomViewModel connectViewModel:room];
+    [roomView setRoom:room];
+    [self.navigationController pushViewController:roomView animated:YES];
 }
 
 - (BOOL)shouldAutorotate

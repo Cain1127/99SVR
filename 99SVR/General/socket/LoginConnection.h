@@ -8,21 +8,7 @@
 #include "PushListener.h"
 #include "LoginMessage.pb.h"
 
-extern UserLogonSuccess2 loginuser;
-extern UserLogonReq4 login_req4;
-extern UserLogonReq5 login_req5;
 
-extern uint32 login_reqv;
-extern uint32 login_nmobile;
-extern uint32 login_version;
-extern uint32 login_userid;
-extern string login_password;
-extern SessionTokenResp login_token;
-
-extern JoinRoomReq join_req;
-extern JoinRoomResp room_info;
-
-extern uint32 main_room_id;
 
 class LoginConnection : public Connection
 {
@@ -43,7 +29,7 @@ private:
 protected:
 
 	void on_do_connected();
-	void on_tick();
+	void on_tick(time_t ctime);
 	void on_dispatch_message(void* msg);
 
 
@@ -55,8 +41,6 @@ public:
 
 	void DispatchSocketMessage(void* msg);
 
-	void RequestReconnect();
-
 	//ping请求
 	void SendMsg_Ping();
 
@@ -67,7 +51,7 @@ public:
 	void SendMsg_LoginReq5(UserLogonReq5& req);
 
 	//token请求
-	void SendMsg_SessionTokenReq(uint32 userid);
+	void SendMsg_SessionTokenReq();
 
 	//设置用户资料请求
 	void SendMsg_SetUserInfoReq(SetUserProfileReq& req);

@@ -690,7 +690,7 @@ void ConsumeRankListener::onResponse(vector<ConsumeRank>& info){
         ConsumeRank rank = info[i];
         NSString *strUserName = [NSString stringWithUTF8String:rank.username().c_str()];
         int headid = rank.headid();
-        float consume = rank.consume();
+        float consume = rank.consume()/1000.0;
         NSDictionary *dict = @{@"username":strUserName,@"headid":@(headid),@"consume":@(consume)};
         XConsumeRankModel *model = [XConsumeRankModel mj_objectWithKeyValues:dict];
         [array addObject:model];
@@ -732,7 +732,7 @@ void SystemMessageListener::OnError(int errCode)
  *  请求信息--提问回复
  */
 
-void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info,int isteacher)
+void QuestionAnswerListener::onResponse(vector<QuestionAnswer>& info,int isteacher, int type)
 {
     NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<info.size(); i++) {
@@ -752,7 +752,7 @@ void QuestionAnswerListener::OnError(int errCode)
  *  请求信息--评论回复
  */
 
-void MailReplyListener::onResponse(vector<MailReply>& info,int isteacher)
+void MailReplyListener::onResponse(vector<MailReply>& info,int isteacher, int type)
 {
     NSMutableArray *ary = [NSMutableArray array];
     for (int i=0; i<info.size(); i++) {

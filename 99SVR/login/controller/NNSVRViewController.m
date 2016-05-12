@@ -12,10 +12,9 @@
 #import "StockDealViewController.h"
 #import "StockDealModel.h"
 
-@interface NNSVRViewController ()<UIWebViewDelegate>
+@interface NNSVRViewController ()<AdaptiveWebViewDelegate>
 
 @property (nonatomic,strong) AdaptiveWebView *adaptiveWebView;
-@property (nonatomic, strong) UIWebView *webView;
 
 @end
 
@@ -32,67 +31,31 @@
     return nil;
 }
 
-//- (void)viewDidLoad
-//{
-//    [super viewDidLoad];
-//    [self setTitleText:_strTitle];
-//
-//    _adaptiveWebView = [[AdaptiveWebView alloc] initWithFrame:Rect(0.0f, 64.0f, kScreenWidth, kScreenHeight - 64.0f)];
-//    _adaptiveWebView.url = _strPath;
-//
-//    [self.view addSubview:_adaptiveWebView];
-//}
-//
-//- (void)dealloc
-//{
-//    _adaptiveWebView = nil;
-//}
+- (void)requestOperater:(NSString *)strId name:(NSString *)strName
+{
+    StockDealViewController *dealView = [[StockDealViewController alloc] init];
+    StockDealModel *stockModel = [[StockDealModel alloc] init];
+    stockModel.operateid = strId;
+    stockModel.teamname = strName;
+    dealView.stockModel = stockModel;
+    [self.navigationController pushViewController:dealView animated:YES];
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setTitleText:_strTitle];
-    
-     NSURLRequest *urlRequest = [[NSURLRequest alloc]initWithURL:[NSURL URLWithString:_strPath]];
-    
-    _webView = [[UIWebView alloc] initWithFrame:Rect(0.0f, 64.0f, kScreenWidth, kScreenHeight - 64.0f)];
-    _webView.delegate = self;
-    [_webView loadRequest:urlRequest];
-    
-    [self.view addSubview:_webView];
-}
 
-#pragma mark - UIWebViewDelegate
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    NSLog(@"webViewDidFinishLoad");
-    @WeakObj(self);
-    JSContext *context = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-    // 定义好JS要调用的方法, AlipayPay就是调用的AlipayPay方法名
-    context[@"openStockRecord"] = ^() {
-        @StrongObj(self);
-        NSArray *args = [JSContext currentArguments];
-        NSString *operateId = @"";
-        NSString *teamname = @"";
-        if (args[0]) {
-            operateId = ((JSValue *)args[0]).toString;
-        }
-        if (args[1]) {
-            teamname = ((JSValue *)args[1]).toString;
-        }
-        
-        StockDealModel *stockModel = [[StockDealModel alloc] init];
-        stockModel.operateid = operateId;
-        stockModel.teamname = teamname;
-        StockDealViewController *stockVC = [[StockDealViewController alloc]init];
-        stockVC.stockModel = stockModel;
-        [self.navigationController pushViewController:stockVC animated:YES];
-    };
+    _adaptiveWebView = [[AdaptiveWebView alloc] initWithFrame:Rect(0.0f, 64.0f, kScreenWidth, kScreenHeight - 64.0f)];
+    _adaptiveWebView.url = _strPath;
+    _adaptiveWebView.delegate = self;
+    [self.view addSubview:_adaptiveWebView];
 }
 
 - (void)dealloc
 {
-    _webView = nil;
+    _adaptiveWebView = nil;
 }
+
 
 @end

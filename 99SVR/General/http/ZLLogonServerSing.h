@@ -13,6 +13,7 @@
 @interface ZLLogonServerSing : NSObject
 
 DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
+- (void)serverInit;
 /**
  *  账号登录
  *

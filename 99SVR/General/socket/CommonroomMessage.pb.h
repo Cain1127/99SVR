@@ -2596,6 +2596,7 @@ class TradeGiftRecord
 
 private:
 
+	uint64	_nk;
 	uint32	_vcbid;
 	uint32	_srcid;
 	uint32	_toid;
@@ -2618,6 +2619,10 @@ private:
 
 
 public:
+
+	 inline uint64 nk() { return _nk; } const 
+
+	 inline void set_nk(const uint64 value) { _nk = value; }
 
 	 inline uint32 vcbid() { return _vcbid; } const 
 
@@ -2701,6 +2706,7 @@ public:
 	void SerializeToArray(void* data, int size)
 	{
 		protocol::tag_CMDTradeGiftRecord* cmd = (protocol::tag_CMDTradeGiftRecord*) data;
+		cmd->nk = _nk;
 		cmd->vcbid = _vcbid;
 		cmd->srcid = _srcid;
 		cmd->toid = _toid;
@@ -2708,7 +2714,10 @@ public:
 		cmd->totype = _totype;
 		cmd->giftid = _giftid;
 		cmd->giftnum = _giftnum;
-		
+		cmd->action = _action;
+		cmd->servertype = _servertype;
+		cmd->banonymous = _banonymous;
+		cmd->casttype = _casttype;
 		cmd->dtime = _dtime;
 		cmd->oldnum = _oldnum;
 		cmd->flyid = _flyid;
@@ -2722,6 +2731,7 @@ public:
 	void ParseFromArray(void* data, int size)
 	{
 		protocol::tag_CMDTradeGiftRecord* cmd = (protocol::tag_CMDTradeGiftRecord*) data;
+		_nk = cmd->nk;
 		_vcbid = cmd->vcbid;
 		_srcid = cmd->srcid;
 		_toid = cmd->toid;
@@ -2729,7 +2739,10 @@ public:
 		_totype = cmd->totype;
 		_giftid = cmd->giftid;
 		_giftnum = cmd->giftnum;
-
+		_action = cmd->action;
+		_servertype = cmd->servertype;
+		_banonymous = cmd->banonymous;
+		_casttype = cmd->casttype;
 		_dtime = cmd->dtime;
 		_oldnum = cmd->oldnum;
 		_flyid = cmd->flyid;
@@ -2743,6 +2756,7 @@ public:
 	void Log()
 	{
 		LOG("--------Receive message: TradeGiftRecord---------");
+		LOG("nk = %lld", _nk);
 		LOG("vcbid = %d", _vcbid);
 		LOG("srcid = %d", _srcid);
 		LOG("toid = %d", _toid);

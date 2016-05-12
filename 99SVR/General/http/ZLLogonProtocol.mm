@@ -405,7 +405,7 @@ ZLLogonProtocol::~ZLLogonProtocol()
 ZLLogonProtocol::ZLLogonProtocol()
 {
     conn = new LoginConnection();
-
+    InitProtocolContext([kLibaryCache UTF8String]);
     conn->RegisterMessageListener(&message_listener);
     conn->RegisterLoginListener(&login_listener);
     conn->RegisterConnectionListener(&conn_listener);

@@ -26,6 +26,7 @@ private:
 protected:
 
 	void on_do_connected();
+	void on_tick(time_t ctime);
 	void on_dispatch_message(void* msg);
 
 public:

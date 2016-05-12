@@ -31,9 +31,6 @@
         }
         
     }];
-    
-    
-    
 }
 
 
@@ -94,9 +91,9 @@
             block(login.text);
         }
     }];
-    [alert addAction:requestAction];
-    [alert addAction:canAction];
     [alert addAction:okAction];
+    [alert addAction:canAction];
+    [alert addAction:requestAction];
     dispatch_async(dispatch_get_main_queue(), ^{
         [senderWeak presentViewController:alert animated:YES completion:nil];
     });

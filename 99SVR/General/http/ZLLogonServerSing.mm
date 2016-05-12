@@ -22,6 +22,16 @@
 
 DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
 
+- (void)serverInit
+{
+    if(protocol==NULL)
+    {
+        protocol = new ZLLogonProtocol();
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeProtocol)
+                                                     name:MESSAGE_LOGIN_PROTOCOL_DISCONNECT_VC object:nil];
+    }
+}
+
 - (void)loginSuccess:(NSString *)username pwd:(NSString *)password
 {
     if(protocol==NULL)

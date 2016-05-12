@@ -27,6 +27,7 @@
     int                             pip_fd[2];
     UInt32                          mNumPacketsToRead;
 }
+
 @property AudioQueueRef mQueue;
 
 -(id)init;

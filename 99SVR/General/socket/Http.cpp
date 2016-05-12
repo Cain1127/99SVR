@@ -123,6 +123,7 @@ void Http::build_request(string& req, const char* host, const char* url_tail, Re
 	if (method == HTTP_GET)
 	{
 		build_param(req, param);
+		LOG("req:%s", req.c_str());
 	}
 	req += " HTTP/1.0\r\n";
 	req += string("Host: ") + host + "\r\n";
@@ -144,7 +145,7 @@ void Http::build_request(string& req, const char* host, const char* url_tail, Re
 		req += "\r\n";
 	}
 
-	//LOG("req:%s", req.c_str());
+
 }
 
 char* Http::request(const char* host, short port, const char* url_tail, RequestParamter* param)
