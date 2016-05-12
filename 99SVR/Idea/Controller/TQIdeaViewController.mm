@@ -53,6 +53,12 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
     //添加更新专家观点的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newIdeaNotifi:) name:MESSAGE_TQIdeaView_NewNotifi_VC object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
+    if(_dataSource.aryModel.count==0)
+    {
+        [self.tableView.gifHeader beginRefreshing];
+    }
 
     [self setTitleText:@"专家观点"];
     
@@ -72,11 +78,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
-    if(_dataSource.aryModel.count==0)
-    {
-        [self.tableView.gifHeader beginRefreshing];
-    }
+    
     RoomViewController *roomView = [RoomViewController sharedRoomViewController];
     if (roomView.room)
     {
@@ -91,7 +93,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 /**新的专家观点通知*/
@@ -102,62 +104,67 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 - (void)loadViewPoint:(NSNotification *)notify{
+    
     NSDictionary *parameters = notify.object;
-    @WeakObj(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak.tableView hideToastActivity];
-        [selfWeak.tableView.header endRefreshing];
-    });
-    int code = [parameters[@"code"] intValue];
-    NSArray *aryIndex = parameters[@"model"];
-    if (code!=1 && _dataSource.aryModel.count ==0)
-    {
-//        [self showErrorViewInView:_tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
-//            Loading_Bird_Show(selfWeak.tableView);
-//            [selfWeak.tableView.header beginRefreshing];
-//        }];
-    }
-    else if (aryIndex.count==0 && code==1 && _dataSource.aryModel.count ==0 )
-    {
-//        [self showEmptyViewInView:_tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
-//            Loading_Bird_Show(selfWeak.tableView);
-//            [selfWeak.tableView.header beginRefreshing];
-//        }];
-    }
-    else
-    {
-        [self hideEmptyViewInView:_tableView];
-        if (_dataSource.aryModel.count>0)
-        {
-            NSMutableArray *aryAll = [NSMutableArray array];
-            [aryAll addObjectsFromArray:_dataSource.aryModel];
-            for (TQIdeaModel *model in aryIndex) {
-                [aryAll addObject:model];
-            }
-            _dataSource.aryModel = aryAll;
-        }
-        else
-        {
-            _dataSource.aryModel = aryIndex;
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @StrongObj(self)
-            if ([self.tableView.header isRefreshing]) {
-                [self.tableView.header endRefreshing];
-            }else{
-                [self.tableView.footer endRefreshing];
-            }
-            if (self.nCurrent != self.dataSource.aryModel.count && self.dataSource.aryModel.count!=0)
-            {
-                [self.tableView.footer setHidden:YES];
-            }
-            else
-            {
-                [self.tableView.footer setHidden:NO];
-            }
-            [self.tableView reloadData];
-        });
-    }
+
+    DLog(@"--------------------😍-------------😍%@",parameters);
+    
+//    NSDictionary *parameters = notify.object;
+//    @WeakObj(self)
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [selfWeak.tableView hideToastActivity];
+//        [selfWeak.tableView.header endRefreshing];
+//    });
+//    int code = [parameters[@"code"] intValue];
+//    NSArray *aryIndex = parameters[@"model"];
+//    if (code!=1 && _dataSource.aryModel.count ==0)
+//    {
+////        [self showErrorViewInView:_tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
+////            Loading_Bird_Show(selfWeak.tableView);
+////            [selfWeak.tableView.header beginRefreshing];
+////        }];
+//    }
+//    else if (aryIndex.count==0 && code==1 && _dataSource.aryModel.count ==0 )
+//    {
+////        [self showEmptyViewInView:_tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
+////            Loading_Bird_Show(selfWeak.tableView);
+////            [selfWeak.tableView.header beginRefreshing];
+////        }];
+//    }
+//    else
+//    {
+//        [self hideEmptyViewInView:_tableView];
+//        if (_dataSource.aryModel.count>0)
+//        {
+//            NSMutableArray *aryAll = [NSMutableArray array];
+//            [aryAll addObjectsFromArray:_dataSource.aryModel];
+//            for (TQIdeaModel *model in aryIndex) {
+//                [aryAll addObject:model];
+//            }
+//            _dataSource.aryModel = aryAll;
+//        }
+//        else
+//        {
+//            _dataSource.aryModel = aryIndex;
+//        }
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            @StrongObj(self)
+//            if ([self.tableView.header isRefreshing]) {
+//                [self.tableView.header endRefreshing];
+//            }else{
+//                [self.tableView.footer endRefreshing];
+//            }
+//            if (self.nCurrent != self.dataSource.aryModel.count && self.dataSource.aryModel.count!=0)
+//            {
+//                [self.tableView.footer setHidden:YES];
+//            }
+//            else
+//            {
+//                [self.tableView.footer setHidden:NO];
+//            }
+//            [self.tableView reloadData];
+//        });
+//    }
 }
 
 -(void)updateRefresh
