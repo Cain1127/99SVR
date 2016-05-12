@@ -15,7 +15,7 @@
 #include <cstring>
 
 
-#define HTTP_API "http://testapi.99ducaijing.cn/api.php"
+#define HTTP_API "http://testphp.99ducaijing.cn/api.php"
 #define HTTP_IMG_SVR "http://testphp.99ducaijing.cn:8081"
 #define HTTP_ICON_SVR "http://testphp.99ducaijing.cn:8081"
 
