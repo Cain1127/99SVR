@@ -162,7 +162,7 @@ static NSUInteger const AboutFooterViewHeight = 60; // 底部高度
     } else if (row == 1){
         // 去评分
         NSString *str = [NSString stringWithFormat:
-                         @"itms-apps://itunes.apple.com/cn/app/id%@?mt=8", @""];
+                         @"itms-apps://itunes.apple.com/cn/app/id%@?mt=8", @"1074104620"];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }
 }

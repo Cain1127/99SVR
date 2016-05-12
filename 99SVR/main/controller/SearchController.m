@@ -273,8 +273,8 @@
             _aryResult = [_allDatas filteredArrayUsingPredicate:pre];
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
             for (RoomHttp *room in _aryResult) {
-                [dictionary setObject:room forKey:room.teamid];
-            }
+                [dictionary setObject:room forKey:room.roomid];
+            };
             _aryResult = [dictionary allValues];
             if (_aryResult.count) {
                 [self hideEmptyViewInView:_searchResultsTable];

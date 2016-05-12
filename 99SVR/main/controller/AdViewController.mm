@@ -106,13 +106,14 @@ NSUInteger secondsCountDown = 3;//倒计时秒数
 // 广告跳转
 -(void)adImageViewTapped:(UITapGestureRecognizer*)tapGr
 {
-    if (_timer.isValid) {
-        [_timer invalidate];
-    }
-    _timer=nil;
-    
     SplashModel *splash = [SplashTool get];
-    if (splash.url) {
+    if (splash.url&&splash.url.length > 0) {
+        
+        if (_timer.isValid) {
+            [_timer invalidate];
+        }
+        _timer=nil;
+        
         AdLinkShowViewController *adLinkShowVc = [[AdLinkShowViewController alloc] init];
         adLinkShowVc.linkShowUrl = splash.url;
         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
