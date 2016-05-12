@@ -20,8 +20,8 @@
 Socket g_socket;
 
 char cache_path[256] = { 0 };
-//static const char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,lbs3.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";//,112.25.230.249:2222
-static const char* lbs0 = "testlbs.99ducaijing.cn:2222";
+static const char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,lbs3.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";//,112.25.230.249:2222
+//static const char* lbs0 = "testlbs.99ducaijing.cn:2222";//cs
 static char lbs_from_file[256] = {0};
 static char lbs_from_http[256] = {0};
 static char lbs_from_set[256] = {0};
@@ -351,8 +351,8 @@ void Connection::connect_from_lbs_asyn()
 	connect_port = 0;
 
 
-	connect("121.12.118.32", 7301);
-	return;
+//	connect("121.12.118.32", 7301);
+//	return;
 
 	if (!is_set_lbs)
 	{

@@ -14,8 +14,8 @@
 #include "proto_err.h"
 #include <cstring>
 
-
-#define HTTP_API "http://testphp.99ducaijing.cn/api.php"
+#define HTTP_API "http://phpapi.99ducaijing.cn/api.php"//zs
+//#define HTTP_API "http://testphp.99ducaijing.cn/api.php"//cs
 #define HTTP_IMG_SVR "http://testphp.99ducaijing.cn:8081"
 #define HTTP_ICON_SVR "http://testphp.99ducaijing.cn:8081"
 
