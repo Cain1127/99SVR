@@ -65,7 +65,7 @@
 
 - (void)createText
 {
-    CGRect frame = Rect(10.0f, 84.0f, kScreenWidth - 100.0f, 30.0f);
+    CGRect frame = Rect(10.0f, 84.0f, kScreenWidth - 130.0f, 30.0f);
     if (!banding) {
         [self createLabelWithRect:Rect(10.0f, 84.0f, 80.0f, 30.0f)];
         _txtName = [self createTextField:Rect(10.0f, 84.0f, kScreenWidth - 20.0f, 30.0f)];
@@ -84,18 +84,19 @@
     [_txtCode setKeyboardType:UIKeyboardTypeNumberPad];
     
     _btnCode = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
-    [_btnCode setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+//    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+//    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    [_btnCode setTitleColor:kNavColor forState:UIControlStateNormal];
     [_btnCode setTitleColor:kNavColor forState:UIControlStateHighlighted];
     [_btnCode setTitle:@"获取验证码" forState:UIControlStateNormal];
-    [self.view addSubview:_btnCode];
-    _btnCode.frame = Rect(kScreenWidth-110,_txtCode.y-3, 95, 36);
-    [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
     _btnCode.titleLabel.font = XCFONT(15);
     _btnCode.layer.masksToBounds = YES;
     _btnCode.layer.cornerRadius = 3;
-    
+    _btnCode.layer.borderColor = [UIColor grayColor].CGColor;
+    _btnCode.layer.borderWidth = 0.5;
+    [self.view addSubview:_btnCode];
+    _btnCode.frame = Rect(kScreenWidth-110,_txtCode.y-3, 95, 36);
+    [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
     
     [_txtName addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [_txtCode addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];

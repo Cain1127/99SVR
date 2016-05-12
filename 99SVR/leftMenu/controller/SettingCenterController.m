@@ -116,6 +116,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (section == 0) {
+        // 如果是第三方登录，隐藏修改密码
+        if ([UserInfo sharedUserInfo].otherLogin != 0) {
+            return 1;
+        }
+    }
     return 2;
 }
 
