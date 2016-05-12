@@ -146,12 +146,12 @@
 {
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     
-    [self createLabelWithRect:Rect(30, 8+kNavigationHeight, 80, 30)];
-    _txtName = [self createTextField:Rect(30, 8+kNavigationHeight, kScreenWidth-60, 30)];
+    [self createLabelWithRect:Rect(10, 8+kNavigationHeight, 80, 30)];
+    _txtName = [self createTextField:Rect(10, 8+kNavigationHeight, kScreenWidth-20, 30)];
     [_txtName setPlaceholder:@"请输入手机号码"];
     _txtName.leftViewImageName = @"register_mob";
     
-    [self createLabelWithRect:Rect(30, _txtName.y+50,80, 30)];
+    [self createLabelWithRect:Rect(10, _txtName.y+50,80, 30)];
     _txtCode = [self createTextField:Rect(_txtName.x, _txtName.y+50,_txtName.width-100,_txtName.height)];
     _txtCode.leftViewImageName = @"register_code";
     
@@ -160,18 +160,20 @@
     
     [_txtCode setPlaceholder:@"请输入验证码"];
     _btnCode = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    //[_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+    //[_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
     
-    [_btnCode setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+    [_btnCode setTitleColor:kNavColor forState:UIControlStateNormal];
     [_btnCode setTitleColor:kNavColor forState:UIControlStateHighlighted];
     [_btnCode setTitle:@"获取验证码" forState:UIControlStateNormal];
-    [self.view addSubview:_btnCode];
-    _btnCode.frame = Rect(_txtCode.x+_txtCode.width+5,_txtCode.y, 95, 30);
-    [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
     _btnCode.titleLabel.font = XCFONT(15);
     _btnCode.layer.masksToBounds = YES;
     _btnCode.layer.cornerRadius = 3;
+    _btnCode.layer.borderColor = [UIColor grayColor].CGColor;
+    _btnCode.layer.borderWidth = 0.5;
+    [self.view addSubview:_btnCode];
+    _btnCode.frame = Rect(_txtCode.x+_txtCode.width+5,_txtCode.y-3, 95, 36);
+    [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *btnRegister = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:btnRegister];

@@ -88,17 +88,20 @@
         frame.origin.y = _txtCode.y+50;
         
         _btnCode = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-        [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
-        [_btnCode setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+//        [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+//        [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+        [_btnCode setTitleColor:kNavColor forState:UIControlStateNormal];
         [_btnCode setTitleColor:kNavColor forState:UIControlStateHighlighted];
         [_btnCode setTitle:@"获取验证码" forState:UIControlStateNormal];
-        [self.view addSubview:_btnCode];
-        _btnCode.frame = Rect(kScreenWidth-105,_txtCode.y-3, 95, 36);
-        [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
         _btnCode.titleLabel.font = XCFONT(15);
         _btnCode.layer.masksToBounds = YES;
         _btnCode.layer.cornerRadius = 3;
+        _btnCode.layer.borderColor = [UIColor grayColor].CGColor;
+        _btnCode.layer.borderWidth = 0.5;
+        [self.view addSubview:_btnCode];
+        _btnCode.frame = Rect(kScreenWidth-105,_txtCode.y-3, 95, 36);
+        [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
+        
         frame.origin.y = _txtCode.y+50;
     }
     else
@@ -213,6 +216,7 @@
     parameters = @{@"action":@(3),@"pnum":_mobile,@"key":strMd5,@"client":@(2)};
     @WeakObj(self)
     @WeakObj(_btnCode)
+    
     [BaseService postJSONWithUrl:kBand_mobile_getcode_URL parameters:parameters success:^(id responseObject)
      {
          [selfWeak.view hideToastActivity];

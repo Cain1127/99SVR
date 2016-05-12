@@ -54,7 +54,7 @@
 
 - (void)initView
 {
-    CGRect frame = Rect(30, 50+64, kScreenWidth-160, 30);
+    CGRect frame = Rect(30, 50+64, kScreenWidth-130, 30);
     
     [self createLabelWithRect:Rect(10, 20+64, 80, 30)];
     _txtName = [self createTextField:Rect(10, 20+64, kScreenWidth-20, 30)];
@@ -72,21 +72,24 @@
     [_txtCode setKeyboardType:UIKeyboardTypeNumberPad];
     
     _btnCode = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
-    [_btnCode setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+//    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+//    [_btnCode setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    [_btnCode setTitleColor:kNavColor forState:UIControlStateNormal];
     [_btnCode setTitleColor:kNavColor forState:UIControlStateHighlighted];
     [_btnCode setTitle:@"获取验证码" forState:UIControlStateNormal];
-    [self.view addSubview:_btnCode];
-    _btnCode.frame = Rect(kScreenWidth-110,_txtCode.y-3, 95, 36);
-    [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
     _btnCode.titleLabel.font = XCFONT(15);
     _btnCode.layer.masksToBounds = YES;
     _btnCode.layer.cornerRadius = 3;
+    _btnCode.layer.borderColor = [UIColor grayColor].CGColor;
+    [_btnCode addTarget:self action:@selector(getAuthCode) forControlEvents:UIControlEventTouchUpInside];
+    _btnCode.layer.borderWidth = 0.5;
+    [self.view addSubview:_btnCode];
+    _btnCode.frame = Rect(kScreenWidth-110,_txtCode.y-3, 95, 36);
+
     frame = Rect(30, _txtCode.y+50, kScreenWidth-60, 20);
     [self createLabelWithRect:Rect(10, _txtCode.y+50,80, 30)];
     _txtPwd = [self createTextField:Rect(_txtName.x,_txtCode.y+50,_txtName.width,_txtCode.height)];
-    [_txtPwd setPlaceholder:@"请输入密码"];
+    [_txtPwd setPlaceholder:@"请输入登录密码"];
     _txtPwd.leftViewImageName = @"register_pwd";
     _txtPwd.isShowTextBool =YES;
     [_txtPwd setKeyboardType:UIKeyboardTypeASCIICapable];
@@ -251,6 +254,8 @@
          {
              //没绑定过的，直接绑定，然后返回
              [selfWeak.navigationController popToRootViewControllerAnimated:YES];
+             // 通知个人中心页更新
+             [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
              [ProgressHUD showSuccess:@"绑定新手机成功"];
          }
          else
