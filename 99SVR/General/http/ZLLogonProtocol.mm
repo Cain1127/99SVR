@@ -36,6 +36,15 @@ int nRoom_fans_info;
 int nRoom_is_collet;
 RoomInfo *currentRoom;
 
+void ZLConnectionListerner::OnConnectError(int err_code)
+{
+    
+}
+void ZLConnectionListerner::OnConnected()
+{
+    
+}
+
 void ZLPushListener::OnConfChanged(int version)
 {
     DLog(@"金币发生变化!");
