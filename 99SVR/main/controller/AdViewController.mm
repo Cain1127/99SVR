@@ -55,7 +55,11 @@ NSUInteger secondsCountDown = 3;//倒计时秒数
     adImageView.clipsToBounds = YES;
     adImageView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.80);
     adImageView.userInteractionEnabled = YES;
-    [adImageView sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"start-mascot"]];
+    if (!str||str.length == 0) {
+        adImageView.image = [UIImage imageNamed:@"start-mascot"];
+    } else{
+        [adImageView sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage new]];
+    }
     UITapGestureRecognizer *tapGr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(adImageViewTapped:)];
     tapGr.cancelsTouchesInView = NO;
     [adImageView addGestureRecognizer:tapGr];
