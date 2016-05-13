@@ -18,6 +18,8 @@
 #import "RoomHttp.h"
 #import "XPrivateService.h"
 #import "ZLPrivateDataSource.h"
+#import "LoginViewController.h"
+#import "UIAlertView+Block.h"
 @interface XTeamPrivateController()<DTAttributedTextContentViewDelegate,PrivateDelegate>
 {
     
@@ -116,14 +118,30 @@
 
 - (void)buyprivate
 {
-    TQPurchaseViewController *control = [[TQPurchaseViewController alloc] init];
-    control.stockModel = [[StockDealModel alloc]init];
-    control.stockModel.teamicon = _room.teamicon;
-    control.stockModel.teamid = _room.teamid;
-    control.stockModel.teamname = _room.teamname;
-    control.stockModel.teamicon = _room.teamicon;
-    [[self viewController].navigationController pushViewController:control animated:YES];
+    
+    if (KUserSingleton.nType ==1 && KUserSingleton.bIsLogin) {
+        
+        TQPurchaseViewController *control = [[TQPurchaseViewController alloc] init];
+        control.stockModel = [[StockDealModel alloc]init];
+        control.stockModel.teamicon = _room.teamicon;
+        control.stockModel.teamid = _room.teamid;
+        control.stockModel.teamname = _room.teamname;
+        control.stockModel.teamicon = _room.teamicon;
+        [[self viewController].navigationController pushViewController:control animated:YES];
 
+    }else{
+        
+        WeakSelf(self);
+        
+        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:[self viewController] withCancleBtnStr:@"取消" withOtherBtnStr:@"登录" withMessage:@"您未登录,登录后兑换" completionCallback:^(NSInteger index) {
+           
+            if (index==1) {
+                LoginViewController *loginVc = [[LoginViewController alloc]init];
+                [[weakSelf viewController].navigationController pushViewController:loginVc animated:YES];
+            }
+
+        }];
+    }
 }
 
 - (void)setupTableView
