@@ -17,6 +17,7 @@
 #import "StockDealViewController.h"
 #import "RegisterTextField.h"
 #import "ZLMeTeamPrivate.h"
+#import "RoomViewController.h"
 #import "TQMeCustomizedViewController.h"
 @interface BandingMobileViewController ()<UITextFieldDelegate>
 {
@@ -381,6 +382,17 @@
             break;
         }
     }
+    
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:[RoomViewController class]]) {//团队的vip详情页面
+            backotherVCBool =  YES;
+            stockDealVC = viewController;
+            break;
+        }
+    }
+    
+    
+    
     
     if (backotherVCBool) {//跳转到到股票详情视图
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
