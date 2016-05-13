@@ -119,7 +119,7 @@
  */
 - (void)attrDescClick:(UIButton *)button
 {
-    // 清空选中边框，显示分割线
+        
     _selectButton.selected = NO;
     UIView *lineView = (UIView *)[_selectButton viewWithTag:_selectButton.tag + 100];
     if (lineView) {
@@ -129,6 +129,7 @@
     // 显示选中边框，隐藏分割线
     UIButton *selectbutton = [self viewWithTag:button.tag];
     selectbutton.selected = YES;
+    
     UIView *nowLineView = (UIView *)[selectbutton viewWithTag:button.tag + 100];
     if (nowLineView) {
         nowLineView.hidden = YES;
