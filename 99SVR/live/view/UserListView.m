@@ -37,23 +37,6 @@
         [self setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
     } completion:^(BOOL finished) {
         self.hidden = YES;
-        [self removeFromSuperview];
-    }];
-}
-
-- (void)setBShow:(BOOL)bShow
-{
-    _bShow = bShow;
-    [UIView animateWithDuration:0.5 animations:^{
-        if (_bShow) {
-            self.frame = Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight);
-        }
-        else
-        {
-            self.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
-        }
-    } completion:^(BOOL finished) {
-        
     }];
 }
 

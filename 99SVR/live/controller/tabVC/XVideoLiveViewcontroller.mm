@@ -228,6 +228,7 @@
     
     [self initTableView];
     [self initSlideView];
+    
     [self.view addSubview:_menuView];
     self.menuView.DidSelectSliderIndex = ^(NSInteger index){
         NSLog(@"模块%ld",(long)index);
@@ -243,21 +244,25 @@
     
     //发送消息按钮
     _giftView = [[GiftView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
-//    [self.view addSubview:_giftView];
+    [self.parentViewController.view addSubview:_giftView];
     _giftView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
+    _giftView.hidden = YES;
     _giftView.delegate = self;
     
     _listView = [[UserListView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight) array:nil];
-//    [self.view addSubview:_listView];
+    [self.parentViewController.view addSubview:_listView];
     _listView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
+    _listView.hidden = YES;
     _listView.delegate = self;
 
     _inputView = [[ChatView alloc] initWithFrame:Rect(0,0, kScreenWidth,kScreenHeight)];
-//    [self.view addSubview:_inputView];
+    [self.parentViewController.view addSubview:_inputView];
     _inputView.hidden = YES;
     _inputView.delegate = self;
     
     _questionView = [[XLiveQuestionView alloc] initWithFrame:Rect(0,0,kScreenWidth,self.view.height)];
+    [self.parentViewController.view addSubview:_questionView];
+    _questionView.hidden = YES;
     _questionView.delegate = self;
 }
 
@@ -677,7 +682,6 @@
                 [UIView animateWithDuration:0.5 animations:
                  ^{
                      _inputView.hidden = NO;
-                     [self.parentViewController.view addSubview:_inputView];
                      [_inputView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
                  } completion:^(BOOL finished) {}];
             }
@@ -693,7 +697,11 @@
             break;
         case 5://显示成员
         {
-            _listView.bShow = YES;
+            [UIView animateWithDuration:0.5 animations:
+             ^{
+                 _listView.hidden = NO;
+                 [_listView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+             } completion:^(BOOL finished) {}];
         }
             break;
         case 3://显示礼物
@@ -703,7 +711,6 @@
                 [UIView animateWithDuration:0.5 animations:
                 ^{
                     _giftView.hidden = NO;
-                    [self.parentViewController.view addSubview:_giftView];
                     [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
                 } completion:^(BOOL finished) {}];
             }
@@ -728,7 +735,6 @@
                 [_giftView updateGoid];
                 [UIView animateWithDuration:0.5 animations:^{
                     _questionView.hidden = NO;
-                    [self.parentViewController.view addSubview:_questionView];
                     [_questionView setFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
                     NSString *strmsg = [NSString stringWithFormat:@"温馨提示:您还剩%d次免费提问的机会，问股仅供参考，不构成投资建议",_question_times];
                     _questionView.lblTimes.text = strmsg;
@@ -805,9 +811,13 @@
         RoomUser *_user = [currentRoom.aryUser objectAtIndex:nIndex];
         if(_user.m_nUserId != [UserInfo sharedUserInfo].nUserId)
         {
-            _listView.bShow = NO;
+            [_listView setGestureHidden];
             toUser = _user.m_nUserId;
             [_inputView setChatInfo:_user];
+        }
+        else
+        {
+            [ProgressHUD showError:@"不能@自己"];
         }
     }
 }
