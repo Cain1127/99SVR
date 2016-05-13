@@ -29,20 +29,25 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     [UIImageFactory createBtnImage:@"home_play_icon" btn:_btnPlay state:UIControlStateNormal];
     _btnPlay.hidden=YES;
     [_btnPlay addTarget:self action:@selector(showPlayInfo) forControlEvents:UIControlEventTouchUpInside];
-    
     return self;
 }
 
 - (void)hidenPlay
 {
+    self.x = kScreenWidth-55;
+    _btnPlay.x = 0;
     _playView.hidden = YES;
     _btnPlay.hidden = NO;
+
 }
 
 - (void)showPlayInfo
 {
+    self.x = 0;
+    _btnPlay.frame = Rect(kScreenWidth-55, 8, 44, 44);
     _playView.hidden = NO;
     _btnPlay.hidden = YES;
+
 }
 
 - (void)exitPlay
@@ -54,6 +59,7 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
 
 - (void)setRoom:(RoomHttp *)room
 {
+    _btnPlay.frame = Rect(kScreenWidth-55, 8, 44, 44);
     [_playView.lblName setText:room.teamname];
     [_playView.lblNumber setText:room.teamid];
     [_playView.btnQuery setTitle:room.onlineusercount forState:UIControlStateNormal];
@@ -157,6 +163,9 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
 
 - (void)goPlayInfo
 {
+    
+    NSLog(@"goPlayInfo");
+    
     if(_delegate && [_delegate respondsToSelector:@selector(gotoPlay)])
     {
         [_delegate gotoPlay];
@@ -165,6 +174,7 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
 
 - (void)addEvent:(UIButton *)sender
 {
+    
     if (sender.tag==19 && _delegate && [_delegate respondsToSelector:@selector(exitPlay)]) {
         [_delegate exitPlay];
     }else if(sender.tag==20 && _delegate && [_delegate respondsToSelector:@selector(hidenPlay)])
