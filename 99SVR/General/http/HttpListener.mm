@@ -254,7 +254,6 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, vecto
     BOOL isShowRecal = currLevelId >= minVipLevel ? YES : NO;
     NSMutableDictionary *muDic = [NSMutableDictionary dictionary];
     
-    
     //股票头部数据
     StockDealModel *headerModel = [[StockDealModel alloc] initWithStockDealHeaderData:&profit];
     headerModel.minVipLevel = IntTransformIntToStr(minVipLevel);
@@ -357,6 +356,13 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, vecto
             StockDealModel *transactionModel = [[StockDealModel alloc]initWithStockDealBusinessRecoreData:transaction];
             [transArray addObject:transactionModel];
         }
+        
+        if (stocks.size()==0) {
+            StockDealModel *transactionModel = [[StockDealModel alloc]init];
+            transactionModel.teamname = @"空的数据";
+            [transArray addObject:transactionModel];
+        }
+
     }else{
         
         StockDealModel *model = [[StockDealModel alloc]init];
@@ -372,6 +378,13 @@ void OperateStockAllDetailListener::onResponse(OperateStockProfit& profit, vecto
             StockDealModel *operateStocksModel = [[StockDealModel alloc]initWithStockDealWareHouseRecoreData:operateStocks];
             [stocksArray addObject:operateStocksModel];
         }
+        
+        if (stocks.size()==0) {
+            StockDealModel *transactionModel = [[StockDealModel alloc]init];
+            transactionModel.teamname = @"空的数据";
+            [stocksArray addObject:transactionModel];
+        }
+    
         
     }else{
         StockDealModel *model = [[StockDealModel alloc]init];

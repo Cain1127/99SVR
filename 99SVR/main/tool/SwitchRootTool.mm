@@ -47,6 +47,7 @@
     // 当前软件的版本号（从Info.plist中获得）
     NSString *currentVersion = [NSBundle mainBundle].infoDictionary[bundleVersionKey];
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    DLog(@"currentVersion:%@-----lastVersion:%@",currentVersion,lastVersion);
     if ([currentVersion isEqualToString:lastVersion]) { // 版本号相同：这次打开和上次打开的是同一个版本
         app.window.rootViewController = [[TabBarController alloc] init];
     } else { // 这次打开的版本和上一次不一样，显示新特性

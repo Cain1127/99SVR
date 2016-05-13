@@ -54,8 +54,10 @@
         
         height = _isVipBool? STORCK_Deal_BusinessRecordCell_VIP_H: STORCK_Deal_BusinessRecordCell_NotVIP_H;
     }else{
-        
-        height = _isVipBool? STORCK_Deal_WareHouseRecordCell_VIP_H: STORCK_Deal_WareHouseRecordCell_NotVIP_H;
+        StockDealModel *model = _dataArray[indexPath.section][indexPath.row];
+        //当name是空的数据 则显示暂无数据
+        NSString *name = model.teamname;
+        height = _isVipBool? ([name isEqualToString:@"空的数据"] ? STORCK_Deal_BusinessRecordCell_VIP_H : STORCK_Deal_WareHouseRecordCell_VIP_H): STORCK_Deal_WareHouseRecordCell_NotVIP_H;
     }
     return height;
 }

@@ -20,29 +20,40 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
 {
     self = [super init];
     _playView = [[PlayCurrentView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 60)];
-    _btnPlay = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnPlay = [[UIImageView alloc]init];
     _btnPlay.hidden = YES;
     _playView.delegate = self;
     [self addSubview:_playView];
     [self addSubview:_btnPlay];
     _btnPlay.frame = Rect(kScreenWidth-55, 8, 44, 44);
-    [UIImageFactory createBtnImage:@"home_play_icon" btn:_btnPlay state:UIControlStateNormal];
+//    [UIImageFactory createBtnImage:@"home_play_icon" btn:_btnPlay state:UIControlStateNormal];
+    _btnPlay.image = [UIImage imageNamed:@"home_play_icon"];
     _btnPlay.hidden=YES;
-    [_btnPlay addTarget:self action:@selector(showPlayInfo) forControlEvents:UIControlEventTouchUpInside];
-    
+    WeakSelf(self);
+    [_btnPlay clickWithBlock:^(UIGestureRecognizer *gesture) {
+        [weakSelf showPlayInfo];
+    }];
+//    self.backgroundColor = [UIColor yellowColor];
+//    [_btnPlay addTarget:self action:@selector(showPlayInfo) forControlEvents:UIControlEventTouchUpInside];
     return self;
 }
 
 - (void)hidenPlay
 {
+    self.x = kScreenWidth-55;
+    _btnPlay.x = 0;
     _playView.hidden = YES;
     _btnPlay.hidden = NO;
+
 }
 
 - (void)showPlayInfo
 {
+    self.x = 0;
+    _btnPlay.frame = Rect(kScreenWidth-55, 8, 44, 44);
     _playView.hidden = NO;
     _btnPlay.hidden = YES;
+
 }
 
 - (void)exitPlay
@@ -54,6 +65,18 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
 
 - (void)setRoom:(RoomHttp *)room
 {
+    
+    if (_playView.isHidden) {
+        
+        self.x = kScreenWidth-55;
+        _btnPlay.x = 0;
+    }else{
+        self.x = 0;
+        _btnPlay.frame = Rect(kScreenWidth-55, 8, 44, 44);
+    }
+    
+    [self startBtnPlayAnimating];
+    
     [_playView.lblName setText:room.teamname];
     [_playView.lblNumber setText:room.teamid];
     [_playView.btnQuery setTitle:room.onlineusercount forState:UIControlStateNormal];
@@ -81,6 +104,19 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     }
     return nil;
 }
+
+
+-(void)startBtnPlayAnimating{
+    NSMutableArray *images = [NSMutableArray array];
+    for (int i=1; i<=10; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"play_icon_100000%d",i]];
+        [images addObject:image];
+    }
+    _btnPlay.animationImages = images;
+    _btnPlay.animationDuration= 1;
+    [_btnPlay startAnimating];
+}
+
 
 @end
 
@@ -149,6 +185,9 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
 
 - (void)goPlayInfo
 {
+    
+    NSLog(@"goPlayInfo");
+    
     if(_delegate && [_delegate respondsToSelector:@selector(gotoPlay)])
     {
         [_delegate gotoPlay];
@@ -157,6 +196,7 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
 
 - (void)addEvent:(UIButton *)sender
 {
+    
     if (sender.tag==19 && _delegate && [_delegate respondsToSelector:@selector(exitPlay)]) {
         [_delegate exitPlay];
     }else if(sender.tag==20 && _delegate && [_delegate respondsToSelector:@selector(hidenPlay)])

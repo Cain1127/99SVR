@@ -8,7 +8,6 @@
 
 #import "XTeamPrivateController.h"
 #import <DTCoreText/DTCoreText.h>
-#import "AlertFactory.h"
 #import "NNSVRViewController.h"
 #import "TQPurchaseViewController.h"
 #import "XPrivateDetailViewController.h"
@@ -19,6 +18,8 @@
 #import "RoomHttp.h"
 #import "XPrivateService.h"
 #import "ZLPrivateDataSource.h"
+#import "LoginViewController.h"
+#import "UIAlertView+Block.h"
 @interface XTeamPrivateController()<DTAttributedTextContentViewDelegate,PrivateDelegate>
 {
     
@@ -70,6 +71,8 @@
                                                  name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:)
                                                  name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+
 }
 
 - (void)removeNotify
@@ -115,8 +118,9 @@
 
 - (void)buyprivate
 {
-    if(KUserSingleton.nType == 1 && KUserSingleton.bIsLogin)
-    {
+    
+    if (KUserSingleton.nType ==1 && KUserSingleton.bIsLogin) {
+        
         TQPurchaseViewController *control = [[TQPurchaseViewController alloc] init];
         control.stockModel = [[StockDealModel alloc]init];
         control.stockModel.teamicon = _room.teamicon;
@@ -124,14 +128,20 @@
         control.stockModel.teamname = _room.teamname;
         control.stockModel.teamicon = _room.teamicon;
         [[self viewController].navigationController pushViewController:control animated:YES];
-    }
-    else
-    {
-        [AlertFactory createLoginAlert:[self viewController] block:^{
-            
+
+    }else{
+        
+        WeakSelf(self);
+        
+        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:[self viewController] withCancleBtnStr:@"取消" withOtherBtnStr:@"登录" withMessage:@"您未登录,登录后兑换" completionCallback:^(NSInteger index) {
+           
+            if (index==1) {
+                LoginViewController *loginVc = [[LoginViewController alloc]init];
+                [[weakSelf viewController].navigationController pushViewController:loginVc animated:YES];
+            }
+
         }];
     }
-
 }
 
 - (void)setupTableView
@@ -162,10 +172,12 @@
             if (model.isOpen)
             {
                 self.buyView.hidden = YES;
+                self.tableView.height = self.height;
             }
             else
             {
                 self.buyView.hidden = NO;
+                self.tableView.height = self.height - 60;
             }
         }
         [self.tableView reloadData];
@@ -174,9 +186,22 @@
     return headerView;
 }
 
+#pragma mark 刷新数据
+- (void)refreshData:(NSNotification *)notify{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+    Loading_Cup_Show(self.tableView);
+    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+    });
+}
+
 - (void)loadPrivate:(NSNotification *)notify
 {
     NSDictionary *dict = notify.object;
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        Loading_Hide(self.tableView);
+        
     if ([dict isKindOfClass:[NSDictionary class]]) {
         int code = [dict[@"code"] intValue];
         if (code==1)
@@ -206,7 +231,6 @@
                 self.privateView.privateVipArray = muAryTemp;
             }
             @WeakObj(self)
-            dispatch_async(dispatch_get_main_queue(), ^{
                 @StrongObj(self)
                 self.dataSource.selectIndex = 1;
                 if (self.dataSource.aryVIP.count>0) {
@@ -214,17 +238,21 @@
                     if (model.isOpen)
                     {
                         self.buyView.hidden = YES;
+                        self.tableView.height = self.height;
                     }
                     else
                     {
                         self.buyView.hidden = NO;
+                        self.tableView.height = self.height - 60;
+
                     }
                 }
                 [self.tableView reloadData];
-            });
             return;
         }
     }
+    });
+
 }
 
 

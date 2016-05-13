@@ -250,7 +250,8 @@
 
 - (void)initDecode
 {
-    if (!_openAL) {
+    if (!_openAL)
+    {
         _openAL = [[OpenAL alloc] init];
     }
     [_openAL initOpenAL];
@@ -296,7 +297,7 @@
     _media.nFall = 0;
     _playing = NO;
     [_glView hideToastActivity];
-    [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
+//    [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
     @WeakObj(self)
     gcd_main_safe(^{
          [selfWeak setDefaultImg];
@@ -384,7 +385,7 @@
     [self updateDownHUD];
     SVRMediaClient *svrClient = [SVRMediaClient sharedSVRMediaClient];
     svrClient.delegate = self;
-    [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
+//    [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
     
     _downHUD.alpha = 0;
     if (_roomIsCollet)
@@ -598,10 +599,11 @@
     _roomid = roomid;
     _nuserid = userid;
     DLog(@"userid:%d--roomid:%d",_nuserid,_roomid);
-    if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:1801124 roomId:_roomid])
-    {
-        DLog(@"开启接收码流失败");
-    }
+    
+//    if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:1801124 roomId:_roomid])
+//    {
+//        DLog(@"开启接收码流失败");
+//    }
     dispatch_async(dispatch_get_global_queue(0, 0),
        ^{
            [__self checkMedia];

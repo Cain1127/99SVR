@@ -48,15 +48,26 @@
     //不是vip的view
     self.notVipView = [[StockNotVipView alloc]initWithFrame:(CGRect){0,0,ScreenWidth,100}];
     [self.bakImageView addSubview:self.notVipView];
-
-
+    
+    //空数据的提示label
+    self.nullLabe = [[UILabel alloc]init];
+    self.nullLabe.font = Font_15;
+    self.nullLabe.textColor = COLOR_Text_Gay;
+    self.nullLabe.textAlignment = NSTextAlignmentCenter;
+    [self.bakImageView addSubview:self.nullLabe];
+    [self.nullLabe mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@0);
+        make.bottom.equalTo(@0);
+        make.left.equalTo(@0);
+        make.right.equalTo(@0);
+    }];
 }
 
 
 -(void)setCellDataWithModel:(id)modelObject withIsVip:(BOOL)vipBool withCellId:(NSString *)cellId withStockHeaderModel:(StockDealModel *)headerModel{
     
     if ([cellId isEqualToString:@"section0"]) {
-        
+        self.nullLabe.hidden = YES;
         self.tradeLabeView.hidden = YES;
         self.wareHouseViw.hidden = YES;
         self.chartView.hidden = NO;
@@ -71,24 +82,35 @@
         
         StockDealModel *model = modelObject;
         self.chartView.hidden =YES;
-
+        self.nullLabe.hidden = YES;
         self.wareHouseViw.hidden = YES;
         self.lineView.hidden = YES;
         
-        if (vipBool) {
-            self.tradeLabeView.hidden = NO;
+        if ([model.teamname isEqualToString:@"空的数据"]) {
+            self.nullLabe.hidden = NO;
             self.notVipView.hidden = YES;
-            NSString *leftAttText = [NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count];
-            NSString *leftText = model.count;
-            NSString *rightAttText = [NSString stringWithFormat:@"%@",model.time];
-            NSString *rightText = @"";
-            [self.tradeLabeView setLeftLabAttText:leftAttText withLeftAttTextColor:COLOR_Text_Black withLeftText:leftText withLeftTextColor:COLOR_Text_BigBlack rightLabAttText:rightAttText withRightAttTextColor:COLOR_Text_Black withRightText:rightText withRightTextColor:COLOR_Text_BigBlack];
+            self.nullLabe.text = @"暂无交易动态";
             
         }else{
-            self.tradeLabeView.hidden = YES;
-            self.notVipView.hidden = NO;
-            self.notVipView.type = StockNotVipViewType_Business;
+            self.nullLabe.hidden = YES;
+            if (vipBool) {
+                self.tradeLabeView.hidden = NO;
+                self.notVipView.hidden = YES;
+                NSString *leftAttText = [NSString stringWithFormat:@"%@ %@ %@ 股",model.buytype,model.stockname,model.count];
+                NSString *leftText = model.count;
+                NSString *rightAttText = [NSString stringWithFormat:@"%@",model.time];
+                NSString *rightText = @"";
+                [self.tradeLabeView setLeftLabAttText:leftAttText withLeftAttTextColor:COLOR_Text_Black withLeftText:leftText withLeftTextColor:COLOR_Text_BigBlack rightLabAttText:rightAttText withRightAttTextColor:COLOR_Text_Black withRightText:rightText withRightTextColor:COLOR_Text_BigBlack];
+                
+            }else{
+                self.tradeLabeView.hidden = YES;
+                self.notVipView.hidden = NO;
+                self.notVipView.type = StockNotVipViewType_Business;
+            }
+            
         }
+        
+        
         
         
     }else{
@@ -97,31 +119,44 @@
         self.chartView.hidden =YES;
         self.tradeLabeView.hidden = YES;
         
-        if (vipBool) {
-            self.wareHouseViw.hidden = NO;
-            self.lineView.hidden = NO;
+        
+        if ([model.teamname isEqualToString:@"空的数据"]) {
+            self.nullLabe.hidden = NO;
             self.notVipView.hidden = YES;
-            
-            //标题
-            [self.wareHouseViw.titleLabV setLeftLabAttText:model.stockname withLeftAttTextColor:COLOR_Text_Black withLeftText:model.stockname withLeftTextColor:COLOR_Text_Black rightLabAttText:@"" withRightAttTextColor:COLOR_Text_Black withRightText:@"" withRightTextColor:COLOR_Text_Black];
-            //成本
-            NSString *costRmbLeftAttText = [NSString stringWithFormat:@"成本 %@",model.cost];
-            NSString *costRmbRightAttText = [NSString stringWithFormat:@"持有数 %@",model.count];
-            [self.wareHouseViw.costRmbLabV setLeftLabAttText:costRmbLeftAttText withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:@"成本" withLeftTextColor:COLOR_Text_Gay rightLabAttText:costRmbRightAttText withRightAttTextColor:COLOR_Text_BigBlack withRightText:@"持有数" withRightTextColor:COLOR_Text_Gay];
-            
-            
-            //现价
-            NSString *nowRmbLeftAttText = [NSString stringWithFormat:@"现价 %@",model.currprice];
-            NSString *nowRmbRightAttText = [NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate];
-            [self.wareHouseViw.nowRmbLabV setLeftLabAttText:nowRmbLeftAttText withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:@"现价" withLeftTextColor:COLOR_Text_Gay rightLabAttText:nowRmbRightAttText withRightAttTextColor:COLOR_Auxiliary_Red withRightText:@"盈亏" withRightTextColor:COLOR_Text_Gay];
+            self.nullLabe.text = @"暂无持仓";
             
         }else{
-        
-            self.wareHouseViw.hidden = YES;
-            self.lineView.hidden = YES;
-            self.notVipView.hidden = NO;
-            self.notVipView.type = StockNotVipViewType_Storehouse;
+            self.nullLabe.hidden = YES;
+            if (vipBool) {
+                self.wareHouseViw.hidden = NO;
+                self.lineView.hidden = NO;
+                self.notVipView.hidden = YES;
+                
+                //标题
+                [self.wareHouseViw.titleLabV setLeftLabAttText:model.stockname withLeftAttTextColor:COLOR_Text_Black withLeftText:model.stockname withLeftTextColor:COLOR_Text_Black rightLabAttText:@"" withRightAttTextColor:COLOR_Text_Black withRightText:@"" withRightTextColor:COLOR_Text_Black];
+                //成本
+                NSString *costRmbLeftAttText = [NSString stringWithFormat:@"成本 %@",model.cost];
+                NSString *costRmbRightAttText = [NSString stringWithFormat:@"持有数 %@",model.count];
+                [self.wareHouseViw.costRmbLabV setLeftLabAttText:costRmbLeftAttText withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:@"成本" withLeftTextColor:COLOR_Text_Gay rightLabAttText:costRmbRightAttText withRightAttTextColor:COLOR_Text_BigBlack withRightText:@"持有数" withRightTextColor:COLOR_Text_Gay];
+                
+                
+                //现价
+                NSString *nowRmbLeftAttText = [NSString stringWithFormat:@"现价 %@",model.currprice];
+                NSString *nowRmbRightAttText = [NSString stringWithFormat:@"盈亏 %@/%@",model.profitmoney,model.profitrate];
+                [self.wareHouseViw.nowRmbLabV setLeftLabAttText:nowRmbLeftAttText withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:@"现价" withLeftTextColor:COLOR_Text_Gay rightLabAttText:nowRmbRightAttText withRightAttTextColor:COLOR_Auxiliary_Red withRightText:@"盈亏" withRightTextColor:COLOR_Text_Gay];
+                
+            }else{
+                
+                self.wareHouseViw.hidden = YES;
+                self.lineView.hidden = YES;
+                self.notVipView.hidden = NO;
+                self.notVipView.type = StockNotVipViewType_Storehouse;
+            }
+
+            
         }
+        
+        
     }
 }
 
