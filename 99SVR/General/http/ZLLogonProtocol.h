@@ -29,17 +29,10 @@ extern RoomInfo *currentRoom;
 
 class ZLConnectionListerner : public ConnectionListener
 {
-    void OnConnected()
-    {
-        LOG("OnConnected");
-        
-    }
-    void OnConnectError(int err_code)
-    {
-        LOG("OnConnectError");
-    }
-    
+    void OnConnected();
+    void OnConnectError(int err_code);
     void OnIOError(int err_code);
+    
 };
 
 class ZLHallListener: public HallListener
