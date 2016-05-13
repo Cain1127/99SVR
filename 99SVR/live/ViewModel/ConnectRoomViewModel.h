@@ -15,6 +15,8 @@ typedef void(^ConnectRoomResult)(int nStatus,RoomHttp *room);
 
 @property (nonatomic, copy) void (^ ConnectRoomResult)(int nStatus);
 
+@property (nonatomic,assign) int nTimes;
+
 @property (nonatomic,strong) RoomHttp *room;
 
 @property (nonatomic,strong) UIViewController *control;

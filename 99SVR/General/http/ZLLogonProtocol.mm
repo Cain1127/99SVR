@@ -858,7 +858,7 @@ void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
     break;
     case 101:
     {
-        strMsg = @"]房间黑名单";
+        strMsg = @"房间黑名单";
     }
     break;
     case 203:
