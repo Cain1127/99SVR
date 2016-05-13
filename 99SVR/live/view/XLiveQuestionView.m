@@ -79,11 +79,11 @@
     inset.left -= 20;
     _btnTitle.imageEdgeInsets = inset;
     [liveQuestion addSubview:_btnTitle];
-    
+   /*
     UILabel *lineTemp1 = [[UILabel alloc] initWithFrame:Rect(0, 43.5, kScreenWidth, 0.5)];
     [lineTemp1 setBackgroundColor:COLOR_Line_Small_Gay];
     [liveQuestion addSubview:lineTemp1];
-    
+   */ 
     _btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnRight setTitle:@"取消" forState:UIControlStateNormal];
     _btnRight.titleLabel.font = XCFONT(15);

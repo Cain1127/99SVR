@@ -127,7 +127,7 @@
 - (void)setupTableView
 {
     _dataSource  = [[ZLPrivateDataSource alloc] init];
-    _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth,self.height) style:UITableViewStyleGrouped];;
+    _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth,self.height-44) style:UITableViewStyleGrouped];;
     _tableView.dataSource = _dataSource;
     _tableView.delegate = _dataSource;
     _dataSource.delegate = self;

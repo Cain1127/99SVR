@@ -33,13 +33,11 @@
 
 - (void)setGestureHidden
 {
-    _bShow = YES;
     [UIView animateWithDuration:0.5 animations:^{
-        if (_bShow) {
-            self.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
-        }
+        [self setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
     } completion:^(BOOL finished) {
-        
+        self.hidden = YES;
+        [self removeFromSuperview];
     }];
 }
 

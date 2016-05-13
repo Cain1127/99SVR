@@ -53,7 +53,8 @@
     return cell;
 }
 
-- (void)setModel:(NSInteger)nRow cell:(ConsumeRankCell *)cell{
+- (void)setModel:(NSInteger)nRow cell:(ConsumeRankCell *)cell
+{
     [cell setRankInfo:nRow];
     if (nRow<3)
     {
@@ -68,7 +69,7 @@
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [cell.imgHead sd_setImageWithURL:url1 placeholderImage:[UIImage imageNamed:@"100_1"]];
     [cell.lblName setText:model.username];
-    NSString *strConsume = [NSString stringWithFormat:@"%.0f",floorf([model.consume floatValue])];
+    NSString *strConsume = [NSString stringWithFormat:@"%.0f",ceilf([model.consume floatValue])];
     [cell.lblGoid setText:strConsume];
     
 }

@@ -64,7 +64,7 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     }
     else
     {
-        strUrl = [NSString stringWithFormat:@"%@%@",kIMAGE_HTTP_URL,room.croompic];
+        strUrl = [NSString stringWithFormat:@"%@",room.teamicon];
     }
     [_playView.imgView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
 }

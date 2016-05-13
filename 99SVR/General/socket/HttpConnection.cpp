@@ -14,12 +14,9 @@
 #include "proto_err.h"
 #include <cstring>
 
-//#define HTTP_API "http://phpapi.99ducaijing.cn/api.php"//zs
-#define HTTP_API "http://testphp.99ducaijing.cn/api.php"//cs
-#define HTTP_IMG_SVR "http://testphp.99ducaijing.cn:8081"
-#define HTTP_ICON_SVR "http://testphp.99ducaijing.cn:8081"
 
-#define HTTP_IMG_DFS_SVR "http://roompic.99ducaijing.cn:8081"
+//#define HTTP_API "http://testphp.99ducaijing.cn/api.php"
+
 
 static int g_authorId;
 static int g_startId;
@@ -28,7 +25,30 @@ static int g_type;
 static int g_team_id;
 static int g_page;
 
-static char http_api[64] = {0};
+static int g_curr_api_host_index = -1;
+
+static void get_full_banner_url(const std::string& relative_path, std::string& absolute_path)
+{
+	if(relative_path.size() == 0)
+	{
+		return;
+	}
+
+	if( relative_path.substr(0, 7) == string("http://") || relative_path.substr(0, 8) == string("https://") )
+	{
+		absolute_path = relative_path;
+		return;
+	}
+
+	absolute_path = HTTP_BANNER_SVR;
+	
+	if(relative_path.at(0) != '/')
+	{
+		absolute_path += "/";
+	}
+
+	absolute_path += relative_path;
+}
 
 static void get_full_img_url(const std::string& relative_path, std::string& absolute_path, bool is_dfs = false)
 {
@@ -109,11 +129,19 @@ static ThreadVoid http_request(void* _param)
 		}
 	}
 
-	int try_count = 3;
+	if ( g_curr_api_host_index == -1 )
+	{
+		g_curr_api_host_index = httphosts.size() > 1 ? 1 : 0;
+	}
+
+	int try_count = httphosts.size() + 2;
 	while ( --try_count >= 0 )
 	{
 		Http http(param->request_method);
-		strcpy(param->url, HTTP_API);
+		strcpy(param->url, "http://");
+		strcat(param->url, httphosts[g_curr_api_host_index].c_str());
+		strcat(param->url, "/api.php");
+
 		if (param->request_method == HTTP_POST)
 		{
 			strcat(param->url, "?s=");
@@ -126,6 +154,8 @@ static ThreadVoid http_request(void* _param)
 		{
 			break;
 		}
+
+		g_curr_api_host_index = (g_curr_api_host_index + 1) % httphosts.size();
 	}
 
 	if ( try_count < 0 )
@@ -148,7 +178,7 @@ static ThreadVoid http_request(void* _param)
 static void http_request_asyn(HttpListener* uiListener, ParseJson jsonPaser, RequestParamter* httpParam, int req_method = HTTP_GET)
 {
 	HttpThreadParam* param = new HttpThreadParam();
-	strcpy(param->url, HTTP_API);
+	//strcpy(param->url, HTTP_API);
 	param->parser = jsonPaser;
 	param->http_listener = uiListener;
 	param->request = httpParam;
@@ -207,7 +237,7 @@ void parse_homepage(char* json, HttpListener* listener)
 							bannerItem.set_type(banner[i]["type"].asString());
 
 							std::string out;
-							get_full_img_url(banner[i]["banner"].asString(), out);
+							get_full_banner_url(banner[i]["banner"].asString(), out);
 							bannerItem.set_croompic(out);
 							
 							vec_banner.push_back( bannerItem );
@@ -3196,7 +3226,6 @@ void HttpConnection::RequestHomePage(HomePageListener* listener)
 
 	RequestParamter& param = get_request_param();
 	param["s"] = "index/index";
-	param["client"] = get_client_type();
 
 	http_request_asyn(listener, parse_homepage, &param);	
 }
@@ -3523,7 +3552,6 @@ void HttpConnection::PostAskQuestion(int teamId, const char* stock, const char* 
 	request["userid"] = get_user_id();
 	request["teamId"] = int2string(teamId);
 	request["stock"] = stock;
-	//request["question"] = GBKToUTF8(question);
 	request["question"] = question;
 	request["clienttype"] = get_client_type().c_str();
 
@@ -3695,10 +3723,24 @@ void HttpConnection::RequestTeacherFans(int startId, int count, TeacherFansListe
 
 string HttpConnection::GetPrivateServiceDetailUrl(int psid)
 {
-	return string("http://testphp.99ducaijing.cn/mobile.php?s=/User/personalSecrets/id/" + int2string(psid) + "/uid/" + get_user_id() + "/token/" + get_user_token() + "/client/" + get_client_type());
+	return string("http://") + httphosts[g_curr_api_host_index] + "/mobile.php?s=/User/personalSecrets/id/" + int2string(psid) + "/uid/" + get_user_id() + "/token/" + get_user_token() + "/client/" + get_client_type();
 }
 
 string HttpConnection::GetConsumeRecordUrl()
 {
-	return string("http://testphp.99ducaijing.cn/mobile.php?s=/User/getConsumeRecord/uid/" + get_user_id() + "/token/" + get_user_token());
+	return string("http://") + httphosts[g_curr_api_host_index] + "/mobile.php?s=/User/getConsumeRecord/uid/" + get_user_id() + "/token/" + get_user_token();
 }
+
+
+// 获取 API host
+string HttpConnection::GetHttpApiHost()
+{
+	return string("http://") + httphosts[g_curr_api_host_index];
+}
+
+// 获取图片 host
+string HttpConnection::GetImageHost()
+{
+	return HTTP_IMG_SVR;
+}
+

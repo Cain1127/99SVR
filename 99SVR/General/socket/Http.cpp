@@ -17,7 +17,6 @@ RequestParamter& get_request_param()
 
 char* parse_response(char* recv_buf)
 {
-	//LOG("%s", recv_buf);
 	char* content = strstr(recv_buf, "\r\n\r\n");
 	if (content != NULL)
 	{

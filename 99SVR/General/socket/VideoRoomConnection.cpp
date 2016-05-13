@@ -136,7 +136,7 @@ void VideoRoomConnection::SendMsg_TradeGiftReq(TradeGiftRecord& req)
 	req.set_srcvcbname(room_info.cname());
 	req.set_tovcbid(join_req.vcbid());
 	req.set_tovcbname(room_info.cname());
-	req.set_action(2);
+	//req.set_action(2);
 
 	SEND_MESSAGE(protocol::Sub_Vchat_TradeGiftReq, req);
 }
@@ -341,11 +341,13 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 				room_info.ParseFromArray(body, room_info.ByteSize());
 				room_join_listener->OnJoinRoomResp(room_info);
 			}
+			last_joinroom_time = 0;
 			in_room = true;
 			break;
 		//加入房间失败
 		case protocol::Sub_Vchat_JoinRoomErr:
 			ON_MESSAGE(room_join_listener,JoinRoomErr, OnJoinRoomErr);
+			last_joinroom_time = 0;
 			break;
 
 		//房间用户列表数据开始

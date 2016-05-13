@@ -6,7 +6,7 @@ void get_out_ip();
 void ReportLoginFailed(int login_type, rstring login_id, rstring server_ip);
 
 //注册失败
-void ReportRegisterFailed(int reg_type, rstring server_ip);
+void ReportRegisterFailed(int reg_type, rstring server_ip, rstring err);
 
 //获取大厅房间列表失败
 void ReportGetRoomListFailed(int userid, int room_type, rstring server_ip);
