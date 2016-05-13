@@ -88,6 +88,7 @@
         
         if ([model.teamname isEqualToString:@"空的数据"]) {
             self.nullLabe.hidden = NO;
+            self.notVipView.hidden = YES;
             self.nullLabe.text = @"暂无交易动态";
             
         }else{
@@ -118,8 +119,10 @@
         self.chartView.hidden =YES;
         self.tradeLabeView.hidden = YES;
         
+        
         if ([model.teamname isEqualToString:@"空的数据"]) {
             self.nullLabe.hidden = NO;
+            self.notVipView.hidden = YES;
             self.nullLabe.text = @"暂无持仓";
             
         }else{

@@ -26,11 +26,12 @@
 
 -(void)setPrivateVipArray:(NSArray *)privateVipArray
 {
-    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+//    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 //    [privateVipArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
     @WeakObj(self)
     _privateVipArray = privateVipArray;
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         @StrongObj(self)
         int i = 1;
         for (NSDictionary *obj in self.privateVipArray) {
