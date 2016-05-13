@@ -1,17 +1,14 @@
 //
 //  OpenAL.m
-//  99SVR
+//  SVRMedia
 //
-//  Created by xia zhonglin  on 1/29/16.
+//  Created by xia zhonglin  on 5/12/16.
 //  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
 #import "OpenAL.h"
 #import <AVFoundation/AVAudioSession.h>
-#import "BaseService.h"
 #import <AudioToolbox/AudioServices.h>
-#import "UserInfo.h"
-#import "DecodeJson.h"
 
 @implementation OpenAL
 
@@ -50,11 +47,12 @@
 #pragma make - openal function
 - (id)init{
     if(self=[super init]){
-       ticketCondition = [[NSCondition alloc] init];
-       AVAudioSession *session = [AVAudioSession sharedInstance];
-       [session setCategory:AVAudioSessionCategoryPlayback error:nil];
-       [[NSNotificationCenter defaultCenter] addObserver:self
-                                                selector:@selector(handleAudioNotify:) name:AVAudioSessionInterruptionNotification object:nil];
+        ticketCondition = [[NSCondition alloc] init];
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        [session setActive: YES error:nil];
+        [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleAudioNotify:) name:AVAudioSessionInterruptionNotification object:nil];
         return self;
     }
     return nil;
@@ -86,53 +84,41 @@
 }
 
 -(void)initOpenAL{
-    ALenum			error;
-    ALCcontext *newContext = NULL;
-    ALCdevice *newDevice = NULL;
-    newDevice = alcOpenDevice(NULL);
-    if (newDevice != NULL){
-        mDevicde = newDevice;
-        newContext = alcCreateContext(newDevice, 0);
-        mContext = newContext;
-        if (newContext != NULL){
-            alcMakeContextCurrent(mContext);
-            alcProcessContext(mContext);
-            alGenSources(1, &outSourceId);
-            if(alGetError() != AL_NO_ERROR){
-                DLog(@"err:%@",[self GetALCErrorString:error]);
-                printf("Error generating sources! %x\n", error);
-            }
-            alSourcei(outSourceId, AL_LOOPING, AL_FALSE);
-            alSourcef(outSourceId, AL_SOURCE_TYPE, AL_STREAMING);
-        }
+    mDevice=alcOpenDevice(NULL);
+    if (mDevice)
+    {
+        mContext=alcCreateContext(mDevice, NULL);
+        alcMakeContextCurrent(mContext);
     }
+    alGenSources(1, &outSourceId);
+    alSpeedOfSound(1.0);
+    alDopplerVelocity(1.0);
+    alDopplerFactor(1.0);
+    alSourcef(outSourceId, AL_PITCH, 1.0f);
+    alSourcef(outSourceId, AL_GAIN, 1.0f);
+    alSourcei(outSourceId, AL_LOOPING, AL_FALSE);
+    alSourcef(outSourceId, AL_SOURCE_TYPE, AL_STREAMING);
 }
 
 - (void)openAudioFromQueue:(unsigned char*)data dataSize:(UInt32)dataSize
 {
     [ticketCondition lock];
-    @autoreleasepool{
-        ALenum  error =AL_NO_ERROR;
-        ALuint bufferID = 0;
-        alGenBuffers(1, &bufferID);
-        int aSampleRate = 48000;
-        alBufferData(bufferID, AL_FORMAT_STEREO16,data,(ALsizei)dataSize,aSampleRate);
-        if ((error =alGetError())!=AL_NO_ERROR){
-            [ticketCondition unlock];
-            return;
-        }
-        else{
-            alSourceQueueBuffers(outSourceId, 1, &bufferID);
-            if ((error =alGetError())!=AL_NO_ERROR){
-                DLog(@"err:%@",[self GetALCErrorString:error]);
-                DLog(@"push bufferData failed");
-                [ticketCondition unlock];
-                return;
-            }
-        
-            [self updataQueueBuffer];
-        }
+    ALuint bufferID = 0;
+    alGenBuffers(1, &bufferID);
+    int aSampleRate,aBit,aChannel;
+    aSampleRate = 48000;
+    aBit = 16;
+    aChannel = 2;
+    ALenum format=AL_FORMAT_STEREO16;
+    alBufferData(bufferID, format,data, (ALsizei)dataSize,aSampleRate);
+    alSourceQueueBuffers(outSourceId, 1, &bufferID);
+    if (alGetError()!= AL_NO_ERROR)
+    {
+        NSLog(@"Error generating sources!\n");
     }
+    [self updataQueueBuffer];
+    ALint stateVaue;
+    alGetSourcei(outSourceId, AL_SOURCE_STATE, &stateVaue);
     [ticketCondition unlock];
 }
 
@@ -140,39 +126,25 @@
 {
     ALint stateVaue;
     int processed, queued;
+    alGetSourcei(outSourceId, AL_BUFFERS_PROCESSED, &processed);
+    alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
     alGetSourcei(outSourceId, AL_SOURCE_STATE, &stateVaue);
-    if (stateVaue != AL_PLAYING){
+    if (stateVaue == AL_STOPPED ||
+        stateVaue == AL_PAUSED ||
+        stateVaue == AL_INITIAL)
+    {
+        if (queued < processed || queued == 0 ||(queued == 1 && processed ==1))
+        {
+            [self stopSound];
+            [self cleanUpOpenAL];
+        }
         [self playSound];
         return NO;
     }
-    alGetSourcei(outSourceId, AL_BUFFERS_PROCESSED, &processed);
-    alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
-    if (queued < processed || queued >75){
-        
-        int nUserid = [UserInfo sharedUserInfo].nUserId;
-        NSString *strErrlog =[NSString stringWithFormat:@"ReportItem=DirectSeedingQuality&ClientType=3&UserId=%d&ServerIP=%@&Error=kadun",nUserid,[UserInfo sharedUserInfo].strMediaAddr];
-        [DecodeJson postPHPServerMsg:strErrlog];
-        
-        alDeleteSources(1, &outSourceId);
+    while(processed--)
+    {
+        alSourceUnqueueBuffers(outSourceId, 1, &buff);
         alDeleteBuffers(1, &buff);
-        DLog(@"重新建立缓存,queued:%d--processed:%d",queued,processed);
-        alGenBuffers(1, &buff);
-        ALenum error = alGetError();
-        if (error != AL_NO_ERROR){
-            DLog(@"err:%@",[self GetALCErrorString:error]);
-            DLog(@"建立新缓存失败");
-        }
-        alGenSources(1, &outSourceId);
-        error = alGetError();
-        if (error != AL_NO_ERROR){
-            DLog(@"err:%@",[self GetALCErrorString:error]);
-            DLog(@"建立新buffer失败");
-        }
-    }
-    while(processed--){
-        ALuint bufferId;
-        alSourceUnqueueBuffers(outSourceId,1,&bufferId);
-        alDeleteBuffers(1, &bufferId);
     }
     return YES;
 }
@@ -194,15 +166,18 @@
     }
 }
 
-- (void)cleanUpOpenAL{
-    DLog(@"已经释放");
-    if (outSourceId){
+- (void)cleanUpOpenAL
+{
+    if (outSourceId)
+    {
         alDeleteSources(1, &outSourceId);
     }
-    if(buff){
+    if(buff)
+    {
         alDeleteBuffers(1, &buff);
     }
-    if (mContext) {
+    if (mContext)
+    {
         alcSuspendContext(mContext);
         alcMakeContextCurrent(NULL);
         alcDestroyContext(mContext);
@@ -211,16 +186,15 @@
 }
 
 - (void)dealloc{
-    NSLog(@"openal sound dealloc");
     ticketCondition = nil;
     [self cleanUpOpenAL];
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *error = nil;
     BOOL bSuccess = [session setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
     if (!bSuccess){
-        DLog(@"错误原因:%@",[error description]);
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
 
 @end

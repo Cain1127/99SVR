@@ -33,7 +33,7 @@
 
 #define kRoom_head_view_height 118
 
-#define kLibaryCache [kLibraryPath stringByAppendingPathComponent:@"cache"]
+#define kLibaryCache kLibraryPath
 
 #define GBK_ENCODING CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
 //http://hall.99ducaijing.cn:8081/roomdata/room.php?act=history&userid=1765152&client=2
