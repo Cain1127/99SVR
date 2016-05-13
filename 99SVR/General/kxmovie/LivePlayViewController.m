@@ -250,7 +250,8 @@
 
 - (void)initDecode
 {
-    if (!_openAL) {
+    if (!_openAL)
+    {
         _openAL = [[OpenAL alloc] init];
     }
     [_openAL initOpenAL];

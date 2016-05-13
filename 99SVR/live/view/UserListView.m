@@ -83,9 +83,11 @@
     UIView *selectView = [[UIView alloc] initWithFrame:cell.bounds];
     [selectView setBackgroundColor:UIColorFromRGB(0x629aff)];
     [cell setSelectedBackgroundView:selectView];
-    
-    RoomUser *user = [_aryUser objectAtIndex:indexPath.row];
-    [cell setRoomUser:user];
+    if(_aryUser.count>indexPath.row)
+    {
+        RoomUser *user = [_aryUser objectAtIndex:indexPath.row];
+        [cell setRoomUser:user];
+    }
     return cell;
 }
 
