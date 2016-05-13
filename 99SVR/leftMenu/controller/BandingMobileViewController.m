@@ -326,8 +326,12 @@
              if (!__banding) {
                  
                  [UserInfo sharedUserInfo].banding = 1;
-                 [selfWeak.navigationController popViewControllerAnimated:YES];
                  [ProgressHUD showSuccess:@"绑定手机成功"];
+                 
+                 [self MarchBackLeft];
+                 
+                 //判断是不是返回上一个界面还是要返回刷新兑换私人定制的页面
+//                 [selfWeak.navigationController popViewControllerAnimated:YES];
              }
              else
              {
