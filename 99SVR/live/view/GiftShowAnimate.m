@@ -52,7 +52,7 @@
     [self addSubview:_leftView];
     _sendName = [[UILabel alloc] initWithFrame:Rect(10, 0, _leftView.width-20, 25)];
     [_leftView addSubview:_sendName];
-    NSString *strSrcInfo = [NSString stringWithFormat:@"%@%d",dict[@"srcName"],[dict[@"srcId"] intValue]];
+    NSString *strSrcInfo = [NSString stringWithFormat:@"%@",dict[@"srcName"]];
     [_sendName setText:strSrcInfo];
     [_sendName setTextColor:UIColorFromRGB(0xeb6100)];
     [_sendName setFont:XCFONT(14)];

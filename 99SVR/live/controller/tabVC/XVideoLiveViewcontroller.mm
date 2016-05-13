@@ -34,6 +34,7 @@
 #import "ConsumeRankDataSource.h"
 #import "HttpManagerSing.h"
 #import "UIAlertView+Block.h"
+
 @interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
                                 ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
 {

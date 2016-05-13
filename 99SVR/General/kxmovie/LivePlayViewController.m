@@ -316,7 +316,6 @@
     if([notify.object isEqualToString:@"ON"])
     {
         _backGroud = YES;
-//        [_media settingBackVideo:YES];
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
         __weak LivePlayViewController *__self = self;
         dispatch_async(dispatch_get_main_queue(),
@@ -327,7 +326,6 @@
     else
     {
         _backGroud = NO;
-//        [_media settingBackVideo:NO];
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
     }
 }
@@ -779,7 +777,6 @@
 
 - (void)onVideoData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height
 {
-//    DLog(@"count:%zi",_aryVideo.count);
     @synchronized(_aryVideo)
     {
         [_aryVideo addObject:data];

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Reachability.h"
 
 @class RoomKey;
 @class RoomUser;
@@ -27,6 +28,8 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
 @property (nonatomic) int sex;
 
 @property (nonatomic,copy) NSString *strEmail;
+@property (nonatomic) int nowNetwork;
+@property (nonatomic) int checkNetWork;
 
 @property (nonatomic,copy) NSString *strMobile;
 /**
@@ -84,7 +87,7 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
  */
 @property (nonatomic,assign) int nType;
 /**
- *  vip
+ *  vikkkp
  */
 @property (nonatomic,assign) unsigned char m_nVipLevel;
 
