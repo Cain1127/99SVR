@@ -178,4 +178,18 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
         protocol->sendQuestion(roomId,teamId,cStock,cQuestion);
     }
 }
+
+- (void)onNetWorkChange
+{
+    if (protocol) {
+        protocol->networkfChanged();
+    }
+}
+
+- (void)reConnect{
+    if (protocol) {
+        protocol->reConnect();
+    }
+}
+
 @end

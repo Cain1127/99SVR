@@ -189,6 +189,15 @@ public :
      *  提问
      */
     void sendQuestion(int roomId,int teamId,const char *stock,const char *question);
+    /**
+     *  网络变更
+     */
+    void networkfChanged();
+    /**
+     *  重连
+     */
+    void reConnect();
+    
     ~ZLLogonProtocol();
 };
 
