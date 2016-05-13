@@ -288,8 +288,8 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
                      } completion:nil];
 }
 
-
-- (void)hideToastActivity {
+- (void)hideMainThread
+{
     UIView *existingActivityView = (UIView *)objc_getAssociatedObject(self, &CSToastActivityViewKey);
     if (existingActivityView != nil)
     {
@@ -303,6 +303,14 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
                              objc_setAssociatedObject (self, &CSToastActivityViewKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
                          }];
     }
+}
+
+- (void)hideToastActivity
+{
+    @WeakObj(self)
+    dispatch_main_async_safe(^{
+        [selfWeak hideMainThread];
+    });
 }
 
 #pragma mark - Private Methods
