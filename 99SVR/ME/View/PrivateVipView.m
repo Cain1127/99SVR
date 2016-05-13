@@ -26,6 +26,7 @@
 
 -(void)setPrivateVipArray:(NSArray *)privateVipArray
 {
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 //    [privateVipArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
     @WeakObj(self)
     _privateVipArray = privateVipArray;
