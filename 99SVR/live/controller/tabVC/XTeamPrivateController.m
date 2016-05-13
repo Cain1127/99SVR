@@ -8,6 +8,7 @@
 
 #import "XTeamPrivateController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "AlertFactory.h"
 #import "NNSVRViewController.h"
 #import "TQPurchaseViewController.h"
 #import "XPrivateDetailViewController.h"
@@ -114,13 +115,22 @@
 
 - (void)buyprivate
 {
-    TQPurchaseViewController *control = [[TQPurchaseViewController alloc] init];
-    control.stockModel = [[StockDealModel alloc]init];
-    control.stockModel.teamicon = _room.teamicon;
-    control.stockModel.teamid = _room.teamid;
-    control.stockModel.teamname = _room.teamname;
-    control.stockModel.teamicon = _room.teamicon;
-    [[self viewController].navigationController pushViewController:control animated:YES];
+    if(KUserSingleton.nType == 1 && KUserSingleton.bIsLogin)
+    {
+        TQPurchaseViewController *control = [[TQPurchaseViewController alloc] init];
+        control.stockModel = [[StockDealModel alloc]init];
+        control.stockModel.teamicon = _room.teamicon;
+        control.stockModel.teamid = _room.teamid;
+        control.stockModel.teamname = _room.teamname;
+        control.stockModel.teamicon = _room.teamicon;
+        [[self viewController].navigationController pushViewController:control animated:YES];
+    }
+    else
+    {
+        [AlertFactory createLoginAlert:[self viewController] block:^{
+            
+        }];
+    }
 
 }
 
