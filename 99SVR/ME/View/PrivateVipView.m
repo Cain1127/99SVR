@@ -31,6 +31,7 @@
     @WeakObj(self)
     _privateVipArray = privateVipArray;
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         @StrongObj(self)
         int i = 1;
