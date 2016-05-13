@@ -56,7 +56,7 @@
     [_hiddenView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     [_hiddenView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     
-    UIView *liveQuestion = [[UIView alloc] initWithFrame:Rect(0,kScreenHeight-kLive_question_height, kScreenWidth,kLive_question_height)];
+    UIView *liveQuestion = [[UIView alloc] initWithFrame:Rect(0,20, kScreenWidth,kScreenHeight-20)];
     [liveQuestion setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self addSubview:liveQuestion];
     
