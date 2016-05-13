@@ -136,11 +136,11 @@ void ZLHallListener::OnViewpointTradeGiftErr(ErrCodeResp& info)
     if (strErr!=nil)
     {
         DLog(@"strerr:%@",strErr);
-//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:strErr];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:strErr];
     }
     else
     {
-//        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:@"提问失败"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:@"提问失败"];
     }
 }
 

@@ -80,15 +80,7 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     [_playView.lblName setText:room.teamname];
     [_playView.lblNumber setText:room.teamid];
     [_playView.btnQuery setTitle:room.onlineusercount forState:UIControlStateNormal];
-    NSString *strUrl=nil;
-    if([room.teamicon length]==0)
-    {
-        strUrl = @"";
-    }
-    else
-    {
-        strUrl = [NSString stringWithFormat:@"%@",room.teamicon];
-    }
+    NSString *strUrl = [NSString stringWithFormat:@"%@",room.teamicon];
     [_playView.imgView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
 }
 

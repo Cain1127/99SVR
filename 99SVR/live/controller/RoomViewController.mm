@@ -116,7 +116,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 {
     _room = room;
     [self createRoomModel];
-    [_roomModel connectViewModel:room];
     if([self isViewLoaded])
     {
         [self addNotify];
@@ -130,6 +129,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
         [_ideaControl setModel:_room];
         [_privateView setModel:_room];
     }
+    [_roomModel connectViewModel:room];
 }
 
 - (void)removeNotice
