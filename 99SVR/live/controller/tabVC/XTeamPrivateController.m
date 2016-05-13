@@ -127,13 +127,13 @@
 - (void)setupTableView
 {
     _dataSource  = [[ZLPrivateDataSource alloc] init];
-    _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth,self.height) style:UITableViewStyleGrouped];;
+    _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth,self.height - 60) style:UITableViewStyleGrouped];;
     _tableView.dataSource = _dataSource;
     _tableView.delegate = _dataSource;
     _dataSource.delegate = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableHeaderView = [self tableHeaderView];
-    _tableView.tableFooterView = [UIView new];
+    _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
     [self addSubview:_tableView];
 }
 
@@ -216,6 +216,8 @@
         }
     }
 }
+
+
 
 
 - (void)loadWhatsPrivate:(NSNotification *)notify
