@@ -62,10 +62,6 @@
 @property (nonatomic,assign) int question_times;
 @property (nonatomic,assign) float question_coin;
 @property (nonatomic,strong) RoomHttp *room;
-@property (nonatomic,copy) NSArray *aryChat;
-@property (nonatomic,copy) NSArray *aryPriChat;
-@property (nonatomic,copy) NSArray *aryNotice;
-@property (nonatomic,copy) NSArray *aryUser;
 @property (nonatomic,copy) NSArray *aryConsume;
 
 @property (nonatomic,strong) UITableView *chatView;
@@ -114,7 +110,8 @@
     return self;
 }
 
-- (void)loadView{
+- (void)loadView
+{
     self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
 }
 
@@ -148,11 +145,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -328,16 +320,6 @@
                ^{
                    _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strTeachWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
                });
-//            [_questionView.txtName resignFirstResponder];
-//            [_questionView.txtContent resignFirstResponder];
-//            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
-//                [UIView animateWithDuration:0.5 animations:^{
-//                    [_questionView setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
-//                } completion:^(BOOL finished)
-//                 {
-//                     _questionView.hidden = NO;
-//                 }];
-//            }
         }
     }
 }
@@ -401,7 +383,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(TradeGiftError:) name:MESSAGE_TRADE_GIFT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startPlayThread:) name:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatPriMsg) name:MESSAGE_ROOM_TO_ME_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatMSg) name:MESSAGE_ROOM_CHAT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatMsg) name:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomListNotice) name:MESSAGE_ROOM_NOTICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomUserList:) name:MESSAGE_ROOM_ALL_USER_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomBeExit:) name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
@@ -450,7 +432,7 @@
 {
     NSNumber *number = notify.object;
     if ([number intValue]==202) {
-//        @WeakObj(self)
+//      @WeakObj(self)
         dispatch_async(dispatch_get_main_queue(), ^{
 //            [selfWeak createPaySVR];
         });
@@ -480,15 +462,18 @@
  */
 - (void)startNewPlay
 {
+    [_ffPlay startPlayRoomId:[_room.roomid intValue] user:1801124 name:_room.teamname];
     for (RoomUser *user in currentRoom.aryUser)
     {
         if ([user isOnMic])
         {
-            [_ffPlay startPlayRoomId:[_room.roomid intValue] user:user.m_nUserId name:_room.teamname];
+            _ffPlay.nuserid = user.m_nUserId;
             [kHTTPSingle RequestConsumeRank:user.m_nUserId];
             return ;
         }
     }
+    _ffPlay.nuserid = 0;
+    [_ffPlay stop];
     @WeakObj(_ffPlay)
     dispatch_main_async_safe(
     ^{
@@ -527,7 +512,7 @@
 /**
  *  聊天响应
  */
-- (void)roomChatMSg
+- (void)roomChatMsg
 {
     [_chatDataSource setModel:aryRoomChat];
     @WeakObj(self)
@@ -568,13 +553,14 @@
             }
         });
     }
+    @WeakObj(aryRoomNotice)
     dispatch_async(dispatch_get_main_queue(),
     ^{
        [selfWeak.noticeView reloadDataWithCompletion:
         ^{
-            if (selfWeak.aryNotice.count > 0)
+            if (aryRoomNoticeWeak.count > 0)
             {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:selfWeak.aryNotice.count-1];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:aryRoomNoticeWeak.count-1];
                 [selfWeak.noticeView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
             }
         }];
@@ -586,7 +572,6 @@
  */
 - (void)roomUserList:(NSNotification*)notify
 {
-//    _aryUser = currentRoom.aryUser;
     [_listView reloadItems:currentRoom.aryUser];
 }
 /**
@@ -682,7 +667,6 @@
                 [UIView animateWithDuration:0.5 animations:
                  ^{
                      _inputView.hidden = NO;
-                     [_inputView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
                  } completion:^(BOOL finished) {}];
             }
             else

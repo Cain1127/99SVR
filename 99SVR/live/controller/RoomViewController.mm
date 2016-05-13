@@ -119,6 +119,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     [_roomModel connectViewModel:room];
     if([self isViewLoaded])
     {
+        [self addNotify];
         [self loadHeadModel];
         [headView.segmented setSelectedSegmentIndex:0];
         [self selectIndexSegment:0];
@@ -128,7 +129,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
         [_tradeView reloadModel:_room];
         [_ideaControl setModel:_room];
         [_privateView setModel:_room];
-        [self addNotify];
     }
 }
 

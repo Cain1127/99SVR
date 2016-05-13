@@ -382,7 +382,8 @@ int ZLLogonProtocol::updateNick(const char *cNick,const char *intro,int sex)
 
 
 
-void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomPwd){
+void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomPwd)
+{
     if (aryRoomChat==nil) {
         aryRoomChat = [NSMutableArray array];
     }
@@ -399,6 +400,8 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
         aryRoomNotice = [NSMutableArray array];
     }
     [aryRoomNotice removeAllObjects];
+    
+    [aryRoomChat addObject:@"<span style=\"color:#919191\">[系统消息]正在加载房间数据...</span>"];
     
     JoinRoomReq req;
     const char *uId = [[DeviceUID uid] UTF8String];
@@ -662,13 +665,15 @@ void ZLRoomListener::OnRoomUserExceptExitNoty(UserExceptExitRoomInfo_ext& info){
 /**
  *  消息信息
  */
-void ZLRoomListener::OnChatNotify(RoomChatMsg& info){
+void ZLRoomListener::OnChatNotify(RoomChatMsg& info)
+{
     if(info.msgtype()==1){
         //解析广播
         DLog(@"广播");
         [RoomService getRibao:&info notice:aryRoomNotice];
     }else{
         //解析消息记录
+        DLog(@"添加信息");
         [RoomService getChatInfo:&info array:aryRoomChat prichat:aryRoomPrichat];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     }
