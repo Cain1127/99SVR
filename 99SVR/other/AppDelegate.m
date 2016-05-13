@@ -77,6 +77,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[ZLLogonServerSing sharedZLLogonServerSing] serverInit];
+    [SVRInitLBS loadAllInfo];
     [[CrashReporter sharedInstance] installWithAppId:@"900018787" applicationGroupIdentifier:@"com.hctt.fae99"];
     [[MTAConfig getInstance] setDebugEnable:TRUE];
     [[MTAConfig getInstance] setAutoExceptionCaught:FALSE];
@@ -106,7 +107,6 @@
      [SwitchRootTool switchRootForAppDelegate];
     [self.window makeKeyAndVisible];
     
-    [SVRInitLBS loadAllInfo];
     
     NSDictionary *dictGift = [UserDefaults objectForKey:kGiftInfo];
     if (dictGift){

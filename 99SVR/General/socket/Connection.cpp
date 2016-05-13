@@ -208,7 +208,6 @@ ThreadVoid get_lbs_from_http(void* param)
 			ThreadReturn;
 		}
 	}
-
 	*lbs_from_http = '\0';
 	LOG("get lbs from http faild");
 
@@ -241,6 +240,7 @@ ThreadVoid get_host_form_lbs_runnable(void* param)
 
 void get_lbs_servers()
 {
+    /*
 	if (!is_set_lbs)
 	{
 		const char* lbs = LBS0;
@@ -274,7 +274,8 @@ void get_lbs_servers()
 	{
 		strcpy(lbs_curr, lbs_from_set);
 	}
-
+     */
+    strcpy(lbs_curr, LBS0);
 	Thread::lock(&conn_lock);
 	lbs_count = 0;
 	memset(lbs_splited, 0, sizeof(lbs_splited));

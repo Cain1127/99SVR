@@ -71,9 +71,8 @@
         NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
         [UserDefaults setObject:parameters forKey:kGiftInfo];
         [DecodeJson setGiftInfo:parameters];
-    } fail:^(NSError *error) {
-        
-    }];
+    } fail:^(NSError *error)
+    {}];
 }
 
 /**
@@ -82,13 +81,15 @@
 + (void)authVersion
 {
     NSString *strVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] stringByReplacingOccurrencesOfString:@"." withString:@""];
-    if ([UserDefaults objectForKey:strVersion]!=nil) {
+    if ([UserDefaults objectForKey:strVersion]!=nil)
+    {
         BOOL bStatus = [[UserDefaults objectForKey:strVersion] boolValue];
         if (bStatus) {
             KUserSingleton.nStatus = bStatus;
             return ;
         }
-    }else{
+    }else
+    {
         [UserDefaults setBool:0 forKey:strVersion];
     }
     __block NSString *__strVersion = strVersion;
