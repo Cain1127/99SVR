@@ -39,9 +39,14 @@
     [self.view addSubview:_tableView];
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideo:) name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
     [kHTTPSingle RequestTeamList];
+
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
     [self.tableView.gifHeader loadDefaultImg];
+    if (_aryVideo.count==0) {
+        [_tableView.gifHeader beginRefreshing];
+    }
 }
 
 - (void)updateRefresh
@@ -54,6 +59,10 @@
     [kHTTPSingle RequestTeamList];
 }
 
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -61,10 +70,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideo:) name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
-    if (_aryVideo.count==0) {
-        [_tableView.gifHeader beginRefreshing];
-    }
     RoomViewController *roomView = [RoomViewController sharedRoomViewController];
     if (roomView.room)
     {
@@ -83,57 +88,71 @@
 
 - (void)loadVideo:(NSNotification *)notify
 {
+    
+    Loading_Hide(self.tableView);
     NSDictionary *parameters = notify.object;
     @WeakObj(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [selfWeak.tableView.header endRefreshing];
-        [selfWeak.tableView hideToastActivity];
-    });
     int code = [parameters[@"code"] intValue];
     NSArray *aryShow = parameters[@"show"];
-    if (code!=1 && !_aryVideo)
-    {
-        [self showErrorViewInView:_tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
-            Loading_Bird_Show(selfWeak.tableView);
-            [selfWeak.tableView.header beginRefreshing];
-        }];
-    }
-    else if (aryShow.count==0 && code==1 && !_aryVideo)
-    {
-        [self showEmptyViewInView:_tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
-            Loading_Bird_Show(selfWeak.tableView);
-            [selfWeak.tableView.header beginRefreshing];
-        }];
-    }
-    else
-    {
-        [self hideEmptyViewInView:_tableView];
-        if(aryShow.count == 0)
-        {
-            return ;
-        }
-        _aryVideo = aryShow;
-        NSMutableArray *aryAll = [NSMutableArray array];
-        [aryAll addObjectsFromArray:_aryVideo];
-        NSArray *aryHidden = parameters[@"hidden"];
-        for (RoomHttp *room in aryHidden)
-        {
-            [aryAll addObject:room];
-        }
-        NSArray *aryHelp = parameters[@"help"];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        [self.tableView.gifHeader endRefreshing];
         
-        [UserInfo sharedUserInfo].aryHelp = aryHelp;
-        for (RoomHttp *room in aryHelp)
-        {
-            [aryAll addObject:room];
+        if (code==1) {//请求成功
+            _aryVideo = nil;
+            _aryVideo = aryShow;
+            NSMutableArray *aryAll = [NSMutableArray array];
+            [aryAll addObjectsFromArray:_aryVideo];
+            NSArray *aryHidden = parameters[@"hidden"];
+            for (RoomHttp *room in aryHidden)
+            {
+                [aryAll addObject:room];
+            }
+            NSArray *aryHelp = parameters[@"help"];
+            
+            [UserInfo sharedUserInfo].aryHelp = aryHelp;
+            for (RoomHttp *room in aryHelp)
+            {
+                [aryAll addObject:room];
+            }
+            [UserInfo sharedUserInfo].aryRoom = aryAll;
         }
-        [UserInfo sharedUserInfo].aryRoom = aryAll;
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-           [selfWeak.tableView reloadData];
-        });
-    }
+        
+            [selfWeak.tableView reloadData];
+        
+        [selfWeak chickEmptyViewShowWithTab:selfWeak.tableView withData:_aryVideo withCode:[NSString stringWithFormat:@"%d",code]];
+    });
+
 }
+
+#pragma mark 请求成功时候-检测是否出现提示图
+-(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSArray *)dataArray withCode:(NSString *)code{
+    
+    WeakSelf(self);
+    
+    if (dataArray.count==0&&[code intValue]!=1) {//数据为0 请求失败
+        
+        [self showErrorViewInView:tab withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
+            
+            Loading_Bird_Show(self.tableView);
+            [weakSelf.tableView.footer beginRefreshing];
+        }];
+    }else if (dataArray.count==0&&[code intValue]==1){//数据为0 请求成功
+        
+        [self showEmptyViewInView:tab withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
+            
+
+        }];
+        
+    }else{//请求成功
+        
+        [self hideEmptyViewInView:tab];
+        
+    }
+    
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
