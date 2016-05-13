@@ -45,12 +45,12 @@
     CGFloat duration;
     CGFloat originalY;
     int _fall;
-    ChatView *_chatView;
     int nCurrent;
     UIView *noView;
     GiftView *_giftView;
     NSCache *commentCache;
 }
+@property (nonatomic,strong) ChatView *chatView;
 @property (nonatomic,strong) DTAttributedTextView *textView;
 @property (nonatomic,strong) UIView *downContentView;
 @property (nonatomic) int keyboardPresentFlag;
@@ -145,11 +145,10 @@
     {
         return ;
     }
-    
     @WeakObj(parameter)
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
-    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,64,kScreenWidth-60,46) dict:parameterWeak];
+    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,kScreenHeight-200,kScreenWidth-60,46) dict:parameterWeak];
     [UIView animateWithDuration:2.0
           delay:1.0
           options:UIViewAnimationOptionCurveEaseOut
@@ -222,6 +221,7 @@
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
         [_giftView updateGoid];
         [UIView animateWithDuration:0.5 animations:^{
+            _giftView.hidden = NO;
             [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
         } completion:^(BOOL finished) {}];
     }
@@ -250,7 +250,12 @@
     UserInfo *info = KUserSingleton;
     if(info.nType == 1 && info.bIsLogin)
     {
-        _chatView.hidden = NO;
+        [UIView animateWithDuration:0.5 animations:
+         ^{
+             _chatView.hidden = NO;
+             [self.view addSubview:_chatView];
+             [_chatView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+         } completion:^(BOOL finished) {}];
     }else{
         
         [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
@@ -400,6 +405,12 @@
         }
         @WeakObj(self)
         [cell clickWithBlock:^(UIGestureRecognizer *gesture) {
+            [UIView animateWithDuration:0.5 animations:
+             ^{
+                 selfWeak.chatView.hidden = NO;
+                 [selfWeak.view addSubview:selfWeak.chatView];
+                 [selfWeak.chatView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+             } completion:^(BOOL finished) {}];
             [selfWeak showChatInfo];
         }];
         return cell;
@@ -520,6 +531,12 @@
                 rUser.m_strUserAlias = [array[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                 rUser.m_nUserId = [strNumber intValue];
                 _chatView.nDetails = [array[2] intValue];
+                [UIView animateWithDuration:0.5 animations:
+                 ^{
+                     _chatView.hidden = NO;
+                     [self.view addSubview:_chatView];
+                     [_chatView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+                 } completion:^(BOOL finished) {}];
                 [_chatView setChatInfo:rUser];
             }
         }
@@ -792,6 +809,12 @@
         user.m_nUserId = viewuserid;
         user.m_strUserAlias = strName;
         _chatView.nDetails = commentId;
+        [UIView animateWithDuration:0.5 animations:
+         ^{
+             _chatView.hidden = NO;
+             [self.view addSubview:_chatView];
+             [_chatView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+         } completion:^(BOOL finished) {}];
         [_chatView setChatInfo:user];
     }
     else
