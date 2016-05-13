@@ -74,7 +74,9 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     UIViewController *viewControl = [self viewController];
     if (viewControl)
     {
-        [viewControl.navigationController pushViewController:[RoomViewController sharedRoomViewController] animated:YES];
+        RoomViewController *roomVC = [RoomViewController sharedRoomViewController];
+        [roomVC addNotify];
+        [viewControl.navigationController pushViewController:roomVC animated:YES];
     }
 }
 

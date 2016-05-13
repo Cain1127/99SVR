@@ -27,6 +27,7 @@
 @property (nonatomic,strong) UIImageView *glView;
 @property (nonatomic) BOOL bFull;
 @property (nonatomic) int roomIsCollet;
+@property (nonatomic) int nuserid;
 @property (nonatomic,copy) void (^statusBarHidden)(BOOL bInfo);
 
 //开始播放

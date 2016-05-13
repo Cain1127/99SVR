@@ -26,13 +26,6 @@
 
 - (void)connectViewModel:(RoomHttp *)room
 {
-//    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-//    if ([roomView.room.roomid isEqualToString:room.roomid])
-//    {
-//        [_control.view hideToastActivity];
-//        [_control.navigationController pushViewController:roomView animated:YES];
-//        return ;
-//    }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     _room = room;

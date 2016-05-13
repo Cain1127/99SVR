@@ -371,6 +371,7 @@
     RoomViewController *roomView = [RoomViewController sharedRoomViewController];
     if ([roomView.room.roomid isEqualToString:room.roomid])
     {
+        [roomView addNotify];
         [self.navigationController pushViewController:roomView animated:YES];
         return ;
     }

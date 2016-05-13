@@ -36,7 +36,6 @@
     BOOL bFirst;
     UILabel *lblText;
     int _roomid;
-    int _nuserid;
     int nReceiveMemory;
     UIView *sunView;
     UIView *_downHUD;
@@ -296,6 +295,7 @@
     DLog(@"视频停止");
     _media.nFall = 0;
     _playing = NO;
+    [_glView hideToastActivity];
     [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
     @WeakObj(self)
     gcd_main_safe(^{
@@ -583,9 +583,8 @@
         if (roomid!=_roomid)
         {
             [self stop];
-            _nuserid = userid;
             _roomid = roomid;
-            [self startPlayRoomId:_roomid user:_nuserid name:_roomName];
+            [self startPlayRoomId:_roomid user:1801124 name:_roomName];
         }
         return ;
     }
@@ -601,7 +600,7 @@
     _roomid = roomid;
     _nuserid = userid;
     DLog(@"userid:%d--roomid:%d",_nuserid,_roomid);
-    if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:_nuserid roomId:_roomid])
+    if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:1801124 roomId:_roomid])
     {
         DLog(@"开启接收码流失败");
     }
