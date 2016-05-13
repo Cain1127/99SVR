@@ -1,6 +1,7 @@
 #ifndef __CONNECT_H__
 #define __CONNECT_H__
 
+#include <vector>
 #include "login_cmd_vchat.h"
 #include "videoroom_cmd_vchat.h"
 #include "proto_message_vchat.h"
@@ -12,8 +13,41 @@
 #include "ConnectionListener.h"
 #include "MessageListener.h"
 
+using std::vector;
+
+#ifdef RELEASE
+
+#define LBS0 "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,lbs3.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";
+#define CONFIG_URL "http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=4&versionNumber=1&parameterName=lbs"
+#define HTTP_API "phpapi.99ducaijing.cn"
+
+#define HTTP_IMG_SVR "http://phppic.99ducaijing.cn"
+#define HTTP_ICON_SVR "http://phppic.99ducaijing.cn"
+#define HTTP_IMG_DFS_SVR "http://phppic.99ducaijing.cn"
+#define HTTP_BANNER_SVR "http://phpapi.99ducaijing.cn"
+
+#else
+
+#define LBS0 "testlbs.99ducaijing.cn:2222"
+#define CONFIG_URL "http://121.12.118.32/caijing/?m=Api&c=ClientConfig&clientType=4&versionNumber=1&parameterName=lbs"
+#define HTTP_API "testphp.99ducaijing.cn"
+
+#define HTTP_IMG_SVR "http://phppic.99ducaijing.cn"
+#define HTTP_ICON_SVR "http://phppic.99ducaijing.cn"
+#define HTTP_IMG_DFS_SVR "http://phppic.99ducaijing.cn"
+#define HTTP_BANNER_SVR "http://phpapi.99ducaijing.cn"
+
+#endif
+
 #define MAX_MESSAGE_SIZE 8192
 #define STYPE_COUNT  3
+
+extern char lbs_from_file[256];
+extern char lbs_from_http[256];
+extern char lbs_from_set[256];
+extern char lbs_curr[256];
+extern char lbs_splited[8][64];
+extern int lbs_count;
 
 extern Socket g_socket;
 extern char cache_path[256];
@@ -27,7 +61,6 @@ extern short connect_port;
 
 extern char send_buf[MAX_MESSAGE_SIZE];
 extern char recv_buf[MAX_MESSAGE_SIZE];
-
 
 
 extern UserLogonSuccess2 loginuser;
@@ -45,14 +78,17 @@ extern JoinRoomReq join_req;
 extern JoinRoomResp room_info;
 
 extern uint32 main_room_id;
+extern time_t last_joinroom_time;
+
+
+extern vector<string> httphosts;
 
 
 void InitProtocolContext(const char* path);
-
 void ReadProtocolCache(const char *suffix_path, std::string& cache_content);
-
 void WriteProtocolCache(const char *suffix_path, std::string& cache_content);
 
+void get_http_servers_from_lbs_asyn();
 
 class Connection
 {

@@ -24,6 +24,7 @@ ThreadVoid report_runnable(void* vparam)
 	Http http(HTTP_POST);
 	http.request(REPORT_API, param);
 
+
 	delete param;
 
 	ThreadReturn;
@@ -51,7 +52,7 @@ void ReportLoginFailed(int login_type, rstring login_id, rstring server_ip)
 	report_asyn(&param);
 }
 
-void ReportRegisterFailed(int reg_type, rstring server_ip)
+void ReportRegisterFailed(int reg_type, rstring server_ip, rstring err)
 {
 	RequestParamter& param = get_request_param();
 	param["ReportItem"] = "Register";
@@ -59,7 +60,7 @@ void ReportRegisterFailed(int reg_type, rstring server_ip)
 	param["RegType"] = int2string(reg_type);
 	param["ServerIP"] = server_ip;
 	param["ClientIP"] = "";
-	param["Error"] = "";
+	param["Error"] = err;
 
 	report_asyn(&param);
 }

@@ -57,7 +57,7 @@
     }
     else
     {
-        strInfo = [NSString stringWithFormat:@" %@ <span style=\"color:#919191\">回复 %@ </span><br>%@",strFrom,strTo,strContent];
+        strInfo = [NSString stringWithFormat:@" %@ <span style=\"color:#919191\"></span><br>@%@ %@",strFrom,strTo,strContent];
     }
     strInfo = [DecodeJson replaceEmojiNewString:strInfo];
     

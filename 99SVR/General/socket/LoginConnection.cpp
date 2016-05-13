@@ -26,12 +26,14 @@ bool need_join_room;
 static time_t last_req_teamtopn_time;
 static time_t last_gettoken_time;
 
+
 LoginConnection::LoginConnection() :
 login_listener(NULL), hall_listener(NULL), push_listener(NULL)
 {
 	loginuser.set_userid(0);
 	need_join_room = false;
 	last_req_teamtopn_time = 0;
+	last_joinroom_time = 0;
 	main_cmd = protocol::MDM_Vchat_Login;
 }
 
@@ -105,6 +107,8 @@ void LoginConnection::join_room()
 void LoginConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 {
 
+	last_joinroom_time = time(0);
+
 	join_req = req;
 	protocol::CMDJoinRoomReq_t temreq = { 0 };
 	string ip = join_req.cipaddr();
@@ -170,44 +174,16 @@ void LoginConnection::on_do_connected()
 
 void LoginConnection::SendMsg_LoginReq4(UserLogonReq4& req)
 {
-	//121.12.118.32:7301
-	//120.197.248.11:7401  ÒÆ¶¯
-	// "login1.99ducaijing.cn", 7401
-	//connect("121.12.118.32", 7301);
-	
-	/*
-	int ret = connect("121.14.211.60",7402);
-
-	if (ret != 0)
-		return;
-	*/
 	if ( !socket_connecting )
 	{
 		login_req4 = req;
 		login_reqv = 4;
 		connect_from_lbs_asyn();
-		//connect("172.16.41.137 ", 7301);
 	}
 	else
 	{
 		LOG("socket_connecting when login request.");
 	}
-	//connect("121.12.118.32", 7301);
-	//connect("122.13.81.62", 7301);
-	//connect("172.16.41.137", 7301);
-	//connect("172.16.41.215", 7301);
-	//connect("172.16.41.114", 7301);
-	//connect("172.16.41.45", 7301);
-
-	/*
-	SendMsg_Hello();
-	SEND_MESSAGE(protocol::Sub_Vchat_logonReq4, req);
-
-	nmobile = req.nmobile();
-	version = req.nversion();
-
-	start_read_thread();
-	*/
 }
 
 void LoginConnection::SendMsg_LoginReq5(UserLogonReq5& req)
@@ -322,7 +298,6 @@ void LoginConnection::close(void)
 
 void LoginConnection::on_tick(time_t ctime)
 {
-	LOG("on_tick");
 	if (in_room)
 	{
 		if ( ctime - last_req_teamtopn_time > 5 * 60 )
@@ -332,9 +307,12 @@ void LoginConnection::on_tick(time_t ctime)
 		}
 	}
 
-	if ( ctime - last_gettoken_time > 60 * 60 * 8 )
+	if ( loginuser.viplevel() > 1 )
 	{
-		SendMsg_SessionTokenReq();
+		if ( ctime - last_gettoken_time > 60 * 60 * 8 )
+		{
+			SendMsg_SessionTokenReq();
+		}
 	}
 }
 
@@ -540,6 +518,7 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 
 	case protocol::Sub_Vchat_Resp_ErrCode:
 		LOG("protocol::Sub_Vchat_Resp_ErrCode");
+		last_joinroom_time = 0;
 		dispatch_error_message(body);
 		break;
 

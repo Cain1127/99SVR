@@ -36,11 +36,12 @@ int nRoom_fans_info;
 int nRoom_is_collet;
 RoomInfo *currentRoom;
 
-void ZLConnectionListerner::OnConnectError(int err_code)
+void ZLConnectionListerner::OnConnected()
 {
     
 }
-void ZLConnectionListerner::OnConnected()
+
+void ZLConnectionListerner::OnConnectError(int err_code)
 {
     
 }
@@ -513,7 +514,7 @@ void ZLLogonProtocol::sendGift(int giftId,int num){
     req.set_toid(toUserId);
     req.set_giftid(giftId);
     req.set_giftnum(num);
-    req.set_action(2);
+//    req.set_action(2);
     const char *toName = (const char *)toUser.bytes;
     if(toName){
         req.set_toalias(toName);

@@ -242,18 +242,18 @@
     [downView addSubview:whiteView];
     
     //发送消息按钮
-    _giftView = [[GiftView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth, kScreenHeight)];
-    [self.view addSubview:_giftView];
+    _giftView = [[GiftView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
+//    [self.view addSubview:_giftView];
     _giftView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
     _giftView.delegate = self;
     
-    _listView = [[UserListView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth, kScreenHeight) array:nil];
-    [self.view addSubview:_listView];
+    _listView = [[UserListView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight) array:nil];
+//    [self.view addSubview:_listView];
     _listView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
     _listView.delegate = self;
 
-    _inputView = [[ChatView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth,kScreenHeight)];
-    [self.view addSubview:_inputView];
+    _inputView = [[ChatView alloc] initWithFrame:Rect(0,0, kScreenWidth,kScreenHeight)];
+//    [self.view addSubview:_inputView];
     _inputView.hidden = YES;
     _inputView.delegate = self;
     
@@ -674,7 +674,12 @@
         {
             if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
                 ([_room.roomid intValue]==10000 || [_room.roomid intValue]==10001)) {
-                _inputView.hidden = !_inputView.hidden;
+                [UIView animateWithDuration:0.5 animations:
+                 ^{
+                     _inputView.hidden = NO;
+                     [self.parentViewController.view addSubview:_inputView];
+                     [_inputView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+                 } completion:^(BOOL finished) {}];
             }
             else
             {
@@ -695,8 +700,11 @@
         {
             if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
                 [_giftView updateGoid];
-                [UIView animateWithDuration:0.5 animations:^{
-                    [_giftView setFrame:Rect(0, -kRoom_head_view_height, kScreenWidth, kScreenHeight)];
+                [UIView animateWithDuration:0.5 animations:
+                ^{
+                    _giftView.hidden = NO;
+                    [self.parentViewController.view addSubview:_giftView];
+                    [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
                 } completion:^(BOOL finished) {}];
             }
             else
@@ -759,17 +767,17 @@
 {
     if([UserInfo sharedUserInfo].nType != 1 && ![_room.roomid isEqualToString:@"10000"] && ![_room.roomid isEqualToString:@"10001"])
     {
-        [self.view makeToast:@"游客不能发送信息"];
+        [ProgressHUD showError:@"游客不能发送信息"];
         return ;
     }
     if ([DecodeJson isEmpty:strInfo])
     {
-        [self.view makeToast:@"请输入聊天内容"];
+        [ProgressHUD showError:@"请输入聊天内容"];
         return ;
     }
     [kProtocolSingle sendMessage:strInfo toId:toUser];
     [_inputView.textView setText:@""];
-    [_inputView setHidden:YES];
+    [_inputView setGestureHidden];
 }
 
 #pragma mark 送礼物

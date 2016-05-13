@@ -41,10 +41,12 @@
 
 - (void)setGestureHidden
 {
-    [UIView animateWithDuration:0.5 animations:
-    ^{
-        self.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
-    }completion:nil];
+    [UIView animateWithDuration:0.5 animations:^{
+        [self setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
+    } completion:^(BOOL finished) {
+        self.hidden = YES;
+        [self removeFromSuperview];
+    }];
 }
 
 - (void)initHiddenView
