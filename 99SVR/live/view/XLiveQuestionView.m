@@ -56,7 +56,7 @@
     [_hiddenView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     [_hiddenView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     
-    UIView *liveQuestion = [[UIView alloc] initWithFrame:Rect(0,kScreenHeight-kLive_question_height, kScreenWidth,kLive_question_height)];
+    UIView *liveQuestion = [[UIView alloc] initWithFrame:Rect(0,20, kScreenWidth,kScreenHeight-20)];
     [liveQuestion setBackgroundColor:UIColorFromRGB(0xffffff)];
     [self addSubview:liveQuestion];
     
@@ -79,11 +79,11 @@
     inset.left -= 20;
     _btnTitle.imageEdgeInsets = inset;
     [liveQuestion addSubview:_btnTitle];
-    
+   /*
     UILabel *lineTemp1 = [[UILabel alloc] initWithFrame:Rect(0, 43.5, kScreenWidth, 0.5)];
     [lineTemp1 setBackgroundColor:COLOR_Line_Small_Gay];
     [liveQuestion addSubview:lineTemp1];
-    
+   */ 
     _btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnRight setTitle:@"取消" forState:UIControlStateNormal];
     _btnRight.titleLabel.font = XCFONT(15);

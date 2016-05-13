@@ -27,7 +27,9 @@
 #import "UIAlertView+Block.h"
 
 @interface TabBarController ()<PlayIconDelegate>
-
+{
+    NetworkStatus nowStatus;
+}
 @property (nonatomic, strong) Reachability *hostReach;
 @property (nonatomic, assign) NetworkStatus nowStatus;
 @property (nonatomic, strong) PlayIconView *iConView;
@@ -43,12 +45,14 @@
     _iConView.hidden = YES;
 }
 
-- (void)gotoPlay{
+- (void)gotoPlay
+{
     RoomViewController *roomView = [RoomViewController sharedRoomViewController];
     [self.navigationController pushViewController:roomView animated:YES];
 }
 
-- (void)hidenPlay{
+- (void)hidenPlay
+{
     _btnPlay.hidden = NO;
     _iConView.hidden = YES;
 }
@@ -56,10 +60,10 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         // 统一设置Item的文字属性
         [self setUpItemTextAttrs];
-        
         // 添加所以子控制器
         [self setUpAllChildViewControllers];
     }
@@ -113,12 +117,10 @@
 /**
  *  添加所有子控制器
  */
-- (void)setUpAllChildViewControllers{
-    
+- (void)setUpAllChildViewControllers
+{
     [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
     [self setUpOneViewController:[[ZLVideoListViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
-    
-    
     if ([UserInfo sharedUserInfo].nStatus)
     {
         [self setUpOneViewController:[[TQIdeaViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];

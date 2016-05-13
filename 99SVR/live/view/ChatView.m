@@ -63,9 +63,14 @@
     return self;
 }
 
-- (void)setViewHidden
+- (void)setGestureHidden
 {
-    [self setHidden:YES];
+    [UIView animateWithDuration:0.5 animations:^{
+        [self setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
+    } completion:^(BOOL finished) {
+        self.hidden = YES;
+        [self removeFromSuperview];
+    }];
 }
 
 - (void)createView
@@ -79,7 +84,7 @@
     [hiddenView clickWithBlock:^(UIGestureRecognizer *gesture) {
         __self.hidden = YES;
     }];
-    [hiddenView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(setViewHidden)]];
+    [hiddenView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(setGestureHidden)]];
     
     downView = [[UIView alloc] initWithFrame:Rect(0, kScreenHeight-50,kScreenWidth,50)];
     [self addSubview:downView];

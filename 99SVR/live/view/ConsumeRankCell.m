@@ -25,6 +25,7 @@
     _lblGoid = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-80,_lblName.y,80, 30)];
     [_lblGoid setTextColor:UIColorFromRGB(0x919191)];
     [_lblGoid setFont:XCFONT(14)];
+    [_lblGoid setTextAlignment:NSTextAlignmentRight];
     
     [self.contentView addSubview:_imgHead];
     [self.contentView addSubview:_lblName];

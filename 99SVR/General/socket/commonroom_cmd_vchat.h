@@ -390,10 +390,6 @@ namespace protocol
 		uint32 totype;     //接受对象类型:0-普通用户,1-所有用户,2-所有注册用户,3-所有会员,4-所有管理,5-所有主持
 		uint32 giftid;     //礼物id
 		uint32 giftnum;    //赠送数目
-		byte action;      //交易动作:action=0-下发跑道礼物列表时使用(null), 2-普通礼物赠送,3-世界道, 5-收费麦礼物, 6-烟花(特别,因为提示格式不一样)
-		byte servertype;  //服务器转发类型。  0-表示普通转发(房间内）。1-表示通过centerSvr转发, 2-表示房间登陆时获取
-		byte banonymous;  //是否匿名。0-表示不匿名，1-表示匿名 10-接受者隐身 11-送受双方都隐身
-		byte casttype;    //是否广播，0-表示不广播，1-表示广播,客户端设是否需要上小喇叭通知 5-所有房间公聊区显示
 		uint32 dtime;      //发起时间
 		uint32 oldnum;     //下发时填写,上次数目, 下发跑道礼物列表时0(null)
 		char flyid;      //跑道ID,-1没有

@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "platform.h"
 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #ifdef WIN

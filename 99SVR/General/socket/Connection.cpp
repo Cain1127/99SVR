@@ -20,14 +20,14 @@
 Socket g_socket;
 
 char cache_path[256] = { 0 };
-//static const char* lbs0 = "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,lbs3.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";//,112.25.230.249:2222
-static const char* lbs0 = "testlbs.99ducaijing.cn:2222";//cs
-static char lbs_from_file[256] = {0};
-static char lbs_from_http[256] = {0};
-static char lbs_from_set[256] = {0};
-static char lbs_curr[256] = {0};
-static int lbs_count;
 
+
+char lbs_from_file[256] = {0};
+char lbs_from_http[256] = {0};
+char lbs_from_set[256] = {0};
+char lbs_curr[256] = {0};
+char lbs_splited[8][64];
+int lbs_count;
 
 static time_t connect_start_time;
 static int lbs_err_counter;
@@ -49,6 +49,7 @@ static bool is_set_lbs;
 
 static time_t last_ping_time;
 static time_t last_send_time;
+time_t last_joinroom_time;
 
 char connect_ip[32];
 short connect_port;
@@ -64,6 +65,7 @@ void InitProtocolContext(const char* path)
 {
 	strcpy(cache_path, path);
 	in_room = false;
+	get_http_servers_from_lbs_asyn();
 }
 
 void ReadProtocolCache(const char *suffix_path, std::string& cache_content)
@@ -188,8 +190,7 @@ int save_lbs_to_file(const char* lbs)
 ThreadVoid get_lbs_from_http(void* param)
 {
 	Http http;
-	char* json = http.request("http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=4&versionNumber=1&parameterName=lbs");
-	//char* json = http.request("http://121.12.118.32/caijing/?m=Api&c=ClientConfig&clientType=4&versionNumber=1&parameterName=lbs");
+	char* json = http.request(CONFIG_URL);
 	if (json)
 	{
 		JsonReader reader;
@@ -235,6 +236,59 @@ ThreadVoid get_host_form_lbs_runnable(void* param)
 	delete p;
 	
 	ThreadReturn;
+}
+
+
+void get_lbs_servers()
+{
+	if (!is_set_lbs)
+	{
+		const char* lbs = LBS0;
+		if (*cache_path)
+		{
+			lbs = get_lbs_from_file();
+			if (lbs == NULL)
+			{
+				get_lbs_from_http(NULL);
+				if (*lbs_from_http)
+				{
+					lbs = lbs_from_http;
+					LOG("use lbs from http:%s", lbs);
+				}
+				else
+				{
+					lbs = LBS0;
+					LOG("use lbs from default:%s", lbs);
+				}
+			}
+			else
+			{
+				LOG("use lbs from file:%s", lbs);
+				Thread::start(get_lbs_from_http, NULL);
+			}
+		}
+
+		strcpy(lbs_curr, lbs);
+	}
+	else
+	{
+		strcpy(lbs_curr, lbs_from_set);
+	}
+
+	Thread::lock(&conn_lock);
+	lbs_count = 0;
+	memset(lbs_splited, 0, sizeof(lbs_splited));
+
+	const char *d = ",;";
+	char *p = strtok(lbs_curr, d);
+
+	while (p)
+	{
+		strcpy(lbs_splited[lbs_count], p);
+		lbs_count++;
+		p = strtok(NULL, d);
+	}
+	Thread::unlock(&conn_lock);
 }
 
 void parse_ip_port(char* s, char* ip, short& port)
@@ -350,43 +404,8 @@ void Connection::connect_from_lbs_asyn()
 	memset(connect_ip, 0, sizeof(connect_ip));
 	connect_port = 0;
 
-
-	connect("121.12.118.32", 7301);
-	return;
-
-	if (!is_set_lbs)
-	{
-		const char* lbs = lbs0;
-		if (*cache_path)
-		{
-			lbs = get_lbs_from_file();
-			if (lbs == NULL)
-			{
-				get_lbs_from_http(NULL);
-				if (*lbs_from_http)
-				{
-					lbs = lbs_from_http;
-					LOG("use lbs from http:%s", lbs);
-				}
-				else
-				{
-					lbs = lbs0;
-					LOG("use lbs from default:%s", lbs);
-				}
-			}
-			else
-			{
-				LOG("use lbs from file:%s", lbs);
-				Thread::start(get_lbs_from_http, NULL);
-			}
-		}
-		
-		strcpy(lbs_curr, lbs);
-	}
-	else
-	{
-		strcpy(lbs_curr, lbs_from_set);
-	}
+	//connect("121.12.118.32", 7301);
+	//return;
 
 	if (connect_start_time == 0)
 	{
@@ -394,19 +413,7 @@ void Connection::connect_from_lbs_asyn()
 		connected_host[0] = '\0';
 	}
 
-	char lbs_splited[8][64];
-	memset(lbs_splited, 0, sizeof(lbs_splited));
-
-	const char *d = ",;";
-	char *p = strtok(lbs_curr, d);
-	lbs_count = 0;
-
-	while (p)
-	{
-		strcpy(lbs_splited[lbs_count], p);
-		lbs_count++;
-		p = strtok(NULL, d);
-	}
+	get_lbs_servers();
 
 	for (int i = 0; i < lbs_count; i++)
 	{
@@ -416,6 +423,80 @@ void Connection::connect_from_lbs_asyn()
 		Thread::start(get_host_form_lbs_runnable, param);
 	}
 }
+
+
+
+//////////// http lbs
+
+vector<string> httphosts;
+
+ThreadVoid get_httphost_form_lbs_runnable(void* param)
+{
+	char* lbs = (char*)param;
+	char ip[64];
+	short port;
+	parse_ip_port(lbs, ip, port);
+
+	Http http;
+	char* content = http.request(ip, port, "/tygetPHP");
+	if (content != NULL && strlen(content) > 10)
+	{
+		Thread::lock(&conn_lock);
+		char* end = strchr(content, '|');
+		if (end)
+			*end = '\0';
+
+		const char *d = ",;";
+		char *p = strtok(content, d);
+		while (p)
+		{
+			if (strlen(p) > 1)
+			{
+				int i = 0;
+				for (i = 0; i < httphosts.size(); i++)
+				{
+					if ( httphosts[i] == p )
+						break;
+				}
+
+				if (i >= httphosts.size())
+				{
+					httphosts.push_back(p);
+					LOG("add http host:%s", p);
+				}
+				else
+				{
+					LOG("exitsted http host:%s", p);
+				}
+			}
+
+			p = strtok(NULL, d);
+		}  // end while split host2
+		Thread::unlock(&conn_lock);
+	}
+
+	ThreadReturn;
+}
+
+void get_http_servers_from_lbs_asyn()
+{
+	get_lbs_servers();
+
+	httphosts.clear();
+	httphosts.push_back(HTTP_API);
+
+	for (int i = 0; i < lbs_count; i++)
+	{
+		Thread::start(get_httphost_form_lbs_runnable, lbs_splited[i]);
+	}
+}
+
+
+
+////////////////////////
+
+
+
 
 void Connection::do_error()
 {
@@ -597,7 +678,7 @@ string Connection::get_error_desc(int err_code)
 		str="没有找到礼物ID";
 		break;
 	default:
-		str="未知错误";
+		str="未知错误：" + int2string(err_code);
 		break;
 	}
 
@@ -989,6 +1070,12 @@ void Connection::on_io_error(int err_code)
 	if (is_closed()) return;
 
 	close();
+
+	if ( last_joinroom_time != 0)
+	{
+		ReportJoinRoomFailed(login_userid, 1, join_req.vcbid(), connected_host, int2string(err_code));
+		last_joinroom_time = 0;
+	}
 
 	if (connect_start_time != 0)  // 5 + 2
 	{

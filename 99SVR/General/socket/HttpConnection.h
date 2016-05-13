@@ -32,8 +32,6 @@ private:
 	bool needOperateStocksCache[3];
 	bool needRoomListCache;
 
-	string GBKToUTF8(const std::string& strGBK);
-
 public:
 
 	HttpConnection()
@@ -159,10 +157,17 @@ public:
 	// PC左侧菜单
 	void RequestPcGroupsPage(GroupsPageListener* listener);
 
-
+	// 获取私人定制详情页的Html5 URL
 	string GetPrivateServiceDetailUrl(int psid);
 
+	// 获取我的充值/消费记录Html5 URL
 	string GetConsumeRecordUrl();
+
+	// 获取 API host
+	string GetHttpApiHost();
+
+	// 获取图片 host
+	string GetImageHost();
 
 };
 

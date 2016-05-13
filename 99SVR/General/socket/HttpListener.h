@@ -11,7 +11,7 @@ using std::vector;
 class HttpListener
 {
 public:
-	virtual void OnError(int errCode)= 0;
+	virtual void OnError(int errCode) =0;
 };
 
 class SplashImageListener : public HttpListener
@@ -52,7 +52,7 @@ public:
 class OperateStockProfitListenerDay : public OperateStockProfitListener
 {
 public:
-	virtual void onResponse(vector<OperateStockProfit>& infos,int seq, bool bRefresh);void OnError(int errCode);
+	virtual void onResponse(vector<OperateStockProfit>& infos, int seq, bool bRefresh);void OnError(int errCode);
 };
 class OperateStockProfitListenerMonth : public OperateStockProfitListener
 {

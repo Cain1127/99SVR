@@ -12,6 +12,7 @@
 
 #import <Foundation/Foundation.h>
 @class RoomInfo;
+
 #import "videoroom_cmd_vchat.h"
 #import "VideoRoomListener.h"
 #import "VideoRoomConnection.h"

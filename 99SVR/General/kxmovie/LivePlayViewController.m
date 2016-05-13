@@ -177,7 +177,6 @@
 - (void)startLoad
 {
     [_glView makeToastActivity:@"bottom"];
-//    Loading_Bird_Show(_glView);
 }
 
 - (void)stopLoad
@@ -186,7 +185,6 @@
     dispatch_async(dispatch_get_main_queue(),
     ^{
         [__glView hideToastActivity];
-//        Loading_Hide(__glView);
     });
 }
 
@@ -257,12 +255,10 @@
         _openAL = [[OpenAL alloc] init];
     }
     [_openAL initOpenAL];
-//    _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
 }
 
 - (void)decodeAudio
 {
-//    [_playAudio startPlayWithBufferByteSize:7680];
     while (_playing)
     {
         if(_aryAudio.count<10)
@@ -278,7 +274,6 @@
                 data = [_aryAudio objectAtIndex:0];
                 if (data && data.length > 0)
                 {
-//                    [_playAudio putAudioData:(short *)data.bytes size:(int)data.length];
                     [_openAL openAudioFromQueue:(unsigned char *)data.bytes dataSize:(int)data.length];
                 }
                 @synchronized(_aryAudio)

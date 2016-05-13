@@ -51,6 +51,7 @@ public:
 		LOG("userid = %d", _userid);
 		LOG("roomid = %d", _roomid);
 	}
+
 };
 
 
@@ -2603,10 +2604,6 @@ private:
 	uint32	_totype;
 	uint32	_giftid;
 	uint32	_giftnum;
-	uint32	_action;
-	uint32	_servertype;
-	uint32	_banonymous;
-	uint32	_casttype;
 	uint32	_dtime;
 	uint32	_oldnum;
 	uint32	_flyid;
@@ -2650,22 +2647,6 @@ public:
 	 inline uint32 giftnum() { return _giftnum; } const 
 
 	 inline void set_giftnum(const uint32 value) { _giftnum = value; }
-
-	 inline uint32 action() { return _action; } const 
-
-	 inline void set_action(const uint32 value) { _action = value; }
-
-	 inline uint32 servertype() { return _servertype; } const 
-
-	 inline void set_servertype(const uint32 value) { _servertype = value; }
-
-	 inline uint32 banonymous() { return _banonymous; } const 
-
-	 inline void set_banonymous(const uint32 value) { _banonymous = value; }
-
-	 inline uint32 casttype() { return _casttype; } const 
-
-	 inline void set_casttype(const uint32 value) { _casttype = value; }
 
 	 inline uint32 dtime() { return _dtime; } const 
 
@@ -2713,10 +2694,6 @@ public:
 		cmd->totype = _totype;
 		cmd->giftid = _giftid;
 		cmd->giftnum = _giftnum;
-		cmd->action = _action;
-		cmd->servertype = _servertype;
-		cmd->banonymous = _banonymous;
-		cmd->casttype = _casttype;
 		cmd->dtime = _dtime;
 		cmd->oldnum = _oldnum;
 		cmd->flyid = _flyid;
@@ -2738,10 +2715,6 @@ public:
 		_totype = cmd->totype;
 		_giftid = cmd->giftid;
 		_giftnum = cmd->giftnum;
-		_action = cmd->action;
-		_servertype = cmd->servertype;
-		_banonymous = cmd->banonymous;
-		_casttype = cmd->casttype;
 		_dtime = cmd->dtime;
 		_oldnum = cmd->oldnum;
 		_flyid = cmd->flyid;
@@ -2763,10 +2736,6 @@ public:
 		LOG("totype = %d", _totype);
 		LOG("giftid = %d", _giftid);
 		LOG("giftnum = %d", _giftnum);
-		LOG("action = %d", _action);
-		LOG("servertype = %d", _servertype);
-		LOG("banonymous = %d", _banonymous);
-		LOG("casttype = %d", _casttype);
 		LOG("dtime = %d", _dtime);
 		LOG("oldnum = %d", _oldnum);
 		LOG("flyid = %d", _flyid);

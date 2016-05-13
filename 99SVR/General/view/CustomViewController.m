@@ -45,7 +45,6 @@
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(MarchBackLeft) image:@"back" highImage:@"back"];
     [_headView addSubview:btnLeft];
     [btnLeft setFrame:Rect(0,20,44,44)];
-    
 }
 /**
  *  3月写的后退效果
@@ -143,6 +142,17 @@
 
 - (void)dealloc
 {
+    
+}
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 
