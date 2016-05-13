@@ -39,6 +39,9 @@
 @property (nonatomic,assign) NSInteger nCurrent;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) XIdeaDataSource *dataSource;
+/**下拉刷新需要清空数据！上啦不需要*/
+@property (nonatomic , assign) __block MJRefreshState refreshState;
+
 
 @end
 
@@ -55,10 +58,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newIdeaNotifi:) name:MESSAGE_TQIdeaView_NewNotifi_VC object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
-    if(_dataSource.aryModel.count==0)
-    {
-        [self.tableView.gifHeader beginRefreshing];
-    }
 
     [self setTitleText:@"专家观点"];
     
@@ -71,7 +70,11 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(uploadMore)];
     [self.tableView.gifHeader loadDefaultImg];
     [self.tableView.footer setHidden:YES];
-    
+    if(_dataSource.aryModel.count==0)
+    {
+        [self.tableView.gifHeader beginRefreshing];
+    }
+
     _nCurrent = 0;
 }
 
@@ -93,7 +96,12 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
 }
 
 /**新的专家观点通知*/
@@ -105,82 +113,97 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 - (void)loadViewPoint:(NSNotification *)notify{
     
-    NSDictionary *parameters = notify.object;
 
-    DLog(@"--------------------😍-------------😍%@",parameters);
     
-//    NSDictionary *parameters = notify.object;
-//    @WeakObj(self)
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [selfWeak.tableView hideToastActivity];
-//        [selfWeak.tableView.header endRefreshing];
-//    });
-//    int code = [parameters[@"code"] intValue];
-//    NSArray *aryIndex = parameters[@"model"];
-//    if (code!=1 && _dataSource.aryModel.count ==0)
-//    {
-////        [self showErrorViewInView:_tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
-////            Loading_Bird_Show(selfWeak.tableView);
-////            [selfWeak.tableView.header beginRefreshing];
-////        }];
-//    }
-//    else if (aryIndex.count==0 && code==1 && _dataSource.aryModel.count ==0 )
-//    {
-////        [self showEmptyViewInView:_tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
-////            Loading_Bird_Show(selfWeak.tableView);
-////            [selfWeak.tableView.header beginRefreshing];
-////        }];
-//    }
-//    else
-//    {
-//        [self hideEmptyViewInView:_tableView];
-//        if (_dataSource.aryModel.count>0)
-//        {
-//            NSMutableArray *aryAll = [NSMutableArray array];
-//            [aryAll addObjectsFromArray:_dataSource.aryModel];
-//            for (TQIdeaModel *model in aryIndex) {
-//                [aryAll addObject:model];
-//            }
-//            _dataSource.aryModel = aryAll;
-//        }
-//        else
-//        {
-//            _dataSource.aryModel = aryIndex;
-//        }
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            @StrongObj(self)
-//            if ([self.tableView.header isRefreshing]) {
-//                [self.tableView.header endRefreshing];
-//            }else{
-//                [self.tableView.footer endRefreshing];
-//            }
-//            if (self.nCurrent != self.dataSource.aryModel.count && self.dataSource.aryModel.count!=0)
-//            {
-//                [self.tableView.footer setHidden:YES];
-//            }
-//            else
-//            {
-//                [self.tableView.footer setHidden:NO];
-//            }
-//            [self.tableView reloadData];
-//        });
-//    }
+    NSDictionary *parameters = notify.object;
+    @WeakObj(self)
+    
+    int code = [parameters[@"code"] intValue];
+    NSArray *aryIndex = parameters[@"model"];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        Loading_Hide(selfWeak.tableView);
+        [selfWeak.tableView.header endRefreshing];
+        [selfWeak.tableView.footer endRefreshing];
+        if (code==1) {//请求成功
+            
+            if (self.refreshState == MJRefreshState_Header) {//头部
+                _dataSource.aryModel = nil;
+            }
+            
+            if (_dataSource.aryModel.count>0)
+            {
+                NSMutableArray *aryAll = [NSMutableArray array];
+                [aryAll addObjectsFromArray:_dataSource.aryModel];
+                for (TQIdeaModel *model in aryIndex) {
+                    [aryAll addObject:model];
+                }
+                _dataSource.aryModel = aryAll;
+            }
+            else
+            {
+                _dataSource.aryModel = aryIndex;
+            }
+        }else{//请求失败
+        
+        }
+        
+        if (self.nCurrent != self.dataSource.aryModel.count && self.dataSource.aryModel.count!=0)
+        {
+            [self.tableView.footer setHidden:YES];
+        }
+        else
+        {
+            [self.tableView.footer setHidden:NO];
+        }
+        [self.tableView reloadData];
+        
+        [self chickEmptyViewShowWithTab:self.tableView withData:self.dataSource.aryModel withCode:code];
+
+    });
 }
+
+#pragma mark 请求成功时候-检测是否出现提示图
+-(void)chickEmptyViewShowWithTab:(UITableView *)tab withData:(NSArray *)dataArray withCode:(int)code{
+    
+    NSString *codeStr = [NSString stringWithFormat:@"%d",code];
+    WeakSelf(self);
+    
+    if (dataArray.count==0&&(code!=1)) {//数据为0 请求失败
+        
+        [self showErrorViewInView:tab withMsg:RequestState_NetworkErrorStr(codeStr) touchHanleBlock:^{
+            [weakSelf.tableView.gifHeader beginRefreshing];
+        }];
+    }else if (dataArray.count==0&&(code==1)){//数据为0 请求成功
+        
+        [self showEmptyViewInView:tab withMsg:RequestState_EmptyStr(codeStr) touchHanleBlock:^{
+            
+            
+        }];
+        
+    }else{//请求成功
+        
+        [self hideEmptyViewInView:tab];
+    }
+    
+}
+
 
 -(void)updateRefresh
 {
+    self.refreshState = MJRefreshState_Header;
     _nCurrent = 20;
     if (_dataSource.aryModel.count==0)
     {
         [self hideEmptyViewInView:_tableView];
         [_tableView makeToastActivity_bird];
     }
-    _dataSource.aryModel = nil;
     [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
 }
 
 - (void)uploadMore
 {
+    self.refreshState = MJRefreshState_Footer;
     if (_dataSource.aryModel.count>0)
     {
         TQIdeaModel *model = _dataSource.aryModel[_dataSource.aryModel.count-1];

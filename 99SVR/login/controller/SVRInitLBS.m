@@ -30,7 +30,7 @@
 
 + (void)httpTest
 {
-    [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
+//    [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
 }
 
 /**
