@@ -17,6 +17,8 @@
 @property (nonatomic , strong) StockDealCellView *wareHouseViw;
 /**不是VIP 的交易动态*/
 @property (nonatomic , strong) StockNotVipView *notVipView;
+/**空数据的提示*/
+@property (nonatomic , strong) UILabel *nullLabe;
 
 -(void)setCellDataWithModel:(id)modelObject withIsVip:(BOOL)vipBool withCellId:(NSString *)cellId withStockHeaderModel:(StockDealModel *)headerModel;
 
