@@ -17,10 +17,10 @@
 @interface UserListView : UIView
 
 @property (nonatomic,assign) id<UserListSelectDelegate> delegate;
-@property (nonatomic,assign) BOOL bShow;
 
 - (id)initWithFrame:(CGRect)frame array:(NSArray *)items;
 
 - (void)reloadItems:(NSArray *)items;
 
+- (void)setGestureHidden;
 @end

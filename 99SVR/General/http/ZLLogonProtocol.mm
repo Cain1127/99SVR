@@ -38,14 +38,12 @@ RoomInfo *currentRoom;
 
 void ZLConnectionListerner::OnConnected()
 {
-    DLog(@"OnConnected-连接成功");
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:@{@"code":@"1"}];
+    
 }
 
 void ZLConnectionListerner::OnConnectError(int err_code)
 {
-     DLog(@"OnConnectError-失去连接回调");
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:@{@"code":@"0"}];
+    
 }
 
 void ZLPushListener::OnConfChanged(int version)
@@ -93,7 +91,7 @@ void ZLPushListener::OnRoomGroupChanged()
 
 //ZLPushListener::ZLPushListener()
 //{
-//
+//    
 //}
 
 void ZLPushListener::OnRoomTeacherOnMicResp(RoomTeacherOnMicResp &info)
@@ -138,11 +136,11 @@ void ZLHallListener::OnViewpointTradeGiftErr(ErrCodeResp& info)
     if (strErr!=nil)
     {
         DLog(@"strerr:%@",strErr);
-        //        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:strErr];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:strErr];
     }
     else
     {
-        //        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:@"提问失败"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:@"提问失败"];
     }
 }
 
@@ -164,9 +162,9 @@ void ZLConnectionListerner::OnIOError(int err_code)
             [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_PROTOCOL_DISCONNECT_VC object:nil];
             
         }
-            break;
+        break;
         default:
-            break;
+        break;
     }
 }
 
@@ -181,25 +179,25 @@ void ZLLoginListener::OnLogonErr(UserLogonErr2& info)
     switch (info.errid()) {
         case 103:
             strMsg = @"没有此用户";
-            break;
+        break;
         case 101:
             strMsg = @"你被限制进入,登录失败!请联系在线客服.";
-            break;
+        break;
         case 106:
             strMsg = @"账号错误";
-            break;
+        break;
         case 104:
             strMsg = @"密码错误";
-            break;
+        break;
         case 105:
             strMsg = @"请升级版本";
-            break;
+        break;
         case 107:
             strMsg = @"账号已冻结";
-            break;
+        break;
         default:
-            strMsg = @"密码错误";
-            break;
+        strMsg = @"密码错误";
+        break;
     }
     int loginType = [UserInfo sharedUserInfo].otherLogin ? [UserInfo sharedUserInfo].otherLogin : 0;
     NSString *strUrl = [NSString stringWithFormat:@"ReportItem=Login&ClientType=3&LoginType=%d&UserId=%d&ServerIP=%@&Error=%@",
@@ -278,24 +276,7 @@ void ZLLoginListener::OnLogonTokenNotify(SessionTokenResp& info)
     DLog(@"token:%@",[UserInfo sharedUserInfo].strToken);
 }
 
-
 //实例调用类
-/**
- *  网络变更
- */
-void ZLLogonProtocol::networkfChanged()
-{
-    conn->OnNetworkChanged();
-}
-
-/**
- *  socket 重连
- */
-void ZLLogonProtocol::reConnect()
-{
-    conn->Reconnect();
-}
-
 /**
  *  直接登录
  *
@@ -344,7 +325,7 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd,const char 
  *  @return 默认1
  */
 int ZLLogonProtocol::startOtherLogin(uint32 cloginid,const char *openid,const char *token){
-    
+
     strUser = [NSString stringWithFormat:@"%d",cloginid];
     strPwd =@"";
     if (openid == NULL || token == NULL) {
@@ -386,7 +367,7 @@ int ZLLogonProtocol::updateNick(const char *cNick,const char *intro,int sex)
     }
     SetUserProfileReq req;
     memset(&req, 0, sizeof(req));
-    
+
     UserInfo *info = [UserInfo sharedUserInfo];
     req.set_userid(info.nUserId);
     req.set_headid(info.headid);
@@ -401,7 +382,8 @@ int ZLLogonProtocol::updateNick(const char *cNick,const char *intro,int sex)
 
 
 
-void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomPwd){
+void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomPwd)
+{
     if (aryRoomChat==nil) {
         aryRoomChat = [NSMutableArray array];
     }
@@ -418,6 +400,8 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
         aryRoomNotice = [NSMutableArray array];
     }
     [aryRoomNotice removeAllObjects];
+    
+    [aryRoomChat addObject:@"<span style=\"color:#919191\">[系统消息]正在加载房间数据...</span>"];
     
     JoinRoomReq req;
     const char *uId = [[DeviceUID uid] UTF8String];
@@ -533,7 +517,7 @@ void ZLLogonProtocol::sendGift(int giftId,int num){
     req.set_toid(toUserId);
     req.set_giftid(giftId);
     req.set_giftnum(num);
-    //    req.set_action(2);
+//    req.set_action(2);
     const char *toName = (const char *)toUser.bytes;
     if(toName){
         req.set_toalias(toName);
@@ -587,7 +571,7 @@ void ZLHallListener::OnSetUserProfileResp(SetUserProfileResp& info, SetUserProfi
             user.sex = req.ngender();
             DLog(@"intro:%@---strname:%@",user.strIntro,user.strName);
         }
-            break;
+        break;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_LOGIN_SET_PROFILE_VC object:@(info.errorid())];
 }
@@ -603,10 +587,10 @@ void ZLHallListener::OnGetUserMoreInfResp(GetUserMoreInfResp& info)
 void ZLHallListener::OnBuyPrivateVipResp(BuyPrivateVipResp& info)
 {
     /*
-     uint32	_userid;
-     uint32	_teacherid;
-     uint32	_viptype;
-     uint64	_nk;  */
+    uint32	_userid;
+    uint32	_teacherid;
+    uint32	_viptype;
+    uint64	_nk;  */
     NSDictionary *didct = @{@"userid":@(info.userid()),@"teacherid":@(info.teacherid()),@"viptype":@(info.viptype()),@"goid":@(info.nk()),@"code":@"1"};
     [UserInfo sharedUserInfo].goldCoin = info.nk()/1000.0;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_BUY_PRIVATE_VIP_VC object:didct];
@@ -681,13 +665,15 @@ void ZLRoomListener::OnRoomUserExceptExitNoty(UserExceptExitRoomInfo_ext& info){
 /**
  *  消息信息
  */
-void ZLRoomListener::OnChatNotify(RoomChatMsg& info){
+void ZLRoomListener::OnChatNotify(RoomChatMsg& info)
+{
     if(info.msgtype()==1){
         //解析广播
         DLog(@"广播");
         [RoomService getRibao:&info notice:aryRoomNotice];
     }else{
         //解析消息记录
+        DLog(@"添加信息");
         [RoomService getChatInfo:&info array:aryRoomChat prichat:aryRoomPrichat];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     }
@@ -740,13 +726,13 @@ void ZLRoomListener::OnRobotTeacherIdNoty(RobotTeacherIdNoty& info)
 //Ã·Œ œÏ”¶
 void ZLRoomListener::OnAskQuestionResp(AskQuestionResp& info)
 {
-    //    uint64	_nk;
-    //    uint32	_questionid;
-    //    uint32	_userid;
-    //    uint32	_teamid;
-    //    string	_stock;
-    //    uint32	_questionlen;
-    //    string	_question;
+//    uint64	_nk;
+//    uint32	_questionid;
+//    uint32	_userid;
+//    uint32	_teamid;
+//    string	_stock;
+//    uint32	_questionlen;
+//    string	_question;
     DLog(@"提问成功");
     [UserInfo sharedUserInfo].goldCoin = info.nk()/1000.0f;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_QUESTION_VC object:@{@"code":@(1)}];
@@ -861,50 +847,50 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
 void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
 {
     DLog(@"加入房间失败");
-    //    NSString *strMsg = [NSString stringWithUTF8String:conn->get_error_desc(info.errid()).c_str()];
+//    NSString *strMsg = [NSString stringWithUTF8String:conn->get_error_desc(info.errid()).c_str()];
     NSString *strMsg = nil;
     switch (info.errid()) {
-            
-        case 201:
-        {
-            strMsg = @"需要输入密码";
-        }
-            break;
-        case 101:
-        {
-            strMsg = @"]房间黑名单";
-        }
-            break;
-        case 203:
-        {
-            strMsg = @"用户名/密码查询错误，无法加入房间!";
-        }
-            break;
-        case 404:
-        {
-            strMsg = @"加入房间 不存在";
-        }
-            break;
-        case 405:
-        {
-            strMsg = @"房间已经被房主关闭，不能进入";
-        }
-            break;
-        case 502:
-        {
-            strMsg = @"房间人数已满";
-        }
-            break;
-        case 505:
-        {
-            strMsg = @"通信版本过低，不能使用，请升级";
-        }
-            break;
-        default:
-        {
-            strMsg = @"未知错误";
-        }
-            break;
+    
+    case 201:
+    {
+        strMsg = @"需要输入密码";
+    }
+    break;
+    case 101:
+    {
+        strMsg = @"房间黑名单";
+    }
+    break;
+    case 203:
+    {
+        strMsg = @"用户名/密码查询错误，无法加入房间!";
+    }
+    break;
+    case 404:
+    {
+        strMsg = @"加入房间 不存在";
+    }
+    break;
+    case 405:
+    {
+        strMsg = @"房间已经被房主关闭，不能进入";
+    }
+    break;
+    case 502:
+    {
+        strMsg = @"房间人数已满";
+    }
+    break;
+    case 505:
+    {
+        strMsg = @"通信版本过低，不能使用，请升级";
+    }
+    break;
+    default:
+    {
+        strMsg = @"未知错误";
+    }
+    break;
     }
     NSDictionary *parameters = @{@"err":@(info.errid()),@"msg":strMsg};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_ERR_VC object:parameters];

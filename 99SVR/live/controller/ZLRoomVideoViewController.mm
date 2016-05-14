@@ -624,6 +624,7 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
         case 5://显示成员
         {
             [UIView animateWithDuration:0.5 animations:^{
+                _listView.hidden = NO;
                 _listView.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
             } completion:^(BOOL finished)
             {}];
@@ -716,7 +717,8 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
         RoomUser *_user = [currentRoom.aryUser objectAtIndex:nIndex];
         if(_user.m_nUserId != [UserInfo sharedUserInfo].nUserId)
         {
-            _listView.bShow = NO;
+//            _listView.bShow = NO;
+            [_listView setGestureHidden];
             toUser = _user.m_nUserId;
             [_inputView setChatInfo:_user];
         }

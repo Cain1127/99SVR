@@ -36,7 +36,6 @@
     BOOL bFirst;
     UILabel *lblText;
     int _roomid;
-    int _nuserid;
     int nReceiveMemory;
     UIView *sunView;
     UIView *_downHUD;
@@ -251,7 +250,8 @@
 
 - (void)initDecode
 {
-    if (!_openAL) {
+    if (!_openAL)
+    {
         _openAL = [[OpenAL alloc] init];
     }
     [_openAL initOpenAL];
@@ -296,7 +296,8 @@
     DLog(@"视频停止");
     _media.nFall = 0;
     _playing = NO;
-    [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
+    [_glView hideToastActivity];
+//    [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
     @WeakObj(self)
     gcd_main_safe(^{
          [selfWeak setDefaultImg];
@@ -316,7 +317,6 @@
     if([notify.object isEqualToString:@"ON"])
     {
         _backGroud = YES;
-//        [_media settingBackVideo:YES];
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
         __weak LivePlayViewController *__self = self;
         dispatch_async(dispatch_get_main_queue(),
@@ -327,7 +327,6 @@
     else
     {
         _backGroud = NO;
-//        [_media settingBackVideo:NO];
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
     }
 }
@@ -386,7 +385,7 @@
     [self updateDownHUD];
     SVRMediaClient *svrClient = [SVRMediaClient sharedSVRMediaClient];
     svrClient.delegate = self;
-    [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
+//    [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
     
     _downHUD.alpha = 0;
     if (_roomIsCollet)
@@ -583,9 +582,8 @@
         if (roomid!=_roomid)
         {
             [self stop];
-            _nuserid = userid;
             _roomid = roomid;
-            [self startPlayRoomId:_roomid user:_nuserid name:_roomName];
+            [self startPlayRoomId:_roomid user:1801124 name:_roomName];
         }
         return ;
     }
@@ -601,10 +599,11 @@
     _roomid = roomid;
     _nuserid = userid;
     DLog(@"userid:%d--roomid:%d",_nuserid,_roomid);
-    if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:_nuserid roomId:_roomid])
-    {
-        DLog(@"开启接收码流失败");
-    }
+    
+//    if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:1801124 roomId:_roomid])
+//    {
+//        DLog(@"开启接收码流失败");
+//    }
     dispatch_async(dispatch_get_global_queue(0, 0),
        ^{
            [__self checkMedia];
@@ -780,7 +779,6 @@
 
 - (void)onVideoData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height
 {
-//    DLog(@"count:%zi",_aryVideo.count);
     @synchronized(_aryVideo)
     {
         [_aryVideo addObject:data];

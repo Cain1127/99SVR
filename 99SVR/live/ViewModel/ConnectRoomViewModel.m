@@ -26,13 +26,6 @@
 
 - (void)connectViewModel:(RoomHttp *)room
 {
-//    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-//    if ([roomView.room.roomid isEqualToString:room.roomid])
-//    {
-//        [_control.view hideToastActivity];
-//        [_control.navigationController pushViewController:roomView animated:YES];
-//        return ;
-//    }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
     _room = room;
@@ -52,6 +45,11 @@
         if (errid==201)
         {
             @WeakObj(self)
+            _nTimes++;
+            if (_nTimes>1)
+            {
+                [ProgressHUD showError:@"输入密码错误"];
+            }
             if ([UserInfo sharedUserInfo].nStatus)
             {
                 [AlertFactory createPassswordAlert:_control room:_room block:^(NSString *pwd) {
@@ -61,19 +59,23 @@
             }
             else
             {
-                @WeakObj(_control)
-                dispatch_async(dispatch_get_main_queue(),
-                ^{
-                    [_controlWeak.view hideToastActivity];
-                    [ProgressHUD showError:@"加入房间失败或房间被关闭"];
-                });
+//                @WeakObj(_control)
+//                dispatch_async(dispatch_get_main_queue(),
+//                ^{
+//                    [_controlWeak.view hideToastActivity];
+//                    [ProgressHUD showError:@"加入房间失败或房间被关闭"];
+//                });
             }
         }
         else
         {
             @WeakObj(strMsg)
-            [[NSNotificationCenter defaultCenter] removeObserver:self];
-            dispatch_async(dispatch_get_main_queue(), ^{
+            if (errid==101)
+            {
+                [_control.navigationController popViewControllerAnimated:YES];
+            }
+            dispatch_async(dispatch_get_main_queue(),
+            ^{
                 [ProgressHUD showError:strMsgWeak];
             });
         }

@@ -1,10 +1,5 @@
-//
-//  XTeamPrivateController.h
-//  99SVR
-//
-//  Created by xia zhonglin  on 4/24/16.
-//  Copyright © 2016 xia zhonglin . All rights reserved.
-//
+
+/**房间内私人定制*/
 
 #import "CustomViewController.h"
 #import "RoomHttp.h"
@@ -20,7 +15,7 @@
 @property (nonatomic,assign) id<WhatIsDelegate> delegate;
 
 - (id)initWithFrame:(CGRect)frame model:(RoomHttp *)room;
-- (id)initWithModel:(RoomHttp*)room;
+//- (id)initWithModel:(RoomHttp*)room;
 
 - (void)setModel:(RoomHttp *)room;
 

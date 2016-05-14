@@ -66,10 +66,9 @@
 - (void)setGestureHidden
 {
     [UIView animateWithDuration:0.5 animations:^{
-        [self setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
+        [self setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
     } completion:^(BOOL finished) {
         self.hidden = YES;
-        [self removeFromSuperview];
     }];
 }
 
@@ -350,7 +349,7 @@
 
 - (void)setChatInfo:(RoomUser *)user
 {
-    [self setHidden:NO];
+    self.hidden = NO;
     char cString[150] = {0};
     sprintf(cString,"@%s ",[user.m_strUserAlias UTF8String]);
     _strName = [NSString stringWithUTF8String:cString];

@@ -34,6 +34,7 @@
 #import "ConsumeRankDataSource.h"
 #import "HttpManagerSing.h"
 #import "UIAlertView+Block.h"
+
 @interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
                                 ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
 {
@@ -62,10 +63,6 @@
 @property (nonatomic,assign) int question_times;
 @property (nonatomic,assign) float question_coin;
 @property (nonatomic,strong) RoomHttp *room;
-@property (nonatomic,copy) NSArray *aryChat;
-@property (nonatomic,copy) NSArray *aryPriChat;
-@property (nonatomic,copy) NSArray *aryNotice;
-@property (nonatomic,copy) NSArray *aryUser;
 @property (nonatomic,copy) NSArray *aryConsume;
 
 @property (nonatomic,strong) UITableView *chatView;
@@ -114,7 +111,8 @@
     return self;
 }
 
-- (void)loadView{
+- (void)loadView
+{
     self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
 }
 
@@ -148,11 +146,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -228,6 +221,7 @@
     
     [self initTableView];
     [self initSlideView];
+    
     [self.view addSubview:_menuView];
     self.menuView.DidSelectSliderIndex = ^(NSInteger index){
         NSLog(@"模块%ld",(long)index);
@@ -243,21 +237,25 @@
     
     //发送消息按钮
     _giftView = [[GiftView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
-//    [self.view addSubview:_giftView];
+    [self.parentViewController.view addSubview:_giftView];
     _giftView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
+    _giftView.hidden = YES;
     _giftView.delegate = self;
     
     _listView = [[UserListView alloc] initWithFrame:Rect(0,0, kScreenWidth, kScreenHeight) array:nil];
-//    [self.view addSubview:_listView];
+    [self.parentViewController.view addSubview:_listView];
     _listView.frame = Rect(0, kScreenHeight, kScreenWidth, 0);
+    _listView.hidden = YES;
     _listView.delegate = self;
 
     _inputView = [[ChatView alloc] initWithFrame:Rect(0,0, kScreenWidth,kScreenHeight)];
-//    [self.view addSubview:_inputView];
+    [self.parentViewController.view addSubview:_inputView];
     _inputView.hidden = YES;
     _inputView.delegate = self;
     
     _questionView = [[XLiveQuestionView alloc] initWithFrame:Rect(0,0,kScreenWidth,self.view.height)];
+    [self.parentViewController.view addSubview:_questionView];
+    _questionView.hidden = YES;
     _questionView.delegate = self;
 }
 
@@ -303,6 +301,7 @@
  *
  *  @param notify
  */
+#pragma mark 课程表数据   响应消息
 - (void)updateRoomTeachInfo:(NSNotification *)notify
 {
     NSString *strTeach = notify.object;
@@ -323,16 +322,6 @@
                ^{
                    _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strTeachWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
                });
-//            [_questionView.txtName resignFirstResponder];
-//            [_questionView.txtContent resignFirstResponder];
-//            if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) {
-//                [UIView animateWithDuration:0.5 animations:^{
-//                    [_questionView setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
-//                } completion:^(BOOL finished)
-//                 {
-//                     _questionView.hidden = NO;
-//                 }];
-//            }
         }
     }
 }
@@ -396,7 +385,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(TradeGiftError:) name:MESSAGE_TRADE_GIFT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startPlayThread:) name:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatPriMsg) name:MESSAGE_ROOM_TO_ME_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatMSg) name:MESSAGE_ROOM_CHAT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomChatMsg) name:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomListNotice) name:MESSAGE_ROOM_NOTICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomUserList:) name:MESSAGE_ROOM_ALL_USER_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roomBeExit:) name:MESSAGE_ROOM_BE_CLOSE_VC object:nil];
@@ -445,7 +434,7 @@
 {
     NSNumber *number = notify.object;
     if ([number intValue]==202) {
-//        @WeakObj(self)
+//      @WeakObj(self)
         dispatch_async(dispatch_get_main_queue(), ^{
 //            [selfWeak createPaySVR];
         });
@@ -475,15 +464,18 @@
  */
 - (void)startNewPlay
 {
+    [_ffPlay startPlayRoomId:[_room.roomid intValue] user:1801124 name:_room.teamname];
     for (RoomUser *user in currentRoom.aryUser)
     {
         if ([user isOnMic])
         {
-            [_ffPlay startPlayRoomId:[_room.roomid intValue] user:user.m_nUserId name:_room.teamname];
+            _ffPlay.nuserid = user.m_nUserId;
             [kHTTPSingle RequestConsumeRank:user.m_nUserId];
             return ;
         }
     }
+    _ffPlay.nuserid = 0;
+    [_ffPlay stop];
     @WeakObj(_ffPlay)
     dispatch_main_async_safe(
     ^{
@@ -522,7 +514,7 @@
 /**
  *  聊天响应
  */
-- (void)roomChatMSg
+- (void)roomChatMsg
 {
     [_chatDataSource setModel:aryRoomChat];
     @WeakObj(self)
@@ -563,13 +555,14 @@
             }
         });
     }
+    @WeakObj(aryRoomNotice)
     dispatch_async(dispatch_get_main_queue(),
     ^{
        [selfWeak.noticeView reloadDataWithCompletion:
         ^{
-            if (selfWeak.aryNotice.count > 0)
+            if (aryRoomNoticeWeak.count > 0)
             {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:selfWeak.aryNotice.count-1];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:aryRoomNoticeWeak.count-1];
                 [selfWeak.noticeView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
             }
         }];
@@ -581,7 +574,6 @@
  */
 - (void)roomUserList:(NSNotification*)notify
 {
-//    _aryUser = currentRoom.aryUser;
     [_listView reloadItems:currentRoom.aryUser];
 }
 /**
@@ -677,8 +669,6 @@
                 [UIView animateWithDuration:0.5 animations:
                  ^{
                      _inputView.hidden = NO;
-                     [self.parentViewController.view addSubview:_inputView];
-                     [_inputView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
                  } completion:^(BOOL finished) {}];
             }
             else
@@ -693,7 +683,11 @@
             break;
         case 5://显示成员
         {
-            _listView.bShow = YES;
+            [UIView animateWithDuration:0.5 animations:
+             ^{
+                 _listView.hidden = NO;
+                 [_listView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
+             } completion:^(BOOL finished) {}];
         }
             break;
         case 3://显示礼物
@@ -703,7 +697,6 @@
                 [UIView animateWithDuration:0.5 animations:
                 ^{
                     _giftView.hidden = NO;
-                    [self.parentViewController.view addSubview:_giftView];
                     [_giftView setFrame:Rect(0, 0, kScreenWidth, kScreenHeight)];
                 } completion:^(BOOL finished) {}];
             }
@@ -728,7 +721,6 @@
                 [_giftView updateGoid];
                 [UIView animateWithDuration:0.5 animations:^{
                     _questionView.hidden = NO;
-                    [self.parentViewController.view addSubview:_questionView];
                     [_questionView setFrame:Rect(0,0, kScreenWidth, kScreenHeight)];
                     NSString *strmsg = [NSString stringWithFormat:@"温馨提示:您还剩%d次免费提问的机会，问股仅供参考，不构成投资建议",_question_times];
                     _questionView.lblTimes.text = strmsg;
@@ -805,9 +797,13 @@
         RoomUser *_user = [currentRoom.aryUser objectAtIndex:nIndex];
         if(_user.m_nUserId != [UserInfo sharedUserInfo].nUserId)
         {
-            _listView.bShow = NO;
+            [_listView setGestureHidden];
             toUser = _user.m_nUserId;
             [_inputView setChatInfo:_user];
+        }
+        else
+        {
+            [ProgressHUD showError:@"不能@自己"];
         }
     }
 }

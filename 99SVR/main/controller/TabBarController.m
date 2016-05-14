@@ -238,7 +238,10 @@
         if(!(nowStatus == status)){
             
         }
+
         nowStatus = status;
+        KUserSingleton.nowNetwork = 0;
+
         return ;
     }
     else if(status == ReachableViaWiFi)
@@ -247,6 +250,7 @@
         //        dispatch_async(dispatch_get_main_queue(), ^{
         //            [__windows makeToast:@"当前网络:WIFI"];
         //        });
+        KUserSingleton.nowNetwork = 1;
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
     }
     else if(status == ReachableViaWWAN)
@@ -256,6 +260,7 @@
         //           ^{
         //               [__windows makeToast:@"当前网络:移动网络"];
         //           });
+        KUserSingleton.nowNetwork = 2;
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_OK_VC object:nil];
     }
     nowStatus = status;
@@ -267,6 +272,16 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end

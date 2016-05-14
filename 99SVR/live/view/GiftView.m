@@ -45,7 +45,6 @@
         [self setFrame:Rect(0, kScreenHeight, kScreenWidth, 0)];
     } completion:^(BOOL finished) {
         self.hidden = YES;
-        [self removeFromSuperview];
     }];
 }
 

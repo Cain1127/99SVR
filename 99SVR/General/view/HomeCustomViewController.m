@@ -198,4 +198,14 @@
 //    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TABBAR_APPER_VC object:nil];
 //}
 
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 @end

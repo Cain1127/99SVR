@@ -125,4 +125,15 @@ NSUInteger secondsCountDown = 3;//倒计时秒数
     }
 }
 
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+
 @end
