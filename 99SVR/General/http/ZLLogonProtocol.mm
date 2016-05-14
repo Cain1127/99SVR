@@ -38,12 +38,14 @@ RoomInfo *currentRoom;
 
 void ZLConnectionListerner::OnConnected()
 {
-    
+    DLog(@"OnConnected-连接成功");
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:@{@"code":@"1"}];
 }
 
 void ZLConnectionListerner::OnConnectError(int err_code)
 {
-    
+    DLog(@"OnConnectError-失去连接回调");
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:@{@"code":@"0"}];
 }
 
 void ZLPushListener::OnConfChanged(int version)
@@ -552,6 +554,21 @@ void ZLLogonProtocol::colletRoomInfo(int action)
     video_room->SendMsg_CollectRoomReq(action);
 }
 
+/**
+ *  网络变更
+ */
+void ZLLogonProtocol::networkfChanged()
+{
+    conn->OnNetworkChanged();
+}
+
+/**
+ *  socket 重连
+ */
+void ZLLogonProtocol::reConnect()
+{
+    conn->Reconnect();
+}
 //**********************************************************************************
 //**********************************************************************************
 #pragma mark ZLHallListener
