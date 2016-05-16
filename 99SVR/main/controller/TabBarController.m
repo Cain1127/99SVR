@@ -85,7 +85,7 @@
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadInfo:) name:MESSAGE_UNREAD_INFO_VC object:nil];
     [kHTTPSingle RequestUnreadCount];
-    
+    KUserSingleton.nStatus = 1;
     // 网络检测
     _hostReach = [Reachability reachabilityWithHostName:@"www.163.com"];
     [[NSNotificationCenter defaultCenter] addObserver:self

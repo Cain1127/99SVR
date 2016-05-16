@@ -97,7 +97,6 @@
     [_ffPlay setRoomName:_room.teamname];
     [_ffPlay setRoomId:[_room.roomid intValue]];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
     [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
@@ -116,7 +115,8 @@
     self.view = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight-kRoom_head_view_height)];
 }
 
-- (void)viewDidLoad{
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     aryGift = [NSMutableArray array];
     nColor = 10000;
@@ -129,7 +129,11 @@
     [_ffPlay.view addGestureRecognizer:singleRecogn];
     _ffPlay.roomIsCollet = nRoom_is_collet;
     [self addNotification];
-    [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
 }
 
 - (void)connectUnVideo:(UIButton *)sender
@@ -146,6 +150,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -257,6 +262,8 @@
     [self.parentViewController.view addSubview:_questionView];
     _questionView.hidden = YES;
     _questionView.delegate = self;
+    
+    
 }
 
 #pragma mark 提问完再次检测提问次数
@@ -304,25 +311,23 @@
 #pragma mark 课程表数据   响应消息
 - (void)updateRoomTeachInfo:(NSNotification *)notify
 {
-    NSString *strTeach = notify.object;
-    if ([strTeach isKindOfClass:[NSString class]])
+    
+    if (roomTeachInfo != nil && roomTeachInfo.length > 0)
     {
-        if (strTeach.length>0) {
-            @WeakObj(self)
-            dispatch_async(dispatch_get_main_queue(),
-               ^{
-                   if (selfWeak.nSelectIndex != 4) {
-                       selfWeak.menuView.showBadgeIndex = 4;
-                   }
-               });
-            @WeakObj(strTeach)
-            @WeakObj(_teachView)
-            
-            dispatch_async(dispatch_get_main_queue(),
-               ^{
-                   _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strTeachWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
-               });
-        }
+        @WeakObj(self)
+        dispatch_async(dispatch_get_main_queue(),
+           ^{
+               if (selfWeak.nSelectIndex != 4) {
+                   selfWeak.menuView.showBadgeIndex = 4;
+               }
+           });
+        @WeakObj(roomTeachInfo)
+        @WeakObj(_teachView)
+        
+        dispatch_async(dispatch_get_main_queue(),
+           ^{
+               _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[roomTeachInfoWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
+           });
     }
 }
 
@@ -464,12 +469,12 @@
  */
 - (void)startNewPlay
 {
-    [_ffPlay startPlayRoomId:[_room.roomid intValue] user:1801124 name:_room.teamname];
     for (RoomUser *user in currentRoom.aryUser)
     {
         if ([user isOnMic])
         {
             _ffPlay.nuserid = user.m_nUserId;
+            [_ffPlay startPlayRoomId:[_room.roomid intValue] user:1801124 name:_room.teamname];
             [kHTTPSingle RequestConsumeRank:user.m_nUserId];
             return ;
         }

@@ -42,7 +42,7 @@
     UIView *_TopHUD;
     int _videoWidth;
     int _videoHeight;
-    CGColorSpaceRef colorSpace;
+    BOOL bCoding;
 }
 
 @property (nonatomic) BOOL backGroud;
@@ -294,12 +294,19 @@
 - (void)stop
 {
     DLog(@"视频停止");
+    if(!_playing)
+    {
+        return ;
+    }
     _media.nFall = 0;
     _playing = NO;
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
+    });
     [_glView hideToastActivity];
-//    [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
     @WeakObj(self)
-    gcd_main_safe(^{
+    gcd_main_safe(
+    ^{
          [selfWeak setDefaultImg];
     });
     [UIApplication sharedApplication].idleTimerDisabled = _playing;
@@ -385,7 +392,7 @@
     [self updateDownHUD];
     SVRMediaClient *svrClient = [SVRMediaClient sharedSVRMediaClient];
     svrClient.delegate = self;
-//    [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
+    [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
     
     _downHUD.alpha = 0;
     if (_roomIsCollet)
@@ -576,7 +583,12 @@
 
 - (void)startPlayRoomId:(int)roomid user:(int)userid name:(NSString *)name
 {
+    if (_playing)
+    {
+        return ;
+    }
     _roomName = name;
+    bCoding = NO;
     if (_playing)
     {
         if (roomid!=_roomid)
@@ -598,34 +610,23 @@
     _bVideo = YES;
     _roomid = roomid;
     _nuserid = userid;
-    DLog(@"userid:%d--roomid:%d",_nuserid,_roomid);
-    
-//    if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:1801124 roomId:_roomid])
-//    {
-//        DLog(@"开启接收码流失败");
-//    }
-    dispatch_async(dispatch_get_global_queue(0, 0),
-       ^{
-           [__self checkMedia];
-       });
-    if (audioQueue==nil)
+    __block int __roomId = _roomid;
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:1801124 roomId:__roomId])
+        {
+            DLog(@"开启接收码流失败");
+        }
+    });
+    if (KUserSingleton.nowNetwork == 2 && !KUserSingleton.checkNetWork)
     {
-        audioQueue = dispatch_queue_create("audio",0);
+        
     }
-    if (videoQueue==nil)
-    {
-        videoQueue = dispatch_queue_create("video_tid", 0);
-    }
-    dispatch_async(videoQueue,
-       ^{
-           [__self decodeVideo];
-       });
-    dispatch_async(audioQueue,
-   ^{
-       [__self decodeAudio];
-   });
-
     [UIApplication sharedApplication].idleTimerDisabled = YES;
+}
+
+- (void)showAlertView
+{
+    
 }
 
 - (void)setOnlyAudio:(BOOL)enable
@@ -714,18 +715,16 @@
 
 - (void)createImage:(NSData *)data
 {
-    if(!colorSpace)
-    {
-        colorSpace = CGColorSpaceCreateDeviceRGB();
-    }
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef newContext = CGBitmapContextCreate((void *)data.bytes,
                                                     _videoWidth, _videoHeight, 8,
                                                     _videoWidth * 4,
-                                                    colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+                                                    colorSpace, kCGBitmapByteOrder32Little|kCGImageAlphaPremultipliedFirst);
     CGImageRef frame = CGBitmapContextCreateImage(newContext);
     _currentImage = [UIImage imageWithCGImage:frame];
     CGImageRelease(frame);
     CGContextRelease(newContext);
+    CGColorSpaceRelease(colorSpace);
     [self performSelectorOnMainThread:@selector(updateGlView) withObject:nil waitUntilDone:YES];
 }
 
@@ -771,19 +770,30 @@
 
 - (void)onAudioData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len
 {
-    @synchronized(_aryAudio)
+    if(!bCoding)
     {
-        [_aryAudio addObject:data];
+        [_glView hideToastActivity];
+        bCoding = YES;
+    }
+    @autoreleasepool
+    {
+        [_openAL openAudioFromQueue:(unsigned char*)data.bytes dataSize:len];
     }
 }
 
 - (void)onVideoData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height
 {
-    @synchronized(_aryVideo)
+    if(!bCoding)
     {
-        [_aryVideo addObject:data];
-        _videoWidth = width;
-        _videoHeight = height;
+        [_glView hideToastActivity];
+        bCoding = YES;
+    }
+    
+    _videoWidth = width;
+    _videoHeight = height;
+    @autoreleasepool
+    {
+        [self createImage:data];
     }
 }
 

@@ -90,7 +90,7 @@
     
     [WXApi registerApp:@"wxfbfe01336f468525" withDescription:@"weixin"];
     
-    [self onCheckVersion];
+   // [self onCheckVersion];
     
     NSDictionary *dict = [UserDefaults objectForKey:kVideoList];
     
