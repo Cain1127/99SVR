@@ -135,15 +135,15 @@ void ZLHallListener::OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info)
 void ZLHallListener::OnViewpointTradeGiftErr(ErrCodeResp& info)
 {
     DLog(@"send gift fail");
-    NSString *strErr = [NSString stringWithUTF8String:conn->get_error_desc(info.errcode()).c_str()];
-    if (strErr!=nil)
+    NSString *error = [NSString stringWithFormat:@"%d",info.errcode()];
+    
+    if (error!=nil)
     {
-        DLog(@"strerr:%@",strErr);
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:strErr];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_GIFT_VIEW_ERR_VC object:error];
     }
     else
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:@"提问失败"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_GIFT_VIEW_ERR_VC object:@"送礼失败"];
     }
 }
 
