@@ -58,12 +58,12 @@
     [self addSubview:self.serviceLab];
 }
 
--(void)setType:(StockNotVipViewType)type{
-    
+-(void)setViewType:(StockNotVipViewType)viewType withVipLevel:(NSString *)vipLevel{
+
     CGFloat buyLab_top = 0;
-    if (type==StockNotVipViewType_Business) {//交易动态
+    if (viewType==StockNotVipViewType_Business) {//交易动态
         self.frame = (CGRect){0,0,ScreenWidth,STORCK_Deal_BusinessRecordCell_NotVIP_H};
-        self.textLab.text = @"兑换私人定制服务可查看详细交易记录";
+        self.textLab.text = [NSString stringWithFormat:@"兑换私人定制VIP%@服务可查看详细交易记录",vipLevel];
         buyLab_top = buy_top_bottom;
         self.serviceLab.hidden = YES;
         
@@ -76,6 +76,8 @@
     }else{//持仓情况
         self.frame = (CGRect){0,0,ScreenWidth,STORCK_Deal_WareHouseRecordCell_NotVIP_H};
         self.textLab.text = @"兑换私人定制服务可查看详细持仓情况";
+        self.textLab.text = [NSString stringWithFormat:@"兑换私人定制VIP%@服务可查看详细持仓情况",vipLevel];
+
         buyLab_top = storehouse_top_bottom;
         self.serviceLab.hidden = NO;
         

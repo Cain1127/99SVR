@@ -56,6 +56,7 @@
 #define COLOR_Auxiliary_Orange UIColorFromRGB(0xf8b551)//辅助色橙色
 #define COLOR_Auxiliary_Red UIColorFromRGB(0xea544a)//辅助色红色
 #define COLOR_Auxiliary_Blue UIColorFromRGB(0x038cff)//辅助蓝色
+#define COLOR_Auxiliary_Yellow UIColorFromRGB(0xfff3cd)//辅助黄色
 
 #pragma mark 分割线的高度
 #define LineView_Height 0.5f

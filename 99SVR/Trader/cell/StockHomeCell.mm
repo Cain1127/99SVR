@@ -85,6 +85,7 @@
         make.height.equalTo(@(traderName_fot));
         make.bottom.equalTo(self.iconImv.mas_bottom).offset(0);
     }];
+
     
 }
 
@@ -92,6 +93,8 @@
 /**tabbar高手操盘 和 首页的高手操盘的cell 1是财经直播tabbar的，2是高手操盘tabbar的*/
 -(void)setCellDataWithModel:(StockDealModel *)model withTabBarInteger:(NSInteger)integer{
 
+    
+    
     
     CGFloat totalNum_top_h  = 0.0;
     
@@ -226,7 +229,7 @@
     }];
     
     //目标收益文字
-    [self.targetLab mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.targetLab mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.nameLab.mas_left);
         make.height.equalTo(@(targetLab_fot));
         make.top.equalTo(self.nameLab.mas_bottom).offset(totalJianGe_h);
@@ -236,7 +239,6 @@
     
     self.nameLab.text =  model.focus;
     self.targetLab.text = [NSString stringWithFormat:@"目标收益：%@",model.goalprofit];
-//    self.targetLab.attributedText = [self changeText:[NSString stringWithFormat:@"目标收益：%@",model.goalprofit]];
     self.totalTitLab.text = @"总收益";
     self.traderNameLab.text = model.teamname;
 

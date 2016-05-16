@@ -10,11 +10,10 @@
 #import "NSMutableArray+GFNavigationControlller.h"
 #import <QuartzCore/QuartzCore.h>
 #import <math.h>
-
+#import "AppDelegate.h"
 
 #define KEY_WINDOW   [[[UIApplication sharedApplication] delegate] window]
 #define SCREEN_SIZE  [[UIScreen mainScreen] bounds].size
-
 
 typedef void(^PendingBlock)(void);
 
@@ -45,7 +44,7 @@ typedef void(^PendingBlock)(void);
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-  
+    
     [self __commonInitialization];
     
     
@@ -123,7 +122,7 @@ typedef void(^PendingBlock)(void);
 }
 
 - (UIImage *)__captureScreen {
-
+    
     UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, self.view.opaque, 0);
     CGContextRef context = UIGraphicsGetCurrentContext();
     [self.view.layer renderInContext:context];
@@ -136,7 +135,7 @@ typedef void(^PendingBlock)(void);
 - (void)__moveViewWithOffsetX:(CGFloat)x {
     
     x = MAX(MIN(CGRectGetWidth(self.view.frame), x), 0);
- 
+    
     
     CGRect frame = self.view.frame;
     frame.origin.x = x;
@@ -161,7 +160,7 @@ typedef void(^PendingBlock)(void);
 }
 
 - (void)__addTransitionBlock:(PendingBlock)block {
-
+    
     if (self.transitionInProcess) {
         [self.pendingBlocks addObject:[block copy]];
     }
@@ -204,7 +203,7 @@ typedef void(^PendingBlock)(void);
         if (![self.containerView.subviews containsObject:self.lastScreenImageView]) {
             [self.containerView addSubview:self.lastScreenImageView];
         }
-    
+        
         
         self.lastScreenImageView.image = [self.screenShots lastObject];
         CGRect frame = self.lastScreenImageView.frame;
@@ -216,7 +215,7 @@ typedef void(^PendingBlock)(void);
         self.containerView.hidden = NO;
     }
     else if (pan.state == UIGestureRecognizerStateEnded) {
-     
+        
         if (touchPoint.x - self.startTouchPoint.x > CGRectGetWidth(self.view.frame) / 3.0) {
             
             [UIView animateWithDuration:self.animationDuration animations:^{
@@ -237,7 +236,7 @@ typedef void(^PendingBlock)(void);
         else {
             
             [UIView animateWithDuration:self.animationDuration animations:^{
-               
+                
                 [self __moveViewWithOffsetX:0];
                 
             }completion:^(BOOL finished) {
@@ -255,7 +254,7 @@ typedef void(^PendingBlock)(void);
         return;
     }
     
- 
+    
     [self __moveViewWithOffsetX:touchPoint.x - self.startTouchPoint.x];
 }
 
@@ -265,8 +264,22 @@ typedef void(^PendingBlock)(void);
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
     
     __weak typeof(self) weakSelf = self;
-    if (self.childViewControllers.count > 0)
+    NSInteger childVcCount = self.childViewControllers.count;
+    
+    // 保存当前的子VIEW数量,方便socket没网时显示
+    [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%ld",childVcCount] forKey:kSocketNetworkKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (childVcCount> 0)
     {
+        if (app.socketNetworkView) {
+            for (UIView *subView in [[UIApplication sharedApplication].keyWindow subviews]) {
+                if ([subView isKindOfClass:[SocketNetworkView class]]) {
+                    subView.hidden = YES;
+                }
+            }
+        }
         viewController.hidesBottomBarWhenPushed = YES;
     }
     
@@ -291,6 +304,36 @@ typedef void(^PendingBlock)(void);
             weakSelf.transitionInProcess = NO;
         }
     }];
+    
+    if (self.childViewControllers.count == 1) {
+        
+        // 保存当前的子VIEW数量,方便socket没网时显示
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:kSocketNetworkKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        NSString *state = [[NSUserDefaults standardUserDefaults] objectForKey:kSocketNetworkStateKey];
+        // 连接成功状态,直接返回
+        if ([state isEqualToString:@"1"]) {
+            return nil;
+        }
+        
+        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        if (!app.socketNetworkView) {
+            return nil;
+        }
+        
+        // 连接失败状态，重新显示状态栏
+        for (UIView *subView in [[UIApplication sharedApplication].keyWindow subviews]) {
+            if ([subView isKindOfClass:[SocketNetworkView class]]) {
+                subView.hidden = NO;
+            }
+        }
+
+        //        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //            ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
+        //            [sing reConnect]; // 重连操作
+        //        });
+    }
     
     return nil;
 }
@@ -324,7 +367,7 @@ typedef void(^PendingBlock)(void);
 }
 
 - (NSArray *)popToRootViewControllerAnimated:(BOOL)animated {
- 
+    
     __weak typeof(self) weakSelf = self;
     
     [self __addTransitionBlock:^{

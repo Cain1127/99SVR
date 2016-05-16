@@ -194,6 +194,14 @@ public :
      *  @return 获取分享链接
      */
     const char * getVideoRoomUrl();
+    /*
+     *  网络变更
+     */
+    void networkfChanged();
+    /**
+     *  重连
+     */
+    void reConnect();
     
     ~ZLLogonProtocol();
 };

@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger,StockNotVipViewType){
 @interface StockNotVipView : UIView
 
 /**类型*/
-@property (nonatomic , assign) StockNotVipViewType type;
+//@property (nonatomic , assign) StockNotVipViewType type;
 
 /**去购买*/
 @property (nonatomic , strong) UILabel *buyLab;
@@ -30,4 +30,7 @@ typedef NS_ENUM(NSInteger,StockNotVipViewType){
 /**什么是定制服务*/
 @property (nonatomic , strong) UILabel *serviceLab;
 @property (nonatomic , weak) id <StockNotVipViewDelegate>delegate;
+
+-(void)setViewType:(StockNotVipViewType)viewType withVipLevel:(NSString *)vipLevel;
+
 @end

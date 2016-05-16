@@ -16,6 +16,8 @@
 #define KUserLogout @"KUserLogout"
 #define LOGIN_SUCESS_VC  @"LOGIN_SUCESS_VC"
 #define KGotoViewController @"KGotoViewController"
+#define kSocketNetworkKey @"kSocketNetworkKey" // socket网络检测Key
+#define kSocketNetworkStateKey @"kSocketNetworkStateKey" // socket保存当前网络状态
 
 #define KServiceResponseCode @"return_code"
 #define KServiceResponseMsg @"result_msg"
