@@ -11,6 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <math.h>
 #import "AppDelegate.h"
+#import "SocketNetworkInfo.h"
 
 #define KEY_WINDOW   [[[UIApplication sharedApplication] delegate] window]
 #define SCREEN_SIZE  [[UIScreen mainScreen] bounds].size
@@ -267,9 +268,8 @@ typedef void(^PendingBlock)(void);
     NSInteger childVcCount = self.childViewControllers.count;
     
     // 保存当前的子VIEW数量,方便socket没网时显示
-    [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%ld",childVcCount] forKey:kSocketNetworkKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
+    [SocketNetworkInfo sharedSocketNetworkInfo].childVcCount = childVcCount;
+
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     if (childVcCount> 0)
     {
@@ -308,17 +308,10 @@ typedef void(^PendingBlock)(void);
     if (self.childViewControllers.count == 1) {
         
         // 保存当前的子VIEW数量,方便socket没网时显示
-        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:kSocketNetworkKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        [SocketNetworkInfo sharedSocketNetworkInfo].childVcCount = 0;
         
-        NSString *state = [[NSUserDefaults standardUserDefaults] objectForKey:kSocketNetworkStateKey];
         // 连接成功状态,直接返回
-        if ([state isEqualToString:@"1"]) {
-            return nil;
-        }
-        
-        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (!app.socketNetworkView) {
+        if ([SocketNetworkInfo sharedSocketNetworkInfo].socketState == 1) {
             return nil;
         }
         
@@ -326,13 +319,9 @@ typedef void(^PendingBlock)(void);
         for (UIView *subView in [[UIApplication sharedApplication].keyWindow subviews]) {
             if ([subView isKindOfClass:[SocketNetworkView class]]) {
                 subView.hidden = NO;
+                ((SocketNetworkView *)subView).socketNetworkViewState = SocketNetworkViewStateNoNetwork;
             }
         }
-
-        //        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        //            ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
-        //            [sing reConnect]; // 重连操作
-        //        });
     }
     
     return nil;
