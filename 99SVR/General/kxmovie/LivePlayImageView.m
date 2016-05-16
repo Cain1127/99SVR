@@ -19,7 +19,7 @@
     [_lblContent setTextAlignment:NSTextAlignmentCenter];
     [_lblContent setTextColor:UIColorFromRGB(0xffffff)];
     [_lblContent setFont:XCFONT(15)];
-    
+    [_lblContent setFrame:Rect(0, 0, kScreenWidth, 20)];
     [self addSubview:_lblContent];
     
     return self;

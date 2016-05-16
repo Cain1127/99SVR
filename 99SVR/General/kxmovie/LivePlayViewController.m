@@ -8,6 +8,8 @@
 
 #import "LivePlayViewController.h"
 #import "UIImageView+WebCache.h"
+#import "RoomViewController.h"
+#import "UIAlertView+Block.h"
 #import "ZLLogonServerSing.h"
 #import "OpenAL.h"
 #import "SVRMediaClient.h"
@@ -545,6 +547,7 @@
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
+    [_glView.lblContent setText:@"当前无讲师上麦"];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -573,29 +576,39 @@
     _playing = YES;
     [self initDecode];
     __weak LivePlayViewController *__self = self;
-    dispatch_main_async_safe(
-    ^{
-        [__self startLoad];
-        [__self setDefaultImg];
-    });
     _bVideo = YES;
     _roomid = roomid;
     _nuserid = userid;
     __block int __roomId = _roomid;
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    dispatch_async(dispatch_get_global_queue(0, 0),
+    ^{
         if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:1801124 roomId:__roomId])
         {
             DLog(@"开启接收码流失败");
         }
     });
-    if (KUserSingleton.nowNetwork == 2 && !KUserSingleton.checkNetWork)
-    {}
+    dispatch_main_async_safe(^{
+         [__self showAlertView];
+         [__self startLoad];
+         [__self setDefaultImg];
+    });
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 }
 
 - (void)showAlertView
 {
-    
+    if (KUserSingleton.nowNetwork == 2 && !KUserSingleton.checkNetWork)
+    {
+        [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        [self setOnlyAudio:YES];
+        @WeakObj(self)
+        [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:[RoomViewController sharedRoomViewController] withCancleBtnStr:@"只听音频" withOtherBtnStr:@"继续看视频" withMessage:nil completionCallback:^(NSInteger index) {
+            if (index==1)
+            {
+                [selfWeak setOnlyAudio:NO];
+            }
+        }];
+    }
 }
 
 - (void)setOnlyAudio:(BOOL)enable
@@ -604,12 +617,12 @@
     if (!enable)
     {
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
-        [self setNoVideo];
+        [self setDefaultImg];
     }
     else
     {
-        lblText.hidden = YES;
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        [self setNoVideo];
     }
 }
 
