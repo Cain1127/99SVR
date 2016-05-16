@@ -67,12 +67,14 @@
  */
 - (void)loadUnreadCount:(NSNotification *)notify
 {
-    // 初始化消息列表数据
-    [self mailboxArrayWithPrvUnreadCount:[notify.object[@"privateservice"] intValue]
-                      messageUnreadCount:[notify.object[@"system"] intValue]
-                        replyUnreadCount:[notify.object[@"reply"] intValue]
-                       answerUnreadCount:[notify.object[@"answer"] intValue]];
-    [_tableView reloadData];
+    dispatch_main_async_safe(^{
+        // 初始化消息列表数据
+        [self mailboxArrayWithPrvUnreadCount:[notify.object[@"privateservice"] intValue]
+                          messageUnreadCount:[notify.object[@"system"] intValue]
+                            replyUnreadCount:[notify.object[@"reply"] intValue]
+                           answerUnreadCount:[notify.object[@"answer"] intValue]];
+        [_tableView reloadData];
+    });
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -108,7 +110,7 @@
 - (void)mailboxArrayWithPrvUnreadCount:(NSInteger)PrvUnreadCount
                     messageUnreadCount:(NSInteger)messageUnreadCount
                       replyUnreadCount:(NSInteger)replyUnreadCount
-                      answerUnreadCount:(NSInteger)answerUnreadCount
+                     answerUnreadCount:(NSInteger)answerUnreadCount
 {
     [self.mailboxArray removeAllObjects];
     

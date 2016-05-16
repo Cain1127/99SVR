@@ -12,6 +12,8 @@
 
 - (void)requestOperater:(NSString *)strId name:(NSString *)strName;
 
+- (void)AdaptiveWebViewDidFailLoadWithError:(NSError *)error;
+
 @end
 
 @interface AdaptiveWebView : UIView

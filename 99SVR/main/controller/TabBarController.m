@@ -26,6 +26,7 @@
 #import "AppDelegate.h"
 #import "UIAlertView+Block.h"
 #import "SocketNetworkView.h"
+#import "SocketNetworkInfo.h"
 
 @interface TabBarController ()<PlayIconDelegate>
 {
@@ -95,45 +96,53 @@
     //开启网络通知
     [_hostReach startNotifier];
     
-    // Socket没网监控,当前只有tabbar底部的几个按钮有效果显示，子页不显示
-    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:kSocketNetworkKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    // Socket没网监控,当前只有tabbar底部的几个按钮有显示，子View不显示
+    [SocketNetworkInfo sharedSocketNetworkInfo].childVcCount = 0;
+    [SocketNetworkInfo sharedSocketNetworkInfo].socketState = 1; // 设置有网
+    
     // Socket没网监控
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(socketNetworkState:) name:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:nil];
 }
 
 - (void)socketNetworkState:(NSNotification *)notify
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSDictionary *dict = notify.object;
-        //当childVcCount为0，表示是根目录，>0表示子view
-        NSString *childVcCount = [[NSUserDefaults standardUserDefaults] objectForKey:kSocketNetworkKey];
-        
-        // 保存当前网络状态，在pust里使用
-        [[NSUserDefaults standardUserDefaults] setObject:[dict[@"code"] description] forKey:kSocketNetworkStateKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        if (!app.socketNetworkView) {
-            app.socketNetworkView = [[SocketNetworkView alloc] init];
-            [[UIApplication sharedApplication].keyWindow addSubview:app.socketNetworkView];
-        }
-        
-        // tabbar 根目录，显示
-        if ([childVcCount isEqualToString:@"0"]) {
-            if ([dict[@"code"] intValue]==1) { // 连接成功
+    NSDictionary *dict = notify.object;
+    
+    // 设置当前网络状态，1正常，0没网
+    [SocketNetworkInfo sharedSocketNetworkInfo].socketState = [dict[@"code"] intValue];
+    // tabbar 根目录，显示
+    if ([SocketNetworkInfo sharedSocketNetworkInfo].childVcCount == 0)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            if (!app.socketNetworkView)
+            {
+                app.socketNetworkView = [[SocketNetworkView alloc] init];
+                [[UIApplication sharedApplication].keyWindow addSubview:app.socketNetworkView];
+            }
+            
+            if ([SocketNetworkInfo sharedSocketNetworkInfo].socketState == 1)
+            {
+                // 连接成功
                 app.socketNetworkView.socketNetworkViewState = SocketNetworkViewStateNormal;
                 app.socketNetworkView.hidden = YES;
-                
-            } else { // 连接失败
+            }
+            else
+            {
+                // 连接失败
                 app.socketNetworkView.hidden = NO;
                 app.socketNetworkView.socketNetworkViewState = SocketNetworkViewStateNoNetwork;
             }
-            
-        } else { // PUST的子View，隐藏
+        });
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            app.socketNetworkView.socketNetworkViewState = SocketNetworkViewStateNoNetwork;
             app.socketNetworkView.hidden = YES;
-        }
-    });
+        });
+    }
 }
 
 /**
@@ -238,10 +247,10 @@
         if(!(nowStatus == status)){
             
         }
-
+        
         nowStatus = status;
         KUserSingleton.nowNetwork = 0;
-
+        
         return ;
     }
     else if(status == ReachableViaWiFi)

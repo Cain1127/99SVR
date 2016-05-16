@@ -29,11 +29,11 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_8_0
     [self.webView loadRequest:urlRequest];
     _bridge = [WebViewJavascriptBridge bridgeForWebView:self.webView];
-    self.webView.delegate = self;
+    [_bridge setWebViewDelegate:self];
 #else
     [self.wkWebView loadRequest:urlRequest];
-    self.wkWebView.navigationDelegate = self;
     _bridge = [WKWebViewJavascriptBridge bridgeForWebView:self.wkWebView];
+    [_bridge setWebViewDelegate:self];
 #endif
     @WeakObj(self)
     [_bridge registerHandler:@"RequestOperater" handler:^(id data, WVJBResponseCallback responseCallback)
@@ -64,11 +64,8 @@
 }
 
 -(WKWebView *)wkWebView{
-    
     if (!_wkWebView) {
-        
         _wkWebView = [[WKWebView alloc]initWithFrame:(CGRect){0,0,self.frame.size.width,self.frame.size.height}];
-        
         [self addSubview:_wkWebView];
     }
     return _wkWebView;
@@ -76,7 +73,6 @@
 
 - (void)dealloc
 {
-    
     if (_webView) {
         _webView = nil;
         _bridge = nil;
@@ -94,10 +90,30 @@
     return YES;
 }
 
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    if ([self.delegate respondsToSelector:@selector(AdaptiveWebViewDidFailLoadWithError:)]) {
+        [self.delegate AdaptiveWebViewDidFailLoadWithError:error];
+    }
+}
+
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
 //    NSString *promptCode = [NSString stringWithFormat:@"openStockRecord(\"%@\")"];
 //    [_wkWebView evaluateJavaScript:promptCode completionHandler:^(id object, NSError *error) { }];
+}
+
+- (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation
+      withError:(NSError *)error
+{
+    DLog(@"didFailNavigation");
+}
+
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error
+{
+    if ([self.delegate respondsToSelector:@selector(AdaptiveWebViewDidFailLoadWithError:)]) {
+        [self.delegate AdaptiveWebViewDidFailLoadWithError:error];
+    }
 }
 
 @end

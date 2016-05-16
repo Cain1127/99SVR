@@ -116,6 +116,7 @@
 		18F971131C92947F001B2575 /* RSADataVerifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F9710A1C92947F001B2575 /* RSADataVerifier.m */; };
 		18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971141C92971B001B2575 /* CoreMotion.framework */; };
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
+		5A48E0C71CE99F1B00D5EBE2 /* SocketNetworkInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A48E0C61CE99F1B00D5EBE2 /* SocketNetworkInfo.m */; };
 		5A4EF3EC1CE6C0D900A489B1 /* SocketNetworkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4EF3EB1CE6C0D900A489B1 /* SocketNetworkView.m */; };
 		5A5784101CD2FE28002E120A /* CommentReplyViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */; };
 		5A6AE1301CD1DEE8002FBD02 /* start-mascot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */; };
@@ -1027,6 +1028,8 @@
 		18F971141C92971B001B2575 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		18F971161C92A40A001B2575 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		5A43875FF97FDC1CA789AE15 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A48E0C51CE99F1B00D5EBE2 /* SocketNetworkInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketNetworkInfo.h; sourceTree = "<group>"; };
+		5A48E0C61CE99F1B00D5EBE2 /* SocketNetworkInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketNetworkInfo.m; sourceTree = "<group>"; };
 		5A4EF3EA1CE6C0D900A489B1 /* SocketNetworkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketNetworkView.h; sourceTree = "<group>"; };
 		5A4EF3EB1CE6C0D900A489B1 /* SocketNetworkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketNetworkView.m; sourceTree = "<group>"; };
 		5A57840E1CD2FE28002E120A /* CommentReplyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentReplyViewController.h; sourceTree = "<group>"; };
@@ -3371,6 +3374,8 @@
 				BB63F47A1C2B809800A042E8 /* UserInfo.m */,
 				BB17689D1C77052000CE947C /* GitInfo.h */,
 				BB17689E1C77052000CE947C /* GitInfo.m */,
+				5A48E0C51CE99F1B00D5EBE2 /* SocketNetworkInfo.h */,
+				5A48E0C61CE99F1B00D5EBE2 /* SocketNetworkInfo.m */,
 				BB9765F11C85B55F00FAA5B7 /* DeviceUID.h */,
 				BB9765F21C85B55F00FAA5B7 /* DeviceUID.m */,
 				BB5E4E871CB8E74500F8C1D4 /* AlertFactory.h */,
@@ -4818,6 +4823,7 @@
 				BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */,
 				BB63F5D61C2CC7A300A042E8 /* UIView+MJExtension.m in Sources */,
 				B404A0821CDB222700E814CC /* HDWhatIsPrivateViewViewController.m in Sources */,
+				5A48E0C71CE99F1B00D5EBE2 /* SocketNetworkInfo.m in Sources */,
 				BB14B9D01CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m in Sources */,
 				BBD46D2B1CB01B4B00E2B767 /* TextCoreViewController.m in Sources */,
 				BB63F6011C2CC7A300A042E8 /* GroupHeaderView.m in Sources */,
