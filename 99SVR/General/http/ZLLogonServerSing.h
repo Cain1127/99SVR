@@ -83,6 +83,5 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
  *  socket重连
  */
 - (void)reConnect;
->>>>>>> LiuHaiDong
 
 @end
