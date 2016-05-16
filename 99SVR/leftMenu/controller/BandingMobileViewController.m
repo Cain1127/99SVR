@@ -209,7 +209,7 @@
         parameters = @{@"action":@(4),@"userid":@([UserInfo sharedUserInfo].nUserId),@"key":strMd5,@"client":@(2)};
     }
     @WeakObj(self)
-    NSString *strUrl = [NSString stringWithFormat:@"%@Message/getmsgcode",kRegisterNumber];
+    NSString *strUrl = [NSString stringWithFormat:@"%@Message/getmsgcode",[kHTTPSingle getHttpApi]];
     [BaseService postJSONWithUrl:strUrl parameters:parameters success:^(id responseObject)
     {
          [self.view hideToastActivity];
@@ -307,12 +307,12 @@
     {
         //直接绑定手机
         paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(3),@"code":strCode};
-        strInfo = [NSString stringWithFormat:@"%@User/bindPhone",kRegisterNumber];
+        strInfo = [NSString stringWithFormat:@"%@User/bindPhone",[kHTTPSingle getHttpApi]];
     }
     else
     {
         paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"action":@(4),@"code":strCode};
-        strInfo = [NSString stringWithFormat:@"%@User/checkphonecode",kRegisterNumber];
+        strInfo = [NSString stringWithFormat:@"%@User/checkphonecode",[kHTTPSingle getHttpApi]];
     }
     @WeakObj(self);
     __block int __banding = banding;

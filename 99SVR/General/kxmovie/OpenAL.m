@@ -111,14 +111,24 @@
     aChannel = 2;
     ALenum format=AL_FORMAT_STEREO16;
     alBufferData(bufferID, format,data, (ALsizei)dataSize,aSampleRate);
+    
+    if (alGetError()!= AL_NO_ERROR)
+    {
+        NSLog(@"Error generating sources!\n");
+        [ticketCondition unlock];
+        return ;
+    }
     alSourceQueueBuffers(outSourceId, 1, &bufferID);
     if (alGetError()!= AL_NO_ERROR)
     {
         NSLog(@"Error generating sources!\n");
+        [ticketCondition unlock];
+        return ;
     }
     [self updataQueueBuffer];
-    ALint stateVaue;
-    alGetSourcei(outSourceId, AL_SOURCE_STATE, &stateVaue);
+    int queued;
+    alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
+    DLog(@"queued:%d",queued);
     [ticketCondition unlock];
 }
 
@@ -149,7 +159,8 @@
     return YES;
 }
 
-- (void)playSound{
+- (void)playSound
+{
     ALint  state;
     alGetSourcei(outSourceId, AL_SOURCE_STATE, &state);
     if (state != AL_PLAYING){
@@ -185,7 +196,8 @@
     }
 }
 
-- (void)dealloc{
+- (void)dealloc
+{
     ticketCondition = nil;
     [self cleanUpOpenAL];
     AVAudioSession *session = [AVAudioSession sharedInstance];

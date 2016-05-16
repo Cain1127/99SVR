@@ -191,13 +191,9 @@ public :
      */
     void sendQuestion(int roomId,int teamId,const char *stock,const char *question);
     /**
-     *  网络变更
+     *  @return 获取分享链接
      */
-    void networkfChanged();
-    /**
-     *  重连
-     */
-    void reConnect();
+    const char * getVideoRoomUrl();
     
     ~ZLLogonProtocol();
 };

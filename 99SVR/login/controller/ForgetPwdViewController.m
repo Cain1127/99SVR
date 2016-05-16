@@ -86,7 +86,7 @@
     NSString *strMd5 = [NSString stringWithFormat:@"action=find&account=%@&date=%@",strMobile,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = [NSString stringWithFormat:@"%@Message/GetFindPasswordMsgCode&pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
+    NSString *strInfo = [NSString stringWithFormat:@"%@Message/GetFindPasswordMsgCode&pnum=%@&key=%@",[kHTTPSingle getHttpApi],strMobile,strMd5];
     __weak ForgetPwdViewController *__self = self;
     [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject)
      {
@@ -257,7 +257,7 @@
     }
     [self.view makeToastActivity_bird];
     NSDictionary *parameters = @{@"phone":strMobile,@"code":strCode};
-    NSString *strInfo = [NSString stringWithFormat:@"%@Verify/MobileFindPasswordCheckSMS",kRegisterNumber];
+    NSString *strInfo = [NSString stringWithFormat:@"%@Verify/MobileFindPasswordCheckSMS",[kHTTPSingle getHttpApi]];
     _strMobile = strMobile;
     __weak ForgetPwdViewController *__self = self;
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id response)

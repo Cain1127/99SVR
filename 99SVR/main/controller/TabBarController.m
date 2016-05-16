@@ -11,7 +11,6 @@
 #import "GFNavigationController.h"
 #import "NavigationViewController.h"
 #import "HomeViewController.h"
-#import "IndexViewController.h"
 #import "StockHomeViewController.h"
 #import "TQIdeaViewController.h"
 #import "TQMeCustomizedViewController.h"

@@ -179,7 +179,7 @@
     strMd5 = [NSString stringWithFormat:@"action=5&date=%@&pnum=%@",strDate,_mobile];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = [NSString stringWithFormat:@"%@Message/getmsgcode",kRegisterNumber];
+    NSString *strInfo = [NSString stringWithFormat:@"%@Message/getmsgcode",[kHTTPSingle getHttpApi]];
     NSDictionary *parameters = nil;
     parameters = @{@"action":@(5),@"pnum":_mobile,@"key":strMd5,@"client":@(2)};
     
@@ -244,7 +244,7 @@
     
         //直接绑定手机
     paramters = @{@"client":@"2",@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(5),@"code":strCode,@"pwd":_password};
-    strInfo = [NSString stringWithFormat:@"%@User/bindPhone",kRegisterNumber];
+    strInfo = [NSString stringWithFormat:@"%@User/bindPhone",[kHTTPSingle getHttpApi]];
     @WeakObj(self);
     [BaseService postJSONWithUrl:strInfo parameters:paramters success:^(id responseObject)
      {

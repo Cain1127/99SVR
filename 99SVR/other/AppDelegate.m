@@ -10,7 +10,6 @@
 #import "LoginViewController.h"
 #import "ZLLogonServerSing.h"
 #import "Toast+UIView.h"
-//#import "Reachability.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import "DecodeJson.h"
 #import "GiftModel.h"
@@ -20,7 +19,6 @@
 #import "UserInfo.h"
 #import "DecodeJson.h"
 #import "SVRInitLBS.h"
-#import "IndexViewController.h"
 #import "BaseService.h"
 #import <Bugly/BuglyLog.h>
 #import <Bugly/CrashReporter.h>
@@ -39,11 +37,8 @@
 
 @interface AppDelegate ()<UIAlertViewDelegate,WeiboSDKDelegate,WXApiDelegate>
 {
-    IndexViewController *indexView;
     BOOL bStatus;
     BOOL bGGLogin;
-//    Reachability *hostReach;
-//    NetworkStatus nowStatus;
 }
 
 @property (nonatomic,unsafe_unretained) UIBackgroundTaskIdentifier backgroundTaskIdentifier;

@@ -132,5 +132,6 @@ DEFINE_SINGLETON_FOR_HEADER(HttpProtocolManager)
 
 - (NSString *)GetPrivateServiceDetailUrl:(int)psid;
 
+- (NSString *)getHttpApi;
 
 @end

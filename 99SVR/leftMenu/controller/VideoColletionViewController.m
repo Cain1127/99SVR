@@ -12,7 +12,6 @@
 #import "CustomViewController.h"
 #import "VideoCell.h"
 #import "UserInfo.h"
-#import "GroupListRequest.h"
 #import "RoomHttp.h"
 #import "ConnectRoomViewModel.h"
 #import "TableViewFactory.h"
@@ -21,7 +20,6 @@
 @interface VideoColletionViewController()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic,copy) NSArray *aryVideo;
-@property (nonatomic,strong) GroupListRequest *listReuqest;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) ConnectRoomViewModel *roomViewModel;
 @property (nonatomic,strong) UIView *noView;

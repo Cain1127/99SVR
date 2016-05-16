@@ -57,7 +57,6 @@
 {
     //聊天view
     NSInteger _nTag;
-    dispatch_queue_t room_gcd;
     NSInteger _tag;
     CGFloat startContentOffsetX;
     CGFloat willEndContentOffsetX;
@@ -115,9 +114,9 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 - (void)setRoom:(RoomHttp*)room
 {
     _room = room;
-    [self createRoomModel];
-    _roomModel.nTimes = 0;
-    [_roomModel connectViewModel:room];
+//    [self createRoomModel];
+//    _roomModel.nTimes = 0;
+//    [_roomModel connectViewModel:room];
     if([self isViewLoaded])
     {
         [self addNotify];
@@ -239,7 +238,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     };
     
     frame.origin.x += kScreenWidth;
-    //伪UIViewController
     _ideaControl = [[XIdeaViewController alloc] initWithFrame:frame model:_room];
     [_scrollView addSubview:_ideaControl];
     
@@ -248,22 +246,14 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     _tradeView = [[XTraderViewController alloc] initWithFrame:frame model:_room control:self];
     [_scrollView addSubview:_tradeView];
     
-    
     frame.origin.x += kScreenWidth;
     _privateView = [[XTeamPrivateController alloc] initWithFrame:frame model:_room];
     [_scrollView addSubview:_privateView];
-   
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    room_gcd = dispatch_queue_create("decode_gcd",0);
     [self initUIHead];
     
     [self addNotify];
@@ -272,10 +262,11 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     [self selectIndexSegment:0];
     [_liveControl stopNewPlay];
     [_liveControl reloadModel:_room];
-    [_ideaControl setModel:_room];
-    [_tradeView reloadModel:_room];
-    [_ideaControl setModel:_room];
-    [_privateView setModel:_room];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning

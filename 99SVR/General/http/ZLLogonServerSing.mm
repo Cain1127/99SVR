@@ -179,17 +179,15 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     }
 }
 
-- (void)onNetWorkChange
+- (NSString *)getVideoUrl
 {
-    if (protocol) {
-        protocol->networkfChanged();
+    if(protocol)
+    {
+        NSString *strVideoUrl = [NSString stringWithUTF8String:protocol->getVideoRoomUrl()];
+        return strVideoUrl;
     }
+    return @"";
 }
 
-- (void)reConnect{
-    if (protocol) {
-        protocol->reConnect();
-    }
-}
 
 @end

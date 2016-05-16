@@ -97,7 +97,7 @@
     NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",_username,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = [NSString stringWithFormat:@"%@User/registerMulti",kRegisterNumber];
+    NSString *strInfo = [NSString stringWithFormat:@"%@User/registerMulti",[kHTTPSingle getHttpApi]];
     NSDictionary *parameters = @{@"account":_username,@"key":strMd5,@"pwd":_password,@"type":@"21"};
 //    __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
     @WeakObj(self)
