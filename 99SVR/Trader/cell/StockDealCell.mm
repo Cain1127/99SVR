@@ -105,7 +105,7 @@
             }else{
                 self.tradeLabeView.hidden = YES;
                 self.notVipView.hidden = NO;
-                self.notVipView.type = StockNotVipViewType_Business;
+                [self.notVipView setViewType:StockNotVipViewType_Business withVipLevel:headerModel.minVipLevel];
             }
             
         }
@@ -150,7 +150,8 @@
                 self.wareHouseViw.hidden = YES;
                 self.lineView.hidden = YES;
                 self.notVipView.hidden = NO;
-                self.notVipView.type = StockNotVipViewType_Storehouse;
+                [self.notVipView setViewType:StockNotVipViewType_Storehouse withVipLevel:headerModel.minVipLevel];
+
             }
 
             

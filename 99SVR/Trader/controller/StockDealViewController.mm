@@ -237,7 +237,7 @@
             
         }else{
             
-            [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"去兑换" withMessage:[NSString stringWithFormat:@"需要兑换私人定制服务-vip%@才能查看详细内容",self.headerModel.minVipLevel] completionCallback:^(NSInteger index) {
+            [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"去兑换" withMessage:[NSString stringWithFormat:@"需要兑换私人定制服务-VIP%@才能查看详细内容",self.headerModel.minVipLevel] completionCallback:^(NSInteger index) {
                 
                 if (index==1) {
                     [weakSelf goBuyVipServiceViewController];
