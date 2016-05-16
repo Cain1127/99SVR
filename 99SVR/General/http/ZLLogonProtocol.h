@@ -21,6 +21,7 @@
 extern NSMutableArray *aryRoomChat;
 extern NSMutableArray *aryRoomPrichat;
 extern NSMutableArray *aryRoomNotice;
+extern NSString *roomTeachInfo;
 extern int nRoom_count_info;
 extern int nRoom_fans_info;
 extern int nRoom_is_collet;

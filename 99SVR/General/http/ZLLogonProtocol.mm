@@ -28,6 +28,7 @@ ZLJoinRoomListener join_listener;
 VideoRoomConnection *video_room;
 ZLRoomListener room_listener;
 
+NSString *roomTeachInfo;
 NSMutableArray *aryRoomChat;
 NSMutableArray *aryRoomPrichat;
 NSMutableArray *aryRoomNotice;
@@ -382,26 +383,28 @@ int ZLLogonProtocol::updateNick(const char *cNick,const char *intro,int sex)
     return 1;
 }
 
-
-
 void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomPwd)
 {
-    if (aryRoomChat==nil) {
+    if (aryRoomChat==nil)
+    {
         aryRoomChat = [NSMutableArray array];
     }
     [aryRoomChat removeAllObjects];
     
-    if (aryRoomPrichat==nil) {
+    if (aryRoomPrichat==nil)
+    {
         aryRoomPrichat = [NSMutableArray array];
     }
     [aryRoomPrichat removeAllObjects];
     [currentRoom.aryUser removeAllObjects];
     [currentRoom.dictUser removeAllObjects];
     
-    if (aryRoomNotice == nil) {
+    if (aryRoomNotice == nil)
+    {
         aryRoomNotice = [NSMutableArray array];
     }
     [aryRoomNotice removeAllObjects];
+    roomTeachInfo = @"";
     
     [aryRoomChat addObject:@"<span style=\"color:#919191\">[系统消息]正在加载房间数据...</span>"];
     
@@ -709,9 +712,10 @@ void ZLRoomListener::OnRoomKickoutUserNoty(UserKickoutRoomInfo_ext& info){
 }
 
 void ZLRoomListener::OnRoomNoticeNotify(RoomNotice& info){
-    if (info.index()==0) {
-        NSString *roomTeachInfo = [RoomService getTeachInfo:&info];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:roomTeachInfo];
+    if (info.index()==0)
+    {
+        roomTeachInfo = [RoomService getTeachInfo:&info];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
     }
     else if(info.index()==2)
     {

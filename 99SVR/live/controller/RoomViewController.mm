@@ -116,6 +116,8 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 {
     _room = room;
     [self createRoomModel];
+    _roomModel.nTimes = 0;
+    [_roomModel connectViewModel:room];
     if([self isViewLoaded])
     {
         [self addNotify];
@@ -129,7 +131,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
         [_ideaControl setModel:_room];
         [_privateView setModel:_room];
     }
-    [_roomModel connectViewModel:room];
 }
 
 - (void)removeNotice
@@ -264,6 +265,17 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     [super viewDidLoad];
     room_gcd = dispatch_queue_create("decode_gcd",0);
     [self initUIHead];
+    
+    [self addNotify];
+    [self loadHeadModel];
+    [headView.segmented setSelectedSegmentIndex:0];
+    [self selectIndexSegment:0];
+    [_liveControl stopNewPlay];
+    [_liveControl reloadModel:_room];
+    [_ideaControl setModel:_room];
+    [_tradeView reloadModel:_room];
+    [_ideaControl setModel:_room];
+    [_privateView setModel:_room];
 }
 
 - (void)didReceiveMemoryWarning
