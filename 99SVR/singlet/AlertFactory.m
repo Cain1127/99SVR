@@ -8,6 +8,7 @@
 
 #import "AlertFactory.h"
 #import "LoginViewController.h"
+#import "PlayIconView.h"
 #import "KefuCenterController.h"
 #import "RoomHttp.h"
 #import "Toast+UIView.h"
@@ -63,33 +64,34 @@
 + (void)createPassswordAlert:(UIViewController *)sender room:(RoomHttp*)room block:(void (^)(NSString *pwd))block
 {
     @WeakObj(sender)
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"输入密码"
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入密码"
                                                                    message:@"" preferredStyle:UIAlertControllerStyleAlert];
-    
     [alert addTextFieldWithConfigurationHandler:^(UITextField *textField)
-     {
-         textField.placeholder = @"输入密码";
-     }];
+    {
+        textField.placeholder = @"输入密码";
+    }];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-       {
-           UITextField *login = alert.textFields.firstObject;
-           if (block)
-           {
-               block(login.text);
-           }
-       }];
+    {
+        UITextField *login = alert.textFields.firstObject;
+        if (block)
+        {
+            block(login.text);
+        }
+    }];
     [alert addAction:okAction];
-    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+    {
         [senderWeak.view hideToastActivity];
+        [[PlayIconView sharedPlayIconView] exitPlay];
+        [senderWeak.navigationController popViewControllerAnimated:YES];
     }];
     [alert addAction:canAction];
-    //UIAlertActionStyleDestructive
     UIAlertAction *requestAction = [UIAlertAction actionWithTitle:@"我要密码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-        {
-            [senderWeak.view hideToastActivity];
-            KefuCenterController *control = [[KefuCenterController alloc] init];
-            [senderWeak.navigationController pushViewController:control animated:YES];
-        }];
+    {
+        [senderWeak.view hideToastActivity];
+        KefuCenterController *control = [[KefuCenterController alloc] init];
+        [senderWeak.navigationController pushViewController:control animated:YES];
+    }];
     [alert addAction:requestAction];
     dispatch_async(dispatch_get_main_queue(), ^{
         [senderWeak presentViewController:alert animated:YES completion:nil];

@@ -23,6 +23,7 @@ DEFINE_SINGLETON_FOR_HEADER(PlayIconView)
 @property (nonatomic,strong) PlayCurrentView *playView;
 @property (nonatomic,strong) UIImageView *btnPlay;
 
+- (void)exitPlay;
 - (void)setRoom:(RoomHttp *)room;
 
 @end

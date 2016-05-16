@@ -86,7 +86,7 @@
     
     [self.view makeToastActivity_bird];
     NSDictionary *parameters = @{@"phone":_strMobile,@"password":strPassword};
-    NSString *strInfo = [NSString stringWithFormat:@"%@Verify/MobileFindPassword",kRegisterNumber];
+    NSString *strInfo = [NSString stringWithFormat:@"%@Verify/MobileFindPassword",[kHTTPSingle getHttpApi]];
     _strPwd = strPassword;
     __weak InputPwdViewController *__self = self;
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id response)

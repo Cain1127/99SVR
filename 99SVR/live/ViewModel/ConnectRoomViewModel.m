@@ -8,6 +8,7 @@
 
 #import "ConnectRoomViewModel.h"
 #import "RoomHttp.h"
+#import "playiconView.h"
 #import "RoomViewController.h"
 #import "DecodeJson.h"
 #import "AlertFactory.h"
@@ -48,7 +49,9 @@
             _nTimes++;
             if (_nTimes>1)
             {
-                [ProgressHUD showError:@"输入密码错误"];
+                dispatch_main_async_safe(^{
+                    [ProgressHUD showError:@"输入密码错误"];
+                });
             }
             if ([UserInfo sharedUserInfo].nStatus)
             {
@@ -58,21 +61,18 @@
                 }];
             }
             else
-            {
-//                @WeakObj(_control)
-//                dispatch_async(dispatch_get_main_queue(),
-//                ^{
-//                    [_controlWeak.view hideToastActivity];
-//                    [ProgressHUD showError:@"加入房间失败或房间被关闭"];
-//                });
-            }
+            {}
         }
         else
         {
             @WeakObj(strMsg)
+            @WeakObj(_control)
             if (errid==101)
             {
-                [_control.navigationController popViewControllerAnimated:YES];
+                dispatch_main_async_safe(^{
+                    [[PlayIconView sharedPlayIconView] exitPlay];
+                    [_controlWeak.navigationController popViewControllerAnimated:YES];
+                });
             }
             dispatch_async(dispatch_get_main_queue(),
             ^{

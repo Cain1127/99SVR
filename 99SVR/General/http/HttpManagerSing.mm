@@ -320,5 +320,11 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
     return [NSString stringWithUTF8String:hConnection->GetPrivateServiceDetailUrl(psid).c_str()];
 }
 
+- (NSString *)getHttpApi
+{
+    [self createHttpConnection];
+    return [NSString stringWithFormat:@"%s?s=",hConnection->GetHttpApiHost().c_str()];
+}
+
 
 @end

@@ -190,6 +190,11 @@ public :
      *  提问
      */
     void sendQuestion(int roomId,int teamId,const char *stock,const char *question);
+    /**
+     *  @return 获取分享链接
+     */
+    const char * getVideoRoomUrl();
+    
     ~ZLLogonProtocol();
 };
 

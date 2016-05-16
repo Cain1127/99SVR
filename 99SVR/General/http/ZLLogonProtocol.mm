@@ -212,6 +212,9 @@ void ZLLoginListener::OnMessageComming(void *msg)
     conn->DispatchSocketMessage(msg);
 }
 
+
+
+
 /**
  *  登录成功
  *
@@ -314,6 +317,14 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd,const char 
     req4.set_nmobile(2);
     conn->SendMsg_LoginReq4(req4);
     return 1;
+}
+
+/**
+ *  @return 获取分享链接
+ */
+const char * ZLLogonProtocol::getVideoRoomUrl()
+{
+    return video_room->GetVideoRoomShareUrl().c_str();
 }
 
 /**

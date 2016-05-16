@@ -9,7 +9,6 @@
 #import "XIdeaViewController.h"
 #import "TableViewFactory.h"
 #import "TQideaTableViewCell.h"
-#import "GroupListRequest.h"
 #import "MJRefresh.h"
 #import "SearchController.h"
 #import <AFNetworking/AFNetworking.h>

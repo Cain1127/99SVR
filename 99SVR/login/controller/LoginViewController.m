@@ -518,7 +518,7 @@
     }
     if (dict && [dict objectForKey:@"code"])
     {
-        NSString *strInfo = [NSString stringWithFormat:@"%@User/VailUserByWeixin&client=2&code=%@",kRegisterNumber,[dict objectForKey:@"code"]];
+        NSString *strInfo = [NSString stringWithFormat:@"%@User/VailUserByWeixin&client=2&code=%@",[kHTTPSingle getHttpApi],[dict objectForKey:@"code"]];
         __weak LoginViewController *__self = self;
         __weak UserInfo *__user = [UserInfo sharedUserInfo];
         [BaseService get:strInfo dictionay:nil timeout:10 success:^(id responseObject)
@@ -575,7 +575,7 @@
     if (dict && [dict objectForKey:@"userID"] && [dict objectForKey:@"accessToken"])
     {
         NSString *strInfo = [NSString stringWithFormat:@"%@User/VailUserByWeibo&client=2&openid=%@&token=%@",
-                             kRegisterNumber,[dict objectForKey:@"userID"],[dict objectForKey:@"accessToken"]];
+                             [kHTTPSingle getHttpApi],[dict objectForKey:@"userID"],[dict objectForKey:@"accessToken"]];
         __weak UserInfo *__user = [UserInfo sharedUserInfo];
         @WeakObj(self)
         [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject) {
@@ -685,7 +685,7 @@
     {
         DLog(@"token:%@ openId;%@",[_tencentOAuth accessToken],[_tencentOAuth openId]);
         NSString *strInfo = [NSString stringWithFormat:@"%@User/VailUserByQQ&client=2&openid=%@&token=%@",
-                             kRegisterNumber,[_tencentOAuth openId],[_tencentOAuth accessToken]];
+                             [kHTTPSingle getHttpApi],[_tencentOAuth openId],[_tencentOAuth accessToken]];
         @WeakObj(self)
         [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject)
         {
@@ -828,7 +828,7 @@
     strMd5 = [DecodeJson XCmdMd5String:strKey];
     @WeakObj(self)
     __weak UserInfo *__user = [UserInfo sharedUserInfo];
-    NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByWeixin",kRegisterNumber];
+    NSString *strInfo = [NSString stringWithFormat:@"%@loginapi/VailUserByWeixin",[kHTTPSingle getHttpApi]];
     NSDictionary *dict = @{@"client":@"2",@"openid":_strOpenId,@"token":_strToken,@"nick":_strNickName,@"key":strMd5};
     DLog(@"strInfo:%zi",strInfo.length);
     [BaseService postJSONWithUrl:strInfo parameters:dict success:^(id responseObject)

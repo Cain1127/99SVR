@@ -71,6 +71,8 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
 
 - (void)colletRoomInfo:(int)action;
 
-
 - (void)requestQuestion:(int)roomId team:(int)teamId stock:(NSString *)stock question:(NSString *)question;
+
+- (NSString *)getVideoUrl;
+
 @end

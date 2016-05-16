@@ -26,7 +26,6 @@
 #import "TQMailboxViewController.h"
 #import "UIImageFactory.h"
 #import "BaseService.h"
-#import "IndexViewController.h"
 #import "BannerModel.h"
 #import "UIImageView+WebCache.h"
 #import "SDCycleScrollView.h"
@@ -72,8 +71,8 @@
     _scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0.0f, 0.0f, kScreenWidth, kPictureHeight) delegate:self placeholderImage:nil];
     _scrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
     _scrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
-    _scrollView.currentPageDotColor = UIColorFromRGB(0x4c4c4c); // 自定义分页控件小圆标颜色
-    _scrollView.pageDotColor = UIColorFromRGB(0xa8a8a8);
+    _scrollView.pageDotColor = UIColorFromRGB(0x4c4c4c); // 自定义分页控件小圆标颜色
+    _scrollView.currentPageDotColor = UIColorFromRGB(0xa8a8a8);
     _scrollView.autoScrollTimeInterval = 5;
     [_scrollView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     @WeakObj(self)

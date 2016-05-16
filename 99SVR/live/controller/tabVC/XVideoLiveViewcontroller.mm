@@ -122,7 +122,6 @@
     nColor = 10000;
     [self initUIHead];
     UITapGestureRecognizer* singleRecogn;
-    
     singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTopHUD)];
     singleRecogn.numberOfTapsRequired = 1; // 双击
     [_ffPlay.view setUserInteractionEnabled:YES];
@@ -156,9 +155,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
-    
-    if (_menuView) {
-        //重置会默认选择第一个按钮
+    if (_menuView)
+    {
         [_menuView resetSelectFirstIndex];
     }
 }

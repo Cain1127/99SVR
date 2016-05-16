@@ -178,4 +178,16 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
         protocol->sendQuestion(roomId,teamId,cStock,cQuestion);
     }
 }
+
+- (NSString *)getVideoUrl
+{
+    if(protocol)
+    {
+        NSString *strVideoUrl = [NSString stringWithUTF8String:protocol->getVideoRoomUrl()];
+        return strVideoUrl;
+    }
+    return @"";
+}
+
+
 @end

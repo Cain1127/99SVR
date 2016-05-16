@@ -216,8 +216,8 @@
     parameters = @{@"action":@(3),@"pnum":_mobile,@"key":strMd5,@"client":@(2)};
     @WeakObj(self)
     @WeakObj(_btnCode)
-    
-    [BaseService postJSONWithUrl:kBand_mobile_getcode_URL parameters:parameters success:^(id responseObject)
+    NSString *strUrl = [NSString stringWithFormat:@"%@Message/getregmsgcode",[kHTTPSingle getHttpApi]];
+    [BaseService postJSONWithUrl:strUrl parameters:parameters success:^(id responseObject)
      {
          [selfWeak.view hideToastActivity];
          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
@@ -245,51 +245,44 @@
 
 - (void)authUpdate
 {
-    if ([UserInfo sharedUserInfo].otherLogin)
-    {
-        [self authOtherLogin];
+    NSString *oldPwd = _txtOld.text;
+    NSString *newPwd = _txtCmd.text;
+    _password = _txtNew.text;
+    
+    [self checkLogBtnIsEnableWithOldPwd:_txtOld.text withNewPwd:_txtNew.text withCmdPwd:_txtCmd.text];
+    
+    if (oldPwd.length==0) {
+        [ProgressHUD showError:@"旧密码不能为空"];
+        return;
     }
-    else
-    {
-        NSString *oldPwd = _txtOld.text;
-        NSString *newPwd = _txtCmd.text;
-        _password = _txtNew.text;
-        
-        [self checkLogBtnIsEnableWithOldPwd:_txtOld.text withNewPwd:_txtNew.text withCmdPwd:_txtCmd.text];
-        
-        if (oldPwd.length==0) {
-            [ProgressHUD showError:@"旧密码不能为空"];
-            return;
-        }
-        else if(newPwd.length==0){
-            [ProgressHUD showError:@"新密码不能为空"];
-            return ;
-        }
-        else if(newPwd.length<6){
-            [ProgressHUD showError:@"密码不能小于6位"];
-            return ;
-        }
-        else if([self MatchLetter:newPwd]==-1)
-        {
-            [ProgressHUD showError:@"密码不能包含空格"];
-            return ;
-        }
-        else if(_password.length==0)
-        {
-            [ProgressHUD showError:@"确认密码不能为空"];
-            return ;
-        }else if(![_password isEqualToString:newPwd])
-        {
-             [ProgressHUD showError:@"新密码与确认密码不一致"];
-             return ;
-        }
-        else if([self MatchLetterNumber:_password]==-1)
-        {
-            [ProgressHUD showError:@"密码不能为纯数字"];
-            return;
-        }
-        [[ZLLogonServerSing sharedZLLogonServerSing] updatePwd:oldPwd cmd:newPwd];
+    else if(newPwd.length==0){
+        [ProgressHUD showError:@"新密码不能为空"];
+        return ;
     }
+    else if(newPwd.length<6){
+        [ProgressHUD showError:@"密码不能小于6位"];
+        return ;
+    }
+    else if([self MatchLetter:newPwd]==-1)
+    {
+        [ProgressHUD showError:@"密码不能包含空格"];
+        return ;
+    }
+    else if(_password.length==0)
+    {
+        [ProgressHUD showError:@"确认密码不能为空"];
+        return ;
+    }else if(![_password isEqualToString:newPwd])
+    {
+         [ProgressHUD showError:@"新密码与确认密码不一致"];
+         return ;
+    }
+    else if([self MatchLetterNumber:_password]==-1)
+    {
+        [ProgressHUD showError:@"密码不能为纯数字"];
+        return;
+    }
+    [[ZLLogonServerSing sharedZLLogonServerSing] updatePwd:oldPwd cmd:newPwd];
 }
 
 /**
@@ -328,87 +321,6 @@
     self.btnDetermine.enabled = (isOldPwdBool && isNewPwdBool && isCmdPwdBool);
 }
 
-
-- (void)authOtherLogin
-{
-     {
-        _mobile = _txtMobile.text;
-        if (_mobile.length==0)
-        {
-            [ProgressHUD showError:@"手机号不能为空"];
-            return ;
-        }
-        if (_mobile.length!=11)
-        {
-            [ProgressHUD showError:@"手机长度错误"];
-            return ;
-        }
-        if(![DecodeJson getSrcMobile:_mobile])
-        {
-            [ProgressHUD showError:@"请输入正确的手机号"];
-            return ;
-        }
-        _password = [_txtNew text];
-        if([_password length]==0)
-        {
-            [ProgressHUD showError:@"必须输入密码才能绑定手机"];
-            return ;
-        }
-        else if(_password.length<6){
-            [ProgressHUD showError:@"密码不能小于6位"];
-            return ;
-        }
-         else if([self MatchLetter:_password]==-1)
-         {
-             [ProgressHUD showError:@"密码不能包含空格"];
-             return ;
-         }else if([self MatchLetterNumber:_password]==-1)
-         {
-             [ProgressHUD showError:@"密码不能为纯数字"];
-             return;
-         }
-         
-    }
-    NSString *strCode = _txtCode.text;
-    if ([strCode length]==0)
-    {
-        [_lblError setText:@"验证码不能为空"];
-        return ;
-    }
-    
-    NSDictionary *paramters;
-    NSString *strInfo;
-    [self.view makeToastActivity_bird];
-    [_lblError setText:@""];
-    {
-        //直接绑定手机
-        paramters = @{@"client":@"2",@"pwd":_password,@"userid":@([UserInfo sharedUserInfo].nUserId),@"pnum":_mobile,@"action":@(3),@"code":strCode};
-        strInfo = kBand_mobile_setphone_URL;
-    }
-    
-    @WeakObj(self);
-    [BaseService postJSONWithUrl:strInfo parameters:paramters success:^(id responseObject)
-     {
-         gcd_main_safe(^{[selfWeak.view hideToastActivity];});
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-         if(dict && [dict objectForKey:@"status"] && [[dict objectForKey:@"status"] intValue]==0)
-         {
-             //没绑定过的，直接绑定，然后返回
-             [selfWeak.navigationController popViewControllerAnimated:YES];
-             [ProgressHUD showSuccess:@"绑定手机成功"];
-         }
-         else
-         {
-            [selfWeak.lblError setText:[dict objectForKey:@"info"]];
-         }
-     }
-     fail:^(NSError *error)
-     {
-         [selfWeak.view hideToastActivity];
-         [selfWeak.lblError setText:@"修改失败"];
-     }];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -426,7 +338,6 @@
         [_txtOld becomeFirstResponder];
 
     });
-    
 }
 
 - (void)dealloc

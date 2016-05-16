@@ -2763,12 +2763,12 @@ public:
 
 	void SerializeToArray(void* data, int size)
 	{
-		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
+//		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
 	}
 
 	void ParseFromArray(void* data, int size)
 	{
-		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
+//		protocol::tag_CMDTradeGiftResp* cmd = (protocol::tag_CMDTradeGiftResp*) data;
 	}
 
 	void Log()

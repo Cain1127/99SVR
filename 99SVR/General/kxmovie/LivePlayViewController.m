@@ -8,6 +8,7 @@
 
 #import "LivePlayViewController.h"
 #import "UIImageView+WebCache.h"
+#import "ZLLogonServerSing.h"
 #import "OpenAL.h"
 #import "SVRMediaClient.h"
 #import "RoomHttp.h"
@@ -57,8 +58,6 @@
 @property (nonatomic,strong) UIButton *btnShare;
 @property (nonatomic,strong) UIButton *btnCollet;
 @property (nonatomic,copy) NSString *roomName;
-@property (nonatomic,strong) NSMutableArray *aryVideo;
-@property (nonatomic,strong) NSMutableArray *aryAudio;
 
 @end
 
@@ -250,45 +249,13 @@
 
 - (void)initDecode
 {
-    if (!_openAL)
-    {
-        _openAL = [[OpenAL alloc] init];
-    }
-    [_openAL initOpenAL];
-}
-
-- (void)decodeAudio
-{
-    while (_playing)
-    {
-        if(_aryAudio.count<10)
-        {
-            [NSThread sleepForTimeInterval:0.01f];
-            continue ;
-        }
-        @autoreleasepool
-        {
-            NSData *data = nil;
-            if(_aryAudio.count>0)
-            {
-                data = [_aryAudio objectAtIndex:0];
-                if (data && data.length > 0)
-                {
-                    [_openAL openAudioFromQueue:(unsigned char *)data.bytes dataSize:(int)data.length];
-                }
-                @synchronized(_aryAudio)
-                {
-                    if(_aryAudio.count>0)
-                    {
-                        [_aryAudio removeObjectAtIndex:0];
-                    }
-                }
-                [NSThread sleepForTimeInterval:0.03];
-            }
-        }
-    }
-    [_playAudio stopPlay];
-    [_media.audioBuf removeAllObjects];
+//    if (!_openAL)
+//    {
+//        _openAL = [[OpenAL alloc] init];
+//    }
+//    [_openAL initOpenAL];
+    _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
+    [_playAudio startPlayWithBufferByteSize:4096];
 }
 
 - (void)stop
@@ -304,6 +271,7 @@
         [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
     });
     [_glView hideToastActivity];
+    [_playAudio stopPlay];
     @WeakObj(self)
     gcd_main_safe(
     ^{
@@ -316,7 +284,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
 }
 
 - (void)setBackGroudMode:(NSNotification *)notify
@@ -403,8 +370,6 @@
     {
         _btnCollet.selected = NO;
     }
-    _aryAudio = [NSMutableArray array];
-    _aryVideo = [NSMutableArray array];
 }
 
 
@@ -455,9 +420,17 @@
 
 - (void)shareInfo
 {
-    NSString *strInfo = [[NSString alloc] initWithFormat:@"正在看%@的视频直播，内容很不错，评论分析切中重点，你也快来看看吧",_roomName];
-    ZLShareViewController *control = [[ZLShareViewController alloc] initWithTitle:strInfo url:@"www.99ducaijing.com"];
-    [control show];
+    NSString *strUrl = [kProtocolSingle getVideoUrl];
+    if(strUrl.length>0)
+    {
+        NSString *strInfo = [[NSString alloc] initWithFormat:@"正在看%@的视频直播，内容很不错，评论分析切中重点，你也快来看看吧",_roomName];
+        ZLShareViewController *control = [[ZLShareViewController alloc] initWithTitle:strInfo url:strUrl];
+        [control show];
+    }
+    else
+    {
+        [ProgressHUD showError:@"没有讲师上麦,无法分享!"];
+    }
 }
 
 - (void)colletInfo
@@ -618,9 +591,7 @@
         }
     });
     if (KUserSingleton.nowNetwork == 2 && !KUserSingleton.checkNetWork)
-    {
-        
-    }
+    {}
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 }
 
@@ -631,25 +602,15 @@
 
 - (void)setOnlyAudio:(BOOL)enable
 {
-//    [_media setEnableVideo:enable];
     _bVideo = enable;
     if (!enable)
     {
-        @synchronized(_aryVideo)
-        {
-            [_aryVideo removeAllObjects];
-        }
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
         [self setNoVideo];
     }
     else
     {
-        __weak LivePlayViewController *__self = self;
         lblText.hidden = YES;
-        dispatch_async(videoQueue,
-        ^{
-            [__self decodeVideo];
-        });
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
     }
 }
@@ -658,60 +619,13 @@
 {
     while (_playing)
     {
-        if (_aryVideo.count)
-        {
-            __weak LivePlayViewController *__self = self;
-            dispatch_main_async_safe(
-            ^{
-//                 [__self.glView hideToastActivity];
-                Loading_Hide(__self.glView);
 
-            });
-           return;
-        }
-        [NSThread sleepForTimeInterval:0.5f];
+//        Loading_Hide(self.glView);
+//        return;
+//        [NSThread sleepForTimeInterval:0.5f];
     }
 }
 
-- (void)decodeVideo
-{
-    //开定时器播放视频
-    if (_playing && _bVideo)
-    {
-        __weak LivePlayViewController *__self = self;
-        if (_aryVideo.count==0)
-        {
-            [NSThread sleepForTimeInterval:.01f];
-        }
-        else
-        {
-            @autoreleasepool
-            {
-                NSData *data = nil;
-                if(_aryVideo.count>0)
-                {
-                    data = [_aryVideo objectAtIndex:0];
-                    [self createImage:data];
-                    @synchronized(_aryVideo)
-                    {
-                        if(_aryVideo.count>0)
-                        {
-                            [_aryVideo removeObjectAtIndex:0];
-                        }
-                    }
-                }
-            }
-        }
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.03 * NSEC_PER_SEC)),videoQueue,
-        ^{
-            [__self decodeVideo];
-        });
-    }
-    else
-    {
-        [_media.videoBuf removeAllObjects];
-    }
-}
 
 - (void)createImage:(NSData *)data
 {
@@ -754,7 +668,8 @@
     NSDictionary *dict = notify.object;
     if ([dict[@"code"] intValue]==1)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^
+        {
             selfWeak.btnCollet.selected = YES;
             [ProgressHUD showSuccess:@"关注成功"];
         });
@@ -777,7 +692,8 @@
     }
     @autoreleasepool
     {
-        [_openAL openAudioFromQueue:(unsigned char*)data.bytes dataSize:len];
+//        [_openAL openAudioFromQueue:(unsigned char*)data.bytes dataSize:len];
+        [_playAudio putAudioData:(short *)data.bytes size:len];
     }
 }
 
@@ -788,7 +704,6 @@
         [_glView hideToastActivity];
         bCoding = YES;
     }
-    
     _videoWidth = width;
     _videoHeight = height;
     @autoreleasepool

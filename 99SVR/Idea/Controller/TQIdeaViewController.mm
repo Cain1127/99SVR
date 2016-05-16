@@ -14,7 +14,6 @@
 #import "TableViewFactory.h"
 #import "TQideaTableViewCell.h"
 #import "XIdeaDataSource.h"
-#import "GroupListRequest.h"
 #import "MJRefresh.h"
 #import "SearchController.h"
 #import <AFNetworking/AFNetworking.h>

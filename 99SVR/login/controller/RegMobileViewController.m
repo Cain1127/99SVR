@@ -83,7 +83,7 @@
     }
     [self.view makeToastActivity_bird];
     NSDictionary *paramters = @{@"type":@"2",@"account":_username,@"pwd":_password,@"vcode":strCode};
-    NSString *strInfo = [NSString stringWithFormat:@"%@User/registerMulti",kRegisterNumber];
+    NSString *strInfo = [NSString stringWithFormat:@"%@User/registerMulti",[kHTTPSingle getHttpApi]];
     @WeakObj(self)
     [BaseService postJSONWithUrl:strInfo parameters:paramters success:^(id responseObject)
     {
@@ -126,7 +126,7 @@
     NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",strMobile,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
-    NSString *strInfo = [NSString stringWithFormat:@"%@Message/getregmsgcode&pnum=%@&key=%@",kRegisterNumber,strMobile,strMd5];
+    NSString *strInfo = [NSString stringWithFormat:@"%@Message/getregmsgcode&pnum=%@&key=%@",[kHTTPSingle getHttpApi],strMobile,strMd5];
     __weak RegMobileViewController *__self = self;
     [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject)
      {
@@ -392,7 +392,6 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
     
         [_txtName becomeFirstResponder];
-
     });
 
 }
