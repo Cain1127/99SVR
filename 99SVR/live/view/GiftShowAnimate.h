@@ -19,6 +19,7 @@
 @property (nonatomic,strong) UIImageView *rigtImg;
 
 - (id)initWithFrame:(CGRect)frame dict:(NSDictionary *)dict;
+
 - (void)addrightViewAnimation;
 
 @end

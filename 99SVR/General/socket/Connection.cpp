@@ -619,75 +619,73 @@ string Connection::get_error_desc(int err_code)
     switch(err_code)
     {
         case protocol::ERR_CODE_SUCCESS:
-            str="≥…π¶";
+            str="成功";
             break;
         case protocol::ERR_CODE_FAILED:
-            str=" ß∞‹";
+            str="失败";
             break;
         case protocol::ERR_CODE_FAILED_PACKAGEERROR:
-            str="«Î«Û∞¸≥§∂»¥ÌŒÛ";
+            str="请求包长度错误";
             break;
         case protocol::ERR_CODE_FAILED_DBERROR:
-            str=" ˝æ›ø‚¿‡–Õ¥ÌŒÛ";
+            str="数据库类型错误";
             break;
         case protocol::ERR_CODE_FAILED_INVALIDCHAR:
-            str=" ‰»Î¡À∑«∑®◊÷∑˚";
+            str="输入了非法字符";
             break;
         case protocol::ERR_CODE_FAILED_USERNOTFOUND:
-            str="’“≤ªµΩ∏√”√ªß";
+            str="找不到该用户";
             break;
         case protocol::ERR_CODE_FAILED_USERFROSEN:
-            str="”√ªß±ª∂≥Ω·";
+            str="用户被冻结";
             break;
         case protocol::ERR_CODE_FAILED_UNKNONMESSAGETYPE:
-            str="Œ¥÷™œ˚œ¢¿‡–Õ";
+            str="未知消息类型";
             break;
         case protocol::ERR_CODE_FAILED_REQUEST_OUTOFRANGE:
-            str="«Î«Û ˝æ›π˝∂‡ªÚ’ﬂƒ⁄»›π˝≥§";
+            str="请求数据过多或者内容过长";
             break;
         case protocol::ERR_CODE_FAILED_SAMEUSERLOGIN:
-            str="ÕÍ»´œ‡Õ¨µƒ”√ªßº”»Î∑øº‰";
+            str="完全相同的用户加入房间";
             break;
         case protocol::ERR_CODE_FAILED_AREAIDNOTFOUND:
-            str="√ª”–’“µΩ«¯”ÚID";
+            str="没有找到区域ID";
             break;
         case protocol::ERR_CODE_FAILED_ROOMIDNOTFOUND:
-            str="√ª”–’“µΩ∑øº‰ID";
+            str="没有找到房间ID";
             break;
         case protocol::ERR_CODE_FAILED_CRC:
-            str="CRC–£—È¥ÌŒÛ";
+            str="CRC校验错误";
             break;
         case protocol::ERR_CODE_FAILED_CREATEUSER:
-            str="√ª”–’“µΩ¥¥Ω®”√ªß ß∞‹";
+            str="没有找到创建用户失败";
             break;
         case protocol::ERR_CODE_FAILED_KEYWORDFOUND:
-            str="∑¢œ÷πÿº¸¥ ";
+            str="发现关键词";
             break;
         case protocol::ERR_CODE_FAILED_NOT_ENOUGH_GOLD:
-            str="Ω±“≤ª◊„";
+            str="金币不足";
             break;
         case protocol::ERR_CODE_FAILED_ALREADY_BUY:
-            str="“—æ≠π∫¬Ú";
+            str="已经购买";
             break;
         case protocol::ERR_CODE_FAILED_PRIVATENOTFOUND:
-            str="√ª”–∏√ÀΩ»À∂©÷∆";
+            str="没有该私人订制";
             break;
         case protocol::ERR_CODE_FAILED_TEAMNOTFOUND:
-            str="√ª”–’“µΩ’Ω∂”ID";
+            str="没有找到战队ID";
             break;
         case protocol::ERR_CODE_FAILED_GIFTNOTFOUND:
-            str="√ª”–’“µΩ¿ÒŒÔID";
+            str="没有找到礼物ID";
             break;
         default:
-            str="Œ¥÷™¥ÌŒÛ£∫" + int2string(err_code);
+            str="未知错误";
             break;
     }
-    
     return str;
 }
 
-void Connection::RegisterConnectionListener(
-                                            ConnectionListener* connection_listener)
+void Connection::RegisterConnectionListener(ConnectionListener* connection_listener)
 {
     this->conn_listener = connection_listener;
 }

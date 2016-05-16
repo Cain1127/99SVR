@@ -97,7 +97,7 @@
     alDopplerFactor(1.0);
     alSourcef(outSourceId, AL_PITCH, 1.0f);
     alSourcef(outSourceId, AL_GAIN, 1.0f);
-    alSourcei(outSourceId, AL_LOOPING, AL_FALSE);
+//    alSourcei(outSourceId, AL_LOOPING, AL_FALSE);
     alSourcef(outSourceId, AL_SOURCE_TYPE, AL_STREAMING);
 }
 
@@ -131,7 +131,14 @@
     [self updataQueueBuffer];
     int queued;
     alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
-    DLog(@"queued:%d",queued);
+    if(queued>20)
+    {
+        [NSThread sleepForTimeInterval:0.016f];
+    }
+    else
+    {
+        [NSThread sleepForTimeInterval:0.013f];
+    }
     [ticketCondition unlock];
 }
 

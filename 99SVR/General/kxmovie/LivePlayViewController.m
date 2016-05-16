@@ -188,7 +188,7 @@
 
 - (void)frameView
 {
-    _glView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kVideoImageHeight)];
+    _glView = [[LivePlayImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kVideoImageHeight)];
     _glView.contentMode = UIViewContentModeScaleAspectFit;
     _glView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:_glView];
@@ -216,12 +216,12 @@
 
 - (void)setDefaultImg
 {
-    
     char cBuffer[100]={0};
     sprintf(cBuffer,"video_logo_bg@2x");
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
+    [_glView.lblContent setText:@""];
     lblText.hidden = YES;
 }
 
@@ -232,8 +232,7 @@
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
-    lblText.hidden = NO;
-    [lblText setText:@"音频模式"];
+    [_glView.lblContent setText:@"音频模式"];
 }
 
 - (id)init
@@ -249,13 +248,11 @@
 
 - (void)initDecode
 {
-//    if (!_openAL)
-//    {
-//        _openAL = [[OpenAL alloc] init];
-//    }
-//    [_openAL initOpenAL];
-    _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
-    [_playAudio startPlayWithBufferByteSize:4096];
+    if (!_openAL)
+    {
+        _openAL = [[OpenAL alloc] init];
+    }
+    [_openAL initOpenAL];
 }
 
 - (void)stop
@@ -397,10 +394,11 @@
        _downHUD.frame = Rect(0,fHeight-44, fWidth, 44);
    }
     int number = 3;
-    if (KUserSingleton.nStatus) {
+    if (KUserSingleton.nStatus)
+    {
         number = 4;
     }
-    CGFloat fWith = fWidth/ number;
+    CGFloat fWith = fWidth / number;
     
     _btnFull.frame = Rect(fWith/2-22, 0,44, 44);
     _btnVideo.frame = Rect(fWith+fWith/2-22, 0,44, 44);
@@ -429,7 +427,7 @@
     }
     else
     {
-        [ProgressHUD showError:@"没有讲师上麦,无法分享!"];
+        [ProgressHUD showError:@"没有讲师上麦,暂时无法分享!"];
     }
 }
 
@@ -692,8 +690,8 @@
     }
     @autoreleasepool
     {
-//        [_openAL openAudioFromQueue:(unsigned char*)data.bytes dataSize:len];
-        [_playAudio putAudioData:(short *)data.bytes size:len];
+        [_openAL openAudioFromQueue:(unsigned char*)data.bytes dataSize:len];
+//        [_playAudio putAudioData:(short *)data.bytes size:len];
     }
 }
 

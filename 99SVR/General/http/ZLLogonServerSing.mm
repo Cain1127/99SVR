@@ -125,7 +125,8 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
 }
 
 - (void)exitRoom{
-    if(protocol){
+    if(protocol)
+    {
         protocol->exitRoomInfo();
     }
 }

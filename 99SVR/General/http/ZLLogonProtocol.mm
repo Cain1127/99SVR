@@ -139,11 +139,11 @@ void ZLHallListener::OnViewpointTradeGiftErr(ErrCodeResp& info)
     if (strErr!=nil)
     {
         DLog(@"strerr:%@",strErr);
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:strErr];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VIEW_POINT_TRADER_ERR_VC object:strErr];
     }
     else
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_QUESTION_FAIL_VC object:@"提问失败"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VIEW_POINT_TRADER_ERR_VC object:@"送礼失败"];
     }
 }
 
@@ -513,6 +513,10 @@ void ZLLogonProtocol::exitRoomInfo(){
     video_room->SendMsg_ExitRoomReq(room_info.vcbid());
     [currentRoom.aryUser removeAllObjects];
     [currentRoom.dictUser removeAllObjects];
+    [aryRoomChat removeAllObjects];
+    [aryRoomNotice removeAllObjects];
+    [aryRoomPrichat removeAllObjects];
+    roomTeachInfo = @"";
 }
 /**
  *  发送礼物
@@ -714,13 +718,18 @@ void ZLRoomListener::OnChatNotify(RoomChatMsg& info)
 /**
  *  用户被踢出通知
  */
-void ZLRoomListener::OnRoomKickoutUserNoty(UserKickoutRoomInfo_ext& info){
-    RoomUser *user = [currentRoom findUser:info.toid()];
-    [currentRoom.aryUser removeObject:user];
-    [currentRoom removeUser:info.toid()];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    
-    
+void ZLRoomListener::OnRoomKickoutUserNoty(UserKickoutRoomInfo_ext& info)
+{
+    if (info.toid()==KUserSingleton.nUserId) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_KICKOUT_VC object:nil];
+    }
+    else
+    {
+        RoomUser *user = [currentRoom findUser:info.toid()];
+        [currentRoom.aryUser removeObject:user];
+        [currentRoom removeUser:info.toid()];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+    }
 }
 
 void ZLRoomListener::OnRoomNoticeNotify(RoomNotice& info){
@@ -736,8 +745,6 @@ void ZLRoomListener::OnRoomNoticeNotify(RoomNotice& info){
 }
 /**
  *  上麦后，用户信息修改
- *
- *  @param info <#info description#>
  */
 void ZLRoomListener::OnRobotTeacherIdNoty(RobotTeacherIdNoty& info)
 {
@@ -759,13 +766,6 @@ void ZLRoomListener::OnRobotTeacherIdNoty(RobotTeacherIdNoty& info)
 //Ã·Œ œÏ”¶
 void ZLRoomListener::OnAskQuestionResp(AskQuestionResp& info)
 {
-//    uint64	_nk;
-//    uint32	_questionid;
-//    uint32	_userid;
-//    uint32	_teamid;
-//    string	_stock;
-//    uint32	_questionlen;
-//    string	_question;
     DLog(@"提问成功");
     [UserInfo sharedUserInfo].goldCoin = info.nk()/1000.0f;
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_QUESTION_VC object:@{@"code":@(1)}];
