@@ -114,9 +114,9 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 - (void)setRoom:(RoomHttp*)room
 {
     _room = room;
-//    [self createRoomModel];
-//    _roomModel.nTimes = 0;
-//    [_roomModel connectViewModel:room];
+    [self createRoomModel];
+    _roomModel.nTimes = 0;
+    [_roomModel connectViewModel:room];
     if([self isViewLoaded])
     {
         [self addNotify];

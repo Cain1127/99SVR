@@ -183,6 +183,7 @@
 		B4EA09231CC8B9E000E8F933 /* StockRecordViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09221CC8B9E000E8F933 /* StockRecordViewController.mm */; };
 		B4EA09291CC8DF8400E8F933 /* StockRecordTabModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09281CC8DF8400E8F933 /* StockRecordTabModel.mm */; };
 		B4EA092C1CC8E12600E8F933 /* StockRecordCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA092B1CC8E12600E8F933 /* StockRecordCell.mm */; };
+		B4ED9B6F1CE9C6EA00F20138 /* SocketNetworkView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4ED9B6E1CE9C6EA00F20138 /* SocketNetworkView.m */; };
 		B4EE59141CDD77110063FDC3 /* AdLinkShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EE59131CDD77110063FDC3 /* AdLinkShowViewController.m */; };
 		B4EE59191CE16C8C0063FDC3 /* set_about_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4EE59171CE16C8C0063FDC3 /* set_about_logo@2x.png */; };
 		B4EE591A1CE16C8C0063FDC3 /* set_about_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4EE59181CE16C8C0063FDC3 /* set_about_logo@3x.png */; };
@@ -1144,6 +1145,8 @@
 		B4EA092A1CC8E12600E8F933 /* StockRecordCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockRecordCell.h; sourceTree = "<group>"; };
 		B4EA092B1CC8E12600E8F933 /* StockRecordCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockRecordCell.mm; sourceTree = "<group>"; };
 		B4EA092D1CC8E8B800E8F933 /* StockMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockMacro.h; sourceTree = "<group>"; };
+		B4ED9B6D1CE9C6EA00F20138 /* SocketNetworkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketNetworkView.h; sourceTree = "<group>"; };
+		B4ED9B6E1CE9C6EA00F20138 /* SocketNetworkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketNetworkView.m; sourceTree = "<group>"; };
 		B4EE59121CDD77110063FDC3 /* AdLinkShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdLinkShowViewController.h; sourceTree = "<group>"; };
 		B4EE59131CDD77110063FDC3 /* AdLinkShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdLinkShowViewController.m; sourceTree = "<group>"; };
 		B4EE59171CE16C8C0063FDC3 /* set_about_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "set_about_logo@2x.png"; sourceTree = "<group>"; };
@@ -3843,6 +3846,8 @@
 		BB63F5941C2CC7A300A042E8 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				B4ED9B6D1CE9C6EA00F20138 /* SocketNetworkView.h */,
+				B4ED9B6E1CE9C6EA00F20138 /* SocketNetworkView.m */,
 				BB1661991C3E2DC700D318BE /* ZLButton.h */,
 				BB16619A1C3E2DC700D318BE /* ZLButton.m */,
 				BB16619B1C3E2DC700D318BE /* ZLTabBar.h */,
@@ -4733,6 +4738,7 @@
 				BB2CA6B61CD4903A00DFE56E /* ZLPrivateDataSource.m in Sources */,
 				BB6F11801CC67E9700F02064 /* RoomInfo.mm in Sources */,
 				BBD58ED41CCB4B5B009250DB /* ConsumeRankCell.m in Sources */,
+				B4ED9B6F1CE9C6EA00F20138 /* SocketNetworkView.m in Sources */,
 				18AC14161C8FB8E100FDFF40 /* JPEngine.m in Sources */,
 				BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */,
 				18B0CECB1CC07CC700BA82DF /* GlobeConst.m in Sources */,
@@ -5267,7 +5273,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ef8c443d-d6bc-4943-ba13-e7a4b47211db";
+				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5322,7 +5328,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ef8c443d-d6bc-4943-ba13-e7a4b47211db";
+				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";

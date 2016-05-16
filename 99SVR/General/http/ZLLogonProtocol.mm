@@ -301,6 +301,7 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd,const char 
     strPwd = [NSString stringWithUTF8String:pwd];
     UserLogonReq4 req4;
     req4.set_nmessageid(1);
+    DLog(@"用户信息登录");
     if(cloginid==NULL)
     {
         req4.set_cloginid("0");

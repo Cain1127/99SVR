@@ -190,4 +190,18 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
 }
 
 
+- (void)onNetWorkChange
+{
+    if (protocol) {
+        protocol->networkfChanged();
+    }
+}
+
+- (void)reConnect{
+    if (protocol) {
+        protocol->reConnect();
+    }
+}
+
+
 @end

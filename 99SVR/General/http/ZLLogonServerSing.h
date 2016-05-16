@@ -74,5 +74,14 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
 - (void)requestQuestion:(int)roomId team:(int)teamId stock:(NSString *)stock question:(NSString *)question;
 
 - (NSString *)getVideoUrl;
+/**
+ *  网络变更
+ */
+- (void)onNetWorkChange;
+
+/**
+ *  socket重连
+ */
+- (void)reConnect;
 
 @end
