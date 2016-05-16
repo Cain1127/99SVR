@@ -388,7 +388,7 @@
             return NO;
         }
     }
-    else if(_txtPwd == textField)
+    else if((_txtPwd == textField) || (_txtCmd == textField) )
     {
         NSString *strCode = @"[^ ]+$";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strCode];;
