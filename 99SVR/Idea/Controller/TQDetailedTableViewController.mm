@@ -137,7 +137,11 @@
                 }
                 
             }];
+        }else {
+            [MBProgressHUD showError:[NSString stringWithFormat:@"错误代码%d",errorStr]];
         }
+        
+        
     });
     
 }
@@ -773,6 +777,20 @@
  */
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser reply:(int32_t)nDetails
 {
+    
+    // 不能发送空字符和全部换行符号
+    NSString *str = textView.text;
+    NSString *textStr =[str stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+    NSString *textNewStr = [textStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (textNewStr.length==0) {
+        [ProgressHUD showError:@"不能发送空信息"];
+        textView.text = @"";
+
+        return ;
+    }
+    
+    
     UserInfo *info = KUserSingleton;
     if (info.nType != 1 && info.bIsLogin) {
         
