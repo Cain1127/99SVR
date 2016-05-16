@@ -83,7 +83,8 @@
     return strMsg;
 }
 
--(void)initOpenAL{
+-(void)initOpenAL
+{
     mDevice=alcOpenDevice(NULL);
     if (mDevice)
     {
@@ -115,6 +116,7 @@
     if (alGetError()!= AL_NO_ERROR)
     {
         NSLog(@"Error generating sources!\n");
+        [self playSound];
         [ticketCondition unlock];
         return ;
     }
@@ -122,6 +124,7 @@
     if (alGetError()!= AL_NO_ERROR)
     {
         NSLog(@"Error generating sources!\n");
+        [self playSound];
         [ticketCondition unlock];
         return ;
     }
@@ -163,12 +166,14 @@
 {
     ALint  state;
     alGetSourcei(outSourceId, AL_SOURCE_STATE, &state);
-    if (state != AL_PLAYING){
+    if (state != AL_PLAYING)
+    {
         alSourcePlay(outSourceId);
     }
 }
 
-- (void)stopSound{
+- (void)stopSound
+{
     ALint  state;
     alGetSourcei(outSourceId, AL_SOURCE_STATE, &state);
     if (state != AL_STOPPED)
