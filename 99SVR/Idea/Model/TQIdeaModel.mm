@@ -37,7 +37,9 @@
     
     _viewpointid = notify->nmessageid();
     
-    [self settingTime];
+    
+    
+//    [self settingTime];
     
     
     return self;

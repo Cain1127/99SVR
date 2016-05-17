@@ -23,8 +23,9 @@
 #import "ViewNullFactory.h"
 
 #import "XIdeaDataSource.h"
+#import "LHDNewIdeaPromptView.h"//新的观点提示的view
 
-@interface XIdeaViewController ()<XIdeaDelegate>
+@interface XIdeaViewController ()<XIdeaDelegate,LHDNewIdeaPromptViewDelegate>
 {
     UIView *noView;
 }
@@ -36,6 +37,7 @@
 @property (nonatomic,strong) XIdeaDataSource *dataSource;
 /**下拉刷新需要清空数据！上啦不需要*/
 @property (nonatomic , assign) __block MJRefreshState refreshState;
+@property (nonatomic , strong) LHDNewIdeaPromptView *ideaPromptView;
 
 
 @end
@@ -63,7 +65,12 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 - (void)addNotify
 {
+    
+
+    [self removeNotify];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_XTRADER_HTTP_VIEWPOINTSUMMARY_VC object:nil];
+    //添加更新专家观点的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newIdeaNotifi:) name:MESSAGE_TQIdeaView_NewNotifi_VC object:nil];
 }
 #pragma mark 专家观点的请求 为了和房间内的专家观点的区别
 -(void)setRequestUserDefaults{
@@ -85,6 +92,20 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self.tableView.gifHeader loadDefaultImg];
     _nCurrent = 0;
     [self.tableView.gifHeader beginRefreshing];
+}
+
+/**新的专家观点*/
+- (void)newIdeaNotifi:(NSNotification *)notify{
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        TQIdeaModel *ideaModel = [notify.object valueForKey:@"data"];
+        NSMutableArray *array = [NSMutableArray arrayWithArray:self.dataSource.aryModel];
+        [array insertObject:ideaModel atIndex:0];
+        self.ideaPromptView.isShow = YES;
+        self.dataSource.aryModel = array;
+        [self.tableView reloadData];
+
+    });
 }
 
 - (void)loadViewPoint:(NSNotification *)notify{
@@ -164,9 +185,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 -(void)updateRefresh
 {
-    
     _nCurrent = 20;
-
     self.refreshState = MJRefreshState_Header;
     [self setRequestUserDefaults];
     [kHTTPSingle RequestViewpointSummary:[_room.teamid intValue] start:0 count:20];
@@ -191,16 +210,33 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     _dataSource.delegate = self;
     _tableView.dataSource = _dataSource;
     _tableView.delegate = _dataSource;
+    
+    self.ideaPromptView = [[LHDNewIdeaPromptView alloc]init];
+    self.ideaPromptView.delegate = self;
+    [self addSubview:self.ideaPromptView];
 }
 
 #pragma mark - TableView dataSource
-
 - (void)selectIdea:(TQIdeaModel *)model
 {
     TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
     [[self viewController].navigationController pushViewController:detaileVc animated:YES];
 }
 
+-(void)scroViewInTop{
+    
+    DLog(@"顶部");
+    self.ideaPromptView.isShow = NO;
+}
+
+
+#pragma mark LHDNewIdeaPromptViewDelegate
+-(void)clickInViewHanle{
+    
+    [self.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+    [self.tableView reloadData];
+    self.ideaPromptView.isShow = NO;
+}
 - (UIViewController*)viewController {
     for (UIView* next = [self superview]; next; next = next.superview) {
         UIResponder* nextResponder = [next nextResponder];

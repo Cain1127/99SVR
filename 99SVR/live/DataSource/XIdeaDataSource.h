@@ -12,6 +12,9 @@
 
 - (void)selectIdea:(TQIdeaModel *)model;
 
+/**滑到顶部了*/
+-(void)scroViewInTop;
+
 @end
 
 @interface XIdeaDataSource : NSObject<UITableViewDataSource,UITableViewDelegate>

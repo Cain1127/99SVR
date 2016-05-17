@@ -73,4 +73,15 @@
     return 130;
 }
 
+
+// scrollView 已经滑动
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{    
+    if (scrollView.contentOffset.y<=0) {
+        if ([self.delegate respondsToSelector:@selector(scroViewInTop)]) {
+            [self.delegate scroViewInTop];
+        }
+    }
+}
+
 @end
