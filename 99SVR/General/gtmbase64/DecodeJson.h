@@ -122,5 +122,13 @@
 + (void)cancelPerfor:(id)object;
 
 + (BOOL)isEmpty:(NSString*)strMsg;
+/**
+ *  检测字符串中是否包含空格
+ */
++(int)MatchLetter:(NSString *)str;
+/**
+ *  检测字符串是否纯数字
+ */
++ (int)MatchLetterNumber:(NSString *)str;
 
 @end

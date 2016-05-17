@@ -8,6 +8,7 @@
 
 #import "XVideoLiveViewcontroller.h"
 #import "LivePlayViewController.h"
+#import "PlayIconView.h"
 #import "PaySelectViewController.h"
 #import "GiftShowAnimate.h"
 #import "DecodeJson.h"
@@ -34,7 +35,7 @@
 #import "ConsumeRankDataSource.h"
 #import "HttpManagerSing.h"
 #import "UIAlertView+Block.h"
-
+#import "GiftShowAnimate.h"
 @interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
                                 ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
 {
@@ -44,7 +45,6 @@
     XLiveQuestionView *_questionView;
     ChatView *_inputView;
     
-    NSMutableDictionary *dictGift;
     NSMutableArray *aryGift;
     BOOL bGiftView;
     BOOL bFull;
@@ -57,6 +57,12 @@
     DTAttributedTextView *_teachView;
     UIView *_chatAllView;
     ChatRightView *_rightView;
+//    int nGift1;
+//    int nGift2;
+//    GiftShowAnimate *_giftShowAnimate1;
+//    GiftShowAnimate *_giftShowAnimate2;
+    NSMutableDictionary *giftDict1;
+    NSMutableDictionary *giftDict2;
 }
 
 @property (nonatomic,assign) int nCurGift;
@@ -96,6 +102,16 @@
     _ffPlay.roomIsCollet = nRoom_is_collet;
     [_ffPlay setRoomName:_room.teamname];
     [_ffPlay setRoomId:[_room.roomid intValue]];
+    [_consumeDataSource setAryModel:@[]];
+    @WeakObj(self)
+    if(_tableConsumeRank)
+    {
+        [_consumeDataSource setAryModel:@[]];
+        dispatch_main_async_safe(
+        ^{
+            [selfWeak.tableConsumeRank reloadData];
+        });
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
@@ -120,6 +136,8 @@
     [super viewDidLoad];
     aryGift = [NSMutableArray array];
     nColor = 10000;
+    giftDict1 = @{@"status":@(0)};
+    giftDict2 = @{@"status":@(0)};
     [self initUIHead];
     UITapGestureRecognizer* singleRecogn;
     singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTopHUD)];
@@ -143,8 +161,6 @@
         sender.selected = !sender.selected;
     }
 }
-
-
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -268,8 +284,8 @@
 - (void)requestQuestion:(NSString *)strName content:(NSString *)strContent
 {
     
-    if ((_questionView==0&&KUserSingleton.goldCoin<=10)) {//提问次数为0且金币小于提问的10玖玖币
-        
+    if ((_questionView==0&&KUserSingleton.goldCoin<=10)) {
+        //提问次数为0且金币小于提问的10玖玖币
         [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"充值" withMessage:@"余额不足请充值" completionCallback:^(NSInteger index) {
             
             if (index==1) {
@@ -291,13 +307,28 @@
 
 - (void)loadConsumeRank:(NSNotification *)notify
 {
-    NSArray *aryConsume = notify.object;
-    if ([aryConsume isKindOfClass:[NSArray class]] && aryConsume.count>0) {
-        [_consumeDataSource setAryModel:aryConsume];
-        @WeakObj(self)
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [selfWeak.tableConsumeRank reloadData];
-        });
+    NSDictionary *parameter = notify.object;
+    int errCode = [parameter[@"code"] intValue];
+    if (errCode==1)
+    {
+        NSArray *aryConsume = parameter[@"data"];
+        if ([aryConsume isKindOfClass:[NSArray class]] && aryConsume.count>0) {
+            [_consumeDataSource setAryModel:aryConsume];
+            @WeakObj(self)
+            dispatch_async(dispatch_get_main_queue(),
+            ^{
+                [selfWeak.tableConsumeRank reloadData];
+            });
+        }
+        else
+        {
+            @WeakObj(self)
+            [_consumeDataSource setAryModel:@[]];
+            dispatch_async(dispatch_get_main_queue(),
+            ^{
+                [selfWeak.tableConsumeRank reloadData];
+            });
+        }
     }
 }
 
@@ -371,10 +402,25 @@
 - (void)loadFailQuestion:(NSNotification *)notify
 {
     NSString *strMsg = notify.object;
-    __weak NSString *__strMsg = strMsg;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [ProgressHUD showError:__strMsg];
-    });
+    if ([strMsg isEqualToString:@"金币不足"])
+    {
+        @WeakObj(self)
+        [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"充值" withMessage:@"余额不足请充值" completionCallback:^(NSInteger index)
+        {
+            if (index==1)
+            {
+                PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+                [selfWeak.navigationController pushViewController:paySelectVC animated:YES];
+            }
+        }];
+    }
+    else
+    {
+        __weak NSString *__strMsg = strMsg;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ProgressHUD showError:__strMsg];
+        });
+    }
 }
 
 - (void)addNotification
@@ -437,9 +483,16 @@
 {
     NSNumber *number = notify.object;
     if ([number intValue]==202) {
-//      @WeakObj(self)
+        @WeakObj(self)
         dispatch_async(dispatch_get_main_queue(), ^{
-//            [selfWeak createPaySVR];
+            [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"充值" withMessage:@"余额不足请充值" completionCallback:^(NSInteger index)
+             {
+                 if (index==1)
+                 {
+                     PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+                     [selfWeak.navigationController pushViewController:paySelectVC animated:YES];
+                 }
+             }];
         });
     }
     else{
@@ -603,8 +656,10 @@
     @WeakObj(self)
     dispatch_main_async_safe(
      ^{
-         [selfWeak.view makeToast:@"您被人踢出当前房间" duration:2 position:@"center"];
-         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+         [selfWeak.view makeToast:@"您被踢出当前房间" duration:2 position:@"center"];
+         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(),
+         ^{
+             [[PlayIconView sharedPlayIconView] exitPlay];
              [selfWeak.navigationController popViewControllerAnimated:YES];
          });
      });
@@ -632,10 +687,36 @@
      */
     NSDictionary *parameter = notify.object;
     @WeakObj(self)
-    [aryGift addObject:parameter];
-    dispatch_async(dispatch_get_main_queue(), ^{
+    @synchronized(aryGift) {
+        [aryGift addObject:parameter];
+    }
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
         [selfWeak showGiftInfo];
     });
+}
+
+- (void)showGiftFrame:(CGRect)frame param:(NSDictionary *)parameter source:(NSMutableDictionary *)sourceDict
+{
+    GiftShowAnimate *showAnimate = [[GiftShowAnimate alloc] initWithFrame:frame dict:parameter];
+    NSString *strTime = NSStringFromInt([parameter[@"num"] intValue]);
+    [UIView animateWithDuration:[strTime length]
+          delay:0.25
+        options:UIViewAnimationOptionCurveEaseOut
+     animations:^{
+         [self.view addSubview:showAnimate];
+         [showAnimate addrightViewAnimation];
+     } completion:^(BOOL finished){
+         @WeakObj(showAnimate)
+         @WeakObj(sourceDict)
+         @WeakObj(self)
+         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)([strTime floatValue] * NSEC_PER_SEC)), dispatch_get_main_queue(),
+         ^{
+             [showAnimateWeak removeFromSuperview];
+             [sourceDictWeak setObject:@(0) forKey:@"status"];
+             [selfWeak showGiftInfo];
+         });
+     }];
 }
 
 /**
@@ -643,10 +724,33 @@
  */
 - (void)showGiftInfo
 {
-    
+    if (aryGift.count > 0)
+    {
+        if ([[giftDict1 objectForKey:@"status"] intValue]==0)
+        {
+            [giftDict1 setObject:@(1) forKey:@"status"];
+            NSDictionary *parameter = [aryGift objectAtIndex:0];
+            @synchronized(aryGift)
+            {
+                [aryGift removeObjectAtIndex:0];
+            }
+            [self showGiftFrame:Rect(0, kScreenHeight-250, kScreenWidth-60, 46) param:parameter source:giftDict1];
+        }
+        else if([[giftDict2 objectForKey:@"status"] intValue]==0)
+        {
+            [giftDict2 setObject:@(1) forKey:@"status"];
+            NSDictionary *parameter = [aryGift objectAtIndex:0];
+            @synchronized(aryGift)
+            {
+                [aryGift removeObjectAtIndex:0];
+            }
+            [self showGiftFrame:Rect(0, kScreenHeight-250, kScreenWidth-60, 46) param:parameter source:giftDict2];
+        }
+    }
 }
 
-- (FloatingView*)createFloatView:(NSDictionary *)parameter color:(int)ncolor onlyOne:(int)nOnly{
+- (FloatingView*)createFloatView:(NSDictionary *)parameter color:(int)ncolor onlyOne:(int)nOnly
+{
     
     NSString *strName = nil;
     int gid ;

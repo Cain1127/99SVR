@@ -507,6 +507,33 @@
         }
     }
 }
+
++(int)MatchLetter:(NSString *)str
+{
+    NSString *ZIMU ;
+    NSPredicate *regextestmobile ;
+    ZIMU = @"^[^ ]+$";
+    regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", ZIMU];
+    if([regextestmobile evaluateWithObject:str]==YES)
+    {
+        return 1;
+    }
+    return -1;
+}
+
++ (int)MatchLetterNumber:(NSString *)str
+{
+    NSString *ZIMU ;
+    NSPredicate *regextestmobile ;
+    ZIMU = @"\\d{1,16}";
+    regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", ZIMU];
+    if([regextestmobile evaluateWithObject:str]==YES)
+    {
+        return -1;
+    }
+    return 1;
+}
+
 @end
 
 

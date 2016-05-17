@@ -251,31 +251,35 @@
     
     [self checkLogBtnIsEnableWithOldPwd:_txtOld.text withNewPwd:_txtNew.text withCmdPwd:_txtCmd.text];
     
-    if (oldPwd.length==0) {
+    if (oldPwd.length==0)
+    {
         [ProgressHUD showError:@"旧密码不能为空"];
         return;
     }
-    else if(newPwd.length==0){
-        [ProgressHUD showError:@"新密码不能为空"];
-        return ;
-    }
-    else if(newPwd.length<6){
-        [ProgressHUD showError:@"密码不能小于6位"];
-        return ;
-    }
-    else if([self MatchLetter:newPwd]==-1)
+    else if(newPwd.length==0)
     {
-        [ProgressHUD showError:@"密码不能包含空格"];
+        [ProgressHUD showError:@"新密码不能为空"];
         return ;
     }
     else if(_password.length==0)
     {
         [ProgressHUD showError:@"确认密码不能为空"];
         return ;
-    }else if(![_password isEqualToString:newPwd])
+    }
+    else if(newPwd.length<6)
     {
-         [ProgressHUD showError:@"新密码与确认密码不一致"];
-         return ;
+        [ProgressHUD showError:@"密码不能小于6位"];
+        return ;
+    }
+    else if(![_password isEqualToString:newPwd])
+    {
+        [ProgressHUD showError:@"新密码与确认密码不一致"];
+        return ;
+    }
+    else if([self MatchLetter:newPwd]==-1)
+    {
+        [ProgressHUD showError:@"密码不能包含空格"];
+        return ;
     }
     else if([self MatchLetterNumber:_password]==-1)
     {

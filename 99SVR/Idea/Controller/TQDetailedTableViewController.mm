@@ -8,6 +8,7 @@
 
 #import "TQDetailedTableViewController.h"
 #import <DTCoreText/DTCoreText.h>
+#import "UIAlertView+Block.h"
 #import "PaySelectViewController.h"
 #import "ZLShareView.h"
 #import "ChatRightView.h"
@@ -180,6 +181,33 @@
     });
 }
 
+- (void)sendTrader_error:(NSNotification *)notify
+{
+    NSString *strMsg = notify.object;
+    if ([strMsg isEqualToString:@"金币不足"])
+    {
+        @WeakObj(self)
+        dispatch_main_async_safe(^{
+            [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"充值" withMessage:@"余额不足请充值" completionCallback:^(NSInteger index)
+             {
+                 if (index==1)
+                 {
+                     PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+                     [selfWeak.navigationController pushViewController:paySelectVC animated:YES];
+                 }
+             }];
+        });
+    }
+    else
+    {
+        @WeakObj(strMsg)
+        dispatch_main_async_safe(
+        ^{
+            [ProgressHUD showError:strMsgWeak];
+        });
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -188,12 +216,13 @@
     [commentCache setTotalCostLimit:10];
     UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(showShareView) image:@"video_room_share_icon_n" highImage:@"video_room_share_icon_p"];
     [self setRightBtn:btnRight];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendTrader_error:) name:MESSAGE_VIEW_POINT_TRADER_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendGiftResp:) name:MESSAGE_VIEW_DETAILS_GIFT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replyResp:) name:MESSAGE_IDEA_REPLY_RESPONSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadCommentView:) name:MESSAGE_HTTP_REQUEST_REPLY_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendGiftFail:) name:MESSAGE_GIFT_VIEW_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadGiftNotify:) name:MESSAGE_VIEWPOINT_GIFT_NOTIFY_VC object:nil];
-    
     
     [self.view setBackgroundColor:COLOR_Bg_Gay];
     _tableView = [[UITableView alloc] initWithFrame:Rect(0,64, kScreenWidth,kScreenHeight-64)];

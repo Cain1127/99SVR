@@ -8,6 +8,7 @@
 
 #import "RechargeResultViewController.h"
 #import "AssetViewController.h"
+#import "TQDetailedTableViewController.h"
 #import "ProfileViewController.h"
 #import "RoomViewController.h"
 #import "XMyViewController.h"
@@ -90,6 +91,16 @@
 - (void)navBack
 {
     NSArray *aryIndex = self.navigationController.viewControllers;
+    
+    for (UIViewController *control in aryIndex)
+    {
+        if ([control isKindOfClass:[TQDetailedTableViewController class]])
+        {
+            [self.navigationController popToViewController:control animated:YES];
+        }
+        return;
+    }
+    
     for (UIViewController *control in aryIndex) {
         if ([control isKindOfClass:[RoomViewController class]]) {
             [self.navigationController popToViewController:control animated:YES];

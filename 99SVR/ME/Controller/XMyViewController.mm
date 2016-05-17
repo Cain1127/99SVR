@@ -197,6 +197,7 @@
             else
             {
                 [cell setrightInfo:@"请登录后查看"];
+                [cell setAccessoryType:UITableViewCellAccessoryNone];
             }
         }
         else

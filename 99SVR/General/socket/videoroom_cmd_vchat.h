@@ -629,7 +629,7 @@ namespace protocol
 		uint32 nvcbid;          //房间ID
 		uint32 teamid;          //战队ID
 		char  sName[48];        //专家名称
-		char  sIcon[32];       //头像信息
+		char  sIcon[64];       //头像信息
 		char  sPublicTime[32];  //发表时间
 		uint32 nCommentCnt;     //评论次数
 		uint32 nLikeCnt;        //点赞次数

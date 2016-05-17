@@ -8,6 +8,8 @@
 
 #import "LivePlayViewController.h"
 #import "UIImageView+WebCache.h"
+#import "RoomViewController.h"
+#import "UIAlertView+Block.h"
 #import "ZLLogonServerSing.h"
 #import "OpenAL.h"
 #import "SVRMediaClient.h"
@@ -188,7 +190,7 @@
 
 - (void)frameView
 {
-    _glView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kVideoImageHeight)];
+    _glView = [[LivePlayImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kVideoImageHeight)];
     _glView.contentMode = UIViewContentModeScaleAspectFit;
     _glView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:_glView];
@@ -216,12 +218,12 @@
 
 - (void)setDefaultImg
 {
-    
     char cBuffer[100]={0};
     sprintf(cBuffer,"video_logo_bg@2x");
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
+    [_glView.lblContent setText:@""];
     lblText.hidden = YES;
 }
 
@@ -232,8 +234,7 @@
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
-    lblText.hidden = NO;
-    [lblText setText:@"音频模式"];
+    [_glView.lblContent setText:@"音频模式"];
 }
 
 - (id)init
@@ -249,13 +250,11 @@
 
 - (void)initDecode
 {
-//    if (!_openAL)
-//    {
-//        _openAL = [[OpenAL alloc] init];
-//    }
-//    [_openAL initOpenAL];
-    _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
-    [_playAudio startPlayWithBufferByteSize:4096];
+    if (!_openAL)
+    {
+        _openAL = [[OpenAL alloc] init];
+    }
+    [_openAL initOpenAL];
 }
 
 - (void)stop
@@ -397,10 +396,11 @@
        _downHUD.frame = Rect(0,fHeight-44, fWidth, 44);
    }
     int number = 3;
-    if (KUserSingleton.nStatus) {
+    if (KUserSingleton.nStatus)
+    {
         number = 4;
     }
-    CGFloat fWith = fWidth/ number;
+    CGFloat fWith = fWidth / number;
     
     _btnFull.frame = Rect(fWith/2-22, 0,44, 44);
     _btnVideo.frame = Rect(fWith+fWith/2-22, 0,44, 44);
@@ -429,7 +429,7 @@
     }
     else
     {
-        [ProgressHUD showError:@"没有讲师上麦,无法分享!"];
+        [ProgressHUD showError:@"没有讲师上麦,暂时无法分享!"];
     }
 }
 
@@ -547,6 +547,7 @@
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
+    [_glView.lblContent setText:@"当前无讲师上麦"];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -575,29 +576,39 @@
     _playing = YES;
     [self initDecode];
     __weak LivePlayViewController *__self = self;
-    dispatch_main_async_safe(
-    ^{
-        [__self startLoad];
-        [__self setDefaultImg];
-    });
     _bVideo = YES;
     _roomid = roomid;
     _nuserid = userid;
     __block int __roomId = _roomid;
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    dispatch_async(dispatch_get_global_queue(0, 0),
+    ^{
         if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:1801124 roomId:__roomId])
         {
             DLog(@"开启接收码流失败");
         }
     });
-    if (KUserSingleton.nowNetwork == 2 && !KUserSingleton.checkNetWork)
-    {}
+    dispatch_main_async_safe(^{
+         [__self showAlertView];
+         [__self startLoad];
+         [__self setDefaultImg];
+    });
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 }
 
 - (void)showAlertView
 {
-    
+    if (KUserSingleton.nowNetwork == 2 && !KUserSingleton.checkNetWork)
+    {
+        [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        [self setOnlyAudio:YES];
+        @WeakObj(self)
+        [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:[RoomViewController sharedRoomViewController] withCancleBtnStr:@"只听音频" withOtherBtnStr:@"继续看视频" withMessage:nil completionCallback:^(NSInteger index) {
+            if (index==1)
+            {
+                [selfWeak setOnlyAudio:NO];
+            }
+        }];
+    }
 }
 
 - (void)setOnlyAudio:(BOOL)enable
@@ -606,12 +617,12 @@
     if (!enable)
     {
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
-        [self setNoVideo];
+        [self setDefaultImg];
     }
     else
     {
-        lblText.hidden = YES;
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        [self setNoVideo];
     }
 }
 
@@ -692,8 +703,8 @@
     }
     @autoreleasepool
     {
-//        [_openAL openAudioFromQueue:(unsigned char*)data.bytes dataSize:len];
-        [_playAudio putAudioData:(short *)data.bytes size:len];
+        [_openAL openAudioFromQueue:(unsigned char*)data.bytes dataSize:len];
+//        [_playAudio putAudioData:(short *)data.bytes size:len];
     }
 }
 
