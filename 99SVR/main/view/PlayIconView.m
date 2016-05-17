@@ -74,9 +74,9 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     }
     
     [self startBtnPlayAnimating];
-    
-    [_playView.lblName setText:room.teamname];
-    [_playView.lblNumber setText:room.teamid];
+    NSString *strTeamInfo = [NSString stringWithFormat:@"%@  %@",room.teamname,room.teamid];
+    [_playView.lblName setText:strTeamInfo];
+//    [_playView.lblNumber setText:room.teamid];
     
     CGRect frame = [room.onlineusercount boundingRectWithSize:CGSizeMake(kScreenWidth, 20) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
     
@@ -141,7 +141,7 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     _imgView.layer.cornerRadius = 22;
     [self addSubview:_imgView];
     
-    _lblName = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+8, _imgView.y, 80, 20)];
+    _lblName = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+8, _imgView.y, 150, 20)];
     [_lblName setTextColor:UIColorFromRGB(0xffffff)];
     [_lblName setFont:XCFONT(15)];
     [self addSubview:_lblName];

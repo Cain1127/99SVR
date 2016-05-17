@@ -131,17 +131,19 @@ void LoginConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 
 	if (socket_connecting)
 	{
+		LOG("SEND JOIN ROOM。。。socket_connecting");
 		need_join_room = true;
 	}
 	else if ( !socket_closed )
 	{
-		LOG("SEND JOIN ROOM。。。");
+		LOG("SEND JOIN ROOM。。。normal");
 		join_req.Log();
 		SEND_MESSAGE_F(protocol::MDM_Vchat_Room, protocol::Sub_Vchat_JoinRoomReq, join_req);
 		need_join_room = false;
 	}
 	else
 	{
+		LOG("SEND JOIN ROOM。。。socket_closed");
 		connect_from_lbs_asyn();
 		need_join_room = true;
 	}

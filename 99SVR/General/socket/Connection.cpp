@@ -244,7 +244,7 @@ ThreadVoid get_host_form_lbs_runnable(void* param)
 
 void get_lbs_servers()
 {
-	/*
+
 	if (!is_set_lbs)
 	{
 		const char* lbs = LBS0;
@@ -278,8 +278,8 @@ void get_lbs_servers()
 	{
 		strcpy(lbs_curr, lbs_from_set);
 	}
-	*/
-	strcpy(lbs_curr, LBS0);
+
+	//strcpy(lbs_curr, LBS0);
 
 	Thread::lock(&conn_lock);
 	lbs_count = 0;
@@ -694,7 +694,14 @@ string Connection::get_error_desc(int err_code)
 		str="没有找到礼物ID";
 		break;
 	default:
-		str="未知错误：" + int2string(err_code);
+		if ( err_code < 0 )
+		{
+			str = "网络连接异常";
+		}
+		else
+		{
+			str="未知错误：" + int2string(err_code);
+		}
 		break;
 	}
 
@@ -792,7 +799,7 @@ int Connection::recv(char* buf, int offset, int len)
 					else
 					{
 						time_t curr_time = time(0);
-						if ( curr_time - last_send_time >= 5 )
+						if ( curr_time - last_send_time >= 15 )
 						{
 							LOG("recv timeout err: %d", err_no);
 							//on_io_error(-4);
@@ -1019,7 +1026,7 @@ void Connection::read_loop(void)
 		}
 
 		read_counter++;
-		if ( read_counter >= 2 )
+		if ( read_counter >= 5 )
 		{
 			connect_start_time = 0;
 		}
@@ -1099,6 +1106,16 @@ void Connection::on_io_error(int err_code)
 
 		return;
 	}
+
+#ifdef WIN
+	if (in_room  && loginuser.viplevel() == 5)
+	{
+		if (conn_listener != NULL )
+		{
+			conn_listener->OnConnectError(err_code);
+		}
+	}
+#endif
 
 	if (connect_start_time != 0)  // 5 + 2
 	{

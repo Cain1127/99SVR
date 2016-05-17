@@ -204,7 +204,8 @@
 
 + (NSString *)replaceEmojiNewString:(NSString *)strInfo
 {
-    if (!strInfo){
+    if (!strInfo)
+    {
         return @"";
     }
     BOOL finished  = NO;
@@ -233,8 +234,16 @@
             break;
         }
         NSString *strTemp = [strInfo substringWithRange:NSMakeRange(nStart+2,nEnd-nStart-2)];
-        strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
-                   [NSString stringWithFormat:@"<object value=%d width=30 height=30 ></object>",[strTemp intValue]]];
+        if ([strTemp isEqualToString:@"999"])
+        {
+            strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
+                       [NSString stringWithFormat:@"<object value=%d width=90 height=30 ></object>",[strTemp intValue]]];
+        }
+        else
+        {
+            strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
+                       [NSString stringWithFormat:@"<object value=%d width=30 height=30 ></object>",[strTemp intValue]]];
+        }
         remainingRange.location = tagRange.location;
         remainingRange.length = [strInfo length]-tagRange.location;
     }

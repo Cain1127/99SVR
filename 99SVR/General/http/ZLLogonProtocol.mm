@@ -495,6 +495,7 @@ void ZLLogonProtocol::sendMessage(const char *msg,int toId,const char *toalias){
         char cName[64]={0};
         ::strncpy(cName,(const char*)dataInfo.bytes,dataInfo.length);
         roomMsg.set_toalias(cName);
+        roomMsg.set_toviplevel(_roomUser.m_nVipLevel);
     }
     video_room->SendMsg_RoomChatReq(roomMsg);
 }
@@ -509,7 +510,8 @@ void ZLLogonProtocol::sendQuestion(int roomId,int teamId,const char *stock,const
     video_room->SendMsg_AskQuestionReq(req);
 }
 
-void ZLLogonProtocol::exitRoomInfo(){
+void ZLLogonProtocol::exitRoomInfo()
+{
     video_room->SendMsg_ExitRoomReq(room_info.vcbid());
     [currentRoom.aryUser removeAllObjects];
     [currentRoom.dictUser removeAllObjects];
@@ -518,6 +520,7 @@ void ZLLogonProtocol::exitRoomInfo(){
     [aryRoomPrichat removeAllObjects];
     roomTeachInfo = @"";
 }
+
 /**
  *  发送礼物
  */

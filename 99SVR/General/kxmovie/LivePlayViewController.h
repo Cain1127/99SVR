@@ -31,6 +31,7 @@
 @property (nonatomic) int nuserid;
 @property (nonatomic,copy) void (^statusBarHidden)(BOOL bInfo);
 @property (nonatomic,copy) void (^colletView)(BOOL bCollet);
+@property (nonatomic,copy) void (^roomHiddenHUD)(BOOL bHidden);
 
 //开始播放
 

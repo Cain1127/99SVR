@@ -52,7 +52,6 @@
     UIView *downView;
     int toUser;
     UIView  *_topHUD;
-    UIView *_downHUD;
     
     DTAttributedTextView *_teachView;
     UIView *_chatAllView;
@@ -141,13 +140,10 @@
     giftDict2 = [NSMutableDictionary dictionary];
     [giftDict2 setValue:@"0" forKey:@"status"];
     [self initUIHead];
-    UITapGestureRecognizer* singleRecogn;
-    singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTopHUD)];
-    singleRecogn.numberOfTapsRequired = 1; // 双击
-    [_ffPlay.view setUserInteractionEnabled:YES];
-    [_ffPlay.view addGestureRecognizer:singleRecogn];
+    
     _ffPlay.roomIsCollet = nRoom_is_collet;
     [self addNotification];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
@@ -231,6 +227,26 @@
     };
 }
 
+- (void)updateName
+{
+    UILabel *lblName = [_topHUD viewWithTag:1001];
+    if (lblName)
+    {
+        NSString *strName = [NSString stringWithFormat:@"房间名:%@",_room.teamname];
+        [lblName setText:strName];
+    }
+}
+
+- (void)updateCount
+{
+    UILabel *lblName = [_topHUD viewWithTag:1002];
+    if (lblName)
+    {
+        NSString *strName = [NSString stringWithFormat:@"在线人数:%zi",[currentRoom.aryUser count]];
+        [lblName setText:strName];
+    }
+}
+
 - (void)initUIHead{
     
     _ffPlay = [[LivePlayViewController alloc] init];
@@ -239,6 +255,42 @@
     [_ffPlay setRoomId:[_room.roomid intValue]];
     [self addChildViewController:_ffPlay];
     [_ffPlay setRoomName:_room.teamname];
+    
+    _topHUD = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44)];
+    [self.view addSubview:_topHUD];
+    
+    __weak UIView *__topHUD = _topHUD;
+    _ffPlay.roomHiddenHUD = ^(BOOL bStatus)
+    {
+        if (bStatus)
+        {
+            __topHUD.hidden = YES;
+        }
+        else
+        {
+            __topHUD.hidden = NO;
+        }
+    };
+    
+    UIImageView *topImg = [[UIImageView alloc] initWithFrame:_topHUD.bounds];
+    [topImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
+    [_topHUD addSubview:topImg];
+    [topImg setTag:1];
+    
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0,10,kScreenWidth/2-15,20)];
+    UILabel *lblCount = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2+15,10,kScreenWidth/2-15,20)];
+    [lblCount setTextAlignment:NSTextAlignmentLeft];
+    [lblName setTextAlignment:NSTextAlignmentRight];
+    lblName.tag = 1001;
+    lblCount.tag = 1002;
+    [_topHUD addSubview:lblName];
+    [lblName setFont:XCFONT(15)];
+    [lblCount setFont:XCFONT(15)];
+    [_topHUD addSubview:lblCount];
+    [lblName setTextColor:UIColorFromRGB(0xffffff)];
+    [lblCount setTextColor:UIColorFromRGB(0xffffff)];
+    [self updateName];
+    [self updateCount];
     
     [self initTableView];
     [self initSlideView];
@@ -634,6 +686,10 @@
  */
 - (void)roomUserList:(NSNotification*)notify
 {
+    @WeakObj(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [selfWeak updateCount];
+    });
     [_listView reloadItems:currentRoom.aryUser];
 }
 /**
@@ -948,20 +1004,6 @@
         return ;
     }
     [kProtocolSingle sendRose];
-}
-
-- (void)showTopHUD
-{
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    if(_downHUD.alpha==0)
-    {
-        _downHUD.alpha = 1;
-        [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:2.0];
-    }
-    else
-    {
-        _downHUD.alpha = 0;
-    }
 }
 
 - (BOOL)prefersStatusBarHidden//for iOS7.0
