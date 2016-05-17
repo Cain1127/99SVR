@@ -20,6 +20,9 @@
 #import "ZLPrivateDataSource.h"
 #import "LoginViewController.h"
 #import "UIAlertView+Block.h"
+#import "RoomChatNull.h"
+#import "UIView+EmptyViewTips.h"
+
 @interface XTeamPrivateController()<DTAttributedTextContentViewDelegate,PrivateDelegate>
 {
     
@@ -38,6 +41,7 @@
 @property (nonatomic,strong) ZLPrivateDataSource *dataSource;
 @property (nonatomic,strong) UIView *buyView;
 @property (nonatomic,assign) int roomId;
+@property (nonatomic, strong) UIView *emptyView;
 
 @end
 
@@ -72,7 +76,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:)
                                                  name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
-
+    
 }
 
 - (void)removeNotify
@@ -84,6 +88,10 @@
 {
     [self setupTableView];
     [self addSubview:_textView];
+    
+    _emptyView = [UIView initWithFrame:CGRectMake(0, 0, kScreenWidth,self.height) message:@"讲师没有发布私人定制"];
+    [self addSubview:_emptyView];
+    _emptyView.hidden = YES;
     
     _buyView = [[UIView alloc] initWithFrame:Rect(0, self.height-60, kScreenWidth, 60)];
     [self addSubview:_buyView];
@@ -128,18 +136,18 @@
         control.stockModel.teamname = _room.teamname;
         control.stockModel.teamicon = _room.teamicon;
         [[self viewController].navigationController pushViewController:control animated:YES];
-
+        
     }else{
         
         WeakSelf(self);
         
         [UIAlertView createAlertViewWithTitle:@"提示" withViewController:[self viewController] withCancleBtnStr:@"取消" withOtherBtnStr:@"登录" withMessage:@"您未登录,登录后兑换" completionCallback:^(NSInteger index) {
-           
+            
             if (index==1) {
                 LoginViewController *loginVc = [[LoginViewController alloc]init];
                 [[weakSelf viewController].navigationController pushViewController:loginVc animated:YES];
             }
-
+            
         }];
     }
 }
@@ -190,47 +198,60 @@
 - (void)refreshData:(NSNotification *)notify{
     
     dispatch_async(dispatch_get_main_queue(), ^{
-    Loading_Cup_Show(self.tableView);
-    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+        Loading_Cup_Show(self.tableView);
+        [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
     });
 }
 
 - (void)loadPrivate:(NSNotification *)notify
 {
     NSDictionary *dict = notify.object;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-
+        
         Loading_Hide(self.tableView);
         
-    if ([dict isKindOfClass:[NSDictionary class]]) {
-        int code = [dict[@"code"] intValue];
-        if (code==1)
-        {
-            DLog(@"request suc:%@",dict[@"model"]);
-            NSArray *aryTemp = dict[@"model"];
-            NSMutableArray *muAryTemp = [NSMutableArray array];
-            for (XPrivateService *model in aryTemp) {
-                NSDictionary *parameters = @{@"vipLevelId" : NSStringFromInt(model.vipLevelId),
-                                             @"vipLevelName" : model.vipLevelName,@"isOpen" :NSStringFromInt(model.isOpen)};
-                [muAryTemp addObject:parameters];
-            }
-            _dataSource.aryVIP = aryTemp;
-            _dataSource.selectIndex = 1;
-            if (muAryTemp.count>0)
+        if ([dict isKindOfClass:[NSDictionary class]]) {
+            int code = [dict[@"code"] intValue];
+            if (code==1)
             {
-                self.privateView.privateVipArray = muAryTemp;
-            }
-            else
-            {
-                int i=1;
-                for (;i<=6;i++) {
-                    NSDictionary *parameters = @{@"vipLevelId" : NSStringFromInt(i),
-                                                 @"vipLevelName" : @"VIP",@"isOpen" :NSStringFromInt(0)};
+                DLog(@"request suc:%@",dict[@"model"]);
+                NSArray *aryTemp = dict[@"model"];
+                if (aryTemp.count == 0) { // 私人定制没有内容时，显示默认图和文案
+                    _emptyView.hidden = NO;
+                    _tableView.hidden = YES;
+                    _buyView.hidden = YES;
+                    return;
+                } else
+                {
+                    _emptyView.hidden = YES;
+                    _tableView.hidden = NO;
+                    _buyView.hidden = NO;
+                }
+                
+                NSMutableArray *muAryTemp = [NSMutableArray array];
+                for (XPrivateService *model in aryTemp) {
+                    NSDictionary *parameters = @{@"vipLevelId" : NSStringFromInt(model.vipLevelId),
+                                                 @"vipLevelName" : model.vipLevelName,@"isOpen" :NSStringFromInt(model.isOpen)};
                     [muAryTemp addObject:parameters];
                 }
-                self.privateView.privateVipArray = muAryTemp;
-            }
-            @WeakObj(self)
+                _dataSource.aryVIP = aryTemp;
+                _dataSource.selectIndex = 1;
+                if (muAryTemp.count>0)
+                {
+                    self.privateView.privateVipArray = muAryTemp;
+                }
+                else
+                {
+                    int i=1;
+                    for (;i<=6;i++) {
+                        NSDictionary *parameters = @{@"vipLevelId" : NSStringFromInt(i),
+                                                     @"vipLevelName" : @"VIP",@"isOpen" :NSStringFromInt(0)};
+                        [muAryTemp addObject:parameters];
+                    }
+                    self.privateView.privateVipArray = muAryTemp;
+                }
+                @WeakObj(self)
                 @StrongObj(self)
                 self.dataSource.selectIndex = 1;
                 if (self.dataSource.aryVIP.count>0) {
@@ -244,15 +265,15 @@
                     {
                         self.buyView.hidden = NO;
                         self.tableView.height = self.height - 60;
-
+                        
                     }
                 }
                 [self.tableView reloadData];
-            return;
+                return;
+            }
         }
-    }
     });
-
+    
 }
 
 
