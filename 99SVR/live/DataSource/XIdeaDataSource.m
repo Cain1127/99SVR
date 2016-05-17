@@ -78,23 +78,14 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     BOOL value = YES;
-    
-    NSLog(@"%f",scrollView.contentOffset.y);
-    
-    NSLog(@"contentSize.height%f",scrollView.contentSize.height);
-    NSLog(@"size.height%f",scrollView.frame.size.height);
-    
-    if (scrollView.contentOffset.y<=149/2.0) {//判断是不是要显示新观点的提示//当前cell的高度一半
+ 
+    if (scrollView.contentOffset.y<=130/2.0) {//判断是不是要显示新观点的提示//当前cell的高度一半
         value = NO;//不显示
     }else{
         value = YES;//显示
     }
     
-//    if ((scrollView.contentSize.height>=scrollView.frame.size.height)&&(value==NO)) {
-//        value = YES;
-//    }
-    
-    BOOL topValue = NO;
+    BOOL topValue = NO;//是否在顶部
 
     if (scrollView.contentOffset.y<=0) {
         
