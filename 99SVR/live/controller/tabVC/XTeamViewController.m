@@ -241,7 +241,7 @@
     else
     {
         if (_aryVideo.count==0) {
-            return 190;
+            return 220;
         }
         CGFloat height = ((kScreenWidth - 36.0f) / 2.0f) * 10 / 16 + 8;
         return height;

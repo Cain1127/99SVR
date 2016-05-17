@@ -85,7 +85,7 @@
     [attrDescButton addSubview:buyStatusLable];
     if (isOpen) {
         buyStatusLable.text = @"已兑换";
-        buyStatusLable.textColor = UIColorFromRGB(0xff7a1e);
+        buyStatusLable.textColor = COLOR_Text_Black;
     } else {
         buyStatusLable.text = @"未兑换";
         buyStatusLable.textColor = COLOR_Text_Black;
