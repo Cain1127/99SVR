@@ -410,7 +410,7 @@ void Connection::connect_from_lbs_asyn()
 	memset(connect_ip, 0, sizeof(connect_ip));
 	connect_port = 0;
 
-	connect("121.12.118.32", 7301);
+	connect("121.14.211.60", 17801);
 	return;
 
 	if (connect_start_time == 0)
