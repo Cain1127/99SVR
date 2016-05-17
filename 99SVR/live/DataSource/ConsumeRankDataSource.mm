@@ -21,7 +21,10 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _aryModel.count==0?:1;
+    if (_aryModel.count == 0) {
+        return 1;
+    }
+    return _aryModel.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
