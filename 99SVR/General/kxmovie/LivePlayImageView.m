@@ -28,7 +28,15 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [_lblContent setCenter:CGPointMake(self.width/2,self.height/2+30)];
+    DLog(@"width:%f--height:%f",self.width,self.height);
+    if(self.height==kScreenHeight)
+    {
+        [_lblContent setCenter:CGPointMake(self.height/2,self.width/2+60)];
+    }
+    else
+    {
+        [_lblContent setCenter:CGPointMake(self.width/2,self.height/2+40)];
+    }
 }
 
 @end

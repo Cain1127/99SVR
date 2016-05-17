@@ -74,6 +74,7 @@ namespace protocol
 		uint32 srcid;
 		uint32 toid;
 		byte srcviplevel;  //用户的viplevel,对广播消息有用(前缀图标)
+		byte toviplevel;
 		//msgtype定义:
 		//0-文字聊天消息,1-房间内广播消息,2-欢迎词消息(收到此消息不会再自动回复)，3-小喇叭消息(聊天),4-礼物喇叭消息,5-塞子,
 		//8-宝箱获取广播喇叭消息,10-获得幸运奖消息(给小喇叭窗口),11-自动回复消息(收到此消息不会再自动回复)

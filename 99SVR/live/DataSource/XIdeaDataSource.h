@@ -12,6 +12,8 @@
 
 - (void)selectIdea:(TQIdeaModel *)model;
 
+-(void)ideaPromptViewIsShowBool:(BOOL )value tabToTopValue:(BOOL)topValue;
+
 @end
 
 @interface XIdeaDataSource : NSObject<UITableViewDataSource,UITableViewDelegate>

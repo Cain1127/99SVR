@@ -435,18 +435,20 @@
         strTilte = [strInfo substringWithRange:NSMakeRange(start.location,end.location-start.location+5)];
         strInfo = [strInfo stringByReplacingCharactersInRange:NSMakeRange(start.location,end.location-start.location+5) withString:@""];
     }
+    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</img>" withString:@"</img><br>"];
+    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</a>" withString:@"</a><br>"];
     NSString *msg ;
     if(nIndex==1)
     {
-        msg = @"<p>房间公告</p>";
+        msg = @"<p style=\"color:#919191\">房间公告</p>";
     }
     else if(nIndex==2)
     {
-        msg = @"<p>房间广播</p>";
+        msg = @"<p style=\"color:#919191\">房间广播</p>";
     }
     else if(nIndex == 3)
     {
-        msg = @"<p>悄悄话</p>";
+        msg = @"<p style=\"color:#919191\">悄悄话</p>";
     }
     NSString *strMsg = [NSString stringWithFormat:@"%@%@%@",strTilte,msg,strInfo];
     

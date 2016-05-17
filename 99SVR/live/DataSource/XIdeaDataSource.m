@@ -73,4 +73,29 @@
     return 130;
 }
 
+
+// scrollView 已经滑动
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    BOOL value = YES;
+ 
+    if (scrollView.contentOffset.y<=130/2.0) {//判断是不是要显示新观点的提示//当前cell的高度一半
+        value = NO;//不显示
+    }else{
+        value = YES;//显示
+    }
+    
+    BOOL topValue = NO;//是否在顶部
+
+    if (scrollView.contentOffset.y<=0) {
+        
+        topValue = YES;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(ideaPromptViewIsShowBool:tabToTopValue:)]) {
+        [self.delegate ideaPromptViewIsShowBool:value tabToTopValue:topValue];
+    }
+
+}
+
 @end

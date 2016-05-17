@@ -295,7 +295,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
     [self createHttpConnection];
     hConnection->RequestCollection(&_collectionListener);
 }
-//获取Banner{
+//获取Banner
 - (void)RequestBanner
 {
     [self createHttpConnection];

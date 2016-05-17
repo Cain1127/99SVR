@@ -136,8 +136,10 @@
     [super viewDidLoad];
     aryGift = [NSMutableArray array];
     nColor = 10000;
-    giftDict1 = @{@"status":@(0)};
-    giftDict2 = @{@"status":@(0)};
+    giftDict1 = [NSMutableDictionary dictionary];
+    [giftDict1 setValue:@"0" forKey:@"status"];
+    giftDict2 = [NSMutableDictionary dictionary];
+    [giftDict2 setValue:@"0" forKey:@"status"];
     [self initUIHead];
     UITapGestureRecognizer* singleRecogn;
     singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTopHUD)];
@@ -425,6 +427,7 @@
 
 - (void)addNotification
 {
+    [self removeAllNotify];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLoadDict:) name:MESSAGE_REQSTION_REMAIN_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadFailQuestion:) name:MESSAGE_QUESTION_FAIL_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseQuestion:) name:MESSAGE_ROOM_QUESTION_VC object:nil];
@@ -686,8 +689,10 @@
      *  2.查看当前是否有显示的
      */
     NSDictionary *parameter = notify.object;
+    DLog(@"parameter!");
     @WeakObj(self)
-    @synchronized(aryGift) {
+    @synchronized(aryGift)
+    {
         [aryGift addObject:parameter];
     }
     dispatch_async(dispatch_get_main_queue(),
@@ -699,21 +704,22 @@
 - (void)showGiftFrame:(CGRect)frame param:(NSDictionary *)parameter source:(NSMutableDictionary *)sourceDict
 {
     GiftShowAnimate *showAnimate = [[GiftShowAnimate alloc] initWithFrame:frame dict:parameter];
-    NSString *strTime = NSStringFromInt([parameter[@"num"] intValue]);
+    NSString *strTime = NSStringFromInteger([parameter[@"number"] integerValue]);
     [UIView animateWithDuration:[strTime length]
           delay:0.25
         options:UIViewAnimationOptionCurveEaseOut
      animations:^{
-         [self.view addSubview:showAnimate];
+         [[UIApplication sharedApplication].keyWindow addSubview:showAnimate];
+         [showAnimate setX:0];
          [showAnimate addrightViewAnimation];
      } completion:^(BOOL finished){
          @WeakObj(showAnimate)
          @WeakObj(sourceDict)
          @WeakObj(self)
-         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)([strTime floatValue] * NSEC_PER_SEC)), dispatch_get_main_queue(),
+         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(([strTime length]+1) * NSEC_PER_SEC)), dispatch_get_main_queue(),
          ^{
              [showAnimateWeak removeFromSuperview];
-             [sourceDictWeak setObject:@(0) forKey:@"status"];
+             [sourceDictWeak setObject:@"0" forKey:@"status"];
              [selfWeak showGiftInfo];
          });
      }];
@@ -724,27 +730,30 @@
  */
 - (void)showGiftInfo
 {
+    DLog(@"count:%zi",aryGift.count);
     if (aryGift.count > 0)
     {
-        if ([[giftDict1 objectForKey:@"status"] intValue]==0)
+        if ([[giftDict1 objectForKey:@"status"] isEqualToString:@"0"])
         {
-            [giftDict1 setObject:@(1) forKey:@"status"];
+            [giftDict1 setValue:@"1" forKey:@"status"];
             NSDictionary *parameter = [aryGift objectAtIndex:0];
             @synchronized(aryGift)
             {
                 [aryGift removeObjectAtIndex:0];
             }
-            [self showGiftFrame:Rect(0, kScreenHeight-250, kScreenWidth-60, 46) param:parameter source:giftDict1];
+            DLog(@"count:%zi",aryGift.count);
+            [self showGiftFrame:Rect(0-kScreenWidth+60, kScreenHeight-kVideoImageHeight-kRoom_head_view_height+50, kScreenWidth-60, 46) param:parameter source:giftDict1];
         }
-        else if([[giftDict2 objectForKey:@"status"] intValue]==0)
+        else if([[giftDict2 objectForKey:@"status"] isEqualToString:@"0"])
         {
-            [giftDict2 setObject:@(1) forKey:@"status"];
+            [giftDict2 setValue:@"1" forKey:@"status"];
             NSDictionary *parameter = [aryGift objectAtIndex:0];
             @synchronized(aryGift)
             {
                 [aryGift removeObjectAtIndex:0];
             }
-            [self showGiftFrame:Rect(0, kScreenHeight-250, kScreenWidth-60, 46) param:parameter source:giftDict2];
+            DLog(@"count:%zi",aryGift.count);
+            [self showGiftFrame:Rect(0-kScreenWidth+60, kScreenHeight-kVideoImageHeight-kRoom_head_view_height+100, kScreenWidth-60, 46) param:parameter source:giftDict2];
         }
     }
 }

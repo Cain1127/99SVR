@@ -171,5 +171,14 @@ void ReportLocalAppData(rstring os, rstring serial_number, rstring version_name,
 	report_asyn(&param);
 }
 
+void ReportHttpApiFailed(rstring url, rstring err)
+{
+	RequestParamter& param = get_request_param();
+	param["ReportItem"] = "HttpApi";
+	param["ClientType"] = get_client_type();
+	param["Url"] = url;
+	param["Error"] = err;
 
+	report_asyn(&param);
+}
 

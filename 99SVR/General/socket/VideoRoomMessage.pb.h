@@ -127,6 +127,7 @@ private:
 	uint32	_srcid;
 	uint32	_toid;
 	uint32	_srcviplevel;
+	uint32	_toviplevel;
 	uint32	_msgtype;
 	uint32	_textlen;
 	string	_srcalias;
@@ -157,6 +158,10 @@ public:
 	 inline uint32 srcviplevel() { return _srcviplevel; } const 
 
 	 inline void set_srcviplevel(const uint32 value) { _srcviplevel = value; }
+
+	 inline uint32 toviplevel() { return _toviplevel; } const 
+
+	 inline void set_toviplevel(const uint32 value) { _toviplevel = value; }
 
 	 inline uint32 msgtype() { return _msgtype; } const 
 
@@ -197,6 +202,7 @@ public:
 		cmd->srcid = _srcid;
 		cmd->toid = _toid;
 		cmd->srcviplevel = _srcviplevel;
+		cmd->toviplevel = _toviplevel;
 		cmd->msgtype = _msgtype;
 		cmd->textlen = _textlen;
 		strcpy(cmd->srcalias, _srcalias.c_str());
@@ -214,6 +220,7 @@ public:
 		_srcid = cmd->srcid;
 		_toid = cmd->toid;
 		_srcviplevel = cmd->srcviplevel;
+		_toviplevel = cmd->toviplevel;
 		_msgtype = cmd->msgtype;
 		_textlen = cmd->textlen;
 		_srcalias = cmd->srcalias;
@@ -231,6 +238,7 @@ public:
 		LOG("srcid = %d", _srcid);
 		LOG("toid = %d", _toid);
 		LOG("srcviplevel = %d", _srcviplevel);
+		LOG("toviplevel = %d", _toviplevel);
 		LOG("msgtype = %d", _msgtype);
 		LOG("textlen = %d", _textlen);
 		LOG("srcalias = %s", _srcalias.c_str());
