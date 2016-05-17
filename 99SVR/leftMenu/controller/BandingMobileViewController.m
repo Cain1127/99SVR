@@ -19,6 +19,8 @@
 #import "ZLMeTeamPrivate.h"
 #import "RoomViewController.h"
 #import "TQMeCustomizedViewController.h"
+#import "XMyViewController.h"
+
 @interface BandingMobileViewController ()<UITextFieldDelegate>
 {
     int nSecond;
@@ -326,6 +328,7 @@
              if (!__banding) {
                  
                  [UserInfo sharedUserInfo].banding = 1;
+                 [UserInfo sharedUserInfo].strMobile = _mobile;
                  [ProgressHUD showSuccess:@"绑定手机成功"];
                  
                  [self MarchBackLeft];
@@ -395,8 +398,13 @@
         }
     }
     
-    
-    
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:[XMyViewController class]]) {//团队的vip详情页面
+            backotherVCBool =  YES;
+            stockDealVC = viewController;
+            break;
+        }
+    }
     
     if (backotherVCBool) {//跳转到到股票详情视图
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
