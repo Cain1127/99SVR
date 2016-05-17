@@ -11,7 +11,12 @@
 @protocol XIdeaDelegate <NSObject>
 
 - (void)selectIdea:(TQIdeaModel *)model;
-
+/**
+ *  回调是否显示新观点的提示的view
+ *
+ *  @param value    是否显示
+ *  @param topValue 是否在顶部
+ */
 -(void)ideaPromptViewIsShowBool:(BOOL )value tabToTopValue:(BOOL)topValue;
 
 @end
