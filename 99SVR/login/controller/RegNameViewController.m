@@ -85,11 +85,11 @@
         [ProgressHUD showError:@"两次输入的密码不一致"];
         return;
     }
-    if ([DecodeJson MatchLetter:_password]) {
-        [ProgressHUD showError:@"密码不能为空格"];
+    if ([DecodeJson MatchLetter:_password]==-1) {
+        [ProgressHUD showError:@"密码不能包含空格"];
         return ;
     }
-    if ([DecodeJson MatchLetterNumber:_password])
+    if ([DecodeJson MatchLetterNumber:_password]==-1)
     {
         [ProgressHUD showError:@"密码不能为纯数字"];
         return ;
@@ -101,14 +101,14 @@
         return ;
     }
     //判断密码是否为空 并且是在6到16位
-    if (!([_txtPwd.text isPassword] && [_txtCmd.text isPassword])) {
-        [ProgressHUD showError:@"密码包含空格或密码长度不为6到16个字符"];
-        _txtPwd.text = @"";
-        _txtCmd.text = @"";
-        [_txtName becomeFirstResponder];
-        [self checkLogBtnIsEnableWithPwd:_txtPwd.text withCmdPwd:_txtCmd.text withUser:_txtName.text];
-        return ;
-    }
+//    if (!([_txtPwd.text isPassword] && [_txtCmd.text isPassword])) {
+//        [ProgressHUD showError:@"密码包含空格或密码长度不为6到16个字符"];
+//        _txtPwd.text = @"";
+//        _txtCmd.text = @"";
+//        [_txtName becomeFirstResponder];
+//        [self checkLogBtnIsEnableWithPwd:_txtPwd.text withCmdPwd:_txtCmd.text withUser:_txtName.text];
+//        return ;
+//    }
     [self.view makeToastActivity_bird];
     NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",_username,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];

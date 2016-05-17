@@ -323,7 +323,7 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (NSString *)getHttpApi
 {
     [self createHttpConnection];
-    return [NSString stringWithFormat:@"%s?s=",hConnection->GetHttpApiHost().c_str()];
+    return [NSString stringWithFormat:@"%s/api.php?s=",hConnection->GetHttpApiHost().c_str()];
 }
 
 
