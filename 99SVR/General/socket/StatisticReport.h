@@ -28,3 +28,6 @@ void ReportOpenHomepageFailed(int userid, rstring server_ip);
 
 //上报本机安装了哪些软件
 void ReportLocalAppData(rstring os, rstring serial_number, rstring version_name, rstring app_list);
+
+// 上报http api 失败
+void ReportHttpApiFailed(rstring url, rstring err);

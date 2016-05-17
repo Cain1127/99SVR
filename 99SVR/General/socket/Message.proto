@@ -1,0 +1,287 @@
+message Splash
+{
+	string	imageUrl;
+	string	text;
+	string	url;
+	uint64	starTime;
+	uint64	endTime;
+}
+message Team
+{
+	uint32	roomId;
+	uint32	teamId;
+	string	teamName;
+	string	teamIcon;
+	string	Introduce;
+	uint32	onlineUserCount;
+	uint32	locked;
+	string	alias;
+}
+message ViewpointSummary
+{
+	uint32	authorId;
+	uint32	roomId;
+	string	authorName;
+	string	authorIcon;
+	uint32	viewpointId;
+	string	publishTime;
+	string	title;
+	string	content;
+	uint32	replyCount;
+	uint32	giftCount;
+}
+message ViewpointDetail
+{
+	uint32	authorId;
+	uint32	roomId;
+	string	authorName;
+	string	authorIcon;
+	uint32	viewpointId;
+	string	publishTime;
+	string	title;
+	string	content;
+	uint32	replyCount;
+	uint32	giftCount;
+	string	html5url;
+}
+message Reply
+{
+	uint32	replytId;
+	uint32	viewpointId;
+	uint32	parentReplyId;
+	uint32	authorId;
+	string	authorName;
+	string	authorIcon;
+	uint32	authorRole;
+	uint32	fromAuthorId;
+	string	fromAuthorName;
+	string	fromAuthorIcon;
+	uint32	fromAuthorRole;
+	string	publishTime;
+	string	content;
+}
+message OperateStockProfit
+{
+	uint32	operateId;
+	uint32	teamId;
+	string	teamName;
+	string	teamIcon;
+	string	focus;
+	float	goalProfit;
+	float	totalProfit;
+	float	dayProfit;
+	float	monthProfit;
+	float	winRate;
+}
+message OperateDataByTime
+{
+	float	rate;
+	float	trend;
+	string	date;
+}
+message OperateStockTransaction
+{
+	uint32	transId;
+	uint32	operateId;
+	uint32	buytypeflag;
+	string	buytype;
+	string	stockId;
+	string	stockName;
+	float	price;
+	uint32	count;
+	float	money;
+	string	time;
+}
+message OperateStocks
+{
+	uint32	transId;
+	uint32	operateId;
+	string	stockId;
+	string	stockName;
+	uint32	count;
+	float	cost;
+	float	currPrice;
+	float	profitRate;
+	float	ProfitMoney;
+}
+message MyPrivateService
+{
+	uint32	teamId;
+	string	teamName;
+	string	teamIcon;
+	uint32	levelId;
+	string	levelName;
+	string	expirationDate;
+}
+message WhatIsPrivateService
+{
+	string	content;
+}
+message PrivateServiceLevelDescription
+{
+	uint32	levelId;
+	string	levelName;
+	string	description;
+	string	buytime;
+	string	expirtiontime;
+	float	buyPrice;
+	float	updatePrice;
+	uint32	isopen;
+	uint32	maxnum;
+}
+message PrivateServiceSummary
+{
+	uint32	id;
+	string	title;
+	string	cover;
+	string	summary;
+	string	publishTime;
+	string	teamName;
+}
+message OperateStockTransactionPC
+{
+	uint32	transId;
+	uint32	operateId;
+	string	title;
+	string	buytype;
+	string	stockId;
+	string	stockName;
+	float	price;
+	uint32	count;
+	float	money;
+	string	time;
+	string	summary;
+}
+message PrivateServiceDetail
+{
+	string	title;
+	string	content;
+	string	publishTime;
+	string	videoUrl;
+	string	videoName;
+	string	attachmentUrl;
+	string	attachmentName;
+	uint32	operateStockId;
+	string	html5Url;
+}
+message ChargeRule
+{
+	float	originalPrice;
+	float	discountPrice;
+	sint32	coinCount;
+}
+message VideoInfo
+{
+	sint32	id;
+	string	name;
+	string	picUrl;
+	string	videoUrl;
+}
+message ConsumeRank
+{
+	string	userName;
+	sint32	headId;
+	uint64	consume;
+}
+message SystemMessage
+{
+	uint32	id;
+	string	title;
+	string	content;
+	string	publishTime;
+}
+message QuestionAnswer
+{
+	uint32	id;
+	uint32	roomId;
+	uint32	answerAuthorId;
+	string	answerAuthorName;
+	string	answerAuthorHead;
+	uint32	answerAuthorRole;
+	string	answerTime;
+	string	answerContent;
+	uint32	askAuthorId;
+	string	askAuthorName;
+	string	askAuthorHead;
+	uint32	askAuthorRole;
+	string	askStock;
+	string	askContent;
+	string	askTime;
+	uint32	fromClient;
+}
+message MailReply
+{
+	uint32	id;
+	uint32	roomId;
+	uint32	viewpointId;
+	string	title;
+	uint32	askAuthorId;
+	string	askAuthorName;
+	string	askAuthorHead;
+	uint32	askAuthorRole;
+	string	askContent;
+	string	askTime;
+	string	answerAuthorId;
+	string	answerAuthorName;
+	string	answerAuthorHead;
+	uint32	answerAuthorRole;
+	string	answerTime;
+	string	answerContent;
+	uint32	fromClient;
+}
+message TotalUnread
+{
+	uint32	total;
+}
+message Unread
+{
+	uint32	system;
+	uint32	answer;
+	uint32	reply;
+	uint32	privateService;
+}
+message TeamTopN
+{
+	string	teamName;
+	string	teamIcon;
+	float	yieldRate;
+}
+message BannerItem
+{
+	string	url;
+	string	type;
+	string	croompic;
+}
+message NavigationItem
+{
+	uint32	nid;
+	uint32	level;
+	uint32	grouptype;
+	uint32	parentid;
+	uint32	showflag;
+	uint32	sortid;
+	string	name;
+	string	fontcolor;
+	string	curl;
+	string	gateurl;
+	uint32	roomid;
+	uint32	type;
+}
+message ImageInfo
+{
+	string	path;
+	uint32	width;
+	uint32	height;
+}
+message UserTeamRelatedInfo
+{
+	uint32	askremain;
+	uint32	askcoin;
+	uint32	viplevel;
+}
+message TeacherFansResp
+{
+	uint32	userid;
+	string	useralias;
+	uint32	userheadid;
+}

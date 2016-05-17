@@ -9,7 +9,9 @@
 #include "VideoRoomConnection.h"
 #include "Thread.h"
 #include "videoroom_cmd_vchat.h"
+#include "http_common.h"
 #include "Util.h"
+#include "Json.h"
 
 #include <vector>
 
@@ -825,7 +827,27 @@ void VideoRoomConnection::dispatch_push_message(void* body)
 	{
 	case 8:
 		body = push->content;
-		ON_MESSAGE(room_listener, ExpertNewViewNoty, OnExpertNewViewNoty)
+		if (room_listener != NULL)
+		{
+			ExpertNewViewNoty info;
+			info.ParseFromArray(body, info.ByteSize());
+			string fullpath;
+			get_full_head_icon(info.sicon(), fullpath);
+			info.set_sicon(fullpath);
+
+			if (info.content().size() > 2)
+			{
+				string temp = "[" + info.content() + "]";
+				JsonValue value;
+				JsonReader reader;
+				if (reader.parse(temp, value))
+				{
+					info.set_content(value[0].asString());
+				}
+			}
+			room_listener->OnExpertNewViewNoty(info);
+		}
+		//ON_MESSAGE(room_listener, ExpertNewViewNoty, OnExpertNewViewNoty)
 		break;
 	}
 }

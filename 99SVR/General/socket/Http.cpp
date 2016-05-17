@@ -17,6 +17,10 @@ RequestParamter& get_request_param()
 
 char* parse_response(char* recv_buf)
 {
+	char* state_start = strchr(recv_buf, ' ');
+	if (!state_start) return NULL;
+	if (state_start[1] != '2') return NULL;
+
 	char* content = strstr(recv_buf, "\r\n\r\n");
 	if (content != NULL)
 	{
@@ -31,8 +35,7 @@ char* parse_response(char* recv_buf)
 				*check_json_end = '\0';
 			}
 		}
-
-		//LOG("%s", content);
+		
 		return content ;
 	}
 

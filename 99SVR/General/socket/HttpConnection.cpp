@@ -7,15 +7,13 @@
 #include "stdafx.h"
 #include "HttpConnection.h"
 #include "LoginConnection.h"
+#include "StatisticReport.h"
 #include "Http.h"
 #include "http_common.h"
 #include "Thread.h"
 #include "Util.h"
 #include "proto_err.h"
 #include <cstring>
-
-
-//#define HTTP_API "http://testphp.99ducaijing.cn/api.php"
 
 
 static int g_authorId;
@@ -50,7 +48,7 @@ static void get_full_banner_url(const std::string& relative_path, std::string& a
 	absolute_path += relative_path;
 }
 
-static void get_full_img_url(const std::string& relative_path, std::string& absolute_path, bool is_dfs = false)
+void get_full_img_url(const std::string& relative_path, std::string& absolute_path, bool is_dfs)
 {
 	if(relative_path.size() == 0)
 	{
@@ -80,23 +78,8 @@ static void get_full_img_url(const std::string& relative_path, std::string& abso
 	absolute_path += relative_path;
 }
 
-static void get_full_head_icon(const std::string& headid, std::string& absolute_path)
+void get_full_head_icon(const std::string& headid, std::string& absolute_path)
 {
-	/*if(headid.size() == 0)
-	{
-		return;
-	}
-
-	absolute_path = HTTP_ICON_SVR;
-	absolute_path += "/";
-	absolute_path += HTTP_ICON_FOLDER;
-	absolute_path += "/";
-	absolute_path += headid;
-	if ( headid.find('.') == string::npos)
-	{
-		absolute_path += ".png";
-	}*/
-
 	std::string relative_path = headid;
 
 	if(string::npos == headid.find(".png") && string::npos == headid.find(".jpg"))
@@ -131,7 +114,7 @@ static ThreadVoid http_request(void* _param)
 
 	if ( g_curr_api_host_index == -1 )
 	{
-		g_curr_api_host_index = httphosts.size() > 1 ? 1 : 0;
+		g_curr_api_host_index = httphosts.size() > 1 ? 0 : 0;
 	}
 
 	int try_count = httphosts.size() + 2;
@@ -161,6 +144,7 @@ static ThreadVoid http_request(void* _param)
 	if ( try_count < 0 )
 	{
 		param->http_listener->OnError(PERR_CONNECT_ERROR);
+		ReportHttpApiFailed(param->url, "");
 	}
 
 	if(param)
@@ -3269,7 +3253,7 @@ void HttpConnection::RequestTeamList(TeamListListener* listener)
 {
 	std::string cache_content;
 	if(needRoomListCache)
-	{
+	{/*
 		needRoomListCache = false;
 
 		ReadProtocolCache("teamlist_cache.txt", cache_content);
@@ -3279,7 +3263,7 @@ void HttpConnection::RequestTeamList(TeamListListener* listener)
 			const char* tmp = cache_content.c_str();
 			parse_TeamList((char*)tmp, listener);
 		}
-	}
+	*/}
 
 	char tmp[32] = {0};
 	
