@@ -51,7 +51,10 @@ void SplashImageListener::OnError(int errCode)
 void ViewpointSummaryListener::OnError(int errCode)
 {
     NSDictionary *dict = @{@"code":@(errCode)};
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:dict];
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    NSString *postNotificationName = [user objectForKey:@"ViewpointSummaryListener"];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:postNotificationName object:dict];
 }
 /**
  *  请求观点列表
@@ -64,7 +67,9 @@ void ViewpointSummaryListener::onResponse(vector<ViewpointSummary>& infos){
         [ary addObject:model];
     }
     NSDictionary *dict = @{@"code":@(1),@"model":ary};
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:dict];
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    NSString *postNotificationName = [user objectForKey:@"ViewpointSummaryListener"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:postNotificationName object:dict];
 }
 
 /**
