@@ -189,7 +189,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self addSubview:_tableView];
     _dataSource = [[XIdeaDataSource alloc] init];
     _dataSource.delegate = self;
-    _tableView.backgroundColor = [UIColor yellowColor];
     _tableView.dataSource = _dataSource;
     _tableView.delegate = _dataSource;
 }
