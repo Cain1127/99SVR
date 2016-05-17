@@ -619,11 +619,13 @@
     if (!enable)
     {
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
+        _bVideo = NO;
         [self setDefaultImg];
     }
     else
     {
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        _bVideo=YES;
         [self setNoVideo];
     }
 }
@@ -655,7 +657,10 @@
     @WeakObj(self)
     dispatch_sync(dispatch_get_main_queue(),
     ^{
-        [selfWeak.glView setImage:selfWeak.currentImage];
+        if (!selfWeak.bVideo)
+        {
+            [selfWeak.glView setImage:selfWeak.currentImage];
+        }
    });
 }
 
