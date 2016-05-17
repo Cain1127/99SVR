@@ -30,6 +30,7 @@
 @property (nonatomic) int roomIsCollet;
 @property (nonatomic) int nuserid;
 @property (nonatomic,copy) void (^statusBarHidden)(BOOL bInfo);
+@property (nonatomic,copy) void (^colletView)(BOOL bCollet);
 
 //开始播放
 

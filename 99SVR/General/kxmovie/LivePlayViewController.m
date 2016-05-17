@@ -630,18 +630,6 @@
     }
 }
 
-- (void)checkMedia
-{
-    while (_playing)
-    {
-
-//        Loading_Hide(self.glView);
-//        return;
-//        [NSThread sleepForTimeInterval:0.5f];
-    }
-}
-
-
 - (void)createImage:(NSData *)data
 {
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -694,6 +682,9 @@
         {
             selfWeak.btnCollet.selected = YES;
             [ProgressHUD showSuccess:@"关注成功"];
+            if (selfWeak.colletView) {
+                selfWeak.colletView(YES);
+            }
         });
     }else
     {
@@ -701,6 +692,10 @@
         {
             selfWeak.btnCollet.selected = NO;
             [ProgressHUD showSuccess:@"取消关注"];
+            if (selfWeak.colletView)
+            {
+                selfWeak.colletView(NO);
+            }
         });
     }
 }
