@@ -22,7 +22,7 @@
     [_lblName setTextColor:UIColorFromRGB(0x343434)];
     [_lblName setFont:XCFONT(14)];
     
-    _lblGoid = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-80,_lblName.y,70, 30)];
+    _lblGoid = [[UILabel alloc] initWithFrame:Rect(kScreenWidth-110,_lblName.y,100, 30)];
     [_lblGoid setTextColor:UIColorFromRGB(0x919191)];
     [_lblGoid setFont:XCFONT(14)];
     [_lblGoid setTextAlignment:NSTextAlignmentRight];

@@ -26,15 +26,13 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     [self addSubview:_playView];
     [self addSubview:_btnPlay];
     _btnPlay.frame = Rect(kScreenWidth-55, 8, 44, 44);
-//    [UIImageFactory createBtnImage:@"home_play_icon" btn:_btnPlay state:UIControlStateNormal];
     _btnPlay.image = [UIImage imageNamed:@"home_play_icon"];
     _btnPlay.hidden=YES;
+
     WeakSelf(self);
     [_btnPlay clickWithBlock:^(UIGestureRecognizer *gesture) {
         [weakSelf showPlayInfo];
     }];
-//    self.backgroundColor = [UIColor yellowColor];
-//    [_btnPlay addTarget:self action:@selector(showPlayInfo) forControlEvents:UIControlEventTouchUpInside];
     return self;
 }
 
@@ -76,10 +74,16 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     }
     
     [self startBtnPlayAnimating];
+    NSString *strTeamInfo = [NSString stringWithFormat:@"%@  %@",room.teamname,room.teamid];
+    [_playView.lblName setText:strTeamInfo];
+//    [_playView.lblNumber setText:room.teamid];
     
-    [_playView.lblName setText:room.teamname];
-    [_playView.lblNumber setText:room.teamid];
+    CGRect frame = [room.onlineusercount boundingRectWithSize:CGSizeMake(kScreenWidth, 20) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:XCFONT(12)} context:nil];
+    
     [_playView.btnQuery setTitle:room.onlineusercount forState:UIControlStateNormal];
+    _playView.btnQuery.frame = Rect(_playView.lblName.x-5, 30,frame.size.width+30,30);
+    
+    
     NSString *strUrl = [NSString stringWithFormat:@"%@",room.teamicon];
     [_playView.imgView sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
 }
@@ -125,23 +129,22 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    [self setBackgroundColor:UIColorFromRGB(0x0078dd)];
-    self.alpha = 0.8;
+//    [self setBackgroundColor:UIColorFromRGB(0x0078dd)];
+    
+    UIView *bgView = [[UIView alloc] initWithFrame:self.bounds];
+    [self addSubview:bgView];
+    [bgView setBackgroundColor:UIColorFromRGB(0x0078dd)];
+    bgView.alpha = 0.8;
+    
     _imgView = [[UIImageView alloc] initWithFrame:Rect(8, 8, 44, 44)];
-    [self addSubview:_imgView];
     _imgView.layer.masksToBounds = YES;
     _imgView.layer.cornerRadius = 22;
     [self addSubview:_imgView];
     
-    _lblName = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+8, _imgView.y, 80, 20)];
+    _lblName = [[UILabel alloc] initWithFrame:Rect(_imgView.x+_imgView.width+8, _imgView.y, 150, 20)];
     [_lblName setTextColor:UIColorFromRGB(0xffffff)];
     [_lblName setFont:XCFONT(15)];
     [self addSubview:_lblName];
-    
-//    _lblNumber = [[UILabel alloc] initWithFrame:Rect(_lblName.x+_lblName.width+8, _lblName.y, 80, 20)];
-//    [_lblNumber setTextColor:UIColorFromRGB(0xffffff)];
-//    [_lblNumber setFont:XCFONT(15)];
-//    [self addSubview:_lblNumber];
     
     _btnQuery = [UIButton buttonWithType:UIButtonTypeCustom];
     _btnQuery.frame = Rect(_lblName.x, 30, 70,30);
@@ -149,10 +152,11 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     [_btnQuery setTitle:@"1" forState:UIControlStateNormal];
     [_btnQuery setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
     _btnQuery.titleLabel.font = XCFONT(13);
-    UIEdgeInsets inset = _btnQuery.imageEdgeInsets;
-    inset.left = 0;
-    inset.right = 55;
-    _btnQuery.imageEdgeInsets = inset;
+    
+    UIEdgeInsets insets = _btnQuery.imageEdgeInsets;
+    insets.left += 10;
+    _btnQuery.titleEdgeInsets = insets;
+
     [self addSubview:_btnQuery];
     [_btnQuery setEnabled:NO];
     
@@ -180,8 +184,6 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     }];
     return self;
 }
-
-
 
 - (void)goPlayInfo
 {

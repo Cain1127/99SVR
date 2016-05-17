@@ -143,10 +143,15 @@
 {
     __weak UIView *__downHUD = _downHUD;
     __weak UIView *__topHUD = _TopHUD;
+    @WeakObj(self)
     dispatch_main_async_safe(
     ^{
          __topHUD.hidden = YES;
          __downHUD.alpha = 0;
+        if (selfWeak.roomHiddenHUD)
+        {
+            selfWeak.roomHiddenHUD(YES);
+        }
     });
 }
 
@@ -160,12 +165,23 @@
         {
             _TopHUD.hidden = NO;
         }
+        else
+        {
+            if (_roomHiddenHUD)
+            {
+                _roomHiddenHUD(NO);
+            }
+        }
         [self performSelector:@selector(hiddenTopHud) withObject:nil afterDelay:5.0];
     }
     else
     {
         _TopHUD.hidden = YES;
         _downHUD.alpha = 0;
+        if (_roomHiddenHUD)
+        {
+            _roomHiddenHUD(YES);
+        }
     }
 }
 
