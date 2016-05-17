@@ -192,6 +192,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 {
     self.refreshState = MJRefreshState_Header;
     _nCurrent = 20;
+    [self setRequestUserDefaults];
     if (_dataSource.aryModel.count==0)
     {
         [self hideEmptyViewInView:_tableView];
@@ -203,6 +204,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 - (void)uploadMore
 {
     self.refreshState = MJRefreshState_Footer;
+    [self setRequestUserDefaults];
     if (_dataSource.aryModel.count>0)
     {
         TQIdeaModel *model = _dataSource.aryModel[_dataSource.aryModel.count-1];
@@ -210,6 +212,14 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         [kHTTPSingle RequestViewpointSummary:0 start:model.viewpointid count:20];
     }
 }
+
+#pragma mark 专家观点的请求 为了和房间内的专家观点的区别
+-(void)setRequestUserDefaults{
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    [user setObject:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC forKey:@"ViewpointSummaryListener"];
+    [user synchronize];
+}
+
 
 -(void)setIdeaTableView {
     _tableView = [TableViewFactory createTableViewWithFrame:Rect(0,64,kScreenWidth,kScreenHeight-108) withStyle:UITableViewStyleGrouped];

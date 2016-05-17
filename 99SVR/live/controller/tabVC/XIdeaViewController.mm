@@ -34,6 +34,9 @@
 @property (nonatomic,strong) RoomHttp *room;
 @property (nonatomic) NSInteger nCurrent;
 @property (nonatomic,strong) XIdeaDataSource *dataSource;
+/**下拉刷新需要清空数据！上啦不需要*/
+@property (nonatomic , assign) __block MJRefreshState refreshState;
+
 
 @end
 
@@ -60,9 +63,14 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 - (void)addNotify
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_XTRADER_HTTP_VIEWPOINTSUMMARY_VC object:nil];
 }
-
+#pragma mark 专家观点的请求 为了和房间内的专家观点的区别
+-(void)setRequestUserDefaults{
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    [user setObject:MESSAGE_XTRADER_HTTP_VIEWPOINTSUMMARY_VC forKey:@"ViewpointSummaryListener"];
+    [user synchronize];
+}
 - (void)removeNotify
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -83,6 +91,11 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     NSDictionary *dict = notify.object;
     if([[dict objectForKey:@"code"] intValue]==1)
     {
+        
+        if (self.refreshState == MJRefreshState_Header) {
+            _dataSource.aryModel = @[];
+        }
+        
         NSArray *aryIndex = [dict objectForKey:@"model"];
         if (_dataSource.aryModel.count>0) {
             NSMutableArray *aryAll = [NSMutableArray array];
@@ -151,13 +164,18 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 -(void)updateRefresh
 {
+    
     _nCurrent = 20;
-    _dataSource.aryModel = nil;
+
+    self.refreshState = MJRefreshState_Header;
+    [self setRequestUserDefaults];
     [kHTTPSingle RequestViewpointSummary:[_room.teamid intValue] start:0 count:20];
 }
 
 - (void)uploadMore
 {
+    self.refreshState = MJRefreshState_Footer;
+    [self setRequestUserDefaults];
     if (_dataSource.aryModel.count>0) {
         TQIdeaModel *model = _dataSource.aryModel[_dataSource.aryModel.count-1];
         _nCurrent += 20;
@@ -171,6 +189,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [self addSubview:_tableView];
     _dataSource = [[XIdeaDataSource alloc] init];
     _dataSource.delegate = self;
+    _tableView.backgroundColor = [UIColor yellowColor];
     _tableView.dataSource = _dataSource;
     _tableView.delegate = _dataSource;
 }
