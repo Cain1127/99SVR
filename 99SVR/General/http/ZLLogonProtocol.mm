@@ -873,6 +873,8 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
     nRoom_count_info = info.naccess_times();
     nRoom_fans_info = info.ncollect_times();
     nRoom_is_collet = info.biscollectroom();
+    [aryRoomNotice removeAllObjects];
+    roomTeachInfo=@"";
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
 }
