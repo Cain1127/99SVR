@@ -246,6 +246,10 @@
 
 }
 
+#pragma mark - 代理 跳转私人定制详情
+/**
+ *  代理方法，点击跳转私人定制详情
+ */
 - (void)selectIndex:(TQMeCustomizedModel *)model
 {
     ZLMeTeamPrivate *privateTeam = [[ZLMeTeamPrivate alloc] initWIthModel:model];
@@ -262,12 +266,12 @@
     [headerView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     char cString[255];
     const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
-    sprintf(cString, "%s/network_anomaly_fail.png",path);
+    sprintf(cString, "%s/customized_no_opened",path);
     NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
     UIImage *image = [UIImage imageWithContentsOfFile:objCString];
     if(image)
     {
-        UIView *noView = [ViewNullFactory createViewBg:Rect(0,0,kScreenWidth,kNetWork_anomaly_image_height) imgView:image msg:@"您没有购买私人定制"];
+        UIView *noView = [ViewNullFactory createViewBg:Rect(0,10,kScreenWidth,kNetWork_anomaly_image_height-10) imgView:image msg:@"您还没有兑换私人定制服务"];
         
         noView.userInteractionEnabled = NO;
         [headerView addSubview:noView];

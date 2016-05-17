@@ -280,7 +280,8 @@
 - (void)showPrivateDetail:(XPrivateSummary *)summary
 {
     NSString *strUrl = [kHTTPSingle GetPrivateServiceDetailUrl:summary.nId];
-    NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strUrl title:summary.teamname];
+    NSString *title = (summary.teamname && summary.teamname.length >0)?summary.teamname:@"私人定制详情";
+    NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:strUrl title:title];
     [self.navigationController pushViewController:svrView animated:YES];
 }
 
