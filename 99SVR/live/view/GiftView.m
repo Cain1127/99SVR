@@ -142,6 +142,9 @@
     char cBuffer[100]={0};
     sprintf(cBuffer, "余额:%.01f",[UserInfo sharedUserInfo].goldCoin);
     [_lblPrice setText:[NSString stringWithUTF8String:cBuffer]];
+    CGSize lblPriceSize = [_lblPrice.text sizeMakeWithFont:_lblPrice.font];
+    _lblPrice.width = lblPriceSize.width;
+    
     
     
     //赠送按钮
@@ -220,6 +223,8 @@
     char cBuffer[100]={0};
     sprintf(cBuffer, "余额:%.01f",[UserInfo sharedUserInfo].goldCoin);
     [_lblPrice setText:[NSString stringWithUTF8String:cBuffer]];
+    CGSize lblPriceSize = [_lblPrice.text sizeMakeWithFont:_lblPrice.font];
+    _lblPrice.width = lblPriceSize.width;
 }
 
 - (void)selectView:(UIView *)view
