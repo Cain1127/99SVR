@@ -8,6 +8,7 @@
 
 #import "RegNameViewController.h"
 #import "QCheckBox.h"
+#import "DecodeJson.h"
 #import "RoomViewController.h"
 #import "UserInfo.h"
 #import "Toast+UIView.h"
@@ -73,16 +74,32 @@
         [ProgressHUD showError:@"密码不能为空"];
         return ;
     }
-    if (![_txtPwd.text isEqualToString:_txtCmd.text]) {
+    NSString *strCmdPwd = _txtCmd.text;
+    if ([strCmdPwd length]==0)
+    {
+        [ProgressHUD showError:@"第二次输入的密码不能为空"];
+        return ;
+    }
+    if (![_txtPwd.text isEqualToString:_txtCmd.text])
+    {
         [ProgressHUD showError:@"两次输入的密码不一致"];
         return;
     }
-    
-    if (!_checkAgree.checked) {
-        [ProgressHUD showError:@"必须同意《用户服务协议》和《隐私权条款》"];
+    if ([DecodeJson MatchLetter:_password]) {
+        [ProgressHUD showError:@"密码不能为空格"];
+        return ;
+    }
+    if ([DecodeJson MatchLetterNumber:_password])
+    {
+        [ProgressHUD showError:@"密码不能为纯数字"];
         return ;
     }
     
+    if (!_checkAgree.checked)
+    {
+        [ProgressHUD showError:@"必须同意《用户服务协议》和《隐私权条款》"];
+        return ;
+    }
     //判断密码是否为空 并且是在6到16位
     if (!([_txtPwd.text isPassword] && [_txtCmd.text isPassword])) {
         [ProgressHUD showError:@"密码包含空格或密码长度不为6到16个字符"];
@@ -92,14 +109,12 @@
         [self checkLogBtnIsEnableWithPwd:_txtPwd.text withCmdPwd:_txtCmd.text withUser:_txtName.text];
         return ;
     }
-    
     [self.view makeToastActivity_bird];
     NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",_username,strDate];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     strMd5 = [DecodeJson XCmdMd5String:strMd5];
     NSString *strInfo = [NSString stringWithFormat:@"%@User/registerMulti",[kHTTPSingle getHttpApi]];
     NSDictionary *parameters = @{@"account":_username,@"key":strMd5,@"pwd":_password,@"type":@"21"};
-//    __weak LSTcpSocket *__tcpSocket = [LSTcpSocket sharedLSTcpSocket];
     @WeakObj(self)
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id responseObject)
      {
@@ -127,9 +142,6 @@
      {
          [selfWeak.view hideToastActivity];
          [ProgressHUD showError:@"连接服务器失败"];
-         NSString *strUrl = [NSString stringWithFormat:@"ReportItem=Register&ClientType=2&RegType=2&ServerIP=%@&Error=%@",
-                             @"120.55.105.224",@"err_fail"];
-         [DecodeJson postPHPServerMsg:strUrl];
      }];
 }
 

@@ -439,6 +439,7 @@
 		BB3785451CDF1DC3008365FD /* libuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3785361CDF1DC3008365FD /* libuv.a */; };
 		BB3785461CDF1DC3008365FD /* libmtasdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3785381CDF1DC3008365FD /* libmtasdk.a */; };
 		BB3785491CDF240C008365FD /* GiftShowAnimate.m in Sources */ = {isa = PBXBuildFile; fileRef = BB3785481CDF240C008365FD /* GiftShowAnimate.m */; };
+		BB3B3D4D1CEA371F00131093 /* LivePlayImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB3B3D4C1CEA371F00131093 /* LivePlayImageView.m */; };
 		BB3EE99C1C1AA95A00CF5621 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3EE99B1C1AA95A00CF5621 /* libz.tbd */; };
 		BB3EE99E1C1AA96000CF5621 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3EE99D1C1AA96000CF5621 /* libbz2.tbd */; };
 		BB4E76CA1CAFCE420060427D /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4E76C91CAFCE420060427D /* Bugly.framework */; };
@@ -1548,6 +1549,8 @@
 		BB37853B1CDF1DC3008365FD /* MTAFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAFeedback.h; sourceTree = "<group>"; };
 		BB3785471CDF240C008365FD /* GiftShowAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GiftShowAnimate.h; sourceTree = "<group>"; };
 		BB3785481CDF240C008365FD /* GiftShowAnimate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GiftShowAnimate.m; sourceTree = "<group>"; };
+		BB3B3D4B1CEA371F00131093 /* LivePlayImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LivePlayImageView.h; sourceTree = "<group>"; };
+		BB3B3D4C1CEA371F00131093 /* LivePlayImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LivePlayImageView.m; sourceTree = "<group>"; };
 		BB3EE99B1C1AA95A00CF5621 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		BB3EE99D1C1AA96000CF5621 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		BB4E76C91CAFCE420060427D /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bugly.framework; sourceTree = "<group>"; };
@@ -3492,6 +3495,8 @@
 				BB5F9BC31C5DDA6100285EA6 /* OpenAL.m */,
 				BB2CA6D31CD505F200DFE56E /* AudioPlayer.h */,
 				BB2CA6D41CD505F200DFE56E /* AudioPlayer.m */,
+				BB3B3D4B1CEA371F00131093 /* LivePlayImageView.h */,
+				BB3B3D4C1CEA371F00131093 /* LivePlayImageView.m */,
 			);
 			path = kxmovie;
 			sourceTree = "<group>";
@@ -4898,6 +4903,7 @@
 				BB17694D1C7D9E7300CE947C /* InputPwdViewController.m in Sources */,
 				BBD58EF11CCBE6AC009250DB /* XPrivateDetailViewController.m in Sources */,
 				BBD719801CE466A100FF9A38 /* WebViewJavascriptBridge_JS.m in Sources */,
+				BB3B3D4D1CEA371F00131093 /* LivePlayImageView.m in Sources */,
 				BB9C7EDB1CDB9A8300FD3532 /* ZLRoomVideoViewController.mm in Sources */,
 				18BF06B81C9A86B00071E524 /* RechargeResultViewController.m in Sources */,
 				BB2CA6191CD338A300DFE56E /* Socket.cpp in Sources */,

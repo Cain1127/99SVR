@@ -15,8 +15,9 @@
 #include "libswscale/swscale.h"
 #include <assert.h>
 #import <QuartzCore/QuartzCore.h>
-
+#import "LivePlayImageView.h"
 #import "MediaSocket.h"
+
 //播放器
 @interface LivePlayViewController : UIViewController
 {
@@ -24,7 +25,7 @@
 }
 
 @property (nonatomic) BOOL playing;
-@property (nonatomic,strong) UIImageView *glView;
+@property (nonatomic,strong) LivePlayImageView *glView;
 @property (nonatomic) BOOL bFull;
 @property (nonatomic) int roomIsCollet;
 @property (nonatomic) int nuserid;

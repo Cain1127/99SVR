@@ -705,7 +705,7 @@ void TeamVideoListener::OnError(int errCode)
 
 void ConsumeRankListener::OnError(int errCode)
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:@{@"code":@(errCode)}];
 }
 
 void ConsumeRankListener::onResponse(vector<ConsumeRank>& info){
@@ -719,7 +719,8 @@ void ConsumeRankListener::onResponse(vector<ConsumeRank>& info){
         XConsumeRankModel *model = [XConsumeRankModel mj_objectWithKeyValues:dict];
         [array addObject:model];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:array];
+    NSDictionary *parameter = @{@"code":@(1),@"data":array};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:parameter];
 }
 
 

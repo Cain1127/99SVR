@@ -102,13 +102,14 @@
     CGSize sizeCount = [ShareFunction calculationOfTheText:dict[@"count"] withFont:13 withMaxSize:CGSizeMake(kScreenWidth, 20)];
     
     CGSize sizeFans = [ShareFunction calculationOfTheText:@"粉丝" withFont:13 withMaxSize:CGSizeMake(kScreenWidth, 20)];
+    
     _lblCount.text = dict[@"count"];
     _lblFans.text = dict[@"fans"];
     
-    _lblCount.frame = Rect(kScreenWidth/2-sizeCount.width+5-5, 45, sizeCount.width+5, 20);
+    _lblCount.frame = Rect(kScreenWidth/2-sizeCount.width-20, 45, sizeCount.width+5, 20);
     _lblTemp.frame = Rect(_lblCount.x-90, 45, 80, 20);
     
-    _lblFanTemp.frame = Rect(kScreenWidth/2+5, 45,sizeFans.width+5,20);
+    _lblFanTemp.frame = Rect(kScreenWidth/2+15, 45,sizeFans.width+5,20);
     _lblFans.frame = Rect(_lblFanTemp.x+_lblFanTemp.width+5,45,50, 20);
     
 }
