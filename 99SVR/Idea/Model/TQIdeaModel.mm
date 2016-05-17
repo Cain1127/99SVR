@@ -24,9 +24,11 @@
     _roomid = NSStringFromInt(notify->nvcbid());
     
     _authoricon = [NSString stringWithUTF8String:notify->sicon().c_str()];
-    
-    _authorname = [NSString stringWithUTF8String:notify->sname().c_str()];
-    
+    //字符 gbkEncoding 进行解码
+    NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSString *string = [NSString stringWithCString:notify->sname().c_str() encoding:gbkEncoding];
+    _authorname = string;
+//    _authorname = [NSString stringWithFormat:@"%s",notify->sname().c_str()];
     _publishtime = [NSString stringWithUTF8String:notify->spublictime().c_str()];
     
     _content = [NSString stringWithUTF8String:notify->content().c_str()];
@@ -37,7 +39,9 @@
     
     _viewpointid = notify->nmessageid();
     
-    [self settingTime];
+    
+    
+//    [self settingTime];
     
     
     return self;

@@ -112,7 +112,6 @@
     aChannel = 2;
     ALenum format=AL_FORMAT_STEREO16;
     alBufferData(bufferID, format,data, (ALsizei)dataSize,aSampleRate);
-    
     if (alGetError()!= AL_NO_ERROR)
     {
         NSLog(@"Error generating sources!\n");

@@ -6,6 +6,8 @@
 //  Copyright © 2016 xia zhonglin . All rights reserved.
 //
 
+/**房间内专家观点*/
+
 #import <UIKit/UIKit.h>
 
 @class RoomHttp;

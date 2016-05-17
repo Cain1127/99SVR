@@ -10,6 +10,7 @@
 #import "ConsumeRankCell.h"
 #import "XConsumeRankModel.h"
 #import "UIImageView+WebCache.h"
+#import "RoomChatNull.h"
 
 @implementation ConsumeRankDataSource
 
@@ -20,7 +21,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _aryModel.count;
+    return _aryModel.count==0?:1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -35,11 +36,27 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (_aryModel.count==0)
+    {
+        return kScreenHeight-kRoom_head_view_height-kVideoImageHeight-44;
+    }
     return 60;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    if(_aryModel.count==0)
+    {
+        RoomChatNull *cell = [tableView dequeueReusableCellWithIdentifier:@"nullInfoCell"];
+        if (!cell)
+        {
+            cell = [[RoomChatNull alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"nullInfoCell"];
+        }
+        cell.lblInfo.text = @"没有贡献榜";
+        return cell;
+    }
+    
     static NSString *strConsumeRank = @"ConsumeRankIdentifier";
     ConsumeRankCell *cell = [tableView dequeueReusableCellWithIdentifier:strConsumeRank];
     if (!cell)
