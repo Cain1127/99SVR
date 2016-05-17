@@ -938,10 +938,6 @@ void ZLRoomListener::OnExpertNewViewNoty(ExpertNewViewNoty& info)
     TQIdeaModel *idea = [[TQIdeaModel alloc] initWIthNewPointNotify:&info];
     NSDictionary *dict = @{@"code":@"1",@"data":idea};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQIdeaView_NewNotifi_VC object:dict];
-    // XIdeaView
-    // NSArray
-    // nsmutablearray
-    
 }
 
 void ZLRoomListener::OnUserAccountInfo(UserAccountInfo& info)

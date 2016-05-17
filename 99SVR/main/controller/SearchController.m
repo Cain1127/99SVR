@@ -8,6 +8,7 @@
 
 #import "SearchController.h"
 #import "MySearchBar.h"
+#import "RoomViewController.h"
 #import "ConnectRoomViewModel.h"
 #import "AlertFactory.h"
 #import "DecodeJson.h"
@@ -473,6 +474,16 @@
 -(void)keyboardHideTapped:(UITapGestureRecognizer*)tapGr
 {
     [_mySearchBar resignFirstResponder];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+    if (roomView.room)
+    {
+        [roomView removeNotice];
+    }
 }
 
 @end
