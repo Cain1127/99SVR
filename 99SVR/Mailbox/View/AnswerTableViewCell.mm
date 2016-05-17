@@ -117,7 +117,7 @@
     CGFloat iconH = 30;
     _answerauthoriconImageView.frame = CGRectMake(LR, 15, iconH, iconH);
     //askauthorhead
-    [_answerauthoriconImageView sd_setImageWithURL:[NSURL URLWithString:answerModel.answerauthorhead] placeholderImage:[UIImage imageNamed:@"personal_user_head"]];
+    [_answerauthoriconImageView sd_setImageWithURL:[NSURL URLWithString:answerModel.answerauthorhead] placeholderImage:[UIImage imageNamed:@"100_1"]];
     
     /** 回答者 */
     _answerauthornameLable.text = [NSString stringWithFormat:@"%@:",answerModel.answerauthorname];

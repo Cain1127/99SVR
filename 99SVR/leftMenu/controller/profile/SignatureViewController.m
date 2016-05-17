@@ -54,7 +54,7 @@
     UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [saveButton setTitle:@"保存" forState:UIControlStateNormal];
     [saveButton setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [saveButton setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
+    [saveButton setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
     [saveButton setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     saveButton.layer.cornerRadius = 2.5;
     saveButton.layer.masksToBounds = YES;
@@ -143,7 +143,7 @@
 {
     NSString *strMsg = _contentTV.text;
     if ([strMsg length]==0) {
-        [MBProgressHUD showError:@"个性签名不能为空"];
+        [ProgressHUD showError:@"个性签名不能为空"];
         return ;
     }
     ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
@@ -162,7 +162,7 @@
     if ([number intValue]==0) {
         @WeakObj(self)
         gcd_main_safe(^{
-            [MBProgressHUD showSuccess:@"修改个性签名成功"];
+            [ProgressHUD showSuccess:@"修改个性签名成功"];
             [selfWeak.navigationController popViewControllerAnimated:YES];
             selfWeak.signatureBlock(__strMsg);
         });
@@ -171,7 +171,7 @@
     {
         gcd_main_safe(
                       ^{
-                          [MBProgressHUD showError:@"修改个性签名出错"];
+                          [ProgressHUD showError:@"修改个性签名出错"];
                       });
     }
 }

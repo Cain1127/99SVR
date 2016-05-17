@@ -26,22 +26,25 @@
 
 -(void)setPrivateVipArray:(NSArray *)privateVipArray
 {
-//    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-//    [privateVipArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
     @WeakObj(self)
     _privateVipArray = privateVipArray;
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         @StrongObj(self)
+        // 移除所有的button
+        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+
         int i = 1;
         for (NSDictionary *obj in self.privateVipArray) {
             BOOL isOpen = [obj[@"isOpen"] isEqualToString:@"1"]?true:false;
             [self addSubview:[self createAttrViewWithVipLevelId:obj[@"vipLevelId"] isOpen:isOpen viewCount:i]];
+            
             i++;
         }
+        // 默认选中第一个
+        UIButton *selectbutton = [self viewWithTag:1];
+        [self attrDescClick:selectbutton];
    });
-//    }];
 }
 
 /**
@@ -111,9 +114,7 @@
     UIImage *gift_frame = [UIImage imageNamed:@"gift_frame"];
     UIEdgeInsets insets = UIEdgeInsetsMake(2,2,gift_frame.size.height-4,gift_frame.size.height-4);
     [attrDescButton setBackgroundImage:[DecodeJson stretchImage:gift_frame capInsets:insets resizingMode:UIImageResizingModeStretch] forState:UIControlStateSelected];
-    if(viewCount==1){
-        [self attrDescClick:attrDescButton];
-    }
+
     return attrDescButton;
 }
 

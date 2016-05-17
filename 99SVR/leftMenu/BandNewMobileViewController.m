@@ -66,7 +66,7 @@
     });
     
     [self createLabelWithRect:Rect(10, _txtName.y+50,80, 30)];
-    _txtCode = [self createTextField:Rect(_txtName.x, _txtName.y+50, kScreenWidth-100, 30)];
+    _txtCode = [self createTextField:Rect(_txtName.x, _txtName.y+50, kScreenWidth-130, 30)];
     [_txtCode setPlaceholder:@"请输入验证码"];
     _txtCode.leftViewImageName = @"register_code";
     [_txtCode setKeyboardType:UIKeyboardTypeNumberPad];
@@ -255,6 +255,7 @@
              //没绑定过的，直接绑定，然后返回
              [selfWeak.navigationController popToRootViewControllerAnimated:YES];
              // 通知个人中心页更新
+             [UserInfo sharedUserInfo].strMobile = _mobile;//更新手机号
              [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
              [ProgressHUD showSuccess:@"绑定新手机成功"];
          }

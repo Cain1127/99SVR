@@ -40,21 +40,29 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:COLOR_Bg_Gay];//UIColorFromRGB(0xffffff)];
-    [self setTitleText:@"讲师团队简介"];
-    UIView *headView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 195)];
+    [self setHeadViewHidden:YES];
+    
+    UIView *headView = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 245)];
     headView.backgroundColor = COLOR_Bg_Gay;
     
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 235)];
     [headView insertSubview:imgView atIndex:0];
-
-    //char cBuffer[100]={0};
-    //sprintf(cBuffer,"video_profiles_bg@2x");
-    //NSString *strName = [NSString stringWithUTF8String:cBuffer];
-    //NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
-    //[imgView sd_setImageWithURL:url1];
     imgView.image = kPNG_IMAGE_FILE(@"video_profiles_bg@2x");
     
-    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-50,30,100,100)];
+    // 标题
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
+    titleLabel.text = @"讲师团队简介";
+    titleLabel.font = Font_16;
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.textColor = [UIColor whiteColor];
+    [headView addSubview:titleLabel];
+    
+    UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(MarchBackLeft) image:@"back" highImage:@"back"];
+    [headView addSubview:btnLeft];
+    [btnLeft setFrame:Rect(0,20,44,44)];
+
+    // 团队头像
+    UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-50,90,100,100)];
     [headView addSubview:imgHead];
     imgHead.layer.masksToBounds = YES;
     imgHead.layer.cornerRadius = 50;
@@ -63,7 +71,7 @@
     NSString *strUrl = [NSString stringWithFormat:@"%@",_room.teamicon];
     [imgHead sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     
-    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 145, kScreenWidth, 20)];
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 200, kScreenWidth, 20)];
     [lblName setTextColor:UIColorFromRGB(0xffffff)];
     [lblName setText:_room.teamname];
     [lblName setFont:XCFONT(16)];
@@ -71,12 +79,12 @@
     [headView addSubview:lblName];
     
     // 分割线
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 185, kScreenWidth, 9)];
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 235, kScreenWidth, 9)];
     lineView.layer.borderWidth = 0.5;
     lineView.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
     [headView addSubview:lineView];
-
-    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64) withStyle:UITableViewStylePlain];
+    
+    _tableView = [TableViewFactory createTableViewWithFrame:Rect(0, 0, kScreenWidth, kScreenHeight) withStyle:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.tableHeaderView = headView;
@@ -190,7 +198,7 @@
         DTAttributedTextCell *cell =[cache objectForKey:@"RoomTeamCell"];
         if (!cell) {
             cell = [[DTAttributedTextCell alloc] initWithReuseIdentifier:@"RoomTeamCell"];
-           
+            
             [cache setObject:cell forKey:@"RoomTeamCell"];
         }
         [cell setHTMLString:_introduce];

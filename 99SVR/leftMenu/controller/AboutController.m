@@ -53,7 +53,7 @@ static NSUInteger const AboutFooterViewHeight = 60; // 底部高度
     // 版权说明
     UILabel *copyrightDescLabel = [[UILabel alloc] init];
     copyrightDescLabel.font = Font_12;
-    copyrightDescLabel.text = @"copyright @ 2015-2016 99letou.All Rights Reserved.";
+    copyrightDescLabel.text = @"copyright © 2015-2016 99letou.All Rights Reserved.";
     copyrightDescLabel.textColor = COLOR_Text_Gay;
     copyrightDescLabel.textAlignment = NSTextAlignmentCenter;
     copyrightDescLabel.frame = CGRectMake(0, CGRectGetMaxY(copyrightLabel.frame), kScreenWidth, 20);

@@ -30,7 +30,8 @@
     UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnRight setTitle:@"保存" forState:UIControlStateNormal];
     [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
+    [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    [btnRight setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     [self.view addSubview:btnRight];
     btnRight.frame = Rect(10,tableView.y+tableView.height+20, kScreenWidth-20, 40);
     [btnRight setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
@@ -60,7 +61,7 @@
     if ([number intValue]==0) {
         @WeakObj(self)
         gcd_main_safe(^{
-            [MBProgressHUD showSuccess:@"修改性别成功"];
+            [ProgressHUD showSuccess:@"修改性别成功"];
             [selfWeak.navigationController popViewControllerAnimated:YES];
             selfWeak.sexBlock(__strMsg);
         });
@@ -68,7 +69,7 @@
     else
     {
         gcd_main_safe(^{
-            [MBProgressHUD showError:@"修改性别出错"];
+            [ProgressHUD showError:@"修改性别出错"];
         });
     }
 }
