@@ -116,7 +116,7 @@
 		18F971131C92947F001B2575 /* RSADataVerifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F9710A1C92947F001B2575 /* RSADataVerifier.m */; };
 		18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971141C92971B001B2575 /* CoreMotion.framework */; };
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
-		5A4EF3EC1CE6C0D900A489B1 /* SocketNetworkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4EF3EB1CE6C0D900A489B1 /* SocketNetworkView.m */; };
+		5A48E0C71CE99F1B00D5EBE2 /* SocketNetworkInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A48E0C61CE99F1B00D5EBE2 /* SocketNetworkInfo.m */; };
 		5A5784101CD2FE28002E120A /* CommentReplyViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */; };
 		5A6AE1301CD1DEE8002FBD02 /* start-mascot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */; };
 		5A7629381CE1B7C400C6A092 /* NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7629351CE1B7C400C6A092 /* NJKWebViewProgress.m */; };
@@ -184,6 +184,7 @@
 		B4EA09231CC8B9E000E8F933 /* StockRecordViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09221CC8B9E000E8F933 /* StockRecordViewController.mm */; };
 		B4EA09291CC8DF8400E8F933 /* StockRecordTabModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA09281CC8DF8400E8F933 /* StockRecordTabModel.mm */; };
 		B4EA092C1CC8E12600E8F933 /* StockRecordCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EA092B1CC8E12600E8F933 /* StockRecordCell.mm */; };
+		B4ED9B6F1CE9C6EA00F20138 /* SocketNetworkView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4ED9B6E1CE9C6EA00F20138 /* SocketNetworkView.m */; };
 		B4EE59141CDD77110063FDC3 /* AdLinkShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4EE59131CDD77110063FDC3 /* AdLinkShowViewController.m */; };
 		B4EE59191CE16C8C0063FDC3 /* set_about_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4EE59171CE16C8C0063FDC3 /* set_about_logo@2x.png */; };
 		B4EE591A1CE16C8C0063FDC3 /* set_about_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4EE59181CE16C8C0063FDC3 /* set_about_logo@3x.png */; };
@@ -1025,8 +1026,8 @@
 		18F971141C92971B001B2575 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		18F971161C92A40A001B2575 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		5A43875FF97FDC1CA789AE15 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		5A4EF3EA1CE6C0D900A489B1 /* SocketNetworkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketNetworkView.h; sourceTree = "<group>"; };
-		5A4EF3EB1CE6C0D900A489B1 /* SocketNetworkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketNetworkView.m; sourceTree = "<group>"; };
+		5A48E0C51CE99F1B00D5EBE2 /* SocketNetworkInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketNetworkInfo.h; sourceTree = "<group>"; };
+		5A48E0C61CE99F1B00D5EBE2 /* SocketNetworkInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketNetworkInfo.m; sourceTree = "<group>"; };
 		5A57840E1CD2FE28002E120A /* CommentReplyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentReplyViewController.h; sourceTree = "<group>"; };
 		5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CommentReplyViewController.mm; sourceTree = "<group>"; };
 		5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-mascot.png"; sourceTree = "<group>"; };
@@ -1148,6 +1149,8 @@
 		B4EA092A1CC8E12600E8F933 /* StockRecordCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockRecordCell.h; sourceTree = "<group>"; };
 		B4EA092B1CC8E12600E8F933 /* StockRecordCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockRecordCell.mm; sourceTree = "<group>"; };
 		B4EA092D1CC8E8B800E8F933 /* StockMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockMacro.h; sourceTree = "<group>"; };
+		B4ED9B6D1CE9C6EA00F20138 /* SocketNetworkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketNetworkView.h; sourceTree = "<group>"; };
+		B4ED9B6E1CE9C6EA00F20138 /* SocketNetworkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketNetworkView.m; sourceTree = "<group>"; };
 		B4EE59121CDD77110063FDC3 /* AdLinkShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdLinkShowViewController.h; sourceTree = "<group>"; };
 		B4EE59131CDD77110063FDC3 /* AdLinkShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdLinkShowViewController.m; sourceTree = "<group>"; };
 		B4EE59171CE16C8C0063FDC3 /* set_about_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "set_about_logo@2x.png"; sourceTree = "<group>"; };
@@ -1337,7 +1340,7 @@
 		BB2CA5F51CD338A200DFE56E /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
 		BB2CA5F61CD338A200DFE56E /* proto_err.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = proto_err.h; sourceTree = "<group>"; };
 		BB2CA5F71CD338A200DFE56E /* proto_message_comm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = proto_message_comm.h; sourceTree = "<group>"; };
-		BB2CA5F81CD338A200DFE56E /* proto_message_vchat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = proto_message_vchat.h; sourceTree = "<group>"; };
+		BB2CA5F81CD338A200DFE56E /* proto_message_vchat.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = proto_message_vchat.h; sourceTree = "<group>"; };
 		BB2CA5F91CD338A200DFE56E /* PushListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushListener.h; sourceTree = "<group>"; };
 		BB2CA5FA1CD338A200DFE56E /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = "<group>"; };
 		BB2CA5FB1CD338A200DFE56E /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
@@ -3365,6 +3368,8 @@
 				BB63F47A1C2B809800A042E8 /* UserInfo.m */,
 				BB17689D1C77052000CE947C /* GitInfo.h */,
 				BB17689E1C77052000CE947C /* GitInfo.m */,
+				5A48E0C51CE99F1B00D5EBE2 /* SocketNetworkInfo.h */,
+				5A48E0C61CE99F1B00D5EBE2 /* SocketNetworkInfo.m */,
 				BB9765F11C85B55F00FAA5B7 /* DeviceUID.h */,
 				BB9765F21C85B55F00FAA5B7 /* DeviceUID.m */,
 				BB5E4E871CB8E74500F8C1D4 /* AlertFactory.h */,
@@ -3851,8 +3856,8 @@
 		BB63F5941C2CC7A300A042E8 /* view */ = {
 			isa = PBXGroup;
 			children = (
-				5A4EF3EA1CE6C0D900A489B1 /* SocketNetworkView.h */,
-				5A4EF3EB1CE6C0D900A489B1 /* SocketNetworkView.m */,
+				B4ED9B6D1CE9C6EA00F20138 /* SocketNetworkView.h */,
+				B4ED9B6E1CE9C6EA00F20138 /* SocketNetworkView.m */,
 				BB1661991C3E2DC700D318BE /* ZLButton.h */,
 				BB16619A1C3E2DC700D318BE /* ZLButton.m */,
 				BB16619B1C3E2DC700D318BE /* ZLTabBar.h */,
@@ -4743,6 +4748,7 @@
 				BB2CA6B61CD4903A00DFE56E /* ZLPrivateDataSource.m in Sources */,
 				BB6F11801CC67E9700F02064 /* RoomInfo.mm in Sources */,
 				BBD58ED41CCB4B5B009250DB /* ConsumeRankCell.m in Sources */,
+				B4ED9B6F1CE9C6EA00F20138 /* SocketNetworkView.m in Sources */,
 				18AC14161C8FB8E100FDFF40 /* JPEngine.m in Sources */,
 				BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */,
 				18B0CECB1CC07CC700BA82DF /* GlobeConst.m in Sources */,
@@ -4800,6 +4806,7 @@
 				BB98EE621CB588C70028AAEF /* SBJsonWriter.m in Sources */,
 				BB63F5D61C2CC7A300A042E8 /* UIView+MJExtension.m in Sources */,
 				B404A0821CDB222700E814CC /* HDWhatIsPrivateViewViewController.m in Sources */,
+				5A48E0C71CE99F1B00D5EBE2 /* SocketNetworkInfo.m in Sources */,
 				BB14B9D01CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m in Sources */,
 				BBD46D2B1CB01B4B00E2B767 /* TextCoreViewController.m in Sources */,
 				BB63F6011C2CC7A300A042E8 /* GroupHeaderView.m in Sources */,
@@ -5000,7 +5007,6 @@
 				185F59731CC4CCA700F605F5 /* TQIdeaDetailModel.mm in Sources */,
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
 				BB2CA6141CD338A300DFE56E /* json_reader.cpp in Sources */,
-				5A4EF3EC1CE6C0D900A489B1 /* SocketNetworkView.m in Sources */,
 				BB63F5CF1C2CC7A300A042E8 /* MJRefreshGifFooter.m in Sources */,
 				BB14B9CF1CD918360027E7E6 /* GFNavigationController.m in Sources */,
 				1895B78A1CCB756900B86B0D /* TQMeCustomizedModel.m in Sources */,
@@ -5279,7 +5285,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ef8c443d-d6bc-4943-ba13-e7a4b47211db";
+				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5334,7 +5340,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ef8c443d-d6bc-4943-ba13-e7a4b47211db";
+				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";

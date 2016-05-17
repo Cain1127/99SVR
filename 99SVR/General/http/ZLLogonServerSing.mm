@@ -190,6 +190,7 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
     return @"";
 }
 
+
 - (void)onNetWorkChange
 {
     if (protocol) {
@@ -202,5 +203,6 @@ DEFINE_SINGLETON_FOR_CLASS(ZLLogonServerSing)
         protocol->reConnect();
     }
 }
+
 
 @end

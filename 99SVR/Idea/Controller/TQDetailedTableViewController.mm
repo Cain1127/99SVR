@@ -34,6 +34,7 @@
 #import "ViewNullFactory.h"
 #import "GiftView.h"
 #import "WXApi.h"
+#import "UIAlertView+Block.h"
 
 @interface TQDetailedTableViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,UIWebViewDelegate,CommentDelegate,GiftDelegate>
 {
@@ -124,19 +125,34 @@
 
 - (void)sendGiftFail:(NSNotification *)notify
 {
-    NSString *strErr = notify.object;
-    @WeakObj(strErr)
+    
+    int errorStr = [[NSString stringWithFormat:@"%@",notify.object] intValue];
+    WeakSelf(self);
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *str = [NSString stringWithFormat:@"送礼失败:%@",strErrWeak];
-        [ProgressHUD showError:str];
+       
+        if (errorStr==1014) {
+            [UIAlertView createAlertViewWithTitle:@"提示" withViewController:self withCancleBtnStr:@"取消" withOtherBtnStr:@"充值" withMessage:@"余额不足请充值" completionCallback:^(NSInteger index) {
+                if (index==1) {
+                    PaySelectViewController *paySelectVC = [[PaySelectViewController alloc] init];
+                    [weakSelf.navigationController pushViewController:paySelectVC animated:YES];
+                }
+                
+            }];
+        }else {
+            [MBProgressHUD showError:[NSString stringWithFormat:@"错误代码%d",errorStr]];
+        }
+        
+        
     });
+    
 }
 
 - (void)sendGiftResp:(NSNotification *)notify
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [ProgressHUD showSuccess:@"送礼成功"];
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [ProgressHUD showSuccess:@"送礼成功"];
+//    });
+    DLog(@"送礼成功");
 }
 
 - (void)loadGiftNotify:(NSNotification *)notify
@@ -149,7 +165,7 @@
     @WeakObj(parameter)
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
-    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,kScreenHeight-200,kScreenWidth-60,46) dict:parameterWeak];
+    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,64,kScreenWidth-60,46) dict:parameterWeak];
     [UIView animateWithDuration:2.0
           delay:1.0
           options:UIViewAnimationOptionCurveEaseOut
@@ -790,6 +806,20 @@
  */
 - (void)sendMessage:(UITextView *)textView userid:(int)nUser reply:(int32_t)nDetails
 {
+    
+    // 不能发送空字符和全部换行符号
+    NSString *str = textView.text;
+    NSString *textStr =[str stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+    NSString *textNewStr = [textStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (textNewStr.length==0) {
+        [ProgressHUD showError:@"不能发送空信息"];
+        textView.text = @"";
+
+        return ;
+    }
+    
+    
     UserInfo *info = KUserSingleton;
     if (info.nType != 1 && info.bIsLogin) {
         

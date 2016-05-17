@@ -156,6 +156,7 @@ static NSUInteger const AboutFooterViewHeight = 60; // 底部高度
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSInteger row=indexPath.row;
     if (row == 0) {
         [self openHttp];
@@ -169,7 +170,7 @@ static NSUInteger const AboutFooterViewHeight = 60; // 底部高度
 
 - (void)openHttp
 {
-    NNSVRViewController *nnView = [[NNSVRViewController alloc] initWithPath:@"http://www.99ducaijing.com/phone/appyhxy.aspx" title:@"使用条款及隐私政策"];
+    NNSVRViewController *nnView = [[NNSVRViewController alloc] initWithPath:@"http://www.99ducaijing.com/phone/appysxy.aspx" title:@"使用条款及隐私政策"];
     [self.navigationController pushViewController:nnView animated:YES];
 }
 

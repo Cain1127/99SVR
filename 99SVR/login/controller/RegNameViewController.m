@@ -86,7 +86,7 @@
         return;
     }
     if ([DecodeJson MatchLetter:_password]==-1) {
-        [ProgressHUD showError:@"密码不能为空格"];
+        [ProgressHUD showError:@"密码不能包含空格"];
         return ;
     }
     if ([DecodeJson MatchLetterNumber:_password]==-1)
@@ -400,7 +400,7 @@
             return NO;
         }
     }
-    else if(_txtPwd == textField)
+    else if((_txtPwd == textField) || (_txtCmd == textField) )
     {
         NSString *strCode = @"[^ ]+$";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", strCode];;
