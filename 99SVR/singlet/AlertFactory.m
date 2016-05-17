@@ -89,6 +89,8 @@
     UIAlertAction *requestAction = [UIAlertAction actionWithTitle:@"我要密码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
     {
         [senderWeak.view hideToastActivity];
+        [[PlayIconView sharedPlayIconView] exitPlay];
+        [senderWeak.navigationController popViewControllerAnimated:YES];
         KefuCenterController *control = [[KefuCenterController alloc] init];
         [senderWeak.navigationController pushViewController:control animated:YES];
     }];

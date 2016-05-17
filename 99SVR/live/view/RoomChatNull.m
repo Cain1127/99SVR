@@ -24,7 +24,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     [self.contentView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
-    _imgView = [[UIImageView alloc] initWithFrame:Rect(0, 8, kScreenWidth, 130)];
+    _imgView = [[UIImageView alloc] initWithFrame:Rect(0, 8, kScreenWidth, 177)];
     char cString[255];
     const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
     sprintf(cString, "%s/text_blank_page.png",path);
@@ -45,7 +45,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    _imgView.frame = Rect(0, 0, kScreenWidth, self.contentView.height*0.8);
+    _imgView.frame = Rect(0, self.contentView.height/2-100, kScreenWidth, 177);
     _lblInfo.frame = Rect(0, _imgView.y+_imgView.height+8, kScreenWidth, 20);
 }
 

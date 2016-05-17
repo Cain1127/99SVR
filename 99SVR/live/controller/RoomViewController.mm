@@ -64,6 +64,7 @@
     RoomHeaderView *headView;
     int updateCount;
     int _currentPage;
+    
 }
 
 @property (nonatomic,strong) UIButton *btnRight;
@@ -273,7 +274,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 {
     [super viewDidLoad];
     [self initUIHead];
-    
     [self addNotify];
     [self loadHeadModel];
     [headView.segmented setSelectedSegmentIndex:0];
