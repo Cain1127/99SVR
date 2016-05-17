@@ -60,8 +60,8 @@ static const char *UIControl_acceptEventTime = "UIControl_acceptEventTime";
 {
     if (NSDate.date.timeIntervalSince1970 - self.cjr_acceptEventTime < self.cjr_acceptEventInterval)
     {
-        if (self.tag==2) {//点击喝彩多次
-            
+        if (self.tag==2)
+        {
             [MBProgressHUD showText:@"喝彩太快了,请稍后再试"];
         }
         
