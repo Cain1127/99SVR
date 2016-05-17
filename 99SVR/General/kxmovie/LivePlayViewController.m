@@ -74,6 +74,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectMedia:) name:MESSAGE_MEDIA_DISCONNECT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollet:) name:MESSAGE_COLLET_RESP_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoList:) name:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc:) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
+
 }
 
 - (void)setRoomId:(int)roomId
@@ -81,14 +83,30 @@
     _roomid = roomId;
     [kHTTPSingle RequestCollection];
     [self addNotify];
-    if (_roomIsCollet)
-    {
-        _btnCollet.selected = YES;
-    }
-    else
-    {
-        _btnCollet.selected = NO;
-    }
+    
+}
+
+#pragma mark 加入房间成功
+- (void)joinSuc:(NSNotification *)notify{
+    
+    int  collect = [(NSString *)[notify.object valueForKey:@"collet"] intValue];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        _roomIsCollet = collect;
+        _btnCollet.selected = _roomIsCollet==1? YES:NO;
+//        if (_roomIsCollet)
+//        {
+//            _btnCollet.selected = YES;
+//        }
+//        else
+//        {
+//            _btnCollet.selected = NO;
+//        }
+        
+    });
+    
+    
 }
 
 - (void)loadVideoList:(NSNotification *)notify
@@ -379,14 +397,14 @@
     [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
     
     _downHUD.alpha = 0;
-    if (_roomIsCollet)
-    {
-        _btnCollet.selected = YES;
-    }
-    else
-    {
-        _btnCollet.selected = NO;
-    }
+//    if (_roomIsCollet)
+//    {
+//        _btnCollet.selected = YES;
+//    }
+//    else
+//    {
+//        _btnCollet.selected = NO;
+//    }
 }
 
 
