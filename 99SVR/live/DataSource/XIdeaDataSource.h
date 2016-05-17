@@ -12,8 +12,7 @@
 
 - (void)selectIdea:(TQIdeaModel *)model;
 
-/**滑到顶部了*/
--(void)scroViewInTop;
+-(void)ideaPromptViewIsShowBool:(BOOL )value tabToTopValue:(BOOL)topValue;
 
 @end
 

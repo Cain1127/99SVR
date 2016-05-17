@@ -38,7 +38,7 @@
 /**下拉刷新需要清空数据！上啦不需要*/
 @property (nonatomic , assign) __block MJRefreshState refreshState;
 @property (nonatomic , strong) LHDNewIdeaPromptView *ideaPromptView;
-
+@property (nonatomic , assign) BOOL tableTopBool;
 
 @end
 
@@ -101,12 +101,18 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         TQIdeaModel *ideaModel = [notify.object valueForKey:@"data"];
         NSMutableArray *array = [NSMutableArray arrayWithArray:self.dataSource.aryModel];
         [array insertObject:ideaModel atIndex:0];
-        self.ideaPromptView.isShow = YES;
         self.dataSource.aryModel = array;
-        [self.tableView reloadData];
-
+        
+        if (self.tableTopBool) {
+            self.ideaPromptView.isShow = YES;
+        }else{
+            self.ideaPromptView.isShow = NO;
+            [self.tableView reloadData];
+        }
+        
     });
 }
+
 
 - (void)loadViewPoint:(NSNotification *)notify{
     NSDictionary *dict = notify.object;
@@ -223,12 +229,15 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [[self viewController].navigationController pushViewController:detaileVc animated:YES];
 }
 
--(void)scroViewInTop{
+-(void)ideaPromptViewIsShowBool:(BOOL)value tabToTopValue:(BOOL)topValue{
     
-    DLog(@"顶部");
-    self.ideaPromptView.isShow = NO;
-}
+    self.tableTopBool = value;
 
+    if (topValue) {
+        self.ideaPromptView.isShow = NO;
+    }
+    
+}
 
 #pragma mark LHDNewIdeaPromptViewDelegate
 -(void)clickInViewHanle{
