@@ -103,7 +103,7 @@
              DLog(@"dict:%@",dict);
              [__self startTimer];
              __self.btnCode.enabled = NO;
-             [ProgressHUD showError:@"已发送验证码到目标手机"];
+             [ProgressHUD showSuccess:@"已发送验证码到目标手机"];
              [__self.txtCode becomeFirstResponder];
          }
          else

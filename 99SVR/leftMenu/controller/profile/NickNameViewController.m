@@ -117,7 +117,7 @@
 {
     NSString *strMsg = _nickNameTextField.text;
     if ([strMsg length]==0) {
-        [MBProgressHUD showError:@"昵称不能为空"];
+        [ProgressHUD showError:@"昵称不能为空"];
         return ;
     }
     ZLLogonServerSing *sing = [ZLLogonServerSing sharedZLLogonServerSing];
@@ -136,7 +136,7 @@
     if ([number intValue]==0) {
         @WeakObj(self)
         gcd_main_safe(^{
-            [MBProgressHUD showSuccess:@"修改昵称成功"];
+            [ProgressHUD showSuccess:@"修改昵称成功"];
             [selfWeak.navigationController popViewControllerAnimated:YES];
             selfWeak.nickNameBlock(__strMsg);
         });
@@ -144,7 +144,7 @@
     else
     {
         gcd_main_safe(^{
-            [MBProgressHUD showError:@"修改昵称出错"];
+            [ProgressHUD showError:@"修改昵称出错"];
         });
     }
 }

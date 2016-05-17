@@ -74,14 +74,14 @@
     }
     
     //判断密码是否为空 并且是在6到16位
-    if (!([strPassword isPassword] && [strCode isPassword])) {
-        [ProgressHUD showError:@"密码包含空格或密码长度不为6到16个字符"];
-        _txtName.text = @"";
-        _txtCode.text = @"";
-        [_txtName becomeFirstResponder];
-        [self checkLogBtnIsEnableWithPwd:_txtName.text withAgainPwd:_txtCode.text];
-        return ;
-    }
+//    if (!([strPassword isPassword] && [strCode isPassword])) {
+//        [ProgressHUD showError:@"密码包含空格或密码长度不为6到16个字符"];
+//        _txtName.text = @"";
+//        _txtCode.text = @"";
+//        [_txtName becomeFirstResponder];
+//        [self checkLogBtnIsEnableWithPwd:_txtName.text withAgainPwd:_txtCode.text];
+//        return ;
+//    }
     
     
     [self.view makeToastActivity_bird];

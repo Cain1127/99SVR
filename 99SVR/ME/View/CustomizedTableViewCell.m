@@ -69,11 +69,17 @@
     _contentLable.text = customizedModel.summary;
     _contentLable.frame = CGRectMake(padding, CGRectGetMaxY(_timeLable.frame), kScreenWidth - 2*padding,20);
     
-    if(!customizedModel.isOpen) // 设置不可点
+    if(customizedModel.isOpen)
     {
-        self.userInteractionEnabled = NO;
-    } else {
         self.userInteractionEnabled = YES;
+        _titleLable.textColor = COLOR_Text_Black;
+        _timeLable.textColor = COLOR_Text_Black;
+        _contentLable.textColor = COLOR_Text_Black;
+    } else {
+        self.userInteractionEnabled = NO;
+        _titleLable.textColor = COLOR_Text_Gay;
+        _timeLable.textColor = COLOR_Text_Gay;
+        _contentLable.textColor = COLOR_Text_Gay;
     }
 }
 
