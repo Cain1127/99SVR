@@ -121,6 +121,7 @@
 		5A6AE1301CD1DEE8002FBD02 /* start-mascot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */; };
 		5A7629381CE1B7C400C6A092 /* NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7629351CE1B7C400C6A092 /* NJKWebViewProgress.m */; };
 		5A7629391CE1B7C400C6A092 /* NJKWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7629371CE1B7C400C6A092 /* NJKWebViewProgressView.m */; };
+		5A7B694B1CEB085300E77DB1 /* UIView+EmptyViewTips.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7B694A1CEB085300E77DB1 /* UIView+EmptyViewTips.m */; };
 		5AA640321CD87F1300CDAE48 /* MailboxTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.mm */; };
 		5AA6D8191CCBC01300841960 /* AdViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D8181CCBC01300841960 /* AdViewController.mm */; };
 		5AA6D81C1CCBD00A00841960 /* NewfeatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA6D81B1CCBD00A00841960 /* NewfeatureViewController.m */; };
@@ -1035,6 +1036,8 @@
 		5A7629351CE1B7C400C6A092 /* NJKWebViewProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NJKWebViewProgress.m; sourceTree = "<group>"; };
 		5A7629361CE1B7C400C6A092 /* NJKWebViewProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJKWebViewProgressView.h; sourceTree = "<group>"; };
 		5A7629371CE1B7C400C6A092 /* NJKWebViewProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NJKWebViewProgressView.m; sourceTree = "<group>"; };
+		5A7B69491CEB085300E77DB1 /* UIView+EmptyViewTips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+EmptyViewTips.h"; sourceTree = "<group>"; };
+		5A7B694A1CEB085300E77DB1 /* UIView+EmptyViewTips.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+EmptyViewTips.m"; sourceTree = "<group>"; };
 		5AA640301CD87F1300CDAE48 /* MailboxTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MailboxTableViewCell.h; sourceTree = "<group>"; };
 		5AA640311CD87F1300CDAE48 /* MailboxTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MailboxTableViewCell.mm; sourceTree = "<group>"; };
 		5AA6D8171CCBC01300841960 /* AdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdViewController.h; sourceTree = "<group>"; };
@@ -3448,6 +3451,8 @@
 				BB63F48E1C2CC7A200A042E8 /* UIView+Frame.m */,
 				BB63F48F1C2CC7A200A042E8 /* UIView+Touch.h */,
 				BB63F4901C2CC7A200A042E8 /* UIView+Touch.m */,
+				5A7B69491CEB085300E77DB1 /* UIView+EmptyViewTips.h */,
+				5A7B694A1CEB085300E77DB1 /* UIView+EmptyViewTips.m */,
 				1887417A1C9702DA002EF25A /* Foundation+Log.m */,
 				1887417B1C9702DA002EF25A /* NSString+Regex.h */,
 				1887417C1C9702DA002EF25A /* NSString+Regex.m */,
@@ -4995,6 +5000,7 @@
 				5AE9A3C91CCE5A1700831606 /* SwitchRootTool.mm in Sources */,
 				BBD58EF71CCC152A009250DB /* XTeamPrivateController.m in Sources */,
 				BB1769291C7B006F00CE947C /* SDWebImagePrefetcher.m in Sources */,
+				5A7B694B1CEB085300E77DB1 /* UIView+EmptyViewTips.m in Sources */,
 				BB2CA61E1CD338A300DFE56E /* VideoRoomConnection.cpp in Sources */,
 				189880041CAA52F8000E9F1C /* RightImageButton.m in Sources */,
 				BBD58F221CCF52F6009250DB /* ZLOperateStock.m in Sources */,
@@ -5285,7 +5291,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "999d6315-7d91-405d-928a-e3375cfe6382";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5340,7 +5346,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "999d6315-7d91-405d-928a-e3375cfe6382";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";

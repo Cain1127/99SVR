@@ -47,17 +47,20 @@
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 185)];
     [headView insertSubview:imgView atIndex:0];
 
-    char cBuffer[100]={0};
-    sprintf(cBuffer,"video_profiles_bg@2x");
-    NSString *strName = [NSString stringWithUTF8String:cBuffer];
-    NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
-    [imgView sd_setImageWithURL:url1];
+    //char cBuffer[100]={0};
+    //sprintf(cBuffer,"video_profiles_bg@2x");
+    //NSString *strName = [NSString stringWithUTF8String:cBuffer];
+    //NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
+    //[imgView sd_setImageWithURL:url1];
+    imgView.image = kPNG_IMAGE_FILE(@"video_profiles_bg@2x");
     
     UIImageView *imgHead = [[UIImageView alloc] initWithFrame:Rect(kScreenWidth/2-50,30,100,100)];
     [headView addSubview:imgHead];
     imgHead.layer.masksToBounds = YES;
     imgHead.layer.cornerRadius = 50;
-    NSString *strUrl = [NSString stringWithFormat:@"%@",_room.croompic];
+    imgHead.contentMode = UIViewContentModeScaleAspectFill;
+    imgHead.clipsToBounds = YES;
+    NSString *strUrl = [NSString stringWithFormat:@"%@",_room.teamicon];
     [imgHead sd_setImageWithURL:[NSURL URLWithString:strUrl] placeholderImage:[UIImage imageNamed:@"default"]];
     
     UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 145, kScreenWidth, 20)];
