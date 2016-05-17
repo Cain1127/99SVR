@@ -69,6 +69,7 @@
 
 - (void)addNotify
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setBackGroudMode:) name:MESSAGE_ENTER_BACK_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectMedia:) name:MESSAGE_MEDIA_DISCONNECT_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollet:) name:MESSAGE_COLLET_RESP_VC object:nil];
@@ -619,26 +620,16 @@
     if (!enable)
     {
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
+        _bVideo = NO;
         [self setDefaultImg];
     }
     else
     {
         [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        _bVideo=YES;
         [self setNoVideo];
     }
 }
-
-- (void)checkMedia
-{
-    while (_playing)
-    {
-
-//        Loading_Hide(self.glView);
-//        return;
-//        [NSThread sleepForTimeInterval:0.5f];
-    }
-}
-
 
 - (void)createImage:(NSData *)data
 {
@@ -655,7 +646,10 @@
     @WeakObj(self)
     dispatch_sync(dispatch_get_main_queue(),
     ^{
-        [selfWeak.glView setImage:selfWeak.currentImage];
+        if (!selfWeak.bVideo)
+        {
+            [selfWeak.glView setImage:selfWeak.currentImage];
+        }
    });
 }
 
@@ -689,6 +683,9 @@
         {
             selfWeak.btnCollet.selected = YES;
             [ProgressHUD showSuccess:@"关注成功"];
+            if (selfWeak.colletView) {
+                selfWeak.colletView(YES);
+            }
         });
     }else
     {
@@ -696,6 +693,10 @@
         {
             selfWeak.btnCollet.selected = NO;
             [ProgressHUD showSuccess:@"取消关注"];
+            if (selfWeak.colletView)
+            {
+                selfWeak.colletView(NO);
+            }
         });
     }
 }

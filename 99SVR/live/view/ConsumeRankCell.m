@@ -56,8 +56,8 @@
         [self.contentView addSubview:_imgRank];
         [_lblGoid setTextColor:UIColorFromRGB(0xf8b551)];
     }else{
-        [_lblGoid setTextColor:UIColorFromRGB(0x919191)];
         [self.contentView addSubview:_lblBad];
+        [_lblGoid setTextColor:UIColorFromRGB(0x919191)];
     }
 }
 

@@ -106,7 +106,10 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     @WeakObj(self)
     _roomModel.ConnectRoomResult = ^(int nStatus)
     {
-        [selfWeak loadHeadModel];
+        dispatch_main_async_safe(
+        ^{
+            [selfWeak loadHeadModel];
+        });
         [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
     };
 }
@@ -235,6 +238,21 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     _liveControl.ffPlay.statusBarHidden=^(BOOL bFull)
     {
          [selfWeak setNeedsStatusBarAppearanceUpdate];
+    };
+    
+    _liveControl.ffPlay.colletView = ^(BOOL bCollet)
+    {
+        if (bCollet) {
+            nRoom_fans_info++;
+        }
+        else
+        {
+            nRoom_fans_info--;
+        }
+        dispatch_main_async_safe(
+        ^{
+            [selfWeak loadHeadModel];
+        });
     };
     
     frame.origin.x += kScreenWidth;
