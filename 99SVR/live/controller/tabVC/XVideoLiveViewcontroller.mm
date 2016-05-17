@@ -550,7 +550,7 @@
     @WeakObj(self)
     [_prichatDataSource setModel:aryRoomPrichat];
     if (aryRoomPrichat.count>0) {
-        dispatch_async(dispatch_get_main_queue(),
+       dispatch_async(dispatch_get_main_queue(),
        ^{
            if (selfWeak.nSelectIndex != 2) {
                selfWeak.menuView.showBadgeIndex = 2;
@@ -577,7 +577,8 @@
 {
     [_chatDataSource setModel:aryRoomChat];
     @WeakObj(self)
-    if (aryRoomChat.count>0) {
+    if (aryRoomChat.count>0)
+    {
         dispatch_async(dispatch_get_main_queue(),
         ^{
             if (selfWeak.nSelectIndex != 1) {
@@ -673,10 +674,10 @@
  */
 - (void)sendLiwuRespInfo
 {
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [ProgressHUD showSuccess:@"赠送礼物成功"];
-    });
+//    dispatch_async(dispatch_get_main_queue(),
+//    ^{
+//        [ProgressHUD showSuccess:@"赠送礼物成功"];
+//    });
 }
 
 /**
@@ -705,23 +706,26 @@
 {
     GiftShowAnimate *showAnimate = [[GiftShowAnimate alloc] initWithFrame:frame dict:parameter];
     NSString *strTime = NSStringFromInteger([parameter[@"number"] integerValue]);
-    [UIView animateWithDuration:[strTime length]
-          delay:0.25
+    [UIView animateWithDuration:0.25
+          delay:0.01
         options:UIViewAnimationOptionCurveEaseOut
      animations:^{
          [[UIApplication sharedApplication].keyWindow addSubview:showAnimate];
          [showAnimate setX:0];
-         [showAnimate addrightViewAnimation];
      } completion:^(BOOL finished){
-         @WeakObj(showAnimate)
-         @WeakObj(sourceDict)
-         @WeakObj(self)
-         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(([strTime length]+1) * NSEC_PER_SEC)), dispatch_get_main_queue(),
-         ^{
-             [showAnimateWeak removeFromSuperview];
-             [sourceDictWeak setObject:@"0" forKey:@"status"];
-             [selfWeak showGiftInfo];
-         });
+         [UIView animateWithDuration:0.5 animations:^{
+             [showAnimate addrightViewAnimation];
+         } completion:^(BOOL finished) {
+             @WeakObj(showAnimate)
+             @WeakObj(sourceDict)
+             @WeakObj(self)
+             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(([strTime length]+0.5) * NSEC_PER_SEC)), dispatch_get_main_queue(),
+                            ^{
+                                [showAnimateWeak removeFromSuperview];
+                                [sourceDictWeak setObject:@"0" forKey:@"status"];
+                                [selfWeak showGiftInfo];
+                            });
+         }];
      }];
 }
 
@@ -941,10 +945,8 @@
         [AlertFactory createLoginAlert:self withMsg:@"给讲师喝彩" block:^{
             
         }];
-
         return ;
     }
-//    [RoomService sendLocalInfo:@"[$999$]" toid:0 roomInfo:currentRoom aryChat:aryRoomChat];
     [kProtocolSingle sendRose];
 }
 
@@ -962,33 +964,6 @@
     }
 }
 
-#pragma mark 横屏
-- (void)horizontalViewControl
-{
-
-}
-
-#pragma mark 竖屏
-- (void)verticalViewControl
-{
-//    _topHUD.frame = Rect(0, 0, kScreenWidth, 64);
-//    [_topHUD viewWithTag:1].frame = Rect(0, 0, kScreenWidth, 64);
-//    _lblName.frame = Rect(50, 35, kScreenWidth-100, 15);
-//    [_topHUD viewWithTag:2].frame = Rect(0, 20, 44, 44);
-//    _btnRight.frame = Rect(kScreenWidth-50, 20, 44, 44);
-//    _downHUD.frame = Rect(0, kVideoImageHeight-24, kScreenWidth, 44);
-//    _ffPlay.view.frame = Rect(0, 0, kScreenWidth, kScreenHeight);
-//    _ffPlay.glView.frame = Rect(0,0,kScreenWidth, kVideoImageHeight);
-//
-//    _btnFull.frame = Rect(kScreenWidth-54, 0, 44, 44);
-//    
-//    _group.hidden = NO;
-//    downView.hidden = NO;
-//    _lblBlue.hidden = NO;
-//    _scrollView.hidden = NO;
-//    [self setNeedsStatusBarAppearanceUpdate];
-}
-
 - (BOOL)prefersStatusBarHidden//for iOS7.0
 {
     if (!bFull)
@@ -998,30 +973,8 @@
     return YES;
 }
 
-#pragma mark ViewLayout
-- (void)viewDidLayoutSubviews
+- (void)dealloc
 {
-    [super viewDidLayoutSubviews];
-    if(!bFull)
-    {
-        [self verticalViewControl];
-    }
-    else
-    {
-        [self horizontalViewControl];
-    }
-}
-
-- (void)hiddenTopHud
-{
-    __weak UIView *__downHUD = _downHUD;
-    dispatch_main_async_safe(
-     ^{
-         __downHUD.alpha = 0;
-     });
-}
-
-- (void)dealloc{
     [_ffPlay stop];
 }
 

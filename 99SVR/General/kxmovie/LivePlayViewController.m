@@ -47,7 +47,7 @@
     int _videoHeight;
     BOOL bCoding;
 }
-
+@property (nonatomic,strong) NSMutableArray *aryVideo;
 @property (nonatomic) BOOL backGroud;
 @property (nonatomic) BOOL bVideo;
 @property (nonatomic,strong) AudioPlayer *playAudio;
@@ -309,6 +309,7 @@
     [super viewDidLoad];
     [self addNotify];
     [self frameView];
+    _aryVideo = [NSMutableArray array];
     lblText = [[UILabel alloc] initWithFrame:Rect(kScreenWidth/2-100,160,200,20)];
     [lblText setTextColor:[UIColor whiteColor]];
     [self.view addSubview:lblText];
@@ -576,7 +577,6 @@
     _playing = YES;
     [self initDecode];
     __weak LivePlayViewController *__self = self;
-    _bVideo = YES;
     _roomid = roomid;
     _nuserid = userid;
     __block int __roomId = _roomid;
@@ -586,8 +586,10 @@
         {
             DLog(@"开启接收码流失败");
         }
+        [__self playVideoThread];
     });
-    dispatch_main_async_safe(^{
+    dispatch_main_async_safe(
+    ^{
          [__self showAlertView];
          [__self startLoad];
          [__self setDefaultImg];
@@ -650,7 +652,11 @@
     CGImageRelease(frame);
     CGContextRelease(newContext);
     CGColorSpaceRelease(colorSpace);
-    [self performSelectorOnMainThread:@selector(updateGlView) withObject:nil waitUntilDone:YES];
+    @WeakObj(self)
+    dispatch_sync(dispatch_get_main_queue(),
+    ^{
+        [selfWeak.glView setImage:selfWeak.currentImage];
+   });
 }
 
 - (void)updateGlView
@@ -704,23 +710,49 @@
     @autoreleasepool
     {
         [_openAL openAudioFromQueue:(unsigned char*)data.bytes dataSize:len];
-//        [_playAudio putAudioData:(short *)data.bytes size:len];
     }
 }
 
 - (void)onVideoData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height
 {
-    if(!bCoding)
-    {
-        [_glView hideToastActivity];
-        bCoding = YES;
-    }
+
     _videoWidth = width;
     _videoHeight = height;
     @autoreleasepool
     {
-        [self createImage:data];
+        @synchronized(_aryVideo)
+        {
+            [_aryVideo addObject:data];
+        }
     }
 }
+
+- (void)playVideoThread
+{
+    if (_playing)
+    {
+        if(_aryVideo.count>0)
+        {
+            @autoreleasepool
+            {
+                NSData *data = _aryVideo[0];
+                @synchronized(_aryVideo)
+                {
+                    [_aryVideo removeObjectAtIndex:0];
+                }
+                [self createImage:data];
+                data = nil;
+            }
+        }
+        [NSThread sleepForTimeInterval:0.01f];
+        @WeakObj(self)
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1/20 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0),
+        ^{
+            [selfWeak playVideoThread];
+        });
+    }
+}
+
+
 
 @end

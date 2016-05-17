@@ -854,14 +854,14 @@ void VideoRoomConnection::dispatch_push_message(void* body)
 
 string VideoRoomConnection::GetVideoRoomShareUrl()
 {
-	if ( main_room_id != 0 )
-	{
-		return string("http://pull.99ducaijing.cn/live/") + int2string(main_room_id) + "/playlist.m3u8";
-	}
-	else
-	{
-		return "";
-	}
+    if ( main_room_id != 0 )
+    {
+        return string("http://phpapi.99ducaijing.cn/Public/video/HLS.html?roomid=") + int2string(main_room_id);
+    }
+    else
+    {
+        return "";
+    }
 }
 
 VideoRoomConnection::~VideoRoomConnection(void)
