@@ -16,6 +16,9 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
     _imgView = [[UIImageView alloc] initWithFrame:Rect(8, 17,40, 40)];
+    _imgView.layer.cornerRadius = 20;
+    _imgView.layer.masksToBounds = YES;
+    _imgView.contentMode = UIViewContentModeScaleAspectFit;
     [self.contentView addSubview:_imgView];
     
     self.attributedTextContextView.edgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -49,7 +52,7 @@
     [_lblTitle setText:_reply.authorname];
 //    [_lblTime setText:_reply.publishtime];
     [self setHTMLString:reply.strContent];
-    [_imgView setImage:[UIImage imageNamed:@"personal_user_head"]];
+    [_imgView setImage:[UIImage imageNamed:@"100_1"]];
 }
 
 - (void)layoutSubviews
