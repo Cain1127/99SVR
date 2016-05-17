@@ -31,7 +31,6 @@ private:
 	HttpListener* http_listener;
 	ParseJson parser;
 
-
 	void build_request(string& req, const char* host, const char* url_tail, map<string, string>* param);
 	void build_param(string& out, map<string, string>* param);
 	
@@ -39,6 +38,8 @@ private:
 	//void build_param(string& out, RequestParamter* param);
 
 public:
+
+	string StateCode;
 
 	void SetRecvBufSize(int sz) { size = sz; }
 	char* request(const char* host, short port, const char* url_tail, RequestParamter* param = NULL);
