@@ -297,7 +297,6 @@
 	_defaultTag.paragraphStyle = _defaultParagraphStyle;
 	_defaultTag.textScale = _textScale;
 	_defaultTag.currentTextSize = _defaultFontDescriptor.pointSize;
-    _defaultTag.textColor = DTColorCreateWithHexString(@"#4c4c4c");
 #if DTCORETEXT_FIX_14684188
 	// workaround, only necessary while rdar://14684188 is not fixed
 	_defaultTag.textColor = [UIColor blackColor];

@@ -53,6 +53,23 @@
             }
         }
     }];
+    
+    [_bridge registerHandler:@"RequestVideo" handler:^(id data, WVJBResponseCallback responseCallback)
+     {
+         NSLog(@"RequestVideo: %@", data);
+         if([data isKindOfClass:[NSDictionary class]])
+         {
+             NSDictionary *dict = data;
+             if ([dict objectForKey:@"path"])
+             {
+                 NSString *strPath = [dict objectForKey:@"path"];
+                 if (selfWeak.delegate && [selfWeak.delegate respondsToSelector:@selector(playUrlVideo:)])
+                 {
+                     [selfWeak.delegate playUrlVideo:strPath];
+                 }
+             }
+         }
+     }];
 }
 
 -(UIWebView *)webView{

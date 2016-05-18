@@ -91,7 +91,7 @@
 - (void)configureCell:(DTAttributedTextCell *)cell forIndexPath:(NSIndexPath *)indexPath array:(NSArray *)aryInfo
 {
     NSString *html = [aryInfo objectAtIndex:indexPath.row];
-    [cell setHTMLString:html];
+    [cell setHTMLString:html options:@{DTDefaultTextColor:@"#4c4c4c"}];
     cell.attributedTextContextView.shouldDrawImages = YES;
 }
 
@@ -152,11 +152,6 @@
         if (_delegate && [_delegate respondsToSelector:@selector(showKeyboard:)]) {
             [_delegate showKeyboard:toUser];
         }
-//        if (_tcpSocket.getRoomInfo != nil)
-//        {
-//            RoomUser *rUser = [_tcpSocket.getRoomInfo findUser:toUser];
-//            [_inputView setChatInfo:rUser];
-//        }
     }
 }
 
