@@ -751,19 +751,22 @@ void ZLRoomListener::OnRoomNoticeNotify(RoomNotice& info){
  */
 void ZLRoomListener::OnRobotTeacherIdNoty(std::vector<RobotTeacherIdNoty>& infos)
 {
-    for (int i=0; i<infos.size(); i++) {
+    for (int i=0; i<infos.size(); i++)
+    {
         RobotTeacherIdNoty info = infos[i];
         RoomUser *_roomUser = [currentRoom.dictUser objectForKey:NSStringFromInt(info.vcbid())];
         _roomUser.m_strUserAlias = [NSString stringWithUTF8String:info.teacheralias().c_str()];
         
-        DLog(@"iOS:%d",info.teacherid());
-        
+        if(info.teacherid())
+        {
+            [kHTTPSingle RequestConsumeRank:info.teacherid()];
+        }
         for (int nTimes=0; nTimes<currentRoom.aryUser.count;nTimes++)
         {
             RoomUser *rUser = [currentRoom.aryUser objectAtIndex:nTimes];
-            if (rUser.m_nUserId == info.vcbid())
+            if (rUser.m_nUserId == info.roborid())
             {
-                rUser.m_strUserAlias = [NSString stringWithUTF8String:info.teacheralias().c_str()];
+                rUser.m_strUserAlias = [NSString stringWithCString:info.teacheralias().c_str() encoding:GBK_ENCODING ];
                 [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
                 break;
             }
@@ -834,18 +837,6 @@ void ZLRoomListener::OnTradeGiftNotify(TradeGiftRecord& info){
 void ZLRoomListener::OnViewpointTradeGiftNoty(ViewpointTradeGiftNoty& info)
 {
     DLog(@"收到观点详情礼物通知!");
-    /**
-     *
-     uint32	_userid;
-     string	_useralias;
-     uint32	_roomid;
-     uint32	_teamid;
-     string	_teamalias;
-     uint32	_viewid;
-     uint32	_giftid;
-     uint32	_giftnum;
-     uint64	_nk;
-     */
     NSString *strName = [NSString stringWithCString:info.useralias().c_str() encoding:GBK_ENCODING];
     int gitId = info.giftid();
     int number = info.giftnum();
@@ -883,7 +874,6 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
     nRoom_is_collet = info.biscollectroom();
     [aryRoomNotice removeAllObjects];
     roomTeachInfo=@"";
-
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:@{@"collet":[NSString stringWithFormat:@"%d",nRoom_is_collet]}];
 }

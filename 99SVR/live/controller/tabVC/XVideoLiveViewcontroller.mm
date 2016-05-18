@@ -129,6 +129,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
     [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
+    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
 }
 
 - (id)initWithModel:(RoomHttp *)room
@@ -610,7 +611,10 @@
         {
             _ffPlay.nuserid = user.m_nUserId;
             [_ffPlay startPlayRoomId:[_room.roomid intValue] user:1801124 name:_room.teamname];
-            [kHTTPSingle RequestConsumeRank:user.m_nUserId];
+            if(user.m_nUserId>100000)
+            {
+                [kHTTPSingle RequestConsumeRank:user.m_nUserId];
+            }
             return ;
         }
     }
@@ -633,7 +637,8 @@
     if (aryRoomPrichat.count>0) {
        dispatch_async(dispatch_get_main_queue(),
        ^{
-           if (selfWeak.nSelectIndex != 2) {
+           if (selfWeak.nSelectIndex != 2)
+           {
                selfWeak.menuView.showBadgeIndex = 2;
            }
            else
