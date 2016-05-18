@@ -91,4 +91,17 @@
         self.adaptiveWebView.url = _strPath;
     }];
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    DLog(@"12345678");
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    DLog(@"87654321");
+}
+
 @end

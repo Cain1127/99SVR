@@ -72,24 +72,29 @@ static NSString *UIAlertViewKey = @"UIAlertViewKey";
     if ([[[UIDevice currentDevice] systemVersion] floatValue]>=8.0) {//8系统以上的
         UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         //取消按钮
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelStr style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            completionCallback(0);
-        }];
-        [cancelAction setValue:COLOR_Text_Gay forKey:@"_titleTextColor"];
+        if (cancelStr)
+        {
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelStr style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                completionCallback(0);
+            }];
+            [cancelAction setValue:COLOR_Text_Gay forKey:@"_titleTextColor"];
+            [alertVC addAction:cancelAction];
+        }
         //其它按钮
-        UIAlertAction *otherAction = [UIAlertAction actionWithTitle:otherBthStr style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            completionCallback(1);
-        }];
-//        [otherAction setValue:[UIColor grayColor] forKey:@"_titleTextColor"];
-        [alertVC addAction:cancelAction];
-        [alertVC addAction:otherAction];
-        
+        if (otherBthStr)
+        {
+            UIAlertAction *otherAction = [UIAlertAction actionWithTitle:otherBthStr style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                completionCallback(1);
+            }];
+            [alertVC addAction:otherAction];
+        }
         [viewController presentViewController:alertVC animated:YES completion:nil];
     }else{//8系统以下
         
-        [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex) {
+        [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex)
+        {
             completionCallback(buttonIndex);
-        } title:title message:message cancelButtonName:cancelStr otherButtonTitles:otherBthStr, nil];
+        }title:title message:message cancelButtonName:cancelStr otherButtonTitles:otherBthStr, nil];
     }
 }
 

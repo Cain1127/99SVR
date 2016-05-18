@@ -91,8 +91,8 @@
         [senderWeak.view hideToastActivity];
         [[PlayIconView sharedPlayIconView] exitPlay];
         [senderWeak.navigationController popViewControllerAnimated:YES];
-        KefuCenterController *control = [[KefuCenterController alloc] init];
-        [senderWeak.navigationController pushViewController:control animated:YES];
+//        KefuCenterController *control = [[KefuCenterController alloc] init];
+//        [senderWeak.navigationController pushViewController:control animated:YES];
     }];
     [alert addAction:requestAction];
     dispatch_async(dispatch_get_main_queue(), ^{

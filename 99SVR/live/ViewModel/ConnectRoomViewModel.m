@@ -77,15 +77,15 @@
             }
             else if (errid == 502)
             {
+                dispatch_main_async_safe(^{
                 [UIAlertView createAlertViewWithTitle:@"提示" withViewController:_controlWeak withCancleBtnStr:nil withOtherBtnStr:@"知道了" withMessage:@"房间人数已满" completionCallback:^(NSInteger index) {
                     if (index==1)
                     {
-                        dispatch_main_async_safe(^{
                             [[PlayIconView sharedPlayIconView] exitPlay];
                             [_controlWeak.navigationController popViewControllerAnimated:YES];
-                        });
                     }
-                }];
+                    }];
+                });
             }
             else
             {

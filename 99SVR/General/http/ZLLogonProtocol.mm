@@ -878,8 +878,7 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
     nRoom_is_collet = info.biscollectroom();
     [aryRoomNotice removeAllObjects];
     roomTeachInfo=@"";
-    NSString *collet = @"";
-    
+
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:@{@"collet":[NSString stringWithFormat:@"%d",nRoom_is_collet]}];
 }

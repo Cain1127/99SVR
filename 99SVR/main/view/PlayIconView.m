@@ -74,7 +74,7 @@ DEFINE_SINGLETON_FOR_CLASS(PlayIconView)
     }
     
     [self startBtnPlayAnimating];
-    NSString *strTeamInfo = [NSString stringWithFormat:@"%@  %@",room.teamname,room.teamid];
+    NSString *strTeamInfo = [NSString stringWithFormat:@"%@  %@",room.teamname,room.roomid];
     [_playView.lblName setText:strTeamInfo];
 //    [_playView.lblNumber setText:room.teamid];
     
