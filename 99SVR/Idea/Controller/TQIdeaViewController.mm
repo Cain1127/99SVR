@@ -78,6 +78,12 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 {
     [super viewWillAppear:animated];
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        [self.tabBarController.tabBar setHidden:NO];
+    });
+    
+    
     RoomViewController *roomView = [RoomViewController sharedRoomViewController];
     if (roomView.room)
     {

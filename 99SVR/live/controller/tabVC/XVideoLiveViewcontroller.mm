@@ -36,6 +36,7 @@
 #import "HttpManagerSing.h"
 #import "UIAlertView+Block.h"
 #import "GiftShowAnimate.h"
+#import "UIView+EmptyViewTips.h"
 @interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
                                 ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
 {
@@ -79,6 +80,7 @@
 @property (nonatomic,strong) UIButton *btnFull;
 @property (nonatomic,strong) SliderMenuView *menuView;
 @property (nonatomic,assign) NSInteger nSelectIndex;
+@property (nonatomic , strong) UIView *teacherEmptyView;
 
 @property (nonatomic,strong) RoomChatDataSource *chatDataSource;
 @property (nonatomic,strong) RoomChatDataSource *prichatDataSource;
@@ -102,6 +104,7 @@
     [_ffPlay setRoomName:_room.teamname];
     [_ffPlay setRoomId:[_room.roomid intValue]];
     [_consumeDataSource setAryModel:@[]];
+    [self updateName];
     @WeakObj(self)
     if(_tableConsumeRank)
     {
@@ -110,6 +113,8 @@
         ^{
             [selfWeak updateName];
             [selfWeak.tableConsumeRank reloadData];
+            [selfWeak updateName];
+
         });
     }
     DLog(@"teach:%@",roomTeachInfo);
@@ -204,19 +209,25 @@
     _priChatView.delegate = _prichatDataSource;
     _prichatDataSource.delegate = self;
     
-    _noticeView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
+    _noticeView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStyleGrouped];
     _noticeDataSource = [[RoomNoticeDataSource alloc] init];
     _noticeView.dataSource = _noticeDataSource;
     _noticeView.delegate = _noticeDataSource;
+    _noticeView.backgroundColor = COLOR_Bg_Gay;
     [_noticeView setBackgroundColor:UIColorFromRGB(0xffffff)];
     
     _teachView = [[DTAttributedTextView alloc] initWithFrame:frame];
+    
+    self.teacherEmptyView = [UIView initWithFrame:(CGRect){0,0,_teachView.width,_teachView.height} message:@"暂无课程表"];
+    [_teachView addSubview:self.teacherEmptyView];
     
     _tableConsumeRank = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
     _consumeDataSource = [[ConsumeRankDataSource alloc] init];
     _tableConsumeRank.dataSource = _consumeDataSource;
     _tableConsumeRank.delegate = _consumeDataSource;
     [_tableConsumeRank setBackgroundColor:UIColorFromRGB(0xffffff)];
+    
+    
 }
 
 - (void)initSlideView{
@@ -412,6 +423,17 @@
     dispatch_async(dispatch_get_main_queue(),
     ^{
         _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[roomTeachInfoWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
+        
+        if (_teachViewWeak.attributedString.length>0) {
+            [self.teacherEmptyView  setHidden:YES];
+
+            _teachViewWeak.backgroundColor = [UIColor whiteColor];
+        }else{
+            
+            [self.teacherEmptyView  setHidden:NO];
+            _teachViewWeak.backgroundColor = COLOR_Bg_Gay;
+        }
+        
     });
 }
 

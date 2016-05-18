@@ -57,6 +57,7 @@
             cell = [[RoomChatNull alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"nullInfoCell"];
         }
         cell.lblInfo.text = @"没有贡献榜";
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     

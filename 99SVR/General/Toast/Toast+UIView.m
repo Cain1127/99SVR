@@ -176,8 +176,8 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(activityView.bounds.size.width/2-15,activityView.bounds.size.height/2-15, 30, 30)];
     NSMutableArray *images = [NSMutableArray array];
     [activityView addSubview:imgView];
-    for (int i=1; i<13; i++) {
-        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading-beizi80X8000%02d",i]];
+    for (int i=1; i<=8; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading_000%d",i]];
         [images addObject:image];
     }
     imgView.animationImages = images;

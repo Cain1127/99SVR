@@ -102,9 +102,19 @@
                 temp=i;
             }
         }
-        UIViewController *vc = senderWeak.navigationController.viewControllers[(temp-1)];
-        [senderWeak.navigationController popViewControllerAnimated:NO];
-        [vc.navigationController pushViewController:[[KefuCenterController alloc]init] animated:YES];
+        
+        if (temp>0)
+        {
+            UIViewController *vc = senderWeak.navigationController.viewControllers[(temp-1)];
+            [senderWeak.navigationController popViewControllerAnimated:NO];
+            @WeakObj(vc)
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(),
+            ^{
+                [vcWeak.navigationController pushViewController:[[KefuCenterController alloc]init] animated:YES];
+            });
+        }
+        
+        
     }];
     [alert addAction:requestAction];
     dispatch_async(dispatch_get_main_queue(), ^{

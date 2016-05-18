@@ -66,8 +66,8 @@
 - (UIImageView *)iconImageViewWithFrame:(CGRect)frame{
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:frame];
     NSMutableArray *images = [NSMutableArray array];
-    for (int i=1; i<12; i++) {
-        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading_cup_45_30_00%02d",i]];
+    for (int i=1; i<=8; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"loading_cup_000%d",i]];
         [images addObject:image];
     }
     imgView.animationImages = images;
