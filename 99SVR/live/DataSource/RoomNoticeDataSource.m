@@ -59,6 +59,7 @@
             cell = [[RoomChatNull alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"nullInfoCell"];
         }
         cell.lblInfo.text = @"讲师没有发布公告";
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     ZLCoreTextCell *cell = [self tableView:tableView preparedCellForZLIndexPath:indexPath];
@@ -101,8 +102,11 @@
             cell = [[ZLCoreTextCell alloc] initWithReuseIdentifier:@"TextLiveIdentifier"];
         }
     }
+    cell.layer.borderColor = COLOR_Line_Small_Gay.CGColor;
+    cell.layer.borderWidth = 0.5;
     return cell;
 }
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -113,6 +117,23 @@
     ZLCoreTextCell *coreText = [self tableView:tableView preparedCellForZLIndexPath:indexPath];
     CGFloat height = [coreText.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
     return height;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenHeight, 10)];
+    lineView.backgroundColor = COLOR_Bg_Gay;
+    return lineView;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 9;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.001;
 }
 
 #pragma mark DTCoreText Delegate
