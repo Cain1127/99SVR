@@ -444,6 +444,7 @@
         strTilte = [strInfo substringWithRange:NSMakeRange(start.location,end.location-start.location+5)];
         strInfo = [strInfo stringByReplacingCharactersInRange:NSMakeRange(start.location,end.location-start.location+5) withString:@""];
     }
+    //<a>  </a>
     strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</img>" withString:@"</img><br>"];
     strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</a>" withString:@"</a><br>"];
     NSString *msg ;
