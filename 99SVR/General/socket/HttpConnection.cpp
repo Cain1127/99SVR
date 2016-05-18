@@ -3708,6 +3708,7 @@ void HttpConnection::RequestTeacherFans(int startId, int count, TeacherFansListe
 string HttpConnection::GetPrivateServiceDetailUrl(int psid)
 {
 	return string("http://") + httphosts[g_curr_api_host_index] + "/mobile.php?s=/User/personalSecrets/id/" + int2string(psid) + "/uid/" + get_user_id() + "/token/" + get_user_token() + "/client/" + get_client_type();
+//    	return string("http://")+"testphp.99ducaijing.cn/mobile.php?s=/User/personalSecrets/id/" + int2string(psid) + "/uid/" + get_user_id() + "/token/" + get_user_token() + "/client/" + get_client_type();
 }
 
 string HttpConnection::GetConsumeRecordUrl()

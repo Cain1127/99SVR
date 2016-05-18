@@ -8,6 +8,8 @@
 
 #import "NNSVRViewController.h"
 #import "AdaptiveWebView.h"
+#import "RoomViewController.h"
+#import "KxMovieViewController.h"
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "StockDealViewController.h"
 #import "StockDealModel.h"
@@ -60,6 +62,12 @@
     [self.navigationController pushViewController:dealView animated:YES];
 }
 
+- (void)playUrlVideo:(NSString *)htmlPath
+{
+    [[RoomViewController sharedRoomViewController] stopVideoPlay];
+    [self presentViewController:[KxMovieViewController movieViewControllerWithContentPath:htmlPath parameters:nil] animated:YES completion:nil];
+}
+
 -(void)AdaptiveWebViewDidFailLoadWithError:(NSError *)error
 {
     @WeakObj(self);
@@ -99,6 +107,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[RoomViewController sharedRoomViewController] startVideoPlay];
 }
+
 
 @end

@@ -199,6 +199,7 @@
     _prichatDataSource = [[RoomChatDataSource alloc] init];
     _priChatView.dataSource = _prichatDataSource;
     _priChatView.delegate = _prichatDataSource;
+    _prichatDataSource.delegate = self;
     
     _noticeView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
     _noticeDataSource = [[RoomNoticeDataSource alloc] init];
