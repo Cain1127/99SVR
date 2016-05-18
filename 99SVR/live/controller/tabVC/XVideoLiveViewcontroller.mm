@@ -111,6 +111,7 @@
         [_consumeDataSource setAryModel:@[]];
         dispatch_main_async_safe(
         ^{
+            [selfWeak updateName];
             [selfWeak.tableConsumeRank reloadData];
             [selfWeak updateName];
 
@@ -119,7 +120,9 @@
     DLog(@"teach:%@",roomTeachInfo);
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
     [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
 }
 

@@ -318,7 +318,10 @@
     if([notify.object isEqualToString:@"ON"])
     {
         _backGroud = YES;
-        [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        dispatch_async(dispatch_get_global_queue(0, 0),
+        ^{
+            [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        });
         __weak LivePlayViewController *__self = self;
         dispatch_async(dispatch_get_main_queue(),
         ^{
@@ -328,7 +331,10 @@
     else
     {
         _backGroud = NO;
-        [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
+        dispatch_async(dispatch_get_global_queue(0, 0),
+        ^{
+            [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
+        });
     }
 }
 
@@ -633,7 +639,10 @@
 {
     if (KUserSingleton.nowNetwork == 2 && !KUserSingleton.checkNetWork)
     {
-        [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        dispatch_async(dispatch_get_global_queue(0, 0),
+        ^{
+            [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        });
         [self setOnlyAudio:YES];
         @WeakObj(self)
         [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:[RoomViewController sharedRoomViewController] withCancleBtnStr:@"只听音频" withOtherBtnStr:@"继续看视频" withMessage:nil completionCallback:^(NSInteger index) {
@@ -651,13 +660,19 @@
     _bVideo = enable;
     if (!enable)
     {
-        [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
+        dispatch_async(dispatch_get_global_queue(0, 0),
+        ^{
+            [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
+        });
         _bVideo = NO;
         [self setDefaultImg];
     }
     else
     {
-        [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        dispatch_async(dispatch_get_global_queue(0, 0),
+        ^{
+            [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
+        });
         _bVideo=YES;
         [self setNoVideo];
     }
