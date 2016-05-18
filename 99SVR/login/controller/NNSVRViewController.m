@@ -91,4 +91,10 @@
         self.adaptiveWebView.url = _strPath;
     }];
 }
+
+-(void)refreshTitle:(NSString *)title{
+    
+    [self setTitleText:title];
+}
+
 @end
