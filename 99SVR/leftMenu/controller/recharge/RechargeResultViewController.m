@@ -97,8 +97,8 @@
         if ([control isKindOfClass:[TQDetailedTableViewController class]])
         {
             [self.navigationController popToViewController:control animated:YES];
+            return;
         }
-        return;
     }
     
     for (UIViewController *control in aryIndex) {
@@ -123,6 +123,7 @@
         }
     }
     
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 /**

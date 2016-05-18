@@ -12,6 +12,8 @@
 
 + (UIView *)initWithFrame:(CGRect)frame message:(NSString *)message;
 
-+ (UIView *)initWithFrame:(CGRect)frame imageName:(NSString *)imageName message:(NSString *)message;
++ (UIView *)initWithFrame:(CGRect)frame message:(NSString *)message pointY:(CGFloat)pointY;
+
++ (UIView *)initWithFrame:(CGRect)frame imageName:(NSString *)imageName message:(NSString *)message pointY:(CGFloat)pointY;
 
 @end
