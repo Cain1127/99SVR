@@ -206,10 +206,11 @@
     _priChatView.delegate = _prichatDataSource;
     _prichatDataSource.delegate = self;
     
-    _noticeView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
+    _noticeView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStyleGrouped];
     _noticeDataSource = [[RoomNoticeDataSource alloc] init];
     _noticeView.dataSource = _noticeDataSource;
     _noticeView.delegate = _noticeDataSource;
+    _noticeView.backgroundColor = COLOR_Bg_Gay;
     [_noticeView setBackgroundColor:UIColorFromRGB(0xffffff)];
     
     _teachView = [[DTAttributedTextView alloc] initWithFrame:frame];
