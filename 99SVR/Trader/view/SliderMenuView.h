@@ -43,6 +43,9 @@
 
 - (void)setDefaultIndex:(int)nIndex;
 
+/**重置全部的红点提示*/
+-(void)resetAllBadgePrompt;
+
 /**重置会默认选择第一个按钮*/
 -(void)resetSelectFirstIndex;
 

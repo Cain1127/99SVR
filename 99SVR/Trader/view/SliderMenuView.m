@@ -50,6 +50,8 @@
     __block NSInteger _lastSelectIndex;
     /**记录第一次初始化时 setContentOffset*/
     BOOL _isFirstInit;
+    /**标题的个数*/
+    NSInteger _titleInteger;
 }
 @property (nonatomic, strong) SliderMenuTopScrollView *topScroView;
 //@property (nonatomic, strong) UIScrollView *bottomScroView;
@@ -73,6 +75,7 @@
         _topScroV_F = (CGRect){0,0,_self_W,40};
         _bottomoScroV_F = (CGRect){0,CGRectGetMaxY(_topScroV_F),_self_W,(_self_H-CGRectGetMaxY(_topScroV_F))};
         _lastSelectIndex = selectIndex;
+        _titleInteger = titles.count;
         //顶部控制menu
         self.topScroView = [[SliderMenuTopScrollView alloc] initWithFrame:_topScroV_F withTitles:titles withDefaultSelectIndex:(selectIndex-1)];
         [self addSubview:self.topScroView];
@@ -182,6 +185,14 @@
     [self.topScroView setAnimationTime:0.5f];
 
 }
+/**移除全部的红点提示*/
+-(void)resetAllBadgePrompt{
+    for (int i=1; i!=_titleInteger; i++) {
+        [self hanleBlockWith:i];
+        [self.topScroView setTitleIndex:i badgeHide:YES];
+    }
+}
+
 
 @end
 
