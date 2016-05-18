@@ -397,7 +397,7 @@
         [lblTemp setTextAlignment:NSTextAlignmentCenter];
         [downContentView addSubview:lblTemp];
         
-        UILabel *lblLine = [[UILabel alloc] initWithFrame:Rect(76,lblTemp.y+lblTemp.height+45,kScreenWidth-76, 0.5)];
+        UILabel *lblLine = [[UILabel alloc] initWithFrame:Rect(0,lblTemp.y+lblTemp.height+45,kScreenWidth, 0.5)];
         [lblLine setBackgroundColor:kLineColor];
         [downContentView addSubview:lblLine];
         
