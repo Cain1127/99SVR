@@ -184,7 +184,10 @@
         }
         
         [table reloadData];
-
+        
+        if (table.contentSize.height>table.frame.size.height) {
+            table.footer.hidden = YES;
+        }
     });
 }
 
