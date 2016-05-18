@@ -35,8 +35,6 @@ using std::vector;
 #define HTTP_IMG_DFS_SVR "http://phppic.99ducaijing.cn"
 #define HTTP_BANNER_SVR "http://phpapi.99ducaijing.cn"
 
-
-
 #define MAX_MESSAGE_SIZE 8192
 #define STYPE_COUNT  3
 

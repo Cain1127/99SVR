@@ -264,19 +264,9 @@
         }];
         return YES;
     }
-    if([url.absoluteString rangeOfString:@"tencent"].location !=NSNotFound)
-    {
-        return [TencentOAuth HandleOpenURL:url];
-    }
-    else if([url.absoluteString rangeOfString:@"wx"].location != NSNotFound)
-    {
-        [WXApi handleOpenURL:url delegate:self];
-    }
-    // 微博返回来的，不是weibo，是wb+kSinaKey
-    else if([url.absoluteString rangeOfString:@"wb4288225685"].location != NSNotFound)
-    {
-        [WeiboSDK handleOpenURL:url delegate:self] ;
-    }
+    return [TencentOAuth HandleOpenURL:url]|
+    [WXApi handleOpenURL:url delegate:self]|
+    [WeiboSDK handleOpenURL:url delegate:self];
     return YES;
 }
 
@@ -289,38 +279,16 @@
          }];
         return YES;
     }
-    if([url.absoluteString rangeOfString:@"tencent"].location !=NSNotFound)
-    {
-        return [TencentOAuth HandleOpenURL:url];
-    }
-    else if([url.absoluteString rangeOfString:@"wx"].location != NSNotFound)
-    {
-        [WXApi handleOpenURL:url delegate:self];
-    }
-    // 微博返回来的，不是weibo，是wb+kSinaKey
-    else if([url.absoluteString rangeOfString:@"wb4288225685"].location != NSNotFound)
-    {
-        [WeiboSDK handleOpenURL:url delegate:self] ;
-    }
-    return YES;
+    return [TencentOAuth HandleOpenURL:url]|
+    [WXApi handleOpenURL:url delegate:self]|
+    [WeiboSDK handleOpenURL:url delegate:self] ;
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
-    if([url.absoluteString rangeOfString:@"tencent"].location !=NSNotFound)
-    {
-        return [TencentOAuth HandleOpenURL:url];
-    }
-    else if([url.absoluteString rangeOfString:@"wx"].location != NSNotFound)
-    {
-        [WXApi handleOpenURL:url delegate:self];
-    }
-    // 微博返回来的，不是weibo，是wb+kSinaKey
-    else if([url.absoluteString rangeOfString:@"wb4288225685"].location != NSNotFound)
-    {
-        [WeiboSDK handleOpenURL:url delegate:self] ;
-    }
-    return YES;
+    return [TencentOAuth HandleOpenURL:url]|
+    [WXApi handleOpenURL:url delegate:self]|
+    [WeiboSDK handleOpenURL:url delegate:self];
 }
 
 -(void)didReceiveWeiboRequest:(WBBaseRequest *)request

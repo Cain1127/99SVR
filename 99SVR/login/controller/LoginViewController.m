@@ -71,7 +71,7 @@
         
         [self.navigationController popViewControllerAnimated:YES];
     }
-        
+    
 }
 
 -(void)initUIHead
@@ -82,19 +82,19 @@
     bodyView.contentMode = UIViewContentModeScaleAspectFit;
     @WeakObj(bodyView)
     dispatch_async(dispatch_get_global_queue(0, 0),
-    ^{
-       char cString[255];
-       const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
-       sprintf(cString, "%s/login_bg.png",path);
-       NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
-       UIImage *image = [UIImage imageWithContentsOfFile:objCString];
-       if (image)
-       {
-           dispatch_async(dispatch_get_main_queue(), ^{
-               bodyViewWeak.image = image;
-           });
-       }
-    });
+                   ^{
+                       char cString[255];
+                       const char *path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+                       sprintf(cString, "%s/login_bg.png",path);
+                       NSString *objCString = [[NSString alloc] initWithUTF8String:cString];
+                       UIImage *image = [UIImage imageWithContentsOfFile:objCString];
+                       if (image)
+                       {
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               bodyViewWeak.image = image;
+                           });
+                       }
+                   });
     
     _txtUser = [[LoginTextField alloc] initWithFrame:CGRectMake(15,bodyView.y+bodyView.height, kScreenWidth-30, 44)];
     _txtPwd = [[RegisterTextField alloc] initWithFrame:CGRectMake(_txtUser.x, _txtUser.frame.origin.y+_txtUser.frame.size.height+10, _txtUser.width, 44)];
@@ -103,7 +103,7 @@
     
     [_txtUser addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [_txtPwd addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-
+    
     
     [_txtUser setBorderStyle:UITextBorderStyleNone];
     [_txtPwd setBorderStyle:UITextBorderStyleNone];
@@ -172,11 +172,11 @@
     [self.view addSubview:_btnFind];
     
     [_btnLogin setTitle:@"登 录" forState:UIControlStateNormal];
-    [_btnLogin setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
-    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
+    [_btnLogin setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
+    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
+    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
     [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
-    _btnLogin.titleLabel.font = XCFONT(16);
+    _btnLogin.titleLabel.font = XCFONT(15);
     
     [_btnRegin setTitleColor:UIColorFromRGB(0x0078DD) forState:UIControlStateNormal];
     [_btnRegin setTitle:@"快速注册" forState:UIControlStateNormal];
@@ -209,7 +209,7 @@
         make.left.equalTo(_txtPwd);
         make.bottom.equalTo(_txtPwd);
     }];
-
+    
     _btnLogin.frame = Rect(15, _txtPwd.y+_txtPwd.height+15, kScreenWidth-30, 40);
     _btnFind.titleLabel.font = XCFONT(15);
     _btnRegin.titleLabel.font = XCFONT(15);
@@ -218,13 +218,8 @@
     
     hidenView = [[UIView alloc] initWithFrame:Rect(0, _btnLogin.y+_btnLogin.height, kScreenWidth,100)];
     [self.view addSubview:hidenView];
-    if ([UserInfo sharedUserInfo].nStatus)
-    {
+    if ([UserInfo sharedUserInfo].nStatus) {
         hidenView.hidden = NO;
-    }
-    else
-    {
-        hidenView.hidden = YES;
     }
     UILabel *line = [[UILabel alloc] initWithFrame:Rect(15, 30, kScreenWidth-30, 0.5)];
     [line setBackgroundColor:kLineColor];
@@ -267,13 +262,13 @@
         [btnWeiChat setImage:[UIImage imageNamed:@"weichat_h"] forState:UIControlStateHighlighted];
         [btnWeiChat addTarget:self action:@selector(weiChatLogin) forControlEvents:UIControlEventTouchUpInside];
         btnWeiChat.frame = Rect(kScreenWidth/2-102, 50, 44, 44);
-    if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi])
-    {
-        [hidenView addSubview:btnWeiChat];
+        if ([WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi])
+        {
+            [hidenView addSubview:btnWeiChat];
+        }
+        
     }
     
-}
-
     
     
     UIButton *btnLeft = [CustomViewController itemWithTarget:self action:@selector(popBack) image:@"back" highImage:@"back"];
@@ -291,6 +286,7 @@
 #pragma mark 微信登录请求
 - (void)weiChatLogin
 {
+    
     [self.view makeToastActivity_bird];
     SendAuthReq *req = [[SendAuthReq alloc] init];
     req.scope = @"snsapi_userinfo,snsapi_base";
@@ -336,18 +332,18 @@
     __weak LoginViewController *__self = self;
     //进入新的界面先
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-        Loading_Cup_Show(__self.view);
-    });
+                   ^{
+                       [__self.view makeToastActivity_bird];
+                   });
     __block NSString *__strUser = strUser;
     __block NSString *__strPwd = strPwd;
     [self performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8.0];
     [UserInfo sharedUserInfo].observationInfo = 0;
     [UserInfo sharedUserInfo].otherLogin = 0;
     dispatch_async(dispatch_get_global_queue(0, 0),
-    ^{
-        [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:__strUser pwd:__strPwd];
-    });
+                   ^{
+                       [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:__strUser pwd:__strPwd];
+                   });
 }
 
 - (void)findPwd
@@ -362,13 +358,13 @@
 
 - (void)requestLbsSettingServer
 {
-//    __weak LoginViewController *__self = self;
-
+    //    __weak LoginViewController *__self = self;
+    
 }
 
 - (void)sinaLogin
 {
-    Loading_Cup_Show(self.view);
+    [self.view makeToastActivity_bird];
     WBAuthorizeRequest *request = [WBAuthorizeRequest request];
     request.redirectURI = kRedirectURI;
     request.scope = @"all";
@@ -381,7 +377,8 @@
 
 - (void)qqLogin
 {
-    Loading_Cup_Show(self.view);
+    //    [ProgressHUD show:@"QQ授权中..." viewInfo:self.view];
+    [self.view makeToastActivity_bird];
     _tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1105298719" andDelegate:self];
     NSArray* permissions = [NSArray arrayWithObjects:
                             kOPEN_PERMISSION_GET_USER_INFO,
@@ -413,7 +410,7 @@
     _txtPwd.text = userPwd == nil ? @"" : userPwd;
     
     if ([userId isEqualToString:@""] || [userId length]==0) {
-
+        
         self.btnLogin.enabled = NO;
         
     }else if([userPwd isEqualToString:@""] || [userPwd length]==0)
@@ -423,13 +420,20 @@
     
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeKeyBoard)]];
-//    [_txtUser becomeFirstResponder];
+    //    [_txtUser becomeFirstResponder];
 }
 
 - (void)closeKeyBoard
 {
-    [self.view endEditing:YES];
+    if ([_txtUser isFirstResponder]) {
+        [_txtUser resignFirstResponder];
+    }
+    else if ([_txtPwd isFirstResponder])
+    {
+        [_txtPwd resignFirstResponder];
+    }
 }
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -507,16 +511,15 @@
 
 - (void)weichat_login:(NSNotification *)notify
 {
-    Loading_Hide(self.view);
     NSDictionary *dict = [notify object];
     __weak LoginViewController *__self = self;
     if (dict && [dict objectForKey:@"status"])
     {
         dispatch_async(dispatch_get_main_queue(),
-        ^{
-            Loading_Hide(__self.view);
-            [__self.view makeToast:@"微信登录失败"];
-        });
+                       ^{
+                           [__self.view hideToastActivity];
+                           [__self.view makeToast:@"微信登录失败"];
+                       });
         return ;
     }
     if (dict && [dict objectForKey:@"code"])
@@ -527,9 +530,9 @@
         [BaseService get:strInfo dictionay:nil timeout:10 success:^(id responseObject)
          {
              dispatch_async(dispatch_get_main_queue(),
-             ^{
-                 Loading_Hide(__self.view);
-             });
+                            ^{
+                                [__self.view hiddenActivityInView];
+                            });
              NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
              if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
                  [[dict objectForKey:@"token"] isKindOfClass:[NSString class]])
@@ -545,15 +548,14 @@
              }
              else
              {
-                 Loading_Hide(__self.view);
-                [__self.view makeToast:@"微信登录授权失败"];
+                 [__self.view hideToastActivity];
+                 [__self.view makeToast:@"微信登录授权失败"];
              }
              
          }
-         fail:^(NSError *error)
+                    fail:^(NSError *error)
          {
-
-             Loading_Hide(__self.view);
+             [__self.view hideToastActivity];
              [__self.view makeToast:@"微信登录授权失败"];
          }];
     }
@@ -562,14 +564,13 @@
 #pragma mark 新浪登录响应
 - (void)sinaLogin_response:(NSNotification *)notify
 {
-    Loading_Hide(self.view);
     NSDictionary *dict = [notify object];
     DLog(@"dict:%@",dict);
     if(dict && [dict objectForKey:@"error"])
     {
         __weak LoginViewController *__self = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            Loading_Hide(__self.view);
+            [__self.view hideToastActivity];
             [__self.view makeToast:@"新浪微博授权失败"];
         });
         return ;
@@ -582,7 +583,7 @@
         __weak UserInfo *__user = [UserInfo sharedUserInfo];
         @WeakObj(self)
         [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject) {
-           [selfWeak.view hiddenActivityInView];
+            [selfWeak.view hiddenActivityInView];
             NSDictionary *dict = nil;;
             if ([responseObject isKindOfClass:[NSDictionary class]]) {
                 dict = responseObject;
@@ -603,14 +604,14 @@
             }
             else
             {
-                Loading_Hide(selfWeak.view);
-               [selfWeak.view makeToast:@"新浪微博登录失败"];
+                [selfWeak.view hideToastActivity];
+                [selfWeak.view makeToast:@"新浪微博登录失败"];
             }
         } fail:^(NSError *error)
-        {
-            Loading_Hide(selfWeak.view);
-            [selfWeak.view makeToast:@"新浪微博登录失败"];
-        }];
+         {
+             [selfWeak.view hideToastActivity];
+             [selfWeak.view makeToast:@"新浪微博登录失败"];
+         }];
     }
 }
 
@@ -639,10 +640,10 @@
 {
     __weak LoginViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [NSObject cancelPreviousPerformRequestsWithTarget:__self];
-        Loading_Hide(__self.view);
-    });
+                   ^{
+                       [NSObject cancelPreviousPerformRequestsWithTarget:__self];
+                       [__self.view hideToastActivity];
+                   });
     if (notify==nil)
     {
         return ;
@@ -657,10 +658,10 @@
     else
     {
         dispatch_async(dispatch_get_main_queue(),
-        ^{
-            Loading_Hide(__self.view);
-            [ProgressHUD showError:@"账号或密码错误"];
-        });
+                       ^{
+                           [__self.view hideToastActivity];
+                           [ProgressHUD showError:@"账号或密码错误，请重新输入"];
+                       });
     }
 }
 
@@ -673,17 +674,14 @@
 {
     __weak LoginViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [self.view hideToastActivity];
-        Loading_Hide(__self.view);
-        [__self.view makeToast:@"登录超时"];
-    });
+                   ^{
+                       [self.view hideToastActivity];
+                       [__self.view makeToast:@"登录超时"];
+                   });
 }
 
 - (void)tencentDidLogin
 {
-    Loading_Hide(self.view);
-    
     if ([_tencentOAuth accessToken] && 0 != [[_tencentOAuth accessToken] length])
     {
         DLog(@"token:%@ openId;%@",[_tencentOAuth accessToken],[_tencentOAuth openId]);
@@ -691,52 +689,52 @@
                              [kHTTPSingle getHttpApi],[_tencentOAuth openId],[_tencentOAuth accessToken]];
         @WeakObj(self)
         [BaseService get:strInfo dictionay:nil timeout:8 success:^(id responseObject)
-        {
-            UserInfo *__user = [UserInfo sharedUserInfo];
-            gcd_main_safe(^{
-                [selfWeak.view hiddenActivityInView];
-            });
-            NSDictionary *dict = nil;;
-            if ([responseObject isKindOfClass:[NSDictionary class]]) {
-                dict = responseObject;
-            }
-            else{
-                dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-            }
-            if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
-                [[dict objectForKey:@"token"] isKindOfClass:[NSString class]] )
-            {
-                __user.strOpenId = [dict objectForKey:@"openid"];
-                __user.strToken = [dict objectForKey:@"token"];
-                __user.nUserId = [[dict objectForKey:@"userid"] intValue];
-                __user.otherLogin = [[dict objectForKey:@"type"] intValue];
-                [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
-                [ProgressHUD showSuccess:@"授权成功"];
-                [selfWeak performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8.0];
-            }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(),
-               ^{
-                   Loading_Hide(selfWeak.view);
-                   [selfWeak.view makeToast:@"QQ登录授权失败"];
-               });
-            }
-        }
-        fail:^(NSError *error)
-        {
-            dispatch_async(dispatch_get_main_queue(),
-            ^{
-                Loading_Hide(selfWeak.view);
-                [selfWeak.view makeToast:@"QQ登录授权失败"];
-            });
-        }];
+         {
+             UserInfo *__user = [UserInfo sharedUserInfo];
+             gcd_main_safe(^{
+                 [selfWeak.view hiddenActivityInView];
+             });
+             NSDictionary *dict = nil;;
+             if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                 dict = responseObject;
+             }
+             else{
+                 dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+             }
+             if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
+                 [[dict objectForKey:@"token"] isKindOfClass:[NSString class]] )
+             {
+                 __user.strOpenId = [dict objectForKey:@"openid"];
+                 __user.strToken = [dict objectForKey:@"token"];
+                 __user.nUserId = [[dict objectForKey:@"userid"] intValue];
+                 __user.otherLogin = [[dict objectForKey:@"type"] intValue];
+                 [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
+                 [ProgressHUD showSuccess:@"授权成功"];
+                 [selfWeak performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8.0];
+             }
+             else
+             {
+                 dispatch_async(dispatch_get_main_queue(),
+                                ^{
+                                    [selfWeak.view hideToastActivity];
+                                    [selfWeak.view makeToast:@"QQ登录授权失败"];
+                                });
+             }
+         }
+                    fail:^(NSError *error)
+         {
+             dispatch_async(dispatch_get_main_queue(),
+                            ^{
+                                [selfWeak.view hideToastActivity];
+                                [selfWeak.view makeToast:@"QQ登录授权失败"];
+                            });
+         }];
     }
     else
     {
         __weak LoginViewController *__self = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            Loading_Hide(__self.view);
+            [__self.view hideToastActivity];
             [__self.view makeToast:@"QQ登录授权失败"];
         });
     }
@@ -756,7 +754,7 @@
     __weak LoginViewController *__self = self;
     __weak NSString *__strMsg = strMsg;
     dispatch_async(dispatch_get_main_queue(), ^{
-        Loading_Hide(__self.view);
+        [__self.view hideToastActivity];
         [__self.view makeToast:__strMsg];
     });
 }
@@ -765,7 +763,7 @@
 {
     __weak LoginViewController *__self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        Loading_Hide(__self.view);
+        [__self.view hideToastActivity];
         [__self.view makeToast:@"网络故障"];
     });
 }
@@ -773,28 +771,28 @@
 -(void)getAccess_token:(NSString *)strCode
 {
     
-//    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/oauth2/access_token?appid=%@&secret=%@&code=%@&grant_type=authorization_code",kWXAPP_ID,kWXAPP_SEC,strCode];
-//    DLog(@"url:%@",url);
+    //    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/oauth2/access_token?appid=%@&secret=%@&code=%@&grant_type=authorization_code",kWXAPP_ID,kWXAPP_SEC,strCode];
+    //    DLog(@"url:%@",url);
     return ;
-//    __weak LoginViewController *__self = self;
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        NSURL *zoneUrl = [NSURL URLWithString:url];
-//        NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
-//        NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
-//        dispatch_async(dispatch_get_global_queue(0, 0),
-//        ^{
-//           if (data)
-//           {
-//               NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-//               NSString *strToken = [dic objectForKey:@"access_token"];
-//               NSString *strOpenId = [dic objectForKey:@"openid"];
-//               __self.strOpenId = strOpenId;
-//               __self.strToken = strToken;
-//               DLog(@"strToken:%@,strOpenId:%@",strToken,strOpenId);
-//               [__self getUserInfo:strToken openid:strOpenId];
-//           }
-//        });
-//    });
+    //    __weak LoginViewController *__self = self;
+    //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    //        NSURL *zoneUrl = [NSURL URLWithString:url];
+    //        NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
+    //        NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
+    //        dispatch_async(dispatch_get_global_queue(0, 0),
+    //        ^{
+    //           if (data)
+    //           {
+    //               NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+    //               NSString *strToken = [dic objectForKey:@"access_token"];
+    //               NSString *strOpenId = [dic objectForKey:@"openid"];
+    //               __self.strOpenId = strOpenId;
+    //               __self.strToken = strToken;
+    //               DLog(@"strToken:%@,strOpenId:%@",strToken,strOpenId);
+    //               [__self getUserInfo:strToken openid:strOpenId];
+    //           }
+    //        });
+    //    });
 }
 
 -(void)getUserInfo:(NSString *)access_token openid:(NSString *)openid
@@ -808,15 +806,15 @@
         NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
         NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
         dispatch_async(dispatch_get_global_queue(0, 0),
-        ^{
-           if (data)
-           {
-               NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-               DLog(@"昵称:%@",[dic objectForKey:@"nickname"]);
-               __self.strNickName = [dic objectForKey:@"nickname"];
-               [__self request_api_weichat_login];
-           }
-        });
+                       ^{
+                           if (data)
+                           {
+                               NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                               DLog(@"昵称:%@",[dic objectForKey:@"nickname"]);
+                               __self.strNickName = [dic objectForKey:@"nickname"];
+                               [__self request_api_weichat_login];
+                           }
+                       });
     });
 }
 
@@ -835,29 +833,29 @@
     NSDictionary *dict = @{@"client":@"2",@"openid":_strOpenId,@"token":_strToken,@"nick":_strNickName,@"key":strMd5};
     DLog(@"strInfo:%zi",strInfo.length);
     [BaseService postJSONWithUrl:strInfo parameters:dict success:^(id responseObject)
-    {
-        [selfWeak.view hiddenActivityInView];
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-        if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
-            [[dict objectForKey:@"token"] isKindOfClass:[NSString class]])
-        {
-            __user.strOpenId = [dict objectForKey:@"openid"];
-            __user.strToken = [dict objectForKey:@"token"];
-            __user.nUserId = [[dict objectForKey:@"userid"] intValue];
-            __user.otherLogin = [[dict objectForKey:@"type"] intValue];
-            [ProgressHUD showSuccess:@"授权成功"];
-            [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
-            [selfWeak performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8];
-        }
-        else{
-            [ProgressHUD showError:@"授权失败"];
-        }
-    }
-    fail:^(NSError *error)
-    {
-        [selfWeak.view hiddenActivityInView];
-        [selfWeak.view makeToast:@"微信登录授权失败"];
-    }];
+     {
+         [selfWeak.view hiddenActivityInView];
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+         if (dict && [[dict objectForKey:@"openid"] isKindOfClass:[NSString class]] &&
+             [[dict objectForKey:@"token"] isKindOfClass:[NSString class]])
+         {
+             __user.strOpenId = [dict objectForKey:@"openid"];
+             __user.strToken = [dict objectForKey:@"token"];
+             __user.nUserId = [[dict objectForKey:@"userid"] intValue];
+             __user.otherLogin = [[dict objectForKey:@"type"] intValue];
+             [ProgressHUD showSuccess:@"授权成功"];
+             [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:NSStringFromInt(__user.nUserId) pwd:@""];
+             [selfWeak performSelector:@selector(loginTimeOut) withObject:nil afterDelay:8];
+         }
+         else{
+             [ProgressHUD showError:@"授权失败"];
+         }
+     }
+                            fail:^(NSError *error)
+     {
+         [selfWeak.view hiddenActivityInView];
+         [selfWeak.view makeToast:@"微信登录授权失败"];
+     }];
 }
 
 - (void) keyboardWasShown:(NSNotification *) notification
@@ -878,4 +876,3 @@
 
 
 @end
-
