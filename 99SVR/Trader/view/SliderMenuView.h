@@ -22,6 +22,7 @@
 /**顶部的控制menu的背景色*/
 @property (nonatomic , strong) UIColor *topBagColor;
 
+- (void)showUnBadgeIndex:(NSInteger)showBadgeIndex;
 
 
 /**

@@ -666,7 +666,6 @@ void ZLHallListener::OnBuyPrivateVipErr(ErrCodeResp& info)
  *  用户列表
  */
 void ZLRoomListener::OnRoomUserList(std::vector<RoomUserInfo>& infos){
-    DLog(@"infos.size:%ld",infos.size());
     for(int i = 0; i < infos.size(); i++)
     {
         [RoomService addRoomUser:currentRoom user:&infos[i]];
@@ -746,6 +745,7 @@ void ZLRoomListener::OnRoomNoticeNotify(RoomNotice& info){
         [RoomService getNoticeInfo:&info notice:aryRoomNotice];
     }
 }
+
 /**
  *  上麦后，用户信息修改
  */
@@ -755,7 +755,9 @@ void ZLRoomListener::OnRobotTeacherIdNoty(std::vector<RobotTeacherIdNoty>& infos
         RobotTeacherIdNoty info = infos[i];
         RoomUser *_roomUser = [currentRoom.dictUser objectForKey:NSStringFromInt(info.vcbid())];
         _roomUser.m_strUserAlias = [NSString stringWithUTF8String:info.teacheralias().c_str()];
-
+        
+        DLog(@"iOS:%d",info.teacherid());
+        
         for (int nTimes=0; nTimes<currentRoom.aryUser.count;nTimes++)
         {
             RoomUser *rUser = [currentRoom.aryUser objectAtIndex:nTimes];

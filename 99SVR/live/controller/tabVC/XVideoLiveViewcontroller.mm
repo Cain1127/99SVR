@@ -413,6 +413,10 @@
                if (selfWeak.nSelectIndex != 4) {
                    selfWeak.menuView.showBadgeIndex = 4;
                }
+               else
+               {
+                   [selfWeak.menuView showUnBadgeIndex:4];
+               }
            });
     }
     @WeakObj(roomTeachInfo)
@@ -626,6 +630,10 @@
            if (selfWeak.nSelectIndex != 2) {
                selfWeak.menuView.showBadgeIndex = 2;
            }
+           else
+           {
+               [selfWeak.menuView showUnBadgeIndex:2];
+           }
        });
     }
     dispatch_async(dispatch_get_main_queue(),^{
@@ -655,6 +663,10 @@
             if (selfWeak.nSelectIndex != 1) {
                 selfWeak.menuView.showBadgeIndex = 1;
             }
+            else
+            {
+                [selfWeak.menuView showUnBadgeIndex:1];
+            }
         });
     }
     dispatch_async(dispatch_get_main_queue(),
@@ -683,6 +695,10 @@
         ^{
             if (selfWeak.nSelectIndex != 3) {
                 selfWeak.menuView.showBadgeIndex = 3;
+            }
+            else
+            {
+                [selfWeak.menuView showUnBadgeIndex:3];
             }
         });
     }

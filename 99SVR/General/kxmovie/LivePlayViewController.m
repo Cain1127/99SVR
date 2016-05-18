@@ -396,10 +396,15 @@
     _btnCollet = [self createPlayBtn:@"video_room_follow_icon_n" high:@"personal_follow_icon"];
     [_btnCollet setImage:[UIImage imageNamed:@"personal_follow_icon"] forState:UIControlStateSelected];
     [_btnCollet addTarget:self action:@selector(colletInfo) forControlEvents:UIControlEventTouchUpInside];
+    
+    [SVRMediaClient sharedSVRMediaClient].delegate = self;
+    
     [self updateDownHUD];
-    SVRMediaClient *svrClient = [SVRMediaClient sharedSVRMediaClient];
-    svrClient.delegate = self;
-    [svrClient clientCoreInit];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        SVRMediaClient *svrClient = [SVRMediaClient sharedSVRMediaClient];
+        [svrClient clientCoreInit];
+    });
+    
     _downHUD.alpha = 0;
 }
 
@@ -630,6 +635,7 @@
     ^{
          [__self showAlertView];
          [__self startLoad];
+         __self.btnVideo.selected = YES;
          [__self setDefaultImg];
     });
     [UIApplication sharedApplication].idleTimerDisabled = YES;
