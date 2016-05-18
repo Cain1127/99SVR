@@ -12,6 +12,8 @@
 
 - (void)requestOperater:(NSString *)strId name:(NSString *)strName;
 
+- (void)playUrlVideo:(NSString *)htmlPath;
+
 - (void)AdaptiveWebViewDidFailLoadWithError:(NSError *)error;
 
 @end
