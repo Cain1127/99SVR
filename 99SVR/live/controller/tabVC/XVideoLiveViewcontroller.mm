@@ -631,7 +631,8 @@
     if (aryRoomPrichat.count>0) {
        dispatch_async(dispatch_get_main_queue(),
        ^{
-           if (selfWeak.nSelectIndex != 2) {
+           if (selfWeak.nSelectIndex != 2)
+           {
                selfWeak.menuView.showBadgeIndex = 2;
            }
            else
