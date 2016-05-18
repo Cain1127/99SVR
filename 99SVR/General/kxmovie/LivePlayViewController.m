@@ -393,8 +393,7 @@
     [self updateDownHUD];
     SVRMediaClient *svrClient = [SVRMediaClient sharedSVRMediaClient];
     svrClient.delegate = self;
-    [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
-    
+    [svrClient clientCoreInit];
     _downHUD.alpha = 0;
 }
 
