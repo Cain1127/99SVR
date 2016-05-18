@@ -150,6 +150,11 @@
     [self.topScroView setTitleIndex:showBadgeIndex badgeHide:NO];
 }
 
+- (void)showUnBadgeIndex:(NSInteger)showBadgeIndex
+{
+    [self.topScroView setTitleIndex:showBadgeIndex badgeHide:YES];
+}
+
 -(void)setBadgeColor:(UIColor *)badgeColor{
     [self.topScroView setTitleBadgeColor:badgeColor];
 }

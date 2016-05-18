@@ -323,8 +323,10 @@
     titleLable.isHideBadge = value;
 }
 #pragma mark 提供给外部修改badge的颜色
--(void)setTitleBadgeColor:(UIColor *)color{
-    for (int i=0; i!=self.subviews.count; i++) {
+-(void)setTitleBadgeColor:(UIColor *)color
+{
+    for (int i=0; i!=self.subviews.count; i++)
+    {
         UIView *view = [self viewWithTag:i];
         if ([view isKindOfClass:[SliderLabel class]]) {
             SliderLabel *sliderLabel = (SliderLabel *)view;
