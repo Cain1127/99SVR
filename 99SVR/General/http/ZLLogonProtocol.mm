@@ -749,19 +749,22 @@ void ZLRoomListener::OnRoomNoticeNotify(RoomNotice& info){
 /**
  *  上麦后，用户信息修改
  */
-void ZLRoomListener::OnRobotTeacherIdNoty(RobotTeacherIdNoty& info)
+void ZLRoomListener::OnRobotTeacherIdNoty(std::vector<RobotTeacherIdNoty>& infos)
 {
-    RoomUser *_roomUser = [currentRoom.dictUser objectForKey:NSStringFromInt(info.vcbid())];
-    _roomUser.m_strUserAlias = [NSString stringWithUTF8String:info.teacheralias().c_str()];
-    
-    for (int i=0; i<currentRoom.aryUser.count;i++)
-    {
-        RoomUser *rUser = [currentRoom.aryUser objectAtIndex:i];
-        if (rUser.m_nUserId == info.vcbid())
+    for (int i=0; i<infos.size(); i++) {
+        RobotTeacherIdNoty info = infos[i];
+        RoomUser *_roomUser = [currentRoom.dictUser objectForKey:NSStringFromInt(info.vcbid())];
+        _roomUser.m_strUserAlias = [NSString stringWithUTF8String:info.teacheralias().c_str()];
+
+        for (int nTimes=0; nTimes<currentRoom.aryUser.count;nTimes++)
         {
-            rUser.m_strUserAlias = [NSString stringWithUTF8String:info.teacheralias().c_str()];
-            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-            break;
+            RoomUser *rUser = [currentRoom.aryUser objectAtIndex:nTimes];
+            if (rUser.m_nUserId == info.vcbid())
+            {
+                rUser.m_strUserAlias = [NSString stringWithUTF8String:info.teacheralias().c_str()];
+                [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+                break;
+            }
         }
     }
 }
