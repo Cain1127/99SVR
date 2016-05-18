@@ -110,9 +110,9 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
         dispatch_main_async_safe(
         ^{
             [selfWeak loadHeadModel];
+            [selfWeak.liveControl stopNewPlay];
+            [selfWeak.liveControl reloadModel:selfWeak.room];
         });
-        [selfWeak.liveControl stopNewPlay];
-        [selfWeak.liveControl reloadModel:selfWeak.room];
         [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
     };
 }

@@ -410,9 +410,6 @@ void Connection::connect_from_lbs_asyn()
 	memset(connect_ip, 0, sizeof(connect_ip));
 	connect_port = 0;
 
-	//connect("121.12.118.32", 7301);
-	//return;
-
 	if (connect_start_time == 0)
 	{
 		connect_start_time = time(0);
@@ -503,7 +500,7 @@ void get_http_servers_from_lbs_asyn()
 		strcpy(param->lbstype, "/tygetPHP");
 		param->hosts = &httphosts;
 
-		Thread::start(get_httphost_form_lbs_runnable, param);
+//		Thread::start(get_httphost_form_lbs_runnable, param);
 	}
 }
 
