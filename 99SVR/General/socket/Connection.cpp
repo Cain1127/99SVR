@@ -199,7 +199,7 @@ ThreadVoid get_lbs_from_http(void* param)
 
 		if (root.isObject())
 		{
-			const char* lbs = root["lbs"].asCString();
+			const char* lbs = root["lbsios"].asCString();
 			strcpy(lbs_from_http, lbs);
 
 			save_lbs_to_file(lbs);
@@ -244,7 +244,7 @@ ThreadVoid get_host_form_lbs_runnable(void* param)
 
 void get_lbs_servers()
 {
-	/*
+	
 	if (!is_set_lbs)
 	{
 		const char* lbs = LBS0;
@@ -271,15 +271,14 @@ void get_lbs_servers()
 				Thread::start(get_lbs_from_http, NULL);
 			}
 		}
-
 		strcpy(lbs_curr, lbs);
 	}
 	else
 	{
 		strcpy(lbs_curr, lbs_from_set);
-	}*/
+	}
 
-	strcpy(lbs_curr, LBS0);
+//	strcpy(lbs_curr, LBS0);
 
 	Thread::lock(&conn_lock);
 	lbs_count = 0;
