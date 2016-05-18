@@ -13,6 +13,9 @@
 #import "RoomHttp.h"
 #import "Toast+UIView.h"
 #import "UIAlertView+Block.h"
+#import "SearchController.h"
+#import "KefuCenterController.h"
+#import "RoomViewController.h"
 
 @implementation AlertFactory
 
@@ -90,9 +93,18 @@
     {
         [senderWeak.view hideToastActivity];
         [[PlayIconView sharedPlayIconView] exitPlay];
-        [senderWeak.navigationController popViewControllerAnimated:YES];
-//        KefuCenterController *control = [[KefuCenterController alloc] init];
-//        [senderWeak.navigationController pushViewController:control animated:YES];
+        
+        DLog(@"%@",senderWeak.navigationController.viewControllers);
+        int temp = 0;
+        for (int i=0; i!=senderWeak.navigationController.viewControllers.count; i++) {
+            UIViewController *vc = senderWeak.navigationController.viewControllers[i];
+            if ([vc isKindOfClass:[RoomViewController class]]) {
+                temp=i;
+            }
+        }
+        UIViewController *vc = senderWeak.navigationController.viewControllers[(temp-1)];
+        [senderWeak.navigationController popViewControllerAnimated:NO];
+        [vc.navigationController pushViewController:[[KefuCenterController alloc]init] animated:YES];
     }];
     [alert addAction:requestAction];
     dispatch_async(dispatch_get_main_queue(), ^{
