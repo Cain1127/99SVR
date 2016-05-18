@@ -218,7 +218,7 @@
     
     _teachView = [[DTAttributedTextView alloc] initWithFrame:frame];
     
-    self.teacherEmptyView = [UIView initWithFrame:(CGRect){0,0,_teachView.width,_teachView.height} message:@"暂无课程表"];
+    self.teacherEmptyView = [UIView initWithFrame:(CGRect){0,0,_teachView.width,_teachView.height} message:@"暂无课程表" pointY:52];
     [_teachView addSubview:self.teacherEmptyView];
     
     _tableConsumeRank = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
@@ -226,8 +226,6 @@
     _tableConsumeRank.dataSource = _consumeDataSource;
     _tableConsumeRank.delegate = _consumeDataSource;
     [_tableConsumeRank setBackgroundColor:UIColorFromRGB(0xffffff)];
-    
-    
 }
 
 - (void)initSlideView{
@@ -425,13 +423,11 @@
         _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[roomTeachInfoWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
         
         if (_teachViewWeak.attributedString.length>0) {
-            [self.teacherEmptyView  setHidden:YES];
-
+            self.teacherEmptyView.hidden = YES;
             _teachViewWeak.backgroundColor = [UIColor whiteColor];
         }else{
-            
-            [self.teacherEmptyView  setHidden:NO];
-            _teachViewWeak.backgroundColor = COLOR_Bg_Gay;
+            self.teacherEmptyView.hidden = NO;
+            _teachViewWeak.backgroundColor = [UIColor clearColor];
         }
         
     });
