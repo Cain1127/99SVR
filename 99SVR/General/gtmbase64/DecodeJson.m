@@ -437,6 +437,7 @@
         return @"";
     }
     NSString *strTilte = @"";
+    NSString *strImage = @"";
     if([strInfo rangeOfString:@"<h3>"].location != NSNotFound &&
        [strInfo rangeOfString:@"</h3>"].location != NSNotFound){
         NSRange start = [strInfo rangeOfString:@"<h3>"];
@@ -445,23 +446,38 @@
         strInfo = [strInfo stringByReplacingCharactersInRange:NSMakeRange(start.location,end.location-start.location+5) withString:@""];
     }
     //<a>  </a>
-    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</img>" withString:@"</img><br>"];
-    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</a>" withString:@"</a><br>"];
-    NSString *msg ;
-    if(nIndex==1)
-    {
-        msg = @"<p style=\"color:#919191\">房间公告</p>";
-    }
-    else if(nIndex==2)
-    {
-        msg = @"<p style=\"color:#919191\">房间广播</p>";
-    }
-    else if(nIndex == 3)
-    {
-        msg = @"<p style=\"color:#919191\">悄悄话</p>";
-    }
-    NSString *strMsg = [NSString stringWithFormat:@"%@%@%@",strTilte,msg,strInfo];
+//    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</img>" withString:@"</img><br>"];
+//    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</a>" withString:@"</a><br>"];
+//    NSString *msg ;
+//    if(nIndex==1)
+//    {
+//        msg = @"<p style=\"color:#919191\">房间公告</p>";
+//    }
+//    else if(nIndex==2)
+//    {
+//        msg = @"<p style=\"color:#919191\">房间广播</p>";
+//    }
+//    else if(nIndex == 3)
+//    {
+//        msg = @"<p style=\"color:#919191\">悄悄话</p>";
+//    }
+//    NSString *strMsg = [NSString stringWithFormat:@"%@%@%@",strTilte,msg,strInfo];
     
+    if([strInfo rangeOfString:@"<a href"].location != NSNotFound &&
+       [strInfo rangeOfString:@"</a>"].location != NSNotFound){
+        NSRange start = [strInfo rangeOfString:@"<a href"];
+        NSRange end = [strInfo rangeOfString:@"</a>"];
+        strImage = [strInfo substringWithRange:NSMakeRange(start.location,end.location-start.location+4)];
+        strInfo = [strInfo stringByReplacingCharactersInRange:NSMakeRange(start.location,end.location-start.location+4) withString:@""];
+    }
+    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</div>" withString:@"</div><br>"];
+    
+    if(nIndex == 3) // 悄悄话，内容也不显示
+    {
+        return @"";
+    }
+    NSString *strMsg = [NSString stringWithFormat:@"<br>%@%@%@",strTilte,strInfo,strImage];
+
     return strMsg;
 }
 
