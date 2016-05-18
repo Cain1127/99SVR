@@ -17,6 +17,7 @@
 
 - (void)handleAudioNotify:(NSNotification *)notification
 {
+    DLog(@"音频中断");
     if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification])
     {
         if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]])
@@ -49,7 +50,7 @@
     if(self=[super init]){
         ticketCondition = [[NSCondition alloc] init];
         AVAudioSession *session = [AVAudioSession sharedInstance];
-        [session setActive: YES error:nil];
+        [session setActive:YES error:nil];
         [session setCategory:AVAudioSessionCategoryPlayback error:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleAudioNotify:) name:AVAudioSessionInterruptionNotification object:nil];
@@ -114,7 +115,7 @@
     alBufferData(bufferID, format,data, (ALsizei)dataSize,aSampleRate);
     if (alGetError()!= AL_NO_ERROR)
     {
-        NSLog(@"Error generating sources!\n");
+//        NSLog(@"Error generating sources!\n");
         [self playSound];
         [ticketCondition unlock];
         return ;
@@ -122,7 +123,7 @@
     alSourceQueueBuffers(outSourceId, 1, &bufferID);
     if (alGetError()!= AL_NO_ERROR)
     {
-        NSLog(@"Error generating sources!\n");
+//        NSLog(@"Error generating sources!\n");
         [self playSound];
         [ticketCondition unlock];
         return ;

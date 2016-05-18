@@ -134,7 +134,8 @@
     if ([parametesrs isKindOfClass:[NSDictionary class]])
     {
         int nStatus = [parametesrs[@"code"] intValue];
-        if (nStatus==1) {
+        if (nStatus==1)
+        {
             XVideoTeamInfo *teamInfo = parametesrs[@"data"];
             _introduce = [NSString stringWithFormat:@"<span stype=\"line-height:17px;\">%@</span>",teamInfo.introduce];
             @WeakObj(self)

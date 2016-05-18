@@ -18,7 +18,7 @@
     
     [_lblContent setTextAlignment:NSTextAlignmentCenter];
     [_lblContent setTextColor:UIColorFromRGB(0xffffff)];
-    [_lblContent setFont:XCFONT(15)];
+    [_lblContent setFont:XCFONT(12)];
     [_lblContent setFrame:Rect(0, 0, kScreenWidth, 20)];
     [self addSubview:_lblContent];
     
@@ -28,7 +28,6 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    DLog(@"width:%f--height:%f",self.width,self.height);
     if(self.height==kScreenHeight)
     {
         [_lblContent setCenter:CGPointMake(self.height/2,self.width/2+60)];

@@ -111,6 +111,7 @@
             [selfWeak.tableConsumeRank reloadData];
         });
     }
+    DLog(@"teach:%@",roomTeachInfo);
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
@@ -140,10 +141,8 @@
     giftDict2 = [NSMutableDictionary dictionary];
     [giftDict2 setValue:@"0" forKey:@"status"];
     [self initUIHead];
-    
     _ffPlay.roomIsCollet = nRoom_is_collet;
     [self addNotification];
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
@@ -232,7 +231,7 @@
     UILabel *lblName = [_topHUD viewWithTag:1001];
     if (lblName)
     {
-        NSString *strName = [NSString stringWithFormat:@"房间名:%@",_room.teamname];
+        NSString *strName = [NSString stringWithFormat:@"房间ID:%@",_room.roomid];
         [lblName setText:strName];
     }
 }
@@ -255,7 +254,6 @@
     [_ffPlay setRoomId:[_room.roomid intValue]];
     [self addChildViewController:_ffPlay];
     [_ffPlay setRoomName:_room.teamname];
-    
     _topHUD = [[UIView alloc] initWithFrame:Rect(0, 0, kScreenWidth, 44)];
     [self.view addSubview:_topHUD];
     
@@ -394,7 +392,6 @@
 #pragma mark 课程表数据   响应消息
 - (void)updateRoomTeachInfo:(NSNotification *)notify
 {
-    
     if (roomTeachInfo != nil && roomTeachInfo.length > 0)
     {
         @WeakObj(self)
@@ -404,14 +401,14 @@
                    selfWeak.menuView.showBadgeIndex = 4;
                }
            });
-        @WeakObj(roomTeachInfo)
-        @WeakObj(_teachView)
-        
-        dispatch_async(dispatch_get_main_queue(),
-           ^{
-               _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[roomTeachInfoWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
-           });
     }
+    @WeakObj(roomTeachInfo)
+    @WeakObj(_teachView)
+
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[roomTeachInfoWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
+    });
 }
 
 /**

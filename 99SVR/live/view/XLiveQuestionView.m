@@ -160,7 +160,10 @@
         [ProgressHUD showError:@"个股名称不能为空"];
         return ;
     }
-    
+    if (strName.length>10) {
+        [ProgressHUD showError:@"个股名称长度不能大于10"];
+        return ;
+    }
     if([DecodeJson isEmpty:strContent])
     {
         [ProgressHUD showError:@"描述不能为空"];

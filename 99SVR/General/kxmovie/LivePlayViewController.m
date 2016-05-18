@@ -75,7 +75,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollet:) name:MESSAGE_COLLET_RESP_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideoList:) name:MESSAGE_ROOM_COLLET_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc:) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
-
 }
 
 - (void)setRoomId:(int)roomId
@@ -92,21 +91,9 @@
     int  collect = [(NSString *)[notify.object valueForKey:@"collet"] intValue];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-       
         _roomIsCollet = collect;
         _btnCollet.selected = _roomIsCollet==1? YES:NO;
-//        if (_roomIsCollet)
-//        {
-//            _btnCollet.selected = YES;
-//        }
-//        else
-//        {
-//            _btnCollet.selected = NO;
-//        }
-        
     });
-    
-    
 }
 
 - (void)loadVideoList:(NSNotification *)notify
@@ -206,6 +193,12 @@
 - (void)setRoomName:(NSString *)name
 {
     _roomName = name;
+    __weak UIView *__topHUD = _TopHUD;
+    @WeakObj(_roomName)
+    dispatch_main_async_safe(^{
+        UILabel *lblName = [__topHUD viewWithTag:1001];
+        [lblName setText:_roomNameWeak];
+    });
 }
 
 #pragma mark - View lifecycle
@@ -367,6 +360,12 @@
     [topImg setImage:[UIImage imageNamed:@"dvr_conttrol_bg"]];
     [_TopHUD addSubview:topImg];
     [topImg setTag:1];
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0, 0, _TopHUD.width, 44)];
+    [lblName setFont:XCFONT(15)];
+    [lblName setTextAlignment:NSTextAlignmentCenter];
+    lblName.tag = 1001;
+    [lblName setTextColor:UIColorFromRGB(0xffffff)];
+    [_TopHUD addSubview:lblName];
     _TopHUD.hidden = YES;
     
     UIButton *btnBack = [self createPlayBtn:@"back" high:@"back"];
@@ -382,7 +381,7 @@
     [downImg setTag:1];
     [_glView addSubview:_downHUD];
     
-    _btnVideo = [self createPlayBtn:@"video_h" high:@"video"];
+    _btnVideo = [self createPlayBtn:@"video" high:@"video_h"];
     [_btnVideo addTarget:self action:@selector(connectUnVideo:) forControlEvents:UIControlEventTouchUpInside];
     _btnFull = [self createPlayBtn:@"full" high:@"full_h"];
     [_btnFull addTarget:self action:@selector(fullPlayMode) forControlEvents:UIControlEventTouchUpInside];
@@ -420,6 +419,10 @@
         UIImageView *topHud = (UIImageView *)[_TopHUD viewWithTag:1];
         topHud.frame = _TopHUD.bounds;
         _TopHUD.hidden = NO;
+        
+        UILabel *lblName = [_TopHUD viewWithTag:1001];
+        [lblName setFrame:Rect(0, 0, fWidth, 44)];
+        
         _downHUD.frame = Rect(0,fHeight-44, fWidth, 44);
         UIImageView *downImg = (UIImageView *)[_downHUD viewWithTag:1];
         downImg.frame = _downHUD.bounds;
@@ -456,12 +459,15 @@
 
 - (void)shareInfo
 {
-    NSString *strUrl = [kProtocolSingle getVideoUrl];
-    if(strUrl.length>0)
+    if(_playing)
     {
-        NSString *strInfo = [[NSString alloc] initWithFormat:@"正在看%@的视频直播，内容很不错，评论分析切中重点，你也快来看看吧",_roomName];
-        ZLShareViewController *control = [[ZLShareViewController alloc] initWithTitle:strInfo url:strUrl];
-        [control show];
+        NSString *strUrl = [kProtocolSingle getVideoUrl];
+        if(strUrl.length>0)
+        {
+            NSString *strInfo = [[NSString alloc] initWithFormat:@"正在看%@的视频直播，内容很不错，评论分析切中重点，你也快来看看吧",_roomName];
+            ZLShareViewController *control = [[ZLShareViewController alloc] initWithTitle:strInfo url:strUrl];
+            [control show];
+        }
     }
     else
     {
@@ -642,6 +648,7 @@
         [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:[RoomViewController sharedRoomViewController] withCancleBtnStr:@"只听音频" withOtherBtnStr:@"继续看视频" withMessage:nil completionCallback:^(NSInteger index) {
             if (index==1)
             {
+                KUserSingleton.checkNetWork = 1;
                 [selfWeak setOnlyAudio:NO];
             }
         }];

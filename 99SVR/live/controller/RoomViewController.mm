@@ -111,6 +111,8 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
         ^{
             [selfWeak loadHeadModel];
         });
+        [selfWeak.liveControl stopNewPlay];
+        [selfWeak.liveControl reloadModel:selfWeak.room];
         [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
     };
 }
@@ -120,18 +122,19 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     _room = room;
     [self createRoomModel];
     _roomModel.nTimes = 0;
-    [_roomModel connectViewModel:room];
+    @WeakObj(self)
+    dispatch_async(dispatch_get_global_queue(0, 0),
+    ^{
+        [selfWeak.roomModel connectViewModel:selfWeak.room];
+    });
     if([self isViewLoaded])
     {
         [self addNotify];
         [self loadHeadModel];
         [headView.segmented setSelectedSegmentIndex:0];
         [self selectIndexSegment:0];
-        [_liveControl stopNewPlay];
-        [_liveControl reloadModel:_room];
         [_ideaControl setModel:_room];
         [_tradeView reloadModel:_room];
-        [_ideaControl setModel:_room];
         [_privateView setModel:_room];
     }
 }
@@ -278,8 +281,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     [self loadHeadModel];
     [headView.segmented setSelectedSegmentIndex:0];
     [self selectIndexSegment:0];
-    [_liveControl stopNewPlay];
-    [_liveControl reloadModel:_room];
 }
 
 - (void)viewDidAppear:(BOOL)animated
