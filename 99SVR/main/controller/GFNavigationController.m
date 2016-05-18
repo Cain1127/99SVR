@@ -306,10 +306,12 @@ typedef void(^PendingBlock)(void);
         }
     }];
     
-    if (self.navigationController.viewControllers.count==1) {
+    if (self.childViewControllers.count == 1) {
         
-        //在rootviewconr上显示tabbar
-        [self.tabBarController.tabBar setHidden:NO];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //在rootviewconr上显示tabbar
+            [self.tabBarController.tabBar setHidden:NO];
+        });
 
     }
     
