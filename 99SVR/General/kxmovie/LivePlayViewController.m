@@ -396,14 +396,6 @@
     [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
     
     _downHUD.alpha = 0;
-//    if (_roomIsCollet)
-//    {
-//        _btnCollet.selected = YES;
-//    }
-//    else
-//    {
-//        _btnCollet.selected = NO;
-//    }
 }
 
 
