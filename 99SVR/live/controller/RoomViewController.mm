@@ -113,7 +113,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
             [selfWeak.liveControl stopNewPlay];
             [selfWeak.liveControl reloadModel:selfWeak.room];
         });
-        [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
+//        [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
     };
 }
 
