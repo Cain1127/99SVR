@@ -244,7 +244,7 @@ ThreadVoid get_host_form_lbs_runnable(void* param)
 
 void get_lbs_servers()
 {
-
+	/*
 	if (!is_set_lbs)
 	{
 		const char* lbs = LBS0;
@@ -277,9 +277,9 @@ void get_lbs_servers()
 	else
 	{
 		strcpy(lbs_curr, lbs_from_set);
-	}
+	}*/
 
-	//strcpy(lbs_curr, LBS0);
+	strcpy(lbs_curr, LBS0);
 
 	Thread::lock(&conn_lock);
 	lbs_count = 0;
@@ -410,8 +410,8 @@ void Connection::connect_from_lbs_asyn()
 	memset(connect_ip, 0, sizeof(connect_ip));
 	connect_port = 0;
 
-	connect("121.14.211.60", 17801);
-	return;
+	//connect("121.12.118.32", 7301);
+	//return;
 
 	if (connect_start_time == 0)
 	{
@@ -1135,7 +1135,6 @@ void Connection::report_connect_error(int err_code)
 
 	ReportLoginFailed(login_reqv == 4 ? 9 : login_req5.platformtype(), login_reqv == 4 ? login_req4.cloginid() : int2string(login_req5.userid()), connect_ip);
 
-
 	if (conn_listener != NULL)
 	{
 		conn_listener->OnConnectError(err_code);
@@ -1148,10 +1147,23 @@ bool Connection::is_closed()
 	return socket_closed;
 }
 
+static bool is_connecting()
+{
+	Thread::lock(&conn_lock);
+	bool ret = socket_connecting;
+	if (ret == false )
+	{
+		socket_connecting = true;
+	}
+	Thread::unlock(&conn_lock);
+	return ret;
+}
 
 void Connection::Reconnect()
 {
-	if ( !socket_connecting )
+	bool connecting = is_connecting();
+	LOG("conn Reconnect:closed:%d connecting:%d", socket_closed, connecting);
+	if ( !connecting )
 	{
 		close();
 		connect_from_lbs_asyn();
@@ -1160,7 +1172,9 @@ void Connection::Reconnect()
 
 void Connection::OnNetworkChanged()
 {
-	if ( !socket_connecting )
+	bool connecting = is_connecting();
+	LOG("conn OnNetworkChanged:closed:%d connecting:%d", socket_closed, connecting);
+	if ( !connecting )
 	{
 		close();
 		connect_from_lbs_asyn();

@@ -2988,7 +2988,7 @@ void parse_splashimage(char* json, HttpListener* listener)
 						questionanswer.set_askauthorname("");
 						questionanswer.set_askauthorhead("");
 						questionanswer.set_askauthorrole(0);
-						questionanswer.set_fromclient(0);
+						questionanswer.set_fromclient(atoi(datas["list"][i]["askClient"].asString().c_str()));
 					}
 					else
 					{
@@ -3012,7 +3012,7 @@ void parse_splashimage(char* json, HttpListener* listener)
 						questionanswer.set_answerauthorrole(0);
 						questionanswer.set_answertime("");
 						questionanswer.set_answercontent("");
-						questionanswer.set_fromclient(0);
+						questionanswer.set_fromclient(atoi(datas["list"][i]["askClient"].asString().c_str()));
 					}
 					vec_questionanswer.push_back(questionanswer);
 				}
@@ -3253,7 +3253,7 @@ void HttpConnection::RequestTeamList(TeamListListener* listener)
 {
 	std::string cache_content;
 	if(needRoomListCache)
-	{/*
+	{
 		needRoomListCache = false;
 
 		ReadProtocolCache("teamlist_cache.txt", cache_content);
@@ -3263,7 +3263,7 @@ void HttpConnection::RequestTeamList(TeamListListener* listener)
 			const char* tmp = cache_content.c_str();
 			parse_TeamList((char*)tmp, listener);
 		}
-	*/}
+	}
 
 	char tmp[32] = {0};
 	
@@ -3708,7 +3708,6 @@ void HttpConnection::RequestTeacherFans(int startId, int count, TeacherFansListe
 string HttpConnection::GetPrivateServiceDetailUrl(int psid)
 {
 	return string("http://") + httphosts[g_curr_api_host_index] + "/mobile.php?s=/User/personalSecrets/id/" + int2string(psid) + "/uid/" + get_user_id() + "/token/" + get_user_token() + "/client/" + get_client_type();
-//    	return string("http://")+"testphp.99ducaijing.cn/mobile.php?s=/User/personalSecrets/id/" + int2string(psid) + "/uid/" + get_user_id() + "/token/" + get_user_token() + "/client/" + get_client_type();
 }
 
 string HttpConnection::GetConsumeRecordUrl()

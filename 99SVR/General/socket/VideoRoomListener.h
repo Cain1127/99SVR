@@ -158,7 +158,7 @@ public:
 	virtual void OnTeacherScoreRecordResp(TeacherScoreRecordResp& info) = 0;
 
 	//上麦机器人对应讲师ID通知
-	virtual void OnRobotTeacherIdNoty(RobotTeacherIdNoty& info) = 0;
+	virtual void OnRobotTeacherIdNoty(std::vector<RobotTeacherIdNoty>& infos) = 0;
 
 	//讲师忠实度周版响应
 	virtual void OnTeacherGiftListResp(std::vector<TeacherGiftListResp>& infos) = 0;

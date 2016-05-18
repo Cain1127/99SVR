@@ -70,7 +70,7 @@ void VideoRoomConnection::on_do_connected()
 	
 	join_req.Log();
 
-	LOG("SEND JOIN ROOM");
+	LOG("SEND JOIN ROOM。。。。xxx");
 	SEND_MESSAGE(protocol::Sub_Vchat_JoinRoomReq, join_req);
 
 }
@@ -106,6 +106,7 @@ void VideoRoomConnection::SendMsg_ExitRoomReq(uint32 roomid)
 	room_info.set_vcbid(0);
 	in_room = false;
 	need_join_room = false;
+	main_room_id = 0;
 	joinRoomSucFlag=0;
 
 	UserExitRoomInfo req;
@@ -317,6 +318,7 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 
 	static std::vector<RoomPubMicState> g_vec_RoomPubMicStateNoty;
 	static std::vector<TeamTopNResp> g_vec_teamtop;
+	static std::vector<RobotTeacherIdNoty> g_vec_teacherId;
 
 	protocol::COM_MSG_HEADER* head = (protocol::COM_MSG_HEADER*)msg;
 	uint8* body = (uint8*)(head->content);
@@ -648,7 +650,31 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 
 		//上麦机器人对应讲师ID通知
 		case protocol::Sub_Vchat_RoborTeacherIdNoty:
-			ON_MESSAGE(room_listener, RobotTeacherIdNoty, OnRobotTeacherIdNoty);
+			//ON_MESSAGE(room_listener, RobotTeacherIdNoty, OnRobotTeacherIdNoty);
+			//break;
+			{
+				int action_num;
+				action_num = *(int*)body;
+
+				g_vec_teacherId.clear();
+
+				body += sizeof(int);
+
+				for (int i = 0; i < action_num; i++)
+				{
+					RobotTeacherIdNoty objRobotTeacherIdNoty;
+
+					objRobotTeacherIdNoty.ParseFromArray(body, objRobotTeacherIdNoty.ByteSize());
+
+					g_vec_teacherId.push_back( objRobotTeacherIdNoty );
+					body += objRobotTeacherIdNoty.ByteSize();
+				}
+
+				if ( room_listener != NULL )
+				{
+					room_listener->OnRobotTeacherIdNoty(g_vec_teacherId);
+				}
+			}
 			break;
 
 		//讲师忠实度周版响应
@@ -835,6 +861,7 @@ void VideoRoomConnection::dispatch_push_message(void* body)
 			get_full_head_icon(info.sicon(), fullpath);
 			info.set_sicon(fullpath);
 
+#ifndef WIN
 			if (info.content().size() > 2)
 			{
 				string temp = "[" + info.content() + "]";
@@ -845,6 +872,7 @@ void VideoRoomConnection::dispatch_push_message(void* body)
 					info.set_content(value[0].asString());
 				}
 			}
+#endif
 			room_listener->OnExpertNewViewNoty(info);
 		}
 		//ON_MESSAGE(room_listener, ExpertNewViewNoty, OnExpertNewViewNoty)

@@ -24,7 +24,7 @@ using std::vector;
 
 #else
 
-#define LBS0 "lbs4.99ducaijing.cn:2222"
+#define LBS0 "testlbs.99ducaijing.cn:2222"
 #define CONFIG_URL "http://121.12.118.32/caijing/?m=Api&c=ClientConfig&clientType=4&versionNumber=1&parameterName=lbs"
 #define HTTP_API "testphp.99ducaijing.cn"
 

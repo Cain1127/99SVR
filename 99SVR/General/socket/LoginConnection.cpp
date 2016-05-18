@@ -21,6 +21,7 @@ JoinRoomReq join_req;
 JoinRoomResp room_info;
 bool in_room;
 bool need_join_room;
+uint32 main_room_id;
 
 
 static time_t last_req_teamtopn_time;
@@ -93,11 +94,13 @@ void LoginConnection::join_room()
 
 	if ( in_room )
 	{
+#ifndef ANDROID
 		AfterJoinRoomReq req;
 		req.set_userid(join_req.userid());
 		req.set_vcbid(join_req.vcbid());
 
 		SEND_MESSAGE_F(protocol::MDM_Vchat_Room, protocol::Sub_Vchat_AfterJoinRoomReq, req);
+#endif
 	}
 
 	need_join_room = false;
@@ -108,6 +111,7 @@ void LoginConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 {
 
 	last_joinroom_time = time(0);
+	//main_room_id = 0;
 
 	join_req = req;
 	protocol::CMDJoinRoomReq_t temreq = { 0 };
@@ -129,21 +133,23 @@ void LoginConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 	join_req.set_crc32(crcval);
 	join_req.set_cipaddr(ip);
 
+	LOG("conn SendMsg_JoinRoomReq:closed:%d connecting:%d", socket_closed, socket_connecting);
+
 	if (socket_connecting)
 	{
-		LOG("SEND JOIN ROOM。。。socket_connecting");
+		LOG("SEND JOIN ROOM socket_connecting");
 		need_join_room = true;
 	}
 	else if ( !socket_closed )
 	{
-		LOG("SEND JOIN ROOM。。。normal");
+		LOG("SEND JOIN ROOM normal");
 		join_req.Log();
 		SEND_MESSAGE_F(protocol::MDM_Vchat_Room, protocol::Sub_Vchat_JoinRoomReq, join_req);
 		need_join_room = false;
 	}
 	else
 	{
-		LOG("SEND JOIN ROOM。。。socket_closed");
+		LOG("SEND JOIN ROOM socket_closed");
 		connect_from_lbs_asyn();
 		need_join_room = true;
 	}
