@@ -295,6 +295,7 @@ typedef void(^PendingBlock)(void);
     
     __weak typeof(self)weakSelf = self;
     
+    
     [self __addTransitionBlock:^{
         
         [weakSelf.screenShots removeLastObject];
@@ -305,8 +306,16 @@ typedef void(^PendingBlock)(void);
         }
     }];
     
-    if (self.childViewControllers.count == 1) {
+    if (self.navigationController.viewControllers.count==1) {
         
+        //在rootviewconr上显示tabbar
+        [self.tabBarController.tabBar setHidden:NO];
+
+    }
+    
+    
+    if (self.childViewControllers.count == 1) {
+            
         // 保存当前的子VIEW数量,方便socket没网时显示
         [SocketNetworkInfo sharedSocketNetworkInfo].childVcCount = 0;
         
@@ -314,6 +323,7 @@ typedef void(^PendingBlock)(void);
         if ([SocketNetworkInfo sharedSocketNetworkInfo].socketState == 1) {
             return nil;
         }
+        
         
         // 连接失败状态，重新显示状态栏
         for (UIView *subView in [[UIApplication sharedApplication].keyWindow subviews]) {

@@ -103,6 +103,7 @@
             }
         }
         UIViewController *vc = senderWeak.navigationController.viewControllers[(temp-1)];
+        [vc.view endEditing:YES];
         [senderWeak.navigationController popViewControllerAnimated:NO];
         [vc.navigationController pushViewController:[[KefuCenterController alloc]init] animated:YES];
     }];
