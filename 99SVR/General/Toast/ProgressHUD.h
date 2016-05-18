@@ -39,8 +39,8 @@
 #define HUD_STATUS_COLOR		[UIColor whiteColor]
 #define HUD_SPINNER_COLOR		[UIColor whiteColor]
 
-#define HUD_IMAGE_SUCCESS		[UIImage imageNamed:@"prompt_ok_icon"]
-#define HUD_IMAGE_ERROR			[UIImage imageNamed:@"prompt_wrong_icon"]
+#define HUD_IMAGE_SUCCESS		[UIImage imageNamed:@"prompt_ok_2_icon"]
+#define HUD_IMAGE_ERROR			[UIImage imageNamed:@"prompt_wrong_2_icon"]
 #endif
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 //#import "GlobalDefine.h"
