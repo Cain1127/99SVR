@@ -12,5 +12,13 @@
 
 @property (nonatomic,strong) UILabel *lblContent;
 
+@property (nonatomic,assign) int nMode;
+
+
+- (void)loadDefault;
+
+- (void)loadAudioModel;
+
+- (void)removeImgView;
 
 @end
