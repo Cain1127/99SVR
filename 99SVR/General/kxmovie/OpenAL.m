@@ -22,8 +22,8 @@
     {
         if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]])
         {
-            alcSuspendContext(mContext);
             alcMakeContextCurrent(NULL);
+            alcSuspendContext(mContext);
         }
         else if([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeEnded]])
         {
@@ -50,7 +50,7 @@
     if(self=[super init]){
         ticketCondition = [[NSCondition alloc] init];
         AVAudioSession *session = [AVAudioSession sharedInstance];
-        [session setActive:YES error:nil];
+//        [session setActive:YES error:nil];
         [session setCategory:AVAudioSessionCategoryPlayback error:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleAudioNotify:) name:AVAudioSessionInterruptionNotification object:nil];
@@ -93,12 +93,11 @@
         alcMakeContextCurrent(mContext);
     }
     alGenSources(1, &outSourceId);
-    alSpeedOfSound(1.0);
+//    alSpeedOfSound(1.0);
     alDopplerVelocity(1.0);
     alDopplerFactor(1.0);
     alSourcef(outSourceId, AL_PITCH, 1.0f);
     alSourcef(outSourceId, AL_GAIN, 1.0f);
-//    alSourcei(outSourceId, AL_LOOPING, AL_FALSE);
     alSourcef(outSourceId, AL_SOURCE_TYPE, AL_STREAMING);
 }
 
