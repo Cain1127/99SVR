@@ -276,6 +276,8 @@
         _openAL = [[OpenAL alloc] init];
     }
     [_openAL initOpenAL];
+//    _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
+//    [_playAudio startPlayWithBufferByteSize:4096];
 }
 
 - (void)stop
@@ -756,6 +758,7 @@
     @autoreleasepool
     {
         [_openAL openAudioFromQueue:(unsigned char*)data.bytes dataSize:len];
+//        [_playAudio putAudioData:(short *)data.bytes size:(int)data.length];
     }
 }
 

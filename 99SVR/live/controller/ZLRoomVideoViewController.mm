@@ -8,6 +8,7 @@
 
 #import "ZLRoomVideoViewController.h"
 #import "LivePlayViewController.h"
+#import "ZLLogonServerSing.h"
 #import "DecodeJson.h"
 #import "RoomChatDataSource.h"
 #import "TableViewFactory.h"
@@ -122,13 +123,13 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    
     [super viewDidAppear:animated];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
+//    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
+    [[ZLLogonServerSing sharedZLLogonServerSing] connectVideoRoom:[_room.roomid intValue] roomPwd:@""];
 }
 
 - (void)initTableView
@@ -317,7 +318,22 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopPlay) name:MESSAGE_ROOM_MIC_CLOSE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendLiwuRespInfo) name:MEESAGE_ROOM_SEND_LIWU_RESP_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendLiwuNotifyInfo:) name:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinRoomErr:) name:MESSAGE_JOIN_ROOM_ERR_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
 }
+
+- (void)joinSuc
+{
+    DLog(@"加入房间成功");
+    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
+}
+
+- (void)joinRoomErr
+{
+    DLog(@"加入房间失败");
+}
+
+
 /**
  *  停止播放
  */

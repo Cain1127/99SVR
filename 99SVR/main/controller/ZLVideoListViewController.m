@@ -7,6 +7,7 @@
 //
 
 #import "ZLVideoListViewController.h"
+#import "ZLRoomVideoViewController.h"
 #import "RoomHttp.h"
 #import "UIViewController+EmpetViewTips.h"
 #import "RoomViewController.h"
@@ -192,15 +193,22 @@
 }
 
 - (void)connectRoom:(RoomHttp *)room{
-    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    if ([roomView.room.roomid isEqualToString:room.roomid])
-    {
-        [roomView addNotify];
+    if (KUserSingleton.nStatus) {
+        RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+        if ([roomView.room.roomid isEqualToString:room.roomid])
+        {
+            [roomView addNotify];
+            [self.navigationController pushViewController:roomView animated:YES];
+            return ;
+        }
+        [roomView setRoom:room];
         [self.navigationController pushViewController:roomView animated:YES];
-        return ;
     }
-    [roomView setRoom:room];
-    [self.navigationController pushViewController:roomView animated:YES];
+    else
+    {
+        ZLRoomVideoViewController *viewVC = [[ZLRoomVideoViewController alloc] initWithModel:room];
+        [self.navigationController pushViewController:viewVC animated:YES];
+    }
 }
 
 @end

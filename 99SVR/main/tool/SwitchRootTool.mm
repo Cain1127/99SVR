@@ -51,9 +51,6 @@
     DLog(@"currentVersion:%@-----lastVersion:%@",currentVersion,lastVersion);
     if ([currentVersion isEqualToString:lastVersion]) { // 版本号相同：这次打开和上次打开的是同一个版本
         app.window.rootViewController = [[TabBarController alloc] init];
-        
-//        SocketNetworkView *networkView = [[SocketNetworkView alloc] init];
-//        [app.window.rootViewController.view addSubview:networkView];
     } else { // 这次打开的版本和上一次不一样，显示新特性
         app.window.rootViewController = [[NewfeatureViewController alloc] init];
     }

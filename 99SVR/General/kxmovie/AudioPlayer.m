@@ -124,7 +124,6 @@ void AQBufferCallback(void *                inUserData ,
         }
     }else {
         if(write(pip_fd[1], pcmData, nSize) < 0){
-            NSLog(@"write to the pipe failed!");
         }
     }
 }

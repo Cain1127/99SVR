@@ -22,11 +22,16 @@
     {
         if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]])
         {
+            mContext = alcGetCurrentContext();
+            AVAudioSession *session = [AVAudioSession sharedInstance];
+            [session setActive:NO error: nil];
             alcMakeContextCurrent(NULL);
             alcSuspendContext(mContext);
         }
         else if([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeEnded]])
         {
+            AVAudioSession *session = [AVAudioSession sharedInstance];
+            [session setActive: YES error: nil];
             alcMakeContextCurrent(mContext);
             alcProcessContext(mContext);
         }
@@ -50,7 +55,7 @@
     if(self=[super init]){
         ticketCondition = [[NSCondition alloc] init];
         AVAudioSession *session = [AVAudioSession sharedInstance];
-//        [session setActive:YES error:nil];
+        [session setActive:YES error:nil];
         [session setCategory:AVAudioSessionCategoryPlayback error:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleAudioNotify:) name:AVAudioSessionInterruptionNotification object:nil];
@@ -93,12 +98,11 @@
         alcMakeContextCurrent(mContext);
     }
     alGenSources(1, &outSourceId);
-//    alSpeedOfSound(1.0);
     alDopplerVelocity(1.0);
     alDopplerFactor(1.0);
-    alSourcef(outSourceId, AL_PITCH, 1.0f);
-    alSourcef(outSourceId, AL_GAIN, 1.0f);
-    alSourcef(outSourceId, AL_SOURCE_TYPE, AL_STREAMING);
+//    alSourcef(outSourceId, AL_PITCH, 1.0f);
+//    alSourcef(outSourceId, AL_GAIN, 1.0f);
+//    alSourcef(outSourceId, AL_SOURCE_TYPE, AL_STREAMING);
 }
 
 - (void)openAudioFromQueue:(unsigned char*)data dataSize:(UInt32)dataSize
@@ -114,15 +118,17 @@
     alBufferData(bufferID, format,data, (ALsizei)dataSize,aSampleRate);
     if (alGetError()!= AL_NO_ERROR)
     {
-//        NSLog(@"Error generating sources!\n");
+        
+        DLog(@"Error generating sources!\n");
         [self playSound];
         [ticketCondition unlock];
         return ;
     }
     alSourceQueueBuffers(outSourceId, 1, &bufferID);
+    alSourcef(outSourceId, AL_PITCH, 1.0);
     if (alGetError()!= AL_NO_ERROR)
     {
-//        NSLog(@"Error generating sources!\n");
+        DLog(@"Error generating sources!\n");
         [self playSound];
         [ticketCondition unlock];
         return ;
@@ -130,7 +136,12 @@
     [self updataQueueBuffer];
     int queued;
     alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
-    if(queued>20)
+    if(queued>60)
+    {
+        alDeleteSources(1, &outSourceId);
+        alGenBuffers(1, &outSourceId);
+    }
+    else if(queued>20)
     {
         [NSThread sleepForTimeInterval:0.016f];
     }

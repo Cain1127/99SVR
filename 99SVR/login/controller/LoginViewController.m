@@ -218,8 +218,13 @@
     
     hidenView = [[UIView alloc] initWithFrame:Rect(0, _btnLogin.y+_btnLogin.height, kScreenWidth,100)];
     [self.view addSubview:hidenView];
-    if ([UserInfo sharedUserInfo].nStatus) {
+    if ([UserInfo sharedUserInfo].nStatus)
+    {
         hidenView.hidden = NO;
+    }
+    else
+    {
+        hidenView.hidden = YES;
     }
     UILabel *line = [[UILabel alloc] initWithFrame:Rect(15, 30, kScreenWidth-30, 0.5)];
     [line setBackgroundColor:kLineColor];
@@ -286,7 +291,6 @@
 #pragma mark 微信登录请求
 - (void)weiChatLogin
 {
-    
     [self.view makeToastActivity_bird];
     SendAuthReq *req = [[SendAuthReq alloc] init];
     req.scope = @"snsapi_userinfo,snsapi_base";
@@ -377,7 +381,6 @@
 
 - (void)qqLogin
 {
-//    [ProgressHUD show:@"QQ授权中..." viewInfo:self.view];
     Loading_Cup_Show(self.view);
     _tencentOAuth = [[TencentOAuth alloc] initWithAppId:@"1105298719" andDelegate:self];
     NSArray* permissions = [NSArray arrayWithObjects:

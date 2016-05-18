@@ -98,8 +98,14 @@
     }
     [IQKeyboardManager sharedManager].shouldShowTextFieldPlaceholder = NO;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-   // self.window.rootViewController = [[TabBarController alloc] init];
-     [SwitchRootTool switchRootForAppDelegate];
+    if (KUserSingleton.nStatus)
+    {
+        [SwitchRootTool switchRootForAppDelegate];
+    }
+    else
+    {
+        self.window.rootViewController = [[TabBarController alloc] init];
+    }
     [self.window makeKeyAndVisible];
     
     

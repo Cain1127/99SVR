@@ -8,6 +8,7 @@
 
 #import "HomeViewController.h"
 #import "ZLTabBar.h"
+#import "ZLRoomVideoViewController.h"
 #import "UIViewController+EmpetViewTips.h"
 #import "TQDetailedTableViewController.h"
 #import "TQIdeaModel.h"
@@ -78,7 +79,8 @@
     @WeakObj(self)
     _scrollView.clickItemOperationBlock = ^(NSInteger index) {
          BannerModel *model = [selfWeak.aryBanner objectAtIndex:index];
-         if(model.webUrl!=nil && model.webUrl.length>0){
+         if(model.webUrl!=nil && model.webUrl.length>0 && KUserSingleton.nStatus)
+         {
              NNSVRViewController *svrView = [[NNSVRViewController alloc] initWithPath:model.webUrl title:model.title];
              [selfWeak.navigationController pushViewController:svrView animated:YES];
          }
@@ -590,15 +592,22 @@
 }
 
 - (void)connectRoom:(RoomHttp *)room{
-    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    if ([roomView.room.roomid isEqualToString:room.roomid])
-    {
-        [roomView addNotify];
+    if (KUserSingleton.nStatus) {
+        RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+        if ([roomView.room.roomid isEqualToString:room.roomid])
+        {
+            [roomView addNotify];
+            [self.navigationController pushViewController:roomView animated:YES];
+            return ;
+        }
+        [roomView setRoom:room];
         [self.navigationController pushViewController:roomView animated:YES];
-        return ;
     }
-    [roomView setRoom:room];
-    [self.navigationController pushViewController:roomView animated:YES];
+    else
+    {
+        ZLRoomVideoViewController *viewVC = [[ZLRoomVideoViewController alloc] initWithModel:room];
+        [self.navigationController pushViewController:viewVC animated:YES];
+    }
 }
 
 - (void)enterEvent:(UIButton *)sender

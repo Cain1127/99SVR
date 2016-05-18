@@ -22,6 +22,7 @@
     NSTimer *updateBufferTimer;
     BOOL iPodIsPlaying;
     NSCondition* ticketCondition;
+    BOOL bPause;
 }
 @property(nonatomic)ALCcontext *mContext;
 @property(nonatomic)ALCdevice *mDevice;

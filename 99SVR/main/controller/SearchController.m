@@ -8,6 +8,7 @@
 
 #import "SearchController.h"
 #import "MySearchBar.h"
+#import "ZLRoomVideoViewController.h"
 #import "RoomViewController.h"
 #import "ConnectRoomViewModel.h"
 #import "AlertFactory.h"
@@ -363,20 +364,22 @@
     [UserDefaults setObject:tableAry forKey:kHistoryList];
     [UserDefaults synchronize];
     
-//    [self.view makeToastActivity_bird];
-//    if (_roomViewModel==nil) {
-//        _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
-//    }
-//    [_roomViewModel connectViewModel:room];
-    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    if ([roomView.room.roomid isEqualToString:room.roomid])
-    {
-        [roomView addNotify];
+    if (KUserSingleton.nStatus) {
+        RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+        if ([roomView.room.roomid isEqualToString:room.roomid])
+        {
+            [roomView addNotify];
+            [self.navigationController pushViewController:roomView animated:YES];
+            return ;
+        }
+        [roomView setRoom:room];
         [self.navigationController pushViewController:roomView animated:YES];
-        return ;
     }
-    [roomView setRoom:room];
-    [self.navigationController pushViewController:roomView animated:YES];
+    else
+    {
+        ZLRoomVideoViewController *viewVC = [[ZLRoomVideoViewController alloc] initWithModel:room];
+        [self.navigationController pushViewController:viewVC animated:YES];
+    }
 }
 
 - (BOOL)shouldAutorotate

@@ -11,6 +11,7 @@
 #import "RoomViewController.h"
 #import "CustomViewController.h"
 #import "VideoCell.h"
+#import "ZLRoomVideoViewController.h"
 #import "UserInfo.h"
 #import "RoomHttp.h"
 #import "ConnectRoomViewModel.h"
@@ -172,23 +173,22 @@
 }
 
 - (void)connectRoom:(RoomHttp *)room{
-    /*
-    [self.view makeToastActivity_bird];
-    if (_roomViewModel==nil)
-    {
-        _roomViewModel = [[ConnectRoomViewModel alloc] initWithViewController:self];
-    }
-    [_roomViewModel connectViewModel:room];
-   */
-    RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    if ([roomView.room.roomid isEqualToString:room.roomid])
-    {
-        [roomView addNotify];
+    if (KUserSingleton.nStatus) {
+        RoomViewController *roomView = [RoomViewController sharedRoomViewController];
+        if ([roomView.room.roomid isEqualToString:room.roomid])
+        {
+            [roomView addNotify];
+            [self.navigationController pushViewController:roomView animated:YES];
+            return ;
+        }
+        [roomView setRoom:room];
         [self.navigationController pushViewController:roomView animated:YES];
-        return ;
     }
-    [roomView setRoom:room];
-    [self.navigationController pushViewController:roomView animated:YES];
+    else
+    {
+        ZLRoomVideoViewController *viewVC = [[ZLRoomVideoViewController alloc] initWithModel:room];
+        [self.navigationController pushViewController:viewVC animated:YES];
+    }
 }
 
 @end

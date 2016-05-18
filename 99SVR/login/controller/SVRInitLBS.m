@@ -93,6 +93,7 @@
         [UserDefaults setBool:0 forKey:strVersion];
     }
     __block NSString *__strVersion = strVersion;
+    
     NSString *strLbs = [NSString stringWithFormat:@"%@%@",lbs_status,strVersion];
     [BaseService get:strLbs dictionay:nil timeout:10 success:^(id responseObject) {
          NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
