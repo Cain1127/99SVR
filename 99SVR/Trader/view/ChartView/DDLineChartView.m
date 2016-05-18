@@ -168,27 +168,12 @@
     CGColorRef lineColor = [[_lineColors objectAtIndex:index] CGColor];
     
     
-    //遍历数据找到最大值，最小值
-//    CGFloat minY = [arrays[0] floatValue];
-//    CGFloat maxY = [arrays[0] floatValue];
-//    
-//    for (int j=0; j!=arrays.count; j++){
-//        CGFloat num = [arrays[j] floatValue];
-//        if (maxY<=num){
-//            maxY = num;
-//        }
-//        if (minY>=num){
-//            minY = num;
-//        }
-//    }
-    
     NSInteger count = 0;
     
-    if (arrays.count==1) {
-        
+    if (arrays.count==1) {//只有一个点的时候
         count = arrays.count;
+//        arrays = @[arrays[0],arrays[0]];
     }else{
-        
         count = arrays.count-1;
     }
     
@@ -210,15 +195,23 @@
         //x坐标
         CGFloat point_x = scale_x *i;
         CGFloat tempValueY = [arrays[i] floatValue];
-        //Y坐标
+        //Y坐标 把数值转成Y的坐标点
         CGFloat point_y = ((fabs(_valueMax_Y - tempValueY))/(_valueMax_Y - _valueMin_Y))*(_height);
         CGPoint point = CGPointMake(point_x, point_y);
+        
+        //添加原点
+        if (arrays.count==1) {//只有一个点的时候
+            point = (CGPoint){_width/2.0,point_y};
+            [self addPoint:point withPointColor:_lineColors[index]];
+        }
+        
         if (i==0) {//添加第一个点
-            
             [progressline moveToPoint:point];
         }
         [progressline addLineToPoint:point];
         [progressline moveToPoint:point];
+        
+        
     }
     
     chartLine.path = progressline.CGPath;
@@ -255,5 +248,18 @@
     }
 }
 
+
+#pragma mark 折线中间的原点
+- (void)addPoint:(CGPoint)point withPointColor:(UIColor *)color
+{
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(5, 5, 8, 8)];
+    view.center = point;
+    view.layer.masksToBounds = YES;
+    view.layer.cornerRadius = 4;
+//    view.layer.borderWidth = 2;
+//    view.layer.borderColor = [color CGColor];
+    view.backgroundColor =color;
+    [self addSubview:view];
+}
 
 @end
