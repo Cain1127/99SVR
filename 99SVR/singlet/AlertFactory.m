@@ -102,10 +102,15 @@
                 temp=i;
             }
         }
-        UIViewController *vc = senderWeak.navigationController.viewControllers[(temp-1)];
-        [vc.view endEditing:YES];
-        [senderWeak.navigationController popViewControllerAnimated:NO];
-        [vc.navigationController pushViewController:[[KefuCenterController alloc]init] animated:YES];
+        
+        if (temp>0) {
+            UIViewController *vc = senderWeak.navigationController.viewControllers[(temp-1)];
+            [vc.view endEditing:YES];
+            [senderWeak.navigationController popViewControllerAnimated:NO];
+            [vc.navigationController pushViewController:[[KefuCenterController alloc]init] animated:YES];
+        }
+        
+        
     }];
     [alert addAction:requestAction];
     dispatch_async(dispatch_get_main_queue(), ^{
