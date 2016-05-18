@@ -1,6 +1,4 @@
 
-
-
 #import "StockHomeViewController.h"
 #import "SliderMenuView.h"
 #import "ShareFunction.h"
@@ -16,7 +14,6 @@
 #import "StockDealModel.h"
 #import "TQMailboxViewController.h"
 #import "UIViewController+EmpetViewTips.h"
-
 @interface StockHomeViewController ()<StockHomeTableViewModelDelegate>
 /**滑动控制器*/
 @property (nonatomic, strong) SliderMenuView *sliderMenuView;

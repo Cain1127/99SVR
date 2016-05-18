@@ -94,10 +94,15 @@
 - (void)addNotify
 {
     [self addNotification];
+    
 }
 
 - (void)reloadModel:(RoomHttp *)room
 {
+    
+    //重置全部红点提示
+    [_menuView resetAllBadgePrompt];
+
     _room = room;
     [_menuView setDefaultIndex:1];
     _ffPlay.roomIsCollet = nRoom_is_collet;
@@ -180,6 +185,7 @@
     if (_menuView)
     {
         [_menuView resetSelectFirstIndex];
+        
     }
 }
 
