@@ -175,22 +175,7 @@
 }
 
 + (BOOL)sendLocalInfo:(NSString *)strMsg toid:(int)toId roomInfo:(RoomInfo *)rInfo aryChat:(NSMutableArray *)aryChat{
-    strMsg = [DecodeJson replaceEmojiNewString:strMsg];
-    NSString *strFrom = [NSString stringWithFormat:@"<span style=\"color: #919191\">%@</span>",[UserInfo sharedUserInfo].strName];
-    if (toId!=0)
-    {
-        RoomUser *user = [rInfo findUser:toId];
-        NSString *strTo = [RoomService getToUser:toId name:user.m_strUserAlias];
-        NSString *strInfo = [NSString stringWithFormat:@"%@ 回复 %@ </span><br>%@</span>",strFrom,strTo,strMsg];
-//        [aryChat addObject:strInfo];
-    }
-    else
-    {
-        NSString *strInfo = [NSString stringWithFormat:@"%@<br>%@</span>",strFrom,strMsg];
-//        [aryChat addObject:strInfo];
-    }
-    [RoomService clearChatInfo:aryChat];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+    
     return YES;
 }
 

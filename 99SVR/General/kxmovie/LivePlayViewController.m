@@ -201,19 +201,9 @@
     });
 }
 
-#pragma mark - View lifecycle
-- (void)startLoad
-{
-    [_glView makeToastActivity:@"bottom"];
-}
-
 - (void)stopLoad
 {
-    __weak UIImageView *__glView = _glView;
-    dispatch_async(dispatch_get_main_queue(),
-    ^{
-        [__glView hideToastActivity];
-    });
+
 }
 
 - (void)frameView
@@ -252,17 +242,20 @@
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
     [_glView.lblContent setText:@""];
-    lblText.hidden = YES;
+    [_glView loadDefault];
+    _glView.nMode = 1;
 }
 
 - (void)setNoVideo
 {
     char cBuffer[100]={0};
-    sprintf(cBuffer,"video_shangmai_bg@2x");
+    sprintf(cBuffer,"video_logo_bg@2x");
     NSString *strName = [NSString stringWithUTF8String:cBuffer];
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
-    [_glView.lblContent setText:@"音频模式"];
+    [_glView.lblContent setText:@""];
+    [_glView loadAudioModel];
+    _glView.nMode = 2;
 }
 
 - (id)init
@@ -297,7 +290,6 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
     });
-    [_glView hideToastActivity];
     [_playAudio stopPlay];
     @WeakObj(self)
     gcd_main_safe(
@@ -592,6 +584,7 @@
     NSURL *url1 = [[NSBundle mainBundle] URLForResource:strName withExtension:@"png"];
     [_glView sd_setImageWithURL:url1];
     [_glView.lblContent setText:@"当前无讲师上麦"];
+    [_glView removeImgView];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -634,7 +627,6 @@
     dispatch_main_async_safe(
     ^{
          [__self showAlertView];
-         [__self startLoad];
          __self.btnVideo.selected = YES;
          [__self setDefaultImg];
     });
@@ -699,6 +691,11 @@
     @WeakObj(self)
     dispatch_sync(dispatch_get_main_queue(),
     ^{
+        if (selfWeak.glView.nMode==1)
+        {
+            [selfWeak.glView removeImgView];
+            selfWeak.glView.nMode = 0;
+        }
         if (!selfWeak.bVideo)
         {
             [selfWeak.glView setImage:selfWeak.currentImage];
@@ -756,11 +753,6 @@
 
 - (void)onAudioData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len
 {
-    if(!bCoding)
-    {
-        [_glView hideToastActivity];
-        bCoding = YES;
-    }
     @autoreleasepool
     {
         [_openAL openAudioFromQueue:(unsigned char*)data.bytes dataSize:len];
