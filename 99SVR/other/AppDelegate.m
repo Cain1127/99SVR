@@ -276,6 +276,13 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
+    if ([[url absoluteString] rangeOfString:@"svrAlipay"].location != NSNotFound) {
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic)
+         {
+             NSLog(@"result = %@",resultDic);
+         }];
+        return YES;
+    }
     if([url.absoluteString rangeOfString:@"tencent"].location !=NSNotFound)
     {
         return [TencentOAuth HandleOpenURL:url];
