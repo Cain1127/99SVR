@@ -182,8 +182,18 @@
 //        }
 //    }
     
+    NSInteger count = 0;
     
-    CGFloat scale_x = (_width/(arrays.count-1)/1.0);
+    if (arrays.count==1) {
+        
+        count = arrays.count;
+    }else{
+        
+        count = arrays.count-1;
+    }
+    
+    
+    CGFloat scale_x = (_width/(count)/1.0);
     CAShapeLayer *chartLine = [CAShapeLayer layer];
     chartLine.lineCap = kCALineCapRound;
     chartLine.lineJoin = kCALineJoinBevel;
