@@ -75,6 +75,7 @@
 -(UIWebView *)webView{
     if (!_webView) {
         _webView = [[UIWebView alloc]initWithFrame:(CGRect){0,0,self.frame.size.width,self.frame.size.height}];
+        _webView.delegate = self;
         [self addSubview:_webView];
     }
     return _webView;
@@ -83,6 +84,8 @@
 -(WKWebView *)wkWebView{
     if (!_wkWebView) {
         _wkWebView = [[WKWebView alloc]initWithFrame:(CGRect){0,0,self.frame.size.width,self.frame.size.height}];
+        _wkWebView.navigationDelegate = self;
+        [_wkWebView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew |NSKeyValueObservingOptionOld context:nil];
         [self addSubview:_wkWebView];
     }
     return _wkWebView;
@@ -96,14 +99,24 @@
     }
     
     if (_wkWebView) {
+        [_wkWebView removeObserver:self forKeyPath:@"title"];
         _wkWebView = nil;
         _bridge = nil;
     }
 }
 
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
+    
+    NSString *title = [change objectForKey:@"new"];
+    if ([self.delegate respondsToSelector:@selector(refreshTitle:)]) {
+        [self.delegate refreshTitle:title];
+    }
+    
+    
+}
+
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    DLog(@"test:%@",[request.URL absoluteString]);
     return YES;
 }
 
@@ -114,11 +127,14 @@
     }
 }
 
-- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
-{
-//    NSString *promptCode = [NSString stringWithFormat:@"openStockRecord(\"%@\")"];
-//    [_wkWebView evaluateJavaScript:promptCode completionHandler:^(id object, NSError *error) { }];
+- (void)webViewDidFinishLoad:(UIWebView *)webView{
+    
+    NSString *title = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    if ([self.delegate respondsToSelector:@selector(refreshTitle:)]) {
+        [self.delegate refreshTitle:title];
+    }
 }
+
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation
       withError:(NSError *)error

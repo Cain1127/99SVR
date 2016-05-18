@@ -16,6 +16,9 @@
 
 - (void)AdaptiveWebViewDidFailLoadWithError:(NSError *)error;
 
+@optional
+/**更新标题*/
+- (void)refreshTitle:(NSString *)title;
 @end
 
 @interface AdaptiveWebView : UIView

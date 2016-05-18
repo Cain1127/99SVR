@@ -100,16 +100,15 @@
     }];
 }
 
+-(void)refreshTitle:(NSString *)title{
+    
+    [self setTitleText:title];
+}
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[RoomViewController sharedRoomViewController] startVideoPlay];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    DLog(@"87654321");
-}
 
 @end
