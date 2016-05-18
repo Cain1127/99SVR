@@ -172,11 +172,11 @@
     [self.view addSubview:_btnFind];
     
     [_btnLogin setTitle:@"登 录" forState:UIControlStateNormal];
-    [_btnLogin setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
-    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
-    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
+    [_btnLogin setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+    [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
     [_btnLogin setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
-    _btnLogin.titleLabel.font = XCFONT(15);
+    _btnLogin.titleLabel.font = XCFONT(16);
     
     [_btnRegin setTitleColor:UIColorFromRGB(0x0078DD) forState:UIControlStateNormal];
     [_btnRegin setTitle:@"快速注册" forState:UIControlStateNormal];
@@ -656,7 +656,7 @@
         dispatch_async(dispatch_get_main_queue(),
         ^{
             Loading_Hide(__self.view);
-            [ProgressHUD showError:@"账号或密码错误，请重新输入"];
+            [ProgressHUD showError:@"账号或密码错误"];
         });
     }
 }

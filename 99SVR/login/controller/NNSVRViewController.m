@@ -95,6 +95,8 @@
 -(void)refreshTitle:(NSString *)title{
     
     [self setTitleText:title];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
