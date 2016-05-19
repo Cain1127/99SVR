@@ -364,12 +364,12 @@
     if (btnSender.tag==101)
     {
         strTitle = @"用户服务协议";
-        strPath = @"http://www.99ducaijing.com/phone/appyhxy.aspx";
+        strPath = FWXY_URL;
     }
     else if(btnSender.tag == 102)
     {
         strTitle = @"隐私权条款";
-        strPath = @"http://www.99ducaijing.com/phone/appysxy.aspx";
+        strPath = YSQTK_URL;
     }
     NNSVRViewController *nnView = [[NNSVRViewController alloc] initWithPath:strPath title:strTitle];
     [self.navigationController pushViewController:nnView animated:YES];
