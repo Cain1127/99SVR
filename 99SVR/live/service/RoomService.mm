@@ -72,12 +72,7 @@
         }
         
     }
-    strInfo = [DecodeJson replaceEmojiNewString:strInfo];
-    
-
-    NSLog(@" toid   %d",msg->toid());
-    NSLog(@"%@",strInfo);
-    
+    strInfo = [DecodeJson replaceEmojiNewString:strInfo];    
     [aryChat addObject:strInfo];
     
     NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[UserInfo sharedUserInfo].nUserId];
