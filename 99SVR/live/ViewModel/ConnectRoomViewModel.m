@@ -39,7 +39,10 @@
 
 - (void)joinRoomErr:(NSNotification *)notify{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [DecodeJson cancelPerfor:self];
+    @WeakObj(self)
+    dispatch_main_async_safe(^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:selfWeak];
+    });
     if ([notify.object isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dict = [notify object];
         int errid = [[dict objectForKey:@"err"] intValue];
@@ -89,6 +92,10 @@
             }
             else
             {
+                if (_ConnectRoomResult)
+                {
+                    _ConnectRoomResult(0);
+                }
                 dispatch_async(dispatch_get_main_queue(),
                 ^{
                     [ProgressHUD showError:strMsgWeak];
@@ -100,38 +107,27 @@
 
 - (void)joinSuc
 {
-    [DecodeJson cancelPerfor:self];
+    @WeakObj(self)
+    dispatch_main_async_safe(^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:selfWeak];
+    });
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     if (_ConnectRoomResult)
     {
         _ConnectRoomResult(1);
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (KUserSingleton.nStatus)
-        {
-//            [_controlWeak.view hideToastActivity];
-//            RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-//            [roomView setRoom:_room];
-//            [_controlWeak.navigationController pushViewController:roomView animated:YES];
-        }
-        else
-        {
-//            [_controlWeak.view hideToastActivity];
-//            ZLRoomVideoViewController *control = [[ZLRoomVideoViewController alloc] initWithModel:_room];
-//            [_controlWeak.navigationController pushViewController:control animated:YES];
-        }
-    });
-    
 }
 
 - (void)joinRoomTimeOut
 {
-    [DecodeJson cancelPerfor:self];
-    @WeakObj(_control)
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [_controlWeak.view hideToastActivity];
-//        [ProgressHUD showError:@"加入房间失败"];
-//    });
+    @WeakObj(self)
+    dispatch_main_async_safe(^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:selfWeak];
+    });
+    if (_ConnectRoomResult)
+    {
+        _ConnectRoomResult(999);
+    }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

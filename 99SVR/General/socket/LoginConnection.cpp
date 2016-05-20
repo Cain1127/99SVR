@@ -117,8 +117,9 @@ void LoginConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 	protocol::CMDJoinRoomReq_t temreq = { 0 };
 	string ip = join_req.cipaddr();
 	join_req.set_cipaddr("");
-	join_req.set_userid(loginuser.userid());
-	join_req.set_cuserpwd(login_password);
+//    join_req.set_userid(loginuser.userid());
+//    join_req.set_cuserpwd(login_password);
+
 	join_req.set_devtype(login_nmobile);
 	join_req.set_bloginsource(login_reqv == 4 ? 0 : 1);
 	join_req.set_time((uint32)time(0));
@@ -213,7 +214,7 @@ void LoginConnection::SendMsg_SessionTokenReq()
 void LoginConnection::SendMsg_SetUserInfoReq(SetUserProfileReq& req)
 {
 	req.set_userid(loginuser.userid());
-	req.set_introducelen(req.introduce().size());
+	req.set_introducelen((int32_t)(req.introduce().size()));
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_SetUserProfileReq, req, req.introducelen());
 }
 

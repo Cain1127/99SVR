@@ -11,17 +11,13 @@
 #include <math.h>
 #include <limits.h>
 #include <signal.h>
-#include "libavformat/avformat.h"
-#include "libswscale/swscale.h"
 #include <assert.h>
 #import <QuartzCore/QuartzCore.h>
 #import "LivePlayImageView.h"
-#import "MediaSocket.h"
 
 //播放器
 @interface LivePlayViewController : UIViewController
 {
-    MediaSocket *_media;
 }
 
 @property (nonatomic) BOOL playing;

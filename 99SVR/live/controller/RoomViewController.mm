@@ -107,13 +107,25 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     @WeakObj(self)
     _roomModel.ConnectRoomResult = ^(int nStatus)
     {
-        dispatch_main_async_safe(
-        ^{
-            [selfWeak loadHeadModel];
-            [selfWeak.liveControl stopNewPlay];
-            [selfWeak.liveControl reloadModel:selfWeak.room];
-        });
-//        [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
+        if(nStatus==1)
+        {
+            dispatch_main_async_safe(
+            ^{
+                [selfWeak loadHeadModel];
+                [selfWeak.liveControl stopNewPlay];
+                [selfWeak.liveControl reloadModel:selfWeak.room];
+            });
+        }
+        else if(nStatus == 999)
+        {
+            dispatch_main_async_safe(
+             ^{
+                 [ProgressHUD showError:@"加入房间超时"];
+                 [selfWeak loadHeadModel];
+                 [selfWeak.liveControl stopNewPlay];
+                 [selfWeak.liveControl reloadModel:selfWeak.room];
+             });
+        }
     };
 }
 

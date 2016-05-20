@@ -16,21 +16,11 @@
 
 + (void)loadAllInfo
 {
+    [SVRInitLBS authVersion];
     //获取登录服务器地址
     [SVRInitLBS loginLocal];
-    //获取房间地址
-    [SVRInitLBS requestLbs];
     
     [SVRInitLBS requestGift];
-    
-    [SVRInitLBS authVersion];
-    
-    [SVRInitLBS httpTest];
-}
-
-+ (void)httpTest
-{
-//    [kHTTPSingle RequestViewpointSummary:0 start:0 count:20];
 }
 
 /**

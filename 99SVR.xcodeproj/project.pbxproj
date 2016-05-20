@@ -213,6 +213,13 @@
 		B4FEC6901CD1F94C0090DD50 /* loading_jixiangwu0006.png in Resources */ = {isa = PBXBuildFile; fileRef = B4FEC6891CD1F94C0090DD50 /* loading_jixiangwu0006.png */; };
 		B4FEC6911CD1F94C0090DD50 /* loading_jixiangwu0007.png in Resources */ = {isa = PBXBuildFile; fileRef = B4FEC68A1CD1F94C0090DD50 /* loading_jixiangwu0007.png */; };
 		BB06311C1C61C827008AD41D /* NoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB06311B1C61C827008AD41D /* NoticeModel.m */; };
+		BB07E4471CEED7BA00C57750 /* MCAudioBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BB07E43A1CEED7BA00C57750 /* MCAudioBuffer.m */; };
+		BB07E4481CEED7BA00C57750 /* MCAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = BB07E43C1CEED7BA00C57750 /* MCAudioFile.m */; };
+		BB07E4491CEED7BA00C57750 /* MCAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = BB07E43E1CEED7BA00C57750 /* MCAudioFileStream.m */; };
+		BB07E44A1CEED7BA00C57750 /* MCAudioOutputQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = BB07E4401CEED7BA00C57750 /* MCAudioOutputQueue.m */; };
+		BB07E44B1CEED7BA00C57750 /* MCAudioSession.m in Sources */ = {isa = PBXBuildFile; fileRef = BB07E4421CEED7BA00C57750 /* MCAudioSession.m */; };
+		BB07E44C1CEED7BA00C57750 /* MCParsedAudioData.m in Sources */ = {isa = PBXBuildFile; fileRef = BB07E4441CEED7BA00C57750 /* MCParsedAudioData.m */; };
+		BB07E44D1CEED7BA00C57750 /* MCSimpleAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = BB07E4461CEED7BA00C57750 /* MCSimpleAudioPlayer.m */; };
 		BB0D3D031CD0AA3200A57E77 /* XIdeaDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0D3D021CD0AA3200A57E77 /* XIdeaDataSource.m */; };
 		BB0D3D061CD0BF6100A57E77 /* XPrivateService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0D3D051CD0BF6100A57E77 /* XPrivateService.m */; };
 		BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B481CB112FC00C573E0 /* BaseService.m */; };
@@ -354,7 +361,6 @@
 		BB2CA6B01CD34D7E00DFE56E /* register_repeat_password_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB2CA6671CD34D7E00DFE56E /* register_repeat_password_icon@2x.png */; };
 		BB2CA6B11CD34D7E00DFE56E /* register_repeat_password_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB2CA6681CD34D7E00DFE56E /* register_repeat_password_icon@3x.png */; };
 		BB2CA6B61CD4903A00DFE56E /* ZLPrivateDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA6B51CD4903A00DFE56E /* ZLPrivateDataSource.m */; };
-		BB2CA6D51CD505F200DFE56E /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA6D41CD505F200DFE56E /* AudioPlayer.m */; };
 		BB2CA6DC1CD51C1400DFE56E /* ZLShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2CA6DB1CD51C1400DFE56E /* ZLShareView.m */; };
 		BB2CA7161CD51FD500DFE56E /* chatRightView1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB2CA6DE1CD51FD500DFE56E /* chatRightView1@2x.png */; };
 		BB2CA7171CD51FD500DFE56E /* chatRightView1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB2CA6DF1CD51FD500DFE56E /* chatRightView1@3x.png */; };
@@ -455,9 +461,7 @@
 		BB5E1CAC1CC4CF320076C416 /* RoomHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5E1CAB1CC4CF310076C416 /* RoomHeaderView.m */; };
 		BB5E4E891CB8E74500F8C1D4 /* AlertFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5E4E881CB8E74500F8C1D4 /* AlertFactory.m */; };
 		BB5E4E8C1CB92D6E00F8C1D4 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5E4E8B1CB92D6E00F8C1D4 /* Reachability.m */; };
-		BB5F9BC11C5DDA2100285EA6 /* MediaBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC01C5DDA2100285EA6 /* MediaBuffer.m */; };
 		BB5F9BC41C5DDA6100285EA6 /* OpenAL.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC31C5DDA6100285EA6 /* OpenAL.m */; };
-		BB5F9BC71C5DDA9D00285EA6 /* MediaSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5F9BC61C5DDA9D00285EA6 /* MediaSocket.m */; };
 		BB63F2B01C27FB2800A042E8 /* 1.gif in Resources */ = {isa = PBXBuildFile; fileRef = BB63F28E1C27FB2800A042E8 /* 1.gif */; };
 		BB63F2B11C27FB2800A042E8 /* 10.gif in Resources */ = {isa = PBXBuildFile; fileRef = BB63F28F1C27FB2800A042E8 /* 10.gif */; };
 		BB63F2B21C27FB2800A042E8 /* 11.gif in Resources */ = {isa = PBXBuildFile; fileRef = BB63F2901C27FB2800A042E8 /* 11.gif */; };
@@ -497,7 +501,6 @@
 		BB63F5AB1C2CC7A300A042E8 /* UIColor+Ext.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F48C1C2CC7A200A042E8 /* UIColor+Ext.m */; };
 		BB63F5AC1C2CC7A300A042E8 /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F48E1C2CC7A200A042E8 /* UIView+Frame.m */; };
 		BB63F5AD1C2CC7A300A042E8 /* UIView+Touch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4901C2CC7A200A042E8 /* UIView+Touch.m */; };
-		BB63F5B31C2CC7A300A042E8 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F49F1C2CC7A200A042E8 /* GCDAsyncSocket.m */; };
 		BB63F5B51C2CC7A300A042E8 /* DecodeJson.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4A41C2CC7A200A042E8 /* DecodeJson.m */; };
 		BB63F5B61C2CC7A300A042E8 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4A61C2CC7A200A042E8 /* GTMBase64.m */; };
 		BB63F5C11C2CC7A300A042E8 /* MASCompositeConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63F4C21C2CC7A200A042E8 /* MASCompositeConstraint.m */; };
@@ -1188,6 +1191,20 @@
 		B4FEC68A1CD1F94C0090DD50 /* loading_jixiangwu0007.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_jixiangwu0007.png; sourceTree = "<group>"; };
 		BB06311A1C61C827008AD41D /* NoticeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeModel.h; sourceTree = "<group>"; };
 		BB06311B1C61C827008AD41D /* NoticeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeModel.m; sourceTree = "<group>"; };
+		BB07E4391CEED7BA00C57750 /* MCAudioBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCAudioBuffer.h; sourceTree = "<group>"; };
+		BB07E43A1CEED7BA00C57750 /* MCAudioBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCAudioBuffer.m; sourceTree = "<group>"; };
+		BB07E43B1CEED7BA00C57750 /* MCAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCAudioFile.h; sourceTree = "<group>"; };
+		BB07E43C1CEED7BA00C57750 /* MCAudioFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCAudioFile.m; sourceTree = "<group>"; };
+		BB07E43D1CEED7BA00C57750 /* MCAudioFileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCAudioFileStream.h; sourceTree = "<group>"; };
+		BB07E43E1CEED7BA00C57750 /* MCAudioFileStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCAudioFileStream.m; sourceTree = "<group>"; };
+		BB07E43F1CEED7BA00C57750 /* MCAudioOutputQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCAudioOutputQueue.h; sourceTree = "<group>"; };
+		BB07E4401CEED7BA00C57750 /* MCAudioOutputQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCAudioOutputQueue.m; sourceTree = "<group>"; };
+		BB07E4411CEED7BA00C57750 /* MCAudioSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCAudioSession.h; sourceTree = "<group>"; };
+		BB07E4421CEED7BA00C57750 /* MCAudioSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCAudioSession.m; sourceTree = "<group>"; };
+		BB07E4431CEED7BA00C57750 /* MCParsedAudioData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCParsedAudioData.h; sourceTree = "<group>"; };
+		BB07E4441CEED7BA00C57750 /* MCParsedAudioData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCParsedAudioData.m; sourceTree = "<group>"; };
+		BB07E4451CEED7BA00C57750 /* MCSimpleAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSimpleAudioPlayer.h; sourceTree = "<group>"; };
+		BB07E4461CEED7BA00C57750 /* MCSimpleAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSimpleAudioPlayer.m; sourceTree = "<group>"; };
 		BB0D3D011CD0AA3200A57E77 /* XIdeaDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XIdeaDataSource.h; sourceTree = "<group>"; };
 		BB0D3D021CD0AA3200A57E77 /* XIdeaDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XIdeaDataSource.m; sourceTree = "<group>"; };
 		BB0D3D041CD0BF6100A57E77 /* XPrivateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPrivateService.h; sourceTree = "<group>"; };
@@ -1441,8 +1458,6 @@
 		BB2CA6681CD34D7E00DFE56E /* register_repeat_password_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "register_repeat_password_icon@3x.png"; sourceTree = "<group>"; };
 		BB2CA6B41CD4903A00DFE56E /* ZLPrivateDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLPrivateDataSource.h; sourceTree = "<group>"; };
 		BB2CA6B51CD4903A00DFE56E /* ZLPrivateDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPrivateDataSource.m; sourceTree = "<group>"; };
-		BB2CA6D31CD505F200DFE56E /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayer.h; sourceTree = "<group>"; };
-		BB2CA6D41CD505F200DFE56E /* AudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayer.m; sourceTree = "<group>"; };
 		BB2CA6DA1CD51C1400DFE56E /* ZLShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLShareView.h; sourceTree = "<group>"; };
 		BB2CA6DB1CD51C1400DFE56E /* ZLShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShareView.m; sourceTree = "<group>"; };
 		BB2CA6DE1CD51FD500DFE56E /* chatRightView1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chatRightView1@2x.png"; sourceTree = "<group>"; };
@@ -1580,12 +1595,8 @@
 		BB5E4E881CB8E74500F8C1D4 /* AlertFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertFactory.m; sourceTree = "<group>"; };
 		BB5E4E8A1CB92D6E00F8C1D4 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BB5E4E8B1CB92D6E00F8C1D4 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
-		BB5F9BBF1C5DDA2100285EA6 /* MediaBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaBuffer.h; sourceTree = "<group>"; };
-		BB5F9BC01C5DDA2100285EA6 /* MediaBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaBuffer.m; sourceTree = "<group>"; };
 		BB5F9BC21C5DDA6100285EA6 /* OpenAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenAL.h; sourceTree = "<group>"; };
 		BB5F9BC31C5DDA6100285EA6 /* OpenAL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenAL.m; sourceTree = "<group>"; };
-		BB5F9BC51C5DDA9D00285EA6 /* MediaSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaSocket.h; sourceTree = "<group>"; };
-		BB5F9BC61C5DDA9D00285EA6 /* MediaSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaSocket.m; sourceTree = "<group>"; };
 		BB5F9BC91C5DE16700285EA6 /* opus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opus.h; sourceTree = "<group>"; };
 		BB5F9BCA1C5DE16700285EA6 /* opus_defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opus_defines.h; sourceTree = "<group>"; };
 		BB5F9BCB1C5DE16700285EA6 /* opus_multistream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opus_multistream.h; sourceTree = "<group>"; };
@@ -1634,8 +1645,6 @@
 		BB63F48E1C2CC7A200A042E8 /* UIView+Frame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Frame.m"; sourceTree = "<group>"; };
 		BB63F48F1C2CC7A200A042E8 /* UIView+Touch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Touch.h"; sourceTree = "<group>"; };
 		BB63F4901C2CC7A200A042E8 /* UIView+Touch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Touch.m"; sourceTree = "<group>"; };
-		BB63F49E1C2CC7A200A042E8 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
-		BB63F49F1C2CC7A200A042E8 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		BB63F4A31C2CC7A200A042E8 /* DecodeJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodeJson.h; sourceTree = "<group>"; };
 		BB63F4A41C2CC7A200A042E8 /* DecodeJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DecodeJson.m; sourceTree = "<group>"; };
 		BB63F4A51C2CC7A200A042E8 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
@@ -2792,6 +2801,28 @@
 			path = other/jixiangwuLaoding;
 			sourceTree = "<group>";
 		};
+		BB07E4381CEED7BA00C57750 /* MCSimpleAudioPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				BB07E4391CEED7BA00C57750 /* MCAudioBuffer.h */,
+				BB07E43A1CEED7BA00C57750 /* MCAudioBuffer.m */,
+				BB07E43B1CEED7BA00C57750 /* MCAudioFile.h */,
+				BB07E43C1CEED7BA00C57750 /* MCAudioFile.m */,
+				BB07E43D1CEED7BA00C57750 /* MCAudioFileStream.h */,
+				BB07E43E1CEED7BA00C57750 /* MCAudioFileStream.m */,
+				BB07E43F1CEED7BA00C57750 /* MCAudioOutputQueue.h */,
+				BB07E4401CEED7BA00C57750 /* MCAudioOutputQueue.m */,
+				BB07E4411CEED7BA00C57750 /* MCAudioSession.h */,
+				BB07E4421CEED7BA00C57750 /* MCAudioSession.m */,
+				BB07E4431CEED7BA00C57750 /* MCParsedAudioData.h */,
+				BB07E4441CEED7BA00C57750 /* MCParsedAudioData.m */,
+				BB07E4451CEED7BA00C57750 /* MCSimpleAudioPlayer.h */,
+				BB07E4461CEED7BA00C57750 /* MCSimpleAudioPlayer.m */,
+			);
+			name = MCSimpleAudioPlayer;
+			path = "../../../../../Documents/JJCJAV/02代码/SVRMedia/testMedia/MCSimpleAudioPlayer";
+			sourceTree = "<group>";
+		};
 		BB1661801C3D029200D318BE /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -3417,7 +3448,6 @@
 				BB1661801C3D029200D318BE /* MBProgressHUD */,
 				BB63F4871C2CC7A200A042E8 /* blocks */,
 				BB63F48A1C2CC7A200A042E8 /* category */,
-				BB63F49D1C2CC7A200A042E8 /* GCDSocket */,
 				BB63F4A21C2CC7A200A042E8 /* gtmbase64 */,
 				BB63F4BB1C2CC7A200A042E8 /* kxmovie */,
 				BB63F4C01C2CC7A200A042E8 /* Masonry */,
@@ -3472,17 +3502,6 @@
 			path = category;
 			sourceTree = "<group>";
 		};
-		BB63F49D1C2CC7A200A042E8 /* GCDSocket */ = {
-			isa = PBXGroup;
-			children = (
-				BB63F49E1C2CC7A200A042E8 /* GCDAsyncSocket.h */,
-				BB63F49F1C2CC7A200A042E8 /* GCDAsyncSocket.m */,
-				BB5F9BC51C5DDA9D00285EA6 /* MediaSocket.h */,
-				BB5F9BC61C5DDA9D00285EA6 /* MediaSocket.m */,
-			);
-			path = GCDSocket;
-			sourceTree = "<group>";
-		};
 		BB63F4A21C2CC7A200A042E8 /* gtmbase64 */ = {
 			isa = PBXGroup;
 			children = (
@@ -3498,14 +3517,11 @@
 		BB63F4BB1C2CC7A200A042E8 /* kxmovie */ = {
 			isa = PBXGroup;
 			children = (
+				BB07E4381CEED7BA00C57750 /* MCSimpleAudioPlayer */,
 				BBD49D711C5B142400EADF74 /* LivePlayViewController.h */,
 				BBD49D721C5B142400EADF74 /* LivePlayViewController.m */,
-				BB5F9BBF1C5DDA2100285EA6 /* MediaBuffer.h */,
-				BB5F9BC01C5DDA2100285EA6 /* MediaBuffer.m */,
 				BB5F9BC21C5DDA6100285EA6 /* OpenAL.h */,
 				BB5F9BC31C5DDA6100285EA6 /* OpenAL.m */,
-				BB2CA6D31CD505F200DFE56E /* AudioPlayer.h */,
-				BB2CA6D41CD505F200DFE56E /* AudioPlayer.m */,
 				BB3B3D4B1CEA371F00131093 /* LivePlayImageView.h */,
 				BB3B3D4C1CEA371F00131093 /* LivePlayImageView.m */,
 			);
@@ -4777,7 +4793,9 @@
 				BB63F6191C2CC7A300A042E8 /* SearchController.m in Sources */,
 				5AD25E511CCE2265005C5BE6 /* SplashTool.mm in Sources */,
 				BB2CA61D1CD338A300DFE56E /* Util.cpp in Sources */,
+				BB07E44D1CEED7BA00C57750 /* MCSimpleAudioPlayer.m in Sources */,
 				BB63F6131C2CC7A300A042E8 /* MainViewController.m in Sources */,
+				BB07E44A1CEED7BA00C57750 /* MCAudioOutputQueue.m in Sources */,
 				BB14B9D31CD9B6D00027E7E6 /* ZLMeTeamPrivate.m in Sources */,
 				BB63F6211C2CC7A300A042E8 /* HtmlRoomViewCell.m in Sources */,
 				BB63F5AC1C2CC7A300A042E8 /* UIView+Frame.m in Sources */,
@@ -4845,7 +4863,6 @@
 				BB17694A1C7D88E000CE947C /* ForgetPwdViewController.m in Sources */,
 				B4EA091D1CC7BDD700E8F933 /* StockDealCellView.m in Sources */,
 				BBD719821CE466A100FF9A38 /* WKWebViewJavascriptBridge.m in Sources */,
-				BB5F9BC71C5DDA9D00285EA6 /* MediaSocket.m in Sources */,
 				BB63F5F91C2CC7A300A042E8 /* UIView+Extension.m in Sources */,
 				1879B8FD1CC85C9400E981A5 /* TQGifConllectionCell.m in Sources */,
 				188490FF1CC73F79007FD1ED /* UIBarButtonItem+Item.m in Sources */,
@@ -4857,7 +4874,6 @@
 				BB98EE5E1CB588C70028AAEF /* NSObject+SBJSON.m in Sources */,
 				BB1769411C7C090F00CE947C /* RegNameViewController.m in Sources */,
 				B4C4B3701CBAA5FF00B20A58 /* SFHFKeychainUtils.m in Sources */,
-				BB63F5B31C2CC7A300A042E8 /* GCDAsyncSocket.m in Sources */,
 				BB63F5AB1C2CC7A300A042E8 /* UIColor+Ext.m in Sources */,
 				B4EA09231CC8B9E000E8F933 /* StockRecordViewController.mm in Sources */,
 				188741871C97058F002EF25A /* TabBarController.m in Sources */,
@@ -4966,7 +4982,6 @@
 				BB2CA6101CD338A300DFE56E /* crc32.cpp in Sources */,
 				BB63F5C81C2CC7A300A042E8 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				BB2CA60E1CD338A300DFE56E /* ZLLogonServerSing.mm in Sources */,
-				BB2CA6D51CD505F200DFE56E /* AudioPlayer.m in Sources */,
 				1895B77F1CCB56A300B86B0D /* TQAnswerModel.mm in Sources */,
 				5AA6D8191CCBC01300841960 /* AdViewController.mm in Sources */,
 				BBAD0E5D1CD1C2A8002C0FD6 /* CommentCell.m in Sources */,
@@ -4974,6 +4989,7 @@
 				BBD58EE21CCB96FF009250DB /* ZLWhatIsPrivateView.m in Sources */,
 				5AD25E4D1CCE225A005C5BE6 /* SplashModel.mm in Sources */,
 				BB6F11A11CC78AE000F02064 /* ChatRightView.m in Sources */,
+				BB07E4471CEED7BA00C57750 /* MCAudioBuffer.m in Sources */,
 				BBD58EFA1CCC1B59009250DB /* XVideoTeamInfo.mm in Sources */,
 				B47DD59D1CBF345300C47EF7 /* SliderMenuTopScrollView.m in Sources */,
 				BB6F120C1CC7C4DD00F02064 /* UIImageFactory.m in Sources */,
@@ -5021,6 +5037,7 @@
 				BB1661861C3D029200D318BE /* MBProgressHUD+Add.m in Sources */,
 				185F59691CC4CAD600F605F5 /* NSObject+MJClass.m in Sources */,
 				BB63F6111C2CC7A300A042E8 /* HotViewController.m in Sources */,
+				BB07E44C1CEED7BA00C57750 /* MCParsedAudioData.m in Sources */,
 				185F59731CC4CCA700F605F5 /* TQIdeaDetailModel.mm in Sources */,
 				BB63F5F71C2CC7A300A042E8 /* Toast+UIView.m in Sources */,
 				BB2CA6141CD338A300DFE56E /* json_reader.cpp in Sources */,
@@ -5031,6 +5048,7 @@
 				185DABAB1CBFDC970019C5A3 /* ideaDetailTableViewCell.m in Sources */,
 				BB63F60D1C2CC7A300A042E8 /* RoomListInfo.m in Sources */,
 				5AE9A3CF1CCE6A4B00831606 /* CustomizedTableViewCell.m in Sources */,
+				BB07E4481CEED7BA00C57750 /* MCAudioFile.m in Sources */,
 				18F9710C1C92947F001B2575 /* base64.m in Sources */,
 				BB17689F1C77052000CE947C /* GitInfo.m in Sources */,
 				BB98EE5F1CB588C70028AAEF /* NSString+SBJSON.m in Sources */,
@@ -5080,13 +5098,13 @@
 				BB5138311C97A21A00E09EF5 /* GiftView.m in Sources */,
 				5AE9A3D21CCE6D1900831606 /* CustomizedModel.m in Sources */,
 				BB63F5FF1C2CC7A300A042E8 /* EmojiTextAttachment.m in Sources */,
-				BB5F9BC11C5DDA2100285EA6 /* MediaBuffer.m in Sources */,
 				BB5138341C97E67300E09EF5 /* GiftModel.m in Sources */,
 				BB1769241C7B006F00CE947C /* SDWebImageCompat.m in Sources */,
 				B4C4B36D1CBAA5FF00B20A58 /* IAPHelper.m in Sources */,
 				18CE9CD31CC70676004AF7C8 /* TQcontentView.m in Sources */,
 				BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */,
 				BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */,
+				BB07E4491CEED7BA00C57750 /* MCAudioFileStream.m in Sources */,
 				B4A15EA21CBFACFE00587E3F /* StockDealCell.mm in Sources */,
 				BB98EE611CB588C70028AAEF /* SBJsonParser.m in Sources */,
 				BB6F3AD71C9F86270035EBBE /* TAPageControl.m in Sources */,
@@ -5099,6 +5117,7 @@
 				BB2CA9E01CD5E99900DFE56E /* IQPreviousNextView.m in Sources */,
 				BB63F61C1C2CC7A300A042E8 /* RoomGroup.m in Sources */,
 				BB5E4E891CB8E74500F8C1D4 /* AlertFactory.m in Sources */,
+				BB07E44B1CEED7BA00C57750 /* MCAudioSession.m in Sources */,
 				BB63F6221C2CC7A300A042E8 /* MySearchBar.m in Sources */,
 				BB1769231C7B006F00CE947C /* SDImageCache.m in Sources */,
 				BB5E4E8C1CB92D6E00F8C1D4 /* Reachability.m in Sources */,

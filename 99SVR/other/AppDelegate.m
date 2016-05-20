@@ -55,9 +55,10 @@
 
 - (void)updateVersion{
     @WeakObj(self)
-    [BaseService post:@"http://hall.99ducaijing.cn:8081/iosVersionUpdate.php?version_code=1" dictionay:nil timeout:10 success:^(id responseObject) {
+    [BaseService post:@"http://hall.99ducaijing.cn:8081/iosVersionUpdate.php?version_code=2" dictionay:nil timeout:10 success:^(id responseObject) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil removingNulls:YES ignoreArrays:NO];
-        if([dict objectForKey:@"update"]!=nil){
+        if([dict objectForKey:@"update"]!=nil)
+        {
             if ([[dict objectForKey:@"update"] intValue]==1) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_VERSION_VC object:nil];
                 dispatch_async(dispatch_get_main_queue(), ^{

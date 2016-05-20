@@ -313,7 +313,7 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd,const char 
     req4.set_nversion(3030822 + 5);
     req4.set_nmask((uint32)time(0));
     req4.set_cuserpwd(md5Pwd);
-    req4.set_cserial("");
+    req4.set_cserial([[DeviceUID uid] UTF8String]);
     req4.set_cmacaddr("");
     req4.set_cipaddr("");
     req4.set_nimstate(0);
@@ -356,7 +356,7 @@ int ZLLogonProtocol::startOtherLogin(uint32 cloginid,const char *openid,const ch
     req.set_opentoken(token);
     int platform = [UserInfo sharedUserInfo].otherLogin;
     req.set_platformtype(platform);
-    req.set_cserial("");
+    req.set_cserial([[DeviceUID uid] UTF8String]);
     req.set_cmacaddr("");
     req.set_cipaddr("");
     req.set_nimstate(0);
@@ -427,6 +427,26 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     req.set_croompwd(roomPwd);
     req.set_devtype(2);
     req.set_bloginsource(platform);
+    req.set_userid(KUserSingleton.nUserId);
+    if(!KUserSingleton.strPwd)
+    {
+        req.set_cuserpwd(login_password);
+    }
+    else if(KUserSingleton.strMd5Pwd)
+    {
+        req.set_cuserpwd([KUserSingleton.strMd5Pwd UTF8String]);
+    }
+    else{
+        req.set_cuserpwd([[DecodeJson XCmdMd5String:KUserSingleton.strPwd] UTF8String]);
+    }
+    if(KUserSingleton.nUserId != loginuser.userid())
+    {
+        NSString *strMsg = [NSString stringWithFormat:@"两端信息不一致,使用双芳封装的loginId:%d",loginuser.userid()];
+        [aryRoomChat addObject:strMsg];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+        req.set_userid(loginuser.userid());
+        req.set_cuserpwd(login_password);
+    }
     conn->SendMsg_JoinRoomReq(req);
 }
 
