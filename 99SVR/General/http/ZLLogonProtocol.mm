@@ -427,6 +427,21 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     req.set_croompwd(roomPwd);
     req.set_devtype(2);
     req.set_bloginsource(platform);
+    req.set_userid(KUserSingleton.nUserId);
+    if(KUserSingleton.strMd5Pwd)
+    {
+        req.set_cuserpwd([KUserSingleton.strMd5Pwd UTF8String]);
+    }
+    else{
+        req.set_cuserpwd([[DecodeJson XCmdMd5String:KUserSingleton.strPwd] UTF8String]);
+    }
+    if(KUserSingleton.nUserId != loginuser.userid())
+    {
+        [aryRoomChat addObject:@"两端信息不一致,使用双芳封装的loginId"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+        req.set_userid(loginuser.userid());
+        req.set_cuserpwd(login_password);
+    }
     conn->SendMsg_JoinRoomReq(req);
 }
 

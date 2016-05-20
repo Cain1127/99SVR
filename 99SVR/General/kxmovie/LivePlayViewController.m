@@ -698,7 +698,7 @@
             [selfWeak.glView removeImgView];
             selfWeak.glView.nMode = 0;
         }
-        if (!selfWeak.bVideo)
+        if (selfWeak.bVideo)
         {
             [selfWeak.glView setImage:selfWeak.currentImage];
         }
@@ -763,7 +763,6 @@
 
 - (void)onVideoData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height
 {
-
     _videoWidth = width;
     _videoHeight = height;
     @autoreleasepool
