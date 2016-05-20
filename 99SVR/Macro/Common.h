@@ -61,5 +61,12 @@
 
 #define kLbs_all_path @"lbs1.99ducaijing.cn:2222;lbs2.99ducaijing.cn:2222;58.210.107.54:2222;122.193.102.23:2222;112.25.230.249:2222"
 
+/**隐私权条款*/
+#define YSQTK_URL @"http://phpapi.99ducaijing.cn/mobile.php?s=/Protocol/appysxy"
+
+/**用户服务协议*/
+#define FWXY_URL   @"http://phpapi.99ducaijing.cn/mobile.php?s=/Protocol/appyhxy"
+
+
 #endif
 
