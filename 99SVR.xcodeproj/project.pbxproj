@@ -117,6 +117,7 @@
 		18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971141C92971B001B2575 /* CoreMotion.framework */; };
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
 		5A48E0C71CE99F1B00D5EBE2 /* SocketNetworkInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A48E0C61CE99F1B00D5EBE2 /* SocketNetworkInfo.m */; };
+		5A4D61291CEEF93B00DD7983 /* StatusBarHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4D61281CEEF93B00DD7983 /* StatusBarHUD.m */; };
 		5A5784101CD2FE28002E120A /* CommentReplyViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */; };
 		5A6AE1301CD1DEE8002FBD02 /* start-mascot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */; };
 		5A7629381CE1B7C400C6A092 /* NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7629351CE1B7C400C6A092 /* NJKWebViewProgress.m */; };
@@ -1030,6 +1031,8 @@
 		5A43875FF97FDC1CA789AE15 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A48E0C51CE99F1B00D5EBE2 /* SocketNetworkInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketNetworkInfo.h; sourceTree = "<group>"; };
 		5A48E0C61CE99F1B00D5EBE2 /* SocketNetworkInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketNetworkInfo.m; sourceTree = "<group>"; };
+		5A4D61271CEEF93B00DD7983 /* StatusBarHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusBarHUD.h; sourceTree = "<group>"; };
+		5A4D61281CEEF93B00DD7983 /* StatusBarHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusBarHUD.m; sourceTree = "<group>"; };
 		5A57840E1CD2FE28002E120A /* CommentReplyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentReplyViewController.h; sourceTree = "<group>"; };
 		5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CommentReplyViewController.mm; sourceTree = "<group>"; };
 		5A6AE12F1CD1DEE8002FBD02 /* start-mascot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-mascot.png"; sourceTree = "<group>"; };
@@ -3591,6 +3594,8 @@
 				BB63F5371C2CC7A300A042E8 /* ProgressHUD.bundle */,
 				BB63F5381C2CC7A300A042E8 /* ProgressHUD.h */,
 				BB63F5391C2CC7A300A042E8 /* ProgressHUD.m */,
+				5A4D61271CEEF93B00DD7983 /* StatusBarHUD.h */,
+				5A4D61281CEEF93B00DD7983 /* StatusBarHUD.m */,
 				BB63F53A1C2CC7A300A042E8 /* Toast+UIView.h */,
 				BB63F53B1C2CC7A300A042E8 /* Toast+UIView.m */,
 			);
@@ -4918,6 +4923,7 @@
 				18BF06B81C9A86B00071E524 /* RechargeResultViewController.m in Sources */,
 				BB2CA6191CD338A300DFE56E /* Socket.cpp in Sources */,
 				1898AC691C9BADE600F2681D /* MyDataController.m in Sources */,
+				5A4D61291CEEF93B00DD7983 /* StatusBarHUD.m in Sources */,
 				18F9710E1C92947F001B2575 /* DataVerifier.m in Sources */,
 				5A7629391CE1B7C400C6A092 /* NJKWebViewProgressView.m in Sources */,
 				BB6F116A1CC519FF00F02064 /* ConnectRoomViewModel.m in Sources */,
@@ -5297,7 +5303,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "999d6315-7d91-405d-928a-e3375cfe6382";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5352,7 +5358,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "accd3a0e-be4d-4a10-9575-25dc39480081";
+				PROVISIONING_PROFILE = "999d6315-7d91-405d-928a-e3375cfe6382";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
