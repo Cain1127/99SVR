@@ -117,7 +117,7 @@ static ThreadVoid http_request(void* _param)
 		g_curr_api_host_index = httphosts.size() > 1 ? 0 : 0;
 	}
 
-	int try_count = httphosts.size() + 2;
+	unsigned long try_count = httphosts.size() + 2;
 	while ( --try_count >= 0 )
 	{
 		Http http(param->request_method);
@@ -1268,7 +1268,6 @@ void parse_BuyPrivateService(char* json, HttpListener* listener)
 
 	std::vector<PrivateServiceLevelDescription> psld_list;
 
-	int size_ = 0;
 	int i = 0;
 
 	BuyPrivateServiceListener* buy_listener = (BuyPrivateServiceListener*)listener;
@@ -2359,7 +2358,6 @@ void parse_groupspage(char* json, HttpListener* listener)
 			if(!value["status"].isNull())
 			{
 				int status = value["status"].asInt();
-				JsonValue& data = value["data"];
 
 				if(0 == status)
 				{
@@ -3265,8 +3263,6 @@ void HttpConnection::RequestTeamList(TeamListListener* listener)
 		}
 	}
 
-	char tmp[32] = {0};
-	
 	RequestParamter& request = get_request_param();
 	
 	request["s"] = "room/getRoomList";

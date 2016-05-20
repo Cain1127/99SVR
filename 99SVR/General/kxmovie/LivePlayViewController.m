@@ -14,16 +14,15 @@
 #import "OpenAL.h"
 #import "SVRMediaClient.h"
 #import "RoomHttp.h"
-#import "AudioPlayer.h"
 #import "Toast+UIView.h"
-#import "MediaSocket.h"
 #include <sys/time.h>
-#import "opus.h"
 #import "SDWebImageCompat.h"
 #import <AVFoundation/AVAudioSession.h>
 #import "ZLShareViewController.h"
 #import "LoginViewController.h"
 #import "UIAlertView+Block.h"
+#import "MCAudioOutputQueue.h"
+
 
 @interface LivePlayViewController()<SVRMediaClientDelegate>
 {
@@ -46,12 +45,13 @@
     int _videoWidth;
     int _videoHeight;
     BOOL bCoding;
+    
+    MCAudioOutputQueue *_audioPlayer;
+    
 }
 @property (nonatomic,strong) NSMutableArray *aryVideo;
 @property (nonatomic) BOOL backGroud;
 @property (nonatomic) BOOL bVideo;
-@property (nonatomic,strong) AudioPlayer *playAudio;
-@property (nonatomic,strong) OpenAL *openAL;
 @property (nonatomic,copy) UIImage *currentImage;
 @property (nonatomic,strong) UIImageView *smallView;
 @property (nonatomic,copy) NSString *strPath;
@@ -128,14 +128,6 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    @synchronized(_media.videoBuf)
-    {
-        [_media.videoBuf removeAllObjects];
-    }
-    @synchronized(_media.audioBuf)
-    {
-        [_media.audioBuf removeAllObjects];
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -228,10 +220,6 @@
         }
         [__self setDefaultImg];
     });
-    if(strMsg)
-    {
-        [_media connectRoomId:_roomid mic:_nuserid];
-    }
 }
 
 - (void)setDefaultImg
@@ -271,13 +259,18 @@
 
 - (void)initDecode
 {
-    if (!_openAL)
-    {
-        _openAL = [[OpenAL alloc] init];
-    }
-    [_openAL initOpenAL];
-//    _playAudio = [[AudioPlayer alloc] initWithSampleRate:48000];
-//    [_playAudio startPlayWithBufferByteSize:4096];
+    AudioStreamBasicDescription mPlayFormat;
+    memset(&mPlayFormat, 0, sizeof(mPlayFormat));
+    mPlayFormat.mFormatID = kAudioFormatLinearPCM;
+    mPlayFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
+    mPlayFormat.mBitsPerChannel = 16;
+    mPlayFormat.mChannelsPerFrame = 2;
+    mPlayFormat.mFramesPerPacket = 1;
+    mPlayFormat.mBytesPerFrame = mPlayFormat.mBitsPerChannel /8 * mPlayFormat.mChannelsPerFrame;
+    mPlayFormat.mBytesPerPacket = mPlayFormat.mBytesPerFrame * mPlayFormat.mFramesPerPacket;
+    mPlayFormat.mSampleRate = 48000;
+    
+    _audioPlayer = [[MCAudioOutputQueue alloc] initWithFormat:mPlayFormat bufferSize:4096 macgicCookie:nil];
 }
 
 - (void)stop
@@ -287,17 +280,21 @@
     {
         return ;
     }
-    _media.nFall = 0;
     _playing = NO;
+    _bVideo = NO;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
     });
-    [_playAudio stopPlay];
+    [_audioPlayer stop:YES];
     @WeakObj(self)
     gcd_main_safe(
     ^{
          [selfWeak setDefaultImg];
     });
+    @synchronized(_aryVideo)
+    {
+        [_aryVideo removeAllObjects];
+    }
     [UIApplication sharedApplication].idleTimerDisabled = _playing;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -343,7 +340,6 @@
     [self.view addSubview:lblText];
     [lblText setFont:XCFONT(16)];
     [lblText setTextAlignment:NSTextAlignmentCenter];
-    _media = [[MediaSocket alloc] init];
     _glView.userInteractionEnabled = YES;
     
     UITapGestureRecognizer *singleRecogn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showTopHUD)];
@@ -521,7 +517,7 @@
 
 -(void)fullPlayMode
 {
-    if (!bFull)//NO状态表示当前竖屏，需要转换成横屏
+    if (!bFull)
     {
         [_glView removeFromSuperview];
         _glView.frame = Rect(0, 0, kScreenWidth,kScreenHeight);
@@ -645,6 +641,7 @@
         });
         [self setOnlyAudio:YES];
         @WeakObj(self)
+        _bVideo = NO;
         [UIAlertView createAlertViewWithTitle:@"温馨提示" withViewController:[RoomViewController sharedRoomViewController] withCancleBtnStr:@"只听音频" withOtherBtnStr:@"继续看视频" withMessage:nil completionCallback:^(NSInteger index) {
             if (index==1)
             {
@@ -653,18 +650,21 @@
             }
         }];
     }
+    else
+    {
+        _bVideo = YES;
+    }
 }
 
 - (void)setOnlyAudio:(BOOL)enable
 {
-    _bVideo = enable;
     if (!enable)
     {
         dispatch_async(dispatch_get_global_queue(0, 0),
         ^{
             [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
         });
-        _bVideo = NO;
+        _bVideo = YES;
         [self setDefaultImg];
     }
     else
@@ -673,7 +673,7 @@
         ^{
             [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
         });
-        _bVideo=YES;
+        _bVideo= NO;
         [self setNoVideo];
     }
 }
@@ -757,8 +757,7 @@
 {
     @autoreleasepool
     {
-        [_openAL openAudioFromQueue:(unsigned char*)data.bytes dataSize:len];
-//        [_playAudio putAudioData:(short *)data.bytes size:(int)data.length];
+        [_audioPlayer playData:data packetCount:0 packetDescriptions:NULL isEof:YES];
     }
 }
 
@@ -769,9 +768,12 @@
     _videoHeight = height;
     @autoreleasepool
     {
-        @synchronized(_aryVideo)
+        if (_bVideo)
         {
-            [_aryVideo addObject:data];
+            @synchronized(_aryVideo)
+            {
+                [_aryVideo addObject:data];
+            }
         }
     }
 }
