@@ -54,6 +54,8 @@
     NSString *strInfo = nil;
     
     
+//    NSLog(@"-----------------接收到的内容%@",strContent);
+    
     //记录是不是我@别人
     BOOL meToOtherBool = NO;
     
