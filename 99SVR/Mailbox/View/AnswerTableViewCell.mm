@@ -155,17 +155,35 @@
     if (!_allButton.hidden) {
         askBgViewY = askBgViewY + 15;
     }
-    /** 提问者姓名 */
-    _askauthornameLabel.text = [NSString stringWithFormat:@"%@:",answerModel.askauthorname];
-    CGSize askauthorSize = [_askauthornameLabel.text sizeMakeWithFont:_askauthornameLabel.font maxW:kScreenWidth - 4 * LR];
-    _askauthornameLabel.frame = CGRectMake(2*LR, askBgViewY+10, askauthorSize.width, askauthorSize.height);
     
-    /** 提问内容 */
-    _askcontentLabel.attributedText = [self ContentAttributedString:answerModel.askcontent];
-    CGSize askcontentSize = [answerModel.askcontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
-    CGFloat askcontentH = askcontentSize.height+10;
-    _askcontentLabel.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), kScreenWidth - 4 * LR, askcontentH);
-    
+    if (answerModel.askstock) { // 提问回复
+        UIImageView *askStockImageView = [[UIImageView alloc] init];
+        askStockImageView.image = [UIImage imageNamed:@"prompt_question_reply_icon"];
+        askStockImageView.frame = CGRectMake(2*LR, askBgViewY+10, 15, 20);
+        askStockImageView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.contentView addSubview:askStockImageView];
+        /** 提问者姓名 */
+        _askauthornameLabel.text = [NSString stringWithFormat:@"%@",answerModel.askstock];
+        CGSize askauthorSize = [_askauthornameLabel.text sizeMakeWithFont:_askauthornameLabel.font maxW:kScreenWidth - 4 * LR -20];
+        _askauthornameLabel.frame = CGRectMake(2*LR + 20, askBgViewY+10, askauthorSize.width, askauthorSize.height);
+        
+        /** 提问内容 */
+        _askcontentLabel.attributedText = [self ContentAttributedString:answerModel.askcontent];
+        CGSize askcontentSize = [answerModel.askcontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR -20];
+        CGFloat askcontentH = askcontentSize.height+10;
+        _askcontentLabel.frame = CGRectMake(2*LR + 20, CGRectGetMaxY(_askauthornameLabel.frame), kScreenWidth - 4 * LR - 20, askcontentH);
+    } else { // 评论回复
+        /** 提问者姓名 */
+        _askauthornameLabel.text = [NSString stringWithFormat:@"%@:",answerModel.askauthorname];
+        CGSize askauthorSize = [_askauthornameLabel.text sizeMakeWithFont:_askauthornameLabel.font maxW:kScreenWidth - 4 * LR];
+        _askauthornameLabel.frame = CGRectMake(2*LR, askBgViewY+10, askauthorSize.width, askauthorSize.height);
+        
+        /** 提问内容 */
+        _askcontentLabel.attributedText = [self ContentAttributedString:answerModel.askcontent];
+        CGSize askcontentSize = [answerModel.askcontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
+        CGFloat askcontentH = askcontentSize.height+10;
+        _askcontentLabel.frame = CGRectMake(2*LR, CGRectGetMaxY(_askauthornameLabel.frame), kScreenWidth - 4 * LR, askcontentH);
+    }
     /** 提问者Bg */
     CGFloat askBgViewH = CGRectGetMaxY(_askcontentLabel.frame) - CGRectGetMaxY(_askauthornameLabel.frame) + 35;
     _askBgView.frame = CGRectMake(LR, askBgViewY, kScreenWidth - 2 *LR, askBgViewH);
