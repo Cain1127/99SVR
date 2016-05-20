@@ -20,6 +20,9 @@
 /**点击事件*/
 @property (nonatomic, copy) void (^DidSelectSliderIndex)(NSInteger index);
 
+/**顶部的界线*/
+@property (nonatomic , strong) UIView *topLineView;
+
 /**
  *  初始化顶部的控件
  *

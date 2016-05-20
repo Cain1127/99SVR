@@ -193,6 +193,12 @@
     }
 }
 
+/**是否显示顶部的分割线*/
+-(void)setTopLineViewHide:(BOOL)value{
+    
+    self.topScroView.topLineView.hidden = value;
+}
+
 
 @end
 

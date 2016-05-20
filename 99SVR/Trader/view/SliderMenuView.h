@@ -49,5 +49,7 @@
 /**重置会默认选择第一个按钮*/
 -(void)resetSelectFirstIndex;
 
+/**是否显示顶部的分割线*/
+-(void)setTopLineViewHide:(BOOL)value;
 
 @end

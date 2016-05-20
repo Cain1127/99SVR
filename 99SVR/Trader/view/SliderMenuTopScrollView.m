@@ -103,6 +103,7 @@
 @property (nonatomic, strong) NSMutableArray *titleOrginXArrays;
 /**底部的界线*/
 @property (nonatomic , strong) UIView *bottomLineView;
+
 @end
 @implementation SliderMenuTopScrollView
 
@@ -125,6 +126,8 @@
         _selectIndex = index;
         _animationTime = 0.5;
         self.bottomLineView.backgroundColor = COLOR_Line_Small_Gay;
+        self.topLineView.backgroundColor = COLOR_Line_Small_Gay;
+
         [self calculateJianGeWithTitleArrays:titles];
         [self createTitle];
         
@@ -226,6 +229,17 @@
     
     return _bottomLineView;
 }
+
+-(UIView *)topLineView{
+    
+    if (!_topLineView) {
+        _topLineView = [[UIView alloc]initWithFrame:(CGRect){0,0,self.width,0.5}];
+        [self addSubview:_topLineView];
+    }
+    
+    return _topLineView;
+}
+
 
 
 /** 标题栏label的点击事件 */
