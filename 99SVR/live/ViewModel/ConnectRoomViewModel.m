@@ -39,7 +39,10 @@
 
 - (void)joinRoomErr:(NSNotification *)notify{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [DecodeJson cancelPerfor:self];
+    @WeakObj(self)
+    dispatch_main_async_safe(^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:selfWeak];
+    });
     if ([notify.object isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dict = [notify object];
         int errid = [[dict objectForKey:@"err"] intValue];
@@ -89,6 +92,10 @@
             }
             else
             {
+                if (_ConnectRoomResult)
+                {
+                    _ConnectRoomResult(0);
+                }
                 dispatch_async(dispatch_get_main_queue(),
                 ^{
                     [ProgressHUD showError:strMsgWeak];
@@ -100,7 +107,10 @@
 
 - (void)joinSuc
 {
-    [DecodeJson cancelPerfor:self];
+    @WeakObj(self)
+    dispatch_main_async_safe(^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:selfWeak];
+    });
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     if (_ConnectRoomResult)
     {
@@ -110,7 +120,10 @@
 
 - (void)joinRoomTimeOut
 {
-    [DecodeJson cancelPerfor:self];
+    @WeakObj(self)
+    dispatch_main_async_safe(^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:selfWeak];
+    });
     if (_ConnectRoomResult)
     {
         _ConnectRoomResult(999);

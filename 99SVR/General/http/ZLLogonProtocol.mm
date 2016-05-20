@@ -428,7 +428,11 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     req.set_devtype(2);
     req.set_bloginsource(platform);
     req.set_userid(KUserSingleton.nUserId);
-    if(KUserSingleton.strMd5Pwd)
+    if(!KUserSingleton.strPwd)
+    {
+        req.set_cuserpwd(login_password);
+    }
+    else if(KUserSingleton.strMd5Pwd)
     {
         req.set_cuserpwd([KUserSingleton.strMd5Pwd UTF8String]);
     }
@@ -437,7 +441,8 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     }
     if(KUserSingleton.nUserId != loginuser.userid())
     {
-        [aryRoomChat addObject:@"两端信息不一致,使用双芳封装的loginId"];
+        NSString *strMsg = [NSString stringWithFormat:@"两端信息不一致,使用双芳封装的loginId:%d",loginuser.userid()];
+        [aryRoomChat addObject:strMsg];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
         req.set_userid(loginuser.userid());
         req.set_cuserpwd(login_password);

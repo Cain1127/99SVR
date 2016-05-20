@@ -116,7 +116,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
                 [selfWeak.liveControl reloadModel:selfWeak.room];
             });
         }
-        else
+        else if(nStatus == 999)
         {
             dispatch_main_async_safe(
              ^{
