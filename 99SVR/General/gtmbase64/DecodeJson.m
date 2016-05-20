@@ -67,7 +67,7 @@
 }
 +(NSString *)XCmdMd5String:(NSString *)str
 {
-    if (str==nil)
+    if (str==nil || str.length == 0)
     {
         return @"";
     }
