@@ -87,7 +87,8 @@
 {
     if (buttonIndex == 1)
     {
-        [[PlayIconView sharedPlayIconView] exitPlay];
+        // 退出视频
+        //[[PlayIconView sharedPlayIconView] exitPlay];
         
         [[ZLLogonServerSing sharedZLLogonServerSing] closeProtocol];
         
