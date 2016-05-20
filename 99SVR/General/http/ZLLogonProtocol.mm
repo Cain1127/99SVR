@@ -313,7 +313,7 @@ int ZLLogonProtocol::startLogin(const char *cloginid,const char *pwd,const char 
     req4.set_nversion(3030822 + 5);
     req4.set_nmask((uint32)time(0));
     req4.set_cuserpwd(md5Pwd);
-    req4.set_cserial("");
+    req4.set_cserial([[DeviceUID uid] UTF8String]);
     req4.set_cmacaddr("");
     req4.set_cipaddr("");
     req4.set_nimstate(0);
@@ -356,7 +356,7 @@ int ZLLogonProtocol::startOtherLogin(uint32 cloginid,const char *openid,const ch
     req.set_opentoken(token);
     int platform = [UserInfo sharedUserInfo].otherLogin;
     req.set_platformtype(platform);
-    req.set_cserial("");
+    req.set_cserial([[DeviceUID uid] UTF8String]);
     req.set_cmacaddr("");
     req.set_cipaddr("");
     req.set_nimstate(0);

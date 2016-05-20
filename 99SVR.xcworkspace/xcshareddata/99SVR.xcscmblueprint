@@ -1,21 +1,30 @@
 {
   "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "FC06F58D0D8D59AF7F38DECC48782B3146D75CB6",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "18ad0edf-9ef7-1c4c-b2b6-943933f9411b++2798" : {
 
+    }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
     "F501F6253A6AEB746530F92C6B0EA8E3AD06410B" : 0,
+    "18ad0edf-9ef7-1c4c-b2b6-943933f9411b++2798" : 0,
     "FC06F58D0D8D59AF7F38DECC48782B3146D75CB6" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "E0727044-A581-43D7-8164-D3E9679440B6",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "F501F6253A6AEB746530F92C6B0EA8E3AD06410B" : "99SVR-1.2\/Externals\/DTCoreText\/Externals\/DTFoundation\/",
+    "18ad0edf-9ef7-1c4c-b2b6-943933f9411b++2798" : "..\/Documents\/JJCJAV\/02%E4%BB%A3%E7%A0%81\/SVRMedia",
     "FC06F58D0D8D59AF7F38DECC48782B3146D75CB6" : "99SVR-1.2\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "99SVR",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
   "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "99SVR.xcworkspace",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/172.16.251.110:8080\/svn\/JJCJAV",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "18ad0edf-9ef7-1c4c-b2b6-943933f9411b++2798"
+    },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Cocoanetics\/DTFoundation.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",

@@ -362,7 +362,6 @@
     {
         static NSString *viewPointCellName = @"TQIdeaTableViewIdentifier";
         TQIdeaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:viewPointCellName];
-        NSString *strInfo = cell.content;
         if (!cell)
         {
             cell = [[TQIdeaTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:viewPointCellName];

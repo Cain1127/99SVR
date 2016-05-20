@@ -106,32 +106,15 @@
     {
         _ConnectRoomResult(1);
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (KUserSingleton.nStatus)
-        {
-//            [_controlWeak.view hideToastActivity];
-//            RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-//            [roomView setRoom:_room];
-//            [_controlWeak.navigationController pushViewController:roomView animated:YES];
-        }
-        else
-        {
-//            [_controlWeak.view hideToastActivity];
-//            ZLRoomVideoViewController *control = [[ZLRoomVideoViewController alloc] initWithModel:_room];
-//            [_controlWeak.navigationController pushViewController:control animated:YES];
-        }
-    });
-    
 }
 
 - (void)joinRoomTimeOut
 {
     [DecodeJson cancelPerfor:self];
-    @WeakObj(_control)
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [_controlWeak.view hideToastActivity];
-//        [ProgressHUD showError:@"加入房间失败"];
-//    });
+    if (_ConnectRoomResult)
+    {
+        _ConnectRoomResult(999);
+    }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

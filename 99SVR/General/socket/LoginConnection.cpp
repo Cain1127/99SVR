@@ -213,7 +213,7 @@ void LoginConnection::SendMsg_SessionTokenReq()
 void LoginConnection::SendMsg_SetUserInfoReq(SetUserProfileReq& req)
 {
 	req.set_userid(loginuser.userid());
-	req.set_introducelen(req.introduce().size());
+	req.set_introducelen((int32_t)(req.introduce().size()));
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_SetUserProfileReq, req, req.introducelen());
 }
 
