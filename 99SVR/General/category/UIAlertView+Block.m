@@ -25,28 +25,28 @@ static NSString *UIAlertViewKey = @"UIAlertViewKey";
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelButtonName otherButtonTitles: otherButtonTitles, nil];
     
-//    unsigned int count;
-//    
-//    Ivar *ivars= class_copyIvarList([alert class], &count);
-//    objc_property_t *objc_property_ts= class_copyPropertyList([alert class], &count);
-//    
-//    for (int i=0; i!=count; i++) {
-//        
-//        objc_property_t proty = objc_property_ts[i];
-//        
-//        NSLog(@"proty %@",[NSString stringWithCString:property_getName(proty) encoding:NSUTF8StringEncoding]);
-//        
-//    }
-//    
-//    for (int i=0; i!=count; i++) {
-//        
-//        
-//        const char *type = ivar_getTypeEncoding(ivars[i]);
-//        
-//        NSLog(@"ivars %@ %s",[NSString stringWithUTF8String:ivar_getName(ivars[i])],type);
-//
-//    
-//    }
+    unsigned int count;
+    
+    Ivar *ivars= class_copyIvarList([alert class], &count);
+    objc_property_t *objc_property_ts= class_copyPropertyList([alert class], &count);
+    
+    for (int i=0; i!=count; i++) {
+        
+        objc_property_t proty = objc_property_ts[i];
+        
+        NSLog(@"proty %@",[NSString stringWithCString:property_getName(proty) encoding:NSUTF8StringEncoding]);
+        
+    }
+    
+    for (int i=0; i!=count; i++) {
+        
+        
+        const char *type = ivar_getTypeEncoding(ivars[i]);
+        
+        NSLog(@"ivars %@ %s",[NSString stringWithUTF8String:ivar_getName(ivars[i])],type);
+
+    
+    }
 
     
 
@@ -77,7 +77,16 @@ static NSString *UIAlertViewKey = @"UIAlertViewKey";
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelStr style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                 completionCallback(0);
             }];
-            [cancelAction setValue:COLOR_Text_Gay forKey:@"_titleTextColor"];
+            //获取所有变量
+            unsigned int outCount;
+            Ivar *ivars = class_copyIvarList([cancelAction class], &outCount);
+            for (int i=0; i!=outCount; i++) {
+                Ivar ivar = ivars[i];
+                NSString *ivarName = [NSString stringWithCString:ivar_getName(ivar) encoding:NSUTF8StringEncoding];
+                if ([ivarName isEqualToString:@"_titleTextColor"]) {//找到这个变量才进行kvc赋值
+                    [cancelAction setValue:COLOR_Text_Gay forKey:@"_titleTextColor"];
+                }
+            }
             [alertVC addAction:cancelAction];
         }
         //其它按钮

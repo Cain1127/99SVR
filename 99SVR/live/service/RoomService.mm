@@ -25,7 +25,8 @@
     }
     if(userId == KUserSingleton.nUserId)
     {
-        return [NSString stringWithFormat:@"<span value=\"forme--%d\" style=\"color:#919191\">%@</span>",userId,strName];
+//        KUserSingleton.strName
+        return [NSString stringWithFormat:@"<span value=\"forme--%d\" style=\"color:#919191\">%@</span>",userId,KUserSingleton.strName];
     }
     else
     {
@@ -51,6 +52,14 @@
     NSString *strToName = [NSString stringWithCString:msg->toalias().c_str() encoding:GBK_ENCODING];
     NSString *strTo = [RoomService getToUser:msg->toid() name:strToName];
     NSString *strInfo = nil;
+    
+    
+//    NSLog(@"-----------------接收到的内容%@",strContent);
+    
+    //记录是不是我@别人
+    BOOL meToOtherBool = NO;
+    
+    
     if (msg->toid() == 0)
     {
         strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\">%@</span><br>%@",strFrom,strTo,strContent];
@@ -58,14 +67,19 @@
     else
     {
         strInfo = [NSString stringWithFormat:@" %@ <span style=\"color:#919191\"></span><br>@%@ %@",strFrom,strTo,strContent];
+        
+        if ([strFrom rangeOfString:[NSString stringWithFormat:@"%d",[UserInfo sharedUserInfo].nUserId]].location != NSNotFound) {//是我@别人
+            
+            meToOtherBool = YES;
+        }
+        
     }
-    strInfo = [DecodeJson replaceEmojiNewString:strInfo];
-    
+    strInfo = [DecodeJson replaceEmojiNewString:strInfo];    
     [aryChat addObject:strInfo];
     
     NSString *query = [NSString stringWithFormat:@"value=\"forme--%d\"",[UserInfo sharedUserInfo].nUserId];
-    //查询是否有对我说的记录
-    if ([strTo rangeOfString:query].location != NSNotFound )
+    //查询是否有对我说的记录 或者我@别人的信息 msg->toid() == [UserInfo sharedUserInfo].nUserId  说明是存在@别人了
+    if ([strTo rangeOfString:query].location != NSNotFound || (meToOtherBool))
     {
         [aryPriChat addObject:strInfo];
         [RoomService clearChatInfo:aryChat];

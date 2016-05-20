@@ -67,13 +67,15 @@
  */
 - (void)loadUnreadCount:(NSNotification *)notify
 {
+    @WeakObj(self)
+    @WeakObj(_tableView)
     dispatch_main_async_safe(^{
         // 初始化消息列表数据
-        [self mailboxArrayWithPrvUnreadCount:[notify.object[@"privateservice"] intValue]
+        [selfWeak mailboxArrayWithPrvUnreadCount:[notify.object[@"privateservice"] intValue]
                           messageUnreadCount:[notify.object[@"system"] intValue]
                             replyUnreadCount:[notify.object[@"reply"] intValue]
                            answerUnreadCount:[notify.object[@"answer"] intValue]];
-        [_tableView reloadData];
+        [_tableViewWeak reloadData];
     });
 }
 
@@ -136,6 +138,11 @@
     mailboxModel.skipVc = skipVc;
     
     [self.mailboxArray addObject:mailboxModel];
+}
+
+- (void)dealloc
+{
+    DLog(@"dealloc!");
 }
 
 @end
