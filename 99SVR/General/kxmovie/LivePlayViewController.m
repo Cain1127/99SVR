@@ -658,14 +658,13 @@
 
 - (void)setOnlyAudio:(BOOL)enable
 {
-    _bVideo = enable;
     if (!enable)
     {
         dispatch_async(dispatch_get_global_queue(0, 0),
         ^{
             [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:NO];
         });
-        _bVideo = NO;
+        _bVideo = YES;
         [self setDefaultImg];
     }
     else
@@ -674,7 +673,7 @@
         ^{
             [[SVRMediaClient sharedSVRMediaClient] clientMuteVideoStream:YES];
         });
-        _bVideo=YES;
+        _bVideo= NO;
         [self setNoVideo];
     }
 }
