@@ -414,6 +414,9 @@ void Connection::connect_from_lbs_asyn()
 		connect_start_time = time(0);
 		connected_host[0] = '\0';
 	}
+    
+//    connect("121.12.118.32:", 7301);
+//    return;
 
 	get_lbs_servers();
 

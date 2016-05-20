@@ -40,6 +40,8 @@
 @property (nonatomic , strong) LHDNewIdeaPromptView *ideaPromptView;
 @property (nonatomic , assign) BOOL tableTopBool;
 
+@property (nonatomic , strong) __block NSIndexPath *selectIndexPath;
+
 @end
 
 @implementation XIdeaViewController
@@ -229,11 +231,33 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 #pragma mark - TableView dataSource
-- (void)selectIdea:(TQIdeaModel *)model
-{
+//- (void)selectIdea:(TQIdeaModel *)model
+//{
+//    TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
+//    [[self viewController].navigationController pushViewController:detaileVc animated:YES];
+//}
+
+-(void)tqIdeaModelSelectIndexPath:(NSIndexPath *)indexPath withModel:(TQIdeaModel *)model{
+    
     TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
+    
+    @WeakObj(_tableView)
+    __block TQIdeaModel *weaeModel = model;
+    detaileVc.refreshCellDataBlock = ^(BOOL replyValue,BOOL giftValue){
+        if (replyValue) {
+            weaeModel.replycount +=1;
+        }
+            
+        if (giftValue) {
+            weaeModel.giftcount  +=1;
+        }
+        [_tableViewWeak reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+    };
+    
     [[self viewController].navigationController pushViewController:detaileVc animated:YES];
+
 }
+
 
 -(void)ideaPromptViewIsShowBool:(BOOL)value tabToTopValue:(BOOL)topValue{
     

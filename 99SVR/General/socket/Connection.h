@@ -18,8 +18,8 @@ using std::vector;
 #if 1
 
 //#define LBS0 "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,lbs3.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";
-//#define LBS0 "lbs4.99ducaijing.cn:2222"
-#define LBS0 "testlbs.99ducaijing.cn:2222"
+#define LBS0 "lbs4.99ducaijing.cn:2222"
+//#define LBS0 "testlbs.99ducaijing.cn:2222"
 #define CONFIG_URL "http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=2&versionNumber=1&parameterName=lbsios"
 #define HTTP_API "phpapi.99ducaijing.cn"
 

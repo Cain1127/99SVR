@@ -236,9 +236,21 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 #pragma mark - TableView dataSource
 
-- (void)selectIdea:(TQIdeaModel *)model
-{
+-(void)tqIdeaModelSelectIndexPath:(NSIndexPath *)indexPath withModel:(TQIdeaModel *)model{
+
     TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
+    @WeakObj(_tableView)
+    __block TQIdeaModel *weaeModel = model;
+    detaileVc.refreshCellDataBlock = ^(BOOL replyValue,BOOL giftValue){
+        if (replyValue) {
+            weaeModel.replycount +=1;
+        }
+        if (giftValue) {
+            weaeModel.giftcount  +=1;
+        }
+        [_tableViewWeak reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+    };
+    
     [self.navigationController pushViewController:detaileVc animated:YES];
 }
 

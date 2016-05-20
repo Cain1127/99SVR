@@ -10,7 +10,12 @@
 @class TQIdeaModel ;
 @protocol XIdeaDelegate <NSObject>
 
-- (void)selectIdea:(TQIdeaModel *)model;
+//- (void)selectIdea:(TQIdeaModel *)model;
+/**
+ *  点击对应cell 返回对应的model
+ *
+ */
+-(void)tqIdeaModelSelectIndexPath:(NSIndexPath *)indexPath withModel:( TQIdeaModel *)model;
 /**
  *  回调是否显示新观点的提示的view
  *

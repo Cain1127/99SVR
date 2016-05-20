@@ -173,7 +173,7 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
     activityView.backgroundColor = RGB(57,64,66);
     
     
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(activityView.bounds.size.width/2-15,activityView.bounds.size.height/2-15, 30, 30)];
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(activityView.bounds.size.width/2-20,activityView.bounds.size.height/2-20, 40, 40)];
     NSMutableArray *images = [NSMutableArray array];
     [activityView addSubview:imgView];
     for (int i=1; i<=8; i++) {

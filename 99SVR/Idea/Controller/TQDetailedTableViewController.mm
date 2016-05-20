@@ -149,9 +149,12 @@
 
 - (void)sendGiftResp:(NSNotification *)notify
 {
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [ProgressHUD showSuccess:@"送礼成功"];
-//    });
+    
+    @WeakObj(self)
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        selfWeak.refreshCellDataBlock(NO,YES);
+    });
     DLog(@"送礼成功");
 }
 
@@ -165,6 +168,7 @@
     @WeakObj(parameter)
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
+        
     GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,64,kScreenWidth-60,46) dict:parameterWeak];
     [UIView animateWithDuration:2.0
           delay:1.0
@@ -178,6 +182,8 @@
                  [giftAnimateWeak removeFromSuperview];
              });
      }];
+        
+        
     });
 }
 
@@ -648,10 +654,13 @@
 - (void)replyResp:(NSNotification *)notify
 {
     NSDictionary *parameters = [notify object];
+    @WeakObj(self)
+
     if ([[parameters objectForKey:@"code"] intValue]==1) {
         dispatch_async(dispatch_get_main_queue(),
         ^{
             [ProgressHUD showSuccess:@"评论成功!"];
+            selfWeak.refreshCellDataBlock(YES,NO);
         });
         NSMutableArray *aryTemp = [NSMutableArray array];
         ZLReply *reply = parameters[@"model"];
