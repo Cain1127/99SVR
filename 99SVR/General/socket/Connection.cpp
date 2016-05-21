@@ -193,19 +193,25 @@ ThreadVoid get_lbs_from_http(void* param)
 	char* json = http.request(CONFIG_URL);
 	if (json)
 	{
-		JsonReader reader;
-		JsonValue root;
-		reader.parse(json, root);
-
-		if (root.isObject())
+		try
 		{
-			const char* lbs = root["lbsios"].asCString();
-			strcpy(lbs_from_http, lbs);
+			JsonReader reader;
+			JsonValue root;
+			reader.parse(json, root);
 
-			save_lbs_to_file(lbs);
-			LOG("get lbs from http:%s", lbs);
+			if (root.isObject())
+			{
+				const char* lbs = root[root.getMemberNames()[0]].asCString();
+				strcpy(lbs_from_http, lbs);
 
-			ThreadReturn;
+				save_lbs_to_file(lbs);
+				LOG("get lbs from http:%s", lbs);
+
+				ThreadReturn;
+			}
+		}
+		catch ( std::exception& ex)
+		{
 		}
 	}
 
@@ -271,6 +277,7 @@ void get_lbs_servers()
 				Thread::start(get_lbs_from_http, NULL);
 			}
 		}
+
 		strcpy(lbs_curr, lbs);
 	}
 	else
@@ -278,7 +285,7 @@ void get_lbs_servers()
 		strcpy(lbs_curr, lbs_from_set);
 	}
 
-//	strcpy(lbs_curr, LBS0);
+	//strcpy(lbs_curr, LBS0);
 
 	Thread::lock(&conn_lock);
 	lbs_count = 0;
@@ -392,6 +399,9 @@ void Connection::get_host_form_lbs(char* lbs)
 
 void Connection::connect_from_lbs_asyn()
 {
+	if (!socket_closed)
+		close();
+
 	socket_connecting = true;
 	lbs_err_counter = 0;
 	get_host_index = 0;
@@ -409,14 +419,13 @@ void Connection::connect_from_lbs_asyn()
 	memset(connect_ip, 0, sizeof(connect_ip));
 	connect_port = 0;
 
+	//connect("121.12.118.32", 7301); return;
+
 	if (connect_start_time == 0)
 	{
 		connect_start_time = time(0);
 		connected_host[0] = '\0';
 	}
-    
-//    connect("121.12.118.32:", 7301);
-//    return;
 
 	get_lbs_servers();
 
@@ -502,7 +511,7 @@ void get_http_servers_from_lbs_asyn()
 		strcpy(param->lbstype, "/tygetPHP");
 		param->hosts = &httphosts;
 
-//		Thread::start(get_httphost_form_lbs_runnable, param);
+		Thread::start(get_httphost_form_lbs_runnable, param);
 	}
 }
 
@@ -692,6 +701,12 @@ string Connection::get_error_desc(int err_code)
 	case protocol::ERR_CODE_FAILED_GIFTNOTFOUND:
 		str="没有找到礼物ID";
 		break;
+	case 205:
+		str = "当前讲师已下麦";
+		break;
+	case 11:
+		str = "网络连接异常, 请重试";
+		break;
 	default:
 		if ( err_code < 0 )
 		{
@@ -798,7 +813,7 @@ int Connection::recv(char* buf, int offset, int len)
 					else
 					{
 						time_t curr_time = time(0);
-						if ( curr_time - last_send_time >= 15 )
+						if ( curr_time - last_send_time >= 40 )
 						{
 							LOG("recv timeout err: %d", err_no);
 							//on_io_error(-4);
@@ -1164,7 +1179,6 @@ void Connection::Reconnect()
 	LOG("conn Reconnect:closed:%d connecting:%d", socket_closed, connecting);
 	if ( !connecting )
 	{
-		close();
 		connect_from_lbs_asyn();
 	}
 }
@@ -1175,7 +1189,6 @@ void Connection::OnNetworkChanged()
 	LOG("conn OnNetworkChanged:closed:%d connecting:%d", socket_closed, connecting);
 	if ( !connecting )
 	{
-		close();
 		connect_from_lbs_asyn();
 	}
 }

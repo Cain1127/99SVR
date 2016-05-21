@@ -35,6 +35,35 @@ void string2timestamp(const std::string &str,std::string &retStr)
 
 }
 
+time_t GetTick(const string& stime)
+{
+	struct tm stm;
+	const char* str_time = stime.c_str();
+	int iY, iM, iD, iH, iMin, iS;
+
+	memset(&stm, 0, sizeof(stm));
+
+	iY = atoi(str_time);
+	iM = atoi(str_time + 5);
+	iD = atoi(str_time + 8);
+	iH = atoi(str_time + 11);
+	iMin = atoi(str_time + 14);
+	iS = atoi(str_time + 17);
+
+	stm.tm_year = iY - 1900;
+	stm.tm_mon = iM - 1;
+	stm.tm_mday = iD;
+	stm.tm_hour = iH;
+	stm.tm_min = iMin;
+	stm.tm_sec = iS;
+
+	//time(&stm);
+
+	printf("%d-%0d-%0d %0d:%0d:%0d\n", iY, iM, iD, iH, iMin, iS);
+
+	return mktime(&stm);
+}
+
 #ifdef WIN
 string UTF8ToGBK(const std::string& strUTF8)  
 {  

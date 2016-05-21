@@ -15,6 +15,7 @@
 
 #include <vector>
 
+static int joinRoomSucFlag;
 
 
 
@@ -101,13 +102,18 @@ void VideoRoomConnection::SendMsg_AfterJoinRoomReq()
 	SendMsg_TeamTopNReq();
 }
 
-void VideoRoomConnection::SendMsg_ExitRoomReq(uint32 roomid)
+void resetRoomState()
 {
 	room_info.set_vcbid(0);
 	in_room = false;
 	need_join_room = false;
 	main_room_id = 0;
-	joinRoomSucFlag=0;
+	joinRoomSucFlag = 0;
+}
+
+void VideoRoomConnection::SendMsg_ExitRoomReq(uint32 roomid)
+{
+	resetRoomState();
 
 	UserExitRoomInfo req;
 	req.set_userid(join_req.userid());
@@ -177,7 +183,7 @@ void VideoRoomConnection::SendMsg_SetRoomBaseInfoReq_v2(SetRoomInfoReq_v2& req)
 
 void VideoRoomConnection::SendMsg_SetRoomNoticeReq(SetRoomNoticeReq& req)
 {
-	req.set_textlen(req.content().size());
+	req.set_textlen(req.content().size() + 1);
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_SetRoomNoticeReq, req, req.textlen());
 }
 
@@ -421,7 +427,19 @@ void VideoRoomConnection::DispatchSocketMessage(void* msg)
 			break;
 		//房间用户踢出通知
 		case protocol::Sub_Vchat_RoomKickoutUserNoty:
-			ON_MESSAGE(room_listener,UserKickoutRoomInfo_ext, OnRoomKickoutUserNoty);
+			//ON_MESSAGE(room_listener,UserKickoutRoomInfo_ext, OnRoomKickoutUserNoty);
+		{
+			UserKickoutRoomInfo_ext info;
+			info.ParseFromArray(body, info.ByteSize());
+			if (room_listener != NULL)
+			{
+				room_listener->OnRoomKickoutUserNoty(info);
+			}
+			if (info.toid() == login_userid)
+			{
+				resetRoomState();
+			}
+		}
 			break;
 
 		//排麦列表（弃用）

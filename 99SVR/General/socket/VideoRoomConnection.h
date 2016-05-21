@@ -14,7 +14,6 @@ class VideoRoomConnection : public Connection
 {
 private:
 
-	int joinRoomSucFlag;
 
 	VideoRoomListener* room_listener;
 	VideoRoomJoinListener* room_join_listener;
