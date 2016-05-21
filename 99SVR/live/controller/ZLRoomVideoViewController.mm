@@ -322,6 +322,12 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(joinSuc) name:MESSAGE_JOIN_ROOM_SUC_VC object:nil];
 }
 
+- (void)joinRoomErr:(NSNotification *)notify
+{
+    DLog(@"加入房间成功");
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+}
+
 - (void)joinSuc
 {
     DLog(@"加入房间成功");
