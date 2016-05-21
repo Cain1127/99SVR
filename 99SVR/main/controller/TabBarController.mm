@@ -26,6 +26,8 @@
 #import "UIAlertView+Block.h"
 #import "SocketNetworkView.h"
 #import "SocketNetworkInfo.h"
+#import "SplashModel.h"
+#import "SplashTool.h"
 
 @interface TabBarController ()<PlayIconDelegate>
 {
@@ -34,7 +36,7 @@
 @property (nonatomic, strong) Reachability *hostReach;
 @property (nonatomic, strong) PlayIconView *iConView;
 @property (nonatomic, strong) UIButton *btnPlay;
-//@property (nonatomic, strong) SocketNetworkView *networkView;
+
 @end
 
 @implementation TabBarController
@@ -70,21 +72,22 @@
     return self;
 }
 
-- (void)loadInfo:(NSNotification *)notify
-{
-    int nAllNum = [notify.object[@"privateservice"] intValue] + [notify.object[@"system"] intValue] +
-    [notify.object[@"reply"] intValue]+[notify.object[@"answer"] intValue];
-    DLog(@"总数字:%d",nAllNum);
-    KUserSingleton.nUnRead = nAllNum;
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UNREAD_NUMBER_VC object:nil];
-}
+#pragma mark - 生命周期
 
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadInfo:) name:MESSAGE_UNREAD_INFO_VC object:nil];
+    
+    // 加载信箱未读数
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUnReadInfoNotify:) name:MESSAGE_UNREAD_INFO_VC object:nil];
     [kHTTPSingle RequestUnreadCount];
+    
+    // 请求下一次广告数据
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadSplashNotify:) name:MESSAGE_HTTP_SPLASH_VC object:nil];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [kHTTPSingle requestSplashImage];
+    });
     
     // 网络检测
     _hostReach = [Reachability reachabilityWithHostName:@"www.163.com"];
@@ -100,10 +103,88 @@
     [SocketNetworkInfo sharedSocketNetworkInfo].socketState = 1; // 设置有网
     
     // Socket没网监控
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(socketNetworkState:) name:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadSocketNetworkStateNotify:) name:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:nil];
 }
 
-- (void)socketNetworkState:(NSNotification *)notify
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - 初始化界面
+
+/**
+ *  添加所有子控制器
+ */
+- (void)setUpAllChildViewControllers
+{
+    [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
+    [self setUpOneViewController:[[ZLVideoListViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
+    if ([UserInfo sharedUserInfo].nStatus)
+    {
+        [self setUpOneViewController:[[TQIdeaViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
+        [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"tab_operate_n" selectImage:@"tab_operate_h"];
+    }
+    [self setUpOneViewController:[[XMyViewController alloc]init] title:@"我" image:@"tab_me_n" selectImage:@"tab_me_p"];
+    
+}
+
+/**
+ *  添加一个子控制器
+ */
+- (void)setUpOneViewController:(UIViewController *)vc title:(NSString *)title image:(NSString *)image selectImage:(NSString *)selectImage
+{
+    vc.title = title;
+    vc.tabBarItem.image = [UIImage imageNamed:image];
+    vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
+    GFNavigationController *nav = [[GFNavigationController alloc]initWithRootViewController:vc];
+    [self addChildViewController:nav];
+}
+
+/**
+ *  统一设置Item文字的属性
+ */
+- (void)setUpItemTextAttrs{
+    // 统一设置Item文字的属性
+    NSMutableDictionary *normalAttrs = [NSMutableDictionary dictionary];
+    normalAttrs[NSForegroundColorAttributeName] = UIColorFromRGB(0x919191);
+    normalAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:11];
+    
+    // 选中状态
+    NSMutableDictionary *selectAttrs = [NSMutableDictionary dictionary];
+    selectAttrs[NSForegroundColorAttributeName] = UIColorFromRGB(0x0078DD);
+    
+    UITabBarItem *item = [UITabBarItem appearance];
+    [item setTitleTextAttributes:normalAttrs forState:UIControlStateNormal];
+    [item setTitleTextAttributes:selectAttrs forState:UIControlStateSelected];
+}
+
+#pragma mark - 通知回调处理
+
+/**
+ *  信箱未读数
+ */
+- (void)loadUnReadInfoNotify:(NSNotification *)notify
+{
+    int nAllNum = [notify.object[@"privateservice"] intValue] + [notify.object[@"system"] intValue] +
+    [notify.object[@"reply"] intValue]+[notify.object[@"answer"] intValue];
+    DLog(@"总数字:%d",nAllNum);
+    KUserSingleton.nUnRead = nAllNum;
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UNREAD_NUMBER_VC object:nil];
+}
+
+/**
+ *  闪屏处理
+ */
+- (void)loadSplashNotify:(NSNotification *)notify{
+    SplashModel *splash = (SplashModel *)notify.object;
+    [SplashTool save:splash];
+}
+
+/**
+ *  网络状态
+ */
+- (void)loadSocketNetworkStateNotify:(NSNotification *)notify
 {
     NSDictionary *dict = notify.object;
     
@@ -142,62 +223,6 @@
             app.socketNetworkView.hidden = YES;
         });
     }
-}
-
-/**
- *  统一设置Item文字的属性
- */
-- (void)setUpItemTextAttrs{
-    // 统一设置Item文字的属性
-    NSMutableDictionary *normalAttrs = [NSMutableDictionary dictionary];
-    normalAttrs[NSForegroundColorAttributeName] = UIColorFromRGB(0x919191);
-    normalAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:11];
-    
-    // 选中状态
-    NSMutableDictionary *selectAttrs = [NSMutableDictionary dictionary];
-    selectAttrs[NSForegroundColorAttributeName] = UIColorFromRGB(0x0078DD);
-    
-    UITabBarItem *item = [UITabBarItem appearance];
-    [item setTitleTextAttributes:normalAttrs forState:UIControlStateNormal];
-    [item setTitleTextAttributes:selectAttrs forState:UIControlStateSelected];
-}
-
-/**
- *  添加所有子控制器
- */
-- (void)setUpAllChildViewControllers
-{
-    [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
-    [self setUpOneViewController:[[ZLVideoListViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
-    if ([UserInfo sharedUserInfo].nStatus)
-    {
-        [self setUpOneViewController:[[TQIdeaViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
-        [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"tab_operate_n" selectImage:@"tab_operate_h"];
-    }
-    [self setUpOneViewController:[[XMyViewController alloc]init] title:@"我" image:@"tab_me_n" selectImage:@"tab_me_p"];
-    
-}
-
-/**
- *  添加一个子控制器
- */
-
-- (void)setUpOneViewController:(UIViewController *)vc title:(NSString *)title image:(NSString *)image selectImage:(NSString *)selectImage
-{
-    vc.title = title;
-    vc.tabBarItem.image = [UIImage imageNamed:image];
-    vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
-    GFNavigationController *nav = [[GFNavigationController alloc]initWithRootViewController:vc];
-    [self addChildViewController:nav];
-}
-
-- (void)setUpMyViewController:(UIViewController *)vc title:(NSString *)title image:(NSString *)image selectImage:(NSString *)selectImage
-{
-    vc.title = title;
-    vc.tabBarItem.image = [UIImage imageNamed:image];
-    vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
-    MyNavigationViewController *nav = [[MyNavigationViewController alloc]initWithRootViewController:vc];
-    [self addChildViewController:nav];
 }
 
 /**
@@ -277,10 +302,7 @@
     [KUserSingleton.dictRoomText removeAllObjects];
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+#pragma mark - 横坚屏限定
 
 - (BOOL)shouldAutorotate
 {
