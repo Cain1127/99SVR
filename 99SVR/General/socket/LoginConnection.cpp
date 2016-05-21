@@ -4,6 +4,7 @@
 #include "Http.h"
 #include "LoginConnection.h"
 #include "Thread.h"
+#include "Util.h"
 #include "login_cmd_vchat.h"
 
 UserLogonSuccess2 loginuser;
@@ -26,6 +27,7 @@ uint32 main_room_id;
 
 static time_t last_req_teamtopn_time;
 static time_t last_gettoken_time;
+static time_t token_valid_time;
 
 
 LoginConnection::LoginConnection() :
@@ -34,6 +36,7 @@ login_listener(NULL), hall_listener(NULL), push_listener(NULL)
 	loginuser.set_userid(0);
 	need_join_room = false;
 	last_req_teamtopn_time = 0;
+	token_valid_time = 0;
 	last_joinroom_time = 0;
 	main_cmd = protocol::MDM_Vchat_Login;
 }
@@ -117,9 +120,8 @@ void LoginConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 	protocol::CMDJoinRoomReq_t temreq = { 0 };
 	string ip = join_req.cipaddr();
 	join_req.set_cipaddr("");
-//    join_req.set_userid(loginuser.userid());
-//    join_req.set_cuserpwd(login_password);
-
+	join_req.set_userid(loginuser.userid());
+	join_req.set_cuserpwd(login_password);
 	join_req.set_devtype(login_nmobile);
 	join_req.set_bloginsource(login_reqv == 4 ? 0 : 1);
 	join_req.set_time((uint32)time(0));
@@ -214,7 +216,7 @@ void LoginConnection::SendMsg_SessionTokenReq()
 void LoginConnection::SendMsg_SetUserInfoReq(SetUserProfileReq& req)
 {
 	req.set_userid(loginuser.userid());
-	req.set_introducelen((int32_t)(req.introduce().size()));
+	req.set_introducelen(req.introduce().size());
 	SEND_MESSAGE_EX(protocol::Sub_Vchat_SetUserProfileReq, req, req.introducelen());
 }
 
@@ -318,7 +320,7 @@ void LoginConnection::on_tick(time_t ctime)
 
 	if ( loginuser.viplevel() > 1 )
 	{
-		if ( ctime - last_gettoken_time > 60 * 60 * 8 )
+		if ( token_valid_time - ctime < 60 * 60 * 1)
 		{
 			SendMsg_SessionTokenReq();
 		}
@@ -449,6 +451,7 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		//ON_MESSAGE(login_listener, SessionTokenResp, OnLogonTokenNotify)
 		login_token.ParseFromArray(body, login_token.ByteSize());
 		last_gettoken_time = time(0);
+		token_valid_time = GetTick(login_token.validtime());
 		if (login_listener)
 			login_listener->OnLogonTokenNotify(login_token);
 		break;
@@ -469,7 +472,7 @@ void LoginConnection::DispatchSocketMessage(void* msg)
 		SetUserProfileReq _SetUserProfileReq;
 		_SetUserProfileReq.ParseFromArray(body, _SetUserProfileReq.ByteSize());
 
-		if (login_listener != NULL)
+		if (hall_listener != NULL)
 			hall_listener->OnSetUserProfileResp(_SetUserProfileResp, _SetUserProfileReq);
 	}
 		break;

@@ -8,6 +8,7 @@
 #include <cassert>
 #include "crc32.h"
 #include "json/json.h"
+#import "XConsumeRankModel.h"
 #import "TQIdeaModel.h"
 #import "TQIdeaDetailModel.h"
 #import "RoomUser.h"
@@ -776,11 +777,6 @@ void ZLRoomListener::OnRobotTeacherIdNoty(std::vector<RobotTeacherIdNoty>& infos
         RobotTeacherIdNoty info = infos[i];
         RoomUser *_roomUser = [currentRoom.dictUser objectForKey:NSStringFromInt(info.vcbid())];
         _roomUser.m_strUserAlias = [NSString stringWithUTF8String:info.teacheralias().c_str()];
-        
-        if(info.teacherid())
-        {
-            [kHTTPSingle RequestConsumeRank:info.teacherid()];
-        }
         for (int nTimes=0; nTimes<currentRoom.aryUser.count;nTimes++)
         {
             RoomUser *rUser = [currentRoom.aryUser objectAtIndex:nTimes];
@@ -901,7 +897,6 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
 void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
 {
     DLog(@"加入房间失败");
-//    NSString *strMsg = [NSString stringWithUTF8String:conn->get_error_desc(info.errid()).c_str()];
     NSString *strMsg = nil;
     switch (info.errid()) {
     
@@ -983,5 +978,21 @@ void ZLRoomListener::OnAskQuestionErr(ErrCodeResp& info)
     }
 }
 
+
+void ZLRoomListener::OnTeacherGiftListResp(std::vector<TeacherGiftListResp>& infos)
+{
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i=0; i<infos.size(); i++)
+    {
+        TeacherGiftListResp giftList = infos[i];
+        XConsumeRankModel *model = [[XConsumeRankModel alloc] init];
+        model.headid = 0;
+        model.username = [NSString stringWithCString:giftList.useralias().c_str() encoding:GBK_ENCODING];
+        model.consume = @(giftList.t_num());
+        [array addObject:model];
+    }
+    NSDictionary *parameter = @{@"code":@(1),@"data":array};
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:parameter];
+}
 
 

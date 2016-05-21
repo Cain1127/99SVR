@@ -358,7 +358,7 @@ class ZLRoomListener : public VideoRoomListener
     virtual void OnRobotTeacherIdNoty(std::vector<RobotTeacherIdNoty>& infos);//{}
     
     //Ω≤ ¶÷“ µ∂»÷‹∞ÊœÏ”¶
-    virtual void OnTeacherGiftListResp(std::vector<TeacherGiftListResp>& infos){}
+    virtual void OnTeacherGiftListResp(std::vector<TeacherGiftListResp>& infos);
     
     //”√ªß∂‘Ω≤ ¶µƒ∆¿∑÷
     virtual void OnUserScoreNotify(UserScoreNoty& info){}

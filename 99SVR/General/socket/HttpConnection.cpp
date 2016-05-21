@@ -117,7 +117,7 @@ static ThreadVoid http_request(void* _param)
 		g_curr_api_host_index = httphosts.size() > 1 ? 0 : 0;
 	}
 
-	unsigned long try_count = httphosts.size() + 2;
+	int try_count = httphosts.size() + 2;
 	while ( --try_count >= 0 )
 	{
 		Http http(param->request_method);
@@ -845,6 +845,69 @@ void parse_privatetraderecord(char* json, HttpListener* listener)
 }
 
 
+
+void parse_test(char* json, HttpListener* listener)
+{
+	JsonValue value;
+	JsonReader reader;
+
+	Team cteam;
+
+	try
+	{
+		if (reader.parse(json, value))
+		{
+			int status = value["status"].asInt();
+			if( status == 0 )
+			{
+				JsonValue& data = value["data"];
+				if(!data.isNull())
+				{
+					//parse_Team(cteam, data);
+					//listener->onResponse(cteam);
+					return;
+				}
+			}
+		}
+	}
+	catch ( std::exception& ex)
+	{
+	}
+
+	listener->OnError(PERR_JSON_PARSE_ERROR);
+}
+
+void parse_test_list(char* json, HttpListener* listener)
+{
+	JsonValue value;
+	JsonReader reader;
+
+	vector<Team> cteam_list;
+
+	try
+	{
+		if (reader.parse(json, value))
+		{
+			int status = value["status"].asInt();
+			if( status == 0 )
+			{
+				JsonValue& data = value["data"];
+				if(!data.isNull())
+				{
+					//parse_Team_list(cteam_list, data);
+				}
+				//listener->onResponse(cteam);
+				return;
+			}
+		}
+	}
+	catch ( std::exception& ex)
+	{
+	}
+
+	listener->OnError(PERR_JSON_PARSE_ERROR);
+}
+
 void parse_PrivateServiceDetail(char* json, HttpListener* listener)
 {
 	std::string strJson = json;
@@ -1268,6 +1331,7 @@ void parse_BuyPrivateService(char* json, HttpListener* listener)
 
 	std::vector<PrivateServiceLevelDescription> psld_list;
 
+	int size_ = 0;
 	int i = 0;
 
 	BuyPrivateServiceListener* buy_listener = (BuyPrivateServiceListener*)listener;
@@ -2358,6 +2422,7 @@ void parse_groupspage(char* json, HttpListener* listener)
 			if(!value["status"].isNull())
 			{
 				int status = value["status"].asInt();
+				JsonValue& data = value["data"];
 
 				if(0 == status)
 				{
@@ -2994,7 +3059,7 @@ void parse_splashimage(char* json, HttpListener* listener)
 						questionanswer.set_askauthorid(atoi(datas["list"][i]["askAuthorId"].asString().c_str()));
 						questionanswer.set_askauthorname(datas["list"][i]["askAuthorName"].asString());
 						std::string icon;
-						get_full_head_icon(datas["list"][i]["answerAuthorHead"].asString(), icon);
+						get_full_head_icon(datas["list"][i]["askAuthorHead"].asString(), icon);
 						questionanswer.set_askauthorhead(icon);
 						questionanswer.set_askauthorrole(atoi((datas["list"][i]["askAuthorRole"].asString()).c_str()));
 						questionanswer.set_askstock(datas["list"][i]["askStock"].asString());
@@ -3263,6 +3328,8 @@ void HttpConnection::RequestTeamList(TeamListListener* listener)
 		}
 	}
 
+	char tmp[32] = {0};
+	
 	RequestParamter& request = get_request_param();
 	
 	request["s"] = "room/getRoomList";
@@ -3311,6 +3378,9 @@ void HttpConnection::RequestConsumeRankList(int teamId, ConsumeRankListener* lis
 // 请求观点列表
 void HttpConnection::RequestViewpointSummary(int authorId, int startId, int requestCount, ViewpointSummaryListener* listener)
 {
+	g_authorId = authorId;
+	g_startId = startId;
+
 	std::string cache_content;
 	if(needViewPointCache)
 	{
