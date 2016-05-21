@@ -33,8 +33,7 @@
     _room = room;
     [[ZLLogonServerSing sharedZLLogonServerSing] exitRoom];
     [kProtocolSingle connectVideoRoom:[room.roomid intValue] roomPwd:_room.password];
-    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
-
+//    [self performSelector:@selector(joinRoomTimeOut) withObject:nil afterDelay:8.0];
 }
 
 - (void)joinRoomErr:(NSNotification *)notify{

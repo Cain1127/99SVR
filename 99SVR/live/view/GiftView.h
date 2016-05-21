@@ -10,6 +10,8 @@
 
 @protocol GiftDelegate <NSObject>
 
+@optional
+
 - (void)sendGift:(int)giftId num:(int)giftNum;
 
 - (void)showPayView;

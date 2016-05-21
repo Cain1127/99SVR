@@ -59,7 +59,8 @@
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil removingNulls:YES ignoreArrays:NO];
         if([dict objectForKey:@"update"]!=nil)
         {
-            if ([[dict objectForKey:@"update"] intValue]==1) {
+            if ([[dict objectForKey:@"update"] intValue]==1)
+            {
                 [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_VERSION_VC object:nil];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [selfWeak createUpdateAlert];

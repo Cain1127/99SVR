@@ -289,7 +289,8 @@
     @WeakObj(self)
     gcd_main_safe(
     ^{
-         [selfWeak setDefaultImg];
+        
+         [selfWeak setNullMic];
     });
     @synchronized(_aryVideo)
     {
@@ -583,6 +584,7 @@
     [_glView sd_setImageWithURL:url1];
     [_glView.lblContent setText:@"当前无讲师上麦"];
     [_glView removeImgView];
+    DLog(@"设置无人上麦!");
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -592,6 +594,7 @@
 
 - (void)startPlayRoomId:(int)roomid user:(int)userid name:(NSString *)name
 {
+    DLog(@"播放开启");
     if (_playing)
     {
         return ;

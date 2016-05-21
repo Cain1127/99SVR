@@ -78,7 +78,7 @@ int Socket::connect(const char* host, short port, int connect_timeout)
 	memset(&sockAddr, 0, sizeof(sockAddr));
 	sockAddr.sin_family = AF_INET;
 	sockAddr.sin_port = htons(port);
-	sockAddr.sin_addr.s_addr = get_inet_addr(host);
+	sockAddr.sin_addr.s_addr = (unsigned int)get_inet_addr(host);
 
 	socket = ::socket(AF_INET, SOCK_STREAM, 0);
 	if (socket < 0 || socket == SOCKET_INVALID)
@@ -142,12 +142,12 @@ int Socket::connect(const char* host, short port, int connect_timeout)
 
 int Socket::send(const char *buf, int len)
 {
-	return ::send(socket, buf, len, SOCKET_SEND_FLAG);
+	return (int)::send(socket, buf, len, SOCKET_SEND_FLAG);
 }
 
 int Socket::recv(char* buf, int len)
 {
-	return ::recv(socket, buf, len, 0);
+	return (int)::recv(socket, buf, len, 0);
 }
 
 int Socket::close_(void)

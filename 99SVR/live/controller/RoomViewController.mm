@@ -53,7 +53,7 @@
 
 #define TABLEVIEW_ARRAY_PREDICATE(A) [NSPredicate predicateWithFormat:@"SELF CONTAINS %@",A];
 
-@interface RoomViewController ()<UIScrollViewDelegate,RoomHeadViewDelegate,VideoLiveDelegate>
+@interface RoomViewController ()<UIScrollViewDelegate,RoomHeadViewDelegate>
 {
     //聊天view
     NSInteger _nTag;
@@ -247,7 +247,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     _liveControl = [[XVideoLiveViewcontroller alloc] initWithModel:_room];
     [self addChildViewController:_liveControl];
     _liveControl.view.frame = frame;
-    _liveControl.delegate = self;
     [_scrollView addSubview:_liveControl.view];
     
     @WeakObj(self)
