@@ -16,9 +16,19 @@
 - (BOOL) clientCoreUnInit;
 - (BOOL) clientRcvStreamStart:(int32_t)userId roomId:(int32_t)roomId;
 //- (BOOL) clientRcvStreamStart:(NSString*)tcpAddr tcpPort:(int32_t)tcpPort rtmpAddr:(NSString*)rtmpAddr userId:(int32_t)userId roomId:(int32_t)roomId;
+
 - (BOOL) clientRcvStreamStop;
+
 - (BOOL) clientMuteVideoStream:(BOOL)en;
+
 - (BOOL) clientMuteAudioStream:(BOOL)en;
+
+- (void)setMainRoom:(int)nMainRoom;
+
+- (void)setMicStatus:(BOOL)bStatus;
+
+- (void)setNetWorkChange;
+
 @end
 
 #pragma mark - CALL BACK
