@@ -605,26 +605,29 @@
  */
 - (void)startNewPlay
 {
-    for (RoomUser *user in currentRoom.aryUser)
+    if(currentRoom.aryUser.count>0)
     {
-        if ([user isOnMic])
+        for (RoomUser *user in currentRoom.aryUser)
         {
-            _ffPlay.nuserid = user.m_nUserId;
-            [_ffPlay startPlayRoomId:[_room.roomid intValue] user:1801124 name:_room.teamname];
-            if(user.m_nUserId>100000)
+            if ([user isOnMic])
             {
-                [kHTTPSingle RequestConsumeRank:user.m_nUserId];
+                _ffPlay.nuserid = user.m_nUserId;
+                [_ffPlay startPlayRoomId:[_room.roomid intValue] user:KUserSingleton.nUserId name:_room.teamname];
+                return ;
             }
-            return ;
         }
+        _ffPlay.nuserid = 0;
+        [_ffPlay stop];
+        @WeakObj(_ffPlay)
+        dispatch_main_async_safe(
+        ^{
+            [_ffPlayWeak setNullMic];
+        });
     }
-    _ffPlay.nuserid = 0;
-    [_ffPlay stop];
-    @WeakObj(_ffPlay)
-    dispatch_main_async_safe(
-    ^{
-        [_ffPlayWeak setNullMic];
-    });
+    else
+    {
+        [_ffPlay startPlayRoomId:[_room.roomid intValue] user:KUserSingleton.nUserId name:_room.teamname];
+    }
 }
 
 /**

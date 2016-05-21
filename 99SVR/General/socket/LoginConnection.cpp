@@ -119,7 +119,6 @@ void LoginConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 	join_req.set_cipaddr("");
 //    join_req.set_userid(loginuser.userid());
 //    join_req.set_cuserpwd(login_password);
-
 	join_req.set_devtype(login_nmobile);
 	join_req.set_bloginsource(login_reqv == 4 ? 0 : 1);
 	join_req.set_time((uint32)time(0));
