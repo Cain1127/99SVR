@@ -38,12 +38,23 @@ static CGFloat const StatusBarHUDHUDStayDuration = 1.5;
 
 - (void)hudCreate:(UIImage *)image text:(NSString *)text bgColor:(UIColor *)bgColor belowSubview:(UIView *)belowSubview
 {
-    // 停止之前的定时器
-    [_timer invalidate];
     
+    CGFloat scroView_w = belowSubview.frame.size.width;
+    CGFloat scroView_h = 44;
+    
+//    DLog(@"%@",[self activityViewController]);
+    
+    UIViewController *viewController = [self getViewControllerInView:belowSubview];
+    CGFloat navBarMaxY = CGRectGetMaxY(viewController.navigationController.navigationBar.frame);
+    DLog(@"%f",navBarMaxY);
+    UIScrollView *scroView = [[UIScrollView alloc]initWithFrame:(CGRect){0,0,scroView_w,scroView_h}];
+    scroView.backgroundColor = [UIColor yellowColor];
+    scroView.contentSize = (CGSize){scroView_w,scroView_h*3.0};
+    [belowSubview addSubview:scroView];
+    [belowSubview bringSubviewToFront:scroView];
     // 添加按钮
     UIButton *statusButton = [[UIButton alloc] init];
-    statusButton.frame =  CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, 44);
+    statusButton.frame =  CGRectMake(0, 0, scroView_w, scroView_h);
     statusButton.userInteractionEnabled = NO;
     [statusButton setBackgroundColor:bgColor];
     [statusButton setTitle:text forState:UIControlStateNormal];
@@ -55,39 +66,8 @@ static CGFloat const StatusBarHUDHUDStayDuration = 1.5;
         statusButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 5);
         statusButton.titleEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0);
     }
-    statusButton.hidden = YES;
-    [belowSubview addSubview:statusButton];
-//    [belowSubview insertSubview:statusButton atIndex:1];
-    // 动画
-    CGFloat duration = 2; // 动画的时间
-    [UIView animateWithDuration:duration animations:^{
-        statusButton.hidden = NO;
-    } completion:^(BOOL finished)
-    {
-        @WeakObj(statusButton)
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-        ^{
-            [statusButtonWeak removeFromSuperview];
-        });
+    [scroView addSubview:statusButton];
     
-    }];
-//     
-//    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-//    DLog(@"%@",window.rootViewController.navigationController);
-//    [window insertSubview:_statusButton belowSubview:belowSubview];
-//    
-//    // 动画
-//    CGFloat duration = StatusBarHUDAnimationDuration; // 动画的时间
-//    [UIView animateWithDuration:duration animations:^{
-//        _statusButton.transform = CGAffineTransformMakeTranslation(0, StatusBarHUDWindowH);
-//    } completion:^(BOOL finished) {
-//        CGFloat delay = StatusBarHUDHUDStayDuration; // 延迟1s
-//        [UIView animateWithDuration:duration delay:delay options:UIViewAnimationOptionCurveLinear animations:^{
-//            _statusButton.transform = CGAffineTransformIdentity;
-//        } completion:^(BOOL finished) {
-//            [_statusButton removeFromSuperview];
-//        }];
-//    }];
 }
 
 + (void)showImage:(UIImage *)image text:(NSString *)text bgColor:(UIColor *)bgColor belowSubview:(UIView *)belowSubview
@@ -108,6 +88,16 @@ static CGFloat const StatusBarHUDHUDStayDuration = 1.5;
 + (void)showText:(NSString *)text belowSubview:(UIView *)belowSubview
 {
     [self showImage:nil text:text bgColor:StatusBarHUD_BGColor_Error belowSubview:belowSubview];
+}
+//获取当前屏幕显示的viewcontroller
+- (UIViewController*)getViewControllerInView:(UIView *)view{
+    for (UIView* next = [view superview]; next; next = next.superview) {
+        UIResponder* nextResponder = [next nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController*)nextResponder;
+        }
+    }
+    return nil;
 }
 
 @end
