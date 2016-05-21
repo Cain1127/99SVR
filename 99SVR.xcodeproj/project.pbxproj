@@ -37,7 +37,7 @@
 		188741811C9702DA002EF25A /* Foundation+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417A1C9702DA002EF25A /* Foundation+Log.m */; };
 		188741821C9702DA002EF25A /* NSString+Regex.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417C1C9702DA002EF25A /* NSString+Regex.m */; };
 		188741831C9702DA002EF25A /* UIBarButtonItem+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */; };
-		188741871C97058F002EF25A /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188741861C97058F002EF25A /* TabBarController.m */; };
+		188741871C97058F002EF25A /* TabBarController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 188741861C97058F002EF25A /* TabBarController.mm */; };
 		188968F81CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */; };
 		188968F91CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */; };
 		188968FA1CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */; };
@@ -828,7 +828,7 @@
 		1887417D1C9702DA002EF25A /* UIBarButtonItem+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Extension.h"; sourceTree = "<group>"; };
 		1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Extension.m"; sourceTree = "<group>"; };
 		188741851C97058F002EF25A /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
-		188741861C97058F002EF25A /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
+		188741861C97058F002EF25A /* TabBarController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TabBarController.mm; sourceTree = "<group>"; };
 		188968F61CAD608100C7E04E /* InAppPurchasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InAppPurchasesViewController.h; sourceTree = "<group>"; };
 		188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InAppPurchasesViewController.m; sourceTree = "<group>"; };
 		188969071CAD828600C7E04E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -3833,7 +3833,7 @@
 				188741771C96FE25002EF25A /* NavigationViewController.h */,
 				188741781C96FE25002EF25A /* NavigationViewController.m */,
 				188741851C97058F002EF25A /* TabBarController.h */,
-				188741861C97058F002EF25A /* TabBarController.m */,
+				188741861C97058F002EF25A /* TabBarController.mm */,
 				189D8A8C1C97982100E7D16D /* SlideBaseViewController.h */,
 				189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */,
 				BB1661A21C3E2F9A00D318BE /* HomeViewController.h */,
@@ -4875,7 +4875,7 @@
 				B4C4B3701CBAA5FF00B20A58 /* SFHFKeychainUtils.m in Sources */,
 				BB63F5AB1C2CC7A300A042E8 /* UIColor+Ext.m in Sources */,
 				B4EA09231CC8B9E000E8F933 /* StockRecordViewController.mm in Sources */,
-				188741871C97058F002EF25A /* TabBarController.m in Sources */,
+				188741871C97058F002EF25A /* TabBarController.mm in Sources */,
 				1895B7931CCBAA8700B86B0D /* TQMyViewController.m in Sources */,
 				1895B7871CCB753200B86B0D /* TQNoPurchaseModel.mm in Sources */,
 				BB63F6201C2CC7A300A042E8 /* GroupView.m in Sources */,
@@ -5321,7 +5321,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "999d6315-7d91-405d-928a-e3375cfe6382";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5376,7 +5376,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "999d6315-7d91-405d-928a-e3375cfe6382";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
