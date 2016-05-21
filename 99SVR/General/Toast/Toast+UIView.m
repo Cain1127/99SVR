@@ -173,7 +173,7 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
     activityView.backgroundColor = RGB(57,64,66);
     
     
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(activityView.bounds.size.width/2-20,activityView.bounds.size.height/2-20, 40, 40)];
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:Rect(activityView.bounds.size.width/2-25,activityView.bounds.size.height/2-35, 50, 50)];
     NSMutableArray *images = [NSMutableArray array];
     [activityView addSubview:imgView];
     for (int i=1; i<=8; i++) {
@@ -184,12 +184,12 @@ static const NSString * CSToastActivityViewKey  = @"CSToastActivityViewKey";
     imgView.animationDuration= 1;
     [imgView startAnimating];
     
-    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0,imgView.height+imgView.y+10, activityView.width, 16)];
-    [lblName setText:@"正在加载，请稍后"];
+    UILabel *lblName = [[UILabel alloc] initWithFrame:Rect(0,imgView.height+imgView.y+5, activityView.width, 16)];
+    [lblName setText:@"正在加载"];
     [lblName setTextColor:UIColorFromRGB(0xffffff)];
     [lblName setTextAlignment:NSTextAlignmentCenter];
     [activityView addSubview:lblName];
-    [lblName setFont:XCFONT(12)];
+    [lblName setFont:XCFONT(15)];
     
     objc_setAssociatedObject (self, &CSToastActivityViewKey, activityView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
