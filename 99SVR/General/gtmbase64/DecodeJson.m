@@ -436,6 +436,7 @@
     if (strInfo==nil || [strInfo length]==0) {
         return @"";
     }
+    DLog(@"resoleNotice---%@",strInfo);
     NSString *strTilte = @"";
     NSString *strImage = @"";
     if([strInfo rangeOfString:@"<h3>"].location != NSNotFound &&
@@ -471,6 +472,7 @@
         strInfo = [strInfo stringByReplacingCharactersInRange:NSMakeRange(start.location,end.location-start.location+4) withString:@""];
     }
     strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</div>" withString:@"</div><br>"];
+    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"<span" withString:@"<br><span"];
     
     if(nIndex == 3) // 悄悄话，内容也不显示
     {

@@ -64,10 +64,8 @@
     NSString *strMobile = _txtName.text;
     if (strMobile.length==0)
     {
-        
-        [StatusBarHUD showError:@"手机号不能为空" belowSubview:self.view];
-        
-//        [ProgressHUD showError:@"手机号不能为空"];
+        //[StatusBarHUD showError:@"手机号不能为空" belowSubview:self.view];
+        [ProgressHUD showError:@"手机号不能为空"];
         return ;
     }
     if (strMobile.length!=11)
