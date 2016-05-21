@@ -62,8 +62,12 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (_aryModel.count>indexPath.row) {
         TQIdeaModel *model = _aryModel[indexPath.section];
-        if (_delegate && [_delegate respondsToSelector:@selector(selectIdea:)]) {
-            [_delegate selectIdea:model];
+//        if (_delegate && [_delegate respondsToSelector:@selector(selectIdea:)]) {
+//            [_delegate selectIdea:model];
+//        }
+        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(tqIdeaModelSelectIndexPath:withModel:)]) {
+            [self.delegate tqIdeaModelSelectIndexPath:indexPath withModel:model];
         }
     }
     

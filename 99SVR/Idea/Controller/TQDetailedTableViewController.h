@@ -9,8 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "CustomViewController.h"
 
+/**
+ *  <#Description#>
+ *
+ *  @param replyValue 评论数
+ *  @param giftValue  礼物数
+ */
+typedef void(^RefreshCellData)(BOOL replyValue,BOOL giftValue);
+
 @interface TQDetailedTableViewController : CustomViewController
 
 - (id)initWithViewId:(int)viewId;
+
+@property (nonatomic , copy) RefreshCellData refreshCellDataBlock;
 
 @end

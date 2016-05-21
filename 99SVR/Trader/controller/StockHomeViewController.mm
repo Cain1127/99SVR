@@ -278,6 +278,7 @@
         CGFloat tabbarH = CGRectGetHeight(self.tabBarController.tabBar.frame);
         _sliderMenuView = [[SliderMenuView alloc]initWithFrame:(CGRect){0,navbarH,ScreenWidth,ScreenHeight-navbarH-tabbarH} withTitles:@[@"日收益",@"月收益",@"总收益"] withDefaultSelectIndex:1];
         _sliderMenuView.viewArrays = @[self.dayTab,self.monTab,self.totalTab];
+        [_sliderMenuView setTopLineViewHide:YES];
     }
     return _sliderMenuView;
 }

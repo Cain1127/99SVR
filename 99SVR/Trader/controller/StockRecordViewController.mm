@@ -227,6 +227,7 @@
         _sliderMenuView.topBagColor = [UIColor whiteColor];
         _sliderMenuView.titleBagColor = [UIColor whiteColor];
         _sliderMenuView.viewArrays = @[self.businessTab,self.houseTab];
+        [_sliderMenuView setTopLineViewHide:YES];
     }
     return _sliderMenuView;
 }
