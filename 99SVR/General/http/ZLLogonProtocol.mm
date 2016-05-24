@@ -563,10 +563,15 @@ void ZLLogonProtocol::sendGift(int giftId,int num){
     req.set_giftid(giftId);
     req.set_giftnum(num);
 //    req.set_action(2);
-    const char *toName = (const char *)toUser.bytes;
-    if(toName){
-        req.set_toalias(toName);
-    }
+    
+    char cBuffer[2048]={0};
+    ::strncpy(cBuffer, (const char *)toUser.bytes,toUser.length);
+    req.set_toalias(cBuffer);
+    
+    //const char *toName = (const char *)toUser.bytes;
+//    if(toName){
+//        req.set_toalias(cBuffer);
+//    }
     video_room->SendMsg_TradeGiftReq(req);
 }
 
