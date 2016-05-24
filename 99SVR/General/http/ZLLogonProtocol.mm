@@ -845,6 +845,13 @@ void ZLRoomListener::OnTradeGiftNotify(TradeGiftRecord& info){
     int gitId = info.giftid();
     int number = info.giftnum();
     NSString *toName = [NSString stringWithCString:info.toalias().c_str() encoding:GBK_ENCODING];
+    
+    if (toName==nil) {
+        toName = @"";
+    }
+    
+    NSLog(@"%d %d",info.toid(),info.srcid());
+    
     NSDictionary *parameters = @{@"srcName":strName,@"gId":@(gitId),@"number":@(number),@"srcId":@(info.srcid()),
                                  @"toName":toName};
     [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:parameters];
