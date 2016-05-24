@@ -138,7 +138,7 @@
         [self updataQueueBuffer];
         int queued;
         alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
-        NSLog(@"queued:%d",queued);
+//        NSLog(@"queued:%d",queued);
         if (queued>80)
         {
             [NSThread sleepForTimeInterval:0.04f];
