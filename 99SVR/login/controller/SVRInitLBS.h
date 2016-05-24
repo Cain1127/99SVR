@@ -14,4 +14,6 @@
 
 + (void)loginLocal;
 
++ (void)initMediaSDK;
+
 @end

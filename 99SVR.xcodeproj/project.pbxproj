@@ -37,7 +37,6 @@
 		188741811C9702DA002EF25A /* Foundation+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417A1C9702DA002EF25A /* Foundation+Log.m */; };
 		188741821C9702DA002EF25A /* NSString+Regex.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417C1C9702DA002EF25A /* NSString+Regex.m */; };
 		188741831C9702DA002EF25A /* UIBarButtonItem+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */; };
-		188741871C97058F002EF25A /* TabBarController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 188741861C97058F002EF25A /* TabBarController.mm */; };
 		188968F81CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */; };
 		188968F91CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */; };
 		188968FA1CAD608100C7E04E /* InAppPurchasesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */; };
@@ -158,13 +157,6 @@
 		87D9EE0FC59214DC02EE2C95 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A43875FF97FDC1CA789AE15 /* libPods.a */; };
 		B404A0791CD36A4D00E814CC /* UIViewController+EmpetViewTips.m in Sources */ = {isa = PBXBuildFile; fileRef = B404A0781CD36A4D00E814CC /* UIViewController+EmpetViewTips.m */; };
 		B404A0821CDB222700E814CC /* HDWhatIsPrivateViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B404A0811CDB222700E814CC /* HDWhatIsPrivateViewViewController.m */; };
-		B40DA7381CEF171F00DABD7C /* MCAudioBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA72B1CEF171F00DABD7C /* MCAudioBuffer.m */; };
-		B40DA7391CEF171F00DABD7C /* MCAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA72D1CEF171F00DABD7C /* MCAudioFile.m */; };
-		B40DA73A1CEF171F00DABD7C /* MCAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA72F1CEF171F00DABD7C /* MCAudioFileStream.m */; };
-		B40DA73B1CEF171F00DABD7C /* MCAudioOutputQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA7311CEF171F00DABD7C /* MCAudioOutputQueue.m */; };
-		B40DA73C1CEF171F00DABD7C /* MCAudioSession.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA7331CEF171F00DABD7C /* MCAudioSession.m */; };
-		B40DA73D1CEF171F00DABD7C /* MCParsedAudioData.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA7351CEF171F00DABD7C /* MCParsedAudioData.m */; };
-		B40DA73E1CEF171F00DABD7C /* MCSimpleAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA7371CEF171F00DABD7C /* MCSimpleAudioPlayer.m */; };
 		B44F77681CC39FF1008E3B26 /* StockDealHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */; };
 		B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.mm */; };
 		B47DD59D1CBF345300C47EF7 /* SliderMenuTopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD59A1CBF345300C47EF7 /* SliderMenuTopScrollView.m */; };
@@ -220,6 +212,7 @@
 		B4FEC6901CD1F94C0090DD50 /* loading_jixiangwu0006.png in Resources */ = {isa = PBXBuildFile; fileRef = B4FEC6891CD1F94C0090DD50 /* loading_jixiangwu0006.png */; };
 		B4FEC6911CD1F94C0090DD50 /* loading_jixiangwu0007.png in Resources */ = {isa = PBXBuildFile; fileRef = B4FEC68A1CD1F94C0090DD50 /* loading_jixiangwu0007.png */; };
 		BB06311C1C61C827008AD41D /* NoticeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB06311B1C61C827008AD41D /* NoticeModel.m */; };
+		BB07E46D1CF0960E00C57750 /* TabBarController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB07E46C1CF0960E00C57750 /* TabBarController.mm */; };
 		BB0D3D031CD0AA3200A57E77 /* XIdeaDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0D3D021CD0AA3200A57E77 /* XIdeaDataSource.m */; };
 		BB0D3D061CD0BF6100A57E77 /* XPrivateService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0D3D051CD0BF6100A57E77 /* XPrivateService.m */; };
 		BB125B4B1CB112FC00C573E0 /* BaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = BB125B481CB112FC00C573E0 /* BaseService.m */; };
@@ -828,7 +821,6 @@
 		1887417D1C9702DA002EF25A /* UIBarButtonItem+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Extension.h"; sourceTree = "<group>"; };
 		1887417E1C9702DA002EF25A /* UIBarButtonItem+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Extension.m"; sourceTree = "<group>"; };
 		188741851C97058F002EF25A /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
-		188741861C97058F002EF25A /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
 		188968F61CAD608100C7E04E /* InAppPurchasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InAppPurchasesViewController.h; sourceTree = "<group>"; };
 		188968F71CAD608100C7E04E /* InAppPurchasesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InAppPurchasesViewController.m; sourceTree = "<group>"; };
 		188969071CAD828600C7E04E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -1098,20 +1090,6 @@
 		B404A0781CD36A4D00E814CC /* UIViewController+EmpetViewTips.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+EmpetViewTips.m"; sourceTree = "<group>"; };
 		B404A0801CDB222700E814CC /* HDWhatIsPrivateViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HDWhatIsPrivateViewViewController.h; sourceTree = "<group>"; };
 		B404A0811CDB222700E814CC /* HDWhatIsPrivateViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HDWhatIsPrivateViewViewController.m; sourceTree = "<group>"; };
-		B40DA72A1CEF171F00DABD7C /* MCAudioBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCAudioBuffer.h; sourceTree = "<group>"; };
-		B40DA72B1CEF171F00DABD7C /* MCAudioBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCAudioBuffer.m; sourceTree = "<group>"; };
-		B40DA72C1CEF171F00DABD7C /* MCAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCAudioFile.h; sourceTree = "<group>"; };
-		B40DA72D1CEF171F00DABD7C /* MCAudioFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCAudioFile.m; sourceTree = "<group>"; };
-		B40DA72E1CEF171F00DABD7C /* MCAudioFileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCAudioFileStream.h; sourceTree = "<group>"; };
-		B40DA72F1CEF171F00DABD7C /* MCAudioFileStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCAudioFileStream.m; sourceTree = "<group>"; };
-		B40DA7301CEF171F00DABD7C /* MCAudioOutputQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCAudioOutputQueue.h; sourceTree = "<group>"; };
-		B40DA7311CEF171F00DABD7C /* MCAudioOutputQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCAudioOutputQueue.m; sourceTree = "<group>"; };
-		B40DA7321CEF171F00DABD7C /* MCAudioSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCAudioSession.h; sourceTree = "<group>"; };
-		B40DA7331CEF171F00DABD7C /* MCAudioSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCAudioSession.m; sourceTree = "<group>"; };
-		B40DA7341CEF171F00DABD7C /* MCParsedAudioData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCParsedAudioData.h; sourceTree = "<group>"; };
-		B40DA7351CEF171F00DABD7C /* MCParsedAudioData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCParsedAudioData.m; sourceTree = "<group>"; };
-		B40DA7361CEF171F00DABD7C /* MCSimpleAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSimpleAudioPlayer.h; sourceTree = "<group>"; };
-		B40DA7371CEF171F00DABD7C /* MCSimpleAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSimpleAudioPlayer.m; sourceTree = "<group>"; };
 		B44F77661CC39FF1008E3B26 /* StockDealHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealHeaderView.h; sourceTree = "<group>"; };
 		B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealHeaderView.mm; sourceTree = "<group>"; };
 		B47DD5961CBF2D9400C47EF7 /* StockHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeViewController.h; sourceTree = "<group>"; };
@@ -1205,6 +1183,7 @@
 		B4FEC68A1CD1F94C0090DD50 /* loading_jixiangwu0007.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_jixiangwu0007.png; sourceTree = "<group>"; };
 		BB06311A1C61C827008AD41D /* NoticeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeModel.h; sourceTree = "<group>"; };
 		BB06311B1C61C827008AD41D /* NoticeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeModel.m; sourceTree = "<group>"; };
+		BB07E46C1CF0960E00C57750 /* TabBarController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TabBarController.mm; sourceTree = "<group>"; };
 		BB0D3D011CD0AA3200A57E77 /* XIdeaDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XIdeaDataSource.h; sourceTree = "<group>"; };
 		BB0D3D021CD0AA3200A57E77 /* XIdeaDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XIdeaDataSource.m; sourceTree = "<group>"; };
 		BB0D3D041CD0BF6100A57E77 /* XPrivateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPrivateService.h; sourceTree = "<group>"; };
@@ -2663,27 +2642,6 @@
 			path = LaunchImage;
 			sourceTree = "<group>";
 		};
-		B40DA7291CEF171F00DABD7C /* MCSimpleAudioPlayer */ = {
-			isa = PBXGroup;
-			children = (
-				B40DA72A1CEF171F00DABD7C /* MCAudioBuffer.h */,
-				B40DA72B1CEF171F00DABD7C /* MCAudioBuffer.m */,
-				B40DA72C1CEF171F00DABD7C /* MCAudioFile.h */,
-				B40DA72D1CEF171F00DABD7C /* MCAudioFile.m */,
-				B40DA72E1CEF171F00DABD7C /* MCAudioFileStream.h */,
-				B40DA72F1CEF171F00DABD7C /* MCAudioFileStream.m */,
-				B40DA7301CEF171F00DABD7C /* MCAudioOutputQueue.h */,
-				B40DA7311CEF171F00DABD7C /* MCAudioOutputQueue.m */,
-				B40DA7321CEF171F00DABD7C /* MCAudioSession.h */,
-				B40DA7331CEF171F00DABD7C /* MCAudioSession.m */,
-				B40DA7341CEF171F00DABD7C /* MCParsedAudioData.h */,
-				B40DA7351CEF171F00DABD7C /* MCParsedAudioData.m */,
-				B40DA7361CEF171F00DABD7C /* MCSimpleAudioPlayer.h */,
-				B40DA7371CEF171F00DABD7C /* MCSimpleAudioPlayer.m */,
-			);
-			path = MCSimpleAudioPlayer;
-			sourceTree = "<group>";
-		};
 		B47DD5911CBF2C1B00C47EF7 /* Trader(高手操盘) */ = {
 			isa = PBXGroup;
 			children = (
@@ -3516,7 +3474,6 @@
 		BB63F4BB1C2CC7A200A042E8 /* kxmovie */ = {
 			isa = PBXGroup;
 			children = (
-				B40DA7291CEF171F00DABD7C /* MCSimpleAudioPlayer */,
 				BBD49D711C5B142400EADF74 /* LivePlayViewController.h */,
 				BBD49D721C5B142400EADF74 /* LivePlayViewController.m */,
 				BB5F9BC21C5DDA6100285EA6 /* OpenAL.h */,
@@ -3824,6 +3781,8 @@
 		BB63F5721C2CC7A300A042E8 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				BB07E46C1CF0960E00C57750 /* TabBarController.mm */,
+				188741851C97058F002EF25A /* TabBarController.h */,
 				BB14B9C81CD918360027E7E6 /* GFBaseViewController.h */,
 				BB14B9C91CD918360027E7E6 /* GFBaseViewController.m */,
 				BB14B9CA1CD918360027E7E6 /* GFNavigationController.h */,
@@ -3832,8 +3791,6 @@
 				BB14B9CD1CD918360027E7E6 /* NSMutableArray+GFNavigationControlller.m */,
 				188741771C96FE25002EF25A /* NavigationViewController.h */,
 				188741781C96FE25002EF25A /* NavigationViewController.m */,
-				188741851C97058F002EF25A /* TabBarController.h */,
-				188741861C97058F002EF25A /* TabBarController.mm */,
 				189D8A8C1C97982100E7D16D /* SlideBaseViewController.h */,
 				189D8A8D1C97982100E7D16D /* SlideBaseViewController.m */,
 				BB1661A21C3E2F9A00D318BE /* HomeViewController.h */,
@@ -4798,7 +4755,6 @@
 				BB63F5AC1C2CC7A300A042E8 /* UIView+Frame.m in Sources */,
 				BB5E1C731CC082310076C416 /* RoomService.mm in Sources */,
 				BB3785491CDF240C008365FD /* GiftShowAnimate.m in Sources */,
-				B40DA73A1CEF171F00DABD7C /* MCAudioFileStream.m in Sources */,
 				BB2CA6171CD338A300DFE56E /* json_writer.cpp in Sources */,
 				B4CC49CB1CCF9AB200D0C2F7 /* TQPurchaseModel.mm in Sources */,
 				BB1661A41C3E2F9A00D318BE /* HomeViewController.m in Sources */,
@@ -4863,7 +4819,6 @@
 				BBD719821CE466A100FF9A38 /* WKWebViewJavascriptBridge.m in Sources */,
 				BB63F5F91C2CC7A300A042E8 /* UIView+Extension.m in Sources */,
 				1879B8FD1CC85C9400E981A5 /* TQGifConllectionCell.m in Sources */,
-				B40DA73B1CEF171F00DABD7C /* MCAudioOutputQueue.m in Sources */,
 				188490FF1CC73F79007FD1ED /* UIBarButtonItem+Item.m in Sources */,
 				BB63F5D41C2CC7A300A042E8 /* UIScrollView+MJExtension.m in Sources */,
 				B4EE59141CDD77110063FDC3 /* AdLinkShowViewController.m in Sources */,
@@ -4875,7 +4830,6 @@
 				B4C4B3701CBAA5FF00B20A58 /* SFHFKeychainUtils.m in Sources */,
 				BB63F5AB1C2CC7A300A042E8 /* UIColor+Ext.m in Sources */,
 				B4EA09231CC8B9E000E8F933 /* StockRecordViewController.mm in Sources */,
-				188741871C97058F002EF25A /* TabBarController.mm in Sources */,
 				1895B7931CCBAA8700B86B0D /* TQMyViewController.m in Sources */,
 				1895B7871CCB753200B86B0D /* TQNoPurchaseModel.mm in Sources */,
 				BB63F6201C2CC7A300A042E8 /* GroupView.m in Sources */,
@@ -4920,7 +4874,6 @@
 				BB14B9D61CDA213D0027E7E6 /* RoomChatNull.m in Sources */,
 				BB6F3ABD1C9ECB3C0035EBBE /* BannerModel.mm in Sources */,
 				185F596D1CC4CAD600F605F5 /* NSString+MJExtension.m in Sources */,
-				B40DA73D1CEF171F00DABD7C /* MCParsedAudioData.m in Sources */,
 				1898AC711C9BB77100F2681D /* VideoColletionViewController.m in Sources */,
 				BBD58EEB1CCBD96C009250DB /* XMeCustomCell.m in Sources */,
 				BB17692D1C7B006F00CE947C /* UIImage+WebP.m in Sources */,
@@ -4941,7 +4894,6 @@
 				1898AC691C9BADE600F2681D /* MyDataController.m in Sources */,
 				5A4D61291CEEF93B00DD7983 /* StatusBarHUD.m in Sources */,
 				18F9710E1C92947F001B2575 /* DataVerifier.m in Sources */,
-				B40DA7381CEF171F00DABD7C /* MCAudioBuffer.m in Sources */,
 				5A7629391CE1B7C400C6A092 /* NJKWebViewProgressView.m in Sources */,
 				BB6F116A1CC519FF00F02064 /* ConnectRoomViewModel.m in Sources */,
 				BB63F5C31C2CC7A300A042E8 /* MASConstraintMaker.m in Sources */,
@@ -4975,7 +4927,6 @@
 				B47DD59E1CBF345300C47EF7 /* SliderMenuView.m in Sources */,
 				BB2CA61A1CD338A300DFE56E /* StatisticReport.cpp in Sources */,
 				BB17692F1C7B006F00CE947C /* UIImageView+WebCache.m in Sources */,
-				B40DA73E1CEF171F00DABD7C /* MCSimpleAudioPlayer.m in Sources */,
 				BB9765F31C85B55F00FAA5B7 /* DeviceUID.m in Sources */,
 				188741831C9702DA002EF25A /* UIBarButtonItem+Extension.m in Sources */,
 				BB63F5CA1C2CC7A300A042E8 /* ViewController+MASAdditions.m in Sources */,
@@ -5035,7 +4986,6 @@
 				187C07F31C9A571B007AE742 /* ProfileViewController.m in Sources */,
 				BB63F5D01C2CC7A300A042E8 /* MJRefreshGifHeader.m in Sources */,
 				BBD58E9F1CC9CB62009250DB /* PlayIconView.m in Sources */,
-				B40DA7391CEF171F00DABD7C /* MCAudioFile.m in Sources */,
 				BB1661861C3D029200D318BE /* MBProgressHUD+Add.m in Sources */,
 				185F59691CC4CAD600F605F5 /* NSObject+MJClass.m in Sources */,
 				BB63F6111C2CC7A300A042E8 /* HotViewController.m in Sources */,
@@ -5083,7 +5033,6 @@
 				185F596B1CC4CAD600F605F5 /* NSObject+MJKeyValue.m in Sources */,
 				BB2CA61C1CD338A300DFE56E /* Thread.cpp in Sources */,
 				18EA82A21CCA148F00BDB735 /* TQNoPurchaseViewController.mm in Sources */,
-				B40DA73C1CEF171F00DABD7C /* MCAudioSession.m in Sources */,
 				18AAD5651C993CD100438E18 /* PaySelectViewController.m in Sources */,
 				185DABA71CBFDC970019C5A3 /* TQDetailedTableViewController.mm in Sources */,
 				189D8A8E1C97982100E7D16D /* SlideBaseViewController.m in Sources */,
@@ -5102,6 +5051,7 @@
 				BB5138341C97E67300E09EF5 /* GiftModel.m in Sources */,
 				BB1769241C7B006F00CE947C /* SDWebImageCompat.m in Sources */,
 				B4C4B36D1CBAA5FF00B20A58 /* IAPHelper.m in Sources */,
+				BB07E46D1CF0960E00C57750 /* TabBarController.mm in Sources */,
 				18CE9CD31CC70676004AF7C8 /* TQcontentView.m in Sources */,
 				BBB515F71C4D29E3008F2CEC /* AllColletViewController.m in Sources */,
 				BBB515F41C4CD515008F2CEC /* SVRInitLBS.m in Sources */,
@@ -5321,7 +5271,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "ef8c443d-d6bc-4943-ba13-e7a4b47211db";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5376,7 +5326,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "ef8c443d-d6bc-4943-ba13-e7a4b47211db";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";

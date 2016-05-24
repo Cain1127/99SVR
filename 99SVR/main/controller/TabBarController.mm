@@ -28,6 +28,7 @@
 #import "SocketNetworkInfo.h"
 #import "SplashModel.h"
 #import "SplashTool.h"
+#import "SVRInitLBS.h"
 
 @interface TabBarController ()<PlayIconDelegate>
 {
@@ -63,12 +64,7 @@
 {
     self = [super init];
     if (self)
-    {
-        // 统一设置Item的文字属性
-        [self setUpItemTextAttrs];
-        // 添加所以子控制器
-        [self setUpAllChildViewControllers];
-    }
+    {}
     return self;
 }
 
@@ -77,6 +73,9 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    
+    [SVRInitLBS initMediaSDK];
+    
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
     
     // 加载信箱未读数
@@ -104,6 +103,10 @@
     
     // Socket没网监控
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadSocketNetworkStateNotify:) name:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:nil];
+    // 统一设置Item的文字属性
+    [self setUpItemTextAttrs];
+    // 添加所以子控制器
+    [self setUpAllChildViewControllers];
 }
 
 - (void)dealloc

@@ -15,7 +15,7 @@
 #import "TextColletViewController.h"
 #import "LeftCellModel.h"
 #import "LeftViewCell.h"
-#import <Bugly/CrashReporter.h>
+#import <Bugly/Bugly.h>
 #import "VideoColletionViewController.h"
 #import "AssetViewController.h"
 #import "SettingCenterController.h"
@@ -100,7 +100,7 @@
 
 - (void)refreshUI
 {
-    [[CrashReporter sharedInstance] setUserId:[NSString stringWithFormat:@"用户:%@",NSStringFromInt([UserInfo sharedUserInfo].nUserId)]];
+    [Bugly setUserIdentifier:[NSString stringWithFormat:@"用户:%@",NSStringFromInt([UserInfo sharedUserInfo].nUserId)]];
     [self performSelectorOnMainThread:@selector(checkLogin) withObject:nil waitUntilDone:YES];
 }
 

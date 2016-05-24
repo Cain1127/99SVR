@@ -21,8 +21,6 @@
 #import "ZLShareViewController.h"
 #import "LoginViewController.h"
 #import "UIAlertView+Block.h"
-#import "MCAudioOutputQueue.h"
-
 
 @interface LivePlayViewController()<SVRMediaClientDelegate>
 {
@@ -46,8 +44,7 @@
     int _videoHeight;
     BOOL bCoding;
     
-    MCAudioOutputQueue *_audioPlayer;
-    
+    OpenAL *_openAL;
 }
 @property (nonatomic,strong) NSMutableArray *aryVideo;
 @property (nonatomic) BOOL backGroud;
@@ -259,18 +256,11 @@
 
 - (void)initDecode
 {
-    AudioStreamBasicDescription mPlayFormat;
-    memset(&mPlayFormat, 0, sizeof(mPlayFormat));
-    mPlayFormat.mFormatID = kAudioFormatLinearPCM;
-    mPlayFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
-    mPlayFormat.mBitsPerChannel = 16;
-    mPlayFormat.mChannelsPerFrame = 2;
-    mPlayFormat.mFramesPerPacket = 1;
-    mPlayFormat.mBytesPerFrame = mPlayFormat.mBitsPerChannel /8 * mPlayFormat.mChannelsPerFrame;
-    mPlayFormat.mBytesPerPacket = mPlayFormat.mBytesPerFrame * mPlayFormat.mFramesPerPacket;
-    mPlayFormat.mSampleRate = 48000;
-    
-    _audioPlayer = [[MCAudioOutputQueue alloc] initWithFormat:mPlayFormat bufferSize:4096 macgicCookie:nil];
+    if (!_openAL)
+    {
+        _openAL = [[OpenAL alloc] init];
+    }
+    [_openAL initOpenAL];
 }
 
 - (void)stop
@@ -285,7 +275,7 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStop];
     });
-    [_audioPlayer stop:YES];
+    [_openAL stopSound];
     @WeakObj(self)
     gcd_main_safe(
     ^{
@@ -391,10 +381,7 @@
     [SVRMediaClient sharedSVRMediaClient].delegate = self;
     
     [self updateDownHUD];
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        SVRMediaClient *svrClient = [SVRMediaClient sharedSVRMediaClient];
-        [svrClient clientCoreInit];
-    });
+
     
     _downHUD.alpha = 0;
 }
@@ -760,7 +747,7 @@
 {
     @autoreleasepool
     {
-        [_audioPlayer playData:data packetCount:0 packetDescriptions:NULL isEof:YES];
+        
     }
 }
 

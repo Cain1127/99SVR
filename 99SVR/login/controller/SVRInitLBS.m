@@ -11,6 +11,7 @@
 #import "ZLLogonServerSing.h"
 #import "DecodeJson.h"
 #import "UserInfo.h"
+#import "SVRMediaClient.h"
 
 @implementation SVRInitLBS
 
@@ -21,6 +22,13 @@
     [SVRInitLBS loginLocal];
     
     [SVRInitLBS requestGift];
+}
+
++ (void)initMediaSDK
+{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
+    });
 }
 
 /**
