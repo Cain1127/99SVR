@@ -12,7 +12,8 @@
 
 
 + (SVRMediaClient *)sharedSVRMediaClient;
-- (BOOL) clientCoreInit;
+
+- (BOOL) clientCoreInit:(NSString *)strAddr;
 - (BOOL) clientCoreUnInit;
 - (BOOL) clientRcvStreamStart:(int32_t)userId roomId:(int32_t)roomId;
 //- (BOOL) clientRcvStreamStart:(NSString*)tcpAddr tcpPort:(int32_t)tcpPort rtmpAddr:(NSString*)rtmpAddr userId:(int32_t)userId roomId:(int32_t)roomId;
@@ -23,11 +24,9 @@
 
 - (BOOL) clientMuteAudioStream:(BOOL)en;
 
-- (void)setMainRoom:(int)nMainRoom;
+- (void)setMainRoomId:(int)roomid;
 
-- (void)setMicStatus:(BOOL)bStatus;
-
-- (void)setNetWorkChange;
+- (void)networkChange;
 
 @end
 
@@ -40,8 +39,8 @@
 @protocol SVRMediaClientDelegate <NSObject>
 
 @optional
-- (void)onAudioData:(SVRMediaClient *)sdk data:(NSData*)data len:(int32_t)len;
-- (void)onVideoData:(SVRMediaClient *)sdk data:(NSData*)data len:(int32_t)len width:(int32_t)width height:(int32_t)height;
+- (void)onAudioData:(unsigned char *)cData len:(int32_t)len;
+- (void)onVideoData:(unsigned char *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height;
 @end
 
 

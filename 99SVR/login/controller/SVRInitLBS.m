@@ -27,7 +27,7 @@
 + (void)initMediaSDK
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [[SVRMediaClient sharedSVRMediaClient] clientCoreInit];
+        [[SVRMediaClient sharedSVRMediaClient] clientCoreInit:@"lbs1.99ducaijing.com;lbs2.99ducaijing.com;lbs3.99ducaijing.com;121.14.211.51;112.90.241.35;120.197.248.16"];
     });
 }
 
