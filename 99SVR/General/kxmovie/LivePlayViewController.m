@@ -742,8 +742,7 @@
         });
     }
 }
-
-- (void)onAudioData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len
+- (void)onAudioData:(unsigned char *)cData len:(int32_t)len
 {
     @autoreleasepool
     {
@@ -751,7 +750,7 @@
     }
 }
 
-- (void)onVideoData:(SVRMediaClient *)sdk data:(NSData *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height
+- (void)onVideoData:(unsigned char *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height
 {
     _videoWidth = width;
     _videoHeight = height;
@@ -759,10 +758,12 @@
     {
         if (_bVideo)
         {
+            NSData *videoData = [NSData dataWithBytes:data length:len];
             @synchronized(_aryVideo)
             {
-                [_aryVideo addObject:data];
+                [_aryVideo addObject:videoData];
             }
+            videoData = nil;
         }
     }
 }
