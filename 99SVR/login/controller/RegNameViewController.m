@@ -54,50 +54,50 @@
     _username = _txtName.text;
     if ([_username length]==0)
     {
-        [ProgressHUD showError:@"用户名不能为空"];
+        [StatusBarHUD showError:@"用户名不能为空" toView:self.view];
         return ;
     }
     int flag = [self MatchLetter:_username];
     if (flag==0)
     {
-        [ProgressHUD showError:@"用户名第一位必须是字母"];
+        [StatusBarHUD showError:@"用户名第一位必须是字母" toView:self.view];
         return ;
     }
     else if(flag == -1)
     {
-        [ProgressHUD showError:@"用户名只能包含数字、字母、下划线"];
+        [StatusBarHUD showError:@"用户名只能包含数字、字母、下划线" toView:self.view];
         return ;
     }
     _password = _txtPwd.text;
     if ([_password length]==0)
     {
-        [ProgressHUD showError:@"密码不能为空"];
+        [StatusBarHUD showError:@"密码不能为空" toView:self.view];
         return ;
     }
     NSString *strCmdPwd = _txtCmd.text;
     if ([strCmdPwd length]==0)
     {
-        [ProgressHUD showError:@"第二次输入的密码不能为空"];
+        [StatusBarHUD showError:@"第二次输入的密码不能为空" toView:self.view];
         return ;
     }
     if (![_txtPwd.text isEqualToString:_txtCmd.text])
     {
-        [ProgressHUD showError:@"两次输入的密码不一致"];
+        [StatusBarHUD showError:@"两次输入的密码不一致" toView:self.view];
         return;
     }
     if ([DecodeJson MatchLetter:_password]==-1) {
-        [ProgressHUD showError:@"密码不能包含空格"];
+        [StatusBarHUD showError:@"密码不能包含空格" toView:self.view];
         return ;
     }
     if ([DecodeJson MatchLetterNumber:_password]==-1)
     {
-        [ProgressHUD showError:@"密码不能为纯数字"];
+        [StatusBarHUD showError:@"密码不能为纯数字" toView:self.view];
         return ;
     }
     
     if (!_checkAgree.checked)
     {
-        [ProgressHUD showError:@"必须同意《用户服务协议》和《隐私权条款》"];
+        [StatusBarHUD showError:@"必须同意《用户服务协议》和《隐私权条款》" toView:self.view];
         return ;
     }
     //判断密码是否为空 并且是在6到16位
@@ -131,17 +131,17 @@
                  NSString *strNull = [dict objectForKey:@"info"];
                  if(strNull)
                  {
-                     [ProgressHUD showError:[dict objectForKey:@"info"]];
+                     [StatusBarHUD showError:[dict objectForKey:@"info"] toView:self.view];
                  }
                  else
                  {
-                     [ProgressHUD showError:@"服务器异常"];
+                     [StatusBarHUD showError:@"服务器异常" toView:self.view];
                  }
          }
      }fail:^(NSError *error)
      {
          [selfWeak.view hideToastActivity];
-         [ProgressHUD showError:@"连接服务器失败"];
+         [StatusBarHUD showError:@"连接服务器失败" toView:self.view];
      }];
 }
 
