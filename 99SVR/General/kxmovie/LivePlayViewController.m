@@ -746,7 +746,7 @@
 {
     @autoreleasepool
     {
-        
+        [_openAL openAudioFromQueue:cData dataSize:len];
     }
 }
 
