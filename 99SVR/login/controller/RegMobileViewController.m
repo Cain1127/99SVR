@@ -51,34 +51,34 @@
     _username = _txtName.text;
     if (_username.length==0)
     {
-        [ProgressHUD showError:@"手机号不能为空"];
+        [StatusBarHUD showError:@"手机号不能为空" toView:self.view];
         return ;
         
     }
     if (_username.length!=11)
     {
-        [ProgressHUD showError:@"手机长度错误"];
+        [StatusBarHUD showError:@"手机长度错误" toView:self.view];
         return ;
     }
     if(![DecodeJson getSrcMobile:_username])
     {
-        [ProgressHUD showError:@"请输入正确的手机号"];
+        [StatusBarHUD showError:@"请输入正确的手机号" toView:self.view];
         return ;
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)
     {
-        [ProgressHUD showError:@"验证码不能为空"];
+        [StatusBarHUD showError:@"验证码不能为空" toView:self.view];
         return ;
     }
     _password = _txtPwd.text;
     if([_password length]==0)
     {
-        [ProgressHUD showError:@"密码不能为空"];
+        [StatusBarHUD showError:@"密码不能为空" toView:self.view];
         return ;
     }
     if (!_checkAgree.checked) {
-        [ProgressHUD showError:@"必须同意《用户服务协议》和《隐私权条款》"];
+        [StatusBarHUD showError:@"必须同意《用户服务协议》和《隐私权条款》" toView:self.view];
         return ;
     }
     [self.view makeToastActivity_bird];
@@ -108,7 +108,7 @@
     fail:^(NSError *error)
     {
          [selfWeak.view hideToastActivity];
-         [ProgressHUD showError:@"注册失败"];
+         [StatusBarHUD showError:@"注册失败" toView:self.view];
          NSString *strUrl = [NSString stringWithFormat:@"ReportItem=Register&ClientType=1&RegType=2&ServerIP=%@&Error=%@",
                             @"120.55.105.224",@"err_fail"];
          [DecodeJson postPHPServerMsg:strUrl];
@@ -120,7 +120,7 @@
 {
     if(!strDate)
     {
-        [ProgressHUD showError:@"系统异常"];
+        [StatusBarHUD showError:@"系统异常" toView:self.view];
         return ;
     }
     NSString *strMd5 = [NSString stringWithFormat:@"action=reg&account=%@&date=%@",strMobile,strDate];
@@ -145,7 +145,7 @@
              ^{
                  [__self.view hideToastActivity];
                  __self.btnCode.enabled = NO;
-                 [ProgressHUD showSuccess:@"已发送验证码到目标手机"];
+                 [StatusBarHUD showSuccess:@"已发送验证码到目标手机" toView:self.view];
                  [__self.txtCode becomeFirstResponder];
              });
          }
@@ -154,7 +154,7 @@
              dispatch_async(dispatch_get_main_queue(),
              ^{
                  [__self.view hideToastActivity];
-                 [ProgressHUD showError:[dict objectForKey:@"info"]];
+                 [StatusBarHUD showError:[dict objectForKey:@"info"] toView:self.view];
              });
          }
      }
@@ -163,7 +163,7 @@
          dispatch_async(dispatch_get_main_queue(),
          ^{
              [__self.view hideToastActivity];
-             [ProgressHUD showError:@"请求验证码失败"];
+             [StatusBarHUD showError:@"请求验证码失败" toView:self.view];
          });
      }];
 }
@@ -183,17 +183,17 @@
     NSString *strMobile = _txtName.text;
     if (strMobile.length==0)
     {
-       [ProgressHUD showError:@"手机号不能为空"];
+       [StatusBarHUD showError:@"手机号不能为空" toView:self.view];
        return ;
     }
     if (strMobile.length!=11)
     {
-        [ProgressHUD showError:@"手机长度错误"];
+        [StatusBarHUD showError:@"手机长度错误" toView:self.view];
         return ;
     }
     if(![DecodeJson getSrcMobile:strMobile])
     {
-        [ProgressHUD showError:@"请输入正确的手机号"];
+        [StatusBarHUD showError:@"请输入正确的手机号" toView:self.view];
         return ;
     }
     [self.view makeToastActivity_bird];
