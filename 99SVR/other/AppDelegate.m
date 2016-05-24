@@ -21,7 +21,7 @@
 #import "SVRInitLBS.h"
 #import "BaseService.h"
 #import <Bugly/BuglyLog.h>
-#import <Bugly/CrashReporter.h>
+#import <Bugly/Bugly.h>
 #import "MTA.h"
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "MTAConfig.h"
@@ -75,7 +75,8 @@
 {
     [[ZLLogonServerSing sharedZLLogonServerSing] serverInit];
     [SVRInitLBS loadAllInfo];
-    [[CrashReporter sharedInstance] installWithAppId:@"900018787" applicationGroupIdentifier:@"com.hctt.fae99"];
+    
+    [Bugly startWithAppId:@"900018787"];
     [[MTAConfig getInstance] setDebugEnable:TRUE];
     [[MTAConfig getInstance] setAutoExceptionCaught:FALSE];
     [[MTAConfig getInstance] setSmartReporting:false];

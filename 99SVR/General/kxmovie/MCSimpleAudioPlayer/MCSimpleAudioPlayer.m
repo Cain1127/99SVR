@@ -1,151 +1,110 @@
 //
-//  MCSimpleAudioPlayer.m
-//  MCSimpleAudioPlayer
+//  MCAudioOutputQueue.m
+//  MCAudioQueue
 //
 //  Created by Chengyin on 14-7-27.
 //  Copyright (c) 2014年 Chengyin. All rights reserved.
 //
 
-#import "MCSimpleAudioPlayer.h"
-#import "MCAudioSession.h"
-#import "MCAudioFile.h"
-#import "MCAudioFileStream.h"
 #import "MCAudioOutputQueue.h"
-#import "MCAudioBuffer.h"
 #import <pthread.h>
+#import "MCAudioSession.h"
 
-@interface MCSimpleAudioPlayer ()<MCAudioFileStreamDelegate>
+const int MCAudioQueueBufferCount = 2;
+
+@interface MCAudioQueueBuffer : NSObject
+@property (nonatomic,assign) AudioQueueBufferRef buffer;
+@end
+@implementation MCAudioQueueBuffer
+@end
+
+@interface MCAudioOutputQueue ()
 {
 @private
-    NSThread *_thread;
-    pthread_mutex_t _mutex;
-	pthread_cond_t _cond;
+    AudioQueueRef _audioQueue;
+    NSMutableArray *_buffers;
+    NSMutableArray *_reusableBuffers;
     
-    MCSAPStatus _status;
-    
-    unsigned long long _fileSize;
-    unsigned long long _offset;
-    NSFileHandle *_fileHandler;
-    
-    UInt32 _bufferSize;
-    MCAudioBuffer *_buffer;
-    
-    MCAudioFile *_audioFile;
-    MCAudioFileStream *_audioFileStream;
-    MCAudioOutputQueue *_audioQueue;
-    
+    BOOL _isRunning;
     BOOL _started;
-    BOOL _pauseRequired;
-    BOOL _stopRequired;
+    NSTimeInterval _playedTime;
     BOOL _pausedByInterrupt;
-    BOOL _usingAudioFile;
-    
-    BOOL _seekRequired;
-    NSTimeInterval _seekTime;
-    NSTimeInterval _timingOffset;
+    pthread_mutex_t _mutex;
+    pthread_cond_t _cond;
 }
 @end
 
-@implementation MCSimpleAudioPlayer
-@dynamic status;
-@synthesize failed = _failed;
-@synthesize fileType = _fileType;
-@synthesize filePath = _filePath;
-@dynamic isPlayingOrWaiting;
-@dynamic duration;
-@dynamic progress;
+@implementation MCAudioOutputQueue
+@synthesize format = _format;
+@dynamic available;
+@synthesize volume = _volume;
+@synthesize bufferSize = _bufferSize;
+@synthesize isRunning = _isRunning;
 
 #pragma mark - init & dealloc
-- (instancetype)initWithFilePath:(NSString *)filePath fileType:(AudioFileTypeID)fileType
+- (instancetype)initWithFormat:(AudioStreamBasicDescription)format  bufferSize:(UInt32)bufferSize macgicCookie:(NSData *)macgicCookie
 {
     self = [super init];
     if (self)
     {
-        _status = MCSAPStatusStopped;
-        
-        _filePath = filePath;
-        _fileType = fileType;
-        
-        _fileHandler = [NSFileHandle fileHandleForReadingAtPath:_filePath];
-        _fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:_filePath error:nil] fileSize];
-        if (_fileHandler && _fileSize > 0)
+        if ([[MCAudioSession sharedInstance] setCategory:kAudioSessionCategory_MediaPlayback error:NULL])
         {
-            _buffer = [MCAudioBuffer buffer];
+            //active audiosession
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interruptHandler:) name:MCAudioSessionInterruptionNotification object:nil];
+            if ([[MCAudioSession sharedInstance] setActive:YES error:NULL])
+            {
+            }
         }
-        else
-        {
-            [_fileHandler closeFile];
-            _failed = YES;
-        }
+        _format = format;
+        _volume = 1.0f;
+        _bufferSize = bufferSize;
+        _buffers = [[NSMutableArray alloc] init];
+        _reusableBuffers = [[NSMutableArray alloc] init];
+        [self _createAudioOutputQueue:macgicCookie];
+        [self _mutexInit];
     }
     return self;
 }
 
+#pragma mark - interrupt
+- (void)interruptHandler:(NSNotification *)notification
+{
+    UInt32 interruptionState = [notification.userInfo[MCAudioSessionInterruptionStateKey] unsignedIntValue];
+    
+    if (interruptionState == kAudioSessionBeginInterruption)
+    {
+        _pausedByInterrupt = YES;
+        [self pause];
+    }
+    else if (interruptionState == kAudioSessionEndInterruption)
+    {
+        AudioSessionInterruptionType interruptionType = [notification.userInfo[MCAudioSessionInterruptionTypeKey] unsignedIntValue];
+        if (interruptionType == kAudioSessionInterruptionType_ShouldResume)
+        {
+            if (!_started && _pausedByInterrupt)
+            {
+                if ([[MCAudioSession sharedInstance] setActive:YES error:NULL])
+                {
+                    [self resume];
+                }
+            }
+        }
+    }
+}
+
 - (void)dealloc
 {
-    [self cleanup];
-    [_fileHandler closeFile];
-}
-
-- (void)cleanup
-{
-    //reset file
-    _offset = 0;
-    [_fileHandler seekToFileOffset:0];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MCAudioSessionInterruptionNotification object:nil];
-    
-    //clean buffer
-    [_buffer clean];
-    
-    _usingAudioFile = NO;
-    //close audioFileStream
-    [_audioFileStream close];
-    _audioFileStream = nil;
-    
-    //close audiofile
-    [_audioFile close];
-    _audioFile = nil;
-    
-    //stop audioQueue
-    [_audioQueue stop:YES];
-    _audioQueue = nil;
-    
-    //destory mutex & cond
+    [self _disposeAudioOutputQueue];
     [self _mutexDestory];
-    
-    _started = NO;
-    _timingOffset = 0;
-    _seekTime = 0;
-    _seekRequired = NO;
-    _pauseRequired = NO;
-    _stopRequired = NO;
-    
-    //reset status
-    [self setStatusInternal:MCSAPStatusStopped];
 }
 
-#pragma mark - status
-- (BOOL)isPlayingOrWaiting
+#pragma mark - error
+- (void)_errorForOSStatus:(OSStatus)status error:(NSError *__autoreleasing *)outError
 {
-    return self.status == MCSAPStatusWaiting || self.status == MCSAPStatusPlaying || self.status == MCSAPStatusFlushing;
-}
-
-- (MCSAPStatus)status
-{
-    return _status;
-}
-
-- (void)setStatusInternal:(MCSAPStatus)status
-{
-    if (_status == status)
+    if (status != noErr && outError != NULL)
     {
-        return;
+        *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
     }
-    
-    [self willChangeValueForKey:@"status"];
-    _status = status;
-    [self didChangeValueForKey:@"status"];
 }
 
 #pragma mark - mutex
@@ -165,7 +124,7 @@
 {
     pthread_mutex_lock(&_mutex);
     pthread_cond_wait(&_cond, &_mutex);
-	pthread_mutex_unlock(&_mutex);
+    pthread_mutex_unlock(&_mutex);
 }
 
 - (void)_mutexSignal
@@ -175,311 +134,262 @@
     pthread_mutex_unlock(&_mutex);
 }
 
-#pragma mark - thread
-- (BOOL)createAudioQueue
+#pragma mark - audio queue
+- (void)_createAudioOutputQueue:(NSData *)magicCookie
 {
-    if (_audioQueue)
+    OSStatus status = AudioQueueNewOutput(&_format,MCAudioQueueOutputCallback, (__bridge void *)(self), NULL, NULL, 0, &_audioQueue);
+    if (status != noErr)
     {
-        return YES;
-    }
-    
-    NSTimeInterval duration = self.duration;
-    UInt64 audioDataByteCount = _usingAudioFile ? _audioFile.audioDataByteCount : _audioFileStream.audioDataByteCount;
-    _bufferSize = 0;
-    if (duration != 0)
-    {
-        _bufferSize = (0.2 / duration) * audioDataByteCount;
-    }
-    
-    if (_bufferSize > 0)
-    {
-        AudioStreamBasicDescription format = _usingAudioFile ? _audioFile.format : _audioFileStream.format;
-        NSData *magicCookie = _usingAudioFile ? [_audioFile fetchMagicCookie] : [_audioFileStream fetchMagicCookie];
-        _audioQueue = [[MCAudioOutputQueue alloc] initWithFormat:format bufferSize:_bufferSize macgicCookie:magicCookie];
-        if (!_audioQueue.available)
-        {
-            _audioQueue = nil;
-            return NO;
-        }
-    }
-    return YES;
-}
-
-- (void)threadMain
-{
-    _failed = YES;
-    NSError *error = nil;
-    //set audiosession category
-    if ([[MCAudioSession sharedInstance] setCategory:kAudioSessionCategory_MediaPlayback error:NULL])
-    {
-        //active audiosession
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interruptHandler:) name:MCAudioSessionInterruptionNotification object:nil];
-        if ([[MCAudioSession sharedInstance] setActive:YES error:NULL])
-        {
-            //create audioFileStream
-            _audioFileStream = [[MCAudioFileStream alloc] initWithFileType:_fileType fileSize:_fileSize error:&error];
-            if (!error)
-            {
-                _failed = NO;
-                _audioFileStream.delegate = self;
-            }
-        }
-    }
-    
-    if (_failed)
-    {
-        [self cleanup];
+        _audioQueue = NULL;
         return;
     }
     
-    [self setStatusInternal:MCSAPStatusWaiting];
-    BOOL isEof = NO;
-    while (self.status != MCSAPStatusStopped && !_failed && _started)
+    status = AudioQueueAddPropertyListener(_audioQueue, kAudioQueueProperty_IsRunning, MCAudioQueuePropertyCallback, (__bridge void *)(self));
+    if (status != noErr)
     {
-        @autoreleasepool
+        AudioQueueDispose(_audioQueue, YES);
+        _audioQueue = NULL;
+        return;
+    }
+    
+    if (_buffers.count == 0)
+    {
+        for (int i = 0; i < MCAudioQueueBufferCount; ++i)
         {
-            //read file & parse
-            if (_usingAudioFile)
+            AudioQueueBufferRef buffer;
+            status = AudioQueueAllocateBuffer(_audioQueue, _bufferSize, &buffer);
+            if (status != noErr)
             {
-                if (!_audioFile)
-                {
-                    _audioFile = [[MCAudioFile alloc] initWithFilePath:_filePath fileType:_fileType];
-                }
-                [_audioFile seekToTime:_seekTime];
-                if ([_buffer bufferedSize] < _bufferSize || !_audioQueue)
-                {
-                    NSArray *parsedData = [_audioFile parseData:&isEof];
-                    if (parsedData)
-                    {
-                        [_buffer enqueueFromDataArray:parsedData];
-                    }
-                    else
-                    {
-                        _failed = YES;
-                        break;
-                    }
-                }
+                AudioQueueDispose(_audioQueue, YES);
+                _audioQueue = NULL;
+                break;
             }
-            else
-            {
-                if (_offset < _fileSize && (!_audioFileStream.readyToProducePackets || [_buffer bufferedSize] < _bufferSize || !_audioQueue))
-                {
-                    NSData *data = [_fileHandler readDataOfLength:1000];
-                    _offset += [data length];
-                    if (_offset >= _fileSize)
-                    {
-                        isEof = YES;
-                    }
-                    [_audioFileStream parseData:data error:&error];
-                    if (error)
-                    {
-                        _usingAudioFile = YES;
-                        continue;
-                    }
-                }
-            }
-            
-            
-            
-            if (_audioFileStream.readyToProducePackets || _usingAudioFile)
-            {
-                if (![self createAudioQueue])
-                {
-                    _failed = YES;
-                    break;
-                }
-                
-                if (!_audioQueue)
-                {
-                    continue;
-                }
-                
-                if (self.status == MCSAPStatusFlushing && !_audioQueue.isRunning)
-                {
-                    break;
-                }
-                
-                //stop
-                if (_stopRequired)
-                {
-                    _stopRequired = NO;
-                    _started = NO;
-                    [_audioQueue stop:YES];
-                    break;
-                }
-                
-                //pause
-                if (_pauseRequired)
-                {
-                    [self setStatusInternal:MCSAPStatusPaused];
-                    [_audioQueue pause];
-                    [self _mutexWait];
-                    _pauseRequired = NO;
-                }
-                
-                //play
-                if ([_buffer bufferedSize] >= _bufferSize || isEof)
-                {
-                    UInt32 packetCount;
-                    AudioStreamPacketDescription *desces = NULL;
-                    NSData *data = [_buffer dequeueDataWithSize:_bufferSize packetCount:&packetCount descriptions:&desces];
-                    if (packetCount != 0)
-                    {
-                        [self setStatusInternal:MCSAPStatusPlaying];
-                        _failed = ![_audioQueue playData:data packetCount:packetCount packetDescriptions:desces isEof:isEof];
-                        free(desces);
-                        if (_failed)
-                        {
-                            break;
-                        }
-                        
-                        if (![_buffer hasData] && isEof && _audioQueue.isRunning)
-                        {
-                            [_audioQueue stop:NO];
-                            [self setStatusInternal:MCSAPStatusFlushing];
-                        }
-                    }
-                    else if (isEof)
-                    {
-                        //wait for end
-                        if (![_buffer hasData] && _audioQueue.isRunning)
-                        {
-                            [_audioQueue stop:NO];
-                            [self setStatusInternal:MCSAPStatusFlushing];
-                        }
-                    }
-                    else
-                    {
-                        _failed = YES;
-                        break;
-                    }
-                }
-                
-                //seek
-                if (_seekRequired && self.duration != 0)
-                {
-                    [self setStatusInternal:MCSAPStatusWaiting];
-                    
-                    _timingOffset = _seekTime - _audioQueue.playedTime;
-                    [_buffer clean];
-                    if (_usingAudioFile)
-                    {
-                        [_audioFile seekToTime:_seekTime];
-                    }
-                    else
-                    {
-                        _offset = [_audioFileStream seekToTime:&_seekTime];
-                        [_fileHandler seekToFileOffset:_offset];
-                    }
-                    _seekRequired = NO;
-                    [_audioQueue reset];
-                }
-            }
+            MCAudioQueueBuffer *bufferObj = [[MCAudioQueueBuffer alloc] init];
+            bufferObj.buffer = buffer;
+            [_buffers addObject:bufferObj];
+            [_reusableBuffers addObject:bufferObj];
         }
     }
     
-    //clean
-    [self cleanup];
-}
-
-
-#pragma mark - interrupt
-- (void)interruptHandler:(NSNotification *)notification
-{
-    UInt32 interruptionState = [notification.userInfo[MCAudioSessionInterruptionStateKey] unsignedIntValue];
+#if TARGET_OS_IPHONE
+    UInt32 property = kAudioQueueHardwareCodecPolicy_PreferSoftware;
+    [self setProperty:kAudioQueueProperty_HardwareCodecPolicy dataSize:sizeof(property) data:&property error:NULL];
+#endif
     
-    if (interruptionState == kAudioSessionBeginInterruption)
+    if (magicCookie)
     {
-        _pausedByInterrupt = YES;
-        [_audioQueue pause];
-        [self setStatusInternal:MCSAPStatusPaused];
-        
+        AudioQueueSetProperty(_audioQueue, kAudioQueueProperty_MagicCookie, [magicCookie bytes], (UInt32)[magicCookie length]);
     }
-    else if (interruptionState == kAudioSessionEndInterruption)
+    
+    [self setVolumeParameter];
+}
+
+- (void)_disposeAudioOutputQueue
+{
+    if (_audioQueue != NULL)
     {
-        AudioSessionInterruptionType interruptionType = [notification.userInfo[MCAudioSessionInterruptionTypeKey] unsignedIntValue];
-        if (interruptionType == kAudioSessionInterruptionType_ShouldResume)
-        {
-            if (self.status == MCSAPStatusPaused && _pausedByInterrupt)
-            {
-                if ([[MCAudioSession sharedInstance] setActive:YES error:NULL])
-                {
-                    [self play];
-                }
-            }
-        }
+        AudioQueueDispose(_audioQueue,true);
+        _audioQueue = NULL;
     }
 }
 
-#pragma mark - parser
-- (void)audioFileStream:(MCAudioFileStream *)audioFileStream audioDataParsed:(NSArray *)audioData
+- (BOOL)_start
 {
-    [_buffer enqueueFromDataArray:audioData];
+    OSStatus status = AudioQueueStart(_audioQueue, NULL);
+    _started = status == noErr;
+    return _started;
 }
 
-#pragma mark - progress
-- (NSTimeInterval)progress
+- (BOOL)resume
 {
-    if (_seekRequired)
+    return [self _start];
+}
+
+- (BOOL)pause
+{
+    OSStatus status = AudioQueuePause(_audioQueue);
+    _started = NO;
+    return status == noErr;
+}
+
+- (BOOL)reset
+{
+    OSStatus status = AudioQueueReset(_audioQueue);
+    return status == noErr;
+}
+
+- (BOOL)flush
+{
+    OSStatus status = AudioQueueFlush(_audioQueue);
+    return status == noErr;
+}
+
+- (BOOL)stop:(BOOL)immediately
+{
+    OSStatus status = noErr;
+    if (immediately)
     {
-        return _seekTime;
-    }
-    return _timingOffset + _audioQueue.playedTime;
-}
-
-- (void)setProgress:(NSTimeInterval)progress
-{
-    _seekRequired = YES;
-    _seekTime = progress;
-}
-
-- (NSTimeInterval)duration
-{
-    return _usingAudioFile ? _audioFile.duration : _audioFileStream.duration;
-}
-
-#pragma mark - method
-- (void)play
-{
-    if (!_started)
-    {
-        _started = YES;
-        [self _mutexInit];
-        _thread = [[NSThread alloc] initWithTarget:self selector:@selector(threadMain) object:nil];
-        [_thread start];
+        status = AudioQueueStop(_audioQueue, true);
     }
     else
     {
-        if (_status == MCSAPStatusPaused || _pauseRequired)
+        status = AudioQueueStop(_audioQueue, false);
+    }
+    _started = NO;
+    _playedTime = 0;
+    return status == noErr;
+}
+
+- (BOOL)playData:(NSData *)data packetCount:(UInt32)packetCount packetDescriptions:(AudioStreamPacketDescription *)packetDescriptions isEof:(BOOL)isEof
+{
+    if ([data length] > _bufferSize)
+    {
+        return NO;
+    }
+    
+    if (_reusableBuffers.count == 0)
+    {
+        if (!_started && ![self _start])
         {
-            _pausedByInterrupt = NO;
-            _pauseRequired = NO;
-            if ([[MCAudioSession sharedInstance] setActive:YES error:NULL])
+            return NO;
+        }
+        [self _mutexWait];
+    }
+    
+    MCAudioQueueBuffer *bufferObj = [_reusableBuffers firstObject];
+    [_reusableBuffers removeObject:bufferObj];
+    if (!bufferObj)
+    {
+        AudioQueueBufferRef buffer;
+        OSStatus status = AudioQueueAllocateBuffer(_audioQueue, _bufferSize, &buffer);
+        if (status == noErr)
+        {
+            bufferObj = [[MCAudioQueueBuffer alloc] init];
+            bufferObj.buffer = buffer;
+        }
+        else
+        {
+            return NO;
+        }
+    }
+    memcpy(bufferObj.buffer->mAudioData, [data bytes], [data length]);
+    bufferObj.buffer->mAudioDataByteSize = (UInt32)[data length];
+    
+    OSStatus status = AudioQueueEnqueueBuffer(_audioQueue, bufferObj.buffer, packetCount, packetDescriptions);
+    
+    if (status == noErr)
+    {
+        if (_reusableBuffers.count == 0 || isEof)
+        {
+            if (!_started && ![self _start])
             {
-                [[MCAudioSession sharedInstance] setCategory:kAudioSessionCategory_MediaPlayback error:NULL];
-                [self _resume];
+                return NO;
             }
         }
     }
+    
+    return status == noErr;
 }
 
-- (void)_resume
+- (BOOL)setProperty:(AudioQueuePropertyID)propertyID dataSize:(UInt32)dataSize data:(const void *)data error:(NSError *__autoreleasing *)outError
 {
-    [_audioQueue resume];
+    OSStatus status = AudioQueueSetProperty(_audioQueue, propertyID, data, dataSize);
+    [self _errorForOSStatus:status error:outError];
+    return status == noErr;
+}
+
+- (BOOL)getProperty:(AudioQueuePropertyID)propertyID dataSize:(UInt32 *)dataSize data:(void *)data error:(NSError *__autoreleasing *)outError
+{
+    OSStatus status = AudioQueueGetProperty(_audioQueue, propertyID, data, dataSize);
+    [self _errorForOSStatus:status error:outError];
+    return status == noErr;
+}
+
+- (BOOL)setParameter:(AudioQueueParameterID)parameterId value:(AudioQueueParameterValue)value error:(NSError *__autoreleasing *)outError
+{
+    OSStatus status = AudioQueueSetParameter(_audioQueue, parameterId, value);
+    [self _errorForOSStatus:status error:outError];
+    return status == noErr;
+}
+
+- (BOOL)getParameter:(AudioQueueParameterID)parameterId value:(AudioQueueParameterValue *)value error:(NSError *__autoreleasing *)outError
+{
+    OSStatus status = AudioQueueGetParameter(_audioQueue, parameterId, value);
+    [self _errorForOSStatus:status error:outError];
+    return status == noErr;
+}
+
+
+#pragma mark - property
+- (NSTimeInterval)playedTime
+{
+    if (_format.mSampleRate == 0)
+    {
+        return 0;
+    }
+    
+    AudioTimeStamp time;
+    OSStatus status = AudioQueueGetCurrentTime(_audioQueue, NULL, &time, NULL);
+    if (status == noErr)
+    {
+        _playedTime = time.mSampleTime / _format.mSampleRate;
+    }
+    
+    return _playedTime;
+}
+
+- (BOOL)available
+{
+    return _audioQueue != NULL;
+}
+
+- (void)setVolume:(float)volume
+{
+    _volume = volume;
+    [self setVolumeParameter];
+}
+
+- (void)setVolumeParameter
+{
+    [self setParameter:kAudioQueueParam_Volume value:_volume error:NULL];
+}
+
+#pragma mark - call back
+static void MCAudioQueueOutputCallback(void *inClientData, AudioQueueRef inAQ, AudioQueueBufferRef inBuffer)
+{
+    MCAudioOutputQueue *audioOutputQueue = (__bridge MCAudioOutputQueue *)inClientData;
+    [audioOutputQueue handleAudioQueueOutputCallBack:inAQ buffer:inBuffer];
+}
+
+- (void)handleAudioQueueOutputCallBack:(AudioQueueRef)audioQueue buffer:(AudioQueueBufferRef)buffer
+{
+    for (int i = 0; i < _buffers.count; ++i)
+    {
+        if (buffer == [_buffers[i] buffer])
+        {
+            [_reusableBuffers addObject:_buffers[i]];
+            break;
+        }
+    }
+    
     [self _mutexSignal];
 }
 
-- (void)pause
+static void MCAudioQueuePropertyCallback(void *inUserData, AudioQueueRef inAQ, AudioQueuePropertyID inID)
 {
-    if (self.isPlayingOrWaiting && self.status != MCSAPStatusFlushing)
+    MCAudioOutputQueue *audioQueue = (__bridge MCAudioOutputQueue *)inUserData;
+    [audioQueue handleAudioQueuePropertyCallBack:inAQ property:inID];
+}
+
+- (void)handleAudioQueuePropertyCallBack:(AudioQueueRef)audioQueue property:(AudioQueuePropertyID)property
+{
+    if (property == kAudioQueueProperty_IsRunning)
     {
-        _pauseRequired = YES;
+        UInt32 isRunning = 0;
+        UInt32 size = sizeof(isRunning);
+        AudioQueueGetProperty(audioQueue, property, &isRunning, &size);
+        _isRunning = isRunning;
     }
 }
-
-- (void)stop
-{
-    _stopRequired = YES;
-    [self _mutexSignal];
-}
 @end
+

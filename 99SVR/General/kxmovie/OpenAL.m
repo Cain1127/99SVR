@@ -17,21 +17,21 @@
 
 - (void)handleAudioNotify:(NSNotification *)notification
 {
-    DLog(@"音频中断");
+    printf("声音中断");
     if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification])
     {
         if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]])
         {
-            mContext = alcGetCurrentContext();
-            AVAudioSession *session = [AVAudioSession sharedInstance];
-            [session setActive:NO error: nil];
             alcMakeContextCurrent(NULL);
             alcSuspendContext(mContext);
+            [[AVAudioSession sharedInstance] setActive:NO error:nil];
         }
         else if([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeEnded]])
         {
-            AVAudioSession *session = [AVAudioSession sharedInstance];
-            [session setActive: YES error: nil];
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback
+                                             withOptions:AVAudioSessionCategoryOptionMixWithOthers
+                                                   error:nil];
+            [[AVAudioSession sharedInstance] setActive:YES error:nil];
             alcMakeContextCurrent(mContext);
             alcProcessContext(mContext);
         }
@@ -55,8 +55,12 @@
     if(self=[super init]){
         ticketCondition = [[NSCondition alloc] init];
         AVAudioSession *session = [AVAudioSession sharedInstance];
-        [session setActive:YES error:nil];
-        [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+        [session setActive: YES error:nil];
+        NSError *setCategoryError = nil;
+        if (![session setCategory:AVAudioSessionCategoryPlayback
+                      withOptions:AVAudioSessionCategoryOptionMixWithOthers
+                            error:&setCategoryError]) {
+        }
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleAudioNotify:) name:AVAudioSessionInterruptionNotification object:nil];
         return self;
@@ -98,11 +102,12 @@
         alcMakeContextCurrent(mContext);
     }
     alGenSources(1, &outSourceId);
+    alSpeedOfSound(1.0);
     alDopplerVelocity(1.0);
     alDopplerFactor(1.0);
-//    alSourcef(outSourceId, AL_PITCH, 1.0f);
-//    alSourcef(outSourceId, AL_GAIN, 1.0f);
-//    alSourcef(outSourceId, AL_SOURCE_TYPE, AL_STREAMING);
+    alSourcef(outSourceId, AL_PITCH, 1.0f);
+    alSourcef(outSourceId, AL_GAIN, 1.0f);
+    alSourcef(outSourceId, AL_SOURCE_TYPE, AL_STREAMING);
 }
 
 - (void)openAudioFromQueue:(unsigned char*)data dataSize:(UInt32)dataSize
@@ -118,38 +123,36 @@
     alBufferData(bufferID, format,data, (ALsizei)dataSize,aSampleRate);
     if (alGetError()!= AL_NO_ERROR)
     {
-        
-        DLog(@"Error generating sources!\n");
-        [self playSound];
+        NSLog(@"Error generating sources!\n");
         [ticketCondition unlock];
         return ;
     }
     alSourceQueueBuffers(outSourceId, 1, &bufferID);
-    alSourcef(outSourceId, AL_PITCH, 1.0);
     if (alGetError()!= AL_NO_ERROR)
     {
-        DLog(@"Error generating sources!\n");
-        [self playSound];
+        NSLog(@"Error generating sources!\n");
         [ticketCondition unlock];
-        return ;
-    }
-    [self updataQueueBuffer];
-    int queued;
-    alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
-    if(queued>60)
-    {
-        alDeleteSources(1, &outSourceId);
-        alGenBuffers(1, &outSourceId);
-    }
-    else if(queued>20)
-    {
-        [NSThread sleepForTimeInterval:0.016f];
     }
     else
     {
-        [NSThread sleepForTimeInterval:0.013f];
+        [self updataQueueBuffer];
+        int queued;
+        alGetSourcei(outSourceId, AL_BUFFERS_QUEUED, &queued);
+        NSLog(@"queued:%d",queued);
+        if (queued>80)
+        {
+            [NSThread sleepForTimeInterval:0.04f];
+        }
+        else if(queued>20)
+        {
+            [NSThread sleepForTimeInterval:0.02f];
+        }
+        else
+        {
+            [NSThread sleepForTimeInterval:0.013f];
+        }
+        [ticketCondition unlock];
     }
-    [ticketCondition unlock];
 }
 
 - (BOOL)updataQueueBuffer
@@ -168,6 +171,15 @@
             [self stopSound];
             [self cleanUpOpenAL];
         }
+        NSLog(@"queue:%d",queued);
+        NSLog(@"stateVaue:%d",stateVaue);
+        if (queued>50)
+        {
+            alDeleteBuffers(1, &outSourceId);
+            alDeleteBuffers(1, &buff);
+            alGenBuffers(1, &buff);
+            alGenSources(1, &outSourceId);
+        }
         [self playSound];
         return NO;
     }
@@ -179,18 +191,15 @@
     return YES;
 }
 
-- (void)playSound
-{
-    ALint  state;
+- (void)playSound{
+    ALint state;
     alGetSourcei(outSourceId, AL_SOURCE_STATE, &state);
-    if (state != AL_PLAYING)
-    {
+    if (state != AL_PLAYING){
         alSourcePlay(outSourceId);
     }
 }
 
-- (void)stopSound
-{
+- (void)stopSound{
     ALint  state;
     alGetSourcei(outSourceId, AL_SOURCE_STATE, &state);
     if (state != AL_STOPPED)
@@ -201,12 +210,10 @@
 
 - (void)cleanUpOpenAL
 {
-    if (outSourceId)
-    {
+    if (outSourceId){
         alDeleteSources(1, &outSourceId);
     }
-    if(buff)
-    {
+    if(buff){
         alDeleteBuffers(1, &buff);
     }
     if (mContext)
@@ -218,8 +225,7 @@
     }
 }
 
-- (void)dealloc
-{
+- (void)dealloc{
     ticketCondition = nil;
     [self cleanUpOpenAL];
     AVAudioSession *session = [AVAudioSession sharedInstance];
@@ -232,3 +238,4 @@
 
 
 @end
+
