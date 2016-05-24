@@ -442,8 +442,9 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     }
     if(KUserSingleton.nUserId != loginuser.userid())
     {
-        NSString *strMsg = [NSString stringWithFormat:@"两端信息不一致,使用双芳封装的loginId:%d",loginuser.userid()];
+        NSString *strMsg = [NSString stringWithFormat:@"两端信息不一致,使用客户端保存的id:%d",KUserSingleton.nUserId];
         [aryRoomChat addObject:strMsg];
+        req.set_userid(KUserSingleton.nUserId);
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
         req.set_userid(loginuser.userid());
         req.set_cuserpwd(login_password);
