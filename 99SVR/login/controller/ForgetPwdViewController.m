@@ -64,24 +64,23 @@
     NSString *strMobile = _txtName.text;
     if (strMobile.length==0)
     {
-        //[StatusBarHUD showError:@"手机号不能为空" belowSubview:self.view];
-        [ProgressHUD showError:@"手机号不能为空"];
+        [StatusBarHUD showError:@"手机号不能为空" toView:self.view];
         return ;
     }
     if (strMobile.length!=11)
     {
-        [ProgressHUD showError:@"手机长度错误"];
+        [StatusBarHUD showError:@"手机长度错误" toView:self.view];
         return ;
     }
     if(![DecodeJson getSrcMobile:strMobile])
     {
-        [ProgressHUD showError:@"请输入正确的手机号"];
+        [StatusBarHUD showError:@"请输入正确的手机号" toView:self.view];
         return ;
     }
     [self.view makeToastActivity_bird];
     if(!strDate)
     {
-        [ProgressHUD showError:@"手机异常"];
+        [StatusBarHUD showError:@"手机异常" toView:self.view];
         return ;
     }
     NSString *strMd5 = [NSString stringWithFormat:@"action=find&account=%@&date=%@",strMobile,strDate];
@@ -104,17 +103,17 @@
              DLog(@"dict:%@",dict);
              [__self startTimer];
              __self.btnCode.enabled = NO;
-             [ProgressHUD showSuccess:@"已发送验证码到目标手机"];
+             [StatusBarHUD showSuccess:@"已发送验证码到目标手机" toView:self.view];
              [__self.txtCode becomeFirstResponder];
          }
          else
          {
-             [ProgressHUD showError:[dict objectForKey:@"info"]];
+             [StatusBarHUD showError:[dict objectForKey:@"info"] toView:self.view];
          }
      }fail:^(NSError *error)
      {
-             [__self.view hideToastActivity];
-         [ProgressHUD showError:@"请求验证码失败"];
+         [__self.view hideToastActivity];
+         [StatusBarHUD showError:@"请求验证码失败" toView:self.view];
      }];
 }
 
@@ -186,7 +185,7 @@
     [btnRegister setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     self.nextBtn = btnRegister;
     [self checkLogBtnIsEnableWithPhone:_txtName.text withCode:_txtCode.text];
-
+    
     btnRegister.layer.masksToBounds = YES;
     btnRegister.layer.cornerRadius = 3;
     [btnRegister addTarget:self action:@selector(authMobile) forControlEvents:UIControlEventTouchUpInside];
@@ -242,18 +241,18 @@
     NSString *strMobile = _txtName.text;
     if ([strMobile length]==0)
     {
-        [ProgressHUD showError:@"手机号不能为空"];
+        [StatusBarHUD showError:@"手机号不能为空" toView:self.view];
         return ;
     }
     if ([strMobile length]!=11)
     {
-        [ProgressHUD showError:@"手机号格式错误"];
+        [StatusBarHUD showError:@"手机号格式错误" toView:self.view];
         return ;
     }
     NSString *strCode = _txtCode.text;
     if ([strCode length]==0)
     {
-        [ProgressHUD showError:@"验证码不能为空"];
+        [StatusBarHUD showError:@"验证码不能为空" toView:self.view];
         return ;
     }
     [self.view makeToastActivity_bird];
@@ -262,26 +261,26 @@
     _strMobile = strMobile;
     __weak ForgetPwdViewController *__self = self;
     [BaseService postJSONWithUrl:strInfo parameters:parameters success:^(id response)
-    {
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-            [__self.view hideToastActivity];
-        });
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
-        if (dict && [[dict objectForKey:@"status"] intValue]==0)
-        {
-            __self.btnCode.enabled = NO;
-            [ProgressHUD showSuccess:@"验证成功"];
-            InputPwdViewController *input = [[InputPwdViewController alloc] initWithMobile:__self.strMobile];
-            [self.navigationController pushViewController:input animated:YES];
-        }
-        else
-        {
-            [ProgressHUD showError:[dict objectForKey:@"info"]];
-        }
-    } fail:^(NSError *error) {
-        [ProgressHUD showError:@"连接服务器失败"];
-    }];
+     {
+         dispatch_async(dispatch_get_main_queue(),
+                        ^{
+                            [__self.view hideToastActivity];
+                        });
+         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
+         if (dict && [[dict objectForKey:@"status"] intValue]==0)
+         {
+             __self.btnCode.enabled = NO;
+             [ProgressHUD showSuccess:@"验证成功"];
+             InputPwdViewController *input = [[InputPwdViewController alloc] initWithMobile:__self.strMobile];
+             [self.navigationController pushViewController:input animated:YES];
+         }
+         else
+         {
+             [ProgressHUD showError:[dict objectForKey:@"info"]];
+         }
+     } fail:^(NSError *error) {
+         [ProgressHUD showError:@"连接服务器失败"];
+     }];
 }
 
 - (void)viewDidLoad

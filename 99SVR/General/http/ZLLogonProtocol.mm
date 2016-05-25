@@ -569,10 +569,15 @@ void ZLLogonProtocol::sendGift(int giftId,int num){
     req.set_giftid(giftId);
     req.set_giftnum(num);
 //    req.set_action(2);
-    const char *toName = (const char *)toUser.bytes;
-    if(toName){
-        req.set_toalias(toName);
-    }
+    
+    char cBuffer[2048]={0};
+    ::strncpy(cBuffer, (const char *)toUser.bytes,toUser.length);
+    req.set_toalias(cBuffer);
+    
+    //const char *toName = (const char *)toUser.bytes;
+//    if(toName){
+//        req.set_toalias(cBuffer);
+//    }
     video_room->SendMsg_TradeGiftReq(req);
 }
 
@@ -851,6 +856,10 @@ void ZLRoomListener::OnTradeGiftNotify(TradeGiftRecord& info){
     int gitId = info.giftid();
     int number = info.giftnum();
     NSString *toName = [NSString stringWithCString:info.toalias().c_str() encoding:GBK_ENCODING];
+    
+    if (toName==nil) {
+        toName = @"";
+    }
     NSDictionary *parameters = @{@"srcName":strName,@"gId":@(gitId),@"number":@(number),@"srcId":@(info.srcid()),
                                  @"toName":toName};
     [[NSNotificationCenter defaultCenter] postNotificationName:MEESAGE_ROOM_SEND_LIWU_NOTIFY_VC object:parameters];
