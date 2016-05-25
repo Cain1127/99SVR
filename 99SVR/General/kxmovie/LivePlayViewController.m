@@ -261,6 +261,10 @@
         _openAL = [[OpenAL alloc] init];
     }
     [_openAL initOpenAL];
+    @synchronized(_aryVideo)
+    {
+        [_aryVideo removeAllObjects];
+    }
 }
 
 - (void)stop
@@ -279,13 +283,8 @@
     @WeakObj(self)
     gcd_main_safe(
     ^{
-        
          [selfWeak setNullMic];
     });
-    @synchronized(_aryVideo)
-    {
-        [_aryVideo removeAllObjects];
-    }
     [UIApplication sharedApplication].idleTimerDisabled = _playing;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -381,7 +380,6 @@
     [SVRMediaClient sharedSVRMediaClient].delegate = self;
     
     [self updateDownHUD];
-
     
     _downHUD.alpha = 0;
 }
@@ -594,7 +592,7 @@
         {
             [self stop];
             _roomid = roomid;
-            [self startPlayRoomId:_roomid user:1801124 name:_roomName];
+            [self startPlayRoomId:_roomid user:_nuserid name:_roomName];
         }
         return ;
     }
@@ -604,9 +602,11 @@
     _roomid = roomid;
     _nuserid = userid;
     __block int __roomId = _roomid;
+    __block int __userid = _nuserid;
+    [[SVRMediaClient sharedSVRMediaClient] setMainRoomId:_roomid];
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
-        if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:1801124 roomId:__roomId])
+        if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:__userid roomId:__roomId])
         {
             DLog(@"开启接收码流失败");
         }
@@ -702,7 +702,6 @@
 
 #pragma mark -
 #pragma mark ibaction methods
-
 - (void)dealloc
 {
     [[SVRMediaClient sharedSVRMediaClient] clientCoreUnInit];

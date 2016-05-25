@@ -104,11 +104,11 @@
     SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:urlObj];
     //将内容分享到qq
     [QQApiInterface sendReq:req];
-
 }
 
 - (void)shareFriend{
-    if (![WeiboSDK isWeiboAppInstalled]) {
+    if (![WeiboSDK isWeiboAppInstalled])
+    {
         [ProgressHUD showError:@"没有安装微博,无法分享"];
         return ;
     }

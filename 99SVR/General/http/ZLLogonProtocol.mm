@@ -1003,7 +1003,7 @@ void ZLRoomListener::OnTeacherGiftListResp(std::vector<TeacherGiftListResp>& inf
         XConsumeRankModel *model = [[XConsumeRankModel alloc] init];
         model.headid = 0;
         model.username = [NSString stringWithCString:giftList.useralias().c_str() encoding:GBK_ENCODING];
-        model.consume = @(giftList.t_num());
+        model.consume = @(giftList.t_num()/1000.0f);
         [array addObject:model];
     }
     NSDictionary *parameter = @{@"code":@(1),@"data":array};
