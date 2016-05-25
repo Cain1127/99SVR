@@ -117,6 +117,9 @@
     [self setTitleText:@"首页"];
     viewCache = [[NSCache alloc] init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLiveInfo:) name:MESSAGE_HOME_BANNER_VC object:nil];
+    //切换皮肤的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeThemeSkin:) name:MESSAGE_CHANGE_THEMESKIN object:nil];
+
 
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
@@ -617,6 +620,21 @@
         rootTabbarVC.selectedIndex = sender.tag;
     }
     
+}
+
+-(void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+}
+
+#pragma mark 皮肤切换
+-(void)changeThemeSkin:(NSNotification *)notfication{
+
+    DLog(@"切换皮肤");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+    });
 }
 
 @end

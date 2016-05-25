@@ -85,6 +85,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMonData:) name:MESSAGE_STOCK_HOME_MON__VC object:nil];
     //total
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+    
+    //切换皮肤
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_CHANGE_THEMESKIN object:nil];
+
+    
     [self.dayTab addGifHeaderWithRefreshingBlock:^{
         
         weakSelf.refreshState = MJRefreshState_Header;
@@ -397,6 +402,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_DAY__VC object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_MON__VC object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_CHANGE_THEMESKIN object:nil];
 
 }
 
@@ -430,5 +436,17 @@
         [iconView setRoom:roomView.room];
     }
 }
+
+
+#pragma mark 皮肤切换
+-(void)changeThemeSkin:(NSNotification *)notfication{
+    DLog(@"切换皮肤");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+    });
+}
+
+
+
 
 @end

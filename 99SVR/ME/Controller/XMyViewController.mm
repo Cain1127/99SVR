@@ -76,6 +76,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadProfile:) name:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
+    //切换皮肤
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadProfile:) name:MESSAGE_CHANGE_THEMESKIN object:nil];
 }
 
 - (UIView *)tableHeaderView
@@ -264,6 +266,21 @@
 {
     RegMobileViewController *regView = [[RegMobileViewController alloc] init];
     [self.navigationController pushViewController:regView animated:YES];
+}
+
+-(void)dealloc{
+    DLog(@"释放");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+#pragma mark 皮肤切换
+-(void)changeThemeSkin:(NSNotification *)notfication{
+    
+    DLog(@"切换皮肤");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+    });
 }
 
 @end
