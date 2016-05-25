@@ -37,6 +37,8 @@ int nRoom_count_info;
 int nRoom_fans_info;
 int nRoom_is_collet;
 RoomInfo *currentRoom;
+BOOL room_again_login;
+int room_again_connctId;
 
 void ZLConnectionListerner::OnConnected()
 {
@@ -203,10 +205,12 @@ void ZLLoginListener::OnLogonErr(UserLogonErr2& info)
         strMsg = @"密码错误";
         break;
     }
-    int loginType = [UserInfo sharedUserInfo].otherLogin ? [UserInfo sharedUserInfo].otherLogin : 0;
-    NSString *strUrl = [NSString stringWithFormat:@"ReportItem=Login&ClientType=3&LoginType=%d&UserId=%d&ServerIP=%@&Error=%@",
-                        loginType,[UserInfo sharedUserInfo].nUserId,@"121.14.211.60",@"login_fail"];
-    [DecodeJson postPHPServerMsg:strUrl];
+    if (room_again_login)
+    {
+        room_again_login = NO;
+        [aryRoomChat addObject:@"[系统消息]验证用户信息失败,请重新登录"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_ERROR_VC object:strMsg];
 }
 
@@ -214,9 +218,6 @@ void ZLLoginListener::OnMessageComming(void *msg)
 {
     conn->DispatchSocketMessage(msg);
 }
-
-
-
 
 /**
  *  登录成功
@@ -265,6 +266,11 @@ void ZLLoginListener::OnLogonSuccess(UserLogonSuccess2& info)
             [UserDefaults setInteger:[UserInfo sharedUserInfo].otherLogin forKey:kOtherLogin];
         }
         [UserDefaults synchronize];
+    }
+    if (room_again_login)
+    {
+        room_again_login = NO;
+        [[ZLLogonServerSing sharedZLLogonServerSing] connectVideoRoom:room_again_connctId roomPwd:@""];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_LOGIN_SUCESS_VC object:@"登录成功"];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
@@ -442,11 +448,11 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     }
     if(KUserSingleton.nUserId != loginuser.userid())
     {
-        NSString *strMsg = [NSString stringWithFormat:@"两端信息不一致,使用双芳封装的loginId:%d",loginuser.userid()];
-        [aryRoomChat addObject:strMsg];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-        req.set_userid(loginuser.userid());
-        req.set_cuserpwd(login_password);
+        DLog(@"重新登录!");
+        room_again_login = YES;
+        room_again_connctId = nRoomId;
+        startLogin("0", "", "");
+        return ;
     }
     conn->SendMsg_JoinRoomReq(req);
 }
@@ -997,7 +1003,7 @@ void ZLRoomListener::OnTeacherGiftListResp(std::vector<TeacherGiftListResp>& inf
         XConsumeRankModel *model = [[XConsumeRankModel alloc] init];
         model.headid = 0;
         model.username = [NSString stringWithCString:giftList.useralias().c_str() encoding:GBK_ENCODING];
-        model.consume = @(giftList.t_num());
+        model.consume = @(giftList.t_num()/1000.0f);
         [array addObject:model];
     }
     NSDictionary *parameter = @{@"code":@(1),@"data":array};

@@ -120,7 +120,7 @@ void LoginConnection::SendMsg_JoinRoomReq(JoinRoomReq& req)
 	protocol::CMDJoinRoomReq_t temreq = { 0 };
 	string ip = join_req.cipaddr();
 	join_req.set_cipaddr("");
-	join_req.set_userid(loginuser.userid());
+//	join_req.set_userid(loginuser.userid());
 	join_req.set_cuserpwd(login_password);
 	join_req.set_devtype(login_nmobile);
 	join_req.set_bloginsource(login_reqv == 4 ? 0 : 1);
