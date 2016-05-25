@@ -100,10 +100,8 @@
 
 - (void)reloadModel:(RoomHttp *)room
 {
-    
     //重置全部红点提示
     [_menuView resetAllBadgePrompt];
-
     _room = room;
     [_menuView setDefaultIndex:1];
     _ffPlay.roomIsCollet = nRoom_is_collet;
@@ -130,7 +128,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
     [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
-    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
+//    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
 }
 
 - (id)initWithModel:(RoomHttp *)room
@@ -226,7 +224,9 @@
     
     _teachView = [[DTAttributedTextView alloc] initWithFrame:frame];
     self.teacherEmptyView = [UIView initWithFrame:(CGRect){0,0,_teachView.width,_teachView.height} message:@"暂无课程表" pointY:52];
+    [_teachView setBackgroundColor:COLOR_Bg_Gay];
     _teachView.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
+    [_teachView.attributedTextContentView setBackgroundColor:COLOR_Bg_Gay];
     [_teachView addSubview:self.teacherEmptyView];
     
     _tableConsumeRank = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
@@ -432,14 +432,10 @@
     dispatch_async(dispatch_get_main_queue(),
     ^{
         _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[roomTeachInfoWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
-//        CGFloat height = [_teachViewWeak.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
-        
         if (_teachViewWeak.attributedString.length>0) {
             self.teacherEmptyView.hidden = YES;
-            _teachViewWeak.backgroundColor = [UIColor whiteColor];
         }else{
             self.teacherEmptyView.hidden = NO;
-            _teachViewWeak.backgroundColor = [UIColor clearColor];
         }
         
     });

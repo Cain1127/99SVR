@@ -128,7 +128,6 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-//    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
     [[ZLLogonServerSing sharedZLLogonServerSing] connectVideoRoom:[_room.roomid intValue] roomPwd:@""];
 }
 

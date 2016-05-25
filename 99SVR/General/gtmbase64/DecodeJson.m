@@ -245,12 +245,12 @@
             if (kScreenWidth>375)
             {
                 strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
-                           [NSString stringWithFormat:@"<object value=%d@3x width=18 height=18 ></object>",[strTemp intValue]]];
+                           [NSString stringWithFormat:@"<object value=%d@3x width=20 height=20 style=\"vertical-align:middle;\"></object>",[strTemp intValue]]];
             }
             else
             {
                 strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
-                       [NSString stringWithFormat:@"<object value=%d width=18 height=18 ></object>",[strTemp intValue]]];
+                       [NSString stringWithFormat:@"<object value=%d width=20 height=20 style=\"vertical-align:middle;\"></object>",[strTemp intValue]]];
             }
         }
         remainingRange.location = tagRange.location;
@@ -455,23 +455,6 @@
         strTilte = [strInfo substringWithRange:NSMakeRange(start.location,end.location-start.location+5)];
         strInfo = [strInfo stringByReplacingCharactersInRange:NSMakeRange(start.location,end.location-start.location+5) withString:@""];
     }
-    //<a>  </a>
-//    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</img>" withString:@"</img><br>"];
-//    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</a>" withString:@"</a><br>"];
-//    NSString *msg ;
-//    if(nIndex==1)
-//    {
-//        msg = @"<p style=\"color:#919191\">房间公告</p>";
-//    }
-//    else if(nIndex==2)
-//    {
-//        msg = @"<p style=\"color:#919191\">房间广播</p>";
-//    }
-//    else if(nIndex == 3)
-//    {
-//        msg = @"<p style=\"color:#919191\">悄悄话</p>";
-//    }
-//    NSString *strMsg = [NSString stringWithFormat:@"%@%@%@",strTilte,msg,strInfo];
     
     if([strInfo rangeOfString:@"<a href"].location != NSNotFound &&
        [strInfo rangeOfString:@"</a>"].location != NSNotFound){

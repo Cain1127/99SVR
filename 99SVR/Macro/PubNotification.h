@@ -204,4 +204,6 @@
 
 #define MESSAGE_TQIdeaView_NewNotifi_VC @"MESSAGE_TQIdeaView_NewNotifi_VC"
 
+#define MESSAGE_VERSION_UPDATE_VC   @"MESSAGE_VERSION_UPDATE_VC"
+
 #endif

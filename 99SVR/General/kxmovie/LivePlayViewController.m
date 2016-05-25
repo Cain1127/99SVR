@@ -463,9 +463,7 @@
 
 - (void)colletInfo
 {
-    
     WeakSelf(self);
-    
     if(KUserSingleton.nType==1 && KUserSingleton.bIsLogin)
     {
         [[ZLLogonServerSing sharedZLLogonServerSing] colletRoomInfo:!_btnCollet.selected];
@@ -492,9 +490,7 @@
 }
 
 - (void)updateHUDView
-{
-    
-}
+{}
 
 - (void)connectUnVideo:(UIButton *)sender
 {
@@ -611,7 +607,6 @@
     _nuserid = userid;
     __block int __roomId = _roomid;
     __block int __userid = _nuserid;
-    [[SVRMediaClient sharedSVRMediaClient] setMainRoomId:_roomid];
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^{
         if(![[SVRMediaClient sharedSVRMediaClient] clientRcvStreamStart:__userid roomId:__roomId])

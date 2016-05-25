@@ -26,7 +26,7 @@
     NSString *strVip = @"";
     if (vipInfo>2)
     {
-        strVip = [NSString stringWithFormat:@"<img src=\"vip_header_%d\" width=\"13\" height=\"13\"></img>",vipInfo];
+        strVip = [NSString stringWithFormat:@"<img src=\"vip_header_%d\" width=\"13\" height=\"13\" style=\"vertical-align:middle;\"></img>",vipInfo];
     }
     
     if(userId == KUserSingleton.nUserId)
@@ -64,11 +64,12 @@
     
     if (msg->toid() == 0)
     {
-        strInfo = [NSString stringWithFormat:@"<span style=\"line-height:20px;\">%@<span style=\"ccolor:#919191;font-size:12px;\">%@</span><br>%@</span>",strFrom,strTo,strContent];
+        strInfo = [NSString stringWithFormat:@"<span style=\"ccolor:#919191;font-size:12px;line-height:15px;\">%@ :</span><br><span style=\"line-height:20px;\">%@</span>",strFrom,strContent];
     }
     else
     {
-        strInfo = [NSString stringWithFormat:@"<span style=\"line-height:20px;\">%@ <span style=\"color:#919191;font-size:12px;\">@  </span>%@<br>%@</span>",strFrom,strTo,strContent];
+        strInfo = [NSString stringWithFormat:@"<span style=\"color:#919191;font-size:12px;line-height:20px;\"> %@  @ %@ :</span><br> \
+                   <span style=\"line-height:20px;\">%@</span>",strFrom,strTo,strContent];
         if ([strFrom rangeOfString:[NSString stringWithFormat:@"%d",[UserInfo sharedUserInfo].nUserId]].location != NSNotFound)
         {
             meToOtherBool = YES;
@@ -167,7 +168,7 @@
     while ([teachTable rangeOfString:@"\r"].location!=NSNotFound) {
         teachTable = [teachTable stringByReplacingOccurrencesOfString:@"\r" withString:@"<br/>"];
     }
-    NSString *strMsg = [NSString stringWithFormat:@"<span style=\"line-height:30px;background-color:#f8f8f8\">%@</span>",teachTable];
+    NSString *strMsg = [NSString stringWithFormat:@"<span style=\"line-height:30px;\">%@</span>",teachTable];
     return strMsg;
 }
 
