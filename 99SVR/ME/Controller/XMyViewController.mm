@@ -58,11 +58,6 @@
     [self.navigationController.navigationBar setHidden:YES];
     [self setTitleText:@"我"];
     
-//    _itemsArray = [NSMutableArray array];
-//    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
-//    _leftMenuHeaderView = [[LeftMenuHeaderView alloc] initWithFrame:CGRectMake(0, 64,kScreenWidth, 185)];
-//    _leftMenuHeaderView.delegate = self;
-//    [self.view addSubview:_leftMenuHeaderView];
     
     //添加一个tableView
     _listTableView = [[UITableView alloc] initWithFrame:Rect(0, 64, kScreenWidth, kScreenHeight-64 - 49) style:UITableViewStyleGrouped];
@@ -77,7 +72,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUI) name:MESSAGE_EXIT_LOGIN_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadProfile:) name:MEESAGE_LOGIN_SET_PROFILE_VC object:nil];
     //切换皮肤
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadProfile:) name:MESSAGE_CHANGE_THEMESKIN object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeThemeSkin:) name:MESSAGE_CHANGE_THEMESKIN object:nil];
 }
 
 - (UIView *)tableHeaderView

@@ -72,7 +72,7 @@ static TabBarController *tabbarController = nil;
 - (void)gotoPlay
 {
     RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    [self.navigationController pushViewController:roomView animated:YES];
+    [tabbarController.navigationController pushViewController:roomView animated:YES];
 }
 
 - (void)hidenPlay
@@ -92,7 +92,7 @@ static TabBarController *tabbarController = nil;
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:tabbarController];
 }
 
 #pragma mark 配置
@@ -101,21 +101,25 @@ static TabBarController *tabbarController = nil;
 
     [SVRInitLBS initMediaSDK];
     
-    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [tabbarController.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    
+    //切换皮肤的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeThemeSkin:) name:MESSAGE_CHANGE_THEMESKIN object:nil];
+
     
     // 加载信箱未读数
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUnReadInfoNotify:) name:MESSAGE_UNREAD_INFO_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:tabbarController selector:@selector(loadUnReadInfoNotify:) name:MESSAGE_UNREAD_INFO_VC object:nil];
     [kHTTPSingle RequestUnreadCount];
     
     // 请求下一次广告数据
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadSplashNotify:) name:MESSAGE_HTTP_SPLASH_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:tabbarController selector:@selector(loadSplashNotify:) name:MESSAGE_HTTP_SPLASH_VC object:nil];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [kHTTPSingle requestSplashImage];
     });
     
     // 网络检测
     _hostReach = [Reachability reachabilityWithHostName:@"www.163.com"];
-    [[NSNotificationCenter defaultCenter] addObserver:self
+    [[NSNotificationCenter defaultCenter] addObserver:tabbarController
                                              selector:@selector(reachabilityChanged:)
                                                  name: kReachabilityChangedNotification
                                                object: nil];
@@ -127,20 +131,20 @@ static TabBarController *tabbarController = nil;
     [SocketNetworkInfo sharedSocketNetworkInfo].socketState = 1; // 设置有网
     
     // Socket没网监控
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadSocketNetworkStateNotify:) name:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:tabbarController selector:@selector(loadSocketNetworkStateNotify:) name:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:nil];
     // 统一设置Item的文字属性
-    [self setUpItemTextAttrs];
+    [tabbarController setUpItemTextAttrs];
     // 添加所以子控制器
-    [self setUpAllChildViewControllers];
+    [tabbarController setUpAllChildViewControllers];
+    //添加一层渐变层
+    [tabbarController.tabBar addSubview:tabbarController.tabbarBackImageView];
+
     
 }
 
 #pragma mark 配置控制器
-
 - (void)setUpAllChildViewControllers
 {
-    
-    
     HomeViewController *homeVC = [[HomeViewController alloc]init];
     GFNavigationController *homeNav = [[GFNavigationController alloc]initWithRootViewController:homeVC];
     ZLVideoListViewController *zlVideoVC = [[ZLVideoListViewController alloc]init];
@@ -158,9 +162,9 @@ static TabBarController *tabbarController = nil;
         tabbarController.viewControllers = @[homeNav,zlVideoNav,xmyNav];
     }
     
-    NSArray *titleArray = [ThemeSkinManager standardThemeSkin].titleArray;
-    NSArray *normalImageArray = [ThemeSkinManager standardThemeSkin].normalImageArray;
-    NSArray *selectImageArray = [ThemeSkinManager standardThemeSkin].selectImageArray;
+    NSArray *titleArray = ThemeSkinManagers.titleArray;
+    NSArray *normalImageArray = ThemeSkinManagers.normalImageArray;
+    NSArray *selectImageArray = ThemeSkinManagers.selectImageArray;
     
     for (int i=0; i!=tabbarController.viewControllers.count; i++) {
         UIViewController *viewcontroller = tabbarController.viewControllers[i];
@@ -184,26 +188,24 @@ static TabBarController *tabbarController = nil;
 - (void)setUpItemTextAttrs{
     // 统一设置Item文字的属性
     NSMutableDictionary *normalAttrs = [NSMutableDictionary dictionary];
-    normalAttrs[NSForegroundColorAttributeName] = UIColorFromRGB(0x919191);
+    normalAttrs[NSForegroundColorAttributeName] = ThemeSkinManagers.normalItemColor;
     normalAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:11];
     
     // 选中状态
     NSMutableDictionary *selectAttrs = [NSMutableDictionary dictionary];
-    selectAttrs[NSForegroundColorAttributeName] = UIColorFromRGB(0x0078DD);
+    selectAttrs[NSForegroundColorAttributeName] = ThemeSkinManagers.selectItemColor;
     
     UITabBarItem *item = [UITabBarItem appearance];
     [item setTitleTextAttributes:normalAttrs forState:UIControlStateNormal];
     [item setTitleTextAttributes:selectAttrs forState:UIControlStateSelected];
     
-    //添加一层渐变层
-    [tabbarController.tabBar addSubview:tabbarController.tabbarBackImageView];
 }
 
 -(UIImageView *)tabbarBackImageView{
     
     if (!_tabbarBackImageView) {
         
-        _tabbarBackImageView = [[UIImageView alloc]initWithFrame:(CGRect){CGPointZero,self.tabBar.frame.size}];
+        _tabbarBackImageView = [[UIImageView alloc]initWithFrame:(CGRect){CGPointZero,tabbarController.tabBar.frame.size}];
         [_tabbarBackImageView addSubview:tabbarController.moveImageView];
         [tabbarController.tabBar sendSubviewToBack:_tabbarBackImageView];
     }
@@ -214,7 +216,7 @@ static TabBarController *tabbarController = nil;
     
     if (!_moveImageView) {
         
-        _moveImageView = [[UIImageView alloc]initWithFrame:(CGRect){CGPointZero,self.tabBar.frame.size}];
+        _moveImageView = [[UIImageView alloc]initWithFrame:(CGRect){CGPointZero,tabbarController.tabBar.frame.size}];
     }
     return _moveImageView;
 }
@@ -364,5 +366,14 @@ static TabBarController *tabbarController = nil;
 {
     return UIInterfaceOrientationMaskPortrait;
 }
+
+#pragma mark 皮肤切换
+-(void)changeThemeSkin:(NSNotification *)notfication{
+    DLog(@"切换皮肤");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+    });
+}
+
 
 @end

@@ -23,4 +23,5 @@
 #import "NSString+Size.h"
 #import "UIViewController+EmpetViewTips.h"
 #import "StatusBarHUD.h"
+#import "ThemeSkinManager.h"
 #endif /* ImportHeader_h */
