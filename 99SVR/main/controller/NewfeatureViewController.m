@@ -142,7 +142,7 @@
     // 切换到TabBarController
     [SwitchRootTool saveCurrentVersion];
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    app.window.rootViewController =  [[TabBarController alloc] init];
+    app.window.rootViewController =  [TabBarController singletonTabBarController];
 }
 
 #pragma ScrollView 代理

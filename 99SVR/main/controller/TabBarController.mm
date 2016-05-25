@@ -30,6 +30,7 @@
 #import "SplashModel.h"
 #import "SplashTool.h"
 #import "SVRInitLBS.h"
+#import "ThemeSkinManager.h"
 
 @interface TabBarController ()<PlayIconDelegate>
 {
@@ -38,10 +39,29 @@
 @property (nonatomic, strong) Reachability *hostReach;
 @property (nonatomic, strong) PlayIconView *iConView;
 @property (nonatomic, strong) UIButton *btnPlay;
-
+/**tabbar背景图*/
+@property (nonatomic , strong) UIImageView *tabbarBackImageView;
+/**移动渐变图片*/
+@property (nonatomic , strong) UIImageView *moveImageView;
 @end
 
 @implementation TabBarController
+
+
+static TabBarController *tabbarController = nil;
++(TabBarController *)singletonTabBarController{
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        tabbarController = [[TabBarController alloc]init];
+        
+        [tabbarController setConfiguration];
+    });
+    
+    return tabbarController;
+}
+
 
 - (void)exitPlay{
     RoomViewController *roomView = [RoomViewController sharedRoomViewController];
@@ -61,20 +81,24 @@
     _iConView.hidden = YES;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self)
-    {}
-    return self;
-}
-
 #pragma mark - 生命周期
 
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     
+    
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark 配置
+-(void)setConfiguration{
+
+
     [SVRInitLBS initMediaSDK];
     
     [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
@@ -108,29 +132,40 @@
     [self setUpItemTextAttrs];
     // 添加所以子控制器
     [self setUpAllChildViewControllers];
+    
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+#pragma mark 配置控制器
 
-#pragma mark - 初始化界面
-
-/**
- *  添加所有子控制器
- */
 - (void)setUpAllChildViewControllers
 {
-    [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
-    [self setUpOneViewController:[[ZLVideoListViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
-    if ([UserInfo sharedUserInfo].nStatus)
-    {
-        [self setUpOneViewController:[[TQIdeaViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
-        [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"tab_operate_n" selectImage:@"tab_operate_h"];
-    }
-    [self setUpOneViewController:[[XMyViewController alloc]init] title:@"我" image:@"tab_me_n" selectImage:@"tab_me_p"];
     
+    
+    HomeViewController *homeVC = [[HomeViewController alloc]init];
+    GFNavigationController *homeNav = [[GFNavigationController alloc]initWithRootViewController:homeVC];
+    ZLVideoListViewController *zlVideoVC = [[ZLVideoListViewController alloc]init];
+    GFNavigationController *zlVideoNav = [[GFNavigationController alloc]initWithRootViewController:zlVideoVC];
+    TQIdeaViewController *tqIdeaVC = [[TQIdeaViewController alloc]init];
+    GFNavigationController *tqIdeaNav = [[GFNavigationController alloc]initWithRootViewController:tqIdeaVC];
+    StockHomeViewController *stockHomeVC = [[StockHomeViewController alloc]init];
+    GFNavigationController *stockHomeNav = [[GFNavigationController alloc]initWithRootViewController:stockHomeVC];
+    XMyViewController *xmyVC = [[XMyViewController alloc]init];
+    GFNavigationController *xmyNav = [[GFNavigationController alloc]initWithRootViewController:xmyVC];
+
+    if ([UserInfo sharedUserInfo].nStatus){
+        tabbarController.viewControllers = @[homeNav,zlVideoNav,tqIdeaNav,stockHomeNav,xmyNav];
+    }else{
+        tabbarController.viewControllers = @[homeNav,zlVideoNav,xmyNav];
+    }
+    
+    NSArray *titleArray = [ThemeSkinManager standardThemeSkin].titleArray;
+    NSArray *normalImageArray = [ThemeSkinManager standardThemeSkin].normalImageArray;
+    NSArray *selectImageArray = [ThemeSkinManager standardThemeSkin].selectImageArray;
+    
+    for (int i=0; i!=tabbarController.viewControllers.count; i++) {
+        UIViewController *viewcontroller = tabbarController.viewControllers[i];
+        [tabbarController setUpOneViewController:viewcontroller title:titleArray[i] image:normalImageArray[i] selectImage:selectImageArray[i]];
+    }
 }
 
 /**
@@ -141,8 +176,6 @@
     vc.title = title;
     vc.tabBarItem.image = [UIImage imageNamed:image];
     vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
-    GFNavigationController *nav = [[GFNavigationController alloc]initWithRootViewController:vc];
-    [self addChildViewController:nav];
 }
 
 /**
@@ -161,7 +194,31 @@
     UITabBarItem *item = [UITabBarItem appearance];
     [item setTitleTextAttributes:normalAttrs forState:UIControlStateNormal];
     [item setTitleTextAttributes:selectAttrs forState:UIControlStateSelected];
+    
+    //添加一层渐变层
+    [tabbarController.tabBar addSubview:tabbarController.tabbarBackImageView];
 }
+
+-(UIImageView *)tabbarBackImageView{
+    
+    if (!_tabbarBackImageView) {
+        
+        _tabbarBackImageView = [[UIImageView alloc]initWithFrame:(CGRect){CGPointZero,self.tabBar.frame.size}];
+        [_tabbarBackImageView addSubview:tabbarController.moveImageView];
+        [tabbarController.tabBar sendSubviewToBack:_tabbarBackImageView];
+    }
+    return _tabbarBackImageView;
+}
+
+-(UIImageView *)moveImageView{
+    
+    if (!_moveImageView) {
+        
+        _moveImageView = [[UIImageView alloc]initWithFrame:(CGRect){CGPointZero,self.tabBar.frame.size}];
+    }
+    return _moveImageView;
+}
+
 
 #pragma mark - 通知回调处理
 
