@@ -778,7 +778,10 @@
                 NSData *data = _aryVideo[0];
                 @synchronized(_aryVideo)
                 {
-                    [_aryVideo removeObjectAtIndex:0];
+                    if (_aryVideo.count>0) {
+                        [_aryVideo removeObjectAtIndex:0];
+                    }
+                    
                 }
                 [self createImage:data];
                 data = nil;
