@@ -441,9 +441,11 @@
 #pragma mark 皮肤切换
 -(void)changeThemeSkin:(NSNotification *)notfication{
     DLog(@"切换皮肤");
+    @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        
+        [selfWeak setHeadBackGroup:ThemeSkinManagers.navBarColor];
+        [selfWeak setTitleTextColor:ThemeSkinManagers.navBarTitColor];
         
     });
 }

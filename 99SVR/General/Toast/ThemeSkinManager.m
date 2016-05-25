@@ -63,7 +63,7 @@ static ThemeSkinManager *manager = nil;
             _tabbarMoveImageName = @"";
             _normalItemColor =  [UIColor yellowColor];
             _selectItemColor = [UIColor blackColor];
-            _navBarColor = COLOR_Bg_Gay;
+            _navBarColor = COLOR_Text_Gay;
             _navBarTitColor = COLOR_Bg_Blue;
             
         }

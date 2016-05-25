@@ -176,6 +176,11 @@
          make.bottom.equalTo(self.headView);
      }];
 }
+- (void)setTitleTextColor:(UIColor *)titleColor{
+    
+    [_txtTitle setTextColor:titleColor];
+
+}
 
 - (void)setLineHidden:(BOOL)bHidden
 {

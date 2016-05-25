@@ -13,7 +13,6 @@
 #import "ZLLogonServerSing.h"
 #import "UserInfo.h"
 #import "LeftViewCell.h"
-
 #define kCellHeight 44
 
 @interface SettingCenterController() <UITableViewDelegate, UITableViewDataSource>
