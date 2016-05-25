@@ -797,11 +797,11 @@ NSDictionary *_classesForNames = nil;
 		self.textColor = DTColorCreateWithHTMLName(color);
 	}
 	
-//	NSString *bgColor = [styles objectForKey:@"background-color"];
-//	if (bgColor)
-//	{
-//		self.backgroundColor = DTColorCreateWithHTMLName(bgColor);
-//	}
+	NSString *bgColor = [styles objectForKey:@"background-color"];
+	if (bgColor)
+	{
+		self.backgroundColor = DTColorCreateWithHTMLName(bgColor);
+	}
 	
 	NSString *floatString = [styles objectForKey:@"float"];
 	

@@ -66,7 +66,7 @@
         cell.selectedBackgroundView = selectView;
         cell.backgroundColor = UIColorFromRGB(0xf8f8f8);
         [chatCache setObject:cell forKey:key];
-        cell.attributedTextContextView.edgeInsets = UIEdgeInsetsMake(0, 5, 0, 64);
+        cell.attributedTextContextView.edgeInsets = UIEdgeInsetsMake(10, 10, 0, 64);
     }
     if(_aryChat.count>indexPath.row)
     {
@@ -87,7 +87,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ChatCoreTextCell *cell = [self tableView:tableView chatPreparedCellForIndexPath:indexPath];
-    return [cell requiredRowHeightInTableView:tableView]+5;
+    return [cell requiredRowHeightInTableView:tableView];
 }
 
 #pragma mark DTCoreText Delegate

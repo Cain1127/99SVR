@@ -78,6 +78,7 @@
         [selectView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
         cell.selectedBackgroundView = selectView;
         [chatCache setObject:cell forKey:key];
+        cell.attributedTextContextView.edgeInsets = UIEdgeInsetsMake(10, 10, 0, 10);
     }
     if(_aryChat.count>indexPath.row)
     {
@@ -110,8 +111,16 @@
 {
     if ([attachment isKindOfClass:[DTImageTextAttachment class]])
     {
+        frame.origin.y += 10;
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
-        [imageView sd_setImageWithURL:attachment.contentURL];
+        if([attachment.contentURL.absoluteString rangeOfString:@"vip_header_"].location ==0)
+        {
+            [imageView setImage:[UIImage imageNamed:attachment.contentURL.absoluteString]];
+        }
+        else
+        {
+            [imageView sd_setImageWithURL:attachment.contentURL];
+        }
         imageView.userInteractionEnabled = YES;
         return imageView;
     }
