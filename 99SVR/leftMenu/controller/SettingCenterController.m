@@ -32,7 +32,8 @@
     [super viewDidLoad];
     self.txtTitle.text = @"设置";
     self.view.backgroundColor = COLOR_Bg_Gay;
-#warning 测试切换皮肤
+//#warning 测试切换皮肤
+//    [ThemeSkinManagers changeThemeSkinType:ThemeSkinType_1];
 //    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CHANGE_THEMESKIN object:nil];
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,64,kScreenWidth,kScreenHeight - 64 - 50) style:UITableViewStyleGrouped];

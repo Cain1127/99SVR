@@ -27,8 +27,8 @@ typedef NS_ENUM(NSInteger,ThemeSkinType){
 @property (nonatomic , strong) UIColor *normalItemColor;
 /**导航条的 颜色*/
 @property (nonatomic , strong) UIColor *navBarColor;
-
-
+/**导航条 标题的颜色*/
+@property (nonatomic , strong) UIColor *navBarTitColor;
 /**单利皮肤管理类*/
 +(ThemeSkinManager *)standardThemeSkin;
 /**切换不同的皮肤*/

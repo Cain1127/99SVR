@@ -162,13 +162,9 @@ static TabBarController *tabbarController = nil;
         tabbarController.viewControllers = @[homeNav,zlVideoNav,xmyNav];
     }
     
-    NSArray *titleArray = ThemeSkinManagers.titleArray;
-    NSArray *normalImageArray = ThemeSkinManagers.normalImageArray;
-    NSArray *selectImageArray = ThemeSkinManagers.selectImageArray;
-    
     for (int i=0; i!=tabbarController.viewControllers.count; i++) {
         UIViewController *viewcontroller = tabbarController.viewControllers[i];
-        [tabbarController setUpOneViewController:viewcontroller title:titleArray[i] image:normalImageArray[i] selectImage:selectImageArray[i]];
+        [tabbarController setUpOneViewController:viewcontroller title:ThemeSkinManagers.titleArray[i] image:ThemeSkinManagers.normalImageArray[i] selectImage:ThemeSkinManagers.selectImageArray[i]];
     }
 }
 
@@ -370,9 +366,19 @@ static TabBarController *tabbarController = nil;
 #pragma mark 皮肤切换
 -(void)changeThemeSkin:(NSNotification *)notfication{
     DLog(@"切换皮肤");
+    @WeakObj(tabbarController);
     dispatch_async(dispatch_get_main_queue(), ^{
         
+        tabbarControllerWeak.tabbarBackImageView.backgroundColor = ThemeSkinManagers.tabbarBackColor;
+        for (int i=0; i!=tabbarController.viewControllers.count; i++) {
+            UIViewController *viewcontroller = tabbarController.viewControllers[i];
+            [tabbarControllerWeak setUpOneViewController:viewcontroller title:ThemeSkinManagers.titleArray[i] image:ThemeSkinManagers.normalImageArray[i] selectImage:ThemeSkinManagers.selectImageArray[i]];
+        }
+        [tabbarControllerWeak setUpItemTextAttrs];
     });
+    
+    
+    
 }
 
 
