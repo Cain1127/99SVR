@@ -185,7 +185,7 @@
         DLog(@"等待时间不够");
         return ;
     }
-    [[ZLLogonServerSing sharedZLLogonServerSing] closeProtocol];
+//    [[ZLLogonServerSing sharedZLLogonServerSing] closeProtocol];
     bGGLogin = YES;
 }
 
@@ -249,7 +249,7 @@
     [self.myTimer invalidate];
     if (bGGLogin)
     {
-        [SVRInitLBS loginLocal];
+//        [SVRInitLBS loginLocal];
     }
     [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];

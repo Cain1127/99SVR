@@ -43,9 +43,9 @@
     int _videoWidth;
     int _videoHeight;
     BOOL bCoding;
-    
     OpenAL *_openAL;
 }
+
 @property (nonatomic,strong) NSMutableArray *aryVideo;
 @property (nonatomic) BOOL backGroud;
 @property (nonatomic) BOOL bVideo;
@@ -184,7 +184,8 @@
     _roomName = name;
     __weak UIView *__topHUD = _TopHUD;
     @WeakObj(_roomName)
-    dispatch_main_async_safe(^{
+    dispatch_main_async_safe(
+    ^{
         UILabel *lblName = [__topHUD viewWithTag:1001];
         [lblName setText:_roomNameWeak];
     });
@@ -198,7 +199,14 @@
 - (void)frameView
 {
     _glView = [[LivePlayImageView alloc] initWithFrame:Rect(0, 0, kScreenWidth, kVideoImageHeight)];
-    _glView.contentMode = UIViewContentModeScaleAspectFit;
+    if(kScreenHeight<500)
+    {
+        _glView.contentMode = UIViewContentModeScaleToFill;
+    }
+    else
+    {
+        _glView.contentMode = UIViewContentModeScaleAspectFit;
+    }
     _glView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:_glView];
     [self setDefaultImg];
@@ -771,18 +779,22 @@
 {
     if (_playing)
     {
-        if(_aryVideo.count>0)
+        @autoreleasepool
         {
-            @autoreleasepool
+            NSData *data = nil;
+            @synchronized(_aryVideo)
             {
-                NSData *data = _aryVideo[0];
-                @synchronized(_aryVideo)
+                if(_aryVideo.count>0)
                 {
+                    data = _aryVideo[0];
                     [_aryVideo removeObjectAtIndex:0];
                 }
-                [self createImage:data];
-                data = nil;
             }
+            if(data)
+            {
+                [self createImage:data];
+            }
+            data = nil;
         }
         [NSThread sleepForTimeInterval:0.01f];
         @WeakObj(self)

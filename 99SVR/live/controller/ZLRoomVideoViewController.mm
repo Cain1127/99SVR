@@ -196,7 +196,6 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
     [self initSlideView];
     [self.view addSubview:_menuView];
     self.menuView.DidSelectSliderIndex = ^(NSInteger index){
-        NSLog(@"模块%ld",(long)index);
     };
     
     UILabel *lblDownLine = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];

@@ -224,7 +224,8 @@
 	NSRange remainingRange = NSMakeRange(0, [strInfo length]);
     while (!finished) {
         NSRange tagRange = [strInfo rangeOfString:regx options:NSRegularExpressionSearch range:remainingRange];
-        if (tagRange.location==NSNotFound) {
+        if (tagRange.location==NSNotFound)
+        {
             break;
         }
         nStart = [strInfo rangeOfString:@"[$"].location != NSNotFound ? [strInfo rangeOfString:@"[$"].location :-1;
@@ -241,8 +242,16 @@
         }
         else
         {
-            strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
-                       [NSString stringWithFormat:@"<object value=%d width=30 height=30 ></object>",[strTemp intValue]]];
+            if (kScreenWidth>375)
+            {
+                strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
+                           [NSString stringWithFormat:@"<object value=%d@3x width=18 height=18 ></object>",[strTemp intValue]]];
+            }
+            else
+            {
+                strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
+                       [NSString stringWithFormat:@"<object value=%d width=18 height=18 ></object>",[strTemp intValue]]];
+            }
         }
         remainingRange.location = tagRange.location;
         remainingRange.length = [strInfo length]-tagRange.location;

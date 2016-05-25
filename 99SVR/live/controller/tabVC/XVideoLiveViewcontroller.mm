@@ -37,8 +37,10 @@
 #import "UIAlertView+Block.h"
 #import "GiftShowAnimate.h"
 #import "UIView+EmptyViewTips.h"
+#import "RoomPriChatDataSource.h"
+
 @interface XVideoLiveViewcontroller()<UITableViewDelegate,UserListSelectDelegate,GiftDelegate,
-                                ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
+                                ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate,RoomPriChatDelegate>
 {
     UserListView *_listView;
     RoomDownView *_infoView;
@@ -55,14 +57,13 @@
     UIView  *_topHUD;
     
     DTAttributedTextView *_teachView;
+    
     UIView *_chatAllView;
     ChatRightView *_rightView;
-//    int nGift1;
-//    int nGift2;
-//    GiftShowAnimate *_giftShowAnimate1;
-//    GiftShowAnimate *_giftShowAnimate2;
+    
     NSMutableDictionary *giftDict1;
     NSMutableDictionary *giftDict2;
+    
 }
 
 @property (nonatomic,assign) int nCurGift;
@@ -83,7 +84,7 @@
 @property (nonatomic , strong) UIView *teacherEmptyView;
 
 @property (nonatomic,strong) RoomChatDataSource *chatDataSource;
-@property (nonatomic,strong) RoomChatDataSource *prichatDataSource;
+@property (nonatomic,strong) RoomPriChatDataSource *prichatDataSource;
 @property (nonatomic,strong) RoomNoticeDataSource *noticeDataSource;
 @property (nonatomic,strong) ConsumeRankDataSource *consumeDataSource;
 
@@ -194,7 +195,7 @@
     CGRect frame = Rect(0,kVideoImageHeight,kScreenWidth,self.view.height-44-kVideoImageHeight);
     _chatAllView = [[UIView alloc] initWithFrame:frame];
     
-    _chatView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth-54,frame.size.height) withStyle:UITableViewStylePlain];
+    _chatView = [TableViewFactory createTableViewWithFrame:Rect(0,0,kScreenWidth,frame.size.height) withStyle:UITableViewStylePlain];
     [_chatView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
     [_chatAllView addSubview:_chatView];
     
@@ -211,7 +212,7 @@
     
     _priChatView = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
     [_priChatView setBackgroundColor:UIColorFromRGB(0xf8f8f8)];
-    _prichatDataSource = [[RoomChatDataSource alloc] init];
+    _prichatDataSource = [[RoomPriChatDataSource alloc] init];
     _priChatView.dataSource = _prichatDataSource;
     _priChatView.delegate = _prichatDataSource;
     _prichatDataSource.delegate = self;
@@ -224,8 +225,8 @@
     [_noticeView setBackgroundColor:UIColorFromRGB(0xffffff)];
     
     _teachView = [[DTAttributedTextView alloc] initWithFrame:frame];
-    
     self.teacherEmptyView = [UIView initWithFrame:(CGRect){0,0,_teachView.width,_teachView.height} message:@"暂无课程表" pointY:52];
+    _teachView.attributedTextContentView.edgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
     [_teachView addSubview:self.teacherEmptyView];
     
     _tableConsumeRank = [TableViewFactory createTableViewWithFrame:frame withStyle:UITableViewStylePlain];
@@ -315,7 +316,6 @@
     
     [self.view addSubview:_menuView];
     self.menuView.DidSelectSliderIndex = ^(NSInteger index){
-        NSLog(@"模块%ld",(long)index);
     };
     
     UILabel *lblDownLine = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];
@@ -432,6 +432,7 @@
     dispatch_async(dispatch_get_main_queue(),
     ^{
         _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[roomTeachInfoWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
+//        CGFloat height = [_teachViewWeak.attributedTextContentView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-20].height;
         
         if (_teachViewWeak.attributedString.length>0) {
             self.teacherEmptyView.hidden = YES;
@@ -1070,6 +1071,15 @@
 }
 
 - (void)showKeyboard:(int)nToUser
+{
+    if (currentRoom != nil)
+    {
+        RoomUser *rUser = [currentRoom findUser:nToUser];
+        [_inputView setChatInfo:rUser];
+    }
+}
+
+- (void)priChatShowKeyboard:(int)nToUser
 {
     if (currentRoom != nil)
     {

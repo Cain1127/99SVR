@@ -78,7 +78,7 @@
             strMsg = @"";
             break;
         default:
-            strMsg = @"guan";
+            strMsg = [NSString stringWithFormat:@"vip_header_%d",user.m_nVipLevel];
             break;
     }
     [imgView setImage:[UIImage imageNamed:strMsg]];
