@@ -274,7 +274,6 @@
         [self.navigationController pushViewController:tqVC animated:YES];
         
     }else{//未登录
-        
         [AlertFactory createLoginAlert:self withMsg:@"兑换私人定制" block:^{
             
         }];

@@ -128,7 +128,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
     [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
-//    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
 }
 
 - (id)initWithModel:(RoomHttp *)room
@@ -428,7 +427,6 @@
     }
     @WeakObj(roomTeachInfo)
     @WeakObj(_teachView)
-
     dispatch_async(dispatch_get_main_queue(),
     ^{
         _teachViewWeak.attributedString = [[NSAttributedString alloc] initWithHTMLData:[roomTeachInfoWeak dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
@@ -437,7 +435,6 @@
         }else{
             self.teacherEmptyView.hidden = NO;
         }
-        
     });
 }
 
@@ -808,31 +805,43 @@
 {
     GiftShowAnimate *showAnimate = [[GiftShowAnimate alloc] initWithFrame:frame dict:parameter];
     NSString *strTime = NSStringFromInteger([parameter[@"number"] integerValue]);
-    [UIView animateWithDuration:0.25
-          delay:0.01
-        options:UIViewAnimationOptionCurveEaseOut
-     animations:^{
-         [[UIApplication sharedApplication].keyWindow addSubview:showAnimate];
-         [showAnimate setX:0];
-     } completion:^(BOOL finished){
-         [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.35 animations:
+    ^{
+        [self.parentViewController.view addSubview:showAnimate];
+        [showAnimate setX:0];
+    }
+    completion:^(BOOL finished)
+    {
+        [UIView animateWithDuration:strTime.length+1.0
+         animations:
+         ^{
              [showAnimate addrightViewAnimation];
-         } completion:^(BOOL finished) {
-             @WeakObj(showAnimate)
-             @WeakObj(sourceDict)
-             @WeakObj(self)
-             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(([strTime length]+0.5) * NSEC_PER_SEC)), dispatch_get_main_queue(),
-                            ^{
-                                [showAnimateWeak removeFromSuperview];
-                                [sourceDictWeak setObject:@"0" forKey:@"status"];
-                                [selfWeak showGiftInfo];
-                            });
          }];
-     }];
+    }];
+    @WeakObj(showAnimate)
+    @WeakObj(self)
+    @WeakObj(sourceDict)
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((strTime.length+1.25) * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+            [UIView animateWithDuration:0.5 animations:^{
+                CGRect frameGift = showAnimateWeak.frame;
+                frameGift.origin.y -= 30;
+                showAnimateWeak.frame = frameGift;
+                showAnimateWeak.alpha = 0.5f;
+            }
+            completion:^(BOOL finished)
+            {
+                [showAnimateWeak removeFromSuperview];
+                [sourceDictWeak setObject:@"0" forKey:@"status"];
+                [selfWeak showGiftInfo];
+            }];
+        });
+    });
 }
 
 /**
- *  显示礼物赠送效果
+ *  生产礼物View,显示礼物赠送效果
  */
 - (void)showGiftInfo
 {
@@ -848,7 +857,7 @@
                 [aryGift removeObjectAtIndex:0];
             }
             DLog(@"count:%zi",aryGift.count);
-            [self showGiftFrame:Rect(0-kScreenWidth+60, kScreenHeight-kVideoImageHeight-kRoom_head_view_height+50, kScreenWidth-60, 46) param:parameter source:giftDict1];
+            [self showGiftFrame:Rect(0-kScreenWidth+60, kVideoImageHeight+kRoom_head_view_height+50, kScreenWidth-60, 46) param:parameter source:giftDict1];
         }
         else if([[giftDict2 objectForKey:@"status"] isEqualToString:@"0"])
         {
@@ -859,7 +868,7 @@
                 [aryGift removeObjectAtIndex:0];
             }
             DLog(@"count:%zi",aryGift.count);
-            [self showGiftFrame:Rect(0-kScreenWidth+60, kScreenHeight-kVideoImageHeight-kRoom_head_view_height+100, kScreenWidth-60, 46) param:parameter source:giftDict2];
+            [self showGiftFrame:Rect(0-kScreenWidth+60, kVideoImageHeight+kRoom_head_view_height+104, kScreenWidth-60, 46) param:parameter source:giftDict2];
         }
     }
 }

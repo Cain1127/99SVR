@@ -10,7 +10,7 @@
 #import "ZLTabBar.h"
 #import "ZLRoomVideoViewController.h"
 #import "UIViewController+EmpetViewTips.h"
-#import "TQDetailedTableViewController.h"
+#import "IdeaDetailedViewController.h"
 #import "TQIdeaModel.h"
 #import "TQideaTableViewCell.h"
 #import "StockMacro.h"
@@ -40,6 +40,7 @@
 #import "StockDealViewController.h"
 #import "StockDealModel.h"
 #import "UIAlertView+Block.h"
+#import "HomePageService.h"
 #define kPictureHeight kScreenWidth * (0.43)
 
 @interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate>
@@ -50,7 +51,7 @@
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *aryLiving;
 @property (nonatomic,strong) SDCycleScrollView *scrollView;
-
+@property (nonatomic,strong) HomePageService *homePageService;
 ///当前数据请求状态:0-未开始请求/1-正在请求/2-banner完成请求/3-列表完成请求
 @property (nonatomic,strong) UIView *videoView;
 @property (nonatomic,strong) UIView *ideaView;
@@ -246,7 +247,12 @@
 
 - (void)initLivingData
 {
-    [kHTTPSingle RequestHomePage];
+//    [kHTTPSingle RequestHomePage];
+    if(!_homePageService)
+    {
+        _homePageService = [[HomePageService alloc] init];
+    }
+    [_homePageService requestHomePage];
 }
 
 #pragma mark table view delegate
@@ -543,7 +549,7 @@
         if(tempArray.count>indexPath.row)
         {
             TQIdeaModel *ideaModel = tempArray[indexPath.row];
-            TQDetailedTableViewController *viewcontrol = [[TQDetailedTableViewController alloc] initWithViewId:ideaModel.viewpointid];
+            IdeaDetailedViewController *viewcontrol = [[IdeaDetailedViewController alloc] initWithViewId:ideaModel.viewpointid];
             [self.navigationController pushViewController:viewcontrol animated:YES];
         }
     }
@@ -562,7 +568,8 @@
     {
         CGFloat height = ((kScreenWidth - 36.0f) / 2.0f) * 10 / 16 + 8;
         return height;
-    }else if([tempObject isKindOfClass:[ZLOperateStock class]])
+    }
+    else if([tempObject isKindOfClass:[ZLOperateStock class]])
     {
         return ValueWithTheIPhoneModelString(@"110,110,110,110");
     }
@@ -572,7 +579,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    
     if (section==0) {
         
         return 34.0;

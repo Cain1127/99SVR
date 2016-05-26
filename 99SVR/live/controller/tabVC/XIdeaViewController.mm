@@ -14,10 +14,8 @@
 #import <AFNetworking/AFNetworking.h>
 #import "MJRefresh.h"
 #import "TQMailboxViewController.h"
-#import "TQcontentView.h"
 #import "CustomViewController.h"
-#import "UIBarButtonItem+Item.h"
-#import "TQDetailedTableViewController.h"
+#import "IdeaDetailedViewController.h"
 #import "TQIdeaModel.h"
 #import "RoomHttp.h"
 #import "ViewNullFactory.h"
@@ -231,29 +229,21 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 }
 
 #pragma mark - TableView dataSource
-//- (void)selectIdea:(TQIdeaModel *)model
-//{
-//    TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
-//    [[self viewController].navigationController pushViewController:detaileVc animated:YES];
-//}
-
 -(void)tqIdeaModelSelectIndexPath:(NSIndexPath *)indexPath withModel:(TQIdeaModel *)model{
-    
-    TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
-    
+    IdeaDetailedViewController *detaileVc = [[IdeaDetailedViewController alloc] initWithViewId:model.viewpointid];
     @WeakObj(_tableView)
     __block TQIdeaModel *weaeModel = model;
     detaileVc.refreshCellDataBlock = ^(BOOL replyValue,BOOL giftValue){
-        if (replyValue) {
+        if (replyValue)
+        {
             weaeModel.replycount +=1;
         }
-            
-        if (giftValue) {
+        if (giftValue)
+        {
             weaeModel.giftcount  +=1;
         }
         [_tableViewWeak reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
     };
-    
     [[self viewController].navigationController pushViewController:detaileVc animated:YES];
 
 }

@@ -19,8 +19,6 @@
     self = [super init];
     ExpertNewViewNoty *notify = (ExpertNewViewNoty *)pData;
     
-//    _authorid = NSStringFromInt(notify->authorid());
-    
     _roomid = NSStringFromInt(notify->nvcbid());
     
     _authoricon = [NSString stringWithUTF8String:notify->sicon().c_str()];
@@ -28,7 +26,7 @@
     NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
     NSString *string = [NSString stringWithCString:notify->sname().c_str() encoding:gbkEncoding];
     _authorname = string;
-//    _authorname = [NSString stringWithFormat:@"%s",notify->sname().c_str()];
+    
     _publishtime = [NSString stringWithUTF8String:notify->spublictime().c_str()];
     
     _content = [NSString stringWithUTF8String:notify->content().c_str()];
@@ -38,11 +36,6 @@
     _giftcount = notify->nflowercnt();
     
     _viewpointid = notify->nmessageid();
-    
-    
-    
-//    [self settingTime];
-    
     
     return self;
 }
