@@ -40,6 +40,7 @@
 #import "StockDealViewController.h"
 #import "StockDealModel.h"
 #import "UIAlertView+Block.h"
+#import "HomePageService.h"
 #define kPictureHeight kScreenWidth * (0.43)
 
 @interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate>
@@ -50,7 +51,7 @@
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *aryLiving;
 @property (nonatomic,strong) SDCycleScrollView *scrollView;
-
+@property (nonatomic,strong) HomePageService *homePageService;
 ///当前数据请求状态:0-未开始请求/1-正在请求/2-banner完成请求/3-列表完成请求
 @property (nonatomic,strong) UIView *videoView;
 @property (nonatomic,strong) UIView *ideaView;
@@ -243,7 +244,12 @@
 
 - (void)initLivingData
 {
-    [kHTTPSingle RequestHomePage];
+//    [kHTTPSingle RequestHomePage];
+    if(!_homePageService)
+    {
+        _homePageService = [[HomePageService alloc] init];
+    }
+    [_homePageService requestHomePage];
 }
 
 #pragma mark table view delegate

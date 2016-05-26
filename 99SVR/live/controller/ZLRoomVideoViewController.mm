@@ -592,11 +592,13 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
             int num = [[parameter objectForKey:@"num"] intValue];
             CGFloat nTime = num/10+1;
             @WeakObj(number)
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(nTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                FloatingView *giftFloat = [selfWeak.view viewWithTag:[numberWeak integerValue]];
-                [dictGiftWeak removeObjectForKey:numberWeak];
-                [giftFloat removeFromSuperview];
-                selfWeak.nCurGift--;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(nTime * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    FloatingView *giftFloat = [selfWeak.view viewWithTag:[numberWeak integerValue]];
+                    [dictGiftWeak removeObjectForKey:numberWeak];
+                    [giftFloat removeFromSuperview];
+                    selfWeak.nCurGift--;
+                });
             });
             [dictGift removeObjectForKey:number];
         }

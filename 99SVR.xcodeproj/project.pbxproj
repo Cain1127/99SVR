@@ -627,6 +627,7 @@
 		BBC618F01CF6C37A004513FA /* RoomListInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC618E21CF6C37A004513FA /* RoomListInfo.m */; };
 		BBC618F11CF6C37A004513FA /* AdaptiveWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC618E51CF6C37A004513FA /* AdaptiveWebView.m */; };
 		BBC618F21CF6C37A004513FA /* LoginTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC618E71CF6C37A004513FA /* LoginTextField.m */; };
+		BBC618F71CF6C7E0004513FA /* HomePageService.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBC618F61CF6C7E0004513FA /* HomePageService.mm */; };
 		BBCE9D061CB3AD5600DA56D6 /* 100_1.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCE9CAB1CB3AD5600DA56D6 /* 100_1.png */; };
 		BBCE9D071CB3AD5600DA56D6 /* 101_1.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCE9CAC1CB3AD5600DA56D6 /* 101_1.png */; };
 		BBCE9D081CB3AD5600DA56D6 /* 102_1.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCE9CAD1CB3AD5600DA56D6 /* 102_1.png */; };
@@ -1878,6 +1879,8 @@
 		BBC618E51CF6C37A004513FA /* AdaptiveWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdaptiveWebView.m; sourceTree = "<group>"; };
 		BBC618E61CF6C37A004513FA /* LoginTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginTextField.h; sourceTree = "<group>"; };
 		BBC618E71CF6C37A004513FA /* LoginTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginTextField.m; sourceTree = "<group>"; };
+		BBC618F51CF6C7E0004513FA /* HomePageService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageService.h; sourceTree = "<group>"; };
+		BBC618F61CF6C7E0004513FA /* HomePageService.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HomePageService.mm; sourceTree = "<group>"; };
 		BBCE9CAB1CB3AD5600DA56D6 /* 100_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 100_1.png; sourceTree = "<group>"; };
 		BBCE9CAC1CB3AD5600DA56D6 /* 101_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 101_1.png; sourceTree = "<group>"; };
 		BBCE9CAD1CB3AD5600DA56D6 /* 102_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 102_1.png; sourceTree = "<group>"; };
@@ -2731,6 +2734,7 @@
 		BB25D7D61C1571B400314C1E /* 99SVR */ = {
 			isa = PBXGroup;
 			children = (
+				BBC618F31CF6C7B1004513FA /* HttpService(Http协议) */,
 				18EA82831CCA148F00BDB735 /* ME */,
 				B47DD5911CBF2C1B00C47EF7 /* Trader(高手操盘) */,
 				18D3CB6E1CC0917C00816BD0 /* Mailbox */,
@@ -4040,6 +4044,24 @@
 			path = view;
 			sourceTree = "<group>";
 		};
+		BBC618F31CF6C7B1004513FA /* HttpService(Http协议) */ = {
+			isa = PBXGroup;
+			children = (
+				BBC618F41CF6C7C4004513FA /* HomePage */,
+			);
+			name = "HttpService(Http协议)";
+			path = HttpService;
+			sourceTree = "<group>";
+		};
+		BBC618F41CF6C7C4004513FA /* HomePage */ = {
+			isa = PBXGroup;
+			children = (
+				BBC618F51CF6C7E0004513FA /* HomePageService.h */,
+				BBC618F61CF6C7E0004513FA /* HomePageService.mm */,
+			);
+			name = HomePage;
+			sourceTree = "<group>";
+		};
 		BBCE9CAA1CB3AD5600DA56D6 /* head */ = {
 			isa = PBXGroup;
 			children = (
@@ -4874,6 +4896,7 @@
 				BBD58EEB1CCBD96C009250DB /* XMeCustomCell.m in Sources */,
 				BB17692D1C7B006F00CE947C /* UIImage+WebP.m in Sources */,
 				BB0D3D061CD0BF6100A57E77 /* XPrivateService.m in Sources */,
+				BBC618F71CF6C7E0004513FA /* HomePageService.mm in Sources */,
 				BB1769261C7B006F00CE947C /* SDWebImageDownloader.m in Sources */,
 				18EA82A91CCA148F00BDB735 /* TQIntroductCell.m in Sources */,
 				1895B78D1CCB7C8700B86B0D /* TQIntroductModel.mm in Sources */,

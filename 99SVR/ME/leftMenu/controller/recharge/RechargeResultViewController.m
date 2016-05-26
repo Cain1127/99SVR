@@ -8,7 +8,7 @@
 
 #import "RechargeResultViewController.h"
 #import "AssetViewController.h"
-#import "TQDetailedTableViewController.h"
+#import "IdeaDetailedViewController.h"
 #import "ProfileViewController.h"
 #import "RoomViewController.h"
 #import "XMyViewController.h"
@@ -94,7 +94,7 @@
     
     for (UIViewController *control in aryIndex)
     {
-        if ([control isKindOfClass:[TQDetailedTableViewController class]])
+        if ([control isKindOfClass:[IdeaDetailedViewController class]])
         {
             [self.navigationController popToViewController:control animated:YES];
             return;

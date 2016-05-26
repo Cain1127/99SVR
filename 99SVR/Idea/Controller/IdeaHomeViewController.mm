@@ -19,9 +19,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "MJRefresh.h"
 #import "TQMailboxViewController.h"
-#import "TQcontentView.h"
 #import "CustomViewController.h"
-#import "UIBarButtonItem+Item.h"
 #import "IdeaDetailedViewController.h"
 #import "TQIdeaModel.h"
 #import "ViewNullFactory.h"

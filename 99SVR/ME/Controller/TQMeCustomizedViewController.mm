@@ -13,7 +13,6 @@
 #import "ViewNullFactory.h"
 #import "XPrivateService.h"
 #import "TQNoCustomView.h"
-#import "UIBarButtonItem+Item.h"
 #import "HttpManagerSing.h"
 #import "TableViewFactory.h"
 #import "XMeCustomDataSource.h"
