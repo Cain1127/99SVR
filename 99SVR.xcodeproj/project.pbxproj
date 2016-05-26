@@ -158,6 +158,7 @@
 		B404A0791CD36A4D00E814CC /* UIViewController+EmpetViewTips.m in Sources */ = {isa = PBXBuildFile; fileRef = B404A0781CD36A4D00E814CC /* UIViewController+EmpetViewTips.m */; };
 		B404A0821CDB222700E814CC /* HDWhatIsPrivateViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B404A0811CDB222700E814CC /* HDWhatIsPrivateViewViewController.m */; };
 		B40DA7BD1CF6821500DABD7C /* ThemeSkinManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA7BC1CF6821500DABD7C /* ThemeSkinManager.m */; };
+		B40DA7CB1CF708DA00DABD7C /* HDSegmentedView.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA7CA1CF708DA00DABD7C /* HDSegmentedView.m */; };
 		B44F77681CC39FF1008E3B26 /* StockDealHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */; };
 		B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.mm */; };
 		B47DD59D1CBF345300C47EF7 /* SliderMenuTopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD59A1CBF345300C47EF7 /* SliderMenuTopScrollView.m */; };
@@ -1125,6 +1126,8 @@
 		B404A0811CDB222700E814CC /* HDWhatIsPrivateViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HDWhatIsPrivateViewViewController.m; sourceTree = "<group>"; };
 		B40DA7BB1CF6821500DABD7C /* ThemeSkinManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemeSkinManager.h; sourceTree = "<group>"; };
 		B40DA7BC1CF6821500DABD7C /* ThemeSkinManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThemeSkinManager.m; sourceTree = "<group>"; };
+		B40DA7C91CF708DA00DABD7C /* HDSegmentedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HDSegmentedView.h; sourceTree = "<group>"; };
+		B40DA7CA1CF708DA00DABD7C /* HDSegmentedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HDSegmentedView.m; sourceTree = "<group>"; };
 		B44F77661CC39FF1008E3B26 /* StockDealHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealHeaderView.h; sourceTree = "<group>"; };
 		B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealHeaderView.mm; sourceTree = "<group>"; };
 		B47DD5961CBF2D9400C47EF7 /* StockHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeViewController.h; sourceTree = "<group>"; };
@@ -3613,6 +3616,8 @@
 				B4C6B7B11CBE1B220072795B /* RegisterTextField.m */,
 				BBD58EFE1CCE7C54009250DB /* HomeCustomViewController.h */,
 				BBD58EFF1CCE7C54009250DB /* HomeCustomViewController.m */,
+				B40DA7C91CF708DA00DABD7C /* HDSegmentedView.h */,
+				B40DA7CA1CF708DA00DABD7C /* HDSegmentedView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -5207,6 +5212,7 @@
 				BB5E4E891CB8E74500F8C1D4 /* AlertFactory.m in Sources */,
 				BB63F6221C2CC7A300A042E8 /* MySearchBar.m in Sources */,
 				BB1769231C7B006F00CE947C /* SDImageCache.m in Sources */,
+				B40DA7CB1CF708DA00DABD7C /* HDSegmentedView.m in Sources */,
 				BB5E4E8C1CB92D6E00F8C1D4 /* Reachability.m in Sources */,
 				1895B7841CCB603100B86B0D /* TQPersonalModel.mm in Sources */,
 				BB6F3AD51C9F86270035EBBE /* TAAnimatedDotView.m in Sources */,
