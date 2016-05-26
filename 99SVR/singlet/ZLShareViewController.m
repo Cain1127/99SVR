@@ -97,7 +97,6 @@
         [ProgressHUD showError:@"没有安装QQ,无法分享"];
         return ;
     }
-    
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"bigest_logo@2x" ofType:@"png"];
     NSData *data = [NSData dataWithContentsOfFile:filePath];
     QQApiURLObject *urlObj = [[QQApiURLObject alloc] initWithURL:[NSURL URLWithString:_strUrl] title:@"99乐投" description:_strTitle previewImageData:data targetContentType:QQApiURLTargetTypeNews];

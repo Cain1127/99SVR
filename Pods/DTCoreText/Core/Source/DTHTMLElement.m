@@ -633,7 +633,6 @@ NSDictionary *_classesForNames = nil;
 {
 	DTEdgeInsets edgeInsets = {0,0,0,0};
 	
-	// preserve previous values in insets
 	if (intoEdgeInsets)
 	{
 		edgeInsets = *intoEdgeInsets;
@@ -780,21 +779,29 @@ NSDictionary *_classesForNames = nil;
         //font-size 只使用一个
 		if ([fontSize isCSSLengthValue])
 		{
-            _fontDescriptor.pointSize = 15.0f;
+            CGFloat fFontSize = [fontSize floatValue];
+            if (fFontSize>15)
+            {
+                _fontDescriptor.pointSize = 15.0f;
+            }
+            else
+            {
+                _fontDescriptor.pointSize = fFontSize;
+            }
 		}
 	}
 	
 	NSString *color = [styles objectForKey:@"color"];
-    if (color)
+    if ([color isEqualToString:@"#919191"] || [color isEqualToString:@"#eb6100"] || [color isEqualToString:@"#f8f8f8"])
 	{
 		self.textColor = DTColorCreateWithHTMLName(color);
 	}
 	
-//	NSString *bgColor = [styles objectForKey:@"background-color"];
-//	if (bgColor)
-//	{
-//		self.backgroundColor = DTColorCreateWithHTMLName(bgColor);
-//	}
+	NSString *bgColor = [styles objectForKey:@"background-color"];
+	if (bgColor)
+	{
+		self.backgroundColor = DTColorCreateWithHTMLName(bgColor);
+	}
 	
 	NSString *floatString = [styles objectForKey:@"float"];
 	

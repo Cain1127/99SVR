@@ -27,8 +27,6 @@
  */
 -(void) onReq:(BaseReq*)req;
 
-
-
 /*! @brief 发送一个sendReq后，收到微信的回应
  *
  * 收到一个来自微信的处理结果。调用一次sendReq后会收到onResp。
@@ -105,8 +103,6 @@
  * @return 微信的安装地址字符串。
  */
 +(NSString *) getWXAppInstallUrl;
-
-
 
 /*! @brief 获取当前微信SDK的版本号
  *

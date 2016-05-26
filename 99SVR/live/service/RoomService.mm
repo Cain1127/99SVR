@@ -17,62 +17,63 @@
 
 
 
-+ (NSString *)getToUser:(int)userId name:(NSString *)strName
++ (NSString *)getToUser:(int)userId name:(NSString *)strName vip:(int)vipInfo
 {
     if(userId == 0)
     {
         return @"";
     }
+    NSString *strVip = @"";
+    if (vipInfo>2)
+    {
+        strVip = [NSString stringWithFormat:@"<img src=\"vip_header_%d\" width=\"13\" height=\"13\" style=\"vertical-align:middle;\"></img>",vipInfo];
+    }
+    
     if(userId == KUserSingleton.nUserId)
     {
-//        KUserSingleton.strName
-        return [NSString stringWithFormat:@"<span value=\"forme--%d\" style=\"color:#919191\">%@</span>",userId,KUserSingleton.strName];
+        return [NSString stringWithFormat:@"<span value=\"forme--%d\" style=\"color:#919191;font-size:12px;\">%@%@</span>",userId,strVip,KUserSingleton.strName];
     }
     else
     {
         if (strName)
         {
-            return [NSString stringWithFormat:@"<a style=\"color:#919191\" href=\"sqchatid://%d\" value=\"%@\">%@</a>",
-                    userId,strName,strName];
+            return [NSString stringWithFormat:@"<a style=\"color:#919191;font-size:12px;\" href=\"sqchatid://%d\" value=\"%@\">%@%@</a>",
+                    userId,strName,strVip,strName];
         }
         else
         {
-            return [NSString stringWithFormat:@"<a style=\"font-size:13px;color:#919191 \" href=\"sqchatid://%d\">%d</a>",
-                    userId, userId];
+            return [NSString stringWithFormat:@"<a style=\"color:#919191;font-size:12px;\" href=\"sqchatid://%d\">%@%d</a>",
+                    userId,strVip,userId];
         }
     }
 }
 
-+ (BOOL )getChatInfo:(RoomChatMsg *)msg array:(NSMutableArray *)aryChat prichat:(NSMutableArray *)aryPriChat{
++ (BOOL )getChatInfo:(RoomChatMsg *)msg array:(NSMutableArray *)aryChat prichat:(NSMutableArray *)aryPriChat
+{
     
     NSString *strContent = [NSString stringWithCString:msg->content().c_str() encoding:GBK_ENCODING];
     strContent = [DecodeJson replaceEmojiNewString:strContent];
     NSString *strSrcName = [NSString stringWithCString:msg->srcalias().c_str() encoding:GBK_ENCODING];
-    NSString *strFrom = [RoomService getToUser:msg->srcid() name:strSrcName];
+    NSString *strFrom = [RoomService getToUser:msg->srcid() name:strSrcName vip:msg->srcviplevel()];
     NSString *strToName = [NSString stringWithCString:msg->toalias().c_str() encoding:GBK_ENCODING];
-    NSString *strTo = [RoomService getToUser:msg->toid() name:strToName];
+    NSString *strTo = [RoomService getToUser:msg->toid() name:strToName vip:msg->toviplevel()];
     NSString *strInfo = nil;
-    
-    
-//    NSLog(@"-----------------接收到的内容%@",strContent);
     
     //记录是不是我@别人
     BOOL meToOtherBool = NO;
     
-    
     if (msg->toid() == 0)
     {
-        strInfo = [NSString stringWithFormat:@"  %@<span style=\"color:#919191\">%@</span><br>%@",strFrom,strTo,strContent];
+        strInfo = [NSString stringWithFormat:@"<span style=\"ccolor:#919191;font-size:12px;line-height:15px;\">%@ :</span><br><span style=\"line-height:20px;\">%@</span>",strFrom,strContent];
     }
     else
     {
-        strInfo = [NSString stringWithFormat:@" %@ <span style=\"color:#919191\"></span><br>@%@ %@",strFrom,strTo,strContent];
-        
-        if ([strFrom rangeOfString:[NSString stringWithFormat:@"%d",[UserInfo sharedUserInfo].nUserId]].location != NSNotFound) {//是我@别人
-            
+        strInfo = [NSString stringWithFormat:@"<span style=\"color:#919191;font-size:12px;line-height:20px;\"> %@  @ %@ :</span><br> \
+                   <span style=\"line-height:20px;\">%@</span>",strFrom,strTo,strContent];
+        if ([strFrom rangeOfString:[NSString stringWithFormat:@"%d",[UserInfo sharedUserInfo].nUserId]].location != NSNotFound)
+        {
             meToOtherBool = YES;
         }
-        
     }
     strInfo = [DecodeJson replaceEmojiNewString:strInfo];    
     [aryChat addObject:strInfo];
@@ -92,7 +93,8 @@
 }
 
 + (BOOL )clearChatInfo:(NSMutableArray *)array{
-    if (array.count>100) {
+    if (array.count>100)
+    {
         @synchronized(array)
         {
             for (int i=0 ;i < 50 ;i++)
@@ -166,7 +168,8 @@
     while ([teachTable rangeOfString:@"\r"].location!=NSNotFound) {
         teachTable = [teachTable stringByReplacingOccurrencesOfString:@"\r" withString:@"<br/>"];
     }
-    return teachTable;
+    NSString *strMsg = [NSString stringWithFormat:@"<span style=\"line-height:30px;\">%@</span>",teachTable];
+    return strMsg;
 }
 
 

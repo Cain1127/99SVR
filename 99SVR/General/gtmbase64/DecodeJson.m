@@ -224,7 +224,8 @@
 	NSRange remainingRange = NSMakeRange(0, [strInfo length]);
     while (!finished) {
         NSRange tagRange = [strInfo rangeOfString:regx options:NSRegularExpressionSearch range:remainingRange];
-        if (tagRange.location==NSNotFound) {
+        if (tagRange.location==NSNotFound)
+        {
             break;
         }
         nStart = [strInfo rangeOfString:@"[$"].location != NSNotFound ? [strInfo rangeOfString:@"[$"].location :-1;
@@ -241,8 +242,16 @@
         }
         else
         {
-            strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
-                       [NSString stringWithFormat:@"<object value=%d width=30 height=30 ></object>",[strTemp intValue]]];
+            if (kScreenWidth>375)
+            {
+                strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
+                           [NSString stringWithFormat:@"<object value=%d@3x width=20 height=20 style=\"vertical-align:middle;\"></object>",[strTemp intValue]]];
+            }
+            else
+            {
+                strInfo = [strInfo stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"[$%@$]",strTemp] withString:
+                       [NSString stringWithFormat:@"<object value=%d width=20 height=20 style=\"vertical-align:middle;\"></object>",[strTemp intValue]]];
+            }
         }
         remainingRange.location = tagRange.location;
         remainingRange.length = [strInfo length]-tagRange.location;
@@ -446,23 +455,6 @@
         strTilte = [strInfo substringWithRange:NSMakeRange(start.location,end.location-start.location+5)];
         strInfo = [strInfo stringByReplacingCharactersInRange:NSMakeRange(start.location,end.location-start.location+5) withString:@""];
     }
-    //<a>  </a>
-//    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</img>" withString:@"</img><br>"];
-//    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"</a>" withString:@"</a><br>"];
-//    NSString *msg ;
-//    if(nIndex==1)
-//    {
-//        msg = @"<p style=\"color:#919191\">房间公告</p>";
-//    }
-//    else if(nIndex==2)
-//    {
-//        msg = @"<p style=\"color:#919191\">房间广播</p>";
-//    }
-//    else if(nIndex == 3)
-//    {
-//        msg = @"<p style=\"color:#919191\">悄悄话</p>";
-//    }
-//    NSString *strMsg = [NSString stringWithFormat:@"%@%@%@",strTilte,msg,strInfo];
     
     if([strInfo rangeOfString:@"<a href"].location != NSNotFound &&
        [strInfo rangeOfString:@"</a>"].location != NSNotFound){
