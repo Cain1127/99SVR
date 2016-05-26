@@ -58,10 +58,13 @@
             }
             if ([UserInfo sharedUserInfo].nStatus)
             {
-                [AlertFactory createPassswordAlert:_control room:_room block:^(NSString *pwd) {
-                    selfWeak.room.password = pwd;
-                    [selfWeak connectViewModel:selfWeak.room];
-                }];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [AlertFactory createPassswordAlert:_control room:_room block:^(NSString *pwd)
+                     {
+                         selfWeak.room.password = pwd;
+                         [selfWeak connectViewModel:selfWeak.room];
+                     }];
+                });
             }
             else
             {}

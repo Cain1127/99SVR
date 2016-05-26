@@ -31,7 +31,7 @@
 #import "SDImageCache.h"
 #import "Toast+UIView.h"
 #import "HttpManagerSing.h"
-
+#import "UIAlertView+Block.h"
 
 #define kMain_color UIColorFromRGB(0x0078dd)
 

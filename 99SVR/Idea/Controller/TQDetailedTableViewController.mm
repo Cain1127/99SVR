@@ -295,6 +295,7 @@
         [_tableView.footer endRefreshing];
     }
 }
+
 //显示聊天界面
 - (void)showChatInfo
 {

@@ -66,60 +66,108 @@
 }
 + (void)createPassswordAlert:(UIViewController *)sender room:(RoomHttp*)room block:(void (^)(NSString *pwd))block
 {
-    @WeakObj(sender)
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入密码"
-                                                                   message:@"" preferredStyle:UIAlertControllerStyleAlert];
-    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField)
+    if(IOSVersion<8.1)
     {
-        textField.placeholder = @"输入密码";
-    }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-        UITextField *login = alert.textFields.firstObject;
-        if (block)
+        @WeakObj(sender)
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入密码"
+                                                                       message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addTextFieldWithConfigurationHandler:^(UITextField *textField)
         {
-            block(login.text);
-        }
-    }];
-    [alert addAction:okAction];
-    UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-        [senderWeak.view hideToastActivity];
-        [[PlayIconView sharedPlayIconView] exitPlay];
-        [senderWeak.navigationController popViewControllerAnimated:YES];
-    }];
-    [alert addAction:canAction];
-    UIAlertAction *requestAction = [UIAlertAction actionWithTitle:@"我要密码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
-    {
-        [senderWeak.view hideToastActivity];
-        [[PlayIconView sharedPlayIconView] exitPlay];
-        
-        DLog(@"%@",senderWeak.navigationController.viewControllers);
-        int temp = 0;
-        for (int i=0; i!=senderWeak.navigationController.viewControllers.count; i++) {
-            UIViewController *vc = senderWeak.navigationController.viewControllers[i];
-            if ([vc isKindOfClass:[RoomViewController class]]) {
-                temp=i;
+            textField.placeholder = @"输入密码";
+        }];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+        {
+            UITextField *login = alert.textFields.firstObject;
+            if (block)
+            {
+                block(login.text);
             }
-        }
-        
-        if (temp>0)
+        }];
+        [alert addAction:okAction];
+        UIAlertAction *canAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
         {
-            UIViewController *vc = senderWeak.navigationController.viewControllers[(temp-1)];
-            [senderWeak.navigationController popViewControllerAnimated:NO];
-            @WeakObj(vc)
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(),
-            ^{
-                [vcWeak.navigationController pushViewController:[[KefuCenterController alloc]init] animated:YES];
-            });
-        }
-        
-        
-    }];
-    [alert addAction:requestAction];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [senderWeak presentViewController:alert animated:YES completion:nil];
-    });
+            [senderWeak.view hideToastActivity];
+            [[PlayIconView sharedPlayIconView] exitPlay];
+            [senderWeak.navigationController popViewControllerAnimated:YES];
+        }];
+        [alert addAction:canAction];
+        UIAlertAction *requestAction = [UIAlertAction actionWithTitle:@"我要密码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action)
+        {
+            [senderWeak.view hideToastActivity];
+            [[PlayIconView sharedPlayIconView] exitPlay];
+            
+            DLog(@"%@",senderWeak.navigationController.viewControllers);
+            int temp = 0;
+            for (int i=0; i!=senderWeak.navigationController.viewControllers.count; i++) {
+                UIViewController *vc = senderWeak.navigationController.viewControllers[i];
+                if ([vc isKindOfClass:[RoomViewController class]]) {
+                    temp=i;
+                }
+            }
+            
+            if (temp>0)
+            {
+                UIViewController *vc = senderWeak.navigationController.viewControllers[(temp-1)];
+                [senderWeak.navigationController popViewControllerAnimated:NO];
+                @WeakObj(vc)
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(),
+                ^{
+                    [vcWeak.navigationController pushViewController:[[KefuCenterController alloc]init] animated:YES];
+                });
+            }
+        }];
+        [alert addAction:requestAction];
+        [sender presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        @WeakObj(sender)
+        [UIAlertView alertWithCallBackBlock:^(UIAlertView *alertView,NSInteger buttonIndex) {
+            switch (buttonIndex) {
+                case 0:
+                {
+                    [senderWeak.view hideToastActivity];
+                    [[PlayIconView sharedPlayIconView] exitPlay];
+                    [senderWeak.navigationController popViewControllerAnimated:YES];
+                }
+                break;
+                case 1:
+                {
+                    UITextField *login = [alertView textFieldAtIndex:0];
+                    if (login && block)
+                    {
+                        block(login.text);
+                    }
+                }
+                break;
+                case 2:
+                {
+                    [senderWeak.view hideToastActivity];
+                    [[PlayIconView sharedPlayIconView] exitPlay];
+                    
+                    DLog(@"%@",senderWeak.navigationController.viewControllers);
+                    int temp = 0;
+                    for (int i=0; i!=senderWeak.navigationController.viewControllers.count; i++) {
+                        UIViewController *vc = senderWeak.navigationController.viewControllers[i];
+                        if ([vc isKindOfClass:[RoomViewController class]]) {
+                            temp=i;
+                        }
+                    }
+                    
+                    if (temp>0)
+                    {
+                        UIViewController *vc = senderWeak.navigationController.viewControllers[(temp-1)];
+                        [senderWeak.navigationController popViewControllerAnimated:NO];
+                        @WeakObj(vc)
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(),
+                                       ^{
+                                           [vcWeak.navigationController pushViewController:[[KefuCenterController alloc]init] animated:YES];
+                                       });
+                    }
+                }
+            }
+        } txtField:@"输入密码" title:@"请输入密码" message:nil cancelButtonName:nil otherButtonTitles:@"取消",@"确定",@"我要密码", nil];
+    }
 }
 
 + (void)createPassswordAlert:(UIViewController *)sender room:(RoomHttp*)room

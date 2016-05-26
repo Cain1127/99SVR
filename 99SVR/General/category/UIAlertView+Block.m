@@ -21,7 +21,41 @@ static NSString *UIAlertViewKey = @"UIAlertViewKey";
  
  */
 
-+ (void)alertWithCallBackBlock:(UIAlertViewCallBackBlock)alertViewCallBackBlock title:(NSString *)title message:(NSString *)message  cancelButtonName:(NSString *)cancelButtonName otherButtonTitles:(NSString *)otherButtonTitles, ...NS_REQUIRES_NIL_TERMINATION {
++ (void)alertWithCallBackBlock:(UIAlertViewCallBackBlock)alertViewCallBackBlock txtField:(NSString *)txtField title:(NSString *)title message:(NSString *)message  cancelButtonName:(NSString *)cancelButtonName otherButtonTitles:(NSString *)otherButtonTitles, ...NS_REQUIRES_NIL_TERMINATION
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelButtonName otherButtonTitles: otherButtonTitles, nil];
+//    unsigned int count;
+//    Ivar *ivars= class_copyIvarList([alert class], &count);
+//    objc_property_t *objc_property_ts= class_copyPropertyList([alert class], &count);
+//    for (int i=0; i!=count; i++) {
+//        objc_property_t proty = objc_property_ts[i];
+//        NSLog(@"proty %@",[NSString stringWithCString:property_getName(proty) encoding:NSUTF8StringEncoding]);
+//    }
+//    for (int i=0; i!=count; i++) {
+//        const char *type = ivar_getTypeEncoding(ivars[i]);
+//        NSLog(@"ivars %@ %s",[NSString stringWithUTF8String:ivar_getName(ivars[i])],type);
+//    }
+    NSString *other = nil;
+    va_list args;
+    if (otherButtonTitles)
+    {
+        va_start(args, otherButtonTitles);
+        while ((other = va_arg(args, NSString*))) {
+            [alert addButtonWithTitle:other];
+        }
+        va_end(args);
+    }
+    alert.delegate = alert;
+    
+    [alert setAlertViewStyle:UIAlertViewStyleSecureTextInput];
+    UITextField *nameField = [alert textFieldAtIndex:0];
+    nameField.placeholder = txtField;
+    
+    [alert show];
+    alert.alertViewCallBackBlock = alertViewCallBackBlock;
+}
++ (void)alertWithCallBackBlock:(UIAlertViewCallBackBlock)alertViewCallBackBlock title:(NSString *)title message:(NSString *)message  cancelButtonName:(NSString *)cancelButtonName otherButtonTitles:(NSString *)otherButtonTitles, ...NS_REQUIRES_NIL_TERMINATION
+{
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelButtonName otherButtonTitles: otherButtonTitles, nil];
     
@@ -98,9 +132,10 @@ static NSString *UIAlertViewKey = @"UIAlertViewKey";
             [alertVC addAction:otherAction];
         }
         [viewController presentViewController:alertVC animated:YES completion:nil];
-    }else{//8系统以下
-        
-        [UIAlertView alertWithCallBackBlock:^(NSInteger buttonIndex)
+    }
+    else
+    {
+        [UIAlertView alertWithCallBackBlock:^(UIAlertView *alertView,NSInteger buttonIndex)
         {
             completionCallback(buttonIndex);
         }title:title message:message cancelButtonName:cancelStr otherButtonTitles:otherBthStr, nil];
@@ -123,7 +158,7 @@ static NSString *UIAlertViewKey = @"UIAlertViewKey";
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     if (self.alertViewCallBackBlock) {
-        self.alertViewCallBackBlock(buttonIndex);
+        self.alertViewCallBackBlock(alertView,buttonIndex);
     }
 }
 

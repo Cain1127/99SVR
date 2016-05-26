@@ -559,7 +559,8 @@
     {
         CGFloat height = ((kScreenWidth - 36.0f) / 2.0f) * 10 / 16 + 8;
         return height;
-    }else if([tempObject isKindOfClass:[ZLOperateStock class]])
+    }
+    else if([tempObject isKindOfClass:[ZLOperateStock class]])
     {
         return ValueWithTheIPhoneModelString(@"110,110,110,110");
     }
@@ -569,7 +570,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    
     if (section==0) {
         
         return 34.0;
