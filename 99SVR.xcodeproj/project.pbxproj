@@ -157,6 +157,7 @@
 		87D9EE0FC59214DC02EE2C95 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A43875FF97FDC1CA789AE15 /* libPods.a */; };
 		B404A0791CD36A4D00E814CC /* UIViewController+EmpetViewTips.m in Sources */ = {isa = PBXBuildFile; fileRef = B404A0781CD36A4D00E814CC /* UIViewController+EmpetViewTips.m */; };
 		B404A0821CDB222700E814CC /* HDWhatIsPrivateViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B404A0811CDB222700E814CC /* HDWhatIsPrivateViewViewController.m */; };
+		B40DA7BD1CF6821500DABD7C /* ThemeSkinManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA7BC1CF6821500DABD7C /* ThemeSkinManager.m */; };
 		B44F77681CC39FF1008E3B26 /* StockDealHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */; };
 		B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.mm */; };
 		B47DD59D1CBF345300C47EF7 /* SliderMenuTopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD59A1CBF345300C47EF7 /* SliderMenuTopScrollView.m */; };
@@ -1122,6 +1123,8 @@
 		B404A0781CD36A4D00E814CC /* UIViewController+EmpetViewTips.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+EmpetViewTips.m"; sourceTree = "<group>"; };
 		B404A0801CDB222700E814CC /* HDWhatIsPrivateViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HDWhatIsPrivateViewViewController.h; sourceTree = "<group>"; };
 		B404A0811CDB222700E814CC /* HDWhatIsPrivateViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HDWhatIsPrivateViewViewController.m; sourceTree = "<group>"; };
+		B40DA7BB1CF6821500DABD7C /* ThemeSkinManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemeSkinManager.h; sourceTree = "<group>"; };
+		B40DA7BC1CF6821500DABD7C /* ThemeSkinManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThemeSkinManager.m; sourceTree = "<group>"; };
 		B44F77661CC39FF1008E3B26 /* StockDealHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealHeaderView.h; sourceTree = "<group>"; };
 		B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealHeaderView.mm; sourceTree = "<group>"; };
 		B47DD5961CBF2D9400C47EF7 /* StockHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeViewController.h; sourceTree = "<group>"; };
@@ -3593,6 +3596,8 @@
 				5A4D61281CEEF93B00DD7983 /* StatusBarHUD.m */,
 				BB63F53A1C2CC7A300A042E8 /* Toast+UIView.h */,
 				BB63F53B1C2CC7A300A042E8 /* Toast+UIView.m */,
+				B40DA7BB1CF6821500DABD7C /* ThemeSkinManager.h */,
+				B40DA7BC1CF6821500DABD7C /* ThemeSkinManager.m */,
 			);
 			path = Toast;
 			sourceTree = "<group>";
@@ -5115,6 +5120,7 @@
 				189880041CAA52F8000E9F1C /* RightImageButton.m in Sources */,
 				BBD58F221CCF52F6009250DB /* ZLOperateStock.m in Sources */,
 				187C07F31C9A571B007AE742 /* ProfileViewController.m in Sources */,
+				B40DA7BD1CF6821500DABD7C /* ThemeSkinManager.m in Sources */,
 				BB63F5D01C2CC7A300A042E8 /* MJRefreshGifHeader.m in Sources */,
 				BBD58E9F1CC9CB62009250DB /* PlayIconView.m in Sources */,
 				BB1661861C3D029200D318BE /* MBProgressHUD+Add.m in Sources */,
@@ -5403,7 +5409,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ef8c443d-d6bc-4943-ba13-e7a4b47211db";
+				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
