@@ -13,7 +13,8 @@
 
 + (SVRMediaClient *)sharedSVRMediaClient;
 
-- (BOOL) clientCoreInit:(NSString *)strAddr;
+- (BOOL) clientCoreInit:(int)nType;
+
 - (BOOL) clientCoreUnInit;
 - (BOOL) clientRcvStreamStart:(int32_t)userId roomId:(int32_t)roomId;
 - (BOOL) setMainRoomId:(int)nRoomId;

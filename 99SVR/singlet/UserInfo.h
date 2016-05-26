@@ -20,6 +20,7 @@ DEFINE_SINGLETON_FOR_HEADER(UserInfo)
  */
 @property (nonatomic) int nStatus;
 @property (nonatomic) int nUnRead;
+@property (nonatomic) BOOL bAuthServer;
 /**
  *  头像id
  */

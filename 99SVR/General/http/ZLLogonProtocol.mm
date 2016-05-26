@@ -8,6 +8,7 @@
 #include <cassert>
 #include "crc32.h"
 #include "json/json.h"
+#import "SVRMediaClient.h"
 #import "XConsumeRankModel.h"
 #import "TQIdeaModel.h"
 #import "TQIdeaDetailModel.h"
@@ -907,6 +908,7 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
     roomTeachInfo=@"";
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:@{@"collet":[NSString stringWithFormat:@"%d",nRoom_is_collet]}];
+    video_room->SendMsg_AfterJoinRoomReq();
 }
 
 void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
@@ -1010,4 +1012,9 @@ void ZLRoomListener::OnTeacherGiftListResp(std::vector<TeacherGiftListResp>& inf
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:parameter];
 }
 
+void ZLRoomListener::OnRoomAndSubRoomId_Noty(RoomAndSubRoomIdNoty& info)
+{
+    DLog(@"roomid:%d",info.roomid());
+    [[SVRMediaClient sharedSVRMediaClient] setMainRoomId:info.roomid()];
+}
 

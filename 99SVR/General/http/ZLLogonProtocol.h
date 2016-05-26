@@ -370,7 +370,7 @@ class ZLRoomListener : public VideoRoomListener
     virtual void OnTeacherAvarageScoreNoty(TeacherAvarageScoreNoty& info){}
     
     //÷˜∑øº‰∫Õ◊”∑øº‰id£¨ƒø«∞÷ª”–“∆∂Ø∂À”–£¨PC∂À√ª”–
-    virtual void OnRoomAndSubRoomId_Noty(RoomAndSubRoomIdNoty& info){}
+    virtual void OnRoomAndSubRoomId_Noty(RoomAndSubRoomIdNoty& info);
     
     //∑øº‰∑¢ÀÕœµÕ≥π´∏Ê
     virtual void OnSysCastResp(Syscast& info){}

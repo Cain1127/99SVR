@@ -128,7 +128,6 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-//    [[ZLLogonServerSing sharedZLLogonServerSing] requestRoomInfo];
     [[ZLLogonServerSing sharedZLLogonServerSing] connectVideoRoom:[_room.roomid intValue] roomPwd:@""];
 }
 
@@ -196,7 +195,6 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
     [self initSlideView];
     [self.view addSubview:_menuView];
     self.menuView.DidSelectSliderIndex = ^(NSInteger index){
-        NSLog(@"模块%ld",(long)index);
     };
     
     UILabel *lblDownLine = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];

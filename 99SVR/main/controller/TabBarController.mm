@@ -63,7 +63,8 @@ static TabBarController *tabbarController = nil;
 }
 
 
-- (void)exitPlay{
+- (void)exitPlay
+{
     RoomViewController *roomView = [RoomViewController sharedRoomViewController];
     [roomView exitRoom];
     _iConView.hidden = YES;
@@ -83,8 +84,8 @@ static TabBarController *tabbarController = nil;
 
 #pragma mark - 生命周期
 
-- (void)viewDidLoad {
-    
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     

@@ -35,10 +35,9 @@
     [_lblBad setTextColor:UIColorFromRGB(0x00)];
     [_lblBad setTextAlignment:NSTextAlignmentCenter];
    
-    _imgRank = [[UIImageView alloc] initWithFrame:Rect(8, 8, 40, 40)];
+    _imgRank = [[UIImageView alloc] initWithFrame:Rect(8, 13, 30, 30)];
+    _imgRank.contentMode = UIViewContentModeScaleAspectFit;
     _imgRank.layer.masksToBounds = YES;
-    _imgRank.layer.cornerRadius = 20;
-    
     return self;
 }
 

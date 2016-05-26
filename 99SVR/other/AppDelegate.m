@@ -88,8 +88,6 @@
     
     [WXApi registerApp:@"wxfbfe01336f468525" withDescription:@"weixin"];
     
-   // [self onCheckVersion];
-    
     NSDictionary *dict = [UserDefaults objectForKey:kVideoList];
     
     if (!dict){
@@ -101,6 +99,11 @@
     }
     [IQKeyboardManager sharedManager].shouldShowTextFieldPlaceholder = NO;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    if(!KUserSingleton.nStatus)
+    {
+        sleep(2);
+    }
     if (KUserSingleton.nStatus)
     {
         [SwitchRootTool switchRootForAppDelegate];
@@ -185,7 +188,6 @@
         DLog(@"等待时间不够");
         return ;
     }
-    [[ZLLogonServerSing sharedZLLogonServerSing] closeProtocol];
     bGGLogin = YES;
 }
 
@@ -249,7 +251,7 @@
     [self.myTimer invalidate];
     if (bGGLogin)
     {
-        [SVRInitLBS loginLocal];
+//        [SVRInitLBS loginLocal];
     }
     [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ENTER_BACK_VC object:@"OFF"];

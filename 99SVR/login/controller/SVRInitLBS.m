@@ -27,38 +27,16 @@
 + (void)initMediaSDK
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [[SVRMediaClient sharedSVRMediaClient] clientCoreInit:@"lbs1.99ducaijing.com;lbs2.99ducaijing.com;lbs3.99ducaijing.com;121.14.211.51;112.90.241.35;120.197.248.16"];
+        [[SVRMediaClient sharedSVRMediaClient] clientCoreInit:0];
     });
 }
 
 /**
  *  请求lbs服务器信息
  */
-+ (void)requestLbs{
-    //存放lbs地址
-    KUserSingleton.dictRoomGate = [NSMutableDictionary dictionary];
-    KUserSingleton.dictRoomText = [NSMutableDictionary dictionary];
-    KUserSingleton.dictRoomMedia = [NSMutableDictionary dictionary];
-    //获取视频服务器地址
-//    [BaseService get:LBS_ROOM_GATE dictionay:nil timeout:10 success:^(id responseObject)
-//     {
-//         NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-//         NSString *strAddr = [DecodeJson getArrayAddr:strInfo];
-//         [KUserSingleton.dictRoomGate setObject:strAddr forKey:@(0)];
-//     }fail:nil];
-    
-//    [BaseService get:LBS_ROOM_MEDIA dictionay:nil timeout:10 success:^(id responseObject) {
-//        NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-//        NSString *strAddr = [DecodeJson getArrayAddr:strInfo];
-//        [KUserSingleton.dictRoomMedia setObject:strAddr forKey:@(0)];
-//    } fail:nil];
-    
-    //获取文字直播服务器
-//    [BaseService get:LBS_ROOM_TEXT dictionay:nil timeout:10 success:^(id responseObject) {
-//        NSString *strInfo = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-//        NSString *strAddr = [DecodeJson getArrayAddr:strInfo];
-//        [KUserSingleton.dictRoomText setObject:strAddr forKey:@(0)];
-//    } fail:nil];
++ (void)requestLbs
+{
+
 }
 
 /**
@@ -93,13 +71,14 @@
     __block NSString *__strVersion = strVersion;
     
     NSString *strLbs = [NSString stringWithFormat:@"%@%@",lbs_status,strVersion];
-    [BaseService get:strLbs dictionay:nil timeout:10 success:^(id responseObject) {
+    [BaseService get:strLbs dictionay:nil timeout:5 success:^(id responseObject) {
          NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
         if([parameters objectForKey:@"errcode"])
         {}
         else
         {
             KUserSingleton.nStatus = [[parameters objectForKey:__strVersion] intValue];
+            [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VERSION_UPDATE_VC object:nil];
             [UserDefaults setBool:KUserSingleton.nStatus forKey:__strVersion];
             [UserDefaults synchronize];
         }
