@@ -87,7 +87,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_STOCK_HOME_TOTAL__VC object:nil];
     
     //切换皮肤
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTotalData:) name:MESSAGE_CHANGE_THEMESKIN object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeThemeSkin:) name:MESSAGE_CHANGE_THEMESKIN object:nil];
 
     
     [self.dayTab addGifHeaderWithRefreshingBlock:^{
@@ -441,7 +441,11 @@
 #pragma mark 皮肤切换
 -(void)changeThemeSkin:(NSNotification *)notfication{
     DLog(@"切换皮肤");
+    @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [selfWeak setHeadBackGroup:ThemeSkinManagers.navBarColor];
+        [selfWeak setTitleTextColor:ThemeSkinManagers.navBarTitColor];
         
     });
 }

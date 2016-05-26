@@ -10,4 +10,7 @@
 
 @interface TabBarController : UITabBarController
 
++(TabBarController *)singletonTabBarController;
+
+
 @end

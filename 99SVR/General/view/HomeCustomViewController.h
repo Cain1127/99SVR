@@ -22,6 +22,7 @@
 - (void)setHeadViewHidden:(BOOL)bFlag;
 - (void)setViewBgColor:(UIColor *)bgColor;
 - (void)setTitleText:(NSString *)strText;
+- (void)setTitleTextColor:(UIColor *)titleColor;
 - (void)setLeftBtn:(UIButton *)btnLeft;
 - (void)setRightBtn:(UIButton *)btnRight;
 - (void)setUserInter;

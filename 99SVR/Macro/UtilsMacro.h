@@ -112,6 +112,9 @@ enum connectP2P
 #define StrongObj(o) autoreleasepool{} __strong typeof(o) o = o##Weak;
 
 
+#pragma mark 皮肤管理宏
+#define ThemeSkinManagers [ThemeSkinManager standardThemeSkin]
+
 #pragma mark 小鸟加载图像
 /**显示小鸟加载*/
 #define Loading_Bird_Show(view) [view makeToastActivity_bird]

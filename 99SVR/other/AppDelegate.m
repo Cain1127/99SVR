@@ -110,7 +110,7 @@
     }
     else
     {
-        self.window.rootViewController = [[TabBarController alloc] init];
+        self.window.rootViewController = [TabBarController singletonTabBarController];
     }
     [self.window makeKeyAndVisible];
     
