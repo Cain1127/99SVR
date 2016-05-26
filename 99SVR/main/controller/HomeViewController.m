@@ -10,7 +10,7 @@
 #import "ZLTabBar.h"
 #import "ZLRoomVideoViewController.h"
 #import "UIViewController+EmpetViewTips.h"
-#import "TQDetailedTableViewController.h"
+#import "IdeaDetailedViewController.h"
 #import "TQIdeaModel.h"
 #import "TQideaTableViewCell.h"
 #import "StockMacro.h"
@@ -540,7 +540,7 @@
         if(tempArray.count>indexPath.row)
         {
             TQIdeaModel *ideaModel = tempArray[indexPath.row];
-            TQDetailedTableViewController *viewcontrol = [[TQDetailedTableViewController alloc] initWithViewId:ideaModel.viewpointid];
+            IdeaDetailedViewController *viewcontrol = [[IdeaDetailedViewController alloc] initWithViewId:ideaModel.viewpointid];
             [self.navigationController pushViewController:viewcontrol animated:YES];
         }
     }

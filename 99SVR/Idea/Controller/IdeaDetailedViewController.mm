@@ -1,12 +1,12 @@
 //
-//  TQDetailedTableViewController.m
+//  IdeaDetailedViewController
 //  99SVR
 //
 //  Created by apple on 16/4/14.
 //  Copyright © 2016年 xia zhonglin . All rights reserved.
 /**************************************** < 专家观点详情>**********************************/
 
-#import "TQDetailedTableViewController.h"
+#import "IdeaDetailedViewController.h"
 #import <DTCoreText/DTCoreText.h>
 #import "UIAlertView+Block.h"
 #import "PaySelectViewController.h"
@@ -36,7 +36,7 @@
 #import "WXApi.h"
 #import "UIAlertView+Block.h"
 
-@interface TQDetailedTableViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,UIWebViewDelegate,CommentDelegate,GiftDelegate>
+@interface IdeaDetailedViewController ()<UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,ChatViewDelegate,UIScrollViewDelegate,DTAttributedTextContentViewDelegate,UIWebViewDelegate,CommentDelegate,GiftDelegate>
 {
     UIView *contentView;
     UILabel *lblPlace;
@@ -69,7 +69,7 @@
 
 @end
 
-@implementation TQDetailedTableViewController
+@implementation IdeaDetailedViewController
 
 @synthesize downContentView;
 

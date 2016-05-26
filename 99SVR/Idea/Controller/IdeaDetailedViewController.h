@@ -1,5 +1,5 @@
 //
-//  IdeaDetailedTableViewController.h
+//  IdeaDetailedViewController
 //  99SVR
 //
 //  Created by apple on 16/4/14.
@@ -10,14 +10,12 @@
 #import "CustomViewController.h"
 
 /**
- *  <#Description#>
- *
  *  @param replyValue 评论数
  *  @param giftValue  礼物数
  */
 typedef void(^RefreshCellData)(BOOL replyValue,BOOL giftValue);
 
-@interface TQDetailedTableViewController : CustomViewController
+@interface IdeaDetailedViewController : CustomViewController
 
 - (id)initWithViewId:(int)viewId;
 

@@ -13,7 +13,7 @@
 #import "NavigationViewController.h"
 #import "HomeViewController.h"
 #import "StockHomeViewController.h"
-#import "TQIdeaViewController.h"
+#import "IdeaHomeViewController.h"
 #import "TQMeCustomizedViewController.h"
 #import "MyNavigationViewController.h"
 #import "XMyViewController.h"
@@ -125,7 +125,7 @@
 {
     [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
     [self setUpOneViewController:[[ZLVideoListViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
-    [self setUpOneViewController:[[TQIdeaViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
+    [self setUpOneViewController:[[IdeaHomeViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
     if ([UserInfo sharedUserInfo].nStatus)
     {
         [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"tab_operate_n" selectImage:@"tab_operate_h"];

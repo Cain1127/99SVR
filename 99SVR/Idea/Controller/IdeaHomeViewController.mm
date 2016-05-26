@@ -1,5 +1,5 @@
 //
-//  TQIdeaViewController.m
+//  IdeaHomeViewController
 //  99SVR
 //
 //  Created by apple on 16/4/13.
@@ -7,7 +7,7 @@
 //
 /**************************************** < 专家观点首页 >**********************************/
 
-#import "TQIdeaViewController.h"
+#import "IdeaHomeViewController.h"
 #import "RoomViewController.h"
 #import "PlayIconView.h"
 #import "roomhttp.h"
@@ -22,14 +22,14 @@
 #import "TQcontentView.h"
 #import "CustomViewController.h"
 #import "UIBarButtonItem+Item.h"
-#import "TQDetailedTableViewController.h"
+#import "IdeaDetailedViewController.h"
 #import "TQIdeaModel.h"
 #import "ViewNullFactory.h"
 #import "UIImage+MultiFormat.h"
 #import "Toast+UIView.h"
 #import "UIViewController+EmpetViewTips.h"
 
-@interface TQIdeaViewController ()<XIdeaDelegate>
+@interface IdeaHomeViewController ()<XIdeaDelegate>
 {
     NSCache *viewCache;
 }
@@ -44,11 +44,12 @@
 
 @end
 
-@implementation TQIdeaViewController
+@implementation IdeaHomeViewController
 
 static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
-- (void)viewDidLoad{
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     [self.navigationController.navigationBar setHidden:YES];
     self.view.backgroundColor = UIColorFromRGB(0xffffff);
@@ -105,13 +106,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
 }
-
-///**新的专家观点通知*/
-//- (void)newIdeaNotifi:(NSNotification *)notify{
-//    
-//    DLog(@"新的专家观点%@",notify.object);
-//    
-//}
 
 - (void)loadViewPoint:(NSNotification *)notify{
     
@@ -238,7 +232,7 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
 
 -(void)tqIdeaModelSelectIndexPath:(NSIndexPath *)indexPath withModel:(TQIdeaModel *)model{
 
-    TQDetailedTableViewController *detaileVc = [[TQDetailedTableViewController alloc] initWithViewId:model.viewpointid];
+    IdeaDetailedViewController *detaileVc = [[IdeaDetailedViewController alloc] initWithViewId:model.viewpointid];
     @WeakObj(_tableView)
     __block TQIdeaModel *weaeModel = model;
     detaileVc.refreshCellDataBlock = ^(BOOL replyValue,BOOL giftValue){
@@ -250,7 +244,6 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
         }
         [_tableViewWeak reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
     };
-    
     [self.navigationController pushViewController:detaileVc animated:YES];
 }
 

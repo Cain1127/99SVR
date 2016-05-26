@@ -1,5 +1,5 @@
 //
-//  IdeaViewController.h
+//  IdeaHomeViewController
 //  99SVR
 //
 //  Created by apple on 16/4/13.
@@ -10,6 +10,6 @@
 #import "CustomViewController.h"
 #import "HomeCustomViewController.h"
 
-@interface TQIdeaViewController : HomeCustomViewController
+@interface IdeaHomeViewController : HomeCustomViewController
 
 @end
