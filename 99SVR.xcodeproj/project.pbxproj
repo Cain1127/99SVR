@@ -627,6 +627,10 @@
 		BBC618F11CF6C37A004513FA /* AdaptiveWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC618E51CF6C37A004513FA /* AdaptiveWebView.m */; };
 		BBC618F21CF6C37A004513FA /* LoginTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC618E71CF6C37A004513FA /* LoginTextField.m */; };
 		BBC618F71CF6C7E0004513FA /* HomePageService.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBC618F61CF6C7E0004513FA /* HomePageService.mm */; };
+		BBC618FA1CF84EDB004513FA /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC618F91CF84EDB004513FA /* ProfileViewController.m */; };
+		BBC618FD1CF84F23004513FA /* NickNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC618FC1CF84F23004513FA /* NickNameViewController.m */; };
+		BBC619021CF84F59004513FA /* SexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC618FF1CF84F59004513FA /* SexViewController.m */; };
+		BBC619031CF84F59004513FA /* SignatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC619011CF84F59004513FA /* SignatureViewController.m */; };
 		BBCE9D061CB3AD5600DA56D6 /* 100_1.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCE9CAB1CB3AD5600DA56D6 /* 100_1.png */; };
 		BBCE9D071CB3AD5600DA56D6 /* 101_1.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCE9CAC1CB3AD5600DA56D6 /* 101_1.png */; };
 		BBCE9D081CB3AD5600DA56D6 /* 102_1.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCE9CAD1CB3AD5600DA56D6 /* 102_1.png */; };
@@ -1878,6 +1882,14 @@
 		BBC618E71CF6C37A004513FA /* LoginTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginTextField.m; sourceTree = "<group>"; };
 		BBC618F51CF6C7E0004513FA /* HomePageService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageService.h; sourceTree = "<group>"; };
 		BBC618F61CF6C7E0004513FA /* HomePageService.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HomePageService.mm; sourceTree = "<group>"; };
+		BBC618F81CF84EDB004513FA /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		BBC618F91CF84EDB004513FA /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		BBC618FB1CF84F23004513FA /* NickNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NickNameViewController.h; sourceTree = "<group>"; };
+		BBC618FC1CF84F23004513FA /* NickNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NickNameViewController.m; sourceTree = "<group>"; };
+		BBC618FE1CF84F59004513FA /* SexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SexViewController.h; sourceTree = "<group>"; };
+		BBC618FF1CF84F59004513FA /* SexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SexViewController.m; sourceTree = "<group>"; };
+		BBC619001CF84F59004513FA /* SignatureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignatureViewController.h; sourceTree = "<group>"; };
+		BBC619011CF84F59004513FA /* SignatureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignatureViewController.m; sourceTree = "<group>"; };
 		BBCE9CAB1CB3AD5600DA56D6 /* 100_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 100_1.png; sourceTree = "<group>"; };
 		BBCE9CAC1CB3AD5600DA56D6 /* 101_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 101_1.png; sourceTree = "<group>"; };
 		BBCE9CAD1CB3AD5600DA56D6 /* 102_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 102_1.png; sourceTree = "<group>"; };
@@ -2283,6 +2295,14 @@
 		18EA82841CCA148F00BDB735 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				BBC618FE1CF84F59004513FA /* SexViewController.h */,
+				BBC618FF1CF84F59004513FA /* SexViewController.m */,
+				BBC619001CF84F59004513FA /* SignatureViewController.h */,
+				BBC619011CF84F59004513FA /* SignatureViewController.m */,
+				BBC618FB1CF84F23004513FA /* NickNameViewController.h */,
+				BBC618FC1CF84F23004513FA /* NickNameViewController.m */,
+				BBC618F81CF84EDB004513FA /* ProfileViewController.h */,
+				BBC618F91CF84EDB004513FA /* ProfileViewController.m */,
 				18EA82B21CCA14E300BDB735 /* TQPurchaseViewController.h */,
 				18EA82B31CCA14E300BDB735 /* TQPurchaseViewController.mm */,
 				18EA82851CCA148F00BDB735 /* TQNoPurchaseViewController.h */,
@@ -4964,6 +4984,7 @@
 				B4EA090A1CC754C500E8F933 /* StockDealTableModel.mm in Sources */,
 				BB2CA60B1CD338A300DFE56E /* HttpListener.mm in Sources */,
 				BB63F5AA1C2CC7A300A042E8 /* UIControl+BlocksKit.m in Sources */,
+				BBC619021CF84F59004513FA /* SexViewController.m in Sources */,
 				18EA82B11CCA148F00BDB735 /* TQNoCustomView.m in Sources */,
 				185DABAD1CBFDC970019C5A3 /* TQideaTableViewCell.mm in Sources */,
 				BB2CA9DF1CD5E99900DFE56E /* IQBarButtonItem.m in Sources */,
@@ -4979,6 +5000,7 @@
 				BB25D8121C15729800314C1E /* main.m in Sources */,
 				BB9765F61C86831D00FAA5B7 /* TextChatModel.m in Sources */,
 				185F59651CC4CAD600F605F5 /* MJFoundation.m in Sources */,
+				BBC619031CF84F59004513FA /* SignatureViewController.m in Sources */,
 				BBC618ED1CF6C37A004513FA /* RegNameViewController.m in Sources */,
 				BB63F5CD1C2CC7A300A042E8 /* MJRefreshConst.m in Sources */,
 				BB2CA9DA1CD5E99900DFE56E /* IQUIViewController+Additions.m in Sources */,
@@ -5037,6 +5059,7 @@
 				BB6F3AD61C9F86270035EBBE /* TADotView.m in Sources */,
 				18D3CB8B1CC0D31800816BD0 /* TQPersonalTailorCell.mm in Sources */,
 				185F596B1CC4CAD600F605F5 /* NSObject+MJKeyValue.m in Sources */,
+				BBC618FD1CF84F23004513FA /* NickNameViewController.m in Sources */,
 				BB2CA61C1CD338A300DFE56E /* Thread.cpp in Sources */,
 				18EA82A21CCA148F00BDB735 /* TQNoPurchaseViewController.mm in Sources */,
 				185DABA71CBFDC970019C5A3 /* IdeaDetailedViewController.mm in Sources */,
@@ -5053,6 +5076,7 @@
 				BB5138311C97A21A00E09EF5 /* GiftView.m in Sources */,
 				5AE9A3D21CCE6D1900831606 /* CustomizedModel.m in Sources */,
 				BB63F5FF1C2CC7A300A042E8 /* EmojiTextAttachment.m in Sources */,
+				BBC618FA1CF84EDB004513FA /* ProfileViewController.m in Sources */,
 				BB5138341C97E67300E09EF5 /* GiftModel.m in Sources */,
 				BB1769241C7B006F00CE947C /* SDWebImageCompat.m in Sources */,
 				B4C4B36D1CBAA5FF00B20A58 /* IAPHelper.m in Sources */,
