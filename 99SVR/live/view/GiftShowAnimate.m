@@ -50,15 +50,15 @@
     
     _leftView = [[UIView alloc] initWithFrame:Rect(0, 0, self.width-45-fWidth, self.height)];
     [self addSubview:_leftView];
-    _sendName = [[UILabel alloc] initWithFrame:Rect(10, 0, _leftView.width-20, 25)];
+    _sendName = [[UILabel alloc] initWithFrame:Rect(10, 5, _leftView.width-20, 18)];
     [_leftView addSubview:_sendName];
     NSString *strSrcInfo = [NSString stringWithFormat:@"%@",dict[@"srcName"]];
     [_sendName setText:strSrcInfo];
     [_sendName setTextColor:UIColorFromRGB(0xeb6100)];
     [_sendName setFont:XCFONT(14)];
     
-    UILabel *lblToName = [[UILabel alloc] initWithFrame:Rect(10, 30, _leftView.width-20, 16)];
-    [lblToName setTextColor:UIColorFromRGB(0xe5e5e5)];
+    UILabel *lblToName = [[UILabel alloc] initWithFrame:Rect(10, 25, _leftView.width-20, 16)];
+    [lblToName setTextColor:UIColorFromRGB(0xa35b33)];
     NSString *strToName = [NSString stringWithFormat:@"送给  %@",dict[@"toName"]];
     [_leftView addSubview:lblToName];
     [lblToName setFont:XCFONT(14)];
@@ -84,6 +84,7 @@
         DLog(@"count:%d",count);
         UIImageView *tempImg = [[UIImageView alloc] initWithFrame:Rect(_rightView.width-(i*kNumber_gift_width),self.height/2-kNumber_gift_height/2, kNumber_gift_width, kNumber_gift_height)];
         NSString *strNumber = [NSString stringWithFormat:@"video_present_%d",count];
+        tempImg.contentMode = UIViewContentModeScaleAspectFit;
         [tempImg setImage:[UIImage imageNamed:strNumber]];
         [_rightView addSubview:tempImg];
     }
@@ -92,7 +93,7 @@
 - (void)addrightViewAnimation
 {
     [self addSubview:_rightView];
-    [_rightView.layer addAnimation:[self scale:@(1.5) orgin:@(1.0) durTimes:0.5 Rep:1] forKey:@"transform.scale"];
+    [_rightView.layer addAnimation:[self scale:@(2.0) orgin:@(1.0) durTimes:0.5 Rep:1] forKey:@"transform.scale"];
 }
 
 - (CABasicAnimation *)scale:(NSNumber *)Multiple orgin:(NSNumber *)orginMultiple durTimes:(float)time Rep:(float)repertTimes

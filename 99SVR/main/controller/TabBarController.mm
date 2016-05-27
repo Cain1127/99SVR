@@ -13,7 +13,7 @@
 #import "NavigationViewController.h"
 #import "HomeViewController.h"
 #import "StockHomeViewController.h"
-#import "TQIdeaViewController.h"
+#import "IdeaHomeViewController.h"
 #import "TQMeCustomizedViewController.h"
 #import "MyNavigationViewController.h"
 #import "XMyViewController.h"
@@ -146,11 +146,12 @@ static TabBarController *tabbarController = nil;
 #pragma mark 配置控制器
 - (void)setUpAllChildViewControllers
 {
+//<<<<<<< HEAD
     HomeViewController *homeVC = [[HomeViewController alloc]init];
     GFNavigationController *homeNav = [[GFNavigationController alloc]initWithRootViewController:homeVC];
     ZLVideoListViewController *zlVideoVC = [[ZLVideoListViewController alloc]init];
     GFNavigationController *zlVideoNav = [[GFNavigationController alloc]initWithRootViewController:zlVideoVC];
-    TQIdeaViewController *tqIdeaVC = [[TQIdeaViewController alloc]init];
+    IdeaHomeViewController *tqIdeaVC = [[IdeaHomeViewController alloc]init];
     GFNavigationController *tqIdeaNav = [[GFNavigationController alloc]initWithRootViewController:tqIdeaVC];
     StockHomeViewController *stockHomeVC = [[StockHomeViewController alloc]init];
     GFNavigationController *stockHomeNav = [[GFNavigationController alloc]initWithRootViewController:stockHomeVC];
@@ -167,6 +168,16 @@ static TabBarController *tabbarController = nil;
         UIViewController *viewcontroller = tabbarController.viewControllers[i];
         [tabbarController setUpOneViewController:viewcontroller title:ThemeSkinManagers.titleArray[i] image:ThemeSkinManagers.normalImageArray[i] selectImage:ThemeSkinManagers.selectImageArray[i]];
     }
+//=======
+//    [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
+//    [self setUpOneViewController:[[ZLVideoListViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
+//    [self setUpOneViewController:[[IdeaHomeViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
+//    if ([UserInfo sharedUserInfo].nStatus)
+//    {
+//        [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"tab_operate_n" selectImage:@"tab_operate_h"];
+//    }
+//    [self setUpOneViewController:[[XMyViewController alloc]init] title:@"我" image:@"tab_me_n" selectImage:@"tab_me_p"];
+//>>>>>>> 72ee038902f5c4437c9dd81097ccf100f2d8322d
 }
 
 /**

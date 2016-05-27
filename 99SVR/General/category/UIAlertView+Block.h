@@ -5,7 +5,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^UIAlertViewCallBackBlock)(NSInteger buttonIndex);
+typedef void(^UIAlertViewCallBackBlock)(UIAlertView *alertView,NSInteger buttonIndex);
 
 @interface UIAlertView (Block)<UIAlertViewDelegate>
 
@@ -33,5 +33,6 @@ typedef void(^UIAlertViewCallBackBlock)(NSInteger buttonIndex);
  */
 +(void)createAlertViewWithTitle:(NSString *)title withViewController:(UIViewController *)viewController withCancleBtnStr:(NSString *)cancelStr withOtherBtnStr:(NSString *)otherBthStr withMessage:(NSString *)message completionCallback:(void (^)(NSInteger index))completionCallback;
 
++ (void)alertWithCallBackBlock:(UIAlertViewCallBackBlock)alertViewCallBackBlock txtField:(NSString *)txtField title:(NSString *)title message:(NSString *)message  cancelButtonName:(NSString *)cancelButtonName otherButtonTitles:(NSString *)otherButtonTitles, ...NS_REQUIRES_NIL_TERMINATION;
 
 @end

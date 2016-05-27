@@ -142,7 +142,10 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
         [self loadHeadModel];
         [_liveControl stopNewPlay];
         [headView.segmented setSelectedSegmentIndex:0];
+        headView.hdsegmented.selectIndex = 0;
         [self selectIndexSegment:0];
+        
+        [_ideaControl setModel:_room];
         [_tradeView reloadModel:_room];
         [_privateView setModel:_room];
     }
@@ -291,7 +294,8 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     [self initUIHead];
     [self addNotify];
     [self loadHeadModel];
-    [headView.segmented setSelectedSegmentIndex:0];
+//    [headView.segmented setSelectedSegmentIndex:0];
+    headView.hdsegmented.selectIndex = 0;
     [self selectIndexSegment:0];
 }
 
@@ -352,13 +356,17 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     {
         DLog(@"x:%f--y:%f",scrollView.contentOffset.x,scrollView.contentOffset.y);
         _tag = scrollView.contentOffset.x/kScreenWidth;
-        [headView.segmented setSelectedSegmentIndex:_tag];
+//        [headView.segmented setSelectedSegmentIndex:_tag];
+        headView.hdsegmented.selectIndex = _tag;
+
     }
     else//加速
     {
         DLog(@"x:%f--y:%f",scrollView.contentOffset.x,scrollView.contentOffset.y);
         _tag = scrollView.contentOffset.x/kScreenWidth;
-        [headView.segmented setSelectedSegmentIndex:_tag];
+//        [headView.segmented setSelectedSegmentIndex:_tag];
+        headView.hdsegmented.selectIndex = _tag;
+
     }
     updateCount = 0;
     startContentOffsetX=0;

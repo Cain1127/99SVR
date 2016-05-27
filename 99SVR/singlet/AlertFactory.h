@@ -9,7 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @class RoomHttp;
+
+typedef void(^AlertFactoryBlock)(NSInteger buttonIndex);
+
 @interface AlertFactory : NSObject
+
+@property (nonatomic,copy) AlertFactoryBlock alertBlock;
 
 /**
  *  未登录的提示

@@ -8,7 +8,7 @@
 
 #import "XIdeaDataSource.h"
 #import "TQIdeaModel.h"
-#import "TQDetailedTableViewController.h"
+#import "IdeaDetailedViewController.h"
 #import "TQIdeaTableViewCell.h"
 @interface XIdeaDataSource()
 {

@@ -24,7 +24,7 @@
 #import "RegMobileViewController.h"
 #import "SettingCenterController.h"
 #import "KefuCenterController.h"
-#import "ProfileViewController.h"
+//#import "ProfileViewController.h"
 #import "TQMeCustomizedViewController.h"
 #import "PaySelectViewController.h"
 #import "TQPurchaseViewController.h"
@@ -247,8 +247,8 @@
 {
     if ([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1)
     {
-        ProfileViewController *profileVC = [[ProfileViewController alloc] init];
-        [self.navigationController pushViewController:profileVC animated:YES];
+//        ProfileViewController *profileVC = [[ProfileViewController alloc] init];
+//        [self.navigationController pushViewController:profileVC animated:YES];
         return;
     }
     ///未登录
