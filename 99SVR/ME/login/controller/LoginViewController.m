@@ -112,7 +112,7 @@
     _txtUser.returnKeyType = UIReturnKeyDone;
     _txtUser.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-    CGFloat imageWidth = 22;
+    CGFloat imageWidth = 16;
     UIImageView *imgUser = [[UIImageView alloc] init];
     imgUser.frame = Rect(0, 0, imageWidth, imageWidth);
     imgUser.image = [UIImage imageNamed:@"login_icon1"];
@@ -134,11 +134,11 @@
     _txtPwd.leftView = imgPwd;
     
     _txtPwd.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    //_txtPwd.leftViewMode = UITextFieldViewModeAlways;
+    _txtPwd.leftViewMode = UITextFieldViewModeAlways;
     [_txtPwd setBackgroundColor:[UIColor clearColor]];
     [_txtPwd setTextColor:UIColorFromRGB(0x343434)];
     _txtPwd.isShowTextBool = YES;
-    _txtPwd.leftViewImageName = @"register_pwd_ok";
+    _txtPwd.leftViewImageName = @"register_pwd";
     
     UIColor *color = UIColorFromRGB(0xB2B2B2);
     _txtUser.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"99账号/手机号码/用户名" attributes:@{NSForegroundColorAttributeName: color}];
