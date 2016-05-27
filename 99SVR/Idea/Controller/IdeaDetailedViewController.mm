@@ -239,7 +239,10 @@
     [btnGift addTarget:self action:@selector(showGiftView) forControlEvents:UIControlEventTouchUpInside];
     [btnComment addTarget:self action:@selector(showChatInfo) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.view addSubview:btnGift];
+    if(KUserSingleton.nStatus)
+    {
+        [self.view addSubview:btnGift];
+    }
     [self.view addSubview:btnComment];
     
     _giftView = [[GiftView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth, kScreenHeight)];
@@ -406,7 +409,8 @@
         lblTalk.layer.masksToBounds= YES;
         lblTalk.layer.cornerRadius = 10;
         [downContentView addSubview:lblTalk];
-    }else
+    }
+    else
     {
         downContentView.frame = Rect(0, _textView.y+_textView.height+10, kScreenWidth,67);
     }
