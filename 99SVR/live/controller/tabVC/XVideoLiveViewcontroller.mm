@@ -1008,7 +1008,7 @@
 {
     if (_ffPlay.playing) {
         [kProtocolSingle sendGiftInfo:giftId number:giftNum];
-        [_giftView setGestureHidden];
+//        [_giftView setGestureHidden];
     }else{
         [ProgressHUD showError:@"只能对在线讲师送礼"];
     }

@@ -9,7 +9,7 @@
 #import "GiftShowAnimate.h"
 #import "UIImageView+WebCache.h"
 
-#define kNumber_gift_width   7
+#define kNumber_gift_width   12
 
 #define kNumber_gift_height  16
 
@@ -84,6 +84,7 @@
         DLog(@"count:%d",count);
         UIImageView *tempImg = [[UIImageView alloc] initWithFrame:Rect(_rightView.width-(i*kNumber_gift_width),self.height/2-kNumber_gift_height/2, kNumber_gift_width, kNumber_gift_height)];
         NSString *strNumber = [NSString stringWithFormat:@"video_present_%d",count];
+        tempImg.contentMode = UIViewContentModeScaleAspectFit;
         [tempImg setImage:[UIImage imageNamed:strNumber]];
         [_rightView addSubview:tempImg];
     }

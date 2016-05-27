@@ -141,6 +141,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
         [self addNotify];
         [self loadHeadModel];
         [_liveControl stopNewPlay];
+        [_ideaControl setModel:_room];
         [headView.segmented setSelectedSegmentIndex:0];
         [self selectIndexSegment:0];
         [_tradeView reloadModel:_room];
