@@ -107,6 +107,7 @@
     _aryChatInfo = nil;
     [_menuView setDefaultIndex:1];
     _ffPlay.roomIsCollet = nRoom_is_collet;
+    [_ffPlay setRoomIsCollet:nRoom_is_collet];
     [_ffPlay setRoomName:_room.teamname];
     [_ffPlay setRoomId:[_room.roomid intValue]];
     [_consumeDataSource setAryModel:@[]];
@@ -945,7 +946,7 @@
     {
         NSString *strInfo = [NSString stringWithFormat:@"test send info:%d",i];
         [kProtocolSingle sendMessage:strInfo toId:0];
-        [NSThread sleepForTimeInterval:0.01f];
+        [NSThread sleepForTimeInterval:0.03f];
     }
 }
 

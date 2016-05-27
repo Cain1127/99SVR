@@ -135,11 +135,12 @@
 
 - (void)sendGiftResp:(NSNotification *)notify
 {
-    
     @WeakObj(self)
-
     dispatch_async(dispatch_get_main_queue(), ^{
-        selfWeak.refreshCellDataBlock(NO,YES);
+        if(selfWeak.refreshCellDataBlock)
+        {
+            selfWeak.refreshCellDataBlock(NO,YES);
+        }
     });
     DLog(@"送礼成功");
 }
@@ -654,7 +655,10 @@
         dispatch_async(dispatch_get_main_queue(),
         ^{
             [ProgressHUD showSuccess:@"评论成功!"];
-            selfWeak.refreshCellDataBlock(YES,NO);
+            if(selfWeak.refreshCellDataBlock)
+            {
+                selfWeak.refreshCellDataBlock(YES,NO);
+            }
         });
         NSMutableArray *aryTemp = [NSMutableArray array];
         ZLReply *reply = parameters[@"model"];
