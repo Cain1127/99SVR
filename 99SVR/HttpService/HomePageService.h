@@ -10,6 +10,7 @@
 
 @interface HomePageService : NSObject
 
+- (void)responseHttp:(NSDictionary *)dict;
 - (void)requestHomePage;
 
 @end

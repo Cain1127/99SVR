@@ -14,6 +14,10 @@
 #import "ZLOperateStock.h"
 #import "TQIdeaModel.h"
 
+
+
+static HomePageService *_homePageService;
+
 void HomePageListener::onResponse(std::vector<BannerItem>& banner_data, std::vector<Team>& team_data, std::vector<ViewpointSummary>& viewpoint_data, std::vector<OperateStockProfit>& operate_data)
 {
     NSMutableArray *banner = [NSMutableArray array];
@@ -55,12 +59,20 @@ void HomePageListener::onResponse(std::vector<BannerItem>& banner_data, std::vec
     }
     NSDictionary *dict = @{@"code":@(1),@"video":videoRoom,@"viewpoint":aryViewPoint,@"operate":aryOperate,@"banner":banner};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HOME_BANNER_VC object:dict];
+    if (_homePageService)
+    {
+        [_homePageService responseHttp:dict];
+    }
 }
 
 void HomePageListener::OnError(int errCode)
 {
     NSDictionary *dict = @{@"code":@(errCode)};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_HOME_BANNER_VC object:dict];
+    if (_homePageService)
+    {
+        [_homePageService responseHttp:dict];
+    }
 }
 
 @interface HomePageService()
@@ -82,8 +94,17 @@ void HomePageListener::OnError(int errCode)
     {
         _httpConnection = new HttpConnection;
     }
+    _homePageService = self;
     _httpConnection->RequestHomePage(_homeListener);
 }
+
+- (void)responseHttp:(NSDictionary *)dict
+{
+    _homePageService = nil;
+    
+}
+
+
 
 
 

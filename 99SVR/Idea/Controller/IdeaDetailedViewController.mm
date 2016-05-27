@@ -82,20 +82,6 @@
 - (void)sendGift:(int)giftId num:(int)giftNum
 {
     [kProtocolSingle sendGiftInfo:giftId number:giftNum toUser:[_ideaDetail.authorId intValue] toViewId:_ideaDetail.viewpointid roomId:[_ideaDetail.roomid intValue]];
-//    NSDictionary *parameter = @{@"number":@(giftNum),@"gId":@(giftId),@"srcName":@"srcName",@"toName":@"toName",@"srcId":@(1234567)};
-//    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,64,kScreenWidth-60,46) dict:parameter];
-//    [UIView animateWithDuration:1.0
-//          delay:1.0
-//          options:UIViewAnimationOptionCurveEaseOut
-//          animations:^{
-//              [self.view addSubview:giftAnimate];
-//              [giftAnimate addrightViewAnimation];
-//           } completion:^(BOOL finished){
-//               @WeakObj(giftAnimate)
-//             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                 [giftAnimateWeak removeFromSuperview];
-//             });
-//     }];
     [_giftView setGestureHidden];
 }
 
@@ -169,7 +155,8 @@
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
         
-    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,64,kScreenWidth-60,46) dict:parameterWeak];
+    GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,kScreenHeight-kRoom_head_view_height-kVideoImageHeight+50
+                                                                               ,kScreenWidth-60,46) dict:parameterWeak];
     [UIView animateWithDuration:2.0
           delay:1.0
           options:UIViewAnimationOptionCurveEaseOut
