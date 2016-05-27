@@ -86,18 +86,17 @@
         
         _labW = self.frame.size.width/items.count;
         _labH = self.frame.size.height;
-        _borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.5];
-        _colorArrays = @[[UIColor blueColor],[UIColor blueColor]];
-        _titleColors = @[[UIColor grayColor],[UIColor whiteColor]];
+        _borderColor = [[UIColor whiteColor] colorWithAlphaComponent:1];
+        _colorArrays = @[[UIColor whiteColor],[UIColor whiteColor]];
+        _titleColors = @[[UIColor whiteColor],COLOR_Bg_Blue];
         _colorDirectionType = ChangeColorDirection_R_L;
         
-        self.layer.borderColor = [[UIColor grayColor] colorWithAlphaComponent:timeValue].CGColor;
+        self.layer.borderColor = _borderColor.CGColor;
         self.layer.borderWidth = 1.0f;
         self.layer.cornerRadius = 5.0f;
         self.layer.masksToBounds = YES;
-        
+        self.backgroundColor = [UIColor clearColor];
         self.userInteractionEnabled = YES;
-        self.backgroundColor = [UIColor whiteColor];
         _titleItems = items;
         [self createUI];
     }
@@ -108,11 +107,10 @@
     
     _movColorLayer = [CAGradientLayer layer];
     _movColorLayer.frame = (CGRect){0,0,_labW,_labH};
-    _movColorLayer.colors = @[(__bridge id)[UIColor blueColor].CGColor,(__bridge id)[UIColor blueColor].CGColor];
-    _movColorLayer.startPoint = CGPointMake(0, 0);
-    _movColorLayer.endPoint = CGPointMake(1, 1);
+    _movColorLayer.colors = @[(__bridge id)[(UIColor *)_colorArrays[0] CGColor],(__bridge id)[(UIColor *)_colorArrays[1] CGColor]];
+    _movColorLayer.startPoint = (CGPoint){1,0};
+    _movColorLayer.endPoint  = (CGPoint){0,0};
     [self.layer addSublayer:_movColorLayer];
-
     for (int i=0; i!=_titleItems.count; i++) {
         HDSegmentedViewLabel *label = [[HDSegmentedViewLabel alloc]initWithFrame:(CGRect){_labW*i,0,_labW,_labH}];
         label.userInteractionEnabled = YES;

@@ -65,23 +65,37 @@
     _lblFans.textColor = RGBA(255, 255, 255, 0.8);
     
     
-    _segmented = [[UISegmentedControl alloc] initWithItems:@[@"直播",@"专家观点",@"高手操盘",@"私人定制"]];
-    _segmented.frame = CGRectMake(30,_lblFans.y+_lblFans.height+10,kScreenWidth-60, 35.0);
-    _segmented.selectedSegmentIndex = 0;//设置默认选择项索引
-    [self addSubview:_segmented];
-    _segmented.tintColor = [UIColor whiteColor];
-    [_segmented addTarget:self action:@selector(selectChanged) forControlEvents:UIControlEventValueChanged];
+//    _segmented = [[UISegmentedControl alloc] initWithItems:@[@"直播",@"专家观点",@"高手操盘",@"私人定制"]];
+//    _segmented.frame = CGRectMake(30,_lblFans.y+_lblFans.height+10,kScreenWidth-60, 35.0);
+//    _segmented.selectedSegmentIndex = 0;//设置默认选择项索引
+//    [self addSubview:_segmented];
+//    _segmented.tintColor = [UIColor whiteColor];
+//    [_segmented addTarget:self action:@selector(selectChanged) forControlEvents:UIControlEventValueChanged];
+    
+    
+    _hdsegmented = [[HDSegmentedView alloc]initWithFrame:CGRectMake(30,_lblFans.y+_lblFans.height+10,kScreenWidth-60, 35.0) initWithItems:@[@"直播",@"专家观点",@"高手操盘",@"私人定制"]];
+    _hdsegmented.selectIndex = 0;
+    [self addSubview:_hdsegmented];
+    
+    @WeakObj(self)
+    
+    _hdsegmented.DidSelectSegmentedViewIndex = ^(NSInteger index){
+        if (selfWeak.delegate && [_delegate respondsToSelector:@selector(selectIndexSegment:)]) {
+            [selfWeak.delegate selectIndexSegment:index];
+        }
+    };
+    
     
     return self;
 }
 
-- (void)selectChanged
-{
-    DLog(@"nIndex:%zi",_segmented.selectedSegmentIndex);
-    if (_delegate && [_delegate respondsToSelector:@selector(selectIndexSegment:)]) {
-        [_delegate selectIndexSegment:_segmented.selectedSegmentIndex];
-    }
-}
+//- (void)selectChanged
+//{
+//    DLog(@"nIndex:%zi",_segmented.selectedSegmentIndex);
+//    if (_delegate && [_delegate respondsToSelector:@selector(selectIndexSegment:)]) {
+//        [_delegate selectIndexSegment:_segmented.selectedSegmentIndex];
+//    }
+//}
 
 - (void)rightEvent
 {
