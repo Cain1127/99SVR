@@ -10,4 +10,6 @@
 
 @interface ChatCoreTextCell : DTAttributedTextCell
 
+@property (nonatomic,assign) CGFloat fHeight;
+
 @end

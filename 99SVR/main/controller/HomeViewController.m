@@ -236,8 +236,8 @@
         if (KUserSingleton.nStatus)
         {
             [self.aryLiving addObject:aryOperator];
-            [self.aryLiving addObject:aryViewPoint];
         }
+        [self.aryLiving addObject:aryViewPoint];
         dispatch_main_async_safe(
         ^{
             [selfWeak.tableView reloadData];

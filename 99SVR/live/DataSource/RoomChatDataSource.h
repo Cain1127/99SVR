@@ -17,6 +17,14 @@
 @interface RoomChatDataSource : NSObject<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,assign) id<RoomChatDelegate> delegate;
+
+@property (nonatomic,assign) NSInteger nLength;
+
+/**
+ *  设置DataSource 展示长度
+ */
+- (void)setRowLength:(NSInteger)nLength;
+
 - (void)setModel:(NSArray *)aryChat;
     
 

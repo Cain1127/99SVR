@@ -63,9 +63,9 @@
     
     NSMutableDictionary *giftDict1;
     NSMutableDictionary *giftDict2;
-    
 }
-
+@property (nonatomic,strong) NSRecursiveLock *lock;
+@property (nonatomic,copy) NSArray *aryChatInfo;
 @property (nonatomic,assign) int nCurGift;
 @property (nonatomic,assign) int question_times;
 @property (nonatomic,assign) float question_coin;
@@ -102,7 +102,9 @@
 {
     //重置全部红点提示
     [_menuView resetAllBadgePrompt];
+    _chatDataSource.nLength = 0;
     _room = room;
+    _aryChatInfo = nil;
     [_menuView setDefaultIndex:1];
     _ffPlay.roomIsCollet = nRoom_is_collet;
     [_ffPlay setRoomName:_room.teamname];
@@ -146,6 +148,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _lock = [[NSRecursiveLock alloc] init];
     aryGift = [NSMutableArray array];
     nColor = 10000;
     giftDict1 = [NSMutableDictionary dictionary];
@@ -662,7 +665,45 @@
  */
 - (void)roomChatMsg
 {
+#if 1
+    [_chatDataSource setRowLength:aryRoomChat.count];
     [_chatDataSource setModel:aryRoomChat];
+    @WeakObj(self)
+    if (aryRoomChat.count>0)
+    {
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+           if (selfWeak.nSelectIndex != 1) {
+               selfWeak.menuView.showBadgeIndex = 1;
+           }
+           else
+           {
+               [selfWeak.menuView showUnBadgeIndex:1];
+           }
+        });
+    }
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        [selfWeak.chatView reloadDataWithCompletion:
+         ^{
+             NSInteger numberOfRows = [selfWeak.chatView numberOfRowsInSection:0];
+             if (numberOfRows > 0)
+             {
+                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
+                 [selfWeak.chatView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+             }
+         }];
+    });
+#else
+    NSInteger nIndex = _aryChatInfo.count;
+    NSInteger nEnd = 0;
+    @synchronized(aryRoomChat)
+    {
+        _aryChatInfo = aryRoomChat;
+        nEnd = _aryChatInfo.count;
+        [_chatDataSource setModel:_aryChatInfo];
+        [];
+    }
     @WeakObj(self)
     if (aryRoomChat.count>0)
     {
@@ -677,18 +718,26 @@
             }
         });
     }
+    __block NSInteger __nIndex = nIndex;
+    __block NSInteger __nEnd = nEnd;
+    [NSThread sleepForTimeInterval:0.01f];
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        [selfWeak.chatView reloadDataWithCompletion:
-        ^{
-            NSInteger numberOfRows = [selfWeak.chatView numberOfRowsInSection:0];
-            if (numberOfRows > 0)
-            {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
-                [selfWeak.chatView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-            }
-        }];
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSInteger i=__nIndex; i<__nEnd; i++)
+        {
+            DLog(@"i:%zi",i);
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+            [array addObject:indexPath];
+        }
+        if (array.count>0 && selfWeak.chatDataSource.nLength != __nEnd)
+        {
+            [selfWeak.chatDataSource setRowLength:__nEnd];
+             [selfWeak.chatView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationNone];
+        }
     });
+#endif
+    
 }
 
 /**
@@ -889,12 +938,28 @@
     return nil;
 }
 
+- (void)sendMessageForever
+{
+    int i=500;
+    while (i--)
+    {
+        NSString *strInfo = [NSString stringWithFormat:@"test send info:%d",i];
+        [kProtocolSingle sendMessage:strInfo toId:0];
+        [NSThread sleepForTimeInterval:0.01f];
+    }
+}
+
 #pragma mark RoomDwonDelegate
 - (void)clickRoom:(UIButton *)button index:(NSInteger)nIndex
 {
     switch (nIndex) {
         case 4://显示聊天
         {
+//            @WeakObj(self)
+//            dispatch_async(dispatch_get_global_queue(0, 0),
+//            ^{
+//                [selfWeak sendMessageForever];
+//            });
             if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
                 ([_room.roomid intValue]==10000 || [_room.roomid intValue]==10001)) {
                 [UIView animateWithDuration:0.5 animations:
@@ -1008,7 +1073,7 @@
 {
     if (_ffPlay.playing) {
         [kProtocolSingle sendGiftInfo:giftId number:giftNum];
-//        [_giftView setGestureHidden];
+        [_giftView setGestureHidden];
     }else{
         [ProgressHUD showError:@"只能对在线讲师送礼"];
     }

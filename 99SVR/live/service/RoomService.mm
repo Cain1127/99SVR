@@ -83,21 +83,22 @@
     if ([strTo rangeOfString:query].location != NSNotFound || (meToOtherBool))
     {
         [aryPriChat addObject:strInfo];
-        [RoomService clearChatInfo:aryChat];
+        [RoomService clearChatInfo:aryPriChat];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
     }
-    [RoomService clearChatInfo:aryChat];
+//    [RoomService clearChatInfo:aryChat];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:aryChat];
     
     return YES;
 }
 
-+ (BOOL )clearChatInfo:(NSMutableArray *)array{
++ (BOOL )clearChatInfo:(NSMutableArray *)array
+{
     if (array.count>100)
     {
         @synchronized(array)
         {
-            for (int i=0 ;i < 50 ;i++)
+            for (int i=0 ;i < 1 ;i++)
             {
                 [array removeObjectAtIndex:0];
             }
