@@ -131,10 +131,11 @@
     /** 回答内容 */
     //@"说好的回报难吃难吃难吃[吃难吃][$17$][$19$][$17$][$17$][$20$][$17$][$20$][$17$][$17$][$20$][$17$][$20$]你当年的你惹麻烦麻烦吗";
     _answercontentLable.attributedText = [self ContentAttributedString:answerModel.answercontent];
-    CGSize answercontentSize = [answerModel.answercontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 2* LR];
-    CGFloat answercontentH = answercontentSize.height+10;//answercontentSize.height  > 50 ? answercontentSize.height+40 : answercontentSize.height+10;
-    _answercontentLable.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), kScreenWidth - 2* LR, answercontentH);
-    
+    //CGSize answercontentSize = [answerModel.answercontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 2* LR];
+    CGSize answerContentSize = [_answercontentLable.attributedText boundingRectWithSize:CGSizeMake(kScreenWidth - 2* LR, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+    //CGFloat answercontentH = answercontentSize.height+10;//answercontentSize.height  > 50 ? answercontentSize.height+40 : answercontentSize.height+10;
+    //_answercontentLable.frame = CGRectMake(LR, CGRectGetMaxY(_answertimeLable.frame), kScreenWidth - 2* LR, answercontentH);
+    _answercontentLable.frame = (CGRect){{LR, CGRectGetMaxY(_answertimeLable.frame)},answerContentSize};
     // 全文按钮
     //    _allButton.tag = answerModel.ID;
     //    _allButton.frame = CGRectMake(kScreenWidth - 60, CGRectGetMaxY(_contentTextView.frame), 50, 25);
