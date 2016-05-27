@@ -54,9 +54,9 @@ static ThemeSkinManager *manager = nil;
                 _selectImageArray = @[@"home_h",@"video_live_h",@"tab_text_icon_pressed",@"tab_operate_h",@"tab_me_p"];
                 
             }else{
-                _titleArray = @[@"首页",@"财经直播",@"我"];
-                _normalImageArray = @[@"home",@"video_live",@"tab_me_p"];
-                _selectImageArray = @[@"home_h",@"video_live_h",@"tab_me_p"];
+                _titleArray = @[@"首页",@"财经直播",@"专家观点",@"我"];
+                _normalImageArray = @[@"home",@"video_live",@"tab_text_icon_normal",@"tab_me_p"];
+                _selectImageArray = @[@"home_h",@"video_live_h",@"tab_text_icon_pressed",@"tab_me_p"];
             }
             
             _tabbarBackColor = [UIColor greenColor];
