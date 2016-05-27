@@ -2,8 +2,11 @@
 
 
 #import "HDSegmentedView.h"
+#import "StockMacro.h"
 #define badgeView_W 15
 #define timeValue 0.5
+#define titleFont  ValueWithTheIPhoneModelString(@"12,12,14,14")
+
 
 @interface HDSegmentedViewLabel ()
 {
@@ -116,7 +119,7 @@
         label.userInteractionEnabled = YES;
         label.tag = i+100;
         label.text = _titleItems[i];
-        label.font = [UIFont systemFontOfSize:15];
+        label.font = [UIFont systemFontOfSize:titleFont];
         label.textAlignment = NSTextAlignmentCenter;
         UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickIndext:)];
         [label addGestureRecognizer:gesture];
