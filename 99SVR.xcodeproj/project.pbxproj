@@ -122,6 +122,7 @@
 		B404A0821CDB222700E814CC /* HDWhatIsPrivateViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B404A0811CDB222700E814CC /* HDWhatIsPrivateViewViewController.m */; };
 		B40DA7BD1CF6821500DABD7C /* ThemeSkinManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA7BC1CF6821500DABD7C /* ThemeSkinManager.m */; };
 		B40DA7CB1CF708DA00DABD7C /* HDSegmentedView.m in Sources */ = {isa = PBXBuildFile; fileRef = B40DA7CA1CF708DA00DABD7C /* HDSegmentedView.m */; };
+		B41C3C031CF833520014AA94 /* UIImage+RGB.m in Sources */ = {isa = PBXBuildFile; fileRef = B41C3C021CF833520014AA94 /* UIImage+RGB.m */; };
 		B44F77681CC39FF1008E3B26 /* StockDealHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */; };
 		B47DD5981CBF2D9400C47EF7 /* StockHomeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B47DD5971CBF2D9400C47EF7 /* StockHomeViewController.mm */; };
 		B47DD59D1CBF345300C47EF7 /* SliderMenuTopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B47DD59A1CBF345300C47EF7 /* SliderMenuTopScrollView.m */; };
@@ -1033,6 +1034,8 @@
 		B40DA7BC1CF6821500DABD7C /* ThemeSkinManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThemeSkinManager.m; sourceTree = "<group>"; };
 		B40DA7C91CF708DA00DABD7C /* HDSegmentedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HDSegmentedView.h; sourceTree = "<group>"; };
 		B40DA7CA1CF708DA00DABD7C /* HDSegmentedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HDSegmentedView.m; sourceTree = "<group>"; };
+		B41C3C011CF833520014AA94 /* UIImage+RGB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RGB.h"; sourceTree = "<group>"; };
+		B41C3C021CF833520014AA94 /* UIImage+RGB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RGB.m"; sourceTree = "<group>"; };
 		B44F77661CC39FF1008E3B26 /* StockDealHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockDealHeaderView.h; sourceTree = "<group>"; };
 		B44F77671CC39FF1008E3B26 /* StockDealHeaderView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StockDealHeaderView.mm; sourceTree = "<group>"; };
 		B47DD5961CBF2D9400C47EF7 /* StockHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockHomeViewController.h; sourceTree = "<group>"; };
@@ -3277,6 +3280,8 @@
 				B4CC497E1CCDED9E00D0C2F7 /* UIAlertView+Block.m */,
 				B404A0771CD36A4D00E814CC /* UIViewController+EmpetViewTips.h */,
 				B404A0781CD36A4D00E814CC /* UIViewController+EmpetViewTips.m */,
+				B41C3C011CF833520014AA94 /* UIImage+RGB.h */,
+				B41C3C021CF833520014AA94 /* UIImage+RGB.m */,
 			);
 			path = category;
 			sourceTree = "<group>";
@@ -4917,6 +4922,7 @@
 				BB2CA9DC1CD5E99900DFE56E /* IQKeyboardManager.m in Sources */,
 				BBD58F1F1CCF4F37009250DB /* ZLViewPoint.m in Sources */,
 				BB2CA6111CD338A300DFE56E /* Http.cpp in Sources */,
+				B41C3C031CF833520014AA94 /* UIImage+RGB.m in Sources */,
 				BB63F6071C2CC7A300A042E8 /* RoomUserCell.m in Sources */,
 				BBD58EF41CCC06F4009250DB /* XTraderViewController.mm in Sources */,
 				BBD449151CA2D83B00727070 /* UserListView.m in Sources */,
