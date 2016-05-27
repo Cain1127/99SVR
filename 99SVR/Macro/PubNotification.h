@@ -204,6 +204,10 @@
 
 #define MESSAGE_TQIdeaView_NewNotifi_VC @"MESSAGE_TQIdeaView_NewNotifi_VC"
 
+
+#pragma mark 更换皮肤颜色的通知
+#define MESSAGE_CHANGE_THEMESKIN @"MESSAGE_CHANGE_THEMESKIN" //更换皮肤颜色通知
+
 #define MESSAGE_VERSION_UPDATE_VC   @"MESSAGE_VERSION_UPDATE_VC"
 
 #endif

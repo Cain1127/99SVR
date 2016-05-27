@@ -48,13 +48,13 @@
     [super viewDidLoad];
     _headView  = [[UIView alloc] initWithFrame:Rect(0, 0,kScreenWidth,64)];
     [self.view addSubview:_headView];
-    _headView.backgroundColor = UIColorFromRGB(0xffffff);
+    _headView.backgroundColor = ThemeSkinManagers.navBarColor;
     
     _txtTitle = [[UILabel alloc] initWithFrame:Rect(44,33,kScreenWidth-88, 20)];
     [_txtTitle setFont:XCFONT(15)];
     [_headView addSubview:_txtTitle];
     [_txtTitle setTextAlignment:NSTextAlignmentCenter];
-    [_txtTitle setTextColor:UIColorFromRGB(0x4C4C4C)];
+    [_txtTitle setTextColor:ThemeSkinManagers.navBarTitColor];
     
     if ([UserInfo sharedUserInfo].nStatus)
     {
@@ -175,6 +175,11 @@
          make.left.equalTo(self.headView);
          make.bottom.equalTo(self.headView);
      }];
+}
+- (void)setTitleTextColor:(UIColor *)titleColor{
+    
+    [_txtTitle setTextColor:titleColor];
+
 }
 
 - (void)setLineHidden:(BOOL)bHidden

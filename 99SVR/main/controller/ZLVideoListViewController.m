@@ -41,6 +41,9 @@
     _tableView.dataSource = self;
     _tableView.delegate = self;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadVideo:) name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
+    //切换皮肤的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeThemeSkin:) name:MESSAGE_CHANGE_THEMESKIN object:nil];
+
     [kHTTPSingle RequestTeamList];
 
     [self.tableView addGifHeaderWithRefreshingTarget:self refreshingAction:@selector(updateRefresh)];
@@ -62,6 +65,8 @@
 
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_HOME_VIDEO_LIST_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_CHANGE_THEMESKIN object:nil];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -210,5 +215,14 @@
         [self.navigationController pushViewController:viewVC animated:YES];
     }
 }
+
+#pragma mark 皮肤切换
+-(void)changeThemeSkin:(NSNotification *)notfication{
+    DLog(@"切换皮肤");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+    });
+}
+
 
 @end

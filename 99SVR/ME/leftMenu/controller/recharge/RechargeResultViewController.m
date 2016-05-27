@@ -9,7 +9,7 @@
 #import "RechargeResultViewController.h"
 #import "AssetViewController.h"
 #import "IdeaDetailedViewController.h"
-#import "ProfileViewController.h"
+//#import "ProfileViewController.h"
 #import "RoomViewController.h"
 #import "XMyViewController.h"
 #import "TQPurchaseViewController.h"

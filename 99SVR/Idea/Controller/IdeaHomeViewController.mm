@@ -53,6 +53,8 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     self.view.backgroundColor = UIColorFromRGB(0xffffff);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadViewPoint:) name:MESSAGE_HTTP_VIEWPOINTSUMMARY_VC object:nil];
+    //切换皮肤的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeThemeSkin:) name:MESSAGE_CHANGE_THEMESKIN object:nil];
 
     [self setTitleText:@"专家观点"];
     
@@ -244,5 +246,14 @@ static NSString *const ideaCell = @"TQIdeaTableViewIdentifier";
     };
     [self.navigationController pushViewController:detaileVc animated:YES];
 }
+
+#pragma mark 皮肤切换
+-(void)changeThemeSkin:(NSNotification *)notfication{
+    DLog(@"切换皮肤");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+    });
+}
+
 
 @end

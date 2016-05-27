@@ -58,29 +58,29 @@ static NSString *UIAlertViewKey = @"UIAlertViewKey";
 {
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelButtonName otherButtonTitles: otherButtonTitles, nil];
-    
-    unsigned int count;
-    
-    Ivar *ivars= class_copyIvarList([alert class], &count);
-    objc_property_t *objc_property_ts= class_copyPropertyList([alert class], &count);
-    
-    for (int i=0; i!=count; i++) {
-        
-        objc_property_t proty = objc_property_ts[i];
-        
-        NSLog(@"proty %@",[NSString stringWithCString:property_getName(proty) encoding:NSUTF8StringEncoding]);
-        
-    }
-    
-    for (int i=0; i!=count; i++) {
-        
-        
-        const char *type = ivar_getTypeEncoding(ivars[i]);
-        
-        NSLog(@"ivars %@ %s",[NSString stringWithUTF8String:ivar_getName(ivars[i])],type);
-
-    
-    }
+//    
+//    unsigned int count;
+//    
+//    Ivar *ivars= class_copyIvarList([alert class], &count);
+//    objc_property_t *objc_property_ts= class_copyPropertyList([alert class], &count);
+//    
+//    for (int i=0; i!=count; i++) {
+//        
+//        objc_property_t proty = objc_property_ts[i];
+//        
+//        NSLog(@"proty %@",[NSString stringWithCString:property_getName(proty) encoding:NSUTF8StringEncoding]);
+//        
+//    }
+//    
+//    for (int i=0; i!=count; i++) {
+//        
+//        
+//        const char *type = ivar_getTypeEncoding(ivars[i]);
+//        
+//        NSLog(@"ivars %@ %s",[NSString stringWithUTF8String:ivar_getName(ivars[i])],type);
+//
+//    
+//    }
 
     
 

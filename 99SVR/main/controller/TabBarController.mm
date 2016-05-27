@@ -30,6 +30,7 @@
 #import "SplashModel.h"
 #import "SplashTool.h"
 #import "SVRInitLBS.h"
+#import "ThemeSkinManager.h"
 
 @interface TabBarController ()<PlayIconDelegate>
 {
@@ -38,10 +39,29 @@
 @property (nonatomic, strong) Reachability *hostReach;
 @property (nonatomic, strong) PlayIconView *iConView;
 @property (nonatomic, strong) UIButton *btnPlay;
-
+/**tabbar背景图*/
+@property (nonatomic , strong) UIImageView *tabbarBackImageView;
+/**移动渐变图片*/
+@property (nonatomic , strong) UIImageView *moveImageView;
 @end
 
 @implementation TabBarController
+
+
+static TabBarController *tabbarController = nil;
++(TabBarController *)singletonTabBarController{
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        tabbarController = [[TabBarController alloc]init];
+        
+        [tabbarController setConfiguration];
+    });
+    
+    return tabbarController;
+}
+
 
 - (void)exitPlay
 {
@@ -53,7 +73,7 @@
 - (void)gotoPlay
 {
     RoomViewController *roomView = [RoomViewController sharedRoomViewController];
-    [self.navigationController pushViewController:roomView animated:YES];
+    [tabbarController.navigationController pushViewController:roomView animated:YES];
 }
 
 - (void)hidenPlay
@@ -62,37 +82,45 @@
     _iConView.hidden = YES;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self)
-    {}
-    return self;
-}
-
 #pragma mark - 生命周期
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:tabbarController];
+}
+
+#pragma mark 配置
+-(void)setConfiguration{
+
+
     [SVRInitLBS initMediaSDK];
     
-    [self.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    [tabbarController.view setBackgroundColor:UIColorFromRGB(0xffffff)];
+    
+    //切换皮肤的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeThemeSkin:) name:MESSAGE_CHANGE_THEMESKIN object:nil];
+
     
     // 加载信箱未读数
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUnReadInfoNotify:) name:MESSAGE_UNREAD_INFO_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:tabbarController selector:@selector(loadUnReadInfoNotify:) name:MESSAGE_UNREAD_INFO_VC object:nil];
     [kHTTPSingle RequestUnreadCount];
     
     // 请求下一次广告数据
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadSplashNotify:) name:MESSAGE_HTTP_SPLASH_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:tabbarController selector:@selector(loadSplashNotify:) name:MESSAGE_HTTP_SPLASH_VC object:nil];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [kHTTPSingle requestSplashImage];
     });
     
     // 网络检测
     _hostReach = [Reachability reachabilityWithHostName:@"www.163.com"];
-    [[NSNotificationCenter defaultCenter] addObserver:self
+    [[NSNotificationCenter defaultCenter] addObserver:tabbarController
                                              selector:@selector(reachabilityChanged:)
                                                  name: kReachabilityChangedNotification
                                                object: nil];
@@ -104,33 +132,52 @@
     [SocketNetworkInfo sharedSocketNetworkInfo].socketState = 1; // 设置有网
     
     // Socket没网监控
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadSocketNetworkStateNotify:) name:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:tabbarController selector:@selector(loadSocketNetworkStateNotify:) name:MESSAGE_NETWORK_TCP_SOCKET_STATE_VC object:nil];
     // 统一设置Item的文字属性
-    [self setUpItemTextAttrs];
+    [tabbarController setUpItemTextAttrs];
     // 添加所以子控制器
-    [self setUpAllChildViewControllers];
+    [tabbarController setUpAllChildViewControllers];
+    //添加一层渐变层
+    [tabbarController.tabBar addSubview:tabbarController.tabbarBackImageView];
+
+    
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-#pragma mark - 初始化界面
-
-/**
- *  添加所有子控制器
- */
+#pragma mark 配置控制器
 - (void)setUpAllChildViewControllers
 {
-    [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
-    [self setUpOneViewController:[[ZLVideoListViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
-    [self setUpOneViewController:[[IdeaHomeViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
-    if ([UserInfo sharedUserInfo].nStatus)
-    {
-        [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"tab_operate_n" selectImage:@"tab_operate_h"];
+//<<<<<<< HEAD
+    HomeViewController *homeVC = [[HomeViewController alloc]init];
+    GFNavigationController *homeNav = [[GFNavigationController alloc]initWithRootViewController:homeVC];
+    ZLVideoListViewController *zlVideoVC = [[ZLVideoListViewController alloc]init];
+    GFNavigationController *zlVideoNav = [[GFNavigationController alloc]initWithRootViewController:zlVideoVC];
+    IdeaHomeViewController *tqIdeaVC = [[IdeaHomeViewController alloc]init];
+    GFNavigationController *tqIdeaNav = [[GFNavigationController alloc]initWithRootViewController:tqIdeaVC];
+    StockHomeViewController *stockHomeVC = [[StockHomeViewController alloc]init];
+    GFNavigationController *stockHomeNav = [[GFNavigationController alloc]initWithRootViewController:stockHomeVC];
+    XMyViewController *xmyVC = [[XMyViewController alloc]init];
+    GFNavigationController *xmyNav = [[GFNavigationController alloc]initWithRootViewController:xmyVC];
+
+    if ([UserInfo sharedUserInfo].nStatus){
+        tabbarController.viewControllers = @[homeNav,zlVideoNav,tqIdeaNav,stockHomeNav,xmyNav];
+    }else{
+        tabbarController.viewControllers = @[homeNav,zlVideoNav,xmyNav];
     }
-    [self setUpOneViewController:[[XMyViewController alloc]init] title:@"我" image:@"tab_me_n" selectImage:@"tab_me_p"];
+    
+    for (int i=0; i!=tabbarController.viewControllers.count; i++) {
+        UIViewController *viewcontroller = tabbarController.viewControllers[i];
+        [tabbarController setUpOneViewController:viewcontroller title:ThemeSkinManagers.titleArray[i] image:ThemeSkinManagers.normalImageArray[i] selectImage:ThemeSkinManagers.selectImageArray[i]];
+    }
+//=======
+//    [self setUpOneViewController:[[HomeViewController alloc]init] title:@"首页" image:@"home" selectImage:@"home_h"];
+//    [self setUpOneViewController:[[ZLVideoListViewController alloc]init] title:@"财经直播" image:@"video_live" selectImage:@"video_live_h"];
+//    [self setUpOneViewController:[[IdeaHomeViewController alloc]init] title:@"专家观点" image:@"tab_text_icon_normal" selectImage:@"tab_text_icon_pressed"];
+//    if ([UserInfo sharedUserInfo].nStatus)
+//    {
+//        [self setUpOneViewController:[[StockHomeViewController alloc]init] title:@"高手操盘" image:@"tab_operate_n" selectImage:@"tab_operate_h"];
+//    }
+//    [self setUpOneViewController:[[XMyViewController alloc]init] title:@"我" image:@"tab_me_n" selectImage:@"tab_me_p"];
+//>>>>>>> 72ee038902f5c4437c9dd81097ccf100f2d8322d
 }
 
 /**
@@ -141,8 +188,6 @@
     vc.title = title;
     vc.tabBarItem.image = [UIImage imageNamed:image];
     vc.tabBarItem.selectedImage = [UIImage imageNamed:selectImage];
-    GFNavigationController *nav = [[GFNavigationController alloc]initWithRootViewController:vc];
-    [self addChildViewController:nav];
 }
 
 /**
@@ -151,17 +196,39 @@
 - (void)setUpItemTextAttrs{
     // 统一设置Item文字的属性
     NSMutableDictionary *normalAttrs = [NSMutableDictionary dictionary];
-    normalAttrs[NSForegroundColorAttributeName] = UIColorFromRGB(0x919191);
+    normalAttrs[NSForegroundColorAttributeName] = ThemeSkinManagers.normalItemColor;
     normalAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:11];
     
     // 选中状态
     NSMutableDictionary *selectAttrs = [NSMutableDictionary dictionary];
-    selectAttrs[NSForegroundColorAttributeName] = UIColorFromRGB(0x0078DD);
+    selectAttrs[NSForegroundColorAttributeName] = ThemeSkinManagers.selectItemColor;
     
     UITabBarItem *item = [UITabBarItem appearance];
     [item setTitleTextAttributes:normalAttrs forState:UIControlStateNormal];
     [item setTitleTextAttributes:selectAttrs forState:UIControlStateSelected];
+    
 }
+
+-(UIImageView *)tabbarBackImageView{
+    
+    if (!_tabbarBackImageView) {
+        
+        _tabbarBackImageView = [[UIImageView alloc]initWithFrame:(CGRect){CGPointZero,tabbarController.tabBar.frame.size}];
+        [_tabbarBackImageView addSubview:tabbarController.moveImageView];
+        [tabbarController.tabBar sendSubviewToBack:_tabbarBackImageView];
+    }
+    return _tabbarBackImageView;
+}
+
+-(UIImageView *)moveImageView{
+    
+    if (!_moveImageView) {
+        
+        _moveImageView = [[UIImageView alloc]initWithFrame:(CGRect){CGPointZero,tabbarController.tabBar.frame.size}];
+    }
+    return _moveImageView;
+}
+
 
 #pragma mark - 通知回调处理
 
@@ -307,5 +374,24 @@
 {
     return UIInterfaceOrientationMaskPortrait;
 }
+
+#pragma mark 皮肤切换
+-(void)changeThemeSkin:(NSNotification *)notfication{
+    DLog(@"切换皮肤");
+    @WeakObj(tabbarController);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        tabbarControllerWeak.tabbarBackImageView.backgroundColor = ThemeSkinManagers.tabbarBackColor;
+        for (int i=0; i!=tabbarController.viewControllers.count; i++) {
+            UIViewController *viewcontroller = tabbarController.viewControllers[i];
+            [tabbarControllerWeak setUpOneViewController:viewcontroller title:ThemeSkinManagers.titleArray[i] image:ThemeSkinManagers.normalImageArray[i] selectImage:ThemeSkinManagers.selectImageArray[i]];
+        }
+        [tabbarControllerWeak setUpItemTextAttrs];
+    });
+    
+    
+    
+}
+
 
 @end

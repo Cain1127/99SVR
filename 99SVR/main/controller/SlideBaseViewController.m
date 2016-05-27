@@ -8,7 +8,7 @@
 
 #import "SlideBaseViewController.h"
 #import "LoginViewController.h"
-#import "ProfileViewController.h"
+//#import "ProfileViewController.h"
 
 #import "UserInfo.h"
 
