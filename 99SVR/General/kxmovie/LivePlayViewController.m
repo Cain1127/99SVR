@@ -81,11 +81,18 @@
     [self addNotify];
     
 }
+- (void)setCollet:(int)iscollet
+{
+    __block int __iscollet = iscollet;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _btnCollet.selected = __iscollet==1? YES:NO;
+    });
+}
 
 #pragma mark 加入房间成功
 - (void)joinSuc:(NSNotification *)notify{
     
-    int  collect = [(NSString *)[notify.object valueForKey:@"collet"] intValue];
+    int collect = [(NSString *)[notify.object valueForKey:@"collet"] intValue];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         _roomIsCollet = collect;
