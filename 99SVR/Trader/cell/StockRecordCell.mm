@@ -48,7 +48,7 @@
             titleLeftColor = COLOR_Bg_Green;
         }
         
-        [self.dealView.titleLabV setLeftLabAttText:[NSString stringWithFormat:@"%@ %@ %@",model.buytype,model.stockname,model.count] withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:titleLeftText withLeftTextColor:titleLeftColor rightLabAttText:@"" withRightAttTextColor:COLOR_Text_BigBlack withRightText:@"" withRightTextColor:COLOR_Text_BigBlack];
+        [self.dealView.titleLabV setLeftLabAttText:[NSString stringWithFormat:@"%@ %@ %@",model.buytype,model.stockname,model.stockid] withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:titleLeftText withLeftTextColor:titleLeftColor rightLabAttText:@"" withRightAttTextColor:COLOR_Text_BigBlack withRightText:@"" withRightTextColor:COLOR_Text_BigBlack];
 
         
         [self.dealView.costRmbLabV setLeftLabAttText:[NSString stringWithFormat:@"成交价 %@",model.price] withLeftAttTextColor:COLOR_Text_BigBlack withLeftText:@"成交价" withLeftTextColor:COLOR_Text_Gay rightLabAttText:[NSString stringWithFormat:@"成交数 %@",model.count] withRightAttTextColor:COLOR_Text_BigBlack withRightText:@"成交数" withRightTextColor:COLOR_Text_Gay];

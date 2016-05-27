@@ -73,9 +73,9 @@
     _btnBuy.frame = Rect(10,8, kScreenWidth-20, 44);
     [_buyView addSubview:_btnBuy];
     [_btnBuy setTitle:@"兑    换" forState:UIControlStateNormal];
-    [_btnBuy setTitleColor:UIColorFromRGB(0xe5e5e5) forState:UIControlStateNormal];
-    [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateNormal];
-    [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateHighlighted];
+    [_btnBuy setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default"] forState:UIControlStateNormal];
+    [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default_h"] forState:UIControlStateHighlighted];
     [_btnBuy setBackgroundImage:[UIImage imageNamed:@"login_default_d"] forState:UIControlStateDisabled];
     _btnBuy.titleLabel.font = XCFONT(15);
     _btnBuy.layer.masksToBounds = YES;
