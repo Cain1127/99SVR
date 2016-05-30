@@ -971,26 +971,26 @@
     switch (nIndex) {
         case 4://显示聊天
         {
-            @WeakObj(self)
-            dispatch_async(dispatch_get_global_queue(0, 0),
-            ^{
-                [selfWeak sendMessageForever];
-            });
-//            if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
-//                ([_room.roomid intValue]==10000 || [_room.roomid intValue]==10001)) {
-//                [UIView animateWithDuration:0.5 animations:
-//                 ^{
-//                     _inputView.hidden = NO;
-//                 } completion:^(BOOL finished) {}];
-//            }
-//            else
-//            {
-//                @WeakObj(self)
-//                
-//                [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
-//                    [selfWeak closeRoomInfo];
-//                }];
-//            }
+//            @WeakObj(self)
+//            dispatch_async(dispatch_get_global_queue(0, 0),
+//            ^{
+//                [selfWeak sendMessageForever];
+//            });
+            if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
+                ([_room.roomid intValue]==10000 || [_room.roomid intValue]==10001)) {
+                [UIView animateWithDuration:0.5 animations:
+                 ^{
+                     _inputView.hidden = NO;
+                 } completion:^(BOOL finished) {}];
+            }
+            else
+            {
+                @WeakObj(self)
+                
+                [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
+                    [selfWeak closeRoomInfo];
+                }];
+            }
         }
             break;
         case 5://显示成员
