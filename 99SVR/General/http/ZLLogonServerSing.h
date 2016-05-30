@@ -66,7 +66,9 @@ DEFINE_SINGLETON_FOR_HEADER(ZLLogonServerSing)
  *  购买私人定制
  */
 - (void)requestBuyPrivateVip:(int)teacherId vipType:(int)vip;
-
+/**
+ *  加入房间成功后，请求所有数据
+ */
 - (void)requestRoomInfo;
 
 - (void)colletRoomInfo:(int)action;

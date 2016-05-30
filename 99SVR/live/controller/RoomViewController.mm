@@ -295,7 +295,6 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
     [self initUIHead];
     [self addNotify];
     [self loadHeadModel];
-//    [headView.segmented setSelectedSegmentIndex:0];
     headView.hdsegmented.selectIndex = 0;
     [self selectIndexSegment:0];
 }

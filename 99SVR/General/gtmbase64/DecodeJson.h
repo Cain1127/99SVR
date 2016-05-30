@@ -23,7 +23,6 @@
 +(BOOL) validateEmail: (NSString *) candidate;
 
 + (NSString *) macaddress;
-+ (NSString *)getIPAddress;
 
 + (NSString *)replaceImageString:(NSString *)strInfo;
 /**

@@ -296,6 +296,7 @@
     });
     [_openAL stopSound];
     @WeakObj(self)
+    DLog(@"停止!!!!!");
     gcd_main_safe(
     ^{
          [selfWeak setNullMic];
@@ -753,26 +754,32 @@
 }
 - (void)onAudioData:(unsigned char *)cData len:(int32_t)len
 {
-    @autoreleasepool
+    if(_playing)
     {
-        [_openAL openAudioFromQueue:cData dataSize:len];
+        @autoreleasepool
+        {
+            [_openAL openAudioFromQueue:cData dataSize:len];
+        }
     }
 }
 
 - (void)onVideoData:(unsigned char *)data len:(int32_t)len width:(int32_t)width height:(int32_t)height
 {
-    _videoWidth = width;
-    _videoHeight = height;
-    @autoreleasepool
+    if(_playing)
     {
-        if (_bVideo)
+        _videoWidth = width;
+        _videoHeight = height;
+        @autoreleasepool
         {
-            NSData *videoData = [NSData dataWithBytes:data length:len];
-            @synchronized(_aryVideo)
+            if (_bVideo)
             {
-                [_aryVideo addObject:videoData];
+                NSData *videoData = [NSData dataWithBytes:data length:len];
+                @synchronized(_aryVideo)
+                {
+                    [_aryVideo addObject:videoData];
+                }
+                videoData = nil;
             }
-            videoData = nil;
         }
     }
 }

@@ -78,7 +78,7 @@
 @property (nonatomic,strong) UIButton *btnVideo;
 @property (nonatomic,strong) UIButton *btnFull;
 @property (nonatomic,strong) SliderMenuView *menuView;
-@property (nonatomic,assign) NSInteger nSelectIndex;
+@property (nonatomic,assign) __block NSInteger nSelectIndex;
 @property (nonatomic , strong) UIView *teacherEmptyView;
 
 @property (nonatomic,strong) RoomChatDataSource *chatDataSource;
@@ -93,13 +93,20 @@
 - (void)addNotify
 {
     [self addNotification];
-    
 }
 
 - (void)clearChatModel
 {
     _chatDataSource.nLength = 0;
     [_chatView reloadData];
+    if(_consumeDataSource)
+    {
+        [_consumeDataSource setAryModel:@[]];
+    }
+    if(_tableConsumeRank)
+    {
+        [_tableConsumeRank reloadData];
+    }
 }
 
 - (void)reloadModel:(RoomHttp *)room
@@ -109,31 +116,15 @@
     _room = room;
     _aryChatInfo = nil;
     [_menuView setDefaultIndex:1];
-    _ffPlay.roomIsCollet = nRoom_is_collet;
-    [_ffPlay setRoomIsCollet:nRoom_is_collet];
+    [_ffPlay setCollet:nRoom_is_collet];
     [_ffPlay setRoomName:_room.teamname];
     [_ffPlay setRoomId:[_room.roomid intValue]];
     [_consumeDataSource setAryModel:@[]];
     [self updateName];
-    @WeakObj(self)
-    if(_tableConsumeRank)
-    {
-        [_consumeDataSource setAryModel:@[]];
-        dispatch_main_async_safe(
-        ^{
-            [selfWeak updateName];
-            [selfWeak.tableConsumeRank reloadData];
-            [selfWeak updateName];
-
-        });
-    }
-    DLog(@"teach:%@",roomTeachInfo);
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
+    [self addNotify];
     [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+    [kProtocolSingle requestRoomInfo];
 }
 
 - (id)initWithModel:(RoomHttp *)room
@@ -161,12 +152,7 @@
     [giftDict2 setValue:@"0" forKey:@"status"];
     [self initUIHead];
     _ffPlay.roomIsCollet = nRoom_is_collet;
-    [self addNotification];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+    [self addNotify];
 }
 
 - (void)connectUnVideo:(UIButton *)sender
@@ -246,10 +232,6 @@
                                            withTitles:@[@"聊天",@"我的",@"公告",@"课程表",@"贡献榜"] withDefaultSelectIndex:1];
     _menuView.viewArrays = @[_chatAllView,_priChatView,_noticeView,_teachView,_tableConsumeRank];
     _menuView.bottomScroView.scrollEnabled = NO;
-    _menuView.DidSelectSliderIndex = ^(NSInteger index)
-    {
-        _nSelectIndex = index;
-    };
 }
 
 - (void)updateName
@@ -321,6 +303,7 @@
     
     [self.view addSubview:_menuView];
     self.menuView.DidSelectSliderIndex = ^(NSInteger index){
+        _nSelectIndex = index;
     };
     
     UILabel *lblDownLine = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];
@@ -665,6 +648,7 @@
 /**
  *  聊天响应
  */
+#pragma mark - 聊天数据
 - (void)roomChatMsg
 {
 #if 0
@@ -675,6 +659,7 @@
     {
         dispatch_async(dispatch_get_main_queue(),
         ^{
+            
            if (selfWeak.nSelectIndex != 1) {
                selfWeak.menuView.showBadgeIndex = 1;
            }
