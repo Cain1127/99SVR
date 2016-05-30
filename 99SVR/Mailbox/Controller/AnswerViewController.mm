@@ -158,15 +158,17 @@ static NSUInteger const kPageCount = 10; // 每页显示多少条
 // 设置每行高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CGFloat LR = 12;
-    CGFloat H = 140;
+    CGFloat H = 110;
     TQAnswerModel *model = self.modelArray[indexPath.row];
     if(model.answercontent)
     {
-        CGSize answercontentSize = [model.answercontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 2* LR];
-        H = H + answercontentSize.height;
+        CGSize answerContentSize = [model.answercontentAttributedText boundingRectWithSize:CGSizeMake(kScreenWidth - 2* LR, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+        
+        H = H + answerContentSize.height;
     }
     if (model.askcontent) {
-        CGSize askcontentSize = [model.askcontent sizeMakeWithFont:Font_15 maxW:kScreenWidth - 4 * LR];
+        CGSize askcontentSize = [model.askcontentAttributedText boundingRectWithSize:CGSizeMake(kScreenWidth - 4 * LR - 20, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+        
         H = H + askcontentSize.height;
     }
     
