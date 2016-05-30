@@ -32,4 +32,9 @@
 
 - (void)startNewPlay;
 
+/**
+ *  清除聊天记录
+ */
+- (void)clearChatModel;
+
 @end

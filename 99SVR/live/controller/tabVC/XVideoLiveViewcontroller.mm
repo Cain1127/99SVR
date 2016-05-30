@@ -47,7 +47,6 @@
     GiftView *_giftView;
     XLiveQuestionView *_questionView;
     ChatView *_inputView;
-    
     NSMutableArray *aryGift;
     BOOL bGiftView;
     BOOL bFull;
@@ -55,15 +54,14 @@
     UIView *downView;
     int toUser;
     UIView  *_topHUD;
-    
     DTAttributedTextView *_teachView;
-    
     UIView *_chatAllView;
     ChatRightView *_rightView;
-    
     NSMutableDictionary *giftDict1;
     NSMutableDictionary *giftDict2;
 }
+
+@property (nonatomic,assign) BOOL bChatRefresh;
 @property (nonatomic,strong) NSRecursiveLock *lock;
 @property (nonatomic,copy) NSArray *aryChatInfo;
 @property (nonatomic,assign) int nCurGift;
@@ -98,11 +96,16 @@
     
 }
 
+- (void)clearChatModel
+{
+    _chatDataSource.nLength = 0;
+    [_chatView reloadData];
+}
+
 - (void)reloadModel:(RoomHttp *)room
 {
     //重置全部红点提示
     [_menuView resetAllBadgePrompt];
-    _chatDataSource.nLength = 0;
     _room = room;
     _aryChatInfo = nil;
     [_menuView setDefaultIndex:1];
@@ -666,7 +669,7 @@
  */
 - (void)roomChatMsg
 {
-#if 1
+#if 0
     [_chatDataSource setRowLength:aryRoomChat.count];
     [_chatDataSource setModel:aryRoomChat];
     @WeakObj(self)
@@ -696,14 +699,17 @@
          }];
     });
 #else
-    NSInteger nIndex = _aryChatInfo.count;
+    if (_bChatRefresh)
+    {
+        return ;
+    }
+    _bChatRefresh = YES;
+    NSInteger nIndex = _chatDataSource.nLength;
     NSInteger nEnd = 0;
     @synchronized(aryRoomChat)
     {
-        _aryChatInfo = aryRoomChat;
-        nEnd = _aryChatInfo.count;
-        [_chatDataSource setModel:_aryChatInfo];
-        [];
+        [_chatDataSource setModel:aryRoomChat];
+        nEnd = aryRoomChat.count;
     }
     @WeakObj(self)
     if (aryRoomChat.count>0)
@@ -734,8 +740,18 @@
         if (array.count>0 && selfWeak.chatDataSource.nLength != __nEnd)
         {
             [selfWeak.chatDataSource setRowLength:__nEnd];
-             [selfWeak.chatView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationNone];
+            [selfWeak.chatView beginUpdates];
+            [selfWeak.chatView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationNone];
+            [selfWeak.chatView endUpdates];
+            [selfWeak.chatView scrollToRowAtIndexPath:[array objectAtIndex:array.count-1]
+                                     atScrollPosition:UITableViewScrollPositionNone animated:YES];
         }
+        selfWeak.chatDataSource.nLength = __nEnd;
+        if (aryRoomChat.count!=selfWeak.chatDataSource.nLength)
+        {
+            [selfWeak roomChatMsg];
+        }
+        selfWeak.bChatRefresh = NO;
     });
 #endif
     
@@ -927,8 +943,8 @@
 {
     
     NSString *strName = nil;
-    int gid ;
-    int num ;
+    int gid;
+    int num;
     if ([parameter objectForKey:@"name"] && [parameter objectForKey:@"gitId"] && [parameter objectForKey:@"num"]) {
         strName = [parameter objectForKey:@"name"];
         gid = [[parameter objectForKey:@"gitId"] intValue];
@@ -941,7 +957,7 @@
 
 - (void)sendMessageForever
 {
-    int i=500;
+    int i=10;
     while (i--)
     {
         NSString *strInfo = [NSString stringWithFormat:@"test send info:%d",i];
@@ -956,26 +972,26 @@
     switch (nIndex) {
         case 4://显示聊天
         {
-//            @WeakObj(self)
-//            dispatch_async(dispatch_get_global_queue(0, 0),
-//            ^{
-//                [selfWeak sendMessageForever];
-//            });
-            if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
-                ([_room.roomid intValue]==10000 || [_room.roomid intValue]==10001)) {
-                [UIView animateWithDuration:0.5 animations:
-                 ^{
-                     _inputView.hidden = NO;
-                 } completion:^(BOOL finished) {}];
-            }
-            else
-            {
-                @WeakObj(self)
-                
-                [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
-                    [selfWeak closeRoomInfo];
-                }];
-            }
+            @WeakObj(self)
+            dispatch_async(dispatch_get_global_queue(0, 0),
+            ^{
+                [selfWeak sendMessageForever];
+            });
+//            if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
+//                ([_room.roomid intValue]==10000 || [_room.roomid intValue]==10001)) {
+//                [UIView animateWithDuration:0.5 animations:
+//                 ^{
+//                     _inputView.hidden = NO;
+//                 } completion:^(BOOL finished) {}];
+//            }
+//            else
+//            {
+//                @WeakObj(self)
+//                
+//                [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
+//                    [selfWeak closeRoomInfo];
+//                }];
+//            }
         }
             break;
         case 5://显示成员
