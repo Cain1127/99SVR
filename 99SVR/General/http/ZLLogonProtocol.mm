@@ -907,7 +907,7 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
     roomTeachInfo=@"";
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:@{@"collet":[NSString stringWithFormat:@"%d",nRoom_is_collet]}];
-    video_room->SendMsg_AfterJoinRoomReq();
+//    video_room->SendMsg_AfterJoinRoomReq();
 }
 
 void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)
@@ -1008,6 +1008,7 @@ void ZLRoomListener::OnTeacherGiftListResp(std::vector<TeacherGiftListResp>& inf
         [array addObject:model];
     }
     NSDictionary *parameter = @{@"code":@(1),@"data":array};
+    DLog(@"贡献榜数据:%ld!",infos.size());
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:parameter];
 }
 

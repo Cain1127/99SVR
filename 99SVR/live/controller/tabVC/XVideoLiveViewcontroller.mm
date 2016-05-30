@@ -93,13 +93,20 @@
 - (void)addNotify
 {
     [self addNotification];
-    
 }
 
 - (void)clearChatModel
 {
     _chatDataSource.nLength = 0;
     [_chatView reloadData];
+    if(_consumeDataSource)
+    {
+        [_consumeDataSource setAryModel:@[]];
+    }
+    if(_tableConsumeRank)
+    {
+        [_tableConsumeRank reloadData];
+    }
 }
 
 - (void)reloadModel:(RoomHttp *)room
@@ -109,31 +116,15 @@
     _room = room;
     _aryChatInfo = nil;
     [_menuView setDefaultIndex:1];
-//    _ffPlay.roomIsCollet = nRoom_is_collet;
     [_ffPlay setCollet:nRoom_is_collet];
     [_ffPlay setRoomName:_room.teamname];
     [_ffPlay setRoomId:[_room.roomid intValue]];
     [_consumeDataSource setAryModel:@[]];
     [self updateName];
-    @WeakObj(self)
-    if(_tableConsumeRank)
-    {
-        [_consumeDataSource setAryModel:@[]];
-        dispatch_main_async_safe(
-        ^{
-            [selfWeak updateName];
-            [selfWeak.tableConsumeRank reloadData];
-            [selfWeak updateName];
-
-        });
-    }
-    DLog(@"teach:%@",roomTeachInfo);
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
+    [self addNotify];
     [kHTTPSingle RequestUserTeamRelatedInfo:[_room.teamid intValue]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
+    [kProtocolSingle requestRoomInfo];
 }
 
 - (id)initWithModel:(RoomHttp *)room
@@ -161,12 +152,7 @@
     [giftDict2 setValue:@"0" forKey:@"status"];
     [self initUIHead];
     _ffPlay.roomIsCollet = nRoom_is_collet;
-    [self addNotification];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CONSUMERANK_LIST_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:@""];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_ALL_USER_VC object:nil];
+    [self addNotify];
 }
 
 - (void)connectUnVideo:(UIButton *)sender
