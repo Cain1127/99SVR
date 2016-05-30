@@ -135,11 +135,12 @@
 
 - (void)sendGiftResp:(NSNotification *)notify
 {
-    
     @WeakObj(self)
-
     dispatch_async(dispatch_get_main_queue(), ^{
-        selfWeak.refreshCellDataBlock(NO,YES);
+        if(selfWeak.refreshCellDataBlock)
+        {
+            selfWeak.refreshCellDataBlock(NO,YES);
+        }
     });
     DLog(@"送礼成功");
 }
@@ -239,7 +240,10 @@
     [btnGift addTarget:self action:@selector(showGiftView) forControlEvents:UIControlEventTouchUpInside];
     [btnComment addTarget:self action:@selector(showChatInfo) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.view addSubview:btnGift];
+    if(KUserSingleton.nStatus)
+    {
+        [self.view addSubview:btnGift];
+    }
     [self.view addSubview:btnComment];
     
     _giftView = [[GiftView alloc] initWithFrame:Rect(0,-kRoom_head_view_height, kScreenWidth, kScreenHeight)];
@@ -406,7 +410,8 @@
         lblTalk.layer.masksToBounds= YES;
         lblTalk.layer.cornerRadius = 10;
         [downContentView addSubview:lblTalk];
-    }else
+    }
+    else
     {
         downContentView.frame = Rect(0, _textView.y+_textView.height+10, kScreenWidth,67);
     }
@@ -650,7 +655,10 @@
         dispatch_async(dispatch_get_main_queue(),
         ^{
             [ProgressHUD showSuccess:@"评论成功!"];
-            selfWeak.refreshCellDataBlock(YES,NO);
+            if(selfWeak.refreshCellDataBlock)
+            {
+                selfWeak.refreshCellDataBlock(YES,NO);
+            }
         });
         NSMutableArray *aryTemp = [NSMutableArray array];
         ZLReply *reply = parameters[@"model"];

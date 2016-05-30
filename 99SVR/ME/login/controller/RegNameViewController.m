@@ -18,6 +18,7 @@
 #import "ProgressHUD.h"
 #import "DecodeJson.h"
 #import "NSString+Regex.h"
+
 @interface RegNameViewController ()<UITextFieldDelegate>
 {
     NSString *strDate;
@@ -42,6 +43,7 @@
 @end
 
 @implementation RegNameViewController
+
 - (void)registerServer
 {
     // 退出键盘

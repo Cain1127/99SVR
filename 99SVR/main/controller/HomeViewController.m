@@ -236,8 +236,8 @@
         if (KUserSingleton.nStatus)
         {
             [self.aryLiving addObject:aryOperator];
-            [self.aryLiving addObject:aryViewPoint];
         }
+        [self.aryLiving addObject:aryViewPoint];
         dispatch_main_async_safe(
         ^{
             [selfWeak.tableView reloadData];
@@ -550,6 +550,17 @@
         {
             TQIdeaModel *ideaModel = tempArray[indexPath.row];
             IdeaDetailedViewController *viewcontrol = [[IdeaDetailedViewController alloc] initWithViewId:ideaModel.viewpointid];
+            @WeakObj(_tableView)
+            __block TQIdeaModel *weaeModel = ideaModel;
+            viewcontrol.refreshCellDataBlock = ^(BOOL replyValue,BOOL giftValue){
+                if (replyValue) {
+                    weaeModel.replycount +=1;
+                }
+                if (giftValue) {
+                    weaeModel.giftcount  +=1;
+                }
+                [_tableViewWeak reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+            };
             [self.navigationController pushViewController:viewcontrol animated:YES];
         }
     }

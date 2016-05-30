@@ -738,13 +738,12 @@ void ZLRoomListener::OnRoomUserExceptExitNoty(UserExceptExitRoomInfo_ext& info){
  */
 void ZLRoomListener::OnChatNotify(RoomChatMsg& info)
 {
-    if(info.msgtype()==1){
+    if(info.msgtype()==1)
+    {
         //解析广播
-        DLog(@"广播");
         [RoomService getRibao:&info notice:aryRoomNotice];
     }else{
         //解析消息记录
-        DLog(@"添加信息");
         [RoomService getChatInfo:&info array:aryRoomChat prichat:aryRoomPrichat];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     }

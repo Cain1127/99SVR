@@ -17,7 +17,6 @@
 {
     NSCache *chatCache;
 }
-
 @property (nonatomic,copy) NSArray *aryChat;
 
 @end
@@ -36,9 +35,15 @@
     _aryChat = aryChat;
 }
 
+- (void)setRowLength:(NSInteger)nLength
+{
+    _nLength = nLength;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _aryChat.count;
+    DLog(@"_nLength:%zi",_nLength);
+    return _nLength;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -82,12 +87,13 @@
     NSString *html = [aryInfo objectAtIndex:indexPath.row];
     [cell setHTMLString:html options:@{DTDefaultTextColor:@"#343434"}];
     cell.attributedTextContextView.shouldDrawImages = YES;
+    cell.fHeight = [cell.attributedTextContextView suggestedFrameSizeToFitEntireStringConstraintedToWidth:kScreenWidth-74].height;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ChatCoreTextCell *cell = [self tableView:tableView chatPreparedCellForIndexPath:indexPath];
-    return [cell requiredRowHeightInTableView:tableView];
+    return cell.fHeight;
 }
 
 #pragma mark DTCoreText Delegate

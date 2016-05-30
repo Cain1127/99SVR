@@ -31,6 +31,8 @@
 
 //开始播放
 
+- (void)setCollet:(int)iscollet;
+
 - (void)setRoomId:(int)roomId;
 
 - (void)setDefaultImg;

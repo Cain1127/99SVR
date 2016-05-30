@@ -47,7 +47,6 @@
     GiftView *_giftView;
     XLiveQuestionView *_questionView;
     ChatView *_inputView;
-    
     NSMutableArray *aryGift;
     BOOL bGiftView;
     BOOL bFull;
@@ -55,17 +54,16 @@
     UIView *downView;
     int toUser;
     UIView  *_topHUD;
-    
     DTAttributedTextView *_teachView;
-    
     UIView *_chatAllView;
     ChatRightView *_rightView;
-    
     NSMutableDictionary *giftDict1;
     NSMutableDictionary *giftDict2;
-    
 }
 
+@property (nonatomic,assign) BOOL bChatRefresh;
+@property (nonatomic,strong) NSRecursiveLock *lock;
+@property (nonatomic,copy) NSArray *aryChatInfo;
 @property (nonatomic,assign) int nCurGift;
 @property (nonatomic,assign) int question_times;
 @property (nonatomic,assign) float question_coin;
@@ -98,13 +96,21 @@
     
 }
 
+- (void)clearChatModel
+{
+    _chatDataSource.nLength = 0;
+    [_chatView reloadData];
+}
+
 - (void)reloadModel:(RoomHttp *)room
 {
     //重置全部红点提示
     [_menuView resetAllBadgePrompt];
     _room = room;
+    _aryChatInfo = nil;
     [_menuView setDefaultIndex:1];
     _ffPlay.roomIsCollet = nRoom_is_collet;
+    [_ffPlay setRoomIsCollet:nRoom_is_collet];
     [_ffPlay setRoomName:_room.teamname];
     [_ffPlay setRoomId:[_room.roomid intValue]];
     [_consumeDataSource setAryModel:@[]];
@@ -146,6 +152,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _lock = [[NSRecursiveLock alloc] init];
     aryGift = [NSMutableArray array];
     nColor = 10000;
     giftDict1 = [NSMutableDictionary dictionary];
@@ -183,7 +190,6 @@
     if (_menuView)
     {
         [_menuView resetSelectFirstIndex];
-        
     }
 }
 
@@ -348,7 +354,6 @@
     _questionView.hidden = YES;
     _questionView.delegate = self;
     
-    
 }
 
 #pragma mark 提问完再次检测提问次数
@@ -368,9 +373,7 @@
         }];
         return;
     }
-    
     [[ZLLogonServerSing sharedZLLogonServerSing] requestQuestion:[_room.roomid intValue] team:[_room.teamid intValue] stock:strName question:strContent];
-    DLog(@"提问 roomid==%@ 提问的次数%d",_room.roomid,_question_times);
     [_questionView.txtName resignFirstResponder];
     [_questionView.txtContent resignFirstResponder];
     [_questionView setGestureHidden];
@@ -455,7 +458,8 @@
         });
     }
     else{
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
             [ProgressHUD showError:@"提问请求失败"];
         });
     }
@@ -463,7 +467,8 @@
 
 - (void)loadAllInfo:(NSNotification *)notify
 {
-     dispatch_async(dispatch_get_main_queue(), ^{
+     dispatch_async(dispatch_get_main_queue(),
+     ^{
          [ProgressHUD showError:@"提问失败"];
      });
 }
@@ -662,7 +667,48 @@
  */
 - (void)roomChatMsg
 {
+#if 0
+    [_chatDataSource setRowLength:aryRoomChat.count];
     [_chatDataSource setModel:aryRoomChat];
+    @WeakObj(self)
+    if (aryRoomChat.count>0)
+    {
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+           if (selfWeak.nSelectIndex != 1) {
+               selfWeak.menuView.showBadgeIndex = 1;
+           }
+           else
+           {
+               [selfWeak.menuView showUnBadgeIndex:1];
+           }
+        });
+    }
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
+        [selfWeak.chatView reloadDataWithCompletion:
+         ^{
+             NSInteger numberOfRows = [selfWeak.chatView numberOfRowsInSection:0];
+             if (numberOfRows > 0)
+             {
+                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
+                 [selfWeak.chatView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+             }
+         }];
+    });
+#else
+    if (_bChatRefresh)
+    {
+        return ;
+    }
+    _bChatRefresh = YES;
+    NSInteger nIndex = _chatDataSource.nLength;
+    NSInteger nEnd = 0;
+    @synchronized(aryRoomChat)
+    {
+        [_chatDataSource setModel:aryRoomChat];
+        nEnd = aryRoomChat.count;
+    }
     @WeakObj(self)
     if (aryRoomChat.count>0)
     {
@@ -677,18 +723,40 @@
             }
         });
     }
+    __block NSInteger __nIndex = nIndex;
+    __block NSInteger __nEnd = nEnd;
+    [NSThread sleepForTimeInterval:0.01f];
     dispatch_async(dispatch_get_main_queue(),
     ^{
-        [selfWeak.chatView reloadDataWithCompletion:
-        ^{
-            NSInteger numberOfRows = [selfWeak.chatView numberOfRowsInSection:0];
-            if (numberOfRows > 0)
-            {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:numberOfRows-1 inSection:0];
-                [selfWeak.chatView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-            }
-        }];
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSInteger i=__nIndex; i<__nEnd; i++)
+        {
+            DLog(@"i:%zi",i);
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+            [array addObject:indexPath];
+        }
+        if (array.count>0 && selfWeak.chatDataSource.nLength != __nEnd)
+        {
+            [selfWeak.chatDataSource setRowLength:__nEnd];
+            [selfWeak.chatView beginUpdates];
+            [selfWeak.chatView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationNone];
+            [selfWeak.chatView endUpdates];
+            [selfWeak.chatView scrollToRowAtIndexPath:[array objectAtIndex:array.count-1]
+                                     atScrollPosition:UITableViewScrollPositionNone animated:YES];
+        }
+        else
+        {
+            selfWeak.chatDataSource.nLength = __nEnd;
+            [selfWeak.chatView reloadData];
+        }
+        selfWeak.bChatRefresh = NO;
+        if (aryRoomChat.count!=selfWeak.chatDataSource.nLength)
+        {
+            [selfWeak roomChatMsg];
+        }
     });
+#endif
+    
 }
 
 /**
@@ -877,8 +945,8 @@
 {
     
     NSString *strName = nil;
-    int gid ;
-    int num ;
+    int gid;
+    int num;
     if ([parameter objectForKey:@"name"] && [parameter objectForKey:@"gitId"] && [parameter objectForKey:@"num"]) {
         strName = [parameter objectForKey:@"name"];
         gid = [[parameter objectForKey:@"gitId"] intValue];
@@ -889,12 +957,28 @@
     return nil;
 }
 
+- (void)sendMessageForever
+{
+    int i=100;
+    while (i--)
+    {
+        NSString *strInfo = [NSString stringWithFormat:@"test send info:%d",i];
+        [kProtocolSingle sendMessage:strInfo toId:0];
+        [NSThread sleepForTimeInterval:0.03f];
+    }
+}
+
 #pragma mark RoomDwonDelegate
 - (void)clickRoom:(UIButton *)button index:(NSInteger)nIndex
 {
     switch (nIndex) {
         case 4://显示聊天
         {
+//            @WeakObj(self)
+//            dispatch_async(dispatch_get_global_queue(0, 0),
+//            ^{
+//                [selfWeak sendMessageForever];
+//            });
             if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
                 ([_room.roomid intValue]==10000 || [_room.roomid intValue]==10001)) {
                 [UIView animateWithDuration:0.5 animations:
@@ -1008,7 +1092,7 @@
 {
     if (_ffPlay.playing) {
         [kProtocolSingle sendGiftInfo:giftId number:giftNum];
-//        [_giftView setGestureHidden];
+        [_giftView setGestureHidden];
     }else{
         [ProgressHUD showError:@"只能对在线讲师送礼"];
     }

@@ -57,8 +57,14 @@
     UIEdgeInsets inset = _giftBtn.imageEdgeInsets;
     inset.left -= 10;
     _giftBtn.imageEdgeInsets = inset;
-    [self.contentView addSubview:_giftBtn];
+
+    if(KUserSingleton.nStatus)
+    {
+        [self.contentView addSubview:_giftBtn];
+    }
+    
     _giftBtn.frame = Rect(kScreenWidth-58,25,50,20);
+    
     _giftBtn.titleLabel.font = XCFONT(12);
     
     _commentBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -110,8 +116,15 @@
     [_giftBtn setTitle:NSStringFromInt(ideaModel.giftcount) forState:UIControlStateNormal];
 
     
-    _giftBtn.frame = Rect(kScreenWidth-55,_iconView.y,50,20);
-    _commentBtn.frame = Rect(kScreenWidth-110,_iconView.y,50,20);
+    if(KUserSingleton.nStatus)
+    {
+        _giftBtn.frame = Rect(kScreenWidth-55,_iconView.y,50,20);
+        _commentBtn.frame = Rect(kScreenWidth-110,_iconView.y,50,20);
+    }
+    else
+    {
+        _commentBtn.frame = Rect(kScreenWidth-55,_iconView.y,50,20);
+    }
     
     [_iconView sd_setImageWithURL:[NSURL URLWithString:ideaModel.authoricon] placeholderImage:[UIImage imageNamed:@"personal_user_head"]];
     [self.contentView addSubview:_lblLine];
@@ -135,8 +148,16 @@
     [_commentBtn setTitle:NSStringFromInt(ideaModel.replycount) forState:UIControlStateNormal];
     [_giftBtn setTitle:NSStringFromInt(ideaModel.giftcount) forState:UIControlStateNormal];
     
-    _giftBtn.frame = Rect(kScreenWidth-55,_iconView.y,50,20);
-    _commentBtn.frame = Rect(kScreenWidth-110,_iconView.y,50,20);
+    if(KUserSingleton.nStatus)
+    {
+        _giftBtn.frame = Rect(kScreenWidth-55,_iconView.y,50,20);
+        _commentBtn.frame = Rect(kScreenWidth-110,_iconView.y,50,20);
+    }
+    else
+    {
+        _commentBtn.frame = Rect(kScreenWidth-55,_iconView.y,50,20);
+    }
+    
     [_iconView sd_setImageWithURL:[NSURL URLWithString:ideaModel.authoricon] placeholderImage:[UIImage imageNamed:@"personal_user_head"]];
     if (bLine) {
         [self.contentView addSubview:_lblLine];
