@@ -3,6 +3,7 @@
 
 unsigned long get_inet_addr(const char* host)
 {
+#if 1
 	if (inet_addr(host) == -1)
 	{
 		struct hostent* pHostEnt;
@@ -13,6 +14,26 @@ unsigned long get_inet_addr(const char* host)
 	}
 
 	return inet_addr(host);
+#else
+    unsigned char buf[sizeof(struct in6_addr)];
+    int domain, s;
+    s = inet_pton(AF_INET6,host,buf);
+    if(s<=0)
+    {
+        if(0 == s)
+        {
+            printf("Not in presentation format/n");
+        }
+        else
+        {
+            printf("inet_pton/n");
+        }
+    }
+//    if(inet_ntop(domain, buf, str, INET6_ADDRSTRLEN) == NULL){
+//        printf("inet ntop/n");
+//    }
+//    return buf;
+#endif
 }
 
 int set_block(SOCKET socket, bool block)
@@ -73,14 +94,40 @@ void set_no_sigpipe(SOCKET socket)
 int Socket::connect(const char* host, short port, int connect_timeout)
 {
 	if (!host || !(*host) || !port) return -2;
-
+#if 0
 	sockaddr_in sockAddr;
 	memset(&sockAddr, 0, sizeof(sockAddr));
 	sockAddr.sin_family = AF_INET;
 	sockAddr.sin_port = htons(port);
 	sockAddr.sin_addr.s_addr = get_inet_addr(host);
+    socket = ::socket(AF_INET, SOCK_STREAM, 0);
+#else
+    sockaddr sockAddr;
+    struct in6_addr iSin6_addr;
+    int s = inet_pton(AF_INET6,host,&iSin6_addr);
+    if (s<=0)
+    {
+        printf("sin6_addr err\n");
+        sockaddr_in sockAddr_in4;
+        memset(&sockAddr_in4, 0, sizeof(sockAddr_in4));
+        sockAddr_in4.sin_family = AF_INET;
+        sockAddr_in4.sin_port = htons(port);
+        sockAddr_in4.sin_addr.s_addr = get_inet_addr(host);
+        memcpy(&sockAddr, &sockAddr_in4,sizeof(struct sockaddr));
+        socket = ::socket(AF_INET, SOCK_STREAM, 0);
+    }
+    else
+    {
+        sockaddr_in6 sockAddr6;
+        memset(&sockAddr6, 0, sizeof(sockAddr6));
+        sockAddr6.sin6_family = AF_INET6;
+        sockAddr6.sin6_port = htons(port);
+        memcpy(&sockAddr6.sin6_addr, &iSin6_addr,sizeof(struct in6_addr));
+        memcpy(&sockAddr,&sockAddr6,sizeof(struct sockaddr));
+        socket = ::socket(AF_INET6, SOCK_STREAM, 0);
+    }
+#endif
 
-	socket = ::socket(AF_INET, SOCK_STREAM, 0);
 	if (socket < 0 || socket == SOCKET_INVALID)
 	{
 		return -2;
@@ -169,23 +216,19 @@ int Socket::close_(void)
 	return 0;
 }
 
-//通过套接字获取IP、Port等地址信息
+//脮庐蟺藵脙鈼娢┾�濃棅梅陋脪禄掳IP掳垄Port碌禄碌每梅鈭戔�撯増艙垄
 int Socket::get_address()
 {
-	sockaddr_in sockAddr;
-	memset(&sockAddr, 0, sizeof(sockAddr));
-	my_socklen_t nAddrLen = sizeof(sockAddr);
+//	sockaddr_in sockAddr;
+//	memset(&sockAddr, 0, sizeof(sockAddr));
+//	my_socklen_t nAddrLen = sizeof(sockAddr);
+//
+//	if (::getsockname(socket, (struct sockaddr*)&sockAddr, &nAddrLen) != 0)
+//	{
+//		printf("Get IP address by socket failed!n");
+//		return -1;
+//	}
 
-	//if (::getpeername(socket, (struct sockaddr*)&sockAddr, &nAddrLen) != 0)
-	if (::getsockname(socket, (struct sockaddr*)&sockAddr, &nAddrLen) != 0)
-	{
-		printf("Get IP address by socket failed!n");
-		return -1;
-	}
-
-	LOG("IP:%s PORT:%d", ::inet_ntoa(sockAddr.sin_addr), ntohs(sockAddr.sin_port));
-	//读取IP和Port
-	//cout << "IP: " << ::inet_ntoa(m_address.sin_addr) << "  PORT: " << ntohs(m_address.sin_port) << endl;
 	return 0;
 }
 
