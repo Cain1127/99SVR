@@ -109,8 +109,8 @@
     _room = room;
     _aryChatInfo = nil;
     [_menuView setDefaultIndex:1];
-    _ffPlay.roomIsCollet = nRoom_is_collet;
-    [_ffPlay setRoomIsCollet:nRoom_is_collet];
+//    _ffPlay.roomIsCollet = nRoom_is_collet;
+    [_ffPlay setCollet:nRoom_is_collet];
     [_ffPlay setRoomName:_room.teamname];
     [_ffPlay setRoomId:[_room.roomid intValue]];
     [_consumeDataSource setAryModel:@[]];
