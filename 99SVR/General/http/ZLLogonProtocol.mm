@@ -426,8 +426,6 @@ void ZLLogonProtocol::connectRoomInfo(int nRoomId,int platform,const char *roomP
     [aryRoomNotice removeAllObjects];
     roomTeachInfo = @"";
     
-    [aryRoomChat addObject:@"<span style=\"color:#919191\">[系统消息]正在加载房间数据...</span>"];
-    
     JoinRoomReq req;
     const char *uId = [[DeviceUID uid] UTF8String];
     req.set_cserial(uId);
@@ -907,7 +905,6 @@ void ZLJoinRoomListener::OnJoinRoomResp(JoinRoomResp& info)
     roomTeachInfo=@"";
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_JOIN_ROOM_SUC_VC object:@{@"collet":[NSString stringWithFormat:@"%d",nRoom_is_collet]}];
-//    video_room->SendMsg_AfterJoinRoomReq();
 }
 
 void ZLJoinRoomListener::OnJoinRoomErr(JoinRoomErr& info)

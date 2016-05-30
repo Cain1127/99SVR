@@ -8,6 +8,7 @@
 //
 
 #import "LoginViewController.h"
+#import "RoomViewController.h"
 #import "DecodeJson.h"
 #import "ZLLogonServerSing.h"
 #import "ProgressHUD.h"
@@ -33,6 +34,7 @@
     TencentOAuth *_tencentOAuth;
     UIView *hidenView;
 }
+
 @property (nonatomic,copy) NSString *strToken;
 @property (nonatomic,copy) NSString *strOpenId;
 @property (nonatomic,copy) NSString *strNickName;
@@ -67,8 +69,10 @@
     if (backStockDealVCBool) {//跳转到到股票详情视图
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
         [self.navigationController popToViewController:stockDealVC animated:YES];
-    }else{//正常返回
-        
+    }
+    else
+    {
+        //正常返回
         [self.navigationController popViewControllerAnimated:YES];
     }
     
