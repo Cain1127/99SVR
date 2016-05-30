@@ -80,7 +80,7 @@
 @property (nonatomic,strong) UIButton *btnVideo;
 @property (nonatomic,strong) UIButton *btnFull;
 @property (nonatomic,strong) SliderMenuView *menuView;
-@property (nonatomic,assign) NSInteger nSelectIndex;
+@property (nonatomic,assign) __block NSInteger nSelectIndex;
 @property (nonatomic , strong) UIView *teacherEmptyView;
 
 @property (nonatomic,strong) RoomChatDataSource *chatDataSource;
@@ -244,10 +244,6 @@
                                            withTitles:@[@"聊天",@"我的",@"公告",@"课程表",@"贡献榜"] withDefaultSelectIndex:1];
     _menuView.viewArrays = @[_chatAllView,_priChatView,_noticeView,_teachView,_tableConsumeRank];
     _menuView.bottomScroView.scrollEnabled = NO;
-    _menuView.DidSelectSliderIndex = ^(NSInteger index)
-    {
-        _nSelectIndex = index;
-    };
 }
 
 - (void)updateName
@@ -319,6 +315,7 @@
     
     [self.view addSubview:_menuView];
     self.menuView.DidSelectSliderIndex = ^(NSInteger index){
+        _nSelectIndex = index;
     };
     
     UILabel *lblDownLine = [[UILabel alloc] initWithFrame:Rect(0, 0, kScreenWidth, 0.5)];
@@ -664,6 +661,7 @@
 /**
  *  聊天响应
  */
+#pragma mark - 聊天数据
 - (void)roomChatMsg
 {
 #if 1
@@ -674,6 +672,7 @@
     {
         dispatch_async(dispatch_get_main_queue(),
         ^{
+            
            if (selfWeak.nSelectIndex != 1) {
                selfWeak.menuView.showBadgeIndex = 1;
            }
