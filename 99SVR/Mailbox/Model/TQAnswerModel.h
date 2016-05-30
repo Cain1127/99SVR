@@ -34,6 +34,7 @@
 @property(nonatomic,copy) NSString *answerauthoricon;
 /** 回答内容 */
 @property(nonatomic,copy) NSString *answercontent;
+@property(nonatomic,copy) NSAttributedString *answercontentAttributedText;
 /** 回答时间 */
 @property(nonatomic,copy) NSString *answertime;
 /** 提问哪只股票 */
@@ -42,6 +43,7 @@
 @property (nonatomic,copy)NSString *askauthorname;
 /** 提问内容 */
 @property(nonatomic,copy) NSString *askcontent;
+@property(nonatomic,copy) NSAttributedString *askcontentAttributedText;
 /** 提问ID */
 @property(nonatomic,assign)int askauthorheadid;
 /** 提问时间 */
