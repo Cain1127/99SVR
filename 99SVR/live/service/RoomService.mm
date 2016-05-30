@@ -86,7 +86,7 @@
         [RoomService clearChatInfo:aryPriChat];
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TO_ME_VC object:nil];
     }
-//    [RoomService clearChatInfo:aryChat];
+    [RoomService clearChatInfo:aryChat];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_CHAT_VC object:aryChat];
     
     return YES;
@@ -94,11 +94,11 @@
 
 + (BOOL )clearChatInfo:(NSMutableArray *)array
 {
-    if (array.count>100)
+    if (array.count>200)
     {
         @synchronized(array)
         {
-            for (int i=0 ;i < 1 ;i++)
+            for (int i=0 ;i < 150 ;i++)
             {
                 [array removeObjectAtIndex:0];
             }
