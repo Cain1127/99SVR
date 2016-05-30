@@ -145,7 +145,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
         [_liveControl clearChatModel];
         headView.hdsegmented.selectIndex = 0;
         [self selectIndexSegment:0];
-        [_liveControl.ffPlay setRoomIsCollet:0];
+        [_liveControl.ffPlay setCollet:0];
         [_ideaControl setModel:_room];
         [_tradeView reloadModel:_room];
         [_privateView setModel:_room];

@@ -190,7 +190,6 @@
     if (_menuView)
     {
         [_menuView resetSelectFirstIndex];
-        
     }
 }
 
@@ -355,7 +354,6 @@
     _questionView.hidden = YES;
     _questionView.delegate = self;
     
-    
 }
 
 #pragma mark 提问完再次检测提问次数
@@ -375,9 +373,7 @@
         }];
         return;
     }
-    
     [[ZLLogonServerSing sharedZLLogonServerSing] requestQuestion:[_room.roomid intValue] team:[_room.teamid intValue] stock:strName question:strContent];
-    DLog(@"提问 roomid==%@ 提问的次数%d",_room.roomid,_question_times);
     [_questionView.txtName resignFirstResponder];
     [_questionView.txtContent resignFirstResponder];
     [_questionView setGestureHidden];
@@ -462,7 +458,8 @@
         });
     }
     else{
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
             [ProgressHUD showError:@"提问请求失败"];
         });
     }
@@ -470,7 +467,8 @@
 
 - (void)loadAllInfo:(NSNotification *)notify
 {
-     dispatch_async(dispatch_get_main_queue(), ^{
+     dispatch_async(dispatch_get_main_queue(),
+     ^{
          [ProgressHUD showError:@"提问失败"];
      });
 }
@@ -746,12 +744,16 @@
             [selfWeak.chatView scrollToRowAtIndexPath:[array objectAtIndex:array.count-1]
                                      atScrollPosition:UITableViewScrollPositionNone animated:YES];
         }
-        selfWeak.chatDataSource.nLength = __nEnd;
+        else
+        {
+            selfWeak.chatDataSource.nLength = __nEnd;
+            [selfWeak.chatView reloadData];
+        }
+        selfWeak.bChatRefresh = NO;
         if (aryRoomChat.count!=selfWeak.chatDataSource.nLength)
         {
             [selfWeak roomChatMsg];
         }
-        selfWeak.bChatRefresh = NO;
     });
 #endif
     
@@ -957,7 +959,7 @@
 
 - (void)sendMessageForever
 {
-    int i=10;
+    int i=100;
     while (i--)
     {
         NSString *strInfo = [NSString stringWithFormat:@"test send info:%d",i];
@@ -972,26 +974,26 @@
     switch (nIndex) {
         case 4://显示聊天
         {
-            @WeakObj(self)
-            dispatch_async(dispatch_get_global_queue(0, 0),
-            ^{
-                [selfWeak sendMessageForever];
-            });
-//            if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
-//                ([_room.roomid intValue]==10000 || [_room.roomid intValue]==10001)) {
-//                [UIView animateWithDuration:0.5 animations:
-//                 ^{
-//                     _inputView.hidden = NO;
-//                 } completion:^(BOOL finished) {}];
-//            }
-//            else
-//            {
-//                @WeakObj(self)
-//                
-//                [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
-//                    [selfWeak closeRoomInfo];
-//                }];
-//            }
+//            @WeakObj(self)
+//            dispatch_async(dispatch_get_global_queue(0, 0),
+//            ^{
+//                [selfWeak sendMessageForever];
+//            });
+            if (([UserInfo sharedUserInfo].bIsLogin && [UserInfo sharedUserInfo].nType == 1) ||
+                ([_room.roomid intValue]==10000 || [_room.roomid intValue]==10001)) {
+                [UIView animateWithDuration:0.5 animations:
+                 ^{
+                     _inputView.hidden = NO;
+                 } completion:^(BOOL finished) {}];
+            }
+            else
+            {
+                @WeakObj(self)
+                
+                [AlertFactory createLoginAlert:self withMsg:@"聊天" block:^{
+                    [selfWeak closeRoomInfo];
+                }];
+            }
         }
             break;
         case 5://显示成员
