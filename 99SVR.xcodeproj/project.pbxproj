@@ -78,6 +78,9 @@
 		18F971131C92947F001B2575 /* RSADataVerifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F9710A1C92947F001B2575 /* RSADataVerifier.m */; };
 		18F971151C92971B001B2575 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971141C92971B001B2575 /* CoreMotion.framework */; };
 		18F971171C92A40A001B2575 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F971161C92A40A001B2575 /* JavaScriptCore.framework */; };
+		5A41C15B1CFBD3340068C050 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A41C15A1CFBD3340068C050 /* libicucore.tbd */; };
+		5A41C15F1CFBD3560068C050 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A41C15E1CFBD3560068C050 /* RegexKitLite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5A41C17A1CFBD6900068C050 /* AttrTextPartModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A41C1791CFBD6900068C050 /* AttrTextPartModel.m */; };
 		5A48E0C71CE99F1B00D5EBE2 /* SocketNetworkInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A48E0C61CE99F1B00D5EBE2 /* SocketNetworkInfo.m */; };
 		5A4D61291CEEF93B00DD7983 /* StatusBarHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4D61281CEEF93B00DD7983 /* StatusBarHUD.m */; };
 		5A5784101CD2FE28002E120A /* CommentReplyViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A57840F1CD2FE28002E120A /* CommentReplyViewController.mm */; };
@@ -962,6 +965,11 @@
 		18F9710A1C92947F001B2575 /* RSADataVerifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSADataVerifier.m; sourceTree = "<group>"; };
 		18F971141C92971B001B2575 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		18F971161C92A40A001B2575 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		5A41C15A1CFBD3340068C050 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		5A41C15D1CFBD3560068C050 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		5A41C15E1CFBD3560068C050 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
+		5A41C1781CFBD6900068C050 /* AttrTextPartModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttrTextPartModel.h; sourceTree = "<group>"; };
+		5A41C1791CFBD6900068C050 /* AttrTextPartModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttrTextPartModel.m; sourceTree = "<group>"; };
 		5A43875FF97FDC1CA789AE15 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A48E0C51CE99F1B00D5EBE2 /* SocketNetworkInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketNetworkInfo.h; sourceTree = "<group>"; };
 		5A48E0C61CE99F1B00D5EBE2 /* SocketNetworkInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketNetworkInfo.m; sourceTree = "<group>"; };
@@ -2029,6 +2037,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A41C15B1CFBD3340068C050 /* libicucore.tbd in Frameworks */,
 				BB3785461CDF1DC3008365FD /* libmtasdk.a in Frameworks */,
 				BB9C7F601CDD563200FD3532 /* Foundation.framework in Frameworks */,
 				BB9C7F5E1CDD561F00FD3532 /* Security.framework in Frameworks */,
@@ -2174,6 +2183,8 @@
 				1895B77E1CCB56A300B86B0D /* TQMessageModel.mm */,
 				5AC00A551CD9E6F500379081 /* MailboxModel.h */,
 				5AC00A561CD9E6F500379081 /* MailboxModel.m */,
+				5A41C1781CFBD6900068C050 /* AttrTextPartModel.h */,
+				5A41C1791CFBD6900068C050 /* AttrTextPartModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2454,6 +2465,15 @@
 				8D4A66C414F8E52B12645457 /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		5A41C15C1CFBD3560068C050 /* RegexKitLite */ = {
+			isa = PBXGroup;
+			children = (
+				5A41C15D1CFBD3560068C050 /* RegexKitLite.h */,
+				5A41C15E1CFBD3560068C050 /* RegexKitLite.m */,
+			);
+			path = RegexKitLite;
 			sourceTree = "<group>";
 		};
 		5A7629331CE1B7C400C6A092 /* NJKWebViewProgress */ = {
@@ -3208,6 +3228,7 @@
 		BB63F4861C2CC7A200A042E8 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				5A41C15C1CFBD3560068C050 /* RegexKitLite */,
 				BBD719761CE466A100FF9A38 /* WebViewJavascriptBridge */,
 				5A7629331CE1B7C400C6A092 /* NJKWebViewProgress */,
 				BB2CA9B01CD5E99800DFE56E /* IQKeyboardManager */,
@@ -3758,6 +3779,7 @@
 		BB9003C01C8D8395007E1C48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5A41C15A1CFBD3340068C050 /* libicucore.tbd */,
 				BB9C7F5F1CDD563200FD3532 /* Foundation.framework */,
 				BB9C7F5D1CDD561F00FD3532 /* Security.framework */,
 				BB9C7F5B1CDD560500FD3532 /* AVFoundation.framework */,
@@ -4800,6 +4822,7 @@
 				BBC618EC1CF6C37A004513FA /* RegMobileViewController.m in Sources */,
 				BBD58EFD1CCD2287009250DB /* XLiveQuestionView.m in Sources */,
 				5AC00A571CD9E6F500379081 /* MailboxModel.m in Sources */,
+				5A41C15F1CFBD3560068C050 /* RegexKitLite.m in Sources */,
 				BBB515FA1C4D3655008F2CEC /* DoubleView.m in Sources */,
 				BB63F5C71C2CC7A300A042E8 /* NSArray+MASAdditions.m in Sources */,
 				B4C6B7B21CBE1B220072795B /* RegisterTextField.m in Sources */,
@@ -4924,6 +4947,7 @@
 				BB7B6FFC1C33D7070018FEC1 /* CircleImageView.m in Sources */,
 				BB6F11A51CC78B0F00F02064 /* XHistoryCell.m in Sources */,
 				BBC618E91CF6C37A004513FA /* InputPwdViewController.m in Sources */,
+				5A41C17A1CFBD6900068C050 /* AttrTextPartModel.m in Sources */,
 				188741821C9702DA002EF25A /* NSString+Regex.m in Sources */,
 				BB63F5D51C2CC7A300A042E8 /* UIScrollView+MJRefresh.m in Sources */,
 				B47DD59E1CBF345300C47EF7 /* SliderMenuView.m in Sources */,
@@ -5266,7 +5290,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3965005d-464c-41ff-bcec-3a4d7574c708";
+				PROVISIONING_PROFILE = "999d6315-7d91-405d-928a-e3375cfe6382";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
@@ -5321,7 +5345,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HCTT.FAE99;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "966ef2e9-ea89-452e-bc8b-cd678c413198";
+				PROVISIONING_PROFILE = "999d6315-7d91-405d-928a-e3375cfe6382";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/** ${SRCROOT}/99SVR/General/socket/**";
