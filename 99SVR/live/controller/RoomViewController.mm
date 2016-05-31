@@ -113,6 +113,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
                 [selfWeak loadHeadModel];
                 [selfWeak.liveControl stopNewPlay];
                 [selfWeak.liveControl reloadModel:selfWeak.room];
+                [selfWeak.privateView setModel:selfWeak.room];
             });
         }
         else if(nStatus == 999)

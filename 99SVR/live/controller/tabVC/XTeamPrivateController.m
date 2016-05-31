@@ -69,6 +69,11 @@
     [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
 
+- (void)updateLoadModel
+{
+    [self setModel:_room];
+}
+
 - (void)addNotify
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPrivate)
@@ -76,11 +81,15 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:)
                                                  name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLoadModel) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
 }
 
 - (void)removeNotify
 {
+//    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:MESSAGE_UPDATE_LOGIN_STATUS];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:MESSAGE_RefreshSTOCK_DEAL_VC];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:MESSAGE_PRIVATE_TEAM_SERVICE_VC];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:MESSAGE_RefreshSTOCK_DEAL_VC];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
