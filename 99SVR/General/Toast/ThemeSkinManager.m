@@ -12,7 +12,7 @@ static ThemeSkinManager *manager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [[ThemeSkinManager alloc]init];
-        [manager changeThemeSkinType:ThemeSkinType_0];
+        [manager changeThemeSkinType:ThemeSkinType_Default];
     });
     
     return manager;
@@ -23,7 +23,7 @@ static ThemeSkinManager *manager = nil;
 -(void)changeThemeSkinType:(ThemeSkinType)type{
     
     switch (type) {
-        case ThemeSkinType_0://默认皮肤
+        case ThemeSkinType_Default://默认皮肤
         {
             if ([UserInfo sharedUserInfo].nStatus){
                 _titleArray = @[@"首页",@"财经直播",@"专家观点",@"高手操盘",@"我"];
@@ -43,9 +43,14 @@ static ThemeSkinManager *manager = nil;
             _navBarColor = UIColorFromRGB(0xffffff);
             _navBarTitColor = UIColorFromRGB(0x4C4C4C);
             
+            _navBarLBtnNImage = @"nav_menu_icon_n";
+            _navBarLBtnHImage = @"nav_menu_icon_p";
+            _navBarRBtnNImage = @"nav_search_icon_n";
+            _navBarRBtnHImage = @"nav_search_icon_p";
+
         }
             break;
-        case ThemeSkinType_1:
+        case ThemeSkinType_Gold:
         {
             
             if ([UserInfo sharedUserInfo].nStatus){

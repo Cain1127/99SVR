@@ -29,16 +29,6 @@
 #import "PaySelectViewController.h"
 #import "TQPurchaseViewController.h"
 
-#define kLogin @"登录"
-#define kRegist @"注册"
-#define kHistory @"历史记录"
-#define kSetting @"设置"
-#define kMyCollection @"我的收藏"
-#define kMyAsset @"我的资产"
-#define kMyProfile @"我的资料"
-#define kMyLivingHistory @"我的足迹"
-#define kKefu @"客服中心"
-
 @interface XMyViewController()<UITableViewDataSource,UITableViewDelegate,LeftMenuHeaderViewDelegate>
 {
     
@@ -134,8 +124,8 @@
         [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的消费记录" icon:@"personal_consumption_icon" goClassName:@"NNSVRViewController"]];
     }
     [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"我的关注" icon:@"personal_follow_icon" goClassName:@"VideoColletionViewController"]];
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kKefu icon:@"personal_services_icon" goClassName:@"KefuCenterController"]];
-    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:kSetting icon:@"personal_ste_icon" goClassName:@"SettingCenterController"]];
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"客服中心" icon:@"personal_services_icon" goClassName:@"KefuCenterController"]];
+    [_itemsArray addObject:[[LeftCellModel alloc] initWithTitle:@"设置" icon:@"personal_ste_icon" goClassName:@"SettingCenterController"]];
     
     @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(),
@@ -273,7 +263,10 @@
 -(void)changeThemeSkin:(NSNotification *)notfication{
     
     DLog(@"切换皮肤");
+    @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [selfWeak changeNavBarThemeSkin];
         
     });
 }
