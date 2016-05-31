@@ -420,6 +420,7 @@
     DLog(@"resoleNotice---%@",strInfo);
     NSString *strTilte = @"";
     NSString *strImage = @"";
+    NSString *strBigImageUrl = @""; // image大图
     if([strInfo rangeOfString:@"<h3>"].location != NSNotFound &&
        [strInfo rangeOfString:@"</h3>"].location != NSNotFound){
         NSRange start = [strInfo rangeOfString:@"<h3>"];
@@ -427,6 +428,19 @@
         strTilte = [strInfo substringWithRange:NSMakeRange(start.location,end.location-start.location+5)];
         strInfo = [strInfo stringByReplacingCharactersInRange:NSMakeRange(start.location,end.location-start.location+5) withString:@""];
     }
+    
+    // 拼接大图
+    if([strInfo rangeOfString:@"<a href"].location != NSNotFound &&
+       [strInfo rangeOfString:@"<img"].location != NSNotFound){
+        NSRange start = [strInfo rangeOfString:@"<a href"];
+        NSRange end = [strInfo rangeOfString:@"<img"];
+        strBigImageUrl = [strInfo substringWithRange:NSMakeRange(start.location,end.location-start.location+4)];
+        strBigImageUrl = [strBigImageUrl stringByReplacingOccurrencesOfString:@"<a href=\"" withString:@""];
+        strBigImageUrl = [strBigImageUrl stringByReplacingOccurrencesOfString:@"\"><img" withString:@""];
+        NSLog(@"%@ -------",strBigImageUrl);
+    }
+    strInfo = [strInfo stringByReplacingOccurrencesOfString:@"<img src" withString:[NSString stringWithFormat:@"<img data-bigurl=\"%@\" src",strBigImageUrl]];
+    NSLog(@"%@ -------",strInfo);
     
     if([strInfo rangeOfString:@"<a href"].location != NSNotFound &&
        [strInfo rangeOfString:@"</a>"].location != NSNotFound){
@@ -444,6 +458,7 @@
     }
     NSString *strMsg = [NSString stringWithFormat:@"<br>%@%@%@",strTilte,strInfo,strImage];
 
+    DLog(@"strMsg %@",strMsg);
     return strMsg;
 }
 

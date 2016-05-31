@@ -14,6 +14,9 @@
 #import "Photo.h"
 #import "PhotoViewController.h"
 #import "RoomChatNull.h"
+#import <objc/runtime.h>
+
+static char kShowBigImageUrlKey;// 公告大图URL
 
 @interface RoomNoticeDataSource()<DTAttributedTextContentViewDelegate>
 {
@@ -89,7 +92,7 @@
         if(![strInfo isEqualToString:cell.strInfo])
         {
             cell.attributedString = [[NSAttributedString alloc] initWithHTMLData:[strInfo dataUsingEncoding:NSUTF8StringEncoding]
-                documentAttributes:nil];
+                                                              documentAttributes:nil];
             cell.section = indexPath.section;
             cell.strInfo = strInfo;
             cell.textDelegate = self;
@@ -138,12 +141,12 @@
 }
 
 #pragma mark DTCoreText Delegate
+
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame
 {
     if ([attachment isKindOfClass:[DTImageTextAttachment class]])
     {
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
-
         @WeakObj(self)
         [imageView sd_setImageWithURL:attachment.contentURL
                             completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL)
@@ -152,8 +155,14 @@
              [selfWeak updateTextView:cell url:imageURL changeSize:image.size];
          }];
         imageView.userInteractionEnabled = YES;
-        [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                action:@selector(showImageInfo:)]];
+        
+        // 高清图URL
+        NSString *strBigUrl =[attachment.attributes objectForKey:@"data-bigurl"];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageInfo:)];
+        [imageView addGestureRecognizer:tap];
+        objc_setAssociatedObject(self, &kShowBigImageUrlKey, strBigUrl, OBJC_ASSOCIATION_COPY);
+        
         return imageView;
     }
     else if([attachment isKindOfClass:[DTObjectTextAttachment class]])
@@ -228,16 +237,17 @@
 - (void)showImageInfo:(UITapGestureRecognizer *)tapGest
 {
     UIImageView *imageView = (UIImageView *)tapGest.view;
-    if (imageView.image)
-    {
+    NSString *strBigUrl = objc_getAssociatedObject(self, &kShowBigImageUrlKey);
+    
+    [imageView sd_setImageWithURL:[NSURL URLWithString:strBigUrl] placeholderImage:imageView.image completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         NSMutableArray *aryIndex = [NSMutableArray array];
         Photo *_photo = [[Photo alloc] init];
         _photo.nId = 0;
-        _photo.imgName = imageView.image;
+        _photo.imgName = image?:imageView.image;
         [aryIndex addObject:_photo];
         PhotoViewController *photoControl = [[PhotoViewController alloc] initWithArray:aryIndex current:0];
         [photoControl show];
-    }
+    }];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
