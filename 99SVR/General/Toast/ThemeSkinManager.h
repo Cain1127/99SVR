@@ -39,6 +39,9 @@ typedef NS_ENUM(NSInteger,ThemeSkinType){
 @property (nonatomic , copy) NSString *navBarRBtnNImage;
 /**导航条按钮右高亮的图片*/
 @property (nonatomic , copy) NSString *navBarRBtnHImage;
+/**模块分割线*/
+@property (nonatomic , strong) UIColor *moduleLineColor;
+
 
 /**单利皮肤管理类*/
 +(ThemeSkinManager *)standardThemeSkin;

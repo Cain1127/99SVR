@@ -36,6 +36,7 @@ static ThemeSkinManager *manager = nil;
                 _selectImageArray = @[@"home_h",@"video_live_h",@"tab_text_icon_pressed",@"tab_me_p"];
             }
             
+            //tabbar
             _tabbarBackColor = [UIColor whiteColor];
             _tabbarMoveImageName = @"";
             _normalItemColor =  UIColorFromRGB(0x919191);
@@ -43,10 +44,14 @@ static ThemeSkinManager *manager = nil;
             _navBarColor = UIColorFromRGB(0xffffff);
             _navBarTitColor = UIColorFromRGB(0x4C4C4C);
             
+            //导航条
             _navBarLBtnNImage = @"nav_menu_icon_n";
             _navBarLBtnHImage = @"nav_menu_icon_p";
             _navBarRBtnNImage = @"nav_search_icon_n";
             _navBarRBtnHImage = @"nav_search_icon_p";
+            
+            //
+            
 
         }
             break;
