@@ -27,6 +27,7 @@
 + (void)initMediaSDK
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//        [[SVRMediaClient sharedSVRMediaClient] clientCoreInit:1];
         [[SVRMediaClient sharedSVRMediaClient] clientCoreInit:0];
     });
 }
@@ -42,7 +43,8 @@
 /**
  *  请求礼物的信息
  */
-+ (void)requestGift{
++ (void)requestGift
+{
     [BaseService post:kGift_URL dictionay:nil timeout:5 success:^(id responseObject) {
         NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil removingNulls:YES ignoreArrays:NO];
         [UserDefaults setObject:parameters forKey:kGiftInfo];

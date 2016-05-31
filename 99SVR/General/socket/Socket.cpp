@@ -1,39 +1,40 @@
 #include "stdafx.h"
 #include "Socket.h"
+#include <netdb.h>
 
-unsigned long get_inet_addr(const char* host)
+const char * get_inet_addr(const char* host,int port,int *type,sockaddr_in6 *sock_in6,sockaddr_in *sock_in4)
 {
-#if 1
-	if (inet_addr(host) == -1)
-	{
-		struct hostent* pHostEnt;
-		pHostEnt = gethostbyname(host);
-		if (pHostEnt == 0)
-			return 0;
-		return *(unsigned long*) pHostEnt->h_addr_list[0];
-	}
+    struct addrinfo *answer, hint, *curr;
+    memset(&hint, 0, sizeof(hint));
+    hint.ai_family   = PF_UNSPEC;
+    hint.ai_socktype = SOCK_STREAM;
+    hint.ai_protocol = IPPROTO_TCP;
 
-	return inet_addr(host);
-#else
-    unsigned char buf[sizeof(struct in6_addr)];
-    int domain, s;
-    s = inet_pton(AF_INET6,host,buf);
-    if(s<=0)
+    char cPort[10] = {0};
+    sprintf(cPort,"%d",port);
+    int ret = getaddrinfo(host, cPort, &hint, &answer);
+    if (ret != 0)
     {
-        if(0 == s)
+        return host;
+    }
+    for (curr = answer; curr != NULL; curr = curr->ai_next)
+    {
+        if (curr->ai_family == AF_INET)
         {
-            printf("Not in presentation format/n");
+            memcpy (sock_in4, curr->ai_addr, curr->ai_addrlen);
+            *type = 1;
+            return "";
+            
         }
-        else
+        else if (curr->ai_family == AF_INET6)
         {
-            printf("inet_pton/n");
+            *type = 2;
+            memcpy (sock_in6, curr->ai_addr, curr->ai_addrlen);
+            sock_in6->sin6_port = htons(port);
+            return "";
         }
     }
-//    if(inet_ntop(domain, buf, str, INET6_ADDRSTRLEN) == NULL){
-//        printf("inet ntop/n");
-//    }
-//    return buf;
-#endif
+    return "";
 }
 
 int set_block(SOCKET socket, bool block)
@@ -94,49 +95,37 @@ void set_no_sigpipe(SOCKET socket)
 int Socket::connect(const char* host, short port, int connect_timeout)
 {
 	if (!host || !(*host) || !port) return -2;
-#if 0
-	sockaddr_in sockAddr;
-	memset(&sockAddr, 0, sizeof(sockAddr));
-	sockAddr.sin_family = AF_INET;
-	sockAddr.sin_port = htons(port);
-	sockAddr.sin_addr.s_addr = get_inet_addr(host);
-    socket = ::socket(AF_INET, SOCK_STREAM, 0);
-#else
-    sockaddr sockAddr;
-    struct in6_addr iSin6_addr;
-    int s = inet_pton(AF_INET6,host,&iSin6_addr);
-    if (s<=0)
+    int type = 0;
+    sockaddr_in sock_in4;
+    sockaddr_in6 sock_in6;
+    memset(&sock_in4,0, sizeof(sock_in4));
+    memset(&sock_in6,0, sizeof(sock_in6));
+    get_inet_addr(host,port,&type,&sock_in6,&sock_in4);
+    int ret = 0;
+    if(type==1)
     {
-        printf("sin6_addr err\n");
-        sockaddr_in sockAddr_in4;
-        memset(&sockAddr_in4, 0, sizeof(sockAddr_in4));
-        sockAddr_in4.sin_family = AF_INET;
-        sockAddr_in4.sin_port = htons(port);
-        sockAddr_in4.sin_addr.s_addr = get_inet_addr(host);
-        memcpy(&sockAddr, &sockAddr_in4,sizeof(struct sockaddr));
         socket = ::socket(AF_INET, SOCK_STREAM, 0);
+        set_block(socket, false);
+        ret = ::connect(socket, (struct sockaddr*) &sock_in4, sizeof(sock_in4));
+    }
+    else if(type == 2)
+    {
+        if ((socket = ::socket(AF_INET6, SOCK_STREAM, 0)) < 0)
+        {
+            perror("create socket fail!\n");
+        }
+        set_block(socket, false);
+        ret = ::connect(socket, (struct sockaddr*) &sock_in6, sizeof(sock_in6));
     }
     else
     {
-        sockaddr_in6 sockAddr6;
-        memset(&sockAddr6, 0, sizeof(sockAddr6));
-        sockAddr6.sin6_family = AF_INET6;
-        sockAddr6.sin6_port = htons(port);
-        memcpy(&sockAddr6.sin6_addr, &iSin6_addr,sizeof(struct in6_addr));
-        memcpy(&sockAddr,&sockAddr6,sizeof(struct sockaddr));
-        socket = ::socket(AF_INET6, SOCK_STREAM, 0);
+        return -2;
     }
-#endif
 
 	if (socket < 0 || socket == SOCKET_INVALID)
 	{
 		return -2;
 	}
-
-	LOG("socket create: %d host:%s port:%d", socket, host, port);
-
-	set_block(socket, false);
-	int ret = ::connect(socket, (struct sockaddr*) &sockAddr, sizeof(sockAddr));
 	if (ret == SOCKET_ERROR)
 	{
 		timeval timeout;
