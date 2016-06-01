@@ -453,6 +453,7 @@ ChatRightDelegate,ChatViewDelegate,RoomChatDelegate,XLiveQuestionDelegate>
  */
 - (void)roomChatMSg
 {
+    [_chatDataSource setNLength:aryRoomChat.count];
     [_chatDataSource setModel:aryRoomChat];
     @WeakObj(self)
     if (aryRoomChat.count>0) {

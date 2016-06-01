@@ -131,6 +131,13 @@ void ZLHallListener::OnViewpointTradeGiftResp(ViewpointTradeGiftNoty& info)
     int gitId = info.giftid();
     int number = info.giftnum();
     NSString *toName = [NSString stringWithCString:info.teamalias().c_str() encoding:GBK_ENCODING];
+    NSLog(@"string:%@ toname:%@",strName,toName);
+//    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+//    [parameters setValue:strName forKey:@"srcName"];
+//    [parameters setValue:@(gitId) forKey:@"gId"];
+//    [parameters setValue:@(number) forKey:@"number"];
+//    [parameters setValue:@(info.userid()) forKey:@"srcId"];
+//    [parameters setValue:toName forKey:@"toName"];
     NSDictionary *parameters = @{@"srcName":strName,@"gId":@(gitId),@"number":@(number),@"srcId":@(info.userid()),@"toName":toName};
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_VIEWPOINT_GIFT_NOTIFY_VC object:parameters];
     

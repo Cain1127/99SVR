@@ -51,6 +51,7 @@
     UIView *noView;
     GiftView *_giftView;
     NSCache *commentCache;
+    NSDictionary *_parameters;
 }
 @property (nonatomic,strong) ChatView *chatView;
 @property (nonatomic,strong) DTAttributedTextView *textView;
@@ -152,12 +153,14 @@
     {
         return ;
     }
-    @WeakObj(parameter)
+    _parameters = parameter;
+    @WeakObj(_parameters)
     @WeakObj(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(),
+    ^{
         
     GiftShowAnimate *giftAnimate = [[GiftShowAnimate alloc] initWithFrame:Rect(0,kScreenHeight-kRoom_head_view_height-kVideoImageHeight+50
-                                                                               ,kScreenWidth-60,46) dict:parameterWeak];
+                                                                               ,kScreenWidth-60,46) dict:_parametersWeak];
     [UIView animateWithDuration:2.0
           delay:1.0
           options:UIViewAnimationOptionCurveEaseOut
@@ -211,7 +214,10 @@
     commentCache = [[NSCache alloc] init];
     [commentCache setTotalCostLimit:10];
     UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(showShareView) image:@"video_room_share_icon_n" highImage:@"video_room_share_icon_p"];
-    [self setRightBtn:btnRight];
+    if(KUserSingleton.nStatus)
+    {
+        [self setRightBtn:btnRight];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendTrader_error:) name:MESSAGE_VIEW_POINT_TRADER_ERR_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendGiftResp:) name:MESSAGE_VIEW_DETAILS_GIFT_VC object:nil];

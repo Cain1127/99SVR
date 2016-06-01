@@ -111,7 +111,6 @@
 
 -(void)initData{
     
-
     /**默认title*/
     NSArray *sectionArry = @[@[@"我的关注"],
                              @[@"客服中心",@"设置"]];
@@ -122,20 +121,32 @@
                                  @[@"客服中心",@"设置"]];
     }
     /**默认title对应的类名*/
-    NSArray *classNameArray = @[@[@"TQMeCustomizedViewController",
-                               @"PaySelectViewController",
-                               @"NNSVRViewController",
-                               @"VideoColletionViewController"],
-                             @[@"KefuCenterController",
-                               @"SettingCenterController"]];
+    NSArray *classNameArray = nil;
+    NSArray *iconNameArray = nil;
+    if (KUserSingleton.nStatus) {
+        classNameArray = @[@[@"TQMeCustomizedViewController",
+            @"PaySelectViewController",
+            @"NNSVRViewController",
+            @"VideoColletionViewController"],
+          @[@"KefuCenterController",
+            @"SettingCenterController"]];
+        iconNameArray = @[@[@"personal_recharge_icon",
+            @"personal_recharge_icon",
+            @"personal_consumption_icon",
+            @"personal_follow_icon"],
+          @[@"personal_services_icon",
+            @"personal_ste_icon"]];
+    }
+    else
+    {
+        classNameArray = @[@[@"VideoColletionViewController"],@[@"KefuCenterController",
+                                                                @"SettingCenterController"]];
+        iconNameArray = @[@[@"personal_follow_icon"],
+                          @[@"personal_services_icon",
+                            @"personal_ste_icon"]];
+    }
     /**默认title对应的图片*/
-    NSArray *iconNameArray = @[@[@"personal_recharge_icon",
-                                 @"personal_recharge_icon",
-                                 @"personal_consumption_icon",
-                                 @"personal_follow_icon"],
-                               @[@"personal_services_icon",
-                                 @"personal_ste_icon"]];
-
+    
     _itemsArray = [NSMutableArray array];
     
     for (int i=0; i!=sectionArry.count; i++) {
@@ -260,11 +271,10 @@
     }else{
     
         
-        if (indexPath.section==0) {
-            
+        if (indexPath.section==0)
+        {
             LoginViewController *loginView = [[LoginViewController alloc] init];
             [self.navigationController pushViewController:loginView animated:YES];
-
             
         }else{
             
