@@ -10,6 +10,7 @@
 #import "TQMailboxViewController.h"
 #import "SearchController.h"
 #import "LoginViewController.h"
+#import "UIImage+RGB.h"
 
 @interface HomeCustomViewController()
 {
@@ -61,12 +62,12 @@
         _readBtn = [[UnReadButton alloc] initWithFrame:Rect(0, 20, 44, 44)];
         [_readBtn addTarget:self action:@selector(MailBoxEvent) forControlEvents:UIControlEventTouchUpInside];
         // 设置图片
-        UIImage *img = [UIImage imageNamed:@"nav_menu_icon_n"];
+        UIImage *img = [UIImage imageNamed:ThemeSkinManagers.navBarLBtnNImage];
         [_readBtn setImage:img forState:UIControlStateNormal];
-        [_readBtn setImage:[UIImage imageNamed:@"nav_menu_icon_p"] forState:UIControlStateHighlighted];
+        [_readBtn setImage:[UIImage imageNamed:ThemeSkinManagers.navBarLBtnHImage] forState:UIControlStateHighlighted];
         [_headView addSubview:_readBtn];
     }
-    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchViewController) image:@"nav_search_icon_n" highImage:@"nav_search_icon_p"];
+    UIButton *btnRight = [CustomViewController itemWithTarget:self action:@selector(searchViewController) image:ThemeSkinManagers.navBarRBtnNImage highImage:ThemeSkinManagers.navBarRBtnHImage];
     [_headView addSubview:btnRight];
     [btnRight setFrame:Rect(kScreenWidth-44, 20, 44, 44)];
     _btnRight = btnRight;
@@ -212,5 +213,21 @@
 {
     return UIInterfaceOrientationMaskPortrait;
 }
+
+#pragma mark 切换皮肤
+-(void)changeNavBarThemeSkin{
+    
+    //标题的颜色
+    [_txtTitle setTextColor:ThemeSkinManagers.navBarTitColor];
+
+    //左边按钮
+    [_readBtn setImage:[UIImage imageNamed:ThemeSkinManagers.navBarLBtnNImage] forState:UIControlStateNormal];
+    [_readBtn setImage:[UIImage imageNamed:ThemeSkinManagers.navBarLBtnHImage] forState:UIControlStateHighlighted];
+    
+    //右边按钮
+    [_btnRight setImage:[UIImage imageNamed:ThemeSkinManagers.navBarRBtnNImage] forState:UIControlStateNormal];
+    [_btnRight setImage:[UIImage imageNamed:ThemeSkinManagers.navBarLBtnHImage] forState:UIControlStateHighlighted];
+}
+
 
 @end

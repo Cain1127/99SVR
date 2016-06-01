@@ -649,9 +649,11 @@
 -(void)changeThemeSkin:(NSNotification *)notfication{
 
     DLog(@"切换皮肤");
+    @WeakObj(self)
     dispatch_async(dispatch_get_main_queue(), ^{
         
-    });
-}
+        [selfWeak changeNavBarThemeSkin];
+        
+    });}
 
 @end

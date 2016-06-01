@@ -6,8 +6,10 @@
 
 typedef NS_ENUM(NSInteger,ThemeSkinType){
     
-    ThemeSkinType_0 = 1,
-    ThemeSkinType_1 = 2,
+    /**默认皮肤*/
+    ThemeSkinType_Default = 1,
+    /**土豪金*/
+    ThemeSkinType_Gold = 2,
 };
 
 @interface ThemeSkinManager : NSObject
@@ -29,6 +31,18 @@ typedef NS_ENUM(NSInteger,ThemeSkinType){
 @property (nonatomic , strong) UIColor *navBarColor;
 /**导航条 标题的颜色*/
 @property (nonatomic , strong) UIColor *navBarTitColor;
+/**导航条按钮左正常的图片*/
+@property (nonatomic , copy) NSString *navBarLBtnNImage;
+/**导航条按钮左高亮的图片*/
+@property (nonatomic , copy) NSString *navBarLBtnHImage;
+/**导航条按钮右正常的图片*/
+@property (nonatomic , copy) NSString *navBarRBtnNImage;
+/**导航条按钮右高亮的图片*/
+@property (nonatomic , copy) NSString *navBarRBtnHImage;
+/**模块分割线*/
+@property (nonatomic , strong) UIColor *moduleLineColor;
+
+
 /**单利皮肤管理类*/
 +(ThemeSkinManager *)standardThemeSkin;
 /**切换不同的皮肤*/

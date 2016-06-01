@@ -16,4 +16,13 @@
  */
 +(UIImage *)imageFromColors:(NSArray *)colors byGradientType:(NSInteger)gradientType withFrame:(CGRect)frame;
 
+
+/**
+ *  图片更换颜色
+ *
+ *  @param tintColor 颜色
+ *
+ */
+-(UIImage *)imageByColor:(UIColor *)tintColor;
+
 @end
