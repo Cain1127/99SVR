@@ -311,7 +311,9 @@ DEFINE_SINGLETON_FOR_CLASS(HttpProtocolManager)
 - (void)RequestUserTeamRelatedInfo:(int)teamId
 {
     [self createHttpConnection];
-    hConnection->RequestUserTeamRelatedInfo(teamId,&_userTeamRelatedInfoListener);
+    if (KUserSingleton.nType == 1 && KUserSingleton.bIsLogin) {
+        hConnection->RequestUserTeamRelatedInfo(teamId,&_userTeamRelatedInfoListener);
+    }
 }
 
 - (NSString *)GetPrivateServiceDetailUrl:(int)psid
