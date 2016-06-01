@@ -17,15 +17,15 @@ using std::vector;
 
 #if 1
 
+//58.210.107.54
 #define LBS0 "lbs1.99ducaijing.cn:2222,lbs2.99ducaijing.cn:2222,lbs3.99ducaijing.cn:2222,58.210.107.54:2222,122.193.102.23:2222,112.25.230.249:2222";
-//#define LBS0 "lbs4.99ducaijing.cn:2222"
 #define CONFIG_URL "http://admin.99ducaijing.com/?m=Api&c=ClientConfig&clientType=4&versionNumber=1&parameterName=lbs"
 #define HTTP_API "phpapi.99ducaijing.cn"
 
 #else
 
 #define LBS0 "testlbs.99ducaijing.cn:2222"
-#define CONFIG_URL "http://121.12.118.32/caijing/?m=Api&c=ClientConfig&clientType=4&versionNumber=1&parameterName=lbs"
+#define CONFIG_URL "http://admin.99ducaijing.com"
 #define HTTP_API "phpapi.99ducaijing.cn"
 
 #endif
