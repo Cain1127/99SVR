@@ -45,11 +45,11 @@
         NSDictionary *dict = [notify object];
         int errid = [[dict objectForKey:@"err"] intValue];
         NSString *strMsg = [dict objectForKey:@"msg"];
+        [[RoomViewController sharedRoomViewController] stopVideoPlay];
         if (errid==201)
         {
             @WeakObj(self)
             _nTimes++;
-            [[RoomViewController sharedRoomViewController] stopVideoPlay];
             if (_nTimes>1)
             {
                 dispatch_main_async_safe(^{

@@ -107,6 +107,7 @@
     {
         [_tableConsumeRank reloadData];
     }
+    [_ffPlay startPlayRoomId:[_room.roomid intValue] user:KUserSingleton.nUserId name:_room.teamname];
 }
 
 - (void)reloadModel:(RoomHttp *)room
@@ -128,6 +129,11 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_NOTICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_TEACH_INFO_VC object:nil];
     [kProtocolSingle requestRoomInfo];
+}
+
+- (void)setRoom:(RoomHttp *)room
+{
+    _room = room;
 }
 
 - (id)initWithModel:(RoomHttp *)room
@@ -170,7 +176,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_ROOM_MIC_UPDATE_VC object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated{

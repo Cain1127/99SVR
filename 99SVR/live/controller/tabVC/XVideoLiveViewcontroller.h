@@ -15,6 +15,7 @@
 
 @property (nonatomic,strong) LivePlayViewController *ffPlay;
 
+- (void)setRoom:(RoomHttp *)room;
 
 - (id)initWithModel:(RoomHttp *)room;
 

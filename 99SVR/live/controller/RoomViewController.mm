@@ -143,6 +143,7 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
         [self addNotify];
         [self loadHeadModel];
         [_liveControl stopNewPlay];
+        [_liveControl setRoom:_room];
         [_liveControl clearChatModel];
         headView.hdsegmented.selectIndex = 0;
         [self selectIndexSegment:0];
