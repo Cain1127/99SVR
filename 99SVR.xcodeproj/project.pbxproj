@@ -752,6 +752,7 @@
 		BBD719801CE466A100FF9A38 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD7197A1CE466A100FF9A38 /* WebViewJavascriptBridge_JS.m */; };
 		BBD719811CE466A100FF9A38 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD7197C1CE466A100FF9A38 /* WebViewJavascriptBridgeBase.m */; };
 		BBD719821CE466A100FF9A38 /* WKWebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD7197E1CE466A100FF9A38 /* WKWebViewJavascriptBridge.m */; };
+		BBDC019C1CFE711A00061F81 /* PrivateTeamService.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBDC019B1CFE711A00061F81 /* PrivateTeamService.mm */; };
 		BBECB52C1C1E959500D7230F /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBECB52B1C1E959500D7230F /* libxml2.tbd */; };
 		BBF22F771C80050400907AD9 /* RoomCoreTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */; };
 /* End PBXBuildFile section */
@@ -2042,6 +2043,8 @@
 		BBD7197C1CE466A100FF9A38 /* WebViewJavascriptBridgeBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridgeBase.m; sourceTree = "<group>"; };
 		BBD7197D1CE466A100FF9A38 /* WKWebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		BBD7197E1CE466A100FF9A38 /* WKWebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewJavascriptBridge.m; sourceTree = "<group>"; };
+		BBDC019A1CFE711A00061F81 /* PrivateTeamService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivateTeamService.h; sourceTree = "<group>"; };
+		BBDC019B1CFE711A00061F81 /* PrivateTeamService.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PrivateTeamService.mm; sourceTree = "<group>"; };
 		BBECB52B1C1E959500D7230F /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		BBF22F751C80050400907AD9 /* RoomCoreTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCoreTextCell.h; sourceTree = "<group>"; };
 		BBF22F761C80050400907AD9 /* RoomCoreTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCoreTextCell.m; sourceTree = "<group>"; };
@@ -4084,6 +4087,7 @@
 		BBC618F31CF6C7B1004513FA /* HttpService(Http协议) */ = {
 			isa = PBXGroup;
 			children = (
+				BBDC01991CFE70FF00061F81 /* PrivateService */,
 				BBC618F41CF6C7C4004513FA /* HomePage */,
 			);
 			name = "HttpService(Http协议)";
@@ -4242,6 +4246,15 @@
 				BBD7197E1CE466A100FF9A38 /* WKWebViewJavascriptBridge.m */,
 			);
 			path = WebViewJavascriptBridge;
+			sourceTree = "<group>";
+		};
+		BBDC01991CFE70FF00061F81 /* PrivateService */ = {
+			isa = PBXGroup;
+			children = (
+				BBDC019A1CFE711A00061F81 /* PrivateTeamService.h */,
+				BBDC019B1CFE711A00061F81 /* PrivateTeamService.mm */,
+			);
+			name = PrivateService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -4938,6 +4951,7 @@
 				1895B78D1CCB7C8700B86B0D /* TQIntroductModel.mm in Sources */,
 				185F59701CC4CC8100F605F5 /* TQIdeaModel.mm in Sources */,
 				BB17692E1C7B006F00CE947C /* UIImageView+HighlightedWebCache.m in Sources */,
+				BBDC019C1CFE711A00061F81 /* PrivateTeamService.mm in Sources */,
 				5AB43D8B1CCFD7AE00693494 /* PrivateVipView.m in Sources */,
 				BBD58EF11CCBE6AC009250DB /* XPrivateDetailViewController.m in Sources */,
 				BBD719801CE466A100FF9A38 /* WebViewJavascriptBridge_JS.m in Sources */,

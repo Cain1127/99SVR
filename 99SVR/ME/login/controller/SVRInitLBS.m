@@ -27,7 +27,6 @@
 + (void)initMediaSDK
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//        [[SVRMediaClient sharedSVRMediaClient] clientCoreInit:1];
         [[SVRMediaClient sharedSVRMediaClient] clientCoreInit:0];
     });
 }

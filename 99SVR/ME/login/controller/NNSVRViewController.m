@@ -76,10 +76,10 @@
         // URL可能如：@"http://210.56.212.25:80/mobile.php?s=/User/personalSecrets/id/420/uid/1780723/token/1816168D18C1026648F3EA55F70B9C39/client/2";
         // 由于url可能是包含token,如果没网-->有网，token会变，导致url地址打开是过期的。
         // 当前的做法是通过截取token，替换成当前的token
-        
         // 1.查找token
         NSString *strCheck = @"";
-        if ([_strPath containsString:@"token/"]) {
+        if ([_strPath containsString:@"token/"])
+        {
             NSArray *array = [_strPath componentsSeparatedByString:@"token/"];
             if (array.count > 1) {
                 NSArray *arrayResult = [array[1] componentsSeparatedByString:@"/"];

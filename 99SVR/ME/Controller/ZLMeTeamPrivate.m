@@ -21,9 +21,11 @@
 #import "ZLWhatIsPrivateView.h"
 #import "TQMeCustomizedModel.h"
 #import "UIViewController+EmpetViewTips.h"
+#import "PrivateTeamService.h"
 
 @interface ZLMeTeamPrivate()<DTAttributedTextContentViewDelegate,PrivateDelegate>
 {
+    PrivateTeamService *_privateService;
 }
 
 @property (nonatomic,strong) UIButton *btnBuy;
@@ -64,6 +66,13 @@
     [self setTitleText:_room.teamname];
     [self setupTableView];
     [self.view addSubview:_textView];
+    _privateService = [[PrivateTeamService alloc] init];
+    
+    @WeakObj(self)
+    _privateService.block = ^(NSDictionary *dict)
+    {
+        [selfWeak loadPrivate:dict];
+    };
     
     _buyView = [[UIView alloc] initWithFrame:Rect(0, self.view.height-60, kScreenWidth, 60)];
     [self.view addSubview:_buyView];
@@ -94,8 +103,7 @@
     }else{
         Loading_Bird_Show(self.tableView);
     }
-    
-    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+    [_privateService requestTeamService:[_room.teamid intValue]];
 }
 #pragma mark 兑换私人定制
 - (void)buyprivate
@@ -150,10 +158,9 @@
     return headerView;
 }
 
-- (void)loadPrivate:(NSNotification *)notify
+- (void)loadPrivate:(NSDictionary *)dict
 {
     Loading_Hide(self.tableView);
-    NSDictionary *dict = notify.object;
     if ([dict isKindOfClass:[NSDictionary class]]) {
         int code = [dict[@"code"] intValue];
         if (code==1)
@@ -213,13 +220,13 @@
     WeakSelf(self);
 
     __weak typeof(_room) weakRoom = _room;
-    
+    @WeakObj(_privateService)
     dispatch_async(dispatch_get_main_queue(), ^{
        
         [self showEmptyViewInView:weakSelf.tableView withMsg:RequestState_EmptyStr(code) touchHanleBlock:^{
             
             Loading_Bird_Show(weakSelf.tableView);
-            [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[weakRoom.teamid intValue]];
+            [_privateServiceWeak requestTeamService:[_room.teamid intValue]];
         }];
         
         if (dataArray.count==0&&[code intValue]!=1) {//数据为0 错误代码不为1
@@ -227,8 +234,7 @@
             [self showErrorViewInView:weakSelf.tableView withMsg:RequestState_NetworkErrorStr(code) touchHanleBlock:^{
                 
                 Loading_Bird_Show(weakSelf.tableView);
-                [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[weakRoom.teamid intValue]];
-
+                [_privateServiceWeak requestTeamService:[_room.teamid intValue]];
             }];
             
         }else if (dataArray.count==0&&[code intValue]==1){//请求成功 空数据
@@ -250,11 +256,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:) name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
     if (_roomId!=[_room.teamid intValue])
     {
         Loading_Bird_Show(self.tableView);
-        [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+        [_privateService requestTeamService:[_room.teamid intValue]];
         _roomId = [_room.teamid intValue];
     }
 }

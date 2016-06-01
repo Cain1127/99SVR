@@ -574,39 +574,40 @@ void BuyPrivateServiceListener::OnError(int errCode)
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_TQPURCHASE_VC object:@{@"code":code}];
 }
 
-void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateServiceSummaryPack>& infos){
-    NSMutableArray *aryDict = [NSMutableArray array];
-    for(int i=0;i<infos.size();i++)
-    {
-        TeamPrivateServiceSummaryPack pack = infos[i];
-        XPrivateService *service = [[XPrivateService alloc] init];
-        service.vipLevelId = pack.vipLevelId();
-        service.vipLevelName = [NSString stringWithUTF8String:pack.vipLevelName().c_str()];
-        service.isOpen = pack.isOpen();
-        NSMutableArray *array = [NSMutableArray array];
-        for (int j = 0 ; j < pack.summaryList().size(); j++) {
-            PrivateServiceSummary sumary = pack.summaryList()[j];
-            XPrivateSummary *priSummary = [[XPrivateSummary alloc] init];
-            
-            priSummary.nId = sumary.id();
-            priSummary.title = [NSString stringWithUTF8String:sumary.title().c_str()];
-            priSummary.summary = [NSString stringWithUTF8String:sumary.summary().c_str()];
-            priSummary.publishtime = [NSString stringWithUTF8String:sumary.publishtime().c_str()];
-            priSummary.teamname = [NSString stringWithUTF8String:sumary.teamname().c_str()];
-            [array addObject:priSummary];
-        }
-        service.summaryList = array;
-        [aryDict addObject:service];
-    }
-    NSDictionary *dict = @{@"code":@(1),@"model":aryDict};
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:dict];
-}
-
-void TeamPrivateServiceSummaryPackListener::OnError(int errCode)
-{
-    NSDictionary *dict = @{@"code":@(errCode)};
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:dict];
-}
+//void TeamPrivateServiceSummaryPackListener::onResponse(vector<TeamPrivateServiceSummaryPack>& infos)
+//{
+//    NSMutableArray *aryDict = [NSMutableArray array];
+//    for(int i=0;i<infos.size();i++)
+//    {
+//        TeamPrivateServiceSummaryPack pack = infos[i];
+//        XPrivateService *service = [[XPrivateService alloc] init];
+//        service.vipLevelId = pack.vipLevelId();
+//        service.vipLevelName = [NSString stringWithUTF8String:pack.vipLevelName().c_str()];
+//        service.isOpen = pack.isOpen();
+//        NSMutableArray *array = [NSMutableArray array];
+//        for (int j = 0 ; j < pack.summaryList().size(); j++) {
+//            PrivateServiceSummary sumary = pack.summaryList()[j];
+//            XPrivateSummary *priSummary = [[XPrivateSummary alloc] init];
+//            
+//            priSummary.nId = sumary.id();
+//            priSummary.title = [NSString stringWithUTF8String:sumary.title().c_str()];
+//            priSummary.summary = [NSString stringWithUTF8String:sumary.summary().c_str()];
+//            priSummary.publishtime = [NSString stringWithUTF8String:sumary.publishtime().c_str()];
+//            priSummary.teamname = [NSString stringWithUTF8String:sumary.teamname().c_str()];
+//            [array addObject:priSummary];
+//        }
+//        service.summaryList = array;
+//        [aryDict addObject:service];
+//    }
+//    NSDictionary *dict = @{@"code":@(1),@"model":aryDict};
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:dict];
+//}
+//
+//void TeamPrivateServiceSummaryPackListener::OnError(int errCode)
+//{
+//    NSDictionary *dict = @{@"code":@(errCode)};
+//    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:dict];
+//}
 
 void PrivateServiceDetailListener::onResponse(PrivateServiceDetail& info)
 {

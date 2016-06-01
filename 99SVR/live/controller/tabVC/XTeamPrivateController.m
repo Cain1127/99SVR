@@ -23,9 +23,11 @@
 #import "RoomChatNull.h"
 #import "UIView+EmptyViewTips.h"
 
+#import "PrivateTeamService.h"
+
 @interface XTeamPrivateController()<DTAttributedTextContentViewDelegate,PrivateDelegate>
 {
-    
+    PrivateTeamService *_privateTeamService;
 }
 
 @property (nonatomic,strong) UIButton *btnBuy;
@@ -53,12 +55,19 @@
     _room = room;
     [self addNotify];
     [self initBody];
+    _privateTeamService = [[PrivateTeamService alloc] init];
+    @WeakObj(self)
+    _privateTeamService.block = ^(NSDictionary *dict)
+    {
+        [selfWeak loadPrivate:dict];
+    };
     return self;
 }
 
 - (void)requestPrivate
 {
-    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+    [_privateTeamService requestTeamService:[_room.teamid intValue]];
+//    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
 
 - (void)setModel:(RoomHttp *)room
@@ -66,7 +75,8 @@
     _room = room;
     NSString *strName = [NSString stringWithFormat:@"开通团队:%@",_room.teamname];
     _titleLable.text = strName;
-    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+    [_privateTeamService requestTeamService:[_room.teamid intValue]];
+//    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
 
 - (void)updateLoadModel
@@ -76,21 +86,17 @@
 
 - (void)addNotify
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPrivate)
                                                  name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrivate:)
-                                                 name:MESSAGE_PRIVATE_TEAM_SERVICE_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLoadModel) name:MESSAGE_UPDATE_LOGIN_STATUS object:nil];
 }
 
 - (void)removeNotify
 {
-//    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:MESSAGE_UPDATE_LOGIN_STATUS];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:MESSAGE_RefreshSTOCK_DEAL_VC];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:MESSAGE_PRIVATE_TEAM_SERVICE_VC];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:MESSAGE_RefreshSTOCK_DEAL_VC];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MESSAGE_RefreshSTOCK_DEAL_VC object:nil];
 }
 
 - (void)initBody
@@ -120,7 +126,8 @@
     [_btnBuy addTarget:self action:@selector(buyprivate) forControlEvents:UIControlEventTouchUpInside];
     _buyView.hidden = YES;
     
-    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+    [_privateTeamService requestTeamService:[_room.teamid intValue]];
+//    [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
 }
 
 - (UIViewController*)viewController {
@@ -135,9 +142,8 @@
 
 - (void)buyprivate
 {
-    
-    if (KUserSingleton.nType ==1 && KUserSingleton.bIsLogin) {
-        
+    if (KUserSingleton.nType ==1 && KUserSingleton.bIsLogin)
+    {
         TQPurchaseViewController *control = [[TQPurchaseViewController alloc] init];
         control.stockModel = [[StockDealModel alloc]init];
         control.stockModel.teamicon = _room.teamicon;
@@ -206,16 +212,15 @@
 #pragma mark 刷新数据
 - (void)refreshData:(NSNotification *)notify{
     
+    @WeakObj(_privateTeamService)
     dispatch_async(dispatch_get_main_queue(), ^{
         Loading_Cup_Show(self.tableView);
-        [kHTTPSingle RequestTeamPrivateServiceSummaryPack:[_room.teamid intValue]];
+        [_privateTeamServiceWeak requestTeamService:[_room.teamid intValue]];
     });
 }
 
-- (void)loadPrivate:(NSNotification *)notify
+- (void)loadPrivate:(NSDictionary *)dict
 {
-    NSDictionary *dict = notify.object;
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         
         Loading_Hide(self.tableView);
@@ -274,7 +279,6 @@
                     {
                         self.buyView.hidden = NO;
                         self.tableView.height = self.height - 60;
-                        
                     }
                 }
                 [self.tableView reloadData];

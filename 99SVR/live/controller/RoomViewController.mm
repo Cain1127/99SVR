@@ -172,7 +172,10 @@ DEFINE_SINGLETON_FOR_CLASS(RoomViewController)
 
 - (void)startVideoPlay
 {
-    [_liveControl startNewPlay];
+    if(_room)
+    {
+        [_liveControl startNewPlay];
+    }
 }
 
 /**

@@ -90,10 +90,6 @@
     if (buttonIndex == 1)
     {
         // 退出视频
-        //[[PlayIconView sharedPlayIconView] exitPlay];
-        
-        [[ZLLogonServerSing sharedZLLogonServerSing] closeProtocol];
-        
         [UserInfo sharedUserInfo].bIsLogin = NO;
         [UserInfo sharedUserInfo].otherLogin = 0;
         [UserInfo sharedUserInfo].nUserId = 0;
@@ -104,7 +100,6 @@
         [[ZLLogonServerSing sharedZLLogonServerSing] loginSuccess:@"0" pwd:@""];
         [logoutBtn setHidden:YES];
         [self dismissViewControllerAnimated:YES completion:nil];
-        
         ///刷新设置列表
         [_tableView reloadData];
     }
